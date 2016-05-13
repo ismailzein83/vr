@@ -1,0 +1,9 @@
+﻿<vr-panel ng-controller="CloudPortal_BEInternal_LandingPageControllerController">
+    <vr-form name="formFilter" vr-loader="isLoading">
+        <div class="row">
+            <vr-datalist maxitemsperrow="4" datasource="currentApplications" onitemclicked="onApplicationClicked">
+                <vr-label>{{dataItem.Name}}</vr-label>
+            </vr-datalist>
+        </div>
+    </vr-form>
+</vr-panel>

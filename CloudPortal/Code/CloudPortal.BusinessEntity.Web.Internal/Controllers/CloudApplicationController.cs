@@ -1,14 +1,7 @@
 ﻿using CloudPortal.BusinessEntity.Business;
 using CloudPortal.BusinessEntity.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web;
 using System.Web.Http;
-using Vanrise.Entities;
-using Vanrise.Security.Entities;
 
 namespace CloudPortal.BusinessEntity.Web.Internal.Controllers
 {
@@ -47,5 +40,14 @@ namespace CloudPortal.BusinessEntity.Web.Internal.Controllers
             CloudApplicationManager manager = new CloudApplicationManager();
             return manager.GetCloudApplication(id);
         }
+
+        [HttpGet]
+        [Route("GetCloudApplicationByUser")]
+        public List<CloudApplication> GetCloudApplicationByUser()
+        {
+            CloudApplicationManager manager = new CloudApplicationManager();
+            return manager.GetCloudApplicationByUser();
+        }
+
     }
 }

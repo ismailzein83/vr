@@ -29,7 +29,13 @@ namespace CloudPortal.BusinessEntity.Data.SQL
 
         public bool AddApplicationUser(Entities.CloudApplicationUser applicationUser)
         {
-            return ExecuteNonQuerySP("cloud.sp_CloudApplicationUser_Insert", applicationUser.ApplicationId, applicationUser.UserId, 
+            return ExecuteNonQuerySP("cloud.sp_CloudApplicationUser_Insert", applicationUser.CloudApplicationTenantID, applicationUser.UserId, 
+                applicationUser.Settings != null ? Serializer.Serialize(applicationUser.Settings) : null) > 0;
+        }
+
+        public bool UpdateApplicationUser(CloudApplicationUser applicationUser)
+        {
+            return ExecuteNonQuerySP("cloud.sp_CloudApplicationUser_Update", applicationUser.CloudApplicationTenantID, applicationUser.UserId,
                 applicationUser.Settings != null ? Serializer.Serialize(applicationUser.Settings) : null) > 0;
         }
 
@@ -39,7 +45,7 @@ namespace CloudPortal.BusinessEntity.Data.SQL
         {
             CloudApplicationUser appUser = new CloudApplicationUser
             {
-                ApplicationId = (int)reader["ApplicationID"],
+                CloudApplicationTenantID = (int)reader["CloudApplicationTenantId"],
                 UserId = (int)reader["UserID"],
                 Settings = Serializer.Deserialize<CloudApplicationUserSettings>(reader["Settings"] as string)
             };

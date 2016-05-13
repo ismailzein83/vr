@@ -17,13 +17,15 @@ namespace CloudPortal.BusinessEntity.Business
             if (context.Token == null)
                 throw new ArgumentNullException("context.Token");
             var appUserManager = new CloudApplicationUserManager();
+            var appTenantManager = new CloudApplicationTenantManager();
             var userApps = appUserManager.GetUserApplications(context.Token.UserId);
             if(userApps != null && userApps.Count > 0)
             {
                 context.Token.AccessibleCloudApplications = new List<SecurityTokenCloudApplication>();
                 foreach (var appUser in userApps.Where(itm => itm.Settings != null && itm.Settings.Status == UserStatus.Active))
                 {
-                    context.Token.AccessibleCloudApplications.Add(new SecurityTokenCloudApplication { ApplicationId = appUser.ApplicationId });
+                    var cloudApplicationTenant = appTenantManager.GetApplicationTenantById(appUser.CloudApplicationTenantID);
+                    context.Token.AccessibleCloudApplications.Add(new SecurityTokenCloudApplication { ApplicationId = cloudApplicationTenant.ApplicationId });
                 }
             }            
         }

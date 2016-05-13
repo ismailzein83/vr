@@ -1,0 +1,12 @@
+﻿<vr-datagrid datasource="tenants"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="onGridReady"
+             menuactions="gridMenuActions"
+             idfield="Entity.TenantId">
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.TenantId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'TenantName'" disablesorting="true"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+</vr-datagrid>

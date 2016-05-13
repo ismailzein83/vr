@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("cloudportalBeinternalCloudapplicationManagementGrid", ["UtilsService", "VRNotificationService", "CloudPortal_BEInternal_CloudApplicationService", "CloudPortal_BEInternal_CloudApplicationAPIService",
-function (UtilsService, VRNotificationService, CloudPortal_BEInternal_CloudApplicationService, CloudPortal_BEInternal_CloudApplicationAPIService) {
+app.directive("cloudportalBeinternalCloudapplicationManagementGrid", ["UtilsService", "VRNotificationService", "CloudPortal_BEInternal_CloudApplicationService", "CloudPortal_BEInternal_CloudApplicationAPIService", "VRUIUtilsService", "CloudPortal_BEInternal_CloudApplicationTenantService", "CloudPortal_BEInternal_CloudApplicationTenantAPIService",
+function (UtilsService, VRNotificationService, CloudPortal_BEInternal_CloudApplicationService, CloudPortal_BEInternal_CloudApplicationAPIService, VRUIUtilsService, CloudPortal_BEInternal_CloudApplicationTenantService, CloudPortal_BEInternal_CloudApplicationTenantAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -27,6 +27,7 @@ function (UtilsService, VRNotificationService, CloudPortal_BEInternal_CloudAppli
     function CloudApplicationManagementGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var gridDrillDownTabsObj;
 
         this.initializeController = initializeController;
 
@@ -38,6 +39,23 @@ function (UtilsService, VRNotificationService, CloudPortal_BEInternal_CloudAppli
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
+                var drillDownDefinitions = [];
+                var drillDownDefinition = {};
+
+                drillDownDefinition.title = "Assigned Tenants";
+                drillDownDefinition.directive = "cloudportal-beinternal-cloudapplication-tenant-management-grid";
+
+                drillDownDefinition.loadDirective = function (directiveAPI, cloudApplicationItem) {
+
+                    cloudApplicationItem.tenantGridAPI = directiveAPI;
+                    var payload = {
+                        ApplicationId: cloudApplicationItem.Entity.CloudApplicationId
+                    };
+                    return cloudApplicationItem.tenantGridAPI.loadGrid(payload);
+                };
+                drillDownDefinitions.push(drillDownDefinition);
+
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
@@ -58,6 +76,11 @@ function (UtilsService, VRNotificationService, CloudPortal_BEInternal_CloudAppli
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return CloudPortal_BEInternal_CloudApplicationAPIService.GetFilteredCloudApplications(dataRetrievalInput)
                     .then(function (response) {
+                        if (response && response.Data) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -70,8 +93,17 @@ function (UtilsService, VRNotificationService, CloudPortal_BEInternal_CloudAppli
 
         function defineMenuActions() {
             $scope.gridMenuActions = [
-             { name: "Edit", clicked: editCloudApplication }
+             { name: "Edit", clicked: editCloudApplication, haspermission: hasUpdateCloudApplicationPermission },
+             { name: "Assign Tenant", clicked: assignTenantToCloudApplication, haspermission: hasAssignCloudApplicationTenantPermission }
             ];
+        }
+
+        function hasUpdateCloudApplicationPermission() {
+            return CloudPortal_BEInternal_CloudApplicationAPIService.HasUpdateCloudApplicationPermission();
+        }
+
+        function hasAssignCloudApplicationTenantPermission() {
+            return CloudPortal_BEInternal_CloudApplicationTenantAPIService.HasAssignCloudApplicationTenantPermission();
         }
 
         function editCloudApplication(cloudApplication) {
@@ -82,6 +114,15 @@ function (UtilsService, VRNotificationService, CloudPortal_BEInternal_CloudAppli
             };
 
             CloudPortal_BEInternal_CloudApplicationService.editCloudApplication(cloudApplication.Entity.CloudApplicationId, onCloudApplicationUpdated);
+        };
+
+        function assignTenantToCloudApplication(cloudApplication) {
+
+            var onTenantAssignedToCloudApplication = function (tenants) {
+
+            };
+
+            CloudPortal_BEInternal_CloudApplicationTenantService.assignTenantToCloudApplication(cloudApplication.Entity.CloudApplicationId, onTenantAssignedToCloudApplication);
         };
     }
 

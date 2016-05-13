@@ -3,7 +3,6 @@ using CloudPortal.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Vanrise.Common;
 
 namespace CloudPortal.BusinessEntity.Business
@@ -144,6 +143,27 @@ namespace CloudPortal.BusinessEntity.Business
             return GetCachedCloudApplications().First(itm => itm.CloudApplicationId == cloudApplicationId);
         }
 
+        public List<CloudApplication> GetCloudApplicationByUser()
+        {
+            var userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            
+            CloudApplicationUserManager cloudUserManager = new CloudApplicationUserManager();
+            var cloudUserApplications = cloudUserManager.GetUserApplications(userId);
+            if (cloudUserApplications == null || cloudUserApplications.Count == 0)
+                return null;
+
+            List<CloudApplication> cloudApplications = new List<CloudApplication>();
+            CloudApplicationManager cloudApplicationManager = new CloudApplicationManager();
+
+            CloudApplicationTenantManager cloudTenantManager = new CloudApplicationTenantManager();
+            foreach (CloudApplicationUser item in cloudUserApplications)
+            {
+                var cloudTenantApplication = cloudTenantManager.GetApplicationTenantById(item.CloudApplicationTenantID);
+                cloudApplications.Add(cloudApplicationManager.GetCloudApplication(cloudTenantApplication.ApplicationId));
+            }
+            return cloudApplications;
+        }
+
         #endregion
 
         #region Private Methods
@@ -154,13 +174,13 @@ namespace CloudPortal.BusinessEntity.Business
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
 
-        private void AddCurrentUserToApplication(CloudApplication cloudApplication)
-        {
-            CloudApplicationUserManager appUserManager = new CloudApplicationUserManager();
-            var userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-            appUserManager.AddUserToApplication(cloudApplication.CloudApplicationId, userId);
-            appUserManager.AssignUserFullControlToApp(cloudApplication, userId);
-        }
+        //private void AddCurrentUserToApplication(CloudApplication cloudApplication)
+        //{
+        //    CloudApplicationUserManager appUserManager = new CloudApplicationUserManager();
+        //    var userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+        //    appUserManager.AddUserToApplication(cloudApplication.CloudApplicationId, userId);
+        //    appUserManager.AssignUserFullControlToApp(cloudApplication, userId);
+        //}
 
         private bool UpdateAppAuthServer(CloudApplication cloudApplication)
         {

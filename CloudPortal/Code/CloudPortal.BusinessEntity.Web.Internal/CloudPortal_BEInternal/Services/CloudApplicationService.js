@@ -27,9 +27,25 @@
             VRModalService.showModal('/Client/Modules/CloudPortal_BEInternal/Views/CloudApplication/CloudApplicationEditor.html', parameters, modalSettings);
         }
 
+        function assignTenantToCloudApplication(cloudApplicationId, onTenantAssignedToCloudApplication) {
+            var modalSettings = {
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onTenantAssignedToCloudApplication = onTenantAssignedToCloudApplication;
+            };
+            var parameters = {
+                CloudApplicationId: cloudApplicationId
+            };
+
+            VRModalService.showModal('/Client/Modules/CloudPortal_BEInternal/Views/CloudApplication/CloudApplicationTenantEditor.html', parameters, modalSettings);
+        }
+
+        
+
         return ({
             editCloudApplication: editCloudApplication,
-            addCloudApplication: addCloudApplication
+            addCloudApplication: addCloudApplication,
+            assignTenantToCloudApplication: assignTenantToCloudApplication
         });
     }
     appControllers.service('CloudPortal_BEInternal_CloudApplicationService', BEInternal_CloudApplicationService);

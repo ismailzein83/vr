@@ -53,6 +53,7 @@
     <Compile Include="BEDataManagerFactory.cs" />
     <Compile Include="ICloudApplicationTypeDataManager.cs" />
     <Compile Include="ICloudApplicationDataManager.cs" />
+    <Compile Include="ICloudApplicationTenantDataManager.cs" />
     <Compile Include="ICloudApplicationUserDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,0 +1,24 @@
+﻿<div vr-modalcontent width="'50%'" ng-controller="CloudPortal_BEInternal_CloudApplicationTenantEditorController">
+    <vr-modalbody>
+        <vr-form name="formCreateProcessInput" vr-loader="isLoading">
+            <vr-row removeline>
+                <vr-columns width="1/3row">
+                    <vr-sec-tenant-selector on-ready="onTenantSelectorReady" isrequired="true" hideremoveicon customlabel="Tenant" vr-disabled="isInEditMode"></vr-sec-tenant-selector>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="License Expires On" value="expiresOn" type="dateTime" isrequired></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="assignCloudApplicationTenant" formname="formCreateProcessInput" haspermission="hasAssignCloudApplicationTenantPermission"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

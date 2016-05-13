@@ -1,0 +1,23 @@
+﻿<div vr-modalcontent width="'50%'" ng-controller="CloudPortal_BEInternal_CloudApplicationUserEditorController">
+    <vr-modalbody>
+        <vr-form name="formCreateProcessInput" vr-loader="isLoading">
+            <vr-row removeline>
+                <vr-columns width="1/3row">
+                    <vr-sec-user-selector on-ready="onUserSelectorReady" isrequired="true" hideremoveicon ismultipleselection></vr-sec-user-selector>
+                </vr-columns>
+                <vr-columns width="1/3row">
+                    <vr-switch value="hasFullPermission" label="Full Permission"></vr-switch>
+                </vr-columns>
+            </vr-row>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="assignCloudApplicationUser" formname="formCreateProcessInput" haspermission="hasAssignCloudApplicationUserPermission"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

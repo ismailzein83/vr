@@ -43,6 +43,15 @@ function CloudPortal_BEInternal_CloudApplicationEditorController($scope, CloudPo
                 });
             }
         };
+
+        $scope.hasSaveCloudApplicationPermission = function () {
+            if (isEditMode) {
+                return CloudPortal_BEInternal_CloudApplicationAPIService.HasUpdateCloudApplicationPermission();
+            }
+            else {
+                return CloudPortal_BEInternal_CloudApplicationAPIService.HasAddCloudApplicationPermission();
+            }
+        }
     }
 
     function buildCloudApplicationObjFromScope() {

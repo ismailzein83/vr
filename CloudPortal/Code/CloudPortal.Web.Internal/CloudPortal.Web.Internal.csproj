@@ -217,6 +217,10 @@
       <Project>{88496758-888a-465a-876b-cc7ee144330f}</Project>
       <Name>CloudPortal.BusinessEntity.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CloudPortal.BusinessEntity.MainExtensions\CloudPortal.BusinessEntity.MainExtensions.csproj">
+      <Project>{6353e9f6-aa7d-48e4-96e0-36b960eaa02e}</Project>
+      <Name>CloudPortal.BusinessEntity.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CloudPortal.BusinessEntity.Web.Internal\CloudPortal.BusinessEntity.Web.Internal.csproj">
       <Project>{d2a7d5ba-36c1-4f8b-a6fd-d18973601ccd}</Project>
       <Name>CloudPortal.BusinessEntity.Web.Internal</Name>

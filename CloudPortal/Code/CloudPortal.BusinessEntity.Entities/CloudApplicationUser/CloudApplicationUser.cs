@@ -9,7 +9,7 @@ namespace CloudPortal.BusinessEntity.Entities
 {
     public class CloudApplicationUser
     {
-        public int ApplicationId { get; set; }
+        public int CloudApplicationTenantID { get; set; }
 
         public int UserId { get; set; }
 

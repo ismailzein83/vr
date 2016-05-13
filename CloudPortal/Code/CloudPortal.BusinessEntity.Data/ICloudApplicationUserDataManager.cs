@@ -13,5 +13,7 @@ namespace CloudPortal.BusinessEntity.Data
         List<Entities.CloudApplicationUser> GetAllApplicationUsers();
 
         bool AddApplicationUser(Entities.CloudApplicationUser applicationUser);
+
+        bool UpdateApplicationUser(Entities.CloudApplicationUser applicationUser);
     }
 }

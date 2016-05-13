@@ -23,7 +23,7 @@ namespace CloudPortal.BusinessEntity.Web.Internal.Controllers
         {
             var applicationIdentification = GetApplicationIdentification();
             var output = new AddUserToApplicationOutput();
-             output.OperationOutput = _manager.AddUserToApplication(applicationIdentification, input.Email, input.Status, input.Description);
+             output.OperationOutput = _manager.AddUserToApplication(applicationIdentification, input.Email, input.Status, input.Description, input.TenantId);
             return output;
         }
 
@@ -53,6 +53,17 @@ namespace CloudPortal.BusinessEntity.Web.Internal.Controllers
             };
         }
 
+        [HttpPost]
+        [Route("UpdateUserToApplication")]
+        [IsInternalAPI]
+        public UpdateUserToApplicationOutput UpdateUserToApplication(UpdateUserToApplicationInput input)
+        {
+            var applicationIdentification = GetApplicationIdentification();
+            var output = new UpdateUserToApplicationOutput();
+            output.OperationOutput = _manager.UpdateUserToApplication(applicationIdentification, input.UserId, input.Status, input.Description);
+            return output;
+        }
+
         CloudApplicationIdentification GetApplicationIdentification()
         {
             var headerItem = HttpContext.Current.Request.Headers[CloudAuthServer.CLOUDSERVICE_HTTPHEADERNAME];
@@ -64,5 +75,62 @@ namespace CloudPortal.BusinessEntity.Web.Internal.Controllers
             return cloudApplicationIdentification;
         }
 
+        [HttpPost]
+        [Route("AddTenantToApplication")]
+        [IsInternalAPI]
+        public AddTenantToApplicationOutput AddTenantToApplication(AddTenantToApplicationInput input)
+        {
+            var applicationIdentification = GetApplicationIdentification();
+            var output = new AddTenantToApplicationOutput();
+            output.OperationOutput = _manager.AddTenantToApplication(applicationIdentification, input.Name, input.ParentTenantId, input.Settings);
+            return output;
+        }
+
+        [HttpPost]
+        [Route("CheckApplicationTenantsUpdated")]
+        [IsInternalAPI]
+        public CheckApplicationTenantsUpdatedOuput CheckApplicationTenantsUpdated(CheckApplicationTenantsUpdatedInput input)
+        {
+            DateTime? lastCheckTime = default(DateTime?);
+            if (input.LastReceivedUpdateInfo != null)
+                lastCheckTime = (DateTime?)input.LastReceivedUpdateInfo;
+            CheckApplicationTenantsUpdatedOuput output = new CheckApplicationTenantsUpdatedOuput();
+            output.Updated = _manager.CheckAppTenantsUpdated(ref lastCheckTime);
+            output.LastUpdateInfo = lastCheckTime;
+            return output;
+        }
+
+        [HttpPost]
+        [Route("GetApplicationTenants")]
+        [IsInternalAPI]
+        public GetApplicationTenantsOutput GetApplicationTenants(GetApplicationTenantsInput input)
+        {
+            var applicationIdentification = GetApplicationIdentification();
+            return new GetApplicationTenantsOutput
+            {
+                Tenants = _manager.GetApplicationTenants(applicationIdentification)
+            };
+        }
+
+        [HttpPost]
+        [Route("UpdateTenantToApplication")]
+        [IsInternalAPI]
+        public UpdateTenantToApplicationOutput UpdateTenantToApplication(UpdateTenantToApplicationInput input)
+        {
+            var applicationIdentification = GetApplicationIdentification();
+            var output = new UpdateTenantToApplicationOutput();
+            output.OperationOutput = _manager.UpdateTenantToApplication(applicationIdentification, input.TenantId);
+            return output;
+        }
+
+
+        [HttpPost]
+        [Route("GetCloudTenants")]
+        [IsInternalAPI]
+        public List<CloudTenantOutput> GetCloudTenants(CloudTenantInput input)
+        {
+            var applicationIdentification = GetApplicationIdentification();
+            return _manager.GetCloudTenants(applicationIdentification);
+        }
     }
 }

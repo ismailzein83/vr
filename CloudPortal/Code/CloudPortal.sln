@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{425C8E7C-5F73-4C7D-9089-519DA66AEB18}"
 EndProject
@@ -37,11 +37,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudPortal.BusinessEntity.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudPortal.Web.Internal", "CloudPortal.Web.Internal\CloudPortal.Web.Internal.csproj", "{854085D1-E7A5-4E65-B2EF-5DF9A2AC08AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudPortal.BusinessEntity.MainExtensions", "CloudPortal.BusinessEntity.MainExtensions\CloudPortal.BusinessEntity.MainExtensions.csproj", "{6353E9F6-AA7D-48E4-96E0-36B960EAA02E}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 12
+		SccNumberOfProjects = 13
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
 		SccProjectTopLevelParentUniqueName1 = CloudPortal.sln
@@ -87,6 +89,10 @@ Global
 		SccProjectTopLevelParentUniqueName11 = CloudPortal.sln
 		SccProjectName11 = CloudPortal.Web.Internal
 		SccLocalPath11 = CloudPortal.Web.Internal
+		SccProjectUniqueName12 = CloudPortal.BusinessEntity.MainExtensions\\CloudPortal.BusinessEntity.MainExtensions.csproj
+		SccProjectTopLevelParentUniqueName12 = CloudPortal.sln
+		SccProjectName12 = CloudPortal.BusinessEntity.MainExtensions
+		SccLocalPath12 = CloudPortal.BusinessEntity.MainExtensions
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,22 +145,27 @@ Global
 		{854085D1-E7A5-4E65-B2EF-5DF9A2AC08AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{854085D1-E7A5-4E65-B2EF-5DF9A2AC08AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{854085D1-E7A5-4E65-B2EF-5DF9A2AC08AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6353E9F6-AA7D-48E4-96E0-36B960EAA02E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6353E9F6-AA7D-48E4-96E0-36B960EAA02E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6353E9F6-AA7D-48E4-96E0-36B960EAA02E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6353E9F6-AA7D-48E4-96E0-36B960EAA02E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{B7A03972-88BF-4AFA-B16F-1FAF88DAA35A} = {425C8E7C-5F73-4C7D-9089-519DA66AEB18}
-		{173B876E-356D-4ECB-824B-8B6E632A3462} = {33D8B0DE-7C1B-4449-A387-612C955F85CC}
-		{16C2163A-C382-4654-AA67-A4082BD203BB} = {297C2D0B-E219-4E68-B10A-994630BF4344}
 		{C527C7B2-A481-4D1D-B25A-4A540E812153} = {D18171BD-5CF9-4484-9354-D6FDE71C0AF9}
 		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0} = {D18171BD-5CF9-4484-9354-D6FDE71C0AF9}
 		{E8846821-CC8D-42D6-A747-628732FE0BA8} = {D18171BD-5CF9-4484-9354-D6FDE71C0AF9}
-		{854085D1-E7A5-4E65-B2EF-5DF9A2AC08AA} = {D18171BD-5CF9-4484-9354-D6FDE71C0AF9}
+		{16C2163A-C382-4654-AA67-A4082BD203BB} = {297C2D0B-E219-4E68-B10A-994630BF4344}
+		{B7A03972-88BF-4AFA-B16F-1FAF88DAA35A} = {425C8E7C-5F73-4C7D-9089-519DA66AEB18}
+		{173B876E-356D-4ECB-824B-8B6E632A3462} = {33D8B0DE-7C1B-4449-A387-612C955F85CC}
 		{88496758-888A-465A-876B-CC7EE144330F} = {173B876E-356D-4ECB-824B-8B6E632A3462}
 		{97E215C1-87A2-4176-9691-FCA05A8476F1} = {173B876E-356D-4ECB-824B-8B6E632A3462}
 		{D2A7D5BA-36C1-4F8B-A6FD-D18973601CCD} = {173B876E-356D-4ECB-824B-8B6E632A3462}
 		{DBF21CE1-1E94-4C32-B506-0C4335225BD7} = {173B876E-356D-4ECB-824B-8B6E632A3462}
 		{A3E21B59-E55A-4BC0-A290-8A145A9512A8} = {173B876E-356D-4ECB-824B-8B6E632A3462}
+		{854085D1-E7A5-4E65-B2EF-5DF9A2AC08AA} = {D18171BD-5CF9-4484-9354-D6FDE71C0AF9}
+		{6353E9F6-AA7D-48E4-96E0-36B960EAA02E} = {173B876E-356D-4ECB-824B-8B6E632A3462}
 	EndGlobalSection
 EndGlobal

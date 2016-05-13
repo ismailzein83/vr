@@ -128,6 +128,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CloudApplicationUserController.cs" />
+    <Compile Include="Controllers\CloudApplicationTenantController.cs" />
     <Compile Include="Controllers\CloudApplicationController.cs" />
     <Compile Include="Controllers\CloudApplicationTypeController.cs" />
     <Compile Include="Controllers\CloudServiceController.cs" />
@@ -150,19 +152,33 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="CloudPortal_BEInternal\Constants\ModuleConfig.js" />
+    <Content Include="CloudPortal_BEInternal\Directives\CloudApplicationUser\cloudapplicationuser-management-grid.js" />
+    <Content Include="CloudPortal_BEInternal\Directives\CloudApplicationUser\Templates\CloudApplicationUsersGrid.html" />
+    <Content Include="CloudPortal_BEInternal\Directives\CloudApplicationTenant\cloudapplicationtenant-management-grid.js" />
+    <Content Include="CloudPortal_BEInternal\Directives\CloudApplicationTenant\Templates\CloudApplicationTenantsGrid.html" />
     <Content Include="CloudPortal_BEInternal\Directives\CloudApplication\cloudapplication-management-grid.js" />
     <Content Include="CloudPortal_BEInternal\Directives\CloudApplication\Templates\CloudApplicationGridTemplate.html" />
     <Content Include="CloudPortal_BEInternal\Directives\CloudApplicationType\cloudapplicationtype-management-grid.js" />
     <Content Include="CloudPortal_BEInternal\Directives\CloudApplicationType\Templates\CloudApplicationTypeGridTemplate.html" />
+    <Content Include="CloudPortal_BEInternal\Services\APIServices\CloudApplicationUserAPIService.js" />
+    <Content Include="CloudPortal_BEInternal\Services\APIServices\CloudApplicationTenantAPIService.js" />
     <Content Include="CloudPortal_BEInternal\Services\APIServices\CloudApplicationAPIService.js" />
     <Content Include="CloudPortal_BEInternal\Services\APIServices\CloudApplicationTypeAPIService.js" />
+    <Content Include="CloudPortal_BEInternal\Services\CloudApplicationUserService.js" />
+    <Content Include="CloudPortal_BEInternal\Services\CloudApplicationTenantService.js" />
     <Content Include="CloudPortal_BEInternal\Services\CloudApplicationService.js" />
     <Content Include="CloudPortal_BEInternal\Services\CloudApplicationTypeService.js" />
+    <Content Include="CloudPortal_BEInternal\Views\Home\LandingPage.html" />
+    <Content Include="CloudPortal_BEInternal\Views\Home\LandingPageController.js" />
+    <Content Include="CloudPortal_BEInternal\Views\CloudApplicationUser\CloudApplicationUserEditor.html" />
+    <Content Include="CloudPortal_BEInternal\Views\CloudApplicationUser\CloudApplicationUserEditorController.js" />
     <Content Include="CloudPortal_BEInternal\Views\CloudApplicationType\CloudApplicationTypeEditor.html" />
     <Content Include="CloudPortal_BEInternal\Views\CloudApplicationType\CloudApplicationTypeManagement.html" />
     <Content Include="CloudPortal_BEInternal\Views\CloudApplicationType\CloudApplicationTypeEditorController.js" />
     <Content Include="CloudPortal_BEInternal\Views\CloudApplicationType\CloudApplicationTypeManagementController.js" />
+    <Content Include="CloudPortal_BEInternal\Views\CloudApplicationTenant\CloudApplicationTenantEditor.html" />
     <Content Include="CloudPortal_BEInternal\Views\CloudApplication\CloudApplicationEditor.html" />
+    <Content Include="CloudPortal_BEInternal\Views\CloudApplicationTenant\CloudApplicationTenantEditorController.js" />
     <Content Include="CloudPortal_BEInternal\Views\CloudApplication\CloudApplicationEditorController.js" />
     <Content Include="CloudPortal_BEInternal\Views\CloudApplication\CloudApplicationManagement.html" />
     <Content Include="CloudPortal_BEInternal\Views\CloudApplication\CloudApplicationManagementController.js" />
