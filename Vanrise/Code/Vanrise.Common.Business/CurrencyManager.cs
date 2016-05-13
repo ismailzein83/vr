@@ -37,7 +37,16 @@ namespace Vanrise.Common.Business
             return currencies.GetRecord(currencyId);
         }
 
-        
+        public Currency GetSystemCurrency()
+        {
+            string systemCurrencySymbol = System.Configuration.ConfigurationManager.AppSettings["Currency"];
+            if (systemCurrencySymbol == null)
+                throw new NullReferenceException("systemCurrencySymbol");
+            var systemCurrency = GetAllCurrencies().FindRecord(itm => String.Compare(itm.Symbol, systemCurrencySymbol, true) == 0);
+            if (systemCurrency == null)
+                throw new NullReferenceException(String.Format("systemCurrency '{0}'", systemCurrencySymbol));
+            return systemCurrency;
+        }
 
         public Dictionary<int, Currency> GetCachedCurrencies()
         {
