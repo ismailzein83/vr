@@ -11,7 +11,6 @@
 
         var gridAPI;
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
-        var pageSize;
 
         var chartAPI;
         var chartReadyDeferred = UtilsService.createPromiseDeferred();
@@ -27,20 +26,46 @@
             $scope.scopeModel.reportTypes = UtilsService.getFilteredArrayFromArray(reportTypes, true, 'isVisible');
             $scope.scopeModel.selectedReportType = UtilsService.getEnum(WhS_Analytics_VariationReportTypeEnum, 'value', WhS_Analytics_VariationReportTypeEnum.InBoundMinutes.value);
 
-            $scope.scopeModel.toDate = new Date('2016-01-04');
+            $scope.scopeModel.toDate = new Date();
 
             $scope.scopeModel.periodTypes = UtilsService.getArrayEnum(WhS_Analytics_VariationReportTimePeriodEnum);
             $scope.scopeModel.selectedPeriodType = UtilsService.getEnum(WhS_Analytics_VariationReportTimePeriodEnum, 'value', WhS_Analytics_VariationReportTimePeriodEnum.Daily.value);
 
-            $scope.scopeModel.numberOfPeriods = 3;
-            $scope.scopeModel.showGrid = false;
-            $scope.scopeModel.showChart = false;
-
+            $scope.scopeModel.numberOfPeriods = 7;
             $scope.scopeModel.top = 5;
 
-            $scope.scopeModel.onReportTypeSelectionChanged = function (selectedReportType) {
+            $scope.scopeModel.onReportTypeSelectionChanged = function ()
+            {
+                if ($scope.scopeModel.selectedPeriodType == undefined)
+                    return;
+
                 $scope.scopeModel.showGrid = false;
                 $scope.scopeModel.showChart = false;
+
+                showTopFilter();
+                showCurrencyFilter();
+                
+                function showTopFilter() {
+                    switch ($scope.scopeModel.selectedReportType.value) {
+                        case WhS_Analytics_VariationReportTypeEnum.InOutBoundMinutes.value:
+                        case WhS_Analytics_VariationReportTypeEnum.InOutBoundAmount.value:
+                            $scope.scopeModel.showTopFilter = false;
+                            return;
+                    }
+                    $scope.scopeModel.showTopFilter = true;
+                }
+                function showCurrencyFilter() {
+                    switch ($scope.scopeModel.selectedReportType.value) {
+                        case WhS_Analytics_VariationReportTypeEnum.InBoundAmount.value:
+                        case WhS_Analytics_VariationReportTypeEnum.OutBoundAmount.value:
+                        case WhS_Analytics_VariationReportTypeEnum.InOutBoundAmount.value:
+                        case WhS_Analytics_VariationReportTypeEnum.TopDestinationAmount.value:
+                        case WhS_Analytics_VariationReportTypeEnum.Profit.value:
+                            $scope.scopeModel.showCurrencyFilter = true;
+                            return;
+                    }
+                    $scope.scopeModel.showCurrencyFilter = false;
+                }
             };
 
             $scope.scopeModel.onCurrencySelectorReady = function (api) {
@@ -51,7 +76,6 @@
             $scope.scopeModel.onGridReady = function (api)
             {
                 gridAPI = api;
-                pageSize = api.getPageSize();
                 gridReadyDeferred.resolve();
             };
 
@@ -61,8 +85,9 @@
             };
 
             $scope.scopeModel.validateTopFilter = function () {
-                if (pageSize == undefined) // Handle the case when/if this function executes before onGridReady in which case pageSize = undefined
+                if (gridAPI == undefined) // Handle the case when/if validateTopFilter executes before onGridReady
                     return null;
+                var pageSize = gridAPI.getPageSize();
                 return ($scope.scopeModel.top > pageSize) ? ('Top <= ' + pageSize) : null;
             };
 
@@ -129,7 +154,8 @@
                 ToDate: $scope.scopeModel.toDate,
                 TimePeriod: $scope.scopeModel.selectedPeriodType.value,
                 NumberOfPeriods: $scope.scopeModel.numberOfPeriods,
-                GroupByProfile: $scope.scopeModel.groupByProfile
+                GroupByProfile: $scope.scopeModel.groupByProfile,
+                CurrencyId: ($scope.scopeModel.showCurrencyFilter) ? currencySelectorAPI.getSelectedIds() : null
             };
         }
 

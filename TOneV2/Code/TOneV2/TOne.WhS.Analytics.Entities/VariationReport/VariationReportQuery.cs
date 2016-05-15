@@ -21,6 +21,8 @@ namespace TOne.WhS.Analytics.Entities
 
         public bool GroupByProfile { get; set; }
 
+        public int? CurrencyId { get; set; }
+
         //public List<VariationReportDimensionFilter> DimensionFilters { get; set; }
     }
 

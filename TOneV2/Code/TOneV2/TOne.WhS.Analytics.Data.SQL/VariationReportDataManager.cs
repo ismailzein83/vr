@@ -68,7 +68,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                 #QUERY_PART#
             ");
 
-            variationReportQueryBuilder.Replace("#EXCHANGE_RATES_TABLE#", GetExchangeRatesTable(query));
+            variationReportQueryBuilder.Replace("#EXCHANGE_RATES_TABLE#", GetExchangeRatesTable(query.CurrencyId));
 
             string queryPart = (query.ReportType == VariationReportType.InOutBoundMinutes || query.ReportType == VariationReportType.InOutBoundAmount) ?
                 GetMultiBoundQuery(query) :
@@ -79,30 +79,11 @@ namespace TOne.WhS.Analytics.Data.SQL
             return variationReportQueryBuilder.ToString();
         }
 
-        string GetExchangeRatesTable(VariationReportQuery query)
+        string GetExchangeRatesTable(int? currencyId)
         {
-            switch (query.ReportType)
-            {
-                case VariationReportType.InBoundAmount:
-                case VariationReportType.OutBoundAmount:
-                case VariationReportType.InOutBoundAmount:
-                case VariationReportType.TopDestinationAmount:
-                case VariationReportType.Profit:
-                case VariationReportType.OutBoundProfit:
-                case VariationReportType.TopDestinationProfit:
-                    return @"DECLARE @ExchangeRates TABLE
-                    (
-	                    CurrencyID INT NOT NULL,
-	                    Rate DECIMAL(18, 6) NOT NULL,
-	                    BED DATETIME NOT NULL,
-	                    EED DATETIME,
-	                    PRIMARY KEY(CurrencyID, BED)
-                    )
-                    INSERT INTO @ExchangeRates
-                    SELECT * FROM Common.getExchangeRates(@SmallestFromDate, @LargestToDate)";
-                default:
-                    return null;
-            }
+            if (currencyId.HasValue)
+                return String.Format(@"WITH ConvertedExchangeRates AS (SELECT * FROM Common.getExchangeRatesConvertedToCurrency({0}, @SmallestFromDate, @LargestToDate))", currencyId.Value);
+            return null;
         }
 
         #region Multi Bound Query
@@ -367,8 +348,8 @@ namespace TOne.WhS.Analytics.Data.SQL
                 case VariationReportType.Profit:
                 case VariationReportType.OutBoundProfit:
                 case VariationReportType.TopDestinationProfit:
-                    joinPartBuilder.Append(String.Format(" LEFT JOIN @ExchangeRates SER on bs.SaleCurrency = SER.CurrencyID AND bs.CallDate >= SER.BED AND (SER.EED IS NULL OR bs.CallDate < SER.EED)"));
-                    joinPartBuilder.Append(String.Format(" LEFT JOIN @ExchangeRates CER on bs.CostCurrency = CER.CurrencyID AND bs.CallDate >= CER.BED AND (CER.EED IS NULL OR bs.CallDate < CER.EED)"));
+                    joinPartBuilder.Append(String.Format(" LEFT JOIN ConvertedExchangeRates SER on bs.SaleCurrency = SER.CurrencyID AND bs.CallDate >= SER.BED AND (SER.EED IS NULL OR bs.CallDate < SER.EED)"));
+                    joinPartBuilder.Append(String.Format(" LEFT JOIN ConvertedExchangeRates CER on bs.CostCurrency = CER.CurrencyID AND bs.CallDate >= CER.BED AND (CER.EED IS NULL OR bs.CallDate < CER.EED)"));
                     break;
             }
             for (int i = 0; i < query.NumberOfPeriods; i++)
