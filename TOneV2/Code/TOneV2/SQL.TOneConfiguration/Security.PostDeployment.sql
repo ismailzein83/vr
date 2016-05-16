@@ -9,25 +9,46 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
+--[sec].[Tenant]------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [sec].[Tenant] on;
+;with cte_data([ID],[Name],[ParentTenantID],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'Root Tenant',null,null)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[ParentTenantID],[Settings]))
+merge	[sec].[Tenant] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[ParentTenantID] = s.[ParentTenantID],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[ParentTenantID],[Settings])
+	values(s.[ID],s.[Name],s.[ParentTenantID],s.[Settings]);
+set identity_insert [sec].[Tenant] off;
+
 --[sec].[User]--------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[User] on;
-;with cte_data([ID],[Name],[Password],[Email],[Status])
+;with cte_data([ID],[Name],[Password],[Email],[TenantId],[Status])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Administrator','9se8222byLvgU9Bzln+oPVZAblIhczMtIT8hLVNhMXQ=','admin@vanrise.com',1)
+(1,'Administrator','9se8222byLvgU9Bzln+oPVZAblIhczMtIT8hLVNhMXQ=','admin@vanrise.com',1,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Password],[Email],[Status]))
+)c([ID],[Name],[Password],[Email],[TenantId],[Status]))
 merge	[sec].[User] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Name] = s.[Name],[Password] = s.[Password],[Email] = s.[Email],[Status] = s.[Status]
+	[Name] = s.[Name],[Password] = s.[Password],[Email] = s.[Email],[TenantId] = s.[TenantId],[Status] = s.[Status]
 when not matched by target then
-	insert([ID],[Name],[Password],[Email],[Status])
-	values(s.[ID],s.[Name],s.[Password],s.[Email],s.[Status]);
+	insert([ID],[Name],[Password],[Email],[TenantId],[Status])
+	values(s.[ID],s.[Name],s.[Password],s.[Email],s.[TenantId],s.[Status]);
 set identity_insert [sec].[User] off;
 
 --[sec].[SystemAction]------------------------------------------------------------------------------

@@ -82,8 +82,9 @@ as (select * from (values
 (1213,'CDR Process Rules',null,1212,null,1,0),
 (1214,'Traffic Analysis',null,null,'/images/menu-icons/NOC.png',70,1),
 (1215,'Billing',null,null,'/images/menu-icons/billing.png',80,0),
-(1216,'Prepaid-Postpaid',null,null,'/images/menu-icons/post paid - pre paid.png',90,0),
-(1217,'Plugins',null,null,'/images/menu-icons/plug.png',100,0)
+(1216,'Reports',null,1215,null,1,0),
+(1217,'Prepaid-Postpaid',null,null,'/images/menu-icons/post paid - pre paid.png',90,0),
+(1218,'Plugins',null,null,'/images/menu-icons/plug.png',100,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -142,7 +143,8 @@ as (select * from (values
 (12036,'Hourly Report','Hourly Report','#/view/WhS_Analytics/Views/HourlyReport',1214,null,null,null,null,0,3),
 (12037,'CDR Log','CDR Log','#/view/WhS_Analytics/Views/CDR/CDRLog',1214,null,null,null,null,0,4),
 (12038,'Raw CDR Log','Raw CDR Log','#/view/WhS_Analytics/Views/RawCDR/RawCDRLog',1214,null,null,null,null,0,5),
-(12071,'Repeated Numbers','Repeated Numbers','#/view/WhS_Analytics/Views/RepeatedNumber/RepeatedNumber',1214,null,null,null,null,0,8)
+(12071,'Repeated Numbers','Repeated Numbers','#/view/WhS_Analytics/Views/RepeatedNumber/RepeatedNumber',1214,null,null,null,null,0,8),
+(12100,'Variation','Variation','#/view/WhS_Analytics/Views/VariationReport/VariationReport',1216,'WhS_Analytics/VariationReport/GetFilteredVariationReportRecords',null,null,null,0,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -163,7 +165,10 @@ set identity_insert [sec].[BusinessEntityModule] on;
 ;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1201,'Purchase',1,0)
+(1201,'Purchase',1,0),
+(1202,'Account Manager',1,0),
+(1203,'Routing',1,0),
+(1204,'Billing',1,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[ParentId],[BreakInheritance]))
 merge	[sec].[BusinessEntityModule] as t
@@ -185,7 +190,8 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(3301,'WhS_BE_SupplierPricelist','Supplier PriceList',1201,0,'["View"]')
+--(3301,'WhS_BE_SupplierPricelist','Supplier PriceList',1201,0,'["View"]'),
+(3301,'WhS_Analytics_Variation','Variation',1204,0,'["View"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -327,7 +333,7 @@ as (select * from (values
 
 ('WhS_BE/SaleCode/GetFilteredSaleCodes',null),
 
-('WhS_BE/SalePricelist/GetFilteredSalePriceLists',null),
+--('WhS_BE/SalePricelist/GetFilteredSalePriceLists',null),
 
 ('WhS_BE/SaleRate/GetFilteredSaleRate',null),
 
@@ -431,7 +437,8 @@ as (select * from (values
 ('WhS_Routing/RouteOptionRule/UpdateRule',null),
 ('WhS_Routing/RouteOptionRule/DeleteRule',null),
 ('WhS_Routing/RouteOptionRule/GetRouteOptionRuleSettingsTemplates',null),
-('WhS_Analytics/RepeatedNumber/GetAllFilteredRepeatedNumbers','WhS_Analytics_RepeatedNumber: View')
+('WhS_Analytics/RepeatedNumber/GetAllFilteredRepeatedNumbers','WhS_Analytics_RepeatedNumber: View'),
+('WhS_Analytics/VariationReport/GetFilteredVariationReportRecords','WhS_Analytics_Variation: View')
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
