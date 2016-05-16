@@ -13,6 +13,16 @@ namespace TOne.WhS.Analytics.Data.SQL
 {
     public class VariationReportDataManager : BaseSQLDataManager, IVariationReportDataManager
     {
+        #region Constructors
+
+        public VariationReportDataManager()
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneV2DBConnString"))
+        {
+
+        }
+        
+        #endregion
+
         #region Public Methods
 
         public IEnumerable<VariationReportRecord> GetFilteredVariationReportRecords(DataRetrievalInput<VariationReportQuery> input, IEnumerable<TimePeriod> timePeriods)
