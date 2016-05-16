@@ -22,7 +22,9 @@ namespace XBooster.PriceListConversion.Web.Controllers
             try
             {
                 byte[] bytes  = manager.ConvertAndDownloadPriceList(priceListConversion);
-                return GetExcelResponse(bytes, "ConvertedExcel.xls");
+                PriceListTemplateManager templateManager = new PriceListTemplateManager();
+                PriceListTemplate template =  templateManager.GetPriceListTemplate(priceListConversion.OutputPriceListTemplateId);
+                return GetExcelResponse(bytes,template.Name.Trim() +".xls");
             }
             catch(Exception ex)
             {

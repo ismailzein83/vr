@@ -10,7 +10,6 @@ namespace XBooster.PriceListConversion.Entities
     {
         public int InputFileId { get; set; }
         public InputPriceListSettings InputPriceListSettings { get; set; }
-
         public int OutputPriceListTemplateId { get; set; }
     }
 }

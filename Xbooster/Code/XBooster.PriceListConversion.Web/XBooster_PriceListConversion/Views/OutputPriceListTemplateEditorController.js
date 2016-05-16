@@ -65,7 +65,7 @@
             {
                 var obj =
                {
-                   pricelistTemplateId: outputTemplateSelectorAPI.getSelectedIds()
+                   pricelistTemplateIds: outputTemplateSelectorAPI.getSelectedIds()
                }
                 return obj
             }
