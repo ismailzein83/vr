@@ -209,6 +209,7 @@
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierProfileGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\TestCutomerTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-carrieraccountall-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-customer-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-activationstatus-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-supplier-selector.js" />
