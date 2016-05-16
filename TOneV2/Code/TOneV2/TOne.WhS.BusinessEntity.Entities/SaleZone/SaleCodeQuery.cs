@@ -10,7 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public int? SellingNumberPlanId { get; set; }
         public List<int> ZonesIds { get; set; }
-
+        public string Code { get; set; }
         public DateTime? EffectiveOn { get; set; }
 
     }

@@ -24,38 +24,37 @@ namespace TOne.WhS.CodePreparation.Business
             Dictionary<string, ExistingZone> existingZonesByZoneName = cpContext.ExistingZonesByZoneName;
 
             ZoneToProcess zoneTopProcess = context.Target as ZoneToProcess;
-            
 
-
-            foreach (CodeToMove codeToMove in zoneTopProcess.CodesToMove)
+            if (zoneTopProcess.CodesToAdd != null)
             {
-                ExistingZone existingZoneInContext;
-                existingZonesByZoneName.TryGetValue(codeToMove.ZoneName, out existingZoneInContext);
-                if (existingZoneInContext != null && existingZoneInContext.BED > DateTime.Today)
-                    return false;
+                foreach (CodeToAdd codeToAdd in zoneTopProcess.CodesToAdd)
+                {
+                    if (codeToAdd.ChangedExistingCodes != null)
+                    {
+                        ExistingZone existingZoneInContext;
+                        existingZonesByZoneName.TryGetValue(codeToAdd.ZoneName, out existingZoneInContext);
+
+                        if (existingZoneInContext != null && existingZoneInContext.BED > DateTime.Today &&
+                            !codeToAdd.ZoneName.Equals(codeToAdd.ChangedExistingCodes.FindRecord(item => item.CodeEntity.Code == codeToAdd.Code).ParentZone.Name, StringComparison.InvariantCultureIgnoreCase))
+                            return false;
+
+                    }
+                }
+            }
+
+
+            if (zoneTopProcess.CodesToMove != null)
+            {
+                foreach (CodeToMove codeToMove in zoneTopProcess.CodesToMove)
+                {
+                    ExistingZone existingZoneInContext;
+                    existingZonesByZoneName.TryGetValue(codeToMove.ZoneName, out existingZoneInContext);
+                    if (existingZoneInContext != null && existingZoneInContext.BED > DateTime.Today)
+                        return false;
+                }
             }
 
             return true;
-
-
-            //ExistingZone existingZone = context.Target as ExistingZone;
-
-            //if (existingZone.AddedCodes.Count() == 0)
-            //    return true;
-            
-            //if(existingZone.BED > DateTime.Today)
-            //{
-            //    foreach (AddedCode addeCode in existingZone.AddedCodes)
-            //    {
-            //        if (addeCode.EED.HasValue)
-            //            return false;
-
-            //        if (existingZone.ExistingCodes.FindRecord(item => item.CodeEntity.Code == addeCode.Code) != null)
-            //            return false;
-            //    }
-            //}
-
-            //return true;
         }
 
         public override string GetMessage(IRuleTarget target)

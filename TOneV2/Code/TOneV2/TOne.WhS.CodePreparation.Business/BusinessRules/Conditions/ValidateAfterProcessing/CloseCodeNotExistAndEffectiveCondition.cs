@@ -10,7 +10,7 @@ using Vanrise.Common;
 
 namespace TOne.WhS.CodePreparation.Business
 {
-    public class ColseCodeNotExistAndEffectiveCondition : BusinessRuleCondition
+    public class CloseCodeNotExistAndEffectiveCondition : BusinessRuleCondition
     {
         public override bool ShouldValidate(IRuleTarget target)
         {

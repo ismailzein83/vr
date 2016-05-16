@@ -77,7 +77,7 @@
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeEffectiveBeforeZoneCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeWithDifferentCountryCodeGroupCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountries\ChangesInPastCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ColseCodeNotExistAndEffectiveCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CloseCodeNotExistAndEffectiveCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\CodeGroupCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateUICodesZones\ZoneWithoutChangesCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\MultipleCountryCondition.cs" />
