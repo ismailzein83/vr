@@ -8,6 +8,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SellingProductInfoFilter
     {
-        public int? AssignableToSellingProductId { get; set; }
+        public int? AssignableToCustomerId { get; set; }
+
+        public int? SellingNumberPlanId { get; set; }
     }
 }

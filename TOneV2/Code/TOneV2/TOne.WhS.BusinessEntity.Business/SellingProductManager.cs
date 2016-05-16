@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
@@ -28,30 +29,26 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public IEnumerable<SellingProductInfo> GetSellingProductsInfo(SellingProductInfoFilter filter)
         {
-            IEnumerable<SellingProduct> sellingProducts = null;
+            Func<SellingProduct, bool> filterPredicate = null;
 
-            if (filter != null && filter.AssignableToSellingProductId != null)
+            if(filter != null)
             {
-                sellingProducts = this.GetAssignableSellingProducts((int)filter.AssignableToSellingProductId);
-            }
-            else
-            {
-                var cachedSellingProducts = GetCachedSellingProducts();
-                if (cachedSellingProducts != null)
-                    sellingProducts = cachedSellingProducts.Values;
-            }
+                CarrierAccount assignableToCustomer = null;
+                CustomerSellingProduct effectiveCustomerSellingProduct = null;
 
-            return sellingProducts.MapRecords(SellingProductInfoMapper);
+                filterPredicate = (prod) =>
+                {
+                    if (filter.SellingNumberPlanId.HasValue && prod.SellingNumberPlanId != filter.SellingNumberPlanId.Value)
+                        return false;
+                    if (filter.AssignableToCustomerId.HasValue && !IsAssignableToCustomer(prod, filter.AssignableToCustomerId.Value, ref assignableToCustomer, ref effectiveCustomerSellingProduct))
+                        return false;
+                    return true;
+                };
+            }
+            
+            return GetCachedSellingProducts().MapRecords(SellingProductInfoMapper, filterPredicate);
         }
-        public IEnumerable<SellingProduct> GetAssignableSellingProducts(int carrierAccountId)
-        {
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            CarrierAccount carrierAccount = carrierAccountManager.GetCarrierAccount(carrierAccountId);
-            var cachedSellingProducts = GetCachedSellingProducts();
-            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
-            var effectiveCustomerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(carrierAccountId, DateTime.Now, false);
-            return cachedSellingProducts.Values.FindAllRecords(x => (x.SellingNumberPlanId == carrierAccount.SellingNumberPlanId && effectiveCustomerSellingProduct == null) || (x.SellingNumberPlanId == carrierAccount.SellingNumberPlanId && effectiveCustomerSellingProduct != null && x.SellingProductId != effectiveCustomerSellingProduct.SellingProductId));
-        }
+
         public IEnumerable<SellingProductInfo> GetAllSellingProduct()
         {
             var sellingProducts = GetCachedSellingProducts();
@@ -128,6 +125,30 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
+        #region Private Methods
+
+        private bool IsAssignableToCustomer(SellingProduct sellingProduct, int customerId, ref CarrierAccount customer, ref CustomerSellingProduct effectiveCustomerSellingProduct)
+        {
+            if (customer == null)
+            {
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                customer = carrierAccountManager.GetCarrierAccount(customerId);
+                if (customer == null)
+                    throw new NullReferenceException(String.Format("CarrierAccount '{0}'", customerId));
+                if (!customer.SellingNumberPlanId.HasValue)
+                    throw new Exception(String.Format("Customer Account '{0}' doesnt have SellingNumberPlanId", customerId));
+                CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
+                effectiveCustomerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, DateTime.Now, false);
+            }
+            if (sellingProduct.SellingNumberPlanId != customer.SellingNumberPlanId.Value)
+                return false;
+            if (effectiveCustomerSellingProduct != null && effectiveCustomerSellingProduct.SellingProductId == sellingProduct.SellingProductId)
+                return false;
+            return true;
+        }
+
+        #endregion
+
         #region Private Members
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
@@ -149,6 +170,7 @@ namespace TOne.WhS.BusinessEntity.Business
                    return sellingProducts.ToDictionary(kvp => kvp.SellingProductId, kvp => kvp);
                });
         }
+
 
         #endregion
 

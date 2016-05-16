@@ -129,7 +129,7 @@
                 .then(function () {
                     var directivePayload = {
                         selectedIds: sellingProductId != undefined ? sellingProductId : customerSellingProductEntity != undefined ? customerSellingProductEntity.SellingProductId : undefined,
-                        filter: { AssignableToSellingProductId: $scope.carrierAccountId }
+                        filter: { AssignableToCustomerId: $scope.carrierAccountId }
                     }
 
                     VRUIUtilsService.callDirectiveLoad(sellingProductDirectiveAPI, directivePayload, sellingProductLoadPromiseDeferred);

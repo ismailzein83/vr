@@ -25,6 +25,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Public Methods
+        
         public Vanrise.Entities.IDataRetrievalResult<CarrierAccountDetail> GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
         {
             CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
@@ -48,15 +49,18 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierAccounts.ToBigResult(input, filterExpression, CarrierAccountDetailMapper));
         }
+        
         public IEnumerable<CarrierAccount> GetAllCarriers()
         {
             return GetCachedCarrierAccounts().Values;
         }
+        
         public CarrierAccount GetCarrierAccount(int carrierAccountId)
         {
             var CarrierAccounts = GetCachedCarrierAccounts();
             return CarrierAccounts.GetRecord(carrierAccountId);
         }
+        
         public string GetDescription(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
         {
             if (carrierAccountsIds.Count() > 0)
@@ -73,52 +77,79 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return string.Empty;
         }
+        
         public IEnumerable<CarrierAccountInfo> GetCarrierAccountInfo(CarrierAccountInfoFilter filter)
         {
-            IEnumerable<CarrierAccount> carrierAccounts = null;
+            Func<CarrierAccount, bool> filterPredicate = null;
 
             if (filter != null)
             {
-                if (filter.AssignableToSellingProductId != null)
-                    carrierAccounts = this.GetNotAssignableCustomersToSellingProduct((int)filter.AssignableToSellingProductId);
-                else if (filter.AssignableToUserId != null)
-                {
-                    carrierAccounts = this.GetCarriersAssignableToUserId(filter.GetCustomers, filter.GetSuppliers).ToList();
-                    return carrierAccounts.MapRecords(AccountManagerCarrierMapper);
-                }
+                SellingProduct sellingProduct = null;
+                IEnumerable<CustomerSellingProduct> effectiveInFutureCustomerSellingProducts = null;
 
-                else
-                    carrierAccounts = this.GetCarrierAccountsByType(filter.GetCustomers, filter.GetSuppliers, filter.SupplierFilterSettings, filter.CustomerFilterSettings);
+                HashSet<int> filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(filter.SupplierFilterSettings);
+                HashSet<int> filteredCustomerIds = CustomerGroupContext.GetFilteredCustomerIds(filter.CustomerFilterSettings);
+
+                filterPredicate = (carr) =>
+                    {
+                        if (filter.AssignableToSellingProductId != null)
+                        {
+                            if (sellingProduct == null)
+                                LoadSellingProduct(filter.AssignableToSellingProductId.Value, out sellingProduct, out effectiveInFutureCustomerSellingProducts);
+                            if(!IsAssignableToSellingProduct(carr, filter.AssignableToSellingProductId.Value, sellingProduct, effectiveInFutureCustomerSellingProducts))
+                                return false;
+                        }
+                            
+
+                        if (!ShouldSelectCarrierAccount(carr, filter.GetCustomers, filter.GetSuppliers, filteredSupplierIds, filteredCustomerIds))
+                            return false;
+
+                        if (filter.AssignableToUserId != null)
+                        {
+                            AccountManagerManager AccountManagerManager = new AccountManagerManager();
+                            IEnumerable<AssignedCarrier> assignedCarriers = AccountManagerManager.GetAssignedCarriers();
+
+                            if (!IsCarrierAccountAssignableToUser(carr, filter.GetCustomers, filter.GetSuppliers, assignedCarriers))
+                                return false;
+                        }
+
+                        if (filter.SellingNumberPlanId != null && carr.SellingNumberPlanId != filter.SellingNumberPlanId.Value)
+                            return false;
+
+                        return true;
+                    };
             }
+
+            if (filter != null && filter.AssignableToUserId != null)
+                return GetCachedCarrierAccounts().MapRecords(AccountManagerCarrierMapper, filterPredicate);
             else
-            {
-                var cachedCarrierAccounts = GetCachedCarrierAccounts();
-                if (cachedCarrierAccounts != null)
-                    carrierAccounts = cachedCarrierAccounts.Values;
-            }
-
-            return carrierAccounts.MapRecords(CarrierAccountInfoMapper);
+                return GetCachedCarrierAccounts().MapRecords(CarrierAccountInfoMapper, filterPredicate);
         }
+
         public List<Vanrise.Entities.TemplateConfig> GetCustomersGroupTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.CustomerGroupConfigType);
         }
+        
         public List<Vanrise.Entities.TemplateConfig> GetSupplierGroupTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.SupplierGroupConfigType);
         }
+        
         public List<Vanrise.Entities.TemplateConfig> GetSuppliersWithZonesGroupsTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.SuppliersWithZonesGroupSettingsConfigType);
         }
+        
         public List<Vanrise.Entities.TemplateConfig> GetCustomerGroupTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.CustomerGroupConfigType);
         }
+        
         public TOne.Entities.InsertOperationOutput<CarrierAccountDetail> AddCarrierAccount(CarrierAccount carrierAccount)
         {
             TOne.Entities.InsertOperationOutput<CarrierAccountDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CarrierAccountDetail>();
@@ -147,6 +178,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
+        
         public TOne.Entities.UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccount carrierAccount)
         {
             ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
@@ -168,6 +200,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
+        
         public int GetSellingNumberPlanId(int carrierAccountId, CarrierAccountType carrierAccountType)
         {
             if (carrierAccountType == CarrierAccountType.Supplier)
@@ -175,6 +208,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return (int)this.GetCarrierAccount(carrierAccountId).SellingNumberPlanId;
         }
+        
         public IEnumerable<RoutingCustomerInfo> GetRoutingActiveCustomers()
         {
             IEnumerable<CarrierAccount> carrierAccounts = GetCarrierAccountsByType(true, false, null, null);
@@ -182,6 +216,7 @@ namespace TOne.WhS.BusinessEntity.Business
             Func<CarrierAccount, bool> filterExpression = (item) => (item.CarrierAccountSettings != null && item.CustomerSettings != null && item.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active && item.CustomerSettings.RoutingStatus == RoutingStatus.Enabled);
             return carrierAccounts.MapRecords(RoutingCustomerInfoMapper, filterExpression);
         }
+        
         public IEnumerable<RoutingSupplierInfo> GetRoutingActiveSuppliers()
         {
             IEnumerable<CarrierAccount> carrierAccounts = GetCarrierAccountsByType(false, true, null, null);
@@ -189,17 +224,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return carrierAccounts.MapRecords(RoutingSupplierInfolMapper, filterExpression);
 
         }
-        public IEnumerable<CarrierAccount> GetNotAssignableCustomersToSellingProduct(int sellingProductId)
-        {
-            SellingProductManager sellingProductManager = new SellingProductManager();
-            SellingProduct sellingProduct = sellingProductManager.GetSellingProduct(sellingProductId);
-            var cachedCarrierAccounts = GetCarrierAccountsByType(true, false, null, null);
-            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
-            IEnumerable<CustomerSellingProduct> customerSellingProducts = customerSellingProductManager.GetEffectiveInFutureCustomerSellingProduct();
-            return cachedCarrierAccounts.Where(x => x.SellingNumberPlanId == sellingProduct.SellingNumberPlanId
-                && (!customerSellingProducts.Any(y => y.CustomerId == x.CarrierAccountId)));
-
-        }
+        
         public int? GetCustomerSellingNumberPlanId(int customerId)
         {
             var customer = GetCarrierAccount(customerId);
@@ -208,6 +233,7 @@ namespace TOne.WhS.BusinessEntity.Business
             else
                 return customer.SellingNumberPlanId;
         }
+        
         public string GetCarrierAccountName(int carrierAccountId)
         {
             CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
@@ -216,6 +242,7 @@ namespace TOne.WhS.BusinessEntity.Business
             string profileName = _carrierProfileManager.GetCarrierProfileName(carrierAccount.CarrierProfileId);
             return GetCarrierAccountName(profileName, carrierAccount.NameSuffix);
         }
+        
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             var carrierAccountNames = new List<string>();
@@ -227,6 +254,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return String.Join(",", carrierAccountNames);
         }
+        
         public bool IsMatched(IBusinessEntityMatchContext context)
         {
             if (context.FieldValueIds == null || context.FilterIds == null) return true;
@@ -240,27 +268,11 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return false;
         }
+        
         #endregion
 
         #region Private Methods
-        private IEnumerable<CarrierAccount> GetCarriersAssignableToUserId(bool getCustomers, bool getSuppliers)
-        {
-            AccountManagerManager AccountManagerManager = new AccountManagerManager();
-            IEnumerable<CarrierAccount> carriers = GetCarrierAccountsByType(getCustomers, getSuppliers, null, null);
-            IEnumerable<AssignedCarrier> assignedCarriers = AccountManagerManager.GetAssignedCarriers();
-
-            Func<CarrierAccount, bool> filterExpression = (carrierAccount) =>
-            {
-                if (carrierAccount.AccountType == CarrierAccountType.Exchange && assignedCarriers.Where(z => z.CarrierAccountId == carrierAccount.CarrierAccountId).Count() > 1)
-                    return false;
-                if (carrierAccount.AccountType != CarrierAccountType.Exchange && assignedCarriers.Any(y => y.CarrierAccountId == carrierAccount.CarrierAccountId))
-                    return false;
-                return true;
-
-            };
-
-            return carriers.FindAllRecords(filterExpression);
-        }
+      
         Dictionary<int, CarrierAccount> GetCachedCarrierAccounts()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierAccounts",
@@ -271,6 +283,7 @@ namespace TOne.WhS.BusinessEntity.Business
                    return carrierAccounts.ToDictionary(kvp => kvp.CarrierAccountId, kvp => kvp);
                });
         }
+        
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ICarrierAccountDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
@@ -281,6 +294,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return _dataManager.AreCarrierAccountsUpdated(ref _updateHandle);
             }
         }
+        
         private IEnumerable<CarrierAccount> GetCarrierAccountsByIds(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
         {
             var carrierAccounts = this.GetCarrierAccountsByType(getCustomers, getSuppliers, null, null);
@@ -291,6 +305,43 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return carrierAccounts.FindAllRecords(filterExpression);
         }
+
+        private bool IsCarrierAccountAssignableToUser(CarrierAccount carrierAccount, bool getCustomers, bool getSuppliers, IEnumerable<AssignedCarrier> assignedCarriers)
+        {
+            if (!ShouldSelectCarrierAccount(carrierAccount, getCustomers, getSuppliers))
+                return false;
+
+            if (carrierAccount.AccountType == CarrierAccountType.Exchange && assignedCarriers.Where(x => x.CarrierAccountId == carrierAccount.CarrierAccountId).Count() > 1)
+                return false;
+
+            if (carrierAccount.AccountType != CarrierAccountType.Exchange && assignedCarriers.Any(y => y.CarrierAccountId == carrierAccount.CarrierAccountId))
+                return false;
+
+            return true;
+        }
+
+        private bool ShouldSelectCarrierAccount(CarrierAccount carrierAccount, bool getCustomers, bool getSuppliers)
+        {
+            return ShouldSelectCarrierAccount(carrierAccount, getCustomers, getSuppliers, null, null);
+        }
+        
+        private bool ShouldSelectCarrierAccount(CarrierAccount carrierAccount, bool getCustomers, bool getSuppliers, HashSet<int> filteredSupplierIds, HashSet<int> filteredCustomerIds)
+        {
+            bool isSupplier = carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange;
+            bool isCustomer = carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange;
+            if (getCustomers && getSuppliers)
+                return true;
+            if (getCustomers && !isCustomer)
+                return false;
+            if (getSuppliers && !isSupplier)
+                return false;
+            if (isSupplier && filteredSupplierIds != null && !filteredSupplierIds.Contains(carrierAccount.CarrierAccountId))
+                return false;
+            if (isCustomer && filteredCustomerIds != null && !filteredCustomerIds.Contains(carrierAccount.CarrierAccountId))
+                return false;
+            return true;
+        }
+
         private IEnumerable<CarrierAccount> GetCarrierAccountsByType(bool getCustomers, bool getSuppliers, SupplierFilterSettings supplierFilterSettings, CustomerFilterSettings customerFilterSettings)
         {
             Dictionary<int, CarrierAccount> carrierAccounts = GetCachedCarrierAccounts();
@@ -315,10 +366,38 @@ namespace TOne.WhS.BusinessEntity.Business
             };
             return carrierAccounts.FindAllRecords(filterExpression);
         }
+
+        private void LoadSellingProduct(int sellingProductId, out SellingProduct sellingProduct, out IEnumerable<CustomerSellingProduct> effectiveInFutureCustomerSellingProducts)
+        {
+            SellingProductManager sellingProductManager = new SellingProductManager();
+            sellingProduct = sellingProductManager.GetSellingProduct(sellingProductId);
+            if (sellingProduct == null)
+                throw new NullReferenceException(String.Format("SellingProduct '{0}'", sellingProductId));
+
+            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
+            effectiveInFutureCustomerSellingProducts = customerSellingProductManager.GetEffectiveInFutureCustomerSellingProduct();
+        }
+
+        private bool IsAssignableToSellingProduct(CarrierAccount carrierAccount, int sellingProductId, SellingProduct sellingProduct,
+          IEnumerable<CustomerSellingProduct> effectiveInFutureCustomerSellingProducts)
+        {
+            if (!ShouldSelectCarrierAccount(carrierAccount, true, false))
+                return false;
+
+            if (carrierAccount.SellingNumberPlanId.Value != sellingProduct.SellingNumberPlanId)
+                return false;
+
+            if (effectiveInFutureCustomerSellingProducts.Any(x => x.CustomerId == carrierAccount.CarrierAccountId))
+                return false;
+
+            return true;
+        }
+
         private static string GetCarrierAccountName(string profileName, string nameSuffix)
         {
             return string.Format("{0}{1}", profileName, string.IsNullOrEmpty(nameSuffix) ? string.Empty : " (" + nameSuffix + ")");
         }
+        
         #endregion
 
         #region  Mappers
@@ -331,6 +410,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 Name = GetCarrierAccountName(_carrierProfileManager.GetCarrierProfileName(carrierAccount.CarrierProfileId), carrierAccount.NameSuffix),
             };
         }
+        
         private RoutingCustomerInfo RoutingCustomerInfoMapper(CarrierAccount carrierAccount)
         {
             RoutingCustomerInfo routingCustomerInfo = new RoutingCustomerInfo();
@@ -339,12 +419,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return routingCustomerInfo;
         }
+        
         private RoutingSupplierInfo RoutingSupplierInfolMapper(CarrierAccount carrierAccount)
         {
             RoutingSupplierInfo routingSupplierInfo = new RoutingSupplierInfo();
             routingSupplierInfo.SupplierId = carrierAccount.CarrierAccountId;
             return routingSupplierInfo;
         }
+        
         private AccountManagerCarrier AccountManagerCarrierMapper(CarrierAccount carrierAccount)
         {
             AccountManagerManager accountManagerManager = new AccountManagerManager();
@@ -359,6 +441,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 IsSupplierAvailable = (carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange) && (assignedCarrierAccount == null || assignedCarrierAccount.RelationType != CarrierAccountType.Supplier),
             };
         }
+        
         private CarrierAccountDetail CarrierAccountDetailMapper(CarrierAccount carrierAccount)
         {
             CarrierAccountDetail carrierAccountDetail = new CarrierAccountDetail();
@@ -383,6 +466,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return carrierAccountDetail;
         }
+        
         #endregion
     }
 }

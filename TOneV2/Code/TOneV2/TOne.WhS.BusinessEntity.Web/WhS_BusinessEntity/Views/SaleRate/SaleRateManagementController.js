@@ -40,17 +40,33 @@
                 saleZoneReadyPromiseDeferred.resolve();
             }
            
-            $scope.onSellingNumberPlanSelectItem = function (selectedItem) {                   
-                    if (selectedItem != undefined) {
-                        var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
+            $scope.onSellingNumberPlanSelectionChanged = function () {
 
-                        var payload = {
-                            sellingNumberPlanId: selectedItem.SellingNumberPlanId 
-                        }
+                if (sellingNumberPlanDirectiveAPI.getSelectedIds() == undefined)
+                    return;
 
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
-                    }
-                    
+                var setSaleZoneLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
+                var saleZoneSelectorPayload = {
+                    sellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds()
+                }
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, saleZoneSelectorPayload, setSaleZoneLoader);
+
+                var sellingProductPayload = {
+                    filter: { SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds() }
+                }
+
+                var carrierAccountPayload = {
+                    filter: { SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds() }
+                }
+
+                var sellingProductSelectorLoadPromise = sellingProductSelectorAPI.load(sellingProductPayload);
+                var carrierAccountSelectorLoadPromise = carrierAccountSelectorAPI.load(carrierAccountPayload);
+
+                $scope.isLoadingOwnerSelector = true;
+                UtilsService.waitMultiplePromises([sellingProductSelectorLoadPromise, carrierAccountSelectorLoadPromise]).finally()
+                {
+                    $scope.isLoadingOwnerSelector = false;
+                };
             }
 
             $scope.ownerTypes = UtilsService.getArrayEnum(WhS_BE_SalePriceListOwnerTypeEnum);
