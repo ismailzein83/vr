@@ -135,6 +135,7 @@ namespace TOne.WhS.Analytics.Business
                 var timePeriods = new List<TimePeriod>();
 
                 DateTime toDate = _query.ToDate.Date.AddDays(1); // Ignore ToDate's time and add 1 day to include it in the result
+                string dateFormat = "dd/MM/yyyy";
 
                 for (int i = 0; i < _query.NumberOfPeriods; i++)
                 {
@@ -142,7 +143,7 @@ namespace TOne.WhS.Analytics.Business
                     timePeriods.Add(new TimePeriod()
                     {
                         PeriodDescription = (_query.TimePeriod == VariationReportTimePeriod.Daily) ?
-                            fromDate.ToShortDateString() : String.Format("{0} - {1}", fromDate.ToShortDateString(), toDate.AddDays(-1).ToShortDateString()),
+                            fromDate.ToString(dateFormat) : String.Format("{0} - {1}", fromDate.ToString(dateFormat), toDate.AddDays(-1).ToString(dateFormat)),
                         From = fromDate,
                         To = toDate
                     });
