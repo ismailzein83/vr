@@ -15,7 +15,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #region Fields / Constructors
 
         public AccountManagerCarrierDataManager()
-            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "MainDBConnString"))
         {
 
         }
