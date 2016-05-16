@@ -30,13 +30,14 @@
             var gridDrillDownTabsObj;
             var reportTypeObjs;
 
-            function initializeController() {
-
+            function initializeController()
+            {
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.dataSource = [];
                 $scope.scopeModel.dimensionTitle;
-                $scope.scopeModel.timePeriodDefinitions = [];
+                $scope.scopeModel.firstPeriodDefinition = {}; // The first period is isolated in order to display the previous period % between the first and second periods
+                $scope.scopeModel.otherPeriodDefinitions = []; // A list of the period definitions starting from the second period
                 $scope.scopeModel.drillDownDimensionValues = [];
 
                 reportTypeObjs = UtilsService.getArrayEnum(WhS_Analytics_VariationReportTypeEnum);
@@ -46,11 +47,12 @@
                     defineAPI();
                 };
 
-                $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady)
+                {
                     return WhS_Analytics_VariationReportAPIService.GetFilteredVariationReportRecords(dataRetrievalInput).then(function (response)
                     {
-                        if (response != null && response.Data != null) {
-
+                        if (response != null && response.Data != null)
+                        {
                             if (firstResponse == undefined) {
                                 firstResponse = response;
                             }
@@ -73,11 +75,12 @@
 
                             if (response.TimePeriods != null)
                             {
-                                $scope.scopeModel.timePeriodDefinitions.length = 0;
+                                $scope.scopeModel.otherPeriodDefinitions.length = 0;
+                                $scope.scopeModel.firstPeriodDefinition = response.TimePeriods[0];
 
                                 setTimeout(function () {
-                                    for (var i = 0; i < response.TimePeriods.length; i++) {
-                                        $scope.scopeModel.timePeriodDefinitions.push(response.TimePeriods[i]);
+                                    for (var i = 1; i < response.TimePeriods.length; i++) { // Discard the first period
+                                        $scope.scopeModel.otherPeriodDefinitions.push(response.TimePeriods[i]);
                                     }
                                     $scope.$apply();
                                 });

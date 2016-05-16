@@ -8,11 +8,16 @@
     <vr-datagridcolumn headertext="scopeModel.dimensionTitle" field="'DimensionName'" type="'Text'" widthfactor="15"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Periods AVG'" field="'Average'" summaryfield="'Average'" type="'Number'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Periods %'" field="'Percentage'" summaryfield="'Percentage'" type="'Number'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="scopeModel.firstPeriodDefinition.PeriodDescription"
+                       field="'TimePeriodValues[0]'"
+                       summaryfield="'TimePeriodValues[0]'"
+                       type="'Number'">
+    </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Previous Period %'" field="'PreviousPeriodPercentage'" summaryfield="'PreviousPeriodPercentage'" type="'Number'"></vr-datagridcolumn>
-    <vr-datagridcolumn ng-repeat="definition in scopeModel.timePeriodDefinitions"
-                       headertext="definition.PeriodDescription"
-                       field="'TimePeriodValues['+$index+']'"
-                       summaryfield="'TimePeriodValues['+$index+']'"
+    <vr-datagridcolumn ng-repeat="periodDef in scopeModel.otherPeriodDefinitions"
+                       headertext="periodDef.PeriodDescription"
+                       field="'TimePeriodValues[' + ($index + 1) + ']'"
+                       summaryfield="'TimePeriodValues[' + ($index + 1) + ']'"
                        type="'Number'">
     </vr-datagridcolumn>
     <vr-datagridexpandablerow ng-if="scopeModel.drillDownDimensionValues.length > 0">
