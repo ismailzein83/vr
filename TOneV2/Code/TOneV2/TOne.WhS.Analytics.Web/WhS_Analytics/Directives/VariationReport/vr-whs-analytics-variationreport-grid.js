@@ -34,7 +34,6 @@
 
                 $scope.scopeModel = {};
 
-                $scope.scopeModel.sortByField = 'Average';
                 $scope.scopeModel.dataSource = [];
                 $scope.scopeModel.dimensionTitle;
                 $scope.scopeModel.timePeriodDefinitions = [];
@@ -72,11 +71,16 @@
                                 gridAPI.setSummary(response.Summary);
                             }
 
-                            if (response.TimePeriods != null) {
+                            if (response.TimePeriods != null)
+                            {
                                 $scope.scopeModel.timePeriodDefinitions.length = 0;
-                                for (var i = 0; i < response.TimePeriods.length; i++) {
-                                    $scope.scopeModel.timePeriodDefinitions.push(response.TimePeriods[i]);
-                                }
+
+                                setTimeout(function () {
+                                    for (var i = 0; i < response.TimePeriods.length; i++) {
+                                        $scope.scopeModel.timePeriodDefinitions.push(response.TimePeriods[i]);
+                                    }
+                                    $scope.$apply();
+                                });
                             }
                         }
                         onResponseReady(response);
@@ -95,10 +99,10 @@
 
                 api.load = function (query)
                 {
-                    setSortByField(query.ReportType);
-
                     gridQuery = cloneGridQuery(query);
                     gridDrillDownTabsObj = undefined;
+
+                    $scope.scopeModel.dimensionTitle = ''; // Resetting to undefined doesn't work
                     firstResponse = undefined;
 
                     return gridAPI.retrieveData(query);
@@ -128,20 +132,9 @@
                         ToDate: gridQueryObj.ToDate,
                         TimePeriod: gridQueryObj.TimePeriod,
                         NumberOfPeriods: gridQueryObj.NumberOfPeriods,
-                        GroupByProfile: gridQueryObj.GroupByProfile
+                        GroupByProfile: gridQueryObj.GroupByProfile,
+                        CurrencyId: gridQueryObj.CurrencyId
                     };
-                }
-            }
-
-            function setSortByField(reportTypeValue) {
-                switch (reportTypeValue) {
-                    case WhS_Analytics_VariationReportTypeEnum.InOutBoundMinutes.value:
-                    case WhS_Analytics_VariationReportTypeEnum.InOutBoundAmount.value:
-                        $scope.scopeModel.sortByField = 'DimensionName';
-                        break;
-                    default:
-                        $scope.scopeModel.sortByField = 'Average';
-                        break;
                 }
             }
 
@@ -182,7 +175,8 @@
                             ToDate: gridQuery.ToDate,
                             TimePeriod: gridQuery.TimePeriod,
                             NumberOfPeriods: gridQuery.NumberOfPeriods,
-                            GroupByProfile: gridQuery.GroupByProfile
+                            GroupByProfile: gridQuery.GroupByProfile,
+                            CurrencyId: gridQuery.CurrencyId
                         };
 
                         return directiveAPI.load(directiveQuery);

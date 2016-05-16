@@ -16,6 +16,8 @@ namespace TOne.WhS.Analytics.Entities
 
         public VariationReportRecordDimensionSuffix DimensionSuffix { get; set; }
 
+        public decimal OrderValue { get; set; }
+
         public List<Decimal> TimePeriodValues { get; set; }
 
         public decimal Average { get; set; }

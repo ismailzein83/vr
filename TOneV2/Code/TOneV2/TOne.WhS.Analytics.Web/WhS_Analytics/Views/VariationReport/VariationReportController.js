@@ -218,8 +218,6 @@
                 }
             }
 
-            
-
             chartAPI.renderChart(seriesList, chartConfig, seriesDefinition, seriesConfig);
         }
 
@@ -231,7 +229,7 @@
                 case WhS_Analytics_VariationReportTypeEnum.OutBoundMinutes.value:
                 case WhS_Analytics_VariationReportTypeEnum.InOutBoundMinutes.value:
                 case WhS_Analytics_VariationReportTypeEnum.TopDestinationMinutes.value:
-                    return 'Duration';
+                    return 'Duration (Minutes)';
 
                 case WhS_Analytics_VariationReportTypeEnum.InBoundAmount.value:
                 case WhS_Analytics_VariationReportTypeEnum.OutBoundAmount.value:

@@ -107,16 +107,21 @@ namespace TOne.WhS.Analytics.Business
                 {
                     case VariationReportType.InBoundMinutes:
                     case VariationReportType.InBoundAmount:
+                    case VariationReportType.Profit:
                         dimensionTitle = "Customer";
                         break;
+
                     case VariationReportType.OutBoundMinutes:
                     case VariationReportType.OutBoundAmount:
                     case VariationReportType.InOutBoundMinutes:
                     case VariationReportType.InOutBoundAmount:
+                    case VariationReportType.OutBoundProfit:
                         dimensionTitle = "Supplier";
                         break;
+
                     case VariationReportType.TopDestinationMinutes:
                     case VariationReportType.TopDestinationAmount:
+                    case VariationReportType.TopDestinationProfit:
                         dimensionTitle = "Zone";
                         break;
                 }

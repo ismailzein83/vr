@@ -82,7 +82,21 @@ namespace TOne.WhS.Analytics.Data.SQL
         string GetExchangeRatesTable(int? currencyId)
         {
             if (currencyId.HasValue)
-                return String.Format(@"WITH ConvertedExchangeRates AS (SELECT * FROM Common.getExchangeRatesConvertedToCurrency({0}, @SmallestFromDate, @LargestToDate))", currencyId.Value);
+                return String.Format
+                (
+                    @"DECLARE @ConvertedExchangeRates TABLE
+                    (
+	                    CurrencyID INT NOT NULL,
+	                    Rate DECIMAL(18, 6) NOT NULL,
+	                    BED DATETIME NOT NULL,
+	                    EED DATETIME,
+	                    PRIMARY KEY(CurrencyID, BED)
+                    )
+
+                    INSERT INTO @ConvertedExchangeRates
+                    SELECT * FROM Common.getExchangeRatesConvertedToCurrency({0}, @SmallestFromDate, @LargestToDate)",
+                    currencyId
+                );
             return null;
         }
 
@@ -95,7 +109,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                 #IN_BOUND_QUERY#
                 #OUT_BOUND_QUERY#
 
-                SELECT 0 OrderIndex,
+                SELECT 3.0 OrderValue,
                     InResult.DimensionId AS DimensionId,
                     #TOTAL_DIMENSION_SUFFIX# AS DimensionSuffix,
                     InResult.Average - OutResult.Average Average,
@@ -105,12 +119,12 @@ namespace TOne.WhS.Analytics.Data.SQL
                 INTO #TotalResult
                 FROM #InResult InResult JOIN #OutResult OutResult ON InResult.DimensionId = OutResult.DimensionId
 
-                UPDATE #InResult SET OrderIndex = 0 WHERE DimensionId IN (SELECT DimensionId FROM #TotalResult)
-                UPDATE #OutResult SET OrderIndex = 0 WHERE DimensionId IN (SELECT DimensionId FROM #TotalResult)
+                UPDATE #InResult SET OrderValue = 3.0 WHERE DimensionId IN (SELECT DimensionId FROM #TotalResult)
+                UPDATE #OutResult SET OrderValue = 3.0 WHERE DimensionId IN (SELECT DimensionId FROM #TotalResult)
 
                 SELECT *
                 FROM (SELECT * FROM #InResult UNION ALL SELECT * FROM #OutResult UNION ALL SELECT * FROM #TotalResult) AS FinalResult
-                ORDER BY OrderIndex, DimensionSuffix
+                ORDER BY OrderValue, DimensionId, DimensionSuffix
             ");
 
             VariationReportQuery inResultQuery;
@@ -169,7 +183,7 @@ namespace TOne.WhS.Analytics.Data.SQL
         {
             var singleResultQueryBuilder = new StringBuilder
             (@"
-                SELECT #ORDER_INDEX_PART#
+                SELECT #ORDER_VALUE_PART#
                     #DIMENTION_COLUMN_NAME# AS DimensionId
                     #DIMENSION_SUFFIX#
                     #AVERAGE_PART#
@@ -186,14 +200,15 @@ namespace TOne.WhS.Analytics.Data.SQL
                 GROUP BY #DIMENTION_COLUMN_NAME#
             ");
 
-            string orderIndex = (intoTableName != null) ? GetOrderIndexPart(query.ReportType) : null; // intoTableName != null indicates that the original report is an InOut one
-            singleResultQueryBuilder.Replace("#ORDER_INDEX_PART#", orderIndex);
             singleResultQueryBuilder.Replace("#DIMENTION_COLUMN_NAME#", GetGroupByColumnName(query.ReportType, query.GroupByProfile));
             singleResultQueryBuilder.Replace("#DIMENSION_SUFFIX#", String.Format(", {0} AS DimensionSuffix", (int)dimensionSuffix));
 
             string sumArgument = GetSumArgument(query.ReportType, query.ParentDimensions);
             string sumExtension = IsDurationReport(query.ReportType) ? " / 60" : null;
             string sumAggregation = String.Format("SUM({0}){1} / {2}", sumArgument, sumExtension, query.NumberOfPeriods);
+
+            string orderValue = GetOrderValuePart(intoTableName, query.ReportType, sumAggregation);
+            singleResultQueryBuilder.Replace("#ORDER_VALUE_PART#", orderValue);
 
             singleResultQueryBuilder.Replace("#AVERAGE_PART#", String.Format(", {0} AS Average", sumAggregation));
             singleResultQueryBuilder.Replace("#PERCENTAGE_PART#", GetPercentagePart(sumArgument, sumExtension, sumAggregation));
@@ -208,29 +223,33 @@ namespace TOne.WhS.Analytics.Data.SQL
             return singleResultQueryBuilder.ToString();
         }
 
-        string GetOrderIndexPart(VariationReportType reportType)
+        string GetOrderValuePart(string intoTableName, VariationReportType reportType, string sumAggregation)
         {
-            var orderIndexPartBuilder = new StringBuilder();
-            
-            // Since the original report type is InOutBound, reportType should be either InBound or OutBound
-            switch (reportType)
+            var orderValuePartBuilder = new StringBuilder();
+
+            if (intoTableName != null) // The root report type is InOutBound
             {
-                case VariationReportType.InBoundMinutes:
-                case  VariationReportType.InBoundAmount:
-                    orderIndexPartBuilder.Append("1");
-                    break;
+                switch (reportType)
+                {
+                    case VariationReportType.InBoundMinutes:
+                    case VariationReportType.InBoundAmount:
+                        orderValuePartBuilder.Append("2.0"); // OrderValue is of type decimal
+                        break;
 
-                case VariationReportType.OutBoundMinutes:
-                case VariationReportType.OutBoundAmount:
-                    orderIndexPartBuilder.Append("2");
-                    break;
+                    case VariationReportType.OutBoundMinutes:
+                    case VariationReportType.OutBoundAmount:
+                        orderValuePartBuilder.Append("1.0");
+                        break;
+                }
+                if (orderValuePartBuilder.Length == 0) // reportType MUST be either InBound/OutBound - Minutes/Amount
+                    throw new ArgumentException("reportType");
             }
+            else
+                orderValuePartBuilder.Append(sumAggregation);
 
-            if (orderIndexPartBuilder.Length == 0)
-                throw new ArgumentException("reportType");
 
-            orderIndexPartBuilder.Append(" AS OrderIndex,");
-            return orderIndexPartBuilder.ToString();
+            orderValuePartBuilder.Append(" AS OrderValue,");
+            return orderValuePartBuilder.ToString();
         }
 
         string GetGroupByColumnName(VariationReportType reportType, bool groupByProfile)
@@ -348,8 +367,8 @@ namespace TOne.WhS.Analytics.Data.SQL
                 case VariationReportType.Profit:
                 case VariationReportType.OutBoundProfit:
                 case VariationReportType.TopDestinationProfit:
-                    joinPartBuilder.Append(String.Format(" LEFT JOIN ConvertedExchangeRates SER on bs.SaleCurrency = SER.CurrencyID AND bs.CallDate >= SER.BED AND (SER.EED IS NULL OR bs.CallDate < SER.EED)"));
-                    joinPartBuilder.Append(String.Format(" LEFT JOIN ConvertedExchangeRates CER on bs.CostCurrency = CER.CurrencyID AND bs.CallDate >= CER.BED AND (CER.EED IS NULL OR bs.CallDate < CER.EED)"));
+                    joinPartBuilder.Append(String.Format(" LEFT JOIN @ConvertedExchangeRates SER on bs.SaleCurrency = SER.CurrencyID AND bs.CallDate >= SER.BED AND (SER.EED IS NULL OR bs.CallDate < SER.EED)"));
+                    joinPartBuilder.Append(String.Format(" LEFT JOIN @ConvertedExchangeRates CER on bs.CostCurrency = CER.CurrencyID AND bs.CallDate >= CER.BED AND (CER.EED IS NULL OR bs.CallDate < CER.EED)"));
                     break;
             }
             for (int i = 0; i < query.NumberOfPeriods; i++)
@@ -413,6 +432,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             {
                 DimensionId = (object)reader["DimensionId"],
                 DimensionSuffix = (VariationReportRecordDimensionSuffix)reader["DimensionSuffix"],
+                OrderValue = (decimal)reader["OrderValue"],
                 Average = (decimal)reader["Average"],
                 Percentage = Convert.ToDecimal((double)reader["Percentage"]),
                 PreviousPeriodPercentage = Convert.ToDecimal((double)reader["PreviousPeriodPercentage"])
