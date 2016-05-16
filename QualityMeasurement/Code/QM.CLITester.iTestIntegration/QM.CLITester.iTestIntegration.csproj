@@ -70,6 +70,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CallTestManager.cs" />
     <Compile Include="CLITesterConnector.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CountryITestReader.cs" />

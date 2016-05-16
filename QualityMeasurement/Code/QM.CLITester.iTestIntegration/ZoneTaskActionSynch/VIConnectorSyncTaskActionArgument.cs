@@ -12,7 +12,11 @@ namespace QM.CLITester.iTestIntegration
     {
         public CLITesterConnectorBase CLITestConnector { get; set; }
 
+        public int ParallelThreadsCount { get; set; }
+
         public int MaximumRetryCount { get; set; }
+
+        public TimeSpan DownloadResultWaitTime { get; set; }
 
         public int TimeOut { get; set; }
         public int ProfileId { get; set; }

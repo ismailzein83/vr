@@ -23,44 +23,98 @@ namespace QM.CLITester.iTestIntegration
         public override SchedulerTaskExecuteOutput Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions)
         {
             VIConnectorSyncTaskActionArgument vIConnectorSyncTaskActionArgument = taskActionArgument as VIConnectorSyncTaskActionArgument;
+            vIConnectorSyncTaskActionArgument.ParallelThreadsCount = 5;
+            
+              CallTestManager callTestManager = new CallTestManager();
+
+            BusinessEntity.Business.SupplierManager supplierManager = new SupplierManager();
+            var supplier = supplierManager.GetSupplier(vIConnectorSyncTaskActionArgument.SupplierId);
+            if(supplier == null)
+                throw new ArgumentNullException(String.Format("supplier '{0}'",vIConnectorSyncTaskActionArgument.SupplierId ));
+
+            string supplierITestId = callTestManager.GetSupplierITestId(supplier);
+
+            ProfileManager profileManager = new ProfileManager();
+            var profile = profileManager.GetProfile(vIConnectorSyncTaskActionArgument.ProfileId);
+            if(profile == null)
+                throw new ArgumentNullException(String.Format("profile '{0}'", vIConnectorSyncTaskActionArgument.ProfileId));
+
+            string profileITestId = callTestManager.GetProfileITestId(profile);
+
+
+            List<ConnectorZoneInfoToUpdate> zoneInfosToUpdate = new List<ConnectorZoneInfoToUpdate>();
+            var zoneInfoManager = new ConnectorZoneInfoManager();
 
             ITestZoneManager iTestZoneManager = new ITestZoneManager();
-            Dictionary<string, ITestZone> allZones = new Dictionary<string, ITestZone>();
+            Dictionary<string, ITestZone> allITestZones = iTestZoneManager.GetAllZones();
 
-            ZoneManager zoneManager = new ZoneManager();
-            allZones = iTestZoneManager.GetAllZones();
-            List<ConnectorZoneInfoToUpdate> listConnectorZoneInfoToUpdates = new List<ConnectorZoneInfoToUpdate>();
-            Task<ConnectorZoneInfoToUpdate>[] taskArray = new Task<ConnectorZoneInfoToUpdate>[4];
-            ConnectorZoneInfoToUpdate zoneInfo = new ConnectorZoneInfoToUpdate();
-
-
-            foreach (var zone in allZones.Where(x => (x.Value.ZoneName == "ALFA" || x.Value.ZoneName == "TOUCH")))
+            if (allITestZones != null)
             {
-                QM.BusinessEntity.Entities.Zone z = new QM.BusinessEntity.Entities.Zone();
-                z = zoneManager.GetZonebySourceId(zone.Value.ZoneId);
-                int i = 0;
-                cq.Enqueue(z);
-                taskArray[i] = Task<ConnectorZoneInfoToUpdate>.Factory.StartNew(() => TestCall(vIConnectorSyncTaskActionArgument, z));
-                i = i + 1;
+                ConcurrentQueue<ITestZone> qITestZones = new ConcurrentQueue<ITestZone>(allITestZones.Values);
+                Parallel.For(0, vIConnectorSyncTaskActionArgument.ParallelThreadsCount, (i) =>
+                    {
+                      
+                        ITestZone itestZone;
+                        while(qITestZones.TryDequeue(out itestZone))
+                        {
+                            InitiateTestInformation initiateTestInformation;
+                            string failureMessage;
+                            if(callTestManager.TryInitiateTest(profileITestId, supplierITestId, itestZone.CountryId, itestZone.ZoneId, out initiateTestInformation, out failureMessage))
+                            {
+                                int retryCount = 0;
+                                while(retryCount <= vIConnectorSyncTaskActionArgument.MaximumRetryCount)
+                                {
+                                    
+                                    retryCount++;
+                                    Thread.Sleep(vIConnectorSyncTaskActionArgument.DownloadResultWaitTime);
+                                }
+                            }
+                            else
+                            {
+                                LogWarning("Test Initiation failed to Zone '{0} - {1}'", itestZone.CountryName, itestZone.ZoneName);
+                            }
+                        }
+                    });
             }
+            
+
+            //List<ConnectorZoneInfoToUpdate> listConnectorZoneInfoToUpdates = new List<ConnectorZoneInfoToUpdate>();
+            //Task<ConnectorZoneInfoToUpdate>[] taskArray = new Task<ConnectorZoneInfoToUpdate>[4];
+            //ConnectorZoneInfoToUpdate zoneInfo = new ConnectorZoneInfoToUpdate();
+
+
+            //foreach (var zone in allZones.Where(x => (x.Value.ZoneName == "ALFA" || x.Value.ZoneName == "TOUCH")))
+            //{
+            //    QM.BusinessEntity.Entities.Zone z = new QM.BusinessEntity.Entities.Zone();
+            //    z = zoneManager.GetZonebySourceId(zone.Value.ZoneId);
+            //    int i = 0;
+            //    cq.Enqueue(z);
+            //    taskArray[i] = Task<ConnectorZoneInfoToUpdate>.Factory.StartNew(() => TestCall(vIConnectorSyncTaskActionArgument, z));
+            //    i = i + 1;
+            //}
 
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput();
-            while (!cq.IsEmpty)
-            {
+            //while (!cq.IsEmpty)
+            //{
 
-            }
-            foreach (var task1 in taskArray)
-            {
-                listConnectorZoneInfoToUpdates.Add(task1.Result);
-            }
-            ConnectorZoneInfoManager connectorZoneInfoManager = new ConnectorZoneInfoManager();
-            connectorZoneInfoManager.UpdateZones("VIConnector", listConnectorZoneInfoToUpdates);
+            //}
+            //foreach (var task1 in taskArray)
+            //{
+            //    listConnectorZoneInfoToUpdates.Add(task1.Result);
+            //}
+            //ConnectorZoneInfoManager connectorZoneInfoManager = new ConnectorZoneInfoManager();
+            //connectorZoneInfoManager.UpdateZones("VIConnector", listConnectorZoneInfoToUpdates);
 
             output = new SchedulerTaskExecuteOutput()
             {
                 Result = ExecuteOutputResult.Completed
             };
             return output;
+        }
+
+        private void LogWarning(string messageFormat, params object[] args)
+        {
+            Vanrise.Common.LoggerFactory.GetLogger().WriteWarning(messageFormat, args);
         }
 
         private static ConnectorZoneInfoToUpdate TestCall(VIConnectorSyncTaskActionArgument vIConnectorSyncTaskActionArgument,
