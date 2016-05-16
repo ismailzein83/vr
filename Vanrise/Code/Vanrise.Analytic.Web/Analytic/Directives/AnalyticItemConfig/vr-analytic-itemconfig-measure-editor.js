@@ -79,6 +79,8 @@
                     var tableId;
                     var promises = [];
                     var configEntity;
+                    $scope.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpression;
+
                     if (payload != undefined) {
                         tableId = payload.tableId;
                         configEntity = payload.ConfigEntity;
