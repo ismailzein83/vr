@@ -6,24 +6,16 @@ using TOne.WhS.DBSync.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SourceCarrierProfileMigrator
+    public class SourceCarrierProfileMigrator : Migrator
     {
-        private string _ConnectionString;
-        private bool _UseTempTables;
-        private DBSyncLogger _Logger;
-
         public SourceCarrierProfileMigrator(string connectionString, bool useTempTables, DBSyncLogger logger)
+            : base(connectionString, useTempTables, logger)
         {
-            _UseTempTables = useTempTables;
-            _Logger = logger;
-            _ConnectionString = connectionString;
         }
 
-
-
-        public  void Migrate(List<DBTable> context)
+        public override void Migrate(List<DBTable> context)
         {
-            _Logger.WriteInformation("Migrating table 'CarrierProfile' started");
+            Logger.WriteInformation("Migrating table 'CarrierProfile' started");
             var sourceItems = GetSourceItems();
             if (sourceItems != null)
             {
@@ -36,12 +28,12 @@ namespace TOne.WhS.DBSync.Business
                 }
                 AddItems(itemsToAdd, context);
             }
-            _Logger.WriteInformation("Migrating table 'CarrierProfile' ended");
+            Logger.WriteInformation("Migrating table 'CarrierProfile' ended");
         }
 
         private  void AddItems(List<CarrierProfile> itemsToAdd, List<DBTable> context)
         {
-            CarrierProfileDBSyncManager CarrierProfileManager = new CarrierProfileDBSyncManager(_UseTempTables);
+            CarrierProfileDBSyncManager CarrierProfileManager = new CarrierProfileDBSyncManager(UseTempTables);
             CarrierProfileManager.ApplyCarrierProfilesToTemp(itemsToAdd);
             DBTable dbTableCarrierProfile = context.Where(x => x.Name == Constants.Table_CarrierProfile).FirstOrDefault();
             if (dbTableCarrierProfile != null)
@@ -50,7 +42,7 @@ namespace TOne.WhS.DBSync.Business
 
         private IEnumerable<SourceCarrierProfile> GetSourceItems()
         {
-            SourceCarrierProfileDataManager dataManager = new SourceCarrierProfileDataManager(_ConnectionString);
+            SourceCarrierProfileDataManager dataManager = new SourceCarrierProfileDataManager(ConnectionString);
             return dataManager.GetSourceCarrierProfiles();
         }
 

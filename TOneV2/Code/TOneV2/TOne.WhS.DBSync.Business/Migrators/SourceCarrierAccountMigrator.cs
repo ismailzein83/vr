@@ -3,24 +3,20 @@ using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
+using System;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SourceCarrierAccountMigrator
+    public class SourceCarrierAccountMigrator : Migrator
     {
-        private string _ConnectionString;
-        private bool _UseTempTables;
-        private DBSyncLogger _Logger;
         public SourceCarrierAccountMigrator(string connectionString, bool useTempTables, DBSyncLogger logger)
+            : base(connectionString, useTempTables, logger)
         {
-            _UseTempTables = useTempTables;
-            _Logger = logger;
-            _ConnectionString = connectionString;
         }
 
-        public void Migrate(List<DBTable> context)
+        public override void Migrate(List<DBTable> context)
         {
-            _Logger.WriteInformation("Migrating table 'CarrierAccount' started");
+            Logger.WriteInformation("Migrating table 'CarrierAccount' started");
 
             var sourceItems = GetSourceItems();
             if (sourceItems != null)
@@ -35,12 +31,12 @@ namespace TOne.WhS.DBSync.Business
                 AddItems(itemsToAdd, context);
             }
 
-            _Logger.WriteInformation("Migrating table 'CarrierAccount' ended");
+            Logger.WriteInformation("Migrating table 'CarrierAccount' ended");
         }
 
         private void AddItems(List<CarrierAccount> itemsToAdd, List<DBTable> context)
         {
-            CarrierAccountDBSyncManager CarrierAccountManager = new CarrierAccountDBSyncManager(_UseTempTables);
+            CarrierAccountDBSyncManager CarrierAccountManager = new CarrierAccountDBSyncManager(UseTempTables);
             CarrierAccountManager.ApplyCarrierAccountsToTemp(itemsToAdd);
             DBTable dbTableCarrierAccount = context.Where(x => x.Name == Constants.Table_CarrierAccount).FirstOrDefault();
             if (dbTableCarrierAccount != null)
@@ -49,22 +45,38 @@ namespace TOne.WhS.DBSync.Business
 
         private IEnumerable<SourceCarrierAccount> GetSourceItems()
         {
-            SourceCarrierAccountDataManager dataManager = new SourceCarrierAccountDataManager(_ConnectionString);
+            SourceCarrierAccountDataManager dataManager = new SourceCarrierAccountDataManager(ConnectionString);
             return dataManager.GetSourceCarrierAccounts();
         }
 
         private CarrierAccount BuildItemFromSource(SourceCarrierAccount sourceItem, List<DBTable> context)
         {
-            return new CarrierAccount
+            DBTable dbTableCarrierProfile = context.Where(x => x.Name == Constants.Table_CarrierProfile).FirstOrDefault();
+            if (dbTableCarrierProfile != null)
+            {
+                List<CarrierProfile> allCurrencies = (List<CarrierProfile>)dbTableCarrierProfile.Records;
+                CarrierProfile carrierProfile = allCurrencies.Where(x => x.SourceId == sourceItem.ProfileId.ToString()).FirstOrDefault();
+                if (carrierProfile != null)
+                    return new CarrierAccount
             {
                 AccountType = CarrierAccountType.Customer,/// Change to real
                 CarrierAccountSettings = new CarrierAccountSettings(),
-                CarrierProfileId = 0,
+                CarrierProfileId = carrierProfile.CarrierProfileId,
                 CustomerSettings = new CarrierAccountCustomerSettings(),
-                NameSuffix = "",
+                NameSuffix = (String.IsNullOrEmpty(sourceItem.NameSuffix) ? carrierProfile.SourceId : sourceItem.NameSuffix),
                 SellingNumberPlanId = null,
-                SupplierSettings = new CarrierAccountSupplierSettings()
+                SupplierSettings = new CarrierAccountSupplierSettings(),
+                SourceId = sourceItem.SourceId
             };
+                else
+                    return null;
+
+            }
+            else
+                return null;
         }
+
+
+
     }
 }

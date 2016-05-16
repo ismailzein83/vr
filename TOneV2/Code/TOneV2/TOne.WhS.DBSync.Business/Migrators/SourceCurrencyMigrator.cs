@@ -6,24 +6,18 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SourceCurrencyMigrator 
+    public class SourceCurrencyMigrator : Migrator
     {
-        private string _ConnectionString;
-        private bool _UseTempTables;
-        private DBSyncLogger _Logger;
-
         public SourceCurrencyMigrator(string connectionString, bool useTempTables, DBSyncLogger logger)
+            : base(connectionString, useTempTables, logger)
         {
-            _UseTempTables = useTempTables;
-            _Logger = logger;
-            _ConnectionString = connectionString;
         }
 
 
 
-        public  void Migrate(List<DBTable> context)
+        public override void Migrate(List<DBTable> context)
         {
-            _Logger.WriteInformation("Migrating table 'Currency' started");
+            Logger.WriteInformation("Migrating table 'Currency' started");
             var sourceItems = GetSourceItems();
             if (sourceItems != null)
             {
@@ -36,12 +30,12 @@ namespace TOne.WhS.DBSync.Business
                 }
                 AddItems(itemsToAdd, context);
             }
-            _Logger.WriteInformation("Migrating table 'Currency' ended");
+            Logger.WriteInformation("Migrating table 'Currency' ended");
         }
 
-        private  void AddItems(List<Currency> itemsToAdd, List<DBTable> context)
+        private void AddItems(List<Currency> itemsToAdd, List<DBTable> context)
         {
-            CurrencyDBSyncManager CurrencyManager = new CurrencyDBSyncManager(_UseTempTables);
+            CurrencyDBSyncManager CurrencyManager = new CurrencyDBSyncManager(UseTempTables);
             CurrencyManager.ApplyCurrenciesToTemp(itemsToAdd);
             DBTable dbTableCurrency = context.Where(x => x.Name == Constants.Table_Currency).FirstOrDefault();
             if (dbTableCurrency != null)
@@ -50,11 +44,11 @@ namespace TOne.WhS.DBSync.Business
 
         private IEnumerable<SourceCurrency> GetSourceItems()
         {
-            SourceCurrencyDataManager dataManager = new SourceCurrencyDataManager(_ConnectionString);
+            SourceCurrencyDataManager dataManager = new SourceCurrencyDataManager(ConnectionString);
             return dataManager.GetSourceCurrencies();
         }
 
-        private  Currency BuildItemFromSource(SourceCurrency sourceItem, List<DBTable> context)
+        private Currency BuildItemFromSource(SourceCurrency sourceItem, List<DBTable> context)
         {
             return new Currency
             {

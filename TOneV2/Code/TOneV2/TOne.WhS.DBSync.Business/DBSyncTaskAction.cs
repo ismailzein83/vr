@@ -32,6 +32,11 @@ namespace TOne.WhS.DBSync.Business
                 context.Add(new DBTable { Name = Constants.Table_Switch, Schema = Constants.SCHEMA_TOneWhS_BE, Database = Constants.DB_TOneV2_Migration });
                 context.Add(new DBTable { Name = Constants.Table_CarrierProfile, Schema = Constants.SCHEMA_TOneWhS_BE, Database = Constants.DB_TOneV2_Migration });
                 context.Add(new DBTable { Name = Constants.Table_CarrierAccount, Schema = Constants.SCHEMA_TOneWhS_BE, Database = Constants.DB_TOneV2_Migration });
+                context.Add(new DBTable { Name = Constants.Table_CustomerZone, Schema = Constants.SCHEMA_TOneWhS_BE, Database = Constants.DB_TOneV2_Migration });
+                context.Add(new DBTable { Name = Constants.Table_SupplierZone, Schema = Constants.SCHEMA_TOneWhS_BE, Database = Constants.DB_TOneV2_Migration });
+                context.Add(new DBTable { Name = Constants.Table_SupplierRate, Schema = Constants.SCHEMA_TOneWhS_BE, Database = Constants.DB_TOneV2_Migration });
+                context.Add(new DBTable { Name = Constants.Table_SupplierCode, Schema = Constants.SCHEMA_TOneWhS_BE, Database = Constants.DB_TOneV2_Migration });
+                context.Add(new DBTable { Name = Constants.Table_SupplierZoneService, Schema = Constants.SCHEMA_TOneWhS_BE, Database = Constants.DB_TOneV2_Migration });
 
                 if (useTempTables)
                 {
@@ -74,24 +79,19 @@ namespace TOne.WhS.DBSync.Business
 
         private void TransferData(DBSyncTaskActionArgument dbSyncTaskActionArgument, bool useTempTables, List<DBTable> context, DBSyncLogger logger)
         {
-            SourceCurrencyMigrator sourceCurrencyMigrator =
-                new SourceCurrencyMigrator(dbSyncTaskActionArgument.ConnectionString, useTempTables, logger);
+            SourceCurrencyMigrator sourceCurrencyMigrator = new SourceCurrencyMigrator(dbSyncTaskActionArgument.ConnectionString, useTempTables, logger);
             sourceCurrencyMigrator.Migrate(context);
 
-            SourceCurrencyExchangeRateMigrator sourceCurrencyExchangeRateMigrator =
-                new SourceCurrencyExchangeRateMigrator(dbSyncTaskActionArgument.ConnectionString, useTempTables, logger);
+            SourceCurrencyExchangeRateMigrator sourceCurrencyExchangeRateMigrator = new SourceCurrencyExchangeRateMigrator(dbSyncTaskActionArgument.ConnectionString, useTempTables, logger);
             sourceCurrencyExchangeRateMigrator.Migrate(context);
 
-            SourceSwitchMigrator sourceSwitchMigrator =
-                new SourceSwitchMigrator(dbSyncTaskActionArgument.ConnectionString, useTempTables, logger);
+            SourceSwitchMigrator sourceSwitchMigrator = new SourceSwitchMigrator(dbSyncTaskActionArgument.ConnectionString, useTempTables, logger);
             sourceSwitchMigrator.Migrate(context);
 
-            SourceCarrierProfileMigrator sourceCarrierProfileMigrator =
-               new SourceCarrierProfileMigrator(dbSyncTaskActionArgument.ConnectionString, useTempTables, logger);
+            SourceCarrierProfileMigrator sourceCarrierProfileMigrator = new SourceCarrierProfileMigrator(dbSyncTaskActionArgument.ConnectionString, useTempTables, logger);
             sourceCarrierProfileMigrator.Migrate(context);
 
-            SourceCarrierAccountMigrator sourceCarrierAccountMigrator =
-               new SourceCarrierAccountMigrator(dbSyncTaskActionArgument.ConnectionString, useTempTables, logger);
+           SourceCarrierAccountMigrator sourceCarrierAccountMigrator = new SourceCarrierAccountMigrator(dbSyncTaskActionArgument.ConnectionString, useTempTables, logger);
             sourceCarrierAccountMigrator.Migrate(context);
         }
     }

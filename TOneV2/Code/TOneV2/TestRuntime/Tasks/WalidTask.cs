@@ -16,7 +16,7 @@ namespace TestRuntime.Tasks
 
             DBSyncTaskActionArgument taskActionArgument = new DBSyncTaskActionArgument();
             taskActionArgument.ConnectionString = "Server=192.168.110.185;Database=MVTSPro;User ID=development;Password=dev!123";
-            taskActionArgument.UseTempTables = false;
+            taskActionArgument.UseTempTables = true;
             DBSyncTaskAction dbSyncTaskAction = new DBSyncTaskAction();
             dbSyncTaskAction.Execute(new SchedulerTask(), taskActionArgument, null);
         }

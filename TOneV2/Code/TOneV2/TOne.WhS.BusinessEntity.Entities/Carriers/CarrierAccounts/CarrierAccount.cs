@@ -19,6 +19,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public CarrierAccountSettings CarrierAccountSettings { get; set; }
         public CarrierAccountSupplierSettings SupplierSettings { get; set; }
         public CarrierAccountCustomerSettings CustomerSettings { get; set; }
+        public string SourceId { get; set; }
         
     }
 }

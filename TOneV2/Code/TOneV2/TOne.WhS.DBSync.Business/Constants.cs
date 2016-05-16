@@ -19,6 +19,11 @@ namespace TOne.WhS.DBSync.Business
         public const string Table_CarrierProfile = "CarrierProfile";
         public const string Table_CarrierAccount = "CarrierAccount";
         public const string Table_Switch = "Switch";
+        public const string Table_CustomerZone = "CustomerZone";
+        public const string Table_SupplierZone = "SupplierZone";
+        public const string Table_SupplierRate = "SupplierRate";
+        public const string Table_SupplierCode = "SupplierCode";
+        public const string Table_SupplierZoneService = "SupplierZoneService";
     }
 }
 

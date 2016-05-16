@@ -8,7 +8,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class CarrierAccountDBSyncDataManager : BaseSQLDataManager
     {
-        readonly string[] columns = { "NameSuffix", "CarrierProfileId", "SellingNumberPlanId", "AccountType", "CarrierAccountSettings", "SupplierSettings", "CustomerSettings" };
+        readonly string[] columns = { "NameSuffix", "CarrierProfileID", "AccountType", "SupplierSettings", "CustomerSettings", "CarrierAccountSettings", "SellingNumberPlanID", "SourceID" };
 
         bool _UseTempTables;
         public CarrierAccountDBSyncDataManager(bool useTempTables) :
@@ -24,7 +24,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             {
                 foreach (var c in carrierAccounts)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}", c.CarrierProfileId, c.SellingNumberPlanId, c.AccountType, c.CarrierAccountSettings, c.SupplierSettings, c.CustomerSettings));
+                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", c.NameSuffix, c.CarrierProfileId, (int)c.AccountType, c.SupplierSettings, c.CustomerSettings, c.CarrierAccountSettings, c.SellingNumberPlanId, c.SourceId));
                 }
                 wr.Close();
             }
@@ -44,7 +44,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public List<CarrierAccount> GetCarrierAccounts()
         {
-            return GetItemsText("SELECT [ID] ,[Settings]  ,[Name] ,[SourceID] FROM [TOneWhS_BE].[CarrierAccount" + (_UseTempTables ? Constants._Temp : "") + "] ", CarrierAccountMapper, cmd => { });
+            return GetItemsText("SELECT [ID] ,[NameSuffix]  ,[AccountType] ,[SellingNumberPlanID],[CarrierProfileId],[SourceID] FROM [TOneWhS_BE].[CarrierAccount" + (_UseTempTables ? Constants._Temp : "") + "] ", CarrierAccountMapper, cmd => { });
         }
 
         private CarrierAccount CarrierAccountMapper(IDataReader reader)
@@ -54,12 +54,9 @@ namespace TOne.WhS.DBSync.Data.SQL
                 CarrierAccountId = (int)reader["ID"],
                 NameSuffix = reader["NameSuffix"] as string,
                 AccountType = (CarrierAccountType)GetReaderValue<int>(reader, "AccountType"),
-                SupplierSettings = Vanrise.Common.Serializer.Deserialize<CarrierAccountSupplierSettings>(reader["SupplierSettings"] as string),
-                CustomerSettings = Vanrise.Common.Serializer.Deserialize<CarrierAccountCustomerSettings>(reader["CustomerSettings"] as string),
                 SellingNumberPlanId = GetReaderValue<int?>(reader, "SellingNumberPlanID"),
                 CarrierProfileId = (int)reader["CarrierProfileId"],
-                CarrierAccountSettings = Vanrise.Common.Serializer.Deserialize<CarrierAccountSettings>(reader["CarrierAccountSettings"] as string),
-
+                SourceId = reader["SourceID"] as string,
             };
             return carrierAccount;
         }

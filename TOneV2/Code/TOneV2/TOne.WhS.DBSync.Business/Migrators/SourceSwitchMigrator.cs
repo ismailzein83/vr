@@ -5,23 +5,16 @@ using TOne.WhS.DBSync.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SourceSwitchMigrator 
+    public class SourceSwitchMigrator : Migrator
     {
-        private string _ConnectionString;
-        private bool _UseTempTables;
-        private DBSyncLogger _Logger;
-
         public SourceSwitchMigrator(string connectionString, bool useTempTables, DBSyncLogger logger)
+            : base(connectionString, useTempTables, logger)
         {
-            _UseTempTables = useTempTables;
-            _Logger = logger;
-            _ConnectionString = connectionString;
         }
 
-
-        public void Migrate(List<DBTable> context)
+        public override void Migrate(List<DBTable> context)
         {
-            _Logger.WriteInformation("Migrating table 'Switch' started");
+            Logger.WriteInformation("Migrating table 'Switch' started");
             var sourceItems = GetSourceItems();
             if (sourceItems != null)
             {
@@ -34,18 +27,18 @@ namespace TOne.WhS.DBSync.Business
                 }
                 AddItems(itemsToAdd, context);
             }
-            _Logger.WriteInformation("Migrating table 'Switch' ended");
+            Logger.WriteInformation("Migrating table 'Switch' ended");
         }
 
         private void AddItems(List<Switch> itemsToAdd, List<DBTable> context)
         {
-            SwitchDBSyncManager switchManager = new SwitchDBSyncManager(_UseTempTables);
+            SwitchDBSyncManager switchManager = new SwitchDBSyncManager(UseTempTables);
             switchManager.ApplySwitchesToTemp(itemsToAdd);
         }
 
         private IEnumerable<SourceSwitch> GetSourceItems()
         {
-            SourceSwitchDataManager dataManager = new SourceSwitchDataManager(_ConnectionString);
+            SourceSwitchDataManager dataManager = new SourceSwitchDataManager(ConnectionString);
             return dataManager.GetSourceSwitches();
         }
 

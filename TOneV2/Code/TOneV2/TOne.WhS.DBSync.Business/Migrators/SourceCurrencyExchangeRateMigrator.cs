@@ -7,21 +7,16 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SourceCurrencyExchangeRateMigrator 
+    public class SourceCurrencyExchangeRateMigrator : Migrator
     {
-        private string _ConnectionString;
-        private bool _UseTempTables;
-        private DBSyncLogger _Logger;
         public SourceCurrencyExchangeRateMigrator(string connectionString, bool useTempTables, DBSyncLogger logger)
+            : base(connectionString, useTempTables, logger)
         {
-            _UseTempTables = useTempTables;
-            _Logger = logger;
-            _ConnectionString = connectionString;
         }
 
-        public  void Migrate(List<DBTable> context)
+        public override void Migrate(List<DBTable> context)
         {
-            _Logger.WriteInformation("Migrating table 'CurrencyExchangeRate' started");
+            Logger.WriteInformation("Migrating table 'CurrencyExchangeRate' started");
             var sourceItems = GetSourceItems();
             if (sourceItems != null)
             {
@@ -34,18 +29,18 @@ namespace TOne.WhS.DBSync.Business
                 }
                 AddItems(itemsToAdd, context);
             }
-            _Logger.WriteInformation("Migrating table 'CurrencyExchangeRate' ended");
+            Logger.WriteInformation("Migrating table 'CurrencyExchangeRate' ended");
         }
 
         private  void AddItems(List<CurrencyExchangeRate> itemsToAdd, List<DBTable> context)
         {
-            CurrencyExchangeRateDBSyncManager CurrencyExchangeRateManager = new CurrencyExchangeRateDBSyncManager(_UseTempTables);
+            CurrencyExchangeRateDBSyncManager CurrencyExchangeRateManager = new CurrencyExchangeRateDBSyncManager(UseTempTables);
             CurrencyExchangeRateManager.ApplyCurrencyExchangeRatesToTemp(itemsToAdd);
         }
 
         private IEnumerable<SourceCurrencyExchangeRate> GetSourceItems()
         {
-            SourceCurrencyExchangeRateDataManager dataManager = new SourceCurrencyExchangeRateDataManager(_ConnectionString);
+            SourceCurrencyExchangeRateDataManager dataManager = new SourceCurrencyExchangeRateDataManager(ConnectionString);
             return dataManager.GetSourceCurrencyExchangeRates();
         }
 
