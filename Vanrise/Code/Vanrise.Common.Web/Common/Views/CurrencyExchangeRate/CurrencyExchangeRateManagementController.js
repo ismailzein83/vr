@@ -16,6 +16,7 @@
         var filter = {};
 
         function defineScope() {
+            $scope.exchangeDate = new Date();
             $scope.searchClicked = function () {
                 getFilterObject();
                 return gridAPI.loadGrid(filter);
@@ -23,6 +24,7 @@
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+                getFilterObject();
                 gridAPI.loadGrid(filter)
             }
 

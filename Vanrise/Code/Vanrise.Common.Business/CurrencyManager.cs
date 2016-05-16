@@ -11,7 +11,7 @@ namespace Vanrise.Common.Business
     public class CurrencyManager
     {
 
-        public Vanrise.Entities.IDataRetrievalResult<Currency> GetFilteredCurrencies(Vanrise.Entities.DataRetrievalInput<CurrencyQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<CurrencyDetail> GetFilteredCurrencies(Vanrise.Entities.DataRetrievalInput<CurrencyQuery> input)
         {
             var allCurrencies = GetCachedCurrencies();
 
@@ -20,7 +20,7 @@ namespace Vanrise.Common.Business
                   &&
                  (input.Query.Symbol == null || prod.Symbol.ToLower().Contains(input.Query.Symbol.ToLower()));
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCurrencies.ToBigResult(input, filterExpression));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCurrencies.ToBigResult(input, filterExpression, CurrencyDetailMapper));
         }
 
         public IEnumerable<Currency> GetAllCurrencies()
@@ -69,9 +69,9 @@ namespace Vanrise.Common.Business
                });
         }
 
-        public Vanrise.Entities.InsertOperationOutput<Currency> AddCurrency(Currency currency)
+        public Vanrise.Entities.InsertOperationOutput<CurrencyDetail> AddCurrency(Currency currency)
         {
-            Vanrise.Entities.InsertOperationOutput<Currency> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<Currency>();
+            Vanrise.Entities.InsertOperationOutput<CurrencyDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<CurrencyDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -85,7 +85,7 @@ namespace Vanrise.Common.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 currency.CurrencyId = currencyId;
-                insertOperationOutput.InsertedObject = currency;
+                insertOperationOutput.InsertedObject = CurrencyDetailMapper(currency);
             }
             else
             {
@@ -94,12 +94,12 @@ namespace Vanrise.Common.Business
 
             return insertOperationOutput;
         }
-        public Vanrise.Entities.UpdateOperationOutput<Currency> UpdateCurrency(Currency currency)
+        public Vanrise.Entities.UpdateOperationOutput<CurrencyDetail> UpdateCurrency(Currency currency)
         {
             ICurrencyDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICurrencyDataManager>();
 
             bool updateActionSucc = dataManager.Update(currency);
-            Vanrise.Entities.UpdateOperationOutput<Currency> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<Currency>();
+            Vanrise.Entities.UpdateOperationOutput<CurrencyDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<CurrencyDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
@@ -108,7 +108,7 @@ namespace Vanrise.Common.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = currency;
+                updateOperationOutput.UpdatedObject = CurrencyDetailMapper(currency);
             }
             else
             {
@@ -128,7 +128,18 @@ namespace Vanrise.Common.Business
                 return _dataManager.AreCurrenciesUpdated(ref _updateHandle);
             }
         }
+        private CurrencyDetail CurrencyDetailMapper(Currency currency)
+        {
+            CurrencyDetail currencDetail = new CurrencyDetail();
 
+            currencDetail.Entity = currency;
+
+            CurrencyManager manager = new CurrencyManager();
+            if (currency == manager.GetSystemCurrency())
+                currencDetail.IsMain = true;
+
+            return currencDetail;
+        } 
         #endregion
     }
 }

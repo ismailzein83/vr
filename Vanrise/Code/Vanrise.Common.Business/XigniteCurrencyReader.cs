@@ -48,7 +48,7 @@ namespace Vanrise.Common.Business
             string result = "";
             CurrencyManager manager = new CurrencyManager();
             var allCurrencies = manager.GetCachedCurrencies();
-            Currency mainCurrency = allCurrencies.FindRecord(c => c.Symbol == "USD");
+            Currency mainCurrency = manager.GetSystemCurrency();
             foreach (var currency in allCurrencies.Values)
             {
                     result += String.Format("{0}{1},", mainCurrency.Symbol, currency.Symbol);

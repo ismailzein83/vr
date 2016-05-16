@@ -9,6 +9,7 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyExchangeRateAPIS
             onReady: "="
         },
         controller: function ($scope, $element, $attrs) {
+            $scope.hidecurrencycolumn ;
             var ctrl = this;
             var grid = new CurrencyExhangeRateGrid($scope, ctrl, $attrs);
             grid.initializeController();
@@ -29,6 +30,7 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyExchangeRateAPIS
         this.initializeController = initializeController;
 
         function initializeController() {
+          
             if ($attrs.hidecurrencycolumn != undefined) {
                 $scope.hidecurrencycolumn = disableCurrency = true;
             }
@@ -41,8 +43,9 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyExchangeRateAPIS
                 function getDirectiveAPI() {
                    
                     var directiveAPI = {};
-                    directiveAPI.loadGrid = function (query) {
-                       
+                    directiveAPI.loadGrid = function (query,isChildgrid) {
+                        if (isChildgrid != undefined)
+                            $scope.hidecurrencycolumn = true;
                         return gridAPI.retrieveData(query);
                     }
                     directiveAPI.onExchangeRateAdded = function (exchangeRateObject) {

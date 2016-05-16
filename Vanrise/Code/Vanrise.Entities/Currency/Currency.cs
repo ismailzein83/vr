@@ -18,4 +18,14 @@ namespace Vanrise.Entities
         public string SourceId { get; set; }
         
     }
+
+    public class CurrencyDetail
+    {
+        public Currency Entity { get; set; }
+
+        public bool? IsMain { get; set; }
+
+
+
+    }
 }

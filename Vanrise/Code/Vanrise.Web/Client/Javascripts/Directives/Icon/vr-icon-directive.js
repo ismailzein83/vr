@@ -54,16 +54,18 @@ app.directive('vrIcon', [function ($compile) {
         var text = "";
         if (ctrl.text != undefined)
             text = ctrl.text;
-
+        var containerstyle = "";
+        if (attr.inline != undefined)
+            containerstyle = "display:inline-block";
         var template = ''
         if (ctrl.icon.isimage) {
             if (ctrl.icontype != undefined)
-                template += '<div style="text-align: left;"><img style="width:15px;height:15px" title="' + ctrl.icontype + '"  src="' + ctrl.icon.value + '"  /><span>' + text + '</span></div>'
+                template += '<div style="text-align: left;' + containerstyle + '"><img style="width:15px;height:15px" title="' + ctrl.icontype + '"  src="' + ctrl.icon.value + '"  /><span>' + text + '</span></div>'
             else if (ctrl.tooltip != undefined)
-                template += '<div style="text-align: left;"><img style="width:15px;height:15px" title="' + ctrl.tooltip + '"  src="' + ctrl.icon.value + '"  /><span>' + text + '</span></div>'
+                template += '<div style="text-align: left;' + containerstyle + '"><img style="width:15px;height:15px" title="' + ctrl.tooltip + '"  src="' + ctrl.icon.value + '"  /><span>' + text + '</span></div>'
         }
         else
-            template += '<div style="text-align: left;"><span class="glyphicon ' + ctrl.icon.value + '"  /></div>'
+            template += '<div style="text-align: left;' + containerstyle + '"><span class="glyphicon ' + ctrl.icon.value + '"  /></div>'
 
         return template;
     }

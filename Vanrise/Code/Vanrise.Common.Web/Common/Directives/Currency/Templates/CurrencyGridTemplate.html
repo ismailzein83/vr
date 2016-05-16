@@ -5,9 +5,12 @@
                 menuactions="gridMenuActions"
                 idfield="CurrencyId">
 
-    <vr-datagridcolumn headertext="'ID'" field="'CurrencyId'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Currency Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Symbol'" field="'Symbol'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.CurrencyId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Currency Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Symbol'" field="'Entity.Symbol'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Main Currency'" field="'IsMain'" type="'Text'">
+        <span ng-if="dataItem.IsMain == true "><vr-icon icontype="'true'"></vr-icon></span>
+    </vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>

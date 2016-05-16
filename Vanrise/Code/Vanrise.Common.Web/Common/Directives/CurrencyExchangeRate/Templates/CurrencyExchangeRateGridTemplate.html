@@ -6,7 +6,16 @@
                 idfield="Entity.CurrencyExchangeRateId">
 
     <vr-datagridcolumn headertext="'ID'" field="'Entity.CurrencyExchangeRateId'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Currency'" field="'CurrencyName'" type="'Text'" ng-if="!hidecurrencycolumn"></vr-datagridcolumn>
+
     <vr-datagridcolumn headertext="'Exchange Date'" field="'Entity.ExchangeDate'" type="'Date'"></vr-datagridcolumn>
+
+    <vr-datagridcolumn headertext="'Currency'" field="'CurrencySymbol'" type="'Text'" ng-show="!hidecurrencycolumn"></vr-datagridcolumn>
+
+    <vr-datagridcolumn headertext="'Name'" field="'CurrencyName'" type="'Text'" ng-show="!hidecurrencycolumn"></vr-datagridcolumn>
+
     <vr-datagridcolumn headertext="'Rate'" field="'Entity.Rate'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
+
+    <vr-datagridcolumn headertext="'Main Currency'" field="'IsMain'" type="'Text'" ng-if="!hidecurrencycolumn">
+        <span ng-if="dataItem.IsMain == true "><vr-icon icontype="'true'"></vr-icon></span>
+    </vr-datagridcolumn>
 </vr-datagrid>

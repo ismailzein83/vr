@@ -23,28 +23,28 @@ app.service('VRCommon_CurrencyExchangeRateService', ['UtilsService', 'VRModalSer
 
             drillDownDefinition.title = "Exchange Rates";
             drillDownDefinition.directive = "vr-common-currencyexchangerate-grid";
-            drillDownDefinition.parentMenuActions = [{
-                name: "New Exchange Rate",
-                clicked: function (currencyItem) {
-                    if (drillDownDefinition.setTabSelected != undefined)
-                        drillDownDefinition.setTabSelected(currencyItem);
+            //drillDownDefinition.parentMenuActions = [{
+            //    name: "New Exchange Rate",
+            //    clicked: function (currencyItem) {
+            //        if (drillDownDefinition.setTabSelected != undefined)
+            //            drillDownDefinition.setTabSelected(currencyItem);
                     
-                    var onExchangeRateAdded = function (exchangeRateObj) {
-                        if (currencyItem.exchangeGridAPI != undefined) {
-                            currencyItem.exchangeGridAPI.onExchangeRateAdded(exchangeRateObj);
-                        }
-                    };
-                    addExchangeRate(onExchangeRateAdded, currencyItem.CurrencyId);
-                }
-            }];
+            //        var onExchangeRateAdded = function (exchangeRateObj) {
+            //            if (currencyItem.exchangeGridAPI != undefined) {
+            //                currencyItem.exchangeGridAPI.onExchangeRateAdded(exchangeRateObj);
+            //            }
+            //        };
+            //        addExchangeRate(onExchangeRateAdded, currencyItem.CurrencyId);
+            //    }
+            //}];
 
             drillDownDefinition.loadDirective = function (directiveAPI, currencyItem) {
                 currencyItem.exchangeGridAPI = directiveAPI;
                 var query = {
-                    Currencies: [currencyItem.CurrencyId],
+                    Currencies: [currencyItem.Entity.CurrencyId],
                 };
 
-                return currencyItem.exchangeGridAPI.loadGrid(query);
+                return currencyItem.exchangeGridAPI.loadGrid(query,true);
             };
 
             VRCommon_CurrencyService.addDrillDownDefinition(drillDownDefinition);

@@ -45,14 +45,14 @@ namespace Vanrise.Common.Web.Controllers
 
        [HttpPost]
        [Route("AddCurrency")]
-       public Vanrise.Entities.InsertOperationOutput<Currency> AddCurrency(Currency currency)
+       public Vanrise.Entities.InsertOperationOutput<CurrencyDetail> AddCurrency(Currency currency)
        {
            CurrencyManager manager = new CurrencyManager();
            return manager.AddCurrency(currency);
        }
        [HttpPost]
        [Route("UpdateCurrency")]
-       public Vanrise.Entities.UpdateOperationOutput<Currency> UpdateCurrency(Currency currency)
+       public Vanrise.Entities.UpdateOperationOutput<CurrencyDetail> UpdateCurrency(Currency currency)
        {
            CurrencyManager manager = new CurrencyManager();
            return manager.UpdateCurrency(currency);

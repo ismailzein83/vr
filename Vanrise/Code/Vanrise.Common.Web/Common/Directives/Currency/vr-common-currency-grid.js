@@ -84,7 +84,7 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCo
                 gridDrillDownTabsObj.setDrillDownExtensionObject(currencyObj);
                 gridAPI.itemUpdated(currencyObj);
             }
-            VRCommon_CurrencyService.editCurrency(currencyObj.CurrencyId, onCurrencyUpdated);
+            VRCommon_CurrencyService.editCurrency(currencyObj.Entity.CurrencyId, onCurrencyUpdated);
         }
         
         this.initializeController = initializeController;

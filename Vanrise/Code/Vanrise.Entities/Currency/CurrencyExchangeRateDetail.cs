@@ -10,7 +10,8 @@ namespace Vanrise.Entities
     {
 
         public CurrencyExchangeRate Entity { get; set; }
-
+        public string CurrencySymbol { get; set; }
         public string CurrencyName { get; set; }
+        public bool? IsMain { get; set; }
     }
 }
