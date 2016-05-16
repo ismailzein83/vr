@@ -22,8 +22,9 @@ BEGIN
 		  LEFT JOIN Common.[CurrencyExchangeRate] cr2 ON	cr1.CurrencyID = cr2.CurrencyID 
 															AND cr1.ExchangeDate < cr2.ExchangeDate 
 															AND (cr2.[ExchangeDate] <= @To OR @To IS NULL)
-		  WHERE cr1.[ExchangeDate] >= @From 
-		  AND (cr1.[ExchangeDate] <= @To OR @To IS NULL) 
+		  WHERE --cr1.[ExchangeDate] >= @From 
+		 -- AND
+		   (cr1.[ExchangeDate] <= @To OR @To IS NULL) 
 	  )
 	  
 	  INSERT INTO @ExchangeRates

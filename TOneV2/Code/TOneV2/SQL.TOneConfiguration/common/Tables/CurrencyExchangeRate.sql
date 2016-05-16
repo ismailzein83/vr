@@ -6,8 +6,11 @@
     [timestamp]    ROWVERSION       NULL,
     [SourceID]     VARCHAR (50)     NULL,
     CONSTRAINT [PK_CurrencyExchangeRate] PRIMARY KEY CLUSTERED ([ID] ASC),
-    CONSTRAINT [FK_CurrencyExchangeRate_Currency] FOREIGN KEY ([CurrencyID]) REFERENCES [common].[Currency] ([ID])
+    CONSTRAINT [FK_CurrencyExchangeRate_Currency] FOREIGN KEY ([CurrencyID]) REFERENCES [common].[Currency] ([ID]),
+    CONSTRAINT [IX_CurrencyExchangeRate_CurrencyIDExchangeDate] UNIQUE NONCLUSTERED ([CurrencyID] ASC, [ExchangeDate] ASC)
 );
+
+
 
 
 
