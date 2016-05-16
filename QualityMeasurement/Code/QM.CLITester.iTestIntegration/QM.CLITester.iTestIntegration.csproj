@@ -60,6 +60,10 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Runtime.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
@@ -82,6 +86,8 @@
     <Compile Include="ITestExtendedZoneSettingBehavior.cs" />
     <Compile Include="ZoneITestReader.cs" />
     <Compile Include="ITestZoneManager.cs" />
+    <Compile Include="ZoneTaskActionSynch\VIConnectorSyncTaskAction.cs" />
+    <Compile Include="ZoneTaskActionSynch\VIConnectorSyncTaskActionArgument.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QM.BusinessEntity.Business\QM.BusinessEntity.Business.csproj">

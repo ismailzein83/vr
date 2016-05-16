@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using QM.BusinessEntity.Data;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace QM.BusinessEntity.Business
 {
@@ -26,7 +28,7 @@ namespace QM.BusinessEntity.Business
             {
                 ConnectorZoneInfo matchZone = existingZones != null ? existingZones.FirstOrDefault(itm => itm.ConnectorZoneId == zone.ConnectorZoneId) : null;
                 if (matchZone != null)
-                    UpdateZone(connectorType, matchZone.ConnectorZoneInfoId, zone.Codes);
+                    UpdateZone(matchZone.ConnectorZoneInfoId, zone.Codes);
                 else
                     AddZone(connectorType, zone.ConnectorZoneId, zone.Codes);
             }
@@ -57,8 +59,25 @@ namespace QM.BusinessEntity.Business
 
         private Dictionary<string, List<ConnectorZoneInfo>> GetAllZonesByConnectorType()
         {
-            //cached
-            throw new NotImplementedException();
+            Dictionary<string, List<ConnectorZoneInfo>> connectorZonesInfo = new Dictionary<string, List<ConnectorZoneInfo>>();
+            foreach (var item in GetCachedConnectorZonesInfo())
+            {
+                List<ConnectorZoneInfo> listconnectorZoneInfo = new List<ConnectorZoneInfo>();
+                if (!connectorZonesInfo.ContainsKey((item.Value.ConnectorType)))
+                {
+                    
+                    listconnectorZoneInfo.Add(item.Value);
+                    connectorZonesInfo.Add(item.Value.ConnectorType, listconnectorZoneInfo);
+                }
+                else
+                {
+                    connectorZonesInfo.TryGetValue(item.Value.ConnectorType, out listconnectorZoneInfo);
+                    listconnectorZoneInfo.Add(item.Value);
+                    connectorZonesInfo[item.Value.ConnectorType] = listconnectorZoneInfo;
+                }
+            }
+                
+            return connectorZonesInfo;
         }
 
         private List<ConnectorZoneInfoSingleCode> GetZonesReverseOrdered(string connectorType)
@@ -77,25 +96,47 @@ namespace QM.BusinessEntity.Business
                 });
         }
 
-        private void UpdateZone(string connectorType, long connectorZoneInfoId, List<string> codes)
+        private bool UpdateZone(long connectorZoneInfoId, List<string> codes)
         {
-            throw new NotImplementedException();
+            IConnectorZoneInfoDataManager dataManager = BEDataManagerFactory.GetDataManager<IConnectorZoneInfoDataManager>();
+            return dataManager.UpdateZone(connectorZoneInfoId,codes);
         }
 
-        private void AddZone(string connectorType, string connectorZoneId, List<string> codes)
+        private bool AddZone(string connectorType, string connectorZoneId, List<string> codes)
         {
-            throw new NotImplementedException();
+            IConnectorZoneInfoDataManager dataManager = BEDataManagerFactory.GetDataManager<IConnectorZoneInfoDataManager>();
+            return dataManager.AddZone(connectorType, connectorZoneId, codes);
+        }
+
+        public List<Vanrise.Entities.TemplateConfig> GetConnectorZoneTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.ConnectorZoneReaderConfigType);
         }
 
         #endregion
 
         #region Private Classes
 
+        public Dictionary<long, ConnectorZoneInfo> GetCachedConnectorZonesInfo()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetConnectorZonesInfo",
+               () =>
+               {
+                   IConnectorZoneInfoDataManager dataManager = BEDataManagerFactory.GetDataManager<IConnectorZoneInfoDataManager>();
+                   IEnumerable<ConnectorZoneInfo> connectorZonesInfo = dataManager.GetConnectorZonesInfo();
+                   return connectorZonesInfo.ToDictionary(cn => cn.ConnectorZoneInfoId, cn => cn);
+               });
+        }
+
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
+            IConnectorZoneInfoDataManager _dataManager = BEDataManagerFactory.GetDataManager<IConnectorZoneInfoDataManager>();
+            object _updateHandle;
+
             protected override bool ShouldSetCacheExpired()
             {
-                throw new NotImplementedException();
+                return _dataManager.AreConnectorZonesInfoUpdated(ref _updateHandle);
             }
         }
 

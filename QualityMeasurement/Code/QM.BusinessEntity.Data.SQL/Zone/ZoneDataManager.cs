@@ -11,8 +11,6 @@ namespace QM.BusinessEntity.Data.SQL
 {
     public class ZoneDataManager : BaseSQLDataManager, IZoneDataManager
     {
-         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
-
          public ZoneDataManager() :
             base(GetConnectionStringName("QM_BE_DBConnStringKey", "QM_BE_DBConnString"))
         {

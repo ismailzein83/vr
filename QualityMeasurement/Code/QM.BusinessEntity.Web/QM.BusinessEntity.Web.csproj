@@ -133,12 +133,16 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\ConnectorZoneController.cs" />
     <Compile Include="Controllers\ZoneController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="QM_BusinessEntity\Constant\ModuleConfig.js" />
+    <Content Include="QM_BusinessEntity\Directives\MainExtensions\ConnectorZoneInfo\qm-be-connectorzoneinfo.js" />
+    <Content Include="QM_BusinessEntity\Directives\MainExtensions\ConnectorZoneInfo\Templates\ConnectorZoneInfo-ITest.html" />
+    <Content Include="QM_BusinessEntity\Directives\MainExtensions\ConnectorZoneInfo\qm-be-connectorzone-itest.js" />
     <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceSupplierReader\qm-be-sourcesupplierreader.js" />
     <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceSupplierReader\Templates\SourceSupplierReader.html" />
     <Content Include="QM_BusinessEntity\Directives\MainExtensions\SourceZoneReader\qm-be-sourcezonereader-tonev1.js" />
@@ -158,10 +162,13 @@
     <Content Include="QM_BusinessEntity\Directives\Zone\vr-qm-be-zone-grid.js" />
     <Content Include="QM_BusinessEntity\Directives\Zone\vr-qm-be-zone-selector.js" />
     <Content Include="QM_BusinessEntity\ModuleInitialization.js" />
+    <Content Include="QM_BusinessEntity\Services\APIServices\ConnectorZoneAPIService.js" />
     <Content Include="QM_BusinessEntity\Services\APIServices\ZoneAPIService.js" />
     <Content Include="QM_BusinessEntity\Services\APIServices\SupplierAPIService.js" />
     <Content Include="QM_BusinessEntity\Services\SupplierService.js" />
     <Content Include="QM_BusinessEntity\Services\ZoneService.js" />
+    <Content Include="QM_BusinessEntity\Directives\MainExtensions\ConnectorZoneInfo\Templates\ConnectorZoneInfoTemplate.html" />
+    <Content Include="QM_BusinessEntity\Views\ConnectorZoneInfo\SchedulerTaskAction\ConnectorZoneInfoTemplate_.html" />
     <Content Include="QM_BusinessEntity\Views\Supplier\SchedulerTaskAction\SupplierSynchronizeTemplate.html" />
     <Content Include="QM_BusinessEntity\Views\Supplier\SchedulerTaskAction\SupplierSynchronizeTemplateController.js" />
     <Content Include="QM_BusinessEntity\Views\Supplier\SupplierEditor.html" />

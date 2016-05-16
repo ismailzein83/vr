@@ -9,6 +9,7 @@ namespace QM.BusinessEntity.Entities
     public class ConnectorZoneInfo
     {
         public long ConnectorZoneInfoId { get; set; }
+        public string ConnectorType { get; set; }
 
         public string ConnectorZoneId { get; set; }
 

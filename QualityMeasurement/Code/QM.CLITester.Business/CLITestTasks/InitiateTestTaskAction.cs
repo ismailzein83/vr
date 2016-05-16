@@ -74,7 +74,6 @@ namespace QM.CLITester.Business
                             callTestStatus = CallTestStatus.InitiationFailedWithNoRetry;
                         break;
                     }
-
                     case InitiateTestResult.FailedWithNoRetry:
                         callTestStatus = CallTestStatus.InitiationFailedWithNoRetry;
                         break;
