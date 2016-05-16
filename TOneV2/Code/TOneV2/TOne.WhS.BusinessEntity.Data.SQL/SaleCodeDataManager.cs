@@ -43,7 +43,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
 
 
-                ExecuteNonQuerySP("TOneWhS_BE.sp_SaleCode_CreateTempByFiltered", tempTableName, input.Query.EffectiveOn, input.Query.SellingNumberPlanId, zonesids);
+                ExecuteNonQuerySP("TOneWhS_BE.sp_SaleCode_CreateTempByFiltered", tempTableName, input.Query.EffectiveOn,input.Query.Code, input.Query.SellingNumberPlanId, zonesids);
             };
 
             return RetrieveData(input, createTempTableAction, SaleCodeMapper, _mapper);
