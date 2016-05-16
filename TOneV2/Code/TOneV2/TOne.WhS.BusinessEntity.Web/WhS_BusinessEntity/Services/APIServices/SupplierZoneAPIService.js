@@ -25,11 +25,14 @@
                     serializedObj: serializedObj
                 });
         }
-
+        function GetSupplierZoneGroupTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSupplierZoneGroupTemplates"));
+        }
         return ({
             GetFilteredSupplierZones: GetFilteredSupplierZones,
             GetSupplierZoneInfo: GetSupplierZoneInfo,
-            GetSupplierZoneInfoByIds: GetSupplierZoneInfoByIds
+            GetSupplierZoneInfoByIds: GetSupplierZoneInfoByIds,
+            GetSupplierZoneGroupTemplates: GetSupplierZoneGroupTemplates
         });
     }
 

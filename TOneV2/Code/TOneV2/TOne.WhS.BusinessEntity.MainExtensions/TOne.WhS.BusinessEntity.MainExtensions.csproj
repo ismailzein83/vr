@@ -81,6 +81,7 @@
     <Compile Include="SellingNumberPlan\SelectiveSellingNumberPlan.cs" />
     <Compile Include="SupplierGroups\SelectiveSupplierGroup.cs" />
     <Compile Include="SuppliersWithZonesGroups\SelectiveSuppliersWithZonesGroup.cs" />
+    <Compile Include="SupplierZoneGroups\SelectiveSupplierZoneGroup.cs" />
     <Compile Include="TransformationSteps\CustomerZoneRateStep.cs" />
     <Compile Include="TransformationSteps\SupplierZoneRateStep.cs" />
   </ItemGroup>

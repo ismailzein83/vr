@@ -228,6 +228,10 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SourceMigrationReader\Templates\SourceMigrationReader.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\Templates\SelectiveSuppliersWithZonesGroup.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\vr-whs-be-supplierswithzonesgroup-selective.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SupplierZoneGroup\Templates\SelectiveSupplierZonesDirectiveTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SupplierZoneGroup\Templates\SupplierZoneTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SupplierZoneGroup\vr-whs-be-supplierzonegroup-selective.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SupplierZoneGroup\vr-whs-be-supplierzonegroup.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\TransformationSteps\CustomerZoneRateStep\Templates\CustomerZoneRateStepPreviewTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\TransformationSteps\CustomerZoneRateStep\Templates\CustomerZoneRateStepTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\TransformationSteps\CustomerZoneRateStep\vr-whs-be-datatransformation-customerzonerate-preview.js" />

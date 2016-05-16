@@ -93,6 +93,26 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return false;
         }
+
+
+        public string GetDescription(IEnumerable<long> supplierZoneIds)
+        {
+            IEnumerable<SupplierZone> supplierZones = GetCachedSupplierZones().Values;
+            Func<SupplierZone, bool> filterExpression = null;
+            if (supplierZoneIds != null)
+                filterExpression = (itm) => (supplierZoneIds.Contains(itm.SupplierZoneId));
+           var supplierZoneIdsValues = supplierZones.FindAllRecords(filterExpression);
+           if (supplierZoneIdsValues != null)
+               return string.Join(", ", supplierZoneIdsValues.Select(x => x.Name));
+            return string.Empty;
+        }
+
+        public IEnumerable<SupplierZoneGroupTemplate> GetSupplierZoneGroupTemplates()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<SupplierZoneGroupTemplate>(Constants.SupplierZoneGroupTemplate);
+        } 
+
         #endregion
 
         #region Private Members

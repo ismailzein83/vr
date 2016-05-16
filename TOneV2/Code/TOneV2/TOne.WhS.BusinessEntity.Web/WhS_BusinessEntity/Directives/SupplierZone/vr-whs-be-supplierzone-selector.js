@@ -8,10 +8,11 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                 onReady: '=',
                 ismultipleselection: "@",
                 onselectionchanged: '=',
-                isrequired: "@",
+                isrequired: "=",
                 supplierid: "=",
                 selectedvalues: '=',
-                hidetitle: '@'
+                hidetitle: '@',
+                normalColNum: '@',
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -50,14 +51,12 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
             if (attrs.hidetitle != undefined) {
                 label = "";
             }
-            var required = "";
-            if (attrs.isrequired != undefined)
-                required = "isrequired";
 
-            return '<div>'
+
+            return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
                + '<vr-select ' + multipleselection + ' on-ready="ctrl.SelectorReady"  datatextfield="Name" datavaluefield="SupplierZoneId"'
-            + required + ' datasource="ctrl.searchSupplierZones" selectedvalues="ctrl.selectedvalues"' + label + 'onselectionchanged="ctrl.onselectionchanged" entityName="Supplier Zone"></vr-select>'
-            + '</div>'
+            + 'isrequired="ctrl.isrequired" datasource="ctrl.searchSupplierZones" selectedvalues="ctrl.selectedvalues"' + label + 'onselectionchanged="ctrl.onselectionchanged" entityName="Supplier Zone"></vr-select>'
+            + '</vr-columns>'
         }
 
         function supplierZoneCtor(ctrl, $scope, $attrs) {
