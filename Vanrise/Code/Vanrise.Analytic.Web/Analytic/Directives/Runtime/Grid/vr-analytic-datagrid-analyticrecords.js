@@ -248,10 +248,10 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                 if (groupingSearchDimension != undefined && UtilsService.getItemByVal(ctrl.groupingDimensions, dimension.DimensionName, 'DimensionName') == undefined)
                                     ctrl.groupingDimensions.push(dimension);
                             }
-                            if (payload.Settings.Dimensions != undefined) {
+                            if (payload.Settings.Dimensions != undefined ) {
                                 var groupingDimension = UtilsService.getItemByVal(payload.Settings.Dimensions, dimension.DimensionName, 'DimensionName');
-                                if(groupingDimension.IsRootDimension)
-                                {
+                                if (groupingDimension.IsRootDimension && UtilsService.getItemByVal(ctrl.groupingDimensions, dimension.DimensionName, 'DimensionName') == undefined)
+                                { 
                                        ctrl.groupingDimensions.push(dimension);
                                 } else if (!groupingDimension.IsRootDimension && UtilsService.getItemByVal(ctrl.groupingDimensions, dimension.DimensionName, 'DimensionName') == undefined)
                                 {
