@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [TOneWhS_BE].[sp_SaleCode_CreateTempByFiltered]
 	@TempTableName varchar(200),
 	@EffectiveOn dateTime = null,
+	@Code varchar(20),
 	@SellingNumberPlanID int ,
 	@ZonesIDs varchar(max)
 AS
@@ -28,6 +29,7 @@ BEGIN
             WHERE 
                 (@EffectiveOn is null or sc.BED < = @EffectiveOn)
             and (@EffectiveOn is null or sc.EED is null or sc.EED  > @EffectiveOn)
+            and (@Code IS NULL OR sc.Code LIKE @Code + '%')
             and (@SellingNumberPlanID is null or @SellingNumberPlanID = sz.SellingNumberPlanID)
             and (@ZonesIDs  is null or sc.ZoneID in (select ZoneID from @ZonesIDsTable))
             DECLARE @sql VARCHAR(1000)

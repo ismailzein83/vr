@@ -8,9 +8,12 @@
     [CarrierAccountSettings] NVARCHAR (MAX) NULL,
     [SellingNumberPlanID]    INT            NULL,
     [timestamp]              ROWVERSION     NULL,
+    [SourceID]               VARCHAR (50)   NULL,
     CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_CarrierAccount_CarrierProfile] FOREIGN KEY ([CarrierProfileID]) REFERENCES [TOneWhS_BE].[CarrierProfile] ([ID])
 );
+
+
 
 
 

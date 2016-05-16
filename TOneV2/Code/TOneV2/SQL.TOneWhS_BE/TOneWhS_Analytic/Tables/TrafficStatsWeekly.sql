@@ -1,4 +1,4 @@
-﻿CREATE TABLE [TOneWhS_Analytic].[TrafficStatsDaily] (
+﻿CREATE TABLE [TOneWhS_Analytic].[TrafficStatsWeekly] (
     [ID]                     BIGINT          NULL,
     [CustomerID]             INT             NULL,
     [SupplierID]             INT             NULL,
@@ -22,15 +22,6 @@
     [SwitchID]               INT             NULL,
     [SumOfPGAD]              NUMERIC (20, 6) NULL,
     [UtilizationInSeconds]   NUMERIC (20, 6) NULL,
-    CONSTRAINT [IX_TrafficStatsDaily_ID] UNIQUE NONCLUSTERED ([ID] ASC)
+    CONSTRAINT [IX_TrafficStatsWeekly_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
-
-
-
-
-
-
-GO
-CREATE CLUSTERED INDEX [IX_TrafficStatsDaily_DateTimeFirst]
-    ON [TOneWhS_Analytic].[TrafficStatsDaily]([FirstCDRAttempt] ASC);
 

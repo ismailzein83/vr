@@ -3,6 +3,9 @@
     [Name]      NVARCHAR (255) NULL,
     [Settings]  NVARCHAR (MAX) NULL,
     [timestamp] ROWVERSION     NULL,
+    [SourceID]  VARCHAR (50)   NULL,
     CONSTRAINT [PK_CarrierProfile] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

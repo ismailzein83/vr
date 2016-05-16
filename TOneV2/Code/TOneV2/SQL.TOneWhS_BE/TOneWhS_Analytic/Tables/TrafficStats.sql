@@ -7,7 +7,9 @@
     [FirstCDRAttempt]        DATETIME        NULL,
     [LastCDRAttempt]         DATETIME        NULL,
     [SaleZoneID]             BIGINT          NULL,
+    [SaleCode]               VARCHAR (20)    NULL,
     [SupplierZoneID]         BIGINT          NULL,
+    [SupplierCode]           VARCHAR (20)    NULL,
     [SumOfPDDInSeconds]      NUMERIC (20, 6) NULL,
     [MaxDurationInSeconds]   NUMERIC (20, 6) NULL,
     [NumberOfCalls]          INT             NULL,
@@ -20,8 +22,11 @@
     [SwitchID]               INT             NULL,
     [SumOfPGAD]              NUMERIC (20, 6) NULL,
     [UtilizationInSeconds]   NUMERIC (20, 6) NULL,
+    [CodeGroup]              VARCHAR (10)    NULL,
     CONSTRAINT [IX_TrafficStats_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 

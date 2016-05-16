@@ -85,6 +85,9 @@
     <Folder Include="TOneWhS_Analytic\Stored Procedures\" />
     <Folder Include="TOneWhS_Analytic\User Defined Types\" />
     <Folder Include="TOneWhS_SPL\Stored Procedures\" />
+    <Folder Include="TOneWhS_Billing\" />
+    <Folder Include="TOneWhS_Billing\Tables\" />
+    <Folder Include="TOneWhS_Billing\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_BE\Tables\CarrierAccount.sql" />
@@ -281,5 +284,15 @@
     <Build Include="TOneWhS_Analytic\Stored Procedures\sp_TrafficStatsMeasure_GroupBySupplierZone.sql" />
     <Build Include="TOneWhS_Analytic\Stored Procedures\sp_TrafficStatsMeasure_GroupBySaleZone_Supplier.sql" />
     <Build Include="TOneWhS_Analytic\User Defined Types\VariationReportTimePeriodType.sql" />
+    <Build Include="TOneWhS_Analytic\Tables\TrafficStatsWeekly.sql" />
+    <Build Include="TOneWhS_Analytic\Tables\TrafficStatsMonthly.sql" />
+    <Build Include="TOneWhS_Analytic\Tables\TrafficStatsHourly.sql" />
+    <Build Include="TOneWhS_Billing\Tables\ReportDefinition.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetBySellingNumberPlanAndEffective.sql" />
+    <Build Include="TOneWhS_Billing\Stored Procedures\SP_BillingRep_GetZoneProfitsV2.sql" />
+    <Build Include="TOneWhS_Billing\Stored Procedures\SP_BillingRep_GetZoneProfits.sql" />
+    <Build Include="TOneWhS_Billing\Stored Procedures\sp_ReportDefinition_GetAll.sql" />
+    <Build Include="TOneWhS_Billing\Stored Procedures\sp_ReportDefinition_GetById.sql" />
+    <Build Include="Security\TOneWhS_Billing.sql" />
   </ItemGroup>
 </Project>
