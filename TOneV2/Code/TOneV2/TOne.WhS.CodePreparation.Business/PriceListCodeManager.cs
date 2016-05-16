@@ -14,21 +14,20 @@ namespace TOne.WhS.CodePreparation.Business
         public void ProcessCountryCodes(IProcessCountryCodesContext context)
         {
             ZonesByName newAndExistingZones = new ZonesByName();
-            
+
             context.NewAndExistingZones = newAndExistingZones;
-            
+
             ProcessCountryCodes(context.CodesToAdd, context.CodesToMove, context.CodesToClose, context.ExistingCodes, newAndExistingZones, context.ExistingZones);
-            
-            context.NewCodes= context.CodesToAdd.SelectMany(itm => itm.AddedCodes);
-            context.NewCodes.Concat(context.CodesToAdd.SelectMany(itm => itm.AddedCodes));
-           
+
+            context.NewCodes = context.CodesToAdd.SelectMany(itm => itm.AddedCodes).Union(context.CodesToMove.SelectMany(itm => itm.AddedCodes));
+
             context.NewZones = newAndExistingZones.SelectMany(itm => itm.Value.Where(izone => izone is AddedZone)).Select(itm => itm as AddedZone);
             context.ChangedZones = context.ExistingZones.Where(itm => itm.ChangedZone != null).Select(itm => itm.ChangedZone);
             context.ChangedCodes = context.ExistingCodes.Where(itm => itm.ChangedCode != null).Select(itm => itm.ChangedCode);
 
         }
 
-       private void  ProcessCountryCodes(IEnumerable<CodeToAdd> codesToAdd, IEnumerable<CodeToMove> codesToMove, IEnumerable<CodeToClose> codesToClose, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones)
+        private void ProcessCountryCodes(IEnumerable<CodeToAdd> codesToAdd, IEnumerable<CodeToMove> codesToMove, IEnumerable<CodeToClose> codesToClose, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones)
         {
             ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
             ExistingCodesByCodeValue existingCodesByCodeValue = StructureExistingCodesByCodeValue(existingCodes);
@@ -70,7 +69,7 @@ namespace TOne.WhS.CodePreparation.Business
 
             CloseZonesWithNoCodes(existingZones);
 
-           
+
         }
 
         private void CloseZonesWithNoCodes(IEnumerable<ExistingZone> existingZones)
@@ -124,7 +123,7 @@ namespace TOne.WhS.CodePreparation.Business
                             ZoneId = existingZone.ZoneId,
                             EED = maxCodeEED.Value
                         };
-                        
+
                     }
                 }
             }
@@ -194,7 +193,7 @@ namespace TOne.WhS.CodePreparation.Business
                 {
                     if (String.Compare(existingCode.ParentZone.Name, codeToMove.OldZoneName, true) != 0)
                         codeToMove.HasOverlapedCodesInOtherZone = true;
-                    
+
                     DateTime existingCodeEED = Utilities.Max(codeToMove.BED, existingCode.BED);
                     existingCode.ChangedCode = new ChangedCode
                     {
@@ -210,14 +209,14 @@ namespace TOne.WhS.CodePreparation.Business
         {
             foreach (var existingCode in matchExistingCodes)
             {
-                if(existingCode.EED.VRGreaterThan(codeToClose.CloseEffectiveDate))
+                if (existingCode.EED.VRGreaterThan(codeToClose.CloseEffectiveDate))
                 {
                     if (String.Compare(existingCode.ParentZone.Name, codeToClose.ZoneName, true) != 0)
                         codeToClose.HasOverlapedCodesInOtherZone = true;
                     existingCode.ChangedCode = new ChangedCode
                     {
                         CodeId = existingCode.CodeEntity.SaleCodeId,
-                        EED =Utilities.Max(codeToClose.CloseEffectiveDate, existingCode.BED)
+                        EED = Utilities.Max(codeToClose.CloseEffectiveDate, existingCode.BED)
                     };
                     codeToClose.ChangedExistingCodes.Add(existingCode);
                 }
@@ -237,7 +236,7 @@ namespace TOne.WhS.CodePreparation.Business
             }
 
             TOne.WhS.BusinessEntity.Entities.CodeGroup codeGroup = importedCode.CodeGroup;
-            
+
             List<IZone> addedZones = new List<IZone>();
             DateTime currentCodeBED = importedCode.BED;
             bool shouldAddMoreCodes = true;
