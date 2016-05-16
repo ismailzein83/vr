@@ -7,10 +7,11 @@ using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class SupplierZoneManager
+    public class SupplierZoneManager : IBusinessEntityManager
     {
         #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<SupplierZoneDetails> GetFilteredSupplierZones(Vanrise.Entities.DataRetrievalInput<SupplierZoneQuery> input)
@@ -65,6 +66,32 @@ namespace TOne.WhS.BusinessEntity.Business
             long startingId;
             IDManager.Instance.ReserveIDRange(this.GetType(), numberOfIDs, out startingId);
             return startingId;
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            var supplierZoneNames = new List<string>();
+            foreach (var entityId in context.EntityIds)
+            {
+                string supplierZoneName = GetSupplierZoneName(Convert.ToInt64(entityId));
+                if (supplierZoneName == null) throw new NullReferenceException("supplierZoneName");
+                supplierZoneNames.Add(supplierZoneName);
+            }
+            return String.Join(",", supplierZoneNames);
+        }
+
+        public bool IsMatched(IBusinessEntityMatchContext context)
+        {
+            if (context.FieldValueIds == null || context.FilterIds == null) return true;
+
+            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt64(itm));
+            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt64(itm));
+            foreach (var filterId in filterIds)
+            {
+                if (fieldValueIds.Contains(filterId))
+                    return true;
+            }
+            return false;
         }
         #endregion
 
