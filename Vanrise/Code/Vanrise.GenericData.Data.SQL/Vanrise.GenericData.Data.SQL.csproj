@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessEntityDefinitionDataManager.cs" />
+    <Compile Include="RecordFilterSQLBuilder.cs" />
     <Compile Include="DataRecordFieldTypeConfigDataManager.cs" />
     <Compile Include="DataRecordStorageDataManager.cs" />
     <Compile Include="DataRecordTypeDataManager.cs" />
