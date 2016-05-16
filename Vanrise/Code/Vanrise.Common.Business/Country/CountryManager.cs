@@ -5,10 +5,11 @@ using System.Data;
 using System.Linq;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Common.Business
 {
-    public class CountryManager
+    public class CountryManager : IBusinessEntityManager
     {
 
         public Vanrise.Entities.IDataRetrievalResult<CountryDetail> GetFilteredCountries(Vanrise.Entities.DataRetrievalInput<CountryQuery> input)
@@ -201,6 +202,32 @@ namespace Vanrise.Common.Business
             }
             return existingItemIds;
         }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            var countriesNames = new List<string>();
+            foreach (var entityId in context.EntityIds)
+            {
+                string countryName = GetCountryName(Convert.ToInt32(entityId));
+                if (countryName == null) throw new NullReferenceException("countryName");
+                countriesNames.Add(countryName);
+            }
+            return String.Join(",", countriesNames);
+        }
+        public bool IsMatched(IBusinessEntityMatchContext context)
+        {
+            if (context.FieldValueIds == null || context.FilterIds == null) return true;
+
+            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
+            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
+            foreach (var filterId in filterIds)
+            {
+                if (fieldValueIds.Contains(filterId))
+                    return true;
+            }
+            return false;
+        }
+
 
         #region Private Members
 
