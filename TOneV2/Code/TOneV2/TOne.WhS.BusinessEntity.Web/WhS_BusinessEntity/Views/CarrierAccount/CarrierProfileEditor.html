@@ -14,9 +14,9 @@
                     </vr-row>
 
                     <vr-row removeline>
-                        <vr-columns width="1/2row">
-                            <vr-common-country-selector selectedvalues="country" onselectionchanged="onCountrySelectionChanged" on-ready="onCountryDirectiveReady" isrequired showaddbutton></vr-common-country-selector>
-                        </vr-columns>
+                        <span>
+                            <vr-common-country-selector selectedvalues="country" normal-col-num="6"  onselectionchanged="onCountrySelectionChanged" on-ready="onCountryDirectiveReady" isrequired showaddbutton></vr-common-country-selector>
+                        </span>
                         <span vr-loader="isLoadingCities">
                             <vr-common-city-selector showaddbutton normal-col-num="6" on-ready="onCityyDirectiveReady"></vr-common-city-selector>
                         </span>

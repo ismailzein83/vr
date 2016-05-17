@@ -138,7 +138,7 @@
             $scope.isGettingData = true;
             return WhS_BE_CodeGroupAPIService.AddCodeGroup(codeGroupObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Code Group", response, "Code")) {
+                if (VRNotificationService.notifyOnItemAdded("Code Group", response, "value")) {
                     if ($scope.onCodeGroupAdded != undefined)
                         $scope.onCodeGroupAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -156,7 +156,7 @@
             $scope.isGettingData = true;
             WhS_BE_CodeGroupAPIService.UpdateCodeGroup(codeGroupObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Code Group", response, "Code")) {
+                if (VRNotificationService.notifyOnItemUpdated("Code Group", response, "value")) {
                     if ($scope.onCodeGroupUpdated != undefined)
                         $scope.onCodeGroupUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
