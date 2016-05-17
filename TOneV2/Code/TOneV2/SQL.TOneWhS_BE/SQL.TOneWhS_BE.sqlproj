@@ -88,6 +88,8 @@
     <Folder Include="TOneWhS_Billing\" />
     <Folder Include="TOneWhS_Billing\Tables\" />
     <Folder Include="TOneWhS_Billing\Stored Procedures\" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_BE\Tables\CarrierAccount.sql" />
@@ -294,5 +296,6 @@
     <Build Include="TOneWhS_Billing\Stored Procedures\sp_ReportDefinition_GetAll.sql" />
     <Build Include="TOneWhS_Billing\Stored Procedures\sp_ReportDefinition_GetById.sql" />
     <Build Include="Security\TOneWhS_Billing.sql" />
+    <Build Include="dbo\Functions\ZeroToMax.sql" />
   </ItemGroup>
 </Project>
