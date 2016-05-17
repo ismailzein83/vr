@@ -14,11 +14,6 @@ namespace QM.BusinessEntity.Business
     {
         #region Public Methods
 
-        public List<ConnectorZoneInfo> GetZones(string connectorType)
-        {
-            return GetAllZonesByConnectorType().GetRecord(connectorType);
-        }
-
         public void UpdateZones(string connectorType, IEnumerable<ConnectorZoneInfoToUpdate> zones)
         {
             if (zones == null)
@@ -53,9 +48,20 @@ namespace QM.BusinessEntity.Business
             return null;
         }
 
+        public List<Vanrise.Entities.TemplateConfig> GetConnectorZoneTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.ConnectorZoneReaderConfigType);
+        }
+
         #endregion
 
         #region Private Methods
+
+        private List<ConnectorZoneInfo> GetZones(string connectorType)
+        {
+            return GetAllZonesByConnectorType().GetRecord(connectorType);
+        }
 
         private Dictionary<string, List<ConnectorZoneInfo>> GetAllZonesByConnectorType()
         {
@@ -108,17 +114,7 @@ namespace QM.BusinessEntity.Business
             return dataManager.AddZone(connectorType, connectorZoneId, codes);
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetConnectorZoneTemplates()
-        {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.ConnectorZoneReaderConfigType);
-        }
-
-        #endregion
-
-        #region Private Classes
-
-        public Dictionary<long, ConnectorZoneInfo> GetCachedConnectorZonesInfo()
+        private Dictionary<long, ConnectorZoneInfo> GetCachedConnectorZonesInfo()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetConnectorZonesInfo",
                () =>
@@ -128,7 +124,11 @@ namespace QM.BusinessEntity.Business
                    return connectorZonesInfo.ToDictionary(cn => cn.ConnectorZoneInfoId, cn => cn);
                });
         }
+        
+        #endregion
 
+        #region Private Classes
+        
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IConnectorZoneInfoDataManager _dataManager = BEDataManagerFactory.GetDataManager<IConnectorZoneInfoDataManager>();

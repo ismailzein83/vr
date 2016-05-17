@@ -10,13 +10,13 @@ namespace QM.CLITester.iTestIntegration
 {
     public class VIConnectorSyncTaskActionArgument : Vanrise.Runtime.Entities.BaseTaskActionArgument
     {
-        public CLITesterConnectorBase CLITestConnector { get; set; }
+        //public CLITesterConnectorBase CLITestConnector { get; set; }
 
         public int ParallelThreadsCount { get; set; }
 
         public int MaximumRetryCount { get; set; }
 
-        public TimeSpan DownloadResultWaitTime { get; set; }
+        public int DownloadResultWaitTime { get; set; }
 
         public int TimeOut { get; set; }
         public int ProfileId { get; set; }

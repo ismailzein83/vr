@@ -21,7 +21,7 @@ namespace QM.BusinessEntity.Data.SQL
         {
             ConnectorZoneInfo connectorZoneInfo = new ConnectorZoneInfo()
             {
-                ConnectorZoneInfoId = (int)reader["ID"],
+                ConnectorZoneInfoId = (long)reader["ID"],
                 ConnectorType = reader["ConnectorType"] as string,
                 ConnectorZoneId = reader["ConnectorZoneID"] as string,
                 Codes = ((string)reader["Codes"]).Split(',').ToList()
@@ -31,7 +31,7 @@ namespace QM.BusinessEntity.Data.SQL
 
         public bool UpdateZone(long connectorZoneInfoId, List<string> codes)
         {
-            int recordsEffected = ExecuteNonQuerySP("QM_BE.sp_ConnectorZoneInfo_Update", codes);
+            int recordsEffected = ExecuteNonQuerySP("QM_BE.sp_ConnectorZoneInfo_Update", connectorZoneInfoId, string.Join(",", codes));
             return (recordsEffected > 0);
         }
 

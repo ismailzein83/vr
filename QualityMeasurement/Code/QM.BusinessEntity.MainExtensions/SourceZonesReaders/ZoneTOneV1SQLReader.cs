@@ -37,6 +37,11 @@ namespace QM.BusinessEntity.MainExtensions.SourceZonesReaders
                 return GetItemsText(query_getUpdatedZones, SourceZonerMapper, null);
             }
 
+            public IEnumerable<SourceZoneCode> GetAllCodes()
+            {
+                return GetItemsText(query_getUpdatedZones, SourceZonerCodeMapper, null);
+            }
+
             private SourceZone SourceZonerMapper(System.Data.IDataReader arg)
             {
                 SourceZone sourceZone = new SourceZone()
@@ -47,10 +52,20 @@ namespace QM.BusinessEntity.MainExtensions.SourceZonesReaders
                     CountryName = arg["CountryName"] as string,
                     BeginEffectiveDate = GetReaderValue<DateTime>(arg, "BeginEffectiveDate"),
                     EndEffectiveDate = GetReaderValue<DateTime>(arg, "EndEffectiveDate")
-
                 };
                 return sourceZone;
             }
+
+            private SourceZoneCode SourceZonerCodeMapper(System.Data.IDataReader arg)
+            {
+                SourceZoneCode sourceZoneCode = new SourceZoneCode()
+                {
+                    SourceZoneId = arg["ZoneID"].ToString(),
+                    Code = arg["CodeGroup"].ToString(),
+                };
+                return sourceZoneCode;
+            }
+
 
             const string query_getUpdatedZones = @"SELECT [ZoneID]
                   ,[CodeGroup]
@@ -58,12 +73,13 @@ namespace QM.BusinessEntity.MainExtensions.SourceZonesReaders
                   ,c.[Name] as CountryName
                   ,[BeginEffectiveDate]
                   ,[EndEffectiveDate]
-                FROM [dbo].[Zone] z join [dbo].[CodeGroup] c on z.CodeGroup = c.Code where ZoneID > 0 and z.SupplierID ='SYS' ";
+                FROM [dbo].[Zone] z join [dbo].[CodeGroup] c on z.CodeGroup = c.Code where ZoneID > 0 and z.SupplierID ='SYS' and IsEffective = 'Y' ";
         }
 
         public override IEnumerable<SourceZoneCode> GetAllCodes()
         {
-            throw new NotImplementedException();
+            DataManager dataManager = new DataManager(this.ConnectionString);
+            return dataManager.GetAllCodes();
         }
     }
 }

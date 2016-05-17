@@ -29,8 +29,8 @@ app.directive("qmBeConnectorzoneinfo", ['UtilsService', 'VRUIUtilsService', 'QM_
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
 
-        var sourceTypeDirectiveAPI;
-        var sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        //var sourceTypeDirectiveAPI;
+        //var sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
      
         var supplierDirectiveAPI;
         var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -41,15 +41,15 @@ app.directive("qmBeConnectorzoneinfo", ['UtilsService', 'VRUIUtilsService', 'QM_
 
 
         function initializeController() {
-            $scope.sourceTypeTemplates = [];
+            //$scope.sourceTypeTemplates = [];
             $scope.suppliers = [];
             $scope.selectedSupplier = [];
 
-            $scope.onSourceTypeDirectiveReady = function (api) {
-                sourceTypeDirectiveAPI = api;
-                var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
-            }
+            //$scope.onSourceTypeDirectiveReady = function (api) {
+            //    sourceTypeDirectiveAPI = api;
+            //    var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
+            //    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
+            //}
 
 
             $scope.onProfileDirectiveReady = function (api) {
@@ -68,18 +68,18 @@ app.directive("qmBeConnectorzoneinfo", ['UtilsService', 'VRUIUtilsService', 'QM_
 
             var api = {};
             api.getData = function () {
-                var CLITestConnectorObj = sourceTypeDirectiveAPI.getData();
-                CLITestConnectorObj.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
+                //var CLITestConnectorObj = sourceTypeDirectiveAPI.getData();
+                //CLITestConnectorObj.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
                 return {
                     $type: "QM.CLITester.iTestIntegration.VIConnectorSyncTaskActionArgument, QM.CLITester.iTestIntegration",
                     SupplierId: supplierDirectiveAPI.getSelectedIds(),
                     ProfileId: profileDirectiveAPI.getSelectedIds(),
-                    CLITestConnector: CLITestConnectorObj,
+                    //CLITestConnector: CLITestConnectorObj,
                     MaximumRetryCount: $scope.maximumRetryCount,
-                    TimeOut: $scope.timeOut
+                    ParallelThreadsCount: $scope.parallelThreadsCount,
+                    DownloadResultWaitTime: $scope.downloadResultWaitTime
                 };
             };
-
 
             api.load = function (payload) {
 
@@ -90,6 +90,11 @@ app.directive("qmBeConnectorzoneinfo", ['UtilsService', 'VRUIUtilsService', 'QM_
                 if (payload != undefined && payload.data != undefined)
                     $scope.timeOut = payload.data.TimeOut;
 
+                if (payload != undefined && payload.data != undefined)
+                    $scope.downloadResultWaitTime = payload.data.DownloadResultWaitTime;
+
+                if (payload != undefined && payload.data != undefined)
+                    $scope.parallelThreadsCount = payload.data.ParallelThreadsCount;
 
                 var profileLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 profileReadyPromiseDeferred.promise
@@ -118,25 +123,25 @@ app.directive("qmBeConnectorzoneinfo", ['UtilsService', 'VRUIUtilsService', 'QM_
                 promises.push(supplierLoadPromiseDeferred.promise);
 
 
-                var loadConnectorZone = QM_BE_ConnectorZoneAPIService.GetConnectorZoneTemplates().then(function (response) {
-                    var sourceConfigId;
-                    angular.forEach(response, function (item) {
-                        $scope.sourceTypeTemplates.push(item);
-                    });
-                    if (payload != undefined && payload.data != undefined && payload.data.CLITestConnector != undefined)
-                         sourceConfigId = payload.data.CLITestConnector.ConfigId;
+                //var loadConnectorZone = QM_BE_ConnectorZoneAPIService.GetConnectorZoneTemplates().then(function (response) {
+                //    var sourceConfigId;
+                //    angular.forEach(response, function (item) {
+                //        $scope.sourceTypeTemplates.push(item);
+                //    });
+                //    if (payload != undefined && payload.data != undefined && payload.data.CLITestConnector != undefined)
+                //         sourceConfigId = payload.data.CLITestConnector.ConfigId;
 
                    
-                    if (sourceConfigId != undefined)
-                        $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
+                //    if (sourceConfigId != undefined)
+                //        $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
 
-                    else 
-                        $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, $scope.sourceTypeTemplates[0].TemplateConfigID, "TemplateConfigID");
+                //    else 
+                //        $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, $scope.sourceTypeTemplates[0].TemplateConfigID, "TemplateConfigID");
 
-                });
+                //});
 
 
-                promises.push(loadConnectorZone);
+                //promises.push(loadConnectorZone);
                 return UtilsService.waitMultiplePromises(promises);
             }
 
