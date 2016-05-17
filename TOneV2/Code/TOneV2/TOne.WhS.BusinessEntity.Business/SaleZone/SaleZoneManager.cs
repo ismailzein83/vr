@@ -256,11 +256,31 @@ namespace TOne.WhS.BusinessEntity.Business
             IDManager.Instance.ReserveIDRange(this.GetType(), numberOfIDs, out startingId);
             return startingId;
         }
+
         private SaleZoneInfo SaleZoneInfoMapper(SaleZone saleZone)
         {
             return new SaleZoneInfo { SaleZoneId = saleZone.SaleZoneId, Name = saleZone.Name , SellingNumberPlanId =  saleZone.SellingNumberPlanId};
         }
 
         #endregion
+       
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetSaleZone(context.EntityId);
+        }
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            var allZones = GetCachedSaleZones();
+            if (allZones == null)
+                return null;
+            else
+                return allZones.Values.Select(itm => itm as dynamic).ToList();
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
     }
 }

@@ -181,5 +181,24 @@ namespace TOne.WhS.BusinessEntity.Business
             return supplierZones.FindAllRecords(filterExpression);
         }
         #endregion
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetSupplierZone(context.EntityId);
+        }
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            var allZones = GetCachedSupplierZones();
+            if (allZones == null)
+                return null;
+            else
+                return allZones.Values.Select(itm => itm as dynamic).ToList();
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
     }
 }

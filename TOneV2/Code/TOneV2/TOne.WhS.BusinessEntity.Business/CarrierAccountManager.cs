@@ -466,5 +466,23 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         
         #endregion
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetCarrierAccount(context.EntityId);
+        }
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            var allCarrierAccounts = GetAllCarriers();
+            if (allCarrierAccounts == null)
+                return null;
+            else
+                return allCarrierAccounts.Select(itm => itm as dynamic).ToList();
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
     }
 }
