@@ -25,7 +25,6 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
             $scope.dataRecordTypeField;
             var dataRecordTypeFieldEditorApi;
 
-            var dataRecordTypeId;
             var context;
             var filterObj;
 
@@ -52,7 +51,6 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
                         
                         $scope.conditions = UtilsService.getArrayEnum(VR_GenericData_ConditionEnum);
                         $scope.selectedCondition = $scope.conditions[0];
-                        dataRecordTypeId = payload.dataRecordTypeId;
                         context = payload.context;
                         $scope.datasource = context.getFields();
                         $scope.dataRecordTypeField = $scope.datasource[0];

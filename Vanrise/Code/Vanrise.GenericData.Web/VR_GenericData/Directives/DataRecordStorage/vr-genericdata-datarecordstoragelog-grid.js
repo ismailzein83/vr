@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageLogGridDirective.$inject = ['VR_GenericData_DataRecordStorageLogAPIService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService'];
+    DataRecordStorageLogGridDirective.$inject = ['VR_GenericData_DataRecordStorageLogAPIService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService','UtilsService'];
 
-    function DataRecordStorageLogGridDirective(VR_GenericData_DataRecordStorageLogAPIService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService) {
+    function DataRecordStorageLogGridDirective(VR_GenericData_DataRecordStorageLogAPIService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, UtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -57,10 +57,16 @@
                 var api = {};
 
                 api.loadGrid = function (query) {
+                    var promiseDeffer = UtilsService.createPromiseDeferred();
                     getDataRecordAttributes(query).then(function () {
                         query.Columns = getColumnsName(query.GridColumns);
-                        return gridAPI.retrieveData(query);
+                         gridAPI.retrieveData(query).finally(function () {
+                            promiseDeffer.resolve();
+                        }).catch(function (error) {
+                            promiseDeffer.reject(error);
+                        });
                     });
+                    return promiseDeffer.promise;
                 };
 
                 return api;

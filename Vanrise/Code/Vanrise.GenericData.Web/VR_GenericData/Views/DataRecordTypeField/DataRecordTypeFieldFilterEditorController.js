@@ -6,20 +6,20 @@
 
     function DataRecordStorageFilterEditorController($scope, VRNavigationService, VR_GenericData_DataRecordFieldAPIService, UtilsService) {
 
-        var dataRecordTypeId;
+        var fields =[];
         var filterObj;
 
         loadParameters();
         defineScope();
 
-        var context = { getFields: function () { return this.dataRecordFieldTypeConfigs }, dataRecordFieldTypeConfigs: [] };
+        var context = { getFields: function () { return fields } };
         var groupFilterAPI;
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
-                dataRecordTypeId = parameters.DataRecordTypeId;
+                fields = parameters.Fields;
                 filterObj= parameters.FilterObj;
             }
         }
@@ -28,16 +28,14 @@
             $scope.title = 'Advanced Filter';
             $scope.onGroupFilterReady = function (api) {
                 groupFilterAPI = api;
-                var payload = { dataRecordTypeId: dataRecordTypeId, context: context, filterObj: filterObj };
-                loadContext().then(function () {
-                    groupFilterAPI.load(payload);
-                });
+                var payload = {context: context, filterObj: filterObj };
+                groupFilterAPI.load(payload);
             };
 
             $scope.save = function () {
                 if ($scope.onDataRecordFieldTypeFilterAdded != undefined) {
                     $scope.onDataRecordFieldTypeFilterAdded(groupFilterAPI.getData(), groupFilterAPI.getExpression());
-                }
+                } 
 
                 $scope.modalContext.closeModal();
             };
@@ -45,17 +43,6 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
-        }
-
-        function loadContext() {
-            var obj = { DataRecordTypeId: dataRecordTypeId };
-            var serializedFilter = UtilsService.serializetoJson(obj);
-            return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter).then(function (response) {
-                if (response != undefined)
-                    angular.forEach(response, function (item) {
-                        context.dataRecordFieldTypeConfigs.push(item);
-                    });
-            });
         }
     }
 

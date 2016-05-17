@@ -22,7 +22,6 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
         };
 
         function recordTypeFieldGroupFilterCtor(ctrl, $scope, $attrs) {
-            var dataRecordTypeId;
             var filterObj;
             var context;
             ctrl.isValid = function () {
@@ -34,7 +33,6 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                 var rule = {
                     onRuleFilterReady: function (api) {
                         var payload = {
-                            dataRecordTypeId: dataRecordTypeId,
                             context: context
                         };
                         api.load(payload);
@@ -55,7 +53,6 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                 var group = {
                     onGroupFilterReady: function (api) {
                         var payload = {
-                            dataRecordTypeId: dataRecordTypeId,
                             context: context
                         };
                         api.load(payload);
@@ -80,7 +77,6 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                 api.load = function (payload) {
                     $scope.conditions = UtilsService.getArrayEnum(VR_GenericData_RecordQueryLogicalOperatorEnum);
                     if (payload != undefined) {
-                        dataRecordTypeId = payload.dataRecordTypeId;
                         context = payload.context;
                         
                         filterObj = payload.filterObj;
@@ -111,7 +107,6 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                     var rule = {
                         onRuleFilterReady: function (api) {
                             var payload = {
-                                dataRecordTypeId: dataRecordTypeId,
                                 context: context,
                                 filterObj: currentItem
                             };
@@ -126,7 +121,6 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                     var group = {
                         onGroupFilterReady: function (api) {
                             var payload = {
-                                dataRecordTypeId: dataRecordTypeId,
                                 context: context,
                                 filterObj: currentItem
                             };
