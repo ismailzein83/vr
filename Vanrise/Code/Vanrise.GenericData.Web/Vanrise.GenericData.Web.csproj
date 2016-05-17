@@ -191,6 +191,8 @@
     <Content Include="VR_GenericData\Constants\FieldNumberDataTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\MappingRuleStructureBehaviorTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\ModuleConfig.js" />
+    <Content Include="VR_GenericData\Directives\BELookupRuleDefinition\Templates\BELookupRuleDefinitionGridTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BELookupRuleDefinition\vr-genericdata-belookupruledefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntity\vr-genericdata-businessentity-recordtype-selector.js" />
     <Content Include="VR_GenericData\Directives\DataRecordSource\Templates\DataRecordSourceGridTemplate.html" />
