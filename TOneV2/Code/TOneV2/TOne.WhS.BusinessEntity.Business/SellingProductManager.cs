@@ -35,13 +35,20 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 CarrierAccount assignableToCustomer = null;
                 CustomerSellingProduct effectiveCustomerSellingProduct = null;
+                if (filter.AssignableToCustomerId.HasValue)
+                {
+                    assignableToCustomer = LoadCustomer(filter.AssignableToCustomerId.Value);
+                    effectiveCustomerSellingProduct = LoadEffectiveCustomerSellingProduct(filter.AssignableToCustomerId.Value);
+                }
 
                 filterPredicate = (prod) =>
                 {
                     if (filter.SellingNumberPlanId.HasValue && prod.SellingNumberPlanId != filter.SellingNumberPlanId.Value)
                         return false;
-                    if (filter.AssignableToCustomerId.HasValue && !IsAssignableToCustomer(prod, filter.AssignableToCustomerId.Value, ref assignableToCustomer, ref effectiveCustomerSellingProduct))
+
+                    if (filter.AssignableToCustomerId.HasValue && !IsAssignableToCustomer(prod, filter.AssignableToCustomerId.Value, assignableToCustomer, effectiveCustomerSellingProduct))
                         return false;
+
                     return true;
                 };
             }
@@ -127,24 +134,31 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Private Methods
 
-        private bool IsAssignableToCustomer(SellingProduct sellingProduct, int customerId, ref CarrierAccount customer, ref CustomerSellingProduct effectiveCustomerSellingProduct)
+        private bool IsAssignableToCustomer(SellingProduct sellingProduct, int customerId, CarrierAccount customer, CustomerSellingProduct effectiveCustomerSellingProduct)
         {
-            if (customer == null)
-            {
-                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                customer = carrierAccountManager.GetCarrierAccount(customerId);
-                if (customer == null)
-                    throw new NullReferenceException(String.Format("CarrierAccount '{0}'", customerId));
-                if (!customer.SellingNumberPlanId.HasValue)
-                    throw new Exception(String.Format("Customer Account '{0}' doesnt have SellingNumberPlanId", customerId));
-                CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
-                effectiveCustomerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, DateTime.Now, false);
-            }
             if (sellingProduct.SellingNumberPlanId != customer.SellingNumberPlanId.Value)
                 return false;
             if (effectiveCustomerSellingProduct != null && effectiveCustomerSellingProduct.SellingProductId == sellingProduct.SellingProductId)
                 return false;
             return true;
+        }
+
+        private CarrierAccount LoadCustomer(int customerId)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            CarrierAccount customer = carrierAccountManager.GetCarrierAccount(customerId);
+            if (customer == null)
+                throw new NullReferenceException(String.Format("CarrierAccount '{0}'", customerId));
+            if (!customer.SellingNumberPlanId.HasValue)
+                throw new Exception(String.Format("Customer Account '{0}' doesnt have SellingNumberPlanId", customerId));
+
+            return customer;
+        }
+
+        private CustomerSellingProduct LoadEffectiveCustomerSellingProduct(int customerId)
+        {
+            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
+            return customerSellingProductManager.GetEffectiveSellingProduct(customerId, DateTime.Now, false);
         }
 
         #endregion

@@ -84,42 +84,43 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (filter != null)
             {
-                SellingProduct sellingProduct = null;
-                IEnumerable<CustomerSellingProduct> effectiveInFutureCustomerSellingProducts = null;
-
                 HashSet<int> filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(filter.SupplierFilterSettings);
                 HashSet<int> filteredCustomerIds = CustomerGroupContext.GetFilteredCustomerIds(filter.CustomerFilterSettings);
 
+                SellingProduct sellingProduct = null;
+                IEnumerable<CustomerSellingProduct> customerSellingProductsEffectiveInFuture = null;
+                if(filter.AssignableToSellingProductId.HasValue)
+                {
+                    sellingProduct = LoadSellingProduct(filter.AssignableToSellingProductId.Value);
+                    customerSellingProductsEffectiveInFuture = LoadCustomerSellingProductsEffectiveInFuture();
+                }
+
+                IEnumerable<AssignedCarrier> assignedCarriers = null;
+                if (filter.AssignableToUserId.HasValue)
+                {
+                    AccountManagerManager AccountManagerManager = new AccountManagerManager();
+                    assignedCarriers = AccountManagerManager.GetAssignedCarriers();
+                }
+
                 filterPredicate = (carr) =>
                     {
-                        if (filter.AssignableToSellingProductId != null)
-                        {
-                            if (sellingProduct == null)
-                                LoadSellingProduct(filter.AssignableToSellingProductId.Value, out sellingProduct, out effectiveInFutureCustomerSellingProducts);
-                            if(!IsAssignableToSellingProduct(carr, filter.AssignableToSellingProductId.Value, sellingProduct, effectiveInFutureCustomerSellingProducts))
-                                return false;
-                        }
-                            
-
                         if (!ShouldSelectCarrierAccount(carr, filter.GetCustomers, filter.GetSuppliers, filteredSupplierIds, filteredCustomerIds))
                             return false;
 
-                        if (filter.AssignableToUserId != null)
-                        {
-                            AccountManagerManager AccountManagerManager = new AccountManagerManager();
-                            IEnumerable<AssignedCarrier> assignedCarriers = AccountManagerManager.GetAssignedCarriers();
+                        if (filter.AssignableToSellingProductId.HasValue && !IsAssignableToSellingProduct(carr, filter.AssignableToSellingProductId.Value, sellingProduct, customerSellingProductsEffectiveInFuture))
+                            return false;
 
-                            if (!IsCarrierAccountAssignableToUser(carr, filter.GetCustomers, filter.GetSuppliers, assignedCarriers))
-                                return false;
-                        }
+                        if (filter.SellingNumberPlanId.HasValue && carr.SellingNumberPlanId != filter.SellingNumberPlanId.Value)
+                            return false;
 
-                        if (filter.SellingNumberPlanId != null && carr.SellingNumberPlanId != filter.SellingNumberPlanId.Value)
+                        if (filter.AssignableToUserId.HasValue && !IsCarrierAccountAssignableToUser(carr, filter.GetCustomers, filter.GetSuppliers, assignedCarriers))
                             return false;
 
                         return true;
                     };
             }
 
+            //TODO: fix this when we reach working with Account Manager module
             if (filter != null && filter.AssignableToUserId != null)
                 return GetCachedCarrierAccounts().MapRecords(AccountManagerCarrierMapper, filterPredicate);
             else
@@ -308,9 +309,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private bool IsCarrierAccountAssignableToUser(CarrierAccount carrierAccount, bool getCustomers, bool getSuppliers, IEnumerable<AssignedCarrier> assignedCarriers)
         {
-            if (!ShouldSelectCarrierAccount(carrierAccount, getCustomers, getSuppliers))
-                return false;
-
             if (carrierAccount.AccountType == CarrierAccountType.Exchange && assignedCarriers.Where(x => x.CarrierAccountId == carrierAccount.CarrierAccountId).Count() > 1)
                 return false;
 
@@ -345,49 +343,49 @@ namespace TOne.WhS.BusinessEntity.Business
         private IEnumerable<CarrierAccount> GetCarrierAccountsByType(bool getCustomers, bool getSuppliers, SupplierFilterSettings supplierFilterSettings, CustomerFilterSettings customerFilterSettings)
         {
             Dictionary<int, CarrierAccount> carrierAccounts = GetCachedCarrierAccounts();
+            List<CarrierAccount> filteredList = null;
 
-            HashSet<int> filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
-            HashSet<int> filteredCustomerIds = CustomerGroupContext.GetFilteredCustomerIds(customerFilterSettings);
-            Func<CarrierAccount, bool> filterExpression = (carrierAccount) =>
+            if(carrierAccounts != null)
             {
-                bool isSupplier = carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange;
-                bool isCustomer = carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange;
-                if (getCustomers && getSuppliers)
-                    return true;
-                if (getCustomers && !isCustomer)
-                    return false;
-                if (getSuppliers && !isSupplier)
-                    return false;
-                if (isSupplier && filteredSupplierIds != null && !filteredSupplierIds.Contains(carrierAccount.CarrierAccountId))
-                    return false;
-                if (isCustomer && filteredCustomerIds != null && !filteredCustomerIds.Contains(carrierAccount.CarrierAccountId))
-                    return false;
-                return true;
-            };
-            return carrierAccounts.FindAllRecords(filterExpression);
+                HashSet<int> filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
+                HashSet<int> filteredCustomerIds = CustomerGroupContext.GetFilteredCustomerIds(customerFilterSettings);
+
+                foreach (CarrierAccount carr in carrierAccounts.Values)
+                {
+                    if (ShouldSelectCarrierAccount(carr, getCustomers, getSuppliers, filteredSupplierIds, filteredCustomerIds))
+                        filteredList.Add(carr);
+                }
+            }
+
+            return filteredList;
         }
 
-        private void LoadSellingProduct(int sellingProductId, out SellingProduct sellingProduct, out IEnumerable<CustomerSellingProduct> effectiveInFutureCustomerSellingProducts)
+        private SellingProduct LoadSellingProduct(int sellingProductId)
         {
             SellingProductManager sellingProductManager = new SellingProductManager();
-            sellingProduct = sellingProductManager.GetSellingProduct(sellingProductId);
+            SellingProduct sellingProduct = sellingProductManager.GetSellingProduct(sellingProductId);
             if (sellingProduct == null)
                 throw new NullReferenceException(String.Format("SellingProduct '{0}'", sellingProductId));
 
+            return sellingProduct;
+        }
+
+        private IEnumerable<CustomerSellingProduct> LoadCustomerSellingProductsEffectiveInFuture()
+        {
             CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
-            effectiveInFutureCustomerSellingProducts = customerSellingProductManager.GetEffectiveInFutureCustomerSellingProduct();
+            return customerSellingProductManager.GetEffectiveInFutureCustomerSellingProduct();
         }
 
         private bool IsAssignableToSellingProduct(CarrierAccount carrierAccount, int sellingProductId, SellingProduct sellingProduct,
-          IEnumerable<CustomerSellingProduct> effectiveInFutureCustomerSellingProducts)
+          IEnumerable<CustomerSellingProduct> customerSellingProductsEffectiveInFuture)
         {
-            if (!ShouldSelectCarrierAccount(carrierAccount, true, false))
-                return false;
+            //if (!ShouldSelectCarrierAccount(carrierAccount, true, false))
+            //    return false;
 
             if (carrierAccount.SellingNumberPlanId.Value != sellingProduct.SellingNumberPlanId)
                 return false;
 
-            if (effectiveInFutureCustomerSellingProducts.Any(x => x.CustomerId == carrierAccount.CarrierAccountId))
+            if (customerSellingProductsEffectiveInFuture.Any(x => x.CustomerId == carrierAccount.CarrierAccountId))
                 return false;
 
             return true;
