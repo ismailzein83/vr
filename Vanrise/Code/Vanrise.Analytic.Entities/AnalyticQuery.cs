@@ -19,5 +19,6 @@ namespace Vanrise.Analytic.Entities
         public List<DimensionFilter> Filters { get; set; }
         public bool WithSummary { get; set; }
         public int? TopRecords { get; set; }
+        public List<string> OrderBy { get; set; }
     }
 }

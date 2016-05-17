@@ -37,7 +37,7 @@ namespace Vanrise.Analytic.Data.SQL
             string query = BuildTimeVariationAnalyticQuery(input, false, parameterValues);
 
 
-            return GetItemsText(query, (reader) => TimeVariationAnalyticRecordMapper(reader, input.Query, false,input.Query.TimeGroupingUnit), (cmd) =>
+            return GetItemsText(query, (reader) => TimeVariationAnalyticRecordMapper(reader, input.Query, false, input.Query.TimeGroupingUnit), (cmd) =>
             {
                 foreach (var prm in parameterValues)
                 {
@@ -62,7 +62,7 @@ namespace Vanrise.Analytic.Data.SQL
             string query = BuildAnalyticQuery(input, input.Query.WithSummary, parameterValues);
             return GetItemText(query, reader => AnalyticRecordMapper(reader, input.Query, true), (cmd) =>
                 {
-                    foreach(var prm in parameterValues)
+                    foreach (var prm in parameterValues)
                     {
                         cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
                     }
@@ -88,10 +88,26 @@ namespace Vanrise.Analytic.Data.SQL
             BuildQueryMeasures(selectPartBuilder, allIncludedDimensions, input.Query.MeasureFields, includeJoinConfigNames);
             string joinPart = BuildQueryJoins(includeJoinConfigNames);
 
+            string orderPart = null;
+            if (input.Query.OrderBy != null)
+                orderPart = BuildQueryOrder(input.Query.OrderBy);
+
             StringBuilder queryBuilder = BuildGlobalQuery(input.Query.FromTime, input.Query.ToTime, input.Query.TopRecords,
-                parameterValues, selectPartBuilder.ToString(), joinPart, filterPart, groupByPart, ref parameterIndex);
+                parameterValues, selectPartBuilder.ToString(), joinPart, filterPart, groupByPart, orderPart, ref parameterIndex);
 
             return queryBuilder.ToString();
+        }
+
+        private string BuildQueryOrder(List<string> measureFields)
+        {
+            StringBuilder orderPart = new StringBuilder();
+            foreach (var measureName in measureFields)
+            {
+                AnalyticMeasure measure = _measures[measureName];
+                AddColumnToStringBuilder(orderPart, String.Format("{0}", GetMeasureColumnAlias(measure)));
+            }
+            orderPart.Append(String.Format(" desc"));
+            return orderPart.ToString();
         }
 
         string BuildTimeVariationAnalyticQuery(Vanrise.Entities.DataRetrievalInput<TimeVariationAnalyticQuery> input, bool isSummary, Dictionary<string, object> parameterValues)
@@ -108,7 +124,7 @@ namespace Vanrise.Analytic.Data.SQL
             string joinPart = BuildQueryJoins(includeJoinConfigNames);
 
             StringBuilder queryBuilder = BuildGlobalQuery(input.Query.FromTime, input.Query.ToTime, null,
-                parameterValues, selectPartBuilder.ToString(), joinPart, filterPart, groupByPart, ref parameterIndex);
+                parameterValues, selectPartBuilder.ToString(), joinPart, filterPart, groupByPart, null, ref parameterIndex);
 
             return queryBuilder.ToString();
         }
@@ -142,7 +158,7 @@ namespace Vanrise.Analytic.Data.SQL
             return groupByPartBuilder.ToString();
         }
 
-        private string BuildQueryJoins( HashSet<string> includeJoinConfigNames)
+        private string BuildQueryJoins(HashSet<string> includeJoinConfigNames)
         {
             StringBuilder joinPartBuilder = new StringBuilder();
             foreach (string joinName in includeJoinConfigNames)
@@ -214,14 +230,15 @@ namespace Vanrise.Analytic.Data.SQL
             return filterPartBuilder.ToString();
         }
 
-        private StringBuilder BuildGlobalQuery(DateTime fromTime, DateTime toTime, int? topRecords, Dictionary<string, Object> parameterValues, string selectPartBuilder, string joinPartBuilder, string filterPartBuilder, string groupByPartBuilder, ref int parameterIndex)
+        private StringBuilder BuildGlobalQuery(DateTime fromTime, DateTime toTime, int? topRecords, Dictionary<string, Object> parameterValues, string selectPartBuilder, string joinPartBuilder, string filterPartBuilder, string groupByPartBuilder, string orderByPart, ref int parameterIndex)
         {
             List<TimeRangeTableName> timePeriodTableNames = GetTimeRangeTableNames(fromTime, toTime);
 
             StringBuilder queryBuilder = new StringBuilder(@"SELECT #TOPRECORDS# #SELECTPART# FROM
                                                                 #QUERYBODY#
                                                                 #JOINPART#
-			                                                    #GROUPBYPART#");
+			                                                    #GROUPBYPART#
+                                                                #ORDERPART#");
 
             string filterPart = filterPartBuilder.ToString();
 
@@ -246,17 +263,21 @@ namespace Vanrise.Analytic.Data.SQL
             }
             queryBuilder.Replace("#TOPRECORDS#", string.Format("{0}", topRecords.HasValue ? "TOP(" + topRecords.Value + ") " : ""));
             queryBuilder.Replace("#SELECTPART#", selectPartBuilder.ToString());
-            if (groupByPartBuilder.Length > 0)
+            if (!string.IsNullOrEmpty(groupByPartBuilder) && groupByPartBuilder.Length > 0)
                 queryBuilder.Replace("#GROUPBYPART#", "GROUP BY " + groupByPartBuilder);
             else
                 queryBuilder.Replace("#GROUPBYPART#", "");
+            if (!string.IsNullOrEmpty(orderByPart) && orderByPart.Length > 0)
+                queryBuilder.Replace("#ORDERPART#", "ORDER BY " + orderByPart);
+            else
+                queryBuilder.Replace("#ORDERPART#", "");
             return queryBuilder;
         }
 
         private string BuildQueryGrouping(StringBuilder selectPartBuilder, TimeGroupingUnit timeGroupingUnit)
         {
             StringBuilder queryGrouping = new StringBuilder();
-            switch(timeGroupingUnit)
+            switch (timeGroupingUnit)
             {
                 case TimeGroupingUnit.Hour: selectPartBuilder.AppendFormat(" CONVERT(varchar(13), {0}, 121) as [Date]", _table.Settings.TimeColumnName); queryGrouping.AppendFormat(" CONVERT(varchar(13), {0}, 121)", _table.Settings.TimeColumnName); break;
                 case TimeGroupingUnit.Day: selectPartBuilder.AppendFormat(" CONVERT(varchar(10), {0}, 121)  as [Date]", _table.Settings.TimeColumnName); queryGrouping.AppendFormat(" CONVERT(varchar(10), {0}, 121)", _table.Settings.TimeColumnName); break;
@@ -359,7 +380,7 @@ namespace Vanrise.Analytic.Data.SQL
 
         DateTime GetStartOfWeek(TimeRange timeRange)
         {
-            DateTime startTime = new DateTime(timeRange.FromTime.Year, 1,1);
+            DateTime startTime = new DateTime(timeRange.FromTime.Year, 1, 1);
             for (var dt = startTime; dt < timeRange.ToTime; dt = dt.AddDays(7))
             {
                 if (dt >= timeRange.FromTime)
@@ -378,9 +399,9 @@ namespace Vanrise.Analytic.Data.SQL
         {
             List<TimeRange> notAllocatedRanges;
             AllocatePeriodTables(timeRange, context.TableName, context.GetPeriodStart, context.RangeMinLength, context.IncrementPeriod, tableNames, out notAllocatedRanges);
-            if(context.NextTimeRangeAllocationContext != null && notAllocatedRanges != null && notAllocatedRanges.Count > 0 )
+            if (context.NextTimeRangeAllocationContext != null && notAllocatedRanges != null && notAllocatedRanges.Count > 0)
             {
-                foreach(var subRange in notAllocatedRanges)
+                foreach (var subRange in notAllocatedRanges)
                 {
                     AllocatePeriodTables(subRange, context.NextTimeRangeAllocationContext, tableNames);
                 }
@@ -531,18 +552,18 @@ namespace Vanrise.Analytic.Data.SQL
             return record;
         }
 
-        TimeVariationAnalyticRecord TimeVariationAnalyticRecordMapper(IDataReader reader, TimeVariationAnalyticQuery timeVariationAnalyticQuery, bool isSummary,TimeGroupingUnit timeGroupingUnit)
+        TimeVariationAnalyticRecord TimeVariationAnalyticRecordMapper(IDataReader reader, TimeVariationAnalyticQuery timeVariationAnalyticQuery, bool isSummary, TimeGroupingUnit timeGroupingUnit)
         {
             TimeVariationAnalyticRecord record = new TimeVariationAnalyticRecord();
             string dateTime = reader["Date"] as string;
             DateTime dateTimeParsedValue = new DateTime();
-            switch(timeGroupingUnit)
+            switch (timeGroupingUnit)
             {
-                case TimeGroupingUnit.Day: DateTime.TryParseExact(dateTime,"yyyy-MM-dd", CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTimeParsedValue); break;
+                case TimeGroupingUnit.Day: DateTime.TryParseExact(dateTime, "yyyy-MM-dd", CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTimeParsedValue); break;
                 case TimeGroupingUnit.Hour: DateTime.TryParseExact(dateTime, "yyyy-MM-dd HH", CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTimeParsedValue); break;
             }
             if (dateTimeParsedValue != default(DateTime))
-               record.Time = dateTimeParsedValue;
+                record.Time = dateTimeParsedValue;
             record.MeasureValues = MeasureValuesMapper(reader, timeVariationAnalyticQuery.MeasureFields);
             return record;
         }

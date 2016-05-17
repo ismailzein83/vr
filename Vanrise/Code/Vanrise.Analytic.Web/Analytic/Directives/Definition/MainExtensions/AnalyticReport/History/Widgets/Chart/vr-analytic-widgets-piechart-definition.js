@@ -46,10 +46,14 @@
                     dimensionSelectorAPI = api;
                     dimensionReadyDeferred.resolve();
                 }
-         
+
                 $scope.scopeModel.onMeasureSelectorDirectiveReady = function (api) {
                     measureSelectorAPI = api;
                     measureReadyDeferred.resolve();
+                }
+
+                $scope.scopeModel.onMeasureSelectionChanged = function () {
+                    
                 }
 
                 defineAPI();

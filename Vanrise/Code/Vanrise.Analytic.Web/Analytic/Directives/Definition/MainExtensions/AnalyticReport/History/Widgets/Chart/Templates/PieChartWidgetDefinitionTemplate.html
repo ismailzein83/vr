@@ -1,10 +1,10 @@
 ﻿<vr-row>
     <vr-columns width="1/2row" haschildcolumns>
-        <vr-analytic-dimension-selector on-ready="scopeModel.onDimensionSelectorDirectiveReady" isrequired="true" ismultipleselection selectedvalues="scopeModel.selectedDimensions" onselectitem="    scopeModel.onSelectDimensionItem" ondeselectitem="    scopeModel.onDeselectDimensionItem" hideselectedvaluessection></vr-analytic-dimension-selector>
+        <vr-analytic-dimension-selector on-ready="scopeModel.onDimensionSelectorDirectiveReady" isrequired="true" ismultipleselection selectedvalues="scopeModel.selectedDimensions" hideselectedvaluessection></vr-analytic-dimension-selector>
     </vr-columns>
 
     <vr-columns width="1/2row" haschildcolumns>
-        <vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorDirectiveReady" datasource="scopeModel.measures" isrequired="true" selectedvalues="scopeModel.Measure" onselectitem="    scopeModel.onSelectMeasureItem" hideselectedvaluessection></vr-analytic-measure-selector>
+        <vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorDirectiveReady" datasource="scopeModel.measures" isrequired="true" selectedvalues="scopeModel.Measure" onselectionchanged="onMeasureSelectionChanged" hideselectedvaluessection></vr-analytic-measure-selector>
     </vr-columns>
     <vr-columns width="1/2row">
         <vr-numeric value="scopeModel.topRecords" type="number" label="Top Records" minvalue="1" maxvalue="100" isrequired="true"></vr-numeric>

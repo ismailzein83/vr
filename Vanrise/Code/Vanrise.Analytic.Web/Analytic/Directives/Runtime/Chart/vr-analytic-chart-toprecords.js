@@ -128,7 +128,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                         ctrl.dimensions = payLoad.Settings.Dimensions;
                         for (var i = 0; i < payLoad.Settings.Dimensions.length; i++) {
                             var dimension = payLoad.Settings.Dimensions[i];
-                            var groupingDimension = UtilsService.getItemByVal(payLoad.GroupingDimensions, dimension.DimensionName, 'DimensionName');
+                            var groupingDimension = UtilsService.getItemByVal(payLoad.SelectedGroupingDimensions, dimension.DimensionName, 'DimensionName');
                             if (groupingDimension != undefined) {
                                 ctrl.groupingDimensions.push(dimension);
 
@@ -145,9 +145,9 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                     for (var i = 0; i < payLoad.Measures.length; i++) {
                         ctrl.measures.push(payLoad.Measures[i]);
                     }
-                    if (payLoad.GroupingDimensions != undefined) {
-                        for (var i = 0; i < payLoad.GroupingDimensions.length; i++) {
-                            ctrl.groupingDimensions.push(UtilsService.getItemByVal(ctrl.dimensions, payLoad.GroupingDimensions[i].DimensionName, 'DimensionName'));
+                    if (payLoad.SelectedGroupingDimensions != undefined) {
+                        for (var i = 0; i < payLoad.SelectedGroupingDimensions.length; i++) {
+                            ctrl.groupingDimensions.push(UtilsService.getItemByVal(ctrl.dimensions, payLoad.SelectedGroupingDimensions[i].DimensionName, 'DimensionName'));
                         }
                     }
                 }
@@ -164,7 +164,8 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                     FromTime: fromTime,
                     ToTime: toTime,
                     TableId: payLoad.TableId,
-                    TopRecords: payLoad.Settings.TopRecords
+                    TopRecords: payLoad.Settings.TopRecords,
+                    OrderBy: [payLoad.Settings.TopMeasure]
                 }
                 return queryFinalized;
             }

@@ -54,6 +54,20 @@
                     measureReadyDeferred.resolve();
                 }
 
+                $scope.scopeModel.onSelectMeasureItem = function (measure) {
+                    var dataItem = {
+                        AnalyticItemConfigId: measure.AnalyticItemConfigId,
+                        Title: measure.Title,
+                        Name: measure.Name,
+                    };
+                    $scope.scopeModel.measures.push(dataItem);
+                }
+
+                $scope.scopeModel.onDeselectMeasureItem = function (dataItem) {
+                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.measures, dataItem.Name, 'Name');
+                    $scope.scopeModel.measures.splice(datasourceIndex, 1);
+                }
+
                 defineAPI();
             }
 
@@ -148,10 +162,10 @@
 
                 function getDimensions() {
                     var dimensions;
-                    if ($scope.scopeModel.dimensions != undefined && $scope.scopeModel.dimensions.length > 0) {
+                    if ($scope.scopeModel.selectedDimensions != undefined && $scope.scopeModel.selectedDimensions.length > 0) {
                         dimensions = [];
-                        for (var i = 0; i < $scope.scopeModel.dimensions.length; i++) {
-                            var dimension = $scope.scopeModel.dimensions[i];
+                        for (var i = 0; i < $scope.scopeModel.selectedDimensions.length; i++) {
+                            var dimension = $scope.scopeModel.selectedDimensions[i];
                             dimensions.push({
                                 DimensionName: dimension.Name,
                                 Title: dimension.Title,
