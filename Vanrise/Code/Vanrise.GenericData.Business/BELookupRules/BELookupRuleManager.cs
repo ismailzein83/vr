@@ -29,16 +29,12 @@ namespace Vanrise.GenericData.Business
             BELookupRuleDefinition beLookupRuleDefinition = GetRuleDefinition(beLookupRuleDefinitionId);
             if(beLookupRuleDefinition == null)
                 throw new NullReferenceException(String.Format("beLookupRuleDefinition '{0}'", beLookupRuleDefinitionId));
+           
             string cacheName = String.Format("GetRuleTree_{0}", beLookupRuleDefinitionId);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, beLookupRuleDefinition.BusinessEntityDefinitionId,
                 () =>
-                {
-                    var beManager = (new BusinessEntityDefinitionManager()).GetBusinessEntityManager(beLookupRuleDefinition.BusinessEntityDefinitionId);
-                    if (beManager == null)
-                        throw new NullReferenceException(String.Format("beManager. BusinessEntityDefinitionId '{0}'", beLookupRuleDefinition.BusinessEntityDefinitionId));
-
-                    var getAllEntitiesContext = new BusinessEntityGetAllContext(beLookupRuleDefinition.BusinessEntityDefinitionId);
-                    List<dynamic> allEntities = beManager.GetAllEntities(getAllEntitiesContext);
+                {                    
+                    List<dynamic> allEntities = (new BusinessEntityManager()).GetAllEntities(beLookupRuleDefinition.BusinessEntityDefinitionId);
                     List<BELookupRule> beLookupRules = new List<BELookupRule>();
                     if (allEntities != null)
                     {
