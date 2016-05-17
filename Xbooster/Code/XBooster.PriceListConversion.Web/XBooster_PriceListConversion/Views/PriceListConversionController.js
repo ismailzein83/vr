@@ -6,6 +6,7 @@
 
             var inputWorkBookApi;
             var outPutWorkBookAPI;
+            var inputPriceListName;
             var inputConfigurationAPI;
             var inputConfigurationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -39,6 +40,7 @@
                             {
                                 
                                 var priceListConversion = {
+                                    InputPriceListName:inputPriceListName,
                                     InputFileId: $scope.scopeModel.inPutFile.fileId,
                                     InputPriceListSettings: buildInputConfigurationObj(),
                                     OutputPriceListTemplateId: choosenPriceListTemplateObj.pricelistTemplateIds[i]
@@ -67,6 +69,10 @@
                 }
 
                 $scope.scopeModel.onInputPriceListTemplateSelectionChanged = function (api) {
+                    if (inputPriceListTemplateAPI != undefined && inputPriceListTemplateAPI.getSelectedIds() ==undefined)
+                    {
+                        inputPriceListName = undefined;
+                    }
                     if (inputPriceListTemplateAPI != undefined && !$scope.scopeModel.isLoading && inputConfigurationAPI != undefined && inputPriceListTemplateAPI.getSelectedIds() !=undefined)
                     {
                         $scope.scopeModel.isLoading = true;
@@ -74,6 +80,7 @@
                            
                             if (response)
                             {
+                                inputPriceListName = response.Name;
                                 var payload = {
                                     context: buildContext(),
                                     configDetails: response.ConfigDetails

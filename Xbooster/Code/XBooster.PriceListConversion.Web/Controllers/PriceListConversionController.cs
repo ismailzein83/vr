@@ -24,7 +24,15 @@ namespace XBooster.PriceListConversion.Web.Controllers
                 byte[] bytes  = manager.ConvertAndDownloadPriceList(priceListConversion);
                 PriceListTemplateManager templateManager = new PriceListTemplateManager();
                 PriceListTemplate template =  templateManager.GetPriceListTemplate(priceListConversion.OutputPriceListTemplateId);
-                return GetExcelResponse(bytes,template.Name.Trim() +".xls");
+                string priceListName = null;
+                if(priceListConversion.InputPriceListName !=null)
+                {
+                    priceListName =string.Format("{0}_{1}.xls", priceListConversion.InputPriceListName.Trim(), template.Name.Trim());
+                }else
+                {
+                    priceListName=string.Format("{0}.xls",template.Name.Trim());
+                }
+                return GetExcelResponse(bytes, priceListName);
             }
             catch(Exception ex)
             {
