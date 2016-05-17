@@ -1,6 +1,7 @@
 ﻿using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
@@ -17,6 +18,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         ServerConnection _ServerConnection = null;
         Server _Server;
         MigrationContext _Context;
+        List<DatabaseScripts> databaseScripts = new List<DatabaseScripts>();
 
         #region Public Methods
         public MigrationManager(MigrationContext context)
@@ -32,7 +34,9 @@ namespace TOne.WhS.DBSync.Data.SQL
             try
             {
                 _ServerConnection.BeginTransaction();
+                GetAllDatabasesofTables();
                 DefineTables();
+                ScriptAllFKs();
                 CreateTempTables();
                 _ServerConnection.CommitTransaction();
                 Executed = true;
@@ -51,10 +55,11 @@ namespace TOne.WhS.DBSync.Data.SQL
             try
             {
                 _ServerConnection.BeginTransaction();
+                DropFKs();
                 DropOriginalTables();
                 RenameTempTables();
                 CreateIndexes();
-                CreateForeignKeys();
+                CreateFKs();
                 _ServerConnection.CommitTransaction();
                 Executed = true;
             }
@@ -65,9 +70,35 @@ namespace TOne.WhS.DBSync.Data.SQL
             }
             return Executed;
         }
+
         #endregion
 
         #region Private Methods
+
+        private void GetAllDatabasesofTables()
+        {
+            foreach (DBTable dbTable in _Context.DBTables.Values)
+                if (!databaseScripts.Exists(x => x.Database == dbTable.Database))
+                    databaseScripts.Add(new DatabaseScripts { Database = dbTable.Database });
+        }
+
+        private void DefineTables()
+        {
+            foreach (DBTable table in _Context.DBTables.Values)
+            {
+                Table sourceTable = GetTableReference(table);
+                table.Info = sourceTable;
+                table.ScriptedIndexes = ScriptIndexes(sourceTable);
+                table.ScriptedTempTable = ScriptTempTable(sourceTable);
+            }
+        }
+
+        private Table GetTableReference(DBTable dbTable)
+        {
+            Table sourceTable = _Server.Databases[dbTable.Database].Tables[dbTable.Name, dbTable.Schema];
+            return sourceTable;
+        }
+
         private string ScriptIndexes(Table sourceTable)
         {
             string script = string.Empty;
@@ -75,20 +106,6 @@ namespace TOne.WhS.DBSync.Data.SQL
                 foreach (Index index in sourceTable.Indexes)
                 {
                     StringCollection sc = index.Script();
-                    string[] strings = new string[sc.Count];
-                    sc.CopyTo(strings, 0);
-                    script = script + string.Join(" ", strings);
-                }
-            return script;
-        }
-
-        private string ScriptFKs(Table sourceTable)
-        {
-            string script = string.Empty;
-            if (sourceTable.EnumForeignKeys().Rows.Count > 0)
-                foreach (ForeignKey fk in sourceTable.ForeignKeys)
-                {
-                    StringCollection sc = fk.Script();
                     string[] strings = new string[sc.Count];
                     sc.CopyTo(strings, 0);
                     script = script + string.Join(" ", strings);
@@ -109,53 +126,29 @@ namespace TOne.WhS.DBSync.Data.SQL
             return script;
         }
 
-        private void DropOriginalTables()
+        private void ScriptAllFKs()
         {
-            //Set Priority by References
-            foreach (DBTable table in _Context.DBTables.Values)
-            {
-                table.DBFKs = new List<DBForeignKey>();
-                foreach (ForeignKey fk in table.Info.ForeignKeys)
+            foreach (var db in databaseScripts)
+                foreach (Table table in _Server.Databases[db.Database].Tables)
                 {
-                    table.DBFKs.Add(new DBForeignKey { ReferencedKey = fk.ReferencedKey, ReferencedTable = fk.ReferencedTable, ReferencedTableSchema = fk.ReferencedTableSchema });
+                    string scriptedFK = string.Empty;
+                    if (table.EnumForeignKeys().Rows.Count > 0)
+                        foreach (ForeignKey fk in table.ForeignKeys)
+                        {
+                            StringCollection sc = fk.Script();
+                            string[] strings = new string[sc.Count];
+                            sc.CopyTo(strings, 0);
+                            scriptedFK = scriptedFK + string.Join(" ", strings);
+                        }
+                    if (db.ScriptCreateFKs == null)
+                        db.ScriptCreateFKs = new StringCollection();
+                    if (scriptedFK != string.Empty)
+                        db.ScriptCreateFKs.Add(scriptedFK);
                 }
-            }
-            DropTables();
-        }
-
-        private void CreateForeignKeys()
-        {
-            //Create Foreign Keys for Tables
-            foreach (DBTable table in _Context.DBTables.Values)
-                if (table.ScriptedFKs != "")
-                    _Server.Databases[table.Database].ExecuteNonQuery(table.ScriptedFKs);
-        }
-
-        private void CreateIndexes()
-        {
-            //Create Indexes Keys for Tables
-            foreach (DBTable table in _Context.DBTables.Values)
-                if (table.ScriptedIndexes != "")
-                    _Server.Databases[table.Database].ExecuteNonQuery(table.ScriptedIndexes);
-        }
-
-        private void RenameTempTables()
-        {
-            foreach (DBTable dbTable in _Context.DBTables.Values)
-            {
-                DBTable dbTempTable = new DBTable();
-                dbTempTable.Name = dbTable.Name + Constants._Temp;
-                dbTempTable.Schema = dbTable.Schema;
-                dbTempTable.Database = dbTable.Database;
-                _Server.Databases[dbTempTable.Database].Tables.Refresh();
-                Table tempTable = _Server.Databases[dbTempTable.Database].Tables[dbTempTable.Name, dbTempTable.Schema];
-                tempTable.Rename(tempTable.Name.Replace(Constants._Temp, ""));
-            }
         }
 
         public void CreateTempTables()
         {
-            // Create Temp Tables
             foreach (DBTable dbTable in _Context.DBTables.Values)
             {
                 Database database = _Server.Databases[dbTable.Database];
@@ -169,16 +162,26 @@ namespace TOne.WhS.DBSync.Data.SQL
             }
         }
 
-        private void DefineTables()
+        private void DropFKs()
         {
+            foreach (var db in databaseScripts)
+                foreach (Table table in _Server.Databases[db.Database].Tables)
+                    foreach (ForeignKey fk in table.ForeignKeys.Cast<ForeignKey>().ToList())
+                        fk.Drop();
+        }
+
+        private void DropOriginalTables()
+        {
+            //Set Priority by References
             foreach (DBTable table in _Context.DBTables.Values)
             {
-                Table sourceTable = GetTableReference(table);
-                table.Info = sourceTable;
-                table.ScriptedIndexes = ScriptIndexes(sourceTable);
-                table.ScriptedFKs = ScriptFKs(sourceTable);
-                table.ScriptedTempTable = ScriptTempTable(sourceTable);
+                table.DBFKs = new List<DBForeignKey>();
+                foreach (ForeignKey fk in table.Info.ForeignKeys)
+                {
+                    table.DBFKs.Add(new DBForeignKey { ReferencedKey = fk.ReferencedKey, ReferencedTable = fk.ReferencedTable, ReferencedTableSchema = fk.ReferencedTableSchema });
+                }
             }
+            DropTables();
         }
 
         private void DropTables()
@@ -211,13 +214,35 @@ namespace TOne.WhS.DBSync.Data.SQL
             }
         }
 
-        private Table GetTableReference(DBTable dbTable)
+        private void RenameTempTables()
         {
-            Table sourceTable = _Server.Databases[dbTable.Database].Tables[dbTable.Name, dbTable.Schema];
-            return sourceTable;
+            foreach (DBTable dbTable in _Context.DBTables.Values)
+            {
+                DBTable dbTempTable = new DBTable();
+                dbTempTable.Name = dbTable.Name + Constants._Temp;
+                dbTempTable.Schema = dbTable.Schema;
+                dbTempTable.Database = dbTable.Database;
+                _Server.Databases[dbTempTable.Database].Tables.Refresh();
+                Table tempTable = _Server.Databases[dbTempTable.Database].Tables[dbTempTable.Name, dbTempTable.Schema];
+                tempTable.Rename(tempTable.Name.Replace(Constants._Temp, ""));
+            }
+        }
+
+        private void CreateIndexes()
+        {
+            //Create Indexes Keys for Tables
+            foreach (DBTable table in _Context.DBTables.Values)
+                if (table.ScriptedIndexes != "")
+                    _Server.Databases[table.Database].ExecuteNonQuery(table.ScriptedIndexes);
+        }
+
+        private void CreateFKs()
+        {
+            foreach (var db in databaseScripts)
+                foreach (string script in db.ScriptCreateFKs)
+                    _Server.Databases[db.Database].ExecuteNonQuery(script);
         }
 
         #endregion
-
     }
 }

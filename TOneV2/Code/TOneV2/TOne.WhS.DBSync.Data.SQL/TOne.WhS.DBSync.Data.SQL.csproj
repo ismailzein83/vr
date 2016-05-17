@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Constants.cs" />
+    <Compile Include="Common\DatabaseScripts.cs" />
     <Compile Include="Common\DBTableName.cs" />
     <Compile Include="Common\MigrationContext.cs" />
     <Compile Include="Common\MigrationCredentials.cs" />
