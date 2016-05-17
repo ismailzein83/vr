@@ -190,8 +190,8 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
---(3301,'WhS_BE_SupplierPricelist','Supplier PriceList',1201,0,'["View"]'),
-(3301,'WhS_Analytics_Variation','Variation',1204,0,'["View"]')
+(3301,'WhS_BE_SupplierPricelist','Supplier PriceList',1201,0,'["View"]'),
+(3302,'WhS_Analytics_Variation','Variation',1204,0,'["View"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
