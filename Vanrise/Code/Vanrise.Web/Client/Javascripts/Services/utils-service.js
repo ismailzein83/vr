@@ -35,7 +35,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
             if (mask.slice(0, 4) == "UTC:") {
                 mask = mask.slice(4);
                 utc = true;
-            }
+            } 
 
             var _ = utc ? "getUTC" : "get",
                 d = date[_ + "Date"](),
@@ -709,7 +709,17 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         value = trimLeft(value, charlist)
         return trimRight(value, charlist);
     };
-
+    function getUploadedFileName(fileName)
+    {
+        if (fileName != undefined)
+        {
+            var splitedFileName = fileName.split(".");
+            if (splitedFileName != undefined && splitedFileName.length > 0) {
+                return splitedFileName[0];
+            }
+        }
+       
+    }
     return ({
         replaceAll: replaceAll,
         waitMultipleAsyncOperations: waitMultipleAsyncOperations,
@@ -755,7 +765,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         getFilteredArrayFromArray: getFilteredArrayFromArray,
         trimRight: trimRight,
         trimLeft: trimLeft,
-        trim: trim
+        trim: trim,
+        getUploadedFileName: getUploadedFileName
     });
 
 }]);

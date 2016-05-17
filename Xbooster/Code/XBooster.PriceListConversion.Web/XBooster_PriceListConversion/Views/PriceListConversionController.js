@@ -39,8 +39,10 @@
                             for (var i = 0; i < choosenPriceListTemplateObj.pricelistTemplateIds.length; i++)
                             {
                                 
+                                var fileName = UtilsService.getUploadedFileName( $scope.scopeModel.inPutFile.fileName);
+              
                                 var priceListConversion = {
-                                    InputPriceListName:inputPriceListName,
+                                    InputPriceListName: fileName,
                                     InputFileId: $scope.scopeModel.inPutFile.fileId,
                                     InputPriceListSettings: buildInputConfigurationObj(),
                                     OutputPriceListTemplateId: choosenPriceListTemplateObj.pricelistTemplateIds[i]
@@ -198,6 +200,7 @@
                 }).catch(function (error) {
                 });
             }
+
         }
 
         appControllers.controller('ExcelConversion_PriceListConversionController', priceListConversionController);
