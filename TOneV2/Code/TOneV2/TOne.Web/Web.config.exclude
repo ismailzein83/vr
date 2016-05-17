@@ -66,6 +66,7 @@
     <add key="ImportPriceListTemplatePath" value="/Client/Modules/WhS_SupplierPriceList/Template/Supplier Price List Sample.xlsx"/>
     <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/WhS_CodePreparation/Template/Code preperation sample.xls"/>
     <add key="DownloadCodeGroupTemplatePath" value="/Client/Modules/WhS_BusinessEntity/Templates/CodeGroupTemplate.xlsx"/>
+    <add key="TempPasswordValidity" value="24:00:00"/>
   </appSettings>
   <system.web>
     <httpHandlers>
