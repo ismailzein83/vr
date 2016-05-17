@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.Business
     {
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            protected override bool ShouldSetCacheExpired(object parameter)
+            protected override bool ShouldSetCacheExpired()
             {
                 throw new NotImplementedException();
             }
