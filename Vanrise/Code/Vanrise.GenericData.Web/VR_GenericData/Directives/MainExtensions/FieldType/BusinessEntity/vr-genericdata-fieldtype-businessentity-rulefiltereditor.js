@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeBusinessentityRulefiltereditor', ['VR_GenericData_ListRecordFilterOperatorEnum', 'UtilsService',
-    function (VR_GenericData_ListRecordFilterOperatorEnum, UtilsService) {
+app.directive('vrGenericdataFieldtypeBusinessentityRulefiltereditor', ['VR_GenericData_ListRecordFilterOperatorEnum', 'UtilsService','VRUIUtilsService',
+    function (VR_GenericData_ListRecordFilterOperatorEnum, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -25,10 +25,11 @@ app.directive('vrGenericdataFieldtypeBusinessentityRulefiltereditor', ['VR_Gener
             var businessEntityApi;
             var selectedObj;
             var filterObj;
+            var businessEntityReadyDeferred = UtilsService.createPromiseDeferred();
+
             $scope.onBusinessEntityReady = function (api) {
-                var payload = { fieldType: selectedObj.Type, fieldValue: filterObj != undefined ? filterObj.Values : null };
-                api.load(payload);
                 businessEntityApi = api;
+                businessEntityReadyDeferred.resolve();
             }
 
             function initializeController() {
@@ -47,7 +48,19 @@ app.directive('vrGenericdataFieldtypeBusinessentityRulefiltereditor', ['VR_Gener
                             $scope.selectedFilter = UtilsService.getItemByVal($scope.filters, payload.filterObj.CompareOperator, 'value');
                             filterObj = payload.filterObj;
                         }
+                        var promises = [];
+
+                        var businessEntityLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        businessEntityReadyDeferred.promise.then(function () {
+                            var payload = { fieldType: selectedObj.Type, fieldValue: filterObj != undefined ? filterObj.Values : undefined };
+                            VRUIUtilsService.callDirectiveLoad(businessEntityApi, payload, businessEntityLoadDeferred);
+                        });
+                        promises.push(businessEntityLoadDeferred.promise);
+                        return UtilsService.waitMultiplePromises(promises);
                     }
+                   
+
                 }
 
                 api.getData = function () {

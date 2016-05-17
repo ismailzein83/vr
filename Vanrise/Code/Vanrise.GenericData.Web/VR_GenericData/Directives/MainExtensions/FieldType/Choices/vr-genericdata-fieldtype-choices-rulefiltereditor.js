@@ -24,11 +24,12 @@ app.directive('vrGenericdataFieldtypeChoicesRulefiltereditor', ['VR_GenericData_
         function recordTypeFieldItemEditorCtor(ctrl, $scope, $attrs) {
             var selectedObj;
             var choiceFilterEditorApi;
+            var choiceFilterReadyDeferred = UtilsService.createPromiseDeferred();
+
             var filterObj;
             $scope.onChoiceFilterEditorReady = function (api) {
                 choiceFilterEditorApi = api;
-                var payload = { fieldType: selectedObj.Type, fieldValue: filterObj != undefined ? filterObj.Values : null };
-                api.load(payload);
+                choiceFilterReadyDeferred.resolve();
             }
 
 
@@ -48,6 +49,16 @@ app.directive('vrGenericdataFieldtypeChoicesRulefiltereditor', ['VR_GenericData_
                             $scope.selectedFilter = UtilsService.getItemByVal($scope.filters, payload.filterObj.CompareOperator, 'value');
                             filterObj = payload.filterObj;
                         }
+                        var promises = [];
+
+                        var choiceFilterLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        choiceFilterReadyDeferred.promise.then(function () {
+                            var payload = { fieldType: selectedObj.Type, fieldValue: filterObj != undefined ? filterObj.Values : null };
+                            VRUIUtilsService.callDirectiveLoad(choiceFilterEditorApi, payload, choiceFilterLoadDeferred);
+                        });
+                        promises.push(choiceFilterLoadDeferred.promise);
+                        return UtilsService.waitMultiplePromises(promises);
                     }
                 }
 

@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData_DateTimeRecordFilterOperatorEnum', 'UtilsService',
-    function (VR_GenericData_DateTimeRecordFilterOperatorEnum, UtilsService) {
+app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData_DateTimeRecordFilterOperatorEnum', 'UtilsService','VRUIUtilsService',
+    function (VR_GenericData_DateTimeRecordFilterOperatorEnum, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -23,6 +23,8 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
 
         function recordTypeFieldItemEditorCtor(ctrl, $scope, $attrs) {
             var dateFilterEditorApi;
+            var dateFilterReadyDeferred = UtilsService.createPromiseDeferred();
+
             var selectedObj;
             var filterObj;
 
@@ -32,8 +34,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
 
             $scope.onDateFilterEditorReady = function (api) {
                 dateFilterEditorApi = api;
-                var payload = { fieldType: selectedObj.Type, fieldValue: filterObj != undefined ? filterObj.Value : null, fieldTitle: 'Date' };
-                api.load(payload);
+                dateFilterReadyDeferred.resolve();
             }
 
             function defineAPI() {
@@ -49,7 +50,18 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
                             $scope.selectedFilter = UtilsService.getItemByVal($scope.filters, payload.filterObj.CompareOperator, 'value');
                             filterObj = payload.filterObj;
                         }
+                        var promises = [];
+
+                        var dateFilterLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        dateFilterReadyDeferred.promise.then(function () {
+                            var payload = { fieldType: selectedObj.Type, fieldValue: filterObj != undefined ? filterObj.Value : null, fieldTitle: 'Date' };
+                            VRUIUtilsService.callDirectiveLoad(dateFilterEditorApi, payload, dateFilterLoadDeferred);
+                        });
+                        promises.push(dateFilterLoadDeferred.promise);
+                        return UtilsService.waitMultiplePromises(promises);
                     }
+
                 }
 
                 api.getData = function () {

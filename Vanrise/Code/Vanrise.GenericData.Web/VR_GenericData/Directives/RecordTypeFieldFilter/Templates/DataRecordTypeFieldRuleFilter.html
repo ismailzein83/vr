@@ -1,16 +1,16 @@
 ﻿<vr-row removeline>
     <vr-columns width="normal">
         <vr-select label="Field" datatextfield="FieldTitle" datavaluefield="FieldName"
-                   datasource="scopeModel.datasource" selectedvalues="scopeModel.dataRecordTypeField" isrequired="true" hideremoveicon onselectionchanged="scopeModel.osnDataRecordTypeFieldSelectionChanged"></vr-select>
+                   datasource="scopeModel.datasource" selectedvalues="scopeModel.dataRecordTypeField" isrequired="true" hideremoveicon onselectionchanged="scopeModel.onDataRecordTypeFieldSelectionChanged"></vr-select>
     </vr-columns>
     <vr-columns width="normal">
         <vr-select style="position: inherit;top: 23px;" datatextfield="description" datavaluefield="description"
                    datasource="scopeModel.conditions" selectedvalues="scopeModel.selectedCondition" isrequired="true" hideremoveicon></vr-select>
     </vr-columns>
-    <vr-columns width="2/3row" ng-if="scopeModel.ruleFilterEditor!=undefined && !scopeModel.selectedCondition.showDirective">
+    <vr-columns width="2/3row" ng-if="scopeModel.ruleFilterEditor!=undefined && !scopeModel.selectedCondition.showDirective" vr-loader="scopeModel.isLoading">
         <vr-directivewrapper directive="scopeModel.selectedCondition.editor" on-ready="scopeModel.onDataRecordTypeFieldFilterReady"></vr-directivewrapper>
     </vr-columns>
-    <vr-columns width="2/3row" ng-if="scopeModel.ruleFilterEditor!=undefined && scopeModel.selectedCondition.showDirective">
+    <vr-columns width="2/3row" ng-if="scopeModel.ruleFilterEditor!=undefined && scopeModel.selectedCondition.showDirective" vr-loader="scopeModel.isLoading">
         <vr-directivewrapper directive="scopeModel.ruleFilterEditor" on-ready="scopeModel.onDataRecordTypeFieldEditorReady"></vr-directivewrapper>
     </vr-columns>
 </vr-row>

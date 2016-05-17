@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeNumberRulefiltereditor', ['VR_GenericData_NumberRecordFilterOperatorEnum', 'UtilsService',
-    function (VR_GenericData_NumberRecordFilterOperatorEnum, UtilsService) {
+app.directive('vrGenericdataFieldtypeNumberRulefiltereditor', ['VR_GenericData_NumberRecordFilterOperatorEnum', 'UtilsService','VRUIUtilsService',
+    function (VR_GenericData_NumberRecordFilterOperatorEnum, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -26,13 +26,14 @@ app.directive('vrGenericdataFieldtypeNumberRulefiltereditor', ['VR_GenericData_N
                 defineAPI();
             }
             var numberFilterEditorApi;
+            var numberFilterReadyDeferred = UtilsService.createPromiseDeferred();
+
             var filterObj;
             var dataRecordTypeField;
 
             $scope.onNumberFilterEditorReady = function (api) {
                 numberFilterEditorApi = api;
-                var payload = { fieldType: dataRecordTypeField != undefined ? dataRecordTypeField.Type : null, fieldValue: filterObj != undefined ? filterObj.Value : null };
-                api.load(payload);
+                numberFilterReadyDeferred.resolve();
             }
             function defineAPI() {
                 var api = {};
@@ -44,6 +45,17 @@ app.directive('vrGenericdataFieldtypeNumberRulefiltereditor', ['VR_GenericData_N
                         filterObj = payload.filterObj;
                         dataRecordTypeField = payload.dataRecordTypeField;
                         $scope.selectedFilter = UtilsService.getItemByVal($scope.filters, payload.filterObj.CompareOperator, 'value');
+
+                        var promises = [];
+
+                        var numberFilterLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        numberFilterReadyDeferred.promise.then(function () {
+                            var payload = { fieldType: dataRecordTypeField != undefined ? dataRecordTypeField.Type : null, fieldValue: filterObj != undefined ? filterObj.Value : null };
+                            VRUIUtilsService.callDirectiveLoad(numberFilterEditorApi, payload, numberFilterLoadDeferred);
+                        });
+                        promises.push(numberFilterLoadDeferred.promise);
+                        return UtilsService.waitMultiplePromises(promises);
                     }
                 }
 

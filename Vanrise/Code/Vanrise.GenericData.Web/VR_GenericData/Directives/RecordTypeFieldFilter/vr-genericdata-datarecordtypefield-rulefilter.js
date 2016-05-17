@@ -36,18 +36,19 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
                 $scope.scopeModel.onDataRecordTypeFieldEditorReady = function (api) {
                     dataRecordTypeFieldEditorApi = api;
                     var payload = { dataRecordTypeField: $scope.scopeModel.dataRecordTypeField, filterObj: filterObj };
-                    api.load(payload);
+                    var setLoader = function (value) {
+                    $scope.isLoading = value;
+                        };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeFieldEditorApi, payload, setLoader);
                 }
 
                 $scope.scopeModel.onDataRecordTypeFieldFilterReady = function (api) {
                     dataRecordTypeFieldEditorApi = api;
                     api.load();
                 }
-                $scope.scopeModel.osnDataRecordTypeFieldSelectionChanged = function()
-                {
-                    if (context != undefined && $scope.scopeModel.dataRecordTypeField !=undefined)
-                    {
-                        $scope.scopeModel.ruleFilterEditor = context.getRuleEditor($scope.scopeModel.dataRecordTypeField.Type.ConfigId);
+                $scope.scopeModel.onDataRecordTypeFieldSelectionChanged = function () {
+                    if (context != undefined && $scope.scopeModel.dataRecordTypeField != undefined) {
+                       $scope.scopeModel.ruleFilterEditor = context.getRuleEditor($scope.scopeModel.dataRecordTypeField.Type.ConfigId);
                     }
                 }
 
