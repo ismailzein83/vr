@@ -296,5 +296,21 @@ namespace Vanrise.Common.Business
         }
 
         #endregion
+        
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            return GetAllCountries().Select(itm => itm as dynamic).ToList();
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
+
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetCountry(context.EntityId);
+        }
     }
 }

@@ -26,12 +26,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override Type GetNonNullableRuntimeType()
         {
-            BusinessEntityDefinitionManager beDefinitionManager = new BusinessEntityDefinitionManager();
-            BusinessEntityDefinition beDefinition = beDefinitionManager.GetBusinessEntityDefinition(BusinessEntityDefinitionId);
-            if (beDefinition == null)
-                throw new NullReferenceException(string.Format("beDefinition '{0}'", this.BusinessEntityDefinitionId));
-            if (beDefinition.Settings == null)
-                throw new NullReferenceException("beDefinition.Settings");
+            BusinessEntityDefinition beDefinition = GetBusinessEntityDefinition();
+           
             if (beDefinition.Settings.IdType == null)
                 throw new NullReferenceException("beDefinition.Settings.IdType");
             return Type.GetType(beDefinition.Settings.IdType);
@@ -55,9 +51,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             else
                 entityIds.Add(value);
 
-            BusinessEntityDefinition beDefinition;
-            var obj = GetBusinessEntityManager(out beDefinition);
-            return GetBusinessEntityManager(out beDefinition).GetEntityDescription(new BusinessEntityDescriptionContext() { EntityDefinition = beDefinition, EntityIds = entityIds });
+            BusinessEntityDefinition beDefinition = GetBusinessEntityDefinition();
+            var beManager = GetBusinessEntityManager();
+            return beManager.GetEntityDescription(new BusinessEntityDescriptionContext() { EntityDefinition = beDefinition, EntityIds = entityIds });
         }
 
         public override bool IsMatched(object fieldValue, object filterValue)
@@ -67,37 +63,31 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
             var beFilter = filterValue as BusinessEntityFieldTypeFilter;
 
-            BusinessEntityDefinition beDefinition;
-            IBusinessEntityManager beManager = GetBusinessEntityManager(out beDefinition); // This statement is not necassary
+            IBusinessEntityManager beManager = GetBusinessEntityManager(); // This statement is not necassary
             return beManager.IsMatched(new BusinessEntityMatchContext() { FieldValueIds = fieldValueObjList, FilterIds = beFilter.BusinessEntityIds });
         }
 
         #endregion
 
         #region Private Methods
-
-        IBusinessEntityManager GetBusinessEntityManager(out BusinessEntityDefinition businessEntityDefinition)
+        BusinessEntityDefinition GetBusinessEntityDefinition()
         {
-            BusinessEntityDefinition beDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(BusinessEntityDefinitionId);
-            businessEntityDefinition = beDefinition;
+            var beDefinitionManager = new BusinessEntityDefinitionManager();
+            var businessEntityDefinition = beDefinitionManager.GetBusinessEntityDefinition(this.BusinessEntityDefinitionId);
 
-            if (beDefinition == null)
-                throw new NullReferenceException("beDefinition");
+            if (businessEntityDefinition == null)
+                throw new NullReferenceException(String.Format("businessEntityDefinition '{0}'", this.BusinessEntityDefinitionId));
+            if (businessEntityDefinition.Settings == null)
+                throw new NullReferenceException(String.Format("businessEntityDefinition.Settings. BusinessEntityDefinitionId '{0}'", this.BusinessEntityDefinitionId));
+            return businessEntityDefinition;
+        }
 
-            if (beDefinition.Settings == null)
-                throw new NullReferenceException("beDefinition.Settings");
-
-            if (beDefinition.Settings.ManagerFQTN == null)
-                throw new NullReferenceException("beDefinition.Settings.ManagerFQTN");
-
-            Type beManagerType = Type.GetType(beDefinition.Settings.ManagerFQTN);
-
-            if (beManagerType == null)
-                throw new NullReferenceException("beManagerType");
-
-            var beManagerInstance = Activator.CreateInstance(beManagerType) as IBusinessEntityManager;
+        IBusinessEntityManager GetBusinessEntityManager()
+        {
+            var beDefinitionManager = new BusinessEntityDefinitionManager();
+            var beManagerInstance = beDefinitionManager.GetBusinessEntityManager(this.BusinessEntityDefinitionId);
             if (beManagerInstance == null)
-                throw new NullReferenceException(String.Format("'{0}' does not implement IBusinessEntityManager", beManagerType.Name));
+                throw new NullReferenceException(String.Format("beManagerInstance. BusinessEntityDefinitionId '{0}'", this.BusinessEntityDefinitionId));
 
             return beManagerInstance;
         }

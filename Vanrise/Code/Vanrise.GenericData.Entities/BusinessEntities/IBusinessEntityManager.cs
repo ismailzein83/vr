@@ -11,5 +11,11 @@ namespace Vanrise.GenericData.Entities
         string GetEntityDescription(IBusinessEntityDescriptionContext context);
 
         bool IsMatched(IBusinessEntityMatchContext context);
+
+        dynamic GetEntity(IBusinessEntityGetByIdContext context);
+
+        List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context);
+
+        bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime);
     }
 }

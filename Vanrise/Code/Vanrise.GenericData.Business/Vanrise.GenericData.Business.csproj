@@ -46,6 +46,11 @@
     <Compile Include="BELookupRuleManager.cs" />
     <Compile Include="BELookupRules\BELookupRuleDefinitionManager.cs" />
     <Compile Include="BELookupRules\BELookupRuleManager.cs" />
+    <Compile Include="BELookupRules\RuleStructureBehaviors\BELookupRuleStructureBehaviorByKey.cs" />
+    <Compile Include="BELookupRules\RuleStructureBehaviors\BELookupRuletructureBehaviorByPrefix.cs" />
+    <Compile Include="BELookupRules\RuleStructureBehaviors\IBELookupRuleStructureBehavior.cs" />
+    <Compile Include="BusinessEntity\BusinessEntityGetAllContext.cs" />
+    <Compile Include="BusinessEntity\BusinessEntityIsCacheExpiredContext.cs" />
     <Compile Include="BusinessEntity\Definition\BusinessEntityDefinitionManager.cs" />
     <Compile Include="BusinessEntity\BusinessEntityGroupContext.cs" />
     <Compile Include="BusinessEntity\BaseBEManager.cs" />

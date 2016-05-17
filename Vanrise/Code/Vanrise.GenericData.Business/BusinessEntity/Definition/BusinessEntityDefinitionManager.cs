@@ -46,6 +46,37 @@ namespace Vanrise.GenericData.Business
             return cachedBEDefinitions.MapRecords(BusinessEntityDefinitionInfoMapper, filterExpression);
         }
 
+        public IBusinessEntityManager GetBusinessEntityManager(int businessEntityDefinitionId)
+        {
+            string cacheName = String.Format("GetBusinessEntityManager_{0}", businessEntityDefinitionId);
+            Type beManagerType = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+                () =>
+                {
+                    var businessEntityDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
+
+                    if (businessEntityDefinition == null)
+                        throw new NullReferenceException("businessEntityDefinition");
+
+                    if (businessEntityDefinition.Settings == null)
+                        throw new NullReferenceException("businessEntityDefinition.Settings");
+
+                    if (businessEntityDefinition.Settings.ManagerFQTN == null)
+                        throw new NullReferenceException("businessEntityDefinition.Settings.ManagerFQTN");
+
+                    Type beManagerType_Internal = Type.GetType(businessEntityDefinition.Settings.ManagerFQTN);
+
+                    if (beManagerType_Internal == null)
+                        throw new NullReferenceException("beManagerType_Internal");
+                    return beManagerType_Internal;
+                });
+
+            var beManagerInstance = Activator.CreateInstance(beManagerType) as IBusinessEntityManager;
+            if (beManagerInstance == null)
+                throw new NullReferenceException(String.Format("'{0}' does not implement IBusinessEntityManager", beManagerType.Name));
+
+            return beManagerInstance;
+        }
+
         public Vanrise.Entities.UpdateOperationOutput<BusinessEntityDefinitionDetail> UpdateBusinessEntityDefinition(BusinessEntityDefinition businessEntityDefinition)
         {
             UpdateOperationOutput<BusinessEntityDefinitionDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<BusinessEntityDefinitionDetail>();
@@ -114,7 +145,7 @@ namespace Vanrise.GenericData.Business
 
         #region Private Classes
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IBusinessEntityDefinitionDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityDefinitionDataManager>();
             object _updateHandle;

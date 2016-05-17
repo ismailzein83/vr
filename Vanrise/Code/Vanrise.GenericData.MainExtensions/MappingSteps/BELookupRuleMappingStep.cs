@@ -14,6 +14,8 @@ namespace Vanrise.GenericData.MainExtensions.MappingSteps
 
         public List<BELookupRuleCriteriaFieldMapping> CriteriaFieldsMappings { get; set; }
 
+        public string BusinessEntity { get; set; }
+
         public override void GenerateExecutionCode(Transformation.Entities.IDataTransformationCodeGenerationContext context)
         {
             throw new NotImplementedException();

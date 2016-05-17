@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Business.BELookupRules.RuleStructureBehaviors;
 using Vanrise.GenericData.Entities;
 using Vanrise.Rules;
 
@@ -24,28 +27,66 @@ namespace Vanrise.GenericData.Business
         private RuleTree GetRuleTree(int beLookupRuleDefinitionId)
         {
             BELookupRuleDefinition beLookupRuleDefinition = GetRuleDefinition(beLookupRuleDefinitionId);
-            List<dynamic> allEntities = null;
-            List<BELookupRule> beLookupRules = new List<BELookupRule>();
-            foreach(var entity in allEntities)
-            {
-                beLookupRules.Add(new BELookupRule
+            if(beLookupRuleDefinition == null)
+                throw new NullReferenceException(String.Format("beLookupRuleDefinition '{0}'", beLookupRuleDefinitionId));
+            string cacheName = String.Format("GetRuleTree_{0}", beLookupRuleDefinitionId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, beLookupRuleDefinition.BusinessEntityDefinitionId,
+                () =>
+                {
+                    var beManager = (new BusinessEntityDefinitionManager()).GetBusinessEntityManager(beLookupRuleDefinition.BusinessEntityDefinitionId);
+                    if (beManager == null)
+                        throw new NullReferenceException(String.Format("beManager. BusinessEntityDefinitionId '{0}'", beLookupRuleDefinition.BusinessEntityDefinitionId));
+
+                    var getAllEntitiesContext = new BusinessEntityGetAllContext(beLookupRuleDefinition.BusinessEntityDefinitionId);
+                    List<dynamic> allEntities = beManager.GetAllEntities(getAllEntitiesContext);
+                    List<BELookupRule> beLookupRules = new List<BELookupRule>();
+                    if (allEntities != null)
                     {
-                        RuleDefinition = beLookupRuleDefinition,
-                        BusinessEntityObject = entity
-                    });
-            }
-            List<BaseRuleStructureBehavior> ruleStructureBehaviors = new List<BaseRuleStructureBehavior>();
-            foreach (var ruleDefinitionCriteriaField in beLookupRuleDefinition.CriteriaFields)
-            {
-                BaseRuleStructureBehavior ruleStructureBehavior = CreateRuleStructureBehavior(ruleDefinitionCriteriaField);
-                ruleStructureBehaviors.Add(ruleStructureBehavior);
-            }
-            return new RuleTree(beLookupRules, ruleStructureBehaviors);
+                        foreach (var entity in allEntities)
+                        {
+                            beLookupRules.Add(new BELookupRule
+                            {
+                                RuleDefinition = beLookupRuleDefinition,
+                                BusinessEntityObject = entity
+                            });
+                        }
+                    }
+                    List<BaseRuleStructureBehavior> ruleStructureBehaviors = new List<BaseRuleStructureBehavior>();
+                    foreach (var ruleDefinitionCriteriaField in beLookupRuleDefinition.CriteriaFields)
+                    {
+                        BaseRuleStructureBehavior ruleStructureBehavior = CreateRuleStructureBehavior(ruleDefinitionCriteriaField);
+                        ruleStructureBehaviors.Add(ruleStructureBehavior);
+                    }
+                    return new RuleTree(beLookupRules, ruleStructureBehaviors);
+                });           
         }
 
         private BELookupRuleDefinition GetRuleDefinition(int beLookupRuleDefinitionId)
         {
-            throw new NotImplementedException();
+            var ruleDefinition = new BELookupRuleDefinition
+            {
+                 BusinessEntityDefinitionId = 1,
+                  CriteriaFields = new List<BELookupRuleDefinitionCriteriaField>()
+            };
+            //ruleDefinition.CriteriaFields.Add(new BELookupRuleDefinitionCriteriaField
+            //    {
+            //        FieldPath = "Settings.Company",
+            //        RuleStructureBehaviorType = MappingRuleStructureBehaviorType.ByPrefix
+            //    });
+
+            //ruleDefinition.CriteriaFields.Add(new BELookupRuleDefinitionCriteriaField
+            //{
+            //    FieldPath = "Settings.CountryId",
+            //    RuleStructureBehaviorType = MappingRuleStructureBehaviorType.ByKey
+            //});
+
+
+            ruleDefinition.CriteriaFields.Add(new BELookupRuleDefinitionCriteriaField
+            {
+                FieldPath = "Settings.PhoneNumbers",
+                RuleStructureBehaviorType = MappingRuleStructureBehaviorType.ByPrefix
+            });
+            return ruleDefinition;
         }
 
         private BaseRuleStructureBehavior CreateRuleStructureBehavior(BELookupRuleDefinitionCriteriaField ruleDefinitionCriteriaField)
@@ -75,92 +116,48 @@ namespace Vanrise.GenericData.Business
             }
             return value;
         }
-    }
 
-    public interface IBELookupRuleStructureBehavior
-    {
-        string FieldPath { set; }
-    }
+        #region Private Classes
 
-    public class BELookupRuleStructureBehaviorByKey : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByKey<Object>, IBELookupRuleStructureBehavior
-    {
-        public string FieldPath { get; set; }
-
-        protected override void GetKeysFromRule(BaseRule rule, out IEnumerable<object> keys)
+        internal class CacheManager : Vanrise.Caching.BaseCacheManager<int>
         {
-            var beLookupRule = rule as BELookupRule;
-            if (beLookupRule == null)
-                throw new NullReferenceException("beLookupRule");
-            Object value = BELookupRuleManager.GetRuleBEFieldValue(beLookupRule, this.FieldPath);
-            if (value == null)
-                keys = null;
-            else
+            DateTime? _beLookupRuleDefinitionCacheLastCheck;
+            DateTime? _businessEntityDefinitionCacheLastCheck;
+
+            ConcurrentDictionary<int, BEDefinitionCacheItem> _beDefinitionCacheItems = new ConcurrentDictionary<int, BEDefinitionCacheItem>();
+
+            protected override bool ShouldSetCacheExpired(int businessEntityDefinitionId)
             {
-                IEnumerable<object> valueAsIEnumerable = value as IEnumerable<object>;
-                if (valueAsIEnumerable != null)
-                    keys = valueAsIEnumerable;
-                else
-                    keys = new List<Object> { value };
+                if (Vanrise.Caching.CacheManagerFactory.GetCacheManager<BELookupRuleDefinitionManager.CacheManager>().IsCacheExpired(ref _beLookupRuleDefinitionCacheLastCheck)
+                    || Vanrise.Caching.CacheManagerFactory.GetCacheManager<BusinessEntityDefinitionManager.CacheManager>().IsCacheExpired(ref _businessEntityDefinitionCacheLastCheck))
+                    return true;
+
+                BEDefinitionCacheItem beDefinitionCacheItem;
+                if(!_beDefinitionCacheItems.TryGetValue(businessEntityDefinitionId, out beDefinitionCacheItem))
+                {
+                    var beManager = (new BusinessEntityDefinitionManager()).GetBusinessEntityManager(businessEntityDefinitionId);
+                    if (beManager == null)
+                        throw new NullReferenceException(String.Format("beManager. businessEntityDefinitionId '{0}'", businessEntityDefinitionId));
+                    _beDefinitionCacheItems.TryAdd(businessEntityDefinitionId, new BEDefinitionCacheItem
+                    {
+                        BEManager = beManager
+                    });
+                    _beDefinitionCacheItems.TryGetValue(businessEntityDefinitionId, out beDefinitionCacheItem);
+                }
+                DateTime? lastCheckTime = beDefinitionCacheItem.LastCheckTime;
+                bool isCacheExpired = beDefinitionCacheItem.BEManager.IsCacheExpired(new BusinessEntityIsCacheExpiredContext(businessEntityDefinitionId), ref lastCheckTime);
+                beDefinitionCacheItem.LastCheckTime = lastCheckTime;                
+                return isCacheExpired;
+            }
+
+            private class BEDefinitionCacheItem
+            {
+                public IBusinessEntityManager BEManager { get; set; }
+
+                public DateTime? LastCheckTime { get; set; }
             }
         }
 
-        protected override bool TryGetKeyFromTarget(object target, out object key)
-        {
-            return GenericRuleManager<GenericRule>.TryGetTargetFieldValue(target as GenericRuleTarget, this.FieldPath, out key);
-        }
-
-        public override BaseRuleStructureBehavior CreateNewBehaviorObject()
-        {
-            return new BELookupRuleStructureBehaviorByKey
-            {
-                FieldPath = this.FieldPath
-            };
-        }
-    }
-
-    public class BELookupRuletructureBehaviorByPrefix : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByPrefix, IBELookupRuleStructureBehavior
-    {
-        public string FieldPath { get; set; }
-
-        protected override void GetPrefixesFromRule(BaseRule rule, out System.Collections.Generic.IEnumerable<string> prefixes)
-        {
-            var beLookupRule = rule as BELookupRule;
-            if (beLookupRule == null)
-                throw new NullReferenceException("beLookupRule");
-            Object value = BELookupRuleManager.GetRuleBEFieldValue(beLookupRule, this.FieldPath);
-            if (value == null)
-                prefixes = null;
-            else
-            {
-                IEnumerable<string> valueAsIEnumerable = value as IEnumerable<string>;
-                if (valueAsIEnumerable != null)
-                    prefixes = valueAsIEnumerable;
-                else
-                    prefixes = new List<string> { value as string };
-            }
-        }
-
-        protected override bool TryGetValueToCompareFromTarget(object target, out string value)
-        {
-            object fieldValue;
-            if (GenericRuleManager<GenericRule>.TryGetTargetFieldValue(target as GenericRuleTarget, this.FieldPath, out fieldValue))
-            {
-                value = fieldValue as string;
-                return true;
-            }
-            else
-            {
-                value = null;
-                return false;
-            }
-        }
-
-        public override BaseRuleStructureBehavior CreateNewBehaviorObject()
-        {
-            return new BELookupRuletructureBehaviorByPrefix
-            {
-                FieldPath = this.FieldPath
-            };
-        }
-    }
+        #endregion
+    }    
 }

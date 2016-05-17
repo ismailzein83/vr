@@ -345,8 +345,7 @@ namespace Vanrise.GenericData.Business
         public class CacheManager : Vanrise.Caching.BaseCacheManager<int>
         {
             IGenericBusinessEntityDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericBusinessEntityDataManager>();
-            ConcurrentDictionary<int, Object> _updateHandlesByRuleType = new ConcurrentDictionary<int, Object>();
-            object _updateHandle;
+            ConcurrentDictionary<int, Object> _updateHandlesByRuleType = new ConcurrentDictionary<int, Object>();            
 
             protected override bool ShouldSetCacheExpired(int parameter)
             {
@@ -384,6 +383,25 @@ namespace Vanrise.GenericData.Business
         }
        
         #endregion
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetGenericBusinessEntity(context.EntityId, context.EntityDefinitionId);
+        }
+        
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            var cachedEntities = GetCachedGenericBusinessEntities(context.EntityDefinitionId);
+            if (cachedEntities == null)
+                return null;
+            else
+                return cachedEntities.Values.Select(itm => itm as dynamic).ToList();
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(context.EntityDefinitionId, ref lastCheckTime);
+        }
     }
     public class GenericBusinessEntityFilter
     {
