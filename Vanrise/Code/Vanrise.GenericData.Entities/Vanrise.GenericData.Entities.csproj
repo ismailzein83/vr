@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinitionDetail.cs" />
+    <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinitionQuery.cs" />
     <Compile Include="BusinessEntities\BusinessEntityDefinition\BusinessEntityDefinition.cs" />
     <Compile Include="BusinessEntities\BusinessEntityDefinition\BusinessEntityDefinitionDetail.cs" />
     <Compile Include="BusinessEntities\BusinessEntityDefinition\BusinessEntityDefinitionInfo.cs" />
@@ -54,7 +56,7 @@
     <Compile Include="BusinessEntities\BusinessEntityDefinition\BusinessEntityDefinitionQuery.cs" />
     <Compile Include="BusinessEntities\BusinessEntityDefinition\BusinessEntityDefinitionSettings.cs" />
     <Compile Include="BusinessEntities\BusinessEntityDescriptionContext.cs" />
-    <Compile Include="BusinessEntities\BELookupRuleDefinition.cs" />
+    <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinition.cs" />
     <Compile Include="BusinessEntities\BusinessEntityMatchContext.cs" />
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
