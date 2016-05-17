@@ -12,15 +12,21 @@ namespace TOne.WhS.DBSync.Entities
 
         public string Name { get; set; }
 
+        public string Address1 { get; set; }
+        public string Address2 { get; set; }
+        public string Address3 { get; set; }
+
+        public string CompanyName	{ get; set; }
+        // CompanyLogo	image	Checked
+        public string CompanyLogoName { get; set; }
+
+
 
         //        ProfileID	smallint	Unchecked
         //Name	nvarchar(200)	Checked
         //CompanyName	nvarchar(200)	Checked
         //CompanyLogo	image	Checked
         //CompanyLogoName	nvarchar(500)	Checked
-        //Address1	nvarchar(250)	Checked
-        //Address2	nvarchar(100)	Checked
-        //Address3	nvarchar(100)	Checked
         //Country	nvarchar(100)	Checked
         //City	nvarchar(100)	Checked
         //Telephone	nvarchar(100)	Checked

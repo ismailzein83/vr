@@ -69,20 +69,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\DBSyncLogger.cs" />
     <Compile Include="Common\Migrator.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="DBSyncManagers\CarrierAccountDBSyncManager.cs" />
-    <Compile Include="DBSyncManagers\CarrierProfileDBSyncManager.cs" />
-    <Compile Include="DBSyncManagers\CurrencyExchangeRateDBSyncManager.cs" />
-    <Compile Include="DBSyncManagers\CurrencyDBSyncManager.cs" />
     <Compile Include="Migrators\SourceCarrierAccountMigrator.cs" />
     <Compile Include="Migrators\SourceCurrencyExchangeRateMigrator.cs" />
     <Compile Include="Migrators\SourceCarrierProfileMigrator.cs" />
     <Compile Include="Migrators\SourceCurrencyMigrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Migrators\SourceSwitchMigrator.cs" />
-    <Compile Include="DBSyncManagers\SwitchDBSyncManager.cs" />
     <Compile Include="DBSyncTaskAction.cs" />
     <Compile Include="DBSyncTaskActionArgument.cs" />
   </ItemGroup>

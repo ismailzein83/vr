@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.DBSync.Data.SQL.Common;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.DBSync.Data.SQL
@@ -9,9 +10,11 @@ namespace TOne.WhS.DBSync.Data.SQL
     public class CarrierProfileDBSyncDataManager : BaseSQLDataManager
     {
         readonly string[] columns = { "Settings", "Name", "SourceID" };
+        string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.CarrierProfile);
+        string _Schema = "TOneWhS_BE";
         bool _UseTempTables;
         public CarrierProfileDBSyncDataManager(bool useTempTables) :
-            base(GetConnectionStringName("TOneWhS_BE_MigrationDBConnStringKey", "TOneV2MigrationDBConnString"))
+            base(GetConnectionStringName("TOneWhS_BE_MigrationDBConnStringKey", "TOneV2DBConnString"))
         {
             _UseTempTables = useTempTables;
         }
@@ -23,14 +26,14 @@ namespace TOne.WhS.DBSync.Data.SQL
             {
                 foreach (var c in carrierProfiles)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}", c.Settings, c.Name, c.SourceId));
+                    wr.WriteLine(String.Format("{0}^{1}^{2}", Vanrise.Common.Serializer.Serialize(c.Settings), c.Name, c.SourceId));
                 }
                 wr.Close();
             }
 
             Object preparedCarrierProfiles = new BulkInsertInfo
             {
-                TableName = "[TOneWhS_BE].[CarrierProfile" + (_UseTempTables ? Constants._Temp : "") + "]",
+                TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables),
                 DataFilePath = filePath,
                 ColumnNames = columns,
                 TabLock = true,
@@ -43,7 +46,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public List<CarrierProfile> GetCarrierProfiles()
         {
-            return GetItemsText("SELECT [ID] ,[Settings]  ,[Name] ,[SourceID] FROM [TOneWhS_BE].[CarrierProfile" + (_UseTempTables ? Constants._Temp : "") + "] ", CarrierProfileMapper, cmd => { });
+            return GetItemsText("SELECT [ID] ,[Settings]  ,[Name] ,[SourceID] FROM" + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), CarrierProfileMapper, cmd => { });
         }
 
         private CarrierProfile CarrierProfileMapper(IDataReader reader)
@@ -58,5 +61,19 @@ namespace TOne.WhS.DBSync.Data.SQL
             return carrierProfile;
         }
 
+        public string GetConnection()
+        {
+            return base.GetConnectionString();
+        }
+
+        public string GetTableName()
+        {
+            return _TableName;
+        }
+
+        public string GetSchema()
+        {
+            return _Schema;
+        }
     }
 }

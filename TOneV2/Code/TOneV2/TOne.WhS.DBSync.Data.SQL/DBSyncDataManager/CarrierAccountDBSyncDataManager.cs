@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using System.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.DBSync.Data.SQL.Common;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
     public class CarrierAccountDBSyncDataManager : BaseSQLDataManager
     {
-        readonly string[] columns = { "NameSuffix", "CarrierProfileID", "AccountType", "SupplierSettings", "CustomerSettings", "CarrierAccountSettings", "SellingNumberPlanID", "SourceID" };
-
+        readonly string[] _Columns = { "NameSuffix", "CarrierProfileID", "AccountType", "SupplierSettings", "CustomerSettings", "CarrierAccountSettings", "SellingNumberPlanID", "SourceID" };
+        string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.CarrierAccount);
+        string _Schema = "TOneWhS_BE";
         bool _UseTempTables;
         public CarrierAccountDBSyncDataManager(bool useTempTables) :
-            base(GetConnectionStringName("TOneWhS_BE_MigrationDBConnStringKey", "TOneV2MigrationDBConnString"))
+            base(GetConnectionStringName("TOneWhS_BE_MigrationDBConnStringKey", "TOneV2DBConnString"))
         {
             _UseTempTables = useTempTables;
         }
@@ -24,16 +26,25 @@ namespace TOne.WhS.DBSync.Data.SQL
             {
                 foreach (var c in carrierAccounts)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", c.NameSuffix, c.CarrierProfileId, (int)c.AccountType, c.SupplierSettings, c.CustomerSettings, c.CarrierAccountSettings, c.SellingNumberPlanId, c.SourceId));
+                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",
+                        c.NameSuffix,
+                        c.CarrierProfileId,
+                        (int)c.AccountType,
+                        Vanrise.Common.Serializer.Serialize(c.SupplierSettings),
+                        Vanrise.Common.Serializer.Serialize(c.CustomerSettings),
+                        Vanrise.Common.Serializer.Serialize(c.CarrierAccountSettings),
+                        c.SellingNumberPlanId,
+                        c.SourceId
+                        ));
                 }
                 wr.Close();
             }
 
             Object preparedCarrierAccounts = new BulkInsertInfo
             {
-                TableName = "[TOneWhS_BE].[CarrierAccount" + (_UseTempTables ? Constants._Temp : "") + "]",
+                TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables),
                 DataFilePath = filePath,
-                ColumnNames = columns,
+                ColumnNames = _Columns,
                 TabLock = true,
                 KeepIdentity = true,
                 FieldSeparator = '^',
@@ -42,9 +53,11 @@ namespace TOne.WhS.DBSync.Data.SQL
             InsertBulkToTable(preparedCarrierAccounts as BaseBulkInsertInfo);
         }
 
+
+
         public List<CarrierAccount> GetCarrierAccounts()
         {
-            return GetItemsText("SELECT [ID] ,[NameSuffix]  ,[AccountType] ,[SellingNumberPlanID],[CarrierProfileId],[SourceID] FROM [TOneWhS_BE].[CarrierAccount" + (_UseTempTables ? Constants._Temp : "") + "] ", CarrierAccountMapper, cmd => { });
+            return GetItemsText("SELECT [ID] ,[NameSuffix]  ,[AccountType] ,[SellingNumberPlanID],[CarrierProfileId],[SourceID] FROM" + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), CarrierAccountMapper, cmd => { });
         }
 
         private CarrierAccount CarrierAccountMapper(IDataReader reader)
@@ -61,5 +74,19 @@ namespace TOne.WhS.DBSync.Data.SQL
             return carrierAccount;
         }
 
+        public string GetConnection()
+        {
+            return base.GetConnectionString();
+        }
+
+        public string GetTableName()
+        {
+            return _TableName;
+        }
+
+        public string GetSchema()
+        {
+            return _Schema;
+        }
     }
 }

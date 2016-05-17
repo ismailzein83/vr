@@ -2,56 +2,52 @@
 using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data.SQL;
+using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SourceCarrierProfileMigrator : Migrator
+    public class SourceCarrierProfileMigrator : Migrator<SourceCarrierProfile, CarrierProfile>
     {
-        public SourceCarrierProfileMigrator(string connectionString, bool useTempTables, DBSyncLogger logger)
-            : base(connectionString, useTempTables, logger)
+        CarrierProfileDBSyncDataManager dbSyncDataManager;
+        SourceCarrierProfileDataManager dataManager;
+
+        public SourceCarrierProfileMigrator(MigrationContext context)
+            : base(context)
         {
+            dbSyncDataManager = new CarrierProfileDBSyncDataManager(context.UseTempTables);
+            dataManager = new SourceCarrierProfileDataManager(Context.ConnectionString);
+            TableName = dbSyncDataManager.GetTableName();
         }
 
-        public override void Migrate(List<DBTable> context)
+        public override void Migrate()
         {
-            Logger.WriteInformation("Migrating table 'CarrierProfile' started");
-            var sourceItems = GetSourceItems();
-            if (sourceItems != null)
-            {
-                List<CarrierProfile> itemsToAdd = new List<CarrierProfile>();
-                foreach (var sourceItem in sourceItems)
-                {
-                    var item = BuildItemFromSource(sourceItem, context);
-                    if (item != null)
-                        itemsToAdd.Add(item);
-                }
-                AddItems(itemsToAdd, context);
-            }
-            Logger.WriteInformation("Migrating table 'CarrierProfile' ended");
+            base.Migrate();
         }
 
-        private  void AddItems(List<CarrierProfile> itemsToAdd, List<DBTable> context)
+        public override void AddItems(List<CarrierProfile> itemsToAdd)
         {
-            CarrierProfileDBSyncManager CarrierProfileManager = new CarrierProfileDBSyncManager(UseTempTables);
-            CarrierProfileManager.ApplyCarrierProfilesToTemp(itemsToAdd);
-            DBTable dbTableCarrierProfile = context.Where(x => x.Name == Constants.Table_CarrierProfile).FirstOrDefault();
+            dbSyncDataManager.ApplyCarrierProfilesToTemp(itemsToAdd);
+            DBTable dbTableCarrierProfile = Context.DBTables[DBTableName.CarrierProfile];
             if (dbTableCarrierProfile != null)
-                dbTableCarrierProfile.Records = CarrierProfileManager.GetCarrierProfiles();
+                dbTableCarrierProfile.Records = dbSyncDataManager.GetCarrierProfiles();
         }
 
-        private IEnumerable<SourceCarrierProfile> GetSourceItems()
+        public override IEnumerable<SourceCarrierProfile> GetSourceItems()
         {
-            SourceCarrierProfileDataManager dataManager = new SourceCarrierProfileDataManager(ConnectionString);
             return dataManager.GetSourceCarrierProfiles();
         }
 
-        private  CarrierProfile BuildItemFromSource(SourceCarrierProfile sourceItem, List<DBTable> context)
+        public override CarrierProfile BuildItemFromSource(SourceCarrierProfile sourceItem)
         {
+            CarrierProfileSettings settings = new CarrierProfileSettings();
+            //settings.Address = sourceItem.Address1 + " " + sourceItem.Address2 + " " + sourceItem.Address3;
+
             return new CarrierProfile
             {
                 Name = sourceItem.Name,
-                SourceId = sourceItem.SourceId
+                SourceId = sourceItem.SourceId,
+                Settings = settings
             };
         }
     }

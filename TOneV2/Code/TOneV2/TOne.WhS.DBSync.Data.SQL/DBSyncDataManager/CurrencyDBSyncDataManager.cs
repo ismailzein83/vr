@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using TOne.WhS.DBSync.Data.SQL.Common;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
 
@@ -10,9 +11,11 @@ namespace TOne.WhS.DBSync.Data.SQL
     public class CurrencyDBSyncDataManager : BaseSQLDataManager
     {
         readonly string[] columns = { "Symbol", "Name", "SourceID" };
+        string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.Currency);
+        string _Schema = "Common";
         bool _UseTempTables;
         public CurrencyDBSyncDataManager(bool useTempTables) :
-            base(GetConnectionStringName("ConfigurationMigrationDBConnStringKey", "ConfigurationMigrationDBConnString"))
+            base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
         {
             _UseTempTables = useTempTables;
         }
@@ -31,7 +34,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
             Object preparedCurrencies = new BulkInsertInfo
             {
-                TableName = "[common].[Currency" + (_UseTempTables ? Constants._Temp : "") + "]",
+                TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables),
                 DataFilePath = filePath,
                 ColumnNames = columns,
                 TabLock = true,
@@ -44,7 +47,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public List<Currency> GetCurrencies()
         {
-            return GetItemsText("SELECT [ID] ,[Symbol]  ,[Name] ,[SourceID] FROM [common].[Currency" + (_UseTempTables ? Constants._Temp : "") + "] ", CurrencyMapper, cmd => { });
+            return GetItemsText("SELECT [ID] ,[Symbol]  ,[Name] ,[SourceID] FROM" + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), CurrencyMapper, cmd => { });
         }
 
         public Currency CurrencyMapper(IDataReader reader)
@@ -60,5 +63,19 @@ namespace TOne.WhS.DBSync.Data.SQL
             return currency;
         }
 
+        public string GetConnection()
+        {
+            return base.GetConnectionString();
+        }
+
+        public string GetTableName()
+        {
+            return _TableName;
+        }
+
+        public string GetSchema()
+        {
+            return _Schema;
+        }
     }
 }

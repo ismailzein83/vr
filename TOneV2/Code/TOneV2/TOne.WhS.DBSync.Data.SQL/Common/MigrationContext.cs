@@ -1,10 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TOne.WhS.DBSync.Entities;
 using Vanrise.Common;
+using TOne.WhS.DBSync.Data.SQL;
+using TOne.WhS.DBSync.Data.SQL.Common;
 
-namespace TOne.WhS.DBSync.Business
+namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class DBSyncLogger
+    public class MigrationContext
     {
+        public string ConnectionString { get; set; }
+        public bool UseTempTables { get; set; }
+        public Dictionary<DBTableName, DBTable> DBTables { get; set; }
+        public MigrationCredentials MigrationCredentials { get; set; }
+
 
         public void WriteException(Exception ex)
         {

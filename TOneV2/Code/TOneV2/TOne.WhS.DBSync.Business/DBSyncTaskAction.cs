@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Configuration;
 using TOne.WhS.DBSync.Data.SQL;
+using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Common;
 using Vanrise.Runtime.Entities;
+using System.Linq;
+using System.Data.SqlClient;
 
 
 namespace TOne.WhS.DBSync.Business
@@ -12,63 +15,80 @@ namespace TOne.WhS.DBSync.Business
 
     public class DBSyncTaskAction : SchedulerTaskAction
     {
-        MigrationManager _MigrationManager;
-        MigrationManager.MigrationCredentials _MigrationCredentials;
-        DBSyncLogger _Logger = new DBSyncLogger();
+
 
         public override SchedulerTaskExecuteOutput Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions)
         {
+            MigrationContext context = new MigrationContext();
             try
             {
-                _Logger.WriteInformation("Database Sync Task Action Started");
-
                 DBSyncTaskActionArgument dbSyncTaskActionArgument = taskActionArgument as DBSyncTaskActionArgument;
+                MigrationManager migrationManager;
 
-                bool useTempTables = dbSyncTaskActionArgument.UseTempTables;
+                context.WriteInformation("Database Sync Task Action Started");
+                context.UseTempTables = dbSyncTaskActionArgument.UseTempTables;
+                context.ConnectionString = dbSyncTaskActionArgument.ConnectionString;
 
-                List<DBTable> context = new List<DBTable>();
-                context.Add(new DBTable { Name = Constants.Table_CurrencyExchangeRate, Schema = Constants.SCHEMA_Common, Database = Constants.DB_TOneConfiguration_Migration });
-                context.Add(new DBTable { Name = Constants.Table_Currency, Schema = Constants.SCHEMA_Common, Database = Constants.DB_TOneConfiguration_Migration });
-                context.Add(new DBTable { Name = Constants.Table_Switch, Schema = Constants.SCHEMA_TOneWhS_BE, Database = Constants.DB_TOneV2_Migration });
-                context.Add(new DBTable { Name = Constants.Table_CarrierProfile, Schema = Constants.SCHEMA_TOneWhS_BE, Database = Constants.DB_TOneV2_Migration });
-                context.Add(new DBTable { Name = Constants.Table_CarrierAccount, Schema = Constants.SCHEMA_TOneWhS_BE, Database = Constants.DB_TOneV2_Migration });
-                context.Add(new DBTable { Name = Constants.Table_CustomerZone, Schema = Constants.SCHEMA_TOneWhS_BE, Database = Constants.DB_TOneV2_Migration });
-                context.Add(new DBTable { Name = Constants.Table_SupplierZone, Schema = Constants.SCHEMA_TOneWhS_BE, Database = Constants.DB_TOneV2_Migration });
-                context.Add(new DBTable { Name = Constants.Table_SupplierRate, Schema = Constants.SCHEMA_TOneWhS_BE, Database = Constants.DB_TOneV2_Migration });
-                context.Add(new DBTable { Name = Constants.Table_SupplierCode, Schema = Constants.SCHEMA_TOneWhS_BE, Database = Constants.DB_TOneV2_Migration });
-                context.Add(new DBTable { Name = Constants.Table_SupplierZoneService, Schema = Constants.SCHEMA_TOneWhS_BE, Database = Constants.DB_TOneV2_Migration });
+                Dictionary<DBTableName, DBTable> dtTables = new Dictionary<DBTableName, DBTable>();
 
-                if (useTempTables)
+                foreach (DBTableName table in Enum.GetValues(typeof(DBTableName)))
                 {
-                    _Logger.WriteInformation("Prepare Database Before Applying Records Started");
-                    _MigrationCredentials = new MigrationManager.MigrationCredentials();
-                    _MigrationCredentials.MigrationServer = ConfigurationManager.AppSettings["MigrationServer"];
-                    _MigrationCredentials.MigrationServerUserID = ConfigurationManager.AppSettings["MigrationServerUserID"];
-                    _MigrationCredentials.MigrationServerPassword = ConfigurationManager.AppSettings["MigrationServerPassword"];
-                    _MigrationManager = new MigrationManager(_MigrationCredentials, context);
-                    _MigrationManager.PrepareBeforeApplyingRecords();
-                    _Logger.WriteInformation("Prepare Database Before Applying Records Ended");
+
+
+                    switch (table)
+                    {
+                        case DBTableName.CarrierAccount:
+                            CarrierAccountDBSyncDataManager carrierAccountDBSyncDataManager = new CarrierAccountDBSyncDataManager(context.UseTempTables);
+                            AddDBTable(dtTables, table, carrierAccountDBSyncDataManager.GetConnection(), carrierAccountDBSyncDataManager.GetSchema());
+                            break;
+
+
+                        case DBTableName.CarrierProfile:
+                            CarrierProfileDBSyncDataManager carrierProfileDBSyncDataManager = new CarrierProfileDBSyncDataManager(context.UseTempTables);
+                            AddDBTable(dtTables, table, carrierProfileDBSyncDataManager.GetConnection(), carrierProfileDBSyncDataManager.GetSchema());
+                            break;
+
+
+                        case DBTableName.Currency:
+                            CurrencyDBSyncDataManager currencyDBSyncDataManager = new CurrencyDBSyncDataManager(context.UseTempTables);
+                            AddDBTable(dtTables, table, currencyDBSyncDataManager.GetConnection(), currencyDBSyncDataManager.GetSchema());
+                            break;
+
+
+                        case DBTableName.CurrencyExchangeRate:
+                            CurrencyExchangeRateDBSyncDataManager currencyExchangeRateDBSyncDataManager = new CurrencyExchangeRateDBSyncDataManager(context.UseTempTables);
+                            AddDBTable(dtTables, table, currencyExchangeRateDBSyncDataManager.GetConnection(), currencyExchangeRateDBSyncDataManager.GetSchema());
+                            break;
+
+
+                        case DBTableName.Switch:
+                            SwitchDBSyncDataManager switchDBSyncDataManager = new SwitchDBSyncDataManager(context.UseTempTables);
+                            AddDBTable(dtTables, table, switchDBSyncDataManager.GetConnection(), switchDBSyncDataManager.GetSchema());
+                            break;
+
+                    }
+
                 }
 
-                TransferData(dbSyncTaskActionArgument, useTempTables, context, _Logger);
 
-                if (useTempTables)
-                {
-                    _Logger.WriteInformation("FinalizeMigration Started");
-                    _MigrationManager.FinalizeMigration();
-                    _Logger.WriteInformation("FinalizeMigration Ended"); ;
-                }
+                context.DBTables = dtTables;
 
-                _Logger.WriteInformation("Database Sync Task Action Executed");
+                CurrencyDBSyncDataManager sampleDBSyncDataManager = new CurrencyDBSyncDataManager(context.UseTempTables);
+                context.MigrationCredentials = GetMigrationCredential(sampleDBSyncDataManager.GetConnection());
+                migrationManager = new MigrationManager(context);
+
+                PrepareBeforeApplyingRecords(context, migrationManager);
+                TransferData(context);
+                FinalizeMigration(context, migrationManager);
+
+                context.WriteInformation("Database Sync Task Action Executed");
 
             }
 
             catch (Exception ex)
             {
-                _Logger.WriteException(ex);
+                context.WriteException(ex);
             }
-
-
 
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
             {
@@ -77,22 +97,67 @@ namespace TOne.WhS.DBSync.Business
             return output;
         }
 
-        private void TransferData(DBSyncTaskActionArgument dbSyncTaskActionArgument, bool useTempTables, List<DBTable> context, DBSyncLogger logger)
+        private void AddDBTable(Dictionary<DBTableName, DBTable> dtTables, DBTableName table, string connectionString, string schema)
         {
-            SourceCurrencyMigrator sourceCurrencyMigrator = new SourceCurrencyMigrator(dbSyncTaskActionArgument.ConnectionString, useTempTables, logger);
-            sourceCurrencyMigrator.Migrate(context);
+            dtTables.Add(table, new DBTable() { Name = Vanrise.Common.Utilities.GetEnumDescription(table), Schema = schema, Database = GetDatabaseName(connectionString) });
+        }
 
-            SourceCurrencyExchangeRateMigrator sourceCurrencyExchangeRateMigrator = new SourceCurrencyExchangeRateMigrator(dbSyncTaskActionArgument.ConnectionString, useTempTables, logger);
-            sourceCurrencyExchangeRateMigrator.Migrate(context);
+        private string GetDatabaseName(string connectionString)
+        {
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(connectionString);
+            string database = builder.InitialCatalog;
+            return database;
+        }
 
-            SourceSwitchMigrator sourceSwitchMigrator = new SourceSwitchMigrator(dbSyncTaskActionArgument.ConnectionString, useTempTables, logger);
-            sourceSwitchMigrator.Migrate(context);
+        private MigrationCredentials GetMigrationCredential(string connectionString)
+        {
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(connectionString);
+            MigrationCredentials migrationCredential = new MigrationCredentials
+            {
+                MigrationServer = builder.DataSource,
+                MigrationServerUserID = builder.UserID,
+                MigrationServerPassword = builder.Password
+            };
+            return migrationCredential;
+        }
 
-            SourceCarrierProfileMigrator sourceCarrierProfileMigrator = new SourceCarrierProfileMigrator(dbSyncTaskActionArgument.ConnectionString, useTempTables, logger);
-            sourceCarrierProfileMigrator.Migrate(context);
 
-           SourceCarrierAccountMigrator sourceCarrierAccountMigrator = new SourceCarrierAccountMigrator(dbSyncTaskActionArgument.ConnectionString, useTempTables, logger);
-            sourceCarrierAccountMigrator.Migrate(context);
+        private void FinalizeMigration(MigrationContext context, MigrationManager migrationManager)
+        {
+            if (context.UseTempTables)
+            {
+                context.WriteInformation("FinalizeMigration Started");
+                migrationManager.FinalizeMigration();
+                context.WriteInformation("FinalizeMigration Ended"); ;
+            }
+        }
+
+        private void PrepareBeforeApplyingRecords(MigrationContext context, MigrationManager migrationManager)
+        {
+            if (context.UseTempTables)
+            {
+                context.WriteInformation("Prepare Database Before Applying Records Started");
+                migrationManager.PrepareBeforeApplyingRecords();
+                context.WriteInformation("Prepare Database Before Applying Records Ended");
+            }
+        }
+
+        private void TransferData(MigrationContext context)
+        {
+            SourceCurrencyMigrator sourceCurrencyMigrator = new SourceCurrencyMigrator(context);
+            sourceCurrencyMigrator.Migrate();
+
+            SourceCurrencyExchangeRateMigrator sourceCurrencyExchangeRateMigrator = new SourceCurrencyExchangeRateMigrator(context);
+            sourceCurrencyExchangeRateMigrator.Migrate();
+
+            SourceSwitchMigrator sourceSwitchMigrator = new SourceSwitchMigrator(context);
+            sourceSwitchMigrator.Migrate();
+
+            SourceCarrierProfileMigrator sourceCarrierProfileMigrator = new SourceCarrierProfileMigrator(context);
+            sourceCarrierProfileMigrator.Migrate();
+
+            SourceCarrierAccountMigrator sourceCarrierAccountMigrator = new SourceCarrierAccountMigrator(context);
+            sourceCarrierAccountMigrator.Migrate();
         }
     }
 }

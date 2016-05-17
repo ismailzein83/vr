@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.DBSync.Data.SQL.Common;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.DBSync.Data.SQL
@@ -8,9 +9,11 @@ namespace TOne.WhS.DBSync.Data.SQL
     public class SwitchDBSyncDataManager : BaseSQLDataManager
     {
         readonly string[] columns = { "Name", "SourceID" };
+        string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.Switch);
+        string _Schema = "TOneWhS_BE";
         bool _UseTempTables;
         public SwitchDBSyncDataManager(bool useTempTables) :
-            base(GetConnectionStringName("TOneWhS_BE_MigrationDBConnStringKey", "TOneV2MigrationDBConnString"))
+            base(GetConnectionStringName("TOneWhS_BE_MigrationDBConnStringKey", "TOneV2DBConnString"))
         {
             _UseTempTables = useTempTables;
         }
@@ -29,7 +32,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
             Object preparedSwitches = new BulkInsertInfo
             {
-                TableName = "[TOneWhS_BE].[Switch" + (_UseTempTables ? Constants._Temp : "") + "]",
+                TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables),
                 DataFilePath = filePath,
                 ColumnNames = columns,
                 TabLock = true,
@@ -39,5 +42,20 @@ namespace TOne.WhS.DBSync.Data.SQL
 
             InsertBulkToTable(preparedSwitches as BaseBulkInsertInfo);
         }
+        public string GetConnection()
+        {
+            return base.GetConnectionString();
+        }
+
+        public string GetTableName()
+        {
+            return _TableName;
+        }
+
+        public string GetSchema()
+        {
+            return _Schema;
+        }
+
     }
 }

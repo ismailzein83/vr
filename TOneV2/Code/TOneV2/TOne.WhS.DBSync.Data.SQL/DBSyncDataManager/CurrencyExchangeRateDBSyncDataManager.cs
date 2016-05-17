@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TOne.WhS.DBSync.Data.SQL.Common;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
 
@@ -8,9 +9,11 @@ namespace TOne.WhS.DBSync.Data.SQL
     public class CurrencyExchangeRateDBSyncDataManager : BaseSQLDataManager
     {
         readonly string[] columns = { "CurrencyID", "Rate", "ExchangeDate", "SourceID" };
+        string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.CurrencyExchangeRate);
+        string _Schema = "Common";
         bool _UseTempTables;
         public CurrencyExchangeRateDBSyncDataManager(bool useTempTables) :
-            base(GetConnectionStringName("ConfigurationMigrationDBConnStringKey", "ConfigurationMigrationDBConnString"))
+            base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
         {
             _UseTempTables = useTempTables;
         }
@@ -29,7 +32,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
             Object preparedCurrencyExchangeRates = new BulkInsertInfo
             {
-                TableName = "[common].[CurrencyExchangeRate" + (_UseTempTables ? Constants._Temp : "") + "]",
+                TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables),
                 DataFilePath = filePath,
                 ColumnNames = columns,
                 TabLock = true,
@@ -42,5 +45,19 @@ namespace TOne.WhS.DBSync.Data.SQL
 
 
 
+        public string GetConnection()
+        {
+            return base.GetConnectionString();
+        }
+
+        public string GetTableName()
+        {
+            return _TableName;
+        }
+
+        public string GetSchema()
+        {
+            return _Schema;
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
+using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
 
@@ -12,24 +13,17 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class MigrationManager : BaseSQLDataManager
     {
-        
-        List<DBTable> _DBTables = new List<DBTable>();
+
         ServerConnection _ServerConnection = null;
         Server _Server;
-
-        public class MigrationCredentials
-        {
-            public string MigrationServer { get; set; }
-            public string MigrationServerUserID { get; set; }
-            public string MigrationServerPassword { get; set; }
-        }
+        MigrationContext _Context;
 
         #region Public Methods
-        public MigrationManager(MigrationCredentials migrationCredentials, List<DBTable> dbTables)
+        public MigrationManager(MigrationContext context)
         {
-            _ServerConnection = new ServerConnection(migrationCredentials.MigrationServer, migrationCredentials.MigrationServerUserID, migrationCredentials.MigrationServerPassword);
+            _ServerConnection = new ServerConnection(context.MigrationCredentials.MigrationServer, context.MigrationCredentials.MigrationServerUserID, context.MigrationCredentials.MigrationServerPassword);
             _Server = new Server(_ServerConnection);
-            _DBTables = dbTables;
+            _Context = context;
         }
 
         public bool PrepareBeforeApplyingRecords()
@@ -64,7 +58,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 _ServerConnection.CommitTransaction();
                 Executed = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _ServerConnection.RollBackTransaction();
                 throw ex;
@@ -118,7 +112,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         private void DropOriginalTables()
         {
             //Set Priority by References
-            foreach (DBTable table in _DBTables)
+            foreach (DBTable table in _Context.DBTables.Values)
             {
                 table.DBFKs = new List<DBForeignKey>();
                 foreach (ForeignKey fk in table.Info.ForeignKeys)
@@ -132,7 +126,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         private void CreateForeignKeys()
         {
             //Create Foreign Keys for Tables
-            foreach (DBTable table in _DBTables)
+            foreach (DBTable table in _Context.DBTables.Values)
                 if (table.ScriptedFKs != "")
                     _Server.Databases[table.Database].ExecuteNonQuery(table.ScriptedFKs);
         }
@@ -140,14 +134,14 @@ namespace TOne.WhS.DBSync.Data.SQL
         private void CreateIndexes()
         {
             //Create Indexes Keys for Tables
-            foreach (DBTable table in _DBTables)
+            foreach (DBTable table in _Context.DBTables.Values)
                 if (table.ScriptedIndexes != "")
                     _Server.Databases[table.Database].ExecuteNonQuery(table.ScriptedIndexes);
         }
 
         private void RenameTempTables()
         {
-            foreach (DBTable dbTable in _DBTables)
+            foreach (DBTable dbTable in _Context.DBTables.Values)
             {
                 DBTable dbTempTable = new DBTable();
                 dbTempTable.Name = dbTable.Name + Constants._Temp;
@@ -162,7 +156,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         public void CreateTempTables()
         {
             // Create Temp Tables
-            foreach (DBTable dbTable in _DBTables)
+            foreach (DBTable dbTable in _Context.DBTables.Values)
             {
                 Database database = _Server.Databases[dbTable.Database];
                 bool tableExists = database.Tables.Contains(dbTable.Name + Constants._Temp, dbTable.Schema);
@@ -177,7 +171,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         private void DefineTables()
         {
-            foreach (DBTable table in _DBTables)
+            foreach (DBTable table in _Context.DBTables.Values)
             {
                 Table sourceTable = GetTableReference(table);
                 table.Info = sourceTable;
@@ -189,15 +183,15 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         private void DropTables()
         {
-            bool hasUnDropped = _DBTables.Exists(x => x.DroppedOriginal == false);
+            bool hasUnDropped = _Context.DBTables.Values.ToList().Exists(x => x.DroppedOriginal == false);
             if (hasUnDropped)
             {
                 // Drop Original Tables
-                foreach (DBTable table in _DBTables.Where(x => x.DroppedOriginal == false))
+                foreach (DBTable table in _Context.DBTables.Values.Where(x => x.DroppedOriginal == false))
                 {
                     bool isReferenced = false;
 
-                    foreach (DBTable otherTable in _DBTables.Where(x => x.Name != table.Name && !x.DroppedOriginal))
+                    foreach (DBTable otherTable in _Context.DBTables.Values.Where(x => x.Name != table.Name && !x.DroppedOriginal))
                     {
                         if (otherTable.DBFKs.Exists(x => x.ReferencedTable == table.Name && x.ReferencedTableSchema == table.Schema))
                         {
@@ -222,6 +216,8 @@ namespace TOne.WhS.DBSync.Data.SQL
             Table sourceTable = _Server.Databases[dbTable.Database].Tables[dbTable.Name, dbTable.Schema];
             return sourceTable;
         }
+
         #endregion
+
     }
 }

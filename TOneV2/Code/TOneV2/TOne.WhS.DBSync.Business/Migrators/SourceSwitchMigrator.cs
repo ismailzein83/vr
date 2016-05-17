@@ -5,44 +5,35 @@ using TOne.WhS.DBSync.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SourceSwitchMigrator : Migrator
+    public class SourceSwitchMigrator : Migrator<SourceSwitch, Switch>
     {
-        public SourceSwitchMigrator(string connectionString, bool useTempTables, DBSyncLogger logger)
-            : base(connectionString, useTempTables, logger)
+        SwitchDBSyncDataManager dbSyncDataManager;
+        SourceSwitchDataManager dataManager;
+
+        public SourceSwitchMigrator(MigrationContext context)
+            : base(context)
         {
+            dbSyncDataManager = new SwitchDBSyncDataManager(context.UseTempTables);
+            dataManager = new SourceSwitchDataManager(Context.ConnectionString);
+            TableName = dbSyncDataManager.GetTableName();
         }
 
-        public override void Migrate(List<DBTable> context)
+        public override void Migrate()
         {
-            Logger.WriteInformation("Migrating table 'Switch' started");
-            var sourceItems = GetSourceItems();
-            if (sourceItems != null)
-            {
-                List<Switch> itemsToAdd = new List<Switch>();
-                foreach (var sourceItem in sourceItems)
-                {
-                    var item = BuildItemFromSource(sourceItem, context);
-                    if (item != null)
-                        itemsToAdd.Add(item);
-                }
-                AddItems(itemsToAdd, context);
-            }
-            Logger.WriteInformation("Migrating table 'Switch' ended");
+            base.Migrate();
         }
 
-        private void AddItems(List<Switch> itemsToAdd, List<DBTable> context)
+        public override void AddItems(List<Switch> itemsToAdd)
         {
-            SwitchDBSyncManager switchManager = new SwitchDBSyncManager(UseTempTables);
-            switchManager.ApplySwitchesToTemp(itemsToAdd);
+            dbSyncDataManager.ApplySwitchesToTemp(itemsToAdd);
         }
 
-        private IEnumerable<SourceSwitch> GetSourceItems()
+        public override IEnumerable<SourceSwitch> GetSourceItems()
         {
-            SourceSwitchDataManager dataManager = new SourceSwitchDataManager(ConnectionString);
             return dataManager.GetSourceSwitches();
         }
 
-        private Switch BuildItemFromSource(SourceSwitch sourceItem, List<DBTable> context)
+        public override Switch BuildItemFromSource(SourceSwitch sourceItem)
         {
             return new Switch
             {

@@ -2,51 +2,43 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.DBSync.Data.SQL;
+using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SourceCurrencyExchangeRateMigrator : Migrator
+    public class SourceCurrencyExchangeRateMigrator : Migrator<SourceCurrencyExchangeRate, CurrencyExchangeRate>
     {
-        public SourceCurrencyExchangeRateMigrator(string connectionString, bool useTempTables, DBSyncLogger logger)
-            : base(connectionString, useTempTables, logger)
+        CurrencyExchangeRateDBSyncDataManager dbSyncDataManager;
+        SourceCurrencyExchangeRateDataManager dataManager;
+
+        public SourceCurrencyExchangeRateMigrator(MigrationContext context)
+            : base(context)
         {
+            dbSyncDataManager = new CurrencyExchangeRateDBSyncDataManager(context.UseTempTables);
+            dataManager = new SourceCurrencyExchangeRateDataManager(Context.ConnectionString);
+            TableName = dbSyncDataManager.GetTableName();
         }
 
-        public override void Migrate(List<DBTable> context)
+        public override void Migrate()
         {
-            Logger.WriteInformation("Migrating table 'CurrencyExchangeRate' started");
-            var sourceItems = GetSourceItems();
-            if (sourceItems != null)
-            {
-                List<CurrencyExchangeRate> itemsToAdd = new List<CurrencyExchangeRate>();
-                foreach (var sourceItem in sourceItems)
-                {
-                    var item = BuildItemFromSource(sourceItem, context);
-                    if (item != null)
-                        itemsToAdd.Add(item);
-                }
-                AddItems(itemsToAdd, context);
-            }
-            Logger.WriteInformation("Migrating table 'CurrencyExchangeRate' ended");
+            base.Migrate();
         }
 
-        private  void AddItems(List<CurrencyExchangeRate> itemsToAdd, List<DBTable> context)
+        public override void AddItems(List<CurrencyExchangeRate> itemsToAdd)
         {
-            CurrencyExchangeRateDBSyncManager CurrencyExchangeRateManager = new CurrencyExchangeRateDBSyncManager(UseTempTables);
-            CurrencyExchangeRateManager.ApplyCurrencyExchangeRatesToTemp(itemsToAdd);
+            dbSyncDataManager.ApplyCurrencyExchangeRatesToTemp(itemsToAdd);
         }
 
-        private IEnumerable<SourceCurrencyExchangeRate> GetSourceItems()
+        public override IEnumerable<SourceCurrencyExchangeRate> GetSourceItems()
         {
-            SourceCurrencyExchangeRateDataManager dataManager = new SourceCurrencyExchangeRateDataManager(ConnectionString);
             return dataManager.GetSourceCurrencyExchangeRates();
         }
 
-        private  CurrencyExchangeRate BuildItemFromSource(SourceCurrencyExchangeRate sourceItem, List<DBTable> context)
+        public override CurrencyExchangeRate BuildItemFromSource(SourceCurrencyExchangeRate sourceItem)
         {
-            DBTable dbTableCurrency = context.Where(x => x.Name == Constants.Table_Currency).FirstOrDefault();
+            DBTable dbTableCurrency = Context.DBTables[DBTableName.Currency];
             if (dbTableCurrency != null)
             {
                 List<Currency> allCurrencies = (List<Currency>)dbTableCurrency.Records;
