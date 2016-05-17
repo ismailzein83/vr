@@ -18,26 +18,19 @@ namespace Vanrise.GenericData.Business
             List<DataRecordField> dataRecordFields = dataRecordTypeManager.GetDataRecordTypeFields(filter.DataRecordTypeId);
             if (dataRecordFields == null || dataRecordFields.Count == 0)
                 return null;
-
             List<DataRecordFieldInfo> result = new List<DataRecordFieldInfo>();
-
             foreach (DataRecordField dataRecordField in dataRecordFields)
             {
                 result.Add(DataRecordFieldInfoMapper(dataRecordField));
             }
-
             return result;
         }
 
         private DataRecordFieldInfo DataRecordFieldInfoMapper(DataRecordField dataRecordField)
         {
-            DataRecordFieldTypeConfigManager dataRecordFieldTypeConfigManager = new DataRecordFieldTypeConfigManager();
-            DataRecordFieldTypeConfig config = dataRecordFieldTypeConfigManager.GetDataRecordFieldTypeConfig(dataRecordField.Type.ConfigId);
-            
             return new DataRecordFieldInfo()
             {
                 Entity = dataRecordField,
-                RuleFilterEditor = config != null ? config.RuleFilterEditor : null
             };
         }
     }

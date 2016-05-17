@@ -224,6 +224,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         MeasureFields: UtilsService.getPropValuesFromArray(ctrl.measures, 'MeasureName'),
                         FromTime: fromTime,
                         ToTime: toTime,
+                        FilterGroup:payLoad.FilterGroup,
                         Currency: payLoad.Currency,
                         ParentDimensions: UtilsService.getPropValuesFromArray(ctrl.parentDimensions, 'DimensionName'),
                         WithSummary: payLoad.Settings == undefined ? false : payLoad.Settings.WithSummary,

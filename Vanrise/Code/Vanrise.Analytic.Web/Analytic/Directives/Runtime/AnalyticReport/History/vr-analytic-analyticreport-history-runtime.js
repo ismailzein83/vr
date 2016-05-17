@@ -2,9 +2,9 @@
 
     'use strict';
 
-    HistoryAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'Analytic_AnalyticService','VR_Analytic_AnalyticConfigurationAPIService','VR_GenericData_DataRecordFieldTypeConfigAPIService','VR_Analytic_AnalyticItemConfigAPIService','VR_Analytic_AnalyticTypeEnum'];
+    HistoryAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'Analytic_AnalyticService','VR_Analytic_AnalyticConfigurationAPIService','VR_GenericData_DataRecordFieldTypeConfigAPIService','VR_Analytic_AnalyticItemConfigAPIService','VR_Analytic_AnalyticTypeEnum','VR_GenericData_DataRecordTypeService'];
 
-    function HistoryAnalyticReportDirective(UtilsService, VRUIUtilsService, Analytic_AnalyticService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum) {
+    function HistoryAnalyticReportDirective(UtilsService, VRUIUtilsService, Analytic_AnalyticService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VR_GenericData_DataRecordTypeService) {
         return {
             restrict: "E",
             scope: {
@@ -23,6 +23,8 @@
         function HistoryAnalyticReport($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var fieldTypes = [];
+            var filterObj;
+
             var dimensions = [];
             var measures = [];
             var settings;
@@ -37,6 +39,28 @@
                 $scope.scopeModel.selectedGroupingDimentions = [];
                 $scope.scopeModel.isGroupingRequired = false;
 
+                $scope.scopeModel.addFilter = function () {
+                    var onDimensionFilterAdded = function (filter, expression) {
+                        filterObj = filter;
+                        $scope.scopeModel.expression = expression;
+                    }
+                    var fields = [];
+                    for (var i = 0; i < dimensions.length; i++)
+                    {
+                        var dimension = dimensions[i];
+                    
+                        fields.push({
+                            FieldName: dimension.Name,
+                            FieldTitle: dimension.Title,
+                            Type: dimension.Config.FieldType,
+                        });
+                    }
+                    VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter(fields, filterObj, onDimensionFilterAdded);
+                };
+                $scope.scopeModel.resetFilter = function () {
+                    $scope.scopeModel.expression = undefined;
+                    filterObj = null;
+                }
                 $scope.search = function () {
                     if ($scope.scopeModel.widgets.length > 0) {
                         var promiseDeffer = UtilsService.createPromiseDeferred();
@@ -267,6 +291,7 @@
                     SelectedGroupingDimensions: groupingDimensions,
                     TableId: widgetPayload.AnalyticTableId,
                     FromTime: $scope.scopeModel.fromdate,
+                    FilterGroup: filterObj,
                     ToTime: $scope.scopeModel.todate
                 };
                 return query;

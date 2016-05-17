@@ -31,7 +31,7 @@ app.directive('vrGenericdataFieldtypeNumberRulefiltereditor', ['VR_GenericData_N
 
             $scope.onNumberFilterEditorReady = function (api) {
                 numberFilterEditorApi = api;
-                var payload = { fieldType: dataRecordTypeField != undefined ? dataRecordTypeField.Entity.Type : null, fieldValue: filterObj != undefined ? filterObj.Value : null };
+                var payload = { fieldType: dataRecordTypeField != undefined ? dataRecordTypeField.Type : null, fieldValue: filterObj != undefined ? filterObj.Value : null };
                 api.load(payload);
             }
             function defineAPI() {

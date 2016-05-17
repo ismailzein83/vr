@@ -23,18 +23,4 @@ namespace Vanrise.GenericData.Entities
 
         public OrderDirection Direction { get; set; }
     }
-
-    public enum RecordQueryLogicalOperator { And = 0, Or = 1 }
-
-    public class RecordFilterGroup : RecordFilter
-    {
-        public RecordQueryLogicalOperator LogicalOperator { get; set; }
-
-        public List<RecordFilter> Filters { get; set; }
-    }
-
-    public abstract class RecordFilter
-    {
-        public string FieldName { get; set; }
-    }
 }

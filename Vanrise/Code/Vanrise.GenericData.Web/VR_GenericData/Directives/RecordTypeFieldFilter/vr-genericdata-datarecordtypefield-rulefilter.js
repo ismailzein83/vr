@@ -22,24 +22,35 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
         };
 
         function recordTypeFieldRuleFilterCtor(ctrl, $scope, $attrs) {
-            $scope.dataRecordTypeField;
+            $scope.scopeModel = {};
+            $scope.scopeModel.dataRecordTypeField;
             var dataRecordTypeFieldEditorApi;
 
             var context;
             var filterObj;
 
-            $scope.onDataRecordTypeFieldEditorReady = function (api) {
-                dataRecordTypeFieldEditorApi = api;
-                var payload = { dataRecordTypeField: $scope.dataRecordTypeField, filterObj: filterObj };
-                api.load(payload);
-            }
 
-            $scope.onDataRecordTypeFieldFilterReady = function (api) {
-                dataRecordTypeFieldEditorApi = api;
-                api.load();
-            }
 
             function initializeController() {
+               
+                $scope.scopeModel.onDataRecordTypeFieldEditorReady = function (api) {
+                    dataRecordTypeFieldEditorApi = api;
+                    var payload = { dataRecordTypeField: $scope.scopeModel.dataRecordTypeField, filterObj: filterObj };
+                    api.load(payload);
+                }
+
+                $scope.scopeModel.onDataRecordTypeFieldFilterReady = function (api) {
+                    dataRecordTypeFieldEditorApi = api;
+                    api.load();
+                }
+                $scope.scopeModel.osnDataRecordTypeFieldSelectionChanged = function()
+                {
+                    if (context != undefined && $scope.scopeModel.dataRecordTypeField !=undefined)
+                    {
+                        $scope.scopeModel.ruleFilterEditor = context.getRuleEditor($scope.scopeModel.dataRecordTypeField.Type.ConfigId);
+                    }
+                }
+
                 defineAPI();
             }
 
@@ -47,33 +58,33 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
                 var api = {};
 
                 api.load = function (payload) {
+                   
                     if (payload != undefined) {
-                        
-                        $scope.conditions = UtilsService.getArrayEnum(VR_GenericData_ConditionEnum);
-                        $scope.selectedCondition = $scope.conditions[0];
+                        $scope.scopeModel.conditions = UtilsService.getArrayEnum(VR_GenericData_ConditionEnum);
+                        $scope.scopeModel.selectedCondition = $scope.scopeModel.conditions[0];
                         context = payload.context;
-                        $scope.datasource = context.getFields();
-                        $scope.dataRecordTypeField = $scope.datasource[0];
+                        $scope.scopeModel.datasource = context.getFields();
+                        $scope.scopeModel.dataRecordTypeField = $scope.scopeModel.datasource[0];
                         filterObj = payload.filterObj;
 
                         if (filterObj) {
-                            $scope.selectedCondition = UtilsService.getItemByVal($scope.conditions, filterObj.$type, 'type');
-                            if (!$scope.selectedCondition) {
-                                $scope.selectedCondition = UtilsService.getItemByVal($scope.conditions, '', 'type');
+                            $scope.scopeModel.selectedCondition = UtilsService.getItemByVal($scope.scopeModel.conditions, filterObj.$type, 'type');
+                            if (!$scope.scopeModel.selectedCondition) {
+                                $scope.scopeModel.selectedCondition = UtilsService.getItemByVal($scope.scopeModel.conditions, '', 'type');
                             }
-                            $scope.dataRecordTypeField = UtilsService.getItemByVal($scope.datasource, filterObj.FieldName, 'Entity.Name');
+                            $scope.scopeModel.dataRecordTypeField = UtilsService.getItemByVal($scope.scopeModel.datasource, filterObj.FieldName, 'FieldName');
                         }
                     }
                 }
 
                 api.getData = function () {
                     var obj = dataRecordTypeFieldEditorApi.getData();
-                    obj.FieldName = $scope.dataRecordTypeField.Entity.Name;
+                    obj.FieldName = $scope.scopeModel.dataRecordTypeField.FieldName;
                     return obj;
                 }
 
                 api.getExpression = function () {
-                    return $scope.dataRecordTypeField.Entity.Title + ' ' + dataRecordTypeFieldEditorApi.getExpression();
+                    return $scope.scopeModel.dataRecordTypeField.FieldTitle + ' ' + dataRecordTypeFieldEditorApi.getExpression();
                 };
 
                 if (ctrl.onReady != null)

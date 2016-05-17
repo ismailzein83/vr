@@ -26,7 +26,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRulefiltereditor', ['VR_Gener
             var selectedObj;
             var filterObj;
             $scope.onBusinessEntityReady = function (api) {
-                var payload = { fieldType: selectedObj.Entity.Type, fieldValue: filterObj != undefined ? filterObj.Values : null };
+                var payload = { fieldType: selectedObj.Type, fieldValue: filterObj != undefined ? filterObj.Values : null };
                 api.load(payload);
                 businessEntityApi = api;
             }

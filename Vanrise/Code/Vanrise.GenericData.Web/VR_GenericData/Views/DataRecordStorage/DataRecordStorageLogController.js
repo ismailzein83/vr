@@ -48,12 +48,25 @@
                 if ($scope.selectedDRSearchPageStorageSource != undefined) {
                     $scope.scopeModel.isLoading = true;
                     loadFields().then(function (response) {
-                        $scope.scopeModel.isLoading = false;
-                        var onDataRecordFieldTypeFilterAdded = function (filter, expression) {
-                            filterObj = filter;
-                            $scope.expression = expression;
+                        if (response)
+                        {
+                            var fields = [];
+                            for (var i = 0; i < response.length; i++) {
+                                var dataRecordField = response[i];
+                                fields.push({
+                                    FieldName: dataRecordField.Entity.Name,
+                                    FieldTitle: dataRecordField.Entity.Title,
+                                    Type: dataRecordField.Entity.Type,
+                                });
+                            }
+                            $scope.scopeModel.isLoading = false;
+                            var onDataRecordFieldTypeFilterAdded = function (filter, expression) {
+                                filterObj = filter;
+                                $scope.expression = expression;
+                            }
+                            VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter(fields, filterObj, onDataRecordFieldTypeFilterAdded);
                         }
-                        VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter(response, filterObj, onDataRecordFieldTypeFilterAdded);
+
                     });
                 }
 

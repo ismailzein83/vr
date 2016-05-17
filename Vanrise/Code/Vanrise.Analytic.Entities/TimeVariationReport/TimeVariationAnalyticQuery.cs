@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
@@ -17,7 +18,7 @@ namespace Vanrise.Analytic.Entities
         public TimeGroupingUnit TimeGroupingUnit { get; set; }
 
         public List<string> ParentDimensions { get; set; }
-
+        public RecordFilterGroup FilterGroup { get; set; }
         public int? CurrencyId { get; set; }
         public List<string> MeasureFields { get; set; }
         public List<DimensionFilter> Filters { get; set; }

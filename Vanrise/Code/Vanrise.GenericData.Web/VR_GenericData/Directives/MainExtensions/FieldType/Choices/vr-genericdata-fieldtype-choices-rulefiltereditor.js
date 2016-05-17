@@ -27,7 +27,7 @@ app.directive('vrGenericdataFieldtypeChoicesRulefiltereditor', ['VR_GenericData_
             var filterObj;
             $scope.onChoiceFilterEditorReady = function (api) {
                 choiceFilterEditorApi = api;
-                var payload = { fieldType: selectedObj.Entity.Type, fieldValue: filterObj != undefined ? filterObj.Values : null };
+                var payload = { fieldType: selectedObj.Type, fieldValue: filterObj != undefined ? filterObj.Values : null };
                 api.load(payload);
             }
 

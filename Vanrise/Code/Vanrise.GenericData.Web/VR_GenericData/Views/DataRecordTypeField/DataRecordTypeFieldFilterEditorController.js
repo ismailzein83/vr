@@ -2,17 +2,16 @@
 
     'use strict';
 
-    DataRecordStorageFilterEditorController.$inject = ['$scope', 'VRNavigationService', 'VR_GenericData_DataRecordFieldAPIService', 'UtilsService'];
+    DataRecordStorageFilterEditorController.$inject = ['$scope', 'VRNavigationService', 'VR_GenericData_DataRecordFieldAPIService', 'UtilsService','VR_GenericData_DataRecordFieldTypeConfigAPIService'];
 
-    function DataRecordStorageFilterEditorController($scope, VRNavigationService, VR_GenericData_DataRecordFieldAPIService, UtilsService) {
+    function DataRecordStorageFilterEditorController($scope, VRNavigationService, VR_GenericData_DataRecordFieldAPIService, UtilsService, VR_GenericData_DataRecordFieldTypeConfigAPIService) {
 
-        var fields =[];
+        var fields = [];
         var filterObj;
 
         loadParameters();
         defineScope();
-
-        var context = { getFields: function () { return fields } };
+        load();
         var groupFilterAPI;
 
         function loadParameters() {
@@ -20,7 +19,7 @@
 
             if (parameters != undefined) {
                 fields = parameters.Fields;
-                filterObj= parameters.FilterObj;
+                filterObj = parameters.FilterObj;
             }
         }
 
@@ -28,14 +27,16 @@
             $scope.title = 'Advanced Filter';
             $scope.onGroupFilterReady = function (api) {
                 groupFilterAPI = api;
-                var payload = {context: context, filterObj: filterObj };
+                var payload = {
+                    context: buildContext(), filterObj: filterObj
+                };
                 groupFilterAPI.load(payload);
             };
 
             $scope.save = function () {
                 if ($scope.onDataRecordFieldTypeFilterAdded != undefined) {
                     $scope.onDataRecordFieldTypeFilterAdded(groupFilterAPI.getData(), groupFilterAPI.getExpression());
-                } 
+                }
 
                 $scope.modalContext.closeModal();
             };
@@ -44,8 +45,45 @@
                 $scope.modalContext.closeModal();
             };
         }
-    }
 
-    appControllers.controller('VR_GenericData_DataRecordTypeFieldFilterEditorController', DataRecordStorageFilterEditorController);
+        function load()
+        {
+            $scope.isLoading = true;
+            loadDataRecordFieldTypeConfig().finally(function () {
+                $scope.isLoading = false;
+            }).catch(function (error) {
+                $scope.isLoading = false;
+            });
+        }
+
+        function buildContext() {
+            var context = {
+                getFields: function () { return fields },
+                getRuleEditor: getRuleFilterEditorByFieldType
+            }
+            return context;
+        }
+
+        function getRuleFilterEditorByFieldType(configId)
+        {
+            var dataRecordFieldTypeConfig = UtilsService.getItemByVal($scope.dataRecordFieldTypesConfig, configId, 'DataRecordFieldTypeConfigId');
+            if(dataRecordFieldTypeConfig !=undefined)
+            {
+                return dataRecordFieldTypeConfig.RuleFilterEditor;
+            }
+        }
+
+        function loadDataRecordFieldTypeConfig() {
+            $scope.dataRecordFieldTypesConfig = [];
+            return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
+                if (response) {
+                    for (var i = 0; i < response.length; i++) {
+                        $scope.dataRecordFieldTypesConfig.push(response[i]);
+                    }
+                }
+            });
+        }
+    }
+        appControllers.controller('VR_GenericData_DataRecordTypeFieldFilterEditorController', DataRecordStorageFilterEditorController);
 
 })(appControllers);

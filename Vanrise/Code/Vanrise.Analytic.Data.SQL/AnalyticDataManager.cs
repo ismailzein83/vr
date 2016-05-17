@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
 using Vanrise.Data.SQL;
+using Vanrise.GenericData.Data.SQL;
 
 namespace Vanrise.Analytic.Data.SQL
 {
@@ -92,8 +93,12 @@ namespace Vanrise.Analytic.Data.SQL
             if (input.Query.OrderBy != null)
                 orderPart = BuildQueryOrder(input.Query.OrderBy);
 
+            RecordFilterSQLBuilder recordFilterSQLBuilder = new RecordFilterSQLBuilder(GetDimensionColumnIdFromFieldName);
+            String recordFilter = recordFilterSQLBuilder.BuildRecordFilter(input.Query.FilterGroup, ref parameterIndex, parameterValues);
+
+
             StringBuilder queryBuilder = BuildGlobalQuery(input.Query.FromTime, input.Query.ToTime, input.Query.TopRecords,
-                parameterValues, selectPartBuilder.ToString(), joinPart, filterPart, groupByPart, orderPart, ref parameterIndex);
+                parameterValues, selectPartBuilder.ToString(), joinPart, filterPart, groupByPart, orderPart, recordFilter, ref parameterIndex);
 
             return queryBuilder.ToString();
         }
@@ -122,9 +127,11 @@ namespace Vanrise.Analytic.Data.SQL
             string filterPart = BuildQueryFilter(input.Query.Filters, includeJoinConfigNames);
             BuildQueryMeasures(selectPartBuilder, input.Query.ParentDimensions, input.Query.MeasureFields, includeJoinConfigNames);
             string joinPart = BuildQueryJoins(includeJoinConfigNames);
+            RecordFilterSQLBuilder recordFilterSQLBuilder = new RecordFilterSQLBuilder(GetDimensionColumnIdFromFieldName);
+            String recordFilter = recordFilterSQLBuilder.BuildRecordFilter(input.Query.FilterGroup, ref parameterIndex, parameterValues);
 
             StringBuilder queryBuilder = BuildGlobalQuery(input.Query.FromTime, input.Query.ToTime, null,
-                parameterValues, selectPartBuilder.ToString(), joinPart, filterPart, groupByPart, null, ref parameterIndex);
+                parameterValues, selectPartBuilder.ToString(), joinPart, filterPart, groupByPart, null,recordFilter, ref parameterIndex);
 
             return queryBuilder.ToString();
         }
@@ -230,18 +237,21 @@ namespace Vanrise.Analytic.Data.SQL
             return filterPartBuilder.ToString();
         }
 
-        private StringBuilder BuildGlobalQuery(DateTime fromTime, DateTime toTime, int? topRecords, Dictionary<string, Object> parameterValues, string selectPartBuilder, string joinPartBuilder, string filterPartBuilder, string groupByPartBuilder, string orderByPart, ref int parameterIndex)
+        private StringBuilder BuildGlobalQuery(DateTime fromTime, DateTime toTime, int? topRecords, Dictionary<string, Object> parameterValues, string selectPartBuilder, string joinPartBuilder, string filterPartBuilder, string groupByPartBuilder, string orderByPart,string recordFilter, ref int parameterIndex)
         {
             List<TimeRangeTableName> timePeriodTableNames = GetTimeRangeTableNames(fromTime, toTime);
+
 
             StringBuilder queryBuilder = new StringBuilder(@"SELECT #TOPRECORDS# #SELECTPART# FROM
                                                                 #QUERYBODY#
                                                                 #JOINPART#
+                                                                 #WHEREPART#
 			                                                    #GROUPBYPART#
                                                                 #ORDERPART#");
 
             string filterPart = filterPartBuilder.ToString();
 
+            queryBuilder.Replace("#WHEREPART#", recordFilter != null ? ("and "+ recordFilter) : "");
             if (timePeriodTableNames == null || timePeriodTableNames.Count == 0)
                 throw new NullReferenceException("timePeriodTableNames");
             if (timePeriodTableNames.Count == 1)
@@ -459,6 +469,15 @@ namespace Vanrise.Analytic.Data.SQL
         {
             return String.Format("Measure_{0}", measure.AnalyticMeasureConfigId);
         }
+
+        string GetDimensionColumnIdFromFieldName(string fieldName)
+        {
+            var dimensionObj = _dimensions.FirstOrDefault(itm => itm.Key == fieldName);
+            if (dimensionObj.Value == null)
+                throw new NullReferenceException(String.Format("Dimension {0}", fieldName));
+            return dimensionObj.Value.Config.IdColumn;
+        }
+
         void AddFilterToFilterPart<T>(StringBuilder filterBuilder, List<T> values, string column)
         {
             if (values != null && values.Count() > 0)

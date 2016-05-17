@@ -32,7 +32,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
 
             $scope.onDateFilterEditorReady = function (api) {
                 dateFilterEditorApi = api;
-                var payload = { fieldType: selectedObj.Entity.Type, fieldValue: filterObj != undefined ? filterObj.Value : null, fieldTitle: 'Date' };
+                var payload = { fieldType: selectedObj.Type, fieldValue: filterObj != undefined ? filterObj.Value : null, fieldTitle: 'Date' };
                 api.load(payload);
             }
 

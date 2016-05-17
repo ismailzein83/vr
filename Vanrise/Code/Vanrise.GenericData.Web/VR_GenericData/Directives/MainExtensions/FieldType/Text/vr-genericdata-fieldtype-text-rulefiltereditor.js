@@ -30,7 +30,7 @@ app.directive('vrGenericdataFieldtypeTextRulefiltereditor', ['VR_GenericData_Str
             var dataRecordTypeField;
             $scope.onTextFilterEditorReady = function (api) {
                 textFilterEditorApi = api;
-                var payload = { fieldType: dataRecordTypeField != undefined ? dataRecordTypeField.Entity.Type : null, fieldValue: filterObj != undefined ? filterObj.Value : null };
+                var payload = { fieldType: dataRecordTypeField != undefined ? dataRecordTypeField.Type : null, fieldValue: filterObj != undefined ? filterObj.Value : null };
                 textFilterEditorApi.load(payload);
             }
             function defineAPI() {
