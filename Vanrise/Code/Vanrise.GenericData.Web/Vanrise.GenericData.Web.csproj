@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BELookupRuleDefinitionController.cs" />
     <Compile Include="Controllers\DataRecordFieldController.cs" />
     <Compile Include="Controllers\DataRecordStorageLogController.cs" />
     <Compile Include="Controllers\ExtensibleBEController.cs" />
@@ -419,6 +420,12 @@
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleService.js" />
     <Content Include="VR_GenericData\Services\SummaryTransformationDefinitionService.js" />
+    <Content Include="VR_GenericData\Views\BELookupRuleDefinition\BELookupRuleDefinitionCriteriaFieldEditor.html" />
+    <Content Include="VR_GenericData\Views\BELookupRuleDefinition\BELookupRuleDefinitionCriteriaFieldEditorController.js" />
+    <Content Include="VR_GenericData\Views\BELookupRuleDefinition\BELookupRuleDefinitionEditor.html" />
+    <Content Include="VR_GenericData\Views\BELookupRuleDefinition\BELookupRuleDefinitionEditorController.js" />
+    <Content Include="VR_GenericData\Views\BELookupRuleDefinition\BELookupRuleDefinitionManagementController.js" />
+    <Content Include="VR_GenericData\Views\BELookupRuleDefinition\BELookupRuleDefinitionManagement.html" />
     <Content Include="VR_GenericData\Views\DataRecordSource\DataRecordSourceEditor.html" />
     <Content Include="VR_GenericData\Views\DataRecordSource\DataRecordSourceEditorController.js" />
     <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageSettingsEditor.html" />
