@@ -21,7 +21,7 @@ namespace TOne.WhS.CodePreparation.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ICPParametersContext cpContext = context.GetExtension<ICPParametersContext>();
-            Dictionary<string, ExistingZone> existingZonesByZoneName = cpContext.ExistingZonesByZoneName;
+            Dictionary<string, ExistingZone> existingZonesByZoneName = cpContext.ExistingZonesByZoneName;  //TODO: Zone.BED must be filled in ZoneToProcess
 
             ZoneToProcess zoneTopProcess = context.Target as ZoneToProcess;
 
