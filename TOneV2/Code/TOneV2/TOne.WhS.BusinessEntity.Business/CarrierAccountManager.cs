@@ -350,6 +350,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 HashSet<int> filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
                 HashSet<int> filteredCustomerIds = CustomerGroupContext.GetFilteredCustomerIds(customerFilterSettings);
 
+                filteredList = new List<CarrierAccount>();
+
                 foreach (CarrierAccount carr in carrierAccounts.Values)
                 {
                     if (ShouldSelectCarrierAccount(carr, getCustomers, getSuppliers, filteredSupplierIds, filteredCustomerIds))
