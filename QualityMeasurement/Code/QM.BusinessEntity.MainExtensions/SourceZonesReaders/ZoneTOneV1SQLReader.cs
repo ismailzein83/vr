@@ -39,7 +39,7 @@ namespace QM.BusinessEntity.MainExtensions.SourceZonesReaders
 
             public IEnumerable<SourceZoneCode> GetAllCodes()
             {
-                return GetItemsText(query_getUpdatedZones, SourceZonerCodeMapper, null);
+                return GetItemsText(query_getAllZones, SourceZonerCodeMapper, null);
             }
 
             private SourceZone SourceZonerMapper(System.Data.IDataReader arg)
@@ -61,7 +61,7 @@ namespace QM.BusinessEntity.MainExtensions.SourceZonesReaders
                 SourceZoneCode sourceZoneCode = new SourceZoneCode()
                 {
                     SourceZoneId = arg["ZoneID"].ToString(),
-                    Code = arg["CodeGroup"].ToString(),
+                    Code = arg["Code"].ToString(),
                 };
                 return sourceZoneCode;
             }
@@ -74,6 +74,8 @@ namespace QM.BusinessEntity.MainExtensions.SourceZonesReaders
                   ,[BeginEffectiveDate]
                   ,[EndEffectiveDate]
                 FROM [dbo].[Zone] z join [dbo].[CodeGroup] c on z.CodeGroup = c.Code where ZoneID > 0 and z.SupplierID ='SYS' and IsEffective = 'Y' ";
+
+            private const string query_getAllZones = @"SELECT [Code] ,[ZoneID] FROM [dbo].[Code] where ZoneID > 0 and IsEffective = 'Y'";
         }
 
         public override IEnumerable<SourceZoneCode> GetAllCodes()
