@@ -293,6 +293,14 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
 
                         }
                     }
+                  
+                }
+                foreach (var code in codes)
+                {
+                    if(codes.Where(x=>x.Code == code.Code).Count()>1)
+                    {
+                        throw new Exception(string.Format("Code {0} should not be duplicated.", code.Code));
+                    }
                 }
             }
         }
