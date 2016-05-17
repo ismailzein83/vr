@@ -56,12 +56,13 @@
                 {
                     if ($scope.scopeModel.selectedCodeLayout != undefined && $scope.scopeModel.selectedCodeLayout.value == XBooster_PriceListConversion_CodeLayoutEnum.Delimitedcode.value)
                     {
-                        if ($scope.scopeModel.delimiterValue == undefined)
-                             $scope.scopeModel.delimiterValue = ',';
+                      //  if ($scope.scopeModel.delimiterValue == undefined)
+                        $scope.scopeModel.delimiterValue = ',';
                         $scope.scopeModel.showDelimiter = true;
                     }
                     else
                     {
+                        $scope.scopeModel.hasCodeRange =false;
                         $scope.scopeModel.delimiterValue = undefined;
                         $scope.scopeModel.showDelimiter = false;
                     }
@@ -129,6 +130,7 @@
                             $scope.scopeModel.hasCodeRange = configDetails.HasCodeRange;
                             $scope.scopeModel.rangeSeparator = configDetails.RangeSeparator;
                             $scope.scopeModel.delimiterValue = configDetails.Delimiter;
+                            $scope.scopeModel.isCommaDecimalSeparator =   configDetails.IsCommaDecimalSeparator;
                             $scope.scopeModel.selectedCodeLayout = UtilsService.getItemByVal($scope.scopeModel.codeLayouts, configDetails.CodeLayout, "value")
                         }
                      
