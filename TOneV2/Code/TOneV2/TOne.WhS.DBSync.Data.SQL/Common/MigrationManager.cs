@@ -132,7 +132,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 foreach (Table table in _Server.Databases[db.Database].Tables)
                 {
                     string scriptedFK = string.Empty;
-                    if (table.EnumForeignKeys().Rows.Count > 0)
+                    if (table.ForeignKeys.Count > 0)
                         foreach (ForeignKey fk in table.ForeignKeys)
                         {
                             StringCollection sc = fk.Script();
