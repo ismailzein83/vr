@@ -30,6 +30,8 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[ParentTenantID],s.[Settings]);
 set identity_insert [sec].[Tenant] off;
 
+--to be removed in next stage
+Update [sec].[User] set TenantID = 1
 --[sec].[User]--------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
