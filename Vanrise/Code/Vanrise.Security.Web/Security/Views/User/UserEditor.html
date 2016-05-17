@@ -3,16 +3,16 @@
         <vr-form name="formUserEditor">
             <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-textbox value="email" label="Email" type="email" isrequired vr-disabled="hasAuthServer && isInEditMode"></vr-textbox>
+                    <vr-textbox value="scopemodel.email" label="Email" type="email" isrequired vr-disabled="hasAuthServer && isInEditMode"></vr-textbox>
                 </vr-columns>
-                <vr-columns width="1/2row" ng-hide="hasAuthServer">
-                    <vr-textbox value="name" label="Name" isrequired vr-disabled="hasAuthServer && isInEditMode"></vr-textbox>
-                </vr-columns>
-                <vr-columns width="1/2row">
-                    <vr-textbox value="description" label="Description"></vr-textbox>
+                <vr-columns width="1/2row" ng-if="!hasAuthServer">
+                    <vr-textbox value="scopemodel.name" label="Name" isrequired vr-disabled="hasAuthServer && isInEditMode"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="1/2row">
-                    <vr-switch value="isActive" label="Active"></vr-switch>
+                    <vr-textbox value="scopemodel.description" label="Description"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-switch value="scopemodel.isActive" label="Active"></vr-switch>
                 </vr-columns>
                 <vr-columns width="1/2row" ng-show="showTenantSelector">
                     <vr-sec-tenant-selector on-ready="onTenantSelectorReady" hideifnotneeded="hideTenantSelectorIfNotNeeded" isrequired="true" hideremoveicon vr-disabled="isInEditMode" customlabel="Tenant"></vr-sec-tenant-selector>

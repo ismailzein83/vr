@@ -20,7 +20,7 @@ namespace Vanrise.Security.Web.Controllers
             this._manager = new UserManager();
         }
 
-        [HttpPost]      
+        [HttpPost]
         [Route("GetFilteredUsers")]
         public object GetFilteredUsers(Vanrise.Entities.DataRetrievalInput<UserQuery> input)
         {
@@ -78,6 +78,15 @@ namespace Vanrise.Security.Web.Controllers
             return _manager.ResetPassword(user.UserId, user.Password);
         }
 
+        [IsAnonymous]
+        [HttpPost]
+        [Route("ActivatePassword")]
+        public Vanrise.Entities.UpdateOperationOutput<object> ActivatePassword(ActivatePasswordInput user)
+        {
+            return _manager.ActivatePassword(user.Email, user.Password, user.Name);
+        }
+
+
         [HttpGet]
         [Route("LoadLoggedInUserProfile")]
         public UserProfile LoadLoggedInUserProfile()
@@ -90,13 +99,32 @@ namespace Vanrise.Security.Web.Controllers
         public Vanrise.Entities.UpdateOperationOutput<UserProfile> EditUserProfile(UserProfile userProfileObject)
         {
             return _manager.EditUserProfile(userProfileObject);
-        
+
+        }
+
+        [IsAnonymous]
+        [HttpPost]
+        [Route("ForgotPassword")]
+        public Vanrise.Entities.UpdateOperationOutput<object> ForgotPassword(ForgotPasswordInput forgotPasswordInput)
+        {
+            return _manager.ForgotPassword(forgotPasswordInput.Email);
         }
     }
 
+    public class ForgotPasswordInput
+    {
+        public string Email { get; set; }
+    }
     public class ResetPasswordInput
     {
         public int UserId { get; set; }
         public string Password { get; set; }
+    }
+
+    public class ActivatePasswordInput
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string Name { get; set; }
     }
 }

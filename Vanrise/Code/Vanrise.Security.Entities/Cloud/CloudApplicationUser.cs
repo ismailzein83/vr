@@ -64,4 +64,25 @@ namespace Vanrise.Security.Entities
     {
         public UpdateOperationOutput<CloudApplicationUser> OperationOutput { get; set; }
     }
+
+    public class ResetUserPasswordApplicationInput
+    {
+        public int UserId { get; set; }
+    }
+
+    public class ResetUserPasswordApplicationOutput
+    {
+        public UpdateOperationOutput<object> OperationOutput { get; set; }
+    }
+
+    public class ForgotUserPasswordApplicationInput 
+    {
+        public string Email { get; set; }
+    }
+
+    public class ForgotUserPasswordApplicationOutput
+    {
+        public UpdateOperationOutput<object> OperationOutput { get; set; }
+    }
+
 }

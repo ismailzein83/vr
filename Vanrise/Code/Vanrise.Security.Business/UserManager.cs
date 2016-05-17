@@ -9,11 +9,21 @@ using Vanrise.Security.Entities;
 using Vanrise.Caching;
 using Vanrise.Common;
 using System.Linq;
+using System.Configuration;
+using RazorEngine.Templating;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Security.Business
 {
     public class UserManager
     {
+        static TimeSpan s_tempPasswordValidity;
+
+        static UserManager()
+        {
+            if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["TempPasswordValidity"], out s_tempPasswordValidity))
+                s_tempPasswordValidity = new TimeSpan(1, 0, 0);
+        }
         #region Public Methods
 
         public IDataRetrievalResult<UserDetail> GetFilteredUsers(DataRetrievalInput<UserQuery> input)
@@ -93,6 +103,12 @@ namespace Vanrise.Security.Business
             return dataManager.GetUserPassword(userId);
         }
 
+        public string GetUserTempPassword(int userId)
+        {
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            return dataManager.GetUserTempPassword(userId);
+        }
+
         public Vanrise.Entities.InsertOperationOutput<UserDetail> AddUser(User userObject)
         {
             InsertOperationOutput<UserDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<UserDetail>();
@@ -102,6 +118,7 @@ namespace Vanrise.Security.Business
             int userId = -1;
             bool insertActionSucc;
             var cloudServiceProxy = GetCloudServiceProxy();
+
             if (cloudServiceProxy != null)
             {
                 var output = cloudServiceProxy.AddUserToApplication(new AddUserToApplicationInput
@@ -119,16 +136,34 @@ namespace Vanrise.Security.Business
                 else
                 {
                     insertActionSucc = false;
+                    if (output.OperationOutput != null && output.OperationOutput.Result == InsertOperationResult.Failed)
+                    {
+                        return new InsertOperationOutput<UserDetail>()
+                        {
+                            Message = output.OperationOutput.Message,
+                            Result = output.OperationOutput.Result,
+                            ShowExactMessage = output.OperationOutput.ShowExactMessage
+                        };
+                    }
                 }
             }
             else
             {
-                string defPassword = "123456";
-                string encryptedPassword = HashingUtility.ComputeHash(defPassword, "", null);
+                PasswordGenerator passwordGenerator = new PasswordGenerator();
+                string pwd = passwordGenerator.Generate();
+                string encryptedPassword = HashingUtility.ComputeHash(pwd, "", null);
 
                 IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
                 insertActionSucc = dataManager.AddUser(userObject, encryptedPassword, out userId);
+                if (insertActionSucc)
+                {
+                    EmailTemplateManager emailTemplateManager = new EmailTemplateManager();
+                    EmailTemplate template = emailTemplateManager.GeEmailTemplateByType(Constants.NewPasswordType);
+                    PasswordEmailContext context = new PasswordEmailContext() { Name = userObject.Name, Password = pwd };
 
+                    EmailHelper emailHelper = new EmailHelper(userObject.Email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
+                    emailHelper.Send();
+                }
             }
 
             if (insertActionSucc)
@@ -195,9 +230,113 @@ namespace Vanrise.Security.Business
 
         public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(int userId, string password)
         {
+            UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            bool updateActionSucc;
+            var cloudServiceProxy = GetCloudServiceProxy();
+            if (cloudServiceProxy != null)
+            {
+                var output = cloudServiceProxy.ResetUserPasswordApplication(new ResetUserPasswordApplicationInput
+                {
+                    UserId = userId
+                });
+                if (output.OperationOutput != null && output.OperationOutput.Result == UpdateOperationResult.Succeeded)
+                {
+                    updateActionSucc = true;
+                }
+                else
+                {
+                    updateActionSucc = false;
+                }
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(password))
+                    throw new ArgumentNullException("password");
+
+                IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+                updateActionSucc = dataManager.ResetPassword(userId, HashingUtility.ComputeHash(password, "", null));
+            }
+
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            }
+
+            return updateOperationOutput;
+        }
+
+        public UpdateOperationOutput<object> ForgotPassword(string email)
+        {
+            UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            bool updateActionSucc;
+            var cloudServiceProxy = GetCloudServiceProxy();
+            if (cloudServiceProxy != null)
+            {
+                var output = cloudServiceProxy.ForgotUserPasswordApplication(new ForgotUserPasswordApplicationInput
+                {
+                    Email = email
+                });
+                if (output.OperationOutput != null && output.OperationOutput.Result == UpdateOperationResult.Succeeded)
+                {
+                    updateActionSucc = true;
+                }
+                else
+                {
+                    updateActionSucc = false;
+                }
+            }
+            else
+            {
+                UserManager userManager = new UserManager();
+                var user = userManager.GetUserbyEmail(email);
+                if (user == null)
+                    return new UpdateOperationOutput<object>() { Result = UpdateOperationResult.Failed };
+
+                Vanrise.Common.PasswordGenerator pwdGenerator = new PasswordGenerator();
+                string pwd = pwdGenerator.Generate();
+
+                IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+                updateActionSucc = dataManager.UpdateTempPasswordByEmail(email, HashingUtility.ComputeHash(pwd, "", null), DateTime.Now.Add(s_tempPasswordValidity));
+                if (updateActionSucc)
+                {
+                    EmailTemplateManager emailTemplateManager = new EmailTemplateManager();
+                    EmailTemplate template = emailTemplateManager.GeEmailTemplateByType(Constants.ForgotPasswordType);
+                    PasswordEmailContext context = new PasswordEmailContext() { Name = user.Name, Password = pwd };
+
+                    EmailHelper emailHelper = new EmailHelper(email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
+                    emailHelper.Send();
+                }
+            }
+
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            }
+
+            return updateOperationOutput;
+        }
+
+        public UpdateOperationOutput<object> UpdateTempPasswordById(int userId, string password, DateTime? passwordValidTill)
+        {
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
 
-            bool updateActionSucc = dataManager.ResetPassword(userId, HashingUtility.ComputeHash(password, "", null));
+            bool updateActionSucc = dataManager.UpdateTempPasswordById(userId, HashingUtility.ComputeHash(password, "", null), passwordValidTill);
 
             UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
 
@@ -212,6 +351,43 @@ namespace Vanrise.Security.Business
             return updateOperationOutput;
         }
 
+        public UpdateOperationOutput<object> UpdateTempPasswordByEmail(string email, string password, DateTime? passwordValidTill)
+        {
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+
+            bool updateActionSucc = dataManager.UpdateTempPasswordByEmail(email, HashingUtility.ComputeHash(password, "", null), passwordValidTill);
+
+            UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+            }
+
+            return updateOperationOutput;
+        }
+
+        public UpdateOperationOutput<object> ActivatePassword(string email, string password, string name)
+        {
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+
+            bool updateActionSucc = dataManager.ActivatePassword(email, HashingUtility.ComputeHash(password, "", null), name);
+
+            UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+            }
+
+            return updateOperationOutput;
+        }
 
         public Vanrise.Entities.UpdateOperationOutput<UserProfile> EditUserProfile(UserProfile userProfileObject)
         {

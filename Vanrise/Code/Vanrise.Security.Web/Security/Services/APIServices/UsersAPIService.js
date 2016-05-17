@@ -21,7 +21,9 @@
             LoadLoggedInUserProfile: LoadLoggedInUserProfile,
             HasAddUserPermission: HasAddUserPermission,
             HasUpdateUserPermission: HasUpdateUserPermission,
-            HasResetUserPasswordPermission: HasResetUserPasswordPermission
+            HasResetUserPasswordPermission: HasResetUserPasswordPermission,
+            ActivatePassword: ActivatePassword,
+            ForgotPassword: ForgotPassword
         });
 
         function GetFilteredUsers(input) {
@@ -64,8 +66,16 @@
             });
         }
 
-        function ResetPassword(resetPasswordInput) {   
+        function ResetPassword(resetPasswordInput) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'ResetPassword'), resetPasswordInput);
+        }
+
+        function ForgotPassword(forgotPasswordInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'ForgotPassword'), forgotPasswordInput);
+        }
+        
+        function ActivatePassword(activatePasswordInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'ActivatePassword'), activatePasswordInput);
         }
 
         function EditUserProfile(userProfileObject) {

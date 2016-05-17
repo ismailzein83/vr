@@ -13,7 +13,9 @@ namespace Vanrise.Security.Data
 
         string GetUserPassword(int userId);
 
-        bool AddUser(User user, string password, out int insertedId);
+        string GetUserTempPassword(int userId);
+
+        bool AddUser(User user, string tempPassword, out int insertedId);
 
         bool UpdateUser(User user);
 
@@ -26,5 +28,11 @@ namespace Vanrise.Security.Data
         bool EditUserProfile(string name, int userId);
 
         bool AreUsersUpdated(ref object updateHandle);
+
+        bool ActivatePassword(string email, string password, string name);
+
+        bool UpdateTempPasswordById(int userId, string password, DateTime? passwordValidTill);
+        
+        bool UpdateTempPasswordByEmail(string email, string password, DateTime? passwordValidTill);
     }
 }

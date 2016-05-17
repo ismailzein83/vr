@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthenticateOperationOutput.cs" />
     <Compile Include="AuthenticationToken.cs" />
     <Compile Include="BusinessEntity\BusinessEntity.cs" />
     <Compile Include="BusinessEntity\BusinessEntityDetail.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Cloud\CloudAuthServer.cs" />
     <Compile Include="Cloud\ICloudApplicationService.cs" />
     <Compile Include="Cloud\ICloudService.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="ContextFactory.cs" />
     <Compile Include="Group\GroupFilter.cs" />
     <Compile Include="Group\GroupInfo.cs" />

@@ -30,14 +30,19 @@ namespace Vanrise.Security.Data.SQL
 
         public string GetUserPassword(int userId)
         {
-            return (string)ExecuteScalarSP("sec.sp_User_GetPassword", userId);
+            return ExecuteScalarSP("sec.sp_User_GetPassword", userId) as string;
         }
 
-        public bool AddUser(User userObject, string password, out int insertedId)
+        public string GetUserTempPassword(int userId)
+        {
+            return ExecuteScalarSP("sec.sp_User_GetTempPassword", userId) as string;
+        }
+
+        public bool AddUser(User userObject, string tempPassword, out int insertedId)
         {
             object userID;
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.Name, password, userObject.Email, userObject.Status, userObject.Description, userObject.TenantId);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.Name, tempPassword, userObject.Email, userObject.Status, userObject.Description, userObject.TenantId);
             insertedId = (recordesEffected > 0) ? (int)userID : -1;
 
             return (recordesEffected > 0);
@@ -58,6 +63,22 @@ namespace Vanrise.Security.Data.SQL
         {
             return ExecuteNonQuerySP("sec.sp_User_UpdatePassword", userId, password) > 0;
         }
+
+        public bool ActivatePassword(string email, string password, string name)
+        {
+            return ExecuteNonQuerySP("sec.sp_User_ActivatePassword", email, password, name) > 0;
+        }
+
+        public bool UpdateTempPasswordById(int userId, string password, DateTime? passwordValidTill)
+        {
+            return ExecuteNonQuerySP("sec.sp_User_UpdateTempPasswordById", userId, password, passwordValidTill) > 0;
+        }
+
+        public bool UpdateTempPasswordByEmail(string email, string password, DateTime? passwordValidTill)
+        {
+            return ExecuteNonQuerySP("sec.sp_User_UpdateTempPasswordByEmail", email, password, passwordValidTill) > 0;
+        }
+
         public bool ChangePassword(int userId, string newPassword)
         {
             int recordsAffected = ExecuteNonQuerySP("sec.sp_User_UpdatePassword", userId, newPassword);

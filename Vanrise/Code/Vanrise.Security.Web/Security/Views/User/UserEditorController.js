@@ -14,7 +14,7 @@
         loadParameters();
         defineScope();
         load();
-
+        $scope.scopemodal = {};
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
@@ -123,21 +123,22 @@
             if (userEntity == undefined)
                 return;
 
-            $scope.name = userEntity.Name;
-            $scope.email = userEntity.Email;
-            $scope.description = userEntity.Description;
-            $scope.isActive = userEntity.Status;
+            $scope.scopemodel.name = userEntity.Name;
+            $scope.scopemodel.email = userEntity.Email;
+            $scope.scopemodel.description = userEntity.Description;
+            $scope.scopemodel.isActive = userEntity.Status;
         }
 
         function buildUserObjFromScope() {
             var userObject = {
                 UserId: (userId != null) ? userId : 0,
-                Name: $scope.name,
-                Email: $scope.email,
-                Description: $scope.description,
-                Status: $scope.isActive == false ? '0' : '1',
+                Name: $scope.scopemodel.name,
+                Email: $scope.scopemodel.email,
+                Description: $scope.scopemodel.description,
+                Status: $scope.scopemodel.isActive == false ? '0' : '1',
                 TenantId: tenantSelectorAPI.getSelectedIds()
             };
+
             return userObject;
         }
 

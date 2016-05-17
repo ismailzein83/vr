@@ -20,5 +20,9 @@ namespace Vanrise.Security.Entities
         UpdateTenantToApplicationOutput UpdateTenantToApplication(UpdateTenantToApplicationInput input);
         
         List<CloudTenantOutput> GetCloudTenants(CloudTenantInput input);
+
+        ResetUserPasswordApplicationOutput ResetUserPasswordApplication(ResetUserPasswordApplicationInput input);
+
+        ForgotUserPasswordApplicationOutput ForgotUserPasswordApplication(ForgotUserPasswordApplicationInput input);
     }
 }

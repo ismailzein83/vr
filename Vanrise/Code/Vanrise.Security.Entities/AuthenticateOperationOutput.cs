@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.Entities
+namespace Vanrise.Security.Entities
 {
-    public enum AuthenticateOperationResult { Succeeded = 0, Failed = 1, Inactive = 2, WrongCredentials = 3, UserNotExists = 4 }
+    public enum AuthenticateOperationResult { Succeeded = 0, Failed = 1, Inactive = 2, WrongCredentials = 3, UserNotExists = 4, ActivationNeeded = 5 }
 
     public class AuthenticateOperationOutput<T>
     {
@@ -15,5 +15,7 @@ namespace Vanrise.Entities
         public string Message { get; set; }
 
         public T AuthenticationObject { get; set; }
+
+        public User LoggedInUser { get; set; }
     }
 }

@@ -1,0 +1,11 @@
+﻿<vr-datagrid datasource="emailTemplates"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.EmailTemplateId">
+
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.EmailTemplateId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+    <!--<vr-datagridcolumn headertext="'Type'" field="'Entity.Type'" type="'Text'"></vr-datagridcolumn>-->
+</vr-datagrid>

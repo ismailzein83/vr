@@ -38,6 +38,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="RazorEngine">
+      <HintPath>..\packages\RazorEngine.3.8.2\lib\net45\RazorEngine.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -72,6 +75,7 @@
     <Compile Include="HashingUtility.cs" />
     <Compile Include="ModuleManager.cs" />
     <Compile Include="OrgChartManager.cs" />
+    <Compile Include="EmailContext\PasswordEmailContext.cs" />
     <Compile Include="SecurityContext.cs" />
     <Compile Include="SystemActionManager.cs" />
     <Compile Include="TenantManager.cs" />

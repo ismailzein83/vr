@@ -26,7 +26,7 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
                 modalScope.message = message;
             else
                 modalScope.message = "Are you sure you want to continue?";
-            
+
             modalScope.yesClicked = function () {
                 modalScope.modalContext.closeModal();
                 deferred.resolve(true);
@@ -82,16 +82,14 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         }
     }
 
-    function notifyOnItemAction(notificationType, message, operationOutput)
-    {
+    function notifyOnItemAction(notificationType, message, operationOutput) {
         var additionalMessage = operationOutput.Message;
         if (operationOutput.ShowExactMessage)
             message = additionalMessage;
         else if (additionalMessage != null && additionalMessage != undefined && additionalMessage != "")
             message += " (" + additionalMessage + ")";
 
-        switch(notificationType)
-        {
+        switch (notificationType) {
             case "success":
                 showSuccess(message); break;
             case "warning":
@@ -162,19 +160,22 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         return false;
     }
 
-    function notifyOnUserAuthenticated(authenticateOperationOutput) {
+    function notifyOnUserAuthenticated(authenticateOperationOutput, onValidationNeeded) {
         switch (authenticateOperationOutput.Result) {
             case AuthenticateOperationResultEnum.Succeeded.value:
                 return true;
                 break;
             case AuthenticateOperationResultEnum.Inactive.value:
-                 showError("Login Failed. Inactive User"); break;
+                showError("Login Failed. Inactive User"); break;
             case AuthenticateOperationResultEnum.WrongCredentials.value:
-                 showError("Login Failed. Wrong Credentials"); break;
+                showError("Login Failed. Wrong Credentials"); break;
             case AuthenticateOperationResultEnum.UserNotExists.value:
-                    showError("Login Failed. User does not exist"); break;
+                showError("Login Failed. User does not exist"); break;
             case AuthenticateOperationResultEnum.Failed.value:
-                    showError("Login Failed. An error occurred"); break;
+                showError("Login Failed. An error occurred"); break;
+            case AuthenticateOperationResultEnum.ActivationNeeded.value:
+                onValidationNeeded(authenticateOperationOutput.LoggedInUser);
+                showError("Activation Needed"); break;
         }
         return false;
     }

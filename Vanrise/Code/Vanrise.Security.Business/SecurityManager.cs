@@ -14,7 +14,7 @@ namespace Vanrise.Security.Business
     public class SecurityManager
     {
         #region Public Methods
-        
+
         public AuthenticateOperationOutput<AuthenticationToken> Authenticate(string email, string password)
         {
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
@@ -26,8 +26,10 @@ namespace Vanrise.Security.Business
             authenticationOperationOutput.Result = AuthenticateOperationResult.Failed;
             authenticationOperationOutput.AuthenticationObject = null;
 
-            if(user != null)
+            if (user != null)
             {
+                authenticationOperationOutput.LoggedInUser = user;
+
                 int expirationPeriodInMinutes = 1440;
 
                 AuthenticationToken authToken = new AuthenticationToken();
@@ -36,33 +38,45 @@ namespace Vanrise.Security.Business
                 authToken.UserName = user.Email;
                 authToken.UserDisplayName = user.Name;
                 authToken.ExpirationIntervalInMinutes = expirationPeriodInMinutes;
-                 
-                string loggedInUserPassword = manager.GetUserPassword(user.UserId);
 
                 if (user.Status == UserStatus.Inactive)
                 {
                     authenticationOperationOutput.Result = AuthenticateOperationResult.Inactive;
                 }
-                else if (!HashingUtility.VerifyHash(password, "", loggedInUserPassword))
-                {
-                    authenticationOperationOutput.Result = AuthenticateOperationResult.WrongCredentials;
-                }
                 else
                 {
-                    SecurityToken securityToken = new SecurityToken
+                    string loggedInUserPassword = manager.GetUserPassword(user.UserId);
+
+                    if (HashingUtility.VerifyHash(password, "", loggedInUserPassword))
                     {
-                        UserId = user.UserId,
-                        IssuedAt = DateTime.Now,
-                        ExpiresAt = DateTime.Now.AddMinutes(expirationPeriodInMinutes)
-                    };
-                    AddTokenExtensions(securityToken);
+                        SecurityToken securityToken = new SecurityToken
+                        {
+                            UserId = user.UserId,
+                            IssuedAt = DateTime.Now,
+                            ExpiresAt = DateTime.Now.AddMinutes(expirationPeriodInMinutes)
+                        };
+                        AddTokenExtensions(securityToken);
 
-                    string encrypted = Common.Cryptography.Encrypt(Common.Serializer.Serialize(securityToken), ConfigurationManager.AppSettings[SecurityContext.SECURITY_ENCRYPTION_SECRETE_KEY]);
-                    authToken.Token = encrypted;
-                    authenticationOperationOutput.Result = AuthenticateOperationResult.Succeeded;
-                    authenticationOperationOutput.AuthenticationObject = authToken;
+                        string encrypted = Common.Cryptography.Encrypt(Common.Serializer.Serialize(securityToken), ConfigurationManager.AppSettings[SecurityContext.SECURITY_ENCRYPTION_SECRETE_KEY]);
+                        authToken.Token = encrypted;
+                        authenticationOperationOutput.Result = AuthenticateOperationResult.Succeeded;
+                        authenticationOperationOutput.AuthenticationObject = authToken;
 
-                    dataManager.UpdateLastLogin(user.UserId);
+                        dataManager.UpdateLastLogin(user.UserId);
+                    }
+                    else
+                    {
+                        string loggedInUserTempPassword = manager.GetUserTempPassword(user.UserId);
+                        if (HashingUtility.VerifyHash(password, "", loggedInUserTempPassword))
+                        {
+                            authenticationOperationOutput.Result = AuthenticateOperationResult.ActivationNeeded;
+                        }
+
+                        else
+                        {
+                            authenticationOperationOutput.Result = AuthenticateOperationResult.WrongCredentials;
+                        }
+                    }
                 }
 
             }
@@ -95,7 +109,7 @@ namespace Vanrise.Security.Business
             bool result = true;
 
             Dictionary<string, List<string>> reqPermissionsDic = GetRequiredPermissionsByNodePath(requiredPermissions);
-            
+
             PermissionManager manager = new PermissionManager();
             EffectivePermissionsWrapper effectivePermissionsWrapper = manager.GetEffectivePermissions(userId);
 
@@ -114,7 +128,7 @@ namespace Vanrise.Security.Business
             int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             UserManager manager = new UserManager();
-            
+
             Vanrise.Entities.UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
@@ -146,7 +160,7 @@ namespace Vanrise.Security.Business
             {
                 return authServer.Settings.AuthenticationCookieName;
             }
-            else 
+            else
                 return ConfigurationManager.AppSettings["Sec_AuthCookieName"];
         }
 
@@ -188,7 +202,7 @@ namespace Vanrise.Security.Business
 
         public bool CheckTokenAccess(SecurityToken securityToken, out string errorMessage, out InvalidAccess invalidAccess)
         {
-            
+
             if (securityToken.ExpiresAt < DateTime.Now)
             {
                 errorMessage = "Token Expired";
@@ -196,9 +210,9 @@ namespace Vanrise.Security.Business
                 return false;
             }
             var authServer = GetAuthServer();
-            if(authServer != null)
+            if (authServer != null)
             {
-                if(securityToken.AccessibleCloudApplications == null || !securityToken.AccessibleCloudApplications.Any(app => app.ApplicationId == authServer.Settings.CurrentApplicationId))
+                if (securityToken.AccessibleCloudApplications == null || !securityToken.AccessibleCloudApplications.Any(app => app.ApplicationId == authServer.Settings.CurrentApplicationId))
                 {
                     errorMessage = "You dont have access to this application";
                     invalidAccess = InvalidAccess.UnauthorizeAccess;
@@ -224,7 +238,7 @@ namespace Vanrise.Security.Business
         {
             TenantManager tenantManager = new TenantManager();
             CloudTenantOutput output = tenantManager.GetCloudTenantOutput(tenantId, applicationId);
-            
+
             if (output == null)
                 return false;
 
@@ -233,7 +247,7 @@ namespace Vanrise.Security.Business
 
             if (output.LicenseExpiresOn < DateTime.Now)
                 return false;
-            
+
             return true;
         }
 
@@ -320,7 +334,7 @@ namespace Vanrise.Security.Business
             foreach (string systemActionName in systemActionNamesArray)
             {
                 SystemAction systemAction = systemActionManager.GetSystemAction(systemActionName.Trim());
-                
+
                 //if (systemAction == null)
                 //    throw new NullReferenceException(String.Format("System action '{0}' was not found", systemActionName));
 
@@ -337,7 +351,7 @@ namespace Vanrise.Security.Business
         {
             var dictionary = new Dictionary<string, List<string>>();
             BusinessEntityNodeManager beNodeManager = new BusinessEntityNodeManager();
-            
+
             string[] permissionsByNodeNameArray = input.Split('&');
 
             foreach (string permissionsByNodeNameString in permissionsByNodeNameArray)
@@ -372,7 +386,7 @@ namespace Vanrise.Security.Business
             return dictionary;
         }
 
-        #endregion        
+        #endregion
 
         #region Private Classes
 
@@ -384,7 +398,7 @@ namespace Vanrise.Security.Business
                 set;
             }
         }
-        
+
         #endregion
     }
 }

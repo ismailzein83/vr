@@ -9,5 +9,9 @@ namespace Vanrise.Security.Business
     public static class Constants
     {
         public const string GroupSettingsConfigType = "VR_Sec_GroupSettings";
+        
+        public const string ResetPasswordType = "VR_Sec_ResetPassword";
+        public const string ForgotPasswordType = "VR_Sec_ForgotPassword";
+        public const string NewPasswordType = "VR_Sec_NewPassword";
     }
 }

@@ -76,5 +76,17 @@ namespace Vanrise.Security.Business
         {
             return Post<CloudTenantInput, List<CloudTenantOutput>>("GetCloudTenants", input);
         }
+
+
+        public ResetUserPasswordApplicationOutput ResetUserPasswordApplication(ResetUserPasswordApplicationInput input)
+        {
+            return Post<ResetUserPasswordApplicationInput, ResetUserPasswordApplicationOutput>("ResetUserPasswordApplication", input);
+        }
+
+
+        public ForgotUserPasswordApplicationOutput ForgotUserPasswordApplication(ForgotUserPasswordApplicationInput input)
+        {
+            return Post<ForgotUserPasswordApplicationInput, ForgotUserPasswordApplicationOutput>("ForgotUserPasswordApplication", input);
+        }
     }
 }

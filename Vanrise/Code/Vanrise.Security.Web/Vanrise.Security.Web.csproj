@@ -209,6 +209,8 @@
     <Content Include="Security\Views\Tenant\TenantManagementController.js" />
     <Content Include="Security\Views\Tenant\TenantEditor.html" />
     <Content Include="Security\Views\Tenant\TenantEditorController.js" />
+    <Content Include="Security\Views\User\ForgotPasswordEditor.html" />
+    <Content Include="Security\Views\User\ForgotPasswordEditorController.js" />
     <Content Include="Security\Views\User\EditProfile.html" />
     <Content Include="Security\Views\User\EditProfileController.js" />
     <Content Include="Security\Views\Login.html" />
@@ -221,7 +223,9 @@
     <Content Include="Security\Views\Permission\PermissionEditorController.js" />
     <Content Include="Security\Views\User\ChangePassword.html" />
     <Content Include="Security\Views\User\ChangePasswordController.js" />
+    <Content Include="Security\Views\User\ActivatePasswordEditor.html" />
     <Content Include="Security\Views\User\ResetPasswordEditor.html" />
+    <Content Include="Security\Views\User\ActivatePasswordEditorController.js" />
     <Content Include="Security\Views\User\ResetPasswordEditorController.js" />
     <Content Include="Security\Views\Group\GroupEditor.html" />
     <Content Include="Security\Views\Group\GroupEditorController.js" />

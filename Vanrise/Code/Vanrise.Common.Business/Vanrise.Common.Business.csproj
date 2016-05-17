@@ -69,6 +69,7 @@
     <Compile Include="Country\CountryManager.cs" />
     <Compile Include="Country\SourceCountrySynchronizer.cs" />
     <Compile Include="CurrencyExchangeRateManager.cs" />
+    <Compile Include="EmailTemplate\EmailTemplateManager.cs" />
     <Compile Include="ExchangeRateInfo.cs" />
     <Compile Include="FxSauderCurrencyReader.cs" />
     <Compile Include="CurrencyManager.cs" />

@@ -51,6 +51,7 @@ namespace Vanrise.Security.Web.Controllers
             return SecurityContext.Current.HasPermissionToActions(systemActionNames);
         }
 
+        [IsAnonymous]
         [HttpGet]
         [Route("HasAuthServer")]
         public bool HasAuthServer()
