@@ -1,9 +1,9 @@
 ﻿<vr-datagrid datasource="currencies"
-                on-ready="onGridReady"
-                dataretrievalfunction="dataRetrievalFunction"
-                pagingtype="'PagingOnScroll'"
-                menuactions="gridMenuActions"
-                idfield="CurrencyId">
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.CurrencyId">
 
     <vr-datagridcolumn headertext="'ID'" field="'Entity.CurrencyId'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Currency Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>

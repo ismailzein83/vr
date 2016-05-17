@@ -203,7 +203,7 @@ namespace Vanrise.Common.Business
                 int currencyId = (int)currencyExchangeRate.CurrencyId;
                 currencyExchangeRateDetail.CurrencyName = manager.GetCurrency(currencyId).Name;
                 currencyExchangeRateDetail.CurrencySymbol = manager.GetCurrency(currencyId).Symbol;
-                if(manager.GetCurrency(currencyId)== manager.GetSystemCurrency())
+                if (currencyExchangeRateDetail.CurrencySymbol == manager.GetSystemCurrency().Symbol) 
                     currencyExchangeRateDetail.IsMain = true; 
             }
 

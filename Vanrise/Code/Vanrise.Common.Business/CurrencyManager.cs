@@ -135,7 +135,7 @@ namespace Vanrise.Common.Business
             currencDetail.Entity = currency;
 
             CurrencyManager manager = new CurrencyManager();
-            if (currency == manager.GetSystemCurrency())
+            if (currency.Symbol == manager.GetSystemCurrency().Symbol)
                 currencDetail.IsMain = true;
 
             return currencDetail;
