@@ -23,7 +23,7 @@ function CloudPortal_BEInternal_CloudApplicationTenantEditorController($scope, C
         $scope.assignCloudApplicationTenant = function () {
             var cloudApplicationTenantObj = buildCloudApplicationTenantObjFromScope();
             if (isEditMode) {
-                CloudPortal_BEInternal_CloudApplicationTenantAPIService.UpdateCloudApplicationTenant(cloudApplicationTenantObj).then(function (response) {
+                return CloudPortal_BEInternal_CloudApplicationTenantAPIService.UpdateCloudApplicationTenant(cloudApplicationTenantObj).then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated("Cloud Application Tenant", response)) {
                         $scope.modalContext.closeModal();
                     }
@@ -32,7 +32,7 @@ function CloudPortal_BEInternal_CloudApplicationTenantEditorController($scope, C
                 });
             }
             else {
-                CloudPortal_BEInternal_CloudApplicationTenantAPIService.AssignCloudApplicationTenant(cloudApplicationTenantObj).then(function (response) {
+                return CloudPortal_BEInternal_CloudApplicationTenantAPIService.AssignCloudApplicationTenant(cloudApplicationTenantObj).then(function (response) {
                     if (VRNotificationService.notifyOnItemAdded("Cloud Application Tenant", response)) {
                         if ($scope.onTenantAssignedToCloudApplication != undefined && response.InsertedObject != undefined) {
                             $scope.onTenantAssignedToCloudApplication(cloudApplicationTenantObj);

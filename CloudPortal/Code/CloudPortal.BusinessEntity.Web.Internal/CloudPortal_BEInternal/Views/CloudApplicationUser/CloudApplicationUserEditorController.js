@@ -19,7 +19,7 @@ function CloudPortal_BEInternal_CloudApplicationUserEditorController($scope, Clo
         $scope.assignCloudApplicationUser = function () {
             var cloudApplicationUserObj = buildCloudApplicationUserObjFromScope();
             if ($scope.hasFullPermission) {
-                CloudPortal_BEInternal_CloudApplicationUserAPIService.AssignCloudApplicationUserWithPermission(cloudApplicationUserObj).then(function (response) {
+                return CloudPortal_BEInternal_CloudApplicationUserAPIService.AssignCloudApplicationUserWithPermission(cloudApplicationUserObj).then(function (response) {
                     if (VRNotificationService.notifyOnItemAdded("Cloud Application User", response)) {
                         if ($scope.onUserAssignedToCloudApplication != undefined && response.InsertedObject != undefined) {
                             $scope.onUserAssignedToCloudApplication(cloudApplicationUserObj);
@@ -31,7 +31,7 @@ function CloudPortal_BEInternal_CloudApplicationUserEditorController($scope, Clo
                 });
             }
             else {
-                CloudPortal_BEInternal_CloudApplicationUserAPIService.AssignCloudApplicationUser(cloudApplicationUserObj).then(function (response) {
+                return CloudPortal_BEInternal_CloudApplicationUserAPIService.AssignCloudApplicationUser(cloudApplicationUserObj).then(function (response) {
                     if (VRNotificationService.notifyOnItemAdded("Cloud Application User", response)) {
                         if ($scope.onUserAssignedToCloudApplication != undefined && response.InsertedObject != undefined) {
                             $scope.onUserAssignedToCloudApplication(cloudApplicationUserObj);

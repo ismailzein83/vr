@@ -132,5 +132,26 @@ namespace CloudPortal.BusinessEntity.Web.Internal.Controllers
             var applicationIdentification = GetApplicationIdentification();
             return _manager.GetCloudTenants(applicationIdentification);
         }
+
+        [HttpPost]
+        [Route("ResetUserPasswordApplication")]
+        [IsInternalAPI]
+        public ResetUserPasswordApplicationOutput ResetUserPasswordApplication(ResetUserPasswordApplicationInput input)
+        {
+            var output = new ResetUserPasswordApplicationOutput();
+            output.OperationOutput = _manager.ResetUserPasswordApplication(input.UserId);
+            return output;
+        }
+
+
+        [HttpPost]
+        [Route("ForgotUserPasswordApplication")]
+        [IsInternalAPI]
+        public ForgotUserPasswordApplicationOutput ForgotUserPasswordApplication(ForgotUserPasswordApplicationInput input)
+        {
+            var output = new ForgotUserPasswordApplicationOutput();
+            output.OperationOutput = _manager.ForgotUserPasswordApplication(input.Email);
+            return output;
+        }
     }
 }

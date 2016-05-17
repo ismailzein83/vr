@@ -1,9 +1,9 @@
 ﻿using CloudPortal.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
+using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Security.Business;
 using VRSecEntities = Vanrise.Security.Entities;
@@ -12,6 +12,15 @@ namespace CloudPortal.BusinessEntity.Business
 {
     public class CloudServiceManager
     {
+        static TimeSpan s_resetPasswordValidity;
+
+        static CloudServiceManager()
+        {
+            if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["TempPasswordValidity"], out s_resetPasswordValidity))
+                s_resetPasswordValidity = new TimeSpan(1, 0, 0);
+        }
+
+
         #region public methods
 
         public List<VRSecEntities.CloudApplicationTenant> GetApplicationTenants(VRSecEntities.CloudApplicationIdentification applicationIdentification)
@@ -163,20 +172,33 @@ namespace CloudPortal.BusinessEntity.Business
                 if (user == null)
                     throw new Exception(String.Format("Could not insert User '{0}'", userEmail));
             }
-            CloudApplicationUserManager appUserManager = new CloudApplicationUserManager();
-            CloudApplicationUser appUser;
-            bool isAdded = appUserManager.AddApplicationUser(applicationIdentification, user.UserId, appUserStatus, appUserDescription, tenantId, out appUser);
-            if (isAdded)
+
+            if (user.TenantId != tenantId)
+            {
                 return new InsertOperationOutput<VRSecEntities.CloudApplicationUser>
                 {
-                    Result = InsertOperationResult.Succeeded,
-                    InsertedObject = MapUserToAppUser(user, appUser)
+                    Result = InsertOperationResult.Failed,
+                    Message="Same user exists under another company",
+                    ShowExactMessage = true
                 };
+            }
             else
-                return new InsertOperationOutput<VRSecEntities.CloudApplicationUser>
-                {
-                    Result = InsertOperationResult.SameExists
-                };
+            {
+                CloudApplicationUserManager appUserManager = new CloudApplicationUserManager();
+                CloudApplicationUser appUser;
+                bool isAdded = appUserManager.AddApplicationUser(applicationIdentification, user.UserId, appUserStatus, appUserDescription, tenantId, out appUser);
+                if (isAdded)
+                    return new InsertOperationOutput<VRSecEntities.CloudApplicationUser>
+                    {
+                        Result = InsertOperationResult.Succeeded,
+                        InsertedObject = MapUserToAppUser(user, appUser)
+                    };
+                else
+                    return new InsertOperationOutput<VRSecEntities.CloudApplicationUser>
+                    {
+                        Result = InsertOperationResult.SameExists
+                    };
+            }
         }
 
         public UpdateOperationOutput<VRSecEntities.CloudApplicationUser> UpdateUserToApplication(VRSecEntities.CloudApplicationIdentification applicationIdentification, int userId, VRSecEntities.UserStatus appUserStatus, string appUserDescription)
@@ -201,6 +223,53 @@ namespace CloudPortal.BusinessEntity.Business
                 {
                     Result = UpdateOperationResult.Failed
                 };
+        }
+
+        public UpdateOperationOutput<object> ResetUserPasswordApplication(int userId)
+        {
+            UserManager userManager = new UserManager();
+            var user = userManager.GetUserbyId(userId);
+            if (user == null)
+                return new UpdateOperationOutput<object>() { Result = UpdateOperationResult.Failed };
+
+            Vanrise.Common.PasswordGenerator pwdGenerator = new Vanrise.Common.PasswordGenerator();
+            string pwd = pwdGenerator.Generate();
+
+
+            UpdateOperationOutput<object> result = userManager.UpdateTempPasswordById(userId, pwd, DateTime.Now.Add(s_resetPasswordValidity));
+            if (result.Result == UpdateOperationResult.Succeeded)
+            {
+                EmailTemplateManager emailTemplateManager = new EmailTemplateManager();
+                EmailTemplate template = emailTemplateManager.GeEmailTemplateByType(Vanrise.Security.Business.Constants.ResetPasswordType);
+                PasswordEmailContext context = new PasswordEmailContext() { Name = user.Name, Password = pwd };
+
+                EmailHelper emailHelper = new EmailHelper(user.Email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
+                emailHelper.Send();
+            }
+            return result;
+        }
+
+        public UpdateOperationOutput<object> ForgotUserPasswordApplication(string email)
+        {
+            UserManager userManager = new UserManager();
+            var user = userManager.GetUserbyEmail(email);
+            if (user == null)
+                return new UpdateOperationOutput<object>() { Result = UpdateOperationResult.Failed };
+
+            Vanrise.Common.PasswordGenerator pwdGenerator = new Vanrise.Common.PasswordGenerator();
+            string pwd = pwdGenerator.Generate();
+
+            UpdateOperationOutput<object> result = userManager.UpdateTempPasswordByEmail(email, pwd, DateTime.Now.Add(s_resetPasswordValidity));
+            if (result.Result == UpdateOperationResult.Succeeded)
+            {
+                EmailTemplateManager emailTemplateManager = new EmailTemplateManager();
+                EmailTemplate template = emailTemplateManager.GeEmailTemplateByType(Vanrise.Security.Business.Constants.ForgotPasswordType);
+                PasswordEmailContext context = new PasswordEmailContext() { Name = user.Name, Password = pwd };
+
+                EmailHelper emailHelper = new EmailHelper(email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
+                emailHelper.Send();
+            }
+            return result;
         }
 
         public bool CheckAppUsersUpdated(ref DateTime? lastCheckTime)
