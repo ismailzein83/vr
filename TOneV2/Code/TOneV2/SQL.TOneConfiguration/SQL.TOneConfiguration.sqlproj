@@ -331,6 +331,8 @@
     <Build Include="sec\Stored Procedures\sp_Tenant_GetAll.sql" />
     <Build Include="sec\Stored Procedures\sp_CloudAuthServer_Update.sql" />
     <Build Include="sec\Stored Procedures\sp_CloudAuthServer_Insert.sql" />
+    <Build Include="genericdata\Tables\BELookupRuleDefinition.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_BELookupRuleDefinition_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

@@ -5,7 +5,7 @@
 AS
 BEGIN
 SET @id =0;
-IF NOT EXISTS(SELECT 1 FROM common.[City] WHERE Name = @Name)
+IF NOT EXISTS(SELECT 1 FROM common.[City] WHERE Name = @Name and CountryID=@CountryID)
 	BEGIN
 		INSERT INTO common.[City](Name, CountryID)
 		VALUES (@Name, @CountryID)
