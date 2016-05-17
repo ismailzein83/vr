@@ -20,7 +20,7 @@
         }
 
         function HasUpdateEmailTemplatePermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['UpdateEmailTemplate']));
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controller, ['UpdateEmailTemplate']));
         }
 
 
