@@ -232,6 +232,7 @@
     <add key="BusinessProcessConfigDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="TOneWhS_TS_DBConnStringKey" value="TOneV2DBConnString"/>
     <add key="TrafficStatsQualityMeasurementInterval" value="5000:00:00"/>
+    <add key="IsRuntimeService" value="true"/>
   </appSettings>
   <system.codedom>
     <compilers>
