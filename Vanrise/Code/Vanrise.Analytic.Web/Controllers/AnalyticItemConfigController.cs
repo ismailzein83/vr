@@ -39,6 +39,14 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticJoinConfigInfoFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<AnalyticJoinConfigInfoFilter>(filter) : null;
             return manager.GetJoinsInfo(serializedFilter);
         }
+        [HttpGet]
+        [Route("GetAggregatesInfo")]
+        public IEnumerable<AnalyticAggregateConfigInfo> GetAggregatesInfo(string filter)
+        {
+            AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
+            AnalyticAggregateConfigInfoFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<AnalyticAggregateConfigInfoFilter>(filter) : null;
+            return manager.GetAggregatesInfo(serializedFilter);
+        }
         [HttpPost]
         [Route("GetFilteredAnalyticItemConfigs")]
         public object GetFilteredAnalyticItemConfigs(Vanrise.Entities.DataRetrievalInput<AnalyticItemConfigQuery> input)
@@ -70,6 +78,9 @@ namespace Vanrise.Analytic.Web.Controllers
                 case AnalyticItemType.Join:
                     var joinAnalyticItemConfigObj = Serializer.Deserialize<AnalyticItemConfig<AnalyticJoinConfig>>(analyticItemConfig.AnalyticItemConfig);
                     return manager.AddAnalyticItemConfig(joinAnalyticItemConfigObj);
+                case AnalyticItemType.Aggregate:
+                    var aggregateAnalyticItemConfigObj = Serializer.Deserialize<AnalyticItemConfig<AnalyticAggregateConfig>>(analyticItemConfig.AnalyticItemConfig);
+                    return manager.AddAnalyticItemConfig(aggregateAnalyticItemConfigObj);
             }
             return null;
         }
@@ -89,6 +100,9 @@ namespace Vanrise.Analytic.Web.Controllers
                 case AnalyticItemType.Join:
                     var joinAnalyticItemConfigObj = Serializer.Deserialize<AnalyticItemConfig<AnalyticJoinConfig>>(analyticItemConfig.AnalyticItemConfig);
                     return manager.UpdateAnalyticItemConfig(joinAnalyticItemConfigObj);
+                case AnalyticItemType.Aggregate:
+                    var aggregateAnalyticItemConfigObj = Serializer.Deserialize<AnalyticItemConfig<AnalyticAggregateConfig>>(analyticItemConfig.AnalyticItemConfig);
+                    return manager.UpdateAnalyticItemConfig(aggregateAnalyticItemConfigObj);
             }
             return null;
         }

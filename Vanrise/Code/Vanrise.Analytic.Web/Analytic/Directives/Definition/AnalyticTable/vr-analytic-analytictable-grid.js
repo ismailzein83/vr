@@ -90,6 +90,7 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalS
             drillDownDefinitions.push(getDimensionDrillDownDefinition());
             drillDownDefinitions.push(getMeasureDrillDownDefinition());
             drillDownDefinitions.push(getJoinDrillDownDefinition());
+            drillDownDefinitions.push(getAggregateDrillDownDefinition());
             return drillDownDefinitions;
         }
         function getDimensionDrillDownDefinition() {
@@ -177,6 +178,36 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalS
                         }
                     };
                     VR_Analytic_AnalyticItemConfigService.addItemConfig(onJoinAdded, tableItem.Entity.AnalyticTableId, VR_Analytic_AnalyticTypeEnum.Join.value);
+                },
+            }];
+            return drillDownDefinition;
+        }
+        function getAggregateDrillDownDefinition() {
+            var drillDownDefinition = {};
+            drillDownDefinition.title = "Aggregates";
+            drillDownDefinition.directive = "vr-analytic-analyticconfig-aggregate-grid";
+            drillDownDefinition.loadDirective = function (aggregateGridAPI, tableItem) {
+                tableItem.aggregateGridAPI = aggregateGridAPI;
+
+                var query = {
+                    TableId: tableItem.Entity.AnalyticTableId,
+                    ItemType: VR_Analytic_AnalyticTypeEnum.Aggregate.value
+                };
+                return aggregateGridAPI.loadGrid(query);
+            };
+
+            drillDownDefinition.parentMenuActions = [{
+                name: "Add Aggregate",
+                clicked: function (tableItem) {
+                    if (drillDownDefinition.setTabSelected != undefined)
+                        drillDownDefinition.setTabSelected(tableItem);
+
+                    var onAggregateAdded = function (aggregateObj) {
+                        if (tableItem.aggregateGridAPI != undefined) {
+                            tableItem.aggregateGridAPI.onAnalyticAggregateAdded(aggregateObj);
+                        }
+                    };
+                    VR_Analytic_AnalyticItemConfigService.addItemConfig(onAggregateAdded, tableItem.Entity.AnalyticTableId, VR_Analytic_AnalyticTypeEnum.Aggregate.value);
                 },
             }];
             return drillDownDefinition;

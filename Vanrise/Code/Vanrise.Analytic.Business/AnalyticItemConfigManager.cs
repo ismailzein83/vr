@@ -123,7 +123,7 @@ namespace Vanrise.Analytic.Business
         public IEnumerable<AnalyticMeasureConfigInfo> GetMeasuresInfo(AnalyticMeasureConfigInfoFilter filter)
         {
             if (filter == null || filter.TableIds == null || filter.TableIds.Count == 0)
-                throw new NullReferenceException("AnalyticMeasureConfigInfoFilter");
+                throw new NullReferenceException("filter");
             List<AnalyticMeasureConfigInfo> measureConfigs = new List<AnalyticMeasureConfigInfo>();
             foreach (var tableId in filter.TableIds)
             {
@@ -135,7 +135,7 @@ namespace Vanrise.Analytic.Business
         public IEnumerable<AnalyticJoinConfigInfo> GetJoinsInfo(AnalyticJoinConfigInfoFilter filter)
         {
             if (filter == null || filter.TableIds == null || filter.TableIds.Count == 0)
-                throw new NullReferenceException("AnalyticJoinConfigInfoFilter");
+                throw new NullReferenceException("filter");
             List<AnalyticJoinConfigInfo> JoinConfigs = new List<AnalyticJoinConfigInfo>();
             foreach (var tableId in filter.TableIds)
             {
@@ -144,8 +144,19 @@ namespace Vanrise.Analytic.Business
             }
             return JoinConfigs;
         }
+        public IEnumerable<AnalyticAggregateConfigInfo> GetAggregatesInfo(AnalyticAggregateConfigInfoFilter filter)
+        {
+            if (filter == null || filter.TableIds == null || filter.TableIds.Count == 0)
+                throw new NullReferenceException("filter");
+            List<AnalyticAggregateConfigInfo> AggregateConfigs = new List<AnalyticAggregateConfigInfo>();
+            foreach (var tableId in filter.TableIds)
+            {
+                var aggregates = GetCachedAnalyticItemConfigs<AnalyticAggregateConfig>(tableId, AnalyticItemType.Aggregate);
+                AggregateConfigs.AddRange(aggregates.MapRecords(AnalyticAggregateConfigInfoMapper));
+            }
+            return AggregateConfigs;
+        }
 
-       
         public IEnumerable<Object> GetAnalyticItemConfigs(List<int> tableIds , AnalyticItemType itemType)
         {
          return GetCachedAnalyticItemConfigsByItemType(tableIds,itemType);
@@ -229,6 +240,7 @@ namespace Vanrise.Analytic.Business
                 case AnalyticItemType.Dimension: data = GetCachedAnalyticItemConfigs<AnalyticDimensionConfig>(tableId, itemType).FindRecord(x => x.AnalyticItemConfigId == analyticItemConfigId); break;
                 case AnalyticItemType.Join: data = GetCachedAnalyticItemConfigs<AnalyticJoinConfig>(tableId, itemType).FindRecord(x => x.AnalyticItemConfigId == analyticItemConfigId); break;
                 case AnalyticItemType.Measure: data = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(tableId, itemType).FindRecord(x => x.AnalyticItemConfigId == analyticItemConfigId); break;
+                case AnalyticItemType.Aggregate: data = GetCachedAnalyticItemConfigs<AnalyticAggregateConfig>(tableId, itemType).FindRecord(x => x.AnalyticItemConfigId == analyticItemConfigId); break;
             }
             return data;
         }
@@ -268,7 +280,19 @@ namespace Vanrise.Analytic.Business
                         measures.AddRange(obj);
                     }
                     data = measures;
-                    break; 
+                    break;
+                case AnalyticItemType.Aggregate:
+                    List<AnalyticItemConfig<AnalyticAggregateConfig>> aggregates = new List<AnalyticItemConfig<AnalyticAggregateConfig>>();
+                    foreach(int tableId in tableIds)
+                    {
+                        var obj = GetCachedAnalyticItemConfigs<AnalyticAggregateConfig>(tableId, itemType).ToList();
+                        RemoveCommonItemsInList(obj, aggregates);
+                        aggregates.AddRange(obj);
+                    }
+                    data = aggregates;
+                    break;
+
+
             }
             return data;
         }
@@ -280,6 +304,8 @@ namespace Vanrise.Analytic.Business
                 case AnalyticItemType.Dimension: data = GetCachedAnalyticItemConfigs<AnalyticDimensionConfig>(tableId, itemType).MapRecords(AnalyticConfigDetailMapper<AnalyticDimensionConfig>); break;
                 case AnalyticItemType.Join: data = GetCachedAnalyticItemConfigs<AnalyticJoinConfig>(tableId, itemType).MapRecords(AnalyticConfigDetailMapper<AnalyticJoinConfig>); break;
                 case AnalyticItemType.Measure: data = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(tableId, itemType).MapRecords(AnalyticConfigDetailMapper<AnalyticMeasureConfig>); break;
+                case AnalyticItemType.Aggregate: data = GetCachedAnalyticItemConfigs<AnalyticAggregateConfig>(tableId, itemType).MapRecords(AnalyticConfigDetailMapper<AnalyticAggregateConfig>); break;
+
             }
            return data; 
         }
@@ -363,6 +389,16 @@ namespace Vanrise.Analytic.Business
                 AnalyticItemConfigId = analyticItemConfig.AnalyticItemConfigId,
                 Name = analyticItemConfig.Name,
                 Title = analyticItemConfig.Title
+            };
+        }
+        AnalyticAggregateConfigInfo AnalyticAggregateConfigInfoMapper(AnalyticItemConfig<AnalyticAggregateConfig> analyticItemConfig)
+        {
+            return new AnalyticAggregateConfigInfo
+            {
+                AnalyticItemConfigId = analyticItemConfig.AnalyticItemConfigId,
+                Name = analyticItemConfig.Name,
+                Title = analyticItemConfig.Title,
+
             };
         }
         #endregion

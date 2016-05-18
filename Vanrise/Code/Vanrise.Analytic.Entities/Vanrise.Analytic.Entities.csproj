@@ -66,6 +66,8 @@
     <Compile Include="AnalyticTableQuery.cs" />
     <Compile Include="Config\Aggregate\AnalyticAggregate.cs" />
     <Compile Include="Config\Aggregate\AnalyticAggregateConfig.cs" />
+    <Compile Include="Config\Aggregate\AnalyticAggregateConfigInfo.cs" />
+    <Compile Include="Config\Aggregate\AnalyticAggregateConfigInfoFilter.cs" />
     <Compile Include="Config\AnalyticItemConfigDetail.cs" />
     <Compile Include="Config\AnalyticItemConfigInput.cs" />
     <Compile Include="Config\AnalyticItemConfigQuery.cs" />

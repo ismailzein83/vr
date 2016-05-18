@@ -21,7 +21,11 @@
                 filter: filter
             });
         }
-
+        function GetAggregatesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetAggregatesInfo"), {
+                filter: filter
+            });
+        }
         function GetFilteredAnalyticItemConfigs(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetFilteredAnalyticItemConfigs"), input);
         }
@@ -47,6 +51,7 @@
             GetDimensionsInfo: GetDimensionsInfo,
             GetMeasuresInfo: GetMeasuresInfo,
             GetJoinsInfo: GetJoinsInfo,
+            GetAggregatesInfo:GetAggregatesInfo,
             GetFilteredAnalyticItemConfigs: GetFilteredAnalyticItemConfigs,
             GetAnalyticItemConfigsById: GetAnalyticItemConfigsById,
             AddAnalyticItemConfig: AddAnalyticItemConfig,
