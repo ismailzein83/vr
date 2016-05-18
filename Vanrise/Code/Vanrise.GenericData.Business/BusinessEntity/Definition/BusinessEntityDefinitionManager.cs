@@ -126,6 +126,22 @@ namespace Vanrise.GenericData.Business
             var allViews = viewManager.GetViews();
             return allViews.FirstOrDefault(v => (v.Settings as GenericBEViewSettings) != null && (v.Settings as GenericBEViewSettings).BusinessEntityDefinitionId == businessEntityDefinitionId);
         }
+        public string GetBusinessEntityDefinitionName(int businessEntityDefinitionId)
+        {
+            var beDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
+            return beDefinition != null ? beDefinition.Name : null;
+        }
+        public int? GetBEDataRecordTypeIdIfGeneric(int businessEntityDefinitionId)
+        {
+            var beDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
+            if (beDefinition != null && beDefinition.Settings != null)
+            {
+                var genericBEDefinitionSettings = beDefinition.Settings as GenericBEDefinitionSettings;
+                if (genericBEDefinitionSettings != null)
+                    return genericBEDefinitionSettings.DataRecordTypeId;
+            }
+            return null;
+        }
         #endregion
 
         #region Private Methods

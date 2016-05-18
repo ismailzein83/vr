@@ -1,9 +1,7 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.dataSource"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'">
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Business Entity Definition Name'" field="'BusinessEntityDefinitionName'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>

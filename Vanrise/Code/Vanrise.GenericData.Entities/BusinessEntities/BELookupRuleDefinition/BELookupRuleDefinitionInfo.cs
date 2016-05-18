@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class BELookupRuleDefinitionQuery
+    public class BELookupRuleDefinitionInfo
     {
+        public int BELookupRuleDefinitionId { get; set; }
         public string Name { get; set; }
-
-        public IEnumerable<int> BusinessEntityDefinitionIds { get; set; }
     }
 }

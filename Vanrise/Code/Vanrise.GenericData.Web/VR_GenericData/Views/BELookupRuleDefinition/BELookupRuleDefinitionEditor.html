@@ -1,9 +1,52 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<div vr-modalcontent ng-controller="VR_GenericData_BELookupRuleDefinitionEditorController" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formEditor">
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-textbox label="Name" value="scopeModel.name" isrequired></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onBEDefinitionSelectorReady"
+                                                                      selectedvalues="scopeModel.selectedBEDefinition"
+                                                                      isrequried="true"
+                                                                      hideremoveicon="true">
+                    </vr-genericdata-businessentitydefinition-selector>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-section title="Criteria Fields">
+                        <vr-row>
+                            <vr-columns width="normal">
+                                <vr-button type="Add" data-onclick="scopeModel.addCriteriaField" vr-disabled="scopeModel.selectedBEDefinition == undefined" standalone></vr-button>
+                            </vr-columns>
+                            <vr-columns width="fullrow">
+                                <vr-validator validate="scopeModel.validateCriteriaFields()">
+                                    <vr-datagrid on-ready="scopeModel.onGridReady"
+                                                 datasource="scopeModel.criteriaFields"
+                                                 gridmenuactions="scopeModel.menuActions"
+                                                 hidegridmenu="true"
+                                                 ondeleterow="scopeModel.removeCriteriaField"
+                                                 enabledraggablerow="true"
+                                                 norowhighlightonclick="true">
+                                        <vr-datagridcolumn headertext="'Title'" field="'Title'" type="'Text'" disablesorting></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Path'" field="'FieldPath'" type="'Text'" disablesorting></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Behavior Type'" field="'RuleStructureBehaviorTypeDescription'" type="'Text'" disablesorting></vr-datagridcolumn>
+                                    </vr-datagrid>
+                                </vr-validator>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-section>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

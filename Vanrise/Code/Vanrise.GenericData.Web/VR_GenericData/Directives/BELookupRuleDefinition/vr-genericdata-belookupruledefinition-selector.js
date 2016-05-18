@@ -2,9 +2,10 @@
 
     'use strict';
 
-    BelookupruledefinitionSelectorDirective.$inject = ['VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataRecordStorageService', 'UtilsService', 'VRUIUtilsService'];
+    BELookupRuleDefinitionSelectorDirective.$inject = ['VR_GenericData_BELookupRuleDefinitionAPIService', 'VR_GenericData_BELookupRuleDefinitionService', 'UtilsService', 'VRUIUtilsService'];
 
-    function BelookupruledefinitionSelectorDirective(VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataRecordStorageService, UtilsService, VRUIUtilsService) {
+    function BELookupRuleDefinitionSelectorDirective(VR_GenericData_BELookupRuleDefinitionAPIService, VR_GenericData_BELookupRuleDefinitionService, UtilsService, VRUIUtilsService)
+    {
         return {
             restrict: 'E',
             scope: {
@@ -18,13 +19,14 @@
                 isdisabled: "=",
                 customlabel: "@",
             },
-            controller: function ($scope, $element, $attrs) {
+            controller: function ($scope, $element, $attrs)
+            {
                 var ctrl = this;
                 ctrl.datasource = [];
                 ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
 
-                var belookupruledefinitionSelector = new BelookupruledefinitionSelector(ctrl, $scope, $attrs);
-                belookupruledefinitionSelector.initializeController();
+                var beLookupRuleDefinitionSelector = new BELookupRuleDefinitionSelector(ctrl, $scope, $attrs);
+                beLookupRuleDefinitionSelector.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -40,40 +42,39 @@
             }
         };
 
-        function BelookupruledefinitionSelector(ctrl, $scope, attrs) {
+        function BELookupRuleDefinitionSelector(ctrl, $scope, attrs)
+        {
             this.initializeController = initializeController;
 
             var selectorAPI;
 
-            function initializeController() {
+            function initializeController()
+            {
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
-
-                    if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-                        ctrl.onReady(getDirectiveAPI());
-                    }
-                }
+                };
             }
 
-            function getDirectiveAPI() {
+            function defineAPI()
+            {
                 var api = {};
 
-                api.clearDataSource = function () {
-                    selectorAPI.clearDataSource();
-                }
-
-                api.load = function (payload) {
+                api.load = function (payload)
+                {
                     var selectedIds;
                     var filter = null;
+
                     if (payload != undefined) {
                         filter = {};
                         selectedIds = payload.selectedIds;
                     }
 
-                    return VR_GenericData_DataRecordStorageAPIService.GetDataRecordsStorageInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return VR_GenericData_BELookupRuleDefinitionAPIService.GetBELookupRuleDefinitionsInfo(UtilsService.serializetoJson(filter)).then(function (response)
+                    {
                         selectorAPI.clearDataSource();
 
-                        if (response) {
+                        if (response != null)
+                        {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);
                             }
@@ -89,9 +90,13 @@
                     return VRUIUtilsService.getIdSelectedIds('', attrs, ctrl);
                 };
 
-                return api;
+                api.clearDataSource = function () {
+                    selectorAPI.clearDataSource();
+                };
+
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
+                    ctrl.onReady(api);
             }
-            
         }
 
         function getDirectiveTemplate(attrs) {
@@ -132,6 +137,6 @@
         }
     }
 
-    app.directive('vrGenericdataBelookupruledefinitionSelector', BelookupruledefinitionSelectorDirective);
+    app.directive('vrGenericdataBelookupruledefinitionSelector', BELookupRuleDefinitionSelectorDirective);
 
 })(app);

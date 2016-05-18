@@ -36,6 +36,7 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return GetWebResponse(input, _manager.GetFilteredBusinessEntityDefinitions(input));
         }
+
         [Route("UpdateBusinessEntityDefinition")]
         public Vanrise.Entities.UpdateOperationOutput<BusinessEntityDefinitionDetail> UpdateBusinessEntityDefinition(BusinessEntityDefinition businessEntityDefinition)
         {
@@ -48,11 +49,19 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.AddBusinessEntityDefinition(businessEntityDefinition);
         }
+
         [HttpGet]
         [Route("GetGenericBEDefinitionView")]
         public Vanrise.Security.Entities.View GetGenericBEDefinitionView(int businessEntityDefinitionId)
         {
             return _manager.GetGenericBEDefinitionView(businessEntityDefinitionId);
+        }
+
+        [HttpGet]
+        [Route("GetBEDataRecordTypeIdIfGeneric")]
+        public int? GetBEDataRecordTypeIdIfGeneric(int businessEntityDefinitionId)
+        {
+            return _manager.GetBEDataRecordTypeIdIfGeneric(businessEntityDefinitionId);
         }
     }
 }
