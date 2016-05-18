@@ -17,7 +17,7 @@ namespace TOne.WhS.DBSync.Business
         public SourceCarrierAccountMigrator(MigrationContext context)
             : base(context)
         {
-            dbSyncDataManager = new CarrierAccountDBSyncDataManager(context.UseTempTables);
+            dbSyncDataManager = new CarrierAccountDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceCarrierAccountDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
         }
@@ -100,6 +100,10 @@ namespace TOne.WhS.DBSync.Business
 
 
                     carrierAccountSettings.Mask = sourceItem.CarrierMask;
+                    int? sellingNumberPlanId = null;
+                    if (accountType != CarrierAccountType.Supplier)
+                        sellingNumberPlanId = Context.DefaultSellingNumberPlanId;
+
                     return new CarrierAccount
                     {
                         AccountType = accountType,
@@ -107,7 +111,7 @@ namespace TOne.WhS.DBSync.Business
                         CarrierProfileId = carrierProfile.CarrierProfileId,
                         CustomerSettings = carrierAccountCustomerSettings,
                         NameSuffix = (String.IsNullOrEmpty(sourceItem.NameSuffix) ? carrierProfile.SourceId : sourceItem.NameSuffix),
-                        //SellingNumberPlanId = null,
+                        SellingNumberPlanId = sellingNumberPlanId,
                         SupplierSettings = carrierAccountSupplierSettings,
                         SourceId = sourceItem.SourceId
                     };

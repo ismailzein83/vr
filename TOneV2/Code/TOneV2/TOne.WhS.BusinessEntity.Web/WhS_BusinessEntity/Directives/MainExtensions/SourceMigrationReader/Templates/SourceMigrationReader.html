@@ -1,11 +1,16 @@
 ﻿<vr-row>
 
-    <vr-columns width="fullrow">
+    <vr-columns width="1/2row">
         <vr-switch value="useTempTables" label="Use Temporary Tables"></vr-switch>
     </vr-columns>
 
+    <vr-whs-be-sellingnumberplan-selector normal-col-num="6" on-ready="onSellingNumberPlanDirectiveReady" isrequired="true">
+    </vr-whs-be-sellingnumberplan-selector>
 
     <vr-columns width="fullrow">
         <vr-textarea label="Connection String" value="connectionString" isrequired />
     </vr-columns>
+
+
+
 </vr-row>

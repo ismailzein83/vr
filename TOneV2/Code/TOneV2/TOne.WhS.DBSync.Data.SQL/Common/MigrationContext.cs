@@ -16,6 +16,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         public bool UseTempTables { get; set; }
         public Dictionary<DBTableName, DBTable> DBTables { get; set; }
         public MigrationCredentials MigrationCredentials { get; set; }
+        public int DefaultSellingNumberPlanId { get; set; }
 
 
         public void WriteException(Exception ex)

@@ -1,4 +1,7 @@
-﻿using TOne.WhS.DBSync.Business;
+﻿using System;
+using System.Collections.Generic;
+using TOne.WhS.DBSync.Business;
+using Vanrise.Runtime;
 using Vanrise.Runtime.Entities;
 
 namespace TestRuntime.Tasks
@@ -16,6 +19,7 @@ namespace TestRuntime.Tasks
 
             DBSyncTaskActionArgument taskActionArgument = new DBSyncTaskActionArgument();
             taskActionArgument.ConnectionString = "Server=192.168.110.185;Database=MVTSPro;User ID=development;Password=dev!123";
+            taskActionArgument.DefaultSellingNumberPlanId = 16;
             taskActionArgument.UseTempTables = true;
             DBSyncTaskAction dbSyncTaskAction = new DBSyncTaskAction();
             dbSyncTaskAction.Execute(new SchedulerTask(), taskActionArgument, null);

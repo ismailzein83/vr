@@ -11,5 +11,6 @@ namespace TOne.WhS.DBSync.Business
     {
         public string ConnectionString { get; set; }
         public bool UseTempTables { get; set; }
+        public int DefaultSellingNumberPlanId { get; set; }
     }
 }

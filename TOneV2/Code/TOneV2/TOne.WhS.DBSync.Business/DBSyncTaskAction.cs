@@ -28,6 +28,7 @@ namespace TOne.WhS.DBSync.Business
                 context.WriteInformation("Database Sync Task Action Started");
                 context.UseTempTables = dbSyncTaskActionArgument.UseTempTables;
                 context.ConnectionString = dbSyncTaskActionArgument.ConnectionString;
+                context.DefaultSellingNumberPlanId = dbSyncTaskActionArgument.DefaultSellingNumberPlanId;
 
                 Dictionary<DBTableName, DBTable> dtTables = new Dictionary<DBTableName, DBTable>();
 
