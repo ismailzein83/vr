@@ -29,13 +29,15 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 foreach (CodeToAdd codeToAdd in zoneTopProcess.CodesToAdd)
                 {
-                    if (codeToAdd.ChangedExistingCodes != null)
+                    if (codeToAdd.ChangedExistingCodes.Count() > 0)
                     {
                         ExistingZone existingZoneInContext;
                         existingZonesByZoneName.TryGetValue(codeToAdd.ZoneName, out existingZoneInContext);
 
-                        if (existingZoneInContext != null && existingZoneInContext.BED > DateTime.Today &&
-                            !codeToAdd.ZoneName.Equals(codeToAdd.ChangedExistingCodes.FindRecord(item => item.CodeEntity.Code == codeToAdd.Code).ParentZone.Name, StringComparison.InvariantCultureIgnoreCase))
+                        ExistingCode changedExistingCode= codeToAdd.ChangedExistingCodes.FindRecord(item => item.CodeEntity.Code == codeToAdd.Code);
+
+                        if (existingZoneInContext != null && existingZoneInContext.BED > DateTime.Today && changedExistingCode != null &&
+                            !codeToAdd.ZoneName.Equals(changedExistingCode.ParentZone.Name,StringComparison.InvariantCultureIgnoreCase))
                             return false;
 
                     }
