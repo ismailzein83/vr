@@ -25,30 +25,42 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
             $scope.scopeModel = {};
             $scope.scopeModel.dataRecordTypeField;
             var dataRecordTypeFieldEditorApi;
-
+            var dataRecordTypeFieldReadyDeferred;
             var context;
             var filterObj;
 
 
 
             function initializeController() {
-               
+
                 $scope.scopeModel.onDataRecordTypeFieldEditorReady = function (api) {
                     dataRecordTypeFieldEditorApi = api;
+
                     var payload = { dataRecordTypeField: $scope.scopeModel.dataRecordTypeField, filterObj: filterObj };
                     var setLoader = function (value) {
-                    $scope.isLoading = value;
-                        };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeFieldEditorApi, payload, setLoader);
+                        $scope.scopeModel.isLoading = value; UtilsService.safeApply($scope);
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeFieldEditorApi, payload, setLoader, dataRecordTypeFieldReadyDeferred);
+
                 }
 
                 $scope.scopeModel.onDataRecordTypeFieldFilterReady = function (api) {
                     dataRecordTypeFieldEditorApi = api;
-                    api.load();
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isLoading = value; UtilsService.safeApply($scope);
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeFieldEditorApi, undefined, setLoader, dataRecordTypeFieldReadyDeferred);
                 }
                 $scope.scopeModel.onDataRecordTypeFieldSelectionChanged = function () {
                     if (context != undefined && $scope.scopeModel.dataRecordTypeField != undefined) {
-                       $scope.scopeModel.ruleFilterEditor = context.getRuleEditor($scope.scopeModel.dataRecordTypeField.Type.ConfigId);
+                        $scope.scopeModel.ruleFilterEditor = context.getRuleEditor($scope.scopeModel.dataRecordTypeField.Type.ConfigId);
+                    }
+                    if (dataRecordTypeFieldEditorApi != undefined) {
+                        var payload = { dataRecordTypeField: $scope.scopeModel.dataRecordTypeField };
+                        var setLoader = function (value) {
+                            $scope.scopeModel.isLoading = value; UtilsService.safeApply($scope);
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeFieldEditorApi, payload, setLoader, dataRecordTypeFieldReadyDeferred);
                     }
                 }
 
@@ -59,7 +71,7 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
                 var api = {};
 
                 api.load = function (payload) {
-                   
+                    var promises = [];
                     if (payload != undefined) {
                         $scope.scopeModel.conditions = UtilsService.getArrayEnum(VR_GenericData_ConditionEnum);
                         $scope.scopeModel.selectedCondition = $scope.scopeModel.conditions[0];
@@ -74,8 +86,20 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
                                 $scope.scopeModel.selectedCondition = UtilsService.getItemByVal($scope.scopeModel.conditions, '', 'type');
                             }
                             $scope.scopeModel.dataRecordTypeField = UtilsService.getItemByVal($scope.scopeModel.datasource, filterObj.FieldName, 'FieldName');
+
+
+                            dataRecordTypeFieldReadyDeferred = UtilsService.createPromiseDeferred();
+                            var dataRecordTypeFieldLoadDeferred = UtilsService.createPromiseDeferred();
+
+                            dataRecordTypeFieldReadyDeferred.promise.then(function () {
+                                dataRecordTypeFieldReadyDeferred = undefined;
+                                var payloadRecordTypeField = { dataRecordTypeField: $scope.scopeModel.dataRecordTypeField, filterObj: filterObj };
+                                VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldEditorApi, payloadRecordTypeField, dataRecordTypeFieldLoadDeferred);
+                            });
+                            promises.push(dataRecordTypeFieldLoadDeferred.promise);
                         }
                     }
+                    return UtilsService.waitMultiplePromises(promises);
                 }
 
                 api.getData = function () {
