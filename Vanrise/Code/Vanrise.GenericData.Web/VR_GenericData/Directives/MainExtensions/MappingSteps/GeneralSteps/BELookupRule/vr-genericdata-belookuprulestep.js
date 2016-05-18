@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataBelookuprulestep', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrGenericdataBelookuprulestep', ['UtilsService', 'VRUIUtilsService','VR_GenericData_BELookupRuleDefinitionAPIService',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_BELookupRuleDefinitionAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -32,23 +32,55 @@ app.directive('vrGenericdataBelookuprulestep', ['UtilsService', 'VRUIUtilsServic
         };
 
         function BELookupRuleStepCtor(ctrl, $scope) {
-            var stepPayload;
-            var sourceDirectiveReadyAPI;
-            var sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var beLookupRuleDefinitionSelectorDirectiveReadyAPI;
+            var beLookupRuleDefinitionSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var targetDirectiveReadyAPI;
-            var targetDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var businessEntityMappingApi;
+            var businessEntityMappingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var mainPayload;
             function initializeController() {
-                $scope.onSourceReady = function (api) {
-                    sourceDirectiveReadyAPI = api;
-                    sourceDirectiveReadyPromiseDeferred.resolve();
+                $scope.criteriaFieldsMappings = [];
+                $scope.onBusinessEntityMappingReady = function (api)
+                {
+                  
+
+                    businessEntityMappingApi = api;
+                    businessEntityMappingReadyPromiseDeferred.resolve();
                 }
 
-                $scope.onTargetReady = function (api) {
-                    targetDirectiveReadyAPI = api;
-                    targetDirectiveReadyPromiseDeferred.resolve();
+                $scope.onBELookupRuleDefinitionSelectorReady = function (api) {
+                    beLookupRuleDefinitionSelectorDirectiveReadyAPI = api; console.log(api);
+
+                    beLookupRuleDefinitionSelectorReadyPromiseDeferred.resolve();
                 }
+
+                $scope.onBELookupRuleDefinitionSelectionChanged = function () {
+
+                    if (beLookupRuleDefinitionSelectorDirectiveReadyAPI != undefined && beLookupRuleDefinitionSelectorDirectiveReadyAPI.getSelectedIds() != undefined) {
+                        $scope.isLoadingMappingData = true;
+                        GetBELookupRuleDefinitionById(beLookupRuleDefinitionSelectorDirectiveReadyAPI.getSelectedIds()).then(function (response) {
+                            if (response && response.CriteriaFields) {
+                                $scope.criteriaFieldsMappings.length = 0;
+                                for (var i = 0; i < response.CriteriaFields.length; i++) {
+                                    var criteriaField = response.CriteriaFields[i];
+                                    var filterItem = {
+                                        CriteriaField: criteriaField,
+                                        readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                    };
+                                    var payload;
+                                    if (mainPayload != undefined && mainPayload.CriteriaFieldsMappings != undefined)
+                                        payload = mainPayload.CriteriaFieldsMappings[i] != undefined ? mainPayload.CriteriaFieldsMappings[i].Value : undefined;
+                                    addFilterItemToGrid(filterItem, payload);
+                                }
+                            }
+                        }).finally(function () {
+                            $scope.isLoadingMappingData = false;
+                        });
+                    }
+                }
+
 
                 defineAPI();
             }
@@ -57,45 +89,119 @@ app.directive('vrGenericdataBelookuprulestep', ['UtilsService', 'VRUIUtilsServic
                 var api = {};
 
                 api.load = function (payload) {
-                    stepPayload = payload;
+                    if (payload != undefined)
+                        mainPayload = payload;
                     var promises = [];
+                    var loadBeLookupRuleDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                        var loadTargetDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                      
-                        targetDirectiveReadyPromiseDeferred.promise.then(function () {
-                            var payloadTarget = { context: payload.context };
-                            if (payload.stepDetails != undefined)
-                                payloadTarget.selectedRecords = payload.stepDetails.Target;
-                            VRUIUtilsService.callDirectiveLoad(targetDirectiveReadyAPI, payloadTarget, loadTargetDirectivePromiseDeferred);
-                        });
-                        promises.push(loadTargetDirectivePromiseDeferred.promise);
+                    beLookupRuleDefinitionSelectorReadyPromiseDeferred.promise.then(function () {
+                        var payloadSelector;
+                        if (payload != undefined && payload.stepDetails != undefined)
+                            payloadSelector = {
+                                selectedIds: payload.stepDetails.BELookupRuleDefinitionId
+                            }
+                        VRUIUtilsService.callDirectiveLoad(beLookupRuleDefinitionSelectorDirectiveReadyAPI, payloadSelector, loadBeLookupRuleDefinitionSelectorPromiseDeferred);
+                    });
+                    promises.push(loadBeLookupRuleDefinitionSelectorPromiseDeferred.promise);
 
-                        var loadSourceDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                      
-                        sourceDirectiveReadyPromiseDeferred.promise.then(function () {
-                            var payloadSource = { context: payload.context};
-                            if (payload.stepDetails != undefined)
-                                payloadSource.selectedRecords = payload.stepDetails.Source;
-                            VRUIUtilsService.callDirectiveLoad(sourceDirectiveReadyAPI, payloadSource, loadSourceDirectivePromiseDeferred);
+                    if (payload != undefined && payload.stepDetails != undefined && payload.stepDetails.BELookupRuleDefinitionId != undefined) {
+                         GetBELookupRuleDefinitionById(payload.stepDetails.BELookupRuleDefinitionId).then(function (response) {
+                            if (response && response.CriteriaFields) {
+                                $scope.criteriaFieldsMappings.length = 0;
+                                for (var i = 0; i < response.CriteriaFields.length; i++) {
+                                    var criteriaField = response.CriteriaFields[i];
+                                    var filterItem = {
+                                        CriteriaField: criteriaField,
+                                        readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                    };
+                                    promises.push(filterItem.loadPromiseDeferred.promise);
+                                    var payloadData;
+                                    if (payload.stepDetails.CriteriaFieldsMappings != undefined)
+                                        payloadData = payload.stepDetails.CriteriaFieldsMappings[i] != undefined ? payload.stepDetails.CriteriaFieldsMappings[i].Value : undefined;
+                                    addFilterItemToGrid(filterItem, payloadData);
+                                }
+                            }
                         });
-                        promises.push(loadSourceDirectivePromiseDeferred.promise);
+                    }
+
+
+
+
+                    var loadbusinessEntityMappingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    businessEntityMappingReadyPromiseDeferred.promise.then(function () {
+                        var payloadBusinessEntityMapping;
+                        if (payload != undefined) {
+                            payloadBusinessEntityMapping = {};
+                            if (payload != undefined && payload.context != undefined)
+                                payloadBusinessEntityMapping.context = payload.context;
+                            if (payload != undefined && payload.stepDetails != undefined)
+                                payloadBusinessEntityMapping.selectedRecords = payload.stepDetails.BusinessEntity;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(businessEntityMappingApi, payloadBusinessEntityMapping, loadbusinessEntityMappingDirectivePromiseDeferred);
+                    });
+                    promises.push(loadbusinessEntityMappingDirectivePromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
-
                 }
 
                 api.getData = function () {
+                    var criteriaFieldsMappings = [];
+                    if ($scope.criteriaFieldsMappings.length > 0) {
+                        for (var i = 0; i < $scope.criteriaFieldsMappings.length; i++) {
+                            var criteriaFieldsMapping = $scope.criteriaFieldsMappings[i];
+                            if (criteriaFieldsMapping.directiveAPI != undefined && criteriaFieldsMapping.directiveAPI.getData() != undefined) {
+                                criteriaFieldsMappings.push({
+                                    FieldPath: criteriaFieldsMapping.FieldName,
+                                    Value: criteriaFieldsMapping.directiveAPI != undefined ? criteriaFieldsMapping.directiveAPI.getData() : undefined
+                                });
+                            }
+
+                        }
+                    }
                     return {
-                        $type: "Vanrise.GenericData.Transformation.MainExtensions.MappingSteps.AssignFieldStep, Vanrise.GenericData.Transformation.MainExtensions",
-                        Source: sourceDirectiveReadyAPI.getData(),
-                        Target: targetDirectiveReadyAPI.getData(),
-                        
+                        $type: "Vanrise.GenericData.MainExtensions.MappingSteps.BELookupRuleMappingStep, Vanrise.GenericData.MainExtensions",
+                        BELookupRuleDefinitionId: beLookupRuleDefinitionSelectorDirectiveReadyAPI != undefined ? beLookupRuleDefinitionSelectorDirectiveReadyAPI.getSelectedIds() : undefined,
+                        CriteriaFieldsMappings: criteriaFieldsMappings,
+                        BusinessEntity: businessEntityMappingApi !=undefined ?businessEntityMappingApi.getData():undefined
                     };
                 }
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
+
+            function addFilterItemToGrid(filterItem, payload) {
+                var dataItem = {
+                    FieldName: filterItem.CriteriaField.FieldPath,
+                    Title: filterItem.CriteriaField.Title
+                };
+                var dataItemPayload = {};
+
+                if (mainPayload != undefined) {
+                    dataItemPayload.context = mainPayload.context;
+
+                }
+                if (payload != undefined)
+                    dataItemPayload.selectedRecords = payload;
+                dataItem.onSourceMappingReady = function (api) {
+                    dataItem.directiveAPI = api;
+                    filterItem.readyPromiseDeferred.resolve();
+                };
+
+                filterItem.readyPromiseDeferred.promise
+                    .then(function () {
+                        VRUIUtilsService.callDirectiveLoad(dataItem.directiveAPI, dataItemPayload, filterItem.loadPromiseDeferred);
+                    });
+
+                $scope.criteriaFieldsMappings.push(dataItem);
+            }
+            function GetBELookupRuleDefinitionById(beLookupRuleDefinitionId)
+            {
+                return VR_GenericData_BELookupRuleDefinitionAPIService.GetBELookupRuleDefinition(beLookupRuleDefinitionId);
+            }
+
             this.initializeController = initializeController;
         }
         return directiveDefinitionObject;

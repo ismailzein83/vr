@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.MainExtensions.MappingSteps
 {
@@ -18,7 +19,7 @@ namespace Vanrise.GenericData.MainExtensions.MappingSteps
 
         public override void GenerateExecutionCode(Transformation.Entities.IDataTransformationCodeGenerationContext context)
         {
-            throw new NotImplementedException();
+          
         }
     }
 

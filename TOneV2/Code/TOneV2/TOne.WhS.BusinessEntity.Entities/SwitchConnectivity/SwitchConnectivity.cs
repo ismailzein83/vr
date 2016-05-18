@@ -20,6 +20,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public DateTime BED { get; set; }
 
-        public DateTime EED { get; set; }
+        public DateTime? EED { get; set; }
     }
 }

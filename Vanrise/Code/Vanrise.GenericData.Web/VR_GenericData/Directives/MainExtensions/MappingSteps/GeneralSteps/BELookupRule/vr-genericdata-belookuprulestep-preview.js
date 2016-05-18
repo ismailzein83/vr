@@ -35,6 +35,8 @@ app.directive('vrGenericdataBelookuprulestepPreview', ['UtilsService', 'VRUIUtil
             var stepObj = {};
 
             function initializeController() {
+                ctrl.criteriaFieldsMappings = [];
+
                 defineAPI();
             }
 
@@ -47,8 +49,10 @@ app.directive('vrGenericdataBelookuprulestepPreview', ['UtilsService', 'VRUIUtil
                         if (payload.stepDetails != undefined)
                         {
                             stepObj.stepDetails = payload.stepDetails;
-                            ctrl.target = payload.stepDetails.Target;
-                            ctrl.source = payload.stepDetails.Source;
+                            if (payload.stepDetails.CriteriaFieldsMappings != undefined && payload.stepDetails.CriteriaFieldsMappings.length > 0) {
+                                ctrl.recordsMapping = payload.stepDetails.CriteriaFieldsMappings;
+                            }
+                            ctrl.businessEntity = payload.stepDetails.BusinessEntity;
                         }
                        checkValidation();
                     }
@@ -56,8 +60,8 @@ app.directive('vrGenericdataBelookuprulestepPreview', ['UtilsService', 'VRUIUtil
                 }
 
                 api.applyChanges = function (changes) {
-                    ctrl.target = changes.Target;
-                    ctrl.source = changes.Source;
+                    ctrl.criteriaFieldsMappings = changes.CriteriaFieldsMappings;
+                    ctrl.businessEntity = changes.BusinessEntity;
                     stepObj.stepDetails = changes;
                 }
 
@@ -75,11 +79,16 @@ app.directive('vrGenericdataBelookuprulestepPreview', ['UtilsService', 'VRUIUtil
             }
 
             function checkValidation() {
-                if (ctrl.target == undefined) {
-                    return "Missing target mapping.";
+                if (ctrl.criteriaFieldsMappings != undefined) {
+                    for (var i = 0 ; i < ctrl.criteriaFieldsMappings.length; i++) {
+                        if (ctrl.criteriaFieldsMappings[i].Value == undefined)
+                            return "All fields should be mapped.";
+                    }
+                } else {
+                    return "All fields should be mapped.";
                 }
-                if ( ctrl.source == undefined) {
-                    return "Missing source mapping.";
+                if (ctrl.businessEntity == undefined) {
+                    return "Missing business entity mapping.";
                 }
                 return null;
             }

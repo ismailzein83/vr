@@ -52,6 +52,7 @@
             {
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
+                    defineAPI();
                 };
             }
 
@@ -80,14 +81,14 @@
                             }
 
                             if (selectedIds) {
-                                VRUIUtilsService.setSelectedValues(selectedIds, '', attrs, ctrl);
+                                VRUIUtilsService.setSelectedValues(selectedIds, 'BELookupRuleDefinitionId', attrs, ctrl);
                             }
                         }
                     });
                 };
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('BELookupRuleDefinitionId', attrs, ctrl);
                 };
 
                 api.clearDataSource = function () {
@@ -103,9 +104,9 @@
 
             var multipleselection = '';
 
-            var label = '';
+            var label = 'Lookup Rule';
             if (attrs.ismultipleselection != undefined) {
-                label = '';
+                label = 'Lookup Rules';
                 multipleselection = 'ismultipleselection';
             }
 
@@ -123,7 +124,7 @@
                     + ' onselectionchanged="ctrl.onselectionchanged"'
                     + ' onselectitem="ctrl.onselectitem"'
                     + ' ondeselectitem="ctrl.ondeselectitem"'
-                    + ' datavaluefield="DataRecordStorageId"'
+                    + ' datavaluefield="BELookupRuleDefinitionId"'
                     + ' datatextfield="Name"'
                     + ' ' + multipleselection
                     + ' ' + hideselectedvaluessection
