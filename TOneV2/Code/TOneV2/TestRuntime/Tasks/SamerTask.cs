@@ -47,7 +47,7 @@ namespace TestRuntime.Tasks
             AnalyticDimensionConfig AnalyticDimensionConfig = new AnalyticDimensionConfig()
             {
                 FieldType = new FieldTextType(),
-                GroupByColumns = new List<string>() { "ant.SaleZoneID", "salz.Name" },
+                //GroupByColumns = new List<string>() { "ant.SaleZoneID", "salz.Name" },
                 IdColumn = "ISNULL(ant.SaleZoneID,'N/A')",
                 JoinConfigNames = new List<string>() { "SaleZoneJoin" },
                 NameColumn = "salz.Name"
@@ -56,7 +56,7 @@ namespace TestRuntime.Tasks
             AnalyticDimensionConfig AnalyticDimensionConfig1 = new AnalyticDimensionConfig()
             {
                 FieldType = new FieldTextType(),
-                GroupByColumns = new List<string>() { "ant.SupplierZoneID", "suppz.Name" },
+                //GroupByColumns = new List<string>() { "ant.SupplierZoneID", "suppz.Name" },
                 IdColumn = "ISNULL(ant.SupplierZoneID,'N/A')",
                 JoinConfigNames = new List<string>() { "SupplierZoneJoin" },
                 NameColumn = "suppz.Name"
@@ -75,9 +75,9 @@ namespace TestRuntime.Tasks
                 Config = new AnalyticMeasureConfig()
                 {
                     JoinConfigNames = null,
-                    GetSQLExpressionMethod = "",
-                    SQLExpression = "Sum(ant.DeliveredAttempts)",
-                    SummaryFunction = AnalyticSummaryFunction.Sum
+                    //GetSQLExpressionMethod = "",
+                    //SQLExpression = "Sum(ant.DeliveredAttempts)",
+                    //SummaryFunction = AnalyticSummaryFunction.Sum
                 }
             };
             var test5 = Vanrise.Common.Serializer.Serialize(AnalyticMeasure);
