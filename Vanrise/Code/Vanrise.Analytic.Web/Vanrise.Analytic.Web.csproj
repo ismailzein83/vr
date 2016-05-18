@@ -124,6 +124,9 @@
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RealTime\Templates\RealTimeAnalyticReportTemplates.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RealTime\vr-analytic-analyticreport-realtime-definition.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RealTime\Widgets\vr-analytic-realtime-widgets-selective.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\SourceSettings\vr-analytic-recordsearch-sourcesettings-selective.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\Templates\RecordSearchAnalyticReportTemplates.html" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\vr-analytic-analyticreport-recordsearch-definition.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\Templates\AnalyticReportGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\vr-analytic-analyticreport-config-selector.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\vr-analytic-analyticreport-grid.js" />
@@ -153,6 +156,8 @@
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RealTime\Chart\vr-analytic-realtime-chart-toprecords.js" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RealTime\Templates\RealTimeAnalyticReportRuntimeTemplates.html" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RealTime\vr-analytic-analyticreport-realtime-runtime.js" />
+    <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\Templates\RecordSearchAnalyticReportRuntimeTemplates.html" />
+    <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\vr-analytic-analyticreport-recordsearch-runtime.js" />
     <Content Include="Analytic\Directives\Runtime\Chart\Templates\AnalyticPieChart.html" />
     <Content Include="Analytic\Directives\Runtime\Chart\Templates\AnalyticTopRecordsChart.html" />
     <Content Include="Analytic\Directives\Runtime\Chart\vr-analytic-piechart-toprecords.js" />
