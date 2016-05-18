@@ -5,6 +5,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Business
@@ -42,13 +43,15 @@ namespace TOne.WhS.DBSync.Business
 
         public override CarrierProfile BuildItemFromSource(SourceCarrierProfile sourceItem)
         {
+            VRFileManager vrFileManager = new VRFileManager();
+
             int? countryId = null;
             DBTable dbTableCountry = Context.DBTables[DBTableName.Country];
             if (dbTableCountry != null)
             {
                 Dictionary<string, Country> allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
                 Country country = null;
-                if (allCountries != null)
+                if (allCountries != null && !string.IsNullOrWhiteSpace(string.Empty))
                     country = allCountries.Values.Where(x => x.Name == sourceItem.Country).FirstOrDefault();
                 if (country != null)
                 {
@@ -96,7 +99,21 @@ namespace TOne.WhS.DBSync.Business
             settings.Faxes = faxes;
             settings.PhoneNumbers = phoneNumbers;
 
-            //settings.CompanyLogo
+            if (sourceItem.CompanyLogo != null)
+            {
+                string[] nameastab = sourceItem.CompanyLogoName.Split('.');
+                VRFile file = new VRFile()
+                {
+                    Content = sourceItem.CompanyLogo,
+                    Name = sourceItem.CompanyLogoName,
+                    Extension = nameastab[nameastab.Length - 1],
+                    CreatedTime = DateTime.Now
+
+                };
+
+                settings.CompanyLogo = vrFileManager.AddFile(file);
+            }
+
             settings.CountryId = countryId;
 
             return new CarrierProfile
