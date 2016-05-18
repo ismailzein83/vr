@@ -20,7 +20,7 @@
             VRModalService.showModal(beLookupRuleDefinitionEditorUrl, null, settings);
         }
 
-        function editBusinessEntityDefinition(beLookupRuleDefinitionId, onBELookupRuleDefinitionUpdated)
+        function editBELookupRuleDefinition(beLookupRuleDefinitionId, onBELookupRuleDefinitionUpdated)
         {
             var parameters = {
                 beLookupRuleDefinitionId: beLookupRuleDefinitionId
@@ -70,7 +70,7 @@
 
         return {
             addBELookupRuleDefinition: addBELookupRuleDefinition,
-            editBusinessEntityDefinition: editBusinessEntityDefinition,
+            editBELookupRuleDefinition: editBELookupRuleDefinition,
             addBELookupRuleDefinitionCriteriaField: addBELookupRuleDefinitionCriteriaField,
             editBELookupRuleDefinitionCriteriaField: editBELookupRuleDefinitionCriteriaField
         };

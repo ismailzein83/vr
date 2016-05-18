@@ -26,7 +26,7 @@ namespace Vanrise.GenericData.Business
             Dictionary<int, BELookupRuleDefinition> cachedEntities = this.GetCachedBELookupRuleDefinitions();
 
             Func<BELookupRuleDefinition, bool> filterExpression = (itm) =>
-                (input.Query.Name == null || itm.Name.Contains(input.Query.Name)) &&
+                (input.Query.Name == null || itm.Name.ToLower().Contains(input.Query.Name.ToLower())) &&
                 (input.Query.BusinessEntityDefinitionIds == null || input.Query.BusinessEntityDefinitionIds.Contains(itm.BusinessEntityDefinitionId));
 
             return DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, BELookupRuleDefinitionDetailMapper));
@@ -37,10 +37,10 @@ namespace Vanrise.GenericData.Business
             return this.GetCachedBELookupRuleDefinitions().MapRecords(BELookupRuleDefinitionInfoMapper);
         }
 
-        public BELookupRuleDefinition GetBELookupRuleDefinition(int beLookupDefinitionId)
+        public BELookupRuleDefinition GetBELookupRuleDefinition(int beLookupRuleDefinitionId)
         {
             Dictionary<int, BELookupRuleDefinition> cachedEntities = this.GetCachedBELookupRuleDefinitions();
-            return cachedEntities.GetRecord(beLookupDefinitionId);
+            return cachedEntities.GetRecord(beLookupRuleDefinitionId);
         }
 
         public Vanrise.Entities.InsertOperationOutput<BELookupRuleDefinitionDetail> AddBELookupRuleDefinition(BELookupRuleDefinition beLookupRuleDefinition)

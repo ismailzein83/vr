@@ -139,6 +139,12 @@
             if (beLookupRuleDefinitionEntity == undefined)
                 return;
             $scope.scopeModel.name = beLookupRuleDefinitionEntity.Name;
+
+            for (var i = 0; i < beLookupRuleDefinitionEntity.CriteriaFields.length; i++) {
+                var item = beLookupRuleDefinitionEntity.CriteriaFields[i];
+                setBehaviorTypeDescription(item);
+                $scope.scopeModel.criteriaFields.push(item);
+            }
         }
 
         function loadBEDefinitionSelector() {

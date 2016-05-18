@@ -59,11 +59,13 @@ namespace Vanrise.GenericData.Data.SQL
 
         #endregion
 
-        #region Private Methods
+        #region Mappers
 
         BELookupRuleDefinition BELookupRuleDefinitionMapper(IDataReader reader)
         {
-            return Vanrise.Common.Serializer.Deserialize<BELookupRuleDefinition>(reader["Details"] as string);
+            var beLookupRuleDefinition = Vanrise.Common.Serializer.Deserialize<BELookupRuleDefinition>(reader["Details"] as string);
+            beLookupRuleDefinition.BELookupRuleDefinitionId = (int)reader["ID"];
+            return beLookupRuleDefinition;
         }
         
         #endregion

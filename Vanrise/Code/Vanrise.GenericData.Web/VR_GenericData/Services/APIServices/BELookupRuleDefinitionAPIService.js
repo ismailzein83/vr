@@ -35,7 +35,8 @@
             GetFilteredBELookupRuleDefinitions: GetFilteredBELookupRuleDefinitions,
             GetBELookupRuleDefinitionsInfo: GetBELookupRuleDefinitionsInfo,
             GetBELookupRuleDefinition: GetBELookupRuleDefinition,
-            AddBELookupRuleDefinition: AddBELookupRuleDefinition
+            AddBELookupRuleDefinition: AddBELookupRuleDefinition,
+            UpdateBELookupRuleDefinition: UpdateBELookupRuleDefinition
         };
     }
 

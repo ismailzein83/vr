@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BELookupRuleDefinitionGridDirective.$inject = ['VR_GenericData_BELookupRuleDefinitionAPIService', 'VRNotificationService'];
+    BELookupRuleDefinitionGridDirective.$inject = ['VR_GenericData_BELookupRuleDefinitionAPIService', 'VR_GenericData_BELookupRuleDefinitionService', 'VRNotificationService'];
 
-    function BELookupRuleDefinitionGridDirective(VR_GenericData_BELookupRuleDefinitionAPIService, VRNotificationService) {
+    function BELookupRuleDefinitionGridDirective(VR_GenericData_BELookupRuleDefinitionAPIService, VR_GenericData_BELookupRuleDefinitionService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -79,7 +79,10 @@
 
                 function editBELookupRuleDefinition(dataItem)
                 {
-                    console.log('edit');
+                    var onBELookupRuleDefinitionUpdated = function (updatedBELookupRuleDefinition) {
+                        gridAPI.itemUpdated(updatedBELookupRuleDefinition);
+                    };
+                    VR_GenericData_BELookupRuleDefinitionService.editBELookupRuleDefinition(dataItem.Entity.BELookupRuleDefinitionId, onBELookupRuleDefinitionUpdated);
                 }
 
                 function deleteBELookupRuleDefinition(dataItem)
