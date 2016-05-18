@@ -37,5 +37,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", NumberPrecision = "NoDecimal" };
         }
+
+        public override bool IsMatched(object fieldValue, RecordFilter recordFilter)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

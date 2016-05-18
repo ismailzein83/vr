@@ -19,6 +19,8 @@ namespace Vanrise.GenericData.Entities
 
         public abstract bool IsMatched(Object fieldValue, Object filterValue);
 
+        public abstract bool IsMatched(Object fieldValue, RecordFilter recordFilter);
+
         public abstract GridColumnAttribute GetGridColumnAttribute();
 
         protected Type GetNullableType(Type type)

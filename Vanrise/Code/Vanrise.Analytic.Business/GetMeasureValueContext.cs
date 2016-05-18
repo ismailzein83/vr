@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
 
-namespace Vanrise.Analytic.Data.SQL
+namespace Vanrise.Analytic.Business
 {
     public class GetMeasureValueContext : IGetMeasureValueContext
     {

@@ -16,7 +16,7 @@ namespace Vanrise.Analytic.Data.SQL
     public class AnalyticDataManager : BaseSQLDataManager, IAnalyticDataManager
     {
         #region Public Methods
-        public IEnumerable<AnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
+        public IEnumerable<DBAnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, out  HashSet<string> includedSQLDimensions)
         {
             //Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
             //string query = BuildAnalyticQuery(input, false, parameterValues);
@@ -31,11 +31,11 @@ namespace Vanrise.Analytic.Data.SQL
             //    if (input.Query.CurrencyId.HasValue)
             //        cmd.Parameters.Add(new SqlParameter("@Currency", input.Query.CurrencyId.Value));
             //});
-            HashSet<string> includedSQLDimensions;
+            HashSet<string> includedSQLDimensions_Local;
             HashSet<string> includedSQLAggregates;
             Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
-            string query = BuildAnalyticQuery(input, out includedSQLDimensions, out includedSQLAggregates, parameterValues);
-            List<SQLRecord> sqlRecords = GetItemsText(query, (reader) => SQLRecordMapper(reader, null, includedSQLDimensions, includedSQLAggregates), (cmd) =>
+            string query = BuildAnalyticQuery(input, out includedSQLDimensions_Local, out includedSQLAggregates, parameterValues);
+            List<DBAnalyticRecord> dbRecords = GetItemsText(query, (reader) => SQLRecordMapper(reader, null, includedSQLDimensions_Local, includedSQLAggregates), (cmd) =>
             {
                 foreach (var prm in parameterValues)
                 {
@@ -44,9 +44,10 @@ namespace Vanrise.Analytic.Data.SQL
                 if (input.Query.CurrencyId.HasValue)
                     cmd.Parameters.Add(new SqlParameter("@Currency", input.Query.CurrencyId.Value));
             });
-
-            AnalyticRecord summaryRecord;
-            return ProcessSQLRecords(input.Query.DimensionFields, input.Query.ParentDimensions, input.Query.MeasureFields, input.Query.Filters, input.Query.FilterGroup, sqlRecords, includedSQLDimensions, input.Query.WithSummary, out summaryRecord);
+            includedSQLDimensions = includedSQLDimensions_Local;
+            return dbRecords;
+            //AnalyticRecord summaryRecord;
+            //return ProcessSQLRecords(input.Query.DimensionFields, input.Query.ParentDimensions, input.Query.MeasureFields, input.Query.Filters, input.Query.FilterGroup, sqlRecords, includedSQLDimensions, input.Query.WithSummary, out summaryRecord);
         }
 
         public IEnumerable<TimeVariationAnalyticRecord> GetTimeVariationAnalyticRecords(Vanrise.Entities.DataRetrievalInput<TimeVariationAnalyticQuery> input)
@@ -68,7 +69,7 @@ namespace Vanrise.Analytic.Data.SQL
 
         public IEnumerable<AnalyticRecord> GetTimeVariationAnalyticRecords2(Vanrise.Entities.DataRetrievalInput<TimeVariationAnalyticQuery> input)
         {
-            List<SQLRecord> sqlRecords = null;
+            List<DBAnalyticRecord> sqlRecords = null;
             HashSet<string> availableDimensions = null;
             AnalyticRecord summaryRecord;
             return ProcessSQLRecords(null, input.Query.ParentDimensions, input.Query.MeasureFields, input.Query.Filters, input.Query.FilterGroup, sqlRecords, availableDimensions, input.Query.WithSummary, out summaryRecord);
@@ -87,7 +88,7 @@ namespace Vanrise.Analytic.Data.SQL
             //    if (input.Query.CurrencyId.HasValue)
             //        cmd.Parameters.Add(new SqlParameter("@Currency", input.Query.CurrencyId.Value));
             //});
-            List<SQLRecord> sqlRecords = null;
+            List<DBAnalyticRecord> sqlRecords = null;
             HashSet<string> availableDimensions = null;
             AnalyticRecord summaryRecord;
             ProcessSQLRecords(null, input.Query.ParentDimensions, input.Query.MeasureFields, input.Query.Filters, input.Query.FilterGroup, sqlRecords, availableDimensions, true, out summaryRecord);
@@ -298,7 +299,7 @@ namespace Vanrise.Analytic.Data.SQL
 			                                                                WHERE
 			                                                               (#TIMECOLUMNNAME# >= #FromTime#  AND  (#TIMECOLUMNNAME# <= #ToTime# or #ToTime# IS NULL))
                                                                             #FILTERPART#");
-            singleTableQueryBodyBuilder.Replace("#TIMECOLUMNNAME#", _table.Settings.TimeColumnName);
+            singleTableQueryBodyBuilder.Replace("#TIMECOLUMNNAME#", GetTable().Settings.TimeColumnName);
             singleTableQueryBodyBuilder.Replace("#TABLENAME#", timeRangeTableName.TableName);
             singleTableQueryBodyBuilder.Replace("#FILTERPART#", filterPart);
             singleTableQueryBodyBuilder.Replace("#JOINPART#", joinPart);
@@ -339,8 +340,8 @@ namespace Vanrise.Analytic.Data.SQL
             StringBuilder queryGrouping = new StringBuilder();
             switch (timeGroupingUnit)
             {
-                case TimeGroupingUnit.Hour: selectPartBuilder.AppendFormat(" CONVERT(varchar(13), {0}, 121) as [Date]", _table.Settings.TimeColumnName); queryGrouping.AppendFormat(" CONVERT(varchar(13), {0}, 121)", _table.Settings.TimeColumnName); break;
-                case TimeGroupingUnit.Day: selectPartBuilder.AppendFormat(" CONVERT(varchar(10), {0}, 121)  as [Date]", _table.Settings.TimeColumnName); queryGrouping.AppendFormat(" CONVERT(varchar(10), {0}, 121)", _table.Settings.TimeColumnName); break;
+                case TimeGroupingUnit.Hour: selectPartBuilder.AppendFormat(" CONVERT(varchar(13), {0}, 121) as [Date]", GetTable().Settings.TimeColumnName); queryGrouping.AppendFormat(" CONVERT(varchar(13), {0}, 121)", GetTable().Settings.TimeColumnName); break;
+                case TimeGroupingUnit.Day: selectPartBuilder.AppendFormat(" CONVERT(varchar(10), {0}, 121)  as [Date]", GetTable().Settings.TimeColumnName); queryGrouping.AppendFormat(" CONVERT(varchar(10), {0}, 121)", GetTable().Settings.TimeColumnName); break;
             }
             return queryGrouping.ToString();
         }
@@ -368,15 +369,13 @@ namespace Vanrise.Analytic.Data.SQL
             Func<AnalyticMeasure, IGetMeasureExpressionContext, string> getMeasureExpression = (measure, getMeasureExpressionContext) =>
             {
                 throw new NotImplementedException();
-               // return !string.IsNullOrWhiteSpace(measure.Config.SQLExpression) ? measure.Config.SQLExpression : measure.Evaluator.GetMeasureExpression(getMeasureExpressionContext);
+                // return !string.IsNullOrWhiteSpace(measure.Config.SQLExpression) ? measure.Config.SQLExpression : measure.Evaluator.GetMeasureExpression(getMeasureExpressionContext);
             };
 
 
             Func<string, IGetMeasureExpressionContext, string> getMeasureExpressionByMeasureName = (measureName, getMeasureExpressionContext) =>
             {
-                AnalyticMeasure measure;
-                if (!this._measures.TryGetValue(measureName, out measure))
-                    throw new NullReferenceException(String.Format("measure. Name '{0}'", measureName));
+                AnalyticMeasure measure = GetMeasureConfig(measureName);
                 return getMeasureExpression(measure, getMeasureExpressionContext);
             };
 
@@ -385,7 +384,7 @@ namespace Vanrise.Analytic.Data.SQL
             HashSet<string> addedMeasureColumns = new HashSet<string>();
             foreach (var measureName in measureFields)
             {
-                AnalyticMeasure measure = _measures[measureName];
+                AnalyticMeasure measure = GetMeasureConfig(measureName);
 
                 GetMeasureExpressionContext getMeasureExpressionContext = new GetMeasureExpressionContext(getMeasureExpressionByMeasureName, isGroupingDimensionIncluded);
                 string measureExpression = getMeasureExpressionByMeasureName(measureName, getMeasureExpressionContext);
@@ -430,7 +429,7 @@ namespace Vanrise.Analytic.Data.SQL
             StringBuilder joinPartBuilder = new StringBuilder();
             foreach (string joinName in includeJoinConfigNames)
             {
-                AnalyticJoin join = _joins[joinName];
+                AnalyticJoin join = GetJoinConfig(joinName);
                 AddStatementToJoinPart(joinPartBuilder, join.Config.JoinStatement);
             }
             return joinPartBuilder.ToString();
@@ -441,7 +440,7 @@ namespace Vanrise.Analytic.Data.SQL
             StringBuilder orderPart = new StringBuilder();
             foreach (var measureName in measureFields)
             {
-                AnalyticMeasure measure = _measures[measureName];
+                AnalyticMeasure measure = GetMeasureConfig(measureName);
                 AddColumnToStringBuilder(orderPart, String.Format("{0}", GetMeasureColumnAlias(measure)));
             }
             orderPart.Append(String.Format(" desc"));
@@ -475,10 +474,10 @@ namespace Vanrise.Analytic.Data.SQL
 
         string GetDimensionColumnIdFromFieldName(string fieldName)
         {
-            var dimensionObj = _dimensions.FirstOrDefault(itm => itm.Key == fieldName);
-            if (dimensionObj.Value == null)
+            var dimensionObj = GetDimensionConfig(fieldName);
+            if (dimensionObj == null)
                 throw new NullReferenceException(String.Format("Dimension {0}", fieldName));
-            return dimensionObj.Value.Config.IdColumn;
+            return dimensionObj.Config.SQLExpression;
         }
 
         void AddFilterToFilterPart<T>(StringBuilder filterBuilder, List<T> values, string column)
@@ -527,7 +526,7 @@ namespace Vanrise.Analytic.Data.SQL
         #region Process Final Result
 
         private List<AnalyticRecord> ProcessSQLRecords(List<string> requestedDimensionNames, List<string> parentDimensionNames, List<string> measureNames, List<DimensionFilter> dimensionFiltes,
-            RecordFilterGroup filterGroup, List<SQLRecord> sqlRecords, HashSet<string> availableDimensions, bool withSummary, out AnalyticRecord summaryRecord)
+            RecordFilterGroup filterGroup, List<DBAnalyticRecord> sqlRecords, HashSet<string> availableDimensions, bool withSummary, out AnalyticRecord summaryRecord)
         {
             List<string> allDimensionNamesList = new List<string>();
             if (requestedDimensionNames != null)
@@ -541,7 +540,7 @@ namespace Vanrise.Analytic.Data.SQL
             return records;
         }
 
-        private void FillCalculatedDimensions(List<string> requestedDimensionNames, List<SQLRecord> sqlRecords, HashSet<string> availableDimensions)
+        private void FillCalculatedDimensions(List<string> requestedDimensionNames, List<DBAnalyticRecord> sqlRecords, HashSet<string> availableDimensions)
         {
             IEnumerable<AnalyticDimension> dimensionsToCalculate = requestedDimensionNames.Where(dimName => !availableDimensions.Contains(dimName)).Select(dimName => GetDimensionConfig(dimName));
             foreach (var sqlRecord in sqlRecords)
@@ -549,7 +548,7 @@ namespace Vanrise.Analytic.Data.SQL
                 foreach (var dimToCalculate in dimensionsToCalculate)
                 {
                     var getDimensionValueContext = new GetDimensionValueContext(sqlRecord);
-                    sqlRecord.GroupingValuesByDimensionName.Add(dimToCalculate.Name, new SQLRecordGroupingValue
+                    sqlRecord.GroupingValuesByDimensionName.Add(dimToCalculate.Name, new DBAnalyticRecordGroupingValue
                     {
                         Value = dimToCalculate.Evaluator.GetDimensionValue(getDimensionValueContext)
                     });
@@ -557,19 +556,19 @@ namespace Vanrise.Analytic.Data.SQL
             }
         }
 
-        private void ApplyDimensionFilter(List<DimensionFilter> dimensionFiltes, RecordFilterGroup filterGroup, List<SQLRecord> sqlRecords)
+        private void ApplyDimensionFilter(List<DimensionFilter> dimensionFiltes, RecordFilterGroup filterGroup, List<DBAnalyticRecord> sqlRecords)
         {
             //throw new NotImplementedException();
         }
 
-        private List<AnalyticRecord> ApplyFinalGrouping(List<string> requestedDimensionNames, HashSet<string> allDimensionNames, List<string> measureNames, List<SQLRecord> sqlRecords, bool withSummary, out AnalyticRecord summaryRecord)
+        private List<AnalyticRecord> ApplyFinalGrouping(List<string> requestedDimensionNames, HashSet<string> allDimensionNames, List<string> measureNames, List<DBAnalyticRecord> sqlRecords, bool withSummary, out AnalyticRecord summaryRecord)
         {
-            Dictionary<string, SQLRecord> groupedRecordsByDimensionsKey = new Dictionary<string, SQLRecord>();
-            SQLRecord summarySQLRecord = new SQLRecord() { AggValuesByAggName = new Dictionary<string, SQLRecordAggValue>() };
+            Dictionary<string, DBAnalyticRecord> groupedRecordsByDimensionsKey = new Dictionary<string, DBAnalyticRecord>();
+            DBAnalyticRecord summarySQLRecord = new DBAnalyticRecord() { AggValuesByAggName = new Dictionary<string, DBAnalyticRecordAggValue>() };
             foreach (var sqlRecord in sqlRecords)
             {
                 string groupingKey = GetDimensionGroupingKey(requestedDimensionNames, sqlRecord);
-                SQLRecord matchRecord;
+                DBAnalyticRecord matchRecord;
                 if (!groupedRecordsByDimensionsKey.TryGetValue(groupingKey, out matchRecord))
                 {
                     groupedRecordsByDimensionsKey.Add(groupingKey, sqlRecord);
@@ -594,12 +593,12 @@ namespace Vanrise.Analytic.Data.SQL
             return analyticRecords;
         }
 
-        private string GetDimensionGroupingKey(List<string> requestedDimensionNames, SQLRecord record)
+        private string GetDimensionGroupingKey(List<string> requestedDimensionNames, DBAnalyticRecord record)
         {
             StringBuilder builder = new StringBuilder();
             foreach (var dimensionName in requestedDimensionNames)
             {
-                SQLRecordGroupingValue groupingValue;
+                DBAnalyticRecordGroupingValue groupingValue;
                 if (record.GroupingValuesByDimensionName.TryGetValue(dimensionName, out groupingValue))
                 {
                     builder.AppendFormat("^*^{0}", groupingValue.Value != null ? groupingValue.Value : "");
@@ -610,7 +609,7 @@ namespace Vanrise.Analytic.Data.SQL
             return builder.ToString();
         }
 
-        private void UpdateAggregateValues(SQLRecord existingRecord, SQLRecord record)
+        private void UpdateAggregateValues(DBAnalyticRecord existingRecord, DBAnalyticRecord record)
         {
             foreach (var aggEntry in record.AggValuesByAggName)
             {
@@ -634,7 +633,7 @@ namespace Vanrise.Analytic.Data.SQL
             }
         }
 
-        private AnalyticRecord BuildAnalyticRecordFromSQLRecord(SQLRecord sqlRecord, List<string> dimensionNames, HashSet<string> allDimensionNames, List<string> measureNames)
+        private AnalyticRecord BuildAnalyticRecordFromSQLRecord(DBAnalyticRecord sqlRecord, List<string> dimensionNames, HashSet<string> allDimensionNames, List<string> measureNames)
         {
             AnalyticRecord analyticRecord = new AnalyticRecord() { Time = sqlRecord.Time, DimensionValues = new DimensionValue[dimensionNames.Count], MeasureValues = new MeasureValues() };
 
@@ -644,7 +643,7 @@ namespace Vanrise.Analytic.Data.SQL
                 foreach (string dimName in dimensionNames)
                 {
                     var dimensionValue = new DimensionValue();
-                    dimensionValue.Value =sqlRecord.GroupingValuesByDimensionName[dimName].Value;
+                    dimensionValue.Value = sqlRecord.GroupingValuesByDimensionName[dimName].Value;
                     if (dimensionValue.Value != null && dimensionValue.Value != DBNull.Value)
                         dimensionValue.Name = GetDimensionConfig(dimName).Config.FieldType.GetDescription(dimensionValue.Value);
                     analyticRecord.DimensionValues[dimIndex] = dimensionValue;
@@ -677,14 +676,14 @@ namespace Vanrise.Analytic.Data.SQL
 
             var noTimeAllocationContext = new TimeRangeTableAllocationContext
             {
-                TableName = this._table.Settings.TableName,
+                TableName = this.GetTable().Settings.TableName,
                 GetPeriodStart = (tr) => tr.FromTime,
                 RangeMinLength = TimeSpan.FromSeconds(0),
                 IncrementPeriod = (d, tr) => d.Add((tr.ToTime - d))
             };
             var hourlyAllocationContext = new TimeRangeTableAllocationContext
             {
-                TableName = this._table.Settings.HourlyTableName,
+                TableName = GetTable().Settings.HourlyTableName,
                 GetPeriodStart = GetStartOfHour,
                 RangeMinLength = TimeSpan.FromHours(1),
                 IncrementPeriod = (d, tr) => d.AddHours(1),
@@ -692,7 +691,7 @@ namespace Vanrise.Analytic.Data.SQL
             };
             var dailyAllocationContext = new TimeRangeTableAllocationContext
             {
-                TableName = this._table.Settings.DailyTableName,
+                TableName = GetTable().Settings.DailyTableName,
                 GetPeriodStart = GetStartOfDay,
                 RangeMinLength = TimeSpan.FromDays(1),
                 IncrementPeriod = (d, tr) => d.AddDays(1),
@@ -700,7 +699,7 @@ namespace Vanrise.Analytic.Data.SQL
             };
             var weeklyAllocationContext = new TimeRangeTableAllocationContext
             {
-                TableName = this._table.Settings.WeeklyTableName,
+                TableName = GetTable().Settings.WeeklyTableName,
                 GetPeriodStart = GetStartOfWeek,
                 RangeMinLength = TimeSpan.FromDays(7),
                 IncrementPeriod = (d, tr) => d.AddDays(7),
@@ -708,7 +707,7 @@ namespace Vanrise.Analytic.Data.SQL
             };
             var monthlyAllocationContext = new TimeRangeTableAllocationContext
             {
-                TableName = this._table.Settings.MonthlyTableName,
+                TableName = GetTable().Settings.MonthlyTableName,
                 GetPeriodStart = GetStartOfMonth,
                 RangeMinLength = TimeSpan.FromDays(28),
                 IncrementPeriod = (d, tr) => d.AddMonths(1),
@@ -806,9 +805,9 @@ namespace Vanrise.Analytic.Data.SQL
         #region Mappers
 
 
-        private SQLRecord SQLRecordMapper(IDataReader reader, TimeGroupingUnit? timeGroupingUnit, HashSet<string> includedSQLDimensions, HashSet<string> includedSQLAggregates)
+        private DBAnalyticRecord SQLRecordMapper(IDataReader reader, TimeGroupingUnit? timeGroupingUnit, HashSet<string> includedSQLDimensions, HashSet<string> includedSQLAggregates)
         {
-            SQLRecord record = new SQLRecord() { GroupingValuesByDimensionName = new Dictionary<string, SQLRecordGroupingValue>(), AggValuesByAggName = new Dictionary<string, SQLRecordAggValue>() };
+            DBAnalyticRecord record = new DBAnalyticRecord() { GroupingValuesByDimensionName = new Dictionary<string, DBAnalyticRecordGroupingValue>(), AggValuesByAggName = new Dictionary<string, DBAnalyticRecordAggValue>() };
             if (timeGroupingUnit.HasValue)
             {
                 string dateTime = reader["Date"] as string;
@@ -821,7 +820,7 @@ namespace Vanrise.Analytic.Data.SQL
                 if (dateTimeParsedValue != default(DateTime))
                     record.Time = dateTimeParsedValue;
             }
-            record.GroupingValuesByDimensionName = new Dictionary<string, SQLRecordGroupingValue>();
+            record.GroupingValuesByDimensionName = new Dictionary<string, DBAnalyticRecordGroupingValue>();
 
             if (includedSQLDimensions != null)
             {
@@ -829,7 +828,7 @@ namespace Vanrise.Analytic.Data.SQL
                 {
                     var dimensionConfig = GetDimensionConfig(dimensionName);
                     var dimensionValue = reader[GetDimensionIdColumnAlias(dimensionConfig)];
-                    record.GroupingValuesByDimensionName.Add(dimensionName, new SQLRecordGroupingValue { Value = dimensionValue != DBNull.Value ? dimensionValue : null });
+                    record.GroupingValuesByDimensionName.Add(dimensionName, new DBAnalyticRecordGroupingValue { Value = dimensionValue != DBNull.Value ? dimensionValue : null });
                 }
             }
 
@@ -839,13 +838,13 @@ namespace Vanrise.Analytic.Data.SQL
                 {
                     var aggregateConfig = GetAggregateConfig(aggregateName);
                     var aggregateValue = reader[GetAggregateColumnAlias(aggregateConfig)];
-                    record.AggValuesByAggName.Add(aggregateName, new SQLRecordAggValue { Value = aggregateValue != DBNull.Value ? aggregateValue : null });
+                    record.AggValuesByAggName.Add(aggregateName, new DBAnalyticRecordAggValue { Value = aggregateValue != DBNull.Value ? aggregateValue : null });
                 }
             }
 
             return record;
         }
-        
+
         AnalyticRecord AnalyticRecordMapper(System.Data.IDataReader reader, AnalyticQuery analyticQuery, bool isSummary)
         {
             AnalyticRecord record = new AnalyticRecord()
@@ -861,7 +860,7 @@ namespace Vanrise.Analytic.Data.SQL
                 {
                     foreach (var dimensionName in analyticQuery.DimensionFields)
                     {
-                        var dimension = _dimensions[dimensionName];
+                        var dimension = GetDimensionConfig(dimensionName);
                         object dimensionId = GetReaderValue<object>(reader, GetDimensionIdColumnAlias(dimension));
                         string name = "";
                         if (dimensionId != null)
@@ -909,7 +908,7 @@ namespace Vanrise.Analytic.Data.SQL
             MeasureValues measureValues = new MeasureValues();
             foreach (var measureName in measureFields)
             {
-                var measure = _measures[measureName];
+                var measure = GetMeasureConfig(measureName);
                 measureValues.Add(measureName, GetReaderValue<Object>(reader, GetMeasureColumnAlias(measure)));
             }
             return measureValues;
@@ -921,64 +920,45 @@ namespace Vanrise.Analytic.Data.SQL
 
         #region IAnalyticDataManager Implementation
 
-        AnalyticTable _table;
-        public AnalyticTable Table
+        IAnalyticTableQueryContext _analyticTableQueryContext;
+        public IAnalyticTableQueryContext AnalyticTableQueryContext
         {
-            set { _table = value; }
+            set { _analyticTableQueryContext = value; }
         }
 
-        Dictionary<string, AnalyticDimension> _dimensions;
-        public Dictionary<string, AnalyticDimension> Dimensions
+        AnalyticTable GetTable()
         {
-            set { _dimensions = value; }
+            if (_analyticTableQueryContext == null)
+                throw new NullReferenceException("_analyticTableQueryContext");
+            return _analyticTableQueryContext.GetTable();
         }
 
         AnalyticDimension GetDimensionConfig(string dimensionName)
         {
-            if (_dimensions == null)
-                throw new NullReferenceException("_dimensions");
-            AnalyticDimension dimension;
-            if (!_dimensions.TryGetValue(dimensionName, out dimension))
-                throw new NullReferenceException(String.Format("dimension '{0}'", dimensionName));
-            return dimension;
-        }
-
-        Dictionary<string, AnalyticAggregate> _aggregates;
-        public Dictionary<string, AnalyticAggregate> Aggregates
-        {
-            set { _aggregates = value; }
+            if (_analyticTableQueryContext == null)
+                throw new NullReferenceException("_analyticTableQueryContext");
+            return _analyticTableQueryContext.GetDimensionConfig(dimensionName);
         }
 
         AnalyticAggregate GetAggregateConfig(string aggregateName)
         {
-            if (_aggregates == null)
-                throw new NullReferenceException("_aggregates");
-            AnalyticAggregate aggregate;
-            if (!_aggregates.TryGetValue(aggregateName, out aggregate))
-                throw new NullReferenceException(String.Format("aggregate '{0}'", aggregateName));
-            return aggregate;
-        }
-
-        Dictionary<string, AnalyticMeasure> _measures;
-        public Dictionary<string, AnalyticMeasure> Measures
-        {
-            set { _measures = value; }
+            if (_analyticTableQueryContext == null)
+                throw new NullReferenceException("_analyticTableQueryContext");
+            return _analyticTableQueryContext.GetAggregateConfig(aggregateName);
         }
 
         AnalyticMeasure GetMeasureConfig(string measureName)
         {
-            if (_measures == null)
-                throw new NullReferenceException("_measures");
-            AnalyticMeasure measure;
-            if (!_measures.TryGetValue(measureName, out measure))
-                throw new NullReferenceException(String.Format("measure '{0}'", measureName));
-            return measure;
+            if (_analyticTableQueryContext == null)
+                throw new NullReferenceException("_analyticTableQueryContext");
+            return _analyticTableQueryContext.GetMeasureConfig(measureName);
         }
 
-        Dictionary<string, AnalyticJoin> _joins;
-        public Dictionary<string, AnalyticJoin> Joins
+        AnalyticJoin GetJoinConfig(string joinName)
         {
-            set { _joins = value; }
+            if (_analyticTableQueryContext == null)
+                throw new NullReferenceException("_analyticTableQueryContext");
+            return _analyticTableQueryContext.GetJoinContig(joinName);
         }
 
         #endregion
@@ -986,7 +966,7 @@ namespace Vanrise.Analytic.Data.SQL
         #region Overriden Methods
         protected override string GetConnectionString()
         {
-            return _table.Settings.ConnectionString;
+            return GetTable().Settings.ConnectionString;
         }
 
         #endregion

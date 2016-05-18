@@ -69,6 +69,27 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return true;
         }
 
+        public override bool IsMatched(object fieldValue, RecordFilter recordFilter)
+        {
+            if (fieldValue == null)
+                return false;
+            NumberRecordFilter numberRecordFilter = recordFilter as NumberRecordFilter;
+            if (numberRecordFilter == null)
+                throw new NullReferenceException("numberRecordFilter");
+            Decimal valueAsDecimal = Convert.ToDecimal(fieldValue);
+            Decimal filterValue = numberRecordFilter.Value;
+            switch (numberRecordFilter.CompareOperator)
+            {
+                case NumberRecordFilterOperator.Equals: return valueAsDecimal == filterValue;
+                case NumberRecordFilterOperator.NotEquals: return valueAsDecimal == filterValue;
+                case NumberRecordFilterOperator.Greater: return valueAsDecimal > filterValue;
+                case NumberRecordFilterOperator.GreaterOrEquals: return valueAsDecimal >= filterValue;
+                case NumberRecordFilterOperator.Less: return valueAsDecimal < filterValue;
+                case NumberRecordFilterOperator.LessOrEquals: return valueAsDecimal <= filterValue;
+            }
+            return false;
+        }
+
         #endregion
 
         public override Vanrise.Entities.GridColumnAttribute GetGridColumnAttribute()

@@ -42,7 +42,26 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return (DataType == FieldDateTimeDataType.Time) ? DoTimesMatch(fieldValue, filterValue) : DoDateTimesMatch(fieldValue, filterValue);
         }
-        
+        public override bool IsMatched(object fieldValue, RecordFilter recordFilter)
+        {
+            if (fieldValue == null)
+                return false;
+            DateTimeRecordFilter dateTimeRecordFilter = recordFilter as DateTimeRecordFilter;
+            if (dateTimeRecordFilter == null)
+                throw new NullReferenceException("dateTimeRecordFilter");
+            DateTime valueAsDateTime = (DateTime)fieldValue;
+            DateTime filterValue = dateTimeRecordFilter.Value;
+            switch (dateTimeRecordFilter.CompareOperator)
+            {
+                case DateTimeRecordFilterOperator.Equals: return valueAsDateTime == filterValue;
+                case DateTimeRecordFilterOperator.NotEquals: return valueAsDateTime == filterValue;
+                case DateTimeRecordFilterOperator.Greater: return valueAsDateTime > filterValue;
+                case DateTimeRecordFilterOperator.GreaterOrEquals: return valueAsDateTime >= filterValue;
+                case DateTimeRecordFilterOperator.Less: return valueAsDateTime < filterValue;
+                case DateTimeRecordFilterOperator.LessOrEquals: return valueAsDateTime <= filterValue;
+            }
+            return false;
+        }
         #endregion
 
         #region Private Methods

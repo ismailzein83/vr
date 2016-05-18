@@ -57,6 +57,33 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return true;
         }
 
+        public override bool IsMatched(object fieldValue, RecordFilter recordFilter)
+        {
+            if (fieldValue == null)
+                return false;
+            StringRecordFilter stringRecordFilter = recordFilter as StringRecordFilter;
+            if (stringRecordFilter == null)
+                throw new NullReferenceException("stringRecordFilter");
+            string valueAsString = fieldValue as string;
+            if(valueAsString == null)
+                throw new NullReferenceException("valueAsString");
+            string filterValue  = stringRecordFilter.Value;
+             if(filterValue == null)
+                throw new NullReferenceException("filterValue");
+            switch(stringRecordFilter.CompareOperator)
+            {
+                case StringRecordFilterOperator.Equals: return String.Compare(valueAsString, filterValue, false) == 0;
+                case StringRecordFilterOperator.NotEquals: return String.Compare(valueAsString, filterValue, false) != 0;
+                case StringRecordFilterOperator.Contains: return valueAsString.Contains(filterValue);
+                case StringRecordFilterOperator.NotContains: return !valueAsString.Contains(filterValue);
+                case StringRecordFilterOperator.StartsWith: return valueAsString.StartsWith(filterValue);
+                case StringRecordFilterOperator.NotStartsWith: return !valueAsString.StartsWith(filterValue);
+                case StringRecordFilterOperator.EndsWith: return valueAsString.EndsWith(filterValue);
+                case StringRecordFilterOperator.NotEndsWith: return !valueAsString.EndsWith(filterValue);
+            }
+            return false;
+        }
+
         public override Vanrise.Entities.GridColumnAttribute GetGridColumnAttribute()
         {
             return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", NumberPrecision = "NoDecimal" };

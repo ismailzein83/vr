@@ -1,0 +1,78 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Vanrise.Analytic.Entities;
+
+namespace Vanrise.Analytic.Business
+{
+    public class AnalyticTableQueryContext : IAnalyticTableQueryContext
+    {
+        AnalyticTable _table;
+        Dictionary<string, AnalyticDimension> _dimensions;
+        Dictionary<string, AnalyticAggregate> _aggregates;
+        Dictionary<string, AnalyticMeasure> _measures;
+        Dictionary<string, AnalyticJoin> _joins;
+
+        public AnalyticTableQueryContext(int analyticTableId)
+        {
+            AnalyticTableManager analyticTableManager = new AnalyticTableManager();
+            AnalyticItemConfigManager analyticItemConfigManager = new AnalyticItemConfigManager();
+            _table = analyticTableManager.GetAnalyticTableById(analyticTableId);
+            if (_table == null)
+                throw new NullReferenceException(String.Format("table. ID '{0}'", analyticTableId));
+            if (_table.Settings == null)
+                throw new NullReferenceException(String.Format("table.Settings. ID '{0}'", analyticTableId));
+
+            _dimensions = analyticItemConfigManager.GetDimensions(analyticTableId);
+            _aggregates = analyticItemConfigManager.GetAggregates(analyticTableId);
+            _measures = analyticItemConfigManager.GetMeasures(analyticTableId);
+            _joins = analyticItemConfigManager.GetJoins(analyticTableId);
+        }
+        public AnalyticTable GetTable()
+        {
+            return _table;
+        }
+
+        public AnalyticDimension GetDimensionConfig(string dimensionName)
+        {
+            if (_dimensions == null)
+                throw new NullReferenceException("_dimensions");
+            AnalyticDimension dimension;
+            if (!_dimensions.TryGetValue(dimensionName, out dimension))
+                throw new NullReferenceException(String.Format("dimension '{0}'", dimensionName));
+            return dimension;
+        }
+
+        public AnalyticAggregate GetAggregateConfig(string aggregateName)
+        {
+            if (_aggregates == null)
+                throw new NullReferenceException("_aggregates");
+            AnalyticAggregate aggregate;
+            if (!_aggregates.TryGetValue(aggregateName, out aggregate))
+                throw new NullReferenceException(String.Format("aggregate '{0}'", aggregateName));
+            return aggregate;
+        }
+
+        public AnalyticMeasure GetMeasureConfig(string measureName)
+        {
+            if (_measures == null)
+                throw new NullReferenceException("_measures");
+            AnalyticMeasure measure;
+            if (!_measures.TryGetValue(measureName, out measure))
+                throw new NullReferenceException(String.Format("measure '{0}'", measureName));
+            return measure;
+        }
+
+        public AnalyticJoin GetJoinContig(string joinName)
+        {
+            if (_joins == null)
+                throw new NullReferenceException("_joins");
+            AnalyticJoin join;
+            if (!_joins.TryGetValue(joinName, out join))
+                throw new NullReferenceException(String.Format("join '{0}'", joinName));
+            return join;
+        }
+    }
+}

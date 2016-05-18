@@ -68,6 +68,18 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return true;
         }
 
+        public override bool IsMatched(object fieldValue, RecordFilter recordFilter)
+        {
+            if (fieldValue == null)
+                return false;
+            NumberListRecordFilter numberListRecordFilter = recordFilter as NumberListRecordFilter;
+            if (numberListRecordFilter == null)
+                throw new NullReferenceException("numberListRecordFilter");
+            bool isValueInFilter = numberListRecordFilter.Values.Contains(Convert.ToDecimal(fieldValue));
+
+            return numberListRecordFilter.CompareOperator == ListRecordFilterOperator.In ? isValueInFilter : !isValueInFilter;
+        }
+
         #endregion
 
         #region Private Methods

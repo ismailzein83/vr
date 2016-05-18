@@ -52,5 +52,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", NumberPrecision = "NoDecimal" };
         }
+
+        public override bool IsMatched(object fieldValue, RecordFilter recordFilter)
+        {
+            if (fieldValue == null)
+                return false;
+            BooleanRecordFilter booleanRecordFilter = recordFilter as BooleanRecordFilter;
+            if (booleanRecordFilter == null)
+                throw new NullReferenceException("booleanRecordFilter");
+            return booleanRecordFilter.IsTrue == (bool)fieldValue;
+        }
     }
 }
