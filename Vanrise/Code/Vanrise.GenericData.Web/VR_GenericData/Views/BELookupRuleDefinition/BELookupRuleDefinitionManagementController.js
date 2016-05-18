@@ -15,12 +15,10 @@
         defineScope();
         load();
 
-        function defineScope()
-        {
+        function defineScope() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.onBEDefinitionSelectorReady = function (api)
-            {
+            $scope.scopeModel.onBEDefinitionSelectorReady = function (api) {
                 beDefinitionSelectorAPI = api;
                 beDefinitionSelectorReadyDeferred.resolve();
             };
@@ -30,16 +28,12 @@
                 gridReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.search = function ()
-            {
-                $scope.scopeModel.showGrid = true;
-                return gridAPI.load(getGridQuery());
+            $scope.scopeModel.search = function () {
+                return loadGrid();
             };
 
-            $scope.scopeModel.add = function ()
-            {
-                var onBELookupRuleDefinitionAdded = function (addedBELookupRuleDefinition)
-                {
+            $scope.scopeModel.add = function () {
+                var onBELookupRuleDefinitionAdded = function (addedBELookupRuleDefinition) {
                     gridAPI.onBELookupRuleDefinitionAdded(addedBELookupRuleDefinition);
                 };
                 VR_GenericData_BELookupRuleDefinitionService.addBELookupRuleDefinition(onBELookupRuleDefinitionAdded);
@@ -51,34 +45,43 @@
             loadAllControls();
         }
 
-        function loadAllControls()
-        {
-            var loadBEDefinitionSelectorPromise = loadBEDefinitionSelector();
-
-            return UtilsService.waitMultiplePromises([loadBEDefinitionSelectorPromise, gridReadyDeferred.promise]).catch(function (error) {
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadBEDefinitionSelector, loadGrid]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
         }
 
-        function loadBEDefinitionSelector()
-        {
+        function loadBEDefinitionSelector() {
             var beDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-            beDefinitionSelectorReadyDeferred.promise.then(function ()
-            {
+            beDefinitionSelectorReadyDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(beDefinitionSelectorAPI, undefined, beDefinitionSelectorLoadDeferred);
             });
 
             return beDefinitionSelectorLoadDeferred.promise;
         }
 
-        function getGridQuery() {
-            return {
-                Name: $scope.scopeModel.name,
-                BusinessEntityDefinitionId: beDefinitionSelectorAPI.getSelectedIds()
-            };
+        function loadGrid() {
+            var gridLoadDeferred = UtilsService.createPromiseDeferred();
+
+            gridReadyDeferred.promise.then(function () {
+                gridAPI.load(getGridQuery()).then(function () {
+                    gridLoadDeferred.resolve();
+                }).catch(function (error) {
+                    gridLoadDeferred.reject(error);
+                });
+            });
+            
+            return gridLoadDeferred.promise;
+
+            function getGridQuery() {
+                return {
+                    Name: $scope.scopeModel.name,
+                    BusinessEntityDefinitionIds: beDefinitionSelectorAPI.getSelectedIds()
+                };
+            }
         }
     }
 

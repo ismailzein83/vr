@@ -145,7 +145,10 @@
                 if (beDataRecordTypeId != null)
                 {
                     $scope.scopeModel.showDataRecordTypeFieldSelector = true;
-                    var payload = (criteriaFieldEntity != undefined) ? { selectedIds: criteriaFieldEntity.FieldPath } : undefined;
+                    var payload = {
+                        dataRecordTypeId: beDataRecordTypeId,
+                        selectedIds: (criteriaFieldEntity != undefined) ? criteriaFieldEntity.FieldPath : undefined
+                    };
                     VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldSelectorAPI, payload, dataRecordTypeFieldSelectorLoadDeferred);
                 }
                 else
@@ -165,7 +168,7 @@
         {
             return {
                 Title: $scope.scopeModel.title,
-                FieldPath: (beDataRecordTypeId != undefined) ? beDefinitionSelectorAPI.getSelectedIds() : $scope.scopeModel.fieldPath,
+                FieldPath: (beDataRecordTypeId != undefined) ? dataRecordTypeFieldSelectorAPI.getSelectedIds() : $scope.scopeModel.fieldPath,
                 RuleStructureBehaviorType: $scope.scopeModel.selectedBehaviorType.value
             };
         }

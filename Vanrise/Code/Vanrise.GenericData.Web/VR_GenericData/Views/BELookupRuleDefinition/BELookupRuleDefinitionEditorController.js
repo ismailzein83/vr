@@ -140,6 +140,7 @@
                 return;
             $scope.scopeModel.name = beLookupRuleDefinitionEntity.Name;
 
+            // Load the criteria fields
             for (var i = 0; i < beLookupRuleDefinitionEntity.CriteriaFields.length; i++) {
                 var item = beLookupRuleDefinitionEntity.CriteriaFields[i];
                 setBehaviorTypeDescription(item);
@@ -151,7 +152,7 @@
             var beDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             beDefinitionSelectorReadyDeferred.promise.then(function () {
-                var payload = (beLookupRuleDefinitionEntity != undefined) ? { selectedIds: beLookupRuleDefinitionEntity.BELookupRuleDefinitionId } : undefined;
+                var payload = (beLookupRuleDefinitionEntity != undefined) ? { selectedIds: beLookupRuleDefinitionEntity.BusinessEntityDefinitionId } : undefined;
                 VRUIUtilsService.callDirectiveLoad(beDefinitionSelectorAPI, payload, beDefinitionSelectorLoadDeferred);
             });
 
@@ -196,6 +197,7 @@
 
         function buildBELookupRuleDefinitionFromScope() {
             return {
+                BELookupRuleDefinitionId: beLookupRuleDefinitionId,
                 Name: $scope.scopeModel.name,
                 BusinessEntityDefinitionId: beDefinitionSelectorAPI.getSelectedIds(),
                 CriteriaFields: buildCriteriaFields()

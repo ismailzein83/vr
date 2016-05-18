@@ -16,5 +16,7 @@ namespace Vanrise.GenericData.Data
         bool InsertBELookupRuleDefinition(BELookupRuleDefinition beLookupRuleDefinition, out int insertedId);
 
         bool UpdateBELookupRuleDefinition(BELookupRuleDefinition beLookupRuleDefinition);
+
+        bool DeleteBELookupRuleDefinition(int beLookupRuleDefinitionId);
     }
 }

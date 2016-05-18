@@ -76,19 +76,20 @@
                     name: 'Delete',
                     clicked: deleteBELookupRuleDefinition
                 }];
+            }
 
-                function editBELookupRuleDefinition(dataItem)
-                {
-                    var onBELookupRuleDefinitionUpdated = function (updatedBELookupRuleDefinition) {
-                        gridAPI.itemUpdated(updatedBELookupRuleDefinition);
-                    };
-                    VR_GenericData_BELookupRuleDefinitionService.editBELookupRuleDefinition(dataItem.Entity.BELookupRuleDefinitionId, onBELookupRuleDefinitionUpdated);
-                }
+            function editBELookupRuleDefinition(dataItem) {
+                var onBELookupRuleDefinitionUpdated = function (updatedBELookupRuleDefinition) {
+                    gridAPI.itemUpdated(updatedBELookupRuleDefinition);
+                };
+                VR_GenericData_BELookupRuleDefinitionService.editBELookupRuleDefinition(dataItem.Entity.BELookupRuleDefinitionId, onBELookupRuleDefinitionUpdated);
+            }
 
-                function deleteBELookupRuleDefinition(dataItem)
-                {
-                    console.log('delete');
-                }
+            function deleteBELookupRuleDefinition(dataItem) {
+                var onBELookupRuleDefintionDeleted = function () {
+                    gridAPI.itemDeleted(dataItem);
+                };
+                VR_GenericData_BELookupRuleDefinitionService.deleteBELookupRuleDefinition($scope, dataItem.Entity.BELookupRuleDefinitionId, onBELookupRuleDefintionDeleted);
             }
         }
     }

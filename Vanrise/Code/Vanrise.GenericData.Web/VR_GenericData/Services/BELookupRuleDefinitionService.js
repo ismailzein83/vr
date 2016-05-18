@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BELookupRuleDefinitionService.$inject = ['VRModalService'];
+    BELookupRuleDefinitionService.$inject = ['VR_GenericData_BELookupRuleDefinitionAPIService', 'VRModalService', 'VRNotificationService'];
 
-    function BELookupRuleDefinitionService(VRModalService)
+    function BELookupRuleDefinitionService(VR_GenericData_BELookupRuleDefinitionAPIService, VRModalService, VRNotificationService)
     {
         var beLookupRuleDefinitionEditorUrl = '/Client/Modules/VR_GenericData/Views/BELookupRuleDefinition/BELookupRuleDefinitionEditor.html';
         var beLookupRuleDefinitionCriteriaFieldEditorUrl = '/Client/Modules/VR_GenericData/Views/BELookupRuleDefinition/BELookupRuleDefinitionCriteriaFieldEditor.html';
@@ -33,6 +33,24 @@
             };
 
             VRModalService.showModal(beLookupRuleDefinitionEditorUrl, parameters, settings);
+        }
+
+        function deleteBELookupRuleDefinition(scope, beLookupRuleDefinitionId, onBELookupRuleDefinitionDeleted)
+        {
+            VRNotificationService.showConfirmation().then(function (confirmed) {
+                if (confirmed) {
+                    VR_GenericData_BELookupRuleDefinitionAPIService.DeleteBELookupRuleDefinition(beLookupRuleDefinitionId).then(function (response) {
+                        if (response) {
+                            var deleted = VRNotificationService.notifyOnItemDeleted('BE Lookup Rule Definition', response);
+
+                            if (deleted && onBELookupRuleDefinitionDeleted != undefined)
+                                onBELookupRuleDefinitionDeleted();
+                        }
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, scope);
+                    });
+                }
+            });
         }
 
         function addBELookupRuleDefinitionCriteriaField(criteriaFields, beDefinitionId, onBELookupRuleDefinitionCriteriaFieldAdded)
@@ -71,6 +89,7 @@
         return {
             addBELookupRuleDefinition: addBELookupRuleDefinition,
             editBELookupRuleDefinition: editBELookupRuleDefinition,
+            deleteBELookupRuleDefinition: deleteBELookupRuleDefinition,
             addBELookupRuleDefinitionCriteriaField: addBELookupRuleDefinitionCriteriaField,
             editBELookupRuleDefinitionCriteriaField: editBELookupRuleDefinitionCriteriaField
         };

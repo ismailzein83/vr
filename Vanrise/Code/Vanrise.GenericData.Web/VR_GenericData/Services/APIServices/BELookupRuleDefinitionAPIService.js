@@ -31,12 +31,19 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'UpdateBELookupRuleDefinition'), beLookupRuleDefinition);
         }
 
+        function DeleteBELookupRuleDefinition(beLookupRuleDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'DeleteBELookupRuleDefinition'), {
+                beLookupRuleDefinitionId: beLookupRuleDefinitionId
+            });
+        }
+
         return {
             GetFilteredBELookupRuleDefinitions: GetFilteredBELookupRuleDefinitions,
             GetBELookupRuleDefinitionsInfo: GetBELookupRuleDefinitionsInfo,
             GetBELookupRuleDefinition: GetBELookupRuleDefinition,
             AddBELookupRuleDefinition: AddBELookupRuleDefinition,
-            UpdateBELookupRuleDefinition: UpdateBELookupRuleDefinition
+            UpdateBELookupRuleDefinition: UpdateBELookupRuleDefinition,
+            DeleteBELookupRuleDefinition: DeleteBELookupRuleDefinition
         };
     }
 

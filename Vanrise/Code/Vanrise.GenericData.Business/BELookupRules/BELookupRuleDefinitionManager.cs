@@ -91,6 +91,22 @@ namespace Vanrise.GenericData.Business
             return updateOperationOutput;
         }
 
+        public Vanrise.Entities.DeleteOperationOutput<object> DeleteBELookupRuleDefinition(int beLookupRuleDefinitionId)
+        {
+            var deleteOperationOutput = new DeleteOperationOutput<object>();
+            deleteOperationOutput.Result = DeleteOperationResult.Failed;
+
+            IBELookupRuleDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBELookupRuleDefinitionDataManager>();
+
+            if (dataManager.DeleteBELookupRuleDefinition(beLookupRuleDefinitionId))
+            {
+                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            }
+
+            return deleteOperationOutput;
+        }
+
         #endregion
 
         #region Private Classes
