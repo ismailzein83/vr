@@ -41,8 +41,8 @@ namespace TOne.WhS.DBSync.Business
             DBTable dbTableCurrency = Context.DBTables[DBTableName.Currency];
             if (dbTableCurrency != null)
             {
-                List<Currency> allCurrencies = (List<Currency>)dbTableCurrency.Records;
-                Currency currency = allCurrencies.Where(x => x.SourceId == sourceItem.CurrencyId).FirstOrDefault();
+                Dictionary<string, Currency> allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
+                Currency currency = allCurrencies[sourceItem.CurrencyId];
                 if (currency != null)
                     return new CurrencyExchangeRate
                     {

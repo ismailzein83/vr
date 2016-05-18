@@ -4,6 +4,7 @@ using System.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data.SQL.Common;
 using Vanrise.Data.SQL;
+using System.Linq;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
@@ -54,10 +55,10 @@ namespace TOne.WhS.DBSync.Data.SQL
         }
 
 
-
-        public List<CarrierAccount> GetCarrierAccounts()
+        public Dictionary<string, CarrierAccount> GetCarrierAccounts()
         {
-            return GetItemsText("SELECT [ID] ,[NameSuffix]  ,[AccountType] ,[SellingNumberPlanID],[CarrierProfileId],[SourceID] FROM" + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), CarrierAccountMapper, cmd => { });
+            return GetItemsText("SELECT [ID] ,[NameSuffix]  ,[AccountType] ,[SellingNumberPlanID],[CarrierProfileId],[SourceID] FROM" 
+                + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), CarrierAccountMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         private CarrierAccount CarrierAccountMapper(IDataReader reader)

@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using TOne.WhS.DBSync.Data.SQL.Common;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
+using System.Linq;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
@@ -45,9 +46,10 @@ namespace TOne.WhS.DBSync.Data.SQL
             InsertBulkToTable(preparedCurrencies as BaseBulkInsertInfo);
         }
 
-        public List<Currency> GetCurrencies()
+        public Dictionary<string, Currency> GetCurrencies()
         {
-            return GetItemsText("SELECT [ID] ,[Symbol]  ,[Name] ,[SourceID] FROM" + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), CurrencyMapper, cmd => { });
+            return GetItemsText("SELECT [ID] ,[Symbol]  ,[Name] ,[SourceID] FROM"
+                + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), CurrencyMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         public Currency CurrencyMapper(IDataReader reader)

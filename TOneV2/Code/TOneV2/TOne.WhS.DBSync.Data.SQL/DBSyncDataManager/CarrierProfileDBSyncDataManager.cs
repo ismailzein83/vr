@@ -4,6 +4,7 @@ using System.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data.SQL.Common;
 using Vanrise.Data.SQL;
+using System.Linq;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
@@ -44,9 +45,10 @@ namespace TOne.WhS.DBSync.Data.SQL
             InsertBulkToTable(preparedCarrierProfiles as BaseBulkInsertInfo);
         }
 
-        public List<CarrierProfile> GetCarrierProfiles()
+        public Dictionary<string, CarrierProfile> GetCarrierProfiles()
         {
-            return GetItemsText("SELECT [ID] ,[Settings]  ,[Name] ,[SourceID] FROM" + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), CarrierProfileMapper, cmd => { });
+            return GetItemsText("SELECT [ID] ,[Settings]  ,[Name] ,[SourceID] FROM" 
+                + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), CarrierProfileMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x); 
         }
 
         private CarrierProfile CarrierProfileMapper(IDataReader reader)

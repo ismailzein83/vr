@@ -47,16 +47,16 @@ namespace TOne.WhS.DBSync.Business
             DBTable dbTableCarrierProfile = Context.DBTables[DBTableName.CarrierProfile];
             if (dbTableCarrierProfile != null && dbTableCurrency != null)
             {
-                List<CarrierProfile> allCarrierProfiles = (List<CarrierProfile>)dbTableCarrierProfile.Records;
+                Dictionary<string, CarrierProfile> allCarrierProfiles = (Dictionary<string, CarrierProfile>)dbTableCarrierProfile.Records;
                 CarrierProfile carrierProfile = null;
                 if (allCarrierProfiles != null)
-                    carrierProfile = allCarrierProfiles.Where(x => x.SourceId == sourceItem.ProfileId.ToString()).FirstOrDefault();
+                    carrierProfile = allCarrierProfiles[sourceItem.ProfileId.ToString()];
 
-                List<Currency> allCurrencies = (List<Currency>)dbTableCurrency.Records;
+                Dictionary<string, Currency> allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
 
                 Currency currency = null;
                 if (allCurrencies != null)
-                    currency = allCurrencies.Where(x => x.SourceId == sourceItem.CurrencyID).FirstOrDefault();
+                    currency = allCurrencies[sourceItem.CurrencyID.ToString()];
 
                 if (carrierProfile != null && currency != null)
                 {
