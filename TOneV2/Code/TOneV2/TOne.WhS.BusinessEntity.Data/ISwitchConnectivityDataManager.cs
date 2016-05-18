@@ -9,9 +9,12 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISwitchConnectivityDataManager : IDataManager
     {
-        bool Insert(SwitchConnectivity switchConnectivity, out int insertedId);
-        bool Update(SwitchConnectivity switchConnectivity);
-        bool AreSwitchConnectivitiesUpdated(ref object updateHandle);
         List<SwitchConnectivity> GetSwitchConnectivities();
+
+        bool AreSwitchConnectivitiesUpdated(ref object updateHandle);
+
+        bool Insert(SwitchConnectivity switchConnectivity, out int insertedId);
+        
+        bool Update(SwitchConnectivity switchConnectivity);
     }
 }

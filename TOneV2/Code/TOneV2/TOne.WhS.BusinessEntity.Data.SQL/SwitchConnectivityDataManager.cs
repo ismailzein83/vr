@@ -22,6 +22,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #endregion
 
         #region Public Methods
+
+        public List<SwitchConnectivity> GetSwitchConnectivities()
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SwitchConnectivity_GetAll", SwitchConnectivityMapper);
+        }
+
+        public bool AreSwitchConnectivitiesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.SwitchConnectivity", ref updateHandle);
+        }
+
         public bool Insert(SwitchConnectivity switchConnectivity, out int insertedId)
         {
             object switchConnectivityId;
@@ -34,26 +45,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 insertedId = 0;
             return insertedSuccesfully;
         }
+
         public bool Update(SwitchConnectivity switchConnectivity)
         {
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SwitchConnectivity_Update", switchConnectivity.SwitchConnectivityId, switchConnectivity.Name, switchConnectivity.SwitchId, switchConnectivity.CarrierAccountId, Vanrise.Common.Serializer.Serialize(switchConnectivity.Settings), switchConnectivity.BED, switchConnectivity.EED);
             return (recordsEffected > 0);
         }
-        public bool AreSwitchConnectivitiesUpdated(ref object updateHandle)
-        {
-            return base.IsDataUpdated("TOneWhS_BE.SwitchConnectivity", ref updateHandle);
-        }
-        public List<SwitchConnectivity> GetSwitchConnectivities()
-        {
-            return GetItemsSP("TOneWhS_BE.sp_SwitchConnectivity_GetAll", SwitchConnectivityMapper);
-        }
-        #endregion
-
-        #region Private Methods
-
+        
         #endregion
 
         #region  Mappers
+
         private SwitchConnectivity SwitchConnectivityMapper(IDataReader reader)
         {
             SwitchConnectivity switchConnectivity = new SwitchConnectivity
@@ -70,6 +72,5 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
         #endregion
-      
     }
 }

@@ -1,9 +1,12 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.dataSource"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             menuactions="scopeModel.menuActions"
+             pagingtype="'PagingOnScroll'"
+             idfield="Entity.SwitchConnectivityId">
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Carrier Account Name'" field="'CarrierAccountName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Switch Name'" field="'SwitchName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'BED'" field="'Entity.BED'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'Entity.EED'" type="'Datetime'"></vr-datagridcolumn>
+</vr-datagrid>
