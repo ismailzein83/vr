@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ItemconfigMeasureEditorDirective.$inject = ['UtilsService', 'VRUIUtilsService','VR_Analytic_ExpressionTypeEnum'];
+    ItemconfigMeasureEditorDirective.$inject = ['UtilsService', 'VRUIUtilsService'];
 
-    function ItemconfigMeasureEditorDirective(UtilsService, VRUIUtilsService,VR_Analytic_ExpressionTypeEnum) {
+    function ItemconfigMeasureEditorDirective(UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -35,30 +35,21 @@
             var joinSelectorAPI;
             var joinReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var dependentAggregateDimensionSelectorAPI;
+            var dependentAggregateDimensionReadyDeferred = UtilsService.createPromiseDeferred();
+
             var fieldTypeAPI;
             var fieldTypeReadyDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
 
-                $scope.expressionType = UtilsService.getArrayEnum(VR_Analytic_ExpressionTypeEnum);
-                $scope.showSQLExpression = false;
-                $scope.showSQLExpressionMethod = false;
-                $scope.onExpressionTypeSelectionChanged = function()
-                {
-                    if($scope.selectedExpressionType !=undefined)
-                    {
-                      
-                        switch ($scope.selectedExpressionType.value)
-                        {
-                            case VR_Analytic_ExpressionTypeEnum.SQLExpression.value: $scope.showSQLExpression = true; $scope.showSQLExpressionMethod = false; break;
-                            case VR_Analytic_ExpressionTypeEnum.SQLExpressionMethod.value: $scope.showSQLExpressionMethod = true; $scope.showSQLExpression = false; break;
-                        }
-
-                    }
-                }
-
                 $scope.onJoinSelectorDirectiveReady = function (api) {
                     joinSelectorAPI = api;
                     joinReadyDeferred.resolve();
+                }
+
+                $scope.onDependentAggregateSelectorDirectiveReady = function (api) {
+                    dependentAggregateDimensionSelectorAPI = api;
+                    dependentAggregateDimensionReadyDeferred.resolve();
                 }
 
                 $scope.onFieldTypeReady = function (api) {
@@ -79,23 +70,12 @@
                     var tableId;
                     var promises = [];
                     var configEntity;
-                    $scope.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpression;
 
                     if (payload != undefined) {
                         tableId = payload.tableId;
                         configEntity = payload.ConfigEntity;
                         if (configEntity != undefined) {
-                            
-                            $scope.sqlExpression = configEntity.SQLExpression;
-                            $scope.sqlExpressionMethod = configEntity.GetSQLExpressionMethod;
-
-                            if( $scope.sqlExpression !=undefined)
-                            {
-                                $scope.selectedExpressionType =  VR_Analytic_ExpressionTypeEnum.SQLExpression;
-                            }else if ($scope.sqlExpressionMethod !=undefined)
-                            {
-                                $scope.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpressionMethod;
-                            }
+                            $scope.sqlExpressionMethod = configEntity.GetValueMethod;
                         }
                         var loadJoinDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         joinReadyDeferred.promise.then(function () {
@@ -107,6 +87,16 @@
                         });
                         promises.push(loadJoinDirectivePromiseDeferred.promise);
 
+                        var loadAggregateDependentDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        dependentAggregateDimensionReadyDeferred.promise.then(function () {
+                            var payloadParentDirective = {
+                                filter: { TableIds: [tableId] },
+                                selectedIds: configEntity != undefined ? configEntity.DependentAggregateNames : undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(dependentAggregateDimensionSelectorAPI, payloadParentDirective, loadAggregateDependentDirectivePromiseDeferred);
+                        });
+                        promises.push(loadAggregateDependentDirectivePromiseDeferred.promise);
 
                         var loadFieldTypePromiseDeferred = UtilsService.createPromiseDeferred();
                         fieldTypeReadyDeferred.promise.then(function () {
@@ -127,12 +117,13 @@
                 api.getData = function () {
                     var fieldType = fieldTypeAPI != undefined ? fieldTypeAPI.getData() : undefined;
                     var joinConfigNames = joinSelectorAPI != undefined ? joinSelectorAPI.getSelectedIds() : undefined;
+                    var dependentAggregateNames = dependentAggregateDimensionSelectorAPI != undefined ? dependentAggregateDimensionSelectorAPI.getSelectedIds() : undefined;
                     var dimension = {
                         $type: "Vanrise.Analytic.Entities.AnalyticMeasureConfig ,Vanrise.Analytic.Entities",
-                        SQLExpression:$scope.showSQLExpression? $scope.sqlExpression:undefined,
+                        GetValueMethod: $scope.sqlExpressionMethod,
                         JoinConfigNames: joinConfigNames,
+                        DependentAggregateNames: dependentAggregateNames,
                         FieldType: fieldType,
-                        GetSQLExpressionMethod:$scope.showSQLExpressionMethod? $scope.sqlExpressionMethod:undefined,
                     };
                     return dimension;
                 }

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ItemconfigDimensionEditorDirective.$inject = ['UtilsService', 'VRUIUtilsService'];
+    ItemconfigDimensionEditorDirective.$inject = ['UtilsService', 'VRUIUtilsService','VR_Analytic_ExpressionTypeEnum'];
 
-    function ItemconfigDimensionEditorDirective(UtilsService, VRUIUtilsService) {
+    function ItemconfigDimensionEditorDirective(UtilsService, VRUIUtilsService, VR_Analytic_ExpressionTypeEnum) {
         return {
             restrict: 'E',
             scope: {
@@ -37,6 +37,9 @@
             var parentDimensionSelectorAPI;
             var parentDimensionReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var dependentDimensionSelectorAPI;
+            var dependentDimensionReadyDeferred = UtilsService.createPromiseDeferred();
+
             var requiredParentDimensionSelectorAPI;
             var requiredParentDimensionReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -44,12 +47,30 @@
             var fieldTypeReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-            
+                $scope.expressionType = UtilsService.getArrayEnum(VR_Analytic_ExpressionTypeEnum);
+
+                $scope.showSQLExpression = true;
+                $scope.showSQLExpressionMethod = false;
+                $scope.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpression;
+                $scope.onExpressionTypeSelectionChanged = function () {
+                    if ($scope.selectedExpressionType != undefined) {
+
+                        switch ($scope.selectedExpressionType.value) {
+                            case VR_Analytic_ExpressionTypeEnum.SQLExpression.value: $scope.showSQLExpression = true; $scope.showSQLExpressionMethod = false; break;
+                            case VR_Analytic_ExpressionTypeEnum.SQLExpressionMethod.value: $scope.showSQLExpressionMethod = true; $scope.showSQLExpression = false; break;
+                        }
+
+                    }
+                }
+
                 $scope.onParentDimensionSelectorDirectiveReady = function (api) {
                     parentDimensionSelectorAPI = api;
                     parentDimensionReadyDeferred.resolve();
                 }
-
+                $scope.onDependentDimensionSelectorDirectiveReady = function (api) {
+                    dependentDimensionSelectorAPI = api;
+                    dependentDimensionReadyDeferred.resolve();
+                }
                 $scope.onRequiredParentDimensionSelectorDirectiveReady = function (api) {
                     requiredParentDimensionSelectorAPI = api;
                     requiredParentDimensionReadyDeferred.resolve();
@@ -81,8 +102,15 @@
                         if (configEntity != undefined)
                         {
                            
-                            $scope.idColumn = configEntity.IdColumn;
-                            $scope.nameColumn = configEntity.NameColumn;
+                            $scope.sqlExpression = configEntity.SQLExpression;
+                            $scope.sqlExpressionMethod = configEntity.GetValueMethod;
+
+                            if ($scope.sqlExpression != undefined) {
+                                $scope.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpression;
+                            } else if ($scope.sqlExpressionMethod != undefined) {
+                                $scope.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpressionMethod;
+                            }
+                          
                             $scope.currencySQLColumnName = configEntity.CurrencySQLColumnName;
                         }
                         var loadJoinDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -95,6 +123,17 @@
                             VRUIUtilsService.callDirectiveLoad(joinSelectorAPI, payloadJoinDirective, loadJoinDirectivePromiseDeferred);
                         });
                         promises.push(loadJoinDirectivePromiseDeferred.promise);
+
+                        var loadDependentDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        dependentDimensionReadyDeferred.promise.then(function () {
+                            var payloadParentDirective = {
+                                filter: { TableIds: [tableId] },
+                                selectedIds: configEntity != undefined ? configEntity.DependentDimensions : undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(dependentDimensionSelectorAPI, payloadParentDirective, loadDependentDirectivePromiseDeferred);
+                        });
+                        promises.push(loadDependentDirectivePromiseDeferred.promise);
 
                         var loadParentDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         parentDimensionReadyDeferred.promise.then(function () {
@@ -138,17 +177,18 @@
                     var joinConfigNames  = joinSelectorAPI !=undefined?joinSelectorAPI.getSelectedIds():undefined;
                     var parents = parentDimensionSelectorAPI != undefined ? parentDimensionSelectorAPI.getSelectedIds() : undefined;
                     var requiredParentDimension = requiredParentDimensionSelectorAPI != undefined ? requiredParentDimensionSelectorAPI.getSelectedIds() : undefined;
+                    var dependentDimensions = dependentDimensionSelectorAPI != undefined ? dependentDimensionSelectorAPI.getSelectedIds() : undefined;
 
                     var dimension = {
                         $type: "Vanrise.Analytic.Entities.AnalyticDimensionConfig ,Vanrise.Analytic.Entities",
-                        IdColumn : $scope.idColumn,
-                        NameColumn:  $scope.nameColumn,
+                        SQLExpression: $scope.showSQLExpression ? $scope.sqlExpression : undefined,
+                        GetValueMethod: $scope.showSQLExpressionMethod ? $scope.sqlExpressionMethod : undefined,
+                        DependentDimensions:dependentDimensions,
                         JoinConfigNames: joinConfigNames,
                         Parents: parents,
                         RequiredParentDimension: requiredParentDimension,
                         FieldType:fieldType,
                         CurrencySQLColumnName: $scope.currencySQLColumnName,
-                     //   GroupByColumns: ,
                     };
                     return dimension;
                 }

@@ -82,7 +82,7 @@ namespace TestRuntime.Tasks
             };
             var test5 = Vanrise.Common.Serializer.Serialize(AnalyticMeasure);
             Vanrise.Common.Serializer.Serialize(AnalyticMeasure);
-
+               
             //QueueExecutionFlowManager executionFlowManager = new QueueExecutionFlowManager();
             //var queuesByStages = executionFlowManager.GetQueuesByStages(2);
             //CDR cdr = new CDR

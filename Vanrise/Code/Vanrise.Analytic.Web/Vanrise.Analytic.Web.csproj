@@ -99,7 +99,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Analytic\Constants\AccessTypeEnum.js" />
+    <Content Include="Analytic\Constants\AnalyticAggregateTypeEnum.js" />
     <Content Include="Analytic\Constants\AnalyticItemTypeEnum.js" />
+    <Content Include="Analytic\Constants\AnalyticSummaryFunctionEnum.js" />
     <Content Include="Analytic\Constants\ExpressionTypeEnum.js" />
     <Content Include="Analytic\Constants\ModuleConfig.js" />
     <Content Include="Analytic\Constants\TimeGroupingUnitEnum.js" />

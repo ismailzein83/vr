@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticAnalyticconfigDimensionGrid", ['VRNotificationService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigService', 'UtilsService', 'VR_Analytic_AnalyticItemConfigAPIService', function (VRNotificationService, VRModalService, VR_Analytic_AnalyticItemConfigService, UtilsService, VR_Analytic_AnalyticItemConfigAPIService) {
+app.directive("vrAnalyticAnalyticconfigAggregateGrid", ['VRNotificationService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigService', 'UtilsService', 'VR_Analytic_AnalyticItemConfigAPIService', function (VRNotificationService, VRModalService, VR_Analytic_AnalyticItemConfigService, UtilsService, VR_Analytic_AnalyticItemConfigAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -10,7 +10,7 @@ app.directive("vrAnalyticAnalyticconfigDimensionGrid", ['VRNotificationService',
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var analyticDimensionGrid = new AnalyticDimensionGrid($scope, ctrl, $attrs);
+            var analyticDimensionGrid = new AnalyticAggregateGrid($scope, ctrl, $attrs);
             analyticDimensionGrid.initializeController();
         },
         controllerAs: "ctrl",
@@ -22,7 +22,7 @@ app.directive("vrAnalyticAnalyticconfigDimensionGrid", ['VRNotificationService',
 
     };
 
-    function AnalyticDimensionGrid($scope, ctrl, $attrs) {
+    function AnalyticAggregateGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
         this.initializeController = initializeController;
