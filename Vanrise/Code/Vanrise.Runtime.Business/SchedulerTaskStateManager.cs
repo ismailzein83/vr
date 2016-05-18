@@ -85,6 +85,22 @@ namespace Vanrise.Runtime.Business
             ISchedulerTaskStateDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskStateDataManager>();
             dataManager.InsertSchedulerTaskState(taskId);
         }
+
+        public Vanrise.Entities.DeleteOperationOutput<SchedulerTaskState> DeleteTaskState(int taskId)
+        {
+            ISchedulerTaskStateDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskStateDataManager>();
+
+            bool deleteActionSucc = dataManager.DeleteTaskState(taskId);
+            DeleteOperationOutput<SchedulerTaskState> deleteOperationOutput = new DeleteOperationOutput<SchedulerTaskState>();
+
+            deleteOperationOutput.Result = DeleteOperationResult.Failed;
+
+            if (deleteActionSucc)
+            {
+                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+            }
+            return deleteOperationOutput;
+        } 
         #region private methods
         
         private SchedulerTaskStateDetail SchedulerTaskStateDetailMapper(SchedulerTaskState task)

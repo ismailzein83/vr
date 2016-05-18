@@ -43,7 +43,9 @@ namespace Vanrise.Runtime
                 SchedulerTask schedulerTask = scheduleTaskManager.GetTask(schedulerTaskState.TaskId);
                 if (schedulerTask == null)
                 {
-                    return;
+                    Vanrise.Common.LoggerFactory.GetLogger().WriteWarning("No Scheduled Task found for the Id: '{0}'", schedulerTaskState.TaskId);
+                    scheduleTaskStateManager.DeleteTaskState(schedulerTaskState.TaskId);
+                    continue;
                 }
 
                 if (schedulerTask.IsEnabled && schedulerTask.TaskSettings.StartEffDate < DateTime.Now && (schedulerTask.TaskSettings.EndEffDate == null || schedulerTask.TaskSettings.EndEffDate > DateTime.Now) &&

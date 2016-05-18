@@ -18,5 +18,7 @@ namespace Vanrise.Runtime.Data
         List<SchedulerTaskState> GetAllScheduleTaskStates();
 
         void InsertSchedulerTaskState(int taskId);
+
+        bool DeleteTaskState(int taskId);
     }
 }

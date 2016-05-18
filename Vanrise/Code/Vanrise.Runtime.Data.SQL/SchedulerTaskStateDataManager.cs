@@ -70,6 +70,11 @@ namespace Vanrise.Runtime.Data.SQL
         {
             ExecuteNonQuerySP("runtime.sp_SchedulerTaskState_Insert", taskId);
         }
+
+        public bool DeleteTaskState(int taskId)
+        {
+            return ExecuteNonQuerySP("runtime.sp_SchedulerTaskState_Delete", taskId) > 0;
+        }
         #endregion
 
         #region mapper
