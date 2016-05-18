@@ -27,7 +27,11 @@ as (select * from (values
 ('VRCommon/City/GetCity',null),
 ('VRCommon/City/AddCity','VRCommon_Country: Add City'),
 ('VRCommon/City/UpdateCity',null),
-('VRCommon/LogAttribute/GetFilteredLoggers','VRCommon_LogAttribute: View')
+('VRCommon/LogAttribute/GetFilteredLoggers','VRCommon_LogAttribute: View'),
+('VRCommon/EmailTemplate/GetFilteredEmailTemplates','VRCommon_EmailTemplates:View'),
+('VRCommon/EmailTemplate/UpdateEmailTemplate','VRCommon_EmailTemplates:Edit'),
+('VRCommon/EmailTemplate/GetEmailTemplate',null)
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
@@ -51,7 +55,9 @@ set identity_insert [sec].[BusinessEntity] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (301,'VRCommon_Country','Country',2,0,'["View", "Add", "Edit", "Download Template", "Upload", "Add City"]'),
-(302,'VRCommon_LogAttribute','Logs',2,0,'["View"]')
+(302,'VRCommon_LogAttribute','Logs',2,0,'["View"]'),
+(303,'VRCommon_EmailTemplates','Email Templates',2,0,'["View", "Edit"]')
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -100,7 +106,9 @@ as (select * from (values
 (1004,'Currency Exchange Rates','Currency Exchange Rates','#/view/Common/Views/CurrencyExchangeRate/CurrencyExchangeRateManagement',102,null,null,null,null,0,20),
 (1005,'Rate Types','Rate Types','#/view/Common/Views/RateType/RateTypeManagement',102,'VRCommon/RateType/GetFilteredRateTypes',null,null,null,0,25),
 --(1006,'System Logs','System Logs','#/view/Common/Views/logger/LoggerManagement',3,'VRCommon/LogAttribute/GetFilteredLoggers',null,null,null,0,10),
-(1007,'Event Logs','Event Logs','#/view/Common/Views/MasterLog/MasterLogManagement',3,'VRCommon/LogAttribute/GetFilteredLoggers',null,null,null,0,15)
+(1007,'Event Logs','Event Logs','#/view/Common/Views/MasterLog/MasterLogManagement',3,'VRCommon/LogAttribute/GetFilteredLoggers',null,null,null,0,15),
+(1008,'Email Templates','Email Templates','#/view/Common/Views/EmailTemplate/EmailTemplateManagement',3,'VRCommon/EmailTemplate/GetFilteredEmailTemplates',null,null,null,0,9)
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
