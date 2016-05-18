@@ -221,6 +221,10 @@
     <Compile Include="SupplierZone\CallCost.cs" />
     <Compile Include="SupplierZone\SupplierZoneInfoFilter.cs" />
     <Compile Include="SupplierZone\SupplierZoneRate.cs" />
+    <Compile Include="SwitchConnectivity\SwitchConnectivity.cs" />
+    <Compile Include="SwitchConnectivity\SwitchConnectivityDetail.cs" />
+    <Compile Include="SwitchConnectivity\SwitchConnectivityQuery.cs" />
+    <Compile Include="SwitchConnectivity\SwitchConnectivitySettings.cs" />
     <Compile Include="Switch\Switch.cs" />
     <Compile Include="Switch\SwitchDetail.cs" />
     <Compile Include="Switch\SwitchInfo.cs" />

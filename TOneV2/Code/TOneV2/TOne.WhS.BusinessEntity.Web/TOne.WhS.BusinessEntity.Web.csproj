@@ -164,6 +164,7 @@
     <Compile Include="Controllers\SupplierPricelistController.cs" />
     <Compile Include="Controllers\SupplierRateController.cs" />
     <Compile Include="Controllers\SupplierZoneController.cs" />
+    <Compile Include="Controllers\SwitchConnectivityController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
     <Compile Include="Controllers\ZoneServiceConfigController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -204,6 +205,7 @@
     <Content Include="WhS_BusinessEntity\Constant\RoutingProductSaleZoneRelationTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\RoutingProductSupplierRelationTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePriceListOwnerTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\SwitchConnectivityTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Directives\AccountManager\Templates\AssignedCarrierGrid.html" />
     <Content Include="WhS_BusinessEntity\Directives\AccountManager\vr-whs-be-assignedcarrier-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridTemplate.html" />
@@ -306,6 +308,8 @@
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\Templates\SupplierZoneGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\vr-whs-be-supplierzone-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\vr-whs-be-supplierzone-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SwitchConnectivity\Templates\SwitchConnectivityGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SwitchConnectivity\vr-whs-be-switchconnectivity-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Switch\Templates\SwitchGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Switch\vr-whs-be-switch-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Switch\vr-whs-be-switch-selector.js" />
@@ -320,6 +324,8 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleCodeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierCodeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierRateAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\SwitchConnectivityAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\SwitchConnectivityService.js" />
     <Content Include="WhS_BusinessEntity\Services\SwitchService.js" />
     <Content Include="WhS_BusinessEntity\Services\SupplierCodeService.js" />
     <Content Include="WhS_BusinessEntity\Services\SupplierRateService.js" />
@@ -416,6 +422,10 @@
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SwitchConnectivity\SwitchConnectivityEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\SwitchConnectivity\SwitchConnectivityEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SwitchConnectivity\SwitchConnectivityManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\SwitchConnectivity\SwitchConnectivityManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\Switch\SwitchEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\Switch\SwitchEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\Switch\SwitchManagement.html" />
