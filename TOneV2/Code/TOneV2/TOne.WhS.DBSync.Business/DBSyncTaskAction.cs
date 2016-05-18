@@ -147,11 +147,11 @@ namespace TOne.WhS.DBSync.Business
             SourceCurrencyMigrator sourceCurrencyMigrator = new SourceCurrencyMigrator(context);
             sourceCurrencyMigrator.Migrate();
 
-            SourceCurrencyExchangeRateMigrator sourceCurrencyExchangeRateMigrator = new SourceCurrencyExchangeRateMigrator(context);
-            sourceCurrencyExchangeRateMigrator.Migrate();
+            //SourceCurrencyExchangeRateMigrator sourceCurrencyExchangeRateMigrator = new SourceCurrencyExchangeRateMigrator(context);
+            //sourceCurrencyExchangeRateMigrator.Migrate();
 
-            SourceSwitchMigrator sourceSwitchMigrator = new SourceSwitchMigrator(context);
-            sourceSwitchMigrator.Migrate();
+            //SourceSwitchMigrator sourceSwitchMigrator = new SourceSwitchMigrator(context);
+            //sourceSwitchMigrator.Migrate();
 
             SourceCarrierProfileMigrator sourceCarrierProfileMigrator = new SourceCarrierProfileMigrator(context);
             sourceCarrierProfileMigrator.Migrate();

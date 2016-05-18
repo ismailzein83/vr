@@ -25,7 +25,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             {
                 foreach (var s in switches)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}", s.Name, s.SwitchId));
+                    wr.WriteLine(String.Format("{0}^{1}", s.Name, s.SourceId));
                 }
                 wr.Close();
             }

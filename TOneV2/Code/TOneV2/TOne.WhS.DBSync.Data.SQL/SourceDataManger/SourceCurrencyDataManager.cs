@@ -21,8 +21,8 @@ namespace TOne.WhS.DBSync.Data.SQL
             SourceCurrency sourceCurrency = new SourceCurrency()
             {
                 SourceId = arg["CurrencyID"].ToString(),
-                Name = arg["Name"].ToString(),
-                Symbol = arg["CurrencyID"].ToString()
+                Name = arg["Name"] as string,
+                Symbol = arg["CurrencyID"].ToString(),
             };
             return sourceCurrency;
         }

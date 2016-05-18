@@ -172,45 +172,9 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         private void DropOriginalTables()
         {
-            //Set Priority by References
-            foreach (DBTable table in _Context.DBTables.Values)
+            foreach (DBTable dbTable in _Context.DBTables.Values)
             {
-                table.DBFKs = new List<DBForeignKey>();
-                foreach (ForeignKey fk in table.Info.ForeignKeys)
-                {
-                    table.DBFKs.Add(new DBForeignKey { ReferencedKey = fk.ReferencedKey, ReferencedTable = fk.ReferencedTable, ReferencedTableSchema = fk.ReferencedTableSchema });
-                }
-            }
-            DropTables();
-        }
-
-        private void DropTables()
-        {
-            bool hasUnDropped = _Context.DBTables.Values.ToList().Exists(x => x.DroppedOriginal == false);
-            if (hasUnDropped)
-            {
-                // Drop Original Tables
-                foreach (DBTable table in _Context.DBTables.Values.Where(x => x.DroppedOriginal == false))
-                {
-                    bool isReferenced = false;
-
-                    foreach (DBTable otherTable in _Context.DBTables.Values.Where(x => x.Name != table.Name && !x.DroppedOriginal))
-                    {
-                        if (otherTable.DBFKs.Exists(x => x.ReferencedTable == table.Name && x.ReferencedTableSchema == table.Schema))
-                        {
-                            isReferenced = true;
-                            break;
-                        }
-                    }
-
-
-                    if (!isReferenced)
-                    {
-                        table.Info.Drop();
-                        table.DroppedOriginal = true;
-                    }
-                }
-                DropTables();
+                dbTable.Info.Drop();
             }
         }
 

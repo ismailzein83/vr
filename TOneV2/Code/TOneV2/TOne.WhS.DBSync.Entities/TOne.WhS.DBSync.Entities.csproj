@@ -59,7 +59,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\DBTable.cs" />
-    <Compile Include="Common\DBForeignKey.cs" />
     <Compile Include="SourceCarrierAccount.cs" />
     <Compile Include="SourceCurrencyExchangeRate.cs" />
     <Compile Include="SourceCurrency.cs" />

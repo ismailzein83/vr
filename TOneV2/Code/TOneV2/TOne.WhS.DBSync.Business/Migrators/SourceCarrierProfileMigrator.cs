@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data.SQL;
@@ -41,7 +42,47 @@ namespace TOne.WhS.DBSync.Business
         public override CarrierProfile BuildItemFromSource(SourceCarrierProfile sourceItem)
         {
             CarrierProfileSettings settings = new CarrierProfileSettings();
-            //settings.Address = sourceItem.Address1 + " " + sourceItem.Address2 + " " + sourceItem.Address3;
+            settings.Address = sourceItem.Address1;
+            settings.PostalCode = sourceItem.Address2;
+            settings.Town = sourceItem.Address3;
+            settings.Company = sourceItem.CompanyName;
+            settings.RegistrationNumber = sourceItem.RegistrationNumber;
+            settings.Website = sourceItem.Website;
+
+            List<CarrierContact> contacts = new List<CarrierContact>();
+            contacts.Add(new CarrierContact { Description = sourceItem.AccountManagerContact, Type = CarrierContactType.AccountManagerContact });
+            contacts.Add(new CarrierContact { Description = sourceItem.AccountManagerEmail, Type = CarrierContactType.AccountManagerEmail });
+            contacts.Add(new CarrierContact { Description = sourceItem.SMSPhoneNumber, Type = CarrierContactType.AlertingSMSPhoneNumbers });
+            contacts.Add(new CarrierContact { Description = sourceItem.BillingContact, Type = CarrierContactType.BillingContactPerson });
+            contacts.Add(new CarrierContact { Description = sourceItem.BillingEmail, Type = CarrierContactType.BillingEmail });
+            contacts.Add(new CarrierContact { Description = sourceItem.CommercialContact, Type = CarrierContactType.CommercialContactPerson });
+            contacts.Add(new CarrierContact { Description = sourceItem.CommercialEmail, Type = CarrierContactType.CommercialEmail });
+            contacts.Add(new CarrierContact { Description = sourceItem.BillingDisputeEmail, Type = CarrierContactType.DisputeEmail });
+            contacts.Add(new CarrierContact { Description = sourceItem.PricingContact, Type = CarrierContactType.PricingContactPerson });
+            contacts.Add(new CarrierContact { Description = sourceItem.PricingEmail, Type = CarrierContactType.PricingEmail });
+            contacts.Add(new CarrierContact { Description = sourceItem.SupportContact, Type = CarrierContactType.SupportContactPerson });
+            contacts.Add(new CarrierContact { Description = sourceItem.SupportEmail, Type = CarrierContactType.SupportEmail });
+            contacts.Add(new CarrierContact { Description = sourceItem.TechnicalContact, Type = CarrierContactType.TechnicalContactPerson });
+            contacts.Add(new CarrierContact { Description = sourceItem.TechnicalEmail, Type = CarrierContactType.TechnicalEmail });
+
+            string[] stringSeparators = new string[] { "\r\n" };
+
+            List<string> faxes = new List<string>();
+            if (sourceItem.Fax != null)
+                faxes = sourceItem.Fax.Split(stringSeparators, StringSplitOptions.None).Where(x => x != string.Empty).ToList();
+
+
+            List<string> phoneNumbers = new List<string>();
+            if (sourceItem.Telephone != null)
+                phoneNumbers = sourceItem.Telephone.Split(stringSeparators, StringSplitOptions.None).Where(x => x != string.Empty).ToList();
+
+            settings.Contacts = contacts;
+            settings.Faxes = faxes;
+            settings.PhoneNumbers = phoneNumbers;
+
+            //settings.CompanyLogo
+            //settings.CountryId
+            //settings.CityId
 
             return new CarrierProfile
             {

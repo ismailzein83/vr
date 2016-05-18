@@ -28,7 +28,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 SourceId = arg["CurrencyExchangeRateID"].ToString(),
                 ExchangeDate = GetReaderValue<DateTime?>(arg, "ExchangeDate"),
                 Rate = rate,
-                CurrencyId = arg["CurrencyId"].ToString()
+                CurrencyId = arg["CurrencyId"].ToString(),
             };
             return sourceCurrencyExchangeRate;
         }

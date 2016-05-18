@@ -11,78 +11,31 @@ namespace TOne.WhS.DBSync.Entities
         }
 
         public string Name { get; set; }
-
         public string Address1 { get; set; }
         public string Address2 { get; set; }
         public string Address3 { get; set; }
-
-        public string CompanyName	{ get; set; }
-        // CompanyLogo	image	Checked
+        public string CompanyName { get; set; }
+        public byte[] CompanyLogo { get; set; }
         public string CompanyLogoName { get; set; }
-
-
-
-        //        ProfileID	smallint	Unchecked
-        //Name	nvarchar(200)	Checked
-        //CompanyName	nvarchar(200)	Checked
-        //CompanyLogo	image	Checked
-        //CompanyLogoName	nvarchar(500)	Checked
-        //Country	nvarchar(100)	Checked
-        //City	nvarchar(100)	Checked
-        //Telephone	nvarchar(100)	Checked
-        //Fax	nvarchar(100)	Checked
-        //BillingContact	nvarchar(200)	Checked
-        //BillingEmail	nvarchar(256)	Checked
-        //PricingContact	nvarchar(200)	Checked
-        //PricingEmail	nvarchar(256)	Checked
-        //SupportContact	nvarchar(200)	Checked
-        //SupportEmail	nvarchar(256)	Checked
-        //CurrencyID	varchar(3)	Checked
-        //DuePeriod	tinyint	Checked
-        //PaymentTerms	tinyint	Checked
-        //Tax1	numeric(6, 2)	Checked
-        //Tax2	numeric(6, 2)	Checked
-        //IsTaxAffectsCost	char(1)	Checked
-        //TaxFormula	varchar(200)	Checked
-        //VAT	numeric(6, 2)	Checked
-        //Services	numeric(6, 2)	Checked
-        //ConnectionFees	money	Checked
-        //IsDeleted	char(1)	Checked
-        //BankingDetails	ntext	Checked
-        //UserID	int	Checked
-        //timestamp	timestamp	Checked
-        //RegistrationNumber	nvarchar(50)	Checked
-        //EscalationLevel	nvarchar(MAX)	Checked
-        //Guarantee	float	Checked
-        //CustomerPaymentType	tinyint	Checked
-        //SupplierPaymentType	tinyint	Checked
-        //CustomerCreditLimit	int	Checked
-        //SupplierCreditLimit	int	Checked
-        //IsNettingEnabled	char(1)	Checked
-        //CustomerActivateDate	datetime	Checked
-        //CustomerDeactivateDate	datetime	Checked
-        //SupplierActivateDate	datetime	Checked
-        //SupplierDeactivateDate	datetime	Checked
-        //VatID	varchar(20)	Checked
-        //VatOffice	varchar(50)	Checked
-        //AccountManagerEmail	nvarchar(255)	Checked
-        //InvoiceByProfile	char(1)	Checked
-        //SMSPhoneNumber	varchar(50)	Checked
-        //CustomerSMSOnPayment	char(1)	Checked
-        //CustomerMailOnPayment	char(1)	Checked
-        //SupplierSMSOnPayment	char(1)	Checked
-        //SupplierMailOnPayment	char(1)	Checked
-        //Website	varchar(255)	Checked
-        //BillingDisputeEmail	nvarchar(256)	Checked
-        //CustomerAllowPayment	char(1)	Checked
-        //SupplierAllowPayment	char(1)	Checked
-        //TechnicalContact	nvarchar(200)	Checked
-        //TechnicalEmail	nvarchar(256)	Checked
-        //CommercialContact	nvarchar(200)	Checked
-        //CommercialEmail	nvarchar(250)	Checked
-        //AccountManagerContact	nvarchar(200)	Checked
-
-
-
+        public string Country { get; set; }
+        public string City { get; set; }
+        public string Telephone { get; set; }
+        public string Fax { get; set; }
+        public string BillingContact { get; set; }
+        public string BillingEmail { get; set; }
+        public string PricingContact { get; set; }
+        public string PricingEmail { get; set; }
+        public string SupportContact { get; set; }
+        public string SupportEmail { get; set; }
+        public string RegistrationNumber { get; set; }
+        public string AccountManagerEmail { get; set; }
+        public string SMSPhoneNumber { get; set; }
+        public string Website { get; set; }
+        public string BillingDisputeEmail { get; set; }
+        public string TechnicalContact { get; set; }
+        public string TechnicalEmail { get; set; }
+        public string CommercialContact { get; set; }
+        public string CommercialEmail { get; set; }
+        public string AccountManagerContact { get; set; }
     }
 }

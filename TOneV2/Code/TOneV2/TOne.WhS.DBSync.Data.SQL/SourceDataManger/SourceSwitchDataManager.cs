@@ -21,7 +21,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             SourceSwitch sourceSwitch = new SourceSwitch()
             {
                 SourceId = arg["SwitchID"].ToString(),
-                Name = arg["Name"].ToString()
+                Name = arg["Name"] as string,
             };
             return sourceSwitch;
         }
