@@ -66,6 +66,11 @@ namespace TOne.WhS.DBSync.Business
                             AddDBTable(dtTables, table, switchDBSyncDataManager.GetConnection(), switchDBSyncDataManager.GetSchema());
                             break;
 
+                        case DBTableName.Country  :
+                            CountryDBSyncDataManager countryDBSyncDataManager = new CountryDBSyncDataManager(context.UseTempTables);
+                            AddDBTable(dtTables, table, countryDBSyncDataManager.GetConnection(), countryDBSyncDataManager.GetSchema());
+                            break;
+
                     }
 
                 }
@@ -144,6 +149,9 @@ namespace TOne.WhS.DBSync.Business
 
         private void TransferData(MigrationContext context)
         {
+            SourceCountryMigrator sourceCountryMigrator = new SourceCountryMigrator(context);
+            sourceCountryMigrator.Migrate();
+
             SourceCurrencyMigrator sourceCurrencyMigrator = new SourceCurrencyMigrator(context);
             sourceCurrencyMigrator.Migrate();
 

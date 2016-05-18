@@ -42,7 +42,9 @@ namespace TOne.WhS.DBSync.Business
             if (dbTableCurrency != null)
             {
                 Dictionary<string, Currency> allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
-                Currency currency = allCurrencies[sourceItem.CurrencyId];
+                Currency currency = null;
+                if (allCurrencies != null)
+                    currency = allCurrencies[sourceItem.CurrencyId.ToString()];
                 if (currency != null)
                     return new CurrencyExchangeRate
                     {

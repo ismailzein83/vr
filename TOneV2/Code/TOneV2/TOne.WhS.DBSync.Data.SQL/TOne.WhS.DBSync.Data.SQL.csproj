@@ -77,6 +77,7 @@
     <Compile Include="Common\MigrationUtils.cs" />
     <Compile Include="DBSyncDataManager\CarrierAccountDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\CarrierProfileDBSyncDataManager.cs" />
+    <Compile Include="DBSyncDataManager\CountryDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\CurrencyExchangeRateDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\CurrencyDBSyncDataManager.cs" />
     <Compile Include="Common\MigrationManager.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="DBSyncDataManager\SwitchDBSyncDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCarrierAccountDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCarrierProfileDataManager.cs" />
+    <Compile Include="SourceDataManger\SourceCountryDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCurrencyDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCurrencyExchangeRateDataManager.cs" />
     <Compile Include="SourceDataManger\SourceSwitchDataManager.cs" />

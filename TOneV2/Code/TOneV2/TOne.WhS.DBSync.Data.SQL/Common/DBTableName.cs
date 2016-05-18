@@ -37,5 +37,8 @@ namespace TOne.WhS.DBSync.Data.SQL.Common
 
         [Description("SupplierZoneService")]
         SupplierZoneService = 9,
+
+        [Description("Country")]
+        Country = 10,
     }
 }

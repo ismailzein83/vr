@@ -64,6 +64,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Runtime.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
     </Reference>
@@ -73,6 +76,7 @@
     <Compile Include="Migrators\SourceCarrierAccountMigrator.cs" />
     <Compile Include="Migrators\SourceCurrencyExchangeRateMigrator.cs" />
     <Compile Include="Migrators\SourceCarrierProfileMigrator.cs" />
+    <Compile Include="Migrators\SourceCountryMigrator.cs" />
     <Compile Include="Migrators\SourceCurrencyMigrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Migrators\SourceSwitchMigrator.cs" />

@@ -5,6 +5,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
+using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
@@ -41,6 +42,21 @@ namespace TOne.WhS.DBSync.Business
 
         public override CarrierProfile BuildItemFromSource(SourceCarrierProfile sourceItem)
         {
+            int? countryId = null;
+            DBTable dbTableCountry = Context.DBTables[DBTableName.Country];
+            if (dbTableCountry != null)
+            {
+                Dictionary<string, Country> allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
+                Country country = null;
+                if (allCountries != null)
+                    country = allCountries.Values.Where(x => x.Name == sourceItem.Country).FirstOrDefault();
+                if (country != null)
+                {
+                    countryId = country.CountryId;
+                }
+            }
+
+
             CarrierProfileSettings settings = new CarrierProfileSettings();
             settings.Address = sourceItem.Address1;
             settings.PostalCode = sourceItem.Address2;
@@ -81,8 +97,7 @@ namespace TOne.WhS.DBSync.Business
             settings.PhoneNumbers = phoneNumbers;
 
             //settings.CompanyLogo
-            //settings.CountryId
-            //settings.CityId
+            settings.CountryId = countryId;
 
             return new CarrierProfile
             {
@@ -90,6 +105,8 @@ namespace TOne.WhS.DBSync.Business
                 SourceId = sourceItem.SourceId,
                 Settings = settings
             };
+
+
         }
     }
 }
