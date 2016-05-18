@@ -333,6 +333,13 @@
     <Build Include="sec\Stored Procedures\sp_CloudAuthServer_Insert.sql" />
     <Build Include="genericdata\Tables\BELookupRuleDefinition.sql" />
     <Build Include="genericdata\Stored Procedures\sp_BELookupRuleDefinition_GetAll.sql" />
+    <Build Include="common\Tables\EmailTemplate.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_UpdateTempPasswordById.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_UpdateTempPasswordByEmail.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_GetTempPassword.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_ActivatePassword.sql" />
+    <Build Include="common\Stored Procedures\sp_EmailTemplate_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_EmailTemplate_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

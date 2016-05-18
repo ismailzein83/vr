@@ -269,3 +269,26 @@ when matched then
 when not matched by target then
 	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
 	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags]);
+
+--[common].[EmailTemplate]-----------------------1 to 1000------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [common].[EmailTemplate] on;
+;with cte_data([ID],[Name],[BodyTemplate],[SubjectTemplate],[Type])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'New Password','<span>Dear @Model.Name,</span><br/><span>Please find below your new password:</span><br/><span>@Model.Password</span><br/><span><strong>ProductX</strong></span>','ProductX: New Password for user @Model.Name','VR_Sec_NewPassword'),
+(2,'Reset Password','<span>Dear @Model.Name,</span><br/><span>Please find below your new password after reset:</span><br/><span>@Model.Password</span><br/><span><strong>ProductX</strong></span>','ProductX: Reset Password for user @Model.Name','VR_Sec_ResetPassword'),
+(3,'Forgot Password','<span>Dear @Model.Name,</span><br/><span>Please find below your new password after forgot:</span><br/><span>@Model.Password</span><br/><span><strong>ProductX</strong></span>','ProductX: Forgot Password for user @Model.Name','VR_Sec_ForgotPassword')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[BodyTemplate],[SubjectTemplate],[Type]))
+merge	[common].[EmailTemplate] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[BodyTemplate] = s.[BodyTemplate],[SubjectTemplate] = s.[SubjectTemplate],[Type] = s.[Type]
+when not matched by target then
+	insert([ID],[Name],[BodyTemplate],[SubjectTemplate],[Type])
+	values(s.[ID],s.[Name],s.[BodyTemplate],s.[SubjectTemplate],s.[Type]);
+set identity_insert [common].[EmailTemplate] off;
