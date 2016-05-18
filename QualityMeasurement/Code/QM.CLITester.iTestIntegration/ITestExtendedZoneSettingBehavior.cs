@@ -22,13 +22,15 @@ namespace QM.CLITester.iTestIntegration
 
             ITestZoneManager itestZoneManager = new ITestZoneManager();
             ITestZone matchITestZone = context.Zone.IsFromTestingConnectorZone ? itestZoneManager.GetZone(context.Zone.SourceId): itestZoneManager.GetMatchZone(context.ZoneCodes);
-            if(matchITestZone != null)
+            if (matchITestZone != null)
             {
                 context.Zone.Settings.IsOffline = matchITestZone.IsOffline;
                 var itestExtendedSettings = context.Zone.Settings.ExtendedSettings.GetOrCreateItem(EXTENDEDZONESETTING_KEYNAME, () => new ITestExtendedZoneSetting()) as ITestExtendedZoneSetting;
                 itestExtendedSettings.ITestZoneId = matchITestZone.ZoneId;
                 itestExtendedSettings.ITestCountryId = matchITestZone.CountryId;
             }
+            else
+                context.Zone.Settings.IsOffline = true;
         }
     }
 }
