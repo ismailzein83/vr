@@ -37,6 +37,7 @@ app.directive("qmBeSourcezonereaderTonev1", [function () {
         this.initializeController = initializeController;
 
         $scope.connectionString = undefined;
+        $scope.zoneNames = undefined;
 
         function initializeController() {
             defineAPI();
@@ -49,7 +50,8 @@ app.directive("qmBeSourcezonereaderTonev1", [function () {
                 
                 return {
                     $type: "QM.BusinessEntity.MainExtensions.SourceZonesReaders.ZoneTOneV1SQLReader, QM.BusinessEntity.MainExtensions",
-                    ConnectionString: $scope.connectionString
+                    ConnectionString: $scope.connectionString,
+                    ZoneNames: $scope.zoneNames
                 };
             };
 
@@ -57,6 +59,7 @@ app.directive("qmBeSourcezonereaderTonev1", [function () {
             api.load = function (payload) {
                 if (payload != undefined) {
                     $scope.connectionString = payload.connectionString;
+                    $scope.zoneNames = payload.zoneNames;
                 }
             }
 

@@ -72,6 +72,12 @@ namespace QM.BusinessEntity.Business
 
         protected override void SetItemsDeleted(List<long> itemIds)
         {
+            foreach (var z in itemIds)
+            {
+                Zone zone = zoneManager.GetZone(z);
+                zone.EndEffectiveDate = DateTime.Now;
+                zoneManager.UpdateZoneFromSource(zone);
+            }
         }
 
         protected override Zone BuildItemFromSource(SourceZone sourceItem)

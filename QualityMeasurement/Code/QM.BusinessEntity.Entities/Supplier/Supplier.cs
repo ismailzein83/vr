@@ -28,5 +28,7 @@ namespace QM.BusinessEntity.Entities
                 this.SupplierId = (int)value;
             }
         }
+
+        public bool IsDeleted { get; set; }
     }
 }

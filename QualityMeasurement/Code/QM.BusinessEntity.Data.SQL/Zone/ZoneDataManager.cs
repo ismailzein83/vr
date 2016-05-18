@@ -61,7 +61,7 @@ namespace QM.BusinessEntity.Data.SQL
             if (zone.Settings != null)
                 settings = Vanrise.Common.Serializer.Serialize(zone.Settings);
 
-            ExecuteNonQuerySP("[QM_BE].[sp_Zone_UpdateFromSource]", zone.ZoneId, zone.Name, zone.SourceId, zone.CountryId, ToDBNullIfDefault(zone.BeginEffectiveDate), settings, zone.IsFromTestingConnectorZone);
+            ExecuteNonQuerySP("[QM_BE].[sp_Zone_UpdateFromSource]", zone.ZoneId, zone.Name, zone.SourceId, zone.CountryId, ToDBNullIfDefault(zone.BeginEffectiveDate), ToDBNullIfDefault(zone.EndEffectiveDate.Value), settings, zone.IsFromTestingConnectorZone);
         }
 
         public bool AreZonesUpdated(ref object updateHandle)

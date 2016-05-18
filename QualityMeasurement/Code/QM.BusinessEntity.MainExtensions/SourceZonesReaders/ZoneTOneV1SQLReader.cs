@@ -10,6 +10,7 @@ namespace QM.BusinessEntity.MainExtensions.SourceZonesReaders
     public class ZoneTOneV1SQLReader : SourceZoneReader 
     {
         public string ConnectionString { get; set; }
+        public string ZoneNames { get; set; }
 
         public override bool UseSourceItemId
         {
@@ -22,7 +23,20 @@ namespace QM.BusinessEntity.MainExtensions.SourceZonesReaders
         public override IEnumerable<SourceZone> GetChangedItems(ref object updatedHandle)
         {
             DataManager dataManager = new DataManager(this.ConnectionString);
-            return dataManager.GetUpdatedZones(ref updatedHandle);
+            List<SourceZone> listSourceZones = dataManager.GetUpdatedZones(ref updatedHandle);
+            List<SourceZone> listZones = new List<SourceZone>();
+            List<string> mobileZones = (ZoneNames).ToLower().Split(',').ToList();
+
+            for (int i = 0; i < listSourceZones.Count; i++)
+            {
+                if (listSourceZones[i].IsMobile)
+                    listZones.Add(listSourceZones[i]);
+                else
+                    if (mobileZones.Any(w => listSourceZones[i].Name.ToLower().Contains(w)))
+                        listZones.Add(listSourceZones[i]);
+            }
+                
+            return listZones;
         }
 
         private class DataManager : Vanrise.Data.SQL.BaseSQLDataManager
@@ -51,7 +65,8 @@ namespace QM.BusinessEntity.MainExtensions.SourceZonesReaders
                     Name = arg["ZoneName"] as string,
                     CountryName = arg["CountryName"] as string,
                     BeginEffectiveDate = GetReaderValue<DateTime>(arg, "BeginEffectiveDate"),
-                    EndEffectiveDate = GetReaderValue<DateTime>(arg, "EndEffectiveDate")
+                    EndEffectiveDate = GetReaderValue<DateTime>(arg, "EndEffectiveDate"),
+                    IsMobile = (arg["IsMobile"] as string == "Y")
                 };
                 return sourceZone;
             }
@@ -73,6 +88,7 @@ namespace QM.BusinessEntity.MainExtensions.SourceZonesReaders
                   ,c.[Name] as CountryName
                   ,[BeginEffectiveDate]
                   ,[EndEffectiveDate]
+                  ,[IsMobile]
                 FROM [dbo].[Zone] z join [dbo].[CodeGroup] c on z.CodeGroup = c.Code where ZoneID > 0 and z.SupplierID ='SYS' and IsEffective = 'Y' ";
 
             private const string query_getAllZones = @"SELECT [Code] ,[ZoneID] FROM [dbo].[Code] where ZoneID > 0 and IsEffective = 'Y'";

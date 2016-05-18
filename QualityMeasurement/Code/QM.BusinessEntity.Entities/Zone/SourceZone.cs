@@ -21,5 +21,6 @@ namespace QM.BusinessEntity.Entities
         public DateTime BeginEffectiveDate { get; set; }
 
         public DateTime? EndEffectiveDate { get; set; }
+        public bool IsMobile { get; set; }
     }
 }

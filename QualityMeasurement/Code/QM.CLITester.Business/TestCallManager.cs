@@ -27,8 +27,7 @@ namespace QM.CLITester.Business
     {
         public AddTestCallOutput AddNewTestCall(AddTestCallInput testCallInput)
         {
-            long batchNumber;
-            IDManager.Instance.ReserveIDRange(this.GetType(), testCallInput.SuppliersIds.Count, out batchNumber);
+
 
             AddTestCallOutput testCallOutput = new AddTestCallOutput();
 
@@ -73,6 +72,10 @@ namespace QM.CLITester.Business
                     listSuppliersIds.Add(supplier.SupplierId);
                 }
             }
+
+
+            long batchNumber;
+            IDManager.Instance.ReserveIDRange(this.GetType(), listSuppliersIds.Count, out batchNumber);
 
             foreach (int supplierId in listSuppliersIds)
                 foreach (Zone z in zones)

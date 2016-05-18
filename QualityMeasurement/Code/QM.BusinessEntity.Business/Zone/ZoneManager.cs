@@ -96,6 +96,12 @@ namespace QM.BusinessEntity.Business
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
 
+        public void UpdateZoneFromSource(Zone zone)
+        {
+            IZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<IZoneDataManager>();
+            dataManager.UpdateZoneFromSource(zone);
+        }
+
         private void UpdateSettings(Zone zone, List<string> zoneCodes, bool isUpdate)
         {
             if(zone.Settings == null)

@@ -105,7 +105,8 @@ app.directive("qmBeSourcezonereader", ['UtilsService', 'VRUIUtilsService', 'VRNo
                         var obj;
                         if (payload != undefined && payload.data != undefined && payload.data.SourceZoneReader != undefined)
                             obj = {
-                                connectionString: payload.data.SourceZoneReader.ConnectionString
+                                connectionString: payload.data.SourceZoneReader.ConnectionString,
+                                zoneNames: payload.data.SourceZoneReader.ZoneNames
                             };
                         VRUIUtilsService.callDirectiveLoad(sourceTypeDirectiveAPI, obj, loadZoneSourceTemplatePromiseDeferred);
                     });

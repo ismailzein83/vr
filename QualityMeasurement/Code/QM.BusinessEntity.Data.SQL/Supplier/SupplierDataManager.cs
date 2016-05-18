@@ -53,13 +53,17 @@ namespace QM.BusinessEntity.Data.SQL
              object settings = null;
              if ( supplier.Settings != null)
                settings =  Vanrise.Common.Serializer.Serialize(supplier.Settings);
-             int recordsEffected = ExecuteNonQuerySP("[QM_BE].[sp_Supplier_Update]", supplier.SupplierId, supplier.Name, settings);
+             int recordsEffected = ExecuteNonQuerySP("[QM_BE].[sp_Supplier_Update]", supplier.SupplierId, supplier.Name, settings, supplier.IsDeleted);
             return (recordsEffected > 0);
         }
 
         public void InsertSupplierFromeSource(Supplier supplier)
         {
-           ExecuteNonQuerySP("[QM_BE].[sp_Supplier_InsertFromSource]", supplier.SupplierId, supplier.Name , supplier.SourceId);
+            object settings = null;
+            if (supplier.Settings != null)
+                settings = Vanrise.Common.Serializer.Serialize(supplier.Settings);
+
+            ExecuteNonQuerySP("[QM_BE].[sp_Supplier_InsertFromSource]", supplier.SupplierId, supplier.Name, settings, supplier.SourceId);
         }
 
         public void UpdateSupplierFromeSource(Supplier supplier)

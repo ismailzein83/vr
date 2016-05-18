@@ -42,6 +42,13 @@ namespace QM.BusinessEntity.Business
 
         protected override void SetItemsDeleted(List<long> itemIds)
         {
+            foreach (var s in itemIds)
+            {
+                SupplierManager supplierManager = new SupplierManager();
+                Supplier supplier = supplierManager.GetSupplier((int)s);
+                supplier.IsDeleted = true;
+                supplierManager.UpdateSupplier(supplier);
+            }
         }
 
         protected override Supplier BuildItemFromSource(SourceSupplier sourceItem)
