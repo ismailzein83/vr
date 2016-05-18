@@ -31,7 +31,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has a pending effective code that can not be moved", (target as ExistingZone).ZoneEntity.Name);
+            return string.Format("Zone {0} has a pending effective code that can not be closed", (target as ExistingZone).ZoneEntity.Name);
         }
 
     }

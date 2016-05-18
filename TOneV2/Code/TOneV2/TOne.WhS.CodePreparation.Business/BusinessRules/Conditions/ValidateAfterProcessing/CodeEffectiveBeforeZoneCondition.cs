@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.Common;
 using Vanrise.BusinessProcess.Entities;
-using TOne.WhS.CodePreparation.Entities;
 
 namespace TOne.WhS.CodePreparation.Business
 {
@@ -20,19 +19,14 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ICPParametersContext cpContext = context.GetExtension<ICPParametersContext>();
-            Dictionary<string, ExistingZone> existingZonesByZoneName = cpContext.ExistingZonesByZoneName; //TODO: Zone.BED must be filled in ZoneToProcess
+
             ZoneToProcess zone = context.Target as ZoneToProcess;
 
             if (zone.CodesToAdd != null)
             {
-               
-
                 foreach (CodeToAdd codeToAdd in zone.CodesToAdd)
                 {
-                    ExistingZone existingZoneInContext;
-                    existingZonesByZoneName.TryGetValue(codeToAdd.ZoneName, out existingZoneInContext);
-                    if (existingZoneInContext != null && existingZoneInContext.BED > codeToAdd.BED)
+                    if (zone.ExistingZones.Any(item => item.BED > codeToAdd.BED))
                         return false;
                 }
 
@@ -43,10 +37,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 foreach (CodeToMove codeToMove in zone.CodesToMove)
                 {
-                    ExistingZone existingZoneInContext;
-                    existingZonesByZoneName.TryGetValue(codeToMove.ZoneName, out existingZoneInContext);
-
-                    if (existingZoneInContext != null && existingZoneInContext.BED > codeToMove.BED)
+                    if (zone.ExistingZones.Any(item => item.BED > codeToMove.BED))
                         return false;
                 }
             }

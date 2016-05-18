@@ -18,6 +18,8 @@ namespace TOne.WhS.BusinessEntity.Data
 
         List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn);
 
+        List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn);
+
         List<SaleCode> GetSaleCodesByCountry(int countryId, DateTime effectiveDate);
 
         List<SaleCode> GetSaleCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes);

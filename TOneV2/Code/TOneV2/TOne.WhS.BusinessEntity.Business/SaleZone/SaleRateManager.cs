@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleRateManager
     {
-     
+
         #region Public Methods
         public List<SaleRate> GetRates(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
@@ -24,11 +24,13 @@ namespace TOne.WhS.BusinessEntity.Business
             throw new NotImplementedException();
         }
 
+
         public List<SaleRate> GetSaleRatesEffectiveAfter(int sellingNumberPlanId, DateTime minimumDate)
         {
             ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
-            return dataManager.GetSaleRatesEffectiveAfter(sellingNumberPlanId, minimumDate); 
+            return dataManager.GetSaleRatesEffectiveAfter(sellingNumberPlanId, minimumDate);
         }
+
         public Vanrise.Entities.IDataRetrievalResult<SaleRateDetail> GetFilteredSaleRates(Vanrise.Entities.DataRetrievalInput<SaleRateQuery> input)
         {
             ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
@@ -46,7 +48,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             SaleZoneManager sz = new SaleZoneManager();
             CurrencyManager currencyManager = new CurrencyManager();
-           
+
             int currencyId;
             if (saleRate.CurrencyId.HasValue)
                 currencyId = saleRate.CurrencyId.Value;

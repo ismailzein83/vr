@@ -23,11 +23,14 @@ namespace TOne.WhS.CodePreparation.Business
 
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
 
-            foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
+            if (zoneToProcess.CodesToClose != null)
             {
-                if (!zoneToProcess.ExistingZones.Any(x => x.ExistingCodes.Any(item => item.CodeEntity.Code == codeToClose.Code)))
-                    return false;
+                foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
+                {
+                    if (codeToClose.ChangedExistingCodes == null || !codeToClose.ChangedExistingCodes.Any(item => item.CodeEntity.Code == codeToClose.Code))
+                        return false;
                 }
+            }
 
             return true;
         }

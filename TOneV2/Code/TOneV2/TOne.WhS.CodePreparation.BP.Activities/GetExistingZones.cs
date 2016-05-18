@@ -41,8 +41,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
-            //if (this.ExistingZoneEntities.Get(context) == null)
-            //    this.ExistingZoneEntities.Set(context, new List<SaleZone>());
+            if (this.ExistingZoneEntities.Get(context) == null)
+                this.ExistingZoneEntities.Set(context, new List<SaleZone>());
             base.OnBeforeExecute(context, handle);
         }
 
@@ -50,7 +50,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         {
 
             SaleZoneManager saleZoneManager = new SaleZoneManager();
-            IEnumerable<SaleZone> saleZones = saleZoneManager.GetSaleZonesEffectiveAfterBySellingNumberPlan(inputArgument.SellingNumberPlanId, inputArgument.MinimumDate);
+            IEnumerable<SaleZone> saleZones = saleZoneManager.GetSaleZonesEffectiveAfter(inputArgument.SellingNumberPlanId, inputArgument.MinimumDate);
             return new GetExistingZonesOutput()
             {
                 ExistingZoneEntities = saleZones
