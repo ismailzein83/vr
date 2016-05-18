@@ -10,6 +10,10 @@ namespace Vanrise.Analytic.Entities
     {
         public int AnalyticDimensionConfigId { get; set; }
 
+        public string Name { get; set; }
+
         public AnalyticDimensionConfig Config { get; set; }
+
+        public IDimensionEvaluator Evaluator { get; set; }
     }
 }

@@ -8,7 +8,9 @@ namespace Vanrise.Analytic.Entities
 {
     public interface IMeasureEvaluator
     {
-        string GetMeasureExpression(IGetMeasureExpressionContext context);
+        //string GetMeasureExpression(IGetMeasureExpressionContext context);
+
+        dynamic GetMeasureValue(IGetMeasureValueContext context);
     }
 
     public interface IGetMeasureExpressionContext
@@ -16,6 +18,11 @@ namespace Vanrise.Analytic.Entities
         string GetMeasureExpression(string measureConfigName);
 
         bool IsGroupingDimensionIncluded(string dimensionName);
+    }
+
+    public interface IGetMeasureValueContext
+    {
+        dynamic GetAggregateValue(string aggregateName);
     }
 
 }

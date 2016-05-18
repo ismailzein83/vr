@@ -16,6 +16,8 @@ namespace Vanrise.Analytic.Data
 
         Dictionary<string, AnalyticDimension> Dimensions { set; }
 
+        Dictionary<string, AnalyticAggregate> Aggregates { set; }
+
         Dictionary<string, AnalyticMeasure> Measures { set; }
 
         Dictionary<string, AnalyticJoin> Joins { set; }

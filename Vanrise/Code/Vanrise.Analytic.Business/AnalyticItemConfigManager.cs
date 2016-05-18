@@ -16,22 +16,55 @@ namespace Vanrise.Analytic.Business
         #region Public Methods
         public Dictionary<string, AnalyticDimension> GetDimensions(int tableId)
         {
-            var dimensionConfigs = GetCachedAnalyticItemConfigs<AnalyticDimensionConfig>(tableId, AnalyticItemType.Dimension);
-            Dictionary<string, AnalyticDimension> analyticDimensions = new Dictionary<string, AnalyticDimension>();
-            foreach (var itemConfig in dimensionConfigs)
-            {
-                AnalyticDimensionConfig dimensionConfig = itemConfig.Config;
-                if (dimensionConfig == null)
-                    throw new NullReferenceException("dimensionConfig");
-                AnalyticDimension dimension = new AnalyticDimension
+            string cacheName = String.Format("GetDimensions_{0}", tableId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+                () =>
                 {
-                    AnalyticDimensionConfigId = itemConfig.AnalyticItemConfigId,
-                    Config = dimensionConfig
-                };
-                analyticDimensions.Add(itemConfig.Name, dimension);
-            }
-            return analyticDimensions;
+                    var dimensionConfigs = GetCachedAnalyticItemConfigs<AnalyticDimensionConfig>(tableId, AnalyticItemType.Dimension);
+                    Dictionary<string, AnalyticDimension> analyticDimensions = new Dictionary<string, AnalyticDimension>();
+                    foreach (var itemConfig in dimensionConfigs)
+                    {
+                        AnalyticDimensionConfig dimensionConfig = itemConfig.Config;
+                        if (dimensionConfig == null)
+                            throw new NullReferenceException("dimensionConfig");
+                        AnalyticDimension dimension = new AnalyticDimension
+                        {
+                            AnalyticDimensionConfigId = itemConfig.AnalyticItemConfigId,
+                            Name = itemConfig.Name,
+                            Config = dimensionConfig,
+                            Evaluator = DynamicTypeGenerator.GetDimensionEvaluator(itemConfig.AnalyticItemConfigId, dimensionConfig)
+                        };
+                        analyticDimensions.Add(itemConfig.Name, dimension);
+                    }
+                    return analyticDimensions;
+                });            
         }
+
+        public Dictionary<string, AnalyticAggregate> GetAggregates(int tableId)
+        {
+            string cacheName = String.Format("GetAggregates_{0}", tableId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+                () =>
+                {
+                    var aggregateConfigs = GetCachedAnalyticItemConfigs<AnalyticAggregateConfig>(tableId, AnalyticItemType.Aggregate);
+                    Dictionary<string, AnalyticAggregate> analyticAggregates = new Dictionary<string, AnalyticAggregate>();
+                    foreach (var itemConfig in aggregateConfigs)
+                    {
+                        AnalyticAggregateConfig aggregateConfig = itemConfig.Config;
+                        if (aggregateConfig == null)
+                            throw new NullReferenceException("aggregateConfig");
+                        AnalyticAggregate measure = new AnalyticAggregate
+                        {
+                            AnalyticAggregateConfigId = itemConfig.AnalyticItemConfigId,
+                            Config = aggregateConfig
+                        };
+                        analyticAggregates.Add(itemConfig.Name, measure);
+                    }
+                    return analyticAggregates;
+                });
+
+        }
+
         public Dictionary<string, AnalyticMeasure> GetMeasures(int tableId)
         {
             string cacheName = String.Format("GetMeasures_{0}", tableId);
@@ -48,7 +81,7 @@ namespace Vanrise.Analytic.Business
                         AnalyticMeasure measure = new AnalyticMeasure
                         {
                             AnalyticMeasureConfigId = itemConfig.AnalyticItemConfigId,
-                            Config = measureConfig,
+                            Config = measureConfig, 
                             Evaluator = DynamicTypeGenerator.GetMeasureEvaluator(itemConfig.AnalyticItemConfigId, measureConfig)
                         };
                         analyticMeasures.Add(itemConfig.Name, measure);
@@ -57,6 +90,7 @@ namespace Vanrise.Analytic.Business
                 });
             
         }
+
         public Dictionary<string, AnalyticJoin> GetJoins(int tableId)
         {
             var joinConfigs = GetCachedAnalyticItemConfigs<AnalyticJoinConfig>(tableId, AnalyticItemType.Join);

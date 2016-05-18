@@ -59,6 +59,7 @@ namespace Vanrise.Analytic.Business
                 throw new NullReferenceException(String.Format("table.Settings.ID '{0}'", table.AnalyticTableId));
             dataManager.Table = table;
             dataManager.Dimensions = analyticItemConfigManager.GetDimensions(table.AnalyticTableId);
+            dataManager.Aggregates = analyticItemConfigManager.GetAggregates(table.AnalyticTableId);
             dataManager.Measures = analyticItemConfigManager.GetMeasures(table.AnalyticTableId);
             dataManager.Joins = analyticItemConfigManager.GetJoins(table.AnalyticTableId);
 

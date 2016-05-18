@@ -12,13 +12,15 @@ namespace Vanrise.Analytic.Business
     {
         public static IMeasureEvaluator GetMeasureEvaluator(int measureConfigId, AnalyticMeasureConfig measureConfig)
         {
-            if (String.IsNullOrEmpty(measureConfig.GetSQLExpressionMethod))
+            if (String.IsNullOrEmpty(measureConfig.GetValueMethod))
                 return null;
             else
             {
                 Type runtimeType;
                 List<string> errorMessages;
-                if(TryBuildRuntimeType(measureConfig, out runtimeType, out errorMessages))
+                string fullTypeName;
+                string classDefinition = BuildMeasureEvaluatorClassDefinition(measureConfig, out fullTypeName);
+                if (TryBuildRuntimeType(classDefinition, fullTypeName, out runtimeType, out errorMessages))
                 {
                     IMeasureEvaluator measureEvaluator = Activator.CreateInstance(runtimeType) as IMeasureEvaluator;
                     if (measureEvaluator == null)
@@ -27,25 +29,39 @@ namespace Vanrise.Analytic.Business
                 }
                 else
                 {
-                    StringBuilder errorsBuilder = new StringBuilder();
-                    if (errorMessages != null)
-                    {
-                        foreach (var errorMessage in errorMessages)
-                        {
-                            errorsBuilder.AppendLine(errorMessage);
-                        }
-                    }
-                    throw new Exception(String.Format("Compile Error when building Measure Evaluator for Analytic Measure Config Id '{0}'. Errors: {1}",
-                        measureConfigId, errorsBuilder));
+                    RaiseCompilationError(measureConfigId, errorMessages);
+                    return null;
                 }
             }
         }
 
-        public static bool TryBuildRuntimeType(AnalyticMeasureConfig measureConfig, out Type runtimeType, out List<string> errorMessages)
+        public static IDimensionEvaluator GetDimensionEvaluator(int dimensionConfigId, AnalyticDimensionConfig dimensionConfig)
         {
-            string fullTypeName;
-            string classDefinition = BuildClassDefinition(measureConfig, out fullTypeName);
+            if (String.IsNullOrEmpty(dimensionConfig.GetValueMethod))
+                return null;
+            else
+            {
+                Type runtimeType;
+                List<string> errorMessages;
+                string fullTypeName;
+                string classDefinition = BuildDimensionEvaluatorClassDefinition(dimensionConfig, out fullTypeName);
+                if (TryBuildRuntimeType(classDefinition, fullTypeName, out runtimeType, out errorMessages))
+                {
+                    IDimensionEvaluator dimensionEvaluator = Activator.CreateInstance(runtimeType) as IDimensionEvaluator;
+                    if (dimensionEvaluator == null)
+                        throw new NullReferenceException("dimensionEvaluator");
+                    return dimensionEvaluator;
+                }
+                else
+                {
+                    RaiseCompilationError(dimensionConfigId, errorMessages);
+                    return null;
+                }
+            }
+        }
 
+        public static bool TryBuildRuntimeType(string classDefinition, string fullTypeName, out Type runtimeType, out List<string> errorMessages)
+        {
             CSharpCompilationOutput compilationOutput;
             if (!CSharpCompiler.TryCompileClass(classDefinition, out compilationOutput))
             {
@@ -59,17 +75,31 @@ namespace Vanrise.Analytic.Business
             errorMessages = null;
             return true;
         }
-        private static string BuildClassDefinition(AnalyticMeasureConfig measureConfig, out string fullTypeName)
-        {
 
+        private static void RaiseCompilationError(int measureConfigId, List<string> errorMessages)
+        {
+            StringBuilder errorsBuilder = new StringBuilder();
+            if (errorMessages != null)
+            {
+                foreach (var errorMessage in errorMessages)
+                {
+                    errorsBuilder.AppendLine(errorMessage);
+                }
+            }
+            throw new Exception(String.Format("Compile Error when building Measure Evaluator for Analytic Measure Config Id '{0}'. Errors: {1}",
+                measureConfigId, errorsBuilder));
+        }
+
+        private static string BuildMeasureEvaluatorClassDefinition(AnalyticMeasureConfig measureConfig, out string fullTypeName)
+        {
             StringBuilder classDefinitionBuilder = new StringBuilder(@" 
                 using System;
 
                 namespace #NAMESPACE#
                 {
                     public class #CLASSNAME# : Vanrise.Analytic.Entities.IMeasureEvaluator
-                    { 
-                        public string GetMeasureExpression(Vanrise.Analytic.Entities.IGetMeasureExpressionContext context)
+                    {
+                        public dynamic GetMeasureValue(Vanrise.Analytic.Entities.IGetMeasureValueContext context)
                         {
                             #EXECUTIONCODE#
                         }
@@ -85,9 +115,40 @@ namespace Vanrise.Analytic.Business
             classDefinitionBuilder.Replace("#CLASSNAME#", className);
             fullTypeName = String.Format("{0}.{1}", classNamespace, className);
 
-            classDefinitionBuilder.Replace("#EXECUTIONCODE#", measureConfig.GetSQLExpressionMethod);
+            classDefinitionBuilder.Replace("#EXECUTIONCODE#", measureConfig.GetValueMethod);
 
             return classDefinitionBuilder.ToString();
         }
+
+        private static string BuildDimensionEvaluatorClassDefinition(AnalyticDimensionConfig dimensionConfig, out string fullTypeName)
+        {
+            StringBuilder classDefinitionBuilder = new StringBuilder(@" 
+                using System;
+
+                namespace #NAMESPACE#
+                {
+                    public class #CLASSNAME# : Vanrise.Analytic.Entities.IDimensionEvaluator
+                    {
+                        public dynamic GetDimensionValue(Vanrise.Analytic.Entities.IGetDimensionValueContext context)
+                        {
+                            #EXECUTIONCODE#
+                        }
+                    }
+                }
+                ");
+
+            //classDefinitionBuilder.Replace("#EXECUTIONCODE#", _instanceExecutionBlockBuilder.ToString());
+
+            string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.Analytic.Business");
+            string className = "DimensionEvaluator";
+            classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
+            classDefinitionBuilder.Replace("#CLASSNAME#", className);
+            fullTypeName = String.Format("{0}.{1}", classNamespace, className);
+
+            classDefinitionBuilder.Replace("#EXECUTIONCODE#", dimensionConfig.GetValueMethod);
+
+            return classDefinitionBuilder.ToString();
+        }
+
     }
 }

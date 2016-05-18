@@ -12,11 +12,21 @@ namespace Vanrise.Analytic.Entities
 
         public string NameColumn { get; set; }
 
+        public string SQLExpression { get; set; }
+
+        /// <summary>
+        /// either SQLExpression or GetValueMethod should have value. SQLExpression has more priority than GetValueMethod
+        /// </summary>
+        public string GetValueMethod { get; set; }
+
+        public List<string> DependentDimensions { get; set; }
+
         public List<string> JoinConfigNames { get; set; }
 
-        public List<string> GroupByColumns { get; set; }
         public List<string> Parents { get; set; }
+
         public string RequiredParentDimension { get; set; }
+
       //  public bool IsRequiredFromParent { get; set; }
         public GenericData.Entities.DataRecordFieldType FieldType { get; set; }
 
