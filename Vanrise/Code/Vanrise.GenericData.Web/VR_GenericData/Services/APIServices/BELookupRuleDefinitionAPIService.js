@@ -17,13 +17,24 @@
             });
         }
 
+        function GetBELookupRuleDefinition(beLookupRuleDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetBELookupRuleDefinition'), {
+                beLookupRuleDefinitionId: beLookupRuleDefinitionId
+            });
+        }
+
         function AddBELookupRuleDefinition(beLookupRuleDefinition) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'AddBELookupRuleDefinition'), beLookupRuleDefinition);
+        }
+
+        function UpdateBELookupRuleDefinition(beLookupRuleDefinition) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'UpdateBELookupRuleDefinition'), beLookupRuleDefinition);
         }
 
         return {
             GetFilteredBELookupRuleDefinitions: GetFilteredBELookupRuleDefinitions,
             GetBELookupRuleDefinitionsInfo: GetBELookupRuleDefinitionsInfo,
+            GetBELookupRuleDefinition: GetBELookupRuleDefinition,
             AddBELookupRuleDefinition: AddBELookupRuleDefinition
         };
     }

@@ -45,6 +45,8 @@
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
                 };
+
+                defineMenuActions();
             }
 
             function defineAPI()

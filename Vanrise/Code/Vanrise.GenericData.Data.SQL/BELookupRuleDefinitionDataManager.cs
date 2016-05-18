@@ -28,6 +28,11 @@ namespace Vanrise.GenericData.Data.SQL
             return GetItemsSP("genericdata.sp_BELookupRuleDefinition_GetAll", BELookupRuleDefinitionMapper);
         }
 
+        public bool AreBELookupRuleDefinitionsUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("[genericdata].[BELookupRuleDefinition]", ref updateHandle);
+        }
+
         public bool InsertBELookupRuleDefinition(BELookupRuleDefinition beLookupRuleDefinition, out int insertedId)
         {
             object beLookupRuleDefinitionId;
@@ -45,11 +50,13 @@ namespace Vanrise.GenericData.Data.SQL
             return false;
         }
 
-        public bool AreBELookupRuleDefinitionsUpdated(ref object updateHandle)
+        public bool UpdateBELookupRuleDefinition(BELookupRuleDefinition beLookupRuleDefinition)
         {
-            return base.IsDataUpdated("[genericdata].[BELookupRuleDefinition]", ref updateHandle);
+            string details = Vanrise.Common.Serializer.Serialize(beLookupRuleDefinition, true);
+            int affectedRows = ExecuteNonQuerySP("genericdata.sp_BELookupRuleDefinition_Update", beLookupRuleDefinition.BELookupRuleDefinitionId, beLookupRuleDefinition.Name, details);
+            return (affectedRows > 0);
         }
-        
+
         #endregion
 
         #region Private Methods

@@ -4,8 +4,7 @@
 
     BELookupRuleDefinitionEditorController.$inject = ['$scope', 'VR_GenericData_BELookupRuleDefinitionService', 'VR_GenericData_BELookupRuleDefinitionAPIService', 'VR_GenericData_MappingRuleStructureBehaviorTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function BELookupRuleDefinitionEditorController($scope, VR_GenericData_BELookupRuleDefinitionService, VR_GenericData_BELookupRuleDefinitionAPIService, VR_GenericData_MappingRuleStructureBehaviorTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService)
-    {
+    function BELookupRuleDefinitionEditorController($scope, VR_GenericData_BELookupRuleDefinitionService, VR_GenericData_BELookupRuleDefinitionAPIService, VR_GenericData_MappingRuleStructureBehaviorTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
         var isEditMode;
 
         var beLookupRuleDefinitionId;
@@ -18,8 +17,7 @@
         defineScope();
         load();
 
-        function loadParameters()
-        {
+        function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null)
@@ -28,24 +26,20 @@
             isEditMode = (beLookupRuleDefinitionId != undefined);
         }
 
-        function defineScope()
-        {
+        function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.criteriaFields = [];
 
-            $scope.scopeModel.onBEDefinitionSelectorReady = function (api)
-            {
+            $scope.scopeModel.onBEDefinitionSelectorReady = function (api) {
                 beDefinitionSelectorAPI = api;
                 beDefinitionSelectorReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.validateCriteriaFields = function ()
-            {
+            $scope.scopeModel.validateCriteriaFields = function () {
                 return ($scope.scopeModel.criteriaFields.length == 0) ? 'Please add at least one criteria field' : null;
             };
 
-            $scope.scopeModel.addCriteriaField = function ()
-            {
+            $scope.scopeModel.addCriteriaField = function () {
                 var onCriteriaFieldAdded = function (addedCriteriaField) {
                     setBehaviorTypeDescription(addedCriteriaField);
                     $scope.scopeModel.criteriaFields.push(addedCriteriaField);
@@ -59,36 +53,30 @@
                 );
             };
 
-            $scope.scopeModel.removeCriteriaField = function (criteriaField)
-            {
+            $scope.scopeModel.removeCriteriaField = function (criteriaField) {
                 var index = UtilsService.getItemIndexByVal($scope.scopeModel.criteriaFields, criteriaField.Title, 'Title');
                 $scope.scopeModel.criteriaFields.splice(index, 1);
             };
 
-            $scope.scopeModel.save = function ()
-            {
+            $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateBELookupRuleDefinition() : insertBELookupRuleDefinition();
             };
 
-            $scope.scopeModel.close = function ()
-            {
+            $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
 
             defineMenuActions();
         }
 
-        function defineMenuActions()
-        {
+        function defineMenuActions() {
             $scope.scopeModel.menuActions = [{
                 name: 'Edit',
                 clicked: editCriteriaField
             }];
 
-            function editCriteriaField(dataItem)
-            {
-                var onCriteriaFieldUpdated = function (updatedCriteriaField)
-                {
+            function editCriteriaField(dataItem) {
+                var onCriteriaFieldUpdated = function (updatedCriteriaField) {
                     setBehaviorTypeDescription(updatedCriteriaField);
                     var outdatedCriteriaFieldIndex = UtilsService.getItemIndexByVal($scope.scopeModel.criteriaFields, dataItem.Title, 'Title');
                     $scope.scopeModel.criteriaFields[outdatedCriteriaFieldIndex] = updatedCriteriaField;
@@ -104,12 +92,10 @@
             }
         }
 
-        function load()
-        {
+        function load() {
             $scope.scopeModel.isLoading = true;
 
-            if (isEditMode)
-            {
+            if (isEditMode) {
                 getBELookupRuleDefinition().then(function () {
                     loadAllControls().finally(function () {
                         beLookupRuleDefinitionEntity = undefined;
@@ -124,15 +110,13 @@
             }
         }
 
-        function getBELookupRuleDefinition()
-        {
+        function getBELookupRuleDefinition() {
             return VR_GenericData_BELookupRuleDefinitionAPIService.GetBELookupRuleDefinition(beLookupRuleDefinitionId).then(function (response) {
                 beLookupRuleDefinitionEntity = response;
             });
         }
 
-        function loadAllControls()
-        {
+        function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadBEDefinitionSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -142,10 +126,8 @@
               });
         }
 
-        function setTitle()
-        {
-            if (isEditMode)
-            {
+        function setTitle() {
+            if (isEditMode) {
                 if (beLookupRuleDefinitionEntity != undefined)
                     $scope.title = UtilsService.buildTitleForUpdateEditor(beLookupRuleDefinitionEntity.Name, 'BE Lookup Rule Definition');
             }
@@ -153,19 +135,16 @@
                 $scope.title = UtilsService.buildTitleForAddEditor('BE Lookup Rule Definition');
         }
 
-        function loadStaticData()
-        {
+        function loadStaticData() {
             if (beLookupRuleDefinitionEntity == undefined)
                 return;
             $scope.scopeModel.name = beLookupRuleDefinitionEntity.Name;
         }
 
-        function loadBEDefinitionSelector()
-        {
+        function loadBEDefinitionSelector() {
             var beDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-            beDefinitionSelectorReadyDeferred.promise.then(function ()
-            {
+            beDefinitionSelectorReadyDeferred.promise.then(function () {
                 var payload = (beLookupRuleDefinitionEntity != undefined) ? { selectedIds: beLookupRuleDefinitionEntity.BELookupRuleDefinitionId } : undefined;
                 VRUIUtilsService.callDirectiveLoad(beDefinitionSelectorAPI, payload, beDefinitionSelectorLoadDeferred);
             });
@@ -173,18 +152,13 @@
             return beDefinitionSelectorLoadDeferred.promise;
         }
 
-        // Refactor region
-
-        function insertBELookupRuleDefinition()
-        {
+        function insertBELookupRuleDefinition() {
             $scope.scopeModel.isLoading = true;
 
             var beLookupRuleDefinition = buildBELookupRuleDefinitionFromScope();
 
-            return VR_GenericData_BELookupRuleDefinitionAPIService.AddBELookupRuleDefinition(beLookupRuleDefinition).then(function (response)
-            {
-                if (VRNotificationService.notifyOnItemAdded('BE Lookup Rule Definition', response, 'Name'))
-                {
+            return VR_GenericData_BELookupRuleDefinitionAPIService.AddBELookupRuleDefinition(beLookupRuleDefinition).then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded('BE Lookup Rule Definition', response, 'Name')) {
                     if ($scope.onBELookupRuleDefinitionAdded != undefined)
                         $scope.onBELookupRuleDefinitionAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -197,36 +171,45 @@
         }
 
         function updateBELookupRuleDefinition() {
-            $scope.isLoading = true;
+            $scope.scopeModel.isLoading = true;
 
-            var userObject = buildUserObjFromScope();
+            var beLookupRuleDefinition = buildBELookupRuleDefinitionFromScope();
 
-            return VR_Sec_UserAPIService.UpdateUser(userObject).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated('User', response, 'Email')) {
-                    if ($scope.onUserUpdated != undefined)
-                        $scope.onUserUpdated(response.UpdatedObject);
+            return VR_GenericData_BELookupRuleDefinitionAPIService.UpdateBELookupRuleDefinition(beLookupRuleDefinition).then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated('BE Lookup Rule Definition', response, 'Name')) {
+                    if ($scope.onBELookupRuleDefinitionUpdated != undefined)
+                        $scope.onBELookupRuleDefinitionUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
-                $scope.isLoading = false;
+                $scope.scopeModel.isLoading = false;
             });
         }
 
-        // Refactor region
-
-        function buildBELookupRuleDefinitionFromScope()
-        {
+        function buildBELookupRuleDefinitionFromScope() {
             return {
                 Name: $scope.scopeModel.name,
                 BusinessEntityDefinitionId: beDefinitionSelectorAPI.getSelectedIds(),
-                CriteriaFields: null
+                CriteriaFields: buildCriteriaFields()
             };
+
+            function buildCriteriaFields() {
+                var criteriaFields = [];
+                for (var i = 0; i < $scope.scopeModel.criteriaFields.length; i++) {
+                    var item = $scope.scopeModel.criteriaFields[i];
+                    criteriaFields.push({
+                        Title: item.Title,
+                        FieldPath: item.FieldPath,
+                        RuleStructureBehaviorType: item.RuleStructureBehaviorType
+                    });
+                }
+                return criteriaFields;
+            }
         }
 
-        function setBehaviorTypeDescription(criteriaField)
-        {
+        function setBehaviorTypeDescription(criteriaField) {
             var behaviorType = UtilsService.getEnum(VR_GenericData_MappingRuleStructureBehaviorTypeEnum, 'value', criteriaField.RuleStructureBehaviorType);
             criteriaField.RuleStructureBehaviorTypeDescription = behaviorType.description;
         }

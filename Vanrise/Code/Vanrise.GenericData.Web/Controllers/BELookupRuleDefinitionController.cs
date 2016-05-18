@@ -31,11 +31,25 @@ namespace Vanrise.GenericData.Web.Controllers
             return _manager.GetBELookupRuleDefinitionsInfo(deserializedFilter);
         }
 
+        [HttpGet]
+        [Route("GetBELookupRuleDefinition")]
+        public BELookupRuleDefinition GetBELookupRuleDefinition(int beLookupDefinitionId)
+        {
+            return _manager.GetBELookupRuleDefinition(beLookupDefinitionId);
+        }
+
         [HttpPost]
         [Route("AddBELookupRuleDefinition")]
         public Vanrise.Entities.InsertOperationOutput<BELookupRuleDefinitionDetail> AddBELookupRuleDefinition(BELookupRuleDefinition beLookupRuleDefinition)
         {
             return _manager.AddBELookupRuleDefinition(beLookupRuleDefinition);
+        }
+
+        [HttpPost]
+        [Route("UpdateBELookupRuleDefinition")]
+        public Vanrise.Entities.UpdateOperationOutput<BELookupRuleDefinitionDetail> UpdateBELookupRuleDefinition(BELookupRuleDefinition beLookupRuleDefinition)
+        {
+            return _manager.UpdateBELookupRuleDefinition(beLookupRuleDefinition);
         }
     }
 }

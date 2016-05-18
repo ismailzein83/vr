@@ -11,8 +11,10 @@ namespace Vanrise.GenericData.Data
     {
         IEnumerable<BELookupRuleDefinition> GetBELookupRuleDefinitions();
 
+        bool AreBELookupRuleDefinitionsUpdated(ref object updateHandle);
+
         bool InsertBELookupRuleDefinition(BELookupRuleDefinition beLookupRuleDefinition, out int insertedId);
 
-        bool AreBELookupRuleDefinitionsUpdated(ref object updateHandle);
+        bool UpdateBELookupRuleDefinition(BELookupRuleDefinition beLookupRuleDefinition);
     }
 }

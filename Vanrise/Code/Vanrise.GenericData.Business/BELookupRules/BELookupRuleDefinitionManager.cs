@@ -37,6 +37,12 @@ namespace Vanrise.GenericData.Business
             return this.GetCachedBELookupRuleDefinitions().MapRecords(BELookupRuleDefinitionInfoMapper);
         }
 
+        public BELookupRuleDefinition GetBELookupRuleDefinition(int beLookupDefinitionId)
+        {
+            Dictionary<int, BELookupRuleDefinition> cachedEntities = this.GetCachedBELookupRuleDefinitions();
+            return cachedEntities.GetRecord(beLookupDefinitionId);
+        }
+
         public Vanrise.Entities.InsertOperationOutput<BELookupRuleDefinitionDetail> AddBELookupRuleDefinition(BELookupRuleDefinition beLookupRuleDefinition)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<BELookupRuleDefinitionDetail>();
@@ -52,6 +58,7 @@ namespace Vanrise.GenericData.Business
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 beLookupRuleDefinition.BELookupRuleDefinitionId = insertedId;
                 insertOperationOutput.InsertedObject = BELookupRuleDefinitionDetailMapper(beLookupRuleDefinition);
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
             else
             {
@@ -59,6 +66,29 @@ namespace Vanrise.GenericData.Business
             }
 
             return insertOperationOutput;
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<BELookupRuleDefinitionDetail> UpdateBELookupRuleDefinition(BELookupRuleDefinition beLookupRuleDefinition)
+        {
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<BELookupRuleDefinitionDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            IBELookupRuleDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBELookupRuleDefinitionDataManager>();
+
+            if (dataManager.UpdateBELookupRuleDefinition(beLookupRuleDefinition))
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = BELookupRuleDefinitionDetailMapper(beLookupRuleDefinition);
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
         }
 
         #endregion
@@ -99,7 +129,7 @@ namespace Vanrise.GenericData.Business
             var detail = new BELookupRuleDefinitionDetail();
             detail.Entity = beLookupDefinition;
             detail.BusinessEntityDefinitionName = _beDefinitionManager.GetBusinessEntityDefinitionName(beLookupDefinition.BusinessEntityDefinitionId);
-            return null;
+            return detail;
         }
 
         BELookupRuleDefinitionInfo BELookupRuleDefinitionInfoMapper(BELookupRuleDefinition beLookupRuleDefinition)
