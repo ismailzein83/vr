@@ -7,12 +7,12 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SourceCurrencyMigrator : Migrator<SourceCurrency, Currency>
+    public class CurrencyMigrator : Migrator<SourceCurrency, Currency>
     {
         CurrencyDBSyncDataManager dbSyncDataManager;
         SourceCurrencyDataManager dataManager;
 
-        public SourceCurrencyMigrator(MigrationContext context)
+        public CurrencyMigrator(MigrationContext context)
             : base(context)
         {
             dbSyncDataManager = new CurrencyDBSyncDataManager(context.UseTempTables);

@@ -9,12 +9,12 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SourceCarrierAccountMigrator : Migrator<SourceCarrierAccount, CarrierAccount>
+    public class CarrierAccountMigrator : Migrator<SourceCarrierAccount, CarrierAccount>
     {
         CarrierAccountDBSyncDataManager dbSyncDataManager;
         SourceCarrierAccountDataManager dataManager;
 
-        public SourceCarrierAccountMigrator(MigrationContext context)
+        public CarrierAccountMigrator(MigrationContext context)
             : base(context)
         {
             dbSyncDataManager = new CarrierAccountDBSyncDataManager(Context.UseTempTables);

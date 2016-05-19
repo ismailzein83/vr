@@ -150,23 +150,23 @@ namespace TOne.WhS.DBSync.Business
 
         private void TransferData(MigrationContext context)
         {
-            SourceCountryMigrator sourceCountryMigrator = new SourceCountryMigrator(context);
-            sourceCountryMigrator.Migrate();
+            CountryMigrator countryMigrator = new CountryMigrator(context);
+            countryMigrator.Migrate();
 
-            SourceCurrencyMigrator sourceCurrencyMigrator = new SourceCurrencyMigrator(context);
-            sourceCurrencyMigrator.Migrate();
+            CurrencyMigrator currencyMigrator = new CurrencyMigrator(context);
+            currencyMigrator.Migrate();
 
-            //SourceCurrencyExchangeRateMigrator sourceCurrencyExchangeRateMigrator = new SourceCurrencyExchangeRateMigrator(context);
-            //sourceCurrencyExchangeRateMigrator.Migrate();
+            CurrencyExchangeRateMigrator currencyExchangeRateMigrator = new CurrencyExchangeRateMigrator(context);
+            currencyExchangeRateMigrator.Migrate();
 
-            //SourceSwitchMigrator sourceSwitchMigrator = new SourceSwitchMigrator(context);
-            //sourceSwitchMigrator.Migrate();
+            SwitchMigrator switchMigrator = new SwitchMigrator(context);
+            switchMigrator.Migrate();
 
-            SourceCarrierProfileMigrator sourceCarrierProfileMigrator = new SourceCarrierProfileMigrator(context);
-            sourceCarrierProfileMigrator.Migrate();
+            CarrierProfileMigrator carrierProfileMigrator = new CarrierProfileMigrator(context);
+            carrierProfileMigrator.Migrate();
 
-            SourceCarrierAccountMigrator sourceCarrierAccountMigrator = new SourceCarrierAccountMigrator(context);
-            sourceCarrierAccountMigrator.Migrate();
+            CarrierAccountMigrator carrierAccountMigrator = new CarrierAccountMigrator(context);
+            carrierAccountMigrator.Migrate();
         }
     }
 }

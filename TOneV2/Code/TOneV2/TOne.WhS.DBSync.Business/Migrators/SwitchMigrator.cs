@@ -5,12 +5,12 @@ using TOne.WhS.DBSync.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SourceSwitchMigrator : Migrator<SourceSwitch, Switch>
+    public class SwitchMigrator : Migrator<SourceSwitch, Switch>
     {
         SwitchDBSyncDataManager dbSyncDataManager;
         SourceSwitchDataManager dataManager;
 
-        public SourceSwitchMigrator(MigrationContext context)
+        public SwitchMigrator(MigrationContext context)
             : base(context)
         {
             dbSyncDataManager = new SwitchDBSyncDataManager(context.UseTempTables);

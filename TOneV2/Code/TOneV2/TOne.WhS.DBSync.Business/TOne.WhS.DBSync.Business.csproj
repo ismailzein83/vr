@@ -73,13 +73,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Migrator.cs" />
-    <Compile Include="Migrators\SourceCarrierAccountMigrator.cs" />
-    <Compile Include="Migrators\SourceCurrencyExchangeRateMigrator.cs" />
-    <Compile Include="Migrators\SourceCarrierProfileMigrator.cs" />
-    <Compile Include="Migrators\SourceCountryMigrator.cs" />
-    <Compile Include="Migrators\SourceCurrencyMigrator.cs" />
+    <Compile Include="Migrators\CarrierAccountMigrator.cs" />
+    <Compile Include="Migrators\CurrencyExchangeRateMigrator.cs" />
+    <Compile Include="Migrators\CarrierProfileMigrator.cs" />
+    <Compile Include="Migrators\CountryMigrator.cs" />
+    <Compile Include="Migrators\CurrencyMigrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Migrators\SourceSwitchMigrator.cs" />
+    <Compile Include="Migrators\SwitchMigrator.cs" />
     <Compile Include="DBSyncTaskAction.cs" />
     <Compile Include="DBSyncTaskActionArgument.cs" />
   </ItemGroup>

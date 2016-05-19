@@ -8,12 +8,12 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SourceCountryMigrator : Migrator<SourceCodeGroup, Country>
+    public class CountryMigrator : Migrator<SourceCodeGroup, Country>
     {
         CountryDBSyncDataManager dbSyncDataManager;
         SourceCodeGroupDataManager dataManager;
 
-        public SourceCountryMigrator(MigrationContext context)
+        public CountryMigrator(MigrationContext context)
             : base(context)
         {
             dbSyncDataManager = new CountryDBSyncDataManager(context.UseTempTables);
