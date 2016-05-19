@@ -39,6 +39,10 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,8 +50,19 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Business">
+      <HintPath>..\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExchangeRateUpdateService\ExchangeRateAction.cs" />
+    <Compile Include="ExchangeRateUpdateService\ExchangeRateActionActionArgument.cs" />
+    <Compile Include="ExchangeRateUpdateService\XigniteCurrency.cs" />
+    <Compile Include="ExchangeRateUpdateService\XigniteCurrencyReader.cs" />
     <Compile Include="GenericDataRecord\DataRecordFieldBooleanType.cs" />
     <Compile Include="GenericDataRecord\DataRecordFieldChoicesType.cs" />
     <Compile Include="GenericDataRecord\DataRecordFieldDateTimeType.cs" />
@@ -69,6 +84,10 @@
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Runtime.Entities\Vanrise.Runtime.Entities.csproj">
+      <Project>{07b66e74-bd84-4023-b839-5bb522b7a98c}</Project>
+      <Name>Vanrise.Runtime.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

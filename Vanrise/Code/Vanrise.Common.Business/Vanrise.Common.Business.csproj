@@ -71,13 +71,9 @@
     <Compile Include="CurrencyExchangeRateManager.cs" />
     <Compile Include="EmailTemplate\EmailTemplateManager.cs" />
     <Compile Include="ExchangeRateInfo.cs" />
-    <Compile Include="FxSauderCurrencyReader.cs" />
     <Compile Include="CurrencyManager.cs" />
     <Compile Include="EntitySynchronization\SourceItemSynchronizer.cs" />
-    <Compile Include="ExchangeRateTasks\ExchangeRateAction.cs" />
-    <Compile Include="ExchangeRateTasks\ExchangeRateActionActionArgument.cs" />
     <Compile Include="ExtensionConfigurationManager.cs" />
-    <Compile Include="XigniteCurrency.cs" />
     <Compile Include="GenericConfig\GenericConfigurationManager.cs" />
     <Compile Include="GenericDataRecord\DataRecordFieldManager.cs" />
     <Compile Include="GenericDataRecord\DataRecordTypeManager.cs" />
@@ -90,7 +86,6 @@
     <Compile Include="TemplateConfigManager.cs" />
     <Compile Include="TypeManager.cs" />
     <Compile Include="VRFileManager.cs" />
-    <Compile Include="XigniteCurrencyReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Caching\Vanrise.Caching.csproj">
