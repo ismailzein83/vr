@@ -340,6 +340,9 @@
     <Build Include="sec\Stored Procedures\sp_User_ActivatePassword.sql" />
     <Build Include="common\Stored Procedures\sp_EmailTemplate_Update.sql" />
     <Build Include="common\Stored Procedures\sp_EmailTemplate_GetAll.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_BELookupRuleDefinition_Update.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_BELookupRuleDefinition_Insert.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_BELookupRuleDefinition_Delete.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
