@@ -69,11 +69,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override bool IsMatched(object fieldValue, RecordFilter recordFilter)
         {
-            if (fieldValue == null)
-                return false;
             NumberListRecordFilter numberListRecordFilter = recordFilter as NumberListRecordFilter;
             if (numberListRecordFilter == null)
                 throw new NullReferenceException("numberListRecordFilter");
+            if (fieldValue == null)
+                return numberListRecordFilter.CompareOperator == ListRecordFilterOperator.NotIn;
+
             bool isValueInFilter = numberListRecordFilter.Values.Contains(Convert.ToDecimal(fieldValue));
 
             return numberListRecordFilter.CompareOperator == ListRecordFilterOperator.In ? isValueInFilter : !isValueInFilter;

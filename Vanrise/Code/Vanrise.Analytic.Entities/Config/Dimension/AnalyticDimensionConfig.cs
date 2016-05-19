@@ -29,7 +29,5 @@ namespace Vanrise.Analytic.Entities
 
       //  public bool IsRequiredFromParent { get; set; }
         public GenericData.Entities.DataRecordFieldType FieldType { get; set; }
-
-        public string CurrencySQLColumnName { get; set; }
     }
 }

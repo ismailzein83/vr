@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Business
 {
@@ -73,6 +74,23 @@ namespace Vanrise.Analytic.Business
             if (!_joins.TryGetValue(joinName, out join))
                 throw new NullReferenceException(String.Format("join '{0}'", joinName));
             return join;
+        }
+
+        public IEnumerable<string> GetDimensionNames(RecordFilterGroup filterGroup)
+        {
+            List<string> dimensionNames = new List<string>();
+            if (filterGroup != null)
+            {
+                foreach (var filter in filterGroup.Filters)
+                {
+                    RecordFilterGroup childFilterGroup = filter as RecordFilterGroup;
+                    if (childFilterGroup != null)
+                        dimensionNames.AddRange(GetDimensionNames(childFilterGroup));
+                    else
+                        dimensionNames.Add(filter.FieldName);
+                }
+            }
+            return new HashSet<string>(dimensionNames);
         }
     }
 }

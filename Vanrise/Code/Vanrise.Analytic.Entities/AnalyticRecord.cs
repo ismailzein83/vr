@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
@@ -31,11 +32,19 @@ namespace Vanrise.Analytic.Entities
         public dynamic Value { get; set; }
     }
 
-    public class DBAnalyticRecordAggValue
+    public class DBAnalyticRecordAggValue : ICloneable
     {
         //public string AggName { get; set; }
 
         public dynamic Value { get; set; }
+
+        public object Clone()
+        {
+            return new DBAnalyticRecordAggValue
+            {
+                Value = this.Value
+            };
+        }
     }
 
     public interface IAnalyticTableQueryContext
@@ -49,5 +58,7 @@ namespace Vanrise.Analytic.Entities
         AnalyticMeasure GetMeasureConfig(string measureName);
 
         AnalyticJoin GetJoinContig(string joinName);
+
+        IEnumerable<string> GetDimensionNames(RecordFilterGroup filterGroup);
     }
 }

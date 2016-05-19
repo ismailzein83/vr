@@ -21,12 +21,5 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticManager manager = new AnalyticManager();
             return GetWebResponse(input, manager.GetFilteredRecords(input));
         }
-        [HttpPost]
-        [Route("GetTimeVariationAnalyticRecords")]
-        public Object GetTimeVariationAnalyticRecords(Vanrise.Entities.DataRetrievalInput<TimeVariationAnalyticQuery> input)
-        {
-            AnalyticManager manager = new AnalyticManager();
-            return GetWebResponse(input, manager.GetTimeVariationAnalyticRecords(input));
-        }
     }
 }

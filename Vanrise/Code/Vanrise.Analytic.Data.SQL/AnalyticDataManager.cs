@@ -17,20 +17,7 @@ namespace Vanrise.Analytic.Data.SQL
     {
         #region Public Methods
         public IEnumerable<DBAnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, out  HashSet<string> includedSQLDimensions)
-        {
-            //Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
-            //string query = BuildAnalyticQuery(input, false, parameterValues);
-
-
-            //List<AnalyticRecord> records = GetItemsText(query, (reader) => AnalyticRecordMapper(reader, input.Query, false), (cmd) =>
-            //{
-            //    foreach (var prm in parameterValues)
-            //    {
-            //        cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
-            //    }
-            //    if (input.Query.CurrencyId.HasValue)
-            //        cmd.Parameters.Add(new SqlParameter("@Currency", input.Query.CurrencyId.Value));
-            //});
+        {            
             HashSet<string> includedSQLDimensions_Local;
             HashSet<string> includedSQLAggregates;
             Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
@@ -46,55 +33,8 @@ namespace Vanrise.Analytic.Data.SQL
             });
             includedSQLDimensions = includedSQLDimensions_Local;
             return dbRecords;
-            //AnalyticRecord summaryRecord;
-            //return ProcessSQLRecords(input.Query.DimensionFields, input.Query.ParentDimensions, input.Query.MeasureFields, input.Query.Filters, input.Query.FilterGroup, sqlRecords, includedSQLDimensions, input.Query.WithSummary, out summaryRecord);
         }
-
-        public IEnumerable<TimeVariationAnalyticRecord> GetTimeVariationAnalyticRecords(Vanrise.Entities.DataRetrievalInput<TimeVariationAnalyticQuery> input)
-        {
-            Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
-            string query = BuildTimeVariationAnalyticQuery(input, false, parameterValues);
-
-
-            return GetItemsText(query, (reader) => TimeVariationAnalyticRecordMapper(reader, input.Query, false, input.Query.TimeGroupingUnit), (cmd) =>
-            {
-                foreach (var prm in parameterValues)
-                {
-                    cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
-                }
-                if (input.Query.CurrencyId.HasValue)
-                    cmd.Parameters.Add(new SqlParameter("@Currency", input.Query.CurrencyId.Value));
-            });
-        }
-
-        public IEnumerable<AnalyticRecord> GetTimeVariationAnalyticRecords2(Vanrise.Entities.DataRetrievalInput<TimeVariationAnalyticQuery> input)
-        {
-            List<DBAnalyticRecord> sqlRecords = null;
-            HashSet<string> availableDimensions = null;
-            AnalyticRecord summaryRecord;
-            return ProcessSQLRecords(null, input.Query.ParentDimensions, input.Query.MeasureFields, input.Query.Filters, input.Query.FilterGroup, sqlRecords, availableDimensions, input.Query.WithSummary, out summaryRecord);
-        }
-
-        public AnalyticRecord GetAnalyticSummary(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
-        {
-            //Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
-            //string query = BuildAnalyticQuery(input, input.Query.WithSummary, parameterValues);
-            //return GetItemText(query, reader => AnalyticRecordMapper(reader, input.Query, true), (cmd) =>
-            //{
-            //    foreach (var prm in parameterValues)
-            //    {
-            //        cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
-            //    }
-            //    if (input.Query.CurrencyId.HasValue)
-            //        cmd.Parameters.Add(new SqlParameter("@Currency", input.Query.CurrencyId.Value));
-            //});
-            List<DBAnalyticRecord> sqlRecords = null;
-            HashSet<string> availableDimensions = null;
-            AnalyticRecord summaryRecord;
-            ProcessSQLRecords(null, input.Query.ParentDimensions, input.Query.MeasureFields, input.Query.Filters, input.Query.FilterGroup, sqlRecords, availableDimensions, true, out summaryRecord);
-            return summaryRecord;
-        }
-
+                
         #endregion
 
         #region Private Methods
@@ -108,15 +48,12 @@ namespace Vanrise.Analytic.Data.SQL
             includedSQLDimensionNames = GetIncludedSQLDimensionNames(input.Query.DimensionFields, input.Query.Filters, input.Query.FilterGroup);
             int parameterIndex = 0;
             string groupByPart = null;
-            groupByPart = BuildQueryGrouping(selectPartBuilder, includedSQLDimensionNames, includeJoinConfigNames);
+            groupByPart = BuildQueryGrouping(selectPartBuilder, includedSQLDimensionNames, input.Query.TimeGroupingUnit, includeJoinConfigNames);
             includedSQLAggregateNames = GetIncludedSQLAggregateNames(input.Query.MeasureFields);
-            BuildQueryAggregates(selectPartBuilder, includedSQLAggregateNames, includeJoinConfigNames);
+            HashSet<string> joinStatements = new HashSet<string>();
+            BuildQueryAggregates(selectPartBuilder, input.Query.CurrencyId, includedSQLAggregateNames, includeJoinConfigNames, joinStatements, input.Query.FromTime, input.Query.ToTime, parameterValues, ref parameterIndex);
             string filterPart = BuildQueryFilter(input.Query.Filters, includeJoinConfigNames);
-            string joinPart = BuildQueryJoins(includeJoinConfigNames);
-
-            //string orderPart = null;
-            //if (input.Query.OrderBy != null)
-            //    orderPart = BuildQueryOrder(input.Query.OrderBy);
+            string joinPart = BuildQueryJoins(includeJoinConfigNames, joinStatements);
 
             RecordFilterSQLBuilder recordFilterSQLBuilder = new RecordFilterSQLBuilder(GetDimensionColumnIdFromFieldName);
             String recordFilter = recordFilterSQLBuilder.BuildRecordFilter(input.Query.FilterGroup, ref parameterIndex, parameterValues);
@@ -127,6 +64,27 @@ namespace Vanrise.Analytic.Data.SQL
 
             return queryBuilder.ToString();
         }
+
+        //string BuildTimeVariationAnalyticQuery(Vanrise.Entities.DataRetrievalInput<TimeVariationAnalyticQuery> input, out HashSet<string> includedSQLDimensionNames, out HashSet<string> includedSQLAggregateNames, Dictionary<string, object> parameterValues)
+        //{
+        //    StringBuilder selectPartBuilder = new StringBuilder();
+        //    HashSet<string> includeJoinConfigNames = new HashSet<string>();
+
+        //    int parameterIndex = 0;
+        //    string groupByPart = null;
+        //    if (!isSummary)
+        //        groupByPart = BuildQueryGrouping(selectPartBuilder, input.Query.TimeGroupingUnit);
+        //    string filterPart = BuildQueryFilter(input.Query.Filters, includeJoinConfigNames);
+        //    BuildQueryMeasures(selectPartBuilder, input.Query.ParentDimensions, input.Query.MeasureFields, includeJoinConfigNames);
+        //    string joinPart = BuildQueryJoins(includeJoinConfigNames);
+        //    RecordFilterSQLBuilder recordFilterSQLBuilder = new RecordFilterSQLBuilder(GetDimensionColumnIdFromFieldName);
+        //    String recordFilter = recordFilterSQLBuilder.BuildRecordFilter(input.Query.FilterGroup, ref parameterIndex, parameterValues);
+
+        //    StringBuilder queryBuilder = BuildGlobalQuery(input.Query.FromTime, input.Query.ToTime, null,
+        //        parameterValues, selectPartBuilder.ToString(), joinPart, filterPart, groupByPart, null, recordFilter, ref parameterIndex);
+
+        //    return queryBuilder.ToString();
+        //}
 
         private HashSet<string> GetIncludedSQLDimensionNames(List<string> requestedDimensionNames, List<DimensionFilter> dimensionFilters, RecordFilterGroup filterGroup)
         {
@@ -143,6 +101,14 @@ namespace Vanrise.Analytic.Data.SQL
                 foreach (var dimensionFilter in dimensionFilters)
                 {
                     AddSQLDimensions(dimensionFilter.Dimension, sqlDimensions);
+                }
+            }
+            var filterGroupDimensions = GetDimensionNames(filterGroup);
+            if (filterGroupDimensions != null)
+            {
+                foreach (var dimensionName in filterGroupDimensions)
+                {
+                    AddSQLDimensions(dimensionName, sqlDimensions);
                 }
             }
             //TODO: add dimensions from FilterGroup
@@ -181,27 +147,6 @@ namespace Vanrise.Analytic.Data.SQL
                 }
             }
             return aggregateNames;
-        }
-
-        string BuildTimeVariationAnalyticQuery(Vanrise.Entities.DataRetrievalInput<TimeVariationAnalyticQuery> input, bool isSummary, Dictionary<string, object> parameterValues)
-        {
-            StringBuilder selectPartBuilder = new StringBuilder();
-            HashSet<string> includeJoinConfigNames = new HashSet<string>();
-
-            int parameterIndex = 0;
-            string groupByPart = null;
-            if (!isSummary)
-                groupByPart = BuildQueryGrouping(selectPartBuilder, input.Query.TimeGroupingUnit);
-            string filterPart = BuildQueryFilter(input.Query.Filters, includeJoinConfigNames);
-            BuildQueryMeasures(selectPartBuilder, input.Query.ParentDimensions, input.Query.MeasureFields, includeJoinConfigNames);
-            string joinPart = BuildQueryJoins(includeJoinConfigNames);
-            RecordFilterSQLBuilder recordFilterSQLBuilder = new RecordFilterSQLBuilder(GetDimensionColumnIdFromFieldName);
-            String recordFilter = recordFilterSQLBuilder.BuildRecordFilter(input.Query.FilterGroup, ref parameterIndex, parameterValues);
-
-            StringBuilder queryBuilder = BuildGlobalQuery(input.Query.FromTime, input.Query.ToTime, null,
-                parameterValues, selectPartBuilder.ToString(), joinPart, filterPart, groupByPart, null, recordFilter, ref parameterIndex);
-
-            return queryBuilder.ToString();
         }
 
         private StringBuilder BuildGlobalQuery(DateTime fromTime, DateTime toTime, Dictionary<string, Object> parameterValues, string selectPartBuilder, string joinPartBuilder, string filterPartBuilder, string groupByPartBuilder, string recordFilter, ref int parameterIndex)
@@ -245,53 +190,6 @@ namespace Vanrise.Analytic.Data.SQL
             return queryBuilder;
         }
 
-        private StringBuilder BuildGlobalQuery(DateTime fromTime, DateTime toTime, int? topRecords, Dictionary<string, Object> parameterValues, string selectPartBuilder, string joinPartBuilder, string filterPartBuilder, string groupByPartBuilder, string orderByPart, string recordFilter, ref int parameterIndex)
-        {
-            List<TimeRangeTableName> timePeriodTableNames = GetTimeRangeTableNames(fromTime, toTime);
-
-
-            StringBuilder queryBuilder = new StringBuilder(@"SELECT #TOPRECORDS# #SELECTPART# FROM
-                                                                #QUERYBODY#
-                                                                #JOINPART#
-                                                                 #WHEREPART#
-			                                                    #GROUPBYPART#
-                                                                #ORDERPART#");
-
-            string filterPart = filterPartBuilder.ToString();
-
-            queryBuilder.Replace("#WHEREPART#", recordFilter != null ? ("and " + recordFilter) : "");
-            if (timePeriodTableNames == null || timePeriodTableNames.Count == 0)
-                throw new NullReferenceException("timePeriodTableNames");
-            if (timePeriodTableNames.Count == 1)
-            {
-                queryBuilder.Replace("#QUERYBODY#", GetSingleTableQueryBody(timePeriodTableNames[0], filterPart, joinPartBuilder.ToString(), ref parameterIndex, parameterValues));
-                queryBuilder.Replace("#JOINPART#", "");
-            }
-            else
-            {
-                StringBuilder tableUnionBuilder = new StringBuilder();
-                foreach (var timePeriodTable in timePeriodTableNames)
-                {
-                    if (tableUnionBuilder.Length > 0)
-                        tableUnionBuilder.AppendLine(" UNION ALL ");
-                    tableUnionBuilder.AppendLine(String.Format(" SELECT * FROM {0} ", GetSingleTableQueryBody(timePeriodTable, filterPart, "", ref parameterIndex, parameterValues)));
-                }
-                queryBuilder.Replace("#QUERYBODY#", String.Format("({0}) ant", tableUnionBuilder));
-                queryBuilder.Replace("#JOINPART#", joinPartBuilder.ToString());
-            }
-            queryBuilder.Replace("#TOPRECORDS#", string.Format("{0}", topRecords.HasValue ? "TOP(" + topRecords.Value + ") " : ""));
-            queryBuilder.Replace("#SELECTPART#", selectPartBuilder.ToString());
-            if (!string.IsNullOrEmpty(groupByPartBuilder) && groupByPartBuilder.Length > 0)
-                queryBuilder.Replace("#GROUPBYPART#", "GROUP BY " + groupByPartBuilder);
-            else
-                queryBuilder.Replace("#GROUPBYPART#", "");
-            if (!string.IsNullOrEmpty(orderByPart) && orderByPart.Length > 0)
-                queryBuilder.Replace("#ORDERPART#", "ORDER BY " + orderByPart);
-            else
-                queryBuilder.Replace("#ORDERPART#", "");
-            return queryBuilder;
-        }
-
         string GetSingleTableQueryBody(TimeRangeTableName timeRangeTableName, string filterPart, string joinPart, ref int parameterIndex, Dictionary<string, Object> parameterValues)
         {
             StringBuilder singleTableQueryBodyBuilder = new StringBuilder(@" #TABLENAME# ant WITH(NOLOCK)  
@@ -313,46 +211,74 @@ namespace Vanrise.Analytic.Data.SQL
             return singleTableQueryBodyBuilder.ToString();
         }
 
-        private string BuildQueryGrouping(StringBuilder selectPartBuilder, IEnumerable<string> sqlDimensionNames, HashSet<string> includeJoinConfigNames)
+        private string BuildQueryGrouping(StringBuilder selectPartBuilder, IEnumerable<string> sqlDimensionNames, TimeGroupingUnit? timeGroupingUnit, HashSet<string> includeJoinConfigNames)
         {
             StringBuilder groupByPartBuilder = new StringBuilder();
-            foreach (string dimensionName in sqlDimensionNames)
+            if (sqlDimensionNames != null)
             {
-                var dimensionConfig = GetDimensionConfig(dimensionName);
-                if (String.IsNullOrEmpty(dimensionConfig.Config.SQLExpression))
-                    throw new NullReferenceException(String.Format("dimensionConfig.Config.SQLExpression. Dim Name '{0}'", dimensionName));
-
-                if (dimensionConfig.Config.JoinConfigNames != null)
+                foreach (string dimensionName in sqlDimensionNames)
                 {
-                    foreach (var join in dimensionConfig.Config.JoinConfigNames)
+                    var dimensionConfig = GetDimensionConfig(dimensionName);
+                    if (String.IsNullOrEmpty(dimensionConfig.Config.SQLExpression))
+                        throw new NullReferenceException(String.Format("dimensionConfig.Config.SQLExpression. Dim Name '{0}'", dimensionName));
+
+                    if (dimensionConfig.Config.JoinConfigNames != null)
                     {
-                        includeJoinConfigNames.Add(join);
+                        foreach (var join in dimensionConfig.Config.JoinConfigNames)
+                        {
+                            includeJoinConfigNames.Add(join);
+                        }
                     }
+                    AddColumnToStringBuilder(groupByPartBuilder, dimensionConfig.Config.SQLExpression);
+                    AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS {1}", dimensionConfig.Config.SQLExpression, GetDimensionIdColumnAlias(dimensionConfig)));
                 }
-                AddColumnToStringBuilder(groupByPartBuilder, dimensionConfig.Config.SQLExpression);
-                AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS {1}", dimensionConfig.Config.SQLExpression, GetDimensionIdColumnAlias(dimensionConfig)));
             }
+            if(timeGroupingUnit.HasValue)
+            {
+                string timeSQLFormula = null;
+                switch (timeGroupingUnit)
+                {
+                    case TimeGroupingUnit.Hour: timeSQLFormula = String.Format(" CONVERT(varchar(13), {0}, 121)", GetTable().Settings.TimeColumnName);break;
+                    case TimeGroupingUnit.Day: timeSQLFormula = String.Format(" CONVERT(varchar(10), {0}, 121)", GetTable().Settings.TimeColumnName); break;
+                }
+                AddColumnToStringBuilder(groupByPartBuilder, timeSQLFormula);
+                AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS [Date]", timeSQLFormula));
+            }
+
             return groupByPartBuilder.ToString();
         }
 
-        private string BuildQueryGrouping(StringBuilder selectPartBuilder, TimeGroupingUnit timeGroupingUnit)
-        {
-            StringBuilder queryGrouping = new StringBuilder();
-            switch (timeGroupingUnit)
-            {
-                case TimeGroupingUnit.Hour: selectPartBuilder.AppendFormat(" CONVERT(varchar(13), {0}, 121) as [Date]", GetTable().Settings.TimeColumnName); queryGrouping.AppendFormat(" CONVERT(varchar(13), {0}, 121)", GetTable().Settings.TimeColumnName); break;
-                case TimeGroupingUnit.Day: selectPartBuilder.AppendFormat(" CONVERT(varchar(10), {0}, 121)  as [Date]", GetTable().Settings.TimeColumnName); queryGrouping.AppendFormat(" CONVERT(varchar(10), {0}, 121)", GetTable().Settings.TimeColumnName); break;
-            }
-            return queryGrouping.ToString();
-        }
-
-        private void BuildQueryAggregates(StringBuilder selectPartBuilder, IEnumerable<string> aggregateNames, HashSet<string> includeJoinConfigNames)
-        {
+        private void BuildQueryAggregates(StringBuilder selectPartBuilder, int? requestedCurrencyId, IEnumerable<string> aggregateNames, HashSet<string> includeJoinConfigNames, HashSet<string> joinStatements, DateTime fromTime, DateTime toTime, Dictionary<string, Object> parameterValues, ref int parameterIndex)
+        {            
             foreach (var aggName in aggregateNames)
             {
                 var aggregateConfig = GetAggregateConfig(aggName);
 
-                AddColumnToStringBuilder(selectPartBuilder, String.Format("{0}({1}) AS {2}", aggregateConfig.Config.AggregateType, aggregateConfig.Config.SQLColumn, GetAggregateColumnAlias(aggregateConfig)));
+                string currencyConversionStatement = null;
+
+                if (!String.IsNullOrEmpty(aggregateConfig.Config.CurrencySQLColumnName))
+                {
+                    string currencyTableAlias = String.Format("CurrExch_{0}", aggregateConfig.Config.CurrencySQLColumnName);
+                    string currencyTableStatement;
+                    string fromTimePrm = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(fromTimePrm, fromTime);
+                    string toTimePrm = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(toTimePrm, toTime);
+                    if (requestedCurrencyId.HasValue)
+                    {
+                        string currencyIdPrm = GenerateParameterName(ref parameterIndex);
+                        parameterValues.Add(currencyIdPrm, requestedCurrencyId.Value);
+                        currencyTableStatement = String.Format("(select * from Common.getExchangeRatesConvertedToCurrency({0} , {1}, {2}))", currencyIdPrm, fromTimePrm, toTimePrm);
+                    }
+                    else
+                        currencyTableStatement = String.Format("(select * from Common.getExchangeRates({0} , {1}))", fromTimePrm, toTimePrm);
+                    joinStatements.Add(String.Format(@"LEFT JOIN {0} AS {1} 
+                                                            ON ant.{2} = {1}.CurrencyID AND ant.{3} >= {1}.BED AND ({1}.EED IS NULL OR ant.{3} < {1}.EED)"
+                                                            , currencyTableStatement, currencyTableAlias, aggregateConfig.Config.CurrencySQLColumnName, GetTable().Settings.TimeColumnName));
+                    currencyConversionStatement = String.Format("/ ISNULL({0}.Rate, 1)", currencyTableAlias);
+                }
+
+                AddColumnToStringBuilder(selectPartBuilder, String.Format("{0}({1}{2}) AS {3}", aggregateConfig.Config.AggregateType, aggregateConfig.Config.SQLColumn, currencyConversionStatement, GetAggregateColumnAlias(aggregateConfig)));
 
                 if (aggregateConfig.Config.JoinConfigNames != null)
                 {
@@ -424,13 +350,17 @@ namespace Vanrise.Analytic.Data.SQL
             return filterPartBuilder.ToString();
         }
 
-        private string BuildQueryJoins(HashSet<string> includeJoinConfigNames)
+        private string BuildQueryJoins(HashSet<string> includeJoinConfigNames, HashSet<string> joinStatements)
         {
             StringBuilder joinPartBuilder = new StringBuilder();
             foreach (string joinName in includeJoinConfigNames)
             {
                 AnalyticJoin join = GetJoinConfig(joinName);
                 AddStatementToJoinPart(joinPartBuilder, join.Config.JoinStatement);
+            }
+            foreach(var joinStatement in joinStatements)
+            {
+                AddStatementToJoinPart(joinPartBuilder, joinStatement);
             }
             return joinPartBuilder.ToString();
         }
@@ -522,146 +452,7 @@ namespace Vanrise.Analytic.Data.SQL
         #endregion
 
         #endregion
-
-        #region Process Final Result
-
-        private List<AnalyticRecord> ProcessSQLRecords(List<string> requestedDimensionNames, List<string> parentDimensionNames, List<string> measureNames, List<DimensionFilter> dimensionFiltes,
-            RecordFilterGroup filterGroup, List<DBAnalyticRecord> sqlRecords, HashSet<string> availableDimensions, bool withSummary, out AnalyticRecord summaryRecord)
-        {
-            List<string> allDimensionNamesList = new List<string>();
-            if (requestedDimensionNames != null)
-                allDimensionNamesList.AddRange(requestedDimensionNames);
-            if (parentDimensionNames != null)
-                allDimensionNamesList.AddRange(parentDimensionNames);
-            HashSet<string> allDimensionNames = new HashSet<string>(allDimensionNamesList);
-            FillCalculatedDimensions(requestedDimensionNames, sqlRecords, availableDimensions);
-            ApplyDimensionFilter(dimensionFiltes, filterGroup, sqlRecords);
-            List<AnalyticRecord> records = ApplyFinalGrouping(requestedDimensionNames, allDimensionNames, measureNames, sqlRecords, withSummary, out summaryRecord);
-            return records;
-        }
-
-        private void FillCalculatedDimensions(List<string> requestedDimensionNames, List<DBAnalyticRecord> sqlRecords, HashSet<string> availableDimensions)
-        {
-            IEnumerable<AnalyticDimension> dimensionsToCalculate = requestedDimensionNames.Where(dimName => !availableDimensions.Contains(dimName)).Select(dimName => GetDimensionConfig(dimName));
-            foreach (var sqlRecord in sqlRecords)
-            {
-                foreach (var dimToCalculate in dimensionsToCalculate)
-                {
-                    var getDimensionValueContext = new GetDimensionValueContext(sqlRecord);
-                    sqlRecord.GroupingValuesByDimensionName.Add(dimToCalculate.Name, new DBAnalyticRecordGroupingValue
-                    {
-                        Value = dimToCalculate.Evaluator.GetDimensionValue(getDimensionValueContext)
-                    });
-                }
-            }
-        }
-
-        private void ApplyDimensionFilter(List<DimensionFilter> dimensionFiltes, RecordFilterGroup filterGroup, List<DBAnalyticRecord> sqlRecords)
-        {
-            //throw new NotImplementedException();
-        }
-
-        private List<AnalyticRecord> ApplyFinalGrouping(List<string> requestedDimensionNames, HashSet<string> allDimensionNames, List<string> measureNames, List<DBAnalyticRecord> sqlRecords, bool withSummary, out AnalyticRecord summaryRecord)
-        {
-            Dictionary<string, DBAnalyticRecord> groupedRecordsByDimensionsKey = new Dictionary<string, DBAnalyticRecord>();
-            DBAnalyticRecord summarySQLRecord = new DBAnalyticRecord() { AggValuesByAggName = new Dictionary<string, DBAnalyticRecordAggValue>() };
-            foreach (var sqlRecord in sqlRecords)
-            {
-                string groupingKey = GetDimensionGroupingKey(requestedDimensionNames, sqlRecord);
-                DBAnalyticRecord matchRecord;
-                if (!groupedRecordsByDimensionsKey.TryGetValue(groupingKey, out matchRecord))
-                {
-                    groupedRecordsByDimensionsKey.Add(groupingKey, sqlRecord);
-                }
-                else
-                {
-                    UpdateAggregateValues(matchRecord, sqlRecord);
-                }
-                if (withSummary)
-                    UpdateAggregateValues(summarySQLRecord, sqlRecord);
-            }
-            List<AnalyticRecord> analyticRecords = new List<AnalyticRecord>();
-            foreach (var sqlRecord in groupedRecordsByDimensionsKey.Values)
-            {
-                AnalyticRecord analyticRecord = BuildAnalyticRecordFromSQLRecord(sqlRecord, requestedDimensionNames, allDimensionNames, measureNames);
-                analyticRecords.Add(analyticRecord);
-            }
-            if (withSummary)
-                summaryRecord = BuildAnalyticRecordFromSQLRecord(summarySQLRecord, null, allDimensionNames, measureNames);
-            else
-                summaryRecord = null;
-            return analyticRecords;
-        }
-
-        private string GetDimensionGroupingKey(List<string> requestedDimensionNames, DBAnalyticRecord record)
-        {
-            StringBuilder builder = new StringBuilder();
-            foreach (var dimensionName in requestedDimensionNames)
-            {
-                DBAnalyticRecordGroupingValue groupingValue;
-                if (record.GroupingValuesByDimensionName.TryGetValue(dimensionName, out groupingValue))
-                {
-                    builder.AppendFormat("^*^{0}", groupingValue.Value != null ? groupingValue.Value : "");
-                }
-                else
-                    throw new NullReferenceException(String.Format("groupingValue. dimName '{0}'", dimensionName));
-            }
-            return builder.ToString();
-        }
-
-        private void UpdateAggregateValues(DBAnalyticRecord existingRecord, DBAnalyticRecord record)
-        {
-            foreach (var aggEntry in record.AggValuesByAggName)
-            {
-                var existingAgg = record.AggValuesByAggName[aggEntry.Key];
-                var agg = aggEntry.Value;
-                switch (GetAggregateConfig(aggEntry.Key).Config.AggregateType)
-                {
-                    case AnalyticAggregateType.Count:
-                    case AnalyticAggregateType.Sum:
-                        existingAgg.Value = existingAgg.Value + agg.Value;
-                        break;
-                    case AnalyticAggregateType.Max:
-                        if (existingAgg.Value < agg.Value)
-                            existingAgg.Value = agg.Value;
-                        break;
-                    case AnalyticAggregateType.Min:
-                        if (existingAgg.Value > agg.Value)
-                            existingAgg.Value = agg.Value;
-                        break;
-                }
-            }
-        }
-
-        private AnalyticRecord BuildAnalyticRecordFromSQLRecord(DBAnalyticRecord sqlRecord, List<string> dimensionNames, HashSet<string> allDimensionNames, List<string> measureNames)
-        {
-            AnalyticRecord analyticRecord = new AnalyticRecord() { Time = sqlRecord.Time, DimensionValues = new DimensionValue[dimensionNames.Count], MeasureValues = new MeasureValues() };
-
-            if (dimensionNames != null)
-            {
-                int dimIndex = 0;
-                foreach (string dimName in dimensionNames)
-                {
-                    var dimensionValue = new DimensionValue();
-                    dimensionValue.Value = sqlRecord.GroupingValuesByDimensionName[dimName].Value;
-                    if (dimensionValue.Value != null && dimensionValue.Value != DBNull.Value)
-                        dimensionValue.Name = GetDimensionConfig(dimName).Config.FieldType.GetDescription(dimensionValue.Value);
-                    analyticRecord.DimensionValues[dimIndex] = dimensionValue;
-                    dimIndex++;
-                }
-            }
-            foreach (var measureName in measureNames)
-            {
-                var measureConfig = GetMeasureConfig(measureName);
-                var getMeasureValueContext = new GetMeasureValueContext(sqlRecord, allDimensionNames);
-                var measureValue = measureConfig.Evaluator.GetMeasureValue(getMeasureValueContext);
-                analyticRecord.MeasureValues.Add(measureName, measureValue);
-            }
-            return analyticRecord;
-        }
-
-        #endregion
-
+        
         #region Table Partition Query Methods
 
         private List<TimeRangeTableName> GetTimeRangeTableNames(DateTime fromTime, DateTime toTime)
@@ -959,6 +750,13 @@ namespace Vanrise.Analytic.Data.SQL
             if (_analyticTableQueryContext == null)
                 throw new NullReferenceException("_analyticTableQueryContext");
             return _analyticTableQueryContext.GetJoinContig(joinName);
+        }
+
+        public IEnumerable<string> GetDimensionNames(RecordFilterGroup filterGroup)
+        {
+            if (_analyticTableQueryContext == null)
+                throw new NullReferenceException("_analyticTableQueryContext");
+            return _analyticTableQueryContext.GetDimensionNames(filterGroup);
         }
 
         #endregion

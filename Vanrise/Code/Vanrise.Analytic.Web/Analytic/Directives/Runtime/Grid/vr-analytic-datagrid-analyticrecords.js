@@ -96,7 +96,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                 for (var i = 0; i < response.Data.length; i++) {
                                     drillDown.setDrillDownExtensionObject(response.Data[i]);
                                 }
-                                if (dataRetrievalInput.Query.WithSummary)
+                                if (response.Summary != undefined)
                                     gridApi.setSummary(response.Summary);
                             }
                             onResponseReady(response);

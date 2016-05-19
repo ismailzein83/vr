@@ -10,8 +10,6 @@ namespace Vanrise.Analytic.Data
     public interface IAnalyticDataManager : IDataManager
     {
         IEnumerable<DBAnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, out  HashSet<string> includedSQLDimensions);
-        AnalyticRecord GetAnalyticSummary(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input);
-        IEnumerable<TimeVariationAnalyticRecord> GetTimeVariationAnalyticRecords(Vanrise.Entities.DataRetrievalInput<TimeVariationAnalyticQuery> input);
         
         IAnalyticTableQueryContext AnalyticTableQueryContext { set; }
     }

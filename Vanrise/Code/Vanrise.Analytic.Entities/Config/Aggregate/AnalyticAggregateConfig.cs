@@ -15,5 +15,7 @@ namespace Vanrise.Analytic.Entities
         public AnalyticAggregateType AggregateType { get; set; }
 
         public List<string> JoinConfigNames { get; set; }
+
+        public string CurrencySQLColumnName { get; set; }
     }
 }

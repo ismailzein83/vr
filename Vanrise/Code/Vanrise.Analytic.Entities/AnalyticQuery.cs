@@ -14,6 +14,9 @@ namespace Vanrise.Analytic.Entities
         public DateTime ToTime { get; set; }
         public string Currency { get; set; }
         public int? CurrencyId { get; set; }
+
+        public TimeGroupingUnit? TimeGroupingUnit { get; set; }
+
         public List<string> DimensionFields { get; set; }
         public List<string> ParentDimensions { get; set; }
         public List<string> MeasureFields { get; set; }
