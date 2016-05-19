@@ -1,7 +1,8 @@
 ﻿
+using Vanrise.Entities.EntitySynchronization;
 namespace TOne.WhS.DBSync.Entities
 {
-    public class SourceCurrency : Vanrise.Entities.EntitySynchronization.ISourceItem
+    public class SourceCurrency : ISourceItem
     {
 
         public string SourceId

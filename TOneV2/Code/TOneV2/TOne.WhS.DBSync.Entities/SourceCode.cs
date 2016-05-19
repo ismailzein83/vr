@@ -1,8 +1,9 @@
-﻿
+﻿using System;
 using Vanrise.Entities.EntitySynchronization;
+
 namespace TOne.WhS.DBSync.Entities
 {
-    public class SourceCodeGroup : ISourceItem
+    public class SourceCode : ISourceItem
     {
 
         public string SourceId
@@ -11,8 +12,9 @@ namespace TOne.WhS.DBSync.Entities
             set;
         }
 
-        public string Name { get; set; }
-
         public string Code { get; set; }
+        public int ZoneId { get; set; }
+        public DateTime BeginEffectiveDate { get; set; }
+        public DateTime? EndEffectiveDate { get; set; }
     }
 }

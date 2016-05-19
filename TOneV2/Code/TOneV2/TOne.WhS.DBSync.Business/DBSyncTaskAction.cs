@@ -67,7 +67,7 @@ namespace TOne.WhS.DBSync.Business
                             AddDBTable(dtTables, table, switchDBSyncDataManager.GetConnection(), switchDBSyncDataManager.GetSchema());
                             break;
 
-                        case DBTableName.Country  :
+                        case DBTableName.Country:
                             CountryDBSyncDataManager countryDBSyncDataManager = new CountryDBSyncDataManager(context.UseTempTables);
                             AddDBTable(dtTables, table, countryDBSyncDataManager.GetConnection(), countryDBSyncDataManager.GetSchema());
                             break;
@@ -163,7 +163,7 @@ namespace TOne.WhS.DBSync.Business
 
             CurrencyExchangeRateMigrator currencyExchangeRateMigrator = new CurrencyExchangeRateMigrator(context);
             currencyExchangeRateMigrator.Migrate();
-            
+
             CountryMigrator countryMigrator = new CountryMigrator(context);
             countryMigrator.Migrate();
 

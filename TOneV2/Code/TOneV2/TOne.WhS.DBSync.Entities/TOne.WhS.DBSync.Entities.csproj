@@ -60,6 +60,9 @@
   <ItemGroup>
     <Compile Include="Common\DBTable.cs" />
     <Compile Include="SourceCarrierAccount.cs" />
+    <Compile Include="SourceCode.cs" />
+    <Compile Include="SourceRate.cs" />
+    <Compile Include="SourceZone.cs" />
     <Compile Include="SourceCodeGroup.cs" />
     <Compile Include="SourceCurrencyExchangeRate.cs" />
     <Compile Include="SourceCurrency.cs" />

@@ -1,7 +1,8 @@
 ﻿
+using Vanrise.Entities.EntitySynchronization;
 namespace TOne.WhS.DBSync.Entities
 {
-    public class SourceCarrierProfile : Vanrise.Entities.EntitySynchronization.ISourceItem
+    public class SourceCarrierProfile : ISourceItem
     {
 
         public string SourceId

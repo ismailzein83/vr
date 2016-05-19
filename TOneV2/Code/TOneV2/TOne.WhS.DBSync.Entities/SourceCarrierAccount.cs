@@ -1,4 +1,5 @@
 ﻿using System;
+using Vanrise.Entities.EntitySynchronization;
 namespace TOne.WhS.DBSync.Entities
 {
 
@@ -6,7 +7,7 @@ namespace TOne.WhS.DBSync.Entities
 
     public enum SourceAccountType : byte { Client = 0, Exchange = 1, Termination = 2 }
 
-    public class SourceCarrierAccount : Vanrise.Entities.EntitySynchronization.ISourceItem
+    public class SourceCarrierAccount : ISourceItem
     {
 
         public string SourceId
@@ -19,9 +20,9 @@ namespace TOne.WhS.DBSync.Entities
 
         public short ProfileId { get; set; }
 
-        public string CarrierAccountID { get; set; }
+        public string CarrierAccountId { get; set; }
 
-        public string CurrencyID { get; set; }
+        public string CurrencyId { get; set; }
 
         public SourceActivationStatus ActivationStatus { get; set; }
 

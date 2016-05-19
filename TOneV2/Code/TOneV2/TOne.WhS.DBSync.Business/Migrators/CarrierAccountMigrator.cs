@@ -56,7 +56,7 @@ namespace TOne.WhS.DBSync.Business
 
                 Currency currency = null;
                 if (allCurrencies != null)
-                    currency = allCurrencies[sourceItem.CurrencyID.ToString()];
+                    currency = allCurrencies[sourceItem.CurrencyId.ToString()];
 
                 if (carrierProfile != null && currency != null)
                 {

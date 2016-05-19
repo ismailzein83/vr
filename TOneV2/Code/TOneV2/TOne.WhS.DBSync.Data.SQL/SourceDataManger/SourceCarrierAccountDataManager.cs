@@ -25,10 +25,10 @@ namespace TOne.WhS.DBSync.Data.SQL
                 SourceId = arg["CarrierAccountID"].ToString(),
                 NameSuffix = arg["NameSuffix"] as string,
                 ProfileId = (short)arg["ProfileID"],
-                CarrierAccountID = arg["CarrierAccountID"] as string,
+                CarrierAccountId = arg["CarrierAccountID"] as string,
                 ActivationStatus = (SourceActivationStatus)arg["ActivationStatus"],
                 AccountType = (SourceAccountType)arg["AccountType"],
-                CurrencyID = arg["CurrencyID"] as string,
+                CurrencyId = arg["CurrencyID"] as string,
                 CarrierMask = arg["CarrierMask"] as string,
             };
             return sourceCarrierAccount;

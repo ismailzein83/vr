@@ -24,14 +24,14 @@ namespace TOne.WhS.DBSync.Data.SQL
             decimal? rate = null;
             if (doubleRate.HasValue)
                 rate = decimal.Round(decimal.Parse(doubleRate.Value.ToString()), 5, MidpointRounding.AwayFromZero);
-            SourceCurrencyExchangeRate sourceCurrencyExchangeRate = new SourceCurrencyExchangeRate()
-            {
-                SourceId = arg["CurrencyExchangeRateID"].ToString(),
-                ExchangeDate = GetReaderValue<DateTime?>(arg, "ExchangeDate"),
-                Rate = rate,
-                CurrencyId = arg["CurrencyId"].ToString(),
-            };
-            return sourceCurrencyExchangeRate;
+            return new SourceCurrencyExchangeRate()
+             {
+                 SourceId = arg["CurrencyExchangeRateID"].ToString(),
+                 ExchangeDate = GetReaderValue<DateTime?>(arg, "ExchangeDate"),
+                 Rate = rate,
+                 CurrencyId = arg["CurrencyId"].ToString(),
+             };
+
         }
 
         const string query_getSourceCurrencyExchangeRates = @"SELECT [CurrencyExchangeRateID] ,[CurrencyID]  ,[Rate]   ,[ExchangeDate]  FROM [dbo].[CurrencyExchangeRate] WITH (NOLOCK)";

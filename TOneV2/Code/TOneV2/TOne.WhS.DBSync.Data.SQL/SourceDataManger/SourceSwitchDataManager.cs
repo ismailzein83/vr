@@ -19,12 +19,11 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         private SourceSwitch SourceSwitchMapper(IDataReader arg)
         {
-            SourceSwitch sourceSwitch = new SourceSwitch()
+            return new SourceSwitch()
             {
                 SourceId = arg["SwitchID"].ToString(),
                 Name = arg["Name"] as string,
             };
-            return sourceSwitch;
         }
 
         const string query_getSourceSwitches = @"SELECT [SwitchID] ,[Name] FROM [dbo].[Switch] WITH (NOLOCK)";

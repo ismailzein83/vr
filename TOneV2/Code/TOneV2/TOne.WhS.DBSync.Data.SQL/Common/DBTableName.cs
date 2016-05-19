@@ -43,5 +43,8 @@ namespace TOne.WhS.DBSync.Data.SQL.Common
 
         [Description("CodeGroup")]
         CodeGroup = 11,
+
+        [Description("SaleZone")]
+        SaleZone = 12,
     }
 }

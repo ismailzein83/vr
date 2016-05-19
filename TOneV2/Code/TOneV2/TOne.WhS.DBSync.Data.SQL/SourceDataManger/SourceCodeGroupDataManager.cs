@@ -19,13 +19,13 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         private SourceCodeGroup SourceCodeGroupMapper(IDataReader arg)
         {
-            SourceCodeGroup sourceCountry = new SourceCodeGroup()
+            SourceCodeGroup sourceCodeGroup = new SourceCodeGroup()
             {
                 SourceId = arg["Code"].ToString(),
                 Name = arg["Name"] as string,
                 Code = arg["Code"] as string
             };
-            return sourceCountry;
+            return sourceCodeGroup;
         }
 
         const string query_getSourceCodeGroups = @"SELECT [Code] , [Name]  FROM [dbo].[CodeGroup] WITH (NOLOCK)";
