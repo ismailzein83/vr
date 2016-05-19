@@ -13,9 +13,9 @@ namespace TOne.WhS.DBSync.Data.SQL
         {
         }
 
-        public List<SourceCode> GetSourceCodes()
+        public List<SourceCode> GetSourceCodes(bool isSaleCode)
         {
-            return GetItemsText(query_getSourceCodes, SourceCodeMapper, null);
+            return GetItemsText(query_getSourceCodes + (isSaleCode ? "where Zone.SupplierID = 'SYS'" : ""), SourceCodeMapper, null);
         }
 
         private SourceCode SourceCodeMapper(IDataReader arg)
@@ -25,11 +25,14 @@ namespace TOne.WhS.DBSync.Data.SQL
                 SourceId = arg["ID"].ToString(),
                 ZoneId = GetReaderValue<int>(arg, "ZoneID"),
                 Code = arg["Code"] as string,
+                CodeGroup = arg["CodeGroup"] as string,
                 BeginEffectiveDate = (DateTime)arg["BeginEffectiveDate"],
                 EndEffectiveDate = GetReaderValue<DateTime?>(arg, "EndEffectiveDate"),
             };
         }
 
-        const string query_getSourceCodes = @"SELECT [ID]  ,[Code]  ,[ZoneID]  ,[BeginEffectiveDate]  ,[EndEffectiveDate]  FROM [dbo].[Code] WITH (NOLOCK)";
+        const string query_getSourceCodes = @"SELECT Code.ID ID, Code.Code Code, Code.ZoneID ZoneID, 
+                                                     Code.BeginEffectiveDate BeginEffectiveDate, Code.EndEffectiveDate EndEffectiveDate, Zone.CodeGroup CodeGroup
+                                                     FROM Code WITH (NOLOCK) INNER JOIN Zone WITH (NOLOCK)  ON Code.ZoneID = Zone.ZoneID ";
     }
 }

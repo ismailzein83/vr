@@ -16,5 +16,6 @@ namespace TOne.WhS.DBSync.Entities
         public int ZoneId { get; set; }
         public DateTime BeginEffectiveDate { get; set; }
         public DateTime? EndEffectiveDate { get; set; }
+        public string CodeGroup { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class SaleCodeDBSyncDataManager : BaseSQLDataManager
     {
-        readonly string[] columns = { "Code", "ZoneID", "CodeGroupID", "BED", "EED", "SourceID" };
+        readonly string[] columns = { "Code", "ZoneID", "CodeGroupID", "BED", "EED", "SourceID", "ID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.SaleCode);
         string _Schema = "TOneWhS_BE";
         bool _UseTempTables;
@@ -20,14 +20,14 @@ namespace TOne.WhS.DBSync.Data.SQL
             _UseTempTables = useTempTables;
         }
 
-        public void ApplySaleCodesToTemp(List<SaleCode> saleCodes)
+        public void ApplySaleCodesToTemp(List<SaleCode> saleCodes, long startingId)
         {
             string filePath = GetFilePathForBulkInsert();
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
             {
                 foreach (var c in saleCodes)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}", c.Code, c.ZoneId, c.CodeGroupId, c.BED, c.EED, c.SourceId));
+                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}", c.Code, c.ZoneId, c.CodeGroupId, c.BED, c.EED, c.SourceId, startingId++));
                 }
                 wr.Close();
             }

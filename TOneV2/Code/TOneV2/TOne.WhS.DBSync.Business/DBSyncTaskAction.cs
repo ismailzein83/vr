@@ -219,6 +219,9 @@ namespace TOne.WhS.DBSync.Business
             SupplierZoneMigrator supplierZoneMigrator = new SupplierZoneMigrator(context);
             supplierZoneMigrator.Migrate();
 
+            SaleCodeMigrator saleCodeMigrator = new SaleCodeMigrator(context);
+            saleCodeMigrator.Migrate();
+
             //SupplierCodeMigrator supplierCodeMigrator = new SupplierCodeMigrator(context);
             //supplierCodeMigrator.Migrate();
 
@@ -228,8 +231,7 @@ namespace TOne.WhS.DBSync.Business
             //SupplierRateMigrator supplierRateMigrator = new SupplierRateMigrator(context);
             //supplierRateMigrator.Migrate();
 
-            //SaleCodeMigrator saleCodeMigrator = new SaleCodeMigrator(context);
-            //saleCodeMigrator.Migrate();
+
 
             //SalePriceListMigrator salePriceListMigrator = new SalePriceListMigrator(context);
             //salePriceListMigrator.Migrate();
