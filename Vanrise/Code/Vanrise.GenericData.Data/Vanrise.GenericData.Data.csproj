@@ -54,6 +54,7 @@
     <Compile Include="IBELookupRuleDefinitionDataManager.cs" />
     <Compile Include="IBusinessEntityDefinitionDataManager.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IDataRecordFieldChoiceDataManager.cs" />
     <Compile Include="IDataRecordFieldTypeConfigDataManager.cs" />
     <Compile Include="IDataRecordStorageDataManager.cs" />
     <Compile Include="IDataRecordTypeDataManager.cs" />
