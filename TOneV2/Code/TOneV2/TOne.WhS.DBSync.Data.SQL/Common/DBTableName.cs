@@ -9,42 +9,51 @@ namespace TOne.WhS.DBSync.Data.SQL.Common
     public enum DBTableName
     {
         [Description("CurrencyExchangeRate")]
-        CurrencyExchangeRate = 0,
+        CurrencyExchangeRate,
 
         [Description("Currency")]
-        Currency = 1,
+        Currency,
 
         [Description("Switch")]
-        Switch = 2,
+        Switch,
 
         [Description("CarrierProfile")]
-        CarrierProfile = 3,
+        CarrierProfile,
 
         [Description("CarrierAccount")]
-        CarrierAccount = 4,
-
-        [Description("CustomerZone")]
-        CustomerZone = 5,
-
-        [Description("SupplierZone")]
-        SupplierZone = 6,
-
-        [Description("SupplierRate")]
-        SupplierRate = 7,
-
-        [Description("SupplierCode")]
-        SupplierCode = 8,
+        CarrierAccount,
 
         [Description("SupplierZoneService")]
-        SupplierZoneService = 9,
+        SupplierZoneService,
 
         [Description("Country")]
-        Country = 10,
+        Country,
 
         [Description("CodeGroup")]
-        CodeGroup = 11,
+        CodeGroup,
 
         [Description("SaleZone")]
-        SaleZone = 12,
+        SaleZone,
+
+        [Description("SupplierZone")]
+        SupplierZone,
+
+        [Description("SaleRate")]
+        SaleRate = 14,
+
+        [Description("SupplierRate")]
+        SupplierRate,
+
+        [Description("SaleCode")]
+        SaleCode,
+
+        [Description("SupplierCode")]
+        SupplierCode,
+
+        [Description("SalePriceList")]
+        SalePriceList,
+
+        [Description("SupplierPriceList")]
+        SupplierPriceList,
     }
 }

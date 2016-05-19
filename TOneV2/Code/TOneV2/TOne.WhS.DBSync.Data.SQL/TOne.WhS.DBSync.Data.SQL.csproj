@@ -77,6 +77,14 @@
     <Compile Include="Common\MigrationUtils.cs" />
     <Compile Include="DBSyncDataManager\CarrierAccountDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\CarrierProfileDBSyncDataManager.cs" />
+    <Compile Include="DBSyncDataManager\SupplierCodeDBSyncDataManager.cs" />
+    <Compile Include="DBSyncDataManager\SupplierPriceListDBSyncDataManager.cs" />
+    <Compile Include="DBSyncDataManager\SalePriceListDBSyncDataManager.cs" />
+    <Compile Include="DBSyncDataManager\SaleCodeDBSyncDataManager.cs" />
+    <Compile Include="DBSyncDataManager\SupplierRateDBSyncDataManager.cs" />
+    <Compile Include="DBSyncDataManager\SaleRateDBSyncDataManager.cs" />
+    <Compile Include="DBSyncDataManager\SupplierZoneDBSyncDataManager.cs" />
+    <Compile Include="DBSyncDataManager\SaleZoneDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\CodeGroupDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\CountryDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\CurrencyExchangeRateDBSyncDataManager.cs" />
