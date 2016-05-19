@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
 
@@ -16,12 +17,13 @@ namespace TOne.WhS.DBSync.Data.SQL
             return GetItemsText(query_getSourceCodeGroups, SourceCodeGroupMapper, null);
         }
 
-        private SourceCodeGroup SourceCodeGroupMapper(System.Data.IDataReader arg)
+        private SourceCodeGroup SourceCodeGroupMapper(IDataReader arg)
         {
             SourceCodeGroup sourceCountry = new SourceCodeGroup()
             {
                 SourceId = arg["Code"].ToString(),
                 Name = arg["Name"] as string,
+                Code = arg["Code"] as string
             };
             return sourceCountry;
         }

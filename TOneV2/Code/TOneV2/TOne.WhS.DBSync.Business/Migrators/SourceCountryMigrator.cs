@@ -8,7 +8,7 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SourceCountryMigrator : Migrator<TOne.WhS.DBSync.Entities.SourceCodeGroup, Country>
+    public class SourceCountryMigrator : Migrator<SourceCodeGroup, Country>
     {
         CountryDBSyncDataManager dbSyncDataManager;
         SourceCodeGroupDataManager dataManager;
@@ -36,7 +36,7 @@ namespace TOne.WhS.DBSync.Business
                 dbTableCountry.Records = dbSyncDataManager.GetCountries();
         }
 
-        public override IEnumerable<TOne.WhS.DBSync.Entities.SourceCodeGroup> GetSourceItems()
+        public override IEnumerable<SourceCodeGroup> GetSourceItems()
         {
             return dataManager.GetSourceCodeGroups();
         }

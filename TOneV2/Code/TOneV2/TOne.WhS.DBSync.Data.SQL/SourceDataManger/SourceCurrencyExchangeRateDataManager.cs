@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
 
@@ -17,7 +18,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             return GetItemsText(query_getSourceCurrencyExchangeRates, SourceCurrencyExchangeRateMapper, null);
         }
 
-        private SourceCurrencyExchangeRate SourceCurrencyExchangeRateMapper(System.Data.IDataReader arg)
+        private SourceCurrencyExchangeRate SourceCurrencyExchangeRateMapper(IDataReader arg)
         {
             double? doubleRate = GetReaderValue<double?>(arg, "Rate");
             decimal? rate = null;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
 
@@ -16,7 +17,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             return GetItemsText(query_getSourceSwitches, SourceSwitchMapper, null);
         }
 
-        private SourceSwitch SourceSwitchMapper(System.Data.IDataReader arg)
+        private SourceSwitch SourceSwitchMapper(IDataReader arg)
         {
             SourceSwitch sourceSwitch = new SourceSwitch()
             {

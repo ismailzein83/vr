@@ -2,6 +2,7 @@
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
 using System;
+using System.Data;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
@@ -17,7 +18,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             return GetItemsText(query_getSourceCarrierAccounts, SourceCarrierAccountMapper, null);
         }
 
-        private SourceCarrierAccount SourceCarrierAccountMapper(System.Data.IDataReader arg)
+        private SourceCarrierAccount SourceCarrierAccountMapper(IDataReader arg)
         {
             SourceCarrierAccount sourceCarrierAccount = new SourceCarrierAccount()
             {
