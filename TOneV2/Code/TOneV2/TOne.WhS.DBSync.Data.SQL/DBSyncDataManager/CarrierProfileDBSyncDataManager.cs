@@ -15,7 +15,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         string _Schema = "TOneWhS_BE";
         bool _UseTempTables;
         public CarrierProfileDBSyncDataManager(bool useTempTables) :
-            base(GetConnectionStringName("TOneWhS_BE_MigrationDBConnStringKey", "TOneV2DBConnString"))
+            base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
             _UseTempTables = useTempTables;
         }

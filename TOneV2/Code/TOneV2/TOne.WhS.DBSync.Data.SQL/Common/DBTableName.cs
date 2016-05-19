@@ -40,5 +40,8 @@ namespace TOne.WhS.DBSync.Data.SQL.Common
 
         [Description("Country")]
         Country = 10,
+
+        [Description("CodeGroup")]
+        CodeGroup = 11,
     }
 }

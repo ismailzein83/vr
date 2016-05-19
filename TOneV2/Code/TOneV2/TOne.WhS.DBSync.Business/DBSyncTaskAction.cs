@@ -72,6 +72,11 @@ namespace TOne.WhS.DBSync.Business
                             AddDBTable(dtTables, table, countryDBSyncDataManager.GetConnection(), countryDBSyncDataManager.GetSchema());
                             break;
 
+                        case DBTableName.CodeGroup:
+                            CodeGroupDBSyncDataManager codeGroupDBSyncDataManager = new CodeGroupDBSyncDataManager(context.UseTempTables);
+                            AddDBTable(dtTables, table, codeGroupDBSyncDataManager.GetConnection(), codeGroupDBSyncDataManager.GetSchema());
+                            break;
+
                     }
 
                 }
@@ -150,17 +155,20 @@ namespace TOne.WhS.DBSync.Business
 
         private void TransferData(MigrationContext context)
         {
-            CountryMigrator countryMigrator = new CountryMigrator(context);
-            countryMigrator.Migrate();
+            SwitchMigrator switchMigrator = new SwitchMigrator(context);
+            switchMigrator.Migrate();
 
             CurrencyMigrator currencyMigrator = new CurrencyMigrator(context);
             currencyMigrator.Migrate();
 
             CurrencyExchangeRateMigrator currencyExchangeRateMigrator = new CurrencyExchangeRateMigrator(context);
             currencyExchangeRateMigrator.Migrate();
+            
+            CountryMigrator countryMigrator = new CountryMigrator(context);
+            countryMigrator.Migrate();
 
-            SwitchMigrator switchMigrator = new SwitchMigrator(context);
-            switchMigrator.Migrate();
+            CodeGroupMigrator codeGroupMigrator = new CodeGroupMigrator(context);
+            codeGroupMigrator.Migrate();
 
             CarrierProfileMigrator carrierProfileMigrator = new CarrierProfileMigrator(context);
             carrierProfileMigrator.Migrate();

@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="Common\Migrator.cs" />
     <Compile Include="Migrators\CarrierAccountMigrator.cs" />
+    <Compile Include="Migrators\CodeGroupMigrator.cs" />
     <Compile Include="Migrators\CurrencyExchangeRateMigrator.cs" />
     <Compile Include="Migrators\CarrierProfileMigrator.cs" />
     <Compile Include="Migrators\CountryMigrator.cs" />
