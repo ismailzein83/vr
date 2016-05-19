@@ -46,7 +46,7 @@ app.directive("vrCommonExchangerateFxsauder", [function () {
             api.getData = function () {
                 
                 return {   
-                    $type: "Vanrise.Common.Business.ExchangeRateTasks.ExchangeRateTaskActionArgument, Vanrise.Common.Business",
+                    $type: "Vanrise.Common.MainExtensions.ExchangeRateUpdateService.ExchangeRateTaskActionArgument, Vanrise.Common.MainExtensions",
                     URL: $scope.url,
                     Token:$scope.token
                 };
@@ -55,9 +55,12 @@ app.directive("vrCommonExchangerateFxsauder", [function () {
 
             api.load = function (payload) {
                 if (payload != undefined && payload.data != undefined) {
-                    $scope.url = payload.data.URL;
+                    $scope.url =  payload.data.URL ;
                     $scope.token = payload.data.Token;
                 }
+                else 
+                    $scope.url = "http://globalcurrencies.xignite.com/";
+
             }
 
 
