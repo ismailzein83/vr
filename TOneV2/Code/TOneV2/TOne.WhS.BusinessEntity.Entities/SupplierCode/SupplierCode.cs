@@ -15,5 +15,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime? EED { get; set; }
 
         public string SourceId { get; set; }
+
+        public int? CodeGroupId { get; set; }
     }
 }
