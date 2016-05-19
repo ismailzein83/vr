@@ -160,15 +160,18 @@ namespace Vanrise.Analytic.Business
             StringBuilder builder = new StringBuilder();
             if (record.Time.HasValue)
                 builder.Append(record.Time.Value.ToString());
-            foreach (var dimensionName in requestedDimensionNames)
+            if (requestedDimensionNames != null)
             {
-                DBAnalyticRecordGroupingValue groupingValue;
-                if (record.GroupingValuesByDimensionName.TryGetValue(dimensionName, out groupingValue))
+                foreach (var dimensionName in requestedDimensionNames)
                 {
-                    builder.AppendFormat("^*^{0}", groupingValue.Value != null ? groupingValue.Value : "");
+                    DBAnalyticRecordGroupingValue groupingValue;
+                    if (record.GroupingValuesByDimensionName.TryGetValue(dimensionName, out groupingValue))
+                    {
+                        builder.AppendFormat("^*^{0}", groupingValue.Value != null ? groupingValue.Value : "");
+                    }
+                    else
+                        throw new NullReferenceException(String.Format("groupingValue. dimName '{0}'", dimensionName));
                 }
-                else
-                    throw new NullReferenceException(String.Format("groupingValue. dimName '{0}'", dimensionName));
             }
             return builder.ToString();
         }

@@ -22,7 +22,7 @@ namespace Vanrise.Analytic.Data.SQL
             HashSet<string> includedSQLAggregates;
             Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
             string query = BuildAnalyticQuery(input, out includedSQLDimensions_Local, out includedSQLAggregates, parameterValues);
-            List<DBAnalyticRecord> dbRecords = GetItemsText(query, (reader) => SQLRecordMapper(reader, null, includedSQLDimensions_Local, includedSQLAggregates), (cmd) =>
+            List<DBAnalyticRecord> dbRecords = GetItemsText(query, (reader) => SQLRecordMapper(reader, input.Query.TimeGroupingUnit, includedSQLDimensions_Local, includedSQLAggregates), (cmd) =>
             {
                 foreach (var prm in parameterValues)
                 {
@@ -640,8 +640,10 @@ namespace Vanrise.Analytic.Data.SQL
         {
             AnalyticRecord record = new AnalyticRecord()
                 {
+                   
                     MeasureValues = new MeasureValues()
                 };
+
             var index = 0;
             if (!isSummary)
             {

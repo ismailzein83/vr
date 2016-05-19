@@ -91,11 +91,15 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
                     return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                         .then(function (response) {
-
                             if (response && response.Data) {
-                                for (var i = 0; i < response.Data.length; i++) {
-                                    drillDown.setDrillDownExtensionObject(response.Data[i]);
+                                if (ctrl.drillDownDimensions.length > 0)
+                                {
+                                    for (var i = 0; i < response.Data.length; i++) {
+
+                                        drillDown.setDrillDownExtensionObject(response.Data[i]);
+                                    }
                                 }
+
                                 if (response.Summary != undefined)
                                     gridApi.setSummary(response.Summary);
                             }
@@ -140,9 +144,11 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
                         var parentDimensions = [];
                         for (var i = 0; i < ctrl.parentDimensions.length; i++) {
-                            parentDimensions.push(ctrl.parentDimensions[i]);
+                            if (UtilsService.getItemByVal(parentDimensions, ctrl.parentDimensions[i].DimensionName, 'DimensionName') == undefined)
+                               parentDimensions.push(ctrl.parentDimensions[i]);
                         }
-                        parentDimensions.push(dimension);
+                        if (UtilsService.getItemByVal(parentDimensions, dimension.DimensionName, 'DimensionName') == undefined)
+                            parentDimensions.push(dimension);
                         if (UtilsService.contains(drillDownDimensions, dimension)) {
                             var dimensionIndex = UtilsService.getItemIndexByVal(drillDownDimensions, dimension.DimensionName, 'DimensionName');
                             drillDownDimensions.splice(dimensionIndex, 1);
@@ -266,7 +272,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
                     for (var i = 0; i < ctrl.groupingDimensions.length; i++)
                     {
-                        ctrl.parentDimensions.push( ctrl.groupingDimensions[i]) ;
+                        if (UtilsService.getItemByVal(ctrl.parentDimensions, ctrl.groupingDimensions[i].DimensionName, 'DimensionName') == undefined)
+                           ctrl.parentDimensions.push( ctrl.groupingDimensions[i]) ;
                     }
                     applyDimensionRules(dimensionForDrillDown);
 
@@ -395,6 +402,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         TableIds: [tableId]
                     }
                     return VR_Analytic_AnalyticItemConfigAPIService.GetDimensionsInfo(UtilsService.serializetoJson(dimensionsFilter)).then(function (response) {
+                       
                         if (response) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.dimensionsConfig.push(response[i]);
