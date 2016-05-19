@@ -331,14 +331,16 @@
                 setTimeout(function () {
                     $('div[name=' + $attrs.id + ']').on('show.bs.dropdown', function () {
                         vrSelectSharedObject.onOpenDropDown($attrs.id);
-                        setTimeout(function () {
-                            $('#filterInput').focus();
-                        }, 1);
+
+                        setTimeout(function () { $('#filterInput').focus(); }, 1);
+                       
                         $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
                     });
 
                     $('div[name=' + $attrs.id + ']').attr('name', $attrs.id).on('hide.bs.dropdown', function () {
+
                         $('#filterInput').blur();
+
                         vrSelectSharedObject.onCloseDropDown($attrs.id);
 
                         $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
@@ -353,11 +355,20 @@
                             var selfHeight = $(this).parent().height();
                             var selfOffset = $(self).offset();
                             var dropDown = self.parent().find('ul');
-                            if (!$(dropDown).hasClass(" menu-to-top"))
-                                $(dropDown).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: selfOffset.left - $(window).scrollLeft() });
+                            var top = 0;
+                            var ulHeight = 260;
+                            if ($(dropDown).hasClass("menu-to-top"))
+                                top = selfOffset.top - $(window).scrollTop()  - (ulHeight + selfHeight);
+                            else
+                                top = selfOffset.top - $(window).scrollTop() + selfHeight;
+
+                            $(dropDown).css({ position: 'fixed', top: top, left: selfOffset.left - $(window).scrollLeft() });
                         });
 
                         $('div[name=' + $attrs.id + ']').parents('div').scroll(function () {
+                            fixDropdownPosition();
+                        });
+                        $(window).scroll(function () {
                             fixDropdownPosition();
                         });
                         $(window).resize(function () {
