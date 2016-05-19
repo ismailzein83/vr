@@ -36,7 +36,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         protected override GetExistingRatesOutput DoWorkWithResult(GetExistingRatesInput inputArgument, Vanrise.BusinessProcess.AsyncActivityHandle handle)
         {
             SaleRateManager saleRateManager = new SaleRateManager();
-            List<SaleRate> saleRates = saleRateManager.GetSaleRatesEffectiveAfter(inputArgument.sellingNumberPlanId, inputArgument.MinimumDate);
+            List<SaleRate> saleRates = saleRateManager.GetSaleRatesEffectiveAfter(inputArgument.sellingNumberPlanId, Vanrise.Common.Utilities.Min(inputArgument.MinimumDate, DateTime.Today));
 
             return new GetExistingRatesOutput()
             {

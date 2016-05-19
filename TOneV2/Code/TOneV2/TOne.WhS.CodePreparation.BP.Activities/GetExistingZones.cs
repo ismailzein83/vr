@@ -50,7 +50,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         {
 
             SaleZoneManager saleZoneManager = new SaleZoneManager();
-            IEnumerable<SaleZone> saleZones = saleZoneManager.GetSaleZonesEffectiveAfter(inputArgument.SellingNumberPlanId, inputArgument.MinimumDate);
+            IEnumerable<SaleZone> saleZones = saleZoneManager.GetSaleZonesEffectiveAfter(inputArgument.SellingNumberPlanId, Vanrise.Common.Utilities.Min(inputArgument.MinimumDate, DateTime.Today));
             return new GetExistingZonesOutput()
             {
                 ExistingZoneEntities = saleZones

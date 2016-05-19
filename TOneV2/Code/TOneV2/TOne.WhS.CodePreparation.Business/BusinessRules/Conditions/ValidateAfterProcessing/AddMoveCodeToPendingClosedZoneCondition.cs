@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.CodePreparation.Entities;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
@@ -14,21 +15,38 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ExistingZone != null);
+            return (target as ZoneToProcess != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
 
-            ExistingZone existingZone = context.Target as ExistingZone;
-            if (existingZone.AddedCodes.Count() > 0)
-                return !existingZone.EED.HasValue;
+            ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
+
+            foreach (CodeToAdd codeToAdd in zoneToProcess.CodesToAdd)
+            {
+                ExistingZone existingZone = zoneToProcess.ExistingZones.FindRecord(item=>item.ZoneEntity.Name.Equals(codeToAdd.ZoneName, StringComparison.InvariantCultureIgnoreCase));
+
+                if (existingZone != null && existingZone.EED.HasValue)
+                    return false;
+            }
+
+
+
+            foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
+            {
+                ExistingZone existingZone = zoneToProcess.ExistingZones.FindRecord(item => item.ZoneEntity.Name.Equals(codeToMove.ZoneName, StringComparison.InvariantCultureIgnoreCase));
+
+                if (existingZone != null && existingZone.EED.HasValue)
+                    return false;
+            }
+
             return true;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Can not move or add code to the pending closed zone {0}", (target as ExistingZone).ZoneEntity.Name);
+            return string.Format("Can not move or add code to the pending closed zone {0}", (target as ZoneToProcess).ZoneName);
         }
 
     }

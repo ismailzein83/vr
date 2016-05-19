@@ -52,7 +52,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         {
 
             SaleCodeManager codeManager = new SaleCodeManager();
-            List<SaleCode> saleCodes = codeManager.GetSaleCodesEffectiveAfter(inputArgument.SellingNumberPlanId, inputArgument.MinimumDate);
+            List<SaleCode> saleCodes = codeManager.GetSaleCodesEffectiveAfter(inputArgument.SellingNumberPlanId, Vanrise.Common.Utilities.Min(inputArgument.MinimumDate, DateTime.Today));
             return new GetExistingCodesOutput()
             {
                 ExistingCodeEntities = saleCodes
