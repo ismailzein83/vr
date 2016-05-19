@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
@@ -23,5 +18,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int OwnerId { get; set; }
 
         public int CurrencyId { get; set; }
+
+        public string SourceId { get; set; }
     }
 }

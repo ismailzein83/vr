@@ -13,7 +13,11 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int SupplierId { get; set; }
 
         public int CurrencyId { get; set; }
+        
         public long FileId { get; set; }
+        
         public DateTime CreateTime { get; set; }
+
+        public string SourceId { get; set; }
     }
 }
