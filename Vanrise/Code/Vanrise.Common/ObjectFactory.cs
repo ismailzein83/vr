@@ -54,7 +54,7 @@ namespace Vanrise.Common
         {
             foreach (var a in _assemblies)
             {
-                foreach (Type t in a.GetTypes())
+                foreach (Type t in a.GetLoadableTypes())
                 {
                     if (baseType.IsAssignableFrom(t) && t.IsClass && !t.IsAbstract)
                     {

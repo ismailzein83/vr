@@ -23,6 +23,8 @@ namespace Vanrise.Analytic.Entities
     public interface IGetMeasureValueContext
     {
         dynamic GetAggregateValue(string aggregateName);
+
+        bool IsGroupingDimensionIncluded(string dimensionName);
     }
 
 }
