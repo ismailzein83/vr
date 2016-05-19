@@ -11,7 +11,7 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', 'UtilsService', f
             hidesettings: '@'
         },
         controller: function ($scope, $element, $attrs) {
-            var ctrl = this;         
+            var ctrl = this;
             var chartElement = $element.find('#divChart');
             var menuActionsAttribute = $attrs.menuactions != undefined ? $scope.$parent.$eval($attrs.menuactions) : undefined;
 
@@ -19,15 +19,15 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', 'UtilsService', f
             chart.initializeController();
             chart.defineMenu(menuActionsAttribute);
             chart.defineAPI();
-           
+
         },
         controllerAs: 'ctrl',
         bindToController: true,
         compile: function (element, attrs) {
-                        
+
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
-                    
+
                 }
             }
         },
@@ -61,7 +61,7 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', 'UtilsService', f
         function initializeChartSettings() {
             clearSettingsIfDifferentSeries();
 
-            if (currentChartSettings == undefined) {                
+            if (currentChartSettings == undefined) {
                 currentChartSettings = {
                     isSingleDimension: currentChartSource.isSingleDimension,
                     showValuesWithLegends: true,
@@ -239,9 +239,9 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', 'UtilsService', f
                 });
                 resizeChart(1);
                 isChartAvailable = true;
-            },1)
-           
-            
+            }, 1)
+
+
         }
 
         function renderChart(chartSource) {
@@ -418,15 +418,19 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', 'UtilsService', f
         }
         function resizeChart(time) {
             setTimeout(function () {
-                if (chartElement.highcharts()!=undefined)
-                     chartElement.highcharts().setSize(chartElement.parent().width() , chartElement.height(), true);
+                if (chartElement.highcharts() != undefined)
+                    chartElement.highcharts().setSize(chartElement.parent().width(), chartElement.height(), true);
 
             }, time)
         }
+        $(window).resize(function () {
+            resizeChart(500);
+
+        });
         $scope.$on('menu-full', function (event, args) {
             resizeChart(500);
         });
-        $scope.$on('menu-collapsed', function (event, args) {           
+        $scope.$on('menu-collapsed', function (event, args) {
             resizeChart(500);
         });
 
