@@ -5,6 +5,9 @@
                 <vr-columns width="1/3row">
                     <vr-switch value="scopeModel.isRequiredGroupingDimensions" label="Required Grouping Dimensions"></vr-switch>
                 </vr-columns>
+                <vr-columns width="1/3row">
+                    <vr-switch value="scopeModel.showCurrency" label="Show Currency"></vr-switch>
+                </vr-columns>
             </vr-row>
             <vr-row>
                 <vr-analytic-dimension-selector on-ready="scopeModel.onGroupingDimensionSelectorDirectiveReady" isrequired="scopeModel.isRequiredGroupingDimensions" ismultipleselection normal-col-num="4" selectedvalues="scopeModel.selectedGroupingDimensions" onselectitem="scopeModel.onSelectGroupingDimensionItem" ondeselectitem="scopeModel.onDeselectGroupingDimensionItem" hideselectedvaluessection></vr-analytic-dimension-selector>

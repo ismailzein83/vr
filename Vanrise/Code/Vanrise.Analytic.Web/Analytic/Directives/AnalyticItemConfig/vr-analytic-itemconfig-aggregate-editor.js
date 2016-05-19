@@ -62,6 +62,8 @@
                         {
                             $scope.sqlColumn = configEntity.SQLColumn;
                             $scope.selectedAnalyticAggregateType = UtilsService.getItemByVal($scope.analyticAggregateTypes, configEntity.AggregateType, "value");
+                            $scope.currencySQLColumnName = configEntity.CurrencySQLColumnName;
+
                         }
                         var loadJoinDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         joinReadyDeferred.promise.then(function () {
@@ -88,6 +90,7 @@
                         SQLColumn: $scope.sqlColumn,
                         AggregateType: $scope.selectedAnalyticAggregateType.value,
                         JoinConfigNames: joinConfigNames,
+                        CurrencySQLColumnName: $scope.currencySQLColumnName,
                     };
                     return dimension;
                 }

@@ -111,7 +111,7 @@
                         if (payload.searchSettings != undefined)
                         {
                             $scope.scopeModel.isRequiredGroupingDimensions = payload.searchSettings.IsRequiredGroupingDimensions;
-                         
+                            $scope.scopeModel.showCurrency =   payload.searchSettings.ShowCurrency;
                             if(payload.searchSettings.GroupingDimensions !=undefined && payload.searchSettings.GroupingDimensions.length>0)
                             {
                                 selectedGroupingIds = [];
@@ -215,7 +215,8 @@
                         $type: "Vanrise.Analytic.MainExtensions.History.SearchSettings.GenericSearchSettings, Vanrise.Analytic.MainExtensions ",
                         GroupingDimensions: groupingDimensions,
                         Filters: filterDimensions,
-                        IsRequiredGroupingDimensions:$scope.scopeModel.isRequiredGroupingDimensions
+                        IsRequiredGroupingDimensions: $scope.scopeModel.isRequiredGroupingDimensions,
+                        ShowCurrency:$scope.scopeModel.showCurrency
                     }
                     return data;
                 }

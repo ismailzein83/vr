@@ -111,7 +111,6 @@
                                 $scope.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpressionMethod;
                             }
                           
-                            $scope.currencySQLColumnName = configEntity.CurrencySQLColumnName;
                         }
                         var loadJoinDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         joinReadyDeferred.promise.then(function () {
@@ -188,7 +187,7 @@
                         Parents: parents,
                         RequiredParentDimension: requiredParentDimension,
                         FieldType:fieldType,
-                        CurrencySQLColumnName: $scope.currencySQLColumnName,
+                     
                     };
                     return dimension;
                 }

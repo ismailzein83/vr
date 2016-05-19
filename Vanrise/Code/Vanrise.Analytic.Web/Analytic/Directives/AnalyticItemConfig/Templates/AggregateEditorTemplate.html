@@ -7,7 +7,11 @@
             <vr-select datatextfield="description" datavaluefield="value" label="Aggregate Type" datasource="analyticAggregateTypes"
                        selectedvalues="selectedAnalyticAggregateType">
         </vr-columns>
+        <vr-columns width="1/3row">
+            <vr-textbox value="currencySQLColumnName" label="Currency SQL Column Name"></vr-textbox>
+        </vr-columns>
         <vr-analytic-join-selector on-ready="onJoinSelectorDirectiveReady" normal-col-num="4" ismultipleselection></vr-analytic-join-selector>
+
     </vr-row>
 </vr-columns>
 

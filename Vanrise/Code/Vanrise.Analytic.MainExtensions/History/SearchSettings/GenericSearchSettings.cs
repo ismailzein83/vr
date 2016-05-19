@@ -10,6 +10,7 @@ namespace Vanrise.Analytic.MainExtensions.History.SearchSettings
     public class GenericSearchSettings : AnalyticHistoryReportSearchSettings
     {
         public bool IsRequiredGroupingDimensions { get; set; }
+        public bool ShowCurrency { get; set; }
         public List<GenericSearchSettingsDimension> GroupingDimensions { get; set; }
 
         public List<GenericSearchSettingsFilter> Filters { get; set; }

@@ -24,7 +24,8 @@
             this.initializeController = initializeController;
             var fieldTypes = [];
             var filterObj;
-
+            var currencySelectorAPI;
+            var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
             var dimensions = [];
             var measures = [];
             var settings;
@@ -38,6 +39,13 @@
                 $scope.scopeModel.groupingDimentions = [];
                 $scope.scopeModel.selectedGroupingDimentions = [];
                 $scope.scopeModel.isGroupingRequired = false;
+
+                $scope.scopeModel.onCurrencySelectorReady = function(api)
+                {
+                    currencySelectorAPI = api;
+                    currencySelectorReadyDeferred.resolve();
+                }
+
 
                 $scope.scopeModel.addFilter = function () {
                     var onDimensionFilterAdded = function (filter, expression) {
@@ -86,6 +94,10 @@
                         settings = payload.settings;
                     }
                     var loadPromiseDeffer = UtilsService.createPromiseDeferred();
+
+
+
+
                     UtilsService.waitMultipleAsyncOperations([getWidgetsTemplateConfigs, getFieldTypeConfigs, loadMeasures, loadDimensions]).then(function () {
                         UtilsService.waitMultipleAsyncOperations([loadFilters, loadWidgets]).finally(function () {
                             loadPromiseDeffer.resolve();
@@ -95,6 +107,8 @@
                     }).catch(function (error) {
                         loadPromiseDeffer.reject(error);
                     });
+
+
                     return loadPromiseDeffer.promise;
                 };
 
@@ -149,6 +163,19 @@
                         }
                     }
                 }
+
+                if (settings != undefined && settings.SearchSettings != undefined && settings.SearchSettings.ShowCurrency) {
+                    $scope.scopeModel.showCurrency = true;
+                    var loadCurrencySelectorDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                    currencySelectorReadyDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, undefined, loadCurrencySelectorDirectivePromiseDeferred);
+                    });
+                     filterPromises.push(loadCurrencySelectorDirectivePromiseDeferred.promise);
+                }
+
+      
+
+
 
                 return UtilsService.waitMultiplePromises(filterPromises);
 
