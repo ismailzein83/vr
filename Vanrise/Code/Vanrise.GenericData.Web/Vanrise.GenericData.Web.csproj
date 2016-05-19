@@ -280,6 +280,10 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\InitializeRecord\Templates\InitializeRecordStepTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\InitializeRecord\vr-genericdata-datatransformation-initializerecordstep-preview.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\InitializeRecord\vr-genericdata-datatransformation-initializerecordstep.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\LoadBEByID\Templates\LoadBEByIDStepPreviewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\LoadBEByID\Templates\LoadBEByIDStepTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\LoadBEByID\vr-genericdata-loadbebyidstep-preview.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\LoadBEByID\vr-genericdata-loadbebyidstep.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Common\Templates\RuleStepCommonPreviewTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Common\vr-genericdata-datatransformation-rulestep-common-preview.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\ExtraCharge\Templates\ExtraChargeRuleStepPreviewTemplate.html" />
