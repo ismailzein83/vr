@@ -47,7 +47,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, SaleCode> GetSaleCodes()
         {
-            return GetItemsText("SELECT Code, ZoneID, CodeGroupID, BED, EED, SourceID FROM"
+            return GetItemsText("SELECT ID,  Code, ZoneID, CodeGroupID, BED, EED, SourceID FROM"
                 + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), SaleCodeMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 

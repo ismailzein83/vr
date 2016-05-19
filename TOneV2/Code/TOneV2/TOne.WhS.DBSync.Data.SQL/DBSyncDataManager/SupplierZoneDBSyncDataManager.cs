@@ -12,7 +12,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class SupplierZoneDBSyncDataManager : BaseSQLDataManager
     {
-        readonly string[] columns = { "CountryID", "Name", "SupplierID", "BED", "EED", "SourceID" };
+        readonly string[] columns = { "CountryID", "Name", "SupplierID", "BED", "EED", "SourceID", "ID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.SupplierZone);
         string _Schema = "TOneWhS_BE";
         bool _UseTempTables;
@@ -22,14 +22,14 @@ namespace TOne.WhS.DBSync.Data.SQL
             _UseTempTables = useTempTables;
         }
 
-        public void ApplySupplierZonesToTemp(List<SupplierZone> supplierZones)
+        public void ApplySupplierZonesToTemp(List<SupplierZone> supplierZones, long startingId)
         {
             string filePath = GetFilePathForBulkInsert();
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
             {
                 foreach (var c in supplierZones)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}", c.CountryId, c.Name, c.SupplierId, c.BED, c.EED, c.SourceId));
+                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}", c.CountryId, c.Name, c.SupplierId, c.BED, c.EED, c.SourceId, startingId++));
                 }
                 wr.Close();
             }
@@ -49,7 +49,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, SupplierZone> GetSupplierZones()
         {
-            return GetItemsText("SELECT CountryID, Name, SupplierID, BED, EED, SourceID FROM"
+            return GetItemsText("SELECT ID,  CountryID, Name, SupplierID, BED, EED, SourceID FROM"
                 + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), SupplierZoneMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 

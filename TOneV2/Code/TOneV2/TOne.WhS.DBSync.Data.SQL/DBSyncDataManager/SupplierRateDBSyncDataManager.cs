@@ -47,7 +47,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, SupplierRate> GetSupplierRates()
         {
-            return GetItemsText("SELECT PriceListID, ZoneID, CurrencyID, NormalRate, OtherRates, BED, EED, SourceID FROM"
+            return GetItemsText("SELECT ID,  PriceListID, ZoneID, CurrencyID, NormalRate, OtherRates, BED, EED, SourceID FROM"
                 + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), SupplierRateMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 

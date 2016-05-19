@@ -13,7 +13,7 @@ namespace TOne.WhS.DBSync.Business
         public SwitchMigrator(MigrationContext context)
             : base(context)
         {
-            dbSyncDataManager = new SwitchDBSyncDataManager(context.UseTempTables);
+            dbSyncDataManager = new SwitchDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceSwitchDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
         }

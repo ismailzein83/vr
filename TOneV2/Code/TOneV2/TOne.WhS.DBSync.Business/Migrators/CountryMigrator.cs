@@ -16,7 +16,7 @@ namespace TOne.WhS.DBSync.Business
         public CountryMigrator(MigrationContext context)
             : base(context)
         {
-            dbSyncDataManager = new CountryDBSyncDataManager(context.UseTempTables);
+            dbSyncDataManager = new CountryDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceCodeGroupDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
         }

@@ -13,9 +13,9 @@ namespace TOne.WhS.DBSync.Data.SQL
         {
         }
 
-        public List<SourceZone> GetSourceZones()
+        public List<SourceZone> GetSourceZones(bool isSaleZone)
         {
-            return GetItemsText(query_getSourceZones, SourceZoneMapper, null);
+            return GetItemsText(query_getSourceZones + (isSaleZone ? "where SupplierID = 'SYS'" : ""), SourceZoneMapper, null);
         }
 
         private SourceZone SourceZoneMapper(IDataReader arg)
@@ -31,6 +31,6 @@ namespace TOne.WhS.DBSync.Data.SQL
             };
         }
 
-        const string query_getSourceZones = @"SELECT  ZoneID, CodeGroup, Name, SupplierID, BeginEffectiveDate, EndEffectiveDate  FROM [dbo].[Zone] WITH (NOLOCK)";
+        const string query_getSourceZones = @"SELECT  ZoneID, CodeGroup, Name, SupplierID, BeginEffectiveDate, EndEffectiveDate  FROM [dbo].[Zone] WITH (NOLOCK) ";
     }
 }

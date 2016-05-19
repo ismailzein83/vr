@@ -15,7 +15,7 @@ namespace TOne.WhS.DBSync.Business
         public CurrencyMigrator(MigrationContext context)
             : base(context)
         {
-            dbSyncDataManager = new CurrencyDBSyncDataManager(context.UseTempTables);
+            dbSyncDataManager = new CurrencyDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceCurrencyDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
         }

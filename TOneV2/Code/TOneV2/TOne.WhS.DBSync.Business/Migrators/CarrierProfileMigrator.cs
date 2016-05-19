@@ -18,7 +18,7 @@ namespace TOne.WhS.DBSync.Business
         public CarrierProfileMigrator(MigrationContext context)
             : base(context)
         {
-            dbSyncDataManager = new CarrierProfileDBSyncDataManager(context.UseTempTables);
+            dbSyncDataManager = new CarrierProfileDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceCarrierProfileDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
         }
@@ -51,6 +51,7 @@ namespace TOne.WhS.DBSync.Business
             {
                 Dictionary<string, Country> allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
                 Country country = null;
+
                 if (allCountries != null && !string.IsNullOrWhiteSpace(string.Empty))
                     country = allCountries.Values.Where(x => x.Name == sourceItem.Country).FirstOrDefault();
                 if (country != null)

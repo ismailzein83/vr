@@ -17,7 +17,7 @@ namespace TOne.WhS.DBSync.Business
         public CodeGroupMigrator(MigrationContext context)
             : base(context)
         {
-            dbSyncDataManager = new CodeGroupDBSyncDataManager(context.UseTempTables);
+            dbSyncDataManager = new CodeGroupDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceCodeGroupDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
         }
@@ -48,7 +48,7 @@ namespace TOne.WhS.DBSync.Business
                 Dictionary<string, Country> allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
                 Country country = null;
                 if (allCountries != null)
-                    country = allCountries[sourceItem.SourceId];
+                    allCountries.TryGetValue(sourceItem.SourceId, out country);
                 if (country != null)
                     return new CodeGroup
             {

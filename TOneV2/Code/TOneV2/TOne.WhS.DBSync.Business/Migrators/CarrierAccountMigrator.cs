@@ -30,6 +30,9 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<CarrierAccount> itemsToAdd)
         {
             dbSyncDataManager.ApplyCarrierAccountsToTemp(itemsToAdd);
+            DBTable dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
+            if (dbTableCarrierAccount != null)
+                dbTableCarrierAccount.Records = dbSyncDataManager.GetCarrierAccounts();
         }
 
         public override IEnumerable<SourceCarrierAccount> GetSourceItems()
@@ -49,14 +52,15 @@ namespace TOne.WhS.DBSync.Business
             {
                 Dictionary<string, CarrierProfile> allCarrierProfiles = (Dictionary<string, CarrierProfile>)dbTableCarrierProfile.Records;
                 CarrierProfile carrierProfile = null;
+
                 if (allCarrierProfiles != null)
-                    carrierProfile = allCarrierProfiles[sourceItem.ProfileId.ToString()];
+                    allCarrierProfiles.TryGetValue(sourceItem.ProfileId.ToString(), out carrierProfile);
 
                 Dictionary<string, Currency> allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
-
                 Currency currency = null;
                 if (allCurrencies != null)
-                    currency = allCurrencies[sourceItem.CurrencyId.ToString()];
+                    allCurrencies.TryGetValue(sourceItem.CurrencyId.ToString(), out currency);
+
 
                 if (carrierProfile != null && currency != null)
                 {

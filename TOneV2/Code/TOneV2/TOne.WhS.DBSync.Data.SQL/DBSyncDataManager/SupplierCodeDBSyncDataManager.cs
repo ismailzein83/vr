@@ -49,7 +49,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, SupplierCode> GetSupplierCodes()
         {
-            return GetItemsText("SELECT Code, ZoneID, CodeGroupID, BED, EED, SourceID FROM"
+            return GetItemsText("SELECT ID,  Code, ZoneID, CodeGroupID, BED, EED, SourceID FROM"
                 + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), SupplierCodeMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 

@@ -16,7 +16,7 @@ namespace TOne.WhS.DBSync.Business
         public CurrencyExchangeRateMigrator(MigrationContext context)
             : base(context)
         {
-            dbSyncDataManager = new CurrencyExchangeRateDBSyncDataManager(context.UseTempTables);
+            dbSyncDataManager = new CurrencyExchangeRateDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceCurrencyExchangeRateDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
         }
@@ -44,7 +44,7 @@ namespace TOne.WhS.DBSync.Business
                 Dictionary<string, Currency> allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
                 Currency currency = null;
                 if (allCurrencies != null)
-                    currency = allCurrencies[sourceItem.CurrencyId.ToString()];
+                    allCurrencies.TryGetValue(sourceItem.CurrencyId, out currency);
                 if (currency != null)
                     return new CurrencyExchangeRate
                     {

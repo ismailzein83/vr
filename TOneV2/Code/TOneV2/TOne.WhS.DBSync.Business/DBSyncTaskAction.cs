@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.Data.SqlClient;
 using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
-using Vanrise.Common;
 using Vanrise.Runtime.Entities;
-using System.Linq;
-using System.Data.SqlClient;
 
 
 namespace TOne.WhS.DBSync.Business
@@ -75,6 +72,46 @@ namespace TOne.WhS.DBSync.Business
                         case DBTableName.CodeGroup:
                             CodeGroupDBSyncDataManager codeGroupDBSyncDataManager = new CodeGroupDBSyncDataManager(context.UseTempTables);
                             AddDBTable(dtTables, table, codeGroupDBSyncDataManager.GetConnection(), codeGroupDBSyncDataManager.GetSchema());
+                            break;
+
+                        case DBTableName.SupplierCode:
+                            SupplierCodeDBSyncDataManager supplierCodeDBSyncDataManager = new SupplierCodeDBSyncDataManager(context.UseTempTables);
+                            AddDBTable(dtTables, table, supplierCodeDBSyncDataManager.GetConnection(), supplierCodeDBSyncDataManager.GetSchema());
+                            break;
+
+                        case DBTableName.SupplierPriceList:
+                            SupplierPriceListDBSyncDataManager supplierPriceListDBSyncDataManager = new SupplierPriceListDBSyncDataManager(context.UseTempTables);
+                            AddDBTable(dtTables, table, supplierPriceListDBSyncDataManager.GetConnection(), supplierPriceListDBSyncDataManager.GetSchema());
+                            break;
+
+                        case DBTableName.SupplierRate:
+                            SupplierRateDBSyncDataManager supplierRateDBSyncDataManager = new SupplierRateDBSyncDataManager(context.UseTempTables);
+                            AddDBTable(dtTables, table, supplierRateDBSyncDataManager.GetConnection(), supplierRateDBSyncDataManager.GetSchema());
+                            break;
+
+                        case DBTableName.SupplierZone:
+                            SupplierZoneDBSyncDataManager supplierZoneDBSyncDataManager = new SupplierZoneDBSyncDataManager(context.UseTempTables);
+                            AddDBTable(dtTables, table, supplierZoneDBSyncDataManager.GetConnection(), supplierZoneDBSyncDataManager.GetSchema());
+                            break;
+
+                        case DBTableName.SaleCode:
+                            SaleCodeDBSyncDataManager saleCodeDBSyncDataManager = new SaleCodeDBSyncDataManager(context.UseTempTables);
+                            AddDBTable(dtTables, table, saleCodeDBSyncDataManager.GetConnection(), saleCodeDBSyncDataManager.GetSchema());
+                            break;
+
+                        case DBTableName.SalePriceList:
+                            SalePriceListDBSyncDataManager salePriceListDBSyncDataManager = new SalePriceListDBSyncDataManager(context.UseTempTables);
+                            AddDBTable(dtTables, table, salePriceListDBSyncDataManager.GetConnection(), salePriceListDBSyncDataManager.GetSchema());
+                            break;
+
+                        case DBTableName.SaleRate:
+                            SaleRateDBSyncDataManager saleRateDBSyncDataManager = new SaleRateDBSyncDataManager(context.UseTempTables);
+                            AddDBTable(dtTables, table, saleRateDBSyncDataManager.GetConnection(), saleRateDBSyncDataManager.GetSchema());
+                            break;
+
+                        case DBTableName.SaleZone:
+                            SaleZoneDBSyncDataManager saleZoneDBSyncDataManager = new SaleZoneDBSyncDataManager(context.UseTempTables);
+                            AddDBTable(dtTables, table, saleZoneDBSyncDataManager.GetConnection(), saleZoneDBSyncDataManager.GetSchema());
                             break;
 
                     }
@@ -175,6 +212,33 @@ namespace TOne.WhS.DBSync.Business
 
             CarrierAccountMigrator carrierAccountMigrator = new CarrierAccountMigrator(context);
             carrierAccountMigrator.Migrate();
+
+            SaleZoneMigrator saleZoneMigrator = new SaleZoneMigrator(context);
+            saleZoneMigrator.Migrate();
+
+            SupplierZoneMigrator supplierZoneMigrator = new SupplierZoneMigrator(context);
+            supplierZoneMigrator.Migrate();
+
+            //SupplierCodeMigrator supplierCodeMigrator = new SupplierCodeMigrator(context);
+            //supplierCodeMigrator.Migrate();
+
+            //SupplierPriceListMigrator supplierPriceListMigrator = new SupplierPriceListMigrator(context);
+            //supplierPriceListMigrator.Migrate();
+
+            //SupplierRateMigrator supplierRateMigrator = new SupplierRateMigrator(context);
+            //supplierRateMigrator.Migrate();
+
+            //SaleCodeMigrator saleCodeMigrator = new SaleCodeMigrator(context);
+            //saleCodeMigrator.Migrate();
+
+            //SalePriceListMigrator salePriceListMigrator = new SalePriceListMigrator(context);
+            //salePriceListMigrator.Migrate();
+
+            //SaleRateMigrator saleRateMigrator = new SaleRateMigrator(context);
+            //saleRateMigrator.Migrate();
+
+
+
         }
     }
 }
