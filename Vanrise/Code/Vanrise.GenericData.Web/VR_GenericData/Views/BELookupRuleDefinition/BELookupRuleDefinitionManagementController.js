@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BELookupRuleDefinitionController.$inject = ['$scope', 'VR_GenericData_BELookupRuleDefinitionService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    BELookupRuleDefinitionController.$inject = ['$scope', 'VR_GenericData_BELookupRuleDefinitionService', 'VR_GenericData_BELookupRuleDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function BELookupRuleDefinitionController($scope, VR_GenericData_BELookupRuleDefinitionService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function BELookupRuleDefinitionController($scope, VR_GenericData_BELookupRuleDefinitionService, VR_GenericData_BELookupRuleDefinitionAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var beDefinitionSelectorAPI;
         var beDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -37,6 +37,10 @@
                     gridAPI.onBELookupRuleDefinitionAdded(addedBELookupRuleDefinition);
                 };
                 VR_GenericData_BELookupRuleDefinitionService.addBELookupRuleDefinition(onBELookupRuleDefinitionAdded);
+            };
+
+            $scope.scopeModel.hasAddPermission = function () {
+                return VR_GenericData_BELookupRuleDefinitionAPIService.HasAddBELookupRuleDefinitionPermission();
             };
         }
 
@@ -73,7 +77,7 @@
                     gridLoadDeferred.reject(error);
                 });
             });
-            
+
             return gridLoadDeferred.promise;
 
             function getGridQuery() {

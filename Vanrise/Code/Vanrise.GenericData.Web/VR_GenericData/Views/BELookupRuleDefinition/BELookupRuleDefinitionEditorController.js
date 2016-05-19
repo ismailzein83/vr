@@ -62,6 +62,12 @@
                 return (isEditMode) ? updateBELookupRuleDefinition() : insertBELookupRuleDefinition();
             };
 
+            $scope.scopeModel.hasSavePermission = function () {
+                return (isEditMode) ?
+                    VR_GenericData_BELookupRuleDefinitionAPIService.HasEditBELookupRuleDefinitionPermission() :
+                    VR_GenericData_BELookupRuleDefinitionAPIService.HasAddBELookupRuleDefinitionPermission();
+            };
+
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };

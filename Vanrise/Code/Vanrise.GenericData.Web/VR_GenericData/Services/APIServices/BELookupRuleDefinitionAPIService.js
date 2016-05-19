@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BELookupRuleDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_GenericData_ModuleConfig'];
+    BELookupRuleDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_GenericData_ModuleConfig', 'SecurityService'];
 
-    function BELookupRuleDefinitionAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
+    function BELookupRuleDefinitionAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig, SecurityService) {
         var controllerName = 'BELookupRuleDefinition';
 
         function GetFilteredBELookupRuleDefinitions(input) {
@@ -31,10 +31,12 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'UpdateBELookupRuleDefinition'), beLookupRuleDefinition);
         }
 
-        function DeleteBELookupRuleDefinition(beLookupRuleDefinitionId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'DeleteBELookupRuleDefinition'), {
-                beLookupRuleDefinitionId: beLookupRuleDefinitionId
-            });
+        function HasAddBELookupRuleDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_GenericData_ModuleConfig.moduleName, controllerName, ['AddBELookupRuleDefinition']));
+        }
+
+        function HasEditBELookupRuleDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_GenericData_ModuleConfig.moduleName, controllerName, ['UpdateBELookupRuleDefinition']));
         }
 
         return {
@@ -43,7 +45,8 @@
             GetBELookupRuleDefinition: GetBELookupRuleDefinition,
             AddBELookupRuleDefinition: AddBELookupRuleDefinition,
             UpdateBELookupRuleDefinition: UpdateBELookupRuleDefinition,
-            DeleteBELookupRuleDefinition: DeleteBELookupRuleDefinition
+            HasAddBELookupRuleDefinitionPermission: HasAddBELookupRuleDefinitionPermission,
+            HasEditBELookupRuleDefinitionPermission: HasEditBELookupRuleDefinitionPermission
         };
     }
 

@@ -57,12 +57,6 @@ namespace Vanrise.GenericData.Data.SQL
             return (affectedRows > 0);
         }
 
-        public bool DeleteBELookupRuleDefinition(int beLookupRuleDefinitionId)
-        {
-            int affectedRows = ExecuteNonQuerySP("genericdata.sp_BELookupRuleDefinition_Delete", beLookupRuleDefinitionId);
-            return (affectedRows > 0);
-        }
-
         #endregion
 
         #region Mappers

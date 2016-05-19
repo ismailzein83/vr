@@ -51,12 +51,5 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.UpdateBELookupRuleDefinition(beLookupRuleDefinition);
         }
-
-        [HttpGet]
-        [Route("DeleteBELookupRuleDefinition")]
-        public Vanrise.Entities.DeleteOperationOutput<object> DeleteBELookupRuleDefinition(int beLookupRuleDefinitionId)
-        {
-            return _manager.DeleteBELookupRuleDefinition(beLookupRuleDefinitionId);
-        }
     }
 }
