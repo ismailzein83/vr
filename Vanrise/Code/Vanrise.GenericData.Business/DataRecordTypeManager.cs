@@ -236,7 +236,7 @@ namespace Vanrise.GenericData.Business
             StringBuilder globalMembersBuilder = new StringBuilder();
             foreach (var field in dataRecordType.Fields)
             {
-                globalMembersBuilder.AppendFormat("public {0} {1} { get; set; }", CSharpCompiler.TypeToString(field.Type.GetRuntimeType()), field.Name);
+                globalMembersBuilder.AppendFormat("public {0} {1} {{ get; set; }}", CSharpCompiler.TypeToString(field.Type.GetRuntimeType()), field.Name);
                 propertiesToSetSerializedBuilder.AppendFormat(", \"{0}\"", field.Name);
             }
 
