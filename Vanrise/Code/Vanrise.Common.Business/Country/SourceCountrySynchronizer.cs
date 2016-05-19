@@ -48,9 +48,9 @@ namespace Vanrise.Common.Business
             };
             return country;
         }
-        protected override Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceItemIds)
+        protected override Dictionary<string, long> GetExistingItemIds()
         {
-            return new CountryManager().GetExistingItemIds(sourceItemIds);
+            return new CountryManager().GetExistingItemIds();
         }
 
         protected override void ReserveIdRange(int nbOfIds, out long startingId)

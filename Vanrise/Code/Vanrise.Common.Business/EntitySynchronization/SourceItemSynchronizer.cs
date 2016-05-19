@@ -32,8 +32,8 @@ namespace Vanrise.Common.Business.EntitySynchronization
             if (sourceItems != null)
             {
                 Dictionary<string, long> existingItemIdsBySourceId;
-                var sourceItemIds = sourceItems.Select(itm => itm.SourceId);
-                existingItemIdsBySourceId = GetExistingItemIds(sourceItemIds);
+                //var sourceItemIds = sourceItems.Select(itm => itm.SourceId);
+                existingItemIdsBySourceId = GetExistingItemIds();
                 List<TItem> itemsToAdd = new List<TItem>();
                 List<TItem> itemsToUpdate = new List<TItem>();
                 foreach (var sourceItem in sourceItems)
@@ -74,7 +74,7 @@ namespace Vanrise.Common.Business.EntitySynchronization
                 UpdateItemUpdateHandle(itemUpdateHandle);
             }
         }
-
+            
         private void UpdateItemUpdateHandle(object itemUpdateHandle)
         {
 
@@ -88,7 +88,7 @@ namespace Vanrise.Common.Business.EntitySynchronization
 
         protected abstract TItem BuildItemFromSource(TSourceItem sourceItem);
 
-        protected abstract Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceItemIds);
+        protected abstract Dictionary<string, long> GetExistingItemIds();
 
         protected abstract void ReserveIdRange(int nbOfIds, out long startingId);
 
