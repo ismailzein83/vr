@@ -128,17 +128,17 @@
     <Compile Include="SaleRate\SaleRateDetail.cs" />
     <Compile Include="SaleRate\SaleRateQuery.cs" />
     <Compile Include="SaleZone\CallSale.cs" />
-    <Compile Include="SaleZone\SaleCodeDetail.cs" />
-    <Compile Include="SaleZone\SalePriceListQuery.cs" />
+    <Compile Include="SaleCode\SaleCodeDetail.cs" />
+    <Compile Include="SalePriceList\SalePriceListQuery.cs" />
     <Compile Include="SaleZone\SaleEntityZoneRate.cs" />
-    <Compile Include="SaleZone\SalePriceListDetail.cs" />
+    <Compile Include="SalePriceList\SalePriceListDetail.cs" />
     <Compile Include="SaleZone\SaleZoneFilterSettings.cs" />
     <Compile Include="SaleZone\SaleZoneInfoFilter.cs" />
-    <Compile Include="SaleZone\SaleCodeQuery.cs" />
+    <Compile Include="SaleCode\SaleCodeQuery.cs" />
     <Compile Include="SaleZone\SaleZoneQuery.cs" />
-    <Compile Include="SaleZone\SellingNumberPlanDetail.cs" />
-    <Compile Include="SaleZone\SellingNumberPlanInfo.cs" />
-    <Compile Include="SaleZone\SellingNumberPlanQuery.cs" />
+    <Compile Include="SellingNumberPlan\SellingNumberPlanDetail.cs" />
+    <Compile Include="SellingNumberPlan\SellingNumberPlanInfo.cs" />
+    <Compile Include="SellingNumberPlan\SellingNumberPlanQuery.cs" />
     <Compile Include="SellingProduct\CustomerSellingProductDetail.cs" />
     <Compile Include="SellingProduct\SellingProductDetail.cs" />
     <Compile Include="SellingProduct\CustomerSellingProduct.cs" />
@@ -186,15 +186,15 @@
     <Compile Include="PricingRules\SalePricingRuleDetail.cs" />
     <Compile Include="SaleZone\IRuleSaleZoneCriteria.cs" />
     <Compile Include="SaleZone\IRuleSaleZoneTarget.cs" />
-    <Compile Include="SaleZone\SalePriceList.cs" />
+    <Compile Include="SalePriceList\SalePriceList.cs" />
     <Compile Include="SaleZone\SaleZoneDetail.cs" />
     <Compile Include="SaleZone\ISaleZoneGroupContext.cs" />
     <Compile Include="SaleZone\SaleZoneInfo.cs" />
-    <Compile Include="SaleZone\SaleCode.cs" />
-    <Compile Include="SaleZone\SaleRate.cs" />
+    <Compile Include="SaleCode\SaleCode.cs" />
+    <Compile Include="SaleRate\SaleRate.cs" />
     <Compile Include="SaleZone\SaleZone.cs" />
     <Compile Include="SaleZone\SaleZoneGroupSettings.cs" />
-    <Compile Include="SaleZone\SellingNumberPlan.cs" />
+    <Compile Include="SellingNumberPlan\SellingNumberPlan.cs" />
     <Compile Include="Carriers\CarrierAccounts\CarrierAccountSupplierSettings.cs" />
     <Compile Include="Carriers\Supplier\SupplierGroupSettings.cs" />
     <Compile Include="SaleZone\SaleZonesToSellQuery.cs" />
@@ -232,9 +232,7 @@
     <Compile Include="ZoneServiceConfig\ZoneServiceConfig.cs" />
     <Compile Include="ZoneServiceConfig\ZoneServiceConfigQuery.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SellingRules\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
