@@ -1558,10 +1558,6 @@ loader .outer-loader {
     top: 11px !important;
 }
 
-.menu-with-choices {
-    top: 15px !important;
-}
-
 .vr-grid-menu-box:hover {
     opacity: 0.9;
 }
