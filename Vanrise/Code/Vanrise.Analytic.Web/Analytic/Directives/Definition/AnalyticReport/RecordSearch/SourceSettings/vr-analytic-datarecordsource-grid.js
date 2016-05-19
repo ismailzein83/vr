@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordSourceGridDirective.$inject = ['VR_GenericData_DataRecordSourceService'];
+    DataRecordSourceGridDirective.$inject = ['Analytic_RecordSearchService'];
 
-    function DataRecordSourceGridDirective(VR_GenericData_DataRecordSourceService) {
+    function DataRecordSourceGridDirective(Analytic_RecordSearchService) {
         return {
             restrict: 'E',
             scope: {
@@ -20,7 +20,7 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: '/Client/Modules/VR_GenericData/Directives/DataRecordSource/Templates/DataRecordSourceGridTemplate.html'
+            templateUrl: "/Client/Modules/Analytic/Directives/Definition/AnalyticReport/RecordSearch/SourceSettings/Templates/DataRecordSourceGridTemplate.html"
         };
 
         function DataRecordSourceGrid($scope, ctrl, $attrs) {
@@ -50,7 +50,7 @@
                         sourceObj.id = counter;
                         ctrl.sources.push(sourceObj);
                     }
-                    VR_GenericData_DataRecordSourceService.addDataRecordSource(onDataRecordSrouceAdded, getSourceNames(null));
+                    Analytic_RecordSearchService.addDataRecordSource(onDataRecordSrouceAdded, getSourceNames(null));
                 }
 
                 ctrl.removeSource = function (source) {
@@ -63,7 +63,7 @@
             function getDirectiveAPI() {
                 var api = {};
 
-                api.loadGrid = function (query) {
+                api.load = function (query) {
                     ctrl.sources.length = 0;
                     if (query) {
                         if (query.sources && query.sources.length > 0) {
@@ -74,7 +74,6 @@
                                 ctrl.sources.push(currentSource);
                             }
                         }
-                        //ctrl.sources = query.sources;
                     }
                 };
 
@@ -106,7 +105,7 @@
                     }
                 }
 
-                VR_GenericData_DataRecordSourceService.editDataRecordSource(source, getSourceNames(source), onDataRecordSrouceUpdated);
+                Analytic_RecordSearchService.editDataRecordSource(source, getSourceNames(source), onDataRecordSrouceUpdated);
             }
 
             function getSourceNames(excludedSource) {
@@ -122,6 +121,6 @@
         }
     }
 
-    app.directive('vrGenericdataDatarecordsourceGrid', DataRecordSourceGridDirective);
+    app.directive('vrAnalyticDatarecordsourceGrid', DataRecordSourceGridDirective);
 
 })(app);

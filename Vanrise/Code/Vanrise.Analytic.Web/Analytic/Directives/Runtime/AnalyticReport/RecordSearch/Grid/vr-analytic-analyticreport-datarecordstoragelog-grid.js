@@ -21,7 +21,7 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: '/Client/Modules/VR_GenericData/Directives/DataRecordStorage/Templates/DataRecordStorageLogGridTemplate.html'
+            templateUrl: "/Client/Modules/Analytic/Directives/Runtime/AnalyticReport/RecordSearch/Grid/Templates/DataRecordStorageLogGridTemplate.html"
         };
 
         function DataRecordStorageLogGrid($scope, ctrl, $attrs) {
@@ -61,7 +61,7 @@
                     getDataRecordAttributes(query).then(function () {
                         query.Columns = getColumnsName(query.GridColumns);
                          gridAPI.retrieveData(query).finally(function () {
-                            promiseDeffer.resolve();
+                             promiseDeffer.resolve();
                         }).catch(function (error) {
                             promiseDeffer.reject(error);
                         });
@@ -76,7 +76,7 @@
                 return VR_GenericData_DataRecordFieldAPIService.GetDataRecordAttributes(query.DataRecordTypeId).then(function (attributes) {
                     ctrl.columns.length = 0;
                     ctrl.sortDirection = query.sortDirection;
-
+                    
                     angular.forEach(query.GridColumns, function (column) {
                         for (var x = 0; x < attributes.length; x++) {
                             var attribute = attributes[x];
@@ -103,8 +103,8 @@
                 return columns;
             }
         }
-    }
+    } 
 
-    app.directive('vrGenericdataDatarecordstorageLogGrid', DataRecordStorageLogGridDirective);
+    app.directive('vrAnalyticAnalyticreportDatarecordstoragelogGrid', DataRecordStorageLogGridDirective);
 
 })(app);

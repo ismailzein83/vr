@@ -1,25 +1,5 @@
-﻿<!--<vr-tab header="'Search Settings'">
+﻿<vr-tab header="'Sources'">
     <vr-row>
-        <vr-columns width="1/2row">
-            <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedTables" ismultipleselection onselectionchanged="scopeModel.onTableSelectionChanged"></vr-analytic-table-selector>
-        </vr-columns>
+        <vr-analytic-datarecordsource-grid on-ready="scopeModel.onDataRecordSourceReady"></vr-analytic-datarecordsource-grid>
     </vr-row>
-    <span ng-if="scopeModel.selectedTables !=undefined && scopeModel.selectedTables.length>0" vr-loader="scopeModel.isLoadingSearchSettingsDirective">
-        <vr-analytic-realtime-searchsettings-selective on-ready="scopeModel.onSearchSettingsDirectiveReady" normal-col-num="3"></vr-analytic-realtime-searchsettings-selective>
-    </span>
 </vr-tab>
-<vr-tab header="'Widgets'">
-    <vr-row ng-if="scopeModel.selectedTables !=undefined && scopeModel.selectedTables.length>0">
-        <vr-columns width="normal">
-            <vr-button type="Add" data-onclick="scopeModel.addWidget" standalone></vr-button>
-        </vr-columns>
-        <vr-columns width="fullrow">
-            <vr-validator validate="scopeModel.isWidgetValid()">
-                <vr-datagrid datasource="scopeModel.widgets" norowhighlightonclick="true" enabledraggablerow="true"
-                             on-ready="onGridReady" ondeleterow="scopeModel.removeWidget" menuactions="scopeModel.widgetsGridMenuActions" hidegridmenu>
-                    <vr-datagridcolumn headertext="'Widget Name'" field="'widgetSettings.WidgetTitle'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
-                </vr-datagrid>
-            </vr-validator>
-        </vr-columns>
-    </vr-row>
-</vr-tab>-->

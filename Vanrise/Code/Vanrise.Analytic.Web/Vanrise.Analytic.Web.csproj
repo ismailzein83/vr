@@ -104,6 +104,7 @@
     <Content Include="Analytic\Constants\AnalyticSummaryFunctionEnum.js" />
     <Content Include="Analytic\Constants\ExpressionTypeEnum.js" />
     <Content Include="Analytic\Constants\ModuleConfig.js" />
+    <Content Include="Analytic\Constants\OrderDirectionEnum.js" />
     <Content Include="Analytic\Constants\TimeGroupingUnitEnum.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-aggregate-selector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-dimension-selector.js" />
@@ -131,7 +132,8 @@
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RealTime\Templates\RealTimeAnalyticReportTemplates.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RealTime\vr-analytic-analyticreport-realtime-definition.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RealTime\Widgets\vr-analytic-realtime-widgets-selective.js" />
-    <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\SourceSettings\vr-analytic-recordsearch-sourcesettings-selective.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\SourceSettings\Templates\DataRecordSourceGridTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\SourceSettings\vr-analytic-datarecordsource-grid.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\Templates\RecordSearchAnalyticReportTemplates.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\vr-analytic-analyticreport-recordsearch-definition.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\Templates\AnalyticReportGridTemplate.html" />
@@ -163,6 +165,8 @@
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RealTime\Chart\vr-analytic-realtime-chart-toprecords.js" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RealTime\Templates\RealTimeAnalyticReportRuntimeTemplates.html" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RealTime\vr-analytic-analyticreport-realtime-runtime.js" />
+    <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\Grid\Templates\DataRecordStorageLogGridTemplate.html" />
+    <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\Grid\vr-analytic-analyticreport-datarecordstoragelog-grid.js" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\Templates\RecordSearchAnalyticReportRuntimeTemplates.html" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\vr-analytic-analyticreport-recordsearch-runtime.js" />
     <Content Include="Analytic\Directives\Runtime\Chart\Templates\AnalyticPieChart.html" />
@@ -175,6 +179,7 @@
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\History\SearchSettings\vr-analytic-reportsearchsettings-genericsearch.js" />
     <Content Include="Analytic\Services\AnalyticItemConfigService.js" />
     <Content Include="Analytic\Services\AnalyticReportService.js" />
+    <Content Include="Analytic\Services\RecordSearchService.js" />
     <Content Include="Analytic\Services\AnalyticService.js" />
     <Content Include="Analytic\Services\AnalyticTableService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticAPIService.js" />
@@ -198,6 +203,8 @@
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticWidgetEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticReportEditor.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticReportEditorController.js" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\DataRecordSourceEditor.html" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\DataRecordSourceEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\RealTimeWidgetEditor.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\RealTimeWidgetEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Runtime\GenericAnalyticReport.html" />

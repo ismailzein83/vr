@@ -1,4 +1,4 @@
-﻿<!--<div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
+﻿<div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
     <vr-row removeline>
         <vr-columns colnum="fullrow">
             <vr-choices-filter selectedindex="selectedFilternIndex">
@@ -9,33 +9,44 @@
     </vr-row>
 
     <vr-row removeline>
-        <vr-columns colnum="2" ng-show="scopeModel.groupingDimentions != undefined && scopeModel.groupingDimentions.length>0">
-            <vr-select datatextfield="DimensionName" datavaluefield="DimensionName" label="Grouping By" isrequired="scopeModel.isGroupingRequired"
-                        entityname="Grouping" selectedvalues="scopeModel.selectedGroupingDimentions" datasource="scopeModel.groupingDimentions " ismultipleselection></vr-select>
+        <vr-columns width="normal">
+            <vr-select label="Source" datasource="drSearchPageStorageSources" selectedvalues="selectedDRSearchPageStorageSource"
+                       datavaluefield="Title" datatextfield="Title" isrequired="true" hideremoveicon onselectionchanged="onDRSearchPageStorageSourceChanged">
+            </vr-select>
+        </vr-columns>
+        <vr-columns width="normal">
+            <vr-datetimepicker label="From" value="fromDate" type="date" customvalidate="validateTimeRange()" isrequired="true"></vr-datetimepicker>
         </vr-columns>
 
-        <vr-columns colnum="2">
-            <vr-datetimepicker type="dateTime" label="From" value="scopeModel.fromdate" isrequired customvalidate="validateDateTime()"></vr-datetimepicker>
+        <vr-columns width="normal">
+            <vr-datetimepicker label="To" value="toDate" type="date" customvalidate="validateTimeRange()"></vr-datetimepicker>
         </vr-columns>
-        <vr-columns colnum="2">
-            <vr-datetimepicker type="dateTime" label="To" value="scopeModel.todate  " customvalidate="validateDateTime()"></vr-datetimepicker>
+
+        <vr-columns width="normal">
+            <vr-textbox label="Limit Result To" value="limit" type="number" decimalprecision="0" isrequired="true"></vr-textbox>
+        </vr-columns>
+
+        <vr-columns width="normal">
+            <vr-select label="Order Direction" datasource="orderDirectionList" selectedvalues="selectedOrderDirection"
+                       datavaluefield="value" datatextfield="description" isrequired="true" hideremoveicon>
+            </vr-select>
         </vr-columns>
     </vr-row>
-    <vr-row removeline  ng-if="advancedSelected">
+    <vr-row removeline ng-if="advancedSelected">
         <vr-columns width="fullrow">
             <vr-section title="Advanced Filter">
-                <vr-row ng-show="scopeModel.expression !=undefined" removeline>
-                    <vr-columns width="fullrow"><vr-label isvalue breakline>{{scopeModel.expression}}</vr-label></vr-columns>
+                <vr-row ng-show="expression !=undefined" removeline>
+                    <vr-columns width="fullrow"><vr-label isvalue breakline>{{expression}}</vr-label></vr-columns>
                 </vr-row>
                 <vr-row removeline>
                     <vr-columns width="1/4row" class="pull-right">
-                        <button type="button" class="btn btn-xs btn-primary" ng-click="scopeModel.addFilter()">
+                        <button type="button" class="btn btn-xs btn-primary" ng-click="addFilter()" ng-disabled="!selectedDRSearchPageStorageSource">
                             <i class="glyphicon glyphicon-pencil"></i> Edit Filter
                         </button>
                     </vr-columns>
 
                     <vr-columns width="1/4row" class="pull-right">
-                        <button type="button" class="btn btn-xs btn-primary" ng-click="scopeModel.resetFilter()" ng-disabled="scopeModel.expression ==undefined">
+                        <button type="button" class="btn btn-xs btn-primary" ng-click="resetFilter()" ng-disabled="expression ==undefined">
                             <i class="glyphicon glyphicon-remove"></i> Reset Filter
                         </button>
                     </vr-columns>
@@ -47,12 +58,13 @@
 <vr-row removeline>
     <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
         <div transclude-to="buttons">
-            <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
+
+            <vr-button type="Search" data-onclick="search" formname="formFilter"></vr-button>
         </div>
     </vr-actionbar>
 </vr-row>
-<vr-row ng-repeat="widget in scopeModel.widgets">
-    <vr-columns colnum="12" simplecol>
-        <vr-directivewrapper directive="widget.runtimeEditor" on-ready="widget.onDirectiveReady" normal-col-num="2"></vr-directivewrapper>
+<vr-row>
+    <vr-columns width="fullrow" simplecol>
+        <vr-analytic-analyticreport-datarecordstoragelog-grid on-ready="onGridReady"></vr-analytic-analyticreport-datarecordstoragelog-grid>
     </vr-columns>
-</vr-row>-->
+</vr-row>

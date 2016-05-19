@@ -185,7 +185,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="VR_GenericData\Constants\OrderDirectionEnum.js" />
     <Content Include="VR_GenericData\Constants\RecordFilterOperatorEnum.js" />
     <Content Include="VR_GenericData\Constants\DateTimeDataTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\IntervalTypeEnum.js" />
@@ -200,11 +199,7 @@
     <Content Include="VR_GenericData\Directives\DataRecordFieldChoice\Templates\DataRecordFieldChoiceGrid.html" />
     <Content Include="VR_GenericData\Directives\DataRecordFieldChoice\vr-genericdata-datarecordfieldchoice-grid.js" />
     <Content Include="VR_GenericData\Directives\DataRecordFieldChoice\vr-genericdata-datarecordfieldchoice-selector.js" />
-    <Content Include="VR_GenericData\Directives\DataRecordSource\Templates\DataRecordSourceGridTemplate.html" />
-    <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageLogGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageGridTemplate.html" />
-    <Content Include="VR_GenericData\Directives\DataRecordSource\vr-genericdata-datarecordsource-grid.js" />
-    <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstoragelog-grid.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-grid.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-selector.js" />
     <Content Include="VR_GenericData\Directives\DataStoreConfig\vr-genericdata-datastoreconfig-selector.js" />
@@ -451,12 +446,8 @@
     <Content Include="VR_GenericData\Views\DataRecordFieldChoice\DataRecordFieldChoiceManagementController.js" />
     <Content Include="VR_GenericData\Views\DataRecordSource\DataRecordSourceEditor.html" />
     <Content Include="VR_GenericData\Views\DataRecordSource\DataRecordSourceEditorController.js" />
-    <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageSettingsEditor.html" />
-    <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageSettingsEditorController.js" />
     <Content Include="VR_GenericData\Views\DataRecordTypeField\DataRecordTypeFieldFilterEditorController.js" />
     <Content Include="VR_GenericData\Views\DataRecordTypeField\DataRecordTypeFieldFilterEditor.html" />
-    <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageLog.html" />
-    <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageLogController.js" />
     <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageManagementController.js" />
     <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageEditor.html" />
     <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageEditorController.js" />
