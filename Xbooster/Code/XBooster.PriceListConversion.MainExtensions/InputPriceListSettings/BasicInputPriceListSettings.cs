@@ -41,7 +41,7 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
             Dictionary<string, string> zoneByZone = BuildZoneByZone(convertedExcel);
             Dictionary<string, PriceListRate> rateByZone = BuildRateByZone(convertedExcel);
             Dictionary<string, List<PriceListCode>> codesByZone = BuildCodesByZone(convertedExcel);
-            ValidateCode(codesByZone);
+            ValidateCode(codesByZone, rateByZone);
             PriceList priceListItem = ConvertToPriceList(rateByZone, codesByZone, zoneByZone);
             return priceListItem;
         }
@@ -277,7 +277,7 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
             return rateByZone;
         }
 
-        private void ValidateCode(Dictionary<string, List<PriceListCode>> codesByZone)
+        private void ValidateCode(Dictionary<string, List<PriceListCode>> codesByZone, Dictionary<string, PriceListRate> rateByZone)
         {
             foreach(var zone in codesByZone)
             {
@@ -301,6 +301,13 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                     {
                         throw new Exception(string.Format("Code {0} should not be duplicated.", code.Code));
                     }
+                }
+
+                PriceListRate rateObj = null;
+
+                if(!rateByZone.TryGetValue(zone.Key,out rateObj))
+                {
+                    throw new Exception(string.Format("Zone {0} has no rate defined.", zone.Key));
                 }
             }
         }
