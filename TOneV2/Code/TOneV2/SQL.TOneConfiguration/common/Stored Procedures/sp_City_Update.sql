@@ -5,7 +5,7 @@
 AS
 BEGIN
 
-IF NOT EXISTS(SELECT 1 FROM common.[City] WHERE ID != @ID AND Name = @Name)
+IF NOT EXISTS(SELECT 1 FROM common.[City] WHERE ID != @ID AND Name = @Name and CountryID=@CountryID)
 	BEGIN
 		Update common.[City]
 	Set Name = @Name, CountryID = @CountryID
