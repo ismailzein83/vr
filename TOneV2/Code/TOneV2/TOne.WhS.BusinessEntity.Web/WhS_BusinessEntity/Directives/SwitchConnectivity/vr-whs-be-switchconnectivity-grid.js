@@ -64,7 +64,8 @@
             function defineMenuActions() {
                 $scope.scopeModel.menuActions = [{
                     name: 'Edit',
-                    clicked: editSwitchConnectivity
+                    clicked: editSwitchConnectivity,
+                    haspermission: hasEditPermission
                 }];
 
                 function editSwitchConnectivity(dataItem) {
@@ -72,6 +73,10 @@
                         gridAPI.itemUpdated(updatedSwitchConnectivity);
                     };
                     WhS_BE_SwitchConnectivityService.editSwitchConnectivity(dataItem.Entity.SwitchConnectivityId, onSwitchConnectivityUpdated);
+                }
+
+                function hasEditPermission() {
+                    return WhS_BE_SwitchConnectivityAPIService.HasEditSwitchConnectivityPermission();
                 }
             }
         }

@@ -68,6 +68,12 @@
                 return (isEditMode) ? updateSwitchConnectivity() : insertSwitchConnectivity();
             };
 
+            $scope.scopeModel.hasSavePermission = function () {
+                return (isEditMode) ?
+                    WhS_BE_SwitchConnectivityAPIService.HasEditSwitchConnectivityPermission() :
+                    WhS_BE_SwitchConnectivityAPIService.HasAddSwitchConnectivityPermission();
+            };
+
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };

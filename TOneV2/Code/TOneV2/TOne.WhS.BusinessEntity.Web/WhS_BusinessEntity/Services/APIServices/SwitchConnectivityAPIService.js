@@ -25,11 +25,21 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'UpdateSwitchConnectivity'), switchConnectivity);
         }
 
+        function HasAddSwitchConnectivityPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['AddSwitchConnectivity']));
+        }
+
+        function HasEditSwitchConnectivityPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['UpdateSwitchConnectivity']));
+        }
+
         return ({
             GetFilteredSwitchConnectivities: GetFilteredSwitchConnectivities,
             GetSwitchConnectivity: GetSwitchConnectivity,
             AddSwitchConnectivity: AddSwitchConnectivity,
-            UpdateSwitchConnectivity: UpdateSwitchConnectivity
+            UpdateSwitchConnectivity: UpdateSwitchConnectivity,
+            HasAddSwitchConnectivityPermission: HasAddSwitchConnectivityPermission,
+            HasEditSwitchConnectivityPermission: HasEditSwitchConnectivityPermission
         });
     }
 

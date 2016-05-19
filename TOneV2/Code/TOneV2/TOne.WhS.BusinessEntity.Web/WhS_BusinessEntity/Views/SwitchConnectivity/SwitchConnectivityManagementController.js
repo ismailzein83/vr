@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwitchConnectivityManagementController.$inject = ['$scope', 'WhS_BE_SwitchConnectivityService', 'WhS_BE_SwitchConnectivityTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    SwitchConnectivityManagementController.$inject = ['$scope', 'WhS_BE_SwitchConnectivityService', 'WhS_BE_SwitchConnectivityAPIService', 'WhS_BE_SwitchConnectivityTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function SwitchConnectivityManagementController($scope, WhS_BE_SwitchConnectivityService, WhS_BE_SwitchConnectivityTypeEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function SwitchConnectivityManagementController($scope, WhS_BE_SwitchConnectivityService, WhS_BE_SwitchConnectivityAPIService, WhS_BE_SwitchConnectivityTypeEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
         var carrierAccountSelectorAPI;
         var carrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -46,6 +46,10 @@
                     gridAPI.onSwitchConnectivityAdded(addedSwitchConnectivity);
                 };
                 WhS_BE_SwitchConnectivityService.addSwitchConnectivity(onSwitchConnectivityAdded);
+            };
+
+            $scope.scopeModel.hasAddPermission = function () {
+                return WhS_BE_SwitchConnectivityAPIService.HasAddSwitchConnectivityPermission();
             };
         }
 
