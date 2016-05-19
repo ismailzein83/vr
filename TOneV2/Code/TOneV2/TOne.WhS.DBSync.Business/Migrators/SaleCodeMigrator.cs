@@ -40,7 +40,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override IEnumerable<SourceCode> GetSourceItems()
         {
-            return dataManager.GetSourceCodes(true);
+            return dataManager.GetSourceCodes(false);
         }
 
         public override SaleCode BuildItemFromSource(SourceCode sourceItem)
