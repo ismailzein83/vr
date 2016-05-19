@@ -1,7 +1,7 @@
 ﻿
 namespace TOne.WhS.DBSync.Entities
 {
-    public class SourceCountry : Vanrise.Entities.EntitySynchronization.ISourceItem
+    public class SourceCodeGroup : Vanrise.Entities.EntitySynchronization.ISourceItem
     {
 
         public string SourceId
@@ -11,5 +11,7 @@ namespace TOne.WhS.DBSync.Entities
         }
 
         public string Name { get; set; }
+
+        public string Code { get; set; }
     }
 }

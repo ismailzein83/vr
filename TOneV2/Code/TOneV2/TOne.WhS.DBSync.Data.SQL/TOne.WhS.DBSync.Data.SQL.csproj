@@ -85,7 +85,7 @@
     <Compile Include="DBSyncDataManager\SwitchDBSyncDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCarrierAccountDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCarrierProfileDataManager.cs" />
-    <Compile Include="SourceDataManger\SourceCountryDataManager.cs" />
+    <Compile Include="SourceDataManger\SourceCodeGroupDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCurrencyDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCurrencyExchangeRateDataManager.cs" />
     <Compile Include="SourceDataManger\SourceSwitchDataManager.cs" />

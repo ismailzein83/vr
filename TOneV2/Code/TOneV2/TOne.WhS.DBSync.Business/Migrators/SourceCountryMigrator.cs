@@ -8,16 +8,16 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SourceCountryMigrator : Migrator<TOne.WhS.DBSync.Entities.SourceCountry, Country>
+    public class SourceCountryMigrator : Migrator<TOne.WhS.DBSync.Entities.SourceCodeGroup, Country>
     {
         CountryDBSyncDataManager dbSyncDataManager;
-        SourceCountryDataManager dataManager;
+        SourceCodeGroupDataManager dataManager;
 
         public SourceCountryMigrator(MigrationContext context)
             : base(context)
         {
             dbSyncDataManager = new CountryDBSyncDataManager(context.UseTempTables);
-            dataManager = new SourceCountryDataManager(Context.ConnectionString);
+            dataManager = new SourceCodeGroupDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
         }
 
@@ -36,12 +36,12 @@ namespace TOne.WhS.DBSync.Business
                 dbTableCountry.Records = dbSyncDataManager.GetCountries();
         }
 
-        public override IEnumerable<TOne.WhS.DBSync.Entities.SourceCountry> GetSourceItems()
+        public override IEnumerable<TOne.WhS.DBSync.Entities.SourceCodeGroup> GetSourceItems()
         {
-            return dataManager.GetSourceCountries();
+            return dataManager.GetSourceCodeGroups();
         }
 
-        public override Country BuildItemFromSource(TOne.WhS.DBSync.Entities.SourceCountry sourceItem)
+        public override Country BuildItemFromSource(SourceCodeGroup sourceItem)
         {
             return new Country
             {

@@ -60,7 +60,7 @@
   <ItemGroup>
     <Compile Include="Common\DBTable.cs" />
     <Compile Include="SourceCarrierAccount.cs" />
-    <Compile Include="SourceCountry.cs" />
+    <Compile Include="SourceCodeGroup.cs" />
     <Compile Include="SourceCurrencyExchangeRate.cs" />
     <Compile Include="SourceCurrency.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
