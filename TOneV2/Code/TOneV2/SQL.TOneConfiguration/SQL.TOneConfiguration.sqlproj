@@ -342,7 +342,13 @@
     <Build Include="common\Stored Procedures\sp_EmailTemplate_GetAll.sql" />
     <Build Include="genericdata\Stored Procedures\sp_BELookupRuleDefinition_Update.sql" />
     <Build Include="genericdata\Stored Procedures\sp_BELookupRuleDefinition_Insert.sql" />
-    <Build Include="genericdata\Stored Procedures\sp_BELookupRuleDefinition_Delete.sql" />
+    <Build Include="genericdata\Tables\DataRecordFieldChoice.sql" />
+    <Build Include="common\Tables\Setting.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_DataRecordFieldChoice_Update.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_DataRecordFieldChoice_Insert.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_DataRecordFieldChoice_GetAll.sql" />
+    <Build Include="common\Stored Procedures\sp_Setting_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_Setting_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

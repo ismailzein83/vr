@@ -8,8 +8,11 @@
     [CreatedTime] DATETIME       CONSTRAINT [DF_AnalyticItemConfig_CreatedTime] DEFAULT (getdate()) NULL,
     [timestamp]   ROWVERSION     NULL,
     CONSTRAINT [PK_AnalyticItemConfig] PRIMARY KEY CLUSTERED ([ID] ASC),
+    CONSTRAINT [FK_AnalyticItemConfig_AnalyticTable] FOREIGN KEY ([TableId]) REFERENCES [Analytic].[AnalyticTable] ([ID]),
     CONSTRAINT [IX_AnalyticItemConfig_NameInTable] UNIQUE NONCLUSTERED ([TableId] ASC, [Name] ASC, [ItemType] ASC)
 );
+
+
 
 
 
