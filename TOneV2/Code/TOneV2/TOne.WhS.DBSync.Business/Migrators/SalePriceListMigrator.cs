@@ -11,17 +11,18 @@ namespace TOne.WhS.DBSync.Business
     {
         SalePriceListDBSyncDataManager dbSyncDataManager;
         SourcePriceListDataManager dataManager;
-        DBTable dbTableCurrency;
-        DBTable dbTableCarrierAccount;
-
+        Dictionary<string, Currency> allCurrencies;
+        Dictionary<string, CarrierAccount> allCarrierAccounts;
         public SalePriceListMigrator(MigrationContext context)
             : base(context)
         {
             dbSyncDataManager = new SalePriceListDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourcePriceListDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
-            dbTableCurrency = Context.DBTables[DBTableName.Currency];
-            dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
+            var dbTableCurrency = Context.DBTables[DBTableName.Currency];
+            var dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
+            allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
+            allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
         }
 
         public override void Migrate()
@@ -44,34 +45,27 @@ namespace TOne.WhS.DBSync.Business
 
         public override SalePriceList BuildItemFromSource(SourcePriceList sourceItem)
         {
-            if (dbTableCurrency != null && dbTableCarrierAccount != null)
-            {
-                var allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
-                Currency currency = null;
-                if (allCurrencies != null)
-                    allCurrencies.TryGetValue(sourceItem.CurrencyId, out currency);
 
-                var allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
-                CarrierAccount carrierAccount = null;
-                if (allCarrierAccounts != null)
-                    allCarrierAccounts.TryGetValue(sourceItem.CustomerId, out carrierAccount);
+            Currency currency = null;
+            if (allCurrencies != null)
+                allCurrencies.TryGetValue(sourceItem.CurrencyId, out currency);
 
 
-                if (currency != null && carrierAccount != null)
-                    return new SalePriceList
-                    {
-                        OwnerType = SalePriceListOwnerType.Customer,
-                        OwnerId = carrierAccount.CarrierAccountId,
-                        CurrencyId = currency.CurrencyId,
-                        SourceId = sourceItem.SourceId
-                    };
-                else
-                    return null;
+            CarrierAccount carrierAccount = null;
+            if (allCarrierAccounts != null)
+                allCarrierAccounts.TryGetValue(sourceItem.CustomerId, out carrierAccount);
 
-            }
+
+            if (currency != null && carrierAccount != null)
+                return new SalePriceList
+                {
+                    OwnerType = SalePriceListOwnerType.Customer,
+                    OwnerId = carrierAccount.CarrierAccountId,
+                    CurrencyId = currency.CurrencyId,
+                    SourceId = sourceItem.SourceId
+                };
             else
                 return null;
         }
-
     }
 }

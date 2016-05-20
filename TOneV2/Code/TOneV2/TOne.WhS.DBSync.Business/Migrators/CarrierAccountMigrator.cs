@@ -12,17 +12,18 @@ namespace TOne.WhS.DBSync.Business
     {
         CarrierAccountDBSyncDataManager dbSyncDataManager;
         SourceCarrierAccountDataManager dataManager;
-        DBTable dbTableCurrency;
-        DBTable dbTableCarrierProfile;
-
+        Dictionary<string, CarrierProfile> allCarrierProfiles;
+        Dictionary<string, Currency> allCurrencies;
         public CarrierAccountMigrator(MigrationContext context)
             : base(context)
         {
             dbSyncDataManager = new CarrierAccountDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceCarrierAccountDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
-            dbTableCurrency = Context.DBTables[DBTableName.Currency];
-            dbTableCarrierProfile = Context.DBTables[DBTableName.CarrierProfile];
+            var dbTableCurrency = Context.DBTables[DBTableName.Currency];
+            var dbTableCarrierProfile = Context.DBTables[DBTableName.CarrierProfile];
+            allCarrierProfiles = (Dictionary<string, CarrierProfile>)dbTableCarrierProfile.Records;
+            allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
         }
 
         public override void Migrate()
@@ -49,84 +50,78 @@ namespace TOne.WhS.DBSync.Business
             CarrierAccountCustomerSettings carrierAccountCustomerSettings = new CarrierAccountCustomerSettings();
             CarrierAccountSupplierSettings carrierAccountSupplierSettings = new CarrierAccountSupplierSettings();
 
-            if (dbTableCarrierProfile != null && dbTableCurrency != null)
+            CarrierProfile carrierProfile = null;
+
+            if (allCarrierProfiles != null)
+                allCarrierProfiles.TryGetValue(sourceItem.ProfileId.ToString(), out carrierProfile);
+
+
+            Currency currency = null;
+            if (allCurrencies != null)
+                allCurrencies.TryGetValue(sourceItem.CurrencyId.ToString(), out currency);
+
+            if (carrierProfile != null && currency != null)
             {
-                var allCarrierProfiles = (Dictionary<string, CarrierProfile>)dbTableCarrierProfile.Records;
-                CarrierProfile carrierProfile = null;
+                carrierAccountSettings.CurrencyId = currency.CurrencyId;
 
-                if (allCarrierProfiles != null)
-                    allCarrierProfiles.TryGetValue(sourceItem.ProfileId.ToString(), out carrierProfile);
-
-                var allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
-                Currency currency = null;
-                if (allCurrencies != null)
-                    allCurrencies.TryGetValue(sourceItem.CurrencyId.ToString(), out currency);
-
-                if (carrierProfile != null && currency != null)
+                switch (sourceItem.ActivationStatus)
                 {
-                    carrierAccountSettings.CurrencyId = currency.CurrencyId;
+                    case SourceActivationStatus.Active:
+                        carrierAccountSettings.ActivationStatus = ActivationStatus.Active;
+                        break;
 
-                    switch (sourceItem.ActivationStatus)
-                    {
-                        case SourceActivationStatus.Active:
-                            carrierAccountSettings.ActivationStatus = ActivationStatus.Active;
-                            break;
+                    case SourceActivationStatus.Inactive:
+                        carrierAccountSettings.ActivationStatus = ActivationStatus.Inactive;
+                        break;
 
-                        case SourceActivationStatus.Inactive:
-                            carrierAccountSettings.ActivationStatus = ActivationStatus.Inactive;
-                            break;
-
-                        case SourceActivationStatus.Testing:
-                            carrierAccountSettings.ActivationStatus = ActivationStatus.Testing;
-                            break;
-                    }
-
-                    CarrierAccountType accountType;
-
-                    switch (sourceItem.AccountType)
-                    {
-                        case SourceAccountType.Client:
-                            accountType = CarrierAccountType.Customer;
-                            break;
-
-                        case SourceAccountType.Exchange:
-                            accountType = CarrierAccountType.Exchange;
-                            break;
-
-                        case SourceAccountType.Termination:
-                            accountType = CarrierAccountType.Supplier;
-                            break;
-
-                        default:
-                            accountType = CarrierAccountType.Exchange;
-                            break;
-                    }
-
-
-                    carrierAccountSettings.Mask = sourceItem.CarrierMask;
-                    int? sellingNumberPlanId = null;
-                    if (accountType != CarrierAccountType.Supplier)
-                        sellingNumberPlanId = Context.DefaultSellingNumberPlanId;
-
-                    return new CarrierAccount
-                    {
-                        AccountType = accountType,
-                        CarrierAccountSettings = carrierAccountSettings,
-                        CarrierProfileId = carrierProfile.CarrierProfileId,
-                        CustomerSettings = carrierAccountCustomerSettings,
-                        NameSuffix = (String.IsNullOrEmpty(sourceItem.NameSuffix) ? carrierProfile.SourceId : sourceItem.NameSuffix),
-                        SellingNumberPlanId = sellingNumberPlanId,
-                        SupplierSettings = carrierAccountSupplierSettings,
-                        SourceId = sourceItem.SourceId
-                    };
+                    case SourceActivationStatus.Testing:
+                        carrierAccountSettings.ActivationStatus = ActivationStatus.Testing;
+                        break;
                 }
 
-                else
-                    return null;
+                CarrierAccountType accountType;
 
+                switch (sourceItem.AccountType)
+                {
+                    case SourceAccountType.Client:
+                        accountType = CarrierAccountType.Customer;
+                        break;
+
+                    case SourceAccountType.Exchange:
+                        accountType = CarrierAccountType.Exchange;
+                        break;
+
+                    case SourceAccountType.Termination:
+                        accountType = CarrierAccountType.Supplier;
+                        break;
+
+                    default:
+                        accountType = CarrierAccountType.Exchange;
+                        break;
+                }
+
+
+                carrierAccountSettings.Mask = sourceItem.CarrierMask;
+                int? sellingNumberPlanId = null;
+                if (accountType != CarrierAccountType.Supplier)
+                    sellingNumberPlanId = Context.DefaultSellingNumberPlanId;
+
+                return new CarrierAccount
+                {
+                    AccountType = accountType,
+                    CarrierAccountSettings = carrierAccountSettings,
+                    CarrierProfileId = carrierProfile.CarrierProfileId,
+                    CustomerSettings = carrierAccountCustomerSettings,
+                    NameSuffix = (String.IsNullOrEmpty(sourceItem.NameSuffix) ? carrierProfile.SourceId : sourceItem.NameSuffix),
+                    SellingNumberPlanId = sellingNumberPlanId,
+                    SupplierSettings = carrierAccountSupplierSettings,
+                    SourceId = sourceItem.SourceId
+                };
             }
+
             else
                 return null;
+
         }
     }
 }

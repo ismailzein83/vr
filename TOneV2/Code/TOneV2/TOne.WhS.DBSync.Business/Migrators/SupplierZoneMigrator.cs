@@ -14,8 +14,8 @@ namespace TOne.WhS.DBSync.Business
     {
         SupplierZoneDBSyncDataManager dbSyncDataManager;
         SourceZoneDataManager dataManager;
-        DBTable dbTableCarrierAccount;
-        DBTable dbTableCountry;
+        Dictionary<string, CarrierAccount> allCarrierAccounts;
+        Dictionary<string, Country> allCountries;
 
         public SupplierZoneMigrator(MigrationContext context)
             : base(context)
@@ -23,8 +23,10 @@ namespace TOne.WhS.DBSync.Business
             dbSyncDataManager = new SupplierZoneDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceZoneDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
-            dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
-            dbTableCountry = Context.DBTables[DBTableName.Country];
+            var dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
+            var dbTableCountry = Context.DBTables[DBTableName.Country];
+            allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
+            allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
         }
 
         public override void Migrate()
@@ -49,32 +51,24 @@ namespace TOne.WhS.DBSync.Business
 
         public override SupplierZone BuildItemFromSource(SourceZone sourceItem)
         {
-            if (dbTableCountry != null && dbTableCarrierAccount != null)
-            {
-                var allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
-                CarrierAccount carrierAccount = null;
-                if (allCarrierAccounts != null)
-                    allCarrierAccounts.TryGetValue(sourceItem.SupplierId, out carrierAccount);
+            CarrierAccount carrierAccount = null;
+            if (allCarrierAccounts != null)
+                allCarrierAccounts.TryGetValue(sourceItem.SupplierId, out carrierAccount);
 
-                var allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
-                Country country = null;
-                if (allCountries != null)
-                    allCountries.TryGetValue(sourceItem.CodeGroup, out country);
+            Country country = null;
+            if (allCountries != null)
+                allCountries.TryGetValue(sourceItem.CodeGroup, out country);
 
-                if (country != null && carrierAccount != null)
-                    return new SupplierZone
-                    {
-                        SupplierId = carrierAccount.CarrierAccountId,
-                        BED = sourceItem.BED,
-                        CountryId = country.CountryId,
-                        EED = sourceItem.EED,
-                        Name = sourceItem.Name,
-                        SourceId = sourceItem.SourceId
-                    };
-                else
-                    return null;
-
-            }
+            if (country != null && carrierAccount != null)
+                return new SupplierZone
+                {
+                    SupplierId = carrierAccount.CarrierAccountId,
+                    BED = sourceItem.BED,
+                    CountryId = country.CountryId,
+                    EED = sourceItem.EED,
+                    Name = sourceItem.Name,
+                    SourceId = sourceItem.SourceId
+                };
             else
                 return null;
         }

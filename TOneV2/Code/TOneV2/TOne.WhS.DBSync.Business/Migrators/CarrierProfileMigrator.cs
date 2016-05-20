@@ -14,15 +14,16 @@ namespace TOne.WhS.DBSync.Business
     {
         CarrierProfileDBSyncDataManager dbSyncDataManager;
         SourceCarrierProfileDataManager dataManager;
-        DBTable dbTableCountry;
-
+        VRFileManager vrFileManager = new VRFileManager();
+        Dictionary<string, Country> allCountries;
         public CarrierProfileMigrator(MigrationContext context)
             : base(context)
         {
             dbSyncDataManager = new CarrierProfileDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceCarrierProfileDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
-            dbTableCountry = Context.DBTables[DBTableName.Country];
+            var dbTableCountry = Context.DBTables[DBTableName.Country];
+            allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
         }
 
         public override void Migrate()
@@ -45,23 +46,16 @@ namespace TOne.WhS.DBSync.Business
 
         public override CarrierProfile BuildItemFromSource(SourceCarrierProfile sourceItem)
         {
-            VRFileManager vrFileManager = new VRFileManager();
-
             int? countryId = null;
 
-            if (dbTableCountry != null)
+            Country country = null;
+
+            if (allCountries != null && !string.IsNullOrWhiteSpace(string.Empty))
+                country = allCountries.Values.Where(x => x.Name == sourceItem.Country).FirstOrDefault();
+            if (country != null)
             {
-                var allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
-                Country country = null;
-
-                if (allCountries != null && !string.IsNullOrWhiteSpace(string.Empty))
-                    country = allCountries.Values.Where(x => x.Name == sourceItem.Country).FirstOrDefault();
-                if (country != null)
-                {
-                    countryId = country.CountryId;
-                }
+                countryId = country.CountryId;
             }
-
 
             CarrierProfileSettings settings = new CarrierProfileSettings();
             settings.Address = sourceItem.Address1;

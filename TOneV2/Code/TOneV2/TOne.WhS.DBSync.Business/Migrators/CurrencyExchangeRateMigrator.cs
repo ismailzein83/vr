@@ -11,8 +11,7 @@ namespace TOne.WhS.DBSync.Business
     {
         CurrencyExchangeRateDBSyncDataManager dbSyncDataManager;
         SourceCurrencyExchangeRateDataManager dataManager;
-        DBTable dbTableCurrency;
-
+        Dictionary<string, Currency> allCurrencies;
 
         public CurrencyExchangeRateMigrator(MigrationContext context)
             : base(context)
@@ -20,7 +19,8 @@ namespace TOne.WhS.DBSync.Business
             dbSyncDataManager = new CurrencyExchangeRateDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceCurrencyExchangeRateDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
-            dbTableCurrency = Context.DBTables[DBTableName.Currency];
+            var dbTableCurrency = Context.DBTables[DBTableName.Currency];
+            allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
         }
 
         public override void Migrate()
@@ -40,24 +40,18 @@ namespace TOne.WhS.DBSync.Business
 
         public override CurrencyExchangeRate BuildItemFromSource(SourceCurrencyExchangeRate sourceItem)
         {
-            if (dbTableCurrency != null)
-            {
-                var allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
-                Currency currency = null;
-                if (allCurrencies != null)
-                    allCurrencies.TryGetValue(sourceItem.CurrencyId, out currency);
-                if (currency != null)
-                    return new CurrencyExchangeRate
-                    {
-                        CurrencyId = currency.CurrencyId,
-                        ExchangeDate = (sourceItem.ExchangeDate.HasValue ? sourceItem.ExchangeDate.Value : DateTime.Now),
-                        Rate = (sourceItem.Rate.HasValue ? sourceItem.Rate.Value : Decimal.MinValue),
-                        SourceId = sourceItem.SourceId
-                    };
-                else
-                    return null;
 
-            }
+            Currency currency = null;
+            if (allCurrencies != null)
+                allCurrencies.TryGetValue(sourceItem.CurrencyId, out currency);
+            if (currency != null)
+                return new CurrencyExchangeRate
+                {
+                    CurrencyId = currency.CurrencyId,
+                    ExchangeDate = (sourceItem.ExchangeDate.HasValue ? sourceItem.ExchangeDate.Value : DateTime.Now),
+                    Rate = (sourceItem.Rate.HasValue ? sourceItem.Rate.Value : Decimal.MinValue),
+                    SourceId = sourceItem.SourceId
+                };
             else
                 return null;
         }

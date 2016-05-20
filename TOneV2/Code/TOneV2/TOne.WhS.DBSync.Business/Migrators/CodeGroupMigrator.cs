@@ -11,7 +11,7 @@ namespace TOne.WhS.DBSync.Business
     {
         CodeGroupDBSyncDataManager dbSyncDataManager;
         SourceCodeGroupDataManager dataManager;
-        DBTable dbTableCountry;
+        Dictionary<string, Country> allCountries;
 
         public CodeGroupMigrator(MigrationContext context)
             : base(context)
@@ -19,7 +19,8 @@ namespace TOne.WhS.DBSync.Business
             dbSyncDataManager = new CodeGroupDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceCodeGroupDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
-            dbTableCountry = Context.DBTables[DBTableName.Country];
+            var dbTableCountry = Context.DBTables[DBTableName.Country];
+            allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
         }
 
         public override void Migrate()
@@ -42,26 +43,19 @@ namespace TOne.WhS.DBSync.Business
 
         public override CodeGroup BuildItemFromSource(SourceCodeGroup sourceItem)
         {
-            if (dbTableCountry != null)
-            {
-                var allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
-                Country country = null;
-                if (allCountries != null)
-                    allCountries.TryGetValue(sourceItem.SourceId, out country);
-                if (country != null)
-                    return new CodeGroup
-            {
-                Code = sourceItem.Code,
-                CountryId = country.CountryId,
-                SourceId = sourceItem.SourceId
-            };
-                else
-                    return null;
 
-            }
+            Country country = null;
+            if (allCountries != null)
+                allCountries.TryGetValue(sourceItem.SourceId, out country);
+            if (country != null)
+                return new CodeGroup
+                            {
+                                Code = sourceItem.Code,
+                                CountryId = country.CountryId,
+                                SourceId = sourceItem.SourceId
+                            };
             else
                 return null;
         }
-
     }
 }

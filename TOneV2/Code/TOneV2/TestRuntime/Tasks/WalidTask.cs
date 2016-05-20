@@ -18,7 +18,7 @@ namespace TestRuntime.Tasks
 
 
             DBSyncTaskActionArgument taskActionArgument = new DBSyncTaskActionArgument();
-            taskActionArgument.ConnectionString = "Server=192.168.110.185;Database=MVTSPro;User ID=development;Password=dev!123";
+            taskActionArgument.ConnectionString = "Server=192.168.110.185;Database=ToneDevTest01;User ID=development;Password=dev!123";
             taskActionArgument.DefaultSellingNumberPlanId = 16;
             taskActionArgument.UseTempTables = true;
             DBSyncTaskAction dbSyncTaskAction = new DBSyncTaskAction();

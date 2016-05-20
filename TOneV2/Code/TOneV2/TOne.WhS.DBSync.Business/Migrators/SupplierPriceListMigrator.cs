@@ -16,17 +16,19 @@ namespace TOne.WhS.DBSync.Business
         SupplierPriceListDBSyncDataManager dbSyncDataManager;
         SourcePriceListDataManager dataManager;
         VRFileManager vrFileManager = new VRFileManager();
-        DBTable dbTableCurrency;
-        DBTable dbTableCarrierAccount;
-
+        Dictionary<string, Currency> allCurrencies;
+        Dictionary<string, CarrierAccount> allCarrierAccounts;
         public SupplierPriceListMigrator(MigrationContext context)
             : base(context)
         {
             dbSyncDataManager = new SupplierPriceListDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourcePriceListDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
-            dbTableCurrency = Context.DBTables[DBTableName.Currency];
-            dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
+            var dbTableCurrency = Context.DBTables[DBTableName.Currency];
+            var dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
+            allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
+            allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
+
         }
 
         public override void Migrate()
@@ -51,47 +53,38 @@ namespace TOne.WhS.DBSync.Business
 
         public override SupplierPriceList BuildItemFromSource(SourcePriceList sourceItem)
         {
-            if (dbTableCurrency != null && dbTableCarrierAccount != null)
+            Currency currency = null;
+            if (allCurrencies != null)
+                allCurrencies.TryGetValue(sourceItem.CurrencyId, out currency);
+
+            CarrierAccount carrierAccount = null;
+            if (allCarrierAccounts != null)
+                allCarrierAccounts.TryGetValue(sourceItem.SupplierId, out carrierAccount);
+
+            long? fileId = null;
+            if (sourceItem.SourceFileBytes != null)
             {
-                var allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
-                Currency currency = null;
-                if (allCurrencies != null)
-                    allCurrencies.TryGetValue(sourceItem.CurrencyId, out currency);
-
-                var allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
-                CarrierAccount carrierAccount = null;
-                if (allCarrierAccounts != null)
-                    allCarrierAccounts.TryGetValue(sourceItem.SupplierId, out carrierAccount);
-
-                long? fileId = null;
-
-                if (sourceItem.SourceFileBytes != null)
+                string[] nameastab = sourceItem.SourceFileName.Split('.');
+                VRFile file = new VRFile()
                 {
-                    string[] nameastab = sourceItem.SourceFileName.Split('.');
-                    VRFile file = new VRFile()
-                    {
-                        Content = sourceItem.SourceFileBytes,
-                        Name = sourceItem.SourceFileName,
-                        Extension = nameastab[nameastab.Length - 1],
-                        CreatedTime = DateTime.Now
+                    Content = sourceItem.SourceFileBytes,
+                    Name = sourceItem.SourceFileName,
+                    Extension = nameastab[nameastab.Length - 1],
+                    CreatedTime = DateTime.Now
 
-                    };
+                };
 
-                    fileId = vrFileManager.AddFile(file);
-                }
-
-                if (currency != null && carrierAccount != null && fileId.HasValue)
-                    return new SupplierPriceList
-                    {
-                        FileId = fileId.Value,
-                        SupplierId = carrierAccount.CarrierAccountId,
-                        CurrencyId = currency.CurrencyId,
-                        SourceId = sourceItem.SourceId
-                    };
-                else
-                    return null;
-
+                fileId = vrFileManager.AddFile(file);
             }
+
+            if (currency != null && carrierAccount != null && fileId.HasValue)
+                return new SupplierPriceList
+                {
+                    FileId = fileId.Value,
+                    SupplierId = carrierAccount.CarrierAccountId,
+                    CurrencyId = currency.CurrencyId,
+                    SourceId = sourceItem.SourceId
+                };
             else
                 return null;
         }

@@ -14,7 +14,7 @@ namespace TOne.WhS.DBSync.Business
     {
         SaleZoneDBSyncDataManager dbSyncDataManager;
         SourceZoneDataManager dataManager;
-        DBTable dbTableCountry;
+        Dictionary<string, Country> allCountries;
 
         public SaleZoneMigrator(MigrationContext context)
             : base(context)
@@ -22,7 +22,8 @@ namespace TOne.WhS.DBSync.Business
             dbSyncDataManager = new SaleZoneDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceZoneDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
-            dbTableCountry = Context.DBTables[DBTableName.Country];
+            var dbTableCountry = Context.DBTables[DBTableName.Country];
+            allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
         }
 
         public override void Migrate()
@@ -47,27 +48,19 @@ namespace TOne.WhS.DBSync.Business
 
         public override SaleZone BuildItemFromSource(SourceZone sourceItem)
         {
-           
-            if (dbTableCountry != null)
-            {
-                var allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
-                Country country = null;
-                if (allCountries != null)
-                    allCountries.TryGetValue(sourceItem.CodeGroup, out country);
-                if (country != null)
-                    return new SaleZone
-                        {
-                            SellingNumberPlanId = Context.DefaultSellingNumberPlanId,
-                            BED = sourceItem.BED,
-                            CountryId = country.CountryId,
-                            EED = sourceItem.EED,
-                            Name = sourceItem.Name,
-                            SourceId = sourceItem.SourceId
-                        };
-                else
-                    return null;
-
-            }
+            Country country = null;
+            if (allCountries != null)
+                allCountries.TryGetValue(sourceItem.CodeGroup, out country);
+            if (country != null)
+                return new SaleZone
+                    {
+                        SellingNumberPlanId = Context.DefaultSellingNumberPlanId,
+                        BED = sourceItem.BED,
+                        CountryId = country.CountryId,
+                        EED = sourceItem.EED,
+                        Name = sourceItem.Name,
+                        SourceId = sourceItem.SourceId
+                    };
             else
                 return null;
         }

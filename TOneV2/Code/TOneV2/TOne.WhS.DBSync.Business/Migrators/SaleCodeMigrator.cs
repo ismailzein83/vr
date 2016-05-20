@@ -13,18 +13,18 @@ namespace TOne.WhS.DBSync.Business
     {
         SaleCodeDBSyncDataManager dbSyncDataManager;
         SourceCodeDataManager dataManager;
-        DBTable dbTableSaleZone;
-        DBTable dbTableCodeGroup;
-
-
+        Dictionary<string, SaleZone> allSaleZones;
+        Dictionary<string, CodeGroup> allCodeGroups;
         public SaleCodeMigrator(MigrationContext context)
             : base(context)
         {
             dbSyncDataManager = new SaleCodeDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceCodeDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
-            dbTableSaleZone = Context.DBTables[DBTableName.SaleZone];
-            dbTableCodeGroup = Context.DBTables[DBTableName.CodeGroup];
+            var dbTableSaleZone = Context.DBTables[DBTableName.SaleZone];
+            var dbTableCodeGroup = Context.DBTables[DBTableName.CodeGroup];
+            allSaleZones = (Dictionary<string, SaleZone>)dbTableSaleZone.Records;
+            allCodeGroups = (Dictionary<string, CodeGroup>)dbTableCodeGroup.Records;
         }
 
         public override void Migrate()
@@ -46,33 +46,24 @@ namespace TOne.WhS.DBSync.Business
 
         public override SaleCode BuildItemFromSource(SourceCode sourceItem)
         {
-            if (dbTableSaleZone != null && dbTableCodeGroup != null)
-            {
-                var allSaleZones = (Dictionary<string, SaleZone>)dbTableSaleZone.Records;
-                var allCodeGroups = (Dictionary<string, CodeGroup>)dbTableCodeGroup.Records;
+            SaleZone saleZone = null;
+            if (allSaleZones != null)
+                allSaleZones.TryGetValue(sourceItem.ZoneId.ToString(), out saleZone);
 
-                SaleZone saleZone = null;
-                if (allSaleZones != null)
-                    allSaleZones.TryGetValue(sourceItem.ZoneId.ToString(), out saleZone);
+            CodeGroup codeGroup = null;
+            if (allCodeGroups != null)
+                allCodeGroups.TryGetValue(sourceItem.CodeGroup, out codeGroup);
 
-                CodeGroup codeGroup = null;
-                if (allCodeGroups != null)
-                    allCodeGroups.TryGetValue(sourceItem.CodeGroup, out codeGroup);
-
-                if (codeGroup != null & saleZone != null)
-                    return new SaleCode
-                        {
-                            Code = sourceItem.Code,
-                            BED = sourceItem.BeginEffectiveDate,
-                            CodeGroupId = codeGroup.CodeGroupId,
-                            EED = sourceItem.EndEffectiveDate,
-                            ZoneId = saleZone.SaleZoneId,
-                            SourceId = sourceItem.SourceId
-                        };
-                else
-                    return null;
-
-            }
+            if (codeGroup != null & saleZone != null)
+                return new SaleCode
+                    {
+                        Code = sourceItem.Code,
+                        BED = sourceItem.BeginEffectiveDate,
+                        CodeGroupId = codeGroup.CodeGroupId,
+                        EED = sourceItem.EndEffectiveDate,
+                        ZoneId = saleZone.SaleZoneId,
+                        SourceId = sourceItem.SourceId
+                    };
             else
                 return null;
         }

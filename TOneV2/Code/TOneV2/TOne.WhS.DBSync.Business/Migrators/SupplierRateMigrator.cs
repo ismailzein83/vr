@@ -14,19 +14,21 @@ namespace TOne.WhS.DBSync.Business
     {
         SupplierRateDBSyncDataManager dbSyncDataManager;
         SourceRateDataManager dataManager;
-        DBTable dbTableSupplierZone;
-        DBTable dbTableSupplierPriceList;
-        DBTable dbTableCurrency;
-
+        Dictionary<string, SupplierZone> allSupplierZones;
+        Dictionary<string, SupplierPriceList> allSupplierPriceLists;
+        Dictionary<string, Currency> allCurrencies;
         public SupplierRateMigrator(MigrationContext context)
             : base(context)
         {
             dbSyncDataManager = new SupplierRateDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceRateDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
-            dbTableSupplierZone = Context.DBTables[DBTableName.SupplierZone];
-            dbTableSupplierPriceList = Context.DBTables[DBTableName.SupplierPriceList];
-            dbTableCurrency = Context.DBTables[DBTableName.Currency];
+            var dbTableSupplierZone = Context.DBTables[DBTableName.SupplierZone];
+            var dbTableSupplierPriceList = Context.DBTables[DBTableName.SupplierPriceList];
+            var dbTableCurrency = Context.DBTables[DBTableName.Currency];
+            allSupplierZones = (Dictionary<string, SupplierZone>)dbTableSupplierZone.Records;
+            allSupplierPriceLists = (Dictionary<string, SupplierPriceList>)dbTableSupplierPriceList.Records;
+            allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
         }
 
         public override void Migrate()
@@ -48,47 +50,37 @@ namespace TOne.WhS.DBSync.Business
 
         public override SupplierRate BuildItemFromSource(SourceRate sourceItem)
         {
+            SupplierZone supplierZone = null;
+            SupplierPriceList supplierPriceList = null;
+            Currency currency = null;
+            if (allCurrencies != null)
+                allCurrencies.TryGetValue(sourceItem.CurrencyId, out currency);
+            if (allSupplierPriceLists != null && sourceItem.PriceListId.HasValue)
+                allSupplierPriceLists.TryGetValue(sourceItem.PriceListId.Value.ToString(), out supplierPriceList);
 
-            if (dbTableCurrency != null && dbTableSupplierPriceList != null && dbTableSupplierZone != null)
-            {
-                var allSupplierZones = (Dictionary<string, SupplierZone>)dbTableSupplierZone.Records;
-                var allSupplierPriceLists = (Dictionary<string, SupplierPriceList>)dbTableSupplierPriceList.Records;
-                var allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
-                SupplierZone supplierZone = null;
-                SupplierPriceList supplierPriceList = null;
-                Currency currency = null;
-                if (allCurrencies != null)
-                    allCurrencies.TryGetValue(sourceItem.CurrencyId, out currency);
-                if (allSupplierPriceLists != null && sourceItem.PriceListId.HasValue)
-                    allSupplierPriceLists.TryGetValue(sourceItem.PriceListId.Value.ToString(), out supplierPriceList);
-
-                if (allSupplierZones != null && sourceItem.ZoneId.HasValue)
-                    allSupplierZones.TryGetValue(sourceItem.ZoneId.Value.ToString(), out supplierZone);
+            if (allSupplierZones != null && sourceItem.ZoneId.HasValue)
+                allSupplierZones.TryGetValue(sourceItem.ZoneId.Value.ToString(), out supplierZone);
 
 
-                Dictionary<int, decimal> otherRates = new Dictionary<int, decimal>();
-                if (sourceItem.OffPeakRate.HasValue)
-                    otherRates.Add((int)RateTypeEnum.OffPeak, sourceItem.OffPeakRate.Value);
+            Dictionary<int, decimal> otherRates = new Dictionary<int, decimal>();
+            if (sourceItem.OffPeakRate.HasValue)
+                otherRates.Add((int)RateTypeEnum.OffPeak, sourceItem.OffPeakRate.Value);
 
-                if (sourceItem.WeekendRate.HasValue)
-                    otherRates.Add((int)RateTypeEnum.Weekend, sourceItem.WeekendRate.Value);
+            if (sourceItem.WeekendRate.HasValue)
+                otherRates.Add((int)RateTypeEnum.Weekend, sourceItem.WeekendRate.Value);
 
-                if (supplierZone != null && supplierPriceList != null && currency != null && sourceItem.BeginEffectiveDate.HasValue && sourceItem.Rate.HasValue)
-                    return new SupplierRate
-                    {
-                        BED = sourceItem.BeginEffectiveDate.Value,
-                        EED = sourceItem.EndEffectiveDate,
-                        NormalRate = sourceItem.Rate.Value,
-                        CurrencyId = currency.CurrencyId,
-                        PriceListId = supplierPriceList.PriceListId,
-                        OtherRates = otherRates,
-                        ZoneId = supplierZone.SupplierZoneId,
-                        SourceId = sourceItem.SourceId
-                    };
-                else
-                    return null;
-
-            }
+            if (supplierZone != null && supplierPriceList != null && currency != null && sourceItem.BeginEffectiveDate.HasValue && sourceItem.Rate.HasValue)
+                return new SupplierRate
+                {
+                    BED = sourceItem.BeginEffectiveDate.Value,
+                    EED = sourceItem.EndEffectiveDate,
+                    NormalRate = sourceItem.Rate.Value,
+                    CurrencyId = currency.CurrencyId,
+                    PriceListId = supplierPriceList.PriceListId,
+                    OtherRates = otherRates,
+                    ZoneId = supplierZone.SupplierZoneId,
+                    SourceId = sourceItem.SourceId
+                };
             else
                 return null;
         }
