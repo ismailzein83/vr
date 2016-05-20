@@ -47,6 +47,33 @@ namespace TOne.WhS.Routing.Business
             else
                 return null;
         }
+        public SaleCodeMatchWithMaster GetSaleCodeMatchWithMaster(string number, int? customerId, DateTime effectiveOn)
+        {
+            SaleCodeMatchWithMaster codeMatch = new SaleCodeMatchWithMaster();
+            SellingNumberPlanManager numberPlanManager = new SellingNumberPlanManager();
+            var masterNumberPlan = numberPlanManager.GetMasterSellingNumberPlan();
+            if (masterNumberPlan == null)
+                throw new NullReferenceException("masterNumberPlan");
+
+            SaleCodeIterator masterCodeIterator = GetSellingNumberPlanSaleCodeIterator(masterNumberPlan.SellingNumberPlanId, effectiveOn);
+            if (masterCodeIterator != null)
+                codeMatch.MasterPlanCodeMatch = masterCodeIterator.GetCodeMatch(number, false);
+            if(customerId.HasValue)
+            {
+                var carrierAccountManager = new CarrierAccountManager();
+                var customerNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(customerId.Value);
+                codeMatch.CustomerSellingNumberPlanId = customerNumberPlanId;
+                if (customerNumberPlanId == masterNumberPlan.SellingNumberPlanId)
+                    codeMatch.SaleCodeMatch = codeMatch.MasterPlanCodeMatch;
+                else
+                {
+                    var saleCodeIterator = GetSellingNumberPlanSaleCodeIterator(customerNumberPlanId, effectiveOn);
+                    if (saleCodeIterator != null)
+                        codeMatch.SaleCodeMatch = saleCodeIterator.GetCodeMatch(number, false);
+                }
+            }
+            return codeMatch;
+        }
 
         public SupplierCodeMatch GetSupplierCodeMatch(string number, int supplierId, DateTime effectiveOn)
         {
@@ -159,11 +186,8 @@ namespace TOne.WhS.Routing.Business
 
         private SaleCodeIterator GetCustomerSaleCodeIterator(int customerId, DateTime effectiveOn)
         {
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            var customerAccount = carrierAccountManager.GetCarrierAccount(customerId);
-            if (customerAccount == null || customerAccount.SellingNumberPlanId == null)
-                return null;
-            int sellingNumberPlanId = (int)customerAccount.SellingNumberPlanId;
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();         
+            int sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(customerId);
             return GetSellingNumberPlanSaleCodeIterator(sellingNumberPlanId, effectiveOn);
            
         }

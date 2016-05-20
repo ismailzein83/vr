@@ -48,8 +48,11 @@ app.directive('vrWhsRoutingDatatransformationSalecodematchPreview', ['UtilsServi
                             ctrl.number = payload.stepDetails.Number
                             ctrl.customerId = payload.stepDetails.CustomerId;
                             ctrl.effectiveOn = payload.stepDetails.EffectiveOn;
+                            ctrl.customerSellingNumberPlanId = payload.stepDetails.CustomerSellingNumberPlanId;
                             ctrl.saleCode = payload.stepDetails.SaleCode;
                             ctrl.saleZoneId = payload.stepDetails.SaleZoneId;
+                            ctrl.masterSaleCode = payload.stepDetails.MasterSaleCode;
+                            ctrl.masterSaleZoneId = payload.stepDetails.MasterSaleZoneId;
                         }
                         checkValidation();
                     }
@@ -60,8 +63,11 @@ app.directive('vrWhsRoutingDatatransformationSalecodematchPreview', ['UtilsServi
                     ctrl.number = changes.Number;
                     ctrl.customerId = changes.CustomerId;
                     ctrl.effectiveOn = changes.EffectiveOn;
+                    ctrl.customerSellingNumberPlanId = changes.CustomerSellingNumberPlanId;
                     ctrl.saleCode = changes.SaleCode;
                     ctrl.saleZoneId = changes.SaleZoneId;
+                    ctrl.masterSaleCode = changes.MasterSaleCode;
+                    ctrl.masterSaleZoneId = changes.MasterSaleZoneId;
                     stepObj.stepDetails = changes;
                 }
 
@@ -81,17 +87,8 @@ app.directive('vrWhsRoutingDatatransformationSalecodematchPreview', ['UtilsServi
                 if (ctrl.number == undefined) {
                     return "Missing number mapping.";
                 }
-                if (ctrl.customerId == undefined) {
-                    return "Missing customerId mapping.";
-                }
                 if (ctrl.effectiveOn == undefined) {
                     return "Missing effectiveOn mapping.";
-                }
-                if (ctrl.saleCode == undefined) {
-                    return "Missing saleCode mapping.";
-                }
-                if (ctrl.saleZoneId == undefined) {
-                    return "Missing saleZoneId mapping.";
                 }
                 return null;
             }

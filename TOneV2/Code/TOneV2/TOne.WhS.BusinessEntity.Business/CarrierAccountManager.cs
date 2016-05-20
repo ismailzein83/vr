@@ -202,12 +202,16 @@ namespace TOne.WhS.BusinessEntity.Business
             return updateOperationOutput;
         }
         
-        public int GetSellingNumberPlanId(int carrierAccountId, CarrierAccountType carrierAccountType)
+        public int GetSellingNumberPlanId(int carrierAccountId, CarrierAccountType carrierAccountType = CarrierAccountType.Customer)
         {
-            if (carrierAccountType == CarrierAccountType.Supplier)
-                return -1;
-
-            return (int)this.GetCarrierAccount(carrierAccountId).SellingNumberPlanId;
+            var carrierAccount = GetCarrierAccount(carrierAccountId);
+            if (carrierAccount == null)
+                throw new NullReferenceException(String.Format("carrierAccount '{0}'", carrierAccountId));
+            if (!IsCustomer(carrierAccount))
+                throw new Exception(String.Format("Carrier Account '{0}' is not Customer", carrierAccountId));
+            if (!carrierAccount.SellingNumberPlanId.HasValue)
+                throw new NullReferenceException(String.Format("carrierAccount.SellingNumberPlanId. CarrierAccountId '{0}'", carrierAccountId));
+            return carrierAccount.SellingNumberPlanId.Value; 
         }
         
         public IEnumerable<RoutingCustomerInfo> GetRoutingActiveCustomers()
@@ -325,8 +329,8 @@ namespace TOne.WhS.BusinessEntity.Business
         
         private bool ShouldSelectCarrierAccount(CarrierAccount carrierAccount, bool getCustomers, bool getSuppliers, HashSet<int> filteredSupplierIds, HashSet<int> filteredCustomerIds)
         {
-            bool isSupplier = carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange;
-            bool isCustomer = carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange;
+            bool isSupplier = IsSupplier(carrierAccount);
+            bool isCustomer = IsCustomer(carrierAccount);
             if (getCustomers && getSuppliers)
                 return true;
             if (getCustomers && !isCustomer)
@@ -338,6 +342,16 @@ namespace TOne.WhS.BusinessEntity.Business
             if (isCustomer && filteredCustomerIds != null && !filteredCustomerIds.Contains(carrierAccount.CarrierAccountId))
                 return false;
             return true;
+        }
+
+        private static bool IsCustomer(CarrierAccount carrierAccount)
+        {
+            return carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange;            
+        }
+
+        private bool IsSupplier(CarrierAccount carrierAccount)
+        {
+            return carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange;
         }
 
         private IEnumerable<CarrierAccount> GetCarrierAccountsByType(bool getCustomers, bool getSuppliers, SupplierFilterSettings supplierFilterSettings, CustomerFilterSettings customerFilterSettings)

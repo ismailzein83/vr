@@ -145,6 +145,15 @@ namespace TOne.WhS.BusinessEntity.Business
             return false;
         }
 
+        public SellingNumberPlan GetMasterSellingNumberPlan()
+        {
+            var allNumberPlans = GetCachedSellingNumberPlans();
+            if (allNumberPlans != null)
+                return allNumberPlans.Values.FirstOrDefault();
+            else
+                return null;
+        }
+
         #endregion
   
         #region Private Method

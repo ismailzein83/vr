@@ -14,4 +14,13 @@ namespace TOne.WhS.Routing.Entities
 
         public int SellingNumberPlanId { get; set; }
     }
+
+    public class SaleCodeMatchWithMaster
+    {
+        public int? CustomerSellingNumberPlanId { get; set; }
+
+        public SaleCodeMatch SaleCodeMatch { get; set; }
+
+        public SaleCodeMatch MasterPlanCodeMatch { get; set; }
+    }
 }
