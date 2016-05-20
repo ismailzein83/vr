@@ -11,6 +11,8 @@ namespace TOne.WhS.DBSync.Business
     {
         SalePriceListDBSyncDataManager dbSyncDataManager;
         SourcePriceListDataManager dataManager;
+        DBTable dbTableCurrency;
+        DBTable dbTableCarrierAccount;
 
         public SalePriceListMigrator(MigrationContext context)
             : base(context)
@@ -18,6 +20,8 @@ namespace TOne.WhS.DBSync.Business
             dbSyncDataManager = new SalePriceListDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourcePriceListDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
+            dbTableCurrency = Context.DBTables[DBTableName.Currency];
+            dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
         }
 
         public override void Migrate()
@@ -40,16 +44,14 @@ namespace TOne.WhS.DBSync.Business
 
         public override SalePriceList BuildItemFromSource(SourcePriceList sourceItem)
         {
-            DBTable dbTableCurrency = Context.DBTables[DBTableName.Currency];
-            DBTable dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
             if (dbTableCurrency != null && dbTableCarrierAccount != null)
             {
-                Dictionary<string, Currency> allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
+                var allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
                 Currency currency = null;
                 if (allCurrencies != null)
                     allCurrencies.TryGetValue(sourceItem.CurrencyId, out currency);
 
-                Dictionary<string, CarrierAccount> allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
+                var allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
                 CarrierAccount carrierAccount = null;
                 if (allCarrierAccounts != null)
                     allCarrierAccounts.TryGetValue(sourceItem.CustomerId, out carrierAccount);

@@ -14,6 +14,7 @@ namespace TOne.WhS.DBSync.Business
     {
         CarrierProfileDBSyncDataManager dbSyncDataManager;
         SourceCarrierProfileDataManager dataManager;
+        DBTable dbTableCountry;
 
         public CarrierProfileMigrator(MigrationContext context)
             : base(context)
@@ -21,6 +22,7 @@ namespace TOne.WhS.DBSync.Business
             dbSyncDataManager = new CarrierProfileDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceCarrierProfileDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
+            dbTableCountry = Context.DBTables[DBTableName.Country];
         }
 
         public override void Migrate()
@@ -46,10 +48,10 @@ namespace TOne.WhS.DBSync.Business
             VRFileManager vrFileManager = new VRFileManager();
 
             int? countryId = null;
-            DBTable dbTableCountry = Context.DBTables[DBTableName.Country];
+
             if (dbTableCountry != null)
             {
-                Dictionary<string, Country> allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
+                var allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
                 Country country = null;
 
                 if (allCountries != null && !string.IsNullOrWhiteSpace(string.Empty))

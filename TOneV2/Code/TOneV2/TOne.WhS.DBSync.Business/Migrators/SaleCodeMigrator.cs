@@ -13,6 +13,9 @@ namespace TOne.WhS.DBSync.Business
     {
         SaleCodeDBSyncDataManager dbSyncDataManager;
         SourceCodeDataManager dataManager;
+        DBTable dbTableSaleZone;
+        DBTable dbTableCodeGroup;
+
 
         public SaleCodeMigrator(MigrationContext context)
             : base(context)
@@ -20,6 +23,8 @@ namespace TOne.WhS.DBSync.Business
             dbSyncDataManager = new SaleCodeDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceCodeDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
+            dbTableSaleZone = Context.DBTables[DBTableName.SaleZone];
+            dbTableCodeGroup = Context.DBTables[DBTableName.CodeGroup];
         }
 
         public override void Migrate()
@@ -41,13 +46,10 @@ namespace TOne.WhS.DBSync.Business
 
         public override SaleCode BuildItemFromSource(SourceCode sourceItem)
         {
-            DBTable dbTableSaleZone = Context.DBTables[DBTableName.SaleZone];
-            DBTable dbTableCodeGroup = Context.DBTables[DBTableName.CodeGroup];
-
             if (dbTableSaleZone != null && dbTableCodeGroup != null)
             {
-                Dictionary<string, SaleZone> allSaleZones = (Dictionary<string, SaleZone>)dbTableSaleZone.Records;
-                Dictionary<string, CodeGroup> allCodeGroups = (Dictionary<string, CodeGroup>)dbTableCodeGroup.Records;
+                var allSaleZones = (Dictionary<string, SaleZone>)dbTableSaleZone.Records;
+                var allCodeGroups = (Dictionary<string, CodeGroup>)dbTableCodeGroup.Records;
 
                 SaleZone saleZone = null;
                 if (allSaleZones != null)

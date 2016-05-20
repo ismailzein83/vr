@@ -14,6 +14,7 @@ namespace TOne.WhS.DBSync.Business
     {
         SaleZoneDBSyncDataManager dbSyncDataManager;
         SourceZoneDataManager dataManager;
+        DBTable dbTableCountry;
 
         public SaleZoneMigrator(MigrationContext context)
             : base(context)
@@ -21,6 +22,7 @@ namespace TOne.WhS.DBSync.Business
             dbSyncDataManager = new SaleZoneDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceZoneDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
+            dbTableCountry = Context.DBTables[DBTableName.Country];
         }
 
         public override void Migrate()
@@ -45,10 +47,10 @@ namespace TOne.WhS.DBSync.Business
 
         public override SaleZone BuildItemFromSource(SourceZone sourceItem)
         {
-            DBTable dbTableCountry = Context.DBTables[DBTableName.Country];
+           
             if (dbTableCountry != null)
             {
-                Dictionary<string, Country> allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
+                var allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
                 Country country = null;
                 if (allCountries != null)
                     allCountries.TryGetValue(sourceItem.CodeGroup, out country);

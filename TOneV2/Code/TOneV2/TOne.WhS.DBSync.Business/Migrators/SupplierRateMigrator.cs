@@ -14,6 +14,9 @@ namespace TOne.WhS.DBSync.Business
     {
         SupplierRateDBSyncDataManager dbSyncDataManager;
         SourceRateDataManager dataManager;
+        DBTable dbTableSupplierZone;
+        DBTable dbTableSupplierPriceList;
+        DBTable dbTableCurrency;
 
         public SupplierRateMigrator(MigrationContext context)
             : base(context)
@@ -21,6 +24,9 @@ namespace TOne.WhS.DBSync.Business
             dbSyncDataManager = new SupplierRateDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceRateDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
+            dbTableSupplierZone = Context.DBTables[DBTableName.SupplierZone];
+            dbTableSupplierPriceList = Context.DBTables[DBTableName.SupplierPriceList];
+            dbTableCurrency = Context.DBTables[DBTableName.Currency];
         }
 
         public override void Migrate()
@@ -42,24 +48,22 @@ namespace TOne.WhS.DBSync.Business
 
         public override SupplierRate BuildItemFromSource(SourceRate sourceItem)
         {
-            DBTable dbTableSupplierZone = Context.DBTables[DBTableName.SupplierZone];
-            DBTable dbTableSupplierPriceList = Context.DBTables[DBTableName.SupplierPriceList];
-            DBTable dbTableCurrency = Context.DBTables[DBTableName.Currency];
+
             if (dbTableCurrency != null && dbTableSupplierPriceList != null && dbTableSupplierZone != null)
             {
-                Dictionary<string, SupplierZone> allSupplierZones = (Dictionary<string, SupplierZone>)dbTableSupplierZone.Records;
-                Dictionary<string, SupplierPriceList> allSupplierPriceLists = (Dictionary<string, SupplierPriceList>)dbTableSupplierPriceList.Records;
-                Dictionary<string, Currency> allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
-                SupplierZone saleZone = null;
-                SupplierPriceList salePriceList = null;
+                var allSupplierZones = (Dictionary<string, SupplierZone>)dbTableSupplierZone.Records;
+                var allSupplierPriceLists = (Dictionary<string, SupplierPriceList>)dbTableSupplierPriceList.Records;
+                var allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
+                SupplierZone supplierZone = null;
+                SupplierPriceList supplierPriceList = null;
                 Currency currency = null;
                 if (allCurrencies != null)
                     allCurrencies.TryGetValue(sourceItem.CurrencyId, out currency);
                 if (allSupplierPriceLists != null && sourceItem.PriceListId.HasValue)
-                    allSupplierPriceLists.TryGetValue(sourceItem.PriceListId.Value.ToString(), out salePriceList);
+                    allSupplierPriceLists.TryGetValue(sourceItem.PriceListId.Value.ToString(), out supplierPriceList);
 
                 if (allSupplierZones != null && sourceItem.ZoneId.HasValue)
-                    allSupplierZones.TryGetValue(sourceItem.ZoneId.Value.ToString(), out saleZone);
+                    allSupplierZones.TryGetValue(sourceItem.ZoneId.Value.ToString(), out supplierZone);
 
 
                 Dictionary<int, decimal> otherRates = new Dictionary<int, decimal>();
@@ -69,16 +73,16 @@ namespace TOne.WhS.DBSync.Business
                 if (sourceItem.WeekendRate.HasValue)
                     otherRates.Add((int)RateTypeEnum.Weekend, sourceItem.WeekendRate.Value);
 
-                if (salePriceList != null && currency != null && sourceItem.BeginEffectiveDate.HasValue && sourceItem.Rate.HasValue)
+                if (supplierZone != null && supplierPriceList != null && currency != null && sourceItem.BeginEffectiveDate.HasValue && sourceItem.Rate.HasValue)
                     return new SupplierRate
                     {
                         BED = sourceItem.BeginEffectiveDate.Value,
                         EED = sourceItem.EndEffectiveDate,
                         NormalRate = sourceItem.Rate.Value,
                         CurrencyId = currency.CurrencyId,
-                        PriceListId = salePriceList.PriceListId,
+                        PriceListId = supplierPriceList.PriceListId,
                         OtherRates = otherRates,
-                        ZoneId = saleZone.SupplierZoneId,
+                        ZoneId = supplierZone.SupplierZoneId,
                         SourceId = sourceItem.SourceId
                     };
                 else

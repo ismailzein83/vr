@@ -14,6 +14,8 @@ namespace TOne.WhS.DBSync.Business
     {
         SupplierZoneDBSyncDataManager dbSyncDataManager;
         SourceZoneDataManager dataManager;
+        DBTable dbTableCarrierAccount;
+        DBTable dbTableCountry;
 
         public SupplierZoneMigrator(MigrationContext context)
             : base(context)
@@ -21,6 +23,8 @@ namespace TOne.WhS.DBSync.Business
             dbSyncDataManager = new SupplierZoneDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceZoneDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
+            dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
+            dbTableCountry = Context.DBTables[DBTableName.Country];
         }
 
         public override void Migrate()
@@ -45,16 +49,14 @@ namespace TOne.WhS.DBSync.Business
 
         public override SupplierZone BuildItemFromSource(SourceZone sourceItem)
         {
-            DBTable dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
-            DBTable dbTableCountry = Context.DBTables[DBTableName.Country];
             if (dbTableCountry != null && dbTableCarrierAccount != null)
             {
-                Dictionary<string, CarrierAccount> allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
+                var allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
                 CarrierAccount carrierAccount = null;
                 if (allCarrierAccounts != null)
                     allCarrierAccounts.TryGetValue(sourceItem.SupplierId, out carrierAccount);
 
-                Dictionary<string, Country> allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
+                var allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
                 Country country = null;
                 if (allCountries != null)
                     allCountries.TryGetValue(sourceItem.CodeGroup, out country);

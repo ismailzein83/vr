@@ -11,6 +11,8 @@ namespace TOne.WhS.DBSync.Business
     {
         CurrencyExchangeRateDBSyncDataManager dbSyncDataManager;
         SourceCurrencyExchangeRateDataManager dataManager;
+        DBTable dbTableCurrency;
+
 
         public CurrencyExchangeRateMigrator(MigrationContext context)
             : base(context)
@@ -18,6 +20,7 @@ namespace TOne.WhS.DBSync.Business
             dbSyncDataManager = new CurrencyExchangeRateDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceCurrencyExchangeRateDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
+            dbTableCurrency = Context.DBTables[DBTableName.Currency];
         }
 
         public override void Migrate()
@@ -37,10 +40,9 @@ namespace TOne.WhS.DBSync.Business
 
         public override CurrencyExchangeRate BuildItemFromSource(SourceCurrencyExchangeRate sourceItem)
         {
-            DBTable dbTableCurrency = Context.DBTables[DBTableName.Currency];
             if (dbTableCurrency != null)
             {
-                Dictionary<string, Currency> allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
+                var allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
                 Currency currency = null;
                 if (allCurrencies != null)
                     allCurrencies.TryGetValue(sourceItem.CurrencyId, out currency);

@@ -11,6 +11,9 @@ namespace TOne.WhS.DBSync.Business
     {
         SaleRateDBSyncDataManager dbSyncDataManager;
         SourceRateDataManager dataManager;
+        DBTable dbTableSaleZone;
+        DBTable dbTableSalePriceList;
+        DBTable dbTableCurrency;
 
         public SaleRateMigrator(MigrationContext context)
             : base(context)
@@ -18,6 +21,9 @@ namespace TOne.WhS.DBSync.Business
             dbSyncDataManager = new SaleRateDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceRateDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
+            dbTableSaleZone = Context.DBTables[DBTableName.SaleZone];
+            dbTableSalePriceList = Context.DBTables[DBTableName.SalePriceList];
+            dbTableCurrency = Context.DBTables[DBTableName.Currency];
         }
 
         public override void Migrate()
@@ -37,14 +43,11 @@ namespace TOne.WhS.DBSync.Business
 
         public override SaleRate BuildItemFromSource(SourceRate sourceItem)
         {
-            DBTable dbTableSaleZone = Context.DBTables[DBTableName.SaleZone];
-            DBTable dbTableSalePriceList = Context.DBTables[DBTableName.SalePriceList];
-            DBTable dbTableCurrency = Context.DBTables[DBTableName.Currency];
             if (dbTableCurrency != null && dbTableSalePriceList != null && dbTableSaleZone != null)
             {
-                Dictionary<string, SaleZone> allSaleZones = (Dictionary<string, SaleZone>)dbTableSaleZone.Records;
+                var allSaleZones = (Dictionary<string, SaleZone>)dbTableSaleZone.Records;
                 Dictionary<string, SalePriceList> allSalePriceLists = (Dictionary<string, SalePriceList>)dbTableSalePriceList.Records;
-                Dictionary<string, Currency> allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
+                var allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
                 SaleZone saleZone = null;
                 SalePriceList salePriceList = null;
                 Currency currency = null;

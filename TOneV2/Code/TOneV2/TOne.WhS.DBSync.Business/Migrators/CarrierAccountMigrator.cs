@@ -12,6 +12,8 @@ namespace TOne.WhS.DBSync.Business
     {
         CarrierAccountDBSyncDataManager dbSyncDataManager;
         SourceCarrierAccountDataManager dataManager;
+        DBTable dbTableCurrency;
+        DBTable dbTableCarrierProfile;
 
         public CarrierAccountMigrator(MigrationContext context)
             : base(context)
@@ -19,6 +21,8 @@ namespace TOne.WhS.DBSync.Business
             dbSyncDataManager = new CarrierAccountDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceCarrierAccountDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
+            dbTableCurrency = Context.DBTables[DBTableName.Currency];
+            dbTableCarrierProfile = Context.DBTables[DBTableName.CarrierProfile];
         }
 
         public override void Migrate()
@@ -45,21 +49,18 @@ namespace TOne.WhS.DBSync.Business
             CarrierAccountCustomerSettings carrierAccountCustomerSettings = new CarrierAccountCustomerSettings();
             CarrierAccountSupplierSettings carrierAccountSupplierSettings = new CarrierAccountSupplierSettings();
 
-            DBTable dbTableCurrency = Context.DBTables[DBTableName.Currency];
-            DBTable dbTableCarrierProfile = Context.DBTables[DBTableName.CarrierProfile];
             if (dbTableCarrierProfile != null && dbTableCurrency != null)
             {
-                Dictionary<string, CarrierProfile> allCarrierProfiles = (Dictionary<string, CarrierProfile>)dbTableCarrierProfile.Records;
+                var allCarrierProfiles = (Dictionary<string, CarrierProfile>)dbTableCarrierProfile.Records;
                 CarrierProfile carrierProfile = null;
 
                 if (allCarrierProfiles != null)
                     allCarrierProfiles.TryGetValue(sourceItem.ProfileId.ToString(), out carrierProfile);
 
-                Dictionary<string, Currency> allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
+                var allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
                 Currency currency = null;
                 if (allCurrencies != null)
                     allCurrencies.TryGetValue(sourceItem.CurrencyId.ToString(), out currency);
-
 
                 if (carrierProfile != null && currency != null)
                 {
