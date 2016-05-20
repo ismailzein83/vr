@@ -2,9 +2,9 @@
 
     'use strict';
 
-    WidgetsChartDefinition.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_ChartDefinitionTypeEnum'];
+    WidgetsChartDefinition.$inject = ["UtilsService", 'VRUIUtilsService'];
 
-    function WidgetsChartDefinition(UtilsService, VRUIUtilsService, VR_ChartDefinitionTypeEnum) {
+    function WidgetsChartDefinition(UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {

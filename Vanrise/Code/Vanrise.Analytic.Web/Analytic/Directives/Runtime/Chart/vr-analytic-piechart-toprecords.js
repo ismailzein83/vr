@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationService', 'Analytic_AnalyticService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService',
-    function (UtilsService, VRNotificationService, Analytic_AnalyticService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService) {
+app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService',
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -58,7 +58,16 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                             }
                             return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                                 .then(function (response) {
-                                    renderCharts(response);
+                                    if (response)
+                                    {
+                                        var data = [];
+                                        for (var i = 0; i < response.Data.length - (response.Data.length - 10);i++)
+                                        {
+                                            data.push(response.Data[i]);
+
+                                        }
+                                    }
+                                    renderCharts(data);
                                     ctrl.showlaoder = false;
                                 });
 
@@ -68,10 +77,10 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                                 for (var m = 0; m < ctrl.measures.length; m++) {
                                     var measureObject = new Object();
 
-                                    for (var i = 0; i < response.Data.length; i++) {
+                                    for (var i = 0; i < response.length; i++) {
                                         var dimensionName = "";
                                         for (var d = 0; d < ctrl.groupingDimensions.length; d++) {
-                                            dimensionName += response.Data[i].DimensionValues[d].Name + ", ";
+                                            dimensionName += response[i].DimensionValues[d].Name + ", ";
                                         }
                                         dimensionName = UtilsService.trim(dimensionName, ", ");
                                         var chartRecord = UtilsService.getItemByVal(chartData, dimensionName, "DimensionValue");
@@ -80,7 +89,7 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                                             chartRecord["DimensionValue"] = dimensionName;
                                             chartData.push(chartRecord);
                                         }
-                                        chartRecord[ctrl.measures[m].MeasureName] = response.Data[i].MeasureValues[ctrl.measures[m].MeasureName];
+                                        chartRecord[ctrl.measures[m].MeasureName] = response[i].MeasureValues[ctrl.measures[m].MeasureName];
                                     }
                                 }
                                 var chartDefinition = {
@@ -123,10 +132,11 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
 
                 if (payLoad.Settings != undefined) {
                     if (payLoad.Settings.Dimensions != undefined) {
+                        console.log(payLoad);
                         ctrl.dimensions = payLoad.Settings.Dimensions;
                         for (var i = 0; i < payLoad.Settings.Dimensions.length; i++) {
                             var dimension = payLoad.Settings.Dimensions[i];
-                            var groupingDimension = UtilsService.getItemByVal(payLoad.GroupingDimensions, dimension.DimensionName, 'DimensionName');
+                            var groupingDimension = UtilsService.getItemByVal(ctrl.dimensions, dimension.DimensionName, 'DimensionName');
                             if (groupingDimension != undefined) {
                                 ctrl.groupingDimensions.push(dimension);
 

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RecordSearchAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'Analytic_AnalyticService'];
+    RecordSearchAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService'];
 
-    function RecordSearchAnalyticReportDirective(UtilsService, VRUIUtilsService, Analytic_AnalyticService) {
+    function RecordSearchAnalyticReportDirective(UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {

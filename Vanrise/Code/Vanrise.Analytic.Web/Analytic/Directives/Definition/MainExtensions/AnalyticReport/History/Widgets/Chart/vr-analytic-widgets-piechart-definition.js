@@ -35,6 +35,7 @@
             var measureSelectorAPI;
             var measureReadyDeferred = UtilsService.createPromiseDeferred();
 
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.dimensions = [];
@@ -66,7 +67,7 @@
 
                     if (payload != undefined && payload.tableIds != undefined) {
                         var tableIds = payload.tableIds;
-                        var selectedDimensionIds;
+                        var selectedDimensionIds; console.log(payload)
                         var selectedMeasureIds;
                         if (payload.widgetEntity != undefined) {
                             $scope.scopeModel.rootDimensionsFromSearch = payload.widgetEntity.RootDimensionsFromSearchSection;
@@ -111,18 +112,6 @@
                             VRUIUtilsService.callDirectiveLoad(measureSelectorAPI, payloadFilterDirective, loadMeasureDirectivePromiseDeferred);
                         });
                         promises.push(loadMeasureDirectivePromiseDeferred.promise);
-
-
-                        var loadFilterDimentionPromiseDeferred = UtilsService.createPromiseDeferred();
-                        filterReadyPromiseDeferred.promise.then(function () {
-                            var entityPayload = payload != undefined ? { entityNames: payload.EntityType, filter: payload.Filter } : undefined;
-                            filterReadyPromiseDeferred = undefined;
-                            VRUIUtilsService.callDirectiveLoad(filterDimensionAPI, entityPayload, loadFilterDimentionPromiseDeferred);
-
-                        });
-                        promises.push(loadFilterDimentionPromiseDeferred.promise);
-
-
                         return UtilsService.waitMultiplePromises(promises);
                     }
 
@@ -148,10 +137,10 @@
 
                 function getDimensions() {
                     var dimensions;
-                    if ($scope.scopeModel.dimensions != undefined && $scope.scopeModel.dimensions.length > 0) {
+                    if ($scope.scopeModel.selectedDimensions != undefined && $scope.scopeModel.selectedDimensions.length > 0) {
                         dimensions = [];
-                        for (var i = 0; i < $scope.scopeModel.dimensions.length; i++) {
-                            var dimension = $scope.scopeModel.dimensions[i];
+                        for (var i = 0; i < $scope.scopeModel.selectedDimensions.length; i++) {
+                            var dimension = $scope.scopeModel.selectedDimensions[i];
                             dimensions.push({
                                 DimensionName: dimension.Name,
                                 Title: dimension.Title,

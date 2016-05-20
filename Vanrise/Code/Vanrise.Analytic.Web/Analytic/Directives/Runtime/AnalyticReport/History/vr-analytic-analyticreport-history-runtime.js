@@ -2,9 +2,9 @@
 
     'use strict';
 
-    HistoryAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'Analytic_AnalyticService','VR_Analytic_AnalyticConfigurationAPIService','VR_GenericData_DataRecordFieldTypeConfigAPIService','VR_Analytic_AnalyticItemConfigAPIService','VR_Analytic_AnalyticTypeEnum','VR_GenericData_DataRecordTypeService','ColumnWidthEnum'];
+    HistoryAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService','VR_Analytic_AnalyticConfigurationAPIService','VR_GenericData_DataRecordFieldTypeConfigAPIService','VR_Analytic_AnalyticItemConfigAPIService','VR_Analytic_AnalyticTypeEnum','VR_GenericData_DataRecordTypeService','ColumnWidthEnum'];
 
-    function HistoryAnalyticReportDirective(UtilsService, VRUIUtilsService, Analytic_AnalyticService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VR_GenericData_DataRecordTypeService, ColumnWidthEnum) {
+    function HistoryAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VR_GenericData_DataRecordTypeService, ColumnWidthEnum) {
         return {
             restrict: "E",
             scope: {
@@ -34,7 +34,7 @@
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.widgets = [];
                 $scope.scopeModel.filters = [];
-                $scope.scopeModel.fromdate = "01/01/2015";
+                $scope.scopeModel.fromdate = "01/01/2016";
                 $scope.scopeModel.todate = new Date();
                 $scope.scopeModel.groupingDimentions = [];
                 $scope.scopeModel.selectedGroupingDimentions = [];
@@ -157,10 +157,15 @@
                 if (settings.SearchSettings.GroupingDimensions != undefined) {
                     for (var i = 0; i < settings.SearchSettings.GroupingDimensions.length; i++) {
                         var groupingDimention = settings.SearchSettings.GroupingDimensions[i];
-                        $scope.scopeModel.groupingDimentions.push(groupingDimention);
-                        if (groupingDimention.IsSelected) {
-                            $scope.scopeModel.selectedGroupingDimentions.push(groupingDimention);
+                        var dimension = UtilsService.getItemByVal(dimensions, groupingDimention.DimensionName, "Name");
+                        if (dimension !=undefined && dimension.Config.RequiredParentDimension == undefined)
+                        {
+                            $scope.scopeModel.groupingDimentions.push(groupingDimention);
+                            if (groupingDimention.IsSelected) {
+                                $scope.scopeModel.selectedGroupingDimentions.push(groupingDimention);
+                            }
                         }
+                       
                     }
                 }
 
