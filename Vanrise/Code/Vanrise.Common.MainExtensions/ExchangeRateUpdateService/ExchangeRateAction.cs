@@ -6,7 +6,7 @@ using Vanrise.Entities;
 using Vanrise.Runtime.Entities;
 using Vanrise.Data;
 
-namespace Vanrise.Common.MainExtensions.ExchangeRateUpdateService
+namespace Vanrise.Common.MainExtensions
 {
     public class ExchangeRateTaskAction : SchedulerTaskAction
     {
@@ -34,7 +34,7 @@ namespace Vanrise.Common.MainExtensions.ExchangeRateUpdateService
             List<CurrencyExchangeRate> ratesToInsert = new List<CurrencyExchangeRate>();
             foreach (var ex in newRates)
             {
-                var existingExchangeRate = currentExchangeRate.FindRecord(nex => nex.Symbol == ex.Symbol);
+                var existingExchangeRate = currentExchangeRate.FindRecord(nex => nex.Symbol.ToUpper() == ex.Symbol.ToUpper());
                 if (existingExchangeRate != null  )
                 {
 

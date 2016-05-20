@@ -11,7 +11,7 @@ using Vanrise.Entities;
 
 
 
-namespace Vanrise.Common.MainExtensions.ExchangeRateUpdateService
+namespace Vanrise.Common.MainExtensions
 {
     public class XigniteCurrencyReader
     {
@@ -51,7 +51,7 @@ namespace Vanrise.Common.MainExtensions.ExchangeRateUpdateService
             Currency mainCurrency = manager.GetSystemCurrency();
             foreach (var currency in allCurrencies.Values)
             {
-                    result += String.Format("{0}{1},", mainCurrency.Symbol, currency.Symbol);
+                    result += String.Format("{0}{1},", mainCurrency.Symbol.ToUpper(), currency.Symbol.ToUpper());
                
             }
             return result.Remove(result.Length - 1, 1);

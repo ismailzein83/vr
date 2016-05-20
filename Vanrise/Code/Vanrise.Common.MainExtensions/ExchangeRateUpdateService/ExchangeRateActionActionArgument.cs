@@ -1,5 +1,5 @@
 ﻿
-namespace Vanrise.Common.MainExtensions.ExchangeRateUpdateService
+namespace Vanrise.Common.MainExtensions
 {
     public class ExchangeRateTaskActionArgument : Vanrise.Runtime.Entities.BaseTaskActionArgument
     {
