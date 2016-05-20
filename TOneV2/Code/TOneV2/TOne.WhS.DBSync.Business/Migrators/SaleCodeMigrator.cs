@@ -65,7 +65,7 @@ namespace TOne.WhS.DBSync.Business
 
                 CodeGroup codeGroup = null;
                 if (allCodeGroups != null & country != null)
-                    allCodeGroups.Values.Where(x => x.CountryId == country.CountryId);
+                    allCodeGroups.Values.Where(x => x.SourceId == sourceItem.CodeGroup);
 
 
                 if (codeGroup != null & saleZone != null)
