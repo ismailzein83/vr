@@ -7,13 +7,23 @@
         var registeredJobs = [];
         var isGettingData = false;
         var currentIndex = 0;
-        function registerJob(callToBeExecuted) {
+        function registerJob(callToBeExecuted, scope) {
             var job = {
                 id: UtilsService.guid(),
                 onTimerElapsed: callToBeExecuted,
-                readyPromiseDeffer: UtilsService.createPromiseDeferred(),
-                isPromiseResloved:false
+
             };
+            if (scope != undefined)
+            {
+                scope.job = job;
+                scope.$on("$destroy", function () {
+                   
+                    if (scope.job) {
+                        unregisterJob(scope.job);
+                    }
+                });
+            }
+           
             registeredJobs.push(job);
             return job;
         }
@@ -42,24 +52,17 @@
 
         function executeJob(job) {
             job.onTimerElapsed().finally(function () {
-                if (!job.isPromiseResloved)
-                {
-                    job.readyPromiseDeffer.resolve();
-                    job.isPromiseResloved = true;
-                }
                 currentIndex++;
                 if (currentIndex < registeredJobs.length)
                     executeJob(registeredJobs[currentIndex]);
                 else
                     isGettingData = false;
-            }).catch(function (error) {
-                job.readyPromiseDeffer.reject(error);
             });
         }
 
-        function registerLowFreqJob(callToBeExecuted)
+        function registerLowFreqJob(callToBeExecuted,scope)
         {
-           return registerJob(callToBeExecuted)
+            return registerJob(callToBeExecuted, scope)
         }
 
         return ({

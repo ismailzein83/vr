@@ -107,31 +107,34 @@
 
                     if (job != undefined)
                         VRTimerService.unregisterJob(job);
-                    job = VRTimerService.registerLowFreqJob(search);
-                    return job.readyPromiseDeffer.promise;
+                    job = VRTimerService.registerLowFreqJob(search, $scope);
                 };
-                $scope.$on("$destroy", function () {
-                    if (job) {
-                        VRTimerService.unregisterJob(job);
-                    }
-                });
+               
                 defineColumnWidth();
                 defineAPI();
             }
 
             function search() {
+                var promises = [];
                 if ($scope.scopeModel.widgets.length > 0) {
-                    var promiseDeffer = UtilsService.createPromiseDeferred();
+                  
+                
                     for (var i = 0; i < $scope.scopeModel.widgets.length ; i++) {
                         var widget = $scope.scopeModel.widgets[i];
-                        var setLoader = function (value) { $scope.isLoadingDimensionDirective = value, !value ? promiseDeffer.resolve() : undefined };
-
-                        var payload = getQuery(widget.settings);
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, widget.directiveAPI, payload, setLoader);
+                        widget.promiseDeffer = UtilsService.createPromiseDeferred();
+                        promises.push(widget.promiseDeffer.promise);
+                        loadWidgetDirective(widget)
                     }
-                    return promiseDeffer.promise;
                 }
+                return UtilsService.waitMultiplePromises(promises);
             }
+            function loadWidgetDirective(widget)
+            {
+                var setLoader = function (value) { $scope.isLoadingDimensionDirective = value, !value ? widget.promiseDeffer.resolve() : undefined; };
+                var payload = getQuery(widget.settings);
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, widget.directiveAPI, payload, setLoader);
+            }
+
             function defineAPI() {
                 var api = {};
 
