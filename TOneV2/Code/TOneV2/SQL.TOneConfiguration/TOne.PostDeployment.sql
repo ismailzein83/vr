@@ -144,7 +144,8 @@ as (select * from (values
 (12037,'CDR Log','CDR Log','#/view/WhS_Analytics/Views/CDR/CDRLog',1214,null,null,null,null,0,4),
 (12038,'Raw CDR Log','Raw CDR Log','#/view/WhS_Analytics/Views/RawCDR/RawCDRLog',1214,null,null,null,null,0,5),
 (12071,'Repeated Numbers','Repeated Numbers','#/view/WhS_Analytics/Views/RepeatedNumber/RepeatedNumber',1214,null,null,null,null,0,8),
-(12100,'Variation','Variation','#/view/WhS_Analytics/Views/VariationReport/VariationReport',1216,'WhS_Analytics/VariationReport/GetFilteredVariationReportRecords',null,null,null,0,1)
+(12100,'Variation','Variation','#/view/WhS_Analytics/Views/VariationReport/VariationReport',1216,'WhS_Analytics/VariationReport/GetFilteredVariationReportRecords',null,null,null,0,1),
+(12109,'Switch Connectivity','Switch Connectivity','#/view/WhS_BusinessEntity/Views/SwitchConnectivity/SwitchConnectivityManagement',101,'WhS_BE/SwitchConnectivity/GetFilteredSwitchConnectivities',null,null,null,0,5)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
