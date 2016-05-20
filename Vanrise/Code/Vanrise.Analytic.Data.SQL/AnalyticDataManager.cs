@@ -52,7 +52,7 @@ namespace Vanrise.Analytic.Data.SQL
             includedSQLAggregateNames = GetIncludedSQLAggregateNames(input.Query.MeasureFields);
             HashSet<string> joinStatements = new HashSet<string>();
             BuildQueryAggregates(selectPartBuilder, input.Query.CurrencyId, includedSQLAggregateNames, includeJoinConfigNames, joinStatements, input.Query.FromTime, input.Query.ToTime, parameterValues, ref parameterIndex);
-            string filterPart = BuildQueryFilter(input.Query.Filters, includeJoinConfigNames);
+            string filterPart = BuildQueryFilter(input.Query.Filters, includeJoinConfigNames, parameterValues, ref parameterIndex);
             string joinPart = BuildQueryJoins(includeJoinConfigNames, joinStatements);
 
             RecordFilterSQLBuilder recordFilterSQLBuilder = new RecordFilterSQLBuilder(GetDimensionColumnIdFromFieldName);
@@ -326,7 +326,7 @@ namespace Vanrise.Analytic.Data.SQL
             }
         }
 
-        private string BuildQueryFilter(List<DimensionFilter> filters, HashSet<string> includeJoinConfigNames)
+        private string BuildQueryFilter(List<DimensionFilter> filters, HashSet<string> includeJoinConfigNames, Dictionary<string, Object> parameterValues, ref int parameterIndex)
         {
             StringBuilder filterPartBuilder = new StringBuilder();
             if (filters != null)
@@ -336,7 +336,7 @@ namespace Vanrise.Analytic.Data.SQL
                     var dimensionConfig = GetDimensionConfig(dimensionFilter.Dimension);
                     if (String.IsNullOrEmpty(dimensionConfig.Config.SQLExpression))
                         continue;
-                    AddFilterToFilterPart(filterPartBuilder, dimensionFilter.FilterValues, dimensionConfig.Config.SQLExpression);
+                    AddFilterToFilterPart(filterPartBuilder, dimensionFilter.FilterValues, dimensionConfig.Config.SQLExpression, parameterValues, ref parameterIndex);
 
                     if (dimensionConfig.Config.JoinConfigNames != null)
                     {
@@ -410,28 +410,30 @@ namespace Vanrise.Analytic.Data.SQL
             return dimensionObj.Config.SQLExpression;
         }
 
-        void AddFilterToFilterPart<T>(StringBuilder filterBuilder, List<T> values, string column)
+        void AddFilterToFilterPart<T>(StringBuilder filterBuilder, List<T> values, string column, Dictionary<string, Object> parameterValues, ref int parameterIndex)
         {
             if (values != null && values.Count() > 0)
-            {
-                if (values[0].GetType() == typeof(string) || values[0].GetType() == typeof(DateTime))
+            {                
+                bool hasNullValue = false;
+                List<string> parameterNames = new List<string>();
+                foreach(var value in values)
                 {
-                    StringBuilder builder = new StringBuilder();
-                    if (values.Count == 1)
-                        builder.Append("'").Append(values[0]).Append("'");
+                    if (value == null)
+                        hasNullValue = true;
                     else
                     {
-                        foreach (T val in values)
-                        {
-                            builder.Append("'").Append(val).Append("' ,");
-                        }
-                        builder.Length--;
+                        string prmName = GenerateParameterName(ref parameterIndex);
+                        parameterValues.Add(prmName, value);
+                        parameterNames.Add(prmName);
                     }
-
-                    filterBuilder.AppendFormat(" AND {0} IN ({1}) ", column, builder);
                 }
-                else
-                    filterBuilder.AppendFormat(" AND {0} IN ({1}) ", column, String.Join(", ", values));
+                List<string> filters = new List<string>();                
+                if(parameterNames.Count > 0)
+                    filters.Add( String.Format(" {0} IN ({1}) ", column, String.Join(", ", parameterNames)));
+                if (hasNullValue)
+                    filters.Add(string.Format(" {0} IS NULL ", column));
+                
+                filterBuilder.AppendFormat(" AND ({0}) ", String.Join(" OR ", filters));
             }
         }
 

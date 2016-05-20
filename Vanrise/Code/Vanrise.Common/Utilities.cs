@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -9,7 +10,8 @@ namespace Vanrise.Common
 {
     public static class Utilities
     {
-        public static Dictionary<T,Q> GetEnumAttributes<T,Q>() where T : struct
+        public static Dictionary<T, Q> GetEnumAttributes<T, Q>()
+            where T : struct
             where Q : Attribute
         {
             Type enumType = typeof(T);
@@ -49,7 +51,7 @@ namespace Vanrise.Common
             return default(Q);
         }
 
-        public  static string GetEnumDescription<T>(T enumItem) where T :struct
+        public static string GetEnumDescription<T>(T enumItem) where T : struct
         {
             System.ComponentModel.DescriptionAttribute descriptionAttribute = GetEnumAttribute<T, System.ComponentModel.DescriptionAttribute>(enumItem);
             return descriptionAttribute != null ? descriptionAttribute.Description : enumItem.ToString();
@@ -58,7 +60,7 @@ namespace Vanrise.Common
         public static IEnumerable<Type> GetAllImplementations(Type baseType)
         {
             List<Type> lst = new List<Type>();
-            foreach(var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
 
                 foreach (Type t in assembly.GetLoadableTypes())
@@ -89,9 +91,68 @@ namespace Vanrise.Common
 
         public static void ActivateAspose()
         {
-            
+
             Aspose.Cells.License license = new Aspose.Cells.License();
             license.SetLicense("Aspose.Cells.lic");
         }
+
+
+        static ConcurrentDictionary<string, IPropValueReader> s_cachedProbValueReaders = new ConcurrentDictionary<string, IPropValueReader>();
+
+        public static IPropValueReader GetPropValueReader<T>(string propertyPath)
+        {
+            IPropValueReader propValueReader;
+            string key = propertyPath;
+            if (!s_cachedProbValueReaders.TryGetValue(key, out propValueReader))
+            {
+                StringBuilder classDefinitionBuilder = new StringBuilder(@" 
+                using System;
+
+                namespace #NAMESPACE#
+                {
+                    public class #CLASSNAME# : Vanrise.Common.IPropValueReader
+                    {   
+                        public Object GetPropertyValue(dynamic target)
+                        {
+                            return target.#PROPERTYPATH#;
+                        }
+                    }
+                }
+                ");
+
+                classDefinitionBuilder.Replace("#PROPERTYPATH#", propertyPath);
+
+                string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.Common");
+                string className = "PropValueReader";
+                classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
+                classDefinitionBuilder.Replace("#CLASSNAME#", className);
+                string fullTypeName = String.Format("{0}.{1}", classNamespace, className);
+                CSharpCompilationOutput compilationOutput;
+                if (!CSharpCompiler.TryCompileClass(classDefinitionBuilder.ToString(), out compilationOutput))
+                {
+                    StringBuilder errorsBuilder = new StringBuilder();
+                    if (compilationOutput.ErrorMessages != null)
+                    {
+                        foreach (var errorMessage in compilationOutput.ErrorMessages)
+                        {
+                            errorsBuilder.AppendLine(errorMessage);
+                        }
+                    }
+                    throw new Exception(String.Format("Compile Error when building executor type for PropValueReader. Errors: {0}",
+                        errorsBuilder));
+                }
+                var runtimeType = compilationOutput.OutputAssembly.GetType(fullTypeName);
+                if (runtimeType == null)
+                    throw new NullReferenceException("runtimeType");
+                propValueReader = Activator.CreateInstance(runtimeType) as IPropValueReader;
+                s_cachedProbValueReaders.TryAdd(key, propValueReader);
+            }
+            return propValueReader;
+        }
+    }
+
+    public interface IPropValueReader
+    {
+        Object GetPropertyValue(dynamic target);
     }
 }

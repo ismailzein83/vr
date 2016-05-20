@@ -230,7 +230,7 @@ namespace Vanrise.Common
 
         private static IEnumerable<T> ApplySortingAndPaging<T>(this IEnumerable<T> list, Vanrise.Entities.DataRetrievalInput input)
         {
-            IPropValueReader propValueReader = GetPropValueReader<T>(input.SortByColumnName);
+            IPropValueReader propValueReader = Utilities.GetPropValueReader<T>(input.SortByColumnName);
             Func<T, Object> selector = x => propValueReader.GetPropertyValue(x);
 
             if (input.IsSortDescending)
@@ -245,64 +245,6 @@ namespace Vanrise.Common
             }
 
             return list;
-        }
-
-        static ConcurrentDictionary<string, IPropValueReader> s_cachedProbValueReaders = new ConcurrentDictionary<string, IPropValueReader>();
-
-        private static IPropValueReader GetPropValueReader<T>(string propertyPath)
-        {
-            IPropValueReader propValueReader;
-            string key = propertyPath;
-            if (!s_cachedProbValueReaders.TryGetValue(key, out propValueReader))
-            {
-                StringBuilder classDefinitionBuilder = new StringBuilder(@" 
-                using System;
-
-                namespace #NAMESPACE#
-                {
-                    public class #CLASSNAME# : Vanrise.Common.ExtensionMethods.IPropValueReader
-                    {   
-                        Object Vanrise.Common.ExtensionMethods.IPropValueReader.GetPropertyValue(dynamic target)
-                        {
-                            return target.#PROPERTYPATH#;
-                        }
-                    }
-                }
-                ");
-
-                classDefinitionBuilder.Replace("#PROPERTYPATH#", propertyPath);
-
-                string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.Common");
-                string className = "PropValueReader";
-                classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
-                classDefinitionBuilder.Replace("#CLASSNAME#", className);
-                string fullTypeName = String.Format("{0}.{1}", classNamespace, className);
-                CSharpCompilationOutput compilationOutput;
-                if (!CSharpCompiler.TryCompileClass(classDefinitionBuilder.ToString(), out compilationOutput))
-                {
-                    StringBuilder errorsBuilder = new StringBuilder();
-                    if (compilationOutput.ErrorMessages != null)
-                    {
-                        foreach (var errorMessage in compilationOutput.ErrorMessages)
-                        {
-                            errorsBuilder.AppendLine(errorMessage);
-                        }
-                    }
-                    throw new Exception(String.Format("Compile Error when building executor type for PropValueReader. Errors: {0}",
-                        errorsBuilder));
-                }
-                var runtimeType = compilationOutput.OutputAssembly.GetType(fullTypeName);
-                if (runtimeType == null)
-                    throw new NullReferenceException("runtimeType");
-                propValueReader = Activator.CreateInstance(runtimeType) as IPropValueReader;
-                s_cachedProbValueReaders.TryAdd(key, propValueReader);
-            }
-            return propValueReader;
-        }
-
-        public interface IPropValueReader
-        {
-            Object GetPropertyValue(dynamic target);
         }
 
         public static IEnumerable<Q> VRCast<Q>(this IEnumerable list)

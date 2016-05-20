@@ -2,7 +2,7 @@
 <div ng-show="analyticrecordsctrl.showGrid">
     <vr-datagrid datasource="analyticrecordsctrl.datasource" defaultsortbyfieldname="analyticrecordsctrl.sortField" pagingtype="'Pager'" dataretrievalfunction="analyticrecordsctrl.dataRetrievalFunction" on-ready="analyticrecordsctrl.gridReady">
         <vr-datagridcolumn ng-repeat="dimension in analyticrecordsctrl.groupingDimensions" headertext="dimension.Title" type="dimension.Type"
-                           numberprecision="dimension.NumberPrecision" field="'DimensionValues[' + $index + '].Name'" columnindex="$index" widthfactor="15"></vr-datagridcolumn>
+                           numberprecision="dimension.NumberPrecision" field="dimension.Type.indexOf('Date') > -1 ? 'DimensionValues[' + $index + '].Value' : 'DimensionValues[' + $index + '].Name'" columnindex="$index" widthfactor="15"></vr-datagridcolumn>
 
         <vr-datagridcolumn ng-repeat="measure in analyticrecordsctrl.measures" headertext="measure.Title" type="measure.Type" numberprecision="measure.NumberPrecision"
                            field="'MeasureValues.' + measure.MeasureName + ''" tag="measure" summaryfield="'MeasureValues.' + measure.MeasureName + ''"></vr-datagridcolumn>
