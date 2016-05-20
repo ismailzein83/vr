@@ -1,5 +1,4 @@
-﻿using System;
-using Vanrise.Entities.EntitySynchronization;
+﻿using Vanrise.Entities.EntitySynchronization;
 namespace TOne.WhS.DBSync.Entities
 {
 

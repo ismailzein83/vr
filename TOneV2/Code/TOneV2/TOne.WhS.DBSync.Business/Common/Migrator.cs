@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data.SQL;
-using TOne.WhS.DBSync.Entities;
 using Vanrise.Entities.EntitySynchronization;
 
 namespace TOne.WhS.DBSync.Business

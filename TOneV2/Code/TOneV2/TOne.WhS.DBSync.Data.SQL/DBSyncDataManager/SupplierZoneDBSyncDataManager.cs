@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using TOne.WhS.DBSync.Data.SQL.Common;
-using Vanrise.Data.SQL;
-using Vanrise.Entities;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.DBSync.Data.SQL.Common;
+using Vanrise.Data.SQL;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {

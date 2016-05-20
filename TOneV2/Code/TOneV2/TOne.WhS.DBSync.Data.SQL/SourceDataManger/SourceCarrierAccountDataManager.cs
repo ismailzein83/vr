@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
-using System;
-using System.Data;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {

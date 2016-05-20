@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data.SQL.Common;
 using Vanrise.Data.SQL;
@@ -43,28 +41,6 @@ namespace TOne.WhS.DBSync.Data.SQL
             };
 
             InsertBulkToTable(preparedSupplierRates as BaseBulkInsertInfo);
-        }
-
-        public Dictionary<string, SupplierRate> GetSupplierRates()
-        {
-            return GetItemsText("SELECT ID,  PriceListID, ZoneID, CurrencyID, NormalRate, OtherRates, BED, EED, SourceID FROM"
-                + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), SupplierRateMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
-        }
-
-        public SupplierRate SupplierRateMapper(IDataReader reader)
-        {
-            return new SupplierRate
-            {
-                NormalRate = GetReaderValue<decimal>(reader, "NormalRate"),
-                OtherRates = reader["OtherRates"] as string != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string) : null,
-                SupplierRateId = (long)reader["ID"],
-                ZoneId = (long)reader["ZoneID"],
-                PriceListId = GetReaderValue<int>(reader, "PriceListID"),
-                BED = GetReaderValue<DateTime>(reader, "BED"),
-                EED = GetReaderValue<DateTime?>(reader, "EED"),
-                CurrencyId = GetReaderValue<int?>(reader, "CurrencyId"),
-                SourceId = reader["SourceID"] as string,
-            };
         }
 
         public string GetConnection()

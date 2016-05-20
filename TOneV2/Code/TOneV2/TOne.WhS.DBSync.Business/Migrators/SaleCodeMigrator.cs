@@ -6,7 +6,6 @@ using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Common.Business;
-using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
@@ -33,9 +32,6 @@ namespace TOne.WhS.DBSync.Business
             long startingId;
             ReserveIDRange(itemsToAdd.Count(), out startingId);
             dbSyncDataManager.ApplySaleCodesToTemp(itemsToAdd, startingId);
-            DBTable dbTableSaleCode = Context.DBTables[DBTableName.SaleCode];
-            if (dbTableSaleCode != null)
-                dbTableSaleCode.Records = dbSyncDataManager.GetSaleCodes();
         }
 
         public override IEnumerable<SourceCode> GetSourceItems()

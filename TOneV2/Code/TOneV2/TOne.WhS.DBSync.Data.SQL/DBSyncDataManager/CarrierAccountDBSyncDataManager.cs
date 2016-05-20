@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data.SQL.Common;
 using Vanrise.Data.SQL;
-using System.Linq;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
@@ -17,7 +17,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         public CarrierAccountDBSyncDataManager(bool useTempTables) :
             base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
-           
+
             _UseTempTables = useTempTables;
         }
 
@@ -55,10 +55,9 @@ namespace TOne.WhS.DBSync.Data.SQL
             InsertBulkToTable(preparedCarrierAccounts as BaseBulkInsertInfo);
         }
 
-
         public Dictionary<string, CarrierAccount> GetCarrierAccounts()
         {
-            return GetItemsText("SELECT [ID] ,[NameSuffix]  ,[AccountType] ,[SellingNumberPlanID],[CarrierProfileId],[SourceID] FROM" 
+            return GetItemsText("SELECT [ID] ,[NameSuffix]  ,[AccountType] ,[SellingNumberPlanID],[CarrierProfileId],[SourceID] FROM"
                 + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), CarrierAccountMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 

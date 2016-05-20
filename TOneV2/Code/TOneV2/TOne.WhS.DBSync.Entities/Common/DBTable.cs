@@ -1,5 +1,4 @@
 ﻿using Microsoft.SqlServer.Management.Smo;
-using System.Collections.Generic;
 
 namespace TOne.WhS.DBSync.Entities
 {

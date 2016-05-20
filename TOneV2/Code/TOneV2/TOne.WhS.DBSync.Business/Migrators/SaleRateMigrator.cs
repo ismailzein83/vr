@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
-using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Business
@@ -30,9 +28,6 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<SaleRate> itemsToAdd)
         {
             dbSyncDataManager.ApplySaleRatesToTemp(itemsToAdd);
-            DBTable dbTableSaleRate = Context.DBTables[DBTableName.SaleRate];
-            if (dbTableSaleRate != null)
-                dbTableSaleRate.Records = dbSyncDataManager.GetSaleRates();
         }
 
         public override IEnumerable<SourceRate> GetSourceItems()

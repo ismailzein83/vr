@@ -1,12 +1,9 @@
 ﻿using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Configuration;
 using System.Linq;
-using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
 
