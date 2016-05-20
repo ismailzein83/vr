@@ -15,7 +15,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public List<SourceZone> GetSourceZones(bool isSaleZone)
         {
-            return GetItemsText(query_getSourceZones + (isSaleZone ? "where SupplierID = 'SYS'" : ""), SourceZoneMapper, null);
+            return GetItemsText(query_getSourceZones + (isSaleZone ? "where SupplierID = 'SYS'" : "where SupplierID <> 'SYS'"), SourceZoneMapper, null);
         }
 
         private SourceZone SourceZoneMapper(IDataReader arg)

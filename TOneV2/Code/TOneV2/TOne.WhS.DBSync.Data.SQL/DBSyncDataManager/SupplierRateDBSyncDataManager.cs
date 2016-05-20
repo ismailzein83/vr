@@ -10,7 +10,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class SupplierRateDBSyncDataManager : BaseSQLDataManager
     {
-        readonly string[] columns = { "PriceListID", "ZoneID", "CurrencyID", "NormalRate", "OtherRates", "BED", "EED", "SourceID" };
+        readonly string[] columns = { "PriceListID", "ZoneID", "CurrencyID", "NormalRate", "OtherRates", "BED", "EED", "SourceID", "ID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.SupplierRate);
         string _Schema = "TOneWhS_BE";
         bool _UseTempTables;
@@ -20,14 +20,14 @@ namespace TOne.WhS.DBSync.Data.SQL
             _UseTempTables = useTempTables;
         }
 
-        public void ApplySupplierRatesToTemp(List<SupplierRate> supplierRates)
+        public void ApplySupplierRatesToTemp(List<SupplierRate> supplierRates, long startingId)
         {
             string filePath = GetFilePathForBulkInsert();
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
             {
                 foreach (var c in supplierRates)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", c.PriceListId, c.ZoneId, c.CurrencyId, c.NormalRate, c.OtherRates, c.BED, c.EED, c.SourceId));
+                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", c.PriceListId, c.ZoneId, c.CurrencyId, c.NormalRate, Vanrise.Common.Serializer.Serialize(c.OtherRates), c.BED, c.EED, c.SourceId, startingId++));
                 }
                 wr.Close();
             }

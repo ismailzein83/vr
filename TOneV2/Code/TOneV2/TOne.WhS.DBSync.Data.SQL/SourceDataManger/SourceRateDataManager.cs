@@ -15,7 +15,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public List<SourceRate> GetSourceRates(bool isSaleRate)
         {
-            return GetItemsText(query_getSourceRates + (isSaleRate ? "where Zone.SupplierID = 'SYS'" : ""), SourceRateMapper, null);
+            return GetItemsText(query_getSourceRates + (isSaleRate ? "where Zone.SupplierID = 'SYS'" : "where Zone.SupplierID <> 'SYS'"), SourceRateMapper, null);
         }
 
         private SourceRate SourceRateMapper(IDataReader arg)

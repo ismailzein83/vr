@@ -1,24 +1,25 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using System.Linq;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SupplierRateMigrator : Migrator<SourceCodeGroup, CodeGroup>
+    public class SupplierRateMigrator : Migrator<SourceRate, SupplierRate>
     {
-        CodeGroupDBSyncDataManager dbSyncDataManager;
-        SourceCodeGroupDataManager dataManager;
+        SupplierRateDBSyncDataManager dbSyncDataManager;
+        SourceRateDataManager dataManager;
 
         public SupplierRateMigrator(MigrationContext context)
             : base(context)
         {
-             dbSyncDataManager = new CodeGroupDBSyncDataManager(Context.UseTempTables);
-            dataManager = new SourceCodeGroupDataManager(Context.ConnectionString);
+            dbSyncDataManager = new SupplierRateDBSyncDataManager(Context.UseTempTables);
+            dataManager = new SourceRateDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
         }
 
@@ -27,33 +28,60 @@ namespace TOne.WhS.DBSync.Business
             base.Migrate();
         }
 
-        public override void AddItems(List<CodeGroup> itemsToAdd)
+        public override void AddItems(List<SupplierRate> itemsToAdd)
         {
-            dbSyncDataManager.ApplyCodeGroupsToTemp(itemsToAdd);
-            DBTable dbTableCodeGroup = Context.DBTables[DBTableName.CodeGroup];
-            if (dbTableCodeGroup != null)
-                dbTableCodeGroup.Records = dbSyncDataManager.GetCodeGroups();
+            long startingId;
+            ReserveIDRange(itemsToAdd.Count(), out startingId);
+            dbSyncDataManager.ApplySupplierRatesToTemp(itemsToAdd, startingId);
+            DBTable dbTableSupplierRate = Context.DBTables[DBTableName.SupplierRate];
+            if (dbTableSupplierRate != null)
+                dbTableSupplierRate.Records = dbSyncDataManager.GetSupplierRates();
         }
 
-        public override IEnumerable<SourceCodeGroup> GetSourceItems()
+        public override IEnumerable<SourceRate> GetSourceItems()
         {
-            return dataManager.GetSourceCodeGroups();
+            return dataManager.GetSourceRates(false);
         }
 
-        public override CodeGroup BuildItemFromSource(SourceCodeGroup sourceItem)
+        public override SupplierRate BuildItemFromSource(SourceRate sourceItem)
         {
-            DBTable dbTableCountry = Context.DBTables[DBTableName.Country];
-            if (dbTableCountry != null)
+            DBTable dbTableSupplierZone = Context.DBTables[DBTableName.SupplierZone];
+            DBTable dbTableSupplierPriceList = Context.DBTables[DBTableName.SupplierPriceList];
+            DBTable dbTableCurrency = Context.DBTables[DBTableName.Currency];
+            if (dbTableCurrency != null && dbTableSupplierPriceList != null && dbTableSupplierZone != null)
             {
-                Dictionary<string, Country> allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
-                Country country = null;
-                if (allCountries != null)
-                    allCountries.TryGetValue(sourceItem.SourceId, out country);
-                if (country != null)
-                    return new CodeGroup
+                Dictionary<string, SupplierZone> allSupplierZones = (Dictionary<string, SupplierZone>)dbTableSupplierZone.Records;
+                Dictionary<string, SupplierPriceList> allSupplierPriceLists = (Dictionary<string, SupplierPriceList>)dbTableSupplierPriceList.Records;
+                Dictionary<string, Currency> allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
+                SupplierZone saleZone = null;
+                SupplierPriceList salePriceList = null;
+                Currency currency = null;
+                if (allCurrencies != null)
+                    allCurrencies.TryGetValue(sourceItem.CurrencyId, out currency);
+                if (allSupplierPriceLists != null && sourceItem.PriceListId.HasValue)
+                    allSupplierPriceLists.TryGetValue(sourceItem.PriceListId.Value.ToString(), out salePriceList);
+
+                if (allSupplierZones != null && sourceItem.ZoneId.HasValue)
+                    allSupplierZones.TryGetValue(sourceItem.ZoneId.Value.ToString(), out saleZone);
+
+
+                Dictionary<int, decimal> otherRates = new Dictionary<int, decimal>();
+                if (sourceItem.OffPeakRate.HasValue)
+                    otherRates.Add((int)RateTypeEnum.OffPeak, sourceItem.OffPeakRate.Value);
+
+                if (sourceItem.WeekendRate.HasValue)
+                    otherRates.Add((int)RateTypeEnum.Weekend, sourceItem.WeekendRate.Value);
+
+                if (salePriceList != null && currency != null && sourceItem.BeginEffectiveDate.HasValue && sourceItem.Rate.HasValue)
+                    return new SupplierRate
                     {
-                        Code = sourceItem.Code,
-                        CountryId = country.CountryId,
+                        BED = sourceItem.BeginEffectiveDate.Value,
+                        EED = sourceItem.EndEffectiveDate,
+                        NormalRate = sourceItem.Rate.Value,
+                        CurrencyId = currency.CurrencyId,
+                        PriceListId = salePriceList.PriceListId,
+                        OtherRates = otherRates,
+                        ZoneId = saleZone.SupplierZoneId,
                         SourceId = sourceItem.SourceId
                     };
                 else
@@ -63,6 +91,9 @@ namespace TOne.WhS.DBSync.Business
             else
                 return null;
         }
-
+        internal static void ReserveIDRange(int nbOfIds, out long startingId)
+        {
+            IDManager.Instance.ReserveIDRange(typeof(SaleRateManager), nbOfIds, out startingId);
+        }
     }
 }

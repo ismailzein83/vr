@@ -15,7 +15,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public List<SourceCode> GetSourceCodes(bool isSaleCode)
         {
-            return GetItemsText(query_getSourceCodes + (isSaleCode ? "where Zone.SupplierID = 'SYS'" : ""), SourceCodeMapper, null);
+            return GetItemsText(query_getSourceCodes + (isSaleCode ? "where Zone.SupplierID = 'SYS'" : "where Zone.SupplierID <> 'SYS'"), SourceCodeMapper, null);
         }
 
         private SourceCode SourceCodeMapper(IDataReader arg)
