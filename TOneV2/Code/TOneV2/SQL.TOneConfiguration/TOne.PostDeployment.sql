@@ -191,7 +191,8 @@ set identity_insert [sec].[BusinessEntity] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (3301,'WhS_BE_SupplierPricelist','Supplier PriceList',1201,0,'["View"]'),
-(3302,'WhS_Analytics_Variation','Variation',1204,0,'["View"]')
+(3302,'WhS_Analytics_Variation','Variation',1204,0,'["View"]'),
+(3303,'WhS_BE_SwitchConnectivity','Switch Connectivity',2,0,'["View", "Add", "Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -438,8 +439,12 @@ as (select * from (values
 ('WhS_Routing/RouteOptionRule/DeleteRule',null),
 ('WhS_Routing/RouteOptionRule/GetRouteOptionRuleSettingsTemplates',null),
 ('WhS_Analytics/RepeatedNumber/GetAllFilteredRepeatedNumbers','WhS_Analytics_RepeatedNumber: View'),
-('WhS_Analytics/VariationReport/GetFilteredVariationReportRecords','WhS_Analytics_Variation: View')
+('WhS_Analytics/VariationReport/GetFilteredVariationReportRecords','WhS_Analytics_Variation: View'),
 
+('WhS_BE/SwitchConnectivity/GetFilteredSwitchConnectivities','WhS_BE_SwitchConnectivity: View'),
+('WhS_BE/SwitchConnectivity/GetSwitchConnectivity','WhS_BE_SwitchConnectivity: View'),
+('WhS_BE/SwitchConnectivity/AddSwitchConnectivity','WhS_BE_SwitchConnectivity: Add'),
+('WhS_BE/SwitchConnectivity/UpdateSwitchConnectivity','WhS_BE_SwitchConnectivity: Edit')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
