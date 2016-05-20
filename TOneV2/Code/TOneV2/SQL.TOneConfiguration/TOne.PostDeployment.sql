@@ -648,3 +648,24 @@ when not matched by target then
 	insert([ID],[Name],[Title],[Settings])
 	values(s.[ID],s.[Name],s.[Title],s.[Settings]);
 set identity_insert [genericdata].[BusinessEntityDefinition] off;
+
+--[common].[ExtensionConfiguration]-----------------1001	to 2000---------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [common].[ExtensionConfiguration] on;
+;with cte_data([ID],[Title],[ConfigType],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1001,'Specific Suppliers Zones','WhS_BE_SupplierZoneGroup','{"Editor":"vr-whs-be-supplierzonegroup-selective","RuntimeEditor":""}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Title],[ConfigType],[Settings]))
+merge	[common].[ExtensionConfiguration] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Title],[ConfigType],[Settings])
+	values(s.[ID],s.[Title],s.[ConfigType],s.[Settings]);
+set identity_insert [common].[ExtensionConfiguration] off;
