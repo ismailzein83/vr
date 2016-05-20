@@ -4,8 +4,11 @@
     [Settings]         NVARCHAR (MAX) NULL,
     [SourceSupplierID] VARCHAR (255)  NULL,
     [timestamp]        ROWVERSION     NULL,
+    [IsDeleted]        BIT            NULL,
     CONSTRAINT [PK_Supplier] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

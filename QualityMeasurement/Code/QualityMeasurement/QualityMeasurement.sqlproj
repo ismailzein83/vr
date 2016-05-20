@@ -104,5 +104,9 @@
     <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_GetAllbyBatchNumber.sql" />
     <Build Include="QM_BE\Stored Procedures\sp_Zone_GetBySourceID.sql" />
     <Build Include="QM_BE\Stored Procedures\sp_Supplier_GetBySourceID.sql" />
+    <Build Include="QM_BE\Tables\ConnectorZoneInfo.sql" />
+    <Build Include="QM_BE\Stored Procedures\sp_ConnectorZoneInfo_Update.sql" />
+    <Build Include="QM_BE\Stored Procedures\sp_ConnectorZoneInfo_Insert.sql" />
+    <Build Include="QM_BE\Stored Procedures\sp_ConnectorZoneInfo_GetAll.sql" />
   </ItemGroup>
 </Project>

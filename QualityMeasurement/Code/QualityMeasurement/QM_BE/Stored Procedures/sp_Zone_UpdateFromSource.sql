@@ -4,6 +4,7 @@
 	@SourceZoneID varchar(255),
 	@CountryID int,
 	@BED datetime,
+	@EED datetime,
 	@Settings nvarchar(MAX),
 	@IsFromTestingConnectorZone bit
 AS
@@ -15,6 +16,7 @@ BEGIN
 	 SourceZoneID = @SourceZoneID,
 	 CountryID = @CountryID,
 	 BED = @BED,
+	 EED = @EED,
 	 Settings = @Settings,
 	 IsFromTestingConnectorZone = @IsFromTestingConnectorZone
 	Where ID = @ID
