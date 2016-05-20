@@ -57,6 +57,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         {
             CodeGroup codeGroup = new CodeGroup
             {
+                CodeGroupId = (int)reader["ID"],
                 CountryId = (int)reader["CountryId"],
                 Code = reader["Code"] as string,
                 SourceId = reader["SourceID"] as string,

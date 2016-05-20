@@ -40,33 +40,26 @@ namespace TOne.WhS.DBSync.Business
 
         public override IEnumerable<SourceCode> GetSourceItems()
         {
-            return dataManager.GetSourceCodes(false);
+            return dataManager.GetSourceCodes(true);
         }
 
         public override SaleCode BuildItemFromSource(SourceCode sourceItem)
         {
             DBTable dbTableSaleZone = Context.DBTables[DBTableName.SaleZone];
-            DBTable dbTableCountry = Context.DBTables[DBTableName.Country];
             DBTable dbTableCodeGroup = Context.DBTables[DBTableName.CodeGroup];
 
-            if (dbTableCountry != null && dbTableSaleZone != null && dbTableCodeGroup != null)
+            if (dbTableSaleZone != null && dbTableCodeGroup != null)
             {
                 Dictionary<string, SaleZone> allSaleZones = (Dictionary<string, SaleZone>)dbTableSaleZone.Records;
-                Dictionary<string, Country> allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
                 Dictionary<string, CodeGroup> allCodeGroups = (Dictionary<string, CodeGroup>)dbTableCodeGroup.Records;
 
                 SaleZone saleZone = null;
                 if (allSaleZones != null)
                     allSaleZones.TryGetValue(sourceItem.ZoneId.ToString(), out saleZone);
 
-                Country country = null;
-                if (allCountries != null)
-                    allCountries.TryGetValue(sourceItem.CodeGroup, out country);
-
                 CodeGroup codeGroup = null;
-                if (allCodeGroups != null & country != null)
-                    allCodeGroups.Values.Where(x => x.SourceId == sourceItem.CodeGroup);
-
+                if (allCodeGroups != null)
+                    allCodeGroups.TryGetValue(sourceItem.CodeGroup, out codeGroup);
 
                 if (codeGroup != null & saleZone != null)
                     return new SaleCode

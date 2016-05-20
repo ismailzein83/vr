@@ -174,9 +174,9 @@ namespace TOne.WhS.DBSync.Business
         {
             if (context.UseTempTables)
             {
-                context.WriteInformation("FinalizeMigration Started");
+                context.WriteInformation("Finalizing Migration Started");
                 migrationManager.FinalizeMigration();
-                context.WriteInformation("FinalizeMigration Ended"); ;
+                context.WriteInformation("Finalizing Migration Ended"); ;
             }
         }
 
