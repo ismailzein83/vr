@@ -25,9 +25,6 @@ namespace TOne.WhS.DBSync.Data.SQL
                 SourceId = arg["PriceListID"].ToString(),
                 SupplierId = arg["SupplierID"] as string,
                 CustomerId = arg["CustomerID"] as string,
-                BeginEffectiveDate = GetReaderValue<DateTime?>(arg, "BeginEffectiveDate"),
-                EndEffectiveDate = GetReaderValue<DateTime?>(arg, "EndEffectiveDate"),
-                Description = arg["Description"] as string,
                 CurrencyId = arg["CurrencyID"] as string,
                 SourceFileBytes = GetReaderValue<byte[]>(arg, "SourceFileBytes"),
                 SourceFileName = arg["SourceFileName"] as string,
@@ -37,8 +34,8 @@ namespace TOne.WhS.DBSync.Data.SQL
         const string query_getSaleSourcePriceLists = @"SELECT  PriceListID ,  SupplierID, CustomerID,  Description, CurrencyID,  BeginEffectiveDate,  EndEffectiveDate,
                                                                NULL SourceFileBytes, NULL SourceFileName FROM PriceList WITH (NOLOCK) where SupplierID = 'SYS' ";
 
-        const string query_getSupplierSourcePriceLists = @"SELECT  p.PriceListID PriceListID, p.SupplierID SupplierID, p.CustomerID CustomerID, p.Description Description,
-                                                           p.CurrencyID CurrencyID, p.BeginEffectiveDate BeginEffectiveDate, p.EndEffectiveDate EndEffectiveDate, p.SourceFileName SourceFileName,
+        const string query_getSupplierSourcePriceLists = @"SELECT  p.PriceListID PriceListID, p.SupplierID SupplierID, p.CustomerID CustomerID, 
+                                                           p.CurrencyID CurrencyID,  p.SourceFileName SourceFileName,
                                                            data.SourceFileBytes SourceFileBytes FROM PriceList p WITH (NOLOCK) INNER JOIN PriceListData data WITH (NOLOCK)
                                                            ON p.PriceListID = data.PriceListID where p.CustomerID = 'SYS'";
     }

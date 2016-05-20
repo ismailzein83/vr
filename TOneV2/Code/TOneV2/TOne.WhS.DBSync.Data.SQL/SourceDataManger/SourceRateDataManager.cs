@@ -30,15 +30,14 @@ namespace TOne.WhS.DBSync.Data.SQL
                 WeekendRate = GetReaderValue<decimal?>(arg, "WeekendRate"),
                 BeginEffectiveDate = GetReaderValue<DateTime?>(arg, "BeginEffectiveDate"),
                 EndEffectiveDate = GetReaderValue<DateTime?>(arg, "EndEffectiveDate"),
-                Notes = arg["Notes"] as string,
                 CurrencyId = arg["CurrencyID"] as string,
             };
         }
 
         const string query_getSourceRates = @"SELECT    Rate.RateID RateID, Rate.PriceListID PriceListID, Rate.ZoneID ZoneID,
                                                         Rate.Rate Rate, Rate.OffPeakRate OffPeakRate, Rate.WeekendRate WeekendRate,
-                                                        Rate.BeginEffectiveDate BeginEffectiveDate, Rate.EndEffectiveDate EndEffectiveDate,
-                                                        Rate.Notes Notes, PriceList.CurrencyID CurrencyID
+                                                        Rate.BeginEffectiveDate BeginEffectiveDate, Rate.EndEffectiveDate EndEffectiveDate, 
+                                                        PriceList.CurrencyID CurrencyID
                                                         FROM Rate WITH (NOLOCK) INNER JOIN
                                                         Zone WITH (NOLOCK) ON Rate.ZoneID = Zone.ZoneID INNER JOIN
                                                         PriceList WITH (NOLOCK) ON Rate.PriceListID = PriceList.PriceListID ";

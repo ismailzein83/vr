@@ -19,7 +19,6 @@ namespace TOne.WhS.DBSync.Entities
         public byte[] CompanyLogo { get; set; }
         public string CompanyLogoName { get; set; }
         public string Country { get; set; }
-        public string City { get; set; }
         public string Telephone { get; set; }
         public string Fax { get; set; }
         public string BillingContact { get; set; }

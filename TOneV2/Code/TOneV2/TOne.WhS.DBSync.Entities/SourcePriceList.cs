@@ -14,10 +14,7 @@ namespace TOne.WhS.DBSync.Entities
 
         public string SupplierId { get; set; }
         public string CustomerId { get; set; }
-        public string Description { get; set; }
         public string CurrencyId { get; set; }
-        public DateTime? BeginEffectiveDate { get; set; }
-        public DateTime? EndEffectiveDate { get; set; }
         public byte[] SourceFileBytes { get; set; }
         public string SourceFileName { get; set; }
     }

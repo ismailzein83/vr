@@ -31,7 +31,6 @@ namespace TOne.WhS.DBSync.Data.SQL
                 BillingContact = arg["BillingContact"].ToString(),
                 BillingDisputeEmail = arg["BillingDisputeEmail"].ToString(),
                 BillingEmail = arg["BillingEmail"].ToString(),
-                City = arg["City"] as string,
                 CommercialContact = arg["CommercialContact"].ToString(),
                 CommercialEmail = arg["CommercialEmail"].ToString(),
                 CompanyLogo = GetReaderValue<byte[]>(arg, "CompanyLogo"),
@@ -54,7 +53,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         }
 
         const string query_getSourceCarrierProfiles = @"SELECT [ProfileID] ,[Name] ,[CompanyName]  ,[CompanyLogo]  ,[CompanyLogoName]  , 
-                                                               [Address1]  ,[Address2]  ,[Address3]  ,[Country]  ,[City]  ,[Telephone] , 
+                                                               [Address1]  ,[Address2]  ,[Address3]  ,[Country]  ,[Telephone] , 
                                                                [Fax]   ,[BillingContact]  ,[BillingEmail]   ,[PricingContact] ,[PricingEmail],  
                                                                [SupportContact]   ,[SupportEmail] ,[CurrencyID]  ,[RegistrationNumber]   , 
                                                                [AccountManagerEmail]   ,[SMSPhoneNumber] ,[Website]  ,[BillingDisputeEmail]  , 

@@ -24,7 +24,6 @@ namespace TOne.WhS.DBSync.Data.SQL
                 SourceId = arg["CarrierAccountID"].ToString(),
                 NameSuffix = arg["NameSuffix"] as string,
                 ProfileId = (short)arg["ProfileID"],
-                CarrierAccountId = arg["CarrierAccountID"] as string,
                 ActivationStatus = (SourceActivationStatus)arg["ActivationStatus"],
                 AccountType = (SourceAccountType)arg["AccountType"],
                 CurrencyId = arg["CurrencyID"] as string,
