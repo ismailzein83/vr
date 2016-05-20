@@ -12,6 +12,9 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
         replace: true,
         template: "<div></div>",
         link: function (scope, elem, attrs) {
+            var data = [];
+          
+
             $(elem).handsontable({
                  rowHeaders: true,
                  colHeaders: true,
@@ -24,7 +27,7 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
                 
                 
             })
-            var data = [];
+            
             var api = $(elem).handsontable('getInstance');
             scope.$parent[loaderkey] = false;
 
@@ -125,6 +128,8 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
                 api.loadData(buildFakeData());
             }
 
+
+
             function buildFakeData() {
                 var fakedata = [];
                 for (var i = 0; i < 20 ; i++) {
@@ -136,6 +141,34 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
                 }
                 return fakedata;
             }
+            var Menu = {};
+            if (attrs.enbalerowinsert != undefined) {
+                Menu["row_above"] = {
+                    disabled: function () {
+                        //if first row, disable this option
+                        return api.getData().length < scope.data.MaxDataRow
+                    }
+                }
+                Menu["row_below"] = {
+                    disabled: function () {
+                        //if first row, disable this option
+                        return api.getData().length < scope.data.MaxDataRow
+                    }
+                }
+                /*Menu["remove_row"] = true;*/
+            }
+                        
+            if (attrs.enbalecolinsert != undefined) {
+                Menu["col_left"] = true;
+                Menu["col_right"] = true;
+                /*Menu["remove_col"] = true;*/
+            }
+            if (Menu!=null)
+                api.updateSettings({
+                    contextMenu: {
+                        items: Menu
+                    }
+                })
             var inter;
             scope.i = 0;
             api.reLoadRefresh = function () {
@@ -155,6 +188,8 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
             if (scope.onReady != undefined && typeof (scope.onReady) == 'function') {
                 scope.onReady(api);
             }
+
+
         }
     }
 }])
