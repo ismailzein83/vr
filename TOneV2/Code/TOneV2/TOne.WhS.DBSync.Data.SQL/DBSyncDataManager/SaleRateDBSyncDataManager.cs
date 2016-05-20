@@ -29,7 +29,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             {
                 foreach (var c in saleRates)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", c.PriceListId, c.ZoneId, c.CurrencyId, c.NormalRate, c.OtherRates, c.BED, c.EED, c.SourceId));
+                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", c.PriceListId, c.ZoneId, c.CurrencyId, c.NormalRate, Vanrise.Common.Serializer.Serialize(c.OtherRates), c.BED, c.EED, c.SourceId));
                 }
                 wr.Close();
             }

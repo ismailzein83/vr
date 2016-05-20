@@ -42,24 +42,43 @@ namespace TOne.WhS.DBSync.Business
 
         public override SaleRate BuildItemFromSource(SourceRate sourceItem)
         {
+            DBTable dbTableSaleZone = Context.DBTables[DBTableName.SaleZone];
+            DBTable dbTableSalePriceList = Context.DBTables[DBTableName.SalePriceList];
             DBTable dbTableCurrency = Context.DBTables[DBTableName.Currency];
-            if (dbTableCurrency != null)
+            if (dbTableCurrency != null && dbTableSalePriceList != null && dbTableSaleZone != null)
             {
+                Dictionary<string, SaleZone> allSaleZones = (Dictionary<string, SaleZone>)dbTableSaleZone.Records;
+                Dictionary<string, SalePriceList> allSalePriceLists = (Dictionary<string, SalePriceList>)dbTableSalePriceList.Records;
                 Dictionary<string, Currency> allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
+                SaleZone saleZone = null;
+                SalePriceList salePriceList = null;
                 Currency currency = null;
                 if (allCurrencies != null)
                     allCurrencies.TryGetValue(sourceItem.CurrencyId, out currency);
-                if (currency != null && sourceItem.BeginEffectiveDate.HasValue && sourceItem.Rate.HasValue)
+                if (allSalePriceLists != null && sourceItem.PriceListId.HasValue)
+                    allSalePriceLists.TryGetValue(sourceItem.PriceListId.Value.ToString(), out salePriceList);
+
+                if (allSaleZones != null && sourceItem.ZoneId.HasValue)
+                    allSaleZones.TryGetValue(sourceItem.ZoneId.Value.ToString(), out saleZone);
+
+
+                Dictionary<int, decimal> otherRates = new Dictionary<int, decimal>();
+                if (sourceItem.OffPeakRate.HasValue)
+                    otherRates.Add((int)RateTypeEnum.OffPeak, sourceItem.OffPeakRate.Value);
+
+                if (sourceItem.WeekendRate.HasValue)
+                    otherRates.Add((int)RateTypeEnum.Weekend, sourceItem.WeekendRate.Value);
+
+                if (salePriceList != null && currency != null && sourceItem.BeginEffectiveDate.HasValue && sourceItem.Rate.HasValue)
                     return new SaleRate
                     {
                         BED = sourceItem.BeginEffectiveDate.Value,
                         EED = sourceItem.EndEffectiveDate,
                         NormalRate = sourceItem.Rate.Value,
                         CurrencyId = currency.CurrencyId,
-                        //PriceListId=sourceItem.PriceListId
-                        //OtherRates=sourceItem.o
-                        
-                        //ZoneId
+                        PriceListId = salePriceList.PriceListId,
+                        OtherRates = otherRates,
+                        ZoneId = saleZone.SaleZoneId,
                         SourceId = sourceItem.SourceId
                     };
                 else

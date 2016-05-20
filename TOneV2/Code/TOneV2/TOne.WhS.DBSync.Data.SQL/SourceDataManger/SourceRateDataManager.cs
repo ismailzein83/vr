@@ -25,9 +25,9 @@ namespace TOne.WhS.DBSync.Data.SQL
                 SourceId = arg["RateID"].ToString(),
                 PriceListId = GetReaderValue<int?>(arg, "PriceListID"),
                 ZoneId = GetReaderValue<int?>(arg, "ZoneID"),
-                Rate = GetReaderValue<int?>(arg, "Rate"),
-                OffPeakRate = GetReaderValue<int?>(arg, "OffPeakRate"),
-                WeekendRate = GetReaderValue<int?>(arg, "WeekendRate"),
+                Rate = GetReaderValue<decimal?>(arg, "Rate"),
+                OffPeakRate = GetReaderValue<decimal?>(arg, "OffPeakRate"),
+                WeekendRate = GetReaderValue<decimal?>(arg, "WeekendRate"),
                 BeginEffectiveDate = GetReaderValue<DateTime?>(arg, "BeginEffectiveDate"),
                 EndEffectiveDate = GetReaderValue<DateTime?>(arg, "EndEffectiveDate"),
                 Notes = arg["Notes"] as string,
@@ -41,6 +41,6 @@ namespace TOne.WhS.DBSync.Data.SQL
                                                         Rate.Notes Notes, PriceList.CurrencyID CurrencyID
                                                         FROM Rate WITH (NOLOCK) INNER JOIN
                                                         Zone WITH (NOLOCK) ON Rate.ZoneID = Zone.ZoneID INNER JOIN
-                                                        PriceList WITH (NOLOCK ON Rate.PriceListID = PriceList.PriceListID ";
+                                                        PriceList WITH (NOLOCK) ON Rate.PriceListID = PriceList.PriceListID ";
     }
 }
