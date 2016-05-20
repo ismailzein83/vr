@@ -27,7 +27,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             {
                 foreach (var c in salePriceLists)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}", c.OwnerType, c.OwnerId, c.CurrencyId, c.SourceId));
+                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}", (int)c.OwnerType, c.OwnerId, c.CurrencyId, c.SourceId));
                 }
                 wr.Close();
             }

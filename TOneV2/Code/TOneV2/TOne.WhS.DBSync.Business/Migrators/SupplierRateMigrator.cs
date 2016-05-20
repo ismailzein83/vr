@@ -17,7 +17,7 @@ namespace TOne.WhS.DBSync.Business
         public SupplierRateMigrator(MigrationContext context)
             : base(context)
         {
-            dbSyncDataManager = new CodeGroupDBSyncDataManager(Context.UseTempTables);
+             dbSyncDataManager = new CodeGroupDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceCodeGroupDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
         }

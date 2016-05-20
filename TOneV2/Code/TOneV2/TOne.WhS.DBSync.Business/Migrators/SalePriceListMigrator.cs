@@ -9,16 +9,16 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SalePriceListMigrator : Migrator<SourceCodeGroup, CodeGroup>
+    public class SalePriceListMigrator : Migrator<SourcePriceList, SalePriceList>
     {
-        CodeGroupDBSyncDataManager dbSyncDataManager;
-        SourceCodeGroupDataManager dataManager;
+        SalePriceListDBSyncDataManager dbSyncDataManager;
+        SourcePriceListDataManager dataManager;
 
         public SalePriceListMigrator(MigrationContext context)
             : base(context)
         {
-            dbSyncDataManager = new CodeGroupDBSyncDataManager(Context.UseTempTables);
-            dataManager = new SourceCodeGroupDataManager(Context.ConnectionString);
+            dbSyncDataManager = new SalePriceListDBSyncDataManager(Context.UseTempTables);
+            dataManager = new SourcePriceListDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
         }
 
@@ -27,33 +27,42 @@ namespace TOne.WhS.DBSync.Business
             base.Migrate();
         }
 
-        public override void AddItems(List<CodeGroup> itemsToAdd)
+        public override void AddItems(List<SalePriceList> itemsToAdd)
         {
-            dbSyncDataManager.ApplyCodeGroupsToTemp(itemsToAdd);
-            DBTable dbTableCodeGroup = Context.DBTables[DBTableName.CodeGroup];
-            if (dbTableCodeGroup != null)
-                dbTableCodeGroup.Records = dbSyncDataManager.GetCodeGroups();
+            dbSyncDataManager.ApplySalePriceListsToTemp(itemsToAdd);
+            DBTable dbTableSalePriceList = Context.DBTables[DBTableName.SalePriceList];
+            if (dbTableSalePriceList != null)
+                dbTableSalePriceList.Records = dbSyncDataManager.GetSalePriceLists();
         }
 
-        public override IEnumerable<SourceCodeGroup> GetSourceItems()
+        public override IEnumerable<SourcePriceList> GetSourceItems()
         {
-            return dataManager.GetSourceCodeGroups();
+            return dataManager.GetSourcePriceLists(true);
         }
 
-        public override CodeGroup BuildItemFromSource(SourceCodeGroup sourceItem)
+        public override SalePriceList BuildItemFromSource(SourcePriceList sourceItem)
         {
-            DBTable dbTableCountry = Context.DBTables[DBTableName.Country];
-            if (dbTableCountry != null)
+            DBTable dbTableCurrency = Context.DBTables[DBTableName.Currency];
+            DBTable dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
+            if (dbTableCurrency != null && dbTableCarrierAccount != null)
             {
-                Dictionary<string, Country> allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
-                Country country = null;
-                if (allCountries != null)
-                    allCountries.TryGetValue(sourceItem.SourceId, out country);
-                if (country != null)
-                    return new CodeGroup
+                Dictionary<string, Currency> allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
+                Currency currency = null;
+                if (allCurrencies != null)
+                    allCurrencies.TryGetValue(sourceItem.CurrencyId, out currency);
+
+                Dictionary<string, CarrierAccount> allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
+                CarrierAccount carrierAccount = null;
+                if (allCarrierAccounts != null)
+                    allCarrierAccounts.TryGetValue(sourceItem.CustomerId, out carrierAccount);
+
+
+                if (currency != null && carrierAccount != null)
+                    return new SalePriceList
                     {
-                        Code = sourceItem.Code,
-                        CountryId = country.CountryId,
+                        OwnerType = SalePriceListOwnerType.Customer,
+                        OwnerId = carrierAccount.CarrierAccountId,
+                        CurrencyId = currency.CurrencyId,
                         SourceId = sourceItem.SourceId
                     };
                 else

@@ -10,7 +10,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class SupplierPriceListDBSyncDataManager : BaseSQLDataManager
     {
-        readonly string[] columns = { "SupplierID", "CurrencyID", "FileID", "CreatedTime", "SourceID" };
+        readonly string[] columns = { "SupplierID", "CurrencyID", "FileID", "SourceID", "ID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.SupplierPriceList);
         string _Schema = "TOneWhS_BE";
         bool _UseTempTables;
@@ -20,14 +20,14 @@ namespace TOne.WhS.DBSync.Data.SQL
             _UseTempTables = useTempTables;
         }
 
-        public void ApplySupplierPriceListsToTemp(List<SupplierPriceList> supplierPriceList)
+        public void ApplySupplierPriceListsToTemp(List<SupplierPriceList> supplierPriceList, long startingId)
         {
             string filePath = GetFilePathForBulkInsert();
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
             {
                 foreach (var c in supplierPriceList)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}", c.SupplierId, c.CurrencyId, c.FileId, c.CreateTime, c.SourceId));
+                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}", c.SupplierId, c.CurrencyId, c.FileId, c.SourceId, startingId++));
                 }
                 wr.Close();
             }
@@ -55,7 +55,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         {
             return new SupplierPriceList
             {
-                 SupplierId = (int)reader["SupplierID"],
+                SupplierId = (int)reader["SupplierID"],
                 CurrencyId = (int)reader["CurrencyID"],
                 PriceListId = (int)reader["ID"],
                 FileId = (long)reader["FileID"],

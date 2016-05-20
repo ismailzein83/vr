@@ -9,16 +9,16 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SaleRateMigrator : Migrator<SourceCodeGroup, CodeGroup>
+    public class SaleRateMigrator : Migrator<SourceRate, SaleRate>
     {
-        CodeGroupDBSyncDataManager dbSyncDataManager;
-        SourceCodeGroupDataManager dataManager;
+        SaleRateDBSyncDataManager dbSyncDataManager;
+        SourceRateDataManager dataManager;
 
         public SaleRateMigrator(MigrationContext context)
             : base(context)
         {
-            dbSyncDataManager = new CodeGroupDBSyncDataManager(Context.UseTempTables);
-            dataManager = new SourceCodeGroupDataManager(Context.ConnectionString);
+            dbSyncDataManager = new SaleRateDBSyncDataManager(Context.UseTempTables);
+            dataManager = new SourceRateDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
         }
 
@@ -27,33 +27,39 @@ namespace TOne.WhS.DBSync.Business
             base.Migrate();
         }
 
-        public override void AddItems(List<CodeGroup> itemsToAdd)
+        public override void AddItems(List<SaleRate> itemsToAdd)
         {
-            dbSyncDataManager.ApplyCodeGroupsToTemp(itemsToAdd);
-            DBTable dbTableCodeGroup = Context.DBTables[DBTableName.CodeGroup];
-            if (dbTableCodeGroup != null)
-                dbTableCodeGroup.Records = dbSyncDataManager.GetCodeGroups();
+            dbSyncDataManager.ApplySaleRatesToTemp(itemsToAdd);
+            DBTable dbTableSaleRate = Context.DBTables[DBTableName.SaleRate];
+            if (dbTableSaleRate != null)
+                dbTableSaleRate.Records = dbSyncDataManager.GetSaleRates();
         }
 
-        public override IEnumerable<SourceCodeGroup> GetSourceItems()
+        public override IEnumerable<SourceRate> GetSourceItems()
         {
-            return dataManager.GetSourceCodeGroups();
+            return dataManager.GetSourceRates(true);
         }
 
-        public override CodeGroup BuildItemFromSource(SourceCodeGroup sourceItem)
+        public override SaleRate BuildItemFromSource(SourceRate sourceItem)
         {
-            DBTable dbTableCountry = Context.DBTables[DBTableName.Country];
-            if (dbTableCountry != null)
+            DBTable dbTableCurrency = Context.DBTables[DBTableName.Currency];
+            if (dbTableCurrency != null)
             {
-                Dictionary<string, Country> allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
-                Country country = null;
-                if (allCountries != null)
-                    allCountries.TryGetValue(sourceItem.SourceId, out country);
-                if (country != null)
-                    return new CodeGroup
+                Dictionary<string, Currency> allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
+                Currency currency = null;
+                if (allCurrencies != null)
+                    allCurrencies.TryGetValue(sourceItem.CurrencyId, out currency);
+                if (currency != null && sourceItem.BeginEffectiveDate.HasValue && sourceItem.Rate.HasValue)
+                    return new SaleRate
                     {
-                        Code = sourceItem.Code,
-                        CountryId = country.CountryId,
+                        BED = sourceItem.BeginEffectiveDate.Value,
+                        EED = sourceItem.EndEffectiveDate,
+                        NormalRate = sourceItem.Rate.Value,
+                        CurrencyId = currency.CurrencyId,
+                        //PriceListId=sourceItem.PriceListId
+                        //OtherRates=sourceItem.o
+                        
+                        //ZoneId
                         SourceId = sourceItem.SourceId
                     };
                 else

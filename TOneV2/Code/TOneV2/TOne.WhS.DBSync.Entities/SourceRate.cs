@@ -17,10 +17,9 @@ namespace TOne.WhS.DBSync.Entities
         public decimal? Rate { get; set; }
         public decimal? OffPeakRate { get; set; }
         public decimal? WeekendRate { get; set; }
-        public int? Change { get; set; }
-        public int? ServicesFlag { get; set; }
         public DateTime? BeginEffectiveDate { get; set; }
         public DateTime? EndEffectiveDate { get; set; }
         public string Notes { get; set; }
+        public string CurrencyId { get; set; }
     }
 }

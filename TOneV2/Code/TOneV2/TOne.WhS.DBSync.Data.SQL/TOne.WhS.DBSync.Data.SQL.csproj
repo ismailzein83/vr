@@ -95,6 +95,7 @@
     <Compile Include="SourceDataManger\SourceCarrierAccountDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCarrierProfileDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCodeDataManager.cs" />
+    <Compile Include="SourceDataManger\SourcePriceListDataManager.cs" />
     <Compile Include="SourceDataManger\SourceRateDataManager.cs" />
     <Compile Include="SourceDataManger\SourceZoneDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCodeGroupDataManager.cs" />
