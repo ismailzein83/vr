@@ -101,7 +101,6 @@
     <Compile Include="GetExistingCodes.cs" />
     <Compile Include="GetExistingRates.cs" />
     <Compile Include="GetExistingZones.cs" />
-    <Compile Include="GetImportedCountriesDataValidationRules.cs" />
     <Compile Include="PrepareChangedCodesToDB.cs" />
     <Compile Include="PrepareChangedRatesToDB.cs" />
     <Compile Include="PrepareChangedZonesToDB.cs" />
@@ -124,7 +123,6 @@
     <Compile Include="StructureDataByZones.cs" />
     <Compile Include="StructureDataByCountries.cs" />
     <Compile Include="SyncImportedDataWithDB.cs" />
-    <Compile Include="GetImportedDataValidationRules.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
