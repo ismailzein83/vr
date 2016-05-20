@@ -111,6 +111,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 // ------- Load Grid ------
 
                 function loadGrid(payLoad) {
+                    ctrl.parentDimensions.length = 0;
                     ctrl.drillDownDimensions.length = 0;
                     var filters = payLoad.DimensionFilters;
                     var queryFinalized = loadGridQuery(payLoad);

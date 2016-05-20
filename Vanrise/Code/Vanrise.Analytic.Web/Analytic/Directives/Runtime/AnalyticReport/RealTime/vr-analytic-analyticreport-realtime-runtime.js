@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RealtimeAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'Analytic_AnalyticService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum','VRTimerService','VR_Analytic_TimeGroupingUnitEnum'];
+    RealtimeAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'Analytic_AnalyticService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VRTimerService', 'VR_Analytic_TimeGroupingUnitEnum', 'VR_GenericData_DataRecordTypeService', 'VR_Analytic_SinceTimeEnum','ColumnWidthEnum'];
 
-    function RealtimeAnalyticReportDirective(UtilsService, VRUIUtilsService, Analytic_AnalyticService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VRTimerService, VR_Analytic_TimeGroupingUnitEnum) {
+    function RealtimeAnalyticReportDirective(UtilsService, VRUIUtilsService, Analytic_AnalyticService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VRTimerService, VR_Analytic_TimeGroupingUnitEnum, VR_GenericData_DataRecordTypeService, VR_Analytic_SinceTimeEnum, ColumnWidthEnum) {
         return {
             restrict: "E",
             scope: {
@@ -22,6 +22,9 @@
         };
         function RealTimeAnalyticReport($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+
+            var filterObj;
+            var job;
             var fieldTypes = [];
             var dimensions = [];
             var measures = [];
@@ -31,37 +34,98 @@
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.timeGroupingUnits = UtilsService.getArrayEnum(VR_Analytic_TimeGroupingUnitEnum);
+                $scope.scopeModel.sinceTimes = UtilsService.getArrayEnum(VR_Analytic_SinceTimeEnum);
 
-                
+                $scope.scopeModel.selectedSinceTime = VR_Analytic_SinceTimeEnum.Time;
+
+                $scope.scopeModel.selectedTimeGroupingUnit = VR_Analytic_TimeGroupingUnitEnum.Day;
+                $scope.scopeModel.onSinceSelectionChanged = function () {
+
+                    if ($scope.scopeModel.selectedSinceTime != undefined) {
+                        switch ($scope.scopeModel.selectedSinceTime.value) {
+                            case VR_Analytic_SinceTimeEnum.Time.value: $scope.scopeModel.showSinceLast = false; $scope.scopeModel.showSinceTime = true; break;
+                            case VR_Analytic_SinceTimeEnum.Last.value: $scope.scopeModel.showSinceLast = true; $scope.scopeModel.showSinceTime = false; break;
+                        }
+                    }
+                }
+
+
+                $scope.scopeModel.addFilter = function () {
+                    var onFilterAdded = function (filter, expression) {
+                        filterObj = filter;
+                        $scope.scopeModel.expression = expression;
+                    }
+                    var fields = [];
+                    for (var i = 0; i < dimensions.length; i++) {
+                        var dimension = dimensions[i];
+
+                        fields.push({
+                            FieldName: dimension.Name,
+                            FieldTitle: dimension.Title,
+                            Type: dimension.Config.FieldType,
+                        });
+                    }
+                    VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter(fields, filterObj, onFilterAdded);
+                };
+                $scope.scopeModel.resetFilter = function () {
+                    $scope.scopeModel.expression = undefined;
+                    filterObj = null;
+                }
+
+
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.widgets = [];
                 $scope.scopeModel.filters = [];
                 $scope.scopeModel.fromdate = "01/01/2015 00:00:00";
-                $scope.scopeModel.todate = "06/05/2015 00:00:00";
 
                 $scope.scopeModel.search = function () {
-                    currentFromDate=$scope.scopeModel.fromdate;
-                    currentToDate = $scope.scopeModel.todate;
-                    VRTimerService.unregisterJob(search);
-                    VRTimerService.registerLowFreqJob(search);
-                    return search();
-                   // VRTimerService.unregisterJob(search);
-                };
+                    if ($scope.scopeModel.selectedSinceTime != undefined) {
+                        switch ($scope.scopeModel.selectedSinceTime.value) {
+                            case VR_Analytic_SinceTimeEnum.Time.value:
+                                currentFromDate = $scope.scopeModel.fromdate;
+                                currentToDate = new Date();
+                                break;
+                            case VR_Analytic_SinceTimeEnum.Last.value:
 
+                                if ($scope.scopeModel.selectedTimeGroupingUnit != undefined) {
+                                    currentFromDate = new Date();
+                                    switch ($scope.scopeModel.selectedTimeGroupingUnit.value) {
+                                        case VR_Analytic_TimeGroupingUnitEnum.Day.value:
+                                            currentFromDate.setDate(currentFromDate.getDate() - $scope.scopeModel.last);
+                                            break;
+
+                                        case VR_Analytic_TimeGroupingUnitEnum.Hour.value:
+                                            currentFromDate.setHours(currentFromDate.getHours() - $scope.scopeModel.last);
+                                            break;
+                                    }
+                                }
+
+                                currentToDate = new Date();
+                                break;
+                        }
+                    }
+
+                    if (job != undefined)
+                        VRTimerService.unregisterJob(job);
+                    job = VRTimerService.registerLowFreqJob(search);
+                    return job.readyPromiseDeffer.promise;
+                };
+                $scope.$on("$destroy", function () {
+                    if (job) {
+                        VRTimerService.unregisterJob(job);
+                    }
+                });
+                defineColumnWidth();
                 defineAPI();
             }
-           
-            function search()
-            {
+
+            function search() {
                 if ($scope.scopeModel.widgets.length > 0) {
                     var promiseDeffer = UtilsService.createPromiseDeferred();
                     for (var i = 0; i < $scope.scopeModel.widgets.length ; i++) {
                         var widget = $scope.scopeModel.widgets[i];
                         var setLoader = function (value) { $scope.isLoadingDimensionDirective = value, !value ? promiseDeffer.resolve() : undefined };
-                        currentFromDate = new Date(currentFromDate);
-                        currentFromDate.setDate(currentFromDate.getDate() + 1);
-                        currentToDate = new Date(currentToDate);
-                        currentToDate.setDate(currentToDate.getDate() + 1);
+
                         var payload = getQuery(widget.settings);
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, widget.directiveAPI, payload, setLoader);
                     }
@@ -205,7 +269,9 @@
                         configId: matchItem.ExtensionConfigurationId,
                         runtimeEditor: matchItem.RuntimeEditor,
                         name: widgetItem.WidgetTitle,
-                        settings: widgetItem.payload
+                        settings: widgetItem.payload,
+                        columnWidth: UtilsService.getItemByVal($scope.scopeModel.columnWidth, widgetItem.payload.ColumnWidth, "value")
+
                     };
                     var dataItemPayload = getQuery(widgetItem.payload);
 
@@ -229,29 +295,35 @@
 
 
             }
-
+            function defineColumnWidth() {
+                $scope.scopeModel.columnWidth = [];
+                for (var td in ColumnWidthEnum)
+                    $scope.scopeModel.columnWidth.push(ColumnWidthEnum[td]);
+                $scope.scopeModel.selectedColumnWidth = $scope.scopeModel.columnWidth[0];
+            }
             function getQuery(widgetPayload) {
                 var dimensionFilters = [];
-                if ($scope.scopeModel.filters != undefined) {
-                    for (var i = 0; i < $scope.scopeModel.filters.length; i++) {
-                        var filter = $scope.scopeModel.filters[i];
-                        if (filter.directiveAPI != undefined && filter.directiveAPI.getData() != undefined) {
-                            dimensionFilters.push({
-                                Dimension: filter.dimesnionName,
-                                FilterValues: filter.directiveAPI.getValuesAsArray()
-                            })
-                        }
+                //if ($scope.scopeModel.filters != undefined) {
+                //    for (var i = 0; i < $scope.scopeModel.filters.length; i++) {
+                //        var filter = $scope.scopeModel.filters[i];
+                //        if (filter.directiveAPI != undefined && filter.directiveAPI.getData() != undefined) {
+                //            dimensionFilters.push({
+                //                Dimension: filter.dimesnionName,
+                //                FilterValues: filter.directiveAPI.getValuesAsArray()
+                //            })
+                //        }
 
-                    }
-                }
+                //    }
+                //}
                 var query = {
-                    Measures:measures,
+                    Measures: measures,
                     Settings: widgetPayload,
                     DimensionFilters: dimensionFilters,
                     TableId: widgetPayload.AnalyticTableId,
                     FromTime: currentFromDate,
                     ToTime: currentToDate,
-                    TimeGroupingUnit: $scope.scopeModel.selectedTimeGroupingUnit !=undefined?$scope.scopeModel.selectedTimeGroupingUnit.value:undefined
+                    FilterGroup: filterObj,
+                    TimeGroupingUnit: $scope.scopeModel.selectedTimeGroupingUnit != undefined ? $scope.scopeModel.selectedTimeGroupingUnit.value : undefined
                 };
                 return query;
             }

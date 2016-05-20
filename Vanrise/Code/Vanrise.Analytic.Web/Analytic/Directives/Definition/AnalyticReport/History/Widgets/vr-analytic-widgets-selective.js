@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AnalyticWidgetsSelective.$inject = ['VR_Analytic_AnalyticConfigurationAPIService', 'UtilsService', 'VRUIUtilsService'];
+    AnalyticWidgetsSelective.$inject = ['VR_Analytic_AnalyticConfigurationAPIService', 'UtilsService', 'VRUIUtilsService','ColumnWidthEnum'];
 
-    function AnalyticWidgetsSelective(VR_Analytic_AnalyticConfigurationAPIService, UtilsService, VRUIUtilsService) {
+    function AnalyticWidgetsSelective(VR_Analytic_AnalyticConfigurationAPIService, UtilsService, VRUIUtilsService, ColumnWidthEnum) {
         return {
             restrict: "E",
             scope: {
@@ -36,10 +36,15 @@
 
             var template =
                 '<vr-row>'
-               + ' <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">'
+                + ' <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">'
                 + ' <vr-textbox label="Title" value="scopeModel.widgetTitle" isrequired="true"></vr-textbox>'
-              + ' </vr-columns>'
-               + ' <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">'
+                + ' </vr-columns>'
+                + '  <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">'
+                + '  <vr-select datasource="scopeModel.columnWidth" datatextfield="description" datavaluefield="value" hideremoveicon label="Row Space" selectedvalues="scopeModel.selectedColumnWidth" isrequired hidefilterbox></vr-select>'
+                + ' </vr-columns>'
+
+
+                + ' <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">'
                 + ' <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedTable" hideremoveicon onselectitem="scopeModel.onSelectionTableChanged"></vr-analytic-table-selector>'
               + ' </vr-columns>'
 
@@ -98,6 +103,7 @@
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
+                defineColumnWidth();
                 defineAPI();
 
             }
@@ -114,7 +120,10 @@
                         if (payload.widgetEntity != undefined)
                         {
                             widgetEntity = payload.widgetEntity;
+
                             $scope.scopeModel.widgetTitle = payload.widgetEntity.WidgetTitle;
+                            $scope.scopeModel.selectedColumnWidth = UtilsService.getItemByVal($scope.scopeModel.columnWidth, payload.widgetEntity.ColumnWidth, "value");
+
                             directiveReadyDeferred = UtilsService.createPromiseDeferred();
                             var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                             directiveReadyDeferred.promise.then(function () {
@@ -169,6 +178,7 @@
                             data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
                             data.AnalyticTableId = $scope.scopeModel.selectedTable != undefined ? $scope.scopeModel.selectedTable.AnalyticTableId : undefined,
                             data.WidgetTitle = $scope.scopeModel.widgetTitle;
+                            data.ColumnWidth = $scope.scopeModel.selectedColumnWidth.value;
                         }
                     }
                     return data;
@@ -188,6 +198,13 @@
                         }
                     });
                 }
+                
+            }
+            function defineColumnWidth() {
+                $scope.scopeModel.columnWidth = [];
+                for (var td in ColumnWidthEnum)
+                    $scope.scopeModel.columnWidth.push(ColumnWidthEnum[td]);
+                $scope.scopeModel.selectedColumnWidth = ColumnWidthEnum.FullRow;
             }
         }
     }

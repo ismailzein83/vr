@@ -2,9 +2,9 @@
 
     'use strict';
 
-    HistoryAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'Analytic_AnalyticService','VR_Analytic_AnalyticConfigurationAPIService','VR_GenericData_DataRecordFieldTypeConfigAPIService','VR_Analytic_AnalyticItemConfigAPIService','VR_Analytic_AnalyticTypeEnum','VR_GenericData_DataRecordTypeService'];
+    HistoryAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'Analytic_AnalyticService','VR_Analytic_AnalyticConfigurationAPIService','VR_GenericData_DataRecordFieldTypeConfigAPIService','VR_Analytic_AnalyticItemConfigAPIService','VR_Analytic_AnalyticTypeEnum','VR_GenericData_DataRecordTypeService','ColumnWidthEnum'];
 
-    function HistoryAnalyticReportDirective(UtilsService, VRUIUtilsService, Analytic_AnalyticService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VR_GenericData_DataRecordTypeService) {
+    function HistoryAnalyticReportDirective(UtilsService, VRUIUtilsService, Analytic_AnalyticService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VR_GenericData_DataRecordTypeService, ColumnWidthEnum) {
         return {
             restrict: "E",
             scope: {
@@ -81,7 +81,7 @@
                         return promiseDeffer.promise;
                     }
                 };
-
+                defineColumnWidth();
                 defineAPI();
             }
 
@@ -245,7 +245,6 @@
 
                 function addWidget(widgetItem) {
                     var matchItem = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, widgetItem.payload.ConfigId, "ExtensionConfigurationId");
-                    
                     if (matchItem == null)
                         return;
                     var widget = {
@@ -253,7 +252,8 @@
                         configId: matchItem.ExtensionConfigurationId,
                         runtimeEditor: matchItem.RuntimeEditor,
                         name: widgetItem.WidgetTitle,
-                        settings: widgetItem.payload
+                        settings: widgetItem.payload,
+                        columnWidth: UtilsService.getItemByVal($scope.scopeModel.columnWidth, widgetItem.payload.ColumnWidth, "value")
                     };
                     var dataItemPayload = getQuery(widgetItem.payload);
 
@@ -277,7 +277,12 @@
 
 
             }
-
+            function defineColumnWidth() {
+                $scope.scopeModel.columnWidth = [];
+                for (var td in ColumnWidthEnum)
+                    $scope.scopeModel.columnWidth.push(ColumnWidthEnum[td]);
+                $scope.scopeModel.selectedColumnWidth = $scope.scopeModel.columnWidth[0];
+            }
             function getQuery(widgetPayload) {
                 var dimensionFilters = [];
                 if ($scope.scopeModel.filters != undefined) {

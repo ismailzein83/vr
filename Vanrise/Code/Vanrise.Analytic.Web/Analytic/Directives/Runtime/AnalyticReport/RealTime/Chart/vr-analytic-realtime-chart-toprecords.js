@@ -167,6 +167,7 @@ app.directive("vrAnalyticRealtimeChartToprecords", ['UtilsService', 'VRNotificat
                     MeasureFields: UtilsService.getPropValuesFromArray(ctrl.measures, 'MeasureName'),
                     FromTime: fromTime,
                     ToTime: toTime,
+                    FilterGroup: payLoad.FilterGroup,
                     TableId: payLoad.TableId
                 }
                 return queryFinalized;

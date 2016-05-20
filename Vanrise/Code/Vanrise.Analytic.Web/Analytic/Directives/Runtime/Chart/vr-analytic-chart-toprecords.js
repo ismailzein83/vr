@@ -164,6 +164,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                     FromTime: fromTime,
                     ToTime: toTime,
                     TableId: payLoad.TableId,
+                    FilterGroup: payLoad.FilterGroup,
                     TopRecords: payLoad.Settings.TopRecords,
                     OrderBy: [payLoad.Settings.TopMeasure]
                 }

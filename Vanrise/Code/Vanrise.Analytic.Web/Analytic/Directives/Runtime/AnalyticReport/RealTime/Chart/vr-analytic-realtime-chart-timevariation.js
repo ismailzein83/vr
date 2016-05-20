@@ -134,6 +134,7 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
                     ToTime: toTime,
                     TableId: payLoad.TableId,
                     TimeGroupingUnit: payLoad.TimeGroupingUnit,
+                    FilterGroup: payLoad.FilterGroup,
                 }
                 return queryFinalized;
             }

@@ -10,7 +10,9 @@
         function registerJob(callToBeExecuted) {
             var job = {
                 id: UtilsService.guid(),
-                onTimerElapsed: callToBeExecuted
+                onTimerElapsed: callToBeExecuted,
+                readyPromiseDeffer: UtilsService.createPromiseDeferred(),
+                isPromiseResloved:false
             };
             registeredJobs.push(job);
             return job;
@@ -40,12 +42,18 @@
 
         function executeJob(job) {
             job.onTimerElapsed().finally(function () {
-
+                if (!job.isPromiseResloved)
+                {
+                    job.readyPromiseDeffer.resolve();
+                    job.isPromiseResloved = true;
+                }
                 currentIndex++;
                 if (currentIndex < registeredJobs.length)
                     executeJob(registeredJobs[currentIndex]);
                 else
                     isGettingData = false;
+            }).catch(function (error) {
+                job.readyPromiseDeffer.reject(error);
             });
         }
 

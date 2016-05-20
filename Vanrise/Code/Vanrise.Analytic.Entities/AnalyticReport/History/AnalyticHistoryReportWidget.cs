@@ -12,5 +12,6 @@ namespace Vanrise.Analytic.Entities
 
         public int AnalyticTableId { get; set; }
         public string WidgetTitle { get; set; }
+        public int ColumnWidth { get; set; }
     }
 }

@@ -160,6 +160,7 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                     FromTime: fromTime,
                     ToTime: toTime,
                     TableId: payLoad.TableId,
+                    FilterGroup: payLoad.FilterGroup,
                     TopRecords: payLoad.Settings.TopRecords
                 }
                 return queryFinalized;
