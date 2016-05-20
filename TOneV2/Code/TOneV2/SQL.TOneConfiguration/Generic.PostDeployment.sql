@@ -64,7 +64,9 @@ as (select * from (values
 (3004,'Data Stores','Data Store','#/view/VR_GenericData/Views/DataStore/DataStoreManagement',301,'VR_GenericData/DataStore/GetFilteredDataStores',null,null,null,0,4),
 (3005,'Data Record Storages','Data Record Storage','#/view/VR_GenericData/Views/DataRecordStorage/DataRecordStorageManagement',301,'VR_GenericData/DataRecordStorage/GetFilteredDataRecordStorages',null,null,null,0,5),
 (3006,'Business Entity Definitions','Business Entity Definitions','#/view/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericBEDefinitionManagement',301,'VR_GenericData/BusinessEntityDefinition/GetFilteredBusinessEntityDefinitions',null,null,null,0,6),
-(3007,'Summary Transformation Definition','Summary Transformation Definition','#/view/VR_GenericData/Views/SummaryTransformationDefinition/SummaryTransformationDefinitionManagement',301,'VR_GenericData/SummaryTransformationDefinition/GetFilteredSummaryTransformationDefinitions',null,null,null,0,8)
+(3007,'Summary Transformation Definition','Summary Transformation Definition','#/view/VR_GenericData/Views/SummaryTransformationDefinition/SummaryTransformationDefinitionManagement',301,'VR_GenericData/SummaryTransformationDefinition/GetFilteredSummaryTransformationDefinitions',null,null,null,0,8),
+(3008,'BE Lookup Rule Definition','BE Lookup Rule Definition Management','#/view/VR_GenericData/Views/BELookupRuleDefinition/BELookupRuleDefinitionManagement',301,'WhS_BE/BELookupRuleDefinition/GetFilteredBELookupRuleDefinitions',null,null,null,0,11),
+(3009,'Data Record Field Choice','Data Record Field Choice','#/view/VR_GenericData/Views/DataRecordFieldChoice/DataRecordFieldChoiceManagement',301,'VR_GenericData/DataRecordFieldChoice/GetFilteredDataRecordFieldChoices',null,null,null,0,12)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -113,7 +115,9 @@ as (select * from (values
 (605,'VR_GenericData_DataRecordType','Data Record Type',301,0,'["View","Add","Edit"]'),
 (606,'VR_GenericData_DataStore','Data Store',301,0,'["View","Add","Edit"]'),
 (607,'VR_GenericData_DataRecordStorage','Data Record Storage',301,0,'["View","Add","Edit"]'),
-(608,'VR_GenericData_SummaryTransformationDefinition','Summary Transformation Definition',301,0,'["View","Add","Edit"]')
+(608,'VR_GenericData_SummaryTransformationDefinition','Summary Transformation Definition',301,0,'["View","Add","Edit"]'),
+(609,'VR_GenericData_BELookupRuleDefinition','BE Lookup Rule Definition',301,0,'["View","Add","Edit"]'),
+(610,'VR_GenericData_DataRecordFieldChoice','VR_GenericData_DataRecordFieldChoice',301,0,'["View","Add","Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -202,7 +206,19 @@ as (select * from (values
 ('VR_GenericData/SummaryTransformationDefinition/AddSummaryTransformationDefinition','VR_GenericData_SummaryTransformationDefinition: Add'),
 ('VR_GenericData/SummaryTransformationDefinition/UpdateSummaryTransformationDefinition','VR_GenericData_SummaryTransformationDefinition: Edit'),
 ('VR_GenericData/SummaryTransformationDefinition/GetSummaryTransformationDefinitionInfo',null),
-('VR_GenericData/SummaryTransformationDefinition/GetSummaryBatchIntervalSourceTemplates',null)
+('VR_GenericData/SummaryTransformationDefinition/GetSummaryBatchIntervalSourceTemplates',null),
+
+('VR_GenericData/BELookupRuleDefinition/GetFilteredBELookupRuleDefinitions','VR_GenericData_BELookupRuleDefinition: View'),
+('VR_GenericData/BELookupRuleDefinition/GetBELookupRuleDefinitionsInfo','VR_GenericData_BELookupRuleDefinition: View'),
+('VR_GenericData/BELookupRuleDefinition/GetBELookupRuleDefinition','VR_GenericData_BELookupRuleDefinition: View'),
+('VR_GenericData/BELookupRuleDefinition/AddBELookupRuleDefinition','VR_GenericData_BELookupRuleDefinition: Add'),
+('VR_GenericData/BELookupRuleDefinition/UpdateBELookupRuleDefinition','VR_GenericData_BELookupRuleDefinition: Edit'),
+
+('VR_GenericData/DataRecordFieldChoice/GetFilteredDataRecordFieldChoices','VR_GenericData_DataRecordFieldChoice: View'),
+('VR_GenericData/DataRecordFieldChoice/GetDataRecordFieldChoicesInfo','VR_GenericData_DataRecordFieldChoice: View'),
+('VR_GenericData/DataRecordFieldChoice/GetDataRecordFieldChoice','VR_GenericData_DataRecordFieldChoice: View'),
+('VR_GenericData/DataRecordFieldChoice/AddDataRecordFieldChoice','VR_GenericData_DataRecordFieldChoice: Add'),
+('VR_GenericData/DataRecordFieldChoice/UpdateDataRecordFieldChoice','VR_GenericData_DataRecordFieldChoice: Edit')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
