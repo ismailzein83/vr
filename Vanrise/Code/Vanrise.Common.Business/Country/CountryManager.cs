@@ -87,7 +87,7 @@ namespace Vanrise.Common.Business
             for (int i = 1; i < countryDataTable.Rows.Count; i++)
             {
                 Country country = GetCachedCountries().FindRecord(it => it.Name.ToLower().Equals(countryDataTable.Rows[i][0].ToString().ToLower()));
-                if (country == null)
+                if (country == null && !String.IsNullOrEmpty(countryDataTable.Rows[i][0].ToString()))
                 {
                     country = new Country();
                     long startingId;

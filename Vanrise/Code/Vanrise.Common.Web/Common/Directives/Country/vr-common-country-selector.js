@@ -11,7 +11,6 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
             isrequired: "=",
             onselectitem: "=",
             ondeselectitem: "=",
-            isdisabled: "=",
             hideremoveicon: '@',
             normalColNum: '@'
         },

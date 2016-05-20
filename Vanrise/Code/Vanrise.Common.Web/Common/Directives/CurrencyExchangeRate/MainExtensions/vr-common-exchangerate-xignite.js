@@ -46,7 +46,7 @@ app.directive("vrCommonExchangerateFxsauder", [function () {
             api.getData = function () {
                 
                 return {   
-                    $type: "Vanrise.Common.MainExtensions.ExchangeRateUpdateService.ExchangeRateTaskActionArgument, Vanrise.Common.MainExtensions",
+                    $type: "Vanrise.Common.MainExtensions.ExchangeRateTaskActionArgument, Vanrise.Common.MainExtensions",
                     URL: $scope.url,
                     Token:$scope.token
                 };

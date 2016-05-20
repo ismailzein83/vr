@@ -2,16 +2,20 @@
 
     "use strict";
 
-    masterLogManagementController.$inject = ['$scope', 'VRCommon_MasterLogService'];
+    masterLogManagementController.$inject = ['$scope', '$filter', 'VRCommon_MasterLogService'];
 
-    function masterLogManagementController($scope, VRCommon_MasterLogService) {
+    function masterLogManagementController($scope, $filter, VRCommon_MasterLogService) {
 
 
         defineScope();
         load();
 
         function defineScope() {
-            $scope.drillDownDirectiveTabs = VRCommon_MasterLogService.getTabsDefinition();
+            //var tabs = VRCommon_MasterLogService.getTabsDefinition();
+            //console.log(tabs);
+            //tabs = $filter('orderBy')(tabs, 'title');
+            //console.log(tabs);
+            $scope.drillDownDirectiveTabs = $filter('orderBy')(VRCommon_MasterLogService.getTabsDefinition(), 'title');// VRCommon_MasterLogService.getTabsDefinition();
 
 
            

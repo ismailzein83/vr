@@ -27,7 +27,7 @@
             }
             editMode = (cityId != undefined);
             $scope.disableCountry = ((countryId != undefined) && !editMode) || disableCountry == true;
-            
+           
         }
 
         function defineScope() {
