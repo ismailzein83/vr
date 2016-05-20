@@ -50,10 +50,10 @@ namespace QM.CLITester.Entities
         [Description("Partially Succeeded")]
         PartiallySucceeded = 2,
 
-        [Description("Failed")]
+        [Description("CLI Failure")]
         Failed = 3,
 
-        [Description("CLI Failure")]
+        [Description("Call Failure")]
         NotAnswered = 4,
 
         [Description("FAS")]

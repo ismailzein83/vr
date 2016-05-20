@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace QM.CLITester.Entities
 {
+    ///// <summary>
+    ///// Used in TOne V1 in "TOne.ClearVoiceIntegration" => Class AddTestCallInput
+    ///// </summary>
     public class AddTestCallInput
     {
         public List<int?> SuppliersIds { get; set; }

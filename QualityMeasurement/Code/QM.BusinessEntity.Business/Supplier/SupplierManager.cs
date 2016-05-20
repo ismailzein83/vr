@@ -26,14 +26,14 @@ namespace QM.BusinessEntity.Business
             var suppliers = GetCachedSuppliers();
             return suppliers.GetRecord(supplierId);
         }
-        public Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceItemIds)
+        public Dictionary<string, long> GetExistingItemIds()
         {
             Dictionary<string, long> existingItemIds = new Dictionary<string, long>();
             foreach (var item in GetCachedSuppliers())
             {
                 if (item.Value.SourceId != null)
                 {
-                    if (sourceItemIds.Contains(item.Value.SourceId))
+                    //if (sourceItemIds.Contains(item.Value.SourceId))
                         existingItemIds.Add(item.Value.SourceId, (long)item.Value.SupplierId);
                 }
             }

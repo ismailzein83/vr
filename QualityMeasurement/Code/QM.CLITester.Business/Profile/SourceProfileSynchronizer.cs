@@ -45,10 +45,10 @@ namespace QM.CLITester.Business
             };
         }
 
-        protected override Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceItemIds)
+        protected override Dictionary<string, long> GetExistingItemIds()
         {
             ProfileManager profileManager = new ProfileManager();
-            return profileManager.GetExistingItemIds(sourceItemIds);
+            return profileManager.GetExistingItemIds();
         }
 
         protected override void ReserveIdRange(int nbOfIds, out long startingId)

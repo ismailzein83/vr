@@ -123,9 +123,9 @@ namespace QM.BusinessEntity.Business
             ZoneManager.ReserveIDRange(nbOfIds, out startingId);
         }
 
-        protected override Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceItemIds)
+        protected override Dictionary<string, long> GetExistingItemIds()
         {
-            return zoneManager.GetExistingItemIds(sourceItemIds);
+            return zoneManager.GetExistingItemIds();
         }
     }
 }

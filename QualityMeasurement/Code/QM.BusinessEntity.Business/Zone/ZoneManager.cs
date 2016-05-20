@@ -158,14 +158,14 @@ namespace QM.BusinessEntity.Business
             Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(typeof(ZoneManager), nbOfIds, out startingId);
         }
 
-        public Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceItemIds)
+        public Dictionary<string, long> GetExistingItemIds()
         {
             Dictionary<string, long> existingItemIds = new Dictionary<string, long>();
             foreach (var item in GetCachedZones())
             {
                 if (item.Value.SourceId != null)
                 {
-                    if (sourceItemIds.Contains(item.Value.SourceId))
+                    //if (sourceItemIds.Contains(item.Value.SourceId))
                         existingItemIds.Add(item.Value.SourceId, (long)item.Value.ZoneId);
                 }
             }

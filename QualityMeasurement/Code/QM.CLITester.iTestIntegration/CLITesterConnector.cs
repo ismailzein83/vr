@@ -237,7 +237,7 @@ namespace QM.CLITester.iTestIntegration
                     }
                     testProgressOutput.Measure = resultTestProgress;
                     testProgressOutput.TestProgress = testProgress;
-                    if (testProgress.Result != "Processing" && testProgress.Result != "Awaiting CLI Result")
+                    if (testProgress.Result != "Processing" && testProgress.Result != "Awaiting CLI Result" && testProgress.Result != "Awaiting Result")
                     {
                         testProgressOutput.Result = GetTestProgressResult.TestCompleted;
 

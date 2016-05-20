@@ -46,8 +46,11 @@ namespace QM.BusinessEntity.Business
             {
                 SupplierManager supplierManager = new SupplierManager();
                 Supplier supplier = supplierManager.GetSupplier((int)s);
-                supplier.IsDeleted = true;
-                supplierManager.UpdateSupplier(supplier);
+                if (supplier != null)
+                {
+                    supplier.IsDeleted = true;
+                    supplierManager.UpdateSupplier(supplier);                    
+                }
             }
         }
 
@@ -60,10 +63,10 @@ namespace QM.BusinessEntity.Business
             };
         }
 
-        protected override Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceItemIds)
+        protected override Dictionary<string, long> GetExistingItemIds()
         {
             SupplierManager supplierManager = new SupplierManager();
-            return supplierManager.GetExistingItemIds(sourceItemIds);
+            return supplierManager.GetExistingItemIds();
         }
 
         protected override void ReserveIdRange(int nbOfIds, out long startingId)
