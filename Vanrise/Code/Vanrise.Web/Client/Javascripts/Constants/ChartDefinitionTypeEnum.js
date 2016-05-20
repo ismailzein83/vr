@@ -1,11 +1,9 @@
-﻿
-app.constant('VR_ChartDefinitionTypeEnum', {
-    Column: { value: "column", description: "Column" },
-    Line: { value: "line", description: "Line" },
-    Spline: { value: "spline", description: "Spline" },
-    Area: { value: "area", description: "Area" },
-    AreaSpline: { value: "areaspline", description: "Area Spline" },
-    Scatter: { value: "scatter", description: "Scatter" },
-    Bar: { value: "bar", description: "Bar" }
-
+﻿app.constant('VR_ChartDefinitionTypeEnum', {
+    Column: { value: "column", description: "Column", orientation: 1 },
+    Line: { value: "line", description: "Line", orientation: 1 },
+    Spline: { value: "spline", description: "Spline", orientation: 1 },
+    Area: { value: "area", description: "Area", orientation: 1 },
+    AreaSpline: { value: "areaspline", description: "Area Spline", orientation: 1 },
+    Scatter: { value: "scatter", description: "Scatter", orientation: 1 },
+    Bar: { value: "bar", description: "Bar", orientation: 0 }
 });

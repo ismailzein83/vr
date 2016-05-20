@@ -177,6 +177,7 @@
     <Content Include="Client\Images\onebit_34.png" />
     <Content Include="Client\Images\support.png" />
     <Content Include="Client\Images\true.png" />
+    <Content Include="Client\Javascripts\Constants\ChartDefinitionTypeOrientationEnum.js" />
     <Content Include="Client\Javascripts\Constants\HttpStatusCodeEnum.js" />
     <Content Include="Client\Javascripts\Constants\AuthenticateOperationResultEnum.js" />
     <Content Include="Client\Javascripts\Constants\ChartDefinitionTypeEnum.js" />

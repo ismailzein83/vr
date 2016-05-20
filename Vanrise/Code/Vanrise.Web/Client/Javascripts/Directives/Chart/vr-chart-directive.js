@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrChart', ['ChartDirService', 'VRModalService', 'UtilsService', function (ChartDirService, VRModalService, UtilsService) {
+app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRModalService', 'UtilsService', function (ChartDirService, VR_ChartDefinitionTypeEnum, VRModalService, UtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -97,17 +97,12 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', 'UtilsService', f
 
         function changeSettings() {
             var modalSettings = {};
+
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.title = 'Chart Settings';
                 modalScope.config = (JSON.parse(JSON.stringify(currentChartSettings)));
-                var seriesTypes = [{ value: "column" },
-                       { value: "line" },
-                       { value: "spline" },
-                       { value: "area" },
-                       { value: "areaspline" },
-                       { value: "scatter" },
-                       { value: "bar" }
-                ];
+
+                var seriesTypes = UtilsService.getArrayEnum(VR_ChartDefinitionTypeEnum);
 
                 angular.forEach(modalScope.config.series, function (s) {
                     s.seriesTypesOption = {
@@ -116,19 +111,37 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', 'UtilsService', f
                     };
 
                 });
-
+                
                 modalScope.save = function () {
                     modalScope.modalContext.closeModal();
-                    currentChartSettings = modalScope.config;
+                    currentChartSettings = modalScope.config;                    
                     if (currentChartSettings.isSingleDimension) {
                         renderSingleDimensionChart(currentChartSource);
                     }
                     else {
                         angular.forEach(modalScope.config.series, function (s) {
-                            s.type = s.seriesTypesOption.lastselectedvalue.value;
+                            s.type = (s.seriesTypesOption.lastselectedvalue != undefined) ? s.seriesTypesOption.lastselectedvalue.value : undefined;
                         });
                         renderChart(currentChartSource);
                     }
+                };
+
+                modalScope.validateChartDefinitionTypes = function () {
+                    if (modalScope.config.isSingleDimension)
+                        return null;
+                    var previousOrientation;
+                    for (var i = 0; i < modalScope.config.series.length; i++) {
+                        if (!modalScope.config.series[i].selected)
+                            continue;
+                        var selectedType = modalScope.config.series[i].seriesTypesOption.lastselectedvalue;
+                        if (selectedType == undefined)
+                            continue;
+                        if (previousOrientation == undefined)
+                            previousOrientation = selectedType.orientation;
+                        else if (selectedType.orientation != previousOrientation)
+                            return 'All types must have the same orientation';
+                    }
+                    return null;
                 };
             };
 
@@ -258,6 +271,7 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', 'UtilsService', f
                 if (serieSettings.selected) {
                     var serie = {
                         name: sDef.title,
+                        serieDefinition: sDef,
                         data: [],
                         events:
                         {
@@ -304,7 +318,8 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', 'UtilsService', f
                 }
 
                 for (var i = 0; i < series.length; i++) {
-                    var sDef = seriesDefinitions[i];
+                    var serie = series[i];
+                    var sDef = serie.serieDefinition;
 
                     var yValue = eval('dataItem.' + sDef.valuePath);
                     series[i].data.push(yValue);
