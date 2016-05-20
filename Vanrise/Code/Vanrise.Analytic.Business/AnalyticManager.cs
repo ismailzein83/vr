@@ -102,15 +102,16 @@ namespace Vanrise.Analytic.Business
                 }
                 if (withSummary)
                 {
-                    if(summarySQLRecord == null)
+                    if (summarySQLRecord == null)
                     {
-                        summarySQLRecord = new DBAnalyticRecord { AggValuesByAggName = new Dictionary<string,DBAnalyticRecordAggValue>()};
-                        foreach( var aggValueEntry in dbRecord.AggValuesByAggName)
+                        summarySQLRecord = new DBAnalyticRecord { AggValuesByAggName = new Dictionary<string, DBAnalyticRecordAggValue>() };
+                        foreach (var aggValueEntry in dbRecord.AggValuesByAggName)
                         {
                             summarySQLRecord.AggValuesByAggName.Add(aggValueEntry.Key, aggValueEntry.Value.Clone() as DBAnalyticRecordAggValue);
                         }
                     }
-                    UpdateAggregateValues(analyticTableQueryContext, summarySQLRecord, dbRecord);
+                    else
+                        UpdateAggregateValues(analyticTableQueryContext, summarySQLRecord, dbRecord);
                 }
             }
             List<AnalyticRecord> analyticRecords = new List<AnalyticRecord>();
