@@ -167,7 +167,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 Country country = countryManager.GetCountry(code.Value.ToLower());
                 CodeGroup codeGroup = null;
-                if (country != null && !cachedCodeGroups.TryGetValue(code.Key, out codeGroup))
+                if (country != null && !cachedCodeGroups.TryGetValue(code.Key, out codeGroup) && !String.IsNullOrEmpty(code.Key))
                 {
                     importedCodeGroup.Add(new CodeGroup
                     {
@@ -190,6 +190,8 @@ namespace TOne.WhS.BusinessEntity.Business
                         RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Country Not Exists");
                     else if (country != null && codeGroup != null)
                         RateWorkSheet.Cells[rowIndex, colIndex].PutValue("CodeGroup Exists");
+                    else if (country != null && String.IsNullOrEmpty(code.Key) )
+                        RateWorkSheet.Cells[rowIndex, colIndex].PutValue("CodeGroup Is Empty");
                     uploadCodeGroupLog.CountOfCodeGroupsFailed++;
                     colIndex = 0;
                     rowIndex++;

@@ -28,6 +28,8 @@ function codeGroupUploadEditorController($scope, VRUIUtilsService, UtilsService,
                 $scope.failedCodeGroup = response.CountOfCodeGroupsFailed;
                 fileID = response.fileID;
                 VRNotificationService.showSuccess("Code Group Finished Upload");
+            }).catch(function (error) {
+                VRNotificationService.showError(error.ExceptionMessage);
             });
         }
         $scope.downloadTemplate = function () {
