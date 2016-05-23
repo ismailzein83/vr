@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("businessprocessBpInstanceTrackingMonitor", ["BusinessProcess_BPInstanceTrackingAPIService", "UtilsService", "BusinessProcess_GridMaxSize","VRTimerService",
+app.directive("businessprocessBpInstanceTrackingMonitor", ["BusinessProcess_BPInstanceTrackingAPIService", "UtilsService", "BusinessProcess_GridMaxSize", "VRTimerService",
 function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService, BusinessProcess_GridMaxSize, VRTimerService) {
 
     var directiveDefinitionObject = {
@@ -50,7 +50,6 @@ function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService, BusinessPr
             loadFilters();
             $scope.selectedTrackingSeverity = [];
             $scope.bpInstanceTracking = [];
-            var job;
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -66,8 +65,8 @@ function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService, BusinessPr
                     }
 
                     directiveAPI.clearTimer = function () {
-                        if (job) {
-                            VRTimerService.unregisterJob(job);
+                        if ($scope.job) {
+                            VRTimerService.unregisterJob($scope.job);
                         }
                     }
                     return directiveAPI;
@@ -84,7 +83,7 @@ function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService, BusinessPr
                     input.NbOfRows = undefined;
                     $scope.bpInstanceTracking.length = 0;
                     input.Severities = UtilsService.getPropValuesFromArray($scope.selectedTrackingSeverity, "value");
-                    job = createTimer();
+                    createTimer();
                 }
 
                 function manipulateDataUpdated(response) {
@@ -115,12 +114,12 @@ function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService, BusinessPr
                 }
 
                 function createTimer() {
-                    if (job) {
-                        VRTimerService.unregisterJob(job);
+                    if ($scope.job) {
+                        VRTimerService.unregisterJob($scope.job);
                     }
                     var pageInfo = gridAPI.getPageInfo();
                     input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
-                    return VRTimerService.registerJob(onTimerElapsed);
+                    VRTimerService.registerJob(onTimerElapsed, $scope);
                 }
 
                 function onTimerElapsed() {
@@ -133,12 +132,6 @@ function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService, BusinessPr
                          $scope.isLoading = false;
                      });
                 }
-
-                $scope.$on("$destroy", function () {
-                    if (job) {
-                        VRTimerService.unregisterJob(job);
-                    }
-                });
             };
         }
 

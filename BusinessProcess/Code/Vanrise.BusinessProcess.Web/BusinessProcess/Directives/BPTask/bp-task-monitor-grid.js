@@ -49,7 +49,6 @@ function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, Busines
             var myTaskSelected;
             $scope.bpTasks = [];
             var isGettingDataFirstTime = true;
-            var job;
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -68,12 +67,12 @@ function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, Busines
                         $scope.bpTasks.length = 0;
                         isGettingDataFirstTime = true;
                         minId = undefined;
-                        job = createTimer();
+                        createTimer();
                     }
 
                     directiveAPI.clearTimer = function () {
-                        if (job) {
-                            VRTimerService.unregisterJob(job);
+                        if ($scope.job) {
+                            VRTimerService.unregisterJob($scope.job);
                         }
                     }
                     return directiveAPI;
@@ -133,18 +132,19 @@ function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, Busines
 
 
                 function createTimer() {
-                    if (job) {
-                        VRTimerService.unregisterJob(job);
+                    if ($scope.job) {
+                        VRTimerService.unregisterJob($scope.job);
                     }
                     var pageInfo = gridAPI.getPageInfo();
                     input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
                     if (myTaskSelected) {
-                        return VRTimerService.registerJob(onMyTimerElapsed);
+                        VRTimerService.registerJob(onMyTimerElapsed, $scope);
                     }
                     else {
-                        return VRTimerService.registerJob(onTimerElapsed);
+                        VRTimerService.registerJob(onTimerElapsed, $scope);
                     }
                 }
+
                 function onTimerElapsed() {
                     return BusinessProcess_BPTaskAPIService.GetProcessTaskUpdated(input).then(function (response) {
                         manipulateDataUpdated(response);
@@ -166,12 +166,6 @@ function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, Busines
                          $scope.isLoading = false;
                      });
                 }
-
-                $scope.$on("$destroy", function () {
-                    if (job) {
-                        VRTimerService.unregisterJob(job);
-                    }
-                });
             };
         }
 

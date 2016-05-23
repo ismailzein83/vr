@@ -6,24 +6,26 @@
     function TimerService(UtilsService) {
         var registeredJobs = [];
         var isGettingData = false;
+        var defaultJobIntervalInSeconds = 2;
         var currentIndex = 0;
-        function registerJob(callToBeExecuted, scope) {
+        function registerJob(callToBeExecuted, scope, jobIntervalInSeconds) {
             var job = {
                 id: UtilsService.guid(),
                 onTimerElapsed: callToBeExecuted,
-
+                jobInterval: jobIntervalInSeconds != undefined ? jobIntervalInSeconds : defaultJobIntervalInSeconds,
+                lastRun: new Date()
             };
-            if (scope != undefined)
-            {
+
+            if (scope != undefined) {
                 scope.job = job;
                 scope.$on("$destroy", function () {
-                   
+
                     if (scope.job) {
                         unregisterJob(scope.job);
                     }
                 });
             }
-           
+
             registeredJobs.push(job);
             return job;
         }
@@ -48,27 +50,33 @@
                 var currentJob = registeredJobs[currentIndex];
                 executeJob(currentJob);
             }
-        }, 2000);
+        }, 1000);
 
         function executeJob(job) {
-            job.onTimerElapsed().finally(function () {
-                currentIndex++;
-                if (currentIndex < registeredJobs.length)
-                    executeJob(registeredJobs[currentIndex]);
-                else
-                    isGettingData = false;
-            });
+            var secondsDiff = (new Date().getTime() - job.lastRun.getTime()) / 1000;
+            if (secondsDiff >= job.jobInterval) {
+                job.onTimerElapsed().finally(function () {
+                    job.lastRun = new Date();
+                    executeNextJob();
+                });
+            }
+            else {
+                executeNextJob();
+            }
         }
 
-        function registerLowFreqJob(callToBeExecuted,scope)
-        {
-            return registerJob(callToBeExecuted, scope)
+        function executeNextJob() {
+            currentIndex++;
+            if (currentIndex < registeredJobs.length)
+                executeJob(registeredJobs[currentIndex]);
+            else
+                isGettingData = false;
         }
+
 
         return ({
             registerJob: registerJob,
-            unregisterJob: unregisterJob,
-            registerLowFreqJob: registerLowFreqJob
+            unregisterJob: unregisterJob
         });
     }
     appControllers.service('VRTimerService', TimerService);

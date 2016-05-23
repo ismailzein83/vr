@@ -45,7 +45,6 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
 
         function initializeController() {
             $scope.bpInstances = [];
-            var job;
             var isGettingDataFirstTime = true;
 
             $scope.onGridReady = function (api) {
@@ -65,12 +64,12 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                         $scope.bpInstances.length = 0;
                         isGettingDataFirstTime = true;
                         minId = undefined;
-                        job = createTimer();
+                        createTimer();
                     }
 
                     directiveAPI.clearTimer = function () {
-                        if (job) {
-                            VRTimerService.unregisterJob(job);
+                        if ($scope.job) {
+                            VRTimerService.unregisterJob($scope.job);
                         }
                     }
                     return directiveAPI;
@@ -121,12 +120,12 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                 }
 
                 function createTimer() {
-                    if (job) {
-                        VRTimerService.unregisterJob(job);
+                    if ($scope.job) {
+                        VRTimerService.unregisterJob($scope.job);
                     }
                     var pageInfo = gridAPI.getPageInfo();
                     input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
-                    return VRTimerService.registerJob(onTimerElapsed);
+                    VRTimerService.registerJob(onTimerElapsed, $scope);
                 }
 
                 function onTimerElapsed() {
@@ -139,12 +138,6 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                          $scope.isLoading = false;
                      });
                 }
-
-                $scope.$on("$destroy", function () {
-                    if (job) {
-                        VRTimerService.unregisterJob(job);
-                    }
-                });
             };
         }
 

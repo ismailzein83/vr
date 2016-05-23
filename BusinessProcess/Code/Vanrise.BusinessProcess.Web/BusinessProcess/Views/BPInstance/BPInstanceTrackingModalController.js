@@ -20,7 +20,6 @@
         var validationMessageHistoryGridAPI;
 
         var bpInstance;
-        var job;
 
         function defineScope() {
 
@@ -75,8 +74,8 @@
                     validationMessageMonitorGridAPI.clearTimer();
                 }
 
-                if (job) {
-                    VRTimerService.unregisterJob(job);
+                if ($scope.job) {
+                    VRTimerService.unregisterJob($scope.job);
                 }
             };
             $scope.getStatusColor = function () {
@@ -144,14 +143,14 @@
             loadParameters();
             getInstance();
             defineScope();
-            job = createTimer();
+            createTimer();
         }
 
         function createTimer() {
-            if (job) {
-                VRTimerService.unregisterJob(job);
+            if ($scope.job) {
+                VRTimerService.unregisterJob($scope.job);
             }
-            return VRTimerService.registerJob(onTimerElapsed);
+            VRTimerService.registerJob(onTimerElapsed, $scope);
         }
 
         function onTimerElapsed() {

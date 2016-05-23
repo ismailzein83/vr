@@ -44,7 +44,6 @@ function (BusinessProcess_BPValidationMessageAPIService, UtilsService, BusinessP
 
         function initializeController() {
             $scope.bpValidationMessages = [];
-            var job;
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -59,8 +58,8 @@ function (BusinessProcess_BPValidationMessageAPIService, UtilsService, BusinessP
                     }
 
                     directiveAPI.clearTimer = function () {
-                        if (job) {
-                            VRTimerService.unregisterJob(job);
+                        if ($scope.job) {
+                            VRTimerService.unregisterJob($scope.job);
                         }
                     }
                     return directiveAPI;
@@ -72,7 +71,7 @@ function (BusinessProcess_BPValidationMessageAPIService, UtilsService, BusinessP
                     input.GreaterThanID = undefined;
                     input.NbOfRows = undefined;
                     $scope.bpValidationMessages.length = 0;
-                    job = createTimer();
+                    createTimer();
                 }
 
                 function manipulateDataUpdated(response) {
@@ -103,12 +102,12 @@ function (BusinessProcess_BPValidationMessageAPIService, UtilsService, BusinessP
                 }
 
                 function createTimer() {
-                    if (job) {
-                        VRTimerService.unregisterJob(job);
+                    if ($scope.job) {
+                        VRTimerService.unregisterJob($scope.job);
                     }
                     var pageInfo = gridAPI.getPageInfo();
                     input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
-                    return VRTimerService.registerJob(onTimerElapsed);
+                    VRTimerService.registerJob(onTimerElapsed, $scope);
                 }
 
                 function onTimerElapsed() {
@@ -121,12 +120,6 @@ function (BusinessProcess_BPValidationMessageAPIService, UtilsService, BusinessP
                          $scope.isLoading = false;
                      });
                 }
-
-                $scope.$on("$destroy", function () {
-                    if (job) {
-                        VRTimerService.unregisterJob(job);
-                    }
-                });
             };
         }
 

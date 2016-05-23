@@ -34,7 +34,6 @@ function (UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runti
         };
         var taskIds = [];
         var gridAPI;
-        var job;
         var isMyTaskSelected;
         this.initializeController = initializeController;
 
@@ -63,7 +62,7 @@ function (UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runti
                     }
                     return directiveAPI;
                 }
-                job = createTimer();
+                createTimer();
             };
             
             defineMenuActions();
@@ -97,17 +96,16 @@ function (UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runti
         }
 
         function createTimer() {
-            if (job) {
-                VRTimerService.unregisterJob(job);
+            if ($scope.job) {
+                VRTimerService.unregisterJob($scope.job);
             }
             var pageInfo = gridAPI.getPageInfo();
 
             input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
-            return VRTimerService.registerJob(onTimerElapsed);
+            VRTimerService.registerJob(onTimerElapsed, $scope);
         }
 
         function onTimerElapsed() {
-
             taskIds.length = 0;
 
             for (var x = 0; x < $scope.schedulerTasks.length; x++) {
@@ -124,12 +122,6 @@ function (UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runti
                  $scope.isLoading = false;
              });
         }
-
-        $scope.$on("$destroy", function () {
-            if (job) {
-                VRTimerService.unregisterJob(job);
-            }
-        });
 
         function defineMenuActions() {
             $scope.gridMenuActions = [{
