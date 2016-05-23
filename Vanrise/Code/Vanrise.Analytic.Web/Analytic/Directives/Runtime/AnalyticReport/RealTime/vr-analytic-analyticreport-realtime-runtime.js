@@ -107,7 +107,7 @@
 
                     if (job != undefined)
                         VRTimerService.unregisterJob(job);
-                    job = VRTimerService.registerLowFreqJob(search, $scope);
+                    job = VRTimerService.registerJob(search, $scope,900);
                 };
                
                 defineColumnWidth();
