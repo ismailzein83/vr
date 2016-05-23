@@ -243,8 +243,7 @@ namespace CloudPortal.BusinessEntity.Business
                 EmailTemplate template = emailTemplateManager.GeEmailTemplateByType(Vanrise.Security.Business.Constants.ResetPasswordType);
                 PasswordEmailContext context = new PasswordEmailContext() { Name = user.Name, Password = pwd };
 
-                EmailHelper emailHelper = new EmailHelper(user.Email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
-                emailHelper.Send();
+                emailTemplateManager.SendEmail(user.Email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
             }
             return result;
         }
@@ -266,8 +265,7 @@ namespace CloudPortal.BusinessEntity.Business
                 EmailTemplate template = emailTemplateManager.GeEmailTemplateByType(Vanrise.Security.Business.Constants.ForgotPasswordType);
                 PasswordEmailContext context = new PasswordEmailContext() { Name = user.Name, Password = pwd };
 
-                EmailHelper emailHelper = new EmailHelper(email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
-                emailHelper.Send();
+                emailTemplateManager.SendEmail(email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
             }
             return result;
         }
