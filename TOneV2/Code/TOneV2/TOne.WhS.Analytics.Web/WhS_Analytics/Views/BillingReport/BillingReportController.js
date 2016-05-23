@@ -79,6 +79,12 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
         $scope.openReport = function () {
             var customers = customerAccountDirectiveAPI.getSelectedIds();
             var suppliers = supplierAccountDirectiveAPI.getSelectedIds();
+            if (customers == undefined)
+                customers = "";
+
+            if (suppliers == undefined)
+                suppliers = "";
+
             var paramsurl = "";
             paramsurl += "reportId=" + $scope.reporttype.ReportDefinitionId;
             paramsurl += "&fromDate=" + $scope.dateToString($scope.fromDate);
@@ -92,19 +98,19 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             paramsurl += "&margin=" + $scope.params.margin;
             paramsurl += "&top=" + $scope.params.top;
             paramsurl += "&zone=" + (($scope.params.zones.length == 0) ? "" : getIdsList($scope.params.zones, 'ZoneId'));
-            paramsurl += "&customer=" + (customers == undefined) ? "" : customers;
-            paramsurl += "&supplier=" + (suppliers == undefined) ? "" : suppliers;
+            paramsurl += "&customer=" + customers;
+            paramsurl += "&supplier=" + suppliers;
             paramsurl += "&currency=" + currencySelectorAPI.getSelectedIds();
             paramsurl += "&currencyDesc=" + (($scope.params.selectedCurrency == null) ? "United States Dollars" : encodeURIComponent($scope.params.selectedCurrency.Name));
             paramsurl += "&pageBreak=" + $scope.params.pageBreak;
             paramsurl += "&Auth-Token=" + encodeURIComponent(SecurityService.getUserToken());
-
+            console.log(paramsurl);
             if (!$scope.reporttype.ParameterSettings.CustomerIdNotOptional)
                 window.open("Client/Modules/WhS_Analytics/Reports/Analytics/BillingReports.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1");
             else
                 return $scope.export();
         }
-        $scope.resetReportParams = function () {
+        $scope.resetReportParams = function() {
             $scope.params = {
                 groupByCustomer: false,
                 selectedCustomers: [],

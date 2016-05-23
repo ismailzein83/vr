@@ -11,6 +11,7 @@ namespace TOne.WhS.Analytics.Data
 {
     public interface IGenericBillingDataManager : IDataManager
     {
-        IEnumerable<BillingReportRecord> GetFilteredBillingReportRecords(DataRetrievalInput<BillingReportQuery> input);
+        List<BillingReportRecord> GetFilteredBillingReportRecords(BillingReportQuery input);
+
     }
 }

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.Analytics.Data;
+using TOne.WhS.Analytics.Entities;
 using TOne.WhS.Analytics.Entities.BillingReport;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
@@ -11,6 +14,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 {
     public class ZoneSummaryReportGenerator : IReportGenerator
     {
+        private readonly IGenericBillingDataManager _gdatamanager;
+
+        public ZoneSummaryReportGenerator()
+        {
+            _gdatamanager = AnalyticsDataManagerFactory.GetDataManager<IGenericBillingDataManager>();
+        }
+
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AccountManagerManager am = new AccountManagerManager();
@@ -27,11 +37,38 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 lstCustomers.Add(a.CarrierAccountId.ToString());
             }
-
+            
             BillingStatisticManager manager = new BillingStatisticManager();
+            
             double service = 0;
-            List<ZoneSummaryFormatted> zoneSummaries =
-                manager.GetZoneSummary(parameters.FromTime, parameters.ToTime, parameters.CustomersId, parameters.SuppliersId, parameters.IsCost, parameters.CurrencyId, parameters.SupplierGroup, parameters.CustomerGroup, lstCustomers, lstSuppliers, parameters.GroupBySupplier, out service);
+
+            TOne.WhS.Analytics.Entities.BillingReportQuery query = new BillingReportQuery();
+            query.FromDate = parameters.FromTime;
+            query.ToDate = parameters.ToTime;
+            query.CustomerIds = parameters.CustomersId;
+            query.SupplierIds = parameters.SuppliersId;
+            query.CurrencyId = parameters.CurrencyId;
+
+
+            var listBillingReportRecords = _gdatamanager.GetFilteredBillingReportRecords(query); 
+            
+            List<ZoneSummary> listzoneSummaries = new List<ZoneSummary>();
+            foreach (var record in listBillingReportRecords)
+            {
+                ZoneSummary zoneSummary = new ZoneSummary();
+                zoneSummary.Zone = record.Zone;
+                zoneSummary.Calls = record.Calls;
+                zoneSummary.CommissionValue = record.CommissionValue;
+                zoneSummary.DurationInSeconds = record.DurationInSeconds;
+                zoneSummary.DurationNet = record.DurationNet;
+                listzoneSummaries.Add(zoneSummary);
+            }
+            List<ZoneSummaryFormatted> zoneSummaries = manager.FormatZoneSummaries(listzoneSummaries);
+
+            //List<ZoneSummaryFormatted> zoneSummaries =
+            //    manager.GetZoneSummary(parameters.FromTime, parameters.ToTime, parameters.CustomersId, parameters.SuppliersId, parameters.IsCost,
+            //    parameters.CurrencyId, parameters.SupplierGroup, parameters.CustomerGroup, lstCustomers, lstSuppliers, parameters.GroupBySupplier, out service);
+            
 
             decimal services = 0;
             if (parameters.IsCost)

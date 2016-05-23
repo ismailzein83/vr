@@ -76,7 +76,7 @@ namespace TOne.WhS.Analytics.Business
             return models;
         }
 
-        private List<ZoneSummaryFormatted> FormatZoneSummaries(List<ZoneSummary> zoneSummaries)
+        public List<ZoneSummaryFormatted> FormatZoneSummaries(List<ZoneSummary> zoneSummaries)
         {
             List<ZoneSummaryFormatted> models = new List<ZoneSummaryFormatted>();
             if (zoneSummaries != null)

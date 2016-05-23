@@ -16,18 +16,22 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         BillingReportQuery _inputQuery;
 
+        public GenericBillingDataManager()
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneV2DBConnString"))
+        { }
+        
         #endregion
 
         #region Public Methods
-        public IEnumerable<Entities.BillingReportRecord> GetFilteredBillingReportRecords(Vanrise.Entities.DataRetrievalInput<Entities.BillingReportQuery> input)
+        public List<Entities.BillingReportRecord> GetFilteredBillingReportRecords(Entities.BillingReportQuery input)
         {
-            _inputQuery = input.Query;
+            _inputQuery = input;
 
             return GetItemsText<BillingReportRecord>(GetBillingReportQuery(), BillingReportRecordMapper, (cmd) =>
             {
-                cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromDate));
-                cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.ToDate));
-                cmd.Parameters.Add(new SqlParameter("@@CurrencyID", input.Query.CurrencyId));
+                cmd.Parameters.Add(new SqlParameter("@FromDate", input.FromDate));
+                cmd.Parameters.Add(new SqlParameter("@ToDate", input.ToDate));
+                cmd.Parameters.Add(new SqlParameter("@CurrencyID", input.CurrencyId));
             });
         }
         #endregion
@@ -62,7 +66,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 	                    PRIMARY KEY(CurrencyID, BED)
                     )
                     INSERT INTO @ExchangeRates
-                    SELECT * FROM Common.getExchangeRates(@SmallestFromDate, @LargestToDate)";
+                    SELECT * FROM Common.getExchangeRates(@FromDate, @ToDate)";
         }
 
         string GetSingleBoundQuery()
@@ -72,23 +76,21 @@ namespace TOne.WhS.Analytics.Data.SQL
                 SELECT
 				bs.SaleZoneID AS SaleZoneID,
 				SUM(bs.NumberOfCalls) AS Calls,
-				AVG(ISNULL(bs.Cost_Rate/ISNULL(ERC.Rate, 1),0)) AS Rate,
+				AVG(ISNULL(bs.CostRate/ISNULL(ERC.Rate, 1),0)) AS Rate,
 				SUM(bs.AvgDuration * bs.NumberOfCalls / 60.0) AS DurationNet,
-				bs.Cost_RateType AS RateType,
+				bs.CostRateType AS RateType,
 				SUM(bs.CostDuration/60.0) AS DurationInSeconds,
-				SUM(bs.cost_nets /ISNULL(ERC.Rate, 1)) AS  Net,
-				SUM(bs.Cost_Commissions/ISNULL(ERC.Rate, 1)) AS CommissionValue,
-				SUM(bs.Cost_ExtraCharges/ISNULL(ERC.Rate, 1)) AS ExtraChargeValue
+				SUM(bs.CostNets /ISNULL(ERC.Rate, 1)) AS  Net,
+				--SUM(bs.Cost_Commissions/ISNULL(ERC.Rate, 1)) AS CommissionValue,
+				SUM(bs.CostExtraCharges/ISNULL(ERC.Rate, 1)) AS ExtraChargeValue
 
-                FROM Billing_Stats bs WITH(NOLOCK,INDEX(IX_Billing_Stats_Date))
+                FROM TOneWhS_Analytic.BillingStats bs WITH(NOLOCK,INDEX(IX_BillingStats_ID))
                 #JOIN_PART#
 
                 #WHERE_PART#
 
                 GROUP BY #DIMENTION_COLUMN_NAME#
                 #ORDER_BY_PART#
-
-                #SELECT_FROM_RESULT_PART#
 
                 #SUMMARY_PART#
             ");
@@ -106,23 +108,23 @@ namespace TOne.WhS.Analytics.Data.SQL
         string GetJoinPart()
         {
             StringBuilder joinPartBuilder = new StringBuilder();
-            joinPartBuilder.Append(" LEFT JOIN @ExchangeRates ERC ON ERC.CurrencyIn = bs.Cost_Currency  AND ERC.CurrencyOut = @CurrencyID AND ERC.Date = bs.CallDate ");
+            joinPartBuilder.Append(" LEFT JOIN @ExchangeRates ERC ON ERC.CurrencyID = bs.CostCurrency ");
             return joinPartBuilder.ToString();
         }
 
         string GetWherePart()
         {
-            var wherePartBuilder = new StringBuilder(" bs.calldate >=@FromDate AND bs.calldate<=@ToDate");
+            var wherePartBuilder = new StringBuilder(" AND bs.calldate >=@FromDate AND bs.calldate<=@ToDate");
             return wherePartBuilder.ToString();
         }
         string GetDimentionColumnName()
         {
-            var wherePartBuilder = new StringBuilder(" bs.SaleZoneID,bs.Cost_RateType ");
+            var wherePartBuilder = new StringBuilder(" bs.SaleZoneID,bs.CostRateType ");
             return wherePartBuilder.ToString();
         }
         string GetOrderByPart()
         {
-            var wherePartBuilder = new StringBuilder(" bs.SaleZoneID ASC   ");
+            var wherePartBuilder = new StringBuilder(" ORDER BY bs.SaleZoneID DESC   ");
             return wherePartBuilder.ToString();
         }
         #endregion
@@ -140,5 +142,8 @@ namespace TOne.WhS.Analytics.Data.SQL
         }
 
         #endregion
+
+
+
     }
 }
