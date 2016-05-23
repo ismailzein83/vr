@@ -41,6 +41,8 @@ app.directive('vrGenericdataFieldtypeBoolean', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
+              
+                    if (payload !=undefined)
                     ctrl.isNullable = payload.IsNullable;
                 }
 
