@@ -1,4 +1,7 @@
 ﻿using Microsoft.SqlServer.Management.Smo;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TOne.WhS.DBSync.Entities
 {
@@ -10,5 +13,7 @@ namespace TOne.WhS.DBSync.Entities
         public string ScriptedIndexes { get; set; }
         public Table Info { get; set; }
         public object Records { get; set; }
+        public List<DBForeignKey> DBFKs { get; set; }
+        public bool Migrated { get; set; }
     }
 }

@@ -142,8 +142,16 @@ namespace TOne.WhS.DBSync.Data.SQL
                 Table sourceTable = GetTableReference(table);
                 table.Info = sourceTable;
                 table.ScriptedIndexes = ScriptIndexes(sourceTable);
+
+                table.DBFKs = new List<DBForeignKey>();
+                foreach (ForeignKey fk in table.Info.ForeignKeys)
+                {
+                    table.DBFKs.Add(new DBForeignKey { ReferencedKey = fk.ReferencedKey, ReferencedTable = fk.ReferencedTable, ReferencedTableSchema = fk.ReferencedTableSchema });
+                }
+
             }
         }
+
 
         private Table GetTableReference(DBTable dbTable)
         {
