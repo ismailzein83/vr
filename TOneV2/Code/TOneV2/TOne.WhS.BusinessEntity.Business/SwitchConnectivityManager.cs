@@ -7,10 +7,11 @@ using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class SwitchConnectivityManager
+    public class SwitchConnectivityManager : IBusinessEntityManager
     {
         #region Fields
 
@@ -38,6 +39,20 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             Dictionary<int, SwitchConnectivity> cachedEntities = this.GetCachedSwitchConnectivities();
             return cachedEntities.GetRecord(switchConnectivityId);
+        }
+
+        public string GetSwitchConnectivityName(int switchConnectivityId)
+        {
+            SwitchConnectivity switchConnectivity = GetSwitchConnectivity(switchConnectivityId);
+            if (switchConnectivity == null)
+                return null;
+            return switchConnectivity.Name;
+        }
+
+        public IEnumerable<SwitchConnectivityInfo> GetSwitcheConnectivitiesInfo()
+        {
+            var switchConnectivities = GetCachedSwitchConnectivities();
+            return switchConnectivities.MapRecords(SwitchConnectivityInfoMapper);
         }
 
         public Vanrise.Entities.InsertOperationOutput<SwitchConnectivityDetail> AddSwitchConnectivity(SwitchConnectivity switchConnectivity)
@@ -130,6 +145,51 @@ namespace TOne.WhS.BusinessEntity.Business
             });
         }
 
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetSwitchConnectivity(context.EntityId);
+        }
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            var switchConnectivities = GetCachedSwitchConnectivities();
+            if (switchConnectivities == null)
+                return null;
+            else
+                return switchConnectivities.Select(itm => itm as dynamic).ToList();
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            var switchConnectivityNames = new List<string>();
+            foreach (var entityId in context.EntityIds)
+            {
+                string switchConnectivityName = GetSwitchConnectivityName(Convert.ToInt32(entityId));
+                if (switchConnectivityName == null) throw new NullReferenceException("switchConnectivityName");
+                switchConnectivityNames.Add(switchConnectivityName);
+            }
+            return String.Join(",", switchConnectivityNames);
+        }
+
+        public bool IsMatched(IBusinessEntityMatchContext context)
+        {
+            if (context.FieldValueIds == null || context.FilterIds == null) return true;
+
+            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
+            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
+            foreach (var filterId in filterIds)
+            {
+                if (fieldValueIds.Contains(filterId))
+                    return true;
+            }
+            return false;
+        }
+
         #endregion
 
         #region Private Classes
@@ -161,6 +221,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
+
+
         #region Mappers
 
         SwitchConnectivityDetail SwitchConnectivityDetailMapper(SwitchConnectivity switchConnectivity)
@@ -172,7 +234,14 @@ namespace TOne.WhS.BusinessEntity.Business
                 SwitchName = _switchManager.GetSwitchName(switchConnectivity.SwitchId)
             };
         }
-
+        private SwitchConnectivityInfo SwitchConnectivityInfoMapper(SwitchConnectivity switchConnectivity)
+        {
+            return new SwitchConnectivityInfo()
+            {
+                SwitchConnectivityId = switchConnectivity.SwitchConnectivityId,
+                Name = switchConnectivity.Name,
+            };
+        }
         #endregion
     }
 }

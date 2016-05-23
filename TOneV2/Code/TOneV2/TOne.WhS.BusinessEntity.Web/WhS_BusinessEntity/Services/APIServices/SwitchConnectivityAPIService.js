@@ -16,7 +16,9 @@
                 switchConnectivityId: switchConnectivityId
             });
         }
-
+        function GetSwitcheConnectivitiesInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetSwitcheConnectivitiesInfo'));
+        }
         function AddSwitchConnectivity(switchConnectivity) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'AddSwitchConnectivity'), switchConnectivity);
         }
@@ -39,7 +41,8 @@
             AddSwitchConnectivity: AddSwitchConnectivity,
             UpdateSwitchConnectivity: UpdateSwitchConnectivity,
             HasAddSwitchConnectivityPermission: HasAddSwitchConnectivityPermission,
-            HasEditSwitchConnectivityPermission: HasEditSwitchConnectivityPermission
+            HasEditSwitchConnectivityPermission: HasEditSwitchConnectivityPermission,
+            GetSwitcheConnectivitiesInfo: GetSwitcheConnectivitiesInfo
         });
     }
 

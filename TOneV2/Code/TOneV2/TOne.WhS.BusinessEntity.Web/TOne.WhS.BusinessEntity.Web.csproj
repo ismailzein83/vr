@@ -309,6 +309,7 @@
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\vr-whs-be-supplierzone-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\vr-whs-be-supplierzone-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\SwitchConnectivity\Templates\SwitchConnectivityGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SwitchConnectivity\vr-whs-be-switchconnectivity-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\SwitchConnectivity\vr-whs-be-switchconnectivity-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Switch\Templates\SwitchGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Switch\vr-whs-be-switch-grid.js" />

@@ -42,5 +42,11 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             return _manager.UpdateSwitchConnectivity(switchConnectivity);
         }
+        [HttpGet]
+        [Route("GetSwitcheConnectivitiesInfo")]
+        public IEnumerable<SwitchConnectivityInfo> GetSwitcheConnectivitiesInfo()
+        {
+            return _manager.GetSwitcheConnectivitiesInfo();
+        }
     }
 }
