@@ -154,6 +154,10 @@
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
+      <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
+      <Name>Vanrise.GenericData.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Integration.Business\Vanrise.Integration.Business.csproj">
       <Project>{1f22483a-d3db-48ee-aea8-8988bdb3b9a1}</Project>
       <Name>Vanrise.Integration.Business</Name>

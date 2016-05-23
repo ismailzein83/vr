@@ -11,10 +11,11 @@ using Vanrise.Integration.Entities;
 using Vanrise.Queueing;
 using Vanrise.Queueing.Entities;
 using Vanrise.Common;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Integration.Business
 {
-    public class DataSourceManager : IDataSourceManager
+    public class DataSourceManager : IDataSourceManager, IBusinessEntityManager
     {
         public IEnumerable<DataSource> GetAllDataSources()
         {
@@ -49,6 +50,16 @@ namespace Vanrise.Integration.Business
         public DataSource GetDataSource(int dataSourceId)
         {
             return GetCachedDataSources().GetRecord(dataSourceId);
+        }
+
+        public string GetDataSourceName(int dataSourceId)
+        {
+            DataSource dataSource = GetDataSource(dataSourceId);
+
+            if (dataSource != null)
+                return dataSource.Name;
+
+            return null;
         }
 
         public Vanrise.Integration.Entities.DataSource GetDataSourcebyTaskId(int taskId)
@@ -188,6 +199,53 @@ namespace Vanrise.Integration.Business
             IDataSourceDataManager manager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
             return manager.UpdateAdapterState(dataSourceId, adapterState);
         }
+
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetDataSource(context.EntityId);
+        }
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            var dataSources = GetCachedDataSources();
+            if (dataSources == null)
+                return null;
+            else
+                return dataSources.Values.Select(itm => itm as dynamic).ToList();
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            var dataSourceNames = new List<string>();
+            foreach (var entityId in context.EntityIds)
+            {
+                string dataSourceName = GetDataSourceName(Convert.ToInt32(entityId));
+                if (dataSourceName == null) throw new NullReferenceException("dataSourceName");
+                dataSourceNames.Add(dataSourceName);
+            }
+            return String.Join(",", dataSourceNames);
+        }
+
+        public bool IsMatched(IBusinessEntityMatchContext context)
+        {
+            if (context.FieldValueIds == null || context.FilterIds == null) return true;
+
+            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
+            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
+            foreach (var filterId in filterIds)
+            {
+                if (fieldValueIds.Contains(filterId))
+                    return true;
+            }
+            return false;
+        }
+
 
         #region Private Methods
 

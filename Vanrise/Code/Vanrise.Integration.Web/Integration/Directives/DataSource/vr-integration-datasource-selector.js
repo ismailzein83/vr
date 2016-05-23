@@ -11,7 +11,8 @@ function (VR_Integration_DataSourceAPIService, UtilsService, $compile, VRUIUtils
             onselectionchanged: '=',
             isrequired: "@",
             selectedvalues: '=',
-            onaddclicked:'='
+            onaddclicked: '=',
+            normalColNum: '@'
 
         },
         controller: function ($scope, $element, $attrs) {
@@ -55,8 +56,8 @@ function (VR_Integration_DataSourceAPIService, UtilsService, $compile, VRUIUtils
         if (attrs.adddatasource != undefined)
           addDataSource='onaddclicked="addDataSource"';
 
-        return  '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="DataSourceID" '
-        + required + ' label="DataSource" datasource="ctrl.datasource" ' + addDataSource + ' selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled" "></vr-select>'
+        return '<vr-columns colnum="{{ctrl.normalColNum}}" ><vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="DataSourceID" '
+        + required + ' label="DataSource" datasource="ctrl.datasource" ' + addDataSource + ' selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled" "></vr-select></vr-columns>'
 
     }
 
