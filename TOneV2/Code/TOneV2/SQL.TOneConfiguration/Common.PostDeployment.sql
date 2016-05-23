@@ -30,7 +30,11 @@ as (select * from (values
 ('VRCommon/LogAttribute/GetFilteredLoggers','VRCommon_LogAttribute: View'),
 ('VRCommon/EmailTemplate/GetFilteredEmailTemplates','VRCommon_EmailTemplates:View'),
 ('VRCommon/EmailTemplate/UpdateEmailTemplate','VRCommon_EmailTemplates:Edit'),
-('VRCommon/EmailTemplate/GetEmailTemplate',null)
+('VRCommon/EmailTemplate/GetEmailTemplate',null),
+('VRCommon/Settings/GetFilteredSettings','VRCommon_Settings:View'),
+('VRCommon/Settings/UpdateSetting','VRCommon_Settings:Edit'),
+('VRCommon/Settings/GetSetting',null),
+('VRCommon/Settings/GetDistinctSettingCategories',null)
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
@@ -56,7 +60,8 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (301,'VRCommon_Country','Country',2,0,'["View", "Add", "Edit", "Download Template", "Upload", "Add City"]'),
 (302,'VRCommon_LogAttribute','Logs',2,0,'["View"]'),
-(303,'VRCommon_EmailTemplates','Email Templates',2,0,'["View", "Edit"]')
+(303,'VRCommon_EmailTemplates','Email Templates',2,0,'["View", "Edit"]'),
+(304,'VRCommon_Settings','Settings',2,0,'["View", "Edit"]')
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
@@ -107,7 +112,8 @@ as (select * from (values
 (1005,'Rate Types','Rate Types','#/view/Common/Views/RateType/RateTypeManagement',102,'VRCommon/RateType/GetFilteredRateTypes',null,null,null,0,25),
 --(1006,'System Logs','System Logs','#/view/Common/Views/logger/LoggerManagement',3,'VRCommon/LogAttribute/GetFilteredLoggers',null,null,null,0,10),
 (1007,'Event Logs','Event Logs','#/view/Common/Views/MasterLog/MasterLogManagement',3,'VRCommon/LogAttribute/GetFilteredLoggers',null,null,null,0,15),
-(1008,'Email Templates','Email Templates','#/view/Common/Views/EmailTemplate/EmailTemplateManagement',3,'VRCommon/EmailTemplate/GetFilteredEmailTemplates',null,null,null,0,9)
+(1008,'Email Templates','Email Templates','#/view/Common/Views/EmailTemplate/EmailTemplateManagement',3,'VRCommon/EmailTemplate/GetFilteredEmailTemplates',null,null,null,0,9),
+(1009,'Settings','Settings','#/view/Common/Views/Settings/SettingsManagement',3,'VRCommon/Settings/GetFilteredSettings',null,null,null,0,10)
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
