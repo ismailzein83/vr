@@ -51,8 +51,8 @@
         }
 
         function getEmailTemplate() {
-            return VRCommon_EmailTemplateAPIService.GetEmailTemplate(emailTemplateId).then(function (currency) {
-                emailTemplateEntity = currency;
+            return VRCommon_EmailTemplateAPIService.GetEmailTemplate(emailTemplateId).then(function (emailTemplateObj) {
+                emailTemplateEntity = emailTemplateObj;
             });
         }
 
@@ -76,7 +76,7 @@
             $scope.subjectTemplate = emailTemplateEntity.SubjectTemplate;
         }
 
-        function buildCurrencyObjFromScope() {
+        function buildEmailTemplateObjFromScope() {
             var obj = {
                 EmailTemplateId: emailTemplateId,
                 Name: $scope.name,
@@ -89,7 +89,7 @@
         function updateEmailTemplate() {
             $scope.isLoading = true;
 
-            var emailTemplateObject = buildCurrencyObjFromScope();
+            var emailTemplateObject = buildEmailTemplateObjFromScope();
 
             VRCommon_EmailTemplateAPIService.UpdateEmailTemplate(emailTemplateObject)
             .then(function (response) {

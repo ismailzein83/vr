@@ -39,12 +39,15 @@ namespace Vanrise.Common.Business
 
         public Currency GetSystemCurrency()
         {
-            string systemCurrencySymbol = System.Configuration.ConfigurationManager.AppSettings["Currency"];
-            if (systemCurrencySymbol == null)
-                throw new NullReferenceException("systemCurrencySymbol");
-            var systemCurrency = GetAllCurrencies().FindRecord(itm => String.Compare(itm.Symbol, systemCurrencySymbol, true) == 0);
+            SettingManager settingManager = new SettingManager();
+            CurrencySettingData currencyData = settingManager.GetSetting<CurrencySettingData>(Constants.BaseCurrencySettingType);
+            if (currencyData == null)
+                throw new NullReferenceException("CurrencySettingData");
+
+            var systemCurrency = GetCurrency(currencyData.CurrencyId);
             if (systemCurrency == null)
-                throw new NullReferenceException(String.Format("systemCurrency '{0}'", systemCurrencySymbol));
+                throw new NullReferenceException(String.Format("systemCurrency ID: '{0}'", currencyData.CurrencyId));
+
             return systemCurrency;
         }
 
@@ -139,7 +142,7 @@ namespace Vanrise.Common.Business
                 currencDetail.IsMain = true;
 
             return currencDetail;
-        } 
+        }
         #endregion
     }
 }

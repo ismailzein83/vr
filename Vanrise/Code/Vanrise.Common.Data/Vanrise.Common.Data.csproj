@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="CommonDataManagerFactory.cs" />
     <Compile Include="IBigDataServiceDataManager.cs" />
+    <Compile Include="ISettingDataManager.cs" />
     <Compile Include="IEmailTemplateDataManager.cs" />
     <Compile Include="IExtensionConfigurationDataManager.cs" />
     <Compile Include="ICityDataManager.cs" />

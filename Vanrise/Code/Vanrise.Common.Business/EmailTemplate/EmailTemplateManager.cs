@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
 
@@ -8,12 +9,47 @@ namespace Vanrise.Common.Business
 {
     public class EmailTemplateManager
     {
+        public EmailSettingData GetSystemEmail()
+        {
+            SettingManager settingManager = new SettingManager();
+            var emailSettings = settingManager.GetSetting<EmailSettingData>(Constants.EmailSettingType);
+
+            if (emailSettings == null)
+                throw new NullReferenceException("EmailSettingData");
+
+            return emailSettings;
+        }
+
+        public void SendEmail(string receiver, string content, string subject)
+        {
+            EmailSettingData emailSettingData = GetSystemEmail();
+
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.From = new MailAddress(emailSettingData.SenderEmail);
+            mailMessage.To.Add(new MailAddress(receiver));
+            mailMessage.Subject = subject;
+            mailMessage.Body = content;
+            mailMessage.IsBodyHtml = true;
+
+
+            SmtpClient client = new SmtpClient();
+            client.Port = emailSettingData.Port;
+            client.Host = emailSettingData.Host;
+            client.Timeout = emailSettingData.Timeout;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.UseDefaultCredentials = false;
+            client.Credentials = new System.Net.NetworkCredential(emailSettingData.SenderEmail, emailSettingData.SenderPassword);
+            client.EnableSsl = true;
+
+            client.Send(mailMessage);
+        }
+
         public IDataRetrievalResult<EmailTemplateDetail> GetFilteredEmailTemplates(DataRetrievalInput<EmailTemplateQuery> input)
         {
             var emailTemplates = GetCachedEmailTemplates();
 
             Func<EmailTemplate, bool> filterExpression = (itemObject) =>
-                 (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()));
+                 (string.IsNullOrEmpty(input.Query.Name) || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()));
 
             return DataRetrievalManager.Instance.ProcessResult(input, emailTemplates.ToBigResult(input, filterExpression, EmailTemplateDetailMapper));
         }

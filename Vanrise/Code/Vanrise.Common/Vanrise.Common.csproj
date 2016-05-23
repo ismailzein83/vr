@@ -75,7 +75,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EmailHelper.cs" />
     <Compile Include="PasswordGenerator.cs" />
     <Compile Include="VRCodeIterator.cs" />
     <Compile Include="Compressor.cs" />

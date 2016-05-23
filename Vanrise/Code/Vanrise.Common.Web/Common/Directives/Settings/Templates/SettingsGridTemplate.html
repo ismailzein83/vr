@@ -1,0 +1,9 @@
+﻿<vr-datagrid datasource="settings"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.SettingId">
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.SettingId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>

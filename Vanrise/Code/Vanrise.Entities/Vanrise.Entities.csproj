@@ -69,8 +69,10 @@
     <Compile Include="Currency\CurrencyQuery.cs" />
     <Compile Include="Currency\Currency.cs" />
     <Compile Include="BigResult.cs" />
+    <Compile Include="Currency\CurrencySettingData.cs" />
     <Compile Include="CustomAttributes\IsInternalAPIAttribute.cs" />
     <Compile Include="DeleteOperationOutput.cs" />
+    <Compile Include="EmailTemplate\EmailSettingData.cs" />
     <Compile Include="EmailTemplate\EmailTemplateQuery.cs" />
     <Compile Include="EmailTemplate\EmailTemplateDetail.cs" />
     <Compile Include="EmailTemplate\EmailTemplate.cs" />
@@ -106,6 +108,9 @@
     <Compile Include="RateType\RateTypeDetail.cs" />
     <Compile Include="RateType\RateTypeInfo.cs" />
     <Compile Include="RateType\RateTypeQuery.cs" />
+    <Compile Include="Settings\Setting.cs" />
+    <Compile Include="Settings\SettingDetail.cs" />
+    <Compile Include="Settings\SettingQuery.cs" />
     <Compile Include="StatisticManagement\IRawItem.cs" />
     <Compile Include="StatisticManagement\IStatisticBatch.cs" />
     <Compile Include="StatisticManagement\StatisticBatchLockOutput.cs" />

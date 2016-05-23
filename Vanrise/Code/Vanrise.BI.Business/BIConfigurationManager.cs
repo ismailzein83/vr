@@ -7,6 +7,8 @@ using Vanrise.BI.Data;
 using Vanrise.BI.Entities;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 namespace Vanrise.BI.Business
 {
     public class BIConfigurationManager
@@ -20,10 +22,14 @@ namespace Vanrise.BI.Business
             {
                 IBIConfigurationDataManager dataManager = BIDataManagerFactory.GetDataManager<IBIConfigurationDataManager>();
                 List<BIConfiguration<BIConfigurationMeasure>> measures = dataManager.GetMeasures();
+                
+                CurrencyManager currencyManager = new CurrencyManager();
+                Currency systemCurrency = currencyManager.GetSystemCurrency();
+
                 foreach (BIConfiguration<BIConfigurationMeasure> measure in measures)
                 {
                     if (measure.Configuration.Unit == "Currency")
-                        measure.Configuration.Unit = System.Configuration.ConfigurationManager.AppSettings["Currency"];
+                        measure.Configuration.Unit = systemCurrency != null ? systemCurrency.Symbol : null;
                 }
                 return measures;
             });
@@ -86,9 +92,9 @@ namespace Vanrise.BI.Business
         {
             return new BIMeasureInfo
             {
-                Id=entity.Id,
-                RequiredPermissions=entity.Configuration.RequiredPermissions,
-                Unit= entity.Configuration.Unit,
+                Id = entity.Id,
+                RequiredPermissions = entity.Configuration.RequiredPermissions,
+                Unit = entity.Configuration.Unit,
                 DisplayName = entity.DisplayName,
                 Name = entity.Name
             };
