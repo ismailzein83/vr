@@ -88,6 +88,48 @@ namespace TOne.WhS.BusinessEntity.Business
             return updateOperationOutput;
         }
 
+        public SwitchConnectivity GetMatchConnectivity(string port)
+        {
+            Dictionary<string, SwitchConnectivity> switchConnectivityByPort = GetSwitchConnectivitiesByPort();
+            if (switchConnectivityByPort == null)
+                return null;
+            SwitchConnectivity connectivity;
+            if (switchConnectivityByPort.TryGetValue(port, out connectivity))
+                return connectivity;
+            else
+                return null;
+        }
+
+        public string GetMatchConnectivityName(string port)
+        {
+            var connectivity = GetMatchConnectivity(port);
+            return connectivity != null ? connectivity.Name : null;
+        }
+
+        private Dictionary<string, SwitchConnectivity> GetSwitchConnectivitiesByPort()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitchConnectivitiesByPort", () =>
+            {
+                Dictionary<string, SwitchConnectivity> switchConnectivitiesByPort = new Dictionary<string, SwitchConnectivity>();
+                var switchConnectivitiesById = GetCachedSwitchConnectivities();
+                if (switchConnectivitiesById != null)
+                {
+                    foreach(var switchConnectivity in switchConnectivitiesById.Values)
+                    {
+                        if(switchConnectivity.Settings != null && switchConnectivity.Settings.Trunks != null)
+                        {
+                            foreach(var trunk in switchConnectivity.Settings.Trunks)
+                            {
+                                if (!switchConnectivitiesByPort.ContainsKey(trunk.Name))
+                                    switchConnectivitiesByPort.Add(trunk.Name, switchConnectivity);
+                            }
+                        }
+                    }
+                }
+                return switchConnectivitiesByPort;
+            });
+        }
+
         #endregion
 
         #region Private Classes
