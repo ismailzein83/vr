@@ -72,6 +72,62 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         #region Private Methods
 
+        private Table createTable(Table sourcetable)
+        {
+            Database db = sourcetable.Parent;
+            string schema = sourcetable.Schema;
+            Table copiedtable = new Table(db, sourcetable.Name + Constants._Temp, schema);
+            Server server = sourcetable.Parent.Parent;
+
+            createColumns(sourcetable, copiedtable);
+
+            copiedtable.AnsiNullsStatus = sourcetable.AnsiNullsStatus;
+            copiedtable.QuotedIdentifierStatus = sourcetable.QuotedIdentifierStatus;
+            copiedtable.TextFileGroup = sourcetable.TextFileGroup;
+            copiedtable.FileGroup = sourcetable.FileGroup;
+            copiedtable.Create();
+
+            return copiedtable;
+        }
+
+        private void createColumns(Table sourcetable, Table copiedtable)
+        {
+            Server server = sourcetable.Parent.Parent;
+
+            foreach (Column source in sourcetable.Columns)
+            {
+                Column column = new Column(copiedtable, source.Name, source.DataType);
+                column.Collation = source.Collation;
+                column.Nullable = source.Nullable;
+                column.Computed = source.Computed;
+                column.ComputedText = source.ComputedText;
+                column.Identity = source.Identity;
+                column.IdentityIncrement = source.IdentityIncrement;
+                column.IdentitySeed = source.IdentitySeed;
+
+                column.Default = source.Default;
+
+                if (source.DefaultConstraint != null)
+                {
+                    column.AddDefaultConstraint(Guid.NewGuid().ToString());
+                    column.DefaultConstraint.Text = source.DefaultConstraint.Text;
+                }
+
+                column.IsPersisted = source.IsPersisted;
+                column.DefaultSchema = source.DefaultSchema;
+                column.RowGuidCol = source.RowGuidCol;
+
+                if (server.VersionMajor >= 10)
+                {
+                    column.IsFileStream = source.IsFileStream;
+                    column.IsSparse = source.IsSparse;
+                    column.IsColumnSet = source.IsColumnSet;
+                }
+
+                copiedtable.Columns.Add(column);
+            }
+        }
+
         private void GetAllDatabasesofTables()
         {
             foreach (DBTable dbTable in _Context.DBTables.Values)
@@ -86,7 +142,6 @@ namespace TOne.WhS.DBSync.Data.SQL
                 Table sourceTable = GetTableReference(table);
                 table.Info = sourceTable;
                 table.ScriptedIndexes = ScriptIndexes(sourceTable);
-                table.ScriptedTempTable = ScriptTempTable(sourceTable);
             }
         }
 
@@ -110,18 +165,6 @@ namespace TOne.WhS.DBSync.Data.SQL
             return script;
         }
 
-        private string ScriptTempTable(Table sourceTable)
-        {
-            ScriptingOptions so = new ScriptingOptions();
-            so.DriAllKeys = false;
-            string script = string.Empty;
-            StringCollection sc = sourceTable.Script(so);
-            string[] strings = new string[sc.Count];
-            sc.CopyTo(strings, 0);
-            script = script + string.Join(" ", strings);
-            script = script.Replace("[" + sourceTable.Schema + "].[" + sourceTable.Name + "]", "[" + sourceTable.Schema + "].[" + sourceTable.Name + Constants._Temp + "]");
-            return script;
-        }
 
         private void ScriptAllFKs()
         {
@@ -154,8 +197,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 {
                     database.Tables[dbTable.Name + Constants._Temp, dbTable.Schema].Drop();
                 }
-
-                database.ExecuteNonQuery(dbTable.ScriptedTempTable);
+                createTable(dbTable.Info);
             }
         }
 
