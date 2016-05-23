@@ -136,7 +136,7 @@ namespace Vanrise.GenericData.Business
             if (entity.Details == null)
                 return null;
             Type entityType = entity.Details.GetType();
-            var field = entityType.GetField(fieldPath);
+            var field = entityType.GetProperty(fieldPath);
             if (field == null)
                 throw new NullReferenceException(String.Format("field {0}", fieldPath));
             return field.GetValue(entity.Details);
