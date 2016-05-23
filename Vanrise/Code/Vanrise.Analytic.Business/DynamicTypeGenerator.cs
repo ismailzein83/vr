@@ -10,90 +10,15 @@ namespace Vanrise.Analytic.Business
 {
     internal static class DynamicTypeGenerator
     {
-        public static IMeasureEvaluator GetMeasureEvaluator(int measureConfigId, AnalyticMeasureConfig measureConfig)
+        public static void BuildMeasureEvaluators(int analyticTableId, IEnumerable<AnalyticMeasure> measureConfigs)
         {
-            if (String.IsNullOrEmpty(measureConfig.GetValueMethod))
-                return null;
-            else
+            Dictionary<int, string> measureFullTypeById = new Dictionary<int, string>();
+            StringBuilder codeBuilder = new StringBuilder("using System;");
+            foreach(var measureConfig in measureConfigs)
             {
-                Type runtimeType;
-                List<string> errorMessages;
-                string fullTypeName;
-                string classDefinition = BuildMeasureEvaluatorClassDefinition(measureConfig, out fullTypeName);
-                if (TryBuildRuntimeType(classDefinition, fullTypeName, out runtimeType, out errorMessages))
-                {
-                    IMeasureEvaluator measureEvaluator = Activator.CreateInstance(runtimeType) as IMeasureEvaluator;
-                    if (measureEvaluator == null)
-                        throw new NullReferenceException("measureEvaluator");
-                    return measureEvaluator;
-                }
-                else
-                {
-                    RaiseCompilationError(measureConfigId, errorMessages);
-                    return null;
-                }
-            }
-        }
-
-        public static IDimensionEvaluator GetDimensionEvaluator(int dimensionConfigId, AnalyticDimensionConfig dimensionConfig)
-        {
-            if (String.IsNullOrEmpty(dimensionConfig.GetValueMethod))
-                return null;
-            else
-            {
-                Type runtimeType;
-                List<string> errorMessages;
-                string fullTypeName;
-                string classDefinition = BuildDimensionEvaluatorClassDefinition(dimensionConfig, out fullTypeName);
-                if (TryBuildRuntimeType(classDefinition, fullTypeName, out runtimeType, out errorMessages))
-                {
-                    IDimensionEvaluator dimensionEvaluator = Activator.CreateInstance(runtimeType) as IDimensionEvaluator;
-                    if (dimensionEvaluator == null)
-                        throw new NullReferenceException("dimensionEvaluator");
-                    return dimensionEvaluator;
-                }
-                else
-                {
-                    RaiseCompilationError(dimensionConfigId, errorMessages);
-                    return null;
-                }
-            }
-        }
-
-        public static bool TryBuildRuntimeType(string classDefinition, string fullTypeName, out Type runtimeType, out List<string> errorMessages)
-        {
-            CSharpCompilationOutput compilationOutput;
-            if (!CSharpCompiler.TryCompileClass(classDefinition, out compilationOutput))
-            {
-                runtimeType = null;
-                errorMessages = compilationOutput.ErrorMessages;
-                return false;
-            }
-            runtimeType = compilationOutput.OutputAssembly.GetType(fullTypeName);
-            if (runtimeType == null)
-                throw new NullReferenceException("runtimeType");
-            errorMessages = null;
-            return true;
-        }
-
-        private static void RaiseCompilationError(int measureConfigId, List<string> errorMessages)
-        {
-            StringBuilder errorsBuilder = new StringBuilder();
-            if (errorMessages != null)
-            {
-                foreach (var errorMessage in errorMessages)
-                {
-                    errorsBuilder.AppendLine(errorMessage);
-                }
-            }
-            throw new Exception(String.Format("Compile Error when building Measure Evaluator for Analytic Measure Config Id '{0}'. Errors: {1}",
-                measureConfigId, errorsBuilder));
-        }
-
-        private static string BuildMeasureEvaluatorClassDefinition(AnalyticMeasureConfig measureConfig, out string fullTypeName)
-        {
-            StringBuilder classDefinitionBuilder = new StringBuilder(@" 
-                using System;
+                if (String.IsNullOrEmpty(measureConfig.Config.GetValueMethod))
+                    throw new NullReferenceException(String.Format("measureConfig.Config.GetValueMethod. '{0}'", measureConfig.AnalyticMeasureConfigId));
+                StringBuilder classDefinitionBuilder = new StringBuilder(@"                 
 
                 namespace #NAMESPACE#
                 {
@@ -107,24 +32,57 @@ namespace Vanrise.Analytic.Business
                 }
                 ");
 
-            //classDefinitionBuilder.Replace("#EXECUTIONCODE#", _instanceExecutionBlockBuilder.ToString());
+                //classDefinitionBuilder.Replace("#EXECUTIONCODE#", _instanceExecutionBlockBuilder.ToString());
 
-            string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.Analytic.Business");
-            string className = "MeasureEvaluator";
-            classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
-            classDefinitionBuilder.Replace("#CLASSNAME#", className);
-            fullTypeName = String.Format("{0}.{1}", classNamespace, className);
+                string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.Analytic.Business");
+                string className = "MeasureEvaluator";
+                classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
+                classDefinitionBuilder.Replace("#CLASSNAME#", className);
+                string fullTypeName = String.Format("{0}.{1}", classNamespace, className);
 
-            classDefinitionBuilder.Replace("#EXECUTIONCODE#", measureConfig.GetValueMethod);
+                classDefinitionBuilder.Replace("#EXECUTIONCODE#", measureConfig.Config.GetValueMethod);
+                codeBuilder.AppendLine(classDefinitionBuilder.ToString());
+                measureFullTypeById.Add(measureConfig.AnalyticMeasureConfigId, fullTypeName);
+            }
 
-            return classDefinitionBuilder.ToString();
+            CSharpCompilationOutput compilationOutput;
+            if (!CSharpCompiler.TryCompileClass(codeBuilder.ToString(), out compilationOutput))
+            {
+                StringBuilder errorsBuilder = new StringBuilder();
+                if (compilationOutput.ErrorMessages != null)
+                {
+                    foreach (var errorMessage in compilationOutput.ErrorMessages)
+                    {
+                        errorsBuilder.AppendLine(errorMessage);
+                    }
+                }
+                throw new Exception(String.Format("Compile Error when building Measure Evaluator for Analytic Table Id '{0}'. Errors: {1}",
+                    analyticTableId, errorsBuilder));
+            }
+                 
+            foreach(var measureConfig in measureConfigs)
+            {
+                var measureFullType = measureFullTypeById[measureConfig.AnalyticMeasureConfigId];
+                var runtimeType = compilationOutput.OutputAssembly.GetType(measureFullType);
+                if (runtimeType == null)
+                    throw new NullReferenceException("runtimeType");
+                measureConfig.Evaluator = Activator.CreateInstance(runtimeType) as IMeasureEvaluator;
+                if(measureConfig.Evaluator == null)
+                    throw new NullReferenceException(String.Format("measureConfig.Evaluator '{0}'", measureConfig.AnalyticMeasureConfigId));
+            }
         }
 
-        private static string BuildDimensionEvaluatorClassDefinition(AnalyticDimensionConfig dimensionConfig, out string fullTypeName)
+        public static void BuildDimensionEvaluators(int analyticTableId, IEnumerable<AnalyticDimension> dimensionConfigs)
         {
-            StringBuilder classDefinitionBuilder = new StringBuilder(@" 
-                using System;
+            Dictionary<int, string> dimensionFullTypeById = new Dictionary<int, string>();
+            StringBuilder codeBuilder = new StringBuilder("using System;");
 
+            foreach (var dimensionConfig in dimensionConfigs)
+            {
+                if (String.IsNullOrEmpty(dimensionConfig.Config.GetValueMethod))
+                    continue;
+                StringBuilder classDefinitionBuilder = new StringBuilder(@" 
+                
                 namespace #NAMESPACE#
                 {
                     public class #CLASSNAME# : Vanrise.Analytic.Entities.IDimensionEvaluator
@@ -137,17 +95,46 @@ namespace Vanrise.Analytic.Business
                 }
                 ");
 
-            //classDefinitionBuilder.Replace("#EXECUTIONCODE#", _instanceExecutionBlockBuilder.ToString());
 
-            string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.Analytic.Business");
-            string className = "DimensionEvaluator";
-            classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
-            classDefinitionBuilder.Replace("#CLASSNAME#", className);
-            fullTypeName = String.Format("{0}.{1}", classNamespace, className);
+                string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.Analytic.Business");
+                string className = "DimensionEvaluator";
+                classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
+                classDefinitionBuilder.Replace("#CLASSNAME#", className);
+                string fullTypeName = String.Format("{0}.{1}", classNamespace, className);
 
-            classDefinitionBuilder.Replace("#EXECUTIONCODE#", dimensionConfig.GetValueMethod);
+                classDefinitionBuilder.Replace("#EXECUTIONCODE#", dimensionConfig.Config.GetValueMethod);
+                codeBuilder.AppendLine(classDefinitionBuilder.ToString());
+                dimensionFullTypeById.Add(dimensionConfig.AnalyticDimensionConfigId, fullTypeName);
+            }
 
-            return classDefinitionBuilder.ToString();
+
+            CSharpCompilationOutput compilationOutput;
+            if (!CSharpCompiler.TryCompileClass(codeBuilder.ToString(), out compilationOutput))
+            {
+                StringBuilder errorsBuilder = new StringBuilder();
+                if (compilationOutput.ErrorMessages != null)
+                {
+                    foreach (var errorMessage in compilationOutput.ErrorMessages)
+                    {
+                        errorsBuilder.AppendLine(errorMessage);
+                    }
+                }
+                throw new Exception(String.Format("Compile Error when building Dimension Evaluator for Analytic Table Id '{0}'. Errors: {1}",
+                    analyticTableId, errorsBuilder));
+            }
+
+            foreach (var dimensionConfig in dimensionConfigs)
+            {
+                if (String.IsNullOrEmpty(dimensionConfig.Config.GetValueMethod))
+                    continue;
+                var dimensionFullType = dimensionFullTypeById[dimensionConfig.AnalyticDimensionConfigId];
+                var runtimeType = compilationOutput.OutputAssembly.GetType(dimensionFullType);
+                if (runtimeType == null)
+                    throw new NullReferenceException("runtimeType");
+                dimensionConfig.Evaluator = Activator.CreateInstance(runtimeType) as IDimensionEvaluator;
+                if (dimensionConfig.Evaluator == null)
+                    throw new NullReferenceException(String.Format("dimensionConfig.Evaluator '{0}'", dimensionConfig.AnalyticDimensionConfigId));
+            }
         }
 
     }

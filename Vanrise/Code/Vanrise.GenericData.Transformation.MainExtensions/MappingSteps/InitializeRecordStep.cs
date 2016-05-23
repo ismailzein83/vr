@@ -17,12 +17,19 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
             var record = context.Records.FirstOrDefault(itm => itm.RecordName == this.RecordName);
             if (record == null)
                 throw new Exception(String.Format("Record '{0}' not found", this.RecordName));
-            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            var runtimeType = dataRecordTypeManager.GetDataRecordRuntimeType(record.DataRecordTypeId.Value);
-            if (runtimeType == null)
-                throw new NullReferenceException("runtimeType");
+            string fullTypeName;
+            if (record.DataRecordTypeId.HasValue)
+            {
+                DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
+                var runtimeType = dataRecordTypeManager.GetDataRecordRuntimeType(record.DataRecordTypeId.Value);
+                if (runtimeType == null)
+                    throw new NullReferenceException("runtimeType");
+                fullTypeName = CSharpCompiler.TypeToString(runtimeType);
+            }
+            else
+                fullTypeName = record.FullTypeName;
             if (!record.IsArray)
-                context.AddCodeToCurrentInstanceExecutionBlock("{0} = new {1}();", this.RecordName, CSharpCompiler.TypeToString(runtimeType));
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = new {1}();", this.RecordName, fullTypeName);
             else
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = new List<dynamic>();", this.RecordName);
         }

@@ -81,6 +81,7 @@
             function loadScopeDataFromObj() {
                 if (dataRecordTypeEntity != undefined) {
                     $scope.scopeModal.name = dataRecordTypeEntity.RecordName;
+                    $scope.scopeModal.fullTypeName = dataRecordTypeEntity.FullTypeName;
                     $scope.scopeModal.isArray = dataRecordTypeEntity.IsArray;
                 }
             }
@@ -112,7 +113,10 @@
         function buildDataRecordTypeObjectObjFromScope() {
             var dataRecordType = {};
             dataRecordType.RecordName = $scope.scopeModal.name;
-            dataRecordType.DataRecordTypeId = $scope.scopeModal.selectedRecordType != undefined ? $scope.scopeModal.selectedRecordType.DataRecordTypeId : undefined,
+            if ($scope.scopeModal.selectedRecordType != undefined)
+                dataRecordType.DataRecordTypeId = $scope.scopeModal.selectedRecordType.DataRecordTypeId;
+            else
+                dataRecordType.FullTypeName = $scope.scopeModal.fullTypeName;
             dataRecordType.IsArray = $scope.scopeModal.isArray;
             return dataRecordType;
         }

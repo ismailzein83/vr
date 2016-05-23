@@ -25,6 +25,10 @@ namespace Vanrise.Analytic.Entities
         dynamic GetAggregateValue(string aggregateName);
 
         bool IsGroupingDimensionIncluded(string dimensionName);
+
+        List<dynamic> GetAllDimensionValues(string dimensionName);
+
+        List<dynamic> GetDistinctDimensionValues(string dimensionName);
     }
 
 }

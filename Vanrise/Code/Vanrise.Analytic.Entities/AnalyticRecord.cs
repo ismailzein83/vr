@@ -30,6 +30,8 @@ namespace Vanrise.Analytic.Entities
         //public string DimensionName { get; set; }
 
         public dynamic Value { get; set; }
+
+        public List<dynamic> AllValues { get; set; }
     }
 
     public class DBAnalyticRecordAggValue : ICloneable

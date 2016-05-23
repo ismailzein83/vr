@@ -94,11 +94,18 @@ namespace Vanrise.Analytic.Business
                 DBAnalyticRecord matchRecord;
                 if (!groupedRecordsByDimensionsKey.TryGetValue(groupingKey, out matchRecord))
                 {
-                    groupedRecordsByDimensionsKey.Add(groupingKey, dbRecord);
+                    matchRecord = dbRecord;
+                    groupedRecordsByDimensionsKey.Add(groupingKey, matchRecord);
                 }
                 else
                 {
                     UpdateAggregateValues(analyticTableQueryContext, matchRecord, dbRecord);
+                }
+                foreach(var groupingValue in matchRecord.GroupingValuesByDimensionName)
+                {
+                    if (groupingValue.Value.AllValues == null)
+                        groupingValue.Value.AllValues = new List<dynamic>();
+                    groupingValue.Value.AllValues.Add(dbRecord.GroupingValuesByDimensionName[groupingValue.Key].Value);
                 }
                 if (withSummary)
                 {
@@ -118,8 +125,7 @@ namespace Vanrise.Analytic.Business
             foreach (var dbRecord in groupedRecordsByDimensionsKey.Values)
             {
                 AnalyticRecord analyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, dbRecord, requestedDimensionNames, allDimensionNames, measureNames);
-               
-                    analyticRecords.Add(analyticRecord);
+                analyticRecords.Add(analyticRecord);
             }
             if (withSummary)
                 summaryRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, summarySQLRecord, null, allDimensionNames, measureNames);

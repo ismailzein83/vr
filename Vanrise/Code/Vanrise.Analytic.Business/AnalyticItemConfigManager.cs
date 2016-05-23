@@ -31,11 +31,11 @@ namespace Vanrise.Analytic.Business
                         {
                             AnalyticDimensionConfigId = itemConfig.AnalyticItemConfigId,
                             Name = itemConfig.Name,
-                            Config = dimensionConfig,
-                            Evaluator = DynamicTypeGenerator.GetDimensionEvaluator(itemConfig.AnalyticItemConfigId, dimensionConfig)
+                            Config = dimensionConfig
                         };
                         analyticDimensions.Add(itemConfig.Name, dimension);
                     }
+                    DynamicTypeGenerator.BuildDimensionEvaluators(tableId, analyticDimensions.Values);
                     return analyticDimensions;
                 });            
         }
@@ -81,11 +81,11 @@ namespace Vanrise.Analytic.Business
                         AnalyticMeasure measure = new AnalyticMeasure
                         {
                             AnalyticMeasureConfigId = itemConfig.AnalyticItemConfigId,
-                            Config = measureConfig, 
-                            Evaluator = DynamicTypeGenerator.GetMeasureEvaluator(itemConfig.AnalyticItemConfigId, measureConfig)
+                            Config = measureConfig                          
                         };
                         analyticMeasures.Add(itemConfig.Name, measure);
                     }
+                    DynamicTypeGenerator.BuildMeasureEvaluators(tableId, analyticMeasures.Values);
                     return analyticMeasures;
                 });
             

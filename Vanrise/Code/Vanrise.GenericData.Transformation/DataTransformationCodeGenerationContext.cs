@@ -97,24 +97,22 @@ namespace Vanrise.GenericData.Transformation
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             foreach (var recordType in _dataTransformationDefinition.RecordTypes)
             {
-                string dataRecordRuntimeType;
-
-                if (recordType.DataRecordTypeId.HasValue)
-                {
-                    dataRecordRuntimeType = CSharpCompiler.TypeToString(dataRecordTypeManager.GetDataRecordRuntimeType(recordType.DataRecordTypeId.Value));
-                    if (recordType.IsArray)
-                        (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public List<dynamic> {0} = new List<dynamic>();", recordType.RecordName));
-                    else
-                        (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public {0} {1} = new {0}();", dataRecordRuntimeType, recordType.RecordName));
-                }
-
+                if (recordType.IsArray)
+                    (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public List<dynamic> {0} = new List<dynamic>();", recordType.RecordName));
                 else
                 {
-                    dataRecordRuntimeType = "dynamic";
-                    (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public {0} {1};", dataRecordRuntimeType, recordType.RecordName));
+                    string dataRecordRuntimeType;
+                    if (recordType.DataRecordTypeId.HasValue)
+                    {
+                        dataRecordRuntimeType = CSharpCompiler.TypeToString(dataRecordTypeManager.GetDataRecordRuntimeType(recordType.DataRecordTypeId.Value));
+                        (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public {0} {1} = new {0}();", dataRecordRuntimeType, recordType.RecordName));
+                    }
+                    else
+                    {
+                        dataRecordRuntimeType = !String.IsNullOrEmpty(recordType.FullTypeName) ? recordType.FullTypeName : "dynamic";
+                        (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public {0} {1};", dataRecordRuntimeType, recordType.RecordName));
+                    }
                 }
-                    
-               
             }
             StringBuilder classDefinitionBuilder = new StringBuilder(@" 
                 using System;

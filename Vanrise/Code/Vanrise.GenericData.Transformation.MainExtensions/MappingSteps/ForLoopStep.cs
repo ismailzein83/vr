@@ -21,17 +21,22 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
         {
             string variableType = "var";
             var arrayRecord = context.Records.FirstOrDefault(itm => itm.RecordName == this.ArrayVariableName);
-            if (arrayRecord != null && arrayRecord.DataRecordTypeId.HasValue)
+            if (arrayRecord != null)
             {
-                DataRecordTypeManager recordTypeManager = new DataRecordTypeManager();
-                var arrayRuntimeType = recordTypeManager.GetDataRecordRuntimeType(arrayRecord.DataRecordTypeId.Value);
-                if (arrayRuntimeType != null)
-                    variableType = CSharpCompiler.TypeToString(arrayRuntimeType);
+                if (arrayRecord.DataRecordTypeId.HasValue)
+                {
+                    DataRecordTypeManager recordTypeManager = new DataRecordTypeManager();
+                    var arrayRuntimeType = recordTypeManager.GetDataRecordRuntimeType(arrayRecord.DataRecordTypeId.Value);
+                    if (arrayRuntimeType != null)
+                        variableType = CSharpCompiler.TypeToString(arrayRuntimeType);
+                }
+                else if (!String.IsNullOrEmpty(arrayRecord.FullTypeName))
+                    variableType = arrayRecord.FullTypeName;
             }
             context.AddCodeToCurrentInstanceExecutionBlock("foreach({0} {1} in {2})", variableType, this.IterationVariableName, this.ArrayVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{");
             context.GenerateStepsCode(this.Steps);
-            context.AddCodeToCurrentInstanceExecutionBlock("}");     
+            context.AddCodeToCurrentInstanceExecutionBlock("}");
         }
     }
 }

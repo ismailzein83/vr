@@ -33,5 +33,21 @@ namespace Vanrise.Analytic.Business
         {
             return _allDimensions.Contains(dimensionName);
         }
+
+        public List<dynamic> GetAllDimensionValues(string dimensionName)
+        {
+            DBAnalyticRecordGroupingValue groupingValue;
+            if(!_sqlRecord.GroupingValuesByDimensionName.TryGetValue(dimensionName, out groupingValue))
+                throw new NullReferenceException(String.Format("groupingValue. dimensionName '{0}'", dimensionName));
+            var allValues = groupingValue.AllValues;
+            if (allValues == null)
+                throw new NullReferenceException("allValues");
+            return allValues;
+        }
+
+        public List<dynamic> GetDistinctDimensionValues(string dimensionName)
+        {
+            return GetAllDimensionValues(dimensionName).Distinct().ToList();
+        }
     }
 }
