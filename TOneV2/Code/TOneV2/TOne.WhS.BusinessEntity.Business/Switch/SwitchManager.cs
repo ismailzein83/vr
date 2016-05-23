@@ -8,10 +8,11 @@ using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class SwitchManager
+    public class SwitchManager : IBusinessEntityManager
     {
         public Vanrise.Entities.IDataRetrievalResult<SwitchDetail> GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input)
         {
@@ -43,7 +44,46 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return null;
         }
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetSwitch(context.EntityId);
+        }
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            var switchConnectivities = GetCachedSwitches();
+            if (switchConnectivities == null)
+                return null;
+            else
+                return switchConnectivities.Select(itm => itm as dynamic).ToList();
+        }
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            var switchNames = new List<string>();
+            foreach (var entityId in context.EntityIds)
+            {
+                string switchName = GetSwitchName(Convert.ToInt32(entityId));
+                if (switchName == null) throw new NullReferenceException("switchName");
+                switchNames.Add(switchName);
+            }
+            return String.Join(",", switchNames);
+        }
+        public bool IsMatched(IBusinessEntityMatchContext context)
+        {
+            if (context.FieldValueIds == null || context.FilterIds == null) return true;
 
+            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
+            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
+            foreach (var filterId in filterIds)
+            {
+                if (fieldValueIds.Contains(filterId))
+                    return true;
+            }
+            return false;
+        }
         public Vanrise.Entities.InsertOperationOutput<SwitchDetail> AddSwitch(Switch whsSwitch)
         {
             Vanrise.Entities.InsertOperationOutput<SwitchDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<SwitchDetail>();
@@ -67,7 +107,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-
         public Vanrise.Entities.UpdateOperationOutput<SwitchDetail> UpdateSwitch(Switch whsSwitch)
         {
             ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
@@ -88,7 +127,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
-
         public Vanrise.Entities.DeleteOperationOutput<SwitchDetail> DeleteSwitch(int switchId)
         {
             ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
@@ -102,7 +140,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Failed;
             return deleteOperationOutput;
         }
-
 
         #region Private Members
 
