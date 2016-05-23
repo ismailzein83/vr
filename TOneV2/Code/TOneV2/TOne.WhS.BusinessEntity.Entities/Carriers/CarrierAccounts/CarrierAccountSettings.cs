@@ -15,5 +15,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public string Mask { get; set; }
 
+        public int NominalCapacity { get; set; }
+
     }
 }

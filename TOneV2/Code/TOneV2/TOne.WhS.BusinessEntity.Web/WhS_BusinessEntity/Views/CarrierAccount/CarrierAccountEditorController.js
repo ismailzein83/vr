@@ -114,7 +114,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCarrierAccountType, loadCarrierActivationStatusType, loadFilterBySection, loadCarrierProfileDirective, loadCurrencySelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCarrierAccountType, loadCarrierActivationStatusType, loadStaticSection, loadCarrierProfileDirective, loadCurrencySelector])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -178,20 +178,24 @@
                 CarrierAccountSettings: {
                     ActivationStatus: activationStatusSelectorAPI.getSelectedIds(),
                     CurrencyId: currencySelectorAPI.getSelectedIds(),
-                    Mask: $scope.scopeModal.mask
+                    Mask: $scope.scopeModal.mask,
+                    NominalCapacity: $scope.scopeModal.nominalCapacity
                 }
             };
             return obj;
         }
 
-        function loadFilterBySection() {
+        function loadStaticSection() {
             if (carrierAccountEntity != undefined) {
                 $scope.scopeModal.name = carrierAccountEntity.NameSuffix;
                 for (var i = 0; i < $scope.scopeModal.carrierAccountTypes.length; i++)
                     if (carrierAccountEntity.AccountType == $scope.scopeModal.carrierAccountTypes[i].value)
                         $scope.scopeModal.selectedCarrierAccountType = $scope.scopeModal.carrierAccountTypes[i];
 
-                $scope.scopeModal.mask = (carrierAccountEntity.CarrierAccountSettings != undefined ? carrierAccountEntity.CarrierAccountSettings.Mask : undefined);
+                if (carrierAccountEntity != undefined && carrierAccountEntity.CarrierAccountSettings != undefined) {
+                    $scope.scopeModal.mask = carrierAccountEntity.CarrierAccountSettings.Mask;
+                    $scope.scopeModal.nominalCapacity = carrierAccountEntity.CarrierAccountSettings.NominalCapacity;
+                }
             }
         }
 
