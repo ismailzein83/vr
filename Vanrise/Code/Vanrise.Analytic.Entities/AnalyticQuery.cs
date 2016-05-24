@@ -11,7 +11,7 @@ namespace Vanrise.Analytic.Entities
     {
         public int TableId { get; set; }
         public DateTime FromTime { get; set; }
-        public DateTime ToTime { get; set; }
+        public DateTime? ToTime { get; set; }
 
         public int? CurrencyId { get; set; }
 

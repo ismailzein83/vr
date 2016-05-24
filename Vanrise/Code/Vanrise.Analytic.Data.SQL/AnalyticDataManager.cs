@@ -51,7 +51,8 @@ namespace Vanrise.Analytic.Data.SQL
             groupByPart = BuildQueryGrouping(selectPartBuilder, includedSQLDimensionNames, input.Query.TimeGroupingUnit, includeJoinConfigNames);
             includedSQLAggregateNames = GetIncludedSQLAggregateNames(input.Query.MeasureFields);
             HashSet<string> joinStatements = new HashSet<string>();
-            BuildQueryAggregates(selectPartBuilder, input.Query.CurrencyId, includedSQLAggregateNames, includeJoinConfigNames, joinStatements, input.Query.FromTime, input.Query.ToTime, parameterValues, ref parameterIndex);
+            var toTime = input.Query.ToTime.HasValue ? input.Query.ToTime.Value : DateTime.Now;
+            BuildQueryAggregates(selectPartBuilder, input.Query.CurrencyId, includedSQLAggregateNames, includeJoinConfigNames, joinStatements, input.Query.FromTime, toTime, parameterValues, ref parameterIndex);
             string filterPart = BuildQueryFilter(input.Query.Filters, includeJoinConfigNames, parameterValues, ref parameterIndex);
             string joinPart = BuildQueryJoins(includeJoinConfigNames, joinStatements);
 
@@ -59,7 +60,7 @@ namespace Vanrise.Analytic.Data.SQL
             String recordFilter = recordFilterSQLBuilder.BuildRecordFilter(input.Query.FilterGroup, ref parameterIndex, parameterValues);
 
 
-            StringBuilder queryBuilder = BuildGlobalQuery(input.Query.FromTime, input.Query.ToTime,
+            StringBuilder queryBuilder = BuildGlobalQuery(input.Query.FromTime, toTime,
                 parameterValues, selectPartBuilder.ToString(), joinPart, filterPart, groupByPart, recordFilter, ref parameterIndex);
 
             return queryBuilder.ToString();
@@ -471,14 +472,12 @@ namespace Vanrise.Analytic.Data.SQL
             {
                 TableName = this.GetTable().Settings.TableName,
                 GetPeriodStart = (tr) => tr.FromTime,
-                RangeMinLength = TimeSpan.FromSeconds(0),
                 IncrementPeriod = (d, tr) => d.Add((tr.ToTime - d))
             };
             var hourlyAllocationContext = new TimeRangeTableAllocationContext
             {
                 TableName = GetTable().Settings.HourlyTableName,
                 GetPeriodStart = GetStartOfHour,
-                RangeMinLength = TimeSpan.FromHours(1),
                 IncrementPeriod = (d, tr) => d.AddHours(1),
                 NextTimeRangeAllocationContext = noTimeAllocationContext
             };
@@ -486,7 +485,6 @@ namespace Vanrise.Analytic.Data.SQL
             {
                 TableName = GetTable().Settings.DailyTableName,
                 GetPeriodStart = GetStartOfDay,
-                RangeMinLength = TimeSpan.FromDays(1),
                 IncrementPeriod = (d, tr) => d.AddDays(1),
                 NextTimeRangeAllocationContext = hourlyAllocationContext
             };
@@ -494,15 +492,13 @@ namespace Vanrise.Analytic.Data.SQL
             {
                 TableName = GetTable().Settings.WeeklyTableName,
                 GetPeriodStart = GetStartOfWeek,
-                RangeMinLength = TimeSpan.FromDays(7),
-                IncrementPeriod = (d, tr) => d.AddDays(7),
+                IncrementPeriod = (d, tr) => d.AddDays(7).Year == d.Year ? d.AddDays(7) : new DateTime(d.Year + 1, 1, 1),
                 NextTimeRangeAllocationContext = dailyAllocationContext
             };
             var monthlyAllocationContext = new TimeRangeTableAllocationContext
             {
                 TableName = GetTable().Settings.MonthlyTableName,
                 GetPeriodStart = GetStartOfMonth,
-                RangeMinLength = TimeSpan.FromDays(28),
                 IncrementPeriod = (d, tr) => d.AddMonths(1),
                 NextTimeRangeAllocationContext = weeklyAllocationContext
             };
@@ -544,7 +540,7 @@ namespace Vanrise.Analytic.Data.SQL
         void AllocatePeriodTables(TimeRange timeRange, TimeRangeTableAllocationContext context, List<TimeRangeTableName> tableNames)
         {
             List<TimeRange> notAllocatedRanges;
-            AllocatePeriodTables(timeRange, context.TableName, context.GetPeriodStart, context.RangeMinLength, context.IncrementPeriod, tableNames, out notAllocatedRanges);
+            AllocatePeriodTables(timeRange, context.TableName, context.GetPeriodStart, context.IncrementPeriod, tableNames, out notAllocatedRanges);
             if (context.NextTimeRangeAllocationContext != null && notAllocatedRanges != null && notAllocatedRanges.Count > 0)
             {
                 foreach (var subRange in notAllocatedRanges)
@@ -554,10 +550,10 @@ namespace Vanrise.Analytic.Data.SQL
             }
         }
 
-        void AllocatePeriodTables(TimeRange timeRange, string tableName, Func<TimeRange, DateTime> getPeriodStart, TimeSpan rangeMinLength, Func<DateTime, TimeRange, DateTime> incrementPeriod, List<TimeRangeTableName> tableNames, out List<TimeRange> notAllocatedRanges)
+        void AllocatePeriodTables(TimeRange timeRange, string tableName, Func<TimeRange, DateTime> getPeriodStart, Func<DateTime, TimeRange, DateTime> incrementPeriod, List<TimeRangeTableName> tableNames, out List<TimeRange> notAllocatedRanges)
         {
             notAllocatedRanges = new List<TimeRange>();
-            if (!String.IsNullOrEmpty(tableName) && (timeRange.ToTime - timeRange.FromTime) >= rangeMinLength)
+            if (!String.IsNullOrEmpty(tableName))
             {
                 DateTime startTime = getPeriodStart(timeRange);
                 DateTime? allocatedRangeStart = null;
@@ -791,7 +787,6 @@ namespace Vanrise.Analytic.Data.SQL
         {
             public string TableName { get; set; }
             public Func<TimeRange, DateTime> GetPeriodStart { get; set; }
-            public TimeSpan RangeMinLength { get; set; }
             public Func<DateTime, TimeRange, DateTime> IncrementPeriod { get; set; }
             public TimeRangeTableAllocationContext NextTimeRangeAllocationContext { get; set; }
         }

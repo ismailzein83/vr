@@ -18,6 +18,8 @@ namespace Vanrise.Analytic.Business
     {
         public Vanrise.Entities.IDataRetrievalResult<AnalyticRecord> GetFilteredRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
+            if (input.Query.FromTime == input.Query.ToTime)
+                return null;
             IAnalyticDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticDataManager>();
 
             if (input.SortByColumnName.Contains("MeasureValues"))
@@ -127,7 +129,7 @@ namespace Vanrise.Analytic.Business
                 AnalyticRecord analyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, dbRecord, requestedDimensionNames, allDimensionNames, measureNames);
                 analyticRecords.Add(analyticRecord);
             }
-            if (withSummary)
+            if (withSummary && summarySQLRecord != null)
                 summaryRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, summarySQLRecord, null, allDimensionNames, measureNames);
             else
                 summaryRecord = null;
