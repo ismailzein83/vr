@@ -35,7 +35,7 @@ namespace TOne.WhS.DBSync.Entities
         SupplierZone,
 
         [Description("SaleRate")]
-        SaleRate = 14,
+        SaleRate ,
 
         [Description("SupplierRate")]
         SupplierRate,
