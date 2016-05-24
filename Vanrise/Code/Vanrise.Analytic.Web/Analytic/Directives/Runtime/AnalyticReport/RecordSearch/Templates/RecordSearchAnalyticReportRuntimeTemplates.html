@@ -14,12 +14,9 @@
                        datavaluefield="Title" datatextfield="Title" isrequired="true" hideremoveicon onselectionchanged="onDRSearchPageStorageSourceChanged">
             </vr-select>
         </vr-columns>
-        <vr-columns width="normal">
-            <vr-datetimepicker label="From" value="fromDate" type="date" customvalidate="validateTimeRange()" isrequired="true"></vr-datetimepicker>
-        </vr-columns>
 
-        <vr-columns width="normal">
-            <vr-datetimepicker label="To" value="toDate" type="date" customvalidate="validateTimeRange()"></vr-datetimepicker>
+        <vr-columns colnum="6">
+            <vr-timerange on-ready="scopeModel.onTimeRangeDirectiveReady " width="1/3row" type="dateTime" from="scopeModel.fromDate" to="scopeModel.toDate" period="selectedPeriod" isrequired="true"></vr-timerange>
         </vr-columns>
 
         <vr-columns width="normal">

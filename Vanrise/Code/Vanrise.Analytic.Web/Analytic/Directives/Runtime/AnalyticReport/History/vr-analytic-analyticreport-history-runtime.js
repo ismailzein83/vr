@@ -2,9 +2,9 @@
 
     'use strict';
 
-    HistoryAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService','VR_Analytic_AnalyticConfigurationAPIService','VR_GenericData_DataRecordFieldTypeConfigAPIService','VR_Analytic_AnalyticItemConfigAPIService','VR_Analytic_AnalyticTypeEnum','VR_GenericData_DataRecordTypeService','ColumnWidthEnum'];
+    HistoryAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService','VR_Analytic_AnalyticConfigurationAPIService','VR_GenericData_DataRecordFieldTypeConfigAPIService','VR_Analytic_AnalyticItemConfigAPIService','VR_Analytic_AnalyticTypeEnum','VR_GenericData_DataRecordTypeService','ColumnWidthEnum','PeriodEnum'];
 
-    function HistoryAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VR_GenericData_DataRecordTypeService, ColumnWidthEnum) {
+    function HistoryAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VR_GenericData_DataRecordTypeService, ColumnWidthEnum, PeriodEnum) {
         return {
             restrict: "E",
             scope: {
@@ -26,6 +26,9 @@
             var filterObj;
             var currencySelectorAPI;
             var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var timeRangeDirectiveAPI;
+            var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             var dimensions = [];
             var measures = [];
             var settings;
@@ -40,8 +43,14 @@
                 $scope.scopeModel.selectedGroupingDimentions = [];
                 $scope.scopeModel.isGroupingRequired = false;
 
+                $scope.scopeModel.onTimeRangeDirectiveReady = function (api) {
+                    timeRangeDirectiveAPI = api;
+                     timeRangeReadyPromiseDeferred.resolve();
+                }
+
+
                 $scope.scopeModel.onCurrencySelectorReady = function(api)
-                {
+                    {
                     currencySelectorAPI = api;
                     currencySelectorReadyDeferred.resolve();
                 }
@@ -109,7 +118,7 @@
 
 
 
-                    UtilsService.waitMultipleAsyncOperations([getWidgetsTemplateConfigs, getFieldTypeConfigs, loadMeasures, loadDimensions]).then(function () {
+                    UtilsService.waitMultipleAsyncOperations([getWidgetsTemplateConfigs, getFieldTypeConfigs, loadMeasures, loadDimensions, loadTimeRangeDirective]).then(function () {
                         UtilsService.waitMultipleAsyncOperations([loadFilters]).finally(function () {
                             loadPromiseDeffer.resolve();
                         }).catch(function (error) {
@@ -129,6 +138,21 @@
                 }
 
             }
+
+            function loadTimeRangeDirective()
+                {
+                     var loadTimeDimentionPromiseDeferred = UtilsService.createPromiseDeferred();
+                             timeRangeReadyPromiseDeferred.promise.then(function () {
+                        var timeRangePeriod = {
+                                period: PeriodEnum.CurrentMonth.value
+                                };
+
+                        VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, timeRangePeriod, loadTimeDimentionPromiseDeferred);
+
+                });
+                             return loadTimeDimentionPromiseDeferred.promise;
+                }
+
 
             function getWidgetsTemplateConfigs() {
                 return VR_Analytic_AnalyticConfigurationAPIService.GetWidgetsTemplateConfigs().then(function (response) {

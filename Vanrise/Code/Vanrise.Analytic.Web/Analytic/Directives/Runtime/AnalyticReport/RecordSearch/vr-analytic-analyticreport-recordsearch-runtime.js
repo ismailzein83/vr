@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RecordSearchAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_OrderDirectionEnum', 'VRValidationService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_DataRecordTypeService'];
+    RecordSearchAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_OrderDirectionEnum', 'VRValidationService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_DataRecordTypeService','PeriodEnum'];
 
-    function RecordSearchAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_OrderDirectionEnum, VRValidationService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_DataRecordTypeService) {
+    function RecordSearchAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_OrderDirectionEnum, VRValidationService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_DataRecordTypeService, PeriodEnum) {
         return {
             restrict: "E",
             scope: {
@@ -27,8 +27,16 @@
             var gridQuery;
             var gridAPI;
 
+            var timeRangeDirectiveAPI;
+            var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.onTimeRangeDirectiveReady = function (api) {
+                    timeRangeDirectiveAPI = api;
+                    timeRangeReadyPromiseDeferred.resolve();
+                }
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
@@ -89,7 +97,7 @@
                         settings = payload.settings;
                     }
                     var loadPromiseDeffer = UtilsService.createPromiseDeferred();
-                    UtilsService.waitMultipleAsyncOperations([setSourceSelector, setStaticData]).then(function () {
+                    UtilsService.waitMultipleAsyncOperations([setSourceSelector, setStaticData, loadTimeRangeDirective]).then(function () {
                         loadPromiseDeffer.resolve();
                     }).catch(function (error) {
                         loadPromiseDeffer.reject(error);
@@ -108,6 +116,19 @@
                 var obj = { DataRecordTypeId: $scope.selectedDRSearchPageStorageSource.DataRecordTypeId };
                 var serializedFilter = UtilsService.serializetoJson(obj);
                 return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter);
+            }
+
+            function loadTimeRangeDirective() {
+                var loadTimeDimentionPromiseDeferred = UtilsService.createPromiseDeferred();
+                timeRangeReadyPromiseDeferred.promise.then(function () {
+                    var timeRangePeriod = {
+                        period: PeriodEnum.CurrentMonth.value
+                    };
+
+                    VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, timeRangePeriod, loadTimeDimentionPromiseDeferred);
+
+                });
+                return loadTimeDimentionPromiseDeferred.promise;
             }
 
             function setSourceSelector() {
