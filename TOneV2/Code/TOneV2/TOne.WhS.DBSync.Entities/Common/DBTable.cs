@@ -1,7 +1,5 @@
 ﻿using Microsoft.SqlServer.Management.Smo;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace TOne.WhS.DBSync.Entities
 {
@@ -15,5 +13,6 @@ namespace TOne.WhS.DBSync.Entities
         public object Records { get; set; }
         public List<DBForeignKey> DBFKs { get; set; }
         public bool Migrated { get; set; }
+        public bool MigrationRequested { get; set; }
     }
 }

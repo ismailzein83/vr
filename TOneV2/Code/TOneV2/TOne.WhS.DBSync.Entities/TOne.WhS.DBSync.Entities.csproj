@@ -53,13 +53,20 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\DatabaseScripts.cs" />
     <Compile Include="Common\DBForeignKey.cs" />
     <Compile Include="Common\DBTable.cs" />
+    <Compile Include="Common\DBTableName.cs" />
+    <Compile Include="Common\MigrationContext.cs" />
+    <Compile Include="Common\MigrationCredentials.cs" />
     <Compile Include="SourceCarrierAccount.cs" />
     <Compile Include="SourceCode.cs" />
     <Compile Include="SourcePriceList.cs" />

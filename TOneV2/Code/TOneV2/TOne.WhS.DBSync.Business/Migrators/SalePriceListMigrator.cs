@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data.SQL;
-using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Entities;
 
@@ -33,9 +32,6 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<SalePriceList> itemsToAdd)
         {
             dbSyncDataManager.ApplySalePriceListsToTemp(itemsToAdd);
-            DBTable dbTableSalePriceList = Context.DBTables[DBTableName.SalePriceList];
-            if (dbTableSalePriceList != null)
-                dbTableSalePriceList.Records = dbSyncDataManager.GetSalePriceLists();
         }
 
         public override IEnumerable<SourcePriceList> GetSourceItems()
@@ -66,6 +62,12 @@ namespace TOne.WhS.DBSync.Business
                 };
             else
                 return null;
+        }
+        public override void FillTableInfo(bool useTempTables)
+        {
+            DBTable dbTableSalePriceList = Context.DBTables[DBTableName.SalePriceList];
+            if (dbTableSalePriceList != null)
+                dbTableSalePriceList.Records = dbSyncDataManager.GetSalePriceLists(useTempTables);
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Linq;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data.SQL;
-using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
@@ -39,9 +38,6 @@ namespace TOne.WhS.DBSync.Business
             long startingId;
             ReserveIDRange(itemsToAdd.Count(), out startingId);
             dbSyncDataManager.ApplySupplierZonesToTemp(itemsToAdd, startingId);
-            DBTable dbTableSupplierZone = Context.DBTables[DBTableName.SupplierZone];
-            if (dbTableSupplierZone != null)
-                dbTableSupplierZone.Records = dbSyncDataManager.GetSupplierZones();
         }
 
         public override IEnumerable<SourceZone> GetSourceItems()
@@ -76,6 +72,12 @@ namespace TOne.WhS.DBSync.Business
         internal static void ReserveIDRange(int nbOfIds, out long startingId)
         {
             IDManager.Instance.ReserveIDRange(typeof(SupplierZoneManager), nbOfIds, out startingId);
+        }
+        public override void FillTableInfo(bool useTempTables)
+        {
+            DBTable dbTableSupplierZone = Context.DBTables[DBTableName.SupplierZone];
+            if (dbTableSupplierZone != null)
+                dbTableSupplierZone.Records = dbSyncDataManager.GetSupplierZones(useTempTables);
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Linq;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data.SQL;
-using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Common.Business;
 
@@ -71,6 +70,12 @@ namespace TOne.WhS.DBSync.Business
         internal static void ReserveIDRange(int nbOfIds, out long startingId)
         {
             IDManager.Instance.ReserveIDRange(typeof(SaleCodeManager), nbOfIds, out startingId);
+        }
+        public override void FillTableInfo(bool useTempTables)
+        {
+            DBTable dbTableSaleCode = Context.DBTables[DBTableName.SaleCode];
+            if (dbTableSaleCode != null)
+                dbTableSaleCode.Records = dbSyncDataManager.GetSaleCodes(useTempTables);
         }
     }
 }

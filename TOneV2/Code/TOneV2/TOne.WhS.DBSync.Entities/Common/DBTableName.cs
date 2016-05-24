@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace TOne.WhS.DBSync.Data.SQL.Common
+namespace TOne.WhS.DBSync.Entities
 {
     public enum DBTableName
     {

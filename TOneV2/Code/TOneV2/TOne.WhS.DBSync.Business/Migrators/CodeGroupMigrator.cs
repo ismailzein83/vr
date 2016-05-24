@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data.SQL;
-using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Entities;
 
@@ -31,9 +30,6 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<CodeGroup> itemsToAdd)
         {
             dbSyncDataManager.ApplyCodeGroupsToTemp(itemsToAdd);
-            DBTable dbTableCodeGroup = Context.DBTables[DBTableName.CodeGroup];
-            if (dbTableCodeGroup != null)
-                dbTableCodeGroup.Records = dbSyncDataManager.GetCodeGroups();
         }
 
         public override IEnumerable<SourceCodeGroup> GetSourceItems()
@@ -56,6 +52,13 @@ namespace TOne.WhS.DBSync.Business
                             };
             else
                 return null;
+        }
+
+        public override void FillTableInfo(bool useTempTables)
+        {
+            DBTable dbTableCodeGroup = Context.DBTables[DBTableName.CodeGroup];
+            if (dbTableCodeGroup != null)
+                dbTableCodeGroup.Records = dbSyncDataManager.GetCodeGroups(useTempTables);
         }
     }
 }

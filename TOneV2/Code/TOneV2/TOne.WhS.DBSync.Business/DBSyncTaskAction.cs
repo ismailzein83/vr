@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using TOne.WhS.DBSync.Data.SQL;
-using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Runtime.Entities;
-using System.Linq;
 
 
 namespace TOne.WhS.DBSync.Business
@@ -20,116 +19,18 @@ namespace TOne.WhS.DBSync.Business
             MigrationContext context = new MigrationContext();
             try
             {
+                context.WriteInformation("Database Sync Task Action Started");
                 DBSyncTaskActionArgument dbSyncTaskActionArgument = taskActionArgument as DBSyncTaskActionArgument;
                 MigrationManager migrationManager;
-
-                context.WriteInformation("Database Sync Task Action Started");
                 context.UseTempTables = dbSyncTaskActionArgument.UseTempTables;
                 context.ConnectionString = dbSyncTaskActionArgument.ConnectionString;
                 context.DefaultSellingNumberPlanId = dbSyncTaskActionArgument.DefaultSellingNumberPlanId;
-
-                Dictionary<DBTableName, DBTable> dtTables = new Dictionary<DBTableName, DBTable>();
-
-                foreach (DBTableName table in Enum.GetValues(typeof(DBTableName)))
-                {
-
-
-                    switch (table)
-                    {
-                        case DBTableName.CarrierAccount:
-                            CarrierAccountDBSyncDataManager carrierAccountDBSyncDataManager = new CarrierAccountDBSyncDataManager(context.UseTempTables);
-                            AddDBTable(dtTables, table, carrierAccountDBSyncDataManager.GetConnection(), carrierAccountDBSyncDataManager.GetSchema());
-                            break;
-
-
-                        case DBTableName.CarrierProfile:
-                            CarrierProfileDBSyncDataManager carrierProfileDBSyncDataManager = new CarrierProfileDBSyncDataManager(context.UseTempTables);
-                            AddDBTable(dtTables, table, carrierProfileDBSyncDataManager.GetConnection(), carrierProfileDBSyncDataManager.GetSchema());
-                            break;
-
-
-                        case DBTableName.Currency:
-                            CurrencyDBSyncDataManager currencyDBSyncDataManager = new CurrencyDBSyncDataManager(context.UseTempTables);
-                            AddDBTable(dtTables, table, currencyDBSyncDataManager.GetConnection(), currencyDBSyncDataManager.GetSchema());
-                            break;
-
-
-                        case DBTableName.CurrencyExchangeRate:
-                            CurrencyExchangeRateDBSyncDataManager currencyExchangeRateDBSyncDataManager = new CurrencyExchangeRateDBSyncDataManager(context.UseTempTables);
-                            AddDBTable(dtTables, table, currencyExchangeRateDBSyncDataManager.GetConnection(), currencyExchangeRateDBSyncDataManager.GetSchema());
-                            break;
-
-
-                        case DBTableName.Switch:
-                            SwitchDBSyncDataManager switchDBSyncDataManager = new SwitchDBSyncDataManager(context.UseTempTables);
-                            AddDBTable(dtTables, table, switchDBSyncDataManager.GetConnection(), switchDBSyncDataManager.GetSchema());
-                            break;
-
-                        case DBTableName.Country:
-                            CountryDBSyncDataManager countryDBSyncDataManager = new CountryDBSyncDataManager(context.UseTempTables);
-                            AddDBTable(dtTables, table, countryDBSyncDataManager.GetConnection(), countryDBSyncDataManager.GetSchema());
-                            break;
-
-                        case DBTableName.CodeGroup:
-                            CodeGroupDBSyncDataManager codeGroupDBSyncDataManager = new CodeGroupDBSyncDataManager(context.UseTempTables);
-                            AddDBTable(dtTables, table, codeGroupDBSyncDataManager.GetConnection(), codeGroupDBSyncDataManager.GetSchema());
-                            break;
-
-                        case DBTableName.SupplierCode:
-                            SupplierCodeDBSyncDataManager supplierCodeDBSyncDataManager = new SupplierCodeDBSyncDataManager(context.UseTempTables);
-                            AddDBTable(dtTables, table, supplierCodeDBSyncDataManager.GetConnection(), supplierCodeDBSyncDataManager.GetSchema());
-                            break;
-
-                        case DBTableName.SupplierPriceList:
-                            SupplierPriceListDBSyncDataManager supplierPriceListDBSyncDataManager = new SupplierPriceListDBSyncDataManager(context.UseTempTables);
-                            AddDBTable(dtTables, table, supplierPriceListDBSyncDataManager.GetConnection(), supplierPriceListDBSyncDataManager.GetSchema());
-                            break;
-
-                        case DBTableName.SupplierRate:
-                            SupplierRateDBSyncDataManager supplierRateDBSyncDataManager = new SupplierRateDBSyncDataManager(context.UseTempTables);
-                            AddDBTable(dtTables, table, supplierRateDBSyncDataManager.GetConnection(), supplierRateDBSyncDataManager.GetSchema());
-                            break;
-
-                        case DBTableName.SupplierZone:
-                            SupplierZoneDBSyncDataManager supplierZoneDBSyncDataManager = new SupplierZoneDBSyncDataManager(context.UseTempTables);
-                            AddDBTable(dtTables, table, supplierZoneDBSyncDataManager.GetConnection(), supplierZoneDBSyncDataManager.GetSchema());
-                            break;
-
-                        case DBTableName.SaleCode:
-                            SaleCodeDBSyncDataManager saleCodeDBSyncDataManager = new SaleCodeDBSyncDataManager(context.UseTempTables);
-                            AddDBTable(dtTables, table, saleCodeDBSyncDataManager.GetConnection(), saleCodeDBSyncDataManager.GetSchema());
-                            break;
-
-                        case DBTableName.SalePriceList:
-                            SalePriceListDBSyncDataManager salePriceListDBSyncDataManager = new SalePriceListDBSyncDataManager(context.UseTempTables);
-                            AddDBTable(dtTables, table, salePriceListDBSyncDataManager.GetConnection(), salePriceListDBSyncDataManager.GetSchema());
-                            break;
-
-                        case DBTableName.SaleRate:
-                            SaleRateDBSyncDataManager saleRateDBSyncDataManager = new SaleRateDBSyncDataManager(context.UseTempTables);
-                            AddDBTable(dtTables, table, saleRateDBSyncDataManager.GetConnection(), saleRateDBSyncDataManager.GetSchema());
-                            break;
-
-                        case DBTableName.SaleZone:
-                            SaleZoneDBSyncDataManager saleZoneDBSyncDataManager = new SaleZoneDBSyncDataManager(context.UseTempTables);
-                            AddDBTable(dtTables, table, saleZoneDBSyncDataManager.GetConnection(), saleZoneDBSyncDataManager.GetSchema());
-                            break;
-
-                    }
-
-                }
-
-
-                context.DBTables = dtTables;
-
-                CurrencyDBSyncDataManager sampleDBSyncDataManager = new CurrencyDBSyncDataManager(context.UseTempTables);
-                context.MigrationCredentials = GetMigrationCredential(sampleDBSyncDataManager.GetConnection());
-                migrationManager = new MigrationManager(context);
-
+                context.MigrationRequestedTables = dbSyncTaskActionArgument.MigrationRequestedTables;
+                context.DBTables = FillDBTables(context);
+                migrationManager = ConstructMigrationManager(context);
                 PrepareBeforeApplyingRecords(context, migrationManager);
                 TransferData(context);
                 FinalizeMigration(context, migrationManager);
-
                 context.WriteInformation("Database Sync Task Action Executed");
 
             }
@@ -146,9 +47,101 @@ namespace TOne.WhS.DBSync.Business
             return output;
         }
 
-        private void AddDBTable(Dictionary<DBTableName, DBTable> dtTables, DBTableName table, string connectionString, string schema)
+        private MigrationManager ConstructMigrationManager(MigrationContext context)
         {
-            dtTables.Add(table, new DBTable() { Name = Vanrise.Common.Utilities.GetEnumDescription(table), Schema = schema, Database = GetDatabaseName(connectionString) });
+            MigrationManager migrationManager;
+            CurrencyDBSyncDataManager sampleDBSyncDataManager = new CurrencyDBSyncDataManager(context.UseTempTables);
+            context.MigrationCredentials = GetMigrationCredential(sampleDBSyncDataManager.GetConnection());
+            migrationManager = new MigrationManager(context);
+            return migrationManager;
+        }
+
+        private Dictionary<DBTableName, DBTable> FillDBTables(MigrationContext context)
+        {
+            Dictionary<DBTableName, DBTable> dtTables = new Dictionary<DBTableName, DBTable>();
+
+            IDBSyncDataManager iDBSyncDataManager = null;
+            bool migrationRequested = false;
+            foreach (DBTableName table in Enum.GetValues(typeof(DBTableName)))
+            {
+                migrationRequested = context.MigrationRequestedTables.Contains(table);
+                switch (table)
+                {
+                    case DBTableName.CarrierAccount:
+                        iDBSyncDataManager = new CarrierAccountDBSyncDataManager(context.UseTempTables);
+                        break;
+
+
+                    case DBTableName.CarrierProfile:
+                        iDBSyncDataManager = new CarrierProfileDBSyncDataManager(context.UseTempTables);
+                        break;
+
+
+                    case DBTableName.Currency:
+                        iDBSyncDataManager = new CurrencyDBSyncDataManager(context.UseTempTables);
+                        break;
+
+
+                    case DBTableName.CurrencyExchangeRate:
+                        iDBSyncDataManager = new CurrencyExchangeRateDBSyncDataManager(context.UseTempTables);
+                        break;
+
+
+                    case DBTableName.Switch:
+                        iDBSyncDataManager = new SwitchDBSyncDataManager(context.UseTempTables);
+                        break;
+
+                    case DBTableName.Country:
+                        iDBSyncDataManager = new CountryDBSyncDataManager(context.UseTempTables);
+                        break;
+
+                    case DBTableName.CodeGroup:
+                        iDBSyncDataManager = new CodeGroupDBSyncDataManager(context.UseTempTables);
+                        break;
+
+                    case DBTableName.SupplierCode:
+                        iDBSyncDataManager = new SupplierCodeDBSyncDataManager(context.UseTempTables);
+                        break;
+
+                    case DBTableName.SupplierPriceList:
+                        iDBSyncDataManager = new SupplierPriceListDBSyncDataManager(context.UseTempTables);
+                        break;
+
+                    case DBTableName.SupplierRate:
+                        iDBSyncDataManager = new SupplierRateDBSyncDataManager(context.UseTempTables);
+                        break;
+
+                    case DBTableName.SupplierZone:
+                        iDBSyncDataManager = new SupplierZoneDBSyncDataManager(context.UseTempTables);
+                        break;
+
+                    case DBTableName.SaleCode:
+                        iDBSyncDataManager = new SaleCodeDBSyncDataManager(context.UseTempTables);
+                        break;
+
+                    case DBTableName.SalePriceList:
+                        iDBSyncDataManager = new SalePriceListDBSyncDataManager(context.UseTempTables);
+                        break;
+
+                    case DBTableName.SaleRate:
+                        iDBSyncDataManager = new SaleRateDBSyncDataManager(context.UseTempTables);
+                        migrationRequested = false;
+                        break;
+
+                    case DBTableName.SaleZone:
+                        iDBSyncDataManager = new SaleZoneDBSyncDataManager(context.UseTempTables);
+                        break;
+
+                }
+                AddDBTable(dtTables, table, iDBSyncDataManager.GetConnection(), iDBSyncDataManager.GetSchema(), migrationRequested);
+
+            }
+            return dtTables;
+        }
+
+        private void AddDBTable(Dictionary<DBTableName, DBTable> dtTables, DBTableName table, string connectionString, string schema, bool migrationRequested)
+        {
+            dtTables.Add(table, new DBTable() { Name = Vanrise.Common.Utilities.GetEnumDescription(table), Schema = schema, Database = GetDatabaseName(connectionString), MigrationRequested = migrationRequested });
         }
 
         private string GetDatabaseName(string connectionString)
@@ -170,7 +163,6 @@ namespace TOne.WhS.DBSync.Business
             return migrationCredential;
         }
 
-
         private void FinalizeMigration(MigrationContext context, MigrationManager migrationManager)
         {
             if (context.UseTempTables)
@@ -191,138 +183,109 @@ namespace TOne.WhS.DBSync.Business
             }
         }
 
-
-
-        private void CallMigrator(MigrationContext context, string tableName)
+        private void CallMigrator(MigrationContext context, DBTable table)
         {
-            switch (tableName)
+            IMigrator imgrator = null;
+            switch ((DBTableName)System.Enum.Parse(typeof(DBTableName), table.Name))
             {
-                case "Switch":
-                    SwitchMigrator switchMigrator = new SwitchMigrator(context);
-                    switchMigrator.Migrate();
+                case DBTableName.Switch:
+                    imgrator = new SwitchMigrator(context);
                     break;
 
-                case "Currency":
-                    CurrencyMigrator currencyMigrator = new CurrencyMigrator(context);
-                    currencyMigrator.Migrate();
+                case DBTableName.Currency:
+                    imgrator = new CurrencyMigrator(context);
                     break;
 
-                case "CurrencyExchangeRate":
-                    CurrencyExchangeRateMigrator currencyExchangeRateMigrator = new CurrencyExchangeRateMigrator(context);
-                    currencyExchangeRateMigrator.Migrate();
+                case DBTableName.CurrencyExchangeRate:
+                    imgrator = new CurrencyExchangeRateMigrator(context);
                     break;
 
-                case "Country":
-                    CountryMigrator countryMigrator = new CountryMigrator(context);
-                    countryMigrator.Migrate();
+                case DBTableName.Country:
+                    imgrator = new CountryMigrator(context);
                     break;
 
-                case "CodeGroup":
-                    CodeGroupMigrator codeGroupMigrator = new CodeGroupMigrator(context);
-                    codeGroupMigrator.Migrate();
+                case DBTableName.CodeGroup:
+                    imgrator = new CodeGroupMigrator(context);
                     break;
 
-                case "CarrierProfile":
-                    CarrierProfileMigrator carrierProfileMigrator = new CarrierProfileMigrator(context);
-                    carrierProfileMigrator.Migrate();
+                case DBTableName.CarrierProfile:
+                    imgrator = new CarrierProfileMigrator(context);
                     break;
 
-                case "CarrierAccount":
-                    CarrierAccountMigrator carrierAccountMigrator = new CarrierAccountMigrator(context);
-                    carrierAccountMigrator.Migrate();
+                case DBTableName.CarrierAccount:
+                    imgrator = new CarrierAccountMigrator(context);
                     break;
 
-                case "SaleZone":
-                    SaleZoneMigrator saleZoneMigrator = new SaleZoneMigrator(context);
-                    saleZoneMigrator.Migrate();
+                case DBTableName.SaleZone:
+                    imgrator = new SaleZoneMigrator(context);
                     break;
 
-                case "SupplierZone":
-                    SupplierZoneMigrator supplierZoneMigrator = new SupplierZoneMigrator(context);
-                    supplierZoneMigrator.Migrate();
+                case DBTableName.SupplierZone:
+                    imgrator = new SupplierZoneMigrator(context);
                     break;
 
-                case "SaleCode":
-                    SaleCodeMigrator saleCodeMigrator = new SaleCodeMigrator(context);
-                    saleCodeMigrator.Migrate();
+                case DBTableName.SaleCode:
+                    imgrator = new SaleCodeMigrator(context);
                     break;
 
-                case "SupplierCode":
-                    SupplierCodeMigrator supplierCodeMigrator = new SupplierCodeMigrator(context);
-                    supplierCodeMigrator.Migrate();
+                case DBTableName.SupplierCode:
+                    imgrator = new SupplierCodeMigrator(context);
                     break;
 
-                case "SalePriceList":
-                    SalePriceListMigrator salePriceListMigrator = new SalePriceListMigrator(context);
-                    salePriceListMigrator.Migrate();
+                case DBTableName.SalePriceList:
+                    imgrator = new SalePriceListMigrator(context);
                     break;
 
-                case "SupplierPriceList":
-                    SupplierPriceListMigrator supplierPriceListMigrator = new SupplierPriceListMigrator(context);
-                    supplierPriceListMigrator.Migrate();
+                case DBTableName.SupplierPriceList:
+                    imgrator = new SupplierPriceListMigrator(context);
                     break;
 
-                case "SaleRate":
-                    SaleRateMigrator saleRateMigrator = new SaleRateMigrator(context);
-                    saleRateMigrator.Migrate();
+                case DBTableName.SaleRate:
+                    imgrator = new SaleRateMigrator(context);
                     break;
 
-                case "SupplierRate":
-                    SupplierRateMigrator supplierRateMigrator = new SupplierRateMigrator(context);
-                    supplierRateMigrator.Migrate();
-
+                case DBTableName.SupplierRate:
+                    imgrator = new SupplierRateMigrator(context);
                     break;
+            }
+
+            if (imgrator != null)
+            {
+                if (table.MigrationRequested)
+                {
+                    imgrator.Migrate();
+                    imgrator.FillTableInfo(context.UseTempTables);
+                }
+                else
+                {
+                    imgrator.FillTableInfo(false);
+                }
             }
         }
 
-
         private void TransferData(MigrationContext context)
         {
-            SwitchMigrator switchMigrator = new SwitchMigrator(context);
-            switchMigrator.Migrate();
+            CallMigrator(context, GetDBTableFromName(context, DBTableName.Switch));
+            CallMigrator(context, GetDBTableFromName(context, DBTableName.Currency));
+            CallMigrator(context, GetDBTableFromName(context, DBTableName.CurrencyExchangeRate));
+            CallMigrator(context, GetDBTableFromName(context, DBTableName.Country));
+            CallMigrator(context, GetDBTableFromName(context, DBTableName.CodeGroup));
+            CallMigrator(context, GetDBTableFromName(context, DBTableName.CarrierProfile));
+            CallMigrator(context, GetDBTableFromName(context, DBTableName.CarrierAccount));
+            CallMigrator(context, GetDBTableFromName(context, DBTableName.SaleZone));
+            CallMigrator(context, GetDBTableFromName(context, DBTableName.SupplierZone));
+            CallMigrator(context, GetDBTableFromName(context, DBTableName.SaleCode));
+            CallMigrator(context, GetDBTableFromName(context, DBTableName.SupplierCode));
+            CallMigrator(context, GetDBTableFromName(context, DBTableName.SalePriceList));
+            CallMigrator(context, GetDBTableFromName(context, DBTableName.SupplierPriceList));
+            CallMigrator(context, GetDBTableFromName(context, DBTableName.SaleRate));
+            CallMigrator(context, GetDBTableFromName(context, DBTableName.SupplierRate));
+        }
 
-            CurrencyMigrator currencyMigrator = new CurrencyMigrator(context);
-            currencyMigrator.Migrate();
-
-            CurrencyExchangeRateMigrator currencyExchangeRateMigrator = new CurrencyExchangeRateMigrator(context);
-            currencyExchangeRateMigrator.Migrate();
-
-            CountryMigrator countryMigrator = new CountryMigrator(context);
-            countryMigrator.Migrate();
-
-            CodeGroupMigrator codeGroupMigrator = new CodeGroupMigrator(context);
-            codeGroupMigrator.Migrate();
-
-            CarrierProfileMigrator carrierProfileMigrator = new CarrierProfileMigrator(context);
-            carrierProfileMigrator.Migrate();
-
-            CarrierAccountMigrator carrierAccountMigrator = new CarrierAccountMigrator(context);
-            carrierAccountMigrator.Migrate();
-
-            SaleZoneMigrator saleZoneMigrator = new SaleZoneMigrator(context);
-            saleZoneMigrator.Migrate();
-
-            SupplierZoneMigrator supplierZoneMigrator = new SupplierZoneMigrator(context);
-            supplierZoneMigrator.Migrate();
-
-            SaleCodeMigrator saleCodeMigrator = new SaleCodeMigrator(context);
-            saleCodeMigrator.Migrate();
-
-            SupplierCodeMigrator supplierCodeMigrator = new SupplierCodeMigrator(context);
-            supplierCodeMigrator.Migrate();
-
-            SalePriceListMigrator salePriceListMigrator = new SalePriceListMigrator(context);
-            salePriceListMigrator.Migrate();
-
-            SupplierPriceListMigrator supplierPriceListMigrator = new SupplierPriceListMigrator(context);
-            supplierPriceListMigrator.Migrate();
-
-            SaleRateMigrator saleRateMigrator = new SaleRateMigrator(context);
-            saleRateMigrator.Migrate();
-
-            SupplierRateMigrator supplierRateMigrator = new SupplierRateMigrator(context);
-            supplierRateMigrator.Migrate();
-
+        private static DBTable GetDBTableFromName(MigrationContext context, DBTableName dbTableName)
+        {
+            DBTable table = context.DBTables.Values.Where(x => x.Name == Vanrise.Common.Utilities.GetEnumDescription(dbTableName)).FirstOrDefault();
+            return table;
         }
     }
 }

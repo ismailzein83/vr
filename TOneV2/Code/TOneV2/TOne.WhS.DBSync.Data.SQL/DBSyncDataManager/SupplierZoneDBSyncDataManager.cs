@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.DBSync.Data.SQL.Common;
+using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class SupplierZoneDBSyncDataManager : BaseSQLDataManager
+    public class SupplierZoneDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
         readonly string[] columns = { "CountryID", "Name", "SupplierID", "BED", "EED", "SourceID", "ID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.SupplierZone);
@@ -45,10 +45,10 @@ namespace TOne.WhS.DBSync.Data.SQL
             InsertBulkToTable(preparedSupplierZones as BaseBulkInsertInfo);
         }
 
-        public Dictionary<string, SupplierZone> GetSupplierZones()
+        public Dictionary<string, SupplierZone> GetSupplierZones(bool useTempTables)
         {
             return GetItemsText("SELECT ID,  CountryID, Name, SupplierID, BED, EED, SourceID FROM"
-                + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), SupplierZoneMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SupplierZoneMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         public SupplierZone SupplierZoneMapper(IDataReader reader)

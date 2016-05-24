@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using TOne.WhS.DBSync.Data.SQL;
-using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Entities;
 
@@ -27,9 +26,6 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<Currency> itemsToAdd)
         {
             dbSyncDataManager.ApplyCurrenciesToTemp(itemsToAdd);
-            DBTable dbTableCurrency = Context.DBTables[DBTableName.Currency];
-            if (dbTableCurrency != null)
-                dbTableCurrency.Records = dbSyncDataManager.GetCurrencies();
         }
 
         public override IEnumerable<SourceCurrency> GetSourceItems()
@@ -45,6 +41,13 @@ namespace TOne.WhS.DBSync.Business
                 Symbol = sourceItem.Symbol,
                 SourceId = sourceItem.SourceId
             };
+        }
+
+        public override void FillTableInfo(bool useTempTables)
+        {
+            DBTable dbTableCurrency = Context.DBTables[DBTableName.Currency];
+            if (dbTableCurrency != null)
+                dbTableCurrency.Records = dbSyncDataManager.GetCurrencies(useTempTables);
         }
     }
 }

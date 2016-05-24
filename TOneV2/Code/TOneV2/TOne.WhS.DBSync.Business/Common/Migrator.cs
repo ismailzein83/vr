@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using TOne.WhS.DBSync.Data.SQL;
+using TOne.WhS.DBSync.Entities;
 using Vanrise.Entities.EntitySynchronization;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public abstract class Migrator<T, Q> where T : ISourceItem
+    public abstract class Migrator<T, Q>:IMigrator where T : ISourceItem
     {
         public string TableName { get; set; }
         public MigrationContext Context { get; set; }
@@ -32,6 +33,7 @@ namespace TOne.WhS.DBSync.Business
             Context.WriteInformation("Migrating table '" + TableName + "' ended");
         }
 
+        public abstract void FillTableInfo(bool useTempTables);
 
         public abstract void AddItems(List<Q> itemsToAdd);
 

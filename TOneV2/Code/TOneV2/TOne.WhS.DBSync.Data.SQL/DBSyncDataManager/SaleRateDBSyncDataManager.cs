@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.DBSync.Data.SQL.Common;
+using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class SaleRateDBSyncDataManager : BaseSQLDataManager
+    public class SaleRateDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
         readonly string[] columns = { "PriceListID", "ZoneID", "CurrencyID", "Rate", "OtherRates", "BED", "EED", "SourceID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.SaleRate);
@@ -41,6 +43,27 @@ namespace TOne.WhS.DBSync.Data.SQL
             };
 
             InsertBulkToTable(preparedSaleRates as BaseBulkInsertInfo);
+        }
+
+        public Dictionary<string, SaleRate> GetSaleRates(bool useTempTables)
+        {
+            return GetItemsText("SELECT [ID]  ,[ZoneID] ,[PriceListID],[Rate],[OtherRates],[BED], [EED], [SourceID] FROM "
+                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SaleRateMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+        }
+
+        public SaleRate SaleRateMapper(IDataReader reader)
+        {
+            return new SaleRate
+            {
+                SaleRateId = (long)reader["ID"],
+                ZoneId = (long)reader["ZoneID"],
+                PriceListId = (int)reader["PriceListID"],
+                NormalRate = (decimal)reader["Rate"],
+                OtherRates = reader["OtherRates"] as string != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string) : null,
+                BED = (DateTime)reader["BED"],
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
+                SourceId = reader["SourceID"] as string,
+            };
         }
 
         public string GetConnection()

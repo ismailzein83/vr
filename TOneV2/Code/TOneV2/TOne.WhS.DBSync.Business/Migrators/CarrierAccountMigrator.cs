@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data.SQL;
-using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Entities;
 
@@ -34,9 +33,7 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<CarrierAccount> itemsToAdd)
         {
             dbSyncDataManager.ApplyCarrierAccountsToTemp(itemsToAdd);
-            DBTable dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
-            if (dbTableCarrierAccount != null)
-                dbTableCarrierAccount.Records = dbSyncDataManager.GetCarrierAccounts();
+
         }
 
         public override IEnumerable<SourceCarrierAccount> GetSourceItems()
@@ -122,6 +119,13 @@ namespace TOne.WhS.DBSync.Business
             else
                 return null;
 
+        }
+
+        public override void FillTableInfo(bool useTempTables)
+        {
+            DBTable dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
+            if (dbTableCarrierAccount != null)
+                dbTableCarrierAccount.Records = dbSyncDataManager.GetCarrierAccounts(useTempTables);
         }
     }
 }

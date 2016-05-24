@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using TOne.WhS.DBSync.Data.SQL;
-using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Entities;
 
@@ -54,6 +53,12 @@ namespace TOne.WhS.DBSync.Business
                 };
             else
                 return null;
+        }
+        public override void FillTableInfo(bool useTempTables)
+        {
+            DBTable dbTableCurrencyExchangeRate = Context.DBTables[DBTableName.CurrencyExchangeRate];
+            if (dbTableCurrencyExchangeRate != null)
+                dbTableCurrencyExchangeRate.Records = dbSyncDataManager.GetCurrencyExchangeRates(useTempTables);
         }
     }
 }

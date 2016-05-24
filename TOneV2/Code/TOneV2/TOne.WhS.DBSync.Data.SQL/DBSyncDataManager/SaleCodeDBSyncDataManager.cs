@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.DBSync.Data.SQL.Common;
+using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class SaleCodeDBSyncDataManager : BaseSQLDataManager
+    public class SaleCodeDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
         readonly string[] columns = { "Code", "ZoneID", "CodeGroupID", "BED", "EED", "SourceID", "ID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.SaleCode);
@@ -41,6 +43,25 @@ namespace TOne.WhS.DBSync.Data.SQL
             };
 
             InsertBulkToTable(preparedSaleCodes as BaseBulkInsertInfo);
+        }
+
+        public Dictionary<string, SaleCode> GetSaleCodes(bool useTempTables)
+        {
+            return GetItemsText("SELECT [ID] ,[Code]  ,[ZoneID]  ,[BED], [EED], [SourceID] FROM "
+                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SaleCodeMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+        }
+
+        public SaleCode SaleCodeMapper(IDataReader reader)
+        {
+            return new SaleCode
+            {
+                SaleCodeId = (long)reader["ID"],
+                Code = reader["Code"] as string,
+                ZoneId = GetReaderValue<long>(reader, "ZoneID"),
+                BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
+                SourceId = reader["SourceID"] as string,
+            };
         }
 
         public string GetConnection()

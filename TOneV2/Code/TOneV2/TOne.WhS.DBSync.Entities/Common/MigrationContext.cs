@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using TOne.WhS.DBSync.Data.SQL.Common;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Common;
 
-namespace TOne.WhS.DBSync.Data.SQL
+namespace TOne.WhS.DBSync.Entities
 {
     public class MigrationContext
     {
         public string ConnectionString { get; set; }
         public bool UseTempTables { get; set; }
         public Dictionary<DBTableName, DBTable> DBTables { get; set; }
+        public List<DBTableName> MigrationRequestedTables { get; set; }
         public MigrationCredentials MigrationCredentials { get; set; }
         public int DefaultSellingNumberPlanId { get; set; }
 

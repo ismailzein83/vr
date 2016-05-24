@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.DBSync.Data.SQL.Common;
+using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class SalePriceListDBSyncDataManager : BaseSQLDataManager
+    public class SalePriceListDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
         readonly string[] columns = { "OwnerType", "OwnerID", "CurrencyID", "SourceID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.SalePriceList);
@@ -45,10 +45,10 @@ namespace TOne.WhS.DBSync.Data.SQL
             InsertBulkToTable(preparedSalePriceLists as BaseBulkInsertInfo);
         }
 
-        public Dictionary<string, SalePriceList> GetSalePriceLists()
+        public Dictionary<string, SalePriceList> GetSalePriceLists(bool useTempTables)
         {
             return GetItemsText("SELECT ID,  OwnerType, OwnerID, CurrencyID, SourceID FROM"
-                + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), SalePriceListMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SalePriceListMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         public SalePriceList SalePriceListMapper(IDataReader reader)

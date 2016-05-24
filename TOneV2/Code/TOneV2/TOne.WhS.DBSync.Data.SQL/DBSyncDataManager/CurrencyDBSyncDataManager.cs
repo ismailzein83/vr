@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using TOne.WhS.DBSync.Data.SQL.Common;
+using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class CurrencyDBSyncDataManager : BaseSQLDataManager
+    public class CurrencyDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
         readonly string[] columns = { "Symbol", "Name", "SourceID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.Currency);
@@ -45,23 +45,21 @@ namespace TOne.WhS.DBSync.Data.SQL
             InsertBulkToTable(preparedCurrencies as BaseBulkInsertInfo);
         }
 
-        public Dictionary<string, Currency> GetCurrencies()
+        public Dictionary<string, Currency> GetCurrencies(bool useTempTables)
         {
             return GetItemsText("SELECT [ID] ,[Symbol]  ,[Name] ,[SourceID] FROM"
-                + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), CurrencyMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), CurrencyMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         public Currency CurrencyMapper(IDataReader reader)
         {
-            Currency currency = new Currency
+            return new Currency
             {
                 CurrencyId = (int)reader["ID"],
                 Symbol = reader["Symbol"] as string,
                 Name = reader["Name"] as string,
                 SourceId = reader["SourceID"] as string,
             };
-
-            return currency;
         }
 
         public string GetConnection()

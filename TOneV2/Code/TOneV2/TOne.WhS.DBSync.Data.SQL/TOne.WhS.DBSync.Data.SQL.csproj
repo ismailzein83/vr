@@ -69,11 +69,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\IDBSyncDataManager.cs" />
     <Compile Include="Common\Constants.cs" />
-    <Compile Include="Common\DatabaseScripts.cs" />
-    <Compile Include="Common\DBTableName.cs" />
-    <Compile Include="Common\MigrationContext.cs" />
-    <Compile Include="Common\MigrationCredentials.cs" />
     <Compile Include="Common\MigrationUtils.cs" />
     <Compile Include="DBSyncDataManager\CarrierAccountDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\CarrierProfileDBSyncDataManager.cs" />

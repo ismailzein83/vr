@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.DBSync.Data.SQL.Common;
+using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class CarrierAccountDBSyncDataManager : BaseSQLDataManager
+    public class CarrierAccountDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
         readonly string[] _Columns = { "NameSuffix", "CarrierProfileID", "AccountType", "SupplierSettings", "CustomerSettings", "CarrierAccountSettings", "SellingNumberPlanID", "SourceID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.CarrierAccount);
@@ -55,10 +55,10 @@ namespace TOne.WhS.DBSync.Data.SQL
             InsertBulkToTable(preparedCarrierAccounts as BaseBulkInsertInfo);
         }
 
-        public Dictionary<string, CarrierAccount> GetCarrierAccounts()
+        public Dictionary<string, CarrierAccount> GetCarrierAccounts(bool useTempTables)
         {
             return GetItemsText("SELECT [ID] ,[NameSuffix]  ,[AccountType] ,[SellingNumberPlanID],[CarrierProfileId],[SourceID] FROM"
-                + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), CarrierAccountMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), CarrierAccountMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         private CarrierAccount CarrierAccountMapper(IDataReader reader)

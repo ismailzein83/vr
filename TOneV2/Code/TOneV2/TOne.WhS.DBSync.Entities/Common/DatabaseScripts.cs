@@ -1,6 +1,6 @@
 ﻿using System.Collections.Specialized;
 
-namespace TOne.WhS.DBSync.Data.SQL
+namespace TOne.WhS.DBSync.Entities
 {
     public class DatabaseScripts
     {

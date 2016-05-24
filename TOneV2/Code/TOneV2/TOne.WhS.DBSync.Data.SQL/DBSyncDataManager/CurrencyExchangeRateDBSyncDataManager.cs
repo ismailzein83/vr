@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using TOne.WhS.DBSync.Data.SQL.Common;
+using System.Data;
+using System.Linq;
+using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class CurrencyExchangeRateDBSyncDataManager : BaseSQLDataManager
+    public class CurrencyExchangeRateDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
         readonly string[] columns = { "CurrencyID", "Rate", "ExchangeDate", "SourceID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.CurrencyExchangeRate);
@@ -43,7 +45,23 @@ namespace TOne.WhS.DBSync.Data.SQL
             InsertBulkToTable(preparedCurrencyExchangeRates as BaseBulkInsertInfo);
         }
 
+        public Dictionary<string, CurrencyExchangeRate> GetCurrencyExchangeRates(bool useTempTables)
+        {
+            return GetItemsText("SELECT [ID],[CurrencyID] ,[Rate]  ,[ExchangeDate]  ,[SourceID] FROM "
+                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), CurrencyExchangeRateMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+        }
 
+        public CurrencyExchangeRate CurrencyExchangeRateMapper(IDataReader reader)
+        {
+            return new CurrencyExchangeRate
+            {
+                CurrencyExchangeRateId = (long)reader["ID"],
+                CurrencyId = (int)reader["CurrencyId"],
+                Rate = GetReaderValue<decimal>(reader, "Rate"),
+                ExchangeDate = GetReaderValue<DateTime>(reader, "ExchangeDate"),
+                SourceId = reader["SourceID"] as string,
+            };
+        }
 
         public string GetConnection()
         {

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.DBSync.Data.SQL.Common;
+using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class SupplierRateDBSyncDataManager : BaseSQLDataManager
+    public class SupplierRateDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
         readonly string[] columns = { "PriceListID", "ZoneID", "CurrencyID", "NormalRate", "OtherRates", "BED", "EED", "SourceID", "ID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.SupplierRate);
@@ -41,6 +43,27 @@ namespace TOne.WhS.DBSync.Data.SQL
             };
 
             InsertBulkToTable(preparedSupplierRates as BaseBulkInsertInfo);
+        }
+
+        public Dictionary<string, SupplierRate> GetSupplierRates(bool useTempTables)
+        {
+            return GetItemsText("SELECT [ID]  ,[ZoneID] ,[PriceListID],[NormalRate],[OtherRates],[BED], [EED], [SourceID] FROM "
+                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SupplierRateMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+        }
+
+        public SupplierRate SupplierRateMapper(IDataReader reader)
+        {
+            return new SupplierRate
+            {
+                SupplierRateId = (long)reader["ID"],
+                ZoneId = (long)reader["ZoneID"],
+                PriceListId = GetReaderValue<int>(reader, "PriceListID"),
+                NormalRate = GetReaderValue<decimal>(reader, "NormalRate"),
+                OtherRates = reader["OtherRates"] as string != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string) : null,
+                BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
+                SourceId = reader["SourceID"] as string,
+            };
         }
 
         public string GetConnection()

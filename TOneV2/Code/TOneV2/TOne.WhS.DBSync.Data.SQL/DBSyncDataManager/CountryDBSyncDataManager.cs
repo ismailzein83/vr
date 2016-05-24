@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using TOne.WhS.DBSync.Data.SQL.Common;
+using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class CountryDBSyncDataManager : BaseSQLDataManager
+    public class CountryDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
         readonly string[] columns = { "Name", "SourceID", "ID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.Country);
@@ -45,10 +45,10 @@ namespace TOne.WhS.DBSync.Data.SQL
             InsertBulkToTable(preparedCountries as BaseBulkInsertInfo);
         }
 
-        public Dictionary<string, Country> GetCountries()
+        public Dictionary<string, Country> GetCountries(bool useTempTables)
         {
             return GetItemsText("SELECT [ID] ,[Name] ,[SourceID] FROM"
-                + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), CountryMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), CountryMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         public Country CountryMapper(IDataReader reader)

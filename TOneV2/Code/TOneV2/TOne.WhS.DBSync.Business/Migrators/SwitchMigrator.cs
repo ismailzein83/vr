@@ -41,5 +41,11 @@ namespace TOne.WhS.DBSync.Business
                 SourceId = sourceItem.SourceId
             };
         }
+        public override void FillTableInfo(bool useTempTables)
+        {
+            DBTable dbTableSwitch = Context.DBTables[DBTableName.Switch];
+            if (dbTableSwitch != null)
+                dbTableSwitch.Records = dbSyncDataManager.GetSwitches(useTempTables);
+        }
     }
 }

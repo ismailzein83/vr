@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.DBSync.Data.SQL.Common;
+using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class CarrierProfileDBSyncDataManager : BaseSQLDataManager
+    public class CarrierProfileDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
         readonly string[] columns = { "Settings", "Name", "SourceID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.CarrierProfile);
@@ -45,10 +45,10 @@ namespace TOne.WhS.DBSync.Data.SQL
             InsertBulkToTable(preparedCarrierProfiles as BaseBulkInsertInfo);
         }
 
-        public Dictionary<string, CarrierProfile> GetCarrierProfiles()
+        public Dictionary<string, CarrierProfile> GetCarrierProfiles(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID] ,[Settings]  ,[Name] ,[SourceID] FROM" 
-                + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), CarrierProfileMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x); 
+            return GetItemsText("SELECT [ID] ,[Settings]  ,[Name] ,[SourceID] FROM"
+                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), CarrierProfileMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x); 
         }
 
         private CarrierProfile CarrierProfileMapper(IDataReader reader)

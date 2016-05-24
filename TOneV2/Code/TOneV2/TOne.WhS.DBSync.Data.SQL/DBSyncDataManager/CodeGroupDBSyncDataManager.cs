@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.DBSync.Data.SQL.Common;
+using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
+
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class CodeGroupDBSyncDataManager : BaseSQLDataManager
+    public class CodeGroupDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
         readonly string[] columns = { "Code", "SourceID", "CountryID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.CodeGroup);
@@ -45,10 +46,10 @@ namespace TOne.WhS.DBSync.Data.SQL
             InsertBulkToTable(preparedCodeGroups as BaseBulkInsertInfo);
         }
 
-        public Dictionary<string, CodeGroup> GetCodeGroups()
+        public Dictionary<string, CodeGroup> GetCodeGroups(bool useTempTables)
         {
             return GetItemsText("SELECT [ID], [CountryID], [Code], [SourceID] FROM"
-                + MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables), CodeGroupMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), CodeGroupMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         public CodeGroup CodeGroupMapper(IDataReader reader)
