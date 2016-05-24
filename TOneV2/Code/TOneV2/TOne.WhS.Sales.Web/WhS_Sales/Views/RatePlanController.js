@@ -96,10 +96,12 @@
                 $scope.showSettingsButton = false;
                 $scope.showCancelButton = false;
 
-                if ($scope.selectedCustomer) {
+                var selectedId = carrierAccountSelectorAPI.getSelectedIds();
+
+                if (selectedId != undefined) {
                     $scope.isLoadingFilterSection = true;
 
-                    WhS_Sales_RatePlanAPIService.ValidateCustomer(getOwnerId(), new Date()).then(function (isCustomerValid) {
+                    WhS_Sales_RatePlanAPIService.ValidateCustomer(selectedId, new Date()).then(function (isCustomerValid) {
                         if (!isCustomerValid) {
                             VRNotificationService.showInformation($scope.selectedCustomer.Name + " is not related to a selling product");
                             $scope.selectedCustomer = undefined;
@@ -379,7 +381,11 @@
             promises.push(checkIfDraftExistsPromise);
 
             zoneLettersGetPromise.then(function () {
-                if ($scope.zoneLetters.length > 0) {
+                if ($scope.zoneLetters.length > 0)
+                {
+                    $scope.showSaveButton = true;
+                    $scope.showSettingsButton = true;
+
                     loadGrid().then(function () {
                         loadGridDeferred.resolve();
                         showRatePlan(true); // At this point, there's no guarantee that the default item has loaded. But that's okay since the tab directive displays a loader for the default item
@@ -387,7 +393,11 @@
                 }
                 else {
                     loadGridDeferred.resolve();
-                    VRNotificationService.showInformation("No countries were sold to this customer");
+
+                    if (ownerTypeValue == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value)
+                        VRNotificationService.showInformation('No zones are related to this selling product');
+                    else
+                        VRNotificationService.showInformation("No countries were sold to this customer");
                 }
             });
 
@@ -413,10 +423,7 @@
                 }
             });
 
-            return UtilsService.waitMultiplePromises(promises).then(function () {
-                $scope.showSaveButton = true;
-                $scope.showSettingsButton = true;
-            }).catch(function (error) {
+            return UtilsService.waitMultiplePromises(promises).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
 

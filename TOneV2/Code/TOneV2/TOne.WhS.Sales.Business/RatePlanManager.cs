@@ -118,17 +118,16 @@ namespace TOne.WhS.Sales.Business
 
         IEnumerable<SaleZone> GetSellingProductZones(int sellingProductId, DateTime effectiveOn)
         {
-            IEnumerable<SaleZone> zones = null;
+            IEnumerable<SaleZone> zones;
 
             SellingProductManager sellingProductManager = new SellingProductManager();
-            int? returnValue = sellingProductManager.GetSellingNumberPlanId(sellingProductId);
+            int? sellingNumberPlanId = sellingProductManager.GetSellingNumberPlanId(sellingProductId);
 
-            if (returnValue != null)
-            {
-                int sellingNumberPlanId = (int)returnValue;
-                SaleZoneManager saleZoneManager = new SaleZoneManager();
-                zones = saleZoneManager.GetSaleZones(sellingNumberPlanId, effectiveOn);
-            }
+            if (!sellingNumberPlanId.HasValue)
+                throw new NullReferenceException("sellingNumberPlanId");
+
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+            zones = saleZoneManager.GetSaleZones(sellingNumberPlanId.Value, effectiveOn);
 
             return zones;
         }
