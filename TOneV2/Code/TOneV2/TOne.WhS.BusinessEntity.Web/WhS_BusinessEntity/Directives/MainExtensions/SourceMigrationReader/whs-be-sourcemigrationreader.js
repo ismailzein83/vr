@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_SwitchAPIService',
-    function (UtilsService, VRUIUtilsService, VRNotificationService, WhS_BE_SwitchAPIService) {
+app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_SwitchAPIService', 'WhS_BE_DBTableNameEnum',
+    function (UtilsService, VRUIUtilsService, VRNotificationService, WhS_BE_SwitchAPIService, WhS_BE_DBTableNameEnum) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -32,6 +32,8 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
             var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
+                $scope.migrationTables = UtilsService.getArrayEnum(WhS_BE_DBTableNameEnum);
+                $scope.migrationTablesSelectedValues = [];
                 $scope.onSellingNumberPlanDirectiveReady = function (api) {
                     sellingNumberPlanDirectiveAPI = api;
                     sellingNumberPlanReadyPromiseDeferred.resolve();
@@ -48,8 +50,17 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     schedulerTaskAction = {};
                     schedulerTaskAction.$type = "TOne.WhS.DBSync.Business.DBSyncTaskActionArgument, TOne.WhS.DBSync.Business";
                     schedulerTaskAction.ConnectionString = $scope.connectionString;
-                    schedulerTaskAction.DefaultSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds()
+                    schedulerTaskAction.DefaultSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
                     schedulerTaskAction.UseTempTables = ($scope.useTempTables == true) ? true : false;
+                    var selectedTables = [];
+
+                    $scope.migrationTablesSelectedValues;
+                    angular.forEach($scope.migrationTablesSelectedValues, function (x) {
+                        selectedTables.push(x.value);
+                    });
+                    schedulerTaskAction.MigrationRequestedTables = selectedTables;
+
+                    console.log(selectedTables)
                     return schedulerTaskAction;
                 };
 
@@ -60,6 +71,9 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                         $scope.connectionString = payload.data.ConnectionString;
                         $scope.useTempTables = payload.data.UseTempTables;
                         sellingNumberPlanId = payload.data.DefaultSellingNumberPlanId;
+                        angular.forEach(payload.data.MigrationRequestedTables, function (x) {
+                            $scope.migrationTablesSelectedValues.push(UtilsService.getEnum(WhS_BE_DBTableNameEnum, 'value', x));
+                        });
                     }
 
                     var sellingNumberPlanPayload;

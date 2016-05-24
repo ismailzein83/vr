@@ -201,6 +201,7 @@
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ModuleConfig.js" />
     <Content Include="WhS_BusinessEntity\Constant\PricingRuleTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\DBTableNameEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PricingTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\RoutingProductSaleZoneRelationTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\RoutingProductSupplierRelationTypeEnum.js" />
