@@ -19,8 +19,8 @@
     <section name="vanriseRuntime" type="Vanrise.Runtime.Configuration.RuntimeConfig, Vanrise.Runtime" />
     <section name="vanriseLogging" type="Vanrise.Common.LoggingConfiguration.LoggingConfig, Vanrise.Common" />
   </configSections>
-  
-  
+
+
   <vanriseRuntime>
     <runtimeServiceGroups>
       <!--<runtimeServiceGroup name="group1" nbOfRuntimeInstances="2">
@@ -267,7 +267,7 @@
     </assemblyBinding>
   </runtime>
 
-  <startup>
+  <startup useLegacyV2RuntimeActivationPolicy="true">
     <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5"/>
   </startup>
 </configuration>
