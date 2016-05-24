@@ -153,8 +153,6 @@
                             VRUIUtilsService.callDirectiveLoad(tableSelectorAPI, payLoadTableSelector, loadTableSelectorPromiseDeferred);
                         });
                         promises.push(loadTableSelectorPromiseDeferred.promise);
-
-                           
                             var getWidgetsTemplateConfigsPromise = getWidgetsTemplateConfigs();
                             promises.push(getWidgetsTemplateConfigsPromise);
 

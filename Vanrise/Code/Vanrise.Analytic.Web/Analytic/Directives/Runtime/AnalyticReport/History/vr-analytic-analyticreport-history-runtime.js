@@ -34,8 +34,8 @@
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.widgets = [];
                 $scope.scopeModel.filters = [];
-                $scope.scopeModel.fromdate = "01/01/2016";
-                $scope.scopeModel.todate = new Date();
+                $scope.scopeModel.fromdate = new Date();
+                $scope.scopeModel.todate;
                 $scope.scopeModel.groupingDimentions = [];
                 $scope.scopeModel.selectedGroupingDimentions = [];
                 $scope.scopeModel.isGroupingRequired = false;
@@ -313,10 +313,11 @@
                 }
 
                 var groupingDimensions = [];
-
+                console.log($scope.scopeModel.selectedGroupingDimentions);
                 if ($scope.scopeModel.selectedGroupingDimentions != undefined && $scope.scopeModel.selectedGroupingDimentions.length > 0) {
                     for (var i = 0; i < $scope.scopeModel.selectedGroupingDimentions.length; i++) {
-                        groupingDimensions.push({ DimensionName: $scope.scopeModel.selectedGroupingDimentions[i].DimensionName });
+                        var dimension = $scope.scopeModel.selectedGroupingDimentions[i];
+                        groupingDimensions.push({ DimensionName: dimension.DimensionName });
 
                     }
                 } else {

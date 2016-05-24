@@ -46,9 +46,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                     function getDirectiveAPI() {
 
                         directiveAPI.load = function (payload) {
-
                             var query = getQuery(payload);
-
                             var dataRetrievalInput = {
                                 DataRetrievalResultType: 0,
                                 IsSortDescending: false,
