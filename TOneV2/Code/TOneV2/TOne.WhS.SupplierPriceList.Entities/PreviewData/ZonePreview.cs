@@ -7,16 +7,22 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.SupplierPriceList.Entities
 {
-    public enum ZoneChangeType {
+    public enum ZoneChangeType
+    {
+        [Description("Not Changed")]
+        NotChanged = 0,
 
         [Description("New")]
-        New = 0,
+        New = 1,
 
         [Description("Closed")]
-        Closed = 1,
+        Closed = 2,
 
         [Description("Deleted")]
-        Deleted = 2
+        Deleted = 3,
+
+        [Description("Renamed")]
+        Renamed = 4
     };
 
 

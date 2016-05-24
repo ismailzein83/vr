@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
-    public class NewCode : ICode
+    public class NewCode : Vanrise.Entities.IDateEffectiveSettings
     {
         public long CodeId { get; set; }
 
@@ -20,15 +20,6 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public DateTime? EED { get; set; }
 
-        public object Key
-        {
-            get { return Code; }
-        }
-
-        public string TargetType
-        {
-            get { return "Code"; }
-        }
     }
 
 }

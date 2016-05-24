@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
-    public class ExistingCode : ICode
+    public class ExistingCode : Vanrise.Entities.IDateEffectiveSettings, IRuleTarget
     {
         public ExistingZone ParentZone { get; set; }
 
@@ -21,11 +22,10 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
             get { return ChangedCode != null ? ChangedCode.EED : CodeEntity.EED; }
         }
 
-        public string Code { get; set; }
 
         public object Key
         {
-            get { return CodeEntity.Code; }
+            get { return this.CodeEntity.Code; }
         }
 
         public string TargetType

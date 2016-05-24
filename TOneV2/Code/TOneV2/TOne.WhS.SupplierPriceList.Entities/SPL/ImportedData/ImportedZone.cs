@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,15 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public List<ImportedRate> ImportedRates { get; set; }
 
+        public List<NewZone> NewZones { get; set; }
+
+        public List<ExistingZone> ExistingZones { get; set; }
+
+        public string RecentZoneName { get; set; }
+
+        public DateTime BED { get; set; }
+        
+        public ZoneChangeType ChangeType { get; set; }
 
         #region IRuleTarget Implementation
 

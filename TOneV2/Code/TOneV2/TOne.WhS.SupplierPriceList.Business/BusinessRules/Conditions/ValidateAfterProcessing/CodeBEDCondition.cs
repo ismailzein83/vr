@@ -7,24 +7,28 @@ namespace TOne.WhS.SupplierPriceList.Business
 {
     class CodeBEDCondition : BusinessRuleCondition
     {
-        public override string GetMessage(IRuleTarget target)
-        {
-            return string.Format("Code {0} has been opened in a period less than system period", (target as ICode).Code);
-
-        }
-
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return target is ICode;
+            return (target as ImportedCode != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            if (context.Target == null)
-                throw new ArgumentNullException("Target");
+            ImportedCode importedCode = context.Target as ImportedCode;
+
+            if (importedCode.ChangeType == CodeChangeType.NotChanged || importedCode.ChangeType == CodeChangeType.Deleted)
+                return true;
+
             IImportSPLContext importSplContext = context.GetExtension<IImportSPLContext>();
-            ICode code = context.Target as ICode;
-            return (code.BED >= DateTime.Now.Add(importSplContext.CodeCloseDateOffset));
+
+            return (importedCode.BED >= DateTime.Now.Add(importSplContext.CodeCloseDateOffset));
+        }
+
+
+        public override string GetMessage(IRuleTarget target)
+        {
+            return string.Format("Code {0} has been opened in a period less than system period", (target as ImportedCode).Code);
+
         }
     }
 }

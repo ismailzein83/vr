@@ -104,8 +104,9 @@
     <Compile Include="PrepareChangedCodesToDB.cs" />
     <Compile Include="PrepareChangedRatesToDB.cs" />
     <Compile Include="PrepareChangedZonesToDB.cs" />
+    <Compile Include="PrepareZonesForValidation.cs" />
     <Compile Include="PrepareExistingCodes.cs" />
-    <Compile Include="PrepareZonesAndCodesForValidation.cs" />
+    <Compile Include="PrepareCodesForValidation.cs" />
     <Compile Include="PrepareExistingRates.cs" />
     <Compile Include="PrepareExistingZones.cs" />
     <Compile Include="PrepareNewCodesForDBApply.cs" />
