@@ -15,6 +15,9 @@
 
     function RatePlanController($scope, WhS_Sales_RatePlanService, WhS_Sales_RatePlanAPIService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_Sales_RatePlanStatusEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
 
+        var ownerTypeSelectorAPI;
+        var ownerTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var sellingProductSelectorAPI;
         var sellingProductSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -40,24 +43,29 @@
         defineScope();
         load();
 
-        function defineScope() {
-            $scope.ownerTypes = UtilsService.getArrayEnum(WhS_BE_SalePriceListOwnerTypeEnum);
-            $scope.selectedOwnerType = $scope.ownerTypes[0];
+        function defineScope()
+        {
             $scope.showSellingProductSelector = true;
             $scope.showCarrierAccountSelector = false;
 
+            $scope.onOwnerTypeSelectorReady = function (api) {
+                ownerTypeSelectorAPI = api;
+                ownerTypeSelectorReadyDeferred.resolve();
+            };
             $scope.onOwnerTypeChanged = function () {
                 clearRatePlan();
                 $scope.showSaveButton = false;
                 $scope.showCancelButton = false;
 
-                if ($scope.selectedOwnerType != undefined) {
-                    if ($scope.selectedOwnerType.value == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) {
+                var selectedId = ownerTypeSelectorAPI.getSelectedIds();
+
+                if (selectedId != undefined) {
+                    if (selectedId == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) {
                         $scope.showSellingProductSelector = true;
                         $scope.showCarrierAccountSelector = false;
                         $scope.selectedCustomer = undefined;
                     }
-                    else if ($scope.selectedOwnerType.value == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
+                    else if (selectedId == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
                         $scope.showSellingProductSelector = false;
                         $scope.showCarrierAccountSelector = true;
                         $scope.selectedSellingProduct = undefined;
@@ -222,7 +230,7 @@
                         $scope.showApplyButton = false;
 
                         var input = {
-                            OwnerType: $scope.selectedOwnerType.value,
+                            OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
                             OwnerId: getOwnerId(),
                             EffectiveOn: new Date(),
                             RoutingDatabaseId: databaseSelectorAPI ? databaseSelectorAPI.getSelectedIds() : null,
@@ -264,7 +272,7 @@
 
                 confirmPromise.then(function (confirmed) {
                     if (confirmed) {
-                        return WhS_Sales_RatePlanAPIService.DeleteDraft($scope.selectedOwnerType.value, getOwnerId()).then(function (response) {
+                        return WhS_Sales_RatePlanAPIService.DeleteDraft(ownerTypeSelectorAPI.getSelectedIds(), getOwnerId()).then(function (response) {
                             if (response) {
                                 deleteDeferred.resolve();
                                 VRNotificationService.showSuccess("Draft deleted");
@@ -286,7 +294,7 @@
 
                 return UtilsService.waitMultiplePromises(promises);
             };
-            
+
             defineSaveButtonMenuActions();
         }
 
@@ -305,20 +313,26 @@
                 function loadOwnerFilterSection() {
                     var promises = [];
 
+                    var ownerTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(ownerTypeSelectorLoadDeferred.promise);
+
+                    ownerTypeSelectorReadyDeferred.promise.then(function () {
+                        var ownerTypeSelectorPayload = { selectedIds: WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value };
+                        VRUIUtilsService.callDirectiveLoad(ownerTypeSelectorAPI, ownerTypeSelectorPayload, ownerTypeSelectorLoadDeferred);
+                    });
+
                     var sellingProductSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     promises.push(sellingProductSelectorLoadDeferred.promise);
 
                     sellingProductSelectorReadyDeferred.promise.then(function () {
-                        var payload = { filter: null, selectedIds: null };
-                        VRUIUtilsService.callDirectiveLoad(sellingProductSelectorAPI, payload, sellingProductSelectorLoadDeferred);
+                        VRUIUtilsService.callDirectiveLoad(sellingProductSelectorAPI, undefined, sellingProductSelectorLoadDeferred);
                     });
 
                     var carrierAccountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     promises.push(carrierAccountSelectorLoadDeferred.promise);
 
                     carrierAccountSelectorReadyDeferred.promise.then(function () {
-                        var payload = { filter: null, selectedIds: null };
-                        VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, payload, carrierAccountSelectorLoadDeferred);
+                        VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, undefined, carrierAccountSelectorLoadDeferred);
                     });
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -346,8 +360,11 @@
             }
         }
 
-        function loadRatePlan() {
+        function loadRatePlan()
+        {
             var promises = [];
+
+            var ownerTypeValue = ownerTypeSelectorAPI.getSelectedIds();
 
             var isLoadingZoneLetters = true;
             var zoneLettersGetPromise = getZoneLetters();
@@ -384,7 +401,7 @@
             defaultItemGetPromise.then(function (response) {
                 if (response) {
                     defaultItem = response;
-                    defaultItem.OwnerType = $scope.selectedOwnerType.value;
+                    defaultItem.OwnerType = ownerTypeValue;
                     defaultItem.OwnerId = getOwnerId();
 
                     for (var i = 0; i < $scope.defaultItemTabs.length; i++) {
@@ -404,7 +421,7 @@
             });
 
             function checkIfDraftExists() {
-                return WhS_Sales_RatePlanAPIService.CheckIfDraftExists($scope.selectedOwnerType.value, getOwnerId()).then(function (response) {
+                return WhS_Sales_RatePlanAPIService.CheckIfDraftExists(ownerTypeValue, getOwnerId()).then(function (response) {
                     $scope.showCancelButton = response === true;
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope); // The user can perform other tasks if CheckIfDraftExists fails
@@ -412,7 +429,7 @@
             }
 
             function getZoneLetters() {
-                return WhS_Sales_RatePlanAPIService.GetZoneLetters($scope.selectedOwnerType.value, getOwnerId()).then(function (response) {
+                return WhS_Sales_RatePlanAPIService.GetZoneLetters(ownerTypeValue, getOwnerId()).then(function (response) {
                     if (response) {
                         $scope.zoneLetters.length = 0;
 
@@ -424,7 +441,7 @@
             }
 
             function getDefaultItem() {
-                return WhS_Sales_RatePlanAPIService.GetDefaultItem($scope.selectedOwnerType.value, getOwnerId());
+                return WhS_Sales_RatePlanAPIService.GetDefaultItem(ownerTypeValue, getOwnerId());
             }
         }
 
@@ -444,7 +461,7 @@
 
             function getGridQuery() {
                 return {
-                    OwnerType: $scope.selectedOwnerType.value,
+                    OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
                     OwnerId: getOwnerId(),
                     ZoneLetter: $scope.zoneLetters[$scope.connector.selectedZoneLetterIndex],
                     RoutingDatabaseId: databaseSelectorAPI.getSelectedIds(),
@@ -494,7 +511,7 @@
                 var zoneChanges = gridAPI.getZoneChanges();
 
                 return {
-                    OwnerType: $scope.selectedOwnerType.value,
+                    OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
                     OwnerId: getOwnerId(),
                     NewChanges: (defaultChanges != null || zoneChanges != null) ? { DefaultChanges: defaultChanges, ZoneChanges: zoneChanges } : null
                 };
@@ -519,7 +536,7 @@
         }
 
         function clearRatePlan() {
-            $scope.zoneLetters.length=0;
+            $scope.zoneLetters.length = 0;
             $scope.connector.selectedZoneLetterIndex = 0;
             showRatePlan(false);
         }
@@ -546,11 +563,13 @@
             function onSavePriceListClick() {
                 var promises = [];
 
+                var ownerTypeValue = ownerTypeSelectorAPI.getSelectedIds();
+
                 var saveChangesPromise = saveChanges(false);
                 promises.push(saveChangesPromise);
 
                 saveChangesPromise.then(function () {
-                    WhS_Sales_RatePlanService.viewChanges($scope.selectedOwnerType.value, getOwnerId(), onRatePlanChangesClose);
+                    WhS_Sales_RatePlanService.viewChanges(ownerTypeValue, getOwnerId(), onRatePlanChangesClose);
                 });
 
                 var savePriceListDeferred = UtilsService.createPromiseDeferred();
@@ -572,7 +591,7 @@
                 }
 
                 function savePriceList() {
-                    return WhS_Sales_RatePlanAPIService.SavePriceList($scope.selectedOwnerType.value, getOwnerId());
+                    return WhS_Sales_RatePlanAPIService.SavePriceList(ownerTypeValue, getOwnerId());
                 }
             }
         }
