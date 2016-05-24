@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Migrator.cs" />
+    <Compile Include="DBSyncTaskActionNew.cs" />
     <Compile Include="Migrators\CarrierAccountMigrator.cs" />
     <Compile Include="Migrators\SupplierPriceListMigrator.cs" />
     <Compile Include="Migrators\SupplierRateMigrator.cs" />

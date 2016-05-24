@@ -11,7 +11,7 @@ using System.Linq;
 namespace TOne.WhS.DBSync.Business
 {
 
-    public class DBSyncTaskAction : SchedulerTaskAction
+    public class DBSyncTaskActionNew : SchedulerTaskAction
     {
 
 
@@ -278,51 +278,29 @@ namespace TOne.WhS.DBSync.Business
 
         private void TransferData(MigrationContext context)
         {
-            SwitchMigrator switchMigrator = new SwitchMigrator(context);
-            switchMigrator.Migrate();
+            bool hasUnMigrated = context.DBTables.Values.ToList().Exists(x => x.Migrated == false);
+            if (hasUnMigrated)
+            {
+                // Migrate Tables
+                foreach (DBTable table in context.DBTables.Values.Where(x => x.Migrated == false))
+                {
+                    bool isReferenced = false;
 
-            CurrencyMigrator currencyMigrator = new CurrencyMigrator(context);
-            currencyMigrator.Migrate();
+                    foreach (DBTable otherTable in context.DBTables.Values.Where(x => x.Name != table.Name && !x.Migrated))
+                        if (otherTable.DBFKs.Exists(x => x.ReferencedTable == table.Name && x.ReferencedTableSchema == table.Schema))
+                        {
+                            isReferenced = true;
+                            break;
+                        }
 
-            CurrencyExchangeRateMigrator currencyExchangeRateMigrator = new CurrencyExchangeRateMigrator(context);
-            currencyExchangeRateMigrator.Migrate();
-
-            CountryMigrator countryMigrator = new CountryMigrator(context);
-            countryMigrator.Migrate();
-
-            CodeGroupMigrator codeGroupMigrator = new CodeGroupMigrator(context);
-            codeGroupMigrator.Migrate();
-
-            CarrierProfileMigrator carrierProfileMigrator = new CarrierProfileMigrator(context);
-            carrierProfileMigrator.Migrate();
-
-            CarrierAccountMigrator carrierAccountMigrator = new CarrierAccountMigrator(context);
-            carrierAccountMigrator.Migrate();
-
-            SaleZoneMigrator saleZoneMigrator = new SaleZoneMigrator(context);
-            saleZoneMigrator.Migrate();
-
-            SupplierZoneMigrator supplierZoneMigrator = new SupplierZoneMigrator(context);
-            supplierZoneMigrator.Migrate();
-
-            SaleCodeMigrator saleCodeMigrator = new SaleCodeMigrator(context);
-            saleCodeMigrator.Migrate();
-
-            SupplierCodeMigrator supplierCodeMigrator = new SupplierCodeMigrator(context);
-            supplierCodeMigrator.Migrate();
-
-            SalePriceListMigrator salePriceListMigrator = new SalePriceListMigrator(context);
-            salePriceListMigrator.Migrate();
-
-            SupplierPriceListMigrator supplierPriceListMigrator = new SupplierPriceListMigrator(context);
-            supplierPriceListMigrator.Migrate();
-
-            SaleRateMigrator saleRateMigrator = new SaleRateMigrator(context);
-            saleRateMigrator.Migrate();
-
-            SupplierRateMigrator supplierRateMigrator = new SupplierRateMigrator(context);
-            supplierRateMigrator.Migrate();
-
+                    if (!isReferenced)
+                    {
+                        CallMigrator(context, table.Name);
+                        table.Migrated = true;
+                    }
+                }
+                TransferData(context);
+            }
         }
     }
 }
