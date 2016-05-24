@@ -57,8 +57,11 @@
         </div>
     </vr-actionbar>
 </vr-row>
-<vr-row >
+<vr-row ng-if="scopeModel.isLoadedData">
     <vr-columns ng-repeat="widget in scopeModel.widgets" colnum="{{widget.columnWidth.numberOfColumns}}" simplecol>
-        <vr-directivewrapper directive="widget.runtimeEditor" on-ready="widget.onDirectiveReady" normal-col-num="2"></vr-directivewrapper>
+        <vr-section title="{{widget.settings.WidgetTitle}}" ng-if="widget.settings.ShowTitle">
+            <vr-directivewrapper directive="widget.runtimeEditor" on-ready="widget.onDirectiveReady" normal-col-num="2"></vr-directivewrapper>
+        </vr-section>
+        <vr-directivewrapper ng-if="!widget.settings.ShowTitle" directive="widget.runtimeEditor" on-ready="widget.onDirectiveReady" normal-col-num="2"></vr-directivewrapper>
     </vr-columns>
 </vr-row>

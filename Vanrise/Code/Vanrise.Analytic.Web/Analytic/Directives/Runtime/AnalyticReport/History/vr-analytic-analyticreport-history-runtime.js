@@ -46,7 +46,6 @@
                     currencySelectorReadyDeferred.resolve();
                 }
 
-
                 $scope.scopeModel.addFilter = function () {
                     var onDimensionFilterAdded = function (filter, expression) {
                         filterObj = filter;
@@ -65,23 +64,35 @@
                     }
                     VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter(fields, filterObj, onDimensionFilterAdded);
                 };
+
                 $scope.scopeModel.resetFilter = function () {
                     $scope.scopeModel.expression = undefined;
                     filterObj = null;
                 }
+
                 $scope.search = function () {
-                    if ($scope.scopeModel.widgets.length > 0) {
-                        var promiseDeffer = UtilsService.createPromiseDeferred();
-                        for (var i = 0; i < $scope.scopeModel.widgets.length ; i++) {
-                            var widget = $scope.scopeModel.widgets[i];
-                            var setLoader = function (value) { $scope.isLoadingDimensionDirective = value, !value? promiseDeffer.resolve():undefined };
-                            var payload = getQuery(widget.settings);
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, widget.directiveAPI, payload, setLoader);
+                    if (!$scope.scopeModel.isLoadedData)
+                    {
+                        $scope.scopeModel.isLoadedData = true;
+                       return loadWidgets();
+                    } else
+                    {
+                        if ($scope.scopeModel.widgets.length > 0) {
+                            var promiseDeffer = UtilsService.createPromiseDeferred();
+                            for (var i = 0; i < $scope.scopeModel.widgets.length ; i++) {
+                                var widget = $scope.scopeModel.widgets[i];
+                                var setLoader = function (value) { $scope.isLoadingDimensionDirective = value, !value ? promiseDeffer.resolve() : undefined };
+                                var payload = getQuery(widget.settings);
+                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, widget.directiveAPI, payload, setLoader);
+                            }
+                            return promiseDeffer.promise;
                         }
-                        return promiseDeffer.promise;
                     }
+                   
                 };
+
                 defineColumnWidth();
+
                 defineAPI();
             }
 
@@ -99,7 +110,7 @@
 
 
                     UtilsService.waitMultipleAsyncOperations([getWidgetsTemplateConfigs, getFieldTypeConfigs, loadMeasures, loadDimensions]).then(function () {
-                        UtilsService.waitMultipleAsyncOperations([loadFilters, loadWidgets]).finally(function () {
+                        UtilsService.waitMultipleAsyncOperations([loadFilters]).finally(function () {
                             loadPromiseDeffer.resolve();
                         }).catch(function (error) {
                             loadPromiseDeffer.reject(error);
@@ -270,24 +281,22 @@
 
                     widgetItem.readyPromiseDeferred.promise
                         .then(function () {
-
-                            // widget.directiveAPI.loadGrid(dataItemPayload);
-                            //  widgetItem.loadPromiseDeferred.resolve();
-
                             VRUIUtilsService.callDirectiveLoad(widget.directiveAPI, dataItemPayload, widgetItem.loadPromiseDeferred);
                         });
                     $scope.scopeModel.widgets.push(widget);
                 }
 
-
+                return  UtilsService.waitMultiplePromises(promises);
 
             }
+
             function defineColumnWidth() {
                 $scope.scopeModel.columnWidth = [];
                 for (var td in ColumnWidthEnum)
                     $scope.scopeModel.columnWidth.push(ColumnWidthEnum[td]);
                 $scope.scopeModel.selectedColumnWidth = $scope.scopeModel.columnWidth[0];
             }
+
             function getQuery(widgetPayload) {
                 var dimensionFilters = [];
                 if ($scope.scopeModel.filters != undefined) {
@@ -302,7 +311,6 @@
 
                     }
                 }
-
 
                 var groupingDimensions = [];
 
