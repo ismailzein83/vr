@@ -26,7 +26,7 @@ namespace Vanrise.GenericData.Business
 
         private RuleTree GetRuleTree(int beLookupRuleDefinitionId)
         {
-            BELookupRuleDefinition beLookupRuleDefinition = GetRuleDefinition(beLookupRuleDefinitionId);
+            BELookupRuleDefinition beLookupRuleDefinition = (new BELookupRuleDefinitionManager()).GetBELookupRuleDefinition(beLookupRuleDefinitionId);
             if(beLookupRuleDefinition == null)
                 throw new NullReferenceException(String.Format("beLookupRuleDefinition '{0}'", beLookupRuleDefinitionId));
            
@@ -57,34 +57,6 @@ namespace Vanrise.GenericData.Business
                 });           
         }
 
-        private BELookupRuleDefinition GetRuleDefinition(int beLookupRuleDefinitionId)
-        {
-            var ruleDefinition = new BELookupRuleDefinition
-            {
-                 BusinessEntityDefinitionId = 1,
-                  CriteriaFields = new List<BELookupRuleDefinitionCriteriaField>()
-            };
-            //ruleDefinition.CriteriaFields.Add(new BELookupRuleDefinitionCriteriaField
-            //    {
-            //        FieldPath = "Settings.Company",
-            //        RuleStructureBehaviorType = MappingRuleStructureBehaviorType.ByPrefix
-            //    });
-
-            //ruleDefinition.CriteriaFields.Add(new BELookupRuleDefinitionCriteriaField
-            //{
-            //    FieldPath = "Settings.CountryId",
-            //    RuleStructureBehaviorType = MappingRuleStructureBehaviorType.ByKey
-            //});
-
-
-            ruleDefinition.CriteriaFields.Add(new BELookupRuleDefinitionCriteriaField
-            {
-                FieldPath = "Settings.PhoneNumbers",
-                RuleStructureBehaviorType = MappingRuleStructureBehaviorType.ByPrefix
-            });
-            return ruleDefinition;
-        }
-
         private BaseRuleStructureBehavior CreateRuleStructureBehavior(BELookupRuleDefinitionCriteriaField ruleDefinitionCriteriaField)
         {
             IBELookupRuleStructureBehavior behavior = null;
@@ -101,9 +73,15 @@ namespace Vanrise.GenericData.Business
         {
             if (rule == null)
                 throw new ArgumentNullException("rule");
-            Type beType = rule.BusinessEntityObject.GetType();
+            GenericBusinessEntity genericBE = rule.BusinessEntityObject as GenericBusinessEntity;
+            if (genericBE == null)
+                throw new NullReferenceException("genericBE");
+            var dataRecord = genericBE.Details;
+            if (dataRecord == null)
+                throw new NullReferenceException("dataRecord");
+            Type beType = dataRecord.GetType();
             string[] propertyParts = fieldPath.Split('.');
-            Object value = rule.BusinessEntityObject;
+            Object value = dataRecord;
             foreach (var propPart in propertyParts)
             {
                 value = value.GetType().GetProperty(propPart).GetValue(value);

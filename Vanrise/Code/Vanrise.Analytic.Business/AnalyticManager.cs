@@ -152,10 +152,14 @@ namespace Vanrise.Analytic.Business
                         throw new NullReferenceException(String.Format("dimensionValue. dimName '{0}'", dimFilter.Dimension));
                     if (dimensionValue.Value == null)
                         return dimFilter.FilterValues.Contains(null);
-                    if (dimFilter.FilterValues.Count > 0)
+                    else
                     {
-                        if (!dimFilter.FilterValues.Contains(Convert.ChangeType(dimensionValue.Value, dimFilter.FilterValues[0].GetType())))
-                            return false;
+                        var nonNullFilterValues = dimFilter.FilterValues.Where(itm => itm != null).ToList();
+                        if (nonNullFilterValues.Count > 0)
+                        {
+                            if (!nonNullFilterValues.Contains(Convert.ChangeType(dimensionValue.Value, nonNullFilterValues[0].GetType())))
+                                return false;
+                        }
                     }
                 }
             }

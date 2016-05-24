@@ -16,7 +16,7 @@ namespace Vanrise.GenericData.MainExtensions.MappingSteps
 
         public override void GenerateExecutionCode(Transformation.Entities.IDataTransformationCodeGenerationContext context)
         {
-            throw new NotImplementedException();
+           
         }
     }
 }

@@ -90,6 +90,10 @@
       <Project>{e8b1931e-f1f5-4937-9cb0-a7d0cf5edcb1}</Project>
       <Name>Vanrise.GenericData.Transformation.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Rules\Vanrise.Rules.csproj">
+      <Project>{f8450e80-5d8e-4fea-a2e0-777cb05e0542}</Project>
+      <Name>Vanrise.Rules</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

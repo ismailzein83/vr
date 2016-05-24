@@ -12,7 +12,7 @@ namespace Vanrise.Analytic.Entities
         public int TableId { get; set; }
         public DateTime FromTime { get; set; }
         public DateTime ToTime { get; set; }
-        public string Currency { get; set; }
+
         public int? CurrencyId { get; set; }
 
         public TimeGroupingUnit? TimeGroupingUnit { get; set; }

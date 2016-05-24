@@ -23,11 +23,17 @@ namespace Vanrise.GenericData.Business.BELookupRules.RuleStructureBehaviors
                 keys = null;
             else
             {
-                IEnumerable valueAsIEnumerable = value as IEnumerable;
-                if (valueAsIEnumerable != null)
-                    keys = valueAsIEnumerable.Cast<Object>();
-                else
+                string valueAsString = value as string;
+                if (valueAsString != null)
                     keys = new List<Object> { value };
+                else
+                {
+                    IEnumerable valueAsIEnumerable = value as IEnumerable;
+                    if (valueAsIEnumerable != null)
+                        keys = valueAsIEnumerable.Cast<Object>();
+                    else
+                        keys = new List<Object> { value };
+                }
             }
         }
 
