@@ -27,6 +27,7 @@ namespace TestRuntime
             while (reader.Read())
             {
                 dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
+                cdr.SwitchId = 5;
                 cdr.IDonSwitch = Utils.GetReaderValue<long>(reader, "IDonSwitch");
                 cdr.Tag = reader["Tag"] as string;
                 cdr.AttemptDateTime = (DateTime)reader["AttemptDateTime"];

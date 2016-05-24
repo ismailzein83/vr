@@ -23,8 +23,21 @@ namespace TestRuntime
     {
         public void Execute()
         {
-            
-            //TestCacheCleaner();
+            //string inIP = null;
+            //while (true)
+            //{
+                
+            //    Uri url;
+            //    System.Net.IPAddress ip;
+            //    if (Uri.TryCreate(String.Format("http://{0}", inIP), UriKind.Absolute, out url) && System.Net.IPAddress.TryParse(url.Host, out ip))
+            //    {
+            //        Console.WriteLine("valid IP");
+            //    }
+            //    else
+            //        Console.WriteLine("Invalid");
+            //    inIP = Console.ReadLine();
+            //}
+            ////TestCacheCleaner();
 
             //var saleZoneDataManager = new SaleZoneDataManager();
             //object lastReceivedTimeStamp = null;
