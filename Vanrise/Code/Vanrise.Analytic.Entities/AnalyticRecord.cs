@@ -59,6 +59,7 @@ namespace Vanrise.Analytic.Entities
 
     public interface IAnalyticTableQueryContext
     {
+        AnalyticQuery Query { get; }
         AnalyticTable GetTable();
 
         AnalyticDimension GetDimensionConfig(string dimensionName);

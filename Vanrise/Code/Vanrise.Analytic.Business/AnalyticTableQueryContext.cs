@@ -10,16 +10,21 @@ namespace Vanrise.Analytic.Business
 {
     public class AnalyticTableQueryContext : IAnalyticTableQueryContext
     {
+        AnalyticQuery _query;
         AnalyticTable _table;
         Dictionary<string, AnalyticDimension> _dimensions;
         Dictionary<string, AnalyticAggregate> _aggregates;
         Dictionary<string, AnalyticMeasure> _measures;
         Dictionary<string, AnalyticJoin> _joins;
 
-        public AnalyticTableQueryContext(int analyticTableId)
+        public AnalyticTableQueryContext(AnalyticQuery query)
         {
+            if (query == null)
+                throw new ArgumentNullException("query");
+            _query = query;
             AnalyticTableManager analyticTableManager = new AnalyticTableManager();
             AnalyticItemConfigManager analyticItemConfigManager = new AnalyticItemConfigManager();
+            var analyticTableId = query.TableId;
             _table = analyticTableManager.GetAnalyticTableById(analyticTableId);
             if (_table == null)
                 throw new NullReferenceException(String.Format("table. ID '{0}'", analyticTableId));
@@ -91,6 +96,14 @@ namespace Vanrise.Analytic.Business
                 }
             }
             return new HashSet<string>(dimensionNames);
+        }
+
+        public AnalyticQuery Query
+        {
+            get
+            {
+                return _query;
+            }
         }
     }
 }

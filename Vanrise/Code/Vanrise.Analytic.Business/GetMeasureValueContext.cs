@@ -9,15 +9,19 @@ namespace Vanrise.Analytic.Business
 {
     public class GetMeasureValueContext : IGetMeasureValueContext
     {
+        AnalyticQuery _query;
         DBAnalyticRecord _sqlRecord;
         HashSet<string> _allDimensions;
 
-        public GetMeasureValueContext(DBAnalyticRecord sqlRecord, HashSet<string> allDimensions)
+        public GetMeasureValueContext(AnalyticQuery query, DBAnalyticRecord sqlRecord, HashSet<string> allDimensions)
         {
+            if (query == null)
+                throw new ArgumentNullException("query");
             if (sqlRecord == null)
                 throw new ArgumentNullException("sqlRecord");
             if (allDimensions == null)
                 throw new ArgumentNullException("allDimensions");
+            _query = query;
             _sqlRecord = sqlRecord;
             _allDimensions = allDimensions;
         }
@@ -48,6 +52,16 @@ namespace Vanrise.Analytic.Business
         public List<dynamic> GetDistinctDimensionValues(string dimensionName)
         {
             return GetAllDimensionValues(dimensionName).Distinct().ToList();
+        }
+
+        public DateTime GetQueryFromTime()
+        {
+            return _query.FromTime;
+        }
+
+        public DateTime GetQueryToTime()
+        {
+            return _query.ToTime.HasValue ? _query.ToTime.Value : DateTime.Now;
         }
     }
 }

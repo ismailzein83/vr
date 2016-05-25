@@ -29,6 +29,10 @@ namespace Vanrise.Analytic.Entities
         List<dynamic> GetAllDimensionValues(string dimensionName);
 
         List<dynamic> GetDistinctDimensionValues(string dimensionName);
+        
+        DateTime GetQueryFromTime();
+
+        DateTime GetQueryToTime();
     }
 
 }

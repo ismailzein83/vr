@@ -27,14 +27,9 @@ namespace Vanrise.Analytic.Business
                 string[] measureProperty = input.SortByColumnName.Split('.');
                 input.SortByColumnName = string.Format(@"{0}[""{1}""]", measureProperty[0], measureProperty[1]);
             }
-            SetDataManagerData(input.Query.TableId, dataManager);
+            dataManager.AnalyticTableQueryContext = new AnalyticTableQueryContext(input.Query);
+           
             return BigDataManager.Instance.RetrieveData(input, new AnalyticRecordRequestHandler(dataManager));
-        }
-
-        private static void SetDataManagerData(int tableId, IAnalyticDataManager dataManager)
-        {
-            dataManager.AnalyticTableQueryContext = new AnalyticTableQueryContext(tableId);
-
         }
 
         #region Private Methods
@@ -250,7 +245,7 @@ namespace Vanrise.Analytic.Business
             foreach (var measureName in measureNames)
             {
                 var measureConfig = analyticTableQueryContext.GetMeasureConfig(measureName);
-                var getMeasureValueContext = new GetMeasureValueContext(dbRecord, allDimensionNames);
+                var getMeasureValueContext = new GetMeasureValueContext(analyticTableQueryContext.Query, dbRecord, allDimensionNames);
                 var measureValue = measureConfig.Evaluator.GetMeasureValue(getMeasureValueContext);
                 analyticRecord.MeasureValues.Add(measureName, measureValue);
             }
@@ -281,7 +276,7 @@ namespace Vanrise.Analytic.Business
                 var query = input.Query;
                 
                 if (dbRecords != null)
-                    return (new AnalyticManager()).ProcessSQLRecords(new AnalyticTableQueryContext(query.TableId), query.DimensionFields, query.ParentDimensions, query.MeasureFields, query.Filters, query.FilterGroup,
+                    return (new AnalyticManager()).ProcessSQLRecords(new AnalyticTableQueryContext(query), query.DimensionFields, query.ParentDimensions, query.MeasureFields, query.Filters, query.FilterGroup,
                         dbRecords, includeDBDimensions, query.WithSummary, out _summaryRecord);
                 else
                     return null;
