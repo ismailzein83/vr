@@ -297,5 +297,11 @@
     <Build Include="TOneWhS_Billing\Stored Procedures\sp_ReportDefinition_GetById.sql" />
     <Build Include="Security\TOneWhS_Billing.sql" />
     <Build Include="dbo\Functions\ZeroToMax.sql" />
+    <Build Include="TOneWhS_BE\Tables\SwitchConnectivity.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SwitchConnectivity_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SwitchConnectivity_Insert.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SwitchConnectivity_GetAll.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetEffectiveAfter.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetEffectiveAndPendingBySellingNumberPlan.sql" />
   </ItemGroup>
 </Project>

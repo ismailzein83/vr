@@ -6,9 +6,12 @@
     [BED]        DATETIME       NOT NULL,
     [EED]        DATETIME       NULL,
     [timestamp]  ROWVERSION     NOT NULL,
+    [SourceID]   VARCHAR (50)   NULL,
     CONSTRAINT [PK_SupplierZone] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_SupplierZone_CarrierAccount] FOREIGN KEY ([SupplierID]) REFERENCES [TOneWhS_BE].[CarrierAccount] ([ID])
 );
+
+
 
 
 

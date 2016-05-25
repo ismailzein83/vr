@@ -6,10 +6,13 @@
     [BED]         DATETIME     NOT NULL,
     [EED]         DATETIME     NULL,
     [timestamp]   ROWVERSION   NULL,
+    [SourceID]    VARCHAR (50) NULL,
     CONSTRAINT [PK_SupplierCode] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_SupplierCode_CodeGroup] FOREIGN KEY ([CodeGroupID]) REFERENCES [TOneWhS_BE].[CodeGroup] ([ID]),
     CONSTRAINT [FK_SupplierCode_SupplierZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE].[SupplierZone] ([ID])
 );
+
+
 
 
 

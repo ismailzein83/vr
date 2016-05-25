@@ -8,10 +8,13 @@
     [BED]         DATETIME       NOT NULL,
     [EED]         DATETIME       NULL,
     [timestamp]   ROWVERSION     NULL,
+    [SourceID]    VARCHAR (50)   NULL,
     CONSTRAINT [PK_SaleRate] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_SaleRate_SalePriceList] FOREIGN KEY ([PriceListID]) REFERENCES [TOneWhS_BE].[SalePriceList] ([ID]),
     CONSTRAINT [FK_SaleRate_SaleZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE].[SaleZone] ([ID])
 );
+
+
 
 
 
