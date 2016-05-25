@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.Data
 
         bool Insert(Switch whsSwitch, out int insertedId);
 
-        bool Update(Switch whsSwitch);
+        bool Update(SwitchToEdit whsSwitch);
 
         bool Delete(int switchId);
 

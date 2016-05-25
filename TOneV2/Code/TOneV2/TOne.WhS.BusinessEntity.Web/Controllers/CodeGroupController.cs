@@ -52,7 +52,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
       
         [HttpPost]
         [Route("UpdateCodeGroup")]
-        public TOne.Entities.UpdateOperationOutput<CodeGroupDetail> UpdateCodeGroup(CodeGroup codeGroup)
+        public TOne.Entities.UpdateOperationOutput<CodeGroupDetail> UpdateCodeGroup(CodeGroupToEdit codeGroup)
         {
             CodeGroupManager manager = new CodeGroupManager();
             return manager.UpdateCodeGroup(codeGroup);

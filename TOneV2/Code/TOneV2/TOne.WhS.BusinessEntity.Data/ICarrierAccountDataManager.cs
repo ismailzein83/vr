@@ -5,14 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 
-
 namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ICarrierAccountDataManager:IDataManager
     {
         List<CarrierAccount> GetCarrierAccounts();
         bool Insert(CarrierAccount carrierAccount,out int carrierAccountId);
-        bool Update(CarrierAccount carrierAccount);
+        bool Update(CarrierAccountToEdit carrierAccount);
         bool AreCarrierAccountsUpdated(ref object updateHandle);
     }
 }

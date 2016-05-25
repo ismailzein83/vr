@@ -7,6 +7,7 @@ using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -153,6 +154,8 @@ namespace TOne.WhS.BusinessEntity.Business
         
         public TOne.Entities.InsertOperationOutput<CarrierAccountDetail> AddCarrierAccount(CarrierAccount carrierAccount)
         {
+            ValidateCarrierAccountToAdd(carrierAccount);
+
             TOne.Entities.InsertOperationOutput<CarrierAccountDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CarrierAccountDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
@@ -180,8 +183,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return insertOperationOutput;
         }
         
-        public TOne.Entities.UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccount carrierAccount)
+        public TOne.Entities.UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccountToEdit carrierAccount)
         {
+            ValidateCarrierAccountToEdit(carrierAccount);
+
             ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
 
             bool updateActionSucc = dataManager.Update(carrierAccount);
@@ -193,7 +198,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(carrierAccount);
+                CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(this.GetCarrierAccount(carrierAccount.CarrierAccountId));
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = carrierAccountDetail;
             }
@@ -294,8 +299,60 @@ namespace TOne.WhS.BusinessEntity.Business
         
         #endregion
 
+        #region Validation Methods
+
+        void ValidateCarrierAccountToAdd(CarrierAccount carrierAccount)
+        {
+            var carrierProfileManager = new CarrierProfileManager();
+            CarrierProfile carrierProfile = carrierProfileManager.GetCarrierProfile(carrierAccount.CarrierProfileId);
+            if (carrierProfile == null)
+                throw new DataIntegrityValidationException(String.Format("CarrierProfile '{0}' does not exist", carrierAccount.CarrierProfileId));
+
+            if (carrierAccount.SellingNumberPlanId.HasValue)
+            {
+                if (carrierAccount.AccountType == CarrierAccountType.Supplier)
+                    throw new DataIntegrityValidationException(String.Format("Supplier cannot be associated with SellingNumberPlan '{0}'", carrierAccount.SellingNumberPlanId.Value));
+
+                var sellingNumberPlanManager = new SellingNumberPlanManager();
+                SellingNumberPlan sellingNumberPlan = sellingNumberPlanManager.GetSellingNumberPlan(carrierAccount.SellingNumberPlanId.Value);
+                if (sellingNumberPlan == null)
+                    throw new DataIntegrityValidationException(String.Format("SellingNumberPlan '{0}' does not exist", carrierAccount.SellingNumberPlanId.Value));
+            }
+            else
+            {
+                if (carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange)
+                    throw new DataIntegrityValidationException(String.Format("{0} must be associated with a SellingNumberPlan", carrierAccount.AccountType.ToString()));
+            }
+
+            ValidateCarrierAccount(carrierAccount.NameSuffix, carrierAccount.CarrierAccountSettings);
+        }
+
+        void ValidateCarrierAccountToEdit(CarrierAccountToEdit carrierAccount)
+        {
+            ValidateCarrierAccount(carrierAccount.NameSuffix, carrierAccount.CarrierAccountSettings);
+        }
+
+        void ValidateCarrierAccount(string caNameSuffix, CarrierAccountSettings caSettings)
+        {
+            if (String.IsNullOrWhiteSpace(caNameSuffix))
+                throw new MissingArgumentValidationException("CarrierAccount.NameSuffix");
+
+            if (caSettings == null)
+                throw new MissingArgumentValidationException("CarrierAccount.CarrierAccountSettings");
+
+            if (String.IsNullOrWhiteSpace(caSettings.Mask))
+                throw new MissingArgumentValidationException("CarrierAccount.CarrierAccountSettings.Mask");
+
+            var currencyManager = new CurrencyManager();
+            Currency currency = currencyManager.GetCurrency(caSettings.CurrencyId);
+            if (currency == null)
+                throw new DataIntegrityValidationException(String.Format("Currency '{0}' does not exist", caSettings.CurrencyId));
+        }
+
+        #endregion
+
         #region Private Methods
-      
+
         Dictionary<int, CarrierAccount> GetCachedCarrierAccounts()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierAccounts",
@@ -500,6 +557,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         
         #endregion
+
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             return GetCarrierAccount(context.EntityId);

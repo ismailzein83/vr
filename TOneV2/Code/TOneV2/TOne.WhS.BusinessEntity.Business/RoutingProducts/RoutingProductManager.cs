@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class RoutingProductManager
     {
+        #region Public Methods
+
         public Vanrise.Entities.IDataRetrievalResult<RoutingProduct> GetFilteredRoutingProducts(Vanrise.Entities.DataRetrievalInput<RoutingProductQuery> input)
         {
             var allRoutingProducts = GetAllRoutingProducts();
@@ -79,13 +82,15 @@ namespace TOne.WhS.BusinessEntity.Business
                 excludedRoutingProductId = filter.ExcludedRoutingProductId;
             }
 
-            
+
 
             return routingProducts.MapRecords(RoutingProductInfoMapper, filterPredicate);
         }
 
         public TOne.Entities.InsertOperationOutput<RoutingProduct> AddRoutingProduct(RoutingProduct routingProduct)
         {
+            ValidateRoutingProductToAdd(routingProduct);
+
             TOne.Entities.InsertOperationOutput<RoutingProduct> insertOperationOutput = new TOne.Entities.InsertOperationOutput<RoutingProduct>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
@@ -98,6 +103,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (insertActionSucc)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 routingProduct.RoutingProductId = routingProductId;
                 insertOperationOutput.InsertedObject = routingProduct;
@@ -106,20 +112,23 @@ namespace TOne.WhS.BusinessEntity.Business
             return insertOperationOutput;
         }
 
-        public TOne.Entities.UpdateOperationOutput<RoutingProductToEdit> UpdateRoutingProduct(RoutingProductToEdit routingProduct)
+        public TOne.Entities.UpdateOperationOutput<RoutingProduct> UpdateRoutingProduct(RoutingProductToEdit routingProduct)
         {
+            ValidateRoutingProductToEdit(routingProduct);
+
             IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
 
             bool updateActionSucc = dataManager.Update(routingProduct);
-            TOne.Entities.UpdateOperationOutput<RoutingProductToEdit> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<RoutingProductToEdit>();
+            var updateOperationOutput = new TOne.Entities.UpdateOperationOutput<RoutingProduct>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
             if (updateActionSucc)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = routingProduct;
+                updateOperationOutput.UpdatedObject = this.GetRoutingProduct(routingProduct.RoutingProductId);
             }
 
             return updateOperationOutput;
@@ -230,9 +239,78 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (routingProduct != null)
                 return routingProduct.Name;
-            
+
             return null;
         }
+
+        #endregion
+
+        #region Validation Methods
+
+        void ValidateRoutingProductToAdd(RoutingProduct routingProduct)
+        {
+            var sellingNumberPlanManager = new SellingNumberPlanManager();
+            SellingNumberPlan sellingNumberPlan = sellingNumberPlanManager.GetSellingNumberPlan(routingProduct.SellingNumberPlanId);
+            if (sellingNumberPlan == null)
+                throw new MissingArgumentValidationException(String.Format("SellingNumberPlan '{0}' of RoutingProduct does not exist", routingProduct.SellingNumberPlanId));
+
+            ValidateRoutingProduct(routingProduct.Name, routingProduct.Settings, routingProduct.SellingNumberPlanId);
+        }
+
+        void ValidateRoutingProductToEdit(RoutingProductToEdit routingProduct)
+        {
+            RoutingProduct routingProductEntity = this.GetRoutingProduct(routingProduct.RoutingProductId);
+            if (routingProductEntity == null)
+                throw new DataIntegrityValidationException(String.Format("RoutingProduct '{0}' does not exit", routingProduct.RoutingProductId));
+
+            ValidateRoutingProduct(routingProduct.Name, routingProduct.Settings, routingProductEntity.SellingNumberPlanId);
+        }
+
+        void ValidateRoutingProduct(string rpName, RoutingProductSettings rpSettings, int sellingNumberPlanId)
+        {
+            if (String.IsNullOrWhiteSpace(rpName))
+                throw new MissingArgumentValidationException("RoutingProduct.Name");
+
+            if (rpSettings == null)
+                throw new MissingArgumentValidationException("RoutingProduct.Settings");
+
+            if (rpSettings.ZoneRelationType != RoutingProductZoneRelationType.AllZones)
+            {
+                if (rpSettings.Zones == null || rpSettings.Zones.Count() == 0)
+                    throw new MissingArgumentValidationException("RoutingProduct.Settings.Zones");
+
+                var saleZoneManager = new SaleZoneManager();
+
+                foreach (RoutingProductZone rpZone in rpSettings.Zones)
+                {
+                    SaleZone saleZone = saleZoneManager.GetSaleZone(rpZone.ZoneId);
+
+                    if (saleZone == null)
+                        throw new DataIntegrityValidationException(String.Format("SaleZone '{0}' does not exist", rpZone.ZoneId));
+
+                    if (saleZone.SellingNumberPlanId != sellingNumberPlanId)
+                        throw new DataIntegrityValidationException(String.Format("The SellingNumberPlanId '{0}' of SaleZone '{1}' does not match the SellingNumberPlanId '{2}' of the RoutingProduct", saleZone.SellingNumberPlanId, saleZone.Name, sellingNumberPlanId));
+                }
+            }
+
+            if (rpSettings.SupplierRelationType != RoutingProductSupplierRelationType.AllSuppliers)
+            {
+                if (rpSettings.Suppliers == null || rpSettings.Suppliers.Count == 0)
+                    throw new MissingArgumentValidationException("RoutingProduct.Settings.Suppliers");
+
+                var carrierAccountManager = new CarrierAccountManager();
+
+                foreach (RoutingProductSupplier rpSupplier in rpSettings.Suppliers)
+                {
+                    CarrierAccount supplier = carrierAccountManager.GetCarrierAccount(rpSupplier.SupplierId);
+
+                    if (supplier == null || (supplier.AccountType != CarrierAccountType.Supplier && supplier.AccountType != CarrierAccountType.Exchange))
+                        throw new DataIntegrityValidationException(String.Format("Supplier '{0}' does not exit", rpSupplier.SupplierId));
+                }
+            }
+        }
+
+        #endregion
 
         #region Private Methods
 

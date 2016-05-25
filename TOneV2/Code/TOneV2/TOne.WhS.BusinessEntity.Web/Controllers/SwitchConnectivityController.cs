@@ -38,7 +38,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("UpdateSwitchConnectivity")]
-        public Vanrise.Entities.UpdateOperationOutput<SwitchConnectivityDetail> UpdateSwitchConnectivity(SwitchConnectivity switchConnectivity)
+        public Vanrise.Entities.UpdateOperationOutput<SwitchConnectivityDetail> UpdateSwitchConnectivity(SwitchConnectivityToEdit switchConnectivity)
         {
             return _manager.UpdateSwitchConnectivity(switchConnectivity);
         }

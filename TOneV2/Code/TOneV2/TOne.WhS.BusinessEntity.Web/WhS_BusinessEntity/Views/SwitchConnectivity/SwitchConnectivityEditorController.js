@@ -160,7 +160,7 @@
         function insertSwitchConnectivity() {
             $scope.scopeModel.isLoading = true;
 
-            var switchConnectivity = buildSwitchConnectivityFromScope();
+            var switchConnectivity = buildBaseSwitchConnectivityFromScope();
 
             return WhS_BE_SwitchConnectivityAPIService.AddSwitchConnectivity(switchConnectivity).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('Switch Connectivity', response, 'Name')) {
@@ -178,9 +178,9 @@
         function updateSwitchConnectivity() {
             $scope.scopeModel.isLoading = true;
 
-            var switchConnectivity = buildSwitchConnectivityFromScope();
+            var switchConnectivityToEdit = buildBaseSwitchConnectivityFromScope();
 
-            return WhS_BE_SwitchConnectivityAPIService.UpdateSwitchConnectivity(switchConnectivity).then(function (response) {
+            return WhS_BE_SwitchConnectivityAPIService.UpdateSwitchConnectivity(switchConnectivityToEdit).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated('Switch Connectivity', response, 'Name')) {
                     if ($scope.onSwitchConnectivityUpdated != undefined)
                         $scope.onSwitchConnectivityUpdated(response.UpdatedObject);
@@ -193,7 +193,7 @@
             });
         }
 
-        function buildSwitchConnectivityFromScope() {
+        function buildBaseSwitchConnectivityFromScope() {
             return {
                 SwitchConnectivityId: switchConnectivityId,
                 Name: $scope.scopeModel.name,

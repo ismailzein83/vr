@@ -52,6 +52,8 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public TOne.Entities.InsertOperationOutput<CarrierProfileDetail> AddCarrierProfile(CarrierProfile carrierProfile)
         {
+            ValidateCarrierProfileToAdd(carrierProfile);
+
             TOne.Entities.InsertOperationOutput<CarrierProfileDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CarrierProfileDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
@@ -73,8 +75,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-        public TOne.Entities.UpdateOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfile carrierProfile)
+        public TOne.Entities.UpdateOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfileToEdit carrierProfile)
         {
+            ValidateCarrierProfileToEdit(carrierProfile);
+
             ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
 
             bool updateActionSucc = dataManager.Update(carrierProfile);
@@ -87,7 +91,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = CarrierProfileDetailMapper(carrierProfile);
+                updateOperationOutput.UpdatedObject = CarrierProfileDetailMapper(this.GetCarrierProfile(carrierProfile.CarrierProfileId));
             }
             else
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
@@ -117,6 +121,32 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return false;
         }
+        #endregion
+
+        #region Validation Methods
+
+        void ValidateCarrierProfileToAdd(CarrierProfile carrierProfile)
+        {
+            ValidateCarrierProfile(carrierProfile.Name, carrierProfile.Settings);
+        }
+
+        void ValidateCarrierProfileToEdit(CarrierProfileToEdit carrierProfile)
+        {
+            ValidateCarrierProfile(carrierProfile.Name, carrierProfile.Settings);
+        }
+
+        void ValidateCarrierProfile(string cpName, CarrierProfileSettings cpSettings)
+        {
+            if (String.IsNullOrWhiteSpace(cpName))
+                throw new MissingArgumentValidationException("CarrierProfile.Name");
+
+            if (cpSettings == null)
+                throw new MissingArgumentValidationException("CarrierProfile.Settings");
+
+            if (String.IsNullOrWhiteSpace(cpSettings.Company))
+                throw new MissingArgumentValidationException("CarrierProfile.Settings.Company");
+        }
+
         #endregion
 
         #region Private Members
@@ -164,10 +194,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return carrierProfileDetail;
         }
         #endregion
+
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             return GetCarrierProfile(context.EntityId);
         }
+        
         public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             var allCarrierProfiles = GetCachedCarrierProfiles();

@@ -43,7 +43,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("UpdateSellingNumberPlan")]
-        public TOne.Entities.UpdateOperationOutput<SellingNumberPlanDetail> UpdateSellingNumberPlan(SellingNumberPlan sellingNumberPlan)
+        public TOne.Entities.UpdateOperationOutput<SellingNumberPlanDetail> UpdateSellingNumberPlan(SellingNumberPlanToEdit sellingNumberPlan)
         {
             SellingNumberPlanManager manager = new SellingNumberPlanManager();
             return manager.UpdateSellingNumberPlan(sellingNumberPlan);

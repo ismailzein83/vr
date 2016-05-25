@@ -14,7 +14,7 @@ namespace TOne.WhS.BusinessEntity.Data
         bool AreSwitchConnectivitiesUpdated(ref object updateHandle);
 
         bool Insert(SwitchConnectivity switchConnectivity, out int insertedId);
-        
-        bool Update(SwitchConnectivity switchConnectivity);
+
+        bool Update(SwitchConnectivityToEdit switchConnectivity);
     }
 }

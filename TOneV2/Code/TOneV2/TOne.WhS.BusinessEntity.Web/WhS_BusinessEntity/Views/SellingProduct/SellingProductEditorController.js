@@ -115,8 +115,9 @@
         }
 
         function insertSellingProduct() {
-            var sellingProductObject = buildSellingProductObjFromScope();
-            return WhS_BE_SellingProductAPIService.AddSellingProduct(sellingProductObject)
+            $scope.scopeModal.isLoading = true;
+            var sellingProduct = buildSellingProductToAddFromScope();
+            return WhS_BE_SellingProductAPIService.AddSellingProduct(sellingProduct)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Selling product", response, "name")) {
                     if ($scope.onSellingProductAdded != undefined)
@@ -125,13 +126,15 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModal.isLoading = false;
             });
-
         }
 
         function updateSellingProduct() {
-            var sellingProductObject = buildSellingProductObjFromScope();
-            WhS_BE_SellingProductAPIService.UpdateSellingProduct(sellingProductObject)
+            $scope.scopeModal.isLoading = true;
+            var sellingProductToEdit = buildSellingProductToEditFromScope();
+            return WhS_BE_SellingProductAPIService.UpdateSellingProduct(sellingProductToEdit)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Selling product", response, "name")) {
                     if ($scope.onSellingProductUpdated != undefined)
@@ -140,16 +143,26 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModal.isLoading = false;
             });
         }
 
-        function buildSellingProductObjFromScope() {
-            var sellingProduct = {
+        function buildSellingProductToAddFromScope() {
+            var baseSellingProduct = buildBaseSellingProductFromScope();
+            baseSellingProduct.SellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
+            return baseSellingProduct;
+        }
+
+        function buildSellingProductToEditFromScope() {
+            return buildBaseSellingProductFromScope();
+        }
+
+        function buildBaseSellingProductFromScope() {
+            return {
                 SellingProductId: (sellingProductId != null) ? sellingProductId : 0,
-                Name: $scope.scopeModal.name,
-                SellingNumberPlanId: (isEditMode ? undefined : sellingNumberPlanDirectiveAPI.getSelectedIds())
+                Name: $scope.scopeModal.name
             };
-            return sellingProduct;
         }
     }
 

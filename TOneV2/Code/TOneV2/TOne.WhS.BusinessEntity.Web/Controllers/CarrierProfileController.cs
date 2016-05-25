@@ -45,7 +45,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         }
         [HttpPost]
         [Route("UpdateCarrierProfile")]
-        public TOne.Entities.UpdateOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfile carrierProfile)
+        public TOne.Entities.UpdateOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfileToEdit carrierProfile)
         {
             CarrierProfileManager manager = new CarrierProfileManager();
             return manager.UpdateCarrierProfile(carrierProfile);

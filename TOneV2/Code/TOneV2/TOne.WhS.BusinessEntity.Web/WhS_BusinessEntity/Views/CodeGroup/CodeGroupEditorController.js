@@ -14,7 +14,6 @@
         var editMode;
 
         defineScope();
-
         loadParameters();
 
         function loadParameters() {
@@ -122,21 +121,10 @@
             $scope.code = codeGroupEntity.Code;
         }
 
-        function buildCodeGroupObjFromScope() {
-            var obj = {
-                Code: $scope.code,
-                CountryId: countryDirectiveApi.getSelectedIds()
-
-            }
-            if (codeGroupId != null)
-                obj.CodeGroupId = codeGroupId;
-            return obj;
-        }
-
         function insertCodeGroup() {
-            var codeGroupObject = buildCodeGroupObjFromScope();
+            var codeGroup = buildCodeGroupToAddFromScope();
             $scope.isGettingData = true;
-            return WhS_BE_CodeGroupAPIService.AddCodeGroup(codeGroupObject)
+            return WhS_BE_CodeGroupAPIService.AddCodeGroup(codeGroup)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Code Group", response, "value")) {
                     if ($scope.onCodeGroupAdded != undefined)
@@ -148,13 +136,12 @@
             }).finally(function () {
                 $scope.isGettingData = false;
             });
-
         }
 
         function updateCodeGroup() {
-            var codeGroupObject = buildCodeGroupObjFromScope();
+            var codeGroupToEdit = buildCodeGroupToEditFromScope();
             $scope.isGettingData = true;
-            WhS_BE_CodeGroupAPIService.UpdateCodeGroup(codeGroupObject)
+            return WhS_BE_CodeGroupAPIService.UpdateCodeGroup(codeGroupToEdit)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Code Group", response, "value")) {
                     if ($scope.onCodeGroupUpdated != undefined)
@@ -166,6 +153,22 @@
             }).finally(function () {
                 $scope.isGettingData = false;
             });
+        }
+
+        function buildCodeGroupToAddFromScope() {
+            return buildBaseCodeGroupFromScope();
+        }
+
+        function buildCodeGroupToEditFromScope() {
+            return buildBaseCodeGroupFromScope();
+        }
+
+        function buildBaseCodeGroupFromScope() {
+            return {
+                CodeGroupId: (codeGroupId != null) ? codeGroupId : 0,
+                Code: $scope.code,
+                CountryId: countryDirectiveApi.getSelectedIds()
+            };
         }
     }
 

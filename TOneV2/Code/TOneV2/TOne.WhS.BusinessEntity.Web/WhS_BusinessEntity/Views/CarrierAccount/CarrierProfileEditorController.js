@@ -264,41 +264,12 @@
 
         }
 
-        function buildCarrierProfileObjFromScope() {
-
-            var obj = {
-                CarrierProfileId: (carrierProfileId != null) ? carrierProfileId : 0,
-                Name: $scope.scopeModal.name,
-                Settings: {
-                    CountryId: countryDirectiveApi.getSelectedIds(),
-                    CityId: cityDirectiveAPI.getSelectedIds(),
-                    Company: $scope.scopeModal.company,
-                    Website: $scope.scopeModal.website,
-                    RegistrationNumber: $scope.scopeModal.registrationNumber,
-                    Address: $scope.scopeModal.address,
-                    PostalCode: $scope.scopeModal.postalCode,
-                    Town: $scope.scopeModal.town,
-                    CompanyLogo: ($scope.scopeModal.companyLogo != null) ? $scope.scopeModal.companyLogo.fileId : 0,
-                    PhoneNumbers: UtilsService.getPropValuesFromArray($scope.scopeModal.phoneNumbers, "phoneNumber"),
-                    Faxes: UtilsService.getPropValuesFromArray($scope.scopeModal.faxes, "fax")
-                }
-            };
-
-            obj.Settings.Contacts = [];
-            for (var i = 0; i < $scope.scopeModal.contacts.length; i++) {
-                var item = $scope.scopeModal.contacts[i];
-                if (item.description != undefined)
-                    obj.Settings.Contacts.push({ Type: item.value, Description: item.description })
-            };
-            return obj;
-        }
-
         function insertCarrierProfile() {
             $scope.isLoading = true;
 
-            var carrierProfileObject = buildCarrierProfileObjFromScope();
+            var carrierProfile = buildCarrierProfileToAddFromScope();
 
-            return WhS_BE_CarrierProfileAPIService.AddCarrierProfile(carrierProfileObject)
+            return WhS_BE_CarrierProfileAPIService.AddCarrierProfile(carrierProfile)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Carrier Profile", response, "Name")) {
                     if ($scope.onCarrierProfileAdded != undefined)
@@ -316,9 +287,9 @@
         function updateCarrierProfile() {
             $scope.isLoading = true;
 
-            var carrierProfileObject = buildCarrierProfileObjFromScope();
+            var carrierProfileToEdit = buildCarrierProfileToEditFromScope();
 
-            WhS_BE_CarrierProfileAPIService.UpdateCarrierProfile(carrierProfileObject)
+            return WhS_BE_CarrierProfileAPIService.UpdateCarrierProfile(carrierProfileToEdit)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Carrier Profile", response, "Name")) {
                     if ($scope.onCarrierProfileUpdated != undefined)
@@ -331,6 +302,45 @@
             }).finally(function () {
                 $scope.isLoading = false;
             });
+        }
+
+        function buildCarrierProfileToAddFromScope() {
+            return buildBaseCarrierProfileFromScope();
+        }
+
+        function buildCarrierProfileToEditFromScope() {
+            return buildBaseCarrierProfileFromScope();
+        }
+
+        function buildBaseCarrierProfileFromScope() {
+            var baseCarrierProfile = {
+                CarrierProfileId: (carrierProfileId != null) ? carrierProfileId : 0,
+                Name: $scope.scopeModal.name,
+                Settings: {
+                    CountryId: countryDirectiveApi.getSelectedIds(),
+                    CityId: cityDirectiveAPI.getSelectedIds(),
+                    Company: $scope.scopeModal.company,
+                    Website: $scope.scopeModal.website,
+                    RegistrationNumber: $scope.scopeModal.registrationNumber,
+                    Address: $scope.scopeModal.address,
+                    PostalCode: $scope.scopeModal.postalCode,
+                    Town: $scope.scopeModal.town,
+                    CompanyLogo: ($scope.scopeModal.companyLogo != null) ? $scope.scopeModal.companyLogo.fileId : 0,
+                    PhoneNumbers: UtilsService.getPropValuesFromArray($scope.scopeModal.phoneNumbers, "phoneNumber"),
+                    Faxes: UtilsService.getPropValuesFromArray($scope.scopeModal.faxes, "fax")
+                }
+            };
+
+            if ($scope.scopeModal.contacts.length > 0) {
+                baseCarrierProfile.Settings.Contacts = [];
+                for (var i = 0; i < $scope.scopeModal.contacts.length; i++) {
+                    var item = $scope.scopeModal.contacts[i];
+                    if (item.description != undefined)
+                        baseCarrierProfile.Settings.Contacts.push({ Type: item.value, Description: item.description })
+                };
+            }
+
+            return baseCarrierProfile;
         }
     }
 

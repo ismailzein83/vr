@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.Data
     {
         List<CarrierProfile> GetCarrierProfiles();
         bool Insert(CarrierProfile carrierProfile, out int carrierProfileId);
-        bool Update(CarrierProfile carrierProfile);
+        bool Update(CarrierProfileToEdit carrierProfile);
         bool AreCarrierProfilesUpdated(ref object updateHandle);
     }
 }

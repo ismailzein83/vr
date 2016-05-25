@@ -166,25 +166,6 @@
                 });
         }
 
-        function buildCarrierAccountObjFromScope() {
-            var obj = {
-                CarrierAccountId: (carrierAccountId != null) ? carrierAccountId : 0,
-                NameSuffix: $scope.scopeModal.name,
-                AccountType: $scope.scopeModal.selectedCarrierAccountType.value,
-                CarrierProfileId: carrierProfileDirectiveAPI.getSelectedIds(),
-                SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
-                SupplierSettings: {},
-                CustomerSettings: {},
-                CarrierAccountSettings: {
-                    ActivationStatus: activationStatusSelectorAPI.getSelectedIds(),
-                    CurrencyId: currencySelectorAPI.getSelectedIds(),
-                    Mask: $scope.scopeModal.mask,
-                    NominalCapacity: $scope.scopeModal.nominalCapacity
-                }
-            };
-            return obj;
-        }
-
         function loadStaticSection() {
             if (carrierAccountEntity != undefined) {
                 $scope.scopeModal.name = carrierAccountEntity.NameSuffix;
@@ -217,9 +198,8 @@
 
         function insertCarrierAccount() {
             $scope.scopeModal.isLoading = true;
-
-            var carrierAccountObject = buildCarrierAccountObjFromScope();
-            return WhS_BE_CarrierAccountAPIService.AddCarrierAccount(carrierAccountObject)
+            var carrierAccount = buildCarrierAccountToAddFromScope();
+            return WhS_BE_CarrierAccountAPIService.AddCarrierAccount(carrierAccount)
                 .then(function (response) {
                     if (VRNotificationService.notifyOnItemAdded("Carrier Account", response, "suffix")) {
                         if ($scope.onCarrierAccountAdded != undefined)
@@ -237,9 +217,8 @@
 
         function updateCarrierAccount() {
             $scope.scopeModal.isLoading = true;
-
-            var carrierAccountObject = buildCarrierAccountObjFromScope();
-            WhS_BE_CarrierAccountAPIService.UpdateCarrierAccount(carrierAccountObject)
+            var carrierAccountToEdit = buildCarrierAccountToEditFromScope();
+            return WhS_BE_CarrierAccountAPIService.UpdateCarrierAccount(carrierAccountToEdit)
                 .then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated("Carrier Account", response, "suffix")) {
                         if ($scope.onCarrierAccountUpdated != undefined)
@@ -252,6 +231,33 @@
                 }).finally(function () {
                     $scope.scopeModal.isLoading = false;
                 });
+        }
+
+        function buildCarrierAccountToAddFromScope() {
+            var baseCarrierAccount = buildBaseCarrierAccountFromScope();
+            baseCarrierAccount.CarrierProfileId = carrierProfileDirectiveAPI.getSelectedIds();
+            baseCarrierAccount.SellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
+            baseCarrierAccount.AccountType = $scope.scopeModal.selectedCarrierAccountType.value;
+            return baseCarrierAccount;
+        }
+
+        function buildCarrierAccountToEditFromScope() {
+            return buildBaseCarrierAccountFromScope();
+        }
+
+        function buildBaseCarrierAccountFromScope() {
+            return {
+                CarrierAccountId: (carrierAccountId != null) ? carrierAccountId : 0,
+                NameSuffix: $scope.scopeModal.name,
+                CarrierAccountSettings: {
+                    ActivationStatus: activationStatusSelectorAPI.getSelectedIds(),
+                    CurrencyId: currencySelectorAPI.getSelectedIds(),
+                    Mask: $scope.scopeModal.mask,
+                    NominalCapacity: $scope.scopeModal.nominalCapacity
+                },
+                SupplierSettings: {},
+                CustomerSettings: {}
+            };
         }
     }
 

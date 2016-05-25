@@ -6,14 +6,24 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class CodeGroup : ICode
+    public class BaseCodeGroup : ICode
     {
-       public int CodeGroupId { get; set; }
+        public int CodeGroupId { get; set; }
 
-       public string Code { get; set; }
+        public string Code { get; set; }
 
-       public int CountryId { get; set; }
+        public int CountryId { get; set; }
 
-       public string SourceId { get; set; }
+        public string SourceId { get; set; }
+    }
+
+    public class CodeGroup : BaseCodeGroup
+    {
+       
+    }
+
+    public class CodeGroupToEdit : BaseCodeGroup
+    {
+
     }
 }

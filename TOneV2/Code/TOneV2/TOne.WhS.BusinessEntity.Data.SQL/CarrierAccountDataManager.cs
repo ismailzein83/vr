@@ -30,9 +30,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             insertedId = (int)carrierAccountId;
             return (recordsEffected > 0);
         }
-        public bool Update(CarrierAccount carrierAccount)
+        public bool Update(CarrierAccountToEdit carrierAccount)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Update", carrierAccount.CarrierAccountId, carrierAccount.NameSuffix, carrierAccount.CarrierProfileId,
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Update", carrierAccount.CarrierAccountId, carrierAccount.NameSuffix,
                 Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), 
                 Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings));
             return (recordsEffected > 0);

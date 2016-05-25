@@ -43,7 +43,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         }
         [HttpPost]
         [Route("UpdateSwitch")]
-        public UpdateOperationOutput<SwitchDetail> UpdateSwitch(Switch whsSwitch)
+        public UpdateOperationOutput<SwitchDetail> UpdateSwitch(SwitchToEdit whsSwitch)
         {
             SwitchManager manager = new SwitchManager();
             return manager.UpdateSwitch(whsSwitch);

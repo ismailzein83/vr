@@ -7,9 +7,7 @@
     function switchEditorController($scope, WhS_BE_SwitchAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
         var isEditMode;
-
         var switchId;
-
         var switchEntity;
 
         loadParameters();
@@ -68,7 +66,6 @@
             }
         }
 
-
         function getSwitch() {
             return WhS_BE_SwitchAPIService.GetSwitch(switchId).then(function (whsSwitch) {
                 switchEntity = whsSwitch;
@@ -76,21 +73,10 @@
             });
         }
 
-
-
-        function buildSwitchObjFromScope() {
-            var whsSwitch = {
-                SwitchId: (switchId != null) ? switchId : 0,
-                Name: $scope.name
-            };
-            return whsSwitch;
-        }
-
         function insertSwitch() {
             $scope.isLoading = true;
-
-            var switchObject = buildSwitchObjFromScope();
-            return WhS_BE_SwitchAPIService.AddSwitch(switchObject)
+            var whsSwitch = buildSwitchToAddFromScope();
+            return WhS_BE_SwitchAPIService.AddSwitch(whsSwitch)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Switch", response, "Name")) {
                     if ($scope.onSwitchAdded != undefined)
@@ -104,12 +90,10 @@
             });
         }
 
-
         function updateSwitch() {
             $scope.isLoading = true;
-
-            var switchObject = buildSwitchObjFromScope();
-            WhS_BE_SwitchAPIService.UpdateSwitch(switchObject)
+            var whsSwitch = buildSwitchToEditFromScope();
+            return WhS_BE_SwitchAPIService.UpdateSwitch(whsSwitch)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Switch", response, "Name")) {
                     if ($scope.onSwitchUpdated != undefined)
@@ -121,6 +105,21 @@
             }).finally(function () {
                 $scope.isLoading = false;
             });
+        }
+
+        function buildSwitchToAddFromScope() {
+            return buildBaseSwitchFromScope();
+        }
+
+        function buildSwitchToEditFromScope() {
+            return buildBaseSwitchFromScope();
+        }
+
+        function buildBaseSwitchFromScope() {
+            return {
+                SwitchId: (switchId != null) ? switchId : 0,
+                Name: $scope.name
+            };
         }
     }
 

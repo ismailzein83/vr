@@ -46,7 +46,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return insertedSuccesfully;
         }
 
-        public bool Update(SwitchConnectivity switchConnectivity)
+        public bool Update(SwitchConnectivityToEdit switchConnectivity)
         {
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SwitchConnectivity_Update", switchConnectivity.SwitchConnectivityId, switchConnectivity.Name, switchConnectivity.SwitchId, switchConnectivity.CarrierAccountId, Vanrise.Common.Serializer.Serialize(switchConnectivity.Settings), switchConnectivity.BED, switchConnectivity.EED);
             return (recordsEffected > 0);

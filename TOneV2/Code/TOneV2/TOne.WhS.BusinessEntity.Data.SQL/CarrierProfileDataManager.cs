@@ -33,7 +33,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 insertedId = 0;
             return insertedSuccesfully;
         }
-        public bool Update(CarrierProfile carrierProfile)
+        public bool Update(CarrierProfileToEdit carrierProfile)
         {
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierProfile_Update", carrierProfile.CarrierProfileId, carrierProfile.Name, Vanrise.Common.Serializer.Serialize(carrierProfile.Settings));
             return (recordsEffected > 0);

@@ -14,6 +14,8 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SwitchManager : IBusinessEntityManager
     {
+        #region Public Methods
+
         public Vanrise.Entities.IDataRetrievalResult<SwitchDetail> GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input)
         {
             var allSwitches = GetCachedSwitches();
@@ -35,6 +37,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var switchs = GetCachedSwitches();
             return switchs.MapRecords(SwitchInfoMapper);
         }
+
         public string GetSwitchName(int switchId)
         {
             Switch switchObj = GetSwitch(switchId);
@@ -44,10 +47,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return null;
         }
+
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             return GetSwitch(context.EntityId);
         }
+
         public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             var switchConnectivities = GetCachedSwitches();
@@ -56,10 +61,12 @@ namespace TOne.WhS.BusinessEntity.Business
             else
                 return switchConnectivities.Select(itm => itm as dynamic).ToList();
         }
+
         public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
+
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             var switchNames = new List<string>();
@@ -71,6 +78,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return String.Join(",", switchNames);
         }
+
         public bool IsMatched(IBusinessEntityMatchContext context)
         {
             if (context.FieldValueIds == null || context.FilterIds == null) return true;
@@ -84,8 +92,11 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return false;
         }
+
         public Vanrise.Entities.InsertOperationOutput<SwitchDetail> AddSwitch(Switch whsSwitch)
         {
+            ValidateSwitchToAdd(whsSwitch);
+
             Vanrise.Entities.InsertOperationOutput<SwitchDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<SwitchDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
@@ -107,8 +118,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-        public Vanrise.Entities.UpdateOperationOutput<SwitchDetail> UpdateSwitch(Switch whsSwitch)
+
+        public Vanrise.Entities.UpdateOperationOutput<SwitchDetail> UpdateSwitch(SwitchToEdit whsSwitch)
         {
+            ValidateSwitchToUpdate(whsSwitch);
+
             ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
 
             bool updateActionSucc = dataManager.Update(whsSwitch);
@@ -121,12 +135,13 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = SwitchDetailMapper(whsSwitch);
+                updateOperationOutput.UpdatedObject = SwitchDetailMapper(this.GetSwitch(whsSwitch.SwitchId));
             }
             else
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
+
         public Vanrise.Entities.DeleteOperationOutput<SwitchDetail> DeleteSwitch(int switchId)
         {
             ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
@@ -141,9 +156,46 @@ namespace TOne.WhS.BusinessEntity.Business
             return deleteOperationOutput;
         }
 
-        #region Private Members
+        #endregion
 
-        public Dictionary<int, Switch> GetCachedSwitches()
+        #region Validation Methods
+
+        void ValidateSwitchToAdd(Switch whsSwitch)
+        {
+            ValidateSwitch(whsSwitch.Name);
+        }
+
+        void ValidateSwitchToUpdate(SwitchToEdit whsSwitch)
+        {
+            ValidateSwitch(whsSwitch.Name);
+        }
+
+        void ValidateSwitch(string sName)
+        {
+            if (String.IsNullOrWhiteSpace(sName))
+                throw new MissingArgumentValidationException("Switch.Name");
+        }
+
+        #endregion
+
+        #region Private Classes
+
+        class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ISwitchDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreSwitchesUpdated(ref _updateHandle);
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        Dictionary<int, Switch> GetCachedSwitches()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitches",
                () =>
@@ -154,16 +206,9 @@ namespace TOne.WhS.BusinessEntity.Business
                });
         }
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            ISwitchDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
-            object _updateHandle;
+        #endregion
 
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return _dataManager.AreSwitchesUpdated(ref _updateHandle);
-            }
-        }
+        #region Mappers
 
         private SwitchInfo SwitchInfoMapper(Switch whsSwitch)
         {
@@ -182,6 +227,5 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
-
     }
 }

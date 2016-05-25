@@ -220,11 +220,55 @@
             $scope.scopeModal.routingProductName = routingProductEntity.Name;
         }
 
-        function buildRoutingProductObjFromScope() {
-            var routingProduct = {
+        function insertRoutingProduct() {
+            $scope.scopeModal.isLoading = true;
+            var routingProduct = buildRoutingProductToAddFromScope();
+            return WhS_BE_RoutingProductAPIService.AddRoutingProduct(routingProduct)
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded("Routing Product", response)) {
+                    if ($scope.onRoutingProductAdded != undefined)
+                        $scope.onRoutingProductAdded(response.InsertedObject);
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModal.isLoading = false;
+            });
+
+        }
+
+        function updateRoutingProduct() {
+            $scope.scopeModal.isLoading = true;
+            var routingProductToEdit = buildRoutingProductToEditFromScope();
+            return WhS_BE_RoutingProductAPIService.UpdateRoutingProduct(routingProductToEdit)
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated("Routing Product", response)) {
+                    if ($scope.onRoutingProductUpdated != undefined)
+                        $scope.onRoutingProductUpdated(response.UpdatedObject);
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModal.isLoading = false;
+            });
+        }
+
+        function buildRoutingProductToAddFromScope() {
+            var baseRoutingProduct = buildBaseRoutingProductFromScope();
+            baseRoutingProduct.SellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
+            return baseRoutingProduct;
+        }
+
+        function buildRoutingProductToEditFromScope() {
+            return buildBaseRoutingProductFromScope();
+        }
+
+        function buildBaseRoutingProductFromScope() {
+            return {
                 RoutingProductId: (routingProductId != null) ? routingProductId : 0,
                 Name: $scope.scopeModal.routingProductName,
-                SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
                 Settings: {
                     ZoneRelationType: $scope.scopeModal.selectedSaleZoneRelationType.value,
                     Zones: buildRoutingProductZoneObj(),
@@ -232,8 +276,6 @@
                     Suppliers: buildRoutingProductSupplierObj()
                 }
             };
-
-            return routingProduct;
         }
 
         function buildRoutingProductZoneObj() {
@@ -268,41 +310,6 @@
             }
 
             return routingProductSuppliers;
-        }
-
-        function insertRoutingProduct() {
-            $scope.scopeModal.isLoading = true;
-            var routingProductObject = buildRoutingProductObjFromScope();
-            return WhS_BE_RoutingProductAPIService.AddRoutingProduct(routingProductObject)
-            .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Routing Product", response)) {
-                    if ($scope.onRoutingProductAdded != undefined)
-                        $scope.onRoutingProductAdded(response.InsertedObject);
-                    $scope.modalContext.closeModal();
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.scopeModal.isLoading = false;
-            });
-
-        }
-
-        function updateRoutingProduct() {
-            $scope.scopeModal.isLoading = true;
-            var routingProductObject = buildRoutingProductObjFromScope();
-            WhS_BE_RoutingProductAPIService.UpdateRoutingProduct(routingProductObject)
-            .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Routing Product", response)) {
-                    if ($scope.onRoutingProductUpdated != undefined)
-                        $scope.onRoutingProductUpdated(response.UpdatedObject);
-                    $scope.modalContext.closeModal();
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.scopeModal.isLoading = false;
-            });
         }
     }
 

@@ -11,7 +11,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class CodeGroupDataManager : BaseSQLDataManager, ICodeGroupDataManager
     {
-
         #region ctor/Local Variables
         public CodeGroupDataManager(): base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
@@ -25,7 +24,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_CodeGroup_GetAll", CodeGroupMapper);
         }
-        public bool Update(CodeGroup codeGroup)
+        public bool Update(CodeGroupToEdit codeGroup)
         {
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CodeGroup_Update", codeGroup.CodeGroupId, codeGroup.CountryId, codeGroup.Code);
             return (recordsEffected > 0);

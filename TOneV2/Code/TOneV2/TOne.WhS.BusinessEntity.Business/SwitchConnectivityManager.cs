@@ -7,6 +7,7 @@ using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -57,6 +58,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public Vanrise.Entities.InsertOperationOutput<SwitchConnectivityDetail> AddSwitchConnectivity(SwitchConnectivity switchConnectivity)
         {
+            ValidateSwitchConnectivityToAdd(switchConnectivity);
+
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<SwitchConnectivityDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
@@ -67,10 +70,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (dataManager.Insert(switchConnectivity, out insertedId))
             {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 switchConnectivity.SwitchConnectivityId = insertedId;
                 insertOperationOutput.InsertedObject = SwitchConnectivityDetailMapper(switchConnectivity);
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
             else
             {
@@ -80,8 +83,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return insertOperationOutput;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<SwitchConnectivityDetail> UpdateSwitchConnectivity(SwitchConnectivity switchConnectivity)
+        public Vanrise.Entities.UpdateOperationOutput<SwitchConnectivityDetail> UpdateSwitchConnectivity(SwitchConnectivityToEdit switchConnectivity)
         {
+            ValidateSwitchConnectivityToEdit(switchConnectivity);
+
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<SwitchConnectivityDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -91,9 +96,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (dataManager.Update(switchConnectivity))
             {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = SwitchConnectivityDetailMapper(switchConnectivity);
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = SwitchConnectivityDetailMapper(this.GetSwitchConnectivity(switchConnectivity.SwitchConnectivityId));
             }
             else
             {
@@ -192,6 +197,45 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
+        #region Validation Methods
+
+        void ValidateSwitchConnectivityToAdd(SwitchConnectivity switchConnectivity)
+        {
+            ValidateSwitchConnectivity(switchConnectivity.Name, switchConnectivity.CarrierAccountId, switchConnectivity.SwitchId, switchConnectivity.Settings, switchConnectivity.BED);
+        }
+
+        void ValidateSwitchConnectivityToEdit(SwitchConnectivityToEdit switchConnectivity)
+        {
+            ValidateSwitchConnectivity(switchConnectivity.Name, switchConnectivity.CarrierAccountId, switchConnectivity.SwitchId, switchConnectivity.Settings, switchConnectivity.BED);
+        }
+
+        void ValidateSwitchConnectivity(string scName, int scCarrierAccountId, int scSwitchId, SwitchConnectivitySettings scSettings, DateTime scBED)
+        {
+            if (String.IsNullOrWhiteSpace(scName))
+                throw new MissingArgumentValidationException("SwitchConnectivity.Name");
+
+            var carrierAccountManager = new CarrierAccountManager();
+            var carrierAccount = carrierAccountManager.GetCarrierAccount(scCarrierAccountId);
+            if (carrierAccount == null)
+                throw new DataIntegrityValidationException(String.Format("CarrierAccount '{0}' does not exist", scCarrierAccountId));
+
+            var switchManager = new SwitchManager();
+            var whsSwitch = switchManager.GetSwitch(scSwitchId);
+            if (whsSwitch == null)
+                throw new DataIntegrityValidationException(String.Format("Switch '{0}' does not exist", scSwitchId));
+
+            if (scSettings == null)
+                throw new MissingArgumentValidationException("SwitchConnectivity.Settings");
+
+            if (scSettings.Trunks == null || scSettings.Trunks.Count == 0)
+                throw new MissingArgumentValidationException("SwitchConnectivity.Settings.Trunks");
+
+            if (scBED == default(DateTime))
+                throw new MissingArgumentValidationException("SwitchConnectivity.BED");
+        }
+
+        #endregion
+
         #region Private Classes
 
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
@@ -220,8 +264,6 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
-
-
 
         #region Mappers
 

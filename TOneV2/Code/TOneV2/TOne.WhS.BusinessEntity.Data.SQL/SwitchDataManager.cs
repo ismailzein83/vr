@@ -35,7 +35,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 insertedId = 0;
             return insertedSuccesfully;
         }
-        public bool Update(Switch whsSwitch)
+        public bool Update(SwitchToEdit whsSwitch)
         {
             int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_Switch_Update]", whsSwitch.SwitchId, whsSwitch.Name);
             return (recordsEffected > 0);

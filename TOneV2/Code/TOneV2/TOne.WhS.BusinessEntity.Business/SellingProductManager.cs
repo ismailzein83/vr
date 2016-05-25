@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
+
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class SellingProductManager
@@ -81,6 +83,8 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public TOne.Entities.InsertOperationOutput<SellingProductDetail> AddSellingProduct(SellingProduct sellingProduct)
         {
+            ValidateSellingProductToAdd(sellingProduct);
+
             TOne.Entities.InsertOperationOutput<SellingProductDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<SellingProductDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
@@ -106,8 +110,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-        public TOne.Entities.UpdateOperationOutput<SellingProductDetail> UpdateSellingProduct(SellingProduct sellingProduct)
+        public TOne.Entities.UpdateOperationOutput<SellingProductDetail> UpdateSellingProduct(SellingProductToEdit sellingProduct)
         {
+            ValidateSellingProductToEdit(sellingProduct);
+
             ISellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingProductDataManager>();
 
             bool updateActionSucc = dataManager.Update(sellingProduct);
@@ -120,7 +126,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = SellingProductDetailMapper(GetSellingProduct(sellingProduct.SellingProductId));
+                updateOperationOutput.UpdatedObject = SellingProductDetailMapper(this.GetSellingProduct(sellingProduct.SellingProductId));
             }
             else
             {
@@ -130,6 +136,31 @@ namespace TOne.WhS.BusinessEntity.Business
             return updateOperationOutput;
         }
 
+        #endregion
+
+        #region Validation Methods
+
+        void ValidateSellingProductToAdd(SellingProduct sellingProduct)
+        {
+            var sellingNumberPlanManager = new SellingNumberPlanManager();
+            var sellingNumberPlan = sellingNumberPlanManager.GetSellingNumberPlan(sellingProduct.SellingNumberPlanId);
+            if (sellingNumberPlan == null)
+                throw new DataIntegrityValidationException(String.Format("SellingNumberPlan '{0}' does not exist", sellingProduct.SellingNumberPlanId));
+
+            ValidateSellingProduct(sellingProduct.Name);
+        }
+
+        void ValidateSellingProductToEdit(SellingProductToEdit sellingProduct)
+        {
+            ValidateSellingProduct(sellingProduct.Name);
+        }
+
+        void ValidateSellingProduct(string spName)
+        {
+            if (String.IsNullOrWhiteSpace(spName))
+                throw new MissingArgumentValidationException("SellingProduct.Name");
+        }
+        
         #endregion
 
         #region Private Methods

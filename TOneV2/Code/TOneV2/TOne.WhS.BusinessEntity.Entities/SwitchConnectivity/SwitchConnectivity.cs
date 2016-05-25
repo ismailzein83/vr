@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SwitchConnectivity
+    public class BaseSwitchConnectivity
     {
         public int SwitchConnectivityId { get; set; }
 
@@ -21,5 +21,15 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
+    }
+
+    public class SwitchConnectivity : BaseSwitchConnectivity
+    {
+
+    }
+
+    public class SwitchConnectivityToEdit : BaseSwitchConnectivity
+    {
+
     }
 }

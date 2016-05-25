@@ -20,7 +20,6 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class CodeGroupManager
     {
-        
         #region ctor/Local Variables
         #endregion
 
@@ -56,6 +55,8 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public TOne.Entities.InsertOperationOutput<CodeGroupDetail> AddCodeGroup(CodeGroup codeGroup)
         {
+            ValidateCodeGroupToAdd(codeGroup);
+
             TOne.Entities.InsertOperationOutput<CodeGroupDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CodeGroupDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
@@ -78,8 +79,10 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return insertOperationOutput;
         }
-        public TOne.Entities.UpdateOperationOutput<CodeGroupDetail> UpdateCodeGroup(CodeGroup codeGroup)
+        public TOne.Entities.UpdateOperationOutput<CodeGroupDetail> UpdateCodeGroup(CodeGroupToEdit codeGroup)
         {
+            ValidateCodeGroupToEdit(codeGroup);
+
             ICodeGroupDataManager dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
 
             bool updateActionSucc = dataManager.Update(codeGroup);
@@ -92,7 +95,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = CodeGroupDetailMapper(codeGroup);
+                updateOperationOutput.UpdatedObject = CodeGroupDetailMapper(this.GetCodeGroup(codeGroup.CodeGroupId));
             }
             else
             {
@@ -190,7 +193,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Country Not Exists");
                     else if (country != null && codeGroup != null)
                         RateWorkSheet.Cells[rowIndex, colIndex].PutValue("CodeGroup Exists");
-                    else if (country != null && String.IsNullOrEmpty(code.Key) )
+                    else if (country != null && String.IsNullOrEmpty(code.Key))
                         RateWorkSheet.Cells[rowIndex, colIndex].PutValue("CodeGroup Is Empty");
                     uploadCodeGroupLog.CountOfCodeGroupsFailed++;
                     colIndex = 0;
@@ -231,7 +234,32 @@ namespace TOne.WhS.BusinessEntity.Business
             return bytes;
         }
         #endregion
-     
+
+        #region Validation Methods
+
+        void ValidateCodeGroupToAdd(CodeGroup codeGroup)
+        {
+            ValidateCodeGroup(codeGroup.Code, codeGroup.CountryId);
+        }
+
+        void ValidateCodeGroupToEdit(CodeGroupToEdit codeGroup)
+        {
+            ValidateCodeGroup(codeGroup.Code, codeGroup.CountryId);
+        }
+
+        void ValidateCodeGroup(string cgCode, int cgCountryId)
+        {
+            if (String.IsNullOrWhiteSpace(cgCode))
+                throw new MissingArgumentValidationException("CodeGroup.Code");
+
+            var countryManager = new CountryManager();
+            var country = countryManager.GetCountry(cgCountryId);
+            if (country == null)
+                throw new DataIntegrityValidationException(String.Format("Country '{0}' does not exist", cgCountryId));
+        }
+        
+        #endregion
+
         #region Private Members
         private Dictionary<int, CodeGroup> GetCachedCodeGroups()
         {
@@ -269,7 +297,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return new CodeIterator<CodeGroup>(cachedCodeGroups.Values);
         }
         #endregion
-      
+
         #region  Mappers
         private CodeGroupDetail CodeGroupDetailMapper(CodeGroup codeGroup)
         {

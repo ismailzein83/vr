@@ -7,12 +7,22 @@ using Vanrise.Entities.EntitySynchronization;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class Switch
+    public class BaseSwitch
     {
         public int SwitchId { get; set; }
 
         public string Name { get; set; }
 
         public string SourceId { get; set; }
+    }
+
+    public class Switch : BaseSwitch
+    {
+        
+    }
+
+    public class SwitchToEdit : BaseSwitch
+    {
+
     }
 }

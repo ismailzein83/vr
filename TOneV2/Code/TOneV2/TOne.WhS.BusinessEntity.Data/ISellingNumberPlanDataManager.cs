@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.Data
 
          bool AreSellingNumberPlansUpdated(ref object updateHandle);
 
-         bool Update(SellingNumberPlan sellingNumberPlan);
+         bool Update(SellingNumberPlanToEdit sellingNumberPlan);
 
          bool Insert(SellingNumberPlan sellingNumberPlan, out int insertedId);
     }

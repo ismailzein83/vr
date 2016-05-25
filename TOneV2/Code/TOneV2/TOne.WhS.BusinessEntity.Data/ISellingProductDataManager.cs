@@ -7,12 +7,11 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data
 {
-    public interface ISellingProductDataManager:IDataManager
+    public interface ISellingProductDataManager : IDataManager
     {
         List<SellingProduct> GetSellingProducts();
         bool Insert(SellingProduct sellingProduct, out int insertedId);
-
-        bool Update(SellingProduct sellingProduct);
+        bool Update(SellingProductToEdit sellingProduct);
         bool AreSellingProductsUpdated(ref object updateHandle);
     }
 }

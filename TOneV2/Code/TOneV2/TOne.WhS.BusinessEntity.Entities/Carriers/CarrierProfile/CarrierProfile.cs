@@ -7,7 +7,7 @@ using Vanrise.Entities.EntitySynchronization;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class CarrierProfile
+    public class BaseCarrierProfile
     {
         public int CarrierProfileId { get; set; }
 
@@ -17,6 +17,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public string SourceId { get; set; }
     }
+
     public class CarrierProfileSettings
     {
         public string Company { get; set; }
@@ -42,6 +43,16 @@ namespace TOne.WhS.BusinessEntity.Entities
         public long CompanyLogo { get; set; }
 
         public List<CarrierContact> Contacts { get; set; }
+
+    }
+
+    public class CarrierProfile : BaseCarrierProfile
+    {
+
+    }
+
+    public class CarrierProfileToEdit : BaseCarrierProfile
+    {
 
     }
 }

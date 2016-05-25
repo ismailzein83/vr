@@ -22,7 +22,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #endregion
 
         #region Public Methods
-        public bool Update(Entities.SellingNumberPlan sellingNumberPlan)
+        public bool Update(Entities.SellingNumberPlanToEdit sellingNumberPlan)
         {
             int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_SellingNumberPlan_Update]", sellingNumberPlan.SellingNumberPlanId, sellingNumberPlan.Name);
             return (recordsEffected > 0);

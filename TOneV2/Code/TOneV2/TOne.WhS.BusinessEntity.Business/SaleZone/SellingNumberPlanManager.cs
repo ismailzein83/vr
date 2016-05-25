@@ -13,31 +13,19 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SellingNumberPlanManager : IBusinessEntityManager
     {
-        #region Private Classes
-
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            ISellingNumberPlanDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISellingNumberPlanDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return _dataManager.AreSellingNumberPlansUpdated(ref _updateHandle);
-            }
-        }
-
-        #endregion
-
         #region Public Methods
+
         public IEnumerable<SellingNumberPlanInfo> GetSellingNumberPlans()
         {
             return GetCachedSellingNumberPlans().Values.MapRecords(SellingNumberPlanInfoMapper);
 
         }
+
         public SellingNumberPlan GetSellingNumberPlan(int numberPlanId)
         {
             return GetCachedSellingNumberPlans().GetRecord(numberPlanId);
         }
+
         public IDataRetrievalResult<SellingNumberPlanDetail> GetFilteredSellingNumberPlans(DataRetrievalInput<SellingNumberPlanQuery> input)
         {
             var allSellingNumberPlans = GetCachedSellingNumberPlans();
@@ -45,8 +33,11 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSellingNumberPlans.ToBigResult(input, filterExpression, SellingNumberPlanDetailMapper));
 
         }
+
         public TOne.Entities.InsertOperationOutput<SellingNumberPlanDetail> AddSellingNumberPlan(SellingNumberPlan sellingNumberPlan)
         {
+            ValidateSellingNumberPlanToAdd(sellingNumberPlan);
+
             TOne.Entities.InsertOperationOutput<SellingNumberPlanDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<SellingNumberPlanDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
@@ -70,8 +61,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-        public TOne.Entities.UpdateOperationOutput<SellingNumberPlanDetail> UpdateSellingNumberPlan(SellingNumberPlan sellingNumberPlan)
+
+        public TOne.Entities.UpdateOperationOutput<SellingNumberPlanDetail> UpdateSellingNumberPlan(SellingNumberPlanToEdit sellingNumberPlan)
         {
+            ValidateSellingNumberPlanToEdit(sellingNumberPlan);
+
             ISellingNumberPlanDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingNumberPlanDataManager>();
 
             bool updateActionSucc = dataManager.Update(sellingNumberPlan);
@@ -84,7 +78,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = SellingNumberPlanDetailMapper(sellingNumberPlan);
+                updateOperationOutput.UpdatedObject = SellingNumberPlanDetailMapper(this.GetSellingNumberPlan(sellingNumberPlan.SellingNumberPlanId));
             }
             else
             {
@@ -154,37 +148,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 return null;
         }
 
-        #endregion
-  
-        #region Private Method
-        Dictionary<int ,SellingNumberPlan> GetCachedSellingNumberPlans()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSellingNumberPlans",
-               () =>
-               {
-                   ISellingNumberPlanDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingNumberPlanDataManager>();
-                   return dataManager.GetSellingNumberPlans().ToDictionary(x=> x.SellingNumberPlanId , x => x);
-               });
-
-        }
-        public SellingNumberPlanDetail SellingNumberPlanDetailMapper(SellingNumberPlan sellingNumberPlan)
-        {
-            SellingNumberPlanDetail sellingNumberPlanDetail = new SellingNumberPlanDetail()
-            {
-                Entity = sellingNumberPlan
-            };
-            return sellingNumberPlanDetail;
-        }
-        private SellingNumberPlanInfo SellingNumberPlanInfoMapper(SellingNumberPlan sellingNumberPlan)
-        {
-            return new SellingNumberPlanInfo
-            {
-                Name = sellingNumberPlan.Name,
-                SellingNumberPlanId = sellingNumberPlan.SellingNumberPlanId
-            };
-        }
-        #endregion
-
         public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             var allSellingNumberPlans = GetCachedSellingNumberPlans();
@@ -203,5 +166,75 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
+
+        #endregion
+
+        #region Validation Methods
+
+        void ValidateSellingNumberPlanToAdd(SellingNumberPlan sellingNumberPlan)
+        {
+            ValidateSellingNumberPlan(sellingNumberPlan.Name);
+        }
+
+        void ValidateSellingNumberPlanToEdit(SellingNumberPlanToEdit sellingNumberPlan)
+        {
+            ValidateSellingNumberPlan(sellingNumberPlan.Name);
+        }
+
+        void ValidateSellingNumberPlan(string snpName)
+        {
+            if (String.IsNullOrWhiteSpace(snpName))
+                throw new MissingArgumentValidationException("SellingNumberPlan.Name");
+        }
+
+        #endregion
+
+        #region Private Classes
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ISellingNumberPlanDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISellingNumberPlanDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreSellingNumberPlansUpdated(ref _updateHandle);
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        Dictionary<int, SellingNumberPlan> GetCachedSellingNumberPlans()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSellingNumberPlans",
+               () =>
+               {
+                   ISellingNumberPlanDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingNumberPlanDataManager>();
+                   return dataManager.GetSellingNumberPlans().ToDictionary(x => x.SellingNumberPlanId, x => x);
+               });
+
+        }
+
+        public SellingNumberPlanDetail SellingNumberPlanDetailMapper(SellingNumberPlan sellingNumberPlan)
+        {
+            SellingNumberPlanDetail sellingNumberPlanDetail = new SellingNumberPlanDetail()
+            {
+                Entity = sellingNumberPlan
+            };
+            return sellingNumberPlanDetail;
+        }
+
+        private SellingNumberPlanInfo SellingNumberPlanInfoMapper(SellingNumberPlan sellingNumberPlan)
+        {
+            return new SellingNumberPlanInfo
+            {
+                Name = sellingNumberPlan.Name,
+                SellingNumberPlanId = sellingNumberPlan.SellingNumberPlanId
+            };
+        }
+
+        #endregion
     }
 }

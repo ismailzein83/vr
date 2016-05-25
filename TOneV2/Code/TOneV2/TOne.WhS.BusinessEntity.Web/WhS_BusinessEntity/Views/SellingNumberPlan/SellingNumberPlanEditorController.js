@@ -8,9 +8,11 @@
 
         var sellingNumberPlanId;
         var editMode;
+
         defineScope();
         loadParameters();
         load();
+
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
@@ -63,22 +65,14 @@
                 $scope.isGettingData = false;
             });
         }
-
-        function buildSellingNumberPlanObjFromScope() {
-            var obj = {
-                SellingNumberPlanId: (sellingNumberPlanId != null) ? sellingNumberPlanId : 0,
-                Name: $scope.name
-            };
-            return obj;
-        }
-
         function fillScopeFromSellingNumberPlanObj(sellingNumberPlan) {
             $scope.name = sellingNumberPlan.Name;
             $scope.title = UtilsService.buildTitleForUpdateEditor(sellingNumberPlan.Name, "Selling Number Plan");
         }
+
         function insertsellingNumberPlan() {
-            var sellingNumberPlanObject = buildSellingNumberPlanObjFromScope();
-            return WhS_BE_SellingNumberPlanAPIService.AddSellingNumberPlan(sellingNumberPlanObject)
+            var sellingNumberPlan = buildSellingNumberPlanToAddFromScope();
+            return WhS_BE_SellingNumberPlanAPIService.AddSellingNumberPlan(sellingNumberPlan)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Selling Number Plan", response, "Name")) {
 
@@ -93,8 +87,8 @@
 
         }
         function updatesellingNumberPlan() {
-            var sellingNumberPlanObject = buildSellingNumberPlanObjFromScope();
-            WhS_BE_SellingNumberPlanAPIService.UpdateSellingNumberPlan(sellingNumberPlanObject)
+            var sellingNumberPlanToEdit = buildSellingNumberPlanToEditFromScope();
+            return WhS_BE_SellingNumberPlanAPIService.UpdateSellingNumberPlan(sellingNumberPlanToEdit)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Selling Number Plan", response, "Name")) {
                     if ($scope.onSellingNumberPlanUpdated != undefined)
@@ -104,6 +98,19 @@
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
+        }
+
+        function buildSellingNumberPlanToAddFromScope() {
+            return buildBaseSellingNumberPlanFromScope();
+        }
+        function buildSellingNumberPlanToEditFromScope() {
+            return buildBaseSellingNumberPlanFromScope();
+        }
+        function buildBaseSellingNumberPlanFromScope() {
+            return {
+                SellingNumberPlanId: (sellingNumberPlanId != null) ? sellingNumberPlanId : 0,
+                Name: $scope.name
+            };
         }
     }
 
