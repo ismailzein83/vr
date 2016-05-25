@@ -9,6 +9,27 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
+--[sec].[Module]------------------------------1501 to 1600------------------------------------------------------
+------------------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [sec].[Module] on;
+;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1501,'Analytics Management',null,1,null,40,0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
+merge	[sec].[Module] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]
+when not matched by target then
+	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
+	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
+set identity_insert [sec].[Module] off;
+
 --[sec].[viewtype]------------------------------201 to 300------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
@@ -27,6 +48,29 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Title],[Details])
 	values(s.[ID],s.[Name],s.[Title],s.[Details]);
+
+--[sec].[View]-----------------------------15001 to 16000---------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [sec].[View] on;
+;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(15001,'Tables','Analytic Table Management','#/view/Analytic/Views/GenericAnalytic/Definition/AnalyticTableManagement',1501,null,null,null,null,0,1),
+(15002,'Reports','Analytic Report Management','#/view/Analytic/Views/GenericAnalytic/Definition/AnalyticReportManagement',1501,null,null,null,null,0,2)
+
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
+merge	[sec].[View] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
+when not matched by target then
+	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
+	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
+set identity_insert [sec].[View] off;
 
 --[common].[ExtensionConfiguration]-------------------1		to 1000----------------------------------------------
 ----------------------------------------------------------------------------------------------------
