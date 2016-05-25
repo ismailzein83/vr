@@ -2,13 +2,14 @@
 
     "use strict";
 
-    AnalyticTableEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','VR_Analytic_AnalyticTableAPIService','VR_Analytic_ConnectionStringTypeEnum'];
+    AnalyticTableEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','VR_Analytic_AnalyticTableAPIService'];
 
-    function AnalyticTableEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Analytic_AnalyticTableAPIService, VR_Analytic_ConnectionStringTypeEnum) {
+    function AnalyticTableEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Analytic_AnalyticTableAPIService) {
 
         var isEditMode;
         var tableEntity;
         var tableId;
+        var connectionStringType;
         loadParameters();
         defineScope();
 
@@ -24,17 +25,20 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-
-            $scope.scopeModel.connectionStringType = UtilsService.getArrayEnum(VR_Analytic_ConnectionStringTypeEnum);
-            $scope.scopeModel.selectedConnectionStringType = VR_Analytic_ConnectionStringTypeEnum.ConnectionString;
+            connectionStringType = {
+                ConnectionString: { value: 0, description: "Connection String" },
+                ConnectionStringName: { value: 1, description: "Connection String Name" },
+            }
+            $scope.scopeModel.connectionStringType = UtilsService.getArrayEnum(connectionStringType);
+            $scope.scopeModel.selectedConnectionStringType = connectionStringType.ConnectionString;
             $scope.scopeModel.showConnectionString = true;
             $scope.scopeModel.showConnectionStringName = false;
             $scope.scopeModel.onConnectionStringTypeSelectionChanged = function () {
                 if ($scope.scopeModel.selectedConnectionStringType != undefined) {
 
                     switch ($scope.scopeModel.selectedConnectionStringType.value) {
-                        case VR_Analytic_ConnectionStringTypeEnum.ConnectionString.value: $scope.scopeModel.showConnectionString = true; $scope.scopeModel.showConnectionStringName = false; break;
-                        case VR_Analytic_ConnectionStringTypeEnum.ConnectionStringName.value: $scope.scopeModel.showConnectionStringName = true; $scope.scopeModel.showConnectionString = false; break;
+                        case connectionStringType.ConnectionString.value: $scope.scopeModel.showConnectionString = true; $scope.scopeModel.showConnectionStringName = false; break;
+                        case connectionStringType.ConnectionStringName.value: $scope.scopeModel.showConnectionStringName = true; $scope.scopeModel.showConnectionString = false; break;
                     }
 
                 }
@@ -101,9 +105,9 @@
                         $scope.scopeModel.connectionString = tableEntity.Settings.ConnectionString;
 
                         if ($scope.scopeModel.connectionStringName != undefined) {
-                            $scope.scopeModel.selectedConnectionStringType = VR_Analytic_ConnectionStringTypeEnum.ConnectionStringName;
+                            $scope.scopeModel.selectedConnectionStringType = connectionStringType.ConnectionStringName;
                         } else if ($scope.scopeModel.connectionString != undefined) {
-                            $scope.scopeModel.selectedConnectionStringType = VR_Analytic_ConnectionStringTypeEnum.ConnectionString;
+                            $scope.scopeModel.selectedConnectionStringType = connectionStringType.ConnectionString;
                         }
 
 
