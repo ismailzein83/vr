@@ -2296,13 +2296,20 @@ vr-label[breakline] .vr-control-label {
 
 
     .big-data-grid .vr-datagrid {
-        width: 3000px !important;
+        width: 100% !important;
     }
 
     .big-data-grid .vr-remote-footer {
+        width: 100% !important;
+    }
+
+    .big-data-grid .vr-datagrid[level^="drill-down-level-0"] {
         width: 3000px !important;
     }
 
+    .big-data-grid .vr-remote-footer[class^="drill-down-level-0"] {
+        width: 3000px !important;
+    }
 vr-switch[type="inline"] > div {
     display: inline-block;
 }
