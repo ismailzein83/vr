@@ -6,7 +6,7 @@ app.service('BusinessProcess_BusinessProcessLogService', ['VRCommon_MasterLogSer
         });
 
         function registerLogToMaster() {
-            BusinessProcess_BPInstanceAPIService.HasViewFilteredBPInstancesPermission().then(function (response) {
+            var promise =  BusinessProcess_BPInstanceAPIService.HasViewFilteredBPInstancesPermission().then(function (response) {
                 if (response == true) {
                     var tabDefinition = {
                         title: "Business Process",
@@ -20,6 +20,8 @@ app.service('BusinessProcess_BusinessProcessLogService', ['VRCommon_MasterLogSer
                 }
 
             });
+
+            VRCommon_MasterLogService.addTabPromise(promise);
                
         }
 
