@@ -132,7 +132,7 @@
                 var loadTimeDimentionPromiseDeferred = UtilsService.createPromiseDeferred();
                 timeRangeReadyPromiseDeferred.promise.then(function () {
                     var timeRangePeriod = {
-                        period: PeriodEnum.CurrentMonth.value
+                        period: PeriodEnum.Today.value
                     };
 
                     VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, timeRangePeriod, loadTimeDimentionPromiseDeferred);

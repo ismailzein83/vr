@@ -10,15 +10,35 @@
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Settings'">
-                    <vr-columns width="2/3row">
+
+
+
+
+                    <vr-columns width="1/2row">
                         <vr-textbox value="scopeModel.tableName" label="Table Name" isrequired="true"></vr-textbox>
                     </vr-columns>
-                    <vr-columns width="fullrow">
-                        <vr-textbox value="scopeModel.connectionString" label="Connection String" isrequired="true"></vr-textbox>
-                    </vr-columns>
-                    <vr-columns width="fullrow">
+
+                    <vr-columns width="1/2row">
                         <vr-textbox value="scopeModel.timeColumnName" label="Time Column Name" isrequired="true"></vr-textbox>
                     </vr-columns>
+
+                    <!--<vr-columns width="fullrow">
+                        <vr-textbox value="scopeModel.connectionString" label="Connection String" isrequired="true"></vr-textbox>
+                    </vr-columns>-->
+
+
+                    <vr-columns width="1/2row">
+                        <vr-select label="Connection Type" datasource="scopeModel.connectionStringType" selectedvalues="scopeModel.selectedConnectionStringType"
+                                    datavaluefield="value" datatextfield="description" isrequired="true" onselectionchanged="scopeModel.onConnectionStringTypeSelectionChanged" hideremoveicon>
+                    </vr-columns>
+
+                    <vr-columns width="2/3row" ng-show="scopeModel.showConnectionStringName">
+                        <vr-textbox value="scopeModel.connectionStringName" label="Connection String Name" isrequired="scopeModel.showConnectionStringName"></vr-textbox>
+                    </vr-columns>
+                    <vr-columns width="2/3row" ng-show="scopeModel.showConnectionString">
+                        <vr-textarea value="scopeModel.connectionString" label="Connection String" isrequired="scopeModel.showConnectionString"></vr-textarea>
+                    </vr-columns>
+
                 </vr-tab>
             </vr-tabs>
 

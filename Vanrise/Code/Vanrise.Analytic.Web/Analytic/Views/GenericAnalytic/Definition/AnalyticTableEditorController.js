@@ -2,9 +2,9 @@
 
     "use strict";
 
-    AnalyticTableEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','VR_Analytic_AnalyticTableAPIService'];
+    AnalyticTableEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','VR_Analytic_AnalyticTableAPIService','VR_Analytic_ConnectionStringTypeEnum'];
 
-    function AnalyticTableEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Analytic_AnalyticTableAPIService) {
+    function AnalyticTableEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Analytic_AnalyticTableAPIService, VR_Analytic_ConnectionStringTypeEnum) {
 
         var isEditMode;
         var tableEntity;
@@ -24,6 +24,23 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+
+            $scope.scopeModel.connectionStringType = UtilsService.getArrayEnum(VR_Analytic_ConnectionStringTypeEnum);
+            $scope.scopeModel.selectedConnectionStringType = VR_Analytic_ConnectionStringTypeEnum.ConnectionString;
+            $scope.scopeModel.showConnectionString = true;
+            $scope.scopeModel.showConnectionStringName = false;
+            $scope.scopeModel.onConnectionStringTypeSelectionChanged = function () {
+                if ($scope.scopeModel.selectedConnectionStringType != undefined) {
+
+                    switch ($scope.scopeModel.selectedConnectionStringType.value) {
+                        case VR_Analytic_ConnectionStringTypeEnum.ConnectionString.value: $scope.scopeModel.showConnectionString = true; $scope.scopeModel.showConnectionStringName = false; break;
+                        case VR_Analytic_ConnectionStringTypeEnum.ConnectionStringName.value: $scope.scopeModel.showConnectionStringName = true; $scope.scopeModel.showConnectionString = false; break;
+                    }
+
+                }
+            }
+
+
             $scope.scopeModel.saveTable = function () {
                 if (isEditMode) {
                     return update();
@@ -78,6 +95,18 @@
                         $scope.scopeModel.connectionString = tableEntity.Settings.ConnectionString;
                         $scope.scopeModel.tableName = tableEntity.Settings.TableName;
                         $scope.scopeModel.timeColumnName = tableEntity.Settings.TimeColumnName;
+
+
+                        $scope.scopeModel.connectionStringName = tableEntity.Settings.ConnectionStringName;
+                        $scope.scopeModel.connectionString = tableEntity.Settings.ConnectionString;
+
+                        if ($scope.scopeModel.connectionStringName != undefined) {
+                            $scope.scopeModel.selectedConnectionStringType = VR_Analytic_ConnectionStringTypeEnum.ConnectionStringName;
+                        } else if ($scope.scopeModel.connectionString != undefined) {
+                            $scope.scopeModel.selectedConnectionStringType = VR_Analytic_ConnectionStringTypeEnum.ConnectionString;
+                        }
+
+
                     }
                 }
 
@@ -96,9 +125,10 @@
                 AnalyticTableId:tableId,
                 Name:  $scope.scopeModel.name ,
                 Settings:{
-                    ConnectionString:  $scope.scopeModel.connectionString,
                     TableName: $scope.scopeModel.tableName,
-                    TimeColumnName: $scope.scopeModel.timeColumnName
+                    TimeColumnName: $scope.scopeModel.timeColumnName,
+                    ConnectionStringName: $scope.scopeModel.showConnectionStringName? $scope.scopeModel.connectionStringName:undefined,
+                    ConnectionString:$scope.scopeModel.showConnectionString? $scope.scopeModel.connectionString:undefined
                 }
             }
             return table;

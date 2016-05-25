@@ -102,6 +102,7 @@
     <Content Include="Analytic\Constants\AnalyticAggregateTypeEnum.js" />
     <Content Include="Analytic\Constants\AnalyticItemTypeEnum.js" />
     <Content Include="Analytic\Constants\AnalyticSummaryFunctionEnum.js" />
+    <Content Include="Analytic\Constants\ConnectionStringTypeEnum.js" />
     <Content Include="Analytic\Constants\ExpressionTypeEnum.js" />
     <Content Include="Analytic\Constants\ModuleConfig.js" />
     <Content Include="Analytic\Constants\OrderDirectionEnum.js" />
