@@ -38,6 +38,9 @@
             var dependentAggregateDimensionSelectorAPI;
             var dependentAggregateDimensionReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var dependentDimensionSelectorAPI;
+            var dependentDimensionReadyDeferred = UtilsService.createPromiseDeferred();
+
             var fieldTypeAPI;
             var fieldTypeReadyDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
@@ -50,6 +53,10 @@
                 $scope.onDependentAggregateSelectorDirectiveReady = function (api) {
                     dependentAggregateDimensionSelectorAPI = api;
                     dependentAggregateDimensionReadyDeferred.resolve();
+                }
+                $scope.onDependentDimensionSelectorDirectiveReady = function (api) {
+                    dependentDimensionSelectorAPI = api;
+                    dependentDimensionReadyDeferred.resolve();
                 }
 
                 $scope.onFieldTypeReady = function (api) {
@@ -98,6 +105,17 @@
                         });
                         promises.push(loadAggregateDependentDirectivePromiseDeferred.promise);
 
+                        var loadDependentDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        dependentDimensionReadyDeferred.promise.then(function () {
+                            var payloadParentDirective = {
+                                filter: { TableIds: [tableId] },
+                                selectedIds: configEntity != undefined ? configEntity.DependentDimensions : undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(dependentDimensionSelectorAPI, payloadParentDirective, loadDependentDirectivePromiseDeferred);
+                        });
+                        promises.push(loadDependentDirectivePromiseDeferred.promise);
+
                         var loadFieldTypePromiseDeferred = UtilsService.createPromiseDeferred();
                         fieldTypeReadyDeferred.promise.then(function () {
                             var payloadFieldTypeDirective = configEntity != undefined ? configEntity.FieldType : undefined;
@@ -118,11 +136,14 @@
                     var fieldType = fieldTypeAPI != undefined ? fieldTypeAPI.getData() : undefined;
                     var joinConfigNames = joinSelectorAPI != undefined ? joinSelectorAPI.getSelectedIds() : undefined;
                     var dependentAggregateNames = dependentAggregateDimensionSelectorAPI != undefined ? dependentAggregateDimensionSelectorAPI.getSelectedIds() : undefined;
+                    var dependentDimensions = dependentDimensionSelectorAPI != undefined ? dependentDimensionSelectorAPI.getSelectedIds() : undefined;
+
                     var dimension = {
                         $type: "Vanrise.Analytic.Entities.AnalyticMeasureConfig ,Vanrise.Analytic.Entities",
                         GetValueMethod: $scope.sqlExpressionMethod,
                         JoinConfigNames: joinConfigNames,
                         DependentAggregateNames: dependentAggregateNames,
+                        DependentDimensions: dependentDimensions,
                         FieldType: fieldType,
                     };
                     return dimension;
