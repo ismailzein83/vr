@@ -52,7 +52,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
         return   '<vr-row removeline>'
                +  periodSection
                + '<vr-columns width="' + attrs.width + '">'
-               + '    <vr-datetimepicker type="' + attrs.type + '" value="ctrltimerange.from" label="From" customvalidate="validateDateTime()" isrequired="ctrltimerange.isrequired" ' + onblurchanged + '></vr-datetimepicker>'
+               + '    <vr-datetimepicker type="' + attrs.type + '" value="ctrltimerange.from" label="From" customvalidate="validateDateTime()" isrequired="true" ' + onblurchanged + '></vr-datetimepicker>'
                + '</vr-columns>'
                + '<vr-columns width="' + attrs.width + '">'
                + '    <vr-datetimepicker type="' + attrs.type + '" value="ctrltimerange.to" label="To" customvalidate="validateDateTime()" isrequired="ctrltimerange.isrequired" ' + onblurchanged + '></vr-datetimepicker>'
