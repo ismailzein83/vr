@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.Sales.Entities.RateManagement;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public class NewRate : Vanrise.Entities.IDateEffectiveSettings
+    //TODO: remove IDateEffectiveSettings in case it is not needed anymore
+    public class DraftNewRate : Vanrise.Entities.IDateEffectiveSettings
     {
         public long ZoneId { get; set; }
 
@@ -22,19 +22,10 @@ namespace TOne.WhS.Sales.Entities
 
         public DateTime? EED { get; set; }
 
-        public RateChangeType ChangeType { get; set; }
-
         List<ExistingRate> _changedExistingRates = new List<ExistingRate>();
         public List<ExistingRate> ChangedExistingRates
         {
             get { return _changedExistingRates; }
         }
-    }
-
-    public class RateChange
-    {
-        public long RateId { get; set; }
-
-        public DateTime EED { get; set; }
     }
 }

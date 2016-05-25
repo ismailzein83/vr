@@ -17,8 +17,8 @@ namespace TOne.WhS.Sales.Business
         int? _sellingProductId;
         DateTime _effectiveOn;
 
-        IEnumerable<NewRate> _newRates;
-        IEnumerable<RateChange> _rateChanges;
+        IEnumerable<DraftNewRate> _newRates;
+        IEnumerable<DraftChangedRate> _rateChanges;
 
         public ZoneRateSetter(SalePriceListOwnerType ownerType, int ownerId, int? sellingProductId, DateTime effectiveOn, Changes changes)
         {
@@ -56,8 +56,8 @@ namespace TOne.WhS.Sales.Business
 
         void SetZoneRateChanges(ZoneItem zoneItem)
         {
-            NewRate newRate = _newRates.FindRecord(itm => itm.ZoneId == zoneItem.ZoneId);
-            RateChange rateChange = _rateChanges.FindRecord(itm => itm.RateId == zoneItem.CurrentRateId); // What if currentRateId = null?
+            DraftNewRate newRate = _newRates.FindRecord(itm => itm.ZoneId == zoneItem.ZoneId);
+            DraftChangedRate rateChange = _rateChanges.FindRecord(itm => itm.RateId == zoneItem.CurrentRateId); // What if currentRateId = null?
 
             if (newRate != null)
             {

@@ -8,7 +8,6 @@ using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Entities;
 using TOne.WhS.Sales.Data;
 using TOne.WhS.Sales.Entities;
-using TOne.WhS.Sales.Entities.RateManagement;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;

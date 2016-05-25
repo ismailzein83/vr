@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
-using TOne.WhS.Sales.Entities.RateManagement;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.Sales.Data.SQL

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
-using TOne.WhS.Sales.Entities.RateManagement;
 
 namespace TOne.WhS.Sales.Data
 {

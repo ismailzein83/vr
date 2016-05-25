@@ -57,7 +57,7 @@ namespace TOne.WhS.Sales.Business
                     {
                         IEnumerable<SaleEntityZoneRate> currentZoneRates = GetCurrentRatesByZoneIds(newRates.MapRecords(itm => itm.ZoneId));
 
-                        foreach (NewRate newRate in newRates)
+                        foreach (DraftNewRate newRate in newRates)
                         {
                             var currentRate = currentZoneRates.FindRecord(itm => itm.Rate.ZoneId == newRate.ZoneId);
 

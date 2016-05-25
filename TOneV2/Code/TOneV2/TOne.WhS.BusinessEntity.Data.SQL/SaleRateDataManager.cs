@@ -72,7 +72,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return base.IsDataUpdated("TOneWhS_BE.SaleRate", ref updateHandle);
         }
-        public bool CloseRates(IEnumerable<RateChange> rateChanges)
+        public bool CloseRates(IEnumerable<DraftChangedRate> rateChanges)
         {
             DataTable rateChangesTable = BuildRateChangesTable(rateChanges);
 
@@ -85,7 +85,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return affectedRows > 0;
         }
-        public bool InsertRates(IEnumerable<NewRate> newRates, int priceListId)
+        public bool InsertRates(IEnumerable<DraftNewRate> newRates, int priceListId)
         {
             DataTable newRatesTable = BuildNewRatesTable(newRates, priceListId);
 
@@ -106,7 +106,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #endregion
 
         #region Private Methods
-        DataTable BuildNewRatesTable(IEnumerable<NewRate> newRates, int priceListId)
+        DataTable BuildNewRatesTable(IEnumerable<DraftNewRate> newRates, int priceListId)
         {
             DataTable table = new DataTable();
 
@@ -120,7 +120,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             table.BeginLoadData();
 
-            foreach (NewRate newRate in newRates)
+            foreach (DraftNewRate newRate in newRates)
             {
                 DataRow row = table.NewRow();
                 row["ZoneID"] = newRate.ZoneId;
@@ -140,7 +140,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return table;
         }
-        DataTable BuildRateChangesTable(IEnumerable<RateChange> rateChanges)
+        DataTable BuildRateChangesTable(IEnumerable<DraftChangedRate> rateChanges)
         {
             DataTable table = new DataTable();
 
@@ -149,7 +149,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             table.BeginLoadData();
 
-            foreach (RateChange rateChange in rateChanges)
+            foreach (DraftChangedRate rateChange in rateChanges)
             {
                 DataRow row = table.NewRow();
                 row["RateID"] = rateChange.RateId;

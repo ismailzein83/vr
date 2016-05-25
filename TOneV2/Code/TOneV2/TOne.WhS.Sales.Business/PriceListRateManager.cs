@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.Sales.Entities;
-using TOne.WhS.Sales.Entities.RateManagement;
 using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Business
 {
     public class PriceListRateManager
     {
-        public void ProcessNewRate(NewRate newRate, IEnumerable<ExistingRate> existingZoneRates)
+        public void ProcessNewRate(DraftNewRate newRate, IEnumerable<ExistingRate> existingZoneRates)
         {
             if(existingZoneRates != null)
             {
