@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using TOne.WhS.Sales.Data;
@@ -49,7 +48,7 @@ namespace TOne.WhS.Sales.Business
             if (_changes != null && _changes.DefaultChanges != null)
             {
                 
-                ISaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
+                ISaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = SalesDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
 
                 if (_changes.DefaultChanges.NewDefaultRoutingProduct != null)
                 {
@@ -68,7 +67,9 @@ namespace TOne.WhS.Sales.Business
         {
             if (_changes != null && _changes.ZoneChanges != null)
             {
-                ISaleRateDataManager saleRateDataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+                IRateDataManager rateDataManager = SalesDataManagerFactory.GetDataManager<IRateDataManager>();
+                SaleRateManager saleRateManager = new SaleRateManager();
+
                 IEnumerable<DraftNewRate> newRates = _changes.ZoneChanges.MapRecords(itm => itm.NewRate, itm => itm.NewRate != null);
                 var zoneRateChanges = _changes.ZoneChanges.MapRecords(itm => itm.RateChange, itm => itm.RateChange != null);
                 List<DraftChangedRate> rateChanges = zoneRateChanges != null ? zoneRateChanges.ToList() : null;
@@ -82,7 +83,7 @@ namespace TOne.WhS.Sales.Business
 
                     DateTime minBED = newRates.MapRecords(itm => itm.BED).OrderBy(itm => itm).FirstOrDefault();
                     IEnumerable<long> zoneIds = newRates.MapRecords(itm => itm.ZoneId);
-                    IEnumerable<SaleRate> existingRates = saleRateDataManager.GetExistingRatesByZoneIds(_ownerType, _ownerId, zoneIds, minBED);
+                    IEnumerable<SaleRate> existingRates = saleRateManager.GetExistingRatesByZoneIds(_ownerType, _ownerId, zoneIds, minBED);
                     int currencyId = GetCurrencyId();
 
                     foreach (DraftNewRate newRate in newRates)
@@ -94,13 +95,13 @@ namespace TOne.WhS.Sales.Business
                     }
 
                     if (_priceListId == null) { AddPriceList(); }
-                    saleRateDataManager.InsertRates(newRates, (int)_priceListId);
+                    rateDataManager.InsertRates(newRates, (int)_priceListId);
                 }
 
                 if (rateChanges != null && rateChanges.Count > 0)
                 {
                     if (_priceListId == null) { AddPriceList(); }
-                    saleRateDataManager.CloseRates(rateChanges);
+                    rateDataManager.CloseRates(rateChanges);
                 }
 
                 // Update the cached rates
@@ -112,7 +113,7 @@ namespace TOne.WhS.Sales.Business
         {
             if (_changes != null && _changes.ZoneChanges != null)
             {
-                ISaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
+                ISaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = SalesDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
                 var newRoutingProducts = _changes.ZoneChanges.MapRecords(itm => itm.NewRoutingProduct, itm => itm.NewRoutingProduct != null);
                 var routingProductChanges = _changes.ZoneChanges.MapRecords(itm => itm.RoutingProductChange, itm => itm.RoutingProductChange != null);
 

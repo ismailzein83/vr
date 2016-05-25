@@ -4,13 +4,14 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.Data.SQL;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.Sales.Data.SQL
 {
-    public class RatePlanDataManager : BaseSQLDataManager, IRatePlanDataManager
+    public class RatePlanDataManager : BaseTOneDataManager, IRatePlanDataManager
     {
         public RatePlanDataManager() : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString")) { }
 

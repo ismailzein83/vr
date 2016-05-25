@@ -116,6 +116,13 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return callSale;
         }
+
+        public IEnumerable<SaleRate> GetExistingRatesByZoneIds(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> zoneIds, DateTime minEED)
+        {
+            ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+            return dataManager.GetExistingRatesByZoneIds(ownerType, ownerId, zoneIds, minEED);
+        }
+
         #endregion
 
     }

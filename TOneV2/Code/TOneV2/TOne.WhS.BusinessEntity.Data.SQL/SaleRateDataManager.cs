@@ -72,95 +72,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return base.IsDataUpdated("TOneWhS_BE.SaleRate", ref updateHandle);
         }
-        public bool CloseRates(IEnumerable<DraftChangedRate> rateChanges)
-        {
-            DataTable rateChangesTable = BuildRateChangesTable(rateChanges);
-
-            int affectedRows = ExecuteNonQuerySPCmd("TOneWhS_BE.sp_SaleRate_CloseRates", (cmd) =>
-            {
-                SqlParameter tableParameter = new SqlParameter("@RateChanges", SqlDbType.Structured);
-                tableParameter.Value = rateChangesTable;
-                cmd.Parameters.Add(tableParameter);
-            });
-
-            return affectedRows > 0;
-        }
-        public bool InsertRates(IEnumerable<DraftNewRate> newRates, int priceListId)
-        {
-            DataTable newRatesTable = BuildNewRatesTable(newRates, priceListId);
-
-            int affectedRows = ExecuteNonQuerySPCmd("TOneWhS_BE.sp_SaleRate_InsertRates", (cmd) =>
-            {
-                SqlParameter tableParameter = new SqlParameter("@NewRates", SqlDbType.Structured);
-                tableParameter.Value = newRatesTable;
-                cmd.Parameters.Add(tableParameter);
-            });
-
-            return affectedRows > 0;
-        }
         public IEnumerable<SaleRate> GetExistingRatesByZoneIds(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> zoneIds, DateTime minEED)
         {
             string zoneIdsParameter = string.Join(",", zoneIds);
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetExistingByZoneIDs", SaleRateMapper, ownerType, ownerId, zoneIdsParameter, minEED);
-        }
-        #endregion
-
-        #region Private Methods
-        DataTable BuildNewRatesTable(IEnumerable<DraftNewRate> newRates, int priceListId)
-        {
-            DataTable table = new DataTable();
-
-            table.Columns.Add("ZoneID", typeof(long));
-            table.Columns.Add("PriceListID", typeof(int));
-            table.Columns.Add("CurrencyID", typeof(int));
-            table.Columns.Add("NormalRate", typeof(decimal));
-            table.Columns.Add("OtherRates", typeof(string));
-            table.Columns.Add("BED", typeof(DateTime));
-            table.Columns.Add("EED", typeof(DateTime));
-
-            table.BeginLoadData();
-
-            foreach (DraftNewRate newRate in newRates)
-            {
-                DataRow row = table.NewRow();
-                row["ZoneID"] = newRate.ZoneId;
-                row["PriceListID"] = priceListId;
-                if (newRate.CurrencyId != null)
-                    row["CurrencyID"] = newRate.CurrencyId;
-                row["NormalRate"] = newRate.NormalRate;
-                if (newRate.OtherRates != null)
-                    row["OtherRates"] = Vanrise.Common.Serializer.Serialize(newRate.OtherRates);
-                row["BED"] = newRate.BED;
-                if (newRate.EED != null)
-                    row["EED"] = newRate.EED;
-                table.Rows.Add(row);
-            }
-
-            table.EndLoadData();
-
-            return table;
-        }
-        DataTable BuildRateChangesTable(IEnumerable<DraftChangedRate> rateChanges)
-        {
-            DataTable table = new DataTable();
-
-            table.Columns.Add("RateID", typeof(long));
-            table.Columns.Add("EED", typeof(DateTime));
-
-            table.BeginLoadData();
-
-            foreach (DraftChangedRate rateChange in rateChanges)
-            {
-                DataRow row = table.NewRow();
-                row["RateID"] = rateChange.RateId;
-                if (rateChange.EED != null)
-                    row["EED"] = rateChange.EED;
-                table.Rows.Add(row);
-            }
-
-            table.EndLoadData();
-
-            return table;
         }
         #endregion
 

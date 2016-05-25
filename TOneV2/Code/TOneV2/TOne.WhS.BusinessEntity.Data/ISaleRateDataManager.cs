@@ -15,8 +15,6 @@ namespace TOne.WhS.BusinessEntity.Data
         List<SaleRate> GetSaleRatesEffectiveAfter(int sellingNumberPlanId, DateTime minimumDate);
         List<SaleRate> GetEffectiveSaleRateByCustomers(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture);
         bool AreSaleRatesUpdated(ref object updateHandle);
-        bool CloseRates(IEnumerable<DraftChangedRate> rateChanges);
-        bool InsertRates(IEnumerable<DraftNewRate> newRates, int priceListId);
         IEnumerable<SaleRate> GetExistingRatesByZoneIds(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> zoneIds, DateTime minEED);
     }
 }
