@@ -273,6 +273,24 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return false;
         }
+
+        public int GetAccountNominalCapacity(int carrierAccountId)
+        {
+            var carrierAccount = GetCarrierAccount(carrierAccountId);
+            if (carrierAccount == null)
+                throw new NullReferenceException(String.Format("carrierAccount '{0}'", carrierAccountId));
+            return carrierAccount.CarrierAccountSettings.NominalCapacity;
+        }
+
+        public int GetAccountsTotalNominalCapacity(IEnumerable<int> carrierAccountIds)
+        {
+            int totalNominalCapacity = 0;
+            foreach(var accountId in carrierAccountIds.Distinct())
+            {
+                totalNominalCapacity += GetAccountNominalCapacity(accountId);
+            }
+            return totalNominalCapacity;
+        }
         
         #endregion
 
