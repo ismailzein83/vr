@@ -659,7 +659,7 @@ set identity_insert [common].[ExtensionConfiguration] on;
 ;with cte_data([ID],[Title],[ConfigType],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1001,'Specific Suppliers Zones','WhS_BE_SupplierZoneGroup','{"Editor":"vr-whs-be-supplierzonegroup-selective","RuntimeEditor":""}')
+(11,'Specific Suppliers Zones','WhS_BE_SupplierZoneGroup','{"Editor":"vr-whs-be-supplierzonegroup-selective","RuntimeEditor":""}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
