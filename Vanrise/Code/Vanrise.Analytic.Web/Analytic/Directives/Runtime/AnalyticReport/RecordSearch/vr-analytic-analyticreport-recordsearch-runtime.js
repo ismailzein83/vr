@@ -71,7 +71,17 @@
                         });
                     }
                 };
-
+                $scope.checkMaxNumberResords = function()
+                {
+                    if($scope.limit <=  $scope.maxNumberOfRecords || $scope.maxNumberOfRecords == undefined)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return "Max number can be entered is: " + $scope.maxNumberOfRecords;
+                    }
+                }
                 $scope.onDRSearchPageStorageSourceChanged = function () {
                     $scope.expression = undefined;
                     filterObj = null;
@@ -139,7 +149,8 @@
                 $scope.orderDirectionList = UtilsService.getArrayEnum(VR_Analytic_OrderDirectionEnum);
                 $scope.selectedOrderDirection = $scope.orderDirectionList[0];
                 $scope.fromDate = new Date();
-                $scope.limit = 10000;
+                $scope.limit = settings != undefined ? settings.NumberOfRecords : 100;
+                $scope.maxNumberOfRecords = settings != undefined ? settings.MaxNumberOfRecords : undefined;
             }
 
             function setGridQuery() {

@@ -9,6 +9,8 @@ namespace Vanrise.Analytic.Entities
     public class DataRecordSearchPageSettings : AnalyticReportSettings
     {
         public List<DRSearchPageStorageSource> Sources { get; set; }
+        public int? MaxNumberOfRecords { get; set; }
+        public int NumberOfRecords { get; set; }
     }
 
     public class DRSearchPageStorageSource

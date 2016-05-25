@@ -29,7 +29,7 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
-
+                $scope.scopeModel.numberOfRecords = 100;
                 $scope.scopeModel.onDataRecordSourceReady = function (api) {
                     sourceAPI = api;
                     sourceReadyDeferred.resolve();
@@ -47,7 +47,10 @@
                     var promises = [];
                     if (payload != undefined && payload.reportSettings != undefined) {
                         reportSettings = payload.reportSettings;
+                        if (reportSettings.NumberOfRecords != undefined)
+                            $scope.scopeModel.numberOfRecords = reportSettings.NumberOfRecords;
 
+                       $scope.scopeModel.maxNumberOfRecords = reportSettings.MaxNumberOfRecords;
                         var loadSourcePromiseDeferred = UtilsService.createPromiseDeferred();
                         sourceReadyDeferred.promise.then(function () {
 
@@ -75,7 +78,9 @@
 
                     var viewSettings = {
                         $type: "Vanrise.Analytic.Entities.DataRecordSearchPageSettings, Vanrise.Analytic.Entities",
-                        Sources: sourceAPI != undefined ? sourceAPI.getData() : undefined
+                        Sources: sourceAPI != undefined ? sourceAPI.getData() : undefined,
+                        MaxNumberOfRecords: $scope.scopeModel.maxNumberOfRecords,
+                        NumberOfRecords: $scope.scopeModel.numberOfRecords,
                     };
 
                     return viewSettings;

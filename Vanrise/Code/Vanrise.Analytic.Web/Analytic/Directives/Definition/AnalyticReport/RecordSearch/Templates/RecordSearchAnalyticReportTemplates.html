@@ -1,4 +1,14 @@
-﻿<vr-tab header="'Sources'">
+﻿<vr-tab header="'Search Settings'">
+    <vr-row>
+        <vr-columns width="1/3row">
+            <vr-textbox type="number" value="scopeModel.numberOfRecords" label="Number Of Records" isrequired></vr-textbox>
+        </vr-columns> 
+        <vr-columns width="1/3row">
+            <vr-textbox type="number" value="scopeModel.maxNumberOfRecords" label="Max Number Of Records"></vr-textbox>
+        </vr-columns> 
+   </vr-row>
+</vr-tab>
+<vr-tab header="'Sources'">
     <vr-row>
         <vr-analytic-datarecordsource-grid on-ready="scopeModel.onDataRecordSourceReady"></vr-analytic-datarecordsource-grid>
     </vr-row>

@@ -1,60 +1,64 @@
-﻿<div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
-    <vr-row removeline>
-        <vr-columns colnum="fullrow">
-            <vr-choices-filter selectedindex="selectedFilternIndex">
-                <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
-                <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
-            </vr-choices-filter>
-        </vr-columns>
-    </vr-row>
+﻿<vr-form validationcontext="formFilter">
+    <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
+        <vr-row removeline>
+            <vr-columns colnum="fullrow">
+                <vr-choices-filter selectedindex="selectedFilternIndex">
+                    <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
+                    <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
+                </vr-choices-filter>
+            </vr-columns>
+        </vr-row>
 
-    <vr-row removeline>
-        <vr-columns colnum="2" ng-show="scopeModel.groupingDimentions != undefined && scopeModel.groupingDimentions.length>0">
-            <vr-select datatextfield="DimensionName" datavaluefield="DimensionName" label="Grouping By" isrequired="scopeModel.isGroupingRequired"
-                        entityname="Grouping" selectedvalues="scopeModel.selectedGroupingDimentions" datasource="scopeModel.groupingDimentions " ismultipleselection ></vr-select>
-        </vr-columns>
-        <vr-columns colnum="2" ng-if="scopeModel.showCurrency">
-            <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady"></vr-common-currency-selector>
-        </vr-columns>
-        <vr-columns colnum="6">
-            <vr-timerange on-ready="scopeModel.onTimeRangeDirectiveReady " width="1/3row" type="dateTime" from="scopeModel.fromdate" to="scopeModel.todate" period="selectedPeriod" isrequired="true"></vr-timerange>
-        </vr-columns>
-    </vr-row>
-    <vr-row removeline  ng-if="advancedSelected">
-        <vr-columns width="fullrow">
-            <vr-section title="Advanced Filter">
-                <vr-row ng-show="scopeModel.expression !=undefined" removeline>
-                    <vr-columns width="fullrow"><vr-label isvalue breakline>{{scopeModel.expression}}</vr-label></vr-columns>
-                </vr-row>
-                <vr-row removeline>
-                    <vr-columns width="1/4row" class="pull-right">
-                        <button type="button" class="btn btn-xs btn-primary" ng-click="scopeModel.addFilter()">
-                            <i class="glyphicon glyphicon-pencil"></i> Edit Filter
-                        </button>
-                    </vr-columns>
+        <vr-row removeline>
+            <vr-columns colnum="2" ng-show="scopeModel.groupingDimentions != undefined && scopeModel.groupingDimentions.length>0">
+                <vr-select datatextfield="DimensionName" datavaluefield="DimensionName" label="Grouping By" isrequired="scopeModel.isGroupingRequired"
+                           entityname="Grouping" selectedvalues="scopeModel.selectedGroupingDimentions" datasource="scopeModel.groupingDimentions " ismultipleselection></vr-select>
+            </vr-columns>
+            <vr-columns colnum="2" ng-if="scopeModel.showCurrency">
+                <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady"></vr-common-currency-selector>
+            </vr-columns>
+            <vr-columns colnum="6">
+                <vr-timerange on-ready="scopeModel.onTimeRangeDirectiveReady " width="1/3row" type="dateTime" from="scopeModel.fromdate" to="scopeModel.todate" period="selectedPeriod" isrequired="true"></vr-timerange>
+            </vr-columns>
+        </vr-row>
+        <vr-row removeline ng-if="advancedSelected">
+            <vr-columns width="fullrow">
+                <vr-section title="Advanced Filter">
+                    <vr-row ng-show="scopeModel.expression !=undefined" removeline>
+                        <vr-columns width="fullrow"><vr-label isvalue breakline>{{scopeModel.expression}}</vr-label></vr-columns>
+                    </vr-row>
+                    <vr-row removeline>
+                        <vr-columns width="1/4row" class="pull-right">
+                            <button type="button" class="btn btn-xs btn-primary" ng-click="scopeModel.addFilter()">
+                                <i class="glyphicon glyphicon-pencil"></i> Edit Filter
+                            </button>
+                        </vr-columns>
 
-                    <vr-columns width="1/4row" class="pull-right">
-                        <button type="button" class="btn btn-xs btn-primary" ng-click="scopeModel.resetFilter()" ng-disabled="scopeModel.expression ==undefined">
-                            <i class="glyphicon glyphicon-remove"></i> Reset Filter
-                        </button>
-                    </vr-columns>
-                </vr-row>
+                        <vr-columns width="1/4row" class="pull-right">
+                            <button type="button" class="btn btn-xs btn-primary" ng-click="scopeModel.resetFilter()" ng-disabled="scopeModel.expression ==undefined">
+                                <i class="glyphicon glyphicon-remove"></i> Reset Filter
+                            </button>
+                        </vr-columns>
+                    </vr-row>
+                </vr-section>
+            </vr-columns>
+        </vr-row>
+    </div>
+    <vr-row removeline>
+        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+            <div transclude-to="buttons">
+                <vr-button type="Search" validationcontext="formFilter" data-onclick="search"></vr-button>
+            </div>
+        </vr-actionbar>
+    </vr-row>
+</vr-form>
+<div>
+    <vr-row ng-if="scopeModel.isLoadedData">
+        <vr-columns ng-repeat="widget in scopeModel.widgets" colnum="{{widget.columnWidth.numberOfColumns}}" simplecol>
+            <vr-section title="{{widget.settings.WidgetTitle}}" ng-if="widget.settings.ShowTitle">
+                <vr-directivewrapper directive="widget.runtimeEditor" on-ready="widget.onDirectiveReady"></vr-directivewrapper>
             </vr-section>
+            <vr-directivewrapper ng-if="!widget.settings.ShowTitle" directive="widget.runtimeEditor" on-ready="widget.onDirectiveReady"></vr-directivewrapper>
         </vr-columns>
     </vr-row>
 </div>
-<vr-row removeline>
-    <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-        <div transclude-to="buttons">
-            <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
-        </div>
-    </vr-actionbar>
-</vr-row>
-<vr-row ng-if="scopeModel.isLoadedData">
-    <vr-columns ng-repeat="widget in scopeModel.widgets" colnum="{{widget.columnWidth.numberOfColumns}}" simplecol>
-        <vr-section title="{{widget.settings.WidgetTitle}}" ng-if="widget.settings.ShowTitle">
-            <vr-directivewrapper directive="widget.runtimeEditor" on-ready="widget.onDirectiveReady" ></vr-directivewrapper>
-        </vr-section>
-        <vr-directivewrapper ng-if="!widget.settings.ShowTitle" directive="widget.runtimeEditor" on-ready="widget.onDirectiveReady"></vr-directivewrapper>
-    </vr-columns>
-</vr-row>
