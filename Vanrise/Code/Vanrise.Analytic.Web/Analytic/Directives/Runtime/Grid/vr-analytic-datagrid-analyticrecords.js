@@ -342,7 +342,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     for (var i = 0; i < parentDrillDownDimensions.length; i++) {
                         var drillDownDimension = parentDrillDownDimensions[i];
                         var dimensionConfig = UtilsService.getItemByVal(ctrl.dimensionsConfig, drillDownDimension.DimensionName, 'Name');
-                    
+
                         if (dimensionConfig != undefined) {
                             if (dimensionConfig.RequiredParentDimension == undefined || (dimensionConfig.RequiredParentDimension != undefined && (UtilsService.getItemByVal(ctrl.groupingDimensions, dimensionConfig.RequiredParentDimension, "DimensionName") != undefined || UtilsService.getItemByVal(ctrl.parentDimensions, dimensionConfig.RequiredParentDimension, "DimensionName") != undefined))) {
                                 drillDownDimension.hideDimension = false;
@@ -360,7 +360,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     return UtilsService.getItemByVal(ctrl.groupingDimensions, dimensionName, "DimensionName");
                 }
 
-                function checkIfShouldAddParent(dimensionName,groupingDimensions)
+                function checkIfShouldAddParent(dimensionName, groupingDimensions)
                 {
                     for (var i = 0; i < groupingDimensions.length; i++)
                     {
@@ -369,29 +369,35 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         var dimensionConfig = UtilsService.getItemByVal(ctrl.dimensionsConfig, groupingDimension.DimensionName, 'Name');
                         if (dimensionConfig != undefined)
                         {
-                            return checkIfShouldAddParentRecursively(dimensionConfig.Parents, dimensionName);
+                            return checkIfShouldAddParentRecursively(dimensionName, dimensionConfig.Name, dimensionConfig.Parents);
                         }
                     }
                    
                 }
 
-                function checkIfShouldAddParentRecursively(parents, dimensionName) {
-                    
-                    if (parents == undefined)
+                function checkIfShouldAddParentRecursively(dimensionName, groupingDimensionName, parents) {
+
+                    if (parents == undefined || parents.length == 0)
                         return true;
+                    var result = false;
                     for (var i = 0; i < parents.length; i++) {
                         var parent = parents[i];
 
-                        if (parent == dimensionName)
+                        if (parent == dimensionName && UtilsService.getItemByVal(ctrl.groupingDimensions, parent, "DimensionName") == undefined)
                             return false;
                         else
                         {
                             var dimensionConfig = UtilsService.getItemByVal(ctrl.dimensionsConfig, parent, 'Name');
                             if (dimensionConfig != undefined)
-                             checkIfShouldAddParentRecursively(dimensionConfig.Parents, dimensionName);
+                            {
+                                result = checkIfShouldAddParentRecursively(dimensionName, groupingDimensionName, dimensionConfig.Parents);
+                                if (!result)
+                                    return result;
+                            }
+                                 
                         }
                     }
-                    return true;
+                    return result;
                 }
 
                 //------- END Rules ------------
