@@ -71,6 +71,7 @@
     <Compile Include="BigResult.cs" />
     <Compile Include="Currency\CurrencySettingData.cs" />
     <Compile Include="CustomAttributes\IsInternalAPIAttribute.cs" />
+    <Compile Include="CustomExceptions\ValidationException.cs" />
     <Compile Include="DeleteOperationOutput.cs" />
     <Compile Include="EmailTemplate\EmailSettingData.cs" />
     <Compile Include="EmailTemplate\EmailTemplateQuery.cs" />
