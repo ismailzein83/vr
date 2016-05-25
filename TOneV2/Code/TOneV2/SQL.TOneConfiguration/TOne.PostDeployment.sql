@@ -111,8 +111,6 @@ as (select * from (values
 (12004,'Carrier Profiles','Carrier Profiles','#/view/WhS_BusinessEntity/Views/CarrierAccount/CarrierProfileManagement',1201,'WhS_BE/CarrierProfile/GetFilteredCarrierProfiles',null,null,null,0,2),
 (12005,'Carrier Accounts','Carrier Accounts','#/view/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountManagement',1201,'WhS_BE/CarrierAccount/GetFilteredCarrierAccounts',null,null,null,0,3),
 (12006,'Account Manager','Account Manager','#/view/WhS_BusinessEntity/Views/AccountManager/AccountManagerManagement',1202,'WhS_BE/AccountManager/GetFilteredAssignedCarriers',null,null,null,0,2),
-(12007,'Carrier Summary',' Carrier Summary','#/view/WhS_Analytics/Views/CarrierSummary',1203,null,null,null,null,0,2),
-(12008,'Daily Report','Daily Report','#/view/WhS_Analytics/Views/DailyReport',1203,null,null,null,null,0,3),
 (12009,'Rate Plan','Rate Plan','#/view/Whs_Sales/Views/RatePlan',1204,null,null,null,null,0,4),
 (12010,'Numbering Plan','Numbering Plan Management','#/view/WhS_CodePreparation/Views/CodePreparationManagement',1204,null,null,null,null,0,5),
 (12011,'Sale Pricelists','Sale Pricelists','#/view/Whs_BusinessEntity/views/SalePriceList/SalePriceList',1205,'WhS_BE/SalePricelist/GetFilteredSalePriceLists',null,null,null,0,8),
@@ -139,13 +137,12 @@ as (select * from (values
 (12032,'Supplier Identification Rules','Supplier Identification Rules','#/view/WhS_CDRProcessing/Views/SupplierRule/SupplierIdentificationRuleManagement',1213,null,null,null,null,0,3),
 (12033,'Switch Identification Rules','Switch Identification Rules','#/view/WhS_CDRProcessing/Views/SwitchRule/SwitchIdentificationRuleManagement',1213,null,null,null,null,0,4),
 (12034,'Normalization Rules','Normalization Rules','#/view/WhS_CDRProcessing/Views/NormalizationRule/NormalizationRuleManagement',1213,null,null,null,null,0,5),
-(12035,'Traffic Monitor','Traffic Monitor','#/view/WhS_Analytics/Views/TrafficMonitor',1214,null,null,null,null,0,2),
-(12036,'Hourly Report','Hourly Report','#/view/WhS_Analytics/Views/HourlyReport',1214,null,null,null,null,0,3),
-(12037,'CDR Log','CDR Log','#/view/WhS_Analytics/Views/CDR/CDRLog',1214,null,null,null,null,0,4),
-(12038,'Raw CDR Log','Raw CDR Log','#/view/WhS_Analytics/Views/RawCDR/RawCDRLog',1214,null,null,null,null,0,5),
-(12071,'Repeated Numbers','Repeated Numbers','#/view/WhS_Analytics/Views/RepeatedNumber/RepeatedNumber',1214,null,null,null,null,0,8),
 (12100,'Variation','Variation','#/view/WhS_Analytics/Views/VariationReport/VariationReport',1216,'WhS_Analytics/VariationReport/GetFilteredVariationReportRecords',null,null,null,0,1),
-(12109,'Switch Connectivity','Switch Connectivity','#/view/WhS_BusinessEntity/Views/SwitchConnectivity/SwitchConnectivityManagement',101,'WhS_BE/SwitchConnectivity/GetFilteredSwitchConnectivities',null,null,null,0,5)
+(12109,'Switch Connectivity','Switch Connectivity','#/view/WhS_BusinessEntity/Views/SwitchConnectivity/SwitchConnectivityManagement',101,'WhS_BE/SwitchConnectivity/GetFilteredSwitchConnectivities',null,null,null,0,5),
+(12110,'Traffic Monitor','Traffic Monitor',null,1214,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":30,"TypeId":4}',202,1),
+(12111,'Traffic By Period','Traffic By Period',null,1214,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":35,"TypeId":4}',202,5),
+(12112,'CDRs','CDRs',null,1214,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":37,"TypeId":13}',202,10),
+(12113,'Traffic Summary','Traffic Summary',null,1203,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":33,"TypeId":4}',202,1),
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
