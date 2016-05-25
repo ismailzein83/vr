@@ -46,6 +46,7 @@ namespace Vanrise.Integration.Business
                 if (_dataManager.TryLockAndGet(dataSourceId, currentRuntimeProcessId, runningRuntimeProcessesIds, out adapterState))
                     return adapterState;
                 Thread.Sleep(s_lockRetryInterval);
+                retryCount++;
             }
             throw new Exception(String.Format("Cannot Lock Data Source State. data source Id '{0}'", dataSourceId));
         }
