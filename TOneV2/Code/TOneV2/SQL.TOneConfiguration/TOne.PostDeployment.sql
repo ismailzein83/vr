@@ -581,7 +581,7 @@ when not matched by target then
 
 --[bp].[BPBusinessRuleDefinition]------------------1 to 10000---------------------------------------
 ----------------------------------------------------------------------------------------------------
-set nocount on;
+ set nocount on;
 set identity_insert [bp].[BPBusinessRuleDefinition] on;
 ;with cte_data([ID],[Name],[BPDefintionId],[Settings])
 as (select * from (values
@@ -597,8 +597,8 @@ as (select * from (values
   (9,'ValidateCountries',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Same Code With Different Zones Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.SameCodeWithDifferentZonesCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[1,2]}'),
   (10,'ValidateAfterProcessing',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"BED Zones Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.ZoneBEDCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[3]}'), 
   (11,'ValidateAfterProcessing',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"BED Codes Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.CodeBEDCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[3]}'), 
-  (12,'ValidateAfterProcessing',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"EED Codes Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.CodeEEDCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[3]}'), 
-  (13,'ValidateAfterProcessing',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"EED Zone Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.ZoneEEDCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[3]}'),
+  (12,'ValidateAfterProcessing',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"EED Zone Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.ZoneEEDCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[3]}'),
+  (13,'ValidateAfterProcessing',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"EED Codes Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.CodeEEDCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[3]}'), 
   (14,'CP_ValidateCodesZones',7,'{"$type": "Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description": "Missing Zone Rule","Condition": {"$type": "TOne.WhS.CodePreparation.Business.MissingZoneCondition, TOne.WhS.CodePreparation.Business"},"ActionTypes": [1]}'), 
   (15,'CP_ValidateCodesZones',7,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Missing Code Rule","Condition":{"$type":"TOne.WhS.CodePreparation.Business.MissingCodeCondition, TOne.WhS.CodePreparation.Business"},"ActionTypes":[1]}'), 
   (16,'CP_ValidateCodesZones',7,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Missing Status Rule","Condition":{"$type":"TOne.WhS.CodePreparation.Business.MissingStatusCondition, TOne.WhS.CodePreparation.Business"},"ActionTypes":[1]}'),  
