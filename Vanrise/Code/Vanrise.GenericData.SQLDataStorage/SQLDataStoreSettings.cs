@@ -12,6 +12,11 @@ namespace Vanrise.GenericData.SQLDataStorage
     {
         public string ConnectionString { get; set; }
 
+        /// <summary>
+        /// either ConnectionString or ConnectionStringName should have value. ConnectionString has more priority than ConnectionStringName
+        /// </summary>
+        public string ConnectionStringName { get; set; }
+
         public override void UpdateRecordStorage(IUpdateRecordStorageContext context)
         {
             var sqlDataStoreSettings = context.DataStore.Settings as SQLDataStoreSettings;

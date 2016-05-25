@@ -10,6 +10,11 @@ namespace Vanrise.Analytic.Entities
     {
         public string ConnectionString { get; set; }
 
+        /// <summary>
+        /// either ConnectionString or ConnectionStringName should have value. ConnectionString has more priority than ConnectionStringName
+        /// </summary>
+        public string ConnectionStringName { get; set; }
+
         public string TableName { get; set; }
 
         public string HourlyTableName { get; set; }
