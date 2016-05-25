@@ -32,7 +32,7 @@
                     <vr-section title="Grid Columns">
                         <vr-validator validate="isFieldGridValid()">
                             <vr-datagrid datasource="selectedFields" norowhighlightonclick="true"
-                                         ondeleterow="removeField" hidegridmenu>
+                                         ondeleterow="removeField" hidegridmenu enabledraggablerow="true">
                                 <vr-datagridcolumn headertext="'Field Name'" widthfactor="5" field="'FieldName'" disablesorting="true"></vr-datagridcolumn>
                                 <vr-datagridcolumn headertext="'Field Title'" widthfactor="5" disablesorting="true">
                                     <vr-textbox value="dataItem.FieldTitle" isrequired="true"></vr-textbox>

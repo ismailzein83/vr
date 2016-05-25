@@ -195,9 +195,14 @@
                         var dimension = UtilsService.getItemByVal(dimensions, groupingDimention.DimensionName, "Name");
                         if (dimension !=undefined && dimension.Config.RequiredParentDimension == undefined)
                         {
-                            $scope.scopeModel.groupingDimentions.push(groupingDimention);
+                            var dimensionObj = {
+                                DimensionName: groupingDimention.DimensionName,
+                                IsSelected: groupingDimention.IsSelected,
+                                Title: dimension.Title
+                        }
+                            $scope.scopeModel.groupingDimentions.push(dimensionObj);
                             if (groupingDimention.IsSelected) {
-                                $scope.scopeModel.selectedGroupingDimentions.push(groupingDimention);
+                                $scope.scopeModel.selectedGroupingDimentions.push(dimensionObj);
                             }
                         }
                        
