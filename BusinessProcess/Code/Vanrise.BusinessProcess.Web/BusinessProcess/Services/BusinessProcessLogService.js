@@ -6,23 +6,19 @@ app.service('BusinessProcess_BusinessProcessLogService', ['VRCommon_MasterLogSer
         });
 
         function registerLogToMaster() {
-            var promise =  BusinessProcess_BPInstanceAPIService.HasViewFilteredBPInstancesPermission().then(function (response) {
-                if (response == true) {
-                    var tabDefinition = {
-                        title: "Business Process",
-                        directive: "bp-instance-log-search",
-                        hide: true,
-                        loadDirective: function (directiveAPI) {
-                            return directiveAPI.load();
-                        }
-                    }
-                    VRCommon_MasterLogService.addTabDefinition(tabDefinition);
+            
+            var tabDefinition = {
+                title: "Business Process",
+                directive: "bp-instance-log-search",
+                hasPermission: function () {
+                   return BusinessProcess_BPInstanceAPIService.HasViewFilteredBPInstancesPermission()
+
+                },
+                loadDirective: function (directiveAPI) {
+                    return directiveAPI.load();
                 }
-
-            });
-
-            VRCommon_MasterLogService.addTabPromise(promise);
-               
+            }
+            VRCommon_MasterLogService.addTabDefinition(tabDefinition);
         }
 
  }]);

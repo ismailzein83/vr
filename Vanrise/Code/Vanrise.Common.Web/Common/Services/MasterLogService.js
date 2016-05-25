@@ -15,9 +15,9 @@
         }
 
         function getTabsDefinition() {
-            return UtilsService.waitMultiplePromises(tabsPromises).then(function () {
+           // return UtilsService.waitMultiplePromises(tabsPromises).then(function () {
                 return tabsDefinitions;
-            })
+          ///  })
         }
 
 }]);

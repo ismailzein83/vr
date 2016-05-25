@@ -8,23 +8,19 @@ app.service('VRCommon_LogEntryService', ['VRCommon_MasterLogService','VRCommon_L
         });
 
         function registerLogToMaster() {
-            var promise = VRCommon_LogEntryAPIService.HasViewSystemLogPermission().then(function (response) {
-                if (response == true) {
-                    var tabDefinition = {
-                        title: "General",
-                        directive: "vr-log-entry-search",
-                        hide: true,
-                        loadDirective: function (directiveAPI) {
-                            return directiveAPI.load();
-                        }
-                    }
-                    VRCommon_MasterLogService.addTabDefinition(tabDefinition);
-                }
-
-            });
-
-            VRCommon_MasterLogService.addTabPromise(promise);
                
+                var tabDefinition = {
+                    title: "General",
+                    directive: "vr-log-entry-search",
+                    hide: true,
+                    hasPermission: function (){
+                        return VRCommon_LogEntryAPIService.HasViewSystemLogPermission();
+                    },
+                    loadDirective: function (directiveAPI) {
+                        return directiveAPI.load();
+                    }
+                }
+                VRCommon_MasterLogService.addTabDefinition(tabDefinition);
         }
 
         function getTypeColor(type) {
