@@ -10,13 +10,11 @@
         defineScope();
         load();
 
-        function defineScope() {
-            //var tabs = VRCommon_MasterLogService.getTabsDefinition();
-            //console.log(tabs);
-            //tabs = $filter('orderBy')(tabs, 'title');
-            //console.log(tabs);
-            $scope.drillDownDirectiveTabs = $filter('orderBy')(VRCommon_MasterLogService.getTabsDefinition(), 'title');// VRCommon_MasterLogService.getTabsDefinition();
-
+        function defineScope() {           
+            VRCommon_MasterLogService.getTabsDefinition().then(function (response) {
+                $scope.drillDownDirectiveTabs = $filter('orderBy')(response, 'title');
+            });
+         
 
            
         }
