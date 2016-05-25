@@ -15,7 +15,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[ActionTypeInfo])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(401,'Exchange Rate','{"URL":"","SystemType":false,"Editor":"vr-common-exchangerate-fxsauder","FQTN":"Vanrise.Common.Business.ExchangeRateTasks.ExchangeRateTaskAction, Vanrise.Common.Business"}')           
+(401,'Exchange Rate','{"URL":"","SystemType":false,"Editor":"vr-common-exchangerate-fxsauder","FQTN":"Vanrise.Common.MainExtensions.ExchangeRateTaskAction, Vanrise.Common.MainExtensions"}')           
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[ActionTypeInfo]))
 merge	[runtime].[SchedulerTaskActionType] as t
