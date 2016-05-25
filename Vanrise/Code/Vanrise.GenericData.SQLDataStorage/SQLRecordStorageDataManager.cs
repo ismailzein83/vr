@@ -37,17 +37,25 @@ namespace Vanrise.GenericData.SQLDataStorage
         }
 
         internal SQLRecordStorageDataManager(SQLDataStoreSettings dataStoreSettings, SQLDataRecordStorageSettings dataRecordStorageSettings, DataRecordStorage dataRecordStorage)
-            : base(dataStoreSettings.ConnectionString, false)
         {
             this._dataStoreSettings = dataStoreSettings;
             this._dataRecordStorageSettings = dataRecordStorageSettings;
             this._dataRecordStorage = dataRecordStorage;
         }
 
+
+
         internal SQLRecordStorageDataManager(SQLDataStoreSettings dataStoreSettings, SQLDataRecordStorageSettings dataRecordStorageSettings, DataRecordStorage dataRecordStorage, SummaryTransformationDefinition summaryTransformationDefinition)
             : this(dataStoreSettings, dataRecordStorageSettings, dataRecordStorage)
         {
             this._summaryTransformationDefinition = summaryTransformationDefinition;
+        }
+
+        protected override string GetConnectionString()
+        {
+            if (_dataStoreSettings == null)
+                throw new NullReferenceException("_dataStoreSettings");
+            return !String.IsNullOrEmpty(_dataStoreSettings.ConnectionString) ? _dataStoreSettings.ConnectionString : Common.Utilities.GetExposedConnectionString(_dataStoreSettings.ConnectionStringName);
         }
 
         public void ApplyStreamToDB(object stream)

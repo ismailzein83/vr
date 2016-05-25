@@ -778,7 +778,8 @@ namespace Vanrise.Analytic.Data.SQL
         #region Overriden Methods
         protected override string GetConnectionString()
         {
-            return GetTable().Settings.ConnectionString;
+            var tableSettings = GetTable().Settings;
+            return !String.IsNullOrEmpty(tableSettings.ConnectionString) ? tableSettings.ConnectionString : Common.Utilities.GetExposedConnectionString(tableSettings.ConnectionStringName);
         }
 
         #endregion

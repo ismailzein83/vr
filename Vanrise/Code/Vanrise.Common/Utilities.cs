@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -148,6 +149,37 @@ namespace Vanrise.Common
                 s_cachedProbValueReaders.TryAdd(key, propValueReader);
             }
             return propValueReader;
+        }
+        public static string GetExposedConnectionString(string connectionStringName)
+        {
+            if (!IsConnectionStringExposed(connectionStringName))
+                throw new Exception(String.Format("Connection String '{0}' is not exposed", connectionStringName));
+            var connStringEntry = ConfigurationManager.ConnectionStrings[connectionStringName];
+            if (connStringEntry == null)
+                throw new NullReferenceException(String.Format("connStringEntry. connectionStringName '{0}'", connectionStringName));
+            return connStringEntry.ConnectionString;
+        }
+
+        static HashSet<string> s_exposedConnectionStringNames;
+        static Object s_lockObj = new object();
+
+        private static bool IsConnectionStringExposed(string connectionStringName)
+        {
+            if (s_exposedConnectionStringNames == null)
+            {
+                lock (s_lockObj)
+                {
+                    if (s_exposedConnectionStringNames == null)
+                    {
+                        var exposedConnectionStringNames = ConfigurationManager.AppSettings["ExposedConnectionStringNames"];
+                        if (exposedConnectionStringNames != null)
+                            s_exposedConnectionStringNames = new HashSet<string>(exposedConnectionStringNames.Split(','));
+                        else
+                            s_exposedConnectionStringNames = new HashSet<string>();
+                    }
+                }
+            }
+            return s_exposedConnectionStringNames.Contains(connectionStringName);
         }
     }
 
