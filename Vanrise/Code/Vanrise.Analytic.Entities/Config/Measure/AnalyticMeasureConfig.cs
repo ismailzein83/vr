@@ -16,6 +16,8 @@ namespace Vanrise.Analytic.Entities
 
         public List<string> DependentAggregateNames { get; set; }
 
+        public List<string> DependentDimensions { get; set; }
+
         public GenericData.Entities.DataRecordFieldType FieldType { get; set; }
     }
 }
