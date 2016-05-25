@@ -25,13 +25,21 @@ namespace Vanrise.Analytic.Entities
         public Dictionary<string, DBAnalyticRecordAggValue> AggValuesByAggName { get; set; }
     }
 
-    public class DBAnalyticRecordGroupingValue
+    public class DBAnalyticRecordGroupingValue : ICloneable
     {
         //public string DimensionName { get; set; }
 
         public dynamic Value { get; set; }
 
         public List<dynamic> AllValues { get; set; }
+
+        public object Clone()
+        {
+            return new DBAnalyticRecordGroupingValue
+            {
+                Value = this.Value
+            };
+        }
     }
 
     public class DBAnalyticRecordAggValue : ICloneable

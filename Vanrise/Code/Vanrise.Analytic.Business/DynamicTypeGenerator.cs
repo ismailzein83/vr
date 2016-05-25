@@ -13,7 +13,8 @@ namespace Vanrise.Analytic.Business
         public static void BuildMeasureEvaluators(int analyticTableId, IEnumerable<AnalyticMeasure> measureConfigs)
         {
             Dictionary<int, string> measureFullTypeById = new Dictionary<int, string>();
-            StringBuilder codeBuilder = new StringBuilder("using System;");
+            StringBuilder codeBuilder = new StringBuilder(@"using System;
+                                                            using System.Linq;");
             foreach(var measureConfig in measureConfigs)
             {
                 if (String.IsNullOrEmpty(measureConfig.Config.GetValueMethod))
@@ -75,7 +76,8 @@ namespace Vanrise.Analytic.Business
         public static void BuildDimensionEvaluators(int analyticTableId, IEnumerable<AnalyticDimension> dimensionConfigs)
         {
             Dictionary<int, string> dimensionFullTypeById = new Dictionary<int, string>();
-            StringBuilder codeBuilder = new StringBuilder("using System;");
+            StringBuilder codeBuilder = new StringBuilder(@"using System;
+                                                            using System.Linq;");
 
             foreach (var dimensionConfig in dimensionConfigs)
             {

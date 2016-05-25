@@ -113,7 +113,11 @@ namespace Vanrise.Analytic.Business
                 {
                     if (summarySQLRecord == null)
                     {
-                        summarySQLRecord = new DBAnalyticRecord { AggValuesByAggName = new Dictionary<string, DBAnalyticRecordAggValue>() };
+                        summarySQLRecord = new DBAnalyticRecord { GroupingValuesByDimensionName = new Dictionary<string,DBAnalyticRecordGroupingValue>(), AggValuesByAggName = new Dictionary<string, DBAnalyticRecordAggValue>() };
+                        foreach(var groupingValueEntry in dbRecord.GroupingValuesByDimensionName)
+                        {
+                            summarySQLRecord.GroupingValuesByDimensionName.Add(groupingValueEntry.Key, groupingValueEntry.Value.Clone() as DBAnalyticRecordGroupingValue);
+                        }
                         foreach (var aggValueEntry in dbRecord.AggValuesByAggName)
                         {
                             summarySQLRecord.AggValuesByAggName.Add(aggValueEntry.Key, aggValueEntry.Value.Clone() as DBAnalyticRecordAggValue);
@@ -121,6 +125,13 @@ namespace Vanrise.Analytic.Business
                     }
                     else
                         UpdateAggregateValues(analyticTableQueryContext, summarySQLRecord, dbRecord);
+
+                    foreach (var groupingValue in summarySQLRecord.GroupingValuesByDimensionName)
+                    {
+                        if (groupingValue.Value.AllValues == null)
+                            groupingValue.Value.AllValues = new List<dynamic>();
+                        groupingValue.Value.AllValues.Add(dbRecord.GroupingValuesByDimensionName[groupingValue.Key].Value);
+                    }
                 }
             }
             List<AnalyticRecord> analyticRecords = new List<AnalyticRecord>();

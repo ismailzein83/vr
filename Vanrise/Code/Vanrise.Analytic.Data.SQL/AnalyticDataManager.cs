@@ -45,7 +45,7 @@ namespace Vanrise.Analytic.Data.SQL
         {
             StringBuilder selectPartBuilder = new StringBuilder();
             HashSet<string> includeJoinConfigNames = new HashSet<string>();
-            includedSQLDimensionNames = GetIncludedSQLDimensionNames(input.Query.DimensionFields, input.Query.Filters, input.Query.FilterGroup);
+            includedSQLDimensionNames = GetIncludedSQLDimensionNames(input.Query.DimensionFields, input.Query.MeasureFields, input.Query.Filters, input.Query.FilterGroup);
             int parameterIndex = 0;
             string groupByPart = null;
             groupByPart = BuildQueryGrouping(selectPartBuilder, includedSQLDimensionNames, input.Query.TimeGroupingUnit, includeJoinConfigNames);
@@ -87,7 +87,7 @@ namespace Vanrise.Analytic.Data.SQL
         //    return queryBuilder.ToString();
         //}
 
-        private HashSet<string> GetIncludedSQLDimensionNames(List<string> requestedDimensionNames, List<DimensionFilter> dimensionFilters, RecordFilterGroup filterGroup)
+        private HashSet<string> GetIncludedSQLDimensionNames(List<string> requestedDimensionNames, List<string> measureNames, List<DimensionFilter> dimensionFilters, RecordFilterGroup filterGroup)
         {
             HashSet<string> sqlDimensions = new HashSet<string>();
             if (requestedDimensionNames != null)
@@ -95,6 +95,20 @@ namespace Vanrise.Analytic.Data.SQL
                 foreach (var dimensionName in requestedDimensionNames)
                 {
                     AddSQLDimensions(dimensionName, sqlDimensions);
+                }
+            }
+            if(measureNames != null)
+            {
+                foreach(var measureName in measureNames)
+                {
+                    var measureConfig = GetMeasureConfig(measureName);
+                    if(measureConfig.Config.DependentDimensions != null)
+                    {
+                        foreach(var measureDepDim in measureConfig.Config.DependentDimensions)
+                        {
+                            AddSQLDimensions(measureDepDim, sqlDimensions);
+                        }
+                    }
                 }
             }
             if (dimensionFilters != null)
