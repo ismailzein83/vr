@@ -337,7 +337,6 @@
                 }
 
                 var groupingDimensions = [];
-                console.log($scope.scopeModel.selectedGroupingDimentions);
                 if ($scope.scopeModel.selectedGroupingDimentions != undefined && $scope.scopeModel.selectedGroupingDimentions.length > 0) {
                     for (var i = 0; i < $scope.scopeModel.selectedGroupingDimentions.length; i++) {
                         var dimension = $scope.scopeModel.selectedGroupingDimentions[i];

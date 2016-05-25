@@ -387,7 +387,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         else
                         {
                             var dimensionConfig = UtilsService.getItemByVal(ctrl.dimensionsConfig, parent, 'Name');
-                            checkIfShouldAddParentRecursively(dimensionConfig.Parents, dimensionName);
+                            if (dimensionConfig != undefined)
+                             checkIfShouldAddParentRecursively(dimensionConfig.Parents, dimensionName);
                         }
                     }
                     return true;
