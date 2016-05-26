@@ -64,7 +64,7 @@ namespace TONEAPI
 
 
             /*Cities*/
-            TextBox4.Text = TextBox4.Text + "Cities";
+            TextBox4.Text = TextBox4.Text + "Cities \n";
             testresults =testresults+ "\n ---------------------------------------------\n";
             cities _cities = new cities();
             string _Citiesresult = _cities.getcities(TextBox7.Text);
@@ -76,12 +76,13 @@ namespace TONEAPI
 
 
             /* SellingNumberPlan*/
-
+            TextBox4.Text = TextBox4.Text + "Selling Number Plan \n";
             SellingNumberPlanCode sc = new SellingNumberPlanCode();
             string _NPpostdata = "{\"Query\":{},\"SortByColumnName\":\"Entity.SellingNumberPlanId\",\"IsSortDescending\":false,\"ResultKey\":null,\"DataRetrievalResultType\":0,\"FromRow\":1,\"ToRow\":30}";
             string _NPresult = sc.GetSellingNunmberPlan(TextBox7.Text, "/api/WhS_BE/SellingNumberPlan/GetFilteredSellingNumberPlans", _NPpostdata);
-            TextBox5.Text = TextBox5.Text + _NPresult;
-
+           
+            testresults = testresults + "\n ---------------------------------------------\n";
+            testresults = testresults + _NPresult;
 
             /* Carrier Profiles */
             testresults =testresults+ "\n ---------------------------------------------\n";
@@ -147,7 +148,22 @@ namespace TONEAPI
             testresults = testresults + "Failed :" +x;
         }
 
-         
+         // Switch 
+
+        testresults = testresults + "---------------------------------------------\n|";
+        TextBox4.Text = TextBox4.Text + "Switches \n";
+        Switches sw = new Switches();
+        try
+        {
+            x = sw.getswitches(client, new Uri(url + "/api/WhS_BE/Switch/GetFilteredSwitches"), TextBox7.Text);
+            testresults = testresults + "\n ---------------------------------------------\n|";
+            testresults = testresults + x;
+        }
+        catch
+        {
+
+            testresults = testresults + "Failed: Get Switch Data|";
+        }
 
 
 
