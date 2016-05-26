@@ -24,7 +24,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             SellingNumberPlanManager manager = new SellingNumberPlanManager();
             return manager.GetSellingNumberPlan(sellingNumberPlanId);
         }
-
+        [HttpGet]
+        [Route("GetMasterSellingNumberPlan")]
+        public SellingNumberPlan GetMasterSellingNumberPlan()
+        {
+            SellingNumberPlanManager manager = new SellingNumberPlanManager();
+            return manager.GetMasterSellingNumberPlan();
+        }
         [HttpPost]
         [Route("GetFilteredSellingNumberPlans")]
         public object GetFilteredSellingNumberPlans(Vanrise.Entities.DataRetrievalInput<SellingNumberPlanQuery> input)

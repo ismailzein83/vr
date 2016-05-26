@@ -14,6 +14,10 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSellingNumberPlan"), { sellingNumberPlanId: sellingNumberPlanId });
         }
 
+        function GetMasterSellingNumberPlan() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetMasterSellingNumberPlan"));
+        }
+
         function GetFilteredSellingNumberPlans(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetFilteredSellingNumberPlans"), input);
         }
@@ -41,7 +45,8 @@
             UpdateSellingNumberPlan: UpdateSellingNumberPlan,
             GetSellingNumberPlan: GetSellingNumberPlan,
             HasUpdateSellingNumberPlanPermission: HasUpdateSellingNumberPlanPermission,
-            HasAddSellingNumberPlanPermission: HasAddSellingNumberPlanPermission
+            HasAddSellingNumberPlanPermission: HasAddSellingNumberPlanPermission,
+            GetMasterSellingNumberPlan: GetMasterSellingNumberPlan
         });
     }
 
