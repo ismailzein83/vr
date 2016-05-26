@@ -18,7 +18,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
         SwitchManager _switchManager = new SwitchManager();
-        
+
         #endregion
 
         #region Public Methods
@@ -134,11 +134,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 var switchConnectivitiesById = GetCachedSwitchConnectivities();
                 if (switchConnectivitiesById != null)
                 {
-                    foreach(var switchConnectivity in switchConnectivitiesById.Values)
+                    foreach (var switchConnectivity in switchConnectivitiesById.Values)
                     {
-                        if(switchConnectivity.Settings != null && switchConnectivity.Settings.Trunks != null)
+                        if (switchConnectivity.Settings != null && switchConnectivity.Settings.Trunks != null)
                         {
-                            foreach(var trunk in switchConnectivity.Settings.Trunks)
+                            foreach (var trunk in switchConnectivity.Settings.Trunks)
                             {
                                 if (!switchConnectivitiesByPort.ContainsKey(trunk.Name))
                                     switchConnectivitiesByPort.Add(trunk.Name, switchConnectivity);
@@ -229,6 +229,19 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (scSettings.Trunks == null || scSettings.Trunks.Count == 0)
                 throw new MissingArgumentValidationException("SwitchConnectivity.Settings.Trunks");
+
+            var existingTrunkNames = new List<string>();
+            for (int i = 0; i < scSettings.Trunks.Count; i++)
+            {
+                SwitchConnectivityTrunk trunk = scSettings.Trunks[i];
+                if (trunk == null || String.IsNullOrWhiteSpace(trunk.Name))
+                    throw new MissingArgumentValidationException(String.Format("SwitchConnectivityTrunk '{0}'", (i + 1)));
+                string trunkName = trunk.Name.ToLower();
+                string existingTrunkName = existingTrunkNames.FindRecord(itm => itm == trunkName);
+                if (existingTrunkName != null)
+                    throw new DataIntegrityValidationException(String.Format("Trunk '{0}' exists multiple times", trunk.Name));
+                existingTrunkNames.Add(trunkName);
+            }
 
             if (scBED == default(DateTime))
                 throw new MissingArgumentValidationException("SwitchConnectivity.BED");
