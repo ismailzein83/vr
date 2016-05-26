@@ -13,7 +13,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         #region ctor/Local Variables
 
-        private BlockedAttemptFilter filter;
+        private BlockedAttemptQuery query;
 
         public BlockedAttemptDataManager()
             : base(GetConnectionStringName("TOneWhS_CDR_DBConnStringKey", "TOneWhS_CDR_DBConnString"))
@@ -33,8 +33,7 @@ namespace TOne.WhS.Analytics.Data.SQL
         #region Public Methods
         public IEnumerable<BlockedAttempt> GetAllFilteredBlockedAttempts(Vanrise.Entities.DataRetrievalInput<BlockedAttemptQuery> input)
         {
-            filter = input.Query.Filter;
-
+            query = input.Query;
             return GetItemsText(GetSingleQuery(), BlockedAttemptMapper, (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.From));
@@ -57,7 +56,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             queryBuilder.Append(String.Format(@"
                     SELECT   #SELECTCOLUMNPART#
                     FROM [TOneWhS_CDR].[BillingCDR_Invalid]
-                        WITH(NOLOCK ,INDEX(BillingCDR_Invalid_AttemptDateTime)) WHERE ( SupplierID is NULL AND DurationInSeconds=0 AND  AttemptDateTime>= @FromDate AND (AttemptDateTime<= @ToDate OR @ToDate IS NULL))  
+                        WITH(NOLOCK ,INDEX(BillingCDR_Invalid_AttemptDateTime)) WHERE SupplierID is NULL AND DurationInSeconds=0 AND  AttemptDateTime>= @FromDate    
                         #WHEREPART#  
                         #GROUPBYPART# 
                         "));
@@ -74,7 +73,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             BlockedAttempt blockedAttempt = new BlockedAttempt();
             blockedAttempt.CustomerID = GetReaderValue<int>(reader, "CustomerID");
             blockedAttempt.SaleZoneID = GetReaderValue<long>(reader, "SaleZoneID");
-            if (filter.GroupByNumber)
+            if (query.Filter.GroupByNumber)
             {
                 blockedAttempt.CDPN = reader["CDPN"] as string;
                 blockedAttempt.CGPN = reader["CGPN"] as string;
@@ -100,7 +99,7 @@ namespace TOne.WhS.Analytics.Data.SQL
         private void AddSelectColumnToQuery(StringBuilder selectColumnBuilder)
         {
             selectColumnBuilder.Append(@" CustomerID,SaleZoneID,ReleaseCode,ReleaseSource,Count (*) AS BlockedAttempts, Min(AttemptDateTime) AS FirstAttempt, Max(AttemptDateTime) AS LastAttempt ");
-            if (filter.GroupByNumber)
+            if (query.Filter.GroupByNumber)
                 selectColumnBuilder.Append(",CDPN,CGPN");
         }
 
@@ -108,16 +107,20 @@ namespace TOne.WhS.Analytics.Data.SQL
         private void AddGroupingToQuery(StringBuilder groupBuilder)
         {
             groupBuilder.Append(@" GROUP BY SaleZoneID,ReleaseCode,ReleaseSource,CustomerID ");
-            if (filter.GroupByNumber)
+            if (query.Filter.GroupByNumber)
                 groupBuilder.Append(",CDPN,CGPN");
         }
 
 
         private void AddFilterToQuery(StringBuilder whereBuilder)
         {
-            AddFilter(whereBuilder, filter.SwitchIds, "SwitchID");
-            AddFilter(whereBuilder, filter.CustomerIds, "CustomerID");
-            AddFilter(whereBuilder, filter.SaleZoneIds, "SaleZoneID");
+            AddFilter(whereBuilder, query.Filter.SwitchIds, "SwitchID");
+            AddFilter(whereBuilder, query.Filter.CustomerIds, "CustomerID");
+            AddFilter(whereBuilder, query.Filter.SaleZoneIds, "SaleZoneID");
+
+            if (query.To.HasValue)
+                whereBuilder.AppendFormat("AND AttemptDateTime<= {0} ", query.To.Value);
+
         }
         private void AddFilter<T>(StringBuilder whereBuilder, IEnumerable<T> values, string column)
         {
