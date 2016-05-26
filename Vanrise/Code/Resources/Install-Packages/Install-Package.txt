@@ -1,4 +1,4 @@
-﻿You have to install below packages on new Web API project in order to be compatible with versions used in both projects Vanrise.Web and Vanrise.Web.Base
+﻿Install-PackagesYou have to install below packages on new Web API project in order to be compatible with versions used in both projects Vanrise.Web and Vanrise.Web.Base
 
 Open Package Manager Console under TOOLs > Library Package Manager
 
