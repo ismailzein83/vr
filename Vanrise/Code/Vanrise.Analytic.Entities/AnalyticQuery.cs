@@ -26,5 +26,7 @@ namespace Vanrise.Analytic.Entities
         public bool WithSummary { get; set; }
         public int? TopRecords { get; set; }
         public List<string> OrderBy { get; set; }
+
+        public List<MeasureStyleRule> MeasureStyleRules { get; set; }
     }
 }
