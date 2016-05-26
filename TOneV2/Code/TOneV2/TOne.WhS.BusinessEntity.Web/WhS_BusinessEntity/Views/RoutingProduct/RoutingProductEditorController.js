@@ -222,8 +222,7 @@
 
         function insertRoutingProduct() {
             $scope.scopeModal.isLoading = true;
-            var routingProduct = buildRoutingProductToAddFromScope();
-            return WhS_BE_RoutingProductAPIService.AddRoutingProduct(routingProduct)
+            return WhS_BE_RoutingProductAPIService.AddRoutingProduct(buildRoutingProductObjFromScope())
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Routing Product", response)) {
                     if ($scope.onRoutingProductAdded != undefined)
@@ -235,13 +234,11 @@
             }).finally(function () {
                 $scope.scopeModal.isLoading = false;
             });
-
         }
 
         function updateRoutingProduct() {
             $scope.scopeModal.isLoading = true;
-            var routingProductToEdit = buildRoutingProductToEditFromScope();
-            return WhS_BE_RoutingProductAPIService.UpdateRoutingProduct(routingProductToEdit)
+            return WhS_BE_RoutingProductAPIService.UpdateRoutingProduct(buildRoutingProductObjFromScope())
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Routing Product", response)) {
                     if ($scope.onRoutingProductUpdated != undefined)
@@ -255,18 +252,8 @@
             });
         }
 
-        function buildRoutingProductToAddFromScope() {
-            var baseRoutingProduct = buildBaseRoutingProductFromScope();
-            baseRoutingProduct.SellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
-            return baseRoutingProduct;
-        }
-
-        function buildRoutingProductToEditFromScope() {
-            return buildBaseRoutingProductFromScope();
-        }
-
-        function buildBaseRoutingProductFromScope() {
-            return {
+        function buildRoutingProductObjFromScope() {
+            var obj = {
                 RoutingProductId: (routingProductId != null) ? routingProductId : 0,
                 Name: $scope.scopeModal.routingProductName,
                 Settings: {
@@ -276,6 +263,11 @@
                     Suppliers: buildRoutingProductSupplierObj()
                 }
             };
+
+            if (!isEditMode)
+                obj.SellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
+
+            return obj;
         }
 
         function buildRoutingProductZoneObj() {

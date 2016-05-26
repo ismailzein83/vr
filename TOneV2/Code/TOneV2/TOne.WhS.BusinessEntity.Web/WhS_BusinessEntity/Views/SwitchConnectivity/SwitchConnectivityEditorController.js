@@ -159,10 +159,7 @@
 
         function insertSwitchConnectivity() {
             $scope.scopeModel.isLoading = true;
-
-            var switchConnectivity = buildBaseSwitchConnectivityFromScope();
-
-            return WhS_BE_SwitchConnectivityAPIService.AddSwitchConnectivity(switchConnectivity).then(function (response) {
+            return WhS_BE_SwitchConnectivityAPIService.AddSwitchConnectivity(buildSwitchConnectivityObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('Switch Connectivity', response, 'Name')) {
                     if ($scope.onSwitchConnectivityAdded != undefined)
                         $scope.onSwitchConnectivityAdded(response.InsertedObject);
@@ -177,10 +174,7 @@
 
         function updateSwitchConnectivity() {
             $scope.scopeModel.isLoading = true;
-
-            var switchConnectivityToEdit = buildBaseSwitchConnectivityFromScope();
-
-            return WhS_BE_SwitchConnectivityAPIService.UpdateSwitchConnectivity(switchConnectivityToEdit).then(function (response) {
+            return WhS_BE_SwitchConnectivityAPIService.UpdateSwitchConnectivity(buildSwitchConnectivityObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated('Switch Connectivity', response, 'Name')) {
                     if ($scope.onSwitchConnectivityUpdated != undefined)
                         $scope.onSwitchConnectivityUpdated(response.UpdatedObject);
@@ -193,8 +187,8 @@
             });
         }
 
-        function buildBaseSwitchConnectivityFromScope() {
-            return {
+        function buildSwitchConnectivityObjFromScope() {
+            var obj = {
                 SwitchConnectivityId: switchConnectivityId,
                 Name: $scope.scopeModel.name,
                 CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
@@ -206,6 +200,7 @@
                 BED: $scope.scopeModel.beginEffectiveDate,
                 EED: $scope.scopeModel.endEffectiveDate
             };
+            return obj;
         }
     }
 

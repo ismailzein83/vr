@@ -43,7 +43,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return base.IsDataUpdated("TOneWhS_BE.CustomerSellingProduct", ref updateHandle);
         }
-        public bool Update(CustomerSellingProduct customerSellingProduct)
+        public bool Update(CustomerSellingProductToEdit customerSellingProduct)
         {
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CustomerSellingProduct_Update", customerSellingProduct.CustomerSellingProductId, customerSellingProduct.SellingProductId, customerSellingProduct.BED);
             return (recordsEffected > 0);

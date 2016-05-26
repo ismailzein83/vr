@@ -122,9 +122,8 @@
         }
 
         function insertCodeGroup() {
-            var codeGroup = buildCodeGroupToAddFromScope();
             $scope.isGettingData = true;
-            return WhS_BE_CodeGroupAPIService.AddCodeGroup(codeGroup)
+            return WhS_BE_CodeGroupAPIService.AddCodeGroup(buildCodeGroupObjFromScope())
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Code Group", response, "value")) {
                     if ($scope.onCodeGroupAdded != undefined)
@@ -139,9 +138,8 @@
         }
 
         function updateCodeGroup() {
-            var codeGroupToEdit = buildCodeGroupToEditFromScope();
             $scope.isGettingData = true;
-            return WhS_BE_CodeGroupAPIService.UpdateCodeGroup(codeGroupToEdit)
+            return WhS_BE_CodeGroupAPIService.UpdateCodeGroup(buildCodeGroupObjFromScope())
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Code Group", response, "value")) {
                     if ($scope.onCodeGroupUpdated != undefined)
@@ -155,20 +153,13 @@
             });
         }
 
-        function buildCodeGroupToAddFromScope() {
-            return buildBaseCodeGroupFromScope();
-        }
-
-        function buildCodeGroupToEditFromScope() {
-            return buildBaseCodeGroupFromScope();
-        }
-
-        function buildBaseCodeGroupFromScope() {
-            return {
+        function buildCodeGroupObjFromScope() {
+            var obj = {
                 CodeGroupId: (codeGroupId != null) ? codeGroupId : 0,
                 Code: $scope.code,
                 CountryId: countryDirectiveApi.getSelectedIds()
             };
+            return obj;
         }
     }
 

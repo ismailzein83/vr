@@ -11,7 +11,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class CarrierAccountDataManager : BaseSQLDataManager, ICarrierAccountDataManager
     {
-
         #region ctor/Local Variables
         public CarrierAccountDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
@@ -30,11 +29,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             insertedId = (int)carrierAccountId;
             return (recordsEffected > 0);
         }
-        public bool Update(CarrierAccountToEdit carrierAccount)
+        public bool Update(CarrierAccountToEdit carrierAccount, int carrierProfileId)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Update", carrierAccount.CarrierAccountId, carrierAccount.NameSuffix,
-                Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), 
-                Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings));
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Update", carrierAccount.CarrierAccountId, carrierAccount.NameSuffix, carrierProfileId, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings));
             return (recordsEffected > 0);
         }
         public List<CarrierAccount> GetCarrierAccounts()
@@ -107,6 +104,5 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return carrierAccount;
         }
         #endregion
-
     }
 }

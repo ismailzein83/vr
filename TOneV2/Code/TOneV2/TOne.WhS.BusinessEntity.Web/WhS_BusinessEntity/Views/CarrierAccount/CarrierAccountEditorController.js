@@ -198,55 +198,38 @@
 
         function insertCarrierAccount() {
             $scope.scopeModal.isLoading = true;
-            var carrierAccount = buildCarrierAccountToAddFromScope();
-            return WhS_BE_CarrierAccountAPIService.AddCarrierAccount(carrierAccount)
-                .then(function (response) {
-                    if (VRNotificationService.notifyOnItemAdded("Carrier Account", response, "suffix")) {
-                        if ($scope.onCarrierAccountAdded != undefined)
-                            $scope.onCarrierAccountAdded(response.InsertedObject);
-                        $scope.modalContext.closeModal();
-                    }
-                })
-                .catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                }).finally(function () {
-                    $scope.scopeModal.isLoading = false;
-                });
-
+            return WhS_BE_CarrierAccountAPIService.AddCarrierAccount(buildCarrierAccountObjFromScope())
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded("Carrier Account", response, "suffix")) {
+                    if ($scope.onCarrierAccountAdded != undefined)
+                        $scope.onCarrierAccountAdded(response.InsertedObject);
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModal.isLoading = false;
+            });
         }
 
         function updateCarrierAccount() {
             $scope.scopeModal.isLoading = true;
-            var carrierAccountToEdit = buildCarrierAccountToEditFromScope();
-            return WhS_BE_CarrierAccountAPIService.UpdateCarrierAccount(carrierAccountToEdit)
-                .then(function (response) {
+            return WhS_BE_CarrierAccountAPIService.UpdateCarrierAccount(buildCarrierAccountObjFromScope())
+            .then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated("Carrier Account", response, "suffix")) {
                         if ($scope.onCarrierAccountUpdated != undefined)
                             $scope.onCarrierAccountUpdated(response.UpdatedObject);
                         $scope.modalContext.closeModal();
                     }
-                })
-                .catch(function (error) {
+                }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 }).finally(function () {
-                    $scope.scopeModal.isLoading = false;
-                });
+                $scope.scopeModal.isLoading = false;
+            });
         }
 
-        function buildCarrierAccountToAddFromScope() {
-            var baseCarrierAccount = buildBaseCarrierAccountFromScope();
-            baseCarrierAccount.CarrierProfileId = carrierProfileDirectiveAPI.getSelectedIds();
-            baseCarrierAccount.SellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
-            baseCarrierAccount.AccountType = $scope.scopeModal.selectedCarrierAccountType.value;
-            return baseCarrierAccount;
-        }
-
-        function buildCarrierAccountToEditFromScope() {
-            return buildBaseCarrierAccountFromScope();
-        }
-
-        function buildBaseCarrierAccountFromScope() {
-            return {
+        function buildCarrierAccountObjFromScope() {
+            var obj = {
                 CarrierAccountId: (carrierAccountId != null) ? carrierAccountId : 0,
                 NameSuffix: $scope.scopeModal.name,
                 CarrierAccountSettings: {
@@ -258,6 +241,14 @@
                 SupplierSettings: {},
                 CustomerSettings: {}
             };
+
+            if (!isEditMode) {
+                obj.CarrierProfileId = carrierProfileDirectiveAPI.getSelectedIds();
+                obj.SellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
+                obj.AccountType = $scope.scopeModal.selectedCarrierAccountType.value;
+            }
+
+            return obj;
         }
     }
 

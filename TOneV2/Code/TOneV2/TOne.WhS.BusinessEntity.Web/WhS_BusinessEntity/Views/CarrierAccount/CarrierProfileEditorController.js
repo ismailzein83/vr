@@ -266,10 +266,7 @@
 
         function insertCarrierProfile() {
             $scope.isLoading = true;
-
-            var carrierProfile = buildCarrierProfileToAddFromScope();
-
-            return WhS_BE_CarrierProfileAPIService.AddCarrierProfile(carrierProfile)
+            return WhS_BE_CarrierProfileAPIService.AddCarrierProfile(buildCarrierProfileObjFromScope())
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Carrier Profile", response, "Name")) {
                     if ($scope.onCarrierProfileAdded != undefined)
@@ -281,15 +278,11 @@
             }).finally(function () {
                 $scope.isLoading = false;
             });
-
         }
 
         function updateCarrierProfile() {
             $scope.isLoading = true;
-
-            var carrierProfileToEdit = buildCarrierProfileToEditFromScope();
-
-            return WhS_BE_CarrierProfileAPIService.UpdateCarrierProfile(carrierProfileToEdit)
+            return WhS_BE_CarrierProfileAPIService.UpdateCarrierProfile(buildCarrierProfileObjFromScope())
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Carrier Profile", response, "Name")) {
                     if ($scope.onCarrierProfileUpdated != undefined)
@@ -304,16 +297,8 @@
             });
         }
 
-        function buildCarrierProfileToAddFromScope() {
-            return buildBaseCarrierProfileFromScope();
-        }
-
-        function buildCarrierProfileToEditFromScope() {
-            return buildBaseCarrierProfileFromScope();
-        }
-
-        function buildBaseCarrierProfileFromScope() {
-            var baseCarrierProfile = {
+        function buildCarrierProfileObjFromScope() {
+            var obj = {
                 CarrierProfileId: (carrierProfileId != null) ? carrierProfileId : 0,
                 Name: $scope.scopeModal.name,
                 Settings: {
@@ -332,15 +317,15 @@
             };
 
             if ($scope.scopeModal.contacts.length > 0) {
-                baseCarrierProfile.Settings.Contacts = [];
+                obj.Settings.Contacts = [];
                 for (var i = 0; i < $scope.scopeModal.contacts.length; i++) {
                     var item = $scope.scopeModal.contacts[i];
                     if (item.description != undefined)
-                        baseCarrierProfile.Settings.Contacts.push({ Type: item.value, Description: item.description })
+                        obj.Settings.Contacts.push({ Type: item.value, Description: item.description })
                 };
             }
 
-            return baseCarrierProfile;
+            return obj;
         }
     }
 

@@ -116,8 +116,7 @@
 
         function insertSellingProduct() {
             $scope.scopeModal.isLoading = true;
-            var sellingProduct = buildSellingProductToAddFromScope();
-            return WhS_BE_SellingProductAPIService.AddSellingProduct(sellingProduct)
+            return WhS_BE_SellingProductAPIService.AddSellingProduct(buildSellingProductObjFromScope())
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Selling product", response, "name")) {
                     if ($scope.onSellingProductAdded != undefined)
@@ -133,8 +132,7 @@
 
         function updateSellingProduct() {
             $scope.scopeModal.isLoading = true;
-            var sellingProductToEdit = buildSellingProductToEditFromScope();
-            return WhS_BE_SellingProductAPIService.UpdateSellingProduct(sellingProductToEdit)
+            return WhS_BE_SellingProductAPIService.UpdateSellingProduct(buildSellingProductObjFromScope())
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Selling product", response, "name")) {
                     if ($scope.onSellingProductUpdated != undefined)
@@ -148,21 +146,17 @@
             });
         }
 
-        function buildSellingProductToAddFromScope() {
-            var baseSellingProduct = buildBaseSellingProductFromScope();
-            baseSellingProduct.SellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
-            return baseSellingProduct;
-        }
-
-        function buildSellingProductToEditFromScope() {
-            return buildBaseSellingProductFromScope();
-        }
-
-        function buildBaseSellingProductFromScope() {
-            return {
+        function buildSellingProductObjFromScope() {
+            var obj = {
                 SellingProductId: (sellingProductId != null) ? sellingProductId : 0,
                 Name: $scope.scopeModal.name
             };
+
+            if (!isEditMode) {
+                obj.SellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
+            }
+
+            return obj;
         }
     }
 

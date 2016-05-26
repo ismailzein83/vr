@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class CustomerSellingProductManager
     {
-
         #region ctor/Local Variables
         SellingProductManager _sellingProductManager;
         CarrierAccountManager _carrierAccountManager;
@@ -48,7 +48,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 List<CustomerSellingProduct> customerSellingProducts = null;
                 customerSellingProductsByCustomerId.TryGetValue(item.CustomerId, out customerSellingProducts);
-                if(customerSellingProducts == null)
+                if (customerSellingProducts == null)
                 {
                     customerSellingProducts = new List<CustomerSellingProduct>();
                     customerSellingProductsByCustomerId.Add(item.CustomerId, customerSellingProducts);
@@ -100,6 +100,8 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public TOne.Entities.InsertOperationOutput<List<CustomerSellingProductDetail>> AddCustomerSellingProduct(List<CustomerSellingProduct> customerSellingProducts)
         {
+            foreach (CustomerSellingProduct customerSellingProduct in customerSellingProducts)
+                ValidateCustomerSellingProductToAdd(customerSellingProduct);
 
             TOne.Entities.InsertOperationOutput<List<CustomerSellingProductDetail>> insertOperationOutput = new TOne.Entities.InsertOperationOutput<List<CustomerSellingProductDetail>>();
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
@@ -150,14 +152,17 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-        public TOne.Entities.UpdateOperationOutput<CustomerSellingProductDetail> UpdateCustomerSellingProduct(CustomerSellingProduct customerSellingProduct)
+        public TOne.Entities.UpdateOperationOutput<CustomerSellingProductDetail> UpdateCustomerSellingProduct(CustomerSellingProductToEdit customerSellingProduct)
         {
+            int customerId;
+            ValidateCustomerSellingProductToEdit(customerSellingProduct, out customerId);
+
             ICustomerSellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerSellingProductDataManager>();
             TOne.Entities.UpdateOperationOutput<CustomerSellingProductDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CustomerSellingProductDetail>();
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            var effectiveCustomerSellingProduct = GetEffectiveSellingProduct(customerSellingProduct.CustomerId, DateTime.Now, false);
+            var effectiveCustomerSellingProduct = GetEffectiveSellingProduct(customerId, DateTime.Now, false);
 
             if (customerSellingProduct.BED < DateTime.Now || (effectiveCustomerSellingProduct != null && customerSellingProduct.BED < effectiveCustomerSellingProduct.BED))
             {
@@ -168,7 +173,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                CustomerSellingProductDetail customerSellingProductDetail = CustomerSellingProductDetailMapper(customerSellingProduct);
+                CustomerSellingProductDetail customerSellingProductDetail = CustomerSellingProductDetailMapper(this.GetCustomerSellingProduct(customerSellingProduct.CustomerSellingProductId));
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = customerSellingProductDetail;
             }
@@ -198,6 +203,43 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return sellingProductId;
         }
+        #endregion
+
+        #region Validation Methods
+
+        void ValidateCustomerSellingProductToAdd(CustomerSellingProduct customerSellingProduct)
+        {
+            ValidateCustomerSellingProduct(customerSellingProduct.CustomerId, customerSellingProduct.SellingProductId);
+        }
+
+        void ValidateCustomerSellingProductToEdit(CustomerSellingProductToEdit customerSellingProduct, out int customerId)
+        {
+            CustomerSellingProduct customerSellingProductEntity = this.GetCustomerSellingProduct(customerSellingProduct.CustomerSellingProductId);
+            if (customerSellingProductEntity == null)
+                throw new DataIntegrityValidationException(String.Format("CustomerSellingProduct '{0}' does not exist", customerSellingProduct.CustomerSellingProductId));
+
+            customerId = customerSellingProductEntity.CustomerId;
+            ValidateCustomerSellingProduct(customerSellingProductEntity.CustomerId, customerSellingProduct.SellingProductId);
+        }
+
+        void ValidateCustomerSellingProduct(int customerId, int sellingProductId)
+        {
+            var sellingProduct = _sellingProductManager.GetSellingProduct(sellingProductId);
+            if (sellingProduct == null)
+                throw new DataIntegrityValidationException(String.Format("SellingProduct '{0}' does not exist", sellingProductId));
+
+            var customer = _carrierAccountManager.GetCarrierAccount(customerId);
+            if (customer == null)
+                throw new DataIntegrityValidationException(String.Format("Customer '{0}' does not exist", customerId));
+            else if (!CarrierAccountManager.IsCustomer(customer.AccountType))
+                throw new DataIntegrityValidationException(String.Format("CarrierAccount '{0}' is a {1} and not a customer", customerId, customer.AccountType.ToString().ToLower()));
+            else if (!customer.SellingNumberPlanId.HasValue)
+                throw new DataIntegrityValidationException(String.Format("Customer '{0}' is not associated with a SellingNumberPlan", customerId));
+
+            if (sellingProduct.SellingNumberPlanId != customer.SellingNumberPlanId.Value)
+                throw new DataIntegrityValidationException(String.Format("Customer '{0}' and SellingProduct '{1}' belong to different SellingNumberPlans", customerId, sellingProductId));
+        }
+
         #endregion
 
         #region Private Members
@@ -239,8 +281,5 @@ namespace TOne.WhS.BusinessEntity.Business
             return customerSellingProductDetail;
         }
         #endregion
-
     }
-
-
 }

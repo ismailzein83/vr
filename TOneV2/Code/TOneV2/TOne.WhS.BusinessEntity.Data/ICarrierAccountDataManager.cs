@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.Data
     {
         List<CarrierAccount> GetCarrierAccounts();
         bool Insert(CarrierAccount carrierAccount,out int carrierAccountId);
-        bool Update(CarrierAccountToEdit carrierAccount);
+        bool Update(CarrierAccountToEdit carrierAccount, int carrierProfileId);
         bool AreCarrierAccountsUpdated(ref object updateHandle);
     }
 }

@@ -75,8 +75,7 @@
 
         function insertSwitch() {
             $scope.isLoading = true;
-            var whsSwitch = buildSwitchToAddFromScope();
-            return WhS_BE_SwitchAPIService.AddSwitch(whsSwitch)
+            return WhS_BE_SwitchAPIService.AddSwitch(buildSwitchObjFromScope())
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Switch", response, "Name")) {
                     if ($scope.onSwitchAdded != undefined)
@@ -92,8 +91,7 @@
 
         function updateSwitch() {
             $scope.isLoading = true;
-            var whsSwitch = buildSwitchToEditFromScope();
-            return WhS_BE_SwitchAPIService.UpdateSwitch(whsSwitch)
+            return WhS_BE_SwitchAPIService.UpdateSwitch(buildSwitchObjFromScope())
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Switch", response, "Name")) {
                     if ($scope.onSwitchUpdated != undefined)
@@ -107,19 +105,12 @@
             });
         }
 
-        function buildSwitchToAddFromScope() {
-            return buildBaseSwitchFromScope();
-        }
-
-        function buildSwitchToEditFromScope() {
-            return buildBaseSwitchFromScope();
-        }
-
-        function buildBaseSwitchFromScope() {
-            return {
+        function buildSwitchObjFromScope() {
+            var obj = {
                 SwitchId: (switchId != null) ? switchId : 0,
                 Name: $scope.name
             };
+            return obj;
         }
     }
 

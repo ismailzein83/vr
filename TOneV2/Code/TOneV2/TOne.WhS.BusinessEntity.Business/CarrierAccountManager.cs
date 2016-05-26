@@ -185,11 +185,12 @@ namespace TOne.WhS.BusinessEntity.Business
         
         public TOne.Entities.UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccountToEdit carrierAccount)
         {
-            ValidateCarrierAccountToEdit(carrierAccount);
+            int carrierProfileId;
+            ValidateCarrierAccountToEdit(carrierAccount, out carrierProfileId);
 
             ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
 
-            bool updateActionSucc = dataManager.Update(carrierAccount);
+            bool updateActionSucc = dataManager.Update(carrierAccount, carrierProfileId);
             TOne.Entities.UpdateOperationOutput<CarrierAccountDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CarrierAccountDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -212,7 +213,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var carrierAccount = GetCarrierAccount(carrierAccountId);
             if (carrierAccount == null)
                 throw new NullReferenceException(String.Format("carrierAccount '{0}'", carrierAccountId));
-            if (!IsCustomer(carrierAccount))
+            if (!IsCustomer(carrierAccount.AccountType))
                 throw new Exception(String.Format("Carrier Account '{0}' is not Customer", carrierAccountId));
             if (!carrierAccount.SellingNumberPlanId.HasValue)
                 throw new NullReferenceException(String.Format("carrierAccount.SellingNumberPlanId. CarrierAccountId '{0}'", carrierAccountId));
@@ -301,7 +302,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Validation Methods
 
-        void ValidateCarrierAccountToAdd(CarrierAccount carrierAccount)
+        private void ValidateCarrierAccountToAdd(CarrierAccount carrierAccount)
         {
             var carrierProfileManager = new CarrierProfileManager();
             CarrierProfile carrierProfile = carrierProfileManager.GetCarrierProfile(carrierAccount.CarrierProfileId);
@@ -327,12 +328,21 @@ namespace TOne.WhS.BusinessEntity.Business
             ValidateCarrierAccount(carrierAccount.NameSuffix, carrierAccount.CarrierAccountSettings);
         }
 
-        void ValidateCarrierAccountToEdit(CarrierAccountToEdit carrierAccount)
+        private void ValidateCarrierAccountToEdit(CarrierAccountToEdit carrierAccount, out int carrierProfileId)
         {
+            var carrierAccountEntity = this.GetCarrierAccount(carrierAccount.CarrierAccountId);
+            if (carrierAccountEntity == null)
+                throw new DataIntegrityValidationException(String.Format("CarrierAccount '{0}' does not exist", carrierAccount.CarrierAccountId));
+
+            var carrierProfile = _carrierProfileManager.GetCarrierProfile(carrierAccountEntity.CarrierProfileId);
+            if (carrierProfile == null)
+                throw new DataIntegrityValidationException(String.Format("CarrierAccount '{0}' does not belong to a CarrierProfile", carrierAccount.CarrierAccountId));
+
+            carrierProfileId = carrierProfile.CarrierProfileId;
             ValidateCarrierAccount(carrierAccount.NameSuffix, carrierAccount.CarrierAccountSettings);
         }
 
-        void ValidateCarrierAccount(string caNameSuffix, CarrierAccountSettings caSettings)
+        private void ValidateCarrierAccount(string caNameSuffix, CarrierAccountSettings caSettings)
         {
             if (String.IsNullOrWhiteSpace(caNameSuffix))
                 throw new MissingArgumentValidationException("CarrierAccount.NameSuffix");
@@ -404,8 +414,8 @@ namespace TOne.WhS.BusinessEntity.Business
         
         private bool ShouldSelectCarrierAccount(CarrierAccount carrierAccount, bool getCustomers, bool getSuppliers, HashSet<int> filteredSupplierIds, HashSet<int> filteredCustomerIds)
         {
-            bool isSupplier = IsSupplier(carrierAccount);
-            bool isCustomer = IsCustomer(carrierAccount);
+            bool isSupplier = IsSupplier(carrierAccount.AccountType);
+            bool isCustomer = IsCustomer(carrierAccount.AccountType);
             if (getCustomers && getSuppliers)
                 return true;
             if (getCustomers && !isCustomer)
@@ -419,14 +429,14 @@ namespace TOne.WhS.BusinessEntity.Business
             return true;
         }
 
-        private static bool IsCustomer(CarrierAccount carrierAccount)
+        public static bool IsCustomer(CarrierAccountType carrierAccountType)
         {
-            return carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange;            
+            return carrierAccountType == CarrierAccountType.Customer || carrierAccountType == CarrierAccountType.Exchange;
         }
 
-        private bool IsSupplier(CarrierAccount carrierAccount)
+        public static bool IsSupplier(CarrierAccountType carrierAccountType)
         {
-            return carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange;
+            return carrierAccountType == CarrierAccountType.Supplier || carrierAccountType == CarrierAccountType.Exchange;
         }
 
         private IEnumerable<CarrierAccount> GetCarrierAccountsByType(bool getCustomers, bool getSuppliers, SupplierFilterSettings supplierFilterSettings, CustomerFilterSettings customerFilterSettings)

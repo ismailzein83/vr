@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.Data
     {
        bool Insert(List<CustomerSellingProduct> customerSellingProduct, out List<CustomerSellingProduct> insertedObjects);
 
-       bool Update(CustomerSellingProduct customerSellingProduct);
+       bool Update(CustomerSellingProductToEdit customerSellingProduct);
        //bool Delete(int customerSellingProductId);
        bool AreCustomerSellingProductsUpdated(ref object updateHandle);
        List<CustomerSellingProduct> GetCustomerSellingProducts();

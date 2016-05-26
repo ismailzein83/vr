@@ -71,8 +71,8 @@
         }
 
         function insertsellingNumberPlan() {
-            var sellingNumberPlan = buildSellingNumberPlanToAddFromScope();
-            return WhS_BE_SellingNumberPlanAPIService.AddSellingNumberPlan(sellingNumberPlan)
+            $scope.isGettingData = true;
+            return WhS_BE_SellingNumberPlanAPIService.AddSellingNumberPlan(buildSellingNumberPlanObjFromScope())
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Selling Number Plan", response, "Name")) {
 
@@ -83,12 +83,13 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isGettingData = false;
             });
-
         }
         function updatesellingNumberPlan() {
-            var sellingNumberPlanToEdit = buildSellingNumberPlanToEditFromScope();
-            return WhS_BE_SellingNumberPlanAPIService.UpdateSellingNumberPlan(sellingNumberPlanToEdit)
+            $scope.isGettingData = true;
+            return WhS_BE_SellingNumberPlanAPIService.UpdateSellingNumberPlan(buildSellingNumberPlanObjFromScope())
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Selling Number Plan", response, "Name")) {
                     if ($scope.onSellingNumberPlanUpdated != undefined)
@@ -97,20 +98,16 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isGettingData = false;
             });
         }
-
-        function buildSellingNumberPlanToAddFromScope() {
-            return buildBaseSellingNumberPlanFromScope();
-        }
-        function buildSellingNumberPlanToEditFromScope() {
-            return buildBaseSellingNumberPlanFromScope();
-        }
-        function buildBaseSellingNumberPlanFromScope() {
-            return {
+        function buildSellingNumberPlanObjFromScope() {
+            var obj = {
                 SellingNumberPlanId: (sellingNumberPlanId != null) ? sellingNumberPlanId : 0,
                 Name: $scope.name
             };
+            return obj;
         }
     }
 
