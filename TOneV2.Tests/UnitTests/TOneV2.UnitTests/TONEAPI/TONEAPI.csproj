@@ -90,6 +90,8 @@
     <Compile Include="ClassCode\countries.cs" />
     <Compile Include="ClassCode\Countryclass.cs" />
     <Compile Include="ClassCode\RestClient.cs" />
+    <Compile Include="ClassCode\SellingNumberingPlan.cs" />
+    <Compile Include="ClassCode\SellingNumberPlanCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebForm1.aspx.cs">
       <DependentUpon>WebForm1.aspx</DependentUpon>
