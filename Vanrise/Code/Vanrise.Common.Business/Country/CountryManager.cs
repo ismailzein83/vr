@@ -86,8 +86,9 @@ namespace Vanrise.Common.Business
             
             for (int i = 1; i < countryDataTable.Rows.Count; i++)
             {
-                Country country = GetCachedCountries().FindRecord(it => it.Name.ToLower().Equals(countryDataTable.Rows[i][0].ToString().ToLower()));
-                if(!String.IsNullOrEmpty(countryDataTable.Rows[i][0].ToString()))
+                string importedCountryName = countryDataTable.Rows[i][0].ToString().Trim();
+                Country country = GetCachedCountries().FindRecord(it => it.Name.Equals(importedCountryName, StringComparison.InvariantCultureIgnoreCase));
+                if(!String.IsNullOrEmpty(importedCountryName))
                 {
                     if (country == null)
                     {
@@ -95,7 +96,7 @@ namespace Vanrise.Common.Business
                         long startingId;
                         ReserveIDRange(1, out startingId);
                         country.CountryId = (int)startingId;
-                        country.Name = countryDataTable.Rows[i][0].ToString();
+                        country.Name = importedCountryName;
 
                         ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
                         bool insertActionSucc = dataManager.Insert(country);
