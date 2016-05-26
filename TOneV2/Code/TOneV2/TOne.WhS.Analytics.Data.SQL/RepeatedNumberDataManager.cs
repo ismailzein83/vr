@@ -13,17 +13,17 @@ namespace TOne.WhS.Analytics.Data.SQL
     public class RepeatedNumberDataManager : BaseTOneDataManager, IRepeatedNumberDataManager
     {
         #region ctor/Local Variables
-        private string mainCDRTableName="[TOneWhS_CDR].[CDRMain]";
+        private string mainCDRTableName = "[TOneWhS_CDR].[BillingCDR_Main]";
         private string mainCDRTableAlias = "MainCDR";
-        private string mainCDRTableIndex = "IX_CDRMain_Attempt";
+        private string mainCDRTableIndex = "BillingCDR_Main_AttemptDateTime";
 
-        private string invalidCDRTableName = "[TOneWhS_CDR].[CDRInvalid]";
+        private string invalidCDRTableName = "[TOneWhS_CDR].[BillingCDR_Invalid]";
         private string invalidCDRTableAlias = "InValidCDR";
-        private string invalidCDRTableIndex = "IX_CDRInvalid_Attempt";
+        private string invalidCDRTableIndex = "BillingCDR_Invalid_AttemptDateTime";
 
-        private string failedCDRTableName = "[TOneWhS_CDR].[CDRFailed]";
+        private string failedCDRTableName = "[TOneWhS_CDR].[BillingCDR_Failed]";
         private string failedCDRTableAlias = "FailedCDR";
-        private string failedCDRTableIndex = "IX_CDRFailed_Attempt";
+        private string failedCDRTableIndex = "BillingCDR_Failed_AttemptDateTime";
 
         public RepeatedNumberDataManager()
             : base(GetConnectionStringName("TOneWhS_CDR_DBConnStringKey", "TOneWhS_CDR_DBConnString"))
@@ -98,10 +98,10 @@ namespace TOne.WhS.Analytics.Data.SQL
                                                WHERE (#WHEREPART#)   
                                                GROUP BY #GROUPBYPART# ", tableName, alias));
 
-            whereBuilder.Append(String.Format(@"{0}.Attempt>= @FromDate AND ({0}.Attempt<= @ToDate OR @ToDate IS NULL)", alias));
+            whereBuilder.Append(String.Format(@"{0}.AttemptDateTime>= @FromDate AND ({0}.AttemptDateTime<= @ToDate OR @ToDate IS NULL)", alias));
             groupByBuilder.Append(@"SaleZoneID, CustomerID, SupplierID, CASE @PhoneNumberType WHEN 'CDPN' THEN CDPN  WHEN 'CGPN' THEN CGPN  END");
-            havingBuilder.Append(String.Format(@"HAVING SUM(Attempt) >= {0} ", repeatedMorethan));
-            selectQueryPart.Append(String.Format(@" {0}.SaleZoneID, {0}.CustomerID, {0}.SupplierID, Count({0}.Attempt) AS Attempt,
+            havingBuilder.Append(String.Format(@"HAVING SUM(AttemptDateTime) >= {0} ", repeatedMorethan));
+            selectQueryPart.Append(String.Format(@" {0}.SaleZoneID, {0}.CustomerID, {0}.SupplierID, Count({0}.AttemptDateTime) AS AttemptDateTime,
                                                     CONVERT(DECIMAL(10,2),SUM({0}.DurationInSeconds)/60.) AS DurationsInMinutes,
 		                                            CASE @PhoneNumberType WHEN 'CDPN' THEN {0}.CDPN  WHEN 'CGPN' THEN {0}.CGPN  END AS PhoneNumber ", alias));
 
@@ -115,7 +115,7 @@ namespace TOne.WhS.Analytics.Data.SQL
         }
         private void AddSelectColumnToQuery(StringBuilder selectColumnBuilder, string aliasTableName)
         {
-            selectColumnBuilder.Append(String.Format(@" {0}.SaleZoneID, {0}.CustomerID, {0}.SupplierID, SUM({0}.Attempt) AS Attempt,
+            selectColumnBuilder.Append(String.Format(@" {0}.SaleZoneID, {0}.CustomerID, {0}.SupplierID, SUM({0}.AttemptDateTime) AS AttemptDateTime,
                                                     SUM({0}.DurationsInMinutes) AS DurationsInMinutes, {0}.PhoneNumber", aliasTableName));
         }
         private void AddGroupingToQuery(StringBuilder groupBuilder, string aliasTableName)
@@ -124,7 +124,7 @@ namespace TOne.WhS.Analytics.Data.SQL
         }
         private void AddHavingToQuery(StringBuilder groupBuilder, string aliasTableName, int repeatedMorethan)
         {
-            groupBuilder.Append(String.Format(@"  SUM({0}.Attempt) >=  {1} ", aliasTableName, repeatedMorethan));
+            groupBuilder.Append(String.Format(@"  SUM({0}.AttemptDateTime) >=  {1} ", aliasTableName, repeatedMorethan));
         }        
         private void AddFilterToQuery(RepeatedNumberFilter filter, StringBuilder whereBuilder)
         {
@@ -146,7 +146,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             repeatedNumber.SaleZoneId = GetReaderValue<long>(reader, "SaleZoneID");
             repeatedNumber.CustomerId = GetReaderValue<int>(reader, "CustomerID");
             repeatedNumber.SupplierId = GetReaderValue<int>(reader, "SupplierID");
-            repeatedNumber.Attempt = GetReaderValue<int>(reader, "Attempt");
+            repeatedNumber.Attempt = GetReaderValue<int>(reader, "AttemptDateTime");
             repeatedNumber.DurationInMinutes = GetReaderValue<decimal>(reader, "DurationsInMinutes");
             repeatedNumber.PhoneNumber = reader["PhoneNumber"] as string;
             return repeatedNumber;

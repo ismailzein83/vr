@@ -75,7 +75,6 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
             CDRType:  callStatusDirectiveAPI.getSelectedIds(),
             PhoneNumber: phoneNumberDirectiveAPI.getSelectedValues()
         }
-        console.log(query);
         return query;
     }
 
