@@ -87,25 +87,30 @@ namespace Vanrise.Common.Business
             for (int i = 1; i < countryDataTable.Rows.Count; i++)
             {
                 Country country = GetCachedCountries().FindRecord(it => it.Name.ToLower().Equals(countryDataTable.Rows[i][0].ToString().ToLower()));
-                if (country == null && !String.IsNullOrEmpty(countryDataTable.Rows[i][0].ToString()))
+                if(!String.IsNullOrEmpty(countryDataTable.Rows[i][0].ToString()))
                 {
-                    country = new Country();
-                    long startingId;
-                    ReserveIDRange(1, out startingId);
-                    country.CountryId = (int)startingId;
-                    country.Name = countryDataTable.Rows[i][0].ToString();
+                    if (country == null)
+                    {
+                        country = new Country();
+                        long startingId;
+                        ReserveIDRange(1, out startingId);
+                        country.CountryId = (int)startingId;
+                        country.Name = countryDataTable.Rows[i][0].ToString();
 
-                    ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
-                    bool insertActionSucc = dataManager.Insert(country);
-                    if (insertActionSucc)
-                        insertedCount++;
-                    else                           
+                        ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
+                        bool insertActionSucc = dataManager.Insert(country);
+                        if (insertActionSucc)
+                            insertedCount++;
+                        else                           
+                            notInsertedCount++;
+                    }
+                    else
+                    {
                         notInsertedCount++;
+                    }
                 }
-                else
-                {
-                    notInsertedCount++;
-                }
+                
+               
             }
            
             message = String.Format("{0} countries added and {1} are already exists", insertedCount, notInsertedCount);
