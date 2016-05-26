@@ -37,7 +37,6 @@ namespace TOne.WhS.Analytics.Data.SQL
             return GetItemsText(GetSingleQuery(), BlockedAttemptMapper, (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.From));
-                    cmd.Parameters.Add(new SqlParameter("@ToDate", ToDBNullIfDefault(input.Query.To)));
                 });
         }
 
