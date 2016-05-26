@@ -324,6 +324,72 @@ namespace Vanrise.Analytic.Business
                         return null;
                 }
             }
+
+            protected override ResultProcessingHandler<AnalyticRecord> GetResultProcessingHandler(DataRetrievalInput<AnalyticQuery> input, BigResult<AnalyticRecord> bigResult)
+            {
+                return new ResultProcessingHandler<AnalyticRecord>
+                {
+                    ExportExcelHandler = new AnalyticExcelExportHandler(input.Query)
+                };
+            }
+        }
+
+        private class AnalyticExcelExportHandler : ExcelExportHandler<AnalyticRecord>
+        {
+            AnalyticQuery _query;
+            public AnalyticExcelExportHandler(AnalyticQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<AnalyticRecord> context)
+            {
+                if(context.BigResult == null)
+                    throw new ArgumentNullException("context.BigResult");
+                if(context.BigResult.Data == null)
+                    throw new ArgumentNullException("context.BigResult.Data");
+                ExportExcelSheet sheet = new ExportExcelSheet();
+                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                if(_query.DimensionFields != null)
+                {
+                    foreach(var dimName in _query.DimensionFields)
+                    {
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = dimName });
+                    }
+                }
+                if(_query.MeasureFields != null)
+                {
+                    foreach (var measureName in _query.MeasureFields)
+                    {
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = measureName });
+                    }
+                }
+                sheet.Rows = new List<ExportExcelRow>();
+                foreach(var record in context.BigResult.Data)
+                {
+                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                    sheet.Rows.Add(row);
+                    if (record.DimensionValues != null)
+                    {
+                        foreach(var dimValue in record.DimensionValues)
+                        {
+                            row.Cells.Add(new ExportExcelCell { Value = dimValue.Name });
+                        }
+                    }
+                    if (_query.MeasureFields != null)
+                    {
+                        foreach (var measureName in _query.MeasureFields)
+                        {
+                            MeasureValue measureValue;
+                            if (!record.MeasureValues.TryGetValue(measureName, out measureValue))
+                                throw new NullReferenceException(String.Format("measureValue. measureName '{0}'", measureName));
+                            row.Cells.Add(new ExportExcelCell { Value = measureValue.Value });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
         }
 
         private class RecordFilterGenericFieldMatchContext : IRecordFilterGenericFieldMatchContext

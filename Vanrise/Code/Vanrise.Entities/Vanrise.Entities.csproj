@@ -68,10 +68,12 @@
     <Compile Include="Currency\CurrencyExchangeRate.cs" />
     <Compile Include="Currency\CurrencyQuery.cs" />
     <Compile Include="Currency\Currency.cs" />
-    <Compile Include="BigResult.cs" />
+    <Compile Include="DataRetrieval\BigResult.cs" />
     <Compile Include="Currency\CurrencySettingData.cs" />
     <Compile Include="CustomAttributes\IsInternalAPIAttribute.cs" />
     <Compile Include="CustomExceptions\ValidationException.cs" />
+    <Compile Include="DataRetrieval\ExcelExportHandler.cs" />
+    <Compile Include="DataRetrieval\ResultProcessingHandler.cs" />
     <Compile Include="DeleteOperationOutput.cs" />
     <Compile Include="EmailTemplate\EmailSettingData.cs" />
     <Compile Include="EmailTemplate\EmailTemplateQuery.cs" />
@@ -80,7 +82,7 @@
     <Compile Include="EntitySynchronization\IItem.cs" />
     <Compile Include="EntitySynchronization\ISourceItem.cs" />
     <Compile Include="EntitySynchronization\ISourceItemReader.cs" />
-    <Compile Include="ExcelResult.cs" />
+    <Compile Include="DataRetrieval\ExcelResult.cs" />
     <Compile Include="ExtensionConfiguration.cs" />
     <Compile Include="File\FileUploadResult.cs" />
     <Compile Include="File\VRFileQuery.cs" />
@@ -104,7 +106,7 @@
     <Compile Include="Logging\LogEntryQuery.cs" />
     <Compile Include="Logging\LogEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DataRetrievalInput.cs" />
+    <Compile Include="DataRetrieval\DataRetrievalInput.cs" />
     <Compile Include="RateType\RateType.cs" />
     <Compile Include="RateType\RateTypeDetail.cs" />
     <Compile Include="RateType\RateTypeInfo.cs" />
