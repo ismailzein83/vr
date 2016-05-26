@@ -60,6 +60,17 @@ namespace TONEAPI
                 TextBox6.Text = TextBox6.Text + "Failed: Create Country";
             }
 
+
+            /*Cities*/
+
+            cities _cities = new cities();
+            string _Citiesresult = _cities.getcities(TextBox7.Text);
+            TextBox5.Text = TextBox5.Text + _Citiesresult;
+
+            string _newCity = "{\"CityId\":\"0\",\"Name\":\"Liber2\",\"CountryId\":\"6\"}";
+            string raddcity = _cities.Addcountry(_newCity, TextBox7.Text);
+            TextBox5.Text = TextBox5.Text + "Create new City " + raddcity + "\n"; 
+
      /* Carrier Profiles */
             TextBox4.Text = TextBox4.Text + "Carrier Profiles \n";
             CarrierProfiles cp = new CarrierProfiles();
