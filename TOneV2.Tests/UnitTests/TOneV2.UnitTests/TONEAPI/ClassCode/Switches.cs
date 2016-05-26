@@ -35,7 +35,7 @@ namespace TONEAPI.ClassCode
                             JsonConvert.DeserializeObject<SwitchClass>(switchdata);
 
 
-                SwitchEntity cp = objResponse1.switchData[1].Entity;
+                SwitchEntity cp = objResponse1.switchData[1].switchEntity;
             
       
          
