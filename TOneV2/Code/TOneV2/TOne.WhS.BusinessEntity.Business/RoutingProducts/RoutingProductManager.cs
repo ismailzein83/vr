@@ -274,7 +274,12 @@ namespace TOne.WhS.BusinessEntity.Business
             if (rpSettings == null)
                 throw new MissingArgumentValidationException("RoutingProduct.Settings");
 
-            if (rpSettings.ZoneRelationType != RoutingProductZoneRelationType.AllZones)
+            if (rpSettings.ZoneRelationType == RoutingProductZoneRelationType.AllZones)
+            {
+                if (rpSettings.Zones != null)
+                    throw new DataIntegrityValidationException(String.Format("RoutingProduct.Settings.Zones must be null when RoutingProduct.Settings.ZoneRelationType = AllZones"));
+            }
+            else if (rpSettings.ZoneRelationType == RoutingProductZoneRelationType.SpecificZones)
             {
                 if (rpSettings.Zones == null || rpSettings.Zones.Count() == 0)
                     throw new MissingArgumentValidationException("RoutingProduct.Settings.Zones");
@@ -293,7 +298,12 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
             }
 
-            if (rpSettings.SupplierRelationType != RoutingProductSupplierRelationType.AllSuppliers)
+            if (rpSettings.SupplierRelationType == RoutingProductSupplierRelationType.AllSuppliers)
+            {
+                if (rpSettings.Suppliers != null)
+                    throw new DataIntegrityValidationException(String.Format("RoutingProduct.Settings.Suppliers must be null when RoutingProduct.Settings.SupplierRelationType = AllSuppliers"));
+            }
+            else if (rpSettings.SupplierRelationType == RoutingProductSupplierRelationType.SpecificSuppliers)
             {
                 if (rpSettings.Suppliers == null || rpSettings.Suppliers.Count == 0)
                     throw new MissingArgumentValidationException("RoutingProduct.Settings.Suppliers");

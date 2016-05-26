@@ -163,7 +163,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             int carrierAccountId = -1;
 
-            if ((carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange) && carrierAccount.SellingNumberPlanId == null)
+            if (CarrierAccountManager.IsCustomer(carrierAccount.AccountType) && carrierAccount.SellingNumberPlanId == null)
                 throw new ArgumentNullException("Missing SellingNumberPlanId");
 
             ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
@@ -321,7 +321,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             else
             {
-                if (carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange)
+                if (CarrierAccountManager.IsCustomer(carrierAccount.AccountType))
                     throw new DataIntegrityValidationException(String.Format("{0} must be associated with a SellingNumberPlan", carrierAccount.AccountType.ToString()));
             }
 
@@ -536,8 +536,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 CarrierAccountId = carrierAccount.CarrierAccountId,
                 Name = GetCarrierAccountName(carrierAccount.CarrierAccountId),
                 CarrierType = carrierAccount.AccountType,
-                IsCustomerAvailable = (carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange) && (assignedCarrierAccount == null || assignedCarrierAccount.RelationType != CarrierAccountType.Customer),
-                IsSupplierAvailable = (carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange) && (assignedCarrierAccount == null || assignedCarrierAccount.RelationType != CarrierAccountType.Supplier),
+                IsCustomerAvailable = (CarrierAccountManager.IsCustomer(carrierAccount.AccountType)) && (assignedCarrierAccount == null || assignedCarrierAccount.RelationType != CarrierAccountType.Customer),
+                IsSupplierAvailable = (CarrierAccountManager.IsSupplier(carrierAccount.AccountType)) && (assignedCarrierAccount == null || assignedCarrierAccount.RelationType != CarrierAccountType.Supplier)
             };
         }
         
