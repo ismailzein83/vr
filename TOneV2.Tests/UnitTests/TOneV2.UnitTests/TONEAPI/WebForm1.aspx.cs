@@ -90,13 +90,15 @@ namespace TONEAPI
             }
 
           // create profile
+
             string parms =  "{\"CarrierProfileId\":0,\"Name\":\"Test\",\"Settings\":{\"CountryId\":1,\"CityId\":9,\"Company\":\"Test\",\"Website\":\"123\",\"RegistrationNumber\":\"123\",\"Address\":\"123\",\"PostalCode\":\"123\",\"Town\":\"123\",\"CompanyLogo\":0,\"Contacts\":[{\"Type\":1,\"Description\":\"nab\"},{\"Type\":2,\"Description\":\"nab@vanrise.com\"},{\"Type\":4,\"Description\":\"nab\"},{\"Type\":5,\"Description\":\"nab@vanrise.com\"},{\"Type\":6,\"Description\":\"nab\"},{\"Type\":7,\"Description\":\"nab@vanrise.com\"},{\"Type\":8,\"Description\":\"nab\"},{\"Type\":9,\"Description\":\"nab@vanrise.com\"},{\"Type\":10,\"Description\":\"nab\"},{\"Type\":11,\"Description\":\"nab@vanrise.com\"},{\"Type\":12,\"Description\":\"nab\"},{\"Type\":13,\"Description\":\"nab@vanrise.com\"},{\"Type\":14,\"Description\":\"234233\"},{\"Type\":3,\"Description\":\"nab@vanrise.com\"}]}}";
             CarrierProfiles cpt = new CarrierProfiles();
             try
             {
                 x = cpt.createprofile(client, new Uri(url + "/api/WhS_BE/CarrierProfile/AddCarrierProfile"), TextBox7.Text, parms);
-                testresults = testresults + "Success: create Carrier Profile |";
+                testresults = testresults + "Success: create Carrier Profile";
                 testresults = testresults + x;
+                testresults = testresults + "---------------------------------------------\n|";
             }
 
             catch
@@ -106,13 +108,13 @@ namespace TONEAPI
             }
             /* Carrier Account */
 
-            testresults =testresults+ "\n ---------------------------------------------\n|";
+            testresults =testresults+ "---------------------------------------------\n|";
             TextBox4.Text = TextBox4.Text + "Carrier Account \n";
             Carrieraccounts ca = new Carrieraccounts();
             try
             {
                 x = ca.getaccounts(client, new Uri(url + "/api/WhS_BE/CarrierAccount/GetFilteredCarrierAccounts"), TextBox7.Text);
-
+                testresults = testresults + "\n ---------------------------------------------\n|";
                 testresults =testresults+ x;
             }
             catch
@@ -122,7 +124,18 @@ namespace TONEAPI
             }
 
 
-
+        string acountparm ="{\"CarrierAccountId\":0,\"NameSuffix\":\"test\",\"AccountType\":1,\"CarrierProfileId\":1,\"SellingNumberPlanId\":1,\"SupplierSettings\":{},\"CustomerSettings\":{},\"CarrierAccountSettings\":{\"ActivationStatus\":0,\"CurrencyId\":1,\"Mask\":\"test\"}}";
+        try
+        {
+            x = ca.createaccount(client, new Uri(url + "/api/WhS_BE/CarrierAccount/AddCarrierAccount"), TextBox7.Text, acountparm);
+            testresults = testresults + "Success: Create Carrier Account \n";
+            testresults = testresults + x;
+        }
+        catch
+        {
+            testresults = testresults + "Failed: Create  Carrier Account \n";
+            testresults = testresults + "Failed :" +x;
+        }
 
          
 
