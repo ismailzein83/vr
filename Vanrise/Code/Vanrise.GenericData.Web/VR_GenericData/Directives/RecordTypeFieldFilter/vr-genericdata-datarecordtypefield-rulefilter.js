@@ -29,8 +29,6 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
             var context;
             var filterObj;
 
-
-
             function initializeController() {
 
                 $scope.scopeModel.onDataRecordTypeFieldEditorReady = function (api) {
@@ -38,7 +36,7 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
 
                     var payload = { dataRecordTypeField: $scope.scopeModel.dataRecordTypeField, filterObj: filterObj };
                     var setLoader = function (value) {
-                        $scope.scopeModel.isLoading = value; UtilsService.safeApply($scope);
+                        $scope.scopeModel.isLoading = value;
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeFieldEditorApi, payload, setLoader, dataRecordTypeFieldReadyDeferred);
 
@@ -47,21 +45,18 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
                 $scope.scopeModel.onDataRecordTypeFieldFilterReady = function (api) {
                     dataRecordTypeFieldEditorApi = api;
                     var setLoader = function (value) {
-                        $scope.scopeModel.isLoading = value; UtilsService.safeApply($scope);
+                        $scope.scopeModel.isLoading = value;
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeFieldEditorApi, undefined, setLoader, dataRecordTypeFieldReadyDeferred);
                 }
                 $scope.scopeModel.onDataRecordTypeFieldSelectionChanged = function () {
-                    if (context != undefined && $scope.scopeModel.dataRecordTypeField != undefined) {
-                        $scope.scopeModel.ruleFilterEditor = context.getRuleEditor($scope.scopeModel.dataRecordTypeField.Type.ConfigId);
-                    }
-                    if (dataRecordTypeFieldEditorApi != undefined) {
-                        var payload = { dataRecordTypeField: $scope.scopeModel.dataRecordTypeField };
-                        var setLoader = function (value) {
-                            $scope.scopeModel.isLoading = value; UtilsService.safeApply($scope);
-                        };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeFieldEditorApi, payload, setLoader, dataRecordTypeFieldReadyDeferred);
-                    }
+                    $scope.scopeModel.ruleFilterEditor = undefined;
+                    setTimeout(function () {
+                        if (context != undefined && $scope.scopeModel.dataRecordTypeField != undefined) {
+                            $scope.scopeModel.ruleFilterEditor = context.getRuleEditor($scope.scopeModel.dataRecordTypeField.Type.ConfigId);
+                        }
+                        UtilsService.safeApply($scope);
+                    });
                 }
 
                 defineAPI();
