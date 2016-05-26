@@ -83,6 +83,8 @@
     <Compile Include="ClassCode\Carrieraccounts.cs" />
     <Compile Include="ClassCode\CarrierProfile.cs" />
     <Compile Include="ClassCode\CarrierProfiles.cs" />
+    <Compile Include="ClassCode\cities.cs" />
+    <Compile Include="ClassCode\City.cs" />
     <Compile Include="ClassCode\Class1.cs" />
     <Compile Include="ClassCode\connect.cs" />
     <Compile Include="ClassCode\countries.cs" />
