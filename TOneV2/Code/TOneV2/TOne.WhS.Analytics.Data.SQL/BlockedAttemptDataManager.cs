@@ -118,7 +118,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             AddFilter(whereBuilder, query.Filter.SaleZoneIds, "SaleZoneID");
 
             if (query.To.HasValue)
-                whereBuilder.AppendFormat("AND AttemptDateTime<= {0} ", query.To.Value);
+                whereBuilder.AppendFormat("AND AttemptDateTime<= '{0}' ", query.To.Value);
 
         }
         private void AddFilter<T>(StringBuilder whereBuilder, IEnumerable<T> values, string column)
