@@ -60,6 +60,7 @@ namespace TONEAPI
 
                 testresults =testresults + "Failed: Create Country|";
             }
+     
 
 
             /*Cities*/
@@ -71,7 +72,16 @@ namespace TONEAPI
 
             string _newCity = "{\"CityId\":\"0\",\"Name\":\"Liber22\",\"CountryId\":\"6\"}";
             string raddcity = _cities.Addcity(_newCity, TextBox7.Text);
-            testresults =testresults+ "Success: Create new City " + raddcity + "\n|"; 
+            testresults =testresults+ "Success: Create new City " + raddcity + "\n|";
+
+
+            /* SellingNumberPlan*/
+
+            SellingNumberPlanCode sc = new SellingNumberPlanCode();
+            string _NPpostdata = "{\"Query\":{},\"SortByColumnName\":\"Entity.SellingNumberPlanId\",\"IsSortDescending\":false,\"ResultKey\":null,\"DataRetrievalResultType\":0,\"FromRow\":1,\"ToRow\":30}";
+            string _NPresult = sc.GetSellingNunmberPlan(TextBox7.Text, "/api/WhS_BE/SellingNumberPlan/GetFilteredSellingNumberPlans", _NPpostdata);
+            TextBox5.Text = TextBox5.Text + _NPresult;
+
 
             /* Carrier Profiles */
             testresults =testresults+ "\n ---------------------------------------------\n";
