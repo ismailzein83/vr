@@ -11,9 +11,6 @@
 
                 </vr-columns>
             </vr-row>
-
-
-
             <vr-row removeline>
                 <vr-timerange on-ready="onTimeRangeDirectiveReady" type="dateTime" width="normal" period="today" from="fromDate" to="toDate" isrequired="true"></vr-timerange>
                 <span ng-show="advancedSelected">
@@ -36,7 +33,7 @@
         </div>
 
 
-        <vr-row>
+        <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="getData"></vr-button>
