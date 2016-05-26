@@ -23,7 +23,9 @@
             $scope.uploadCountires = function () {                
                 return VRCommon_CountryAPIService.UploadCountries($scope.file.fileId).then(function (response) {
                     VRNotificationService.showInformation(response)
-                });
+                }).catch(function (error) {
+                    VRNotificationService.showError(error.ExceptionMessage);
+                });;
             }
             $scope.hasUploadCountryPermission = function () {
                 return VRCommon_CountryAPIService.HasUploadCountryPermission();
