@@ -10,7 +10,6 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class CarrierProfileDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
-        readonly string[] columns = { "Settings", "Name", "SourceID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.CarrierProfile);
         string _Schema = "TOneWhS_BE";
         bool _UseTempTables;
@@ -20,35 +19,33 @@ namespace TOne.WhS.DBSync.Data.SQL
             _UseTempTables = useTempTables;
         }
 
+
         public void ApplyCarrierProfilesToTemp(List<CarrierProfile> carrierProfiles)
         {
-            string filePath = GetFilePathForBulkInsert();
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
+            DataTable dt = new DataTable();
+            dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
+            dt.Columns.Add("Settings", typeof(string));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("SourceID", typeof(string));
+           
+            dt.BeginLoadData();
+            foreach (var item in carrierProfiles)
             {
-                foreach (var c in carrierProfiles)
-                {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}", Vanrise.Common.Serializer.Serialize(c.Settings), c.Name, c.SourceId));
-                }
-                wr.Close();
+                DataRow row = dt.NewRow();
+                int index = 0;
+                row[index++] = Vanrise.Common.Serializer.Serialize(item.Settings);
+                row[index++] = item.Name;
+                row[index++] = item.SourceId;
+                dt.Rows.Add(row);
             }
-
-            Object preparedCarrierProfiles = new BulkInsertInfo
-            {
-                TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables),
-                DataFilePath = filePath,
-                ColumnNames = columns,
-                TabLock = true,
-                KeepIdentity = true,
-                FieldSeparator = '^',
-            };
-
-            InsertBulkToTable(preparedCarrierProfiles as BaseBulkInsertInfo);
+            dt.EndLoadData();
+            WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
 
         public Dictionary<string, CarrierProfile> GetCarrierProfiles(bool useTempTables)
         {
             return GetItemsText("SELECT [ID] ,[Settings]  ,[Name] ,[SourceID] FROM"
-                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), CarrierProfileMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x); 
+                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), CarrierProfileMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         private CarrierProfile CarrierProfileMapper(IDataReader reader)

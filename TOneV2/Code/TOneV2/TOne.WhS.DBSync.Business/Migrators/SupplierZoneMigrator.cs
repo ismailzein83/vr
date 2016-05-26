@@ -38,6 +38,7 @@ namespace TOne.WhS.DBSync.Business
             long startingId;
             ReserveIDRange(itemsToAdd.Count(), out startingId);
             dbSyncDataManager.ApplySupplierZonesToTemp(itemsToAdd, startingId);
+            TotalRows = itemsToAdd.Count;
         }
 
         public override IEnumerable<SourceZone> GetSourceItems()

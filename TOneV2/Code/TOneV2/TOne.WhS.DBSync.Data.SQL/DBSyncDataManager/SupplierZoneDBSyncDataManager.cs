@@ -10,7 +10,6 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class SupplierZoneDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
-        readonly string[] columns = { "CountryID", "Name", "SupplierID", "BED", "EED", "SourceID", "ID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.SupplierZone);
         string _Schema = "TOneWhS_BE";
         bool _UseTempTables;
@@ -22,27 +21,35 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public void ApplySupplierZonesToTemp(List<SupplierZone> supplierZones, long startingId)
         {
-            string filePath = GetFilePathForBulkInsert();
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
+            DataTable dt = new DataTable();
+            dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
+            dt.Columns.Add("CountryID", typeof(int));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("SupplierID", typeof(int));
+            dt.Columns.Add("BED", typeof(DateTime));
+            dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "EED", DataType = typeof(DateTime) });
+            dt.Columns.Add("SourceID", typeof(string));
+            dt.Columns.Add("ID", typeof(long));
+            dt.BeginLoadData();
+            foreach (var item in supplierZones)
             {
-                foreach (var c in supplierZones)
-                {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}", c.CountryId, c.Name, c.SupplierId, c.BED, c.EED, c.SourceId, startingId++));
-                }
-                wr.Close();
+                DataRow row = dt.NewRow();
+                int index = 0;
+                row[index++] = item.CountryId;
+                row[index++] = item.Name;
+                row[index++] = item.SupplierId;
+                row[index++] = item.BED;
+                if (item.EED == null)
+                    row[index++] = DBNull.Value;
+                else
+                    row[index++] = item.EED;
+                row[index++] = item.SourceId;
+                row[index++] = startingId++;
+
+                dt.Rows.Add(row);
             }
-
-            Object preparedSupplierZones = new BulkInsertInfo
-            {
-                TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables),
-                DataFilePath = filePath,
-                ColumnNames = columns,
-                TabLock = true,
-                KeepIdentity = true,
-                FieldSeparator = '^',
-            };
-
-            InsertBulkToTable(preparedSupplierZones as BaseBulkInsertInfo);
+            dt.EndLoadData();
+            WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
 
         public Dictionary<string, SupplierZone> GetSupplierZones(bool useTempTables)

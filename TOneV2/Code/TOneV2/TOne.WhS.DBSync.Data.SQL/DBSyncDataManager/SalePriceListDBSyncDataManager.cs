@@ -10,7 +10,6 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class SalePriceListDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
-        readonly string[] columns = { "OwnerType", "OwnerID", "CurrencyID", "SourceID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.SalePriceList);
         string _Schema = "TOneWhS_BE";
         bool _UseTempTables;
@@ -22,27 +21,25 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public void ApplySalePriceListsToTemp(List<SalePriceList> salePriceLists)
         {
-            string filePath = GetFilePathForBulkInsert();
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
+            DataTable dt = new DataTable();
+            dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
+            dt.Columns.Add("OwnerType", typeof(int));
+            dt.Columns.Add("OwnerID", typeof(int));
+            dt.Columns.Add("CurrencyID", typeof(int));
+            dt.Columns.Add("SourceID", typeof(string));
+            dt.BeginLoadData();
+            foreach (var item in salePriceLists)
             {
-                foreach (var c in salePriceLists)
-                {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}", (int)c.OwnerType, c.OwnerId, c.CurrencyId, c.SourceId));
-                }
-                wr.Close();
+                DataRow row = dt.NewRow();
+                int index = 0;
+                row[index++] = (int)item.OwnerType;
+                row[index++] = item.OwnerId;
+                row[index++] = item.CurrencyId;
+                row[index++] = item.SourceId;
+                dt.Rows.Add(row);
             }
-
-            Object preparedSalePriceLists = new BulkInsertInfo
-            {
-                TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables),
-                DataFilePath = filePath,
-                ColumnNames = columns,
-                TabLock = true,
-                KeepIdentity = true,
-                FieldSeparator = '^',
-            };
-
-            InsertBulkToTable(preparedSalePriceLists as BaseBulkInsertInfo);
+            dt.EndLoadData();
+            WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
 
         public Dictionary<string, SalePriceList> GetSalePriceLists(bool useTempTables)

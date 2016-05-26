@@ -10,7 +10,6 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class CurrencyExchangeRateDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
-        readonly string[] columns = { "CurrencyID", "Rate", "ExchangeDate", "SourceID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.CurrencyExchangeRate);
         string _Schema = "Common";
         bool _UseTempTables;
@@ -22,27 +21,26 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public void ApplyCurrencyExchangeRatesToTemp(List<CurrencyExchangeRate> currencyExchangeRates)
         {
-            string filePath = GetFilePathForBulkInsert();
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
+            DataTable dt = new DataTable();
+            dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
+            dt.Columns.Add("CurrencyID", typeof(int));
+            dt.Columns.Add("Rate", typeof(decimal));
+            dt.Columns.Add("ExchangeDate", typeof(DateTime));
+            dt.Columns.Add("SourceID", typeof(string));
+           
+            dt.BeginLoadData();
+            foreach (var item in currencyExchangeRates)
             {
-                foreach (var c in currencyExchangeRates)
-                {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}", c.CurrencyId, c.Rate, c.ExchangeDate, c.SourceId));
-                }
-                wr.Close();
+                DataRow row = dt.NewRow();
+                int index = 0;
+                row[index++] = item.CurrencyId;
+                row[index++] = item.Rate;
+                row[index++] = item.ExchangeDate;
+                row[index++] = item.SourceId;
+                dt.Rows.Add(row);
             }
-
-            Object preparedCurrencyExchangeRates = new BulkInsertInfo
-            {
-                TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables),
-                DataFilePath = filePath,
-                ColumnNames = columns,
-                TabLock = true,
-                KeepIdentity = true,
-                FieldSeparator = '^',
-            };
-
-            InsertBulkToTable(preparedCurrencyExchangeRates as BaseBulkInsertInfo);
+            dt.EndLoadData();
+            WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
 
         public Dictionary<string, CurrencyExchangeRate> GetCurrencyExchangeRates(bool useTempTables)

@@ -39,7 +39,9 @@ namespace TOne.WhS.DBSync.Business
         {
             long startingId;
             ReserveIDRange(itemsToAdd.Count(), out startingId);
-            dbSyncDataManager.ApplySupplierPriceListsToTemp(itemsToAdd, startingId);
+            int insertStartingId = int.Parse(startingId.ToString());
+            dbSyncDataManager.ApplySupplierPriceListsToTemp(itemsToAdd, insertStartingId);
+            TotalRows = itemsToAdd.Count;
         }
 
         public override IEnumerable<SourcePriceList> GetSourceItems()

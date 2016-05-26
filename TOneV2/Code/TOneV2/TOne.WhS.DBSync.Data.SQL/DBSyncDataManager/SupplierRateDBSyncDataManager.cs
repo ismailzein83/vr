@@ -10,7 +10,6 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class SupplierRateDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
-        readonly string[] columns = { "PriceListID", "ZoneID", "CurrencyID", "NormalRate", "OtherRates", "BED", "EED", "SourceID", "ID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.SupplierRate);
         string _Schema = "TOneWhS_BE";
         bool _UseTempTables;
@@ -22,27 +21,43 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public void ApplySupplierRatesToTemp(List<SupplierRate> supplierRates, long startingId)
         {
-            string filePath = GetFilePathForBulkInsert();
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
+            DataTable dt = new DataTable();
+            dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
+            dt.Columns.Add("PriceListID", typeof(int));
+            dt.Columns.Add("ZoneID", typeof(string));
+            dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "CurrencyID", DataType = typeof(int) });
+            dt.Columns.Add("NormalRate", typeof(decimal));
+            dt.Columns.Add("OtherRates", typeof(string));
+            dt.Columns.Add("BED", typeof(DateTime));
+            dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "EED", DataType = typeof(DateTime) });
+            dt.Columns.Add("SourceID", typeof(string));
+            dt.Columns.Add("ID", typeof(long));
+
+            dt.BeginLoadData();
+            foreach (var item in supplierRates)
             {
-                foreach (var c in supplierRates)
-                {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", c.PriceListId, c.ZoneId, c.CurrencyId, c.NormalRate, Vanrise.Common.Serializer.Serialize(c.OtherRates), c.BED, c.EED, c.SourceId, startingId++));
-                }
-                wr.Close();
+                DataRow row = dt.NewRow();
+                int index = 0;
+                row[index++] = item.PriceListId;
+                row[index++] = item.ZoneId;
+                if (item.CurrencyId == null)
+                    row[index++] = DBNull.Value;
+                else
+                    row[index++] = item.CurrencyId;
+                row[index++] = item.NormalRate;
+                row[index++] = Vanrise.Common.Serializer.Serialize(item.OtherRates);
+                row[index++] = item.BED;
+                if (item.EED == null)
+                    row[index++] = DBNull.Value;
+                else
+                    row[index++] = item.EED;
+                row[index++] = item.SourceId;
+                row[index++] = startingId++;
+
+                dt.Rows.Add(row);
             }
-
-            Object preparedSupplierRates = new BulkInsertInfo
-            {
-                TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables),
-                DataFilePath = filePath,
-                ColumnNames = columns,
-                TabLock = true,
-                KeepIdentity = true,
-                FieldSeparator = '^',
-            };
-
-            InsertBulkToTable(preparedSupplierRates as BaseBulkInsertInfo);
+            dt.EndLoadData();
+            WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
 
         public Dictionary<string, SupplierRate> GetSupplierRates(bool useTempTables)

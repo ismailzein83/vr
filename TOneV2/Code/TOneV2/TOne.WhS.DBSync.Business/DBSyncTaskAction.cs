@@ -125,7 +125,6 @@ namespace TOne.WhS.DBSync.Business
 
                     case DBTableName.SaleRate:
                         iDBSyncDataManager = new SaleRateDBSyncDataManager(context.UseTempTables);
-                        migrationRequested = false;
                         break;
 
                     case DBTableName.SaleZone:

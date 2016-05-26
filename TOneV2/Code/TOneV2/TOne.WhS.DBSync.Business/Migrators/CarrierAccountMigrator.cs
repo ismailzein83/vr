@@ -33,6 +33,7 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<CarrierAccount> itemsToAdd)
         {
             dbSyncDataManager.ApplyCarrierAccountsToTemp(itemsToAdd);
+            TotalRows = itemsToAdd.Count;
 
         }
 
@@ -54,12 +55,13 @@ namespace TOne.WhS.DBSync.Business
 
 
             Currency currency = null;
-            if (allCurrencies != null)
+            if (allCurrencies != null && sourceItem.CurrencyId != null)
                 allCurrencies.TryGetValue(sourceItem.CurrencyId.ToString(), out currency);
 
-            if (carrierProfile != null && currency != null)
+            if (carrierProfile != null)
             {
-                carrierAccountSettings.CurrencyId = currency.CurrencyId;
+                if (currency != null)
+                    carrierAccountSettings.CurrencyId = currency.CurrencyId;
 
                 switch (sourceItem.ActivationStatus)
                 {
@@ -99,9 +101,6 @@ namespace TOne.WhS.DBSync.Business
 
 
                 carrierAccountSettings.Mask = sourceItem.CarrierMask;
-                int? sellingNumberPlanId = null;
-                if (accountType != CarrierAccountType.Supplier)
-                    sellingNumberPlanId = Context.DefaultSellingNumberPlanId;
 
                 return new CarrierAccount
                 {
@@ -110,7 +109,7 @@ namespace TOne.WhS.DBSync.Business
                     CarrierProfileId = carrierProfile.CarrierProfileId,
                     CustomerSettings = carrierAccountCustomerSettings,
                     NameSuffix = (String.IsNullOrEmpty(sourceItem.NameSuffix) ? carrierProfile.SourceId : sourceItem.NameSuffix),
-                    SellingNumberPlanId = sellingNumberPlanId,
+                    SellingNumberPlanId = Context.DefaultSellingNumberPlanId,
                     SupplierSettings = carrierAccountSupplierSettings,
                     SourceId = sourceItem.SourceId
                 };

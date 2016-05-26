@@ -32,8 +32,9 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
             var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
+                $scope.useTempTables = true;
                 $scope.migrationTables = UtilsService.getArrayEnum(WhS_BE_DBTableNameEnum);
-                $scope.migrationTablesSelectedValues = [];
+                $scope.migrationTablesSelectedValues = UtilsService.getArrayEnum(WhS_BE_DBTableNameEnum);
                 $scope.onSellingNumberPlanDirectiveReady = function (api) {
                     sellingNumberPlanDirectiveAPI = api;
                     sellingNumberPlanReadyPromiseDeferred.resolve();
@@ -71,6 +72,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                         $scope.connectionString = payload.data.ConnectionString;
                         $scope.useTempTables = payload.data.UseTempTables;
                         sellingNumberPlanId = payload.data.DefaultSellingNumberPlanId;
+                        $scope.migrationTablesSelectedValues = [];
                         angular.forEach(payload.data.MigrationRequestedTables, function (x) {
                             $scope.migrationTablesSelectedValues.push(UtilsService.getEnum(WhS_BE_DBTableNameEnum, 'value', x));
                         });

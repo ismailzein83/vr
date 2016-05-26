@@ -10,7 +10,6 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class CountryDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
-        readonly string[] columns = { "Name", "SourceID", "ID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.Country);
         string _Schema = "Common";
         bool _UseTempTables;
@@ -20,29 +19,26 @@ namespace TOne.WhS.DBSync.Data.SQL
             _UseTempTables = useTempTables;
         }
 
-        public void ApplyCountriesToTemp(List<Country> countries, int startingId)
+        public void ApplyCountriesToTemp(List<Country> countries, long startingId)
         {
-            string filePath = GetFilePathForBulkInsert();
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
+            DataTable dt = new DataTable();
+            dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("SourceID", typeof(string));
+            dt.Columns.Add("ID", typeof(int));
+           
+            dt.BeginLoadData();
+            foreach (var item in countries)
             {
-                foreach (var c in countries)
-                {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}", c.Name, c.SourceId, startingId++));
-                }
-                wr.Close();
+                DataRow row = dt.NewRow();
+                int index = 0;
+                row[index++] = item.Name;
+                row[index++] = item.SourceId;
+                row[index++] = startingId++;
+                dt.Rows.Add(row);
             }
-
-            Object preparedCountries = new BulkInsertInfo
-            {
-                TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables),
-                DataFilePath = filePath,
-                ColumnNames = columns,
-                TabLock = true,
-                KeepIdentity = true,
-                FieldSeparator = '^',
-            };
-
-            InsertBulkToTable(preparedCountries as BaseBulkInsertInfo);
+            dt.EndLoadData();
+            WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
 
         public Dictionary<string, Country> GetCountries(bool useTempTables)

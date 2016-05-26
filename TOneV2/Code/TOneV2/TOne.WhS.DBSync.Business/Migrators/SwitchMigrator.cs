@@ -26,6 +26,7 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<Switch> itemsToAdd)
         {
             dbSyncDataManager.ApplySwitchesToTemp(itemsToAdd);
+            TotalRows = itemsToAdd.Count;
         }
 
         public override IEnumerable<SourceSwitch> GetSourceItems()

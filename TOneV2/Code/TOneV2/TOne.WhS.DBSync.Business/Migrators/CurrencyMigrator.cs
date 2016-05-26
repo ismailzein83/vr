@@ -26,6 +26,7 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<Currency> itemsToAdd)
         {
             dbSyncDataManager.ApplyCurrenciesToTemp(itemsToAdd);
+            TotalRows = itemsToAdd.Count;
         }
 
         public override IEnumerable<SourceCurrency> GetSourceItems()

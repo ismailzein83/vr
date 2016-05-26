@@ -10,7 +10,6 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class SaleCodeDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
-        readonly string[] columns = { "Code", "ZoneID", "CodeGroupID", "BED", "EED", "SourceID", "ID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.SaleCode);
         string _Schema = "TOneWhS_BE";
         bool _UseTempTables;
@@ -22,27 +21,35 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public void ApplySaleCodesToTemp(List<SaleCode> saleCodes, long startingId)
         {
-            string filePath = GetFilePathForBulkInsert();
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
+            DataTable dt = new DataTable();
+            dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
+            dt.Columns.Add("Code", typeof(string));
+            dt.Columns.Add("ZoneID", typeof(long));
+            dt.Columns.Add("CodeGroupID", typeof(int));
+            dt.Columns.Add("BED", typeof(DateTime));
+            dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "EED", DataType = typeof(DateTime) });
+            dt.Columns.Add("SourceID", typeof(string));
+            dt.Columns.Add("ID", typeof(long));
+
+            dt.BeginLoadData();
+            foreach (var item in saleCodes)
             {
-                foreach (var c in saleCodes)
-                {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}", c.Code, c.ZoneId, c.CodeGroupId, c.BED, c.EED, c.SourceId, startingId++));
-                }
-                wr.Close();
+                DataRow row = dt.NewRow();
+                int index = 0;
+                row[index++] = item.Code;
+                row[index++] = item.ZoneId;
+                row[index++] = item.CodeGroupId;
+                row[index++] = item.BED;
+                if (item.EED == null)
+                    row[index++] = DBNull.Value;
+                else
+                    row[index++] = item.EED;
+                row[index++] = item.SourceId;
+                row[index++] = startingId++;
+                dt.Rows.Add(row);
             }
-
-            Object preparedSaleCodes = new BulkInsertInfo
-            {
-                TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables),
-                DataFilePath = filePath,
-                ColumnNames = columns,
-                TabLock = true,
-                KeepIdentity = true,
-                FieldSeparator = '^',
-            };
-
-            InsertBulkToTable(preparedSaleCodes as BaseBulkInsertInfo);
+            dt.EndLoadData();
+            WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
 
         public Dictionary<string, SaleCode> GetSaleCodes(bool useTempTables)

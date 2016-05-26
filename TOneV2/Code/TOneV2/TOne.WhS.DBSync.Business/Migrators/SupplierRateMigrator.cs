@@ -40,6 +40,7 @@ namespace TOne.WhS.DBSync.Business
             long startingId;
             ReserveIDRange(itemsToAdd.Count(), out startingId);
             dbSyncDataManager.ApplySupplierRatesToTemp(itemsToAdd, startingId);
+            TotalRows = itemsToAdd.Count;
         }
 
         public override IEnumerable<SourceRate> GetSourceItems()

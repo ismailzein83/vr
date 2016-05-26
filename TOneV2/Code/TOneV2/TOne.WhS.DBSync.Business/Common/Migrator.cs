@@ -5,11 +5,11 @@ using Vanrise.Entities.EntitySynchronization;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public abstract class Migrator<T, Q>:IMigrator where T : ISourceItem
+    public abstract class Migrator<T, Q> : IMigrator where T : ISourceItem
     {
         public string TableName { get; set; }
         public MigrationContext Context { get; set; }
-
+        public int TotalRows { get; set; }
         protected Migrator(MigrationContext context)
         {
             Context = context;
@@ -30,7 +30,7 @@ namespace TOne.WhS.DBSync.Business
                 }
                 AddItems(itemsToAdd);
             }
-            Context.WriteInformation("Migrating table '" + TableName + "' ended");
+            Context.WriteInformation(string.Format("Migrating table '" + TableName + "' ended: {0} rows ", TotalRows));
         }
 
         public abstract void FillTableInfo(bool useTempTables);

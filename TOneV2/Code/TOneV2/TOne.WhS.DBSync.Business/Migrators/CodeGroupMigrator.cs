@@ -30,6 +30,7 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<CodeGroup> itemsToAdd)
         {
             dbSyncDataManager.ApplyCodeGroupsToTemp(itemsToAdd);
+            TotalRows = itemsToAdd.Count;
         }
 
         public override IEnumerable<SourceCodeGroup> GetSourceItems()

@@ -10,7 +10,6 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class CurrencyDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
-        readonly string[] columns = { "Symbol", "Name", "SourceID" };
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.Currency);
         string _Schema = "Common";
         bool _UseTempTables;
@@ -22,27 +21,24 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public void ApplyCurrenciesToTemp(List<Currency> currencies)
         {
-            string filePath = GetFilePathForBulkInsert();
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
+            DataTable dt = new DataTable();
+            dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
+            dt.Columns.Add("Symbol", typeof(string));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("SourceID", typeof(string));
+           
+            dt.BeginLoadData();
+            foreach (var item in currencies)
             {
-                foreach (var c in currencies)
-                {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}", c.Symbol, c.Name, c.SourceId));
-                }
-                wr.Close();
+                DataRow row = dt.NewRow();
+                int index = 0;
+                row[index++] = item.Symbol;
+                row[index++] = item.Name;
+                row[index++] = item.SourceId;
+                dt.Rows.Add(row);
             }
-
-            Object preparedCurrencies = new BulkInsertInfo
-            {
-                TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables),
-                DataFilePath = filePath,
-                ColumnNames = columns,
-                TabLock = true,
-                KeepIdentity = true,
-                FieldSeparator = '^',
-            };
-
-            InsertBulkToTable(preparedCurrencies as BaseBulkInsertInfo);
+            dt.EndLoadData();
+            WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
 
         public Dictionary<string, Currency> GetCurrencies(bool useTempTables)
