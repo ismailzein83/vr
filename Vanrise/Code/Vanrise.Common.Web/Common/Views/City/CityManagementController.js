@@ -2,9 +2,9 @@
 
     "use strict";
 
-    cityManagementController.$inject = ['$scope', 'VRCommon_CityService', 'UtilsService', 'VRUIUtilsService'];
+    cityManagementController.$inject = ['$scope', 'VRCommon_CityService','VRCommon_CityAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function cityManagementController($scope, VRCommon_CityService, UtilsService, VRUIUtilsService) {
+    function cityManagementController($scope, VRCommon_CityService, VRCommon_CityAPIService, UtilsService, VRUIUtilsService) {
         var gridAPI;
         var filter = {};
 
@@ -19,7 +19,9 @@
                 getFilterObject();
                 return gridAPI.loadGrid(filter);
             };
-
+            $scope.hasAddCityPermission = function () {
+                return VRCommon_CityAPIService.HasAddCityPermission();
+            };
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();

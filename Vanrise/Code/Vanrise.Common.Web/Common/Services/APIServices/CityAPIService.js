@@ -24,11 +24,16 @@
         function UpdateCity(cityObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "UpdateCity"), cityObject);
         }
+
+        function HasEditCityPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['UpdateCity']));
+        }
+
         function AddCity(cityObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "AddCity"), cityObject);
         }
 
-        function HasNewCityPermission() {
+        function HasAddCityPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['AddCity']));
         }
 
@@ -37,11 +42,12 @@
         }
 
         return ({
-            HasNewCityPermission: HasNewCityPermission,
+            HasAddCityPermission: HasAddCityPermission,
             GetFilteredCities: GetFilteredCities,
             GetCitiesInfo: GetCitiesInfo,
             GetCity: GetCity,
             UpdateCity: UpdateCity,
+            HasEditCityPermission:HasEditCityPermission,
             AddCity: AddCity,
             GetCountryIdByCityIds: GetCountryIdByCityIds
         });

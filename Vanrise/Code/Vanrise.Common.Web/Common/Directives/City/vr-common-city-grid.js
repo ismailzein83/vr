@@ -64,8 +64,13 @@ function (UtilsService, VRNotificationService, VRCommon_CityAPIService, VRCommon
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
-                clicked: editCity
-            }];
+                clicked: editCity,
+                haspermission: hasEditCityPermission
+                }];
+        }
+
+        function hasEditCityPermission() {
+            return VRCommon_CityAPIService.HasEditCityPermission();
         }
 
         function editCity(cityObj) {
