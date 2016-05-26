@@ -8,7 +8,7 @@
                         <vr-choice isselected="advancedSelected">Advanced</vr-choice>
                     </vr-choices>
 
-                    <vr-row>
+                    <vr-row removeline>
                         <vr-columns width="normal">
                             <vr-select label="Number Type"
                                        datasource="phoneNumberTypes"
@@ -45,7 +45,7 @@
             </vr-actionbar>
         </vr-row>
     </vr-form>
-    <vr-row>
+    <vr-row >
         <vr-columns width="fullrow">
             <vr-whs-cdrprocessing-normalizationrule-grid on-ready="onDirectiveGridReady"></vr-whs-cdrprocessing-normalizationrule-grid>
         </vr-columns>
