@@ -56,8 +56,8 @@ namespace TOne.WhS.Analytics.Data.SQL
             AddGroupingToQuery(groupByBuilder);
             queryBuilder.Append(String.Format(@"
                     SELECT   #SELECTCOLUMNPART#
-                    FROM [TOneWhS_CDR].[CDRInvalid]
-                        WITH(NOLOCK ,INDEX(IX_CDRInvalid_Attempt)) WHERE ( SupplierID is NULL AND DurationInSeconds=0 AND  Attempt>= @FromDate AND (Attempt<= @ToDate OR @ToDate IS NULL))  
+                    FROM [TOneWhS_CDR].[BillingCDR_Invalid]
+                        WITH(NOLOCK ,INDEX(BillingCDR_Invalid_AttemptDateTime)) WHERE ( SupplierID is NULL AND DurationInSeconds=0 AND  AttemptDateTime>= @FromDate AND (AttemptDateTime<= @ToDate OR @ToDate IS NULL))  
                         #WHEREPART#  
                         #GROUPBYPART# 
                         "));
@@ -99,7 +99,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         private void AddSelectColumnToQuery(StringBuilder selectColumnBuilder)
         {
-            selectColumnBuilder.Append(@" CustomerID,SaleZoneID,ReleaseCode,ReleaseSource,Count (*) AS BlockedAttempts, Min(Attempt) AS FirstAttempt, Max(Attempt) AS LastAttempt ");
+            selectColumnBuilder.Append(@" CustomerID,SaleZoneID,ReleaseCode,ReleaseSource,Count (*) AS BlockedAttempts, Min(AttemptDateTime) AS FirstAttempt, Max(AttemptDateTime) AS LastAttempt ");
             if (filter.GroupByNumber)
                 selectColumnBuilder.Append(",CDPN,CGPN");
         }
