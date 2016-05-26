@@ -121,8 +121,8 @@ namespace TOne.WhS.BusinessEntity.Business
             Dictionary<string, string> addedCountriesByCodeGroup = new Dictionary<string, string>();
             while (count < worksheet.Cells.Rows.Count)
             {
-                string codeGroup = worksheet.Cells[count, 0].StringValue;
-                string country = worksheet.Cells[count, 1].StringValue;
+                string codeGroup = worksheet.Cells[count, 0].StringValue.Trim();
+                string country = worksheet.Cells[count, 1].StringValue.Trim();
                 if (!addedCountriesByCodeGroup.ContainsKey(codeGroup))
                     addedCountriesByCodeGroup.Add(codeGroup, country);
                 count++;
