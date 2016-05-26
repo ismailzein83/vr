@@ -89,6 +89,21 @@ namespace TONEAPI.ClassCode
 
         }
 
+        // Add Selling Numbering Plan 
+        public String AddSellingNumberPlan(String _PostData, String _Token, string _api)
+        {
+            string endPoint = "http://192.168.110.195:8585" + _api;
+            string RaddSellingNumberPlan;
+
+            var client = new RestClient(endpoint: endPoint,
+                            method: HttpVerb.POST);
+            client.PostData = _PostData;
+            client.ContentType = "application/json;charset=UTF-8";
+            RaddSellingNumberPlan = client.MakeRequested(_PostData, _Token);
+            return RaddSellingNumberPlan;
+        }
+  
+    
 
 
     }

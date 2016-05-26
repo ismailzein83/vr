@@ -80,8 +80,15 @@ namespace TONEAPI
             SellingNumberPlanCode sc = new SellingNumberPlanCode();
             string _NPpostdata = "{\"Query\":{},\"SortByColumnName\":\"Entity.SellingNumberPlanId\",\"IsSortDescending\":false,\"ResultKey\":null,\"DataRetrievalResultType\":0,\"FromRow\":1,\"ToRow\":30}";
             string _NPresult = sc.GetSellingNunmberPlan(TextBox7.Text, "/api/WhS_BE/SellingNumberPlan/GetFilteredSellingNumberPlans", _NPpostdata);
-           
-            testresults = testresults + "\n ---------------------------------------------\n";
+
+            string _newSellingNumberPlan = "{\"SellingNumberPlanId\":0,\"Name\":\"test3\"}";
+            string raddSellingNP = sc.AddSellingNumberPlan(_newSellingNumberPlan, TextBox7.Text, "/api/WhS_BE/SellingNumberPlan/AddSellingNumberPlan");
+            TextBox5.Text = TextBox5.Text + raddSellingNP;
+
+
+     
+       testresults = testresults + "\n ---------------------------------------------\n";
+     
             testresults = testresults + _NPresult;
 
             /* Carrier Profiles */
