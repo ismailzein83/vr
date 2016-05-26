@@ -85,11 +85,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         importedZone.RecentZoneName = recentZoneName;
                 }
 
-                else if (importedZone.NewZones != null && importedZone.NewZones.Count() > 0 && importedZone.ExistingZones.All(item => item.ExistingCodes.All(itm => itm.EED.HasValue && itm.ChangedCode == null)))
+                else if (importedZone.NewZones != null && importedZone.NewZones.Count() > 0 && importedZone.ExistingZones.All(item => item.ExistingCodes.All(itm => itm.EED.HasValue)))
                     importedZone.ChangeType = ZoneChangeType.New;
             }
 
-            else if (importedZone.NewZones != null && importedZone.NewZones.Count() > 0 && importedZone.ExistingZones.All(item => item.ExistingCodes.All(itm => itm.EED.HasValue && itm.ChangedCode == null)))
+            else if (importedZone.NewZones != null && importedZone.NewZones.Count() > 0 && importedZone.ExistingZones.All(item => item.ExistingCodes.All(itm => itm.EED.HasValue)))
                 importedZone.ChangeType= ZoneChangeType.New;
 
             else if (importedZone.ExistingZones != null && importedZone.ExistingZones.Any(item => item.ChangedZone != null))
