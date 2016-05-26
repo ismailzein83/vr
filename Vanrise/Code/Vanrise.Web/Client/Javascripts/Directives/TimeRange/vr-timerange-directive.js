@@ -56,7 +56,6 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                + '<vr-columns width="' + attrs.width + '">'
                + '    <vr-datetimepicker type="' + attrs.type + '" value="ctrltimerange.to" label="To" customvalidate="validateDateTime()" isrequired="ctrltimerange.isrequired" ' + onblurchanged + '></vr-datetimepicker>'
                + '</vr-columns>'
-               +'</vr-row>'
     }
 
     function timeRangeCtor(ctrl, $scope, $attrs) {
