@@ -223,7 +223,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     if (ctrl.groupingDimensions.length > 0)
                         ctrl.sortField = 'DimensionValues[0].Name';
                     else
-                        ctrl.sortField = 'MeasureValues.' + ctrl.measures[0];
+                        ctrl.sortField = 'MeasureValues.' + ctrl.measures[0] + '.Value';
 
                     var queryFinalized = {
                         Filters: payLoad.DimensionFilters,

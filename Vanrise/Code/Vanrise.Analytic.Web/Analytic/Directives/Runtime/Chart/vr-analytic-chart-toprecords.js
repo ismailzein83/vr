@@ -78,7 +78,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                                             chartRecord["DimensionValue"] = dimensionName;
                                             chartData.push(chartRecord);
                                         }
-                                        chartRecord[ctrl.measures[m].MeasureName] = response.Data[i].MeasureValues[ctrl.measures[m].MeasureName];
+                                        chartRecord[ctrl.measures[m].MeasureName] = response.Data[i].MeasureValues[ctrl.measures[m].MeasureName].Value;
                                     }
                                 }
                                 var chartDefinition = {
@@ -153,7 +153,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                 if (ctrl.groupingDimensions.length > 0)
                     ctrl.sortField = 'DimensionValues[0].Name';
                 else
-                    ctrl.sortField = 'MeasureValues.' + ctrl.measures[0].MeasureName;
+                    ctrl.sortField = 'MeasureValues.' + ctrl.measures[0].MeasureName + '.Value';
 
                 var queryFinalized = {
                     Filters: payLoad.DimensionFilters,

@@ -8,7 +8,11 @@ namespace Vanrise.Analytic.Entities
     /// <summary>
     /// Key Measure Name, Value measure value
     /// </summary>
-    public class MeasureValues : Dictionary<string, object>
+    public class MeasureValues : Dictionary<string, MeasureValue>
     {
+    }
+    public class MeasureValue
+    {
+        public object Value { get; set; }
     }
 }

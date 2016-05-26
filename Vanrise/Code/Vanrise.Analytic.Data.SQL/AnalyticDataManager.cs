@@ -714,7 +714,7 @@ namespace Vanrise.Analytic.Data.SQL
             foreach (var measureName in measureFields)
             {
                 var measure = GetMeasureConfig(measureName);
-                measureValues.Add(measureName, GetReaderValue<Object>(reader, GetMeasureColumnAlias(measure)));
+                measureValues.Add(measureName, new MeasureValue { Value = GetReaderValue<Object>(reader, GetMeasureColumnAlias(measure)) });
             }
             return measureValues;
         }

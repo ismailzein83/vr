@@ -25,7 +25,7 @@ namespace Vanrise.Analytic.Business
             if (input.SortByColumnName.Contains("MeasureValues"))
             {
                 string[] measureProperty = input.SortByColumnName.Split('.');
-                input.SortByColumnName = string.Format(@"{0}[""{1}""]", measureProperty[0], measureProperty[1]);
+                input.SortByColumnName = string.Format(@"{0}[""{1}""].Value", measureProperty[0], measureProperty[1]);
             }
             dataManager.AnalyticTableQueryContext = new AnalyticTableQueryContext(input.Query);
            
@@ -247,7 +247,7 @@ namespace Vanrise.Analytic.Business
                 var measureConfig = analyticTableQueryContext.GetMeasureConfig(measureName);
                 var getMeasureValueContext = new GetMeasureValueContext(analyticTableQueryContext,  dbRecord, allDimensionNames);
                 var measureValue = measureConfig.Evaluator.GetMeasureValue(getMeasureValueContext);
-                analyticRecord.MeasureValues.Add(measureName, measureValue);
+                analyticRecord.MeasureValues.Add(measureName, new MeasureValue { Value = measureValue });
             }
             return analyticRecord;
         }
@@ -290,13 +290,13 @@ namespace Vanrise.Analytic.Business
                     if (orderByMeasures == null || orderByMeasures.Count() == 0)
                         throw new NullReferenceException("orderByMeasures");
                     string firstMeasureName = orderByMeasures[0];
-                    IOrderedEnumerable<AnalyticRecord> orderedRecords = allRecords.OrderByDescending(record => record.MeasureValues[firstMeasureName]);
+                    IOrderedEnumerable<AnalyticRecord> orderedRecords = allRecords.OrderByDescending(record => record.MeasureValues[firstMeasureName].Value);
                     if (orderByMeasures.Count > 1)
                     {
                         for (int i = 1; i < orderByMeasures.Count; i++)
                         {
                             string measureName = orderByMeasures[i];
-                            orderedRecords = orderedRecords.ThenByDescending(itm => itm.MeasureValues[measureName]);
+                            orderedRecords = orderedRecords.ThenByDescending(itm => itm.MeasureValues[measureName].Value);
                         }
                     }
                     return new AnalyticSummaryBigResult<AnalyticRecord>()
