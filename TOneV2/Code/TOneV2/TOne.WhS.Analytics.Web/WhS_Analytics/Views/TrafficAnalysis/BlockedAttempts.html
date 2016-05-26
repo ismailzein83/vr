@@ -11,34 +11,27 @@
 
                 </vr-columns>
             </vr-row>
+
+
+
             <vr-row removeline>
-                <vr-columns width="fullrow">
-                    <vr-timerange on-ready="onTimeRangeDirectiveReady" type="dateTime" width="normal" period="today" from="fromDate" to="toDate" isrequired="true"></vr-timerange>
+                <vr-timerange on-ready="onTimeRangeDirectiveReady" type="dateTime" width="normal" period="today" from="fromDate" to="toDate" isrequired="true"></vr-timerange>
+                <span ng-show="advancedSelected">
+                    <vr-whs-be-switch-selector normal-col-num="2" on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selectorv>
+                </span>
+                <span ng-show="advancedSelected">
+                    <vr-whs-be-customer-selector normal-col-num="2" ismultipleselection on-ready="onCustomerAccountDirectiveReady"></vr-whs-be-customer-selector>
+                </span>
+
+
+                <span ng-show="advancedSelected">
+                    <vr-whs-be-salezone-selector normal-col-num="2" ismultipleselection on-ready="onSaleZoneDirectiveReady" />
+                </span>
+
+                <vr-columns width="normal" ng-show="advancedSelected">
+                    <vr-switch value="groupbyNumber" label="Group by Number"></vr-switch>
                 </vr-columns>
-            </vr-row>
-            <vr-row removeline>
-                <vr-columns width="fullrow">
-                    <vr-row>
 
-                        <vr-columns width="normal" ng-show="advancedSelected">
-                            <vr-whs-be-switch-selector on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>
-                        </vr-columns>
-
-                        <span ng-show="advancedSelected">
-                            <vr-whs-be-customer-selector normal-col-num="2" ismultipleselection on-ready="onCustomerAccountDirectiveReady"></vr-whs-be-customer-selector>
-                        </span>
-
-
-                        <span ng-show="advancedSelected">
-                            <vr-whs-be-salezone-selector normal-col-num="2" ismultipleselection on-ready="onSaleZoneDirectiveReady" />
-                        </span>
-
-                        <vr-columns width="normal" ng-show="advancedSelected">
-                            <vr-switch value="groupbyNumber" label="Group by Number"></vr-switch>
-                        </vr-columns>
-
-                    </vr-row>
-                </vr-columns>
             </vr-row>
         </div>
 
