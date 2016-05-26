@@ -12,32 +12,26 @@
                 </vr-columns>
             </vr-row>
             <vr-row removeline>
-                <vr-columns width="fullrow">
-                    <vr-row>
+                <vr-timerange on-ready="onTimeRangeDirectiveReady" type="dateTime" width="normal" period="today" from="fromDate" to="toDate" isrequired="true"></vr-timerange>
 
-                        <vr-timerange on-ready="onTimeRangeDirectiveReady" type="dateTime" width="normal" period="today" from="fromDate" to="toDate" isrequired="true"></vr-timerange>
+                <span>
+                    <vr-whs-analytics-callstatus-selector normal-col-num="2" on-ready="onCallStatusDirectiveReady" isrequired="true"></vr-whs-analytics-callstatus-selector>
+                </span>
 
-                        <span>
-                            <vr-whs-analytics-callstatus-selector normal-col-num="2" on-ready="onCallStatusDirectiveReady" isrequired="true"></vr-whs-analytics-callstatus-selector>
-                        </span>
+                <span>
+                    <vr-whs-analytics-phonenumber-selector normal-col-num="2" on-ready="onPhoneNumberDirectiveReady" isrequired="true"></vr-whs-analytics-phonenumber-selector>
+                </span>
 
-                        <span>
-                            <vr-whs-analytics-phonenumber-selector normal-col-num="2" on-ready="onPhoneNumberDirectiveReady" isrequired="true"></vr-whs-analytics-phonenumber-selector>
-                        </span>
-
-                        <vr-columns width="normal" ng-show="advancedSelected">
-                            <vr-textbox type="number" value="nRecords" label="Repeated More Than" isrequired></vr-textbox>
-                        </vr-columns>
-                        <span ng-show="advancedSelected">
-                            <vr-whs-be-switch-selector normal-col-num="2" on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>
-                        </span>
-
-                    </vr-row>
+                <vr-columns width="normal" ng-show="advancedSelected">
+                    <vr-textbox type="number" value="nRecords" label="Repeated More Than" isrequired></vr-textbox>
                 </vr-columns>
+                <span ng-show="advancedSelected">
+                    <vr-whs-be-switch-selector normal-col-num="2" on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>
+                </span>
             </vr-row>
         </div>
 
-        <vr-row>
+        <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
 
                 <div transclude-to="buttons">
