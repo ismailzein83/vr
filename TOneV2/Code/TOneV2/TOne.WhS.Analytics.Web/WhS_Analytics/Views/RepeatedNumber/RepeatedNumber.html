@@ -17,6 +17,14 @@
 
                         <vr-timerange on-ready="onTimeRangeDirectiveReady" type="dateTime" width="normal" period="today" from="fromDate" to="toDate" isrequired="true"></vr-timerange>
 
+                        <span>
+                            <vr-whs-analytics-callstatus-selector normal-col-num="2" on-ready="onCallStatusDirectiveReady" isrequired="true"></vr-whs-analytics-callstatus-selector>
+                        </span>
+
+                        <span>
+                            <vr-whs-analytics-phonenumber-selector normal-col-num="2" on-ready="onPhoneNumberDirectiveReady" isrequired="true"></vr-whs-analytics-phonenumber-selector>
+                        </span>
+
                         <vr-columns width="normal" ng-show="advancedSelected">
                             <vr-textbox type="number" value="nRecords" label="Repeated More Than" isrequired></vr-textbox>
                         </vr-columns>
@@ -24,13 +32,6 @@
                             <vr-whs-be-switch-selector normal-col-num="2" on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>
                         </span>
 
-                        <span ng-show="advancedSelected">
-                            <vr-whs-analytics-callstatus-selector normal-col-num="2" on-ready="onCallStatusDirectiveReady"></vr-whs-analytics-callstatus-selector>
-                        </span>
-
-                        <span ng-show="advancedSelected">
-                            <vr-whs-analytics-phonenumber-selector normal-col-num="2" on-ready="onPhoneNumberDirectiveReady"></vr-whs-analytics-phonenumber-selector>
-                        </span>
                     </vr-row>
                 </vr-columns>
             </vr-row>
