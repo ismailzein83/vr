@@ -69,6 +69,9 @@ app.directive('vrWhsAnalyticsPhonenumberSelector', ['WhS_Analytics_PhoneNumberEn
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
                 }
+                api.getSelectedValues = function () {
+                    return VRUIUtilsService.getIdSelectedIds('description', attrs, ctrl);
+                }
                 api.load = function (payload) {
                     var selectedIds;
                     if (payload != undefined) {

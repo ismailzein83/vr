@@ -73,7 +73,7 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
             To: $scope.toDate,
             RepeatedMorethan: $scope.nRecords,
             CDRType:  callStatusDirectiveAPI.getSelectedIds(),
-            PhoneNumber: phoneNumberDirectiveAPI.getSelectedIds()
+            PhoneNumber: phoneNumberDirectiveAPI.getSelectedValues()
         }
         console.log(query);
         return query;
@@ -123,7 +123,7 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
     function loadCallStatus() {
         var callStatusLoadPromiseDeferred = UtilsService.createPromiseDeferred();
         callStatusReadyPromiseDeferred.promise.then(function () {
-            var payload = { selectedIds: 2 }
+            var payload = { selectedIds: 0 }
             VRUIUtilsService.callDirectiveLoad(callStatusDirectiveAPI, payload , callStatusLoadPromiseDeferred);
         });
         return callStatusLoadPromiseDeferred.promise;
