@@ -26,10 +26,12 @@ namespace Vanrise.Analytic.Entities
 
         bool IsGroupingDimensionIncluded(string dimensionName);
 
+        bool IsFilterIncluded(string filterName);
+
         List<dynamic> GetAllDimensionValues(string dimensionName);
 
         List<dynamic> GetDistinctDimensionValues(string dimensionName);
-        
+
         DateTime GetQueryFromTime();
 
         DateTime GetQueryToTime();

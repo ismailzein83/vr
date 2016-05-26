@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Business
 {
@@ -12,16 +13,19 @@ namespace Vanrise.Analytic.Business
         AnalyticQuery _query;
         DBAnalyticRecord _sqlRecord;
         HashSet<string> _allDimensions;
-
-        public GetMeasureValueContext(AnalyticQuery query, DBAnalyticRecord sqlRecord, HashSet<string> allDimensions)
+        IAnalyticTableQueryContext _analyticTableQueryContext;
+        public GetMeasureValueContext(IAnalyticTableQueryContext analyticTableQueryContext, DBAnalyticRecord sqlRecord, HashSet<string> allDimensions)
         {
-            if (query == null)
-                throw new ArgumentNullException("query");
+            if (analyticTableQueryContext == null)
+                throw new ArgumentNullException("analyticTableQueryContext");
+            if (analyticTableQueryContext.Query == null)
+                throw new ArgumentNullException("analyticTableQueryContext.Query");
             if (sqlRecord == null)
                 throw new ArgumentNullException("sqlRecord");
             if (allDimensions == null)
                 throw new ArgumentNullException("allDimensions");
-            _query = query;
+            _analyticTableQueryContext = analyticTableQueryContext;
+            _query = _analyticTableQueryContext.Query;
             _sqlRecord = sqlRecord;
             _allDimensions = allDimensions;
         }
@@ -41,7 +45,7 @@ namespace Vanrise.Analytic.Business
         public List<dynamic> GetAllDimensionValues(string dimensionName)
         {
             DBAnalyticRecordGroupingValue groupingValue;
-            if(!_sqlRecord.GroupingValuesByDimensionName.TryGetValue(dimensionName, out groupingValue))
+            if (!_sqlRecord.GroupingValuesByDimensionName.TryGetValue(dimensionName, out groupingValue))
                 throw new NullReferenceException(String.Format("groupingValue. dimensionName '{0}'", dimensionName));
             var allValues = groupingValue.AllValues;
             if (allValues == null)
@@ -62,6 +66,11 @@ namespace Vanrise.Analytic.Business
         public DateTime GetQueryToTime()
         {
             return _query.ToTime.HasValue ? _query.ToTime.Value : DateTime.Now;
+        }
+
+        public bool IsFilterIncluded(string filterName)
+        {
+            return _analyticTableQueryContext.GetDimensionNames(_query.FilterGroup).Contains(filterName);
         }
     }
 }

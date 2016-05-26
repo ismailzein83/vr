@@ -245,7 +245,7 @@ namespace Vanrise.Analytic.Business
             foreach (var measureName in measureNames)
             {
                 var measureConfig = analyticTableQueryContext.GetMeasureConfig(measureName);
-                var getMeasureValueContext = new GetMeasureValueContext(analyticTableQueryContext.Query, dbRecord, allDimensionNames);
+                var getMeasureValueContext = new GetMeasureValueContext(analyticTableQueryContext,  dbRecord, allDimensionNames);
                 var measureValue = measureConfig.Evaluator.GetMeasureValue(getMeasureValueContext);
                 analyticRecord.MeasureValues.Add(measureName, measureValue);
             }
