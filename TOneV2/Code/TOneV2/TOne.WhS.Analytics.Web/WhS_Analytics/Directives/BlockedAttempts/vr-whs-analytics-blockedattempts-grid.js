@@ -30,7 +30,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_BlockedAttemptsAPIS
         this.initializeController = initializeController;
 
         function initializeController() {
-           
+
             $scope.blockedAttempts = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -50,6 +50,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_BlockedAttemptsAPIS
                 }
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                ctrl.showGrid = true;
                 return WhS_Analytics_BlockedAttemptsAPIService.GetBlockedAttemptsData(dataRetrievalInput)
                                  .then(function (response) {
                                      $scope.shownumber = ctrl.shownumber;
