@@ -148,3 +148,27 @@ when not matched by target then
 	insert([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
 	values(s.[ID],s.[Name],s.[ConfigType],s.[Editor],s.[BehaviorFQTN],s.[Settings]);
 set identity_insert [common].[TemplateConfig] off;
+
+--[common].[Setting]--------------------1 to 100----------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [common].[Setting] on;
+;with cte_data([Id],[Name],[Type],[Category],[Settings],[Data])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'System Mail','VR_Common_Email','General','{"Editor":"vr-common-emailtemplate-settings-editor"}','{"$type":"Vanrise.Entities.EmailSettingData, Vanrise.Entities","SenderEmail":"testemail.vr@gmail.com","SenderPassword":"gmer2juIda","Host":"smtp.gmail.com","Port":587,"Timeout":10000}'),
+(2,'System Currency','VR_Common_BaseCurrency','General','{"Editor":"vr-common-currency-settings-editor"}','{"$type":"Vanrise.Entities.CurrencySettingData, Vanrise.Entities","CurrencyId":1}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[Type],[Category],[Settings],[Data]))
+merge	[common].[Setting] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data]
+when not matched by target then
+	insert([Id],[Name],[Type],[Category],[Settings],[Data])
+	values(s.[Id],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data])
+when not matched by source then
+	delete;
+set identity_insert [common].[Setting] off;
