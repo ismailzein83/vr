@@ -8,13 +8,26 @@ namespace TONEAPI.ClassCode
 {
     public class Switches
     {
-
-        public class SwitchEntities
+        public class Switchobj
+        {
+            public object ResultKey { get; set; }
+            public IList<SwitchDatum> switchData { get; set; }
+            public int TotalCount { get; set; }
+        }
+        public class SwitchDatum
+        {
+            public SwitchEntity switchEntity { get; set; }
+        }
+        public class SwitchEntity
         {
             public int SwitchId { get; set; }
             public string Name { get; set; }
             public object SourceId { get; set; }
         }
+
+      
+
+      
 
         public string getswitches(RestClient rs, Uri ur, string token)
         {
@@ -32,11 +45,10 @@ namespace TONEAPI.ClassCode
             try
             {
                 var objResponse1 =
-                            JsonConvert.DeserializeObject<SwitchClass>(switchdata);
+                            JsonConvert.DeserializeObject<Switchobj>(switchdata);
 
 
-                SwitchEntity cp = objResponse1.switchData[1].switchEntity;
-            
+               
       
          
                 result = result + "Success: get Carrier Profiles  \n|";

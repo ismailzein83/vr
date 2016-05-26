@@ -5,7 +5,7 @@ using System.Web;
 
 namespace TONEAPI.ClassCode
 {
-    
+
     public class SwitchEntity
     {
         public int SwitchId { get; set; }
@@ -21,7 +21,7 @@ namespace TONEAPI.ClassCode
     public class SwitchClass
     {
         public object ResultKey { get; set; }
-        public List<SwitchDatum> switchData { get; set; }
+        public IList<SwitchDatum> switchData { get; set; }
         public int TotalCount { get; set; }
     }
 }

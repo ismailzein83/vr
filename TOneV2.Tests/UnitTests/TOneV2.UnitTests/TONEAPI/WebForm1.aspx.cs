@@ -72,18 +72,20 @@ namespace TONEAPI
 
             string _newCity = "{\"CityId\":\"0\",\"Name\":\"Liber22\",\"CountryId\":\"6\"}";
             string raddcity = _cities.Addcity(_newCity, TextBox7.Text);
-            testresults =testresults+ "Success: Create new City " + raddcity + "\n|";
-
+            testresults =testresults+ "Success: Create new City " + raddcity ;
+            testresults = testresults + "\n ---------------------------------------------\n|";
 
             /* SellingNumberPlan*/
             TextBox4.Text = TextBox4.Text + "Selling Number Plan \n";
+           
             SellingNumberPlanCode sc = new SellingNumberPlanCode();
             string _NPpostdata = "{\"Query\":{},\"SortByColumnName\":\"Entity.SellingNumberPlanId\",\"IsSortDescending\":false,\"ResultKey\":null,\"DataRetrievalResultType\":0,\"FromRow\":1,\"ToRow\":30}";
             string _NPresult = sc.GetSellingNunmberPlan(TextBox7.Text, "/api/WhS_BE/SellingNumberPlan/GetFilteredSellingNumberPlans", _NPpostdata);
+            testresults = testresults + "Success: Selling Number Plan " + _NPresult + "\n|";
 
             string _newSellingNumberPlan = "{\"SellingNumberPlanId\":0,\"Name\":\"test3\"}";
             string raddSellingNP = sc.AddSellingNumberPlan(_newSellingNumberPlan, TextBox7.Text, "/api/WhS_BE/SellingNumberPlan/AddSellingNumberPlan");
-            TextBox5.Text = TextBox5.Text + raddSellingNP;
+            testresults = testresults + "Success: create Selling Number Plan " + raddSellingNP + "\n|";
 
 
      
