@@ -17,7 +17,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             IImportSPLContext importSplContext = context.GetExtension<IImportSPLContext>();
 
             ExistingZone existingZone = context.Target as ExistingZone;
-            return (existingZone.ChangedZone == null || existingZone.ChangedZone.EED >= DateTime.Now.Add(importSplContext.CodeCloseDateOffset));
+            return (Vanrise.Common.ExtensionMethods.VRLessThan(DateTime.Today.Add(importSplContext.CodeCloseDateOffset),existingZone.ChangedZone.EED));
         }
         public override string GetMessage(IRuleTarget target)
         {

@@ -2,7 +2,6 @@
 using System.Activities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using System.Linq;
-using System.Collections.Generic;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {

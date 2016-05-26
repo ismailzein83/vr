@@ -16,12 +16,13 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             ImportedCode importedCode = context.Target as ImportedCode;
 
-            if (importedCode.ChangeType == CodeChangeType.NotChanged || importedCode.ChangeType == CodeChangeType.Deleted)
-                return true;
+            if (importedCode.ChangeType == CodeChangeType.New || importedCode.ChangeType == CodeChangeType.Moved)
+            {
+                IImportSPLContext importSplContext = context.GetExtension<IImportSPLContext>();
+                return (Vanrise.Common.ExtensionMethods.VRLessThan(DateTime.Today.Add(importSplContext.CodeCloseDateOffset), importedCode.BED));
+            }
 
-            IImportSPLContext importSplContext = context.GetExtension<IImportSPLContext>();
-
-            return (importedCode.BED >= DateTime.Now.Add(importSplContext.CodeCloseDateOffset));
+            return true;
         }
 
 

@@ -17,10 +17,10 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             ImportedZone importedZone = context.Target as ImportedZone;
 
-            if(importedZone.ChangeType == ZoneChangeType.New)
+            if(importedZone.ChangeType == ZoneChangeType.New || importedZone.ChangeType == ZoneChangeType.Renamed)
             {
                 IImportSPLContext importSplContext = context.GetExtension<IImportSPLContext>();
-                return (importedZone.BED >= DateTime.Now.Add(importSplContext.CodeCloseDateOffset));
+                return (Vanrise.Common.ExtensionMethods.VRLessThan(DateTime.Today.Add(importSplContext.CodeCloseDateOffset), importedZone.BED));
             }
 
             return true;

@@ -20,8 +20,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             ExistingCode existingCode = context.Target as ExistingCode;
 
-            return (existingCode.ChangedCode == null ||
-                    existingCode.ChangedCode.EED >= DateTime.Now.Add(importSplContext.CodeCloseDateOffset));
+            return (Vanrise.Common.ExtensionMethods.VRLessThan(DateTime.Today.Add(importSplContext.CodeCloseDateOffset), existingCode.ChangedCode.EED));
         }
 
         public override string GetMessage(IRuleTarget target)
