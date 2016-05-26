@@ -132,13 +132,13 @@
 
     };
  
-    var cellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" title="{{#CELLTOOLTIP#}}" >'
-        + ''
-      + '<a ng-if="#ISCLICKABLE#"  ng-class="#CELLCLASS#" ng-click="$parent.ctrl.onColumnClicked(colDef, dataItem)" style="cursor:pointer;"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</a>'
-      + '<a ng-if="#EXPENDABLECOLUMN#" ng-class="#CELLCLASS#" ng-click="$parent.ctrl.onDescriptionClicked(colDef, dataItem)" style="cursor:pointer;"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</a>'
-      + '<span ng-if="!#ISCLICKABLE# && !#EXPENDABLECOLUMN#" ng-style="::$parent.ctrl.cellLayoutStyle" ng-class="#CELLCLASS#"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</span>'
-      + ''
-   + '</div>';
+    var cellTemplateNormalContent = '<span ng-style="::$parent.ctrl.cellLayoutStyle" ng-class="#CELLCLASS#"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</span>';
+    var cellTemplateClickableContent = '<a ng-class="#CELLCLASS#" ng-click="$parent.ctrl.onColumnClicked(colDef, dataItem)" style="cursor:pointer;"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</a>';
+    var cellTemplateExpendableContent = '<a ng-class="#CELLCLASS#" ng-click="$parent.ctrl.onDescriptionClicked(colDef, dataItem)" style="cursor:pointer;"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</a>';
+
+    var cellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" title="{{#CELLTOOLTIP#}}" >'        
+                        + '#CELLCONTENT#'
+                     + '</div>';
 
     var summaryCellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" >'
         + ''
@@ -578,12 +578,18 @@
                 }else
                 {
                     var cellTemplate = currentColumn.cellTemplate;
+                    if (ctrl.hasExpendableColumn(currentColumn))
+                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCONTENT#", cellTemplateExpendableContent);
+                    else if (currentColumn.isClickableAttr != undefined)
+                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCONTENT#", cellTemplateClickableContent);
+                    else
+                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCONTENT#", cellTemplateNormalContent);
+                 
                     if (currentColumn.isFieldDynamic) {
                         cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLVALUE#", "ctrl.getCellValue(dataItem, colDef)");
                         cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLTOOLTIP#", "ctrl.getCellTooltip(dataItem, colDef)");
                         cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCLASS#", "ctrl.getCellClass(dataItem, colDef)");
                         cellTemplate = UtilsService.replaceAll(cellTemplate, "#ISCLICKABLE#", "ctrl.isColumnClickable(dataItem, colDef)");
-                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#EXPENDABLECOLUMN#", "ctrl.hasExpendableColumn(colDef)");
 
                     }
                     else {
@@ -591,16 +597,16 @@
                         cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLTOOLTIP#", "::" + dataItemColumnPropertyPath + ".tooltip");
                         cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCLASS#", "::" + dataItemColumnPropertyPath + ".cellClass");
                         cellTemplate = UtilsService.replaceAll(cellTemplate, "#ISCLICKABLE#", dataItemColumnPropertyPath + ".isClickable");
-                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#EXPENDABLECOLUMN#", dataItemColumnPropertyPath + ".expendableColumn");
 
                     }
                     cellTemplate = UtilsService.replaceAll(cellTemplate, "colDef", currentColumnHtml);
+                    cellTemplate = getCellTemplateWithFilter(cellTemplate, currentColumn);
                     ctrl.rowHtml += '<div class="vr-datagrid-cell">'
                         + '    <div class="vr-datagrid-celltext ">'
                        + cellTemplate
                      +'</div>'
                      + '</div>'
-                        + '</div>'; 
+                        + '</div>';
                 }
                 
             }        
@@ -691,7 +697,7 @@
             }
 
             function addBatchItemsToSource(items) {
-                var numberOfItems = pagingOnScrollEnabled ? getPageSize() : 10;//if paging on scroll is enabled, take the page size
+                var numberOfItems = pagingOnScrollEnabled ? getPageSize() : 50;//if paging on scroll is enabled, take the page size
                 for (var i = 0; i < numberOfItems; i++)
                 {
                     if(items.length > 0) {
