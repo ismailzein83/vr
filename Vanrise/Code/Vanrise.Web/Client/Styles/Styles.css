@@ -1824,6 +1824,11 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     pointer-events: none;
     opacity: 0.5;
 }
+
+vr-button[class*="divDisabled"] > div{
+    pointer-events: none;
+    opacity: 0.5;
+}
 /**************START Pagination*********/
 
 .pagination {
