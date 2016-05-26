@@ -56,7 +56,7 @@ namespace TONEAPI.ClassCode
                 // check 1 
                 if (LC.Count == ff.Count)
                 {
-                    result = result + " Success :  SellingNumberingPlanCount count correct  \n";
+                    result = result + " Success :  SellingNumberingPlanCount count correct  \n|";
                 }
 
 
@@ -71,7 +71,7 @@ namespace TONEAPI.ClassCode
                         correctcountry = false;
                 }
                 if (correctcountry)
-                    result = result + " Success : Selling NumberPlan equal SellingNumberPlan in DB  \n";
+                    result = result + " Success : Selling NumberPlan equal SellingNumberPlan in DB  \n|";
 
 
 
@@ -80,7 +80,7 @@ namespace TONEAPI.ClassCode
             catch
             {
 
-                result = result + "Failed: get SellingNumberPlan  \n";
+                result = result + "Failed: get SellingNumberPlan  \n|";
             }
 
 
