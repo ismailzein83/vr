@@ -58,7 +58,7 @@ namespace TONEAPI.ClassCode
                                // check 1 
                                if (LC.Count == ff.Count)
                                {
-                                   result = result + " Success :  City count correct  \n";
+                                   result = result + " Success :  City count correct  \n|";
                                }
 
 
@@ -73,7 +73,7 @@ namespace TONEAPI.ClassCode
                                        correctcountry = false;
                                }
                                if (correctcountry)
-                                   result = result + " Success : Cities equal Cities in DB  \n";
+                                   result = result + " Success : Cities equal Cities in DB  \n|";
    
                  
 
@@ -82,7 +82,7 @@ namespace TONEAPI.ClassCode
             catch
             {
 
-                result = result + "Failed: get cities  \n";
+                result = result + "Failed: get cities  \n|";
             }
 
             return result;
@@ -92,8 +92,8 @@ namespace TONEAPI.ClassCode
 
         // Add city To database 
 
-       
-        public String Addcountry( String  _PostData,String _Token  )
+
+        public String Addcity(String _PostData, String _Token)
         {
             string endPoint = "http://192.168.110.195:8585" + "/api/VRCommon/City/AddCity";
             string raddcountry;

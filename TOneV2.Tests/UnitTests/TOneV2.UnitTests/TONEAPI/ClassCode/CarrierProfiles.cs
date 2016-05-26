@@ -97,96 +97,45 @@ namespace TONEAPI.ClassCode
           //      List<Entity> entity = (List<Entity>)CPsettings.
 
                 string name = CPsettings.Company.ToString();
-                result = result + "Success: get Carrier Profiles  \n";
+                result = result + "Success: get Carrier Profiles  \n|";
 
-                return "Success :  Carrier Profile count correct  \n  Success: Carrier Profile Data Validation \n";
+                return "Success :  Carrier Profile count correct  \n  Success: Carrier Profile Data Validation \n|";
             }
             catch
             {
 
             }
-            return "Failed :  Carrier Profile count wrong  \n  Failed: Carrier Profile Data Validation \n";
+            return "Failed :  Carrier Profile count wrong  \n  Failed: Carrier Profile Data Validation \n|";
+        }
+
+        public string createprofile(RestClient rs, Uri ur, string token, string data)
+        {
+            string EndPoint = @"http://192.168.110.195:8585/api/WhS_BE/CarrierProfile/AddCarrierProfile";
+            var client = new RestClient(endpoint: EndPoint,
+                              method: HttpVerb.POST);
+                client.PostData = data;
+                client.ContentType = "application/json;charset=UTF-8";
+
+         
+            //string paramter = "{\"CarrierProfileId\":0,\"Name\":\"Test\",\"Settings\":{\"CountryId\":1,\"CityId\":9,\"Company\":\"Test\",\"Website\":\"123\",\"RegistrationNumber\":\"123\",\"Address\":\"123\",\"PostalCode\":\"123\",\"Town\":\"123\",\"CompanyLogo\":0,\"Contacts\":[{\"Type\":1,\"Description\":\"nab\"},{\"Type\":2,\"Description\":\"nab@vanrise.com\"},{\"Type\":4,\"Description\":\"nab\"},{\"Type\":5,\"Description\":\"nab@vanrise.com\"},{\"Type\":6,\"Description\":\"nab\"},{\"Type\":7,\"Description\":\"nab@vanrise.com\"},{\"Type\":8,\"Description\":\"nab\"},{\"Type\":9,\"Description\":\"nab@vanrise.com\"},{\"Type\":10,\"Description\":\"nab\"},{\"Type\":11,\"Description\":\"nab@vanrise.com\"},{\"Type\":12,\"Description\":\"nab\"},{\"Type\":13,\"Description\":\"nab@vanrise.com\"},{\"Type\":14,\"Description\":\"234233\"},{\"Type\":3,\"Description\":\"nab@vanrise.com\"}]}}";
+            string paramter = data;
+            string result = client.MakeRequested(paramter, token);
+
+
+
+            return result;
+                       
+           
+
+
+
         }
     }
 }
 
 
 
-            //        connect con = new connect();
-            //        DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='Carrierprofile' and httpmethod='GET'");
-            //        string query = "";
-            //        foreach (DataRow _r in ds.Tables[0].Rows)
-            //        {
-            //            query = _r["validatequery"].ToString();
-            //        }
-            //        DataSet ds1 = con.getdata(query);
 
-
-            //        List<Countryclass> LC = ds1.Tables[0].AsEnumerable().Select(row => new Countryclass
-            //        {
-
-            //            CountryId = row.Field<int>("countryid"),
-            //            Name = row.Field<string>("Name")
-
-            //        }).ToList();
-
-
-
-            //        List<Countryclass> ff = (List<Countryclass>)objResponse1;
-
-            //        // check 1 
-            //        if (LC.Count == ff.Count)
-            //        {
-            //            result = result + " Success :  Countries count correct  \n";
-            //        }
-
-
-            //        bool correctcountry = false;
-            //        foreach (Countryclass c in LC)
-            //        {
-            //            if (ff.Any(countr => countr.CountryId == c.CountryId && countr.Name == c.Name))
-            //            {
-            //                correctcountry = true;
-            //            }
-            //            else
-            //                correctcountry = false;
-            //        }
-            //        if (correctcountry)
-            //            result = result + " Success : Countries equal countries in DB  \n";
-
-            //    }
-
-            //    catch
-            //    {
-
-            //        result = result + "Failed: get countries  \n";
-            //    }
-
-            //    return result;
-
-            //}
-
-
-            //public string createcountry(RestClient rs, Uri ur, string token, string data)
-            //{
-            //    //   string endPoint = @"http://192.168.110.195:8585/api/VRCommon/Country/AddCountry";
-            //    //RestClient  client = new RestClient(endpoint: endPoint,
-            //    //                          method: HttpVerb.POST,
-            //    //                          contenttype: "application/json;charset=UTF-8",
-            //    //                          Auth_token:token,
-            //    //                          postData: "{\"CountryId\":\"0\",  \"Name\":\"Batatas\"}");
-
-            //    rs.EndPoint = @"http://192.168.110.195:8585/api/VRCommon/Country/AddCountry";
-            //    //RestClient  client = new RestClient(endpoint: endPoint,
-
-            //    rs.PostData = data;
-            //    string result = rs.MakeRequests("", token);
-
-
-            //    return result;
-
-
-
-            //}
+            
 
    

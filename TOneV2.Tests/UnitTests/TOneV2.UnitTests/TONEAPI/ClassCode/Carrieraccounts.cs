@@ -95,24 +95,35 @@ namespace TONEAPI.ClassCode
 
                        }).ToList();
 
-
                 if (LC.Count == ct.Count)
                 {
                     result = result + "Success: get Carrier Accounts  \n";
-                    result = result + "Success: Carrier Accounts count correct \n";
+                    result = result + "Success: Carrier Accounts count correct \n|";
                 }
                 else
                 {
-                    result = result + "Success:  Carrier Accounts count wrong   \n";
+                    result = result + "Success:  Carrier Accounts count wrong   \n|";
                 }
 
+                bool correctaccount = false;
+                foreach (carrieraccountdet c in LC)
+                {
+                    if (ct.Any(countr => countr.CarrierAccountId == c.CarrierAccountId && countr.CarrierProfileId == c.CarrierProfileId  && countr.SellingNumberPlanId==c.SellingNumberPlanId && countr.AccountType ==c.AccountType ))
+                    {
+                        correctaccount = true;
+                    }
+                    else
+                        correctaccount = false;
+                }
+                if (correctaccount)
+                    result = result + " Success : CarrierAccount are retrieved correctly \n|";
 
 
 
             }
             catch
             {
-                return "Failed :  Carrier Profile count wrong  \n  Failed: Carrier Profile Data Validation \n";
+                return "Failed :  Carrier Profile count wrong  \n  Failed: Carrier Profile Data Validation \n|";
             }
             return result; 
         }

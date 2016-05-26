@@ -19,7 +19,7 @@ namespace TONEAPI.ClassCode
             {
                 var objResponse1 =
                             JsonConvert.DeserializeObject<List<Countryclass>>(country);
-                result = result + "Success: get Countries  \n";
+                result = result + "Success: get Countries  \n|";
 
                 connect con = new connect();
                 DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='country' and httpmethod='GET'");
@@ -46,7 +46,7 @@ namespace TONEAPI.ClassCode
                 // check 1 
                 if (LC.Count == ff.Count)
                 {
-                    result = result + " Success :  Countries count correct  \n";
+                    result = result + " Success :  Countries count correct  \n|";
                 }
 
 
@@ -61,14 +61,14 @@ namespace TONEAPI.ClassCode
                         correctcountry = false;
                 }
                 if (correctcountry)
-                    result = result + " Success : Countries equal countries in DB  \n";
+                    result = result + " Success : Countries equal countries in DB  \n|";
 
             }
 
             catch
             {
 
-                result = result + "Failed: get countries  \n";
+                result = result + "Failed: get countries  \n|";
             }
 
             return result;
