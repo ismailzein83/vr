@@ -49,11 +49,7 @@
         </vr-row>
         <vr-row ng-show="scopeModel.showGrid">
             <vr-columns width="fullrow" simplecol>
-                <div class="big-data-grid" >
-                    <div class="container">
-                        <vr-whs-analytics-variationreport-grid on-ready="scopeModel.onGridReady"></vr-whs-analytics-variationreport-grid>
-                    </div>
-                </div>
+                <vr-whs-analytics-variationreport-grid on-ready="scopeModel.onGridReady"></vr-whs-analytics-variationreport-grid>
             </vr-columns>
         </vr-row>
         <vr-row ng-show="scopeModel.showChart">
