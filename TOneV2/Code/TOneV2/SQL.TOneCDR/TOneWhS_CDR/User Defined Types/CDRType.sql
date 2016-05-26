@@ -1,4 +1,5 @@
-CREATE TABLE [TOneWhS_CDR].[CDR] (
+﻿CREATE TYPE [TOneWhS_CDR].[CDRType] AS TABLE (
+    [SwitchID]                INT              NULL,
     [IDonSwitch]              BIGINT           NULL,
     [Tag]                     VARCHAR (100)    NULL,
     [AttemptDateTime]         DATETIME         NULL,
@@ -22,14 +23,5 @@ CREATE TABLE [TOneWhS_CDR].[CDR] (
     [CAUSE_TO]                VARCHAR (10)     NULL,
     [IsRerouted]              BIT              NULL,
     [CDPNOut]                 VARCHAR (50)     NULL,
-    [SIP]                     VARCHAR (100)    NULL,
-    [SwitchID]                INT              NULL
-);
-
-
-
-
-GO
-CREATE CLUSTERED INDEX [CDR_AttemptDateTime]
-    ON [TOneWhS_CDR].[CDR]([AttemptDateTime] ASC);
+    [SIP]                     VARCHAR (100)    NULL);
 
