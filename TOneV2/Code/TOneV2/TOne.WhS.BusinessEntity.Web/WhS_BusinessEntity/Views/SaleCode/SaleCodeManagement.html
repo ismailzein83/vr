@@ -5,7 +5,7 @@
 
                 <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" normal-col-num="2" selectedvalues="selectedSellingNumberPlan" onselectitem="onSellingNumberPlanSelectItem" isrequired="true"></vr-whs-be-sellingnumberplan-selector>
 
-                <vr-columns width="normal" ng-show="selectedSellingNumberPlan!=undefined">
+                <vr-columns width="normal" ng-show="selectedSellingNumberPlan!=undefined" haschildcolumns>
                     <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady">
                     </vr-whs-be-salezone-selector>
                 </vr-columns>
