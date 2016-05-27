@@ -91,18 +91,7 @@
             }
             function editSource(source) {
                 var onDataRecordSrouceUpdated = function (sourceObj) {
-                    for (var x = 0; x < ctrl.sources.length; x++) {
-                        var currentSource = ctrl.sources[x];
-                        if (currentSource.id == source.id) {
-                            ctrl.sources.splice(x, 1);
-                            sourceObj.id = source.id;
-                            ctrl.sources.push(sourceObj);
-                            ctrl.sources.sort(function (a, b) {
-                                return b.id - a.id;
-                            });
-                            break;
-                        }
-                    }
+                    ctrl.sources[ctrl.sources.indexOf(source)] = sourceObj;
                 }
 
                 Analytic_RecordSearchService.editDataRecordSource(source, getSourceNames(source), onDataRecordSrouceUpdated);

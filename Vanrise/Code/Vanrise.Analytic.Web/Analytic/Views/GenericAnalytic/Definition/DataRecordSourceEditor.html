@@ -14,7 +14,7 @@
                     </vr-genericdata-datarecordtype-selector>
                 </vr-columns>
 
-                <vr-columns width="1/3row">
+                <vr-columns width="1/3row" vr-loader="isRecordStorageLoading">
                     <vr-genericdata-datarecordstorage-selector on-ready="onDataRecordStorageSelectorReady" isrequired="true"
                                                                selectedvalues="selectedDataRecordStorages" ismultipleselection>
                     </vr-genericdata-datarecordstorage-selector>
@@ -22,13 +22,13 @@
             </vr-row>
 
             <vr-row>
-                <vr-columns width="1/3row">
+                <vr-columns width="1/3row" vr-loader="isRecordTypeFieldsLoading">
                     <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedFields"
                                datavaluefield="FieldName" datatextfield="FieldName" hideremoveicon ismultipleselection>
                     </vr-select>
                 </vr-columns>
 
-                <vr-columns width="fullrow">
+                <vr-columns width="fullrow" >
                     <vr-section title="Grid Columns">
                         <vr-validator validate="isFieldGridValid()">
                             <vr-datagrid datasource="selectedFields" norowhighlightonclick="true"
