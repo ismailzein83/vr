@@ -126,7 +126,7 @@ as (select * from (values
 (12021,'Supplier Zones','Supplier Zones','#/view/WhS_BusinessEntity/Views/SupplierZone/SupplierZoneManagement',1208,'WhS_BE/SupplierZone/GetFilteredSupplierZones',null,null,null,0,3),
 (12022,'Supplier Codes','Supplier Codes','#/view/WhS_BusinessEntity/Views/SupplierCode/SupplierCodeManagement',1208,'WhS_BE/SupplierCode/GetFilteredSupplierCodes',null,null,null,0,4),
 (12023,'Supplier Rates','Supplier Rates','#/view/WhS_BusinessEntity/Views/SupplierRate/SupplierRateManagement',1208,'WhS_BE/SupplierRate/GetFilteredSupplierRates',null,null,null,0,5),
-(12024,'Supplier Pricelists','Supplier Pricelists','#/view/WhS_BusinessEntity/Views/SupplierPricelist/SupplierPricelist',1208,'GetFilteredSupplierPricelist',null,null,null,0,6),
+(12024,'Supplier Pricelists','Supplier Pricelists','#/view/WhS_BusinessEntity/Views/SupplierPricelist/SupplierPricelist',1208,'WhS_BE/SupplierPricelist/GetFilteredSupplierPricelist',null,null,null,0,6),
 (12025,'Purchase Pricing Rules','Purchase Pricing Rules','#/view/WhS_BusinessEntity/Views/PricingRule/PurchasePricingRuleManagement',1209,null,null,null,null,0,10),
 (12026,'Routing Products','Routing Products','#/view/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductManagement',1210,null,null,null,null,0,4),
 (12027,'Product Routes','Product Routes','#/view/WhS_Routing/Views/RPRoute/RPRouteManagement',1210,'WhS_Routing/RPRoute/GetFilteredRPRoutes',null,null,null,0,5),
@@ -169,7 +169,8 @@ as (select * from (values
 (1202,'Account Manager',1,0),
 (1203,'Routing',1,0),
 (1204,'Billing',1,0),
-(1205,'Traffic Stats',1,0)
+(1205,'Traffic Stats',1,0),
+(1206,'Sales',1,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[ParentId],[BreakInheritance]))
 merge	[sec].[BusinessEntityModule] as t
@@ -195,7 +196,30 @@ as (select * from (values
 (3302,'WhS_Analytics_Variation','Variation',1204,0,'["View"]'),
 (3303,'WhS_BE_SwitchConnectivity','Switch Connectivity',2,0,'["View", "Add", "Edit"]'),
 (3304,'WhS_Analytics_RepeatedNumber','Repeated Number',1205,0,'["View"]'),
-(3305,'WhS_Analytics_BlockedAttempts','BlockedAttempts',1205,0,'["View"]')
+(3305,'WhS_Analytics_BlockedAttempts','BlockedAttempts',1205,0,'["View"]'),
+
+(3306,'WhS_BE_CarrierAccount','Carrier Account',201,0,'["View", "Add", "Edit", "Delete"]'),
+(3307,'WhS_BE_CarrierProfile','Carrier Profile',201,0,'["View"]'),
+(3308,'WhS_BE_CodeGroup','Code Group',201,0,'["View"]'),
+(3309,'WhS_BE_Switch','Switches',201,0,'["View", "Add", "Edit", "Delete"]'),
+
+(3316,'WhS_BE_SupplierCode','Supplier Code',1201,0,'["View"]'),
+(3317,'WhS_BE_SupplierRate','Supplier Rate',1201,0,'["View"]'),
+(3318,'WhS_BE_SupplierZone','Supplier Zone',1201,0,'["View"]'),
+
+(3319,'Whs_BE_RoutingProduct','Routing Product',1203,0,'["View","Add","Edit","Delete"]'),
+(3320,'Whs_BE_ZoneServiceConfig','Zone Service Configuration',201,0,'["View","Add","Edit"]'),
+
+(3321,'WhS_Sales_SellingRules','Selling Rules',1206,0,'["View","Add","Edit","Delete"]'),
+(3322,'WhS_Sales_SaleCode','Sale Codes',1206,0,'["View"]'),
+(3323,'WhS_Sales_SalePriceList','Sale Price List',1206,0,'["View"]'),
+(3324,'WhS_Sales_SaleRate','Sale Rate',1206,0,'["View"]'),
+
+(3400,'VR_AccountManager','VR_AccountManager',1202,0,'["View", "AssignCarriers", "UpdateLinkedOrgChart","GetAssignedCarrierDetails","GetLinkedOrgChartId"]'),
+
+(3450,'WhS_Routing_RoutingRule','Routing Rule',1203,0,'["View","Add","Edit","Delete"]'),
+(3451,'WhS_Routing_RPRoutes','RPRoutes',1203,0,'["View"]')
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -272,9 +296,9 @@ set nocount on;
 ;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('WhS_BE/CarrierAccount/GetFilteredCarrierAccounts',null),
-('WhS_BE/CarrierAccount/UpdateCarrierAccount',null),
-('WhS_BE/CarrierAccount/AddCarrierAccount',null),
+('WhS_BE/CarrierAccount/GetFilteredCarrierAccounts','WhS_BE_CarrierAccount: View'),
+('WhS_BE/CarrierAccount/UpdateCarrierAccount','WhS_BE_CarrierAccount: Edit'),
+('WhS_BE/CarrierAccount/AddCarrierAccount','WhS_BE_CarrierAccount: Add'),
 ('WhS_BE/CarrierAccount/GetCarrierAccountCurrency',null),
 ('WhS_BE/CarrierAccount/GetCarrierAccount',null),
 ('WhS_BE/CarrierAccount/GetCarrierAccountInfo',null),
@@ -282,13 +306,13 @@ as (select * from (values
 ('WhS_BE/CarrierAccount/GetCustomerGroupTemplates',null),
 ('WhS_BE/CarrierAccount/GetSuppliersWithZonesGroupsTemplates',null),
 
-('WhS_BE/CarrierProfile/GetFilteredCarrierProfiles',null),
+('WhS_BE/CarrierProfile/GetFilteredCarrierProfiles','WhS_BE_CarrierProfile: View'),
 ('WhS_BE/CarrierProfile/GetCarrierProfile',null),
 ('WhS_BE/CarrierProfile/GetCarrierProfilesInfo',null),
 ('WhS_BE/CarrierProfile/UpdateCarrierProfile',null),
 ('WhS_BE/CarrierProfile/AddCarrierProfile',null),
 
-('WhS_BE/CodeGroup/GetFilteredCodeGroups',null),
+('WhS_BE/CodeGroup/GetFilteredCodeGroups','WhS_BE_CodeGroup: View'),
 ('WhS_BE/CodeGroup/GetAllCodeGroups',null),
 ('WhS_BE/CodeGroup/GetCodeGroup',null),
 ('WhS_BE/CodeGroup/UpdateCodeGroup',null),
@@ -315,13 +339,11 @@ as (select * from (values
 ('WhS_BE/CustomerSellingProduct/GetCustomerSellingProduct',null),
 ('WhS_BE/CustomerSellingProduct/IsCustomerAssignedToSellingProduct',null),
 
-
-
-('WhS_BE/AccountManager/GetLinkedOrgChartId',null),
-('WhS_BE/AccountManager/GetFilteredAssignedCarriers',null),
-('WhS_BE/AccountManager/GetAssignedCarrierDetails',null),
-('WhS_BE/AccountManager/UpdateLinkedOrgChart',null),
-('WhS_BE/AccountManager/AssignCarriers',null),
+('WhS_BE/AccountManager/GetLinkedOrgChartId','VR_AccountManager: GetLinkedOrgChartId'),
+('WhS_BE/AccountManager/GetFilteredAssignedCarriers','VR_AccountManager:View'),
+('WhS_BE/AccountManager/GetAssignedCarrierDetails','VR_AccountManager: GetAssignedCarrierDetails'),
+('WhS_BE/AccountManager/UpdateLinkedOrgChart','VR_AccountManager: UpdateLinkedOrgChart'),
+('WhS_BE/AccountManager/AssignCarriers','VR_AccountManager: AssignCarriers'),
 
 ('WhS_BE/CustomerZone/GetCustomerZones',null),
 ('WhS_BE/CustomerZone/GetCountriesToSell',null),
@@ -332,14 +354,14 @@ as (select * from (values
 ('WhS_BE/RoutingProduct/GetRoutingProductsInfoBySellingNumberPlan',null),
 ('WhS_BE/RoutingProduct/GetRoutingProductInfo',null),
 ('WhS_BE/RoutingProduct/GetRoutingProduct',null),
-('WhS_BE/RoutingProduct/UpdateRoutingProduct',null),
-('WhS_BE/RoutingProduct/DeleteRoutingProduct',null),
+('WhS_BE/RoutingProduct/UpdateRoutingProduct','Whs_BE_RoutingProduct: Edit'),
+('WhS_BE/RoutingProduct/DeleteRoutingProduct','Whs_BE_RoutingProduct: Delete'),
 
-('WhS_BE/SaleCode/GetFilteredSaleCodes',null),
+('WhS_BE/SaleCode/GetFilteredSaleCodes','WhS_Sales_SaleCode: View'),
 
---('WhS_BE/SalePricelist/GetFilteredSalePriceLists',null),
+('WhS_BE/SalePricelist/GetFilteredSalePriceLists','WhS_Sales_SalePriceList: View'),
 
-('WhS_BE/SaleRate/GetFilteredSaleRate',null),
+('WhS_BE/SaleRate/GetFilteredSaleRate','WhS_Sales_SaleRate: View'),
 
 ('WhS_BE/SaleZone/GetFilteredSaleZones',null),
 ('WhS_BE/SaleZone/GetSaleZonesInfo',null),
@@ -350,24 +372,24 @@ as (select * from (values
 ('WhS_BE/SaleZone/GetSaleZonesByName',null),
 ('WhS_BE/SaleZone/GetSaleZoneInfoByCountryId',null),
 
-('WhS_BE/SupplierCode/GetFilteredSupplierCodes',null),
-('WhS_BE/SupplierRate/GetFilteredSupplierRates',null),
-('WhS_BE/SupplierZone/GetFilteredSupplierZones',null),
+('WhS_BE/SupplierCode/GetFilteredSupplierCodes','WhS_BE_SupplierCode: View'),
+('WhS_BE/SupplierRate/GetFilteredSupplierRates','WhS_BE_SupplierRate: View'),
+('WhS_BE/SupplierZone/GetFilteredSupplierZones','WhS_BE_SupplierZone: View'),
 ('WhS_BE/SupplierZone/GetSupplierZoneInfo',null),
 ('WhS_BE/SupplierZone/GetSupplierZoneInfoByIds',null),
 
-('WhS_BE/Switch/GetFilteredSwitches',null),
+('WhS_BE/Switch/GetFilteredSwitches','WhS_BE_Switch: View'),
+('WhS_BE/Switch/AddSwitch','WhS_BE_Switch: Add'),
+('WhS_BE/Switch/UpdateSwitch','WhS_BE_Switch: Edit'),
+('WhS_BE/Switch/DeleteSwitch','WhS_BE_Switch: Delete'),
 ('WhS_BE/Switch/GetSwitch',null),
-('WhS_BE/Switch/AddSwitch',null),
-('WhS_BE/Switch/UpdateSwitch',null),
-('WhS_BE/Switch/DeleteSwitch',null),
 ('WhS_BE/Switch/GetSwitchesInfo',null),
 
-('WhS_BE/ZoneServiceConfig/GetFilteredZoneServiceConfigs',null),
+('WhS_BE/ZoneServiceConfig/GetFilteredZoneServiceConfigs','Whs_BE_ZoneServiceConfig: View'),
 ('WhS_BE/ZoneServiceConfig/GetAllZoneServiceConfigs',null),
 ('WhS_BE/ZoneServiceConfig/GetZoneServiceConfig',null),
-('WhS_BE/ZoneServiceConfig/UpdateZoneServiceConfig',null),
-('WhS_BE/ZoneServiceConfig/AddZoneServiceConfig',null),
+('WhS_BE/ZoneServiceConfig/UpdateZoneServiceConfig','Whs_BE_ZoneServiceConfig: Edit'),
+('WhS_BE/ZoneServiceConfig/AddZoneServiceConfig','Whs_BE_ZoneServiceConfig: Add'),
 
 ('WhS_CodePrep/CodePreparation/GetZoneItems',null),
 ('WhS_CodePrep/CodePreparation/CheckCodePreparationState',null),
@@ -386,10 +408,10 @@ as (select * from (values
 ('WhS_Routing/CustomerRoute/GetFilteredCustomerRoutes',null),
 
 ('WhS_Routing/RouteRule/AddRule',null),
-('WhS_Routing/RouteRule/GetFilteredRouteRules',null),
+('WhS_Routing/RouteRule/GetFilteredRouteRules','WhS_Routing_RoutingRule: View'),
 ('WhS_Routing/RouteRule/GetRule',null),
-('WhS_Routing/RouteRule/UpdateRule',null),
-('WhS_Routing/RouteRule/DeleteRule',null),
+('WhS_Routing/RouteRule/UpdateRule','WhS_Routing_RoutingRule: Edit'),
+('WhS_Routing/RouteRule/DeleteRule','WhS_Routing_RoutingRule: Delete'),
 ('WhS_Routing/RouteRule/GetCodeCriteriaGroupTemplates',null),
 ('WhS_Routing/RouteRule/GetRouteRuleSettingsTemplates',null),
 
@@ -400,10 +422,10 @@ as (select * from (values
 
 ('WhS_Routing/RoutingDatabase/GetRoutingDatabaseInfo',null),
 
-('WhS_Routing/RPRoute/GetFilteredRPRoutes',null),
 ('WhS_Routing/RPRoute/GetRPRouteOptionSupplier',null),
 ('WhS_Routing/RPRoute/GetPoliciesOptionTemplates',null),
 ('WhS_Routing/RPRoute/GetFilteredRPRouteOptions',null),
+('WhS_Routing/RPRoute/GetFilteredRPRoutes','WhS_Routing_RPRoutes: View'),
 
 ('WhS_Sales/RatePlan/ValidateCustomer',null),
 ('WhS_Sales/RatePlan/GetZoneLetters',null),
@@ -420,17 +442,18 @@ as (select * from (values
 ('WhS_Sales/RatePlan/ApplyCalculatedRates',null),
 ('WhS_Sales/RatePlan/CheckIfDraftExists',null),
 ('WhS_Sales/RatePlan/DeleteDraft',null),
-('WhS_Sales/SellingRule/GetFilteredSellingRules',null),
+
+('WhS_Sales/SellingRule/GetFilteredSellingRules','WhS_Sales_SellingRules: View'),
 ('WhS_Sales/SellingRule/GetRule',null),
-('WhS_Sales/SellingRule/AddRule',null),
-('WhS_Sales/SellingRule/UpdateRule',null),
-('WhS_Sales/SellingRule/DeleteRule',null),
+('WhS_Sales/SellingRule/AddRule','WhS_Sales_SellingRules: Add'),
+('WhS_Sales/SellingRule/UpdateRule','WhS_Sales_SellingRules: Edit'),
+('WhS_Sales/SellingRule/DeleteRule','WhS_Sales_SellingRules: Delete'),
 ('WhS_Sales/SellingRule/GetCodeCriteriaGroupTemplates',null),
 ('WhS_Sales/SellingRule/GetSellingRuleSettingsTemplates',null),
 
 ('WhS_BE/SupplierPricelist/GetFilteredSupplierPricelist','WhS_BE_SupplierPricelist: View'),
 
-('WhS_SupPL/SupplierPriceList/DownloadSupplierPriceListTemplate',null),
+('WhS_SupPL/SupplierPriceList/DownloadSupplierPriceListTemplate','WhS_BE_SupplierPricelist: DownloadTemplate'),
 ('WhS_SupPL/SupplierPriceListPreview/GetFilteredZonePreview',null),
 ('WhS_SupPL/SupplierPriceListPreview/GetFilteredCodePreview',null),
 ('WhS_SupPL/SupplierPriceListPreview/GetFilteredRatePreview',null),

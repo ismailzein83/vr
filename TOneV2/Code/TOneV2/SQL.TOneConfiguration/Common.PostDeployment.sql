@@ -22,19 +22,28 @@ as (select * from (values
 ('VRCommon/Country/GetCountrySourceTemplates',null),
 ('VRCommon/Country/DownloadCountriesTemplate','VRCommon_Country: Download Template'),
 ('VRCommon/Country/UploadCountries','VRCommon_Country: Upload'),
-('VRCommon/City/GetFilteredCities',null),
+
+('VRCommon/City/AddCity','VRCommon_City: Add'),
 ('VRCommon/City/GetCitiesInfo',null),
 ('VRCommon/City/GetCity',null),
-('VRCommon/City/AddCity','VRCommon_Country: Add City'),
-('VRCommon/City/UpdateCity',null),
+('VRCommon/City/GetFilteredCities','VRCommon_City: View'),
+('VRCommon/City/UpdateCity','VRCommon_City: Edit'),
+
 ('VRCommon/LogAttribute/GetFilteredLoggers','VRCommon_LogAttribute: View'),
+
 ('VRCommon/EmailTemplate/GetFilteredEmailTemplates','VRCommon_EmailTemplates:View'),
 ('VRCommon/EmailTemplate/UpdateEmailTemplate','VRCommon_EmailTemplates:Edit'),
 ('VRCommon/EmailTemplate/GetEmailTemplate',null),
+
 ('VRCommon/Settings/GetFilteredSettings','VRCommon_Settings:View'),
 ('VRCommon/Settings/UpdateSetting','VRCommon_Settings:Edit'),
 ('VRCommon/Settings/GetSetting',null),
-('VRCommon/Settings/GetDistinctSettingCategories',null)
+('VRCommon/Settings/GetDistinctSettingCategories',null),
+
+('VRCommon/RateType/GetFilteredRateTypes','VRCommon_RateType: View'),
+
+('VRCommon/Currency/GetFilteredCurrencies','VRCommon_Currency: View'),
+('VRCommon/CurrencyExchangeRate/GetFilteredExchangeRateCurrencies','VRCommon_CurrencyExchangeRate: View')
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
@@ -50,6 +59,25 @@ when not matched by target then
 
 --[sec].[BusinessEntityModule]------------------------201 to 300----------------------------------------------
 --------------------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [sec].[BusinessEntityModule] on;
+;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(201,'Business Entities',1,0),
+(202,'Lookups',201,0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[ParentId],[BreakInheritance]))
+merge	[sec].[BusinessEntityModule] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]
+when not matched by target then
+	insert([Id],[Name],[ParentId],[BreakInheritance])
+	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
+set identity_insert [sec].[BusinessEntityModule] off;
 
 --[sec].[BusinessEntity]------------------301 to 600----------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
@@ -58,10 +86,14 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(301,'VRCommon_Country','Country',2,0,'["View", "Add", "Edit", "Download Template", "Upload", "Add City"]'),
+(301,'VRCommon_Country','Country',202,0,'["View", "Add", "Edit", "Download Template", "Upload", "Add City"]'),
 (302,'VRCommon_LogAttribute','Logs',2,0,'["View"]'),
 (303,'VRCommon_EmailTemplates','Email Templates',2,0,'["View", "Edit"]'),
-(304,'VRCommon_Settings','Settings',2,0,'["View", "Edit"]')
+(304,'VRCommon_Settings','Settings',2,0,'["View", "Edit"]'),
+(305,'VRCommon_City','City',202,0,'["View","Add","Edit"]'),
+(306,'VRCommon_Currency','Currency',202,0,'["View"]'),
+(307,'VRCommon_CurrencyExchangeRate','Currency Exchange Rate',202,0,'["View"]'),
+(308,'VRCommon_RateType','Rate Type',202,0,'["View"]')
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
@@ -107,10 +139,9 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1001,'Countries','Countries','#/view/Common/Views/Country/CountryManagement',102,'VRCommon/Country/GetFilteredCountries',null,null,null,0,5),
 (1002,'Cities','Cities','#/view/Common/Views/City/CityManagement',102,'VRCommon/City/GetFilteredCities',null,null,null,0,10),
-(1003,'Currencies','Currencies','#/view/Common/Views/Currency/CurrencyManagement',102,null,null,null,null,0,15),
-(1004,'Currency Exchange Rates','Currency Exchange Rates','#/view/Common/Views/CurrencyExchangeRate/CurrencyExchangeRateManagement',102,null,null,null,null,0,20),
+(1003,'Currencies','Currencies','#/view/Common/Views/Currency/CurrencyManagement',102,'VRCommon/Currency/GetFilteredCurrencies',null,null,null,0,15),
+(1004,'Currency Exchange Rates','Currency Exchange Rates','#/view/Common/Views/CurrencyExchangeRate/CurrencyExchangeRateManagement',102,'VRCommon/CurrencyExchangeRate/GetFilteredExchangeRateCurrencies',null,null,null,0,20),
 (1005,'Rate Types','Rate Types','#/view/Common/Views/RateType/RateTypeManagement',102,'VRCommon/RateType/GetFilteredRateTypes',null,null,null,0,25),
---(1006,'System Logs','System Logs','#/view/Common/Views/logger/LoggerManagement',3,'VRCommon/LogAttribute/GetFilteredLoggers',null,null,null,0,10),
 (1007,'Event Logs','Event Logs','#/view/Common/Views/MasterLog/MasterLogManagement',3,'VRCommon/LogAttribute/GetFilteredLoggers',null,null,null,0,15),
 (1008,'Email Templates','Email Templates','#/view/Common/Views/EmailTemplate/EmailTemplateManagement',3,'VRCommon/EmailTemplate/GetFilteredEmailTemplates',null,null,null,0,9),
 (1009,'Settings','Settings','#/view/Common/Views/Settings/SettingsManagement',3,'VRCommon/Settings/GetFilteredSettings',null,null,null,0,10)
