@@ -202,6 +202,10 @@ as (select * from (values
 (3307,'WhS_BE_CarrierProfile','Carrier Profile',201,0,'["View"]'),
 (3308,'WhS_BE_CodeGroup','Code Group',201,0,'["View"]'),
 (3309,'WhS_BE_Switch','Switches',201,0,'["View", "Add", "Edit", "Delete"]'),
+(3310,'WhS_Sales_SaleCode','Sale Codes',201,0,'["View"]'),
+(3311,'WhS_Sales_SaleRate','Sale Rate',201,0,'["View"]'),
+(3312,'WhS_BE_SaleZone','Sale Zone',201,0,'["View"]'),
+
 
 (3316,'WhS_BE_SupplierCode','Supplier Code',1201,0,'["View"]'),
 (3317,'WhS_BE_SupplierRate','Supplier Rate',1201,0,'["View"]'),
@@ -211,15 +215,18 @@ as (select * from (values
 (3320,'Whs_BE_ZoneServiceConfig','Zone Service Configuration',201,0,'["View","Add","Edit"]'),
 
 (3321,'WhS_Sales_SellingRules','Selling Rules',1206,0,'["View","Add","Edit","Delete"]'),
-(3322,'WhS_Sales_SaleCode','Sale Codes',1206,0,'["View"]'),
+
 (3323,'WhS_Sales_SalePriceList','Sale Price List',1206,0,'["View"]'),
-(3324,'WhS_Sales_SaleRate','Sale Rate',1206,0,'["View"]'),
+
+
+(3619,'WhS_BE_CustomerSellingProduct','Customer Selling Product',1206,0,'["View"]'),
+(3620,'WhS_BE_SellingProduct','Selling Product',1206,0,'["View"]'),
+(3621,'WhS_BE_SellingNumberPlan','Selling Number Plan',1206,0,'["View"]'),
 
 (3400,'VR_AccountManager','VR_AccountManager',1202,0,'["View", "AssignCarriers", "UpdateLinkedOrgChart","GetAssignedCarrierDetails","GetLinkedOrgChartId"]'),
 
 (3450,'WhS_Routing_RoutingRule','Routing Rule',1203,0,'["View","Add","Edit","Delete"]'),
 (3451,'WhS_Routing_RPRoutes','RPRoutes',1203,0,'["View"]')
-
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -321,19 +328,19 @@ as (select * from (values
 ('WhS_BE/CodeGroup/UploadCodeGroupList',null),
 ('WhS_BE/CodeGroup/DownloadCodeGroupLog',null),
 
-('WhS_BE/SellingNumberPlan/GetFilteredSellingNumberPlans',null),
+('WhS_BE/SellingNumberPlan/GetFilteredSellingNumberPlans','WhS_BE_SellingNumberPlan: View'),
 ('WhS_BE/SellingNumberPlan/GetSellingNumberPlans',null),
 ('WhS_BE/SellingNumberPlan/AddSellingNumberPlan',null),
 ('WhS_BE/SellingNumberPlan/UpdateSellingNumberPlan',null),
 ('WhS_BE/SellingNumberPlan/GetSellingNumberPlan',null),
 
-('WhS_BE/SellingProduct/GetFilteredSellingProducts',null),
+('WhS_BE/SellingProduct/GetFilteredSellingProducts','WhS_BE_SellingProduct: View'),
 ('WhS_BE/SellingProduct/AddSellingProduct',null),
 ('WhS_BE/SellingProduct/UpdateSellingProduct',null),
 ('WhS_BE/SellingProduct/GetSellingProduct',null),
 ('WhS_BE/SellingProduct/GetSellingProductsInfo',null),
 
-('WhS_BE/CustomerSellingProduct/GetFilteredCustomerSellingProducts',null),
+('WhS_BE/CustomerSellingProduct/GetFilteredCustomerSellingProducts','WhS_BE_CustomerSellingProduct: View'),
 ('WhS_BE/CustomerSellingProduct/AddCustomerSellingProduct',null),
 ('WhS_BE/CustomerSellingProduct/UpdateCustomerSellingProduct',null),
 ('WhS_BE/CustomerSellingProduct/GetCustomerSellingProduct',null),
@@ -363,7 +370,7 @@ as (select * from (values
 
 ('WhS_BE/SaleRate/GetFilteredSaleRate','WhS_Sales_SaleRate: View'),
 
-('WhS_BE/SaleZone/GetFilteredSaleZones',null),
+('WhS_BE/SaleZone/GetFilteredSaleZones','WhS_BE_SaleZone: View'),
 ('WhS_BE/SaleZone/GetSaleZonesInfo',null),
 ('WhS_BE/SaleZone/GetSaleZonesInfoByIds',null),
 ('WhS_BE/SaleZone/GetSaleZone',null),
