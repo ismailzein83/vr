@@ -86,6 +86,8 @@
     <Compile Include="ClassCode\cities.cs" />
     <Compile Include="ClassCode\City.cs" />
     <Compile Include="ClassCode\Class1.cs" />
+    <Compile Include="ClassCode\codegroup.cs" />
+    <Compile Include="ClassCode\CodeGroupClass.cs" />
     <Compile Include="ClassCode\connect.cs" />
     <Compile Include="ClassCode\countries.cs" />
     <Compile Include="ClassCode\Countryclass.cs" />

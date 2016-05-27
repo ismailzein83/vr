@@ -176,6 +176,23 @@ namespace TONEAPI
 
 
 
+        /*CodeGroup*/
+
+        TextBox4.Text = TextBox4.Text + "CodeGroup";
+        testresults = testresults + "\n ---------------------------------------------\n";
+        codegroup cg = new codegroup();
+        string Codegroupresult = cg.getcodegroup(TextBox7.Text);
+        testresults = testresults + Codegroupresult;
+        TextBox5.Text = TextBox5.Text + testresults;
+
+
+
+        string newcg = "{\"Code\":\"9637\",\"CodeGroupId\":\"299\",\"CountryId\":\"35\"}";
+        string raddcg = cg.Addcodegroup(newcg, TextBox7.Text);
+        testresults = testresults + "Success: Create new CodeGroup " + raddcg + "\n|";
+        TextBox5.Text = TextBox5.Text + testresults;
+
+
 
 
 
