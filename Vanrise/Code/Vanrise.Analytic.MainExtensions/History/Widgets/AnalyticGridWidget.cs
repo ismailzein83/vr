@@ -15,6 +15,8 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
 
         public List<AnalyticGridWidgetMeasure> Measures { get; set; }
 
+        public AnalyticQueryOrderType OrderType { get; set; }
+
         public bool WithSummary { get; set; }
     }
 
