@@ -218,7 +218,7 @@
                 }
 
                 if (usedFiltersCount < filtersToUseCount) {
-                    return 'Not all selected filters are used';
+                    return 'Not all selected filters are used in suspicion rules';
                 }
 
                 return null;
