@@ -140,8 +140,10 @@
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\Templates\RecordSearchAnalyticReportTemplates.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\vr-analytic-analyticreport-recordsearch-definition.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\Templates\AnalyticReportGridTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\Templates\MeasureStyleGridEditorTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\vr-analytic-analyticreport-config-selector.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\vr-analytic-analyticreport-grid.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\vr-analytic-analyticreport-measurestyle-grid-editor.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\vr-analytic-analyticreport-selector.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticTable\Templates\AnalyticTableGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticTable\vr-analytic-analytictable-grid.js" />
@@ -208,6 +210,8 @@
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticReportEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\DataRecordSourceEditor.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\DataRecordSourceEditorController.js" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\MeasureStyleEditor.html" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\MeasureStyleEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\RealTimeWidgetEditor.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\RealTimeWidgetEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Runtime\GenericAnalyticReport.html" />

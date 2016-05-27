@@ -1,0 +1,9 @@
+﻿<vr-columns width="normal">
+    <vr-button type="Add" data-onclick="ctrl.addMeasureStyle" standalone></vr-button>
+</vr-columns>
+<vr-columns width="fullrow">
+    <vr-datagrid datasource="ctrl.measureStyles" norowhighlightonclick="true"
+                    on-ready="ctrl.onGridReady" ondeleterow="ctrl.removeMeasureStyle" menuactions="ctrl.measureStylesGridMenuActions" hidegridmenu>
+        <vr-datagridcolumn headertext="'Measure Name'" field="'Title'" disablesorting="true"></vr-datagridcolumn>
+    </vr-datagrid>
+</vr-columns>
