@@ -69,7 +69,7 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
         }
 
         function hasNewCityPermission() {
-            return VRCommon_CityAPIService.HasNewCityPermission();
+            return VRCommon_CityAPIService.HasAddCityPermission();
         }
 
     }]);
