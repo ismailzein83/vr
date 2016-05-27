@@ -1,4 +1,5 @@
-﻿app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalResultTypeEnum', '$compile', 'VRModalService', function (UtilsService, SecurityService, DataRetrievalResultTypeEnum, $compile, VRModalService) {
+﻿app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalResultTypeEnum', '$compile', 'VRModalService', 'DataGridRetrieveDataEventType',
+    function (UtilsService, SecurityService, DataRetrievalResultTypeEnum, $compile, VRModalService, DataGridRetrieveDataEventType) {
 
     'use strict';
 
@@ -210,7 +211,7 @@
                 col.onSortChanged = function (colDef_internal, sortDirection_internal) {
                     sortColumn = colDef_internal;
                     sortDirection = sortDirection_internal;
-                    return retrieveData(false, false, true);
+                    return retrieveData(false, false, true, DataGridRetrieveDataEventType.Sorting);
                 };
             }
 
@@ -453,7 +454,7 @@
                     promise = this.onexport();
                 }
                 else {
-                    promise = retrieveData(false, true);
+                    promise = retrieveData(false, true, false, DataGridRetrieveDataEventType.Export);
                 }
 
                 if (promise != undefined && promise != null) {
@@ -749,7 +750,7 @@
                 retrieveDataInput = {
                     Query: query                    
                 };
-                return retrieveData(true);
+                return retrieveData(true, false, false, DataGridRetrieveDataEventType.ExternalTrigger);
             };
             setTimeout(function () {
 
@@ -1064,6 +1065,9 @@
             retrieveDataFunction = retrieveDataFunc;
             //defaultSortDirection = defaultSortDirection_local;
 
+            var retrieveDataOnPaging = function () {
+                return retrieveData(false, false, false, DataGridRetrieveDataEventType.Paging);
+            };
             switch(pagingType)
             {
                 case "Pager":
@@ -1071,16 +1075,16 @@
                     ctrl.pagerSettings = {
                         currentPage: 1,
                         totalDataCount: 0,
-                        pageChanged: retrieveData
+                        pageChanged: retrieveDataOnPaging
                     }
                     break;
                 case "PagingOnScroll":
-                    definePagingOnScroll(scope, retrieveData);
+                    definePagingOnScroll(scope, retrieveDataOnPaging);
                     break;
             }
         }
         
-        function retrieveData(clearBeforeRetrieve, isExport, isSorting) {
+        function retrieveData(clearBeforeRetrieve, isExport, isSorting, eventType) {
             if (!isGridReady)
                 return;
 
@@ -1150,8 +1154,8 @@
                 }
             };
               
-           
-            var promise = retrieveDataFunction(retrieveDataInput, onResponseReady);//this function should return a promise in case it is getting data
+            var retrieveDataContext = { eventType: eventType };
+            var promise = retrieveDataFunction(retrieveDataInput, onResponseReady, retrieveDataContext);//this function should return a promise in case it is getting data
             
             if (promise != undefined && promise != null) {
                 ctrl.isLoadingMoreData = true;
@@ -1174,6 +1178,7 @@
         this.defineDeleteRowAction = defineDeleteRowAction;
     }
 
+    
 
     return directiveDefinitionObject;
 }]);

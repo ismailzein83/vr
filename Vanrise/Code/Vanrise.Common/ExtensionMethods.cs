@@ -145,6 +145,7 @@ namespace Vanrise.Common
 
             Vanrise.Entities.BigResult<T> rslt = new Vanrise.Entities.BigResult<T>
             {
+                ResultKey = input.ResultKey,
                 TotalCount = filteredResults.Count(),
                 Data = processedResults
             };
@@ -160,6 +161,7 @@ namespace Vanrise.Common
 
             Vanrise.Entities.BigResult<Q> rslt = new Vanrise.Entities.BigResult<Q>
             {
+                ResultKey = input.ResultKey,
                 TotalCount = filteredResults != null ? filteredResults.Count() : 0,
                 Data = processedResults
             };
@@ -230,21 +232,35 @@ namespace Vanrise.Common
 
         private static IEnumerable<T> ApplySortingAndPaging<T>(this IEnumerable<T> list, Vanrise.Entities.DataRetrievalInput input)
         {
+            list = list.VROrderList<T>(input);
+
+            list = VRGetPage<T>(list, input);
+
+            return list;
+        }
+
+        public static IEnumerable<T> VROrderList<T>(this IEnumerable<T> list, Vanrise.Entities.DataRetrievalInput input)
+        {
             IPropValueReader propValueReader = Utilities.GetPropValueReader<T>(input.SortByColumnName);
             Func<T, Object> selector = x => propValueReader.GetPropertyValue(x);
 
+            IEnumerable<T> orderedList;
             if (input.IsSortDescending)
-                list = list.OrderByDescending(selector);
+                orderedList = list.OrderByDescending(selector);
             else
-                list = list.OrderBy(selector);
+                orderedList = list.OrderBy(selector);
+            return orderedList;
+        }
 
+        public static IEnumerable<T> VRGetPage<T>(this IEnumerable<T> list, Vanrise.Entities.DataRetrievalInput input)
+        {
+            IEnumerable<T> pagedList = list;
             if (input.FromRow.HasValue && input.ToRow.HasValue)
             {
                 int pageSize = (input.ToRow.Value - input.FromRow.Value) + 1;
-                list = list.ToList().Skip(input.FromRow.Value - 1).Take(pageSize);
+                pagedList = list.ToList().Skip(input.FromRow.Value - 1).Take(pageSize);
             }
-
-            return list;
+            return pagedList;
         }
 
         public static IEnumerable<Q> VRCast<Q>(this IEnumerable list)

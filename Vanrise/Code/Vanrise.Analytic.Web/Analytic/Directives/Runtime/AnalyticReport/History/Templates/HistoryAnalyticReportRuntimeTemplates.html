@@ -55,11 +55,11 @@
 <div>
     <vr-row ng-if="scopeModel.isLoadedData">
         <vr-columns ng-repeat="widget in scopeModel.widgets" colnum="{{widget.columnWidth.numberOfColumns}}">
-            <span style="padding-right: 3px;">
                 <vr-section title="{{widget.settings.WidgetTitle}}" ng-if="widget.settings.ShowTitle">
                     <vr-directivewrapper directive="widget.runtimeEditor" on-ready="widget.onDirectiveReady"></vr-directivewrapper>
                 </vr-section>
-                <vr-directivewrapper ng-if="!widget.settings.ShowTitle" directive="widget.runtimeEditor" on-ready="widget.onDirectiveReady"></vr-directivewrapper>
+            <span style="padding-right: 3px;" ng-if="!widget.settings.ShowTitle">
+                <vr-directivewrapper directive="widget.runtimeEditor" on-ready="widget.onDirectiveReady"></vr-directivewrapper>
             </span>
         </vr-columns>
     </vr-row>

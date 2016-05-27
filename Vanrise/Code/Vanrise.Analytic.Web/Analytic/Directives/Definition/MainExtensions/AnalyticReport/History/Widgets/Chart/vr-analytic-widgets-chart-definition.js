@@ -42,7 +42,6 @@
                 $scope.scopeModel = {};
                 $scope.scopeModel.dimensions = [];
                 $scope.scopeModel.measures = [];
-                $scope.scopeModel.topRecords = 10;
                 $scope.scopeModel.chartTypes = [];
                 $scope.scopeModel.selectedChartType;
                 $scope.scopeModel.topMeasure;
@@ -124,6 +123,8 @@
 
                             setTopMeasure(payload.widgetEntity.TopMeasure);
                             $scope.scopeModel.selectedChartType = UtilsService.getItemByVal($scope.scopeModel.chartTypes, payload.widgetEntity.ChartType, "value");
+
+                            $scope.scopeModel.topRecords = payload.widgetEntity.TopRecords;
                         }
 
                     };
@@ -175,7 +176,6 @@
                 api.getData = getData;
 
                 function getData() {
-
                     var data = {
                         $type: "Vanrise.Analytic.MainExtensions.History.Widgets.AnalyticChartWidget, Vanrise.Analytic.MainExtensions ",
                         Measures: getMeasures(),

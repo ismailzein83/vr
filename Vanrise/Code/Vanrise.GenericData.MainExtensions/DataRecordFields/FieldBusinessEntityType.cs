@@ -16,6 +16,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public int BusinessEntityDefinitionId { get; set; }
         public bool IsNullable { get; set; }
 
+        public override DataRecordFieldOrderType OrderType
+        {
+            get
+            {
+                return DataRecordFieldOrderType.ByFieldDescription;
+            }
+        }
+
         #region Public Methods
 
         public override Type GetRuntimeType()

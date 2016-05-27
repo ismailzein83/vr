@@ -15,6 +15,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public List<Choice> Choices { get; set; }
         public bool IsNullable { get; set; }
 
+        public override DataRecordFieldOrderType OrderType
+        {
+            get
+            {
+                return DataRecordFieldOrderType.ByFieldDescription;
+            }
+        }
+
         #region Public Methods
 
         public override Type GetRuntimeType()

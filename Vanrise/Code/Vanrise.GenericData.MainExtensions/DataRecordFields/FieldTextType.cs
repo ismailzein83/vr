@@ -11,6 +11,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldTextType : DataRecordFieldType
     {
+        public override DataRecordFieldOrderType OrderType
+        {
+            get
+            {
+                return DataRecordFieldOrderType.ByFieldDescription;
+            }
+        }
         public override Type GetRuntimeType()
         {
             return GetNonNullableRuntimeType();

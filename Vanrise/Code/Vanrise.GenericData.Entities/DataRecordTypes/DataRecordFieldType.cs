@@ -7,6 +7,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Entities
 {
+    public enum DataRecordFieldOrderType { ByFieldValue = 0, ByFieldDescription = 1 }
     public abstract class DataRecordFieldType
     {
         public int ConfigId { get; set; }
@@ -26,6 +27,14 @@ namespace Vanrise.GenericData.Entities
         protected Type GetNullableType(Type type)
         {
             return (type.IsValueType) ? typeof(Nullable<>).MakeGenericType(type) : type;
+        }
+
+        public virtual DataRecordFieldOrderType OrderType
+        {
+            get
+            {
+                return DataRecordFieldOrderType.ByFieldValue;
+            }
         }
     }   
 }

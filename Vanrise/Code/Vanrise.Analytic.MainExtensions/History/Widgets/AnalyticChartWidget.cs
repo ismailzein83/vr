@@ -11,9 +11,8 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
     {
         public List<AnalyticChartWidgetDimension> Dimensions { get; set; }
         public List<AnalyticChartWidgetMeasure> Measures { get; set; }
-        public string TopMeasure { get; set; }
         public AnalyticQueryOrderType OrderType { get; set; }
-        public int TopRecords { get; set; }
+        public int? TopRecords { get; set; }
         public string ChartType { get; set; }
     }
 

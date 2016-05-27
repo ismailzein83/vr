@@ -284,45 +284,79 @@ namespace Vanrise.Analytic.Business
 
             protected override BigResult<AnalyticRecord> AllRecordsToBigResult(DataRetrievalInput<AnalyticQuery> input, IEnumerable<AnalyticRecord> allRecords)
             {
-                if (input.Query.TopRecords.HasValue)
+                var query = input.Query;
+                IEnumerable<AnalyticRecord> orderedRecords;
+                if (query.OrderType.HasValue)
                 {
-                    List<string> orderByMeasures = input.Query.MeasureFields;
-                    if (orderByMeasures == null || orderByMeasures.Count() == 0)
-                        throw new NullReferenceException("orderByMeasures");
-                    string firstMeasureName = orderByMeasures[0];
-                    IOrderedEnumerable<AnalyticRecord> orderedRecords = allRecords.OrderByDescending(record => record.MeasureValues[firstMeasureName].Value);
-                    if (orderByMeasures.Count > 1)
+                    switch(query.OrderType.Value)
                     {
-                        for (int i = 1; i < orderByMeasures.Count; i++)
-                        {
-                            string measureName = orderByMeasures[i];
-                            orderedRecords = orderedRecords.ThenByDescending(itm => itm.MeasureValues[measureName].Value);
-                        }
+                        case AnalyticQueryOrderType.ByAllDimensions: orderedRecords = GetOrderedByAllDimensions(query, allRecords); break;
+                        case AnalyticQueryOrderType.ByAllMeasures: orderedRecords = GetOrderedByAllMeasures(query, allRecords); break;
+                        default: orderedRecords = null; break;
                     }
-                    return new AnalyticSummaryBigResult<AnalyticRecord>()
-                    {
-                        Data = orderedRecords.Take(input.Query.TopRecords.Value),
-                        TotalCount = input.Query.TopRecords.Value
-                    };
                 }
                 else
+                    orderedRecords = allRecords.VROrderList(input);
+
+                IEnumerable<AnalyticRecord> pagedRecords;
+                if (query.TopRecords.HasValue)
+                    pagedRecords = orderedRecords.Take(query.TopRecords.Value);
+                else
+                    pagedRecords = orderedRecords.VRGetPage(input);
+                var analyticBigResult = new AnalyticSummaryBigResult<AnalyticRecord>()
                 {
-                    var bigResult = allRecords.ToBigResult(input, null, (entity) => this.EntityDetailMapper(entity));
-                    if (bigResult != null)
+                    ResultKey = input.ResultKey,
+                    Data = pagedRecords,
+                    TotalCount = allRecords.Count()
+                };
+                if (input.Query.WithSummary)
+                    analyticBigResult.Summary = _summaryRecord;
+                return analyticBigResult;
+            }
+
+            private IEnumerable<AnalyticRecord> GetOrderedByAllDimensions(AnalyticQuery query, IEnumerable<AnalyticRecord> allRecords)
+            {
+                var queryContext = new AnalyticTableQueryContext(query);
+                List<string> orderByDimensions = query.DimensionFields;
+                if (orderByDimensions == null || orderByDimensions.Count == 0)
+                    throw new NullReferenceException("orderByDimensions");
+                IOrderedEnumerable<AnalyticRecord> orderedRecords;
+                var firstDimensionConfig = queryContext.GetDimensionConfig(orderByDimensions[0]);
+                if (firstDimensionConfig.Config.FieldType.OrderType == DataRecordFieldOrderType.ByFieldValue)
+                    orderedRecords = allRecords.OrderBy(record => record.DimensionValues[0].Value);
+                else
+                    orderedRecords = allRecords.OrderBy(record => record.DimensionValues[0].Name);
+                if (orderByDimensions.Count > 1)
+                {
+                    for (int i = 1; i < orderByDimensions.Count; i++)
                     {
-                        var analyticBigResult = new AnalyticSummaryBigResult<AnalyticRecord>()
-                        {
-                            ResultKey = bigResult.ResultKey,
-                            Data = bigResult.Data,
-                            TotalCount = bigResult.TotalCount
-                        };
-                        if (input.Query.WithSummary)
-                            analyticBigResult.Summary = _summaryRecord;
-                        return analyticBigResult;
+                        var dimensionIndex = i;
+                        var dimensionConfig = queryContext.GetDimensionConfig(orderByDimensions[dimensionIndex]);
+                        if (dimensionConfig.Config.FieldType.OrderType == DataRecordFieldOrderType.ByFieldValue)
+                            orderedRecords = orderedRecords.ThenBy(record => record.DimensionValues[dimensionIndex].Value);
+                        else
+                            orderedRecords = orderedRecords.ThenBy(record => record.DimensionValues[dimensionIndex].Name);
                     }
-                    else
-                        return null;
                 }
+                return orderedRecords;
+            }
+
+            private IEnumerable<AnalyticRecord> GetOrderedByAllMeasures(AnalyticQuery query, IEnumerable<AnalyticRecord> allRecords)
+            {
+                List<string> orderByMeasures = query.MeasureFields;
+                if (orderByMeasures == null || orderByMeasures.Count() == 0)
+                    throw new NullReferenceException("orderByMeasures");
+                string firstMeasureName = orderByMeasures[0];
+                IOrderedEnumerable<AnalyticRecord> orderedRecords = allRecords.OrderByDescending(record => record.MeasureValues[firstMeasureName].Value);
+                if (orderByMeasures.Count > 1)
+                {
+                    for (int i = 1; i < orderByMeasures.Count; i++)
+                    {
+                        string measureName = orderByMeasures[i];
+                        orderedRecords = orderedRecords.ThenByDescending(itm => itm.MeasureValues[measureName].Value);
+                    }
+                }
+                return orderedRecords;
             }
 
             protected override ResultProcessingHandler<AnalyticRecord> GetResultProcessingHandler(DataRetrievalInput<AnalyticQuery> input, BigResult<AnalyticRecord> bigResult)
