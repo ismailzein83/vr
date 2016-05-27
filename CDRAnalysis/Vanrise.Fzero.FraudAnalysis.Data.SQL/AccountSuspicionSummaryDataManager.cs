@@ -32,7 +32,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.AccountNumber, input.Query.StrategyIDs, input.Query.Statuses, input.Query.SuspicionLevelIDs, input.Query.FromDate, input.Query.ToDate), (cmd) => { });
+                ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName, input.Query.AccountNumber, input.Query.StrategyIDs, input.Query.Statuses, input.Query.SuspicionLevelIDs, input.Query.FromDate, input.Query.ToDate, input.Query.StrategyExecutionId), (cmd) => { });
             };
 
             return RetrieveData(input, createTempTableAction, AccountSuspicionSummaryMapper, _columnMapper);
@@ -46,7 +46,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         #endregion
 
         #region Private Methods
-        private string CreateTempTableIfNotExists(string tempTableName, string accountNumber, List<int> strategyIDs, List<CaseStatus> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs, DateTime fromDate, DateTime? toDate)
+        private string CreateTempTableIfNotExists(string tempTableName, string accountNumber, List<int> strategyIDs, List<CaseStatus> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs, DateTime fromDate, DateTime? toDate, long? strategyExecutionId)
         {
             StringBuilder query = new StringBuilder(@"
                 IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
@@ -55,7 +55,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     SELECT ac.ID CaseID, ac.AccountNumber, ac.[Status], 
 	                       COUNT(sed.ID) AS NumberOfOccurances,
 	                       MAX(sed.SuspicionLevelID) AS SuspicionLevelID, 
-	                       MAX(se.ExecutionDate) AS LastOccurance
+	                       MAX(se.ExecutionDate) AS LastOccurance, MAX(sed.StrategyExecutionID) AS StrategyExecutionID
                     INTO #TEMP_TABLE_NAME#                
                     FROM FraudAnalysis.AccountCase ac  WITH (NOLOCK)
                     LEFT JOIN FraudAnalysis.StrategyExecutionItem AS sed WITH (NOLOCK) ON sed.CaseID = ac.ID
@@ -67,12 +67,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             ");
 
             query.Replace("#TEMP_TABLE_NAME#", tempTableName);
-            query.Replace("#WHERE_CLAUSE#", GetWhereClause(accountNumber, strategyIDs, accountStatusIDs, suspicionLevelIDs, fromDate, toDate));
+            query.Replace("#WHERE_CLAUSE#", GetWhereClause(strategyExecutionId, accountNumber, strategyIDs, accountStatusIDs, suspicionLevelIDs, fromDate, toDate));
 
             return query.ToString();
         }
 
-        private string GetWhereClause(string accountNumber, List<int> strategyIDs, List<CaseStatus> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs, DateTime fromDate, DateTime? toDate)
+        private string GetWhereClause(long? strategyExecutionId, string accountNumber, List<int> strategyIDs, List<CaseStatus> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs, DateTime fromDate, DateTime? toDate)
         {
             StringBuilder whereClause = new StringBuilder();
 
@@ -92,6 +92,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             if (suspicionLevelIDs != null && suspicionLevelIDs.Count > 0)
                 whereClause.Append(" AND sed.SuspicionLevelID IN (" + string.Join(",", GetSuspicionLevelListAsIntList(suspicionLevelIDs)) + ")");
+
+            if (strategyExecutionId != null)
+                whereClause.Append(" AND sed.StrategyExecutionID = " + strategyExecutionId + "");
 
             return whereClause.ToString();
         }
@@ -120,7 +123,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         private AccountSuspicionSummary AccountSuspicionSummaryMapper(IDataReader reader)
         {
             var summary = new AccountSuspicionSummary();
-
+            summary.StrategyExecutionId = (long)reader["StrategyExecutionID"];
             summary.AccountNumber = reader["AccountNumber"] as string;
             summary.SuspicionLevelID = GetReaderValue<SuspicionLevel>(reader, "SuspicionLevelID");
             summary.NumberOfOccurances = (int)reader["NumberOfOccurances"];

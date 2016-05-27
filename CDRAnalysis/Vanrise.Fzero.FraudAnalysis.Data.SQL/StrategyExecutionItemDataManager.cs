@@ -274,7 +274,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         private AccountSuspicionDetail AccountSuspicionDetailMapper(IDataReader reader)
         {
             var detail = new AccountSuspicionDetail(); // a detail is a fraud result instance
-
+            detail.StrategyExecutionId = (long)reader["StrategyExecutionID"];
             detail.DetailID = (long)reader["DetailID"];
             detail.SuspicionLevelID = (SuspicionLevel)reader["SuspicionLevelID"];
             detail.StrategyName = reader["StrategyName"] as string;

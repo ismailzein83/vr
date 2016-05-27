@@ -53,7 +53,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_
         }
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-
+            console.log(dataRetrievalInput)
             return CDRAnalysis_FA_AccountCaseAPIService.GetFilteredAccountSuspicionSummaries(dataRetrievalInput)
                 .then(function (response) {
 
@@ -98,6 +98,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_
     function retrieveData() {
         var query = {
             AccountNumber: ($scope.accountNumber != undefined && $scope.accountNumber != "") ? $scope.accountNumber : null,
+            StrategyExecutionId: ($scope.strategyExecutionId != undefined && $scope.strategyExecutionId != "") ? $scope.strategyExecutionId : null,
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate,
             StrategyIDs: strategySelectorAPI.getSelectedIds(),
@@ -136,7 +137,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_
             AccountNumber: accountNumber,
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate,
-            CaseID:caseID,
+            CaseID: caseID,
             ModalLevel: 1
         };
 
