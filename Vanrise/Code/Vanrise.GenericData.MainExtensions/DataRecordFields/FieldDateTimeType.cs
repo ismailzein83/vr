@@ -89,7 +89,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             IEnumerable<DateTime> dateTimeValues = FieldTypeHelper.ConvertFieldValueToList<DateTime>(fieldValue);
 
             if (dateTimeValues == null)
-                return Convert.ToDateTime(fieldValue).ToString();
+                return DateTimeValueToString(fieldValue);
 
             var descriptions = new List<string>();
 
@@ -97,6 +97,19 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 descriptions.Add(GetDateTimeDescription(dateTimeValue));
 
             return String.Join(",", descriptions);
+        }
+
+        string DateTimeValueToString(object value)
+        {
+            if (value == null)
+                return null;
+            switch(this.DataType)
+            {
+                case FieldDateTimeDataType.Date: return Convert.ToDateTime(value).ToString("yyyy-MM-dd");
+                case FieldDateTimeDataType.DateTime: return Convert.ToDateTime(value).ToString("yyyy-MM-dd HH:mm:ss");
+                case FieldDateTimeDataType.Time: return ((Vanrise.Entities.Time)value).ToShortTimeString();
+            }
+            return null;
         }
         
         bool DoDateTimesMatch(object fieldValue, object filterValue)
