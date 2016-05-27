@@ -192,7 +192,8 @@
                 summaryField: col.summaryField,
                 tooltipField: col.tooltipField,
                 enableSorting: col.enableSorting != undefined ? col.enableSorting : false,
-                type:col.type,
+                type: col.type,
+                numberPrecision: col.numberPrecision,
                 tag: col.tag,
                 getcolor: col.getcolor,
                 rotateHeader: ctrl.rotateHeader,
@@ -233,10 +234,10 @@
                 columnCellTemplate = col.cellTemplate;
             }
             else {
-                columnCellTemplate = getCellTemplateWithFilter(cellTemplate, col);
+                columnCellTemplate = getCellTemplateWithFilter(cellTemplate, colDef);
             }
             colDef.cellTemplate = columnCellTemplate;
-            colDef.summaryCellTemplate = getCellTemplateWithFilter(summaryCellTemplate, col);
+            colDef.summaryCellTemplate = getCellTemplateWithFilter(summaryCellTemplate, colDef);
             
             if (col.isClickable != undefined) {
                 colDef.isClickableAttr = col.isClickable;
@@ -277,18 +278,18 @@
             return colDef;
         }
 
-        function getCellTemplateWithFilter(template, col) {
-            if (col.type == "Number") {
+        function getCellTemplateWithFilter(template, colDef) {
+            if (colDef.type == "Number") {
                 var numberPrecision = 2;
-                if (col.numberPrecision == "NoDecimal")
+                if (colDef.numberPrecision == "NoDecimal")
                     numberPrecision = 0;
-                else if (col.numberPrecision == "LongPrecision")
+                else if (colDef.numberPrecision == "LongPrecision")
                     numberPrecision = 4;
                 template = template.replace("#TEXTALIGN#", "right;padding-right:2px");
                 template = UtilsService.replaceAll(template, "#CELLFILTER#", "| number:" + numberPrecision);
                 template = UtilsService.replaceAll(template, "#PERCENTAGE#", "");
             }
-            else if (col.type == "Progress" || col.type == "MultiProgress") {
+            else if (colDef.type == "Progress" || colDef.type == "MultiProgress") {
                 template = template.replace("#TEXTALIGN#", "center;position:absolute;color:#666;");
                 template = UtilsService.replaceAll(template, "#CELLFILTER#", "| number:1");
                 template = UtilsService.replaceAll(template, "#PERCENTAGE#", "%");
@@ -296,11 +297,11 @@
             else {
                 template = UtilsService.replaceAll(template, "#PERCENTAGE#", "");
                 template = template.replace("#TEXTALIGN#", "left");
-                if (col.type == "LongDatetime")
+                if (colDef.type == "LongDatetime")
                     template = UtilsService.replaceAll(template, "#CELLFILTER#", "| date:'yyyy-MM-dd HH:mm:ss'");
-                else if (col.type == "Datetime")
+                else if (colDef.type == "Datetime")
                     template = UtilsService.replaceAll(template, "#CELLFILTER#", "| date:'yyyy-MM-dd HH:mm'");
-                else if (col.type == "Date")
+                else if (colDef.type == "Date")
                     template = UtilsService.replaceAll(template, "#CELLFILTER#", "| date:'yyyy-MM-dd'");
                 else
                     template = UtilsService.replaceAll(template, "#CELLFILTER#", "");
