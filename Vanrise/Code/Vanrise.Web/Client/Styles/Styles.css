@@ -2037,6 +2037,7 @@ vr-button[class*="divDisabled"] > div{
 
 vr-label[breakline] .vr-control-label {   
     white-space: pre-line !important;
+    word-wrap: break-word;
 }
 
 
