@@ -178,12 +178,13 @@
 
         function loadDataRecord(dataRecordTypeId)
         {
-            $scope.dataRecordTypeFields.length = 0;
+          
             $scope.selectedFields.length = 0;
             var obj = { DataRecordTypeId: dataRecordTypeId };
             var serializedFilter = UtilsService.serializetoJson(obj);
             return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter).then(function (response) {
                 if (response != undefined) {
+                    $scope.dataRecordTypeFields.length = 0;
                     angular.forEach(response, function (item) {
                         var obj = { FieldName: item.Entity.Name, FieldTitle: item.Entity.Title };
                         $scope.dataRecordTypeFields.push(obj);
@@ -196,7 +197,8 @@
             if (isEditMode)
             {
                return loadDataRecord(dataRecordSource.DataRecordTypeId).then(function()
-                {
+               {
+                   $scope.selectedFields.length = 0;
                     if (dataRecordSource != undefined && dataRecordSource.GridColumns) {
                         for (var x = 0; x < dataRecordSource.GridColumns.length; x++) {
                             var currentColumn = dataRecordSource.GridColumns[x];
