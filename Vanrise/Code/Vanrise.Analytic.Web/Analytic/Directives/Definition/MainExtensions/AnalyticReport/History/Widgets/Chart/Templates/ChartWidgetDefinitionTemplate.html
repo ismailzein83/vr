@@ -4,15 +4,15 @@
     </vr-columns>
 
     <vr-columns width="1/2row" haschildcolumns>
-        <vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorDirectiveReady" isrequired="true" ismultipleselection selectedvalues="scopeModel.selectedMeasures" onselectitem="    scopeModel.onSelectMeasureItem" ondeselectitem="    scopeModel.onDeselectMeasureItem" hideselectedvaluessection></vr-analytic-measure-selector>
+        <vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorDirectiveReady" isrequired="true" ismultipleselection selectedvalues="scopeModel.selectedMeasures" onselectitem="scopeModel.onSelectMeasureItem" ondeselectitem="scopeModel.onDeselectMeasureItem" hideselectedvaluessection></vr-analytic-measure-selector>
     </vr-columns>
     <vr-columns width="1/2row">
-        <vr-select datasource="scopeModel.measures" datatextfield="Title" datavaluefield="Name" label="Top Measure" selectedvalues="scopeModel.topMeasure" hidefilterbox isrequired="true" hideremoveicon></vr-select>
+        <vr-analytic-ordertype-selector on-ready="scopeModel.onOrderTypeSelectorReady" isrequired="true" selectedvalues="scopeModel.selectedOrderType" normal-col-num="2" hideselectedvaluessection></vr-analytic-ordertype-selector>
     </vr-columns>
     <vr-columns width="1/2row">
         <vr-select datasource="scopeModel.chartTypes" datatextfield="description" datavaluefield="value" label="Chart Type" selectedvalues="scopeModel.selectedChartType" isrequired="true" hidefilterbox hideremoveicon></vr-select>
     </vr-columns>
     <vr-columns width="1/2row">
-        <vr-numeric value="scopeModel.topRecords" type="number" label="Top Records" minvalue="1" maxvalue="100" isrequired="true"></vr-numeric>
+        <vr-numeric value="scopeModel.topRecords" type="number" label="Top Records" minvalue="1" maxvalue="100"></vr-numeric>
     </vr-columns>
 </vr-row>

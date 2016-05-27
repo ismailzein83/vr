@@ -106,9 +106,11 @@
     <Content Include="Analytic\Constants\ConnectionStringTypeEnum.js" />
     <Content Include="Analytic\Constants\ExpressionTypeEnum.js" />
     <Content Include="Analytic\Constants\ModuleConfig.js" />
+    <Content Include="Analytic\Constants\OrderTypeEnum.js" />
     <Content Include="Analytic\Constants\OrderDirectionEnum.js" />
     <Content Include="Analytic\Constants\SinceTimeEnum.js" />
     <Content Include="Analytic\Constants\TimeGroupingUnitEnum.js" />
+    <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-ordertype-selector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-aggregate-selector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-dimension-selector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-join-selector.js" />
