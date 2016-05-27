@@ -30,6 +30,13 @@
             var dimensionReadyDeferred = UtilsService.createPromiseDeferred();
             var measureSelectorAPI;
             var measureReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var measureStyleGridAPI;
+            var measureStyleGridReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var orderTypeSelectorAPI;
+            var orderTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.onDimensionSelectorDirectiveReady = function (api) {
@@ -63,6 +70,10 @@
                     $scope.scopeModel.dimensions.splice(datasourceIndex, 1);
                 };
 
+                $scope.scopeModel.onOrderTypeSelectorReady = function (api) {
+                  orderTypeSelectorAPI = api;
+                  orderTypeSelectorReadyDeferred.resolve();
+                };
 
                 $scope.scopeModel.measures = [];
                 $scope.scopeModel.onMeasureSelectorDirectiveReady = function (api) {
@@ -93,7 +104,11 @@
                     var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.measures, dataItem.AnalyticItemConfigId, 'Name');
                     $scope.scopeModel.measures.splice(datasourceIndex, 1);
                 };
-
+                $scope.scopeModel.onMeasureStyleGridDirectiveReady = function(api)
+                {
+                    measureStyleGridAPI = api;
+                    measureStyleGridReadyDeferred.resolve();
+                }
                 defineAPI();
             }
 
@@ -147,6 +162,18 @@
                         });
                         promises.push(loadDimensionDirectivePromiseDeferred.promise);
 
+
+                        var loadMeasureStyleGridDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        measureStyleGridReadyDeferred.promise.then(function () {
+                            var payloadMeasureStyleGridDirective = {
+                                context:getContext(),
+                                measureStyles: payload != undefined && payload.widgetEntity !=undefined?payload.widgetEntity.MeasureStyles:undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(measureStyleGridAPI, payloadMeasureStyleGridDirective, loadMeasureStyleGridDirectivePromiseDeferred);
+                        });
+                        promises.push(loadMeasureStyleGridDirectivePromiseDeferred.promise);
+
                         var loadMeasureDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         measureReadyDeferred.promise.then(function () {
                             var payloadFilterDirective = {
@@ -157,6 +184,19 @@
                             VRUIUtilsService.callDirectiveLoad(measureSelectorAPI, payloadFilterDirective, loadMeasureDirectivePromiseDeferred);
                         });
                         promises.push(loadMeasureDirectivePromiseDeferred.promise);
+
+
+                         var orderTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(orderTypeSelectorLoadDeferred.promise);
+
+                    orderTypeSelectorReadyDeferred.promise.then(function () {
+                        var orderTypeSelectorPayload = undefined;
+                        if(payload.widgetEntity != undefined)
+                            orderTypeSelectorPayload = { selectedIds : payload.widgetEntity.OrderType };
+                        VRUIUtilsService.callDirectiveLoad(orderTypeSelectorAPI, orderTypeSelectorPayload, orderTypeSelectorLoadDeferred);
+                        });
+
+
 
                         return UtilsService.waitMultiplePromises(promises);
                     }
@@ -200,10 +240,23 @@
                         RootDimensionsFromSearchSection: $scope.scopeModel.rootDimensionsFromSearch,
                         Dimensions: dimensions,
                         Measures: measures,
-                        WithSummary: $scope.scopeModel.withSummary
+                        WithSummary: $scope.scopeModel.withSummary,
+                    OrderType: orderTypeSelectorAPI.getSelectedIds(),
                     }
                     return data;
                 }
+
+            }
+
+            function getContext()
+            {
+                var context = {
+                    getMeasures :function()
+                    {
+                       return $scope.scopeModel.selectedMeasures;
+                    }
+                }
+                return context;
             }
         }
     }

@@ -162,7 +162,7 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                     ctrl.sortField = 'DimensionValues[0].Name';
                 else
                     ctrl.sortField = 'MeasureValues.' + ctrl.measures[0].MeasureName;
-
+                console.log(payLoad.Settings);
                 var queryFinalized = {
                     Filters: payLoad.DimensionFilters,
                     DimensionFields: UtilsService.getPropValuesFromArray(ctrl.groupingDimensions, 'DimensionName'),
@@ -171,7 +171,8 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                     ToTime: toTime,
                     TableId: payLoad.TableId,
                     FilterGroup: payLoad.FilterGroup,
-                    TopRecords: payLoad.Settings.TopRecords
+                    TopRecords: payLoad.Settings.TopRecords,
+                    OrderBy: [payLoad.Settings.TopMeasure]
                 }
                 return queryFinalized;
             }

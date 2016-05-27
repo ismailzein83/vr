@@ -2,9 +2,9 @@
 
     'use strict';
 
-    MeasureStyleGridEditorDirective.$inject = ['Analytic_RecordSearchService'];
+    MeasureStyleGridEditorDirective.$inject = ['Analytic_AnalyticService'];
 
-    function MeasureStyleGridEditorDirective(Analytic_RecordSearchService) {
+    function MeasureStyleGridEditorDirective(Analytic_AnalyticService) {
         return {
             restrict: 'E',
             scope: {
@@ -20,12 +20,12 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Analytic/Directives/Definition/AnalyticReport/Templates/MeasureStyleGridEditorTemplate.html"
+            templateUrl: "/Client/Modules/Analytic/Directives/Definition/AnalyticReport/MeasureStyle/Templates/MeasureStyleGridEditorTemplate.html"
         };
 
         function MeasureStyleGridEditor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-            var measureFields;
+            var context;
             var gridAPI;
             var counter = 0;
             function initializeController() {
@@ -44,7 +44,7 @@
                         measureStyleObj.id = counter;
                         ctrl.measureStyles.push(measureStyleObj);
                     }
-                    Analytic_RecordSearchService.addDataRecordMeasureStyle(onMeasureStyleAdded, getMeasureNames(null));
+                    Analytic_AnalyticService.addMeasureStyle(onMeasureStyleAdded, getMeasureNames());
                 }
 
                 ctrl.removeMeasureStyle = function (measureStyle) {
@@ -60,14 +60,12 @@
                 api.load = function (payload) {
                     if (payload != undefined)
                     {
-                        measureFields = payload.measureFields;
-                    }
-                    ctrl.measureStyles.length = 0;
-                    if (query) {
-                        if (query.measureStyles && query.measureStyles.length > 0) {
-                            for (var y = 0; y < query.measureStyles.length; y++) {
+                        context = payload.context;
+                        ctrl.measureStyles.length = 0;
+                        if (payload.measureStyles && payload.measureStyles.length > 0) {
+                            for (var y = 0; y < payload.measureStyles.length; y++) {
                                 counter++;
-                                var currentMeasureStyle = query.measureStyles[y];
+                                var currentMeasureStyle = payload.measureStyles[y];
                                 currentMeasureStyle.id = counter;
                                 ctrl.measureStyles.push(currentMeasureStyle);
                             }
@@ -103,22 +101,23 @@
                     }
                 }
 
-                Analytic_RecordSearchService.editDataRecordMeasureStyle(measureStyle, getMeasureNames(measureStyle), onMeasureStyleUpdated);
+                Analytic_AnalyticService.editMeasureStyle(measureStyle,  onMeasureStyleUpdated,getMeasureNames(measureStyle));
             }
 
             function getMeasureNames(measureStyle) {
-                var measureNames = [];
+                var measures = [];
+                var measureFields = context.getMeasures();
                 for (var x = 0; x < measureFields.length; x++) {
                     var currentMeasureField = measureFields[x];
-                    if (measureStyle == null || measureStyle.Title != currentMeasureField.Title) {
-                        measureNames.push(currentMeasureField.Title.toLowerCase());
+                    if (measureStyle == undefined || measureStyle.Name != currentMeasureField.Name) {
+                        measures.push(currentMeasureField);
                     }
                 }
-                return measureNames;
+                return measures;
             }
         }
     }
 
-    app.directive('vrAnalyticAnalyticreportMeasurestyleGridEditor', MeasureStyleGridEditorDirective);
+    app.directive('vrAnalyticMeasurestyleGridEditor', MeasureStyleGridEditorDirective);
 
 })(app);

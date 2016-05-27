@@ -20,11 +20,16 @@
         {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetRealTimeWidgetsTemplateConfigs"));
         }
+        function GetMeasureStyleRuleTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetMeasureStyleRuleTemplateConfigs"));
+        }
         return ({
             GetAnalyticReportSettingsTemplateConfigs: GetAnalyticReportSettingsTemplateConfigs,
             GetWidgetsTemplateConfigs: GetWidgetsTemplateConfigs,
+
             GetRealTimeReportSettingsTemplateConfigs: GetRealTimeReportSettingsTemplateConfigs,
-            GetRealTimeWidgetsTemplateConfigs: GetRealTimeWidgetsTemplateConfigs
+            GetRealTimeWidgetsTemplateConfigs: GetRealTimeWidgetsTemplateConfigs,
+            GetMeasureStyleRuleTemplateConfigs: GetMeasureStyleRuleTemplateConfigs
         });
     }
 

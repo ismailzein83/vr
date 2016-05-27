@@ -31,6 +31,11 @@ namespace Vanrise.Analytic.Business
         {
             var templateConfigManager = new ExtensionConfigurationManager();
             return templateConfigManager.GetExtensionConfigurations<RealTimeWidgetSetting>(Constants.RealTimeWidgetConfigType);
+        }
+        public IEnumerable<MeasureStyleRuleTemplate> GetMeasureStyleRuleTemplateConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<MeasureStyleRuleTemplate>(Constants.MeasureStyleRuleConfigType);
         } 
     }
 }

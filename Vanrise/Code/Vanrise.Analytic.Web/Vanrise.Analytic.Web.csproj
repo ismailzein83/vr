@@ -133,6 +133,7 @@
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\vr-analytic-analyticconfig-measure-grid.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\History\Templates\HistoryAnalyticReportTemplates.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\History\vr-analytic-analyticreport-history-definition.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\MeasureStyle\vr-analytic-measurestyle-stylerulecondition.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RealTime\SearchSettings\vr-analytic-realtime-searchsettings-selective.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RealTime\Templates\RealTimeAnalyticReportTemplates.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RealTime\vr-analytic-analyticreport-realtime-definition.js" />
@@ -142,10 +143,10 @@
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\Templates\RecordSearchAnalyticReportTemplates.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\vr-analytic-analyticreport-recordsearch-definition.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\Templates\AnalyticReportGridTemplate.html" />
-    <Content Include="Analytic\Directives\Definition\AnalyticReport\Templates\MeasureStyleGridEditorTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\MeasureStyle\Templates\MeasureStyleGridEditorTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\vr-analytic-analyticreport-config-selector.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\vr-analytic-analyticreport-grid.js" />
-    <Content Include="Analytic\Directives\Definition\AnalyticReport\vr-analytic-analyticreport-measurestyle-grid-editor.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\MeasureStyle\vr-analytic-measurestyle-grid-editor.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\vr-analytic-analyticreport-selector.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticTable\Templates\AnalyticTableGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticTable\vr-analytic-analytictable-grid.js" />
@@ -164,6 +165,10 @@
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RealTime\Widgets\Chart\Templates\RealTimeChartWidgetDefinitionTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RealTime\Widgets\Chart\vr-analytic-realtime-widgets-timevariation-definition.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RealTime\Widgets\Chart\vr-analytic-realtime-widgets-chart-definition.js" />
+    <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\StyleRuleConditions\Templates\CompareConditionTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\StyleRuleConditions\Templates\RangeConditionTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\StyleRuleConditions\vr-analytic-measurestyle-stylerulecondition-compare.js" />
+    <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\StyleRuleConditions\vr-analytic-measurestyle-stylerulecondition-range.js" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\History\Templates\HistoryAnalyticReportRuntimeTemplates.html" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\History\vr-analytic-analyticreport-history-runtime.js" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RealTime\Chart\Templates\AnalyticRealTimeTimeVariationChart.html" />

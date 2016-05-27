@@ -16,5 +16,8 @@ namespace Vanrise.Analytic.Business
 
         public const string AnalyticReportConfigType = "Analytic_AnalyticReportConfigType";
         public const string RealTimeWidgetConfigType = "Analytic_RealTimeWidgetSettings";
+        public const string MeasureStyleRuleConfigType = "Analytic_MeasureStyleRuleTemplates";
+
+        
     }
 }

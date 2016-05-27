@@ -12,7 +12,7 @@ namespace Vanrise.Analytic.Entities
 
         public List<StyleRule> Rules { get; set; }
     }
-    public abstract class StyleRule
+    public class StyleRule
     {
         public StyleRuleCondition Condition { get; set; }
 

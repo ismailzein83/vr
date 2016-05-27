@@ -96,6 +96,7 @@
     <Compile Include="Config\Measure\AnalyticMeasureConfigQuery.cs" />
     <Compile Include="DimensionFilter.cs" />
     <Compile Include="DimensionValue.cs" />
+    <Compile Include="MeasureStyleRuleTemplate.cs" />
     <Compile Include="StyleRule.cs" />
     <Compile Include="MeasureValues.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
