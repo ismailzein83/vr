@@ -45,7 +45,8 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
             }
 
             return '<span  ng-show="ctrl.isSellingNumberPlanVisible">'
-                   + ' <vr-whs-be-sellingnumberplan-selector  normal-col-num="{{ctrl.normalColNum}}"   on-ready="ctrl.onSellingNumberReady"  onselectionchanged="ctrl.onSellingNumberPlanSelectionchanged"></vr-whs-be-sellingnumberplan-selector>'
+                   + ' <vr-whs-be-sellingnumberplan-selector  normal-col-num="{{ctrl.normalColNum}}"   on-ready="ctrl.onSellingNumberReady"'
+                   + ' onselectionchanged="ctrl.onSellingNumberPlanSelectionchanged"></vr-whs-be-sellingnumberplan-selector>'
                    + ' </span>'
                    + ' <vr-columns colnum="{{ctrl.normalColNum}}">'
                    + '  <vr-select on-ready="ctrl.onSelectorReady"'
@@ -55,7 +56,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                    + '  datavaluefield="SaleZoneId"'
                    + '  datatextfield="Name"'
                    + '  ' + multipleselection
-                   + '  isrequired="ctrl.isrequired"'
+                   + '  isrequired="saleZoneSelectorRequired"'
                    + '  vr-disabled="ctrl.isdisabled"'
                    + '  label="' + label + '"'
                    + '  >'
@@ -96,12 +97,18 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
 
                 saleZoneSelectorCtrl.onSellingNumberPlanSelectionchanged = function () {
+
                     selectorApi.clearDataSource();
                     var oldsellingNumberPlanId = sellingNumberPlanId;
 
                     sellingNumberPlanId = sellingDirectiveApi.getSelectedIds();
                     if (sellingNumberPlanId == undefined)
                         sellingNumberPlanId = oldsellingNumberPlanId;
+
+                    if (sellingDirectiveApi.getSelectedIds() != undefined)
+                        $scope.saleZoneSelectorRequired = true;
+                    else
+                        $scope.saleZoneSelectorRequired = false;
                 }
 
 
@@ -176,7 +183,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
                                 var setSelectedSaleZonesPromiseDeferred = UtilsService.createPromiseDeferred();
                                 promises.push(setSelectedSaleZonesPromiseDeferred.promise);
-                               
+
 
                                 var loadSaleZonePromise = WhS_BE_SaleZoneAPIService.GetSellingNumberPlanIdBySaleZoneIds(selectedSaleZoneIds).then(function (response) {
 
@@ -203,7 +210,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                                         });
 
                                     })
-                                   
+
 
                                 });
 
@@ -244,7 +251,6 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
             this.initializeController = initializeController;
         }
-
 
         function GetSaleZonesInfo(attrs, saleZoneSelectorCtrl, selectedIds, input) {
             saleZoneSelectorCtrl.datasource = [];
