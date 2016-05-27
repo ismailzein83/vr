@@ -66,9 +66,9 @@
                     <vr-datagridcolumn headertext="'Id'" field="'Entity.ID'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Type'" field="'PeriodName'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" type="'Text'" widthfactor="10" getcolor="getStatusColor" disablesorting></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'From CDR Date'" field="'Entity.FromDate'" type="'Datetime'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'To CDR Date'" field="'Entity.ToDate'" type="'Datetime'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" type="'Text'"  getcolor="getStatusColor" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'From CDR Date'" field="'Entity.FromDate'" widthfactor="15" type="'Datetime'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'To CDR Date'" field="'Entity.ToDate'" widthfactor="15" type="'Datetime'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Exec. By'" field="'ExecutedByName'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Exec. Date'" field="'Entity.ExecutionDate'" type="'Datetime'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Duration (min)'">{{dataItem.Entity.ExecutionDuration/60 | number:1}}</vr-datagridcolumn>
