@@ -262,7 +262,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             string imies = GetReaderValue<string>(reader, "IMEIs");
             if (imies != null)
                 item.IMEIs = new HashSet<string>((imies).Split(','));
-            item.StrategyExecutionID = (int)reader["StrategyExecutionID"];
+            item.StrategyExecutionID = (long)reader["StrategyExecutionID"];
             item.AccountNumber = reader["AccountNumber"] as string;
             item.SuspicionLevelID = (int)reader["SuspicionLevelID"];
             item.CaseID = GetReaderValue<int?>(reader, "CaseID");
