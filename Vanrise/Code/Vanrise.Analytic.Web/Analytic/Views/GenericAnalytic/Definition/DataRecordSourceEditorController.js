@@ -13,6 +13,7 @@
         var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var dataRecordStorageSelectorAPI;
+        var dataRecordStorageSelectorReadyDeferred;
 
         $scope.selectedFields = [];
         $scope.dataRecordTypeFields = [];
@@ -42,19 +43,25 @@
             };
 
             $scope.onDataRecordTypeSelectionChanged = function (option) {
-                var payload = { DataRecordTypeId: option != undefined ? option.DataRecordTypeId : 0, selectedIds: dataRecordSource != undefined ? dataRecordSource.RecordStorageIds : undefined };
-                dataRecordStorageSelectorAPI.load(payload);
+                if (dataRecordStorageSelectorAPI != undefined) {
+                    var setLoader = function (value) { $scope.isLoading = value; };
+                    var payload = {
+                        DataRecordTypeId: option != undefined ? option.DataRecordTypeId : 0,
+                        selectedIds: dataRecordSource != undefined ? dataRecordSource.RecordStorageIds : undefined
+                    };
+
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordStorageSelectorAPI, payload, setLoader, dataRecordStorageSelectorReadyDeferred);
+                }
                 loadDataRecordFields(option);
+                //var payload = {
+                //    DataRecordTypeId: option != undefined ? option.DataRecordTypeId : 0,
+                //    selectedIds: dataRecordSource != undefined ? dataRecordSource.RecordStorageIds : undefined
+                //};
+                //dataRecordStorageSelectorAPI.load(payload);
+
             };
 
-            //$scope.addField = function () {
-            //    $scope.selectedFields.push($scope.selectedDataRecordTypeField);
-            //    $scope.dataRecordTypeFields.splice($scope.dataRecordTypeFields.indexOf($scope.selectedDataRecordTypeField), 1);
-            //    $scope.selectedDataRecordTypeField = undefined;
-            //}
-
             $scope.removeField = function (field) {
-                //$scope.dataRecordTypeFields.push(field);
                 $scope.selectedFields.splice($scope.selectedFields.indexOf(field), 1);
             }
 
@@ -94,6 +101,7 @@
             }
         }
         function loadAllControls() {
+            $scope.isLoading = true;
             return UtilsService.waitMultipleAsyncOperations([setTitle, setData, loadDataRecordTypeSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
@@ -114,6 +122,7 @@
         }
         function loadDataRecordTypeSelector() {
             var dataRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            //dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             dataRecordTypeSelectorReadyDeferred.promise.then(function () {
                 var payload;
@@ -166,7 +175,6 @@
         }
 
         function loadDataRecordFields(option) {
-            //$scope.selectedDataRecordTypeField = undefined;
             $scope.dataRecordTypeFields.length = 0;
             $scope.selectedFields.length = 0;
             if (option != undefined) {
@@ -176,23 +184,23 @@
                 return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter).then(function (response) {
                     if (response != undefined) {
                         angular.forEach(response, function (item) {
-                            //var found = false;
-                            if (dataRecordSource != undefined && dataRecordSource.GridColumns) {
-                                for (var x = 0; x < dataRecordSource.GridColumns.length; x++) {
-                                    var currentColumn = dataRecordSource.GridColumns[x];
+                            var obj = { FieldName: item.Entity.Name, FieldTitle: item.Entity.Title };
+                            $scope.dataRecordTypeFields.push(obj);
+                        });
+
+                        if (dataRecordSource != undefined && dataRecordSource.GridColumns) {
+                            for (var x = 0; x < dataRecordSource.GridColumns.length; x++) {
+                                var currentColumn = dataRecordSource.GridColumns[x];
+                                for (var y = 0; y < response.length; y++) {
+                                    var item = response[y];
                                     if (currentColumn.FieldName == item.Entity.Name) {
                                         var obj = { FieldName: currentColumn.FieldName, FieldTitle: currentColumn.FieldTitle };
                                         $scope.selectedFields.push(obj);
-                                        //found = true;
                                         break;
                                     }
                                 }
                             }
-                            //if (!found) {
-                            var obj = { FieldName: item.Entity.Name, FieldTitle: item.Entity.Title };
-                            $scope.dataRecordTypeFields.push(obj);
-                            //}
-                        });
+                        }
                     }
                     dataRecordSource = undefined;
                 });
