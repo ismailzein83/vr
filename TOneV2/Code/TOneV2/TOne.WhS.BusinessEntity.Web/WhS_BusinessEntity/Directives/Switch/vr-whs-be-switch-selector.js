@@ -9,7 +9,7 @@ function (WhS_BE_SwitchAPIService, UtilsService, VRUIUtilsService) {
             ismultipleselection: "@",
             isdisabled: "=",
             onselectionchanged: '=',
-            isrequired: "@",
+            isrequired: "=",
             selectedvalues: '=',
             normalColNum: '@'
 
@@ -51,13 +51,8 @@ function (WhS_BE_SwitchAPIService, UtilsService, VRUIUtilsService) {
             multipleselection = "ismultipleselection";
         }
 
-        var required = "";
-        if (attrs.isrequired != undefined)
-            required = "isrequired";
-
         return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-            + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SwitchId" '
-        + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
+            + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SwitchId" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
            + '</vr-columns>';
     }
 
