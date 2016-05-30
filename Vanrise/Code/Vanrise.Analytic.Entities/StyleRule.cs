@@ -21,6 +21,7 @@ namespace Vanrise.Analytic.Entities
 
     public abstract class StyleRuleCondition
     {
+        public int ConfigId { get; set; }
         public abstract bool Evaluate(IStyleRuleConditionContext context);
     }
 

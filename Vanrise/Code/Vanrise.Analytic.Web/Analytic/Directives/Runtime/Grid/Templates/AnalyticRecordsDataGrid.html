@@ -7,7 +7,7 @@
                            numberprecision="dimension.NumberPrecision" field="dimension.Type.indexOf('Date') > -1 || dimension.Type.indexOf('Number') > -1 ? 'DimensionValues[' + $index + '].Value' : 'DimensionValues[' + $index + '].Name'" columnindex="$index" widthfactor="15"></vr-datagridcolumn>
 
         <vr-datagridcolumn ng-repeat="measure in analyticrecordsctrl.measures" headertext="measure.Title" type="measure.Type" numberprecision="measure.NumberPrecision"
-                           field="'MeasureValues.' + measure.MeasureName + '.Value'" tag="measure" summaryfield="'MeasureValues.' + measure.MeasureName + '.Value'"></vr-datagridcolumn>
+                           field="'MeasureValues.' + measure.MeasureName + '.Value'" tag="measure.MeasureName" summaryfield="'MeasureValues.' + measure.MeasureName + '.Value'" getcolor="analyticrecordsctrl.getMeasureColor"></vr-datagridcolumn>
 
 
         <vr-datagridexpandablerow ng-if="analyticrecordsctrl.drillDownDimensions.length > 0">

@@ -2,26 +2,19 @@
 
     "use strict";
 
-    MeasureStyleEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticTypeEnum', 'VR_Analytic_AnalyticItemConfigAPIService','VR_Analytic_AnalyticConfigurationAPIService'];
+    MeasureStyleEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','VR_Analytic_AnalyticConfigurationAPIService','VR_GenericData_DataRecordFieldTypeConfigAPIService','VR_Analytic_StyleCodeEnum'];
 
-    function MeasureStyleEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Analytic_AnalyticTypeEnum, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticConfigurationAPIService) {
+    function MeasureStyleEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_StyleCodeEnum) {
 
-        var isEditMode;
-
-        var itemConfigDirectiveAPI;
-        var itemConfigDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-   
-        var analyticItemConfigId;
-        var analyticTableId;
-        var itemconfigType;
+        var measureStyleEntity;
+        var fieldTypeConfigs = [];
         $scope.scopeModel = {};
+        $scope.scopeModel.isEditMode = false;
         $scope.scopeModel.measureNames = [];
         $scope.scopeModel.measureStyles = [];
-        var measureStyleEntity;
-       
+
         loadParameters();
         defineScope();
-
         load();
 
         function loadParameters() {
@@ -30,18 +23,46 @@
                 $scope.scopeModel.measureFields = parameters.measureFields;
                 measureStyleEntity = parameters.measureStyle;
             }
-            isEditMode = (measureStyleEntity != undefined);
+            $scope.scopeModel.isEditMode = (measureStyleEntity != undefined);
         }
 
         function defineScope() {
             $scope.scopeModel.measureStyleRuleTemplates = [];
+
+            $scope.scopeModel.removeMeasureStyle = function (measureStyle)
+            {
+                $scope.scopeModel.measureStyles.splice($scope.scopeModel.measureStyles.indexOf(measureStyle), 1);
+            }
+
+            $scope.scopeModel.styleColors = UtilsService.getArrayEnum(VR_Analytic_StyleCodeEnum);
+
+
+            $scope.scopeModel.isValidMeasureStyles = function()
+            {
+                if ($scope.scopeModel.measureStyles.length == 0)
+                    return "At least one style should be added.";
+                return null;
+            }
             $scope.scopeModel.addMeasureStyleRule = function()
             {
-
+                var dataItem = {
+                    id: $scope.scopeModel.measureStyles.length + 1,
+                    configId: $scope.scopeModel.selectedMeasureStyleRuleTemplate.ExtensionConfigurationId,
+                    editor: $scope.scopeModel.selectedMeasureStyleRuleTemplate.Editor,
+                    name: $scope.scopeModel.selectedMeasureStyleRuleTemplate.Name,
+                    onDirectiveReady:function(api)
+                    {
+                        dataItem.directiveAPI = api;
+                        var payload ={context:getContext(),Title:"Compare Value",FieldType:$scope.scopeModel.selectedMeasureName.FieldType};
+                        var setLoader = function (value) { $scope.scopeModel.isLoadingDirective = value };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, payload, setLoader);
+                    }
+                }
+                $scope.scopeModel.measureStyles.push(dataItem);
             }
 
             $scope.scopeModel.saveMeasureStyle = function () {
-                if (isEditMode) {
+                if ($scope.scopeModel.isEditMode) {
                     return update();
                 }
                 else {
@@ -52,34 +73,77 @@
                 $scope.modalContext.closeModal()
             };
         }
+        function getContext()
+        {
+            var context = {
+                getFieldTypeEditor: function (fieldTypeConfigId) {
+                    var fieldType = UtilsService.getItemByVal(fieldTypeConfigs, fieldTypeConfigId, "DataRecordFieldTypeConfigId");
+                    if (fieldType != undefined) {
+                        return fieldType.RuntimeEditor;
+                    }
 
+                }
+            }
+            
+            return context;
+        }
         function load() {
             $scope.scopeModel.isLoading = true;
             loadAllControls();
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadSelectedMeasureStyles, loadStaticData, loadMeasureStyleRuleTemplateConfigs]).then(function () {
-
-                }).finally(function () {
-                    $scope.scopeModel.isLoading = false;
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                });
 
                 function setTitle() {
-                    if (isEditMode && measureStyleEntity != undefined)
-                            $scope.title = UtilsService.buildTitleForUpdateEditor("Measure Style","");
-                        else
-                            $scope.title = UtilsService.buildTitleForAddEditor("Measure Style");
+                    if ($scope.scopeModel.isEditMode && measureStyleEntity != undefined)
+                        $scope.title = UtilsService.buildTitleForUpdateEditor("Measure Style", measureStyleEntity.MeasureName);
+                    else
+                        $scope.title = UtilsService.buildTitleForAddEditor("Measure Style");
                 }
-
                 function loadSelectedMeasureStyles() {
-                   
-                }
+                    var promises = [];
+                    if (measureStyleEntity != undefined && measureStyleEntity.Rules != undefined) {
+                        for (var i = 0; i < measureStyleEntity.Rules.length; i++) {
+                            var rule = measureStyleEntity.Rules[i];
+                            var filterItem = {
+                                payload: rule,
+                                readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                            };
+                            promises.push(filterItem.loadPromiseDeferred.promise);
+                            addStyleConditionItemToGrid(filterItem)
+                        }
+                        function addStyleConditionItemToGrid(styleConditionItem) {
+                            var matchItem = UtilsService.getItemByVal($scope.scopeModel.measureStyleRuleTemplates, styleConditionItem.payload.Condition.ConfigId, "ExtensionConfigurationId");
+                            if (matchItem == null)
+                                return;
 
+                            var dataItem = {
+                                id: $scope.scopeModel.measureStyles.length + 1,
+                                configId: matchItem.ExtensionConfigurationId,
+                                editor: matchItem.Editor,
+                                name: matchItem.Name,
+                                selectedStyleColor: UtilsService.getItemByVal($scope.scopeModel.styleColors, styleConditionItem.payload.StyleCode, 'value')
+                            };
+                            var dataItemPayload = { context: getContext(), Title: "Compare Value", FieldType: $scope.scopeModel.selectedMeasureName.FieldType,RuleStyle: styleConditionItem.payload.Condition};
+
+                            dataItem.onDirectiveReady = function (api) {
+                                dataItem.directiveAPI = api;
+                                styleConditionItem.readyPromiseDeferred.resolve();
+                            };
+
+                            styleConditionItem.readyPromiseDeferred.promise
+                                .then(function () {
+                                    VRUIUtilsService.callDirectiveLoad(dataItem.directiveAPI, dataItemPayload, styleConditionItem.loadPromiseDeferred);
+                                });
+
+                            $scope.scopeModel.measureStyles.push(dataItem);
+                        }
+                    }
+                    return UtilsService.waitMultiplePromises(promises);
+                }
                 function loadStaticData() {
                     if (measureStyleEntity != undefined) {
-                        $scope.scopeModel.selectedMeasureNames = UtilsService.getItemByVal($scope.scopeModel.measureFields, measureStyleEntity.MeasureName,"MeasureName");
+                        $scope.scopeModel.selectedMeasureName = UtilsService.getItemByVal($scope.scopeModel.measureFields, measureStyleEntity.MeasureName, "Name");
                     }
                 }
                 function loadMeasureStyleRuleTemplateConfigs() {
@@ -95,63 +159,64 @@
                         }
                     });
                 }
+
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadMeasureStyleRuleTemplateConfigs, getFieldTypeConfigs]).then(function () {
+                    loadSelectedMeasureStyles().finally(function () {
+                        $scope.scopeModel.isLoading = false;
+                    }).catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                });
             }
-
         }
 
-
-        function buildItemConfigObjectFromScope() {
-            var analyticItemConfigdetail = itemConfigDirectiveAPI != undefined ? itemConfigDirectiveAPI.getData() : undefined;
-            var analyticItemConfig = {
-                AnalyticItemConfigId: analyticItemConfigId,
-                TableId: analyticItemConfigEntity != undefined ? analyticItemConfigEntity.TableId : analyticTableId,
-                Name: $scope.scopeModel.name,
-                Title: $scope.scopeModel.title,
-                ItemType: itemconfigType,
-                Config: analyticItemConfigdetail
-            };
-            var analyticItemConfigForAdd = {
-                ItemType: itemconfigType,
-                AnalyticItemConfig: UtilsService.serializetoJson(analyticItemConfig)
-            };
-            return analyticItemConfigForAdd;
+        function getFieldTypeConfigs() {
+            return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
+                fieldTypeConfigs = [];
+                for (var i = 0; i < response.length; i++) {
+                    fieldTypeConfigs.push(response[i]);
+                }
+            });
         }
 
+        function buildMeasuerStyleObjectFromScope() {
+            var rules = [];
+            for (var i = 0; i < $scope.scopeModel.measureStyles.length; i++)
+            {
+                var measurestyle = $scope.scopeModel.measureStyles[i];
+                var data;
+                if (measurestyle.directiveAPI != undefined)
+                    data = measurestyle.directiveAPI.getData();
+                if (data !=undefined)
+                    data.ConfigId = measurestyle.configId;
+                rules.push({
+                    $type: "Vanrise.Analytic.Entities.StyleRule,Vanrise.Analytic.Entities",
+                    Condition: data,
+                    StyleCode: measurestyle.selectedStyleColor.value
+                });
+            }
+            var measureStyleRule = {
+                MeasureName: $scope.scopeModel.selectedMeasureName.Name,
+                Rules: rules
+            };
+            return measureStyleRule;
+        }
 
         function insert() {
-            $scope.scopeModel.isLoading = true;
-            var analyticItemConfigObject = buildItemConfigObjectFromScope();
-            return VR_Analytic_AnalyticItemConfigAPIService.AddAnalyticItemConfig(analyticItemConfigObject)
-           .then(function (response) {
-               if (VRNotificationService.notifyOnItemAdded($scope.scopeModel.selectedItemConfigType.description, response, 'Name')) {
-                   if ($scope.onAnalyticItemConfigAdded != undefined)
-                       $scope.onAnalyticItemConfigAdded(response.InsertedObject);
-                   $scope.modalContext.closeModal();
-               }
-           }).catch(function (error) {
-               VRNotificationService.notifyException(error, $scope);
-           }).finally(function () {
-               $scope.scopeModel.isLoading = false;
-           });
-
+            var measureStyleObj = buildMeasuerStyleObjectFromScope();
+            if ($scope.onMeasureStyleAdded != undefined)
+                $scope.onMeasureStyleAdded(measureStyleObj);
+            $scope.modalContext.closeModal();
         }
 
         function update() {
-            var analyticItemConfigObject = buildItemConfigObjectFromScope();
-
-            $scope.scopeModel.isLoading = true;
-
-            return VR_Analytic_AnalyticItemConfigAPIService.UpdateAnalyticItemConfig(analyticItemConfigObject).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated($scope.scopeModel.selectedItemConfigType.description, response, 'Name')) {
-                    if ($scope.onAnalyticItemConfigUpdated != undefined)
-                        $scope.onAnalyticItemConfigUpdated(response.UpdatedObject);
-                    $scope.modalContext.closeModal();
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.scopeModel.isLoading = false;
-            });
+            var measureStyleObj = buildMeasuerStyleObjectFromScope();
+            if ($scope.onMeasureStyleUpdated != undefined)
+                $scope.onMeasureStyleUpdated(measureStyleObj);
+            $scope.modalContext.closeModal();
+          
         }
 
     }

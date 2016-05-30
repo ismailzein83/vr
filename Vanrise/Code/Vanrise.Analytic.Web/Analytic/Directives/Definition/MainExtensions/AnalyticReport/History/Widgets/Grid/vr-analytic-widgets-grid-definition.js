@@ -2,9 +2,9 @@
 
     'use strict';
 
-    WidgetsGridDefinition.$inject = ["UtilsService", 'VRUIUtilsService'];
+    WidgetsGridDefinition.$inject = ["UtilsService", 'VRUIUtilsService','VR_Analytic_AnalyticTypeEnum','VR_Analytic_AnalyticItemConfigAPIService'];
 
-    function WidgetsGridDefinition(UtilsService, VRUIUtilsService) {
+    function WidgetsGridDefinition(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticTypeEnum, VR_Analytic_AnalyticItemConfigAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -36,7 +36,8 @@
 
             var orderTypeSelectorAPI;
             var orderTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
+            var tableIds;
+            var measures;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.onDimensionSelectorDirectiveReady = function (api) {
@@ -69,12 +70,10 @@
                     var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.dimensions, dataItem.Name, 'Name');
                     $scope.scopeModel.dimensions.splice(datasourceIndex, 1);
                 };
-
                 $scope.scopeModel.onOrderTypeSelectorReady = function (api) {
                   orderTypeSelectorAPI = api;
                   orderTypeSelectorReadyDeferred.resolve();
                 };
-
                 $scope.scopeModel.measures = [];
                 $scope.scopeModel.onMeasureSelectorDirectiveReady = function (api) {
                     measureSelectorAPI = api;
@@ -117,7 +116,7 @@
 
                 api.load = function (payload) {
                     if (payload != undefined && payload.tableIds != undefined) {
-                        var tableIds = payload.tableIds;
+                        tableIds = payload.tableIds;
                         var selectedDimensionIds;
                         var selectedMeasureIds;
                         if (payload.widgetEntity != undefined) {
@@ -166,10 +165,10 @@
                         var loadMeasureStyleGridDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         measureStyleGridReadyDeferred.promise.then(function () {
                             var payloadMeasureStyleGridDirective = {
-                                context:getContext(),
-                                measureStyles: payload != undefined && payload.widgetEntity !=undefined?payload.widgetEntity.MeasureStyles:undefined
+                                context: getContext(),
+                            
+                                measureStyles: payload != undefined && payload.widgetEntity != undefined ? payload.widgetEntity.MeasureStyleRules : undefined
                             };
-
                             VRUIUtilsService.callDirectiveLoad(measureStyleGridAPI, payloadMeasureStyleGridDirective, loadMeasureStyleGridDirectivePromiseDeferred);
                         });
                         promises.push(loadMeasureStyleGridDirectivePromiseDeferred.promise);
@@ -195,8 +194,8 @@
                             orderTypeSelectorPayload = { selectedIds : payload.widgetEntity.OrderType };
                         VRUIUtilsService.callDirectiveLoad(orderTypeSelectorAPI, orderTypeSelectorPayload, orderTypeSelectorLoadDeferred);
                         });
-
-
+                    promises.push(getAllMeasures());
+                    
 
                         return UtilsService.waitMultiplePromises(promises);
                     }
@@ -240,12 +239,24 @@
                         RootDimensionsFromSearchSection: $scope.scopeModel.rootDimensionsFromSearch,
                         Dimensions: dimensions,
                         Measures: measures,
+                        MeasureStyleRules: measureStyleGridAPI !=undefined?measureStyleGridAPI.getData():undefined,
                         WithSummary: $scope.scopeModel.withSummary,
-                    OrderType: orderTypeSelectorAPI.getSelectedIds(),
+                        OrderType: orderTypeSelectorAPI.getSelectedIds(),
                     }
                     return data;
                 }
 
+            }
+
+            function getAllMeasures()
+            {
+                var input = {
+                    TableIds: tableIds,
+                    ItemType: VR_Analytic_AnalyticTypeEnum.Measure.value,
+                }
+                return VR_Analytic_AnalyticItemConfigAPIService.GetAnalyticItemConfigs(input).then(function (response) {
+                    measures = response;
+                });
             }
 
             function getContext()
@@ -253,7 +264,18 @@
                 var context = {
                     getMeasures :function()
                     {
-                       return $scope.scopeModel.selectedMeasures;
+                        var selectedMeasures =[];
+                        for (var i = 0; i < $scope.scopeModel.selectedMeasures.length; i++) {
+                            var selectedMeasure = $scope.scopeModel.selectedMeasures[i];
+                            var matchItem = UtilsService.getItemByVal(measures, selectedMeasure.Name, "Name");
+                            if (matchItem != undefined) {
+                                selectedMeasure.FieldType = matchItem.Config.FieldType;
+                            }
+                            selectedMeasures.push(selectedMeasure);
+                        }
+
+                        return selectedMeasures;
+
                     }
                 }
                 return context;

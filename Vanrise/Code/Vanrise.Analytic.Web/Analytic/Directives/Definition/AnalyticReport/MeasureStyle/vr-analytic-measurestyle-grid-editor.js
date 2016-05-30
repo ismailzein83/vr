@@ -2,9 +2,9 @@
 
     'use strict';
 
-    MeasureStyleGridEditorDirective.$inject = ['Analytic_AnalyticService'];
+    MeasureStyleGridEditorDirective.$inject = ['Analytic_AnalyticService','UtilsService'];
 
-    function MeasureStyleGridEditorDirective(Analytic_AnalyticService) {
+    function MeasureStyleGridEditorDirective(Analytic_AnalyticService, UtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -40,8 +40,6 @@
 
                 ctrl.addMeasureStyle = function () {
                     var onMeasureStyleAdded = function (measureStyleObj) {
-                        counter++;
-                        measureStyleObj.id = counter;
                         ctrl.measureStyles.push(measureStyleObj);
                     }
                     Analytic_AnalyticService.addMeasureStyle(onMeasureStyleAdded, getMeasureNames());
@@ -64,9 +62,7 @@
                         ctrl.measureStyles.length = 0;
                         if (payload.measureStyles && payload.measureStyles.length > 0) {
                             for (var y = 0; y < payload.measureStyles.length; y++) {
-                                counter++;
                                 var currentMeasureStyle = payload.measureStyles[y];
-                                currentMeasureStyle.id = counter;
                                 ctrl.measureStyles.push(currentMeasureStyle);
                             }
                         }
@@ -74,7 +70,16 @@
                 };
 
                 api.getData = function () {
-                    return ctrl.measureStyles;
+                    var measureStyles = [];
+                    for (var i = 0; i < ctrl.measureStyles.length ; i++)
+                    {
+                        var measureStyle  =ctrl.measureStyles[i];
+                        measureStyles.push({
+                            MeasureName: measureStyle.MeasureName,
+                            Rules: measureStyle.Rules
+                        });
+                    }
+                    return measureStyles;
                 }
                 return api;
             }
@@ -85,22 +90,11 @@
                     clicked: editMeasureStyle
                 }];
             }
+
             function editMeasureStyle(measureStyle) {
                 var onMeasureStyleUpdated = function (measureStyleObj) {
-                    for (var x = 0; x < ctrl.measureStyles.length; x++) {
-                        var currentMeasureStyle = ctrl.measureStyles[x];
-                        if (currentMeasureStyle.id == measureStyle.id) {
-                            ctrl.measureStyles.splice(x, 1);
-                            measureStyleObj.id = measureStyle.id;
-                            ctrl.measureStyles.push(measureStyleObj);
-                            ctrl.measureStyles.sort(function (a, b) {
-                                return b.id - a.id;
-                            });
-                            break;
-                        }
-                    }
+                    ctrl.measureStyles[ctrl.measureStyles.indexOf(measureStyle)] = measureStyleObj;
                 }
-
                 Analytic_AnalyticService.editMeasureStyle(measureStyle,  onMeasureStyleUpdated,getMeasureNames(measureStyle));
             }
 
@@ -109,7 +103,7 @@
                 var measureFields = context.getMeasures();
                 for (var x = 0; x < measureFields.length; x++) {
                     var currentMeasureField = measureFields[x];
-                    if (measureStyle == undefined || measureStyle.Name != currentMeasureField.Name) {
+                    if (measureStyle != undefined || UtilsService.getItemByVal(ctrl.measureStyles, currentMeasureField.Name, "MeasureName") == undefined) {
                         measures.push(currentMeasureField);
                     }
                 }

@@ -1,1 +1,6 @@
-﻿
+﻿<vr-columns width="1/2row">
+    <vr-select hideremoveicon datasource="scopeModel.compareOperators" selectedvalues="scopeModel.selectedCompareOperator" label="Time Format Template" datatextfield="description" datavaluefield="value" isrequired="true"></vr-select>
+</vr-columns>
+<vr-columns width="1/2row">
+    <vr-directivewrapper vr-loader="scopeModel.isLoadingDirective" ng-if="scopeModel.editor !=undefined" directive="scopeModel.editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="9" isrequired="true" selectionmode="single"></vr-directivewrapper>
+</vr-columns>

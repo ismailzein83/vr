@@ -34,20 +34,41 @@ namespace Vanrise.Analytic.Business
 
         #region Private Methods
 
-        internal List<AnalyticRecord> ProcessSQLRecords(IAnalyticTableQueryContext analyticTableQueryContext, List<string> requestedDimensionNames, List<string> parentDimensionNames, List<string> measureNames, List<DimensionFilter> dimensionFilters,
+        internal List<AnalyticRecord> ProcessSQLRecords(IAnalyticTableQueryContext analyticTableQueryContext, List<string> requestedDimensionNames, List<string> parentDimensionNames, List<string> measureNames,List<MeasureStyleRule> measureStyleRules, List<DimensionFilter> dimensionFilters,
            RecordFilterGroup filterGroup, IEnumerable<DBAnalyticRecord> dbRecords, HashSet<string> availableDimensions, bool withSummary, out AnalyticRecord summaryRecord)
         {
             List<string> allDimensionNamesList = new List<string>();
+
+
+            Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary = BuildMeasureStyleRulesDictionary(measureStyleRules);
+           
             if (requestedDimensionNames != null)
                 allDimensionNamesList.AddRange(requestedDimensionNames);
             if (parentDimensionNames != null)
                 allDimensionNamesList.AddRange(parentDimensionNames);
             HashSet<string> allDimensionNames = new HashSet<string>(allDimensionNamesList);
             FillCalculatedDimensions(analyticTableQueryContext, requestedDimensionNames, dbRecords, availableDimensions, dimensionFilters, filterGroup);           
-            List<AnalyticRecord> records = ApplyFinalGroupingAndFiltering(analyticTableQueryContext, dbRecords,requestedDimensionNames, allDimensionNames, measureNames, dimensionFilters, filterGroup, withSummary, out summaryRecord);
+            List<AnalyticRecord> records = ApplyFinalGroupingAndFiltering(analyticTableQueryContext, dbRecords,requestedDimensionNames, allDimensionNames, measureNames,measureStyleRulesDictionary, dimensionFilters, filterGroup, withSummary, out summaryRecord);
             return records;
         }
-
+        private Dictionary<string, MeasureStyleRule> BuildMeasureStyleRulesDictionary(List<MeasureStyleRule> measureStyleRules)
+        {
+            Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary = null;
+            if (measureStyleRules !=null)
+            {
+                measureStyleRulesDictionary = new Dictionary<string, MeasureStyleRule>();
+                foreach (var styleRule in measureStyleRules)
+                {
+                    MeasureStyleRule measureStyleRule = null;
+                    if (!measureStyleRulesDictionary.TryGetValue(styleRule.MeasureName, out measureStyleRule))
+                    {
+                        measureStyleRulesDictionary.Add(styleRule.MeasureName, styleRule);
+                    }
+                }
+            }
+            return measureStyleRulesDictionary;
+            
+        }
         private void FillCalculatedDimensions(IAnalyticTableQueryContext analyticTableQueryContext, List<string> requestedDimensionNames, IEnumerable<DBAnalyticRecord> sqlRecords, HashSet<string> availableDimensions, List<DimensionFilter> dimensionFilters,
            RecordFilterGroup filterGroup)
         {
@@ -79,7 +100,7 @@ namespace Vanrise.Analytic.Business
             }
         }
 
-        private List<AnalyticRecord> ApplyFinalGroupingAndFiltering(IAnalyticTableQueryContext analyticTableQueryContext,  IEnumerable<DBAnalyticRecord> dbRecords, List<string> requestedDimensionNames, HashSet<string> allDimensionNames, List<string> measureNames,List<DimensionFilter> dimensionFilters, RecordFilterGroup filterGroup, bool withSummary, out AnalyticRecord summaryRecord)
+        private List<AnalyticRecord> ApplyFinalGroupingAndFiltering(IAnalyticTableQueryContext analyticTableQueryContext, IEnumerable<DBAnalyticRecord> dbRecords, List<string> requestedDimensionNames, HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary, List<DimensionFilter> dimensionFilters, RecordFilterGroup filterGroup, bool withSummary, out AnalyticRecord summaryRecord)
         {
             Dictionary<string, DBAnalyticRecord> groupedRecordsByDimensionsKey = new Dictionary<string, DBAnalyticRecord>();
             DBAnalyticRecord summarySQLRecord = null;
@@ -132,11 +153,11 @@ namespace Vanrise.Analytic.Business
             List<AnalyticRecord> analyticRecords = new List<AnalyticRecord>();
             foreach (var dbRecord in groupedRecordsByDimensionsKey.Values)
             {
-                AnalyticRecord analyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, dbRecord, requestedDimensionNames, allDimensionNames, measureNames);
+                AnalyticRecord analyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, dbRecord, requestedDimensionNames, allDimensionNames, measureNames, measureStyleRulesDictionary);
                 analyticRecords.Add(analyticRecord);
             }
             if (withSummary && summarySQLRecord != null)
-                summaryRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, summarySQLRecord, null, allDimensionNames, measureNames);
+                summaryRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, summarySQLRecord, null, allDimensionNames, measureNames,null);
             else
                 summaryRecord = null;
             return analyticRecords;
@@ -224,7 +245,7 @@ namespace Vanrise.Analytic.Business
             }
         }
 
-        private AnalyticRecord BuildAnalyticRecordFromSQLRecord(IAnalyticTableQueryContext analyticTableQueryContext, DBAnalyticRecord dbRecord, List<string> dimensionNames, HashSet<string> allDimensionNames, List<string> measureNames)
+        private AnalyticRecord BuildAnalyticRecordFromSQLRecord(IAnalyticTableQueryContext analyticTableQueryContext, DBAnalyticRecord dbRecord, List<string> dimensionNames, HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary)
         {
             AnalyticRecord analyticRecord = new AnalyticRecord() { Time = dbRecord.Time, MeasureValues = new MeasureValues() };
 
@@ -247,8 +268,28 @@ namespace Vanrise.Analytic.Business
                 var measureConfig = analyticTableQueryContext.GetMeasureConfig(measureName);
                 var getMeasureValueContext = new GetMeasureValueContext(analyticTableQueryContext,  dbRecord, allDimensionNames);
                 var measureValue = measureConfig.Evaluator.GetMeasureValue(getMeasureValueContext);
-                analyticRecord.MeasureValues.Add(measureName, new MeasureValue { Value = measureValue });
+                string styleCode = null;
+                if (measureStyleRulesDictionary != null)
+                {
+                    MeasureStyleRule measureStyleRule = null;
+                    if (measureStyleRulesDictionary.TryGetValue(measureName, out measureStyleRule))
+                    {
+                        foreach (var rule in measureStyleRule.Rules)
+                        {
+                            StyleRuleConditionContext context = new StyleRuleConditionContext { Value = measureValue };
+                            if (rule.Condition != null && rule.Condition.Evaluate(context))
+                            {
+                                styleCode = rule.StyleCode;
+                                break;
+                            }
+                        }
+                    }
+                   
+                }
+                analyticRecord.MeasureValues.Add(measureName, new MeasureValue { Value = measureValue, StyleCode = styleCode });
             }
+
+            
             return analyticRecord;
         }
         
@@ -275,8 +316,10 @@ namespace Vanrise.Analytic.Business
                 var dbRecords = _dataManager.GetAnalyticRecords(input, out includeDBDimensions);
                 var query = input.Query;
                 
+
+
                 if (dbRecords != null)
-                    return (new AnalyticManager()).ProcessSQLRecords(new AnalyticTableQueryContext(query), query.DimensionFields, query.ParentDimensions, query.MeasureFields, query.Filters, query.FilterGroup,
+                    return (new AnalyticManager()).ProcessSQLRecords(new AnalyticTableQueryContext(query), query.DimensionFields, query.ParentDimensions, query.MeasureFields,query.MeasureStyleRules, query.Filters, query.FilterGroup,
                         dbRecords, includeDBDimensions, query.WithSummary, out _summaryRecord);
                 else
                     return null;

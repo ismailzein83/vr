@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService', 'DataGridRetrieveDataEventType',
-    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService, DataGridRetrieveDataEventType) {
+app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService', 'DataGridRetrieveDataEventType','VR_Analytic_StyleCodeEnum',
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService, DataGridRetrieveDataEventType, VR_Analytic_StyleCodeEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -49,6 +49,16 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
             function initializeController() {
 
                 ctrl.mainGrid = (ctrl.parameters == undefined);
+                var styleColors = UtilsService.getArrayEnum(VR_Analytic_StyleCodeEnum);
+                ctrl.getMeasureColor = function (dataItem, colDef) {
+                    var measure = dataItem.MeasureValues[colDef.tag];
+                    if (measure != undefined) {
+                        var style = UtilsService.getItemByVal(styleColors, measure.StyleCode, 'value');
+                        if (style !=undefined)
+                            return style.styleCode;
+                    }
+                }
+
 
                 ctrl.gridReady = function (api) {
                     gridApi = api;
@@ -207,7 +217,6 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 }
 
                 function loadGridQuery(payLoad) {
-
                     ctrl.groupingDimensions.length = 0;
                     ctrl.measures.length = 0;
                     ctrl.drillDownDimensions.length = 0;
@@ -243,7 +252,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         Currency: payLoad.Currency,
                         ParentDimensions: UtilsService.getPropValuesFromArray(ctrl.parentDimensions, 'DimensionName'),
                         WithSummary: payLoad.Settings == undefined ? false : payLoad.Settings.WithSummary,
-                        TableId: payLoad.TableId
+                        TableId: payLoad.TableId,
+                        MeasureStyleRules: payLoad.Settings !=undefined? payLoad.Settings.MeasureStyleRules:undefined
                     }
                     return queryFinalized;
                 }
