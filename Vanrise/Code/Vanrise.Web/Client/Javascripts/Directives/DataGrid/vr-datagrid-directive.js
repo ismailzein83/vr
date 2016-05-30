@@ -37,6 +37,7 @@
             //    defaultSortDirection = $scope.$parent.$eval($attrs.defaultsortdirection);
 
             ctrl.hideGridMenu = ($attrs.hidegridmenu != undefined);
+            ctrl.enableAutoExport = ($attrs.enableautoexport != undefined);
 
             ctrl.showgmenu = false;
             ctrl.toggelGridMenu = function (e, bool) {
