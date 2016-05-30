@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeSalezoneMasterplanSelector', ['WhS_BE_SellingNumberPlanAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (WhS_BE_SellingNumberPlanAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsBeSalezoneMasterplanSelector', ['WhS_BE_SellingNumberPlanAPIService', 'WhS_BE_SaleZoneAPIService', 'UtilsService', 'VRUIUtilsService',
+    function (WhS_BE_SellingNumberPlanAPIService, WhS_BE_SaleZoneAPIService, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -31,7 +31,7 @@ app.directive('vrWhsBeSalezoneMasterplanSelector', ['WhS_BE_SellingNumberPlanAPI
                 multipleselection = "ismultipleselection";
             }
 
-            return '<vr-whs-be-salezone-selector on-ready="scopeModal.onSaleZoneSelectorReady" selectedvalues="scopeModal.selectedSaleZones" normal-col-num="{{ctrl.normalColNum}}" ismultipleselection>'
+            return '<vr-whs-be-salezone-selector on-ready="scopeModal.onSaleZoneSelectorReady" selectedvalues="ctrl.selectedvalues" normal-col-num="{{ctrl.normalColNum}}" ismultipleselection>'
             + '</vr-whs-be-salezone-selector>'
         }
 
@@ -45,7 +45,12 @@ app.directive('vrWhsBeSalezoneMasterplanSelector', ['WhS_BE_SellingNumberPlanAPI
 
             function initializeController() {
                 $scope.scopeModal = {};
-                $scope.scopeModal.selectedSaleZones = [];
+
+                saleZoneSelectorCtrl.selectedvalues;
+
+                if (attrs.ismultipleselection != undefined)
+                    saleZoneSelectorCtrl.selectedvalues = [];
+
                 $scope.scopeModal.SellingNumberPlanId;
                 $scope.scopeModal.onSaleZoneSelectorReady = function (api) {
                     saleZoneDirectiveAPI = api;
@@ -59,12 +64,18 @@ app.directive('vrWhsBeSalezoneMasterplanSelector', ['WhS_BE_SellingNumberPlanAPI
                 var api = {};
 
                 api.load = function (payload) {
+                    var selectedIds;
+
+                    if (payload != undefined) {
+                        selectedIds = payload.selectedIds;
+                    }
+
                     var promiseDeferredLoadSelector = UtilsService.createPromiseDeferred();
                     var promises = [];
                     promises.push(promiseDeferredLoadSelector.promise);
 
                     var masterPlanPromise = GetMasterPlan().then(function () {
-                        loadSaleZoneSelectorSelector().then(function () {
+                        loadSaleZoneSelectorSelector(selectedIds).then(function () {
                             promiseDeferredLoadSelector.resolve();
                         }).catch(function (error) {
                             promiseDeferredLoadSelector.reject(error);
@@ -76,19 +87,29 @@ app.directive('vrWhsBeSalezoneMasterplanSelector', ['WhS_BE_SellingNumberPlanAPI
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
-                function loadSaleZoneSelectorSelector() {
+                function loadSaleZoneSelectorSelector(selectedIds) {
 
                     var saleZonePlanLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     saleZoneReadyPromiseDeferred.promise
-    .then(function () {
-        var directivePayload = {
-            sellingNumberPlanId: $scope.scopeModal.SellingNumberPlanId
-        }
+                            .then(function () {
+                                var directivePayload = {
+                                    sellingNumberPlanId: $scope.scopeModal.SellingNumberPlanId,
+                                    selectedIds: selectedIds
+                                }
 
-        VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, directivePayload, saleZonePlanLoadPromiseDeferred);
-    });
+                                VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, directivePayload, saleZonePlanLoadPromiseDeferred);
+                            });
                     return saleZonePlanLoadPromiseDeferred.promise;
                 }
+
+
+
+                api.getSelectedIds = function () {
+                    return VRUIUtilsService.getIdSelectedIds('SaleZoneId', attrs, saleZoneSelectorCtrl);
+                }
+
+                if (saleZoneSelectorCtrl.onReady != null)
+                    saleZoneSelectorCtrl.onReady(api);
 
                 function GetMasterPlan() {
 
@@ -96,12 +117,10 @@ app.directive('vrWhsBeSalezoneMasterplanSelector', ['WhS_BE_SellingNumberPlanAPI
                         $scope.scopeModal.SellingNumberPlanId = response.SellingNumberPlanId;
                     });
                 }
-
-                if (saleZoneSelectorCtrl.onReady != null)
-                    saleZoneSelectorCtrl.onReady(api);
             }
 
             this.initializeController = initializeController;
         }
+
         return directiveDefinitionObject;
     }]);
