@@ -37,7 +37,6 @@
             //    defaultSortDirection = $scope.$parent.$eval($attrs.defaultsortdirection);
 
             ctrl.hideGridMenu = ($attrs.hidegridmenu != undefined);
-            ctrl.enableAutoExport = ($attrs.enableautoexport != undefined);
 
             ctrl.showgmenu = false;
             ctrl.toggelGridMenu = function (e, bool) {
@@ -465,6 +464,11 @@
                     });
                 }
             };
+
+            ctrl.showExportAction = function()
+            {
+                return (attrs.enableautoexport != undefined) || this.onexport != undefined;
+            }
 
             ctrl.viewSelectionChanged = function () {
                 calculateDataColumnsSectionWidth();
