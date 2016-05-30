@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
-    //TODO: remove IDateEffectiveSettings in case it is not needed anymore
-    public class DraftNewRate : Vanrise.Entities.IDateEffectiveSettings
+    public class RateToChange
     {
-        public long ZoneId { get; set; }
+        public string ZoneName { get; set; }
 
         public Decimal NormalRate { get; set; }
+
+        public Decimal OldNormalRate { get; set; }
 
         public Dictionary<int, Decimal> OtherRates { get; set; }
 
@@ -22,11 +22,23 @@ namespace TOne.WhS.Sales.Entities
 
         public DateTime? EED { get; set; }
 
-        //TODO: to be removed after converting the logic to a process
+        List<NewRate> _newRates = new List<NewRate>();
+        public List<NewRate> NewRates
+        {
+            get
+            {
+                return _newRates;
+            }
+        }
+
         List<ExistingRate> _changedExistingRates = new List<ExistingRate>();
+
         public List<ExistingRate> ChangedExistingRates
         {
-            get { return _changedExistingRates; }
+            get
+            {
+                return _changedExistingRates;
+            }
         }
     }
 }

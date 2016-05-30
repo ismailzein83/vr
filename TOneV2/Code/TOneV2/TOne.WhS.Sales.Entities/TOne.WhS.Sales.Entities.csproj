@@ -63,6 +63,8 @@
     <Compile Include="RateCalculation\IRateCalculationMethodContext.cs" />
     <Compile Include="RateCalculation\RateCalculationMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RateManagement\Actions\Rate\RateToChange.cs" />
+    <Compile Include="RateManagement\Actions\Rate\RateToClose.cs" />
     <Compile Include="RateManagement\Rate\ChangedRate.cs" />
     <Compile Include="RateManagement\Rate\ExistingRate.cs" />
     <Compile Include="RateManagement\Rate\NewRate.cs" />
