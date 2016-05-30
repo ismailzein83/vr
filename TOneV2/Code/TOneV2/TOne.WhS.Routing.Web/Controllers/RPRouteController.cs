@@ -30,10 +30,11 @@ namespace TOne.WhS.Routing.Web.Controllers
 
         [HttpGet]
         [Route("GetPoliciesOptionTemplates")]
-        public IEnumerable<Vanrise.Entities.TemplateConfig> GetPoliciesOptionTemplates()
+        public IEnumerable<RPRouteOptionPolicySetting> GetPoliciesOptionTemplates(string filter = null)
         {
             RPRouteManager manager = new RPRouteManager();
-            return manager.GetPoliciesOptionTemplates();
+            var deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<RPRouteOptionPolicyFilter>(filter) : null;
+            return manager.GetPoliciesOptionTemplates(deserializedFilter);
         }
 
         [HttpPost]

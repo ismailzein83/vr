@@ -50,7 +50,7 @@ app.directive("vrWhsRoutingRpbuildproduct", [ 'WhS_Routing_RPRouteAPIService', '
 
             $scope.onDefaultCheckChanged = function (dataItem) {
                 angular.forEach($scope.supplierZoneRPOptionPolicies, function (item) {
-                    if (item.TemplateConfigID != dataItem.TemplateConfigID) {
+                    if (item.ExtensionConfigurationId != dataItem.ExtensionConfigurationId) {
                         item.IsDefault = false;
                     }
                 });
@@ -73,9 +73,10 @@ app.directive("vrWhsRoutingRpbuildproduct", [ 'WhS_Routing_RPRouteAPIService', '
             defineAPI();
         }
 
-        function defineAPI() {
-
+        function defineAPI()
+        {
             var api = {};
+
             api.getData = function () {
                 return {
                     InputArguments: {
@@ -89,10 +90,10 @@ app.directive("vrWhsRoutingRpbuildproduct", [ 'WhS_Routing_RPRouteAPIService', '
                         SupplierZoneRPOptionPolicies: GetSelectedSupplierPolicies()
                     }
                 };
-               
             };
 
             api.load = function (payload) {
+                var promises = [];
 
                 $scope.routingDatabaseTypes = UtilsService.getArrayEnum(WhS_Routing_RoutingDatabaseTypeEnum);
                 $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', WhS_Routing_RoutingDatabaseTypeEnum.Current.value);
@@ -103,46 +104,47 @@ app.directive("vrWhsRoutingRpbuildproduct", [ 'WhS_Routing_RPRouteAPIService', '
                 $scope.saleZoneRangeOptions = WhS_Routing_SaleZoneRangeOptions;
                 $scope.selectedSaleZoneRange = WhS_Routing_SaleZoneRangeOptions[0];
 
-              
+                var getPoliciesPromise = WhS_Routing_RPRouteAPIService.GetPoliciesOptionTemplates();
+                promises.push(getPoliciesPromise);
 
-                var loadPoliciesPromiseDeffered = UtilsService.createPromiseDeferred();
-                WhS_Routing_RPRouteAPIService.GetPoliciesOptionTemplates().then(function (response) {
+                var loadPoliciesDeferred = UtilsService.createPromiseDeferred();
+                promises.push(loadPoliciesDeferred.promise);
 
-                    var promises = [];
-                    angular.forEach(response, function (itm) {
-                        promises.push(setPoliciesDirectives(itm));
-                        $scope.supplierZoneRPOptionPolicies.push(itm);
-                    });
+                getPoliciesPromise.then(function (response) {
+                    var policyLoadPromises = [];
 
-                    UtilsService.waitMultiplePromises(promises).then(function () {
-                        loadPoliciesPromiseDeffered.resolve();
+                    if (response != null) {
+                        for (var i = 0; i < response.length; i++) {
+                            var policy = response[i];
+                            extendPolicy(policy);
+                            policyLoadPromises.push(policy.directiveLoadDeferred.promise);
+                            $scope.supplierZoneRPOptionPolicies.push(policy);
+                        }
+                    }
+
+                    UtilsService.waitMultiplePromises(policyLoadPromises).then(function () {
+                        loadPoliciesDeferred.resolve();
                     }).catch(function (error) {
-                        loadPoliciesPromiseDeffered.reject();
+                        loadPoliciesDeferred.reject(error);
                     });
-
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
                 });
 
-                function setPoliciesDirectives(poilicy) {
+                function extendPolicy(policy) {
+                    policy.directiveReadyDeferred = UtilsService.createPromiseDeferred();
+                    policy.directiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                    poilicy.rpSupplierPoliciesReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                    poilicy.onDirectiveReady = function (api) {
-                        poilicy.rpSupplierPoliciesDirectiveApi = api;
-                        poilicy.rpSupplierPoliciesReadyPromiseDeferred.resolve();
-                    }
-                    poilicy.rpSupplierPoliciesLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    poilicy.rpSupplierPoliciesReadyPromiseDeferred.promise.then(function () {
+                    policy.onDirectiveReady = function (api) {
+                        policy.directiveAPI = api;
+                        policy.directiveReadyDeferred.resolve();
+                    };
 
-                        VRUIUtilsService.callDirectiveLoad(poilicy.rpSupplierPoliciesDirectiveApi, undefined, poilicy.rpSupplierPoliciesLoadPromiseDeferred);
+                    policy.directiveReadyDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(policy.directiveAPI, undefined, policy.directiveLoadDeferred);
                     });
-
-                    return poilicy.rpSupplierPoliciesLoadPromiseDeferred.promise;
                 }
 
-
-                return loadPoliciesPromiseDeffered.promise;
-            }
+                return UtilsService.waitMultiplePromises(promises);
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
@@ -154,8 +156,8 @@ app.directive("vrWhsRoutingRpbuildproduct", [ 'WhS_Routing_RPRouteAPIService', '
 
             angular.forEach($scope.supplierZoneRPOptionPolicies, function (item) {
                 if (item.isSelected) {
-                    var obj = item.rpSupplierPoliciesDirectiveApi.getData();
-                    obj.ConfigId = item.TemplateConfigID;
+                    var obj = item.directiveAPI.getData();
+                    obj.ConfigId = item.ExtensionConfigurationId;
                     obj.IsDefault = item.IsDefault;
                     policies.push(obj);
                 }

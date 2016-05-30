@@ -22,7 +22,9 @@ function (WhS_BE_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService) {
         this.initCtrl = initCtrl;
 
         var defaultItem;
-        var counter = 0;
+        var isFirstSelectionEvent;
+        var isStateLoaded;
+
         var selectorAPI;
         var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -32,17 +34,22 @@ function (WhS_BE_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService) {
                 selectorReadyPromiseDeferred.resolve();
             };
 
-            ctrl.onSelectionChange = function (item) {
-                counter++;
-                var selectedId = selectorAPI.getSelectedIds;
-                    
-                if ((!defaultItem.NewRoutingProductId && counter > 1) || (defaultItem.NewRoutingProductId && counter > 2)) {
-                    defaultItem.IsDirty = true;
+            ctrl.onSelectionChanged = function ()
+            {
+                var selectedId = selectorAPI.getSelectedIds();
 
-                    if (defaultItem.onChange && typeof (defaultItem.onChange) == "function") {
-                        defaultItem.onChange();
-                    }
+                if (selectedId == undefined && isFirstSelectionEvent == true) {
+                    isFirstSelectionEvent = false;
+                    return;
                 }
+
+                if (isStateLoaded === false) {
+                    isStateLoaded = true;
+                    return;
+                }
+
+                defaultItem.IsDirty = true;
+                defaultItem.onChange();
             };
 
             selectorReadyPromiseDeferred.promise.then(function () {
@@ -54,11 +61,14 @@ function (WhS_BE_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService) {
             var api = {};
 
             api.load = function (payload) {
-                counter = 0;
+                isFirstSelectionEvent = true;
+                isStateLoaded = undefined;
 
                 if (payload != undefined) {
                     defaultItem = payload;
                     ctrl.CurrentName = defaultItem.IsCurrentRoutingProductEditable === false ? defaultItem.CurrentRoutingProductName + " (Inherited)" : defaultItem.CurrentRoutingProductName;
+                    if (defaultItem.NewRoutingProductId != undefined)
+                        isStateLoaded = false;
                 }
 
                 var selectorLoadDeferred = UtilsService.createPromiseDeferred();

@@ -85,13 +85,42 @@ namespace TOne.WhS.Routing.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult<RPRouteOptionDetail>(input, routeOptionsByPolicy.ToBigResult(input, null, RPRouteOptionMapper));
         }
 
-        public IEnumerable<Vanrise.Entities.TemplateConfig> GetPoliciesOptionTemplates()
+        public IEnumerable<RPRouteOptionPolicySetting> GetPoliciesOptionTemplates(RPRouteOptionPolicyFilter filter)
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.SupplierZoneToRPOptionConfigType);
+            var extensionConfigManager = new ExtensionConfigurationManager();
+            IEnumerable<RPRouteOptionPolicySetting> cachedConfigs = extensionConfigManager.GetExtensionConfigurations<RPRouteOptionPolicySetting>(Constants.SupplierZoneToRPOptionConfigType);
+
+            if (filter == null)
+                return cachedConfigs;
+
+            int defaultPolicyId;
+            IEnumerable<int> selectedPolicyIds = this.GetRoutingDatabasePolicyIds(filter.RoutingDatabaseId, out defaultPolicyId);
+            Func<RPRouteOptionPolicySetting, bool> filterExpression = (itm) => selectedPolicyIds.Contains(itm.ExtensionConfigurationId);
+            
+            IEnumerable<RPRouteOptionPolicySetting> filteredConfigs = cachedConfigs.FindAllRecords(filterExpression);
+            
+            if (filteredConfigs == null || filteredConfigs.Count() == 0)
+                throw new NullReferenceException("filteredConfigs");
+
+            // Set the default policy
+            bool isDefaultPolicySet = false;
+            foreach (RPRouteOptionPolicySetting config in filteredConfigs)
+            {
+                if (config.ExtensionConfigurationId == defaultPolicyId)
+                {
+                    config.IsDefault = true;
+                    isDefaultPolicySet = true;
+                    break;
+                }
+            }
+
+            if (!isDefaultPolicySet)
+                throw new DataIntegrityValidationException(String.Format("RPRoutingDatabase '{0}' does not have a default policy", filter.RoutingDatabaseId));
+
+            return filteredConfigs;
         }
 
-        #region Private Memebers
+        #region Private Members
 
         private RPRouteDetail RPRouteDetailMapper(RPRoute rpRoute, int policyConfigId, int numberOfOptions)
         {
@@ -137,6 +166,26 @@ namespace TOne.WhS.Routing.Business
 
             IEnumerable<RPRouteOption> routeOptionDetails = dicRouteOptions[policyConfigId].Take(numberOfOptions);
             return routeOptionDetails.MapRecords(RPRouteOptionMapper);
+        }
+
+        private IEnumerable<int> GetRoutingDatabasePolicyIds(int routingDbId, out int defaultPolicyId)
+        {
+            var routingDbManager = new RoutingDatabaseManager();
+            var routingDbInfoFilter = new RoutingDatabaseInfoFilter() { ProcessType = RoutingProcessType.RoutingProductRoute };
+            IEnumerable<RoutingDatabaseInfo> routingDbInfoEntities = routingDbManager.GetRoutingDatabaseInfo(routingDbInfoFilter);
+            RoutingDatabaseInfo routingDbInfo = routingDbInfoEntities.FindRecord(itm => itm.RoutingDatabaseId == routingDbId);
+            if (routingDbInfo == null)
+                throw new NullReferenceException("routingDbInfo");
+            if (routingDbInfo.Information == null)
+                throw new NullReferenceException("routingDbInfo.Information");
+            var rpRoutingDbInfo = routingDbInfo.Information as RPRoutingDatabaseInformation;
+            if (rpRoutingDbInfo == null)
+                throw new NullReferenceException("rpRoutingDbInfo");
+            if (rpRoutingDbInfo.SelectedPoliciesIds == null || rpRoutingDbInfo.SelectedPoliciesIds.Count() == 0)
+                throw new NullReferenceException("rpRoutingDbInfo.SelectedPoliciesIds");
+
+            defaultPolicyId = rpRoutingDbInfo.DefaultPolicyId;
+            return rpRoutingDbInfo.SelectedPoliciesIds;
         }
 
         #endregion

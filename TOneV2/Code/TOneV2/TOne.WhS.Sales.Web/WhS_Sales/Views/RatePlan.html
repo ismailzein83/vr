@@ -32,7 +32,12 @@
                         </span>
                     </vr-validation-group>
                     <vr-columns colnum="2">
-                        <vr-whs-routing-routingdatabase-selector getroutingproductroutes on-ready="onDatabaseSelectorReady" onselectionchanged="onRoutingDatabaseSelectorChange" isrequired></vr-whs-routing-routingdatabase-selector>
+                        <vr-whs-routing-routingdatabase-selector on-ready="onDatabaseSelectorReady"
+                                                                 getroutingproductroutes
+                                                                 onselectionchanged="onRoutingDatabaseChanged"
+                                                                 isrequired
+                                                                 hideremoveicon>
+                        </vr-whs-routing-routingdatabase-selector>
                     </vr-columns>
                     <vr-columns colnum="2">
                         <vr-whs-routing-rproutepolicy-selector on-ready="onPolicySelectorReady" isrequired></vr-whs-routing-rproutepolicy-selector>

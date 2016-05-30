@@ -113,8 +113,10 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                         var loadPolicySelectorDeferred = UtilsService.createPromiseDeferred();
 
                         var policySelectorPayload = {
-                            filteredIds: policies,
-                            selectedId: defaultPolicyId
+                            filter: {
+                                RoutingDatabaseId: routingDatabaseId
+                            },
+                            selectDefaultPolicy: true
                         };
 
                         VRUIUtilsService.callDirectiveLoad(rpRoutePolicyAPI, policySelectorPayload, loadPolicySelectorDeferred);
@@ -132,12 +134,12 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                 if (rpRouteDetail) {
                     query = {
                         RoutingDatabaseId: routingDatabaseId,
-                        PolicyOptionConfigId: $scope.selectedPolicy.TemplateConfigID, // $scope.selectedPolicy is != undefined since the policy selector is loaded before the grid
+                        PolicyOptionConfigId: $scope.selectedPolicy.ExtensionConfigurationId, // $scope.selectedPolicy is != undefined since the policy selector is loaded before the grid
                         RoutingProductId: rpRouteDetail.RoutingProductId,
                         SaleZoneId: rpRouteDetail.SaleZoneId
                     };
                 }
-
+                
                 return gridAPI.retrieveData(query);
             }
 

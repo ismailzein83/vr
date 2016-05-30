@@ -1,4 +1,5 @@
 ﻿'use strict';
+
 app.directive('vrWhsRoutingRproutepolicySelector', ['WhS_Routing_RPRouteAPIService', 'UtilsService', 'VRUIUtilsService',
     function (WhS_Routing_RPRouteAPIService, UtilsService, VRUIUtilsService) {
 
@@ -40,8 +41,8 @@ app.directive('vrWhsRoutingRproutepolicySelector', ['WhS_Routing_RPRouteAPIServi
 
         };
 
-
-        function getTemplate(attrs) {
+        function getTemplate(attrs)
+        {
             var multipleselection = "";
             var label = "Policy";
             if (attrs.ismultipleselection != undefined) {
@@ -57,84 +58,68 @@ app.directive('vrWhsRoutingRproutepolicySelector', ['WhS_Routing_RPRouteAPIServi
                 hideremoveicon = "hideremoveicon";
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="TemplateConfigID" '
+                + '<vr-select on-ready="ctrl.onSelectorReady" ' + multipleselection + '  datatextfield="Title" datavaluefield="ExtensionConfigurationId" '
             + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectitem="ctrl.onselectitem"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" ' + hideremoveicon + '></vr-select>'
                + '</div>'
         }
 
         function rpRoutePolicyCtor(ctrl, $scope, $attrs) {
 
-            function initializeController() {
-                defineAPI();
+            var selectorAPI;
+
+            function initializeController()
+            {
+                ctrl.onSelectorReady = function (api) {
+                    selectorAPI = api;
+                    defineAPI();
+                };
             }
-            var policies;
+            
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) {
-                    ctrl.datasource.length = 0;
-                    var filteredIds;
-                    var selectedId;
+                api.load = function (payload)
+                {
+                    selectorAPI.clearDataSource();
 
-                    if (policies != undefined) {
-                        fillPolicies(payload);
+                    var filter;
+                    var selectDefaultPolicy;
+
+                    if (payload != undefined) {
+                        filter = payload.filter;
+                        selectDefaultPolicy = payload.selectDefaultPolicy;
                     }
-                    else {
-                        policies = [];
-                        return WhS_Routing_RPRouteAPIService.GetPoliciesOptionTemplates().then(function (response) {
-                            angular.forEach(response, function (itm) {
-                                policies.push(itm);
-                            });
-                            fillPolicies(payload);
-                        });
-                    }
-                   
+
+                    return WhS_Routing_RPRouteAPIService.GetPoliciesOptionTemplates(UtilsService.serializetoJson(filter)).then(function (response)
+                    {
+                        if (response != null)
+                        {
+                            for (var i = 0; i < response.length; i++) {
+                                ctrl.datasource.push(response[i]);
+                            }
+
+                            if (selectDefaultPolicy === true) {
+                                var defaultPolicy = UtilsService.getItemByVal(ctrl.datasource, true, 'IsDefault'); // The response is invalid if no default policy exists
+                                VRUIUtilsService.setSelectedValues(defaultPolicy.ExtensionConfigurationId, 'ExtensionConfigurationId', $attrs, ctrl);
+                            }
+                        }
+                    });
                 }
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('TemplateConfigID', $attrs, ctrl);
-                }
+                    return VRUIUtilsService.getIdSelectedIds('ExtensionConfigurationId', $attrs, ctrl);
+                };
 
                 api.getDefaultPolicyId = function () {
-                    return UtilsService.getItemByVal(ctrl.datasource, true, 'IsDefault').TemplateConfigID;
-                }
+                    return UtilsService.getItemByVal(ctrl.datasource, true, 'IsDefault').ExtensionConfigurationId;
+                };
 
                 api.getFilteredPoliciesIds = function () {
-                    var filteredPolicies;
-                    if (ctrl.datasource != undefined)
-                        filteredPolicies = ctrl.datasource;
-                    else
-                        fillPolicies = policies;
-                    return UtilsService.getPropValuesFromArray(filteredPolicies, 'TemplateConfigID')
-
-                }
+                    return UtilsService.getPropValuesFromArray(ctrl.datasource, 'ExtensionConfigurationId');
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            }
-
-            function fillPolicies(payload) {
-             
-                if (payload != undefined) {
-                    angular.forEach(payload.filteredIds, function (filteredId) {
-                        var policy = UtilsService.getItemByVal(policies, filteredId, 'TemplateConfigID');
-                        if (policy != null) {
-                            policy.IsDefault = false;
-                            if (payload.selectedId == policy.TemplateConfigID)
-                                policy.IsDefault = true;
-                            ctrl.datasource.push(policy);
-                        }
-                    });
-
-                    if (payload.selectedId != undefined)
-                        VRUIUtilsService.setSelectedValues(payload.selectedId, 'TemplateConfigID', $attrs, ctrl);
-
-                }
-                else {
-                    angular.forEach(policies, function (itm) {
-                        ctrl.datasource.push(itm);
-                    });
-                }
             }
 
             this.initializeController = initializeController;

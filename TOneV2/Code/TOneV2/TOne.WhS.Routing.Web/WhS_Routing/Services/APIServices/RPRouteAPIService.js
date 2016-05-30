@@ -20,8 +20,10 @@
             });
         }
 
-        function GetPoliciesOptionTemplates() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetPoliciesOptionTemplates"));
+        function GetPoliciesOptionTemplates(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetPoliciesOptionTemplates"), {
+                filter: filter
+            });
         }
         
         function GetFilteredRPRouteOptions(input) {

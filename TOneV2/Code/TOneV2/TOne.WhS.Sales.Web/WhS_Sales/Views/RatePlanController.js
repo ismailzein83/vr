@@ -28,7 +28,6 @@
         var databaseSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var policySelectorAPI;
-        var policySelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var defaultItem;
         var defaultItemAPI;
@@ -121,26 +120,33 @@
                 databaseSelectorReadyDeferred.resolve();
             };
 
-            $scope.onRoutingDatabaseSelectorChange = function (item) {
-                var payload;
+            $scope.onRoutingDatabaseChanged = function ()
+            {
+                clearRatePlan();
+                $scope.showSaveButton = false;
+                $scope.showSettingsButton = false;
+                $scope.showCancelButton = false;
 
-                if (item != undefined && item.Information != undefined)
-                    payload = {
-                        filteredIds: item.Information.SelectedPoliciesIds,
-                        selectedId: item.Information.DefaultPolicyId
-                    };
-                else {
-                    payload = {
-                        filteredIds: []
-                    };
-                }
+                var selectedId = databaseSelectorAPI.getSelectedIds();
 
-                policySelectorAPI.load(payload);
-            }
+                if (selectedId == undefined)
+                    return;
+
+                var policySelectorPayload = {
+                    filter: {
+                        RoutingDatabaseId: selectedId
+                    },
+                    selectDefaultPolicy: true
+                };
+                
+                var setLoader = function (value) {
+                    $scope.isLoadingFilterSection = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, policySelectorAPI, policySelectorPayload, setLoader, undefined);
+            };
 
             $scope.onPolicySelectorReady = function (api) {
                 policySelectorAPI = api;
-                policySelectorReadyDeferred.resolve();
             };
 
             $scope.defaultItemTabs = [{
@@ -348,13 +354,6 @@
 
                     databaseSelectorReadyDeferred.promise.then(function () {
                         VRUIUtilsService.callDirectiveLoad(databaseSelectorAPI, undefined, databaseSelectorLoadDeferred);
-                    });
-
-                    var policySelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                    promises.push(policySelectorLoadDeferred.promise);
-
-                    policySelectorReadyDeferred.promise.then(function () {
-                        VRUIUtilsService.callDirectiveLoad(policySelectorAPI, undefined, policySelectorLoadDeferred);
                     });
 
                     return UtilsService.waitMultiplePromises(promises);
