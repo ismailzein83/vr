@@ -96,7 +96,6 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public bool TryGetValue(string key, out List<ExistingZone> value)
         {
-            value= new List<ExistingZone>();
             return _ExistingZonesByName.TryGetValue(key.ToLower(), out value);
         }
 
