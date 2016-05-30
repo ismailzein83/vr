@@ -29,7 +29,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 ValidTill = GetReaderValue<DateTime?>(reader, "ValidTill"),
                 Source = GetReaderValue<AccountStatusSource>(reader, "Source"),
                 Reason = reader["Reason"] as string,
-                UserId = (int)reader["UserId"]
+                UserId = (int)reader["UserId"],
+                LastUpdatedOn = (DateTime)reader["LastUpdatedOn"]
             };
 
             return accountStatus;
@@ -39,7 +40,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             StringBuilder queryBuilder = new StringBuilder();
             queryBuilder.Append(String.Format(@"
-                    SELECT   [AccountNumber] ,[Status]  ,[ValidTill], [Reason], [Source], [UserId]
+                    SELECT   [AccountNumber] ,[Status]  ,[ValidTill], [Reason], [Source], [UserId], [LastUpdatedOn]
                         FROM [FraudAnalysis].[AccountStatus]
                         WITH(NOLOCK) #WHERE_CLAUSE#  
                         "));

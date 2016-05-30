@@ -15,5 +15,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public int UserId { get; set; }
 
+        public DateTime LastUpdatedOn { get; set; }
+
     }
 }
