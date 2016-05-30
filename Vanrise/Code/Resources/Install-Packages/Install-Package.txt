@@ -12,3 +12,4 @@ Install-Package bootstrap -version 3.0.0
 Install-Package jQuery -version 1.10.2
 Install-Package Microsoft.AspNet.WebApi -version 5.0.0
 Install-Package Microsoft.AspNet.WebApi.HelpPage -version 5.0.0
+Install-Package RazorEngine -Version 3.8.2
