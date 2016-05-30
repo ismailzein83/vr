@@ -35,10 +35,13 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         public IEnumerable<RepeatedNumber> GetAllFilteredRepeatedNumbers(Vanrise.Entities.DataRetrievalInput<Entities.RepeatedNumberQuery> input)
         {
+            DateTime toDate = DateTime.MinValue;
+            if(input.Query.To == DateTime.MinValue)
+                toDate = DateTime.Now;
             return GetItemsText(GetQuery(input.Query.Filter, input.Query.CDRType, input.Query.RepeatedMorethan, input.Query.PhoneNumber), RepeatedNumberDataMapper, (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.From));
-                cmd.Parameters.Add(new SqlParameter("@ToDate", ToDBNullIfDefault(input.Query.To)));
+                cmd.Parameters.Add(new SqlParameter("@ToDate", ToDBNullIfDefault(toDate)));
             });
         }
 
