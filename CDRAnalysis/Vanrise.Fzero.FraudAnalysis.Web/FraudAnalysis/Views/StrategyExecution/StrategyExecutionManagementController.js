@@ -169,17 +169,16 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnal
     function retrieveData() {
         var query = {
             UserIds: userSelectorAPI.getSelectedIds(),
-            FromCDRDate: ($scope.selectedFilterDateType.id == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByCDRConnect.value ? $scope.fromDate : null),
-            ToCDRDate: ($scope.selectedFilterDateType.id == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByCDRConnect.value ? $scope.toDate : null),
-            FromExecutionDate: ($scope.selectedFilterDateType.id == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByStrategyExecutionDate.value ? $scope.fromDate : null),
-            ToExecutionDate: ($scope.selectedFilterDateType.id == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByStrategyExecutionDate.value ? $scope.toDate : null),
-            FromCancellationDate: ($scope.selectedFilterDateType.id == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByCancelDate.value ? $scope.fromDate : null),
-            ToCancellationDate: ($scope.selectedFilterDateType.id == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByCancelDate.value ? $scope.toDate : null),
+            FromCDRDate: ($scope.selectedFilterDateType.value == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByCDRConnect.value ? $scope.fromDate : null),
+            ToCDRDate: ($scope.selectedFilterDateType.value == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByCDRConnect.value ? $scope.toDate : null),
+            FromExecutionDate: ($scope.selectedFilterDateType.value == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByStrategyExecutionDate.value ? $scope.fromDate : null),
+            ToExecutionDate: ($scope.selectedFilterDateType.value == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByStrategyExecutionDate.value ? $scope.toDate : null),
+            FromCancellationDate: ($scope.selectedFilterDateType.value == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByCancelDate.value ? $scope.fromDate : null),
+            ToCancellationDate: ($scope.selectedFilterDateType.value == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByCancelDate.value ? $scope.toDate : null),
             PeriodId: periodSelectorAPI.getSelectedIds(),
             StrategyIds: strategySelectorAPI.getSelectedIds(),
             StatusIds: UtilsService.getPropValuesFromArray($scope.selectedSuspicionOccuranceStatuses, "value")
         };
-
         return mainGridAPI.retrieveData(query);
     }
 
