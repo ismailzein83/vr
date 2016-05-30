@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace QM.BusinessEntity.Business
 {
@@ -18,8 +19,16 @@ namespace QM.BusinessEntity.Business
 
             Func<Supplier, bool> filterExpression = (prod) =>
                  (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            
+            SupplierExcelExportHandler supplierExcel = new SupplierExcelExportHandler(input.Query);
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSuppliers.ToBigResult(input, filterExpression, SupplierDetailMapper));
+            ResultProcessingHandler<SupplierDetail> handler = new ResultProcessingHandler<SupplierDetail>()
+            {
+                ExportExcelHandler = supplierExcel
+            };
+            
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input,
+                allSuppliers.ToBigResult(input, filterExpression, SupplierDetailMapper), handler);
         }
         public Supplier GetSupplier(int supplierId)
         {
@@ -94,44 +103,7 @@ namespace QM.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
-
-        private void UpdateSettings(Supplier supplier, bool isUpdate)
-        {
-            if (supplier.Settings == null)
-                supplier.Settings = new SupplierSettings();
-            
-            
-            if (isUpdate)
-            {
-                var existingSupplier = GetSupplier(supplier.SupplierId);
-                if (existingSupplier == null)
-                    throw new NullReferenceException(String.Format("existingSupplier {0}", supplier.SupplierId));
-                if (existingSupplier.Settings == null)
-                    throw new NullReferenceException(String.Format("existingSupplier.Settings {0}", supplier.SupplierId));
-                supplier.Settings.ExtendedSettings = existingSupplier.Settings.ExtendedSettings;
-            }
-            else
-            {
-                if (supplier.Settings.ExtendedSettings == null)
-                    supplier.Settings.ExtendedSettings = new Dictionary<string, object>();
-            }
-
-            IEnumerable<Type> extendedSettingsBehaviorsImplementations =
-                Utilities.GetAllImplementations<ExtendedSupplierSettingBehavior>();
-            if (extendedSettingsBehaviorsImplementations != null)
-            {
-                foreach (var extendedSettingsBehaviorType in extendedSettingsBehaviorsImplementations)
-                {
-                    var extendedSettingsBehavior =
-                        Activator.CreateInstance(extendedSettingsBehaviorType) as ExtendedSupplierSettingBehavior;
-                    extendedSettingsBehavior.ApplyExtendedSettings(new ApplyExtendedSupplierSettingsContext
-                    {
-                        Supplier = supplier
-                    });
-                }
-            }
-        }
-
+        
         public void AddSupplierFromSource(Supplier supplier)
         {
             AssignSupplierId(supplier);
@@ -161,7 +133,7 @@ namespace QM.BusinessEntity.Business
             return allSuppliers.FindRecord(filterExpression);
         }
 
-        
+
         public string AddSuppliers(int fileId, bool AllowUpdateIfExisting)
         {
             DataTable supplierDataTable = new DataTable();
@@ -231,9 +203,6 @@ namespace QM.BusinessEntity.Business
 
             return message;
         }
-
-        #region Private Members
-
         public Dictionary<int, Supplier> GetCachedSuppliers()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSuppliers",
@@ -249,6 +218,104 @@ namespace QM.BusinessEntity.Business
         public Supplier GetSupplierByName(string supplierName)
         {
             return GetCachedSuppliers().FindRecord(it => it.Name.ToLower().Equals(supplierName));
+        }
+
+
+        #region Private Members
+
+        private class SupplierRequestHandler : BigDataRequestHandler<SupplierQuery, Supplier, SupplierDetail>
+        {
+            public override IEnumerable<Supplier> RetrieveAllData(DataRetrievalInput<SupplierQuery> input)
+            {
+                throw new ArgumentException("query.ReportType is invalid");
+            }
+            protected override ResultProcessingHandler<SupplierDetail> GetResultProcessingHandler(DataRetrievalInput<SupplierQuery> input, BigResult<SupplierDetail> bigResult)
+            {
+                return new ResultProcessingHandler<SupplierDetail>
+                {
+                    ExportExcelHandler = new SupplierExcelExportHandler(input.Query)
+                };
+            }
+
+            public override SupplierDetail EntityDetailMapper(Supplier entity)
+            {
+                return new SupplierDetail()
+                {
+                    Entity = entity
+                };
+            }
+        }
+
+        private class SupplierExcelExportHandler : ExcelExportHandler<SupplierDetail>
+        {
+            private SupplierQuery _query;
+            public SupplierExcelExportHandler(SupplierQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SupplierDetail> context)
+            {
+                if (context.BigResult == null)
+                    throw new ArgumentNullException("context.BigResult");
+                if (context.BigResult.Data == null)
+                    throw new ArgumentNullException("context.BigResult.Data");
+                ExportExcelSheet sheet = new ExportExcelSheet();
+                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Prefix" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                foreach (var record in context.BigResult.Data)
+                {
+                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                    sheet.Rows.Add(row);
+                    if (record.Entity.Settings != null)
+                    {
+                        row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                        row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.Prefix });
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
+
+        private void UpdateSettings(Supplier supplier, bool isUpdate)
+        {
+            if (supplier.Settings == null)
+                supplier.Settings = new SupplierSettings();
+
+
+            if (isUpdate)
+            {
+                var existingSupplier = GetSupplier(supplier.SupplierId);
+                if (existingSupplier == null)
+                    throw new NullReferenceException(String.Format("existingSupplier {0}", supplier.SupplierId));
+                if (existingSupplier.Settings == null)
+                    throw new NullReferenceException(String.Format("existingSupplier.Settings {0}", supplier.SupplierId));
+                supplier.Settings.ExtendedSettings = existingSupplier.Settings.ExtendedSettings;
+            }
+            else
+            {
+                if (supplier.Settings.ExtendedSettings == null)
+                    supplier.Settings.ExtendedSettings = new Dictionary<string, object>();
+            }
+
+            IEnumerable<Type> extendedSettingsBehaviorsImplementations =
+                Utilities.GetAllImplementations<ExtendedSupplierSettingBehavior>();
+            if (extendedSettingsBehaviorsImplementations != null)
+            {
+                foreach (var extendedSettingsBehaviorType in extendedSettingsBehaviorsImplementations)
+                {
+                    var extendedSettingsBehavior =
+                        Activator.CreateInstance(extendedSettingsBehaviorType) as ExtendedSupplierSettingBehavior;
+                    extendedSettingsBehavior.ApplyExtendedSettings(new ApplyExtendedSupplierSettingsContext
+                    {
+                        Supplier = supplier
+                    });
+                }
+            }
         }
 
         private static void AssignSupplierId(Supplier supplier)

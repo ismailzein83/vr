@@ -1,8 +1,8 @@
 ﻿<vr-datagrid datasource="testcalls"
              on-ready="onGridReady" dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
-             menuactions="gridMenuActions" hidegridmenu
-             idfield="Entity.ID" defaultsortdirection="'DESC'">
+             menuactions="gridMenuActions"
+             idfield="Entity.ID" defaultsortdirection="'DESC'" enableautoexport="true">
 
     <vr-datagridcolumn headertext="'Id'" field="'Entity.ID'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'" type="'Text'"></vr-datagridcolumn>

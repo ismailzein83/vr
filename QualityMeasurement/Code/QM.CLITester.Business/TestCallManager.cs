@@ -171,7 +171,15 @@ namespace QM.CLITester.Business
             testBigResult.Data = listTestCallDetails;
             testBigResult.ResultKey = testCalls.ResultKey;
             testBigResult.TotalCount = testCalls.TotalCount;
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, testBigResult);
+
+            TestCallExcelExportHandler testCallExcel = new TestCallExcelExportHandler(input.Query);
+
+            ResultProcessingHandler<TestCallDetail> handler = new ResultProcessingHandler<TestCallDetail>()
+            {
+                ExportExcelHandler = testCallExcel
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, testBigResult, handler);
         }
 
         public List<Vanrise.Entities.TemplateConfig> GetInitiateTestTemplates()
@@ -186,7 +194,89 @@ namespace QM.CLITester.Business
             return manager.GetTemplateConfigurations(Constants.CliTesterConnectorTestProgress);
         }
 
+         #region Private Members
 
+        private class TestCallRequestHandler : BigDataRequestHandler<TestCallQuery, TestCall, TestCallDetail>
+        {
+            public override IEnumerable<TestCall> RetrieveAllData(DataRetrievalInput<TestCallQuery> input)
+            {
+                throw new ArgumentException("query.ReportType is invalid");
+            }
+            protected override ResultProcessingHandler<TestCallDetail> GetResultProcessingHandler(DataRetrievalInput<TestCallQuery> input, BigResult<TestCallDetail> bigResult)
+            {
+                return new ResultProcessingHandler<TestCallDetail>
+                {
+                    ExportExcelHandler = new TestCallExcelExportHandler(input.Query)
+                };
+            }
+
+            public override TestCallDetail EntityDetailMapper(TestCall entity)
+            {
+                return new TestCallDetail()
+                {
+                    Entity = entity
+                };
+            }
+        }
+
+        private class TestCallExcelExportHandler : ExcelExportHandler<TestCallDetail>
+        {
+            private TestCallQuery _query;
+            public TestCallExcelExportHandler(TestCallQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<TestCallDetail> context)
+            {
+                if (context.BigResult == null)
+                    throw new ArgumentNullException("context.BigResult");
+                if (context.BigResult.Data == null)
+                    throw new ArgumentNullException("context.BigResult.Data");
+                ExportExcelSheet sheet = new ExportExcelSheet();
+                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Supplier Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "User Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Creation Date" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "PDD" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "MOS" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Batch Number" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Schedule Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Call Test Status" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Call Test Result" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                foreach (var record in context.BigResult.Data)
+                {
+                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                    sheet.Rows.Add(row);
+                    if (record.Entity != null)
+                        row.Cells.Add(new ExportExcelCell { Value = record.Entity.ID });
+                    row.Cells.Add(new ExportExcelCell { Value = record.SupplierName });
+                    row.Cells.Add(new ExportExcelCell { Value = record.UserName });
+                    row.Cells.Add(new ExportExcelCell { Value = record.CountryName });
+                    row.Cells.Add(new ExportExcelCell { Value = record.ZoneName });
+                    if (record.Entity != null)
+                    {
+                        row.Cells.Add(new ExportExcelCell { Value = record.Entity.CreationDate });
+                        row.Cells.Add(new ExportExcelCell { Value = record.Entity.Measure.Pdd });
+                        row.Cells.Add(new ExportExcelCell { Value = record.Entity.Measure.Mos });
+                        row.Cells.Add(new ExportExcelCell { Value = record.Entity.BatchNumber });    
+                    }
+                    row.Cells.Add(new ExportExcelCell { Value = record.ScheduleName });
+                    row.Cells.Add(new ExportExcelCell { Value = record.CallTestStatusDescription });
+                    row.Cells.Add(new ExportExcelCell { Value = record.CallTestResultDescription });
+                }
+                context.MainSheet = sheet;
+            }
+        }
+
+
+         #endregion
         TestCallDetail TestCallDetailMapper(TestCall testCall)
         {
             SupplierManager supplierManager = new SupplierManager();
