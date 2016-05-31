@@ -41,6 +41,11 @@
                     <vr-switch value="params.commission"></vr-switch>
                 </vr-columns>
 
+                <vr-columns ng-hide="!params.isCost" colnum="2" ng-if="reporttype.ParameterSettings.RequiresGroupBySupplier">
+                    <vr-label>By Supplier</vr-label>
+                    <vr-switch value="params.bySupplier"></vr-switch>
+                </vr-columns>
+
             </vr-row>
         </div>
     </vr-form>
