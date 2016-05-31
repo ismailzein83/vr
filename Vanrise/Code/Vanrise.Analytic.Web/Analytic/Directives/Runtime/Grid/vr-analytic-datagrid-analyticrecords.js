@@ -51,6 +51,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 gridWidths = UtilsService.getArrayEnum(VR_Analytic_GridWidthEnum);
                 ctrl.mainGrid = (ctrl.parameters == undefined);
                 var styleColors = UtilsService.getArrayEnum(VR_Analytic_StyleCodeEnum);
+
                 ctrl.getMeasureColor = function (dataItem, colDef) {
                     var measure = dataItem.MeasureValues[colDef.tag];
                     if (measure != undefined) {
@@ -59,12 +60,6 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                             return style.styleCode;
                     }
                 }
-
-                ctrl.gridLeftMenuActions = [
-                {
-                    name: "Settings",
-                    onClicked: editSettings
-                }];
 
                 ctrl.gridReady = function (api) {
                     gridApi = api;
@@ -102,7 +97,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 };
 
                 ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady, retrieveDataContext) {
-            
+                    ctrl.gridLeftMenuActions = getGridLeftMenuActions();
                     ctrl.showGrid = true;
                     if (!retrieveDataContext.isDataSorted)
                         dataRetrievalInput.Query.OrderType = initialQueryOrderType;
@@ -159,6 +154,16 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     Analytic_AnalyticService.openGridWidgetSettings(onSaveSettings, getSettingContext(), measureStyleRules);
                 }
 
+                function getGridLeftMenuActions() {
+                    if (gridPayload != undefined && gridPayload.Settings != undefined)
+                    {
+                        var gridLeftMenuActions = [{
+                            name: "Settings",
+                            onClicked: editSettings
+                        }];
+                        return gridLeftMenuActions;
+                    }
+                }
 
                 // ------- Load Grid ------
 

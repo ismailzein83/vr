@@ -70,7 +70,7 @@
 
                 function setTitle() {
                     if (isEditMode && widgetEntity != undefined)
-                        $scope.title = UtilsService.buildTitleForUpdateEditor(widgetEntity.Name, 'Widget Editor');
+                        $scope.title = UtilsService.buildTitleForUpdateEditor(widgetEntity.WidgetTitle, 'Widget Editor');
                     else
                         $scope.title = UtilsService.buildTitleForAddEditor('Widget Editor');
                 }

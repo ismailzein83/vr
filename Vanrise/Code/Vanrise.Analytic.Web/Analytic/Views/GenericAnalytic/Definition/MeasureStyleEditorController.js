@@ -27,11 +27,15 @@
         }
 
         function defineScope() {
-            $scope.scopeModel.measureStyleRuleTemplates = [];
 
             $scope.scopeModel.removeMeasureStyle = function (measureStyle)
             {
                 $scope.scopeModel.measureStyles.splice($scope.scopeModel.measureStyles.indexOf(measureStyle), 1);
+            }
+
+            $scope.scopeModel.onMeasureSelectionChanged = function()
+            {
+                $scope.scopeModel.measureStyles.length = 0;
             }
 
             $scope.scopeModel.styleColors = UtilsService.getArrayEnum(VR_Analytic_StyleCodeEnum);
@@ -45,11 +49,13 @@
 
             $scope.scopeModel.addMeasureStyleRule = function ()
             {
+                var fieldType = UtilsService.getItemByVal(fieldTypeConfigs, $scope.scopeModel.selectedMeasureName.FieldType.ConfigId, "DataRecordFieldTypeConfigId");
+
                 var dataItem = {
                     id: $scope.scopeModel.measureStyles.length + 1,
-                    configId: $scope.scopeModel.selectedMeasureStyleRuleTemplate.ExtensionConfigurationId,
-                    editor: $scope.scopeModel.selectedMeasureStyleRuleTemplate.Editor,
-                    name: $scope.scopeModel.selectedMeasureStyleRuleTemplate.Name,
+                    configId: fieldType !=undefined?fieldType.DataRecordFieldTypeConfigId: undefined,
+                    editor: fieldType !=undefined?  fieldType.RuleFilterEditor: undefined,
+                    name: fieldType != undefined ? fieldType.Name : undefined,
                     selectedStyleColor: VR_Analytic_StyleCodeEnum.Red,
                     onDirectiveReady:function(api)
                     {
@@ -75,21 +81,6 @@
                 $scope.modalContext.closeModal()
             };
 
-        }
-
-        function getContext()
-        {
-            var context = {
-                getFieldTypeEditor: function (fieldTypeConfigId) {
-                    var fieldType = UtilsService.getItemByVal(fieldTypeConfigs, fieldTypeConfigId, "DataRecordFieldTypeConfigId");
-                    if (fieldType != undefined) {
-                        return fieldType.RuntimeEditor;
-                    }
-
-                }
-            }
-            
-            return context;
         }
 
         function load() {
@@ -119,19 +110,19 @@
                             addStyleConditionItemToGrid(filterItem)
                         }
                         function addStyleConditionItemToGrid(styleConditionItem) {
-                            var matchItem = UtilsService.getItemByVal($scope.scopeModel.measureStyleRuleTemplates, styleConditionItem.payload.Condition.ConfigId, "ExtensionConfigurationId");
+                            var matchItem = UtilsService.getItemByVal(fieldTypeConfigs, styleConditionItem.payload.RecordFilter.FieldName, "Name");
                             if (matchItem == null)
                                 return;
 
                             var dataItem = {
                                 id: $scope.scopeModel.measureStyles.length + 1,
-                                configId: matchItem.ExtensionConfigurationId,
-                                editor: matchItem.Editor,
+                                configId: matchItem.DataRecordFieldTypeConfigId,
+                                editor: matchItem.RuleFilterEditor,
                                 name: matchItem.Name,
                                 selectedStyleColor: UtilsService.getItemByVal($scope.scopeModel.styleColors, styleConditionItem.payload.StyleCode, 'value')
                             };
                             var dataItemPayload = getPayload();
-                            dataItemPayload.RuleStyle = styleConditionItem.payload.Condition;
+                            dataItemPayload.filterObj = styleConditionItem.payload.RecordFilter;
 
                             dataItem.onDirectiveReady = function (api) {
                                 dataItem.directiveAPI = api;
@@ -148,26 +139,14 @@
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 }
+
                 function loadStaticData() {
                     if (measureStyleEntity != undefined) {
                         $scope.scopeModel.selectedMeasureName = UtilsService.getItemByVal($scope.scopeModel.measureFields, measureStyleEntity.MeasureName, "Name");
                     }
                 }
-                function loadMeasureStyleRuleTemplateConfigs() {
-                    return VR_Analytic_AnalyticConfigurationAPIService.GetMeasureStyleRuleTemplateConfigs().then(function (response) {
-                        if (response != null) {
-                            for (var i = 0; i < response.length; i++) {
-                                $scope.scopeModel.measureStyleRuleTemplates.push(response[i]);
-                            }
-                            if (measureStyleEntity != undefined)
-                                $scope.scopeModel.selectedMeasureStyleRuleTemplate = UtilsService.getItemByVal($scope.scopeModel.measureStyleRuleTemplates, measureStyleEntity.ConfigId, 'ExtensionConfigurationId');
-                            else
-                                $scope.scopeModel.selectedMeasureStyleRuleTemplate = $scope.scopeModel.measureStyleRuleTemplates[0];
-                        }
-                    });
-                }
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadMeasureStyleRuleTemplateConfigs, getFieldTypeConfigs]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, getFieldTypeConfigs]).then(function () {
                     loadSelectedMeasureStyles().finally(function () {
                         $scope.scopeModel.isLoading = false;
                     }).catch(function (error) {
@@ -182,7 +161,6 @@
         function getPayload()
         {
             var payload = {
-                context: getContext(),
                 FieldType: $scope.scopeModel.selectedMeasureName.FieldType,
             };
             return payload;
@@ -206,10 +184,10 @@
                 if (measurestyle.directiveAPI != undefined)
                     data = measurestyle.directiveAPI.getData();
                 if (data !=undefined)
-                    data.ConfigId = measurestyle.configId;
+                    data.FieldName = measurestyle.name;
                 rules.push({
                     $type: "Vanrise.Analytic.Entities.StyleRule,Vanrise.Analytic.Entities",
-                    Condition: data,
+                    RecordFilter: data,
                     StyleCode: measurestyle.selectedStyleColor.value
                 });
             }

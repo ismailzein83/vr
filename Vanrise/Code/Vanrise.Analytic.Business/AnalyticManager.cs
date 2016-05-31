@@ -268,6 +268,7 @@ namespace Vanrise.Analytic.Business
                 var measureConfig = analyticTableQueryContext.GetMeasureConfig(measureName);
                 var getMeasureValueContext = new GetMeasureValueContext(analyticTableQueryContext,  dbRecord, allDimensionNames);
                 var measureValue = measureConfig.Evaluator.GetMeasureValue(getMeasureValueContext);
+                RecordFilterManager filterManager = new RecordFilterManager();
                 string styleCode = null;
                 if (measureStyleRulesDictionary != null)
                 {
@@ -277,7 +278,7 @@ namespace Vanrise.Analytic.Business
                         foreach (var rule in measureStyleRule.Rules)
                         {
                             StyleRuleConditionContext context = new StyleRuleConditionContext { Value = measureValue };
-                            if (rule.Condition != null && rule.Condition.Evaluate(context))
+                            if (rule.RecordFilter != null && filterManager.IsSingleFieldFilterMatch(rule.RecordFilter, measureValue, measureConfig.Config.FieldType))
                             {
                                 styleCode = rule.StyleCode;
                                 break;

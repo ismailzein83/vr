@@ -15,8 +15,6 @@ namespace Vanrise.Analytic.Entities
     }
     public class StyleRule
     {
-        public StyleRuleCondition Condition { get; set; }
-
         public RecordFilter RecordFilter { get; set; } 
 
         public string StyleCode { get; set; }

@@ -10,69 +10,59 @@
     </vr-columns>
 
 </vr-row>
-<vr-row>
-    <vr-columns width="fullrow">
-        <vr-section title="Dimensions">
-            <vr-row>
-                <vr-analytic-dimension-selector on-ready="scopeModel.onDimensionSelectorDirectiveReady" isrequired="!scopeModel.rootDimensionsFromSearch" ismultipleselection normal-col-num="4" selectedvalues="scopeModel.selectedDimensions" onselectitem="    scopeModel.onSelectDimensionItem" ondeselectitem="    scopeModel.onDeselectDimensionItem" hideselectedvaluessection></vr-analytic-dimension-selector>
-                <vr-columns width="2/3row" >
-                    <vr-validator validate="scopeModel.isValidDimensions()">
-                        <vr-datagrid datasource="scopeModel.dimensions" enabledraggablerow="true"
-                                     on-ready="onGridReady" ondeleterow="    scopeModel.removeDimension" hidegridmenu norowhighlightonclick="'true'">
-                            <vr-datagridcolumn headertext="'Dimension Name'" field="'Name'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Title'" widthfactor="10" disablesorting="true">
-                                <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
-                            </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
-                                <vr-select datatextfield="description" datavaluefield="value" datasource="viewScope.scopeModel.gridWidths"
-                                           selectedvalues="dataItem.SelectedGridWidth" isrequired="true">
-                                </vr-select>
-                            </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Root Dimension'" widthfactor="4" disablesorting="true">
-                                <vr-switch value="dataItem.IsRootDimension"></vr-switch>
-                            </vr-datagridcolumn>
 
-                        </vr-datagrid>
-                    </vr-validator>
-                </vr-columns>
-            </vr-row>
-        </vr-section>
-    </vr-columns>
-</vr-row>
-<vr-row>
-    <vr-columns width="fullrow">
-        <vr-section title="Measures">
-            <vr-row>
-                <vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorDirectiveReady" isrequired="true" ismultipleselection normal-col-num="4" selectedvalues="scopeModel.selectedMeasures" onselectitem="    scopeModel.onSelectMeasureItem" ondeselectitem="    scopeModel.onDeselectMeasureItem" hideselectedvaluessection></vr-analytic-measure-selector>
-                <vr-columns width="2/3row" >
-                    <vr-validator validate="scopeModel.isValidMeasures()">
-                        <vr-datagrid datasource="scopeModel.measures" enabledraggablerow="true"
-                                     on-ready="onGridReady" ondeleterow="    scopeModel.removeMeasure" hidegridmenu norowhighlightonclick="'true'">
-                            <vr-datagridcolumn headertext="'Measure Name'" field="'Name'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Title'" widthfactor="10" disablesorting="true">
-                                <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
-                            </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
-                                <vr-select datatextfield="description" datavaluefield="value" datasource="viewScope.scopeModel.gridWidths"
-                                           selectedvalues="dataItem.SelectedGridWidth" isrequired="true">
-                                </vr-select>
-                            </vr-datagridcolumn>
-                        </vr-datagrid>
-                    </vr-validator>
-                </vr-columns>
-            </vr-row>
-        </vr-section>
-    </vr-columns>
-</vr-row>
+<vr-tabs>
+    <vr-tab header="'Dimensions'">
+        <vr-row>
+            <vr-analytic-dimension-selector on-ready="scopeModel.onDimensionSelectorDirectiveReady" isrequired="!scopeModel.rootDimensionsFromSearch" ismultipleselection normal-col-num="4" selectedvalues="scopeModel.selectedDimensions" onselectitem="    scopeModel.onSelectDimensionItem" ondeselectitem="    scopeModel.onDeselectDimensionItem" hideselectedvaluessection></vr-analytic-dimension-selector>
+            <vr-columns width="2/3row">
+                <vr-validator validate="scopeModel.isValidDimensions()">
+                    <vr-datagrid datasource="scopeModel.dimensions" enabledraggablerow="true"
+                                    on-ready="onGridReady" ondeleterow="    scopeModel.removeDimension" hidegridmenu norowhighlightonclick="'true'">
+                        <vr-datagridcolumn headertext="'Dimension Name'" field="'Name'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Title'" widthfactor="10" disablesorting="true">
+                            <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
+                            <vr-select datatextfield="description" datavaluefield="value" datasource="viewScope.scopeModel.gridWidths"
+                                       selectedvalues="dataItem.SelectedGridWidth" isrequired="true" hideremoveicon>
+                            </vr-select>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Root Dimension'" widthfactor="4" disablesorting="true">
+                            <vr-switch value="dataItem.IsRootDimension"></vr-switch>
+                        </vr-datagridcolumn>
+
+                    </vr-datagrid>
+                </vr-validator>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+    <vr-tab header="'Measures'">
+        <vr-row>
+            <vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorDirectiveReady" isrequired="true" ismultipleselection normal-col-num="4" selectedvalues="scopeModel.selectedMeasures" onselectitem="    scopeModel.onSelectMeasureItem" ondeselectitem="    scopeModel.onDeselectMeasureItem" hideselectedvaluessection></vr-analytic-measure-selector>
+            <vr-columns width="2/3row">
+                <vr-validator validate="scopeModel.isValidMeasures()">
+                    <vr-datagrid datasource="scopeModel.measures" enabledraggablerow="true"
+                                    on-ready="onGridReady" ondeleterow="    scopeModel.removeMeasure" hidegridmenu norowhighlightonclick="'true'">
+                        <vr-datagridcolumn headertext="'Measure Name'" field="'Name'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Title'" widthfactor="10" disablesorting="true">
+                            <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
+                            <vr-select datatextfield="description" datavaluefield="value" datasource="viewScope.scopeModel.gridWidths"
+                                       selectedvalues="dataItem.SelectedGridWidth" isrequired="true" hideremoveicon>
+                            </vr-select>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-validator>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+    <vr-tab header="'Measure Style'">
+        <vr-row>
+            <vr-analytic-measurestyle-grid-editor on-ready="scopeModel.onMeasureStyleGridDirectiveReady"></vr-analytic-measurestyle-grid-editor>
+        </vr-row>
+    </vr-tab>
+</vr-tabs>
 
 
-
-<vr-row>
-    <vr-columns width="fullrow">
-        <vr-section title="Measure Style">
-            <vr-row>
-                <vr-analytic-measurestyle-grid-editor on-ready="scopeModel.onMeasureStyleGridDirectiveReady"></vr-analytic-measurestyle-grid-editor>
-            </vr-row>
-        </vr-section>
-    </vr-columns>
-</vr-row>
