@@ -3,10 +3,10 @@
         <vr-form name="formGenericRuleEditor">
             <vr-tabs>
                 <vr-tab header="'Criteria'">
-                    <div ng-repeat="field in scopeModel.criteriaFields">
+                    <span ng-repeat="field in scopeModel.criteriaFields">
                         <vr-directivewrapper directive="field.runtimeEditor.directive" on-ready="field.runtimeEditor.onDirectiveReady"
                                              selectionmode="dynamic" normal-col-num="3"></vr-directivewrapper>
-                    </div>
+                    </span>
                 </vr-tab>
                 <vr-tab header="'Settings'">
                     <vr-directivewrapper directive="scopeModel.settingsDirective" on-ready="scopeModel.onSettingsDirectiveReady" isrequired="true"></vr-directivewrapper>

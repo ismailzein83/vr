@@ -149,18 +149,18 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_
             return getSingleSelectionModeTemplate();
         }
         else {
-            return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum * 4}}">'
-                    + '<vr-row>'
+            return '<vr-columns colnum="12" haschildcolumns>'
+                    //+ '<vr-row>'
                         + getSingleSelectionModeTemplate()
                         + '<vr-columns withemptyline>'
                             + '<vr-button type="Add" data-onclick="scopeModel.addValue" standalone vr-disabled="scopeModel.isAddButtonDisabled"></vr-button>'
                         + '</vr-columns>'
-                    + '</vr-row>'
-                    + '<vr-row>'
-                        + '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum * 2}}">'
-                            + '<vr-datalist maxitemsperrow="6" datasource="scopeModel.values" autoremoveitem="true">{{dataItem}}</vr-datalist>'
+                    //+ '</vr-row>'
+                    //+ '<vr-row>'
+                        + '<vr-columns colnum="12">'
+                            + '<vr-datalist maxitemsperrow="4" datasource="scopeModel.values" autoremoveitem="true">{{dataItem}}</vr-datalist>'
                         + '</vr-columns>'
-                    + '</vr-row>'
+                    //+ '</vr-row>'
                 + '</vr-columns>';
         }
 
