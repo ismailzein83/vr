@@ -39,13 +39,21 @@ namespace Vanrise.GenericData.Business
             }
             return fields;
         }
-        public List<DataRecordField> GetDataRecordTypeFields(int dataRecordTypeId)
+        public Dictionary<string, DataRecordField> GetDataRecordTypeFields(int dataRecordTypeId)
         {
-            var dataRecordType = GetDataRecordType(dataRecordTypeId);
-            if (dataRecordType == null)
-                return null;
-            return dataRecordType.Fields;
-        }
+            string cacheName = String.Format("GetDataRecordTypeFields_{0}", dataRecordTypeId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+               () =>
+               {
+                   var dataRecordType = GetDataRecordType(dataRecordTypeId);
+                   if (dataRecordType == null)
+                       throw new NullReferenceException(String.Format("dataRecordType '{0}'", dataRecordTypeId));
+                   if (dataRecordType.Fields == null)
+                       throw new NullReferenceException(String.Format("dataRecordType.Fields '{0}'", dataRecordTypeId));
+                   return dataRecordType.Fields.ToDictionary(itm => itm.Name, itm => itm);
+               });          
+        }        
+
         public string GetDataRecordTypeName(int dataRecordTypeId)
         {
             var dataRecordTypes = GetCachedDataRecordTypes();
@@ -175,6 +183,25 @@ namespace Vanrise.GenericData.Business
         {
             return Serializer.Deserialize(serializedRecord, GetDataRecordRuntimeType(dataRecordTypeId));
         }
+
+        public IDataRecordFieldEvaluator GetFieldEvaluator(int dataRecordTypeId)
+        {
+            string cacheName = String.Format("GetFieldEvaluator_{0}", dataRecordTypeId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+                () =>
+                {
+                    var fields = GetDataRecordTypeFields(dataRecordTypeId);
+                    if (fields == null)
+                        throw new NullReferenceException(String.Format("fields. dataRecordTypeId '{0}'", dataRecordTypeId));
+                    return BuildFieldEvaluator(fields.ToDictionary(itm => itm.Key, itm => itm.Value.Type));
+                });
+        }
+
+        public IDataRecordFieldEvaluator BuildFieldEvaluator(Dictionary<string, DataRecordFieldType> fieldsByName)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Private Methods

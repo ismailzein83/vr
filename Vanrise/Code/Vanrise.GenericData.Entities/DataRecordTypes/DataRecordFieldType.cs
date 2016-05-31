@@ -36,5 +36,26 @@ namespace Vanrise.GenericData.Entities
                 return DataRecordFieldOrderType.ByFieldValue;
             }
         }
+
+        public string GetValueMethod { get; set; }
+
+        public string ConvertFilterMethod { get; set; }
     }   
+
+    public interface IDataRecordFieldEvaluator
+    {
+        dynamic GetFieldValue(string fieldName, IDataRecordFieldGetValueContext context);
+
+        RecordFilter ConvertRecordFilter(string fieldName, RecordFilter recordFilter, IDataRecordFieldConvertFilterContext context);
+    }
+
+    public interface IDataRecordFieldGetValueContext
+    {
+        dynamic GetFieldValue(string fieldName);
+    }
+
+    public interface IDataRecordFieldConvertFilterContext
+    {
+
+    }
 }

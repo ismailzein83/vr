@@ -71,20 +71,20 @@ namespace Vanrise.GenericData.Business
             BuildManagementRuntime(businessEntityDefinitionSettings.ManagementDesign, genericManagementRuntime, businessEntityDefinitionSettings.DataRecordTypeId);
             return genericManagementRuntime;
         }
-   
-        public T BuildRuntimeField<T>(GenericUIField field, List<DataRecordField> dataRecordTypeFields, int dataRecordTypeId) where T : GenericUIRuntimeField
+
+        public T BuildRuntimeField<T>(GenericUIField field, Dictionary<string, DataRecordField> dataRecordTypeFieldsByName, int dataRecordTypeId) where T : GenericUIRuntimeField
         {
             var runtimeField = Activator.CreateInstance<T>();
             runtimeField.FieldTitle = field.FieldTitle;
             runtimeField.FieldPath = field.FieldPath;
-            runtimeField.FieldType = GetFieldType(field.FieldPath, dataRecordTypeFields, dataRecordTypeId);
+            runtimeField.FieldType = GetFieldType(field.FieldPath, dataRecordTypeFieldsByName, dataRecordTypeId);
             return runtimeField;
         }
 
-        public DataRecordFieldType GetFieldType(string fieldPath, List<DataRecordField> dataRecordTypeFields, int dataRecordTypeId)
+        public DataRecordFieldType GetFieldType(string fieldPath, Dictionary<string, DataRecordField> dataRecordTypeFieldsByName, int dataRecordTypeId)
         {
-            var dataRecordTypeField = dataRecordTypeFields.FindRecord(itm => itm.Name == fieldPath);
-            if (dataRecordTypeField == null)
+            DataRecordField dataRecordTypeField;
+            if (dataRecordTypeFieldsByName.TryGetValue(fieldPath, out dataRecordTypeField ))
                 throw new NullReferenceException(String.Format("DataRecordType '{0}' dataRecordTypeField '{1}'", dataRecordTypeId, fieldPath));
             return dataRecordTypeField.Type;
         }
@@ -104,14 +104,14 @@ namespace Vanrise.GenericData.Business
         }
     
         #region Grid Runtime
-        private void BuildGridRuntime(GenericGrid gridDesign, GenericGridRuntime genericGridRuntime, List<DataRecordField> dataRecordTypeFields, int dataRecordTypeId)
+        private void BuildGridRuntime(GenericGrid gridDesign, GenericGridRuntime genericGridRuntime, Dictionary<string, DataRecordField> dataRecordTypeFieldsByName, int dataRecordTypeId)
         {
             if (gridDesign.Columns != null)
             {
                 genericGridRuntime.Columns = new List<GenericGridRuntimeField>();
                 foreach (var column in gridDesign.Columns)
                 {
-                    var runtimeColumn = BuildRuntimeField<GenericGridRuntimeField>(column, dataRecordTypeFields, dataRecordTypeId);
+                    var runtimeColumn = BuildRuntimeField<GenericGridRuntimeField>(column, dataRecordTypeFieldsByName, dataRecordTypeId);
                     genericGridRuntime.Columns.Add(runtimeColumn);
                 }
             }
@@ -119,14 +119,14 @@ namespace Vanrise.GenericData.Business
         #endregion
         
         #region Filter Runtime
-        private void BuildFilterRuntime(GenericFilter genericFilter, GenericFilterRuntime genericFilterRuntime, List<DataRecordField> dataRecordTypeFields, int dataRecordTypeId)
+        private void BuildFilterRuntime(GenericFilter genericFilter, GenericFilterRuntime genericFilterRuntime, Dictionary<string, DataRecordField> dataRecordTypeFieldsByName, int dataRecordTypeId)
         {
             if (genericFilter.Fields != null)
             {
                 genericFilterRuntime.Fields = new List<GenericFilterRuntimeField>();
                 foreach (var field in genericFilter.Fields)
                 {
-                    var runtimeField = BuildRuntimeField<GenericFilterRuntimeField>(field, dataRecordTypeFields, dataRecordTypeId);
+                    var runtimeField = BuildRuntimeField<GenericFilterRuntimeField>(field, dataRecordTypeFieldsByName, dataRecordTypeId);
                     runtimeField.IsRequired = field.IsRequired;
                     genericFilterRuntime.Fields.Add(runtimeField);
                 }
@@ -172,14 +172,14 @@ namespace Vanrise.GenericData.Business
                 }
             }
         }
-        private void BuildExtensibleBEItemRuntimeFields(GenericEditorRow row, GenericEditorRuntimeRow runtimeRow, List<DataRecordField> dataRecordTypeFields, int dataRecordTypeId)
+        private void BuildExtensibleBEItemRuntimeFields(GenericEditorRow row, GenericEditorRuntimeRow runtimeRow, Dictionary<string, DataRecordField> dataRecordTypeFieldsByName, int dataRecordTypeId)
         {
             if (row.Fields != null)
             {
                 runtimeRow.Fields = new List<GenericEditorRuntimeField>();
                 foreach (var field in row.Fields)
                 {
-                    var runtimeField = BuildRuntimeField<GenericEditorRuntimeField>(field, dataRecordTypeFields, dataRecordTypeId);
+                    var runtimeField = BuildRuntimeField<GenericEditorRuntimeField>(field, dataRecordTypeFieldsByName, dataRecordTypeId);
                     runtimeField.IsRequired = field.IsRequired;
                     runtimeRow.Fields.Add(runtimeField);
                 }
@@ -223,14 +223,14 @@ namespace Vanrise.GenericData.Business
                 }
             }
         }
-        private void BuildEditorRuntimeFields(GenericEditorRow row, GenericEditorRuntimeRow runtimeRow, List<DataRecordField> dataRecordTypeFields, int dataRecordTypeId)
+        private void BuildEditorRuntimeFields(GenericEditorRow row, GenericEditorRuntimeRow runtimeRow, Dictionary<string, DataRecordField> dataRecordTypeFieldsByName, int dataRecordTypeId)
         {
             if (row.Fields != null)
             {
                 runtimeRow.Fields = new List<GenericEditorRuntimeField>();
                 foreach (var field in row.Fields)
                 {
-                    var runtimeField = BuildRuntimeField<GenericEditorRuntimeField>(field, dataRecordTypeFields, dataRecordTypeId);
+                    var runtimeField = BuildRuntimeField<GenericEditorRuntimeField>(field, dataRecordTypeFieldsByName, dataRecordTypeId);
                     runtimeField.IsRequired = field.IsRequired;
                     runtimeRow.Fields.Add(runtimeField);
                 }

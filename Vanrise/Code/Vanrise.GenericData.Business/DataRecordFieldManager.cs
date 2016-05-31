@@ -15,11 +15,11 @@ namespace Vanrise.GenericData.Business
         public IEnumerable<DataRecordFieldInfo> GetDataRecordFieldsInfo(DataRecordFieldInfoFilter filter)
         {
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            List<DataRecordField> dataRecordFields = dataRecordTypeManager.GetDataRecordTypeFields(filter.DataRecordTypeId);
+            Dictionary<string, DataRecordField> dataRecordFields = dataRecordTypeManager.GetDataRecordTypeFields(filter.DataRecordTypeId);
             if (dataRecordFields == null || dataRecordFields.Count == 0)
                 return null;
             List<DataRecordFieldInfo> result = new List<DataRecordFieldInfo>();
-            foreach (DataRecordField dataRecordField in dataRecordFields)
+            foreach (DataRecordField dataRecordField in dataRecordFields.Values)
             {
                 result.Add(DataRecordFieldInfoMapper(dataRecordField));
             }

@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnalyticItemAction.cs" />
     <Compile Include="AnalyticQuery.cs" />
     <Compile Include="AnalyticRecord.cs" />
     <Compile Include="AnalyticReport\AnalyticReport.cs" />

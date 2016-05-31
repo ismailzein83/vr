@@ -235,31 +235,31 @@ namespace Vanrise.GenericData.Business
 
             return definitionSettings;
         }
-        private DataRecordType GetDataRecordType(int dataRecordTypeId)
+        private Dictionary<string, DataRecordField> GetDataRecordTypeFields(int dataRecordTypeId)
         {
-            var recordType = _recordTypeManager.GetDataRecordType(dataRecordTypeId);
-            if (recordType == null)
-                throw new NullReferenceException("recordType");
-            return recordType;
+            var fields = _recordTypeManager.GetDataRecordTypeFields(dataRecordTypeId);
+            if (fields == null)
+                throw new NullReferenceException(String.Format("fields. dataRecordTypeId '{0}'", dataRecordTypeId));
+            return fields;
         }
         private string GetFieldDescription(GenericBusinessEntity genericBusinessEntity, string fieldPath, int dataRecordTypeId)
         {
-            var recordType = GetDataRecordType(dataRecordTypeId);
+            var recordTypeFields = GetDataRecordTypeFields(dataRecordTypeId);
             var columnValue = GetFieldPathValue(genericBusinessEntity, fieldPath);
             if (columnValue != null)
             {
-                var uiRuntimeField = _uiRuntimeManager.GetFieldType(fieldPath, recordType.Fields, recordType.DataRecordTypeId);
+                var uiRuntimeField = _uiRuntimeManager.GetFieldType(fieldPath, recordTypeFields, dataRecordTypeId);
                 return uiRuntimeField.GetDescription(columnValue);
             }
             return null;
         }
         private string GetFieldDescription<T>(GenericUIField field, GenericBusinessEntity genericBusinessEntity, string fieldPath, int dataRecordTypeId) where T : GenericUIRuntimeField
         {
-            var recordType = GetDataRecordType(dataRecordTypeId);
+            var recordTypeFields = GetDataRecordTypeFields(dataRecordTypeId);
             var columnValue = GetFieldPathValue(genericBusinessEntity, fieldPath);
             if (columnValue != null)
             {
-                var uiRuntimeField = _uiRuntimeManager.BuildRuntimeField<T>(field, recordType.Fields, recordType.DataRecordTypeId);
+                var uiRuntimeField = _uiRuntimeManager.BuildRuntimeField<T>(field, recordTypeFields, dataRecordTypeId);
                 //var value = (columnValue.Value != null) ? columnValue.Value : columnValue;
                 return uiRuntimeField.FieldType.GetDescription(columnValue);
             }
