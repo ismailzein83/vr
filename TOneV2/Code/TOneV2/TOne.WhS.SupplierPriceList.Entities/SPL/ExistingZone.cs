@@ -83,20 +83,20 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
     public class ExistingZonesByName
     {
-        private Dictionary<string, List<ExistingZone>> _ExistingZonesByName;
+        private Dictionary<string, List<ExistingZone>> _existingZonesByName;
 
         public ExistingZonesByName()
         {
-            _ExistingZonesByName = new Dictionary<string, List<ExistingZone>>();
+            _existingZonesByName = new Dictionary<string, List<ExistingZone>>();
         }
         public void Add(string key, List<ExistingZone> values)
         {
-            _ExistingZonesByName.Add(key.ToLower(), values);
+            _existingZonesByName.Add(key.ToLower(), values);
         }
 
         public bool TryGetValue(string key, out List<ExistingZone> value)
         {
-            return _ExistingZonesByName.TryGetValue(key.ToLower(), out value);
+            return _existingZonesByName.TryGetValue(key.ToLower(), out value);
         }
 
     }

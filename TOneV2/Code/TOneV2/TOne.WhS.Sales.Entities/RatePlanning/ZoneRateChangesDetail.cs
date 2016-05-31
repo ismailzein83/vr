@@ -17,12 +17,4 @@ namespace TOne.WhS.Sales.Entities
         public DateTime EffectiveOn { get; set; }
         public DateTime? EffectiveUntil { get; set; }
     }
-
-    public enum RateChangeType
-    {
-        New = 0,
-        Increase = 1,
-        Decrease = 2,
-        Close = 3
-    }
 }

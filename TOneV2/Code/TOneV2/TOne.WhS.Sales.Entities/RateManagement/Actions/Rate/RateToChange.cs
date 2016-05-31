@@ -6,17 +6,19 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public class RateToChange
+    public class RateToChange : Vanrise.Entities.IDateEffectiveSettings
     {
         public string ZoneName { get; set; }
 
         public Decimal NormalRate { get; set; }
 
-        public Decimal OldNormalRate { get; set; }
+        public Decimal? RecentNormalRate { get; set; }
 
         public Dictionary<int, Decimal> OtherRates { get; set; }
 
         public int? CurrencyId { get; set; }
+
+        public RateChangeType ChangeType { get; set; }
 
         public DateTime BED { get; set; }
 
@@ -40,5 +42,13 @@ namespace TOne.WhS.Sales.Entities
                 return _changedExistingRates;
             }
         }
+    }
+
+    public enum RateChangeType
+    {
+        New = 0,
+        Increase = 1,
+        Decrease = 2,
+        Close = 3
     }
 }

@@ -8,7 +8,7 @@ namespace TOne.WhS.Sales.Entities
 {
     public class RateToClose
     {
-        public string ZoneN0ame { get; set; }
+        public string ZoneName { get; set; }
 
         public DateTime CloseEffectiveDate { get; set; }
 

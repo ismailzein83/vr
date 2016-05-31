@@ -24,21 +24,21 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
     public class ExistingRatesByZoneName
     {
-         private Dictionary<string, List<ExistingRate>> _ExistingRatesByZoneName;
+         private Dictionary<string, List<ExistingRate>> _existingRatesByZoneName;
 
         public ExistingRatesByZoneName()
         {
-            _ExistingRatesByZoneName = new Dictionary<string, List<ExistingRate>>();
+            _existingRatesByZoneName = new Dictionary<string, List<ExistingRate>>();
         }
         public void Add(string key, List<ExistingRate> values)
         {
-            _ExistingRatesByZoneName.Add(key.ToLower(), values);
+            _existingRatesByZoneName.Add(key.ToLower(), values);
         }
 
         public bool TryGetValue(string key, out List<ExistingRate> value)
         {
             value= new List<ExistingRate>();
-            return _ExistingRatesByZoneName.TryGetValue(key.ToLower(), out value);
+            return _existingRatesByZoneName.TryGetValue(key.ToLower(), out value);
         }
 
     }

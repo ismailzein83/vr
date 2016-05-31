@@ -10,7 +10,10 @@ namespace TOne.WhS.Sales.Entities
     //TODO: remove IDateEffectiveSettings in case it is not needed anymore
     public class DraftNewRate : Vanrise.Entities.IDateEffectiveSettings
     {
+        //TODO: to remove later if there is no need to, the replacement is zone name
         public long ZoneId { get; set; }
+
+        public string ZoneName { get; set; }
 
         public Decimal NormalRate { get; set; }
 

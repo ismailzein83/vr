@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public class ExistingZone : IZone
+    public class ExistingZone : Vanrise.Entities.IDateEffectiveSettings
     {
         public BusinessEntity.Entities.SaleZone ZoneEntity { get; set; }
 
@@ -52,5 +52,25 @@ namespace TOne.WhS.Sales.Entities
                 return _existingRates;
             }
         }
+    }
+
+    public class ExistingZonesByName
+    {
+        private Dictionary<string, List<ExistingZone>> _existingZonesByName;
+
+        public ExistingZonesByName()
+        {
+            _existingZonesByName = new Dictionary<string, List<ExistingZone>>();
+        }
+        public void Add(string key, List<ExistingZone> values)
+        {
+            _existingZonesByName.Add(key.ToLower(), values);
+        }
+
+        public bool TryGetValue(string key, out List<ExistingZone> value)
+        {
+            return _existingZonesByName.TryGetValue(key.ToLower(), out value);
+        }
+
     }
 }

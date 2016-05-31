@@ -10,7 +10,7 @@ namespace TOne.WhS.Sales.Entities
     {
         public long RateId { get; set; }
 
-        public IZone Zone { get; set; }
+        public ExistingZone Zone { get; set; }
 
         public Decimal NormalRate { get; set; }
 
