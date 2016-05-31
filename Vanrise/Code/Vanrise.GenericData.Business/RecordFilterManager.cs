@@ -45,6 +45,33 @@ namespace Vanrise.GenericData.Business
 
             return fieldType.IsMatched(fieldValue, filter);
         }
+
+        public bool IsSingleFieldFilterMatch(RecordFilter filter, Object fieldValue, DataRecordFieldType fieldType)
+        {
+            return IsFilterMatch(filter, new SingleFieldRecordFilterGenericFieldMatchContext(fieldValue, fieldType));
+        }
+
+        #region Private Classes
+
+        private class SingleFieldRecordFilterGenericFieldMatchContext : IRecordFilterGenericFieldMatchContext
+        {
+            Object _fieldValue;
+            DataRecordFieldType _fieldType;
+
+            public SingleFieldRecordFilterGenericFieldMatchContext(Object fieldValue, DataRecordFieldType fieldType)
+            {
+                _fieldValue = fieldValue;
+                _fieldType = fieldType;
+            }
+
+            public object GetFieldValue(string fieldName, out DataRecordFieldType fieldType)
+            {
+                fieldType = _fieldType;
+                return _fieldValue;
+            }
+        }
+
+        #endregion
     }
 
     public interface IRecordFilterGenericFieldMatchContext
