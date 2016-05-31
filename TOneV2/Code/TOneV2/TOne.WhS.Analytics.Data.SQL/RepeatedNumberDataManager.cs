@@ -36,8 +36,10 @@ namespace TOne.WhS.Analytics.Data.SQL
         public IEnumerable<RepeatedNumber> GetAllFilteredRepeatedNumbers(Vanrise.Entities.DataRetrievalInput<Entities.RepeatedNumberQuery> input)
         {
             DateTime toDate = DateTime.MinValue;
-            if(input.Query.To == DateTime.MinValue)
+            if (input.Query.To == DateTime.MinValue)
                 toDate = DateTime.Now;
+            else
+                toDate = input.Query.To;
             return GetItemsText(GetQuery(input.Query.Filter, input.Query.CDRType, input.Query.RepeatedMorethan, input.Query.PhoneNumber), RepeatedNumberDataMapper, (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.From));
