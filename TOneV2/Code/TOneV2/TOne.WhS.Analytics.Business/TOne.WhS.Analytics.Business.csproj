@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="BillingReports\ReportHelpers.cs" />
     <Compile Include="BillingReports\ZoneProfitReportGenerator.cs" />
+    <Compile Include="BillingReports\ZoneSummaryDetailedReportGenerator.cs" />
     <Compile Include="BillingReports\ZoneSummaryReportGenerator.cs" />
     <Compile Include="BillingStatisticManager.cs" />
     <Compile Include="BlockedAttemptsManager.cs" />
