@@ -14,5 +14,5 @@
     SaleCode: { value: 12, description: "SaleCode" },
     SupplierCode: { value: 13, description: "SupplierCode" },
     SalePriceList: { value: 14, description: "SalePriceList" },
-    SupplierPriceList: { value: 14, description: "SupplierPriceList" }
+    SupplierPriceList: { value: 15, description: "SupplierPriceList" }
 });
