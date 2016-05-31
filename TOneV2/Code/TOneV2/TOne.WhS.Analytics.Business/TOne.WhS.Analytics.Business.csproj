@@ -41,6 +41,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Analytic.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
@@ -72,6 +78,10 @@
     <Compile Include="VariationReportManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
+      <Project>{70ce755d-00ae-4e12-8f07-e4df91346293}</Project>
+      <Name>TOne.BusinessEntity.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Analytics.Data\TOne.WhS.Analytics.Data.csproj">
       <Project>{86a1eac7-48f9-4e53-83f4-5bfc936b9ae2}</Project>
       <Name>TOne.WhS.Analytics.Data</Name>

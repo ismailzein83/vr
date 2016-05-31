@@ -1,93 +1,188 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using TOne.WhS.Analytics.Data;
 using TOne.WhS.Analytics.Entities;
 using TOne.WhS.Analytics.Entities.BillingReport;
-using TOne.WhS.BusinessEntity.Business;
+using Vanrise.Analytic.Business;
+using Vanrise.Analytic.Entities;
+using Vanrise.Entities;
+using AnalyticRecord = Vanrise.Analytic.Entities.AnalyticRecord;
+using DimensionFilter = Vanrise.Analytic.Entities.DimensionFilter;
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Analytics.Business.BillingReports
 {
     public class ZoneSummaryReportGenerator : IReportGenerator
     {
-        private readonly IGenericBillingDataManager _gdatamanager;
-
-        public ZoneSummaryReportGenerator()
-        {
-            _gdatamanager = AnalyticsDataManagerFactory.GetDataManager<IGenericBillingDataManager>();
-        }
-
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
-            AccountManagerManager am = new AccountManagerManager();
-            IEnumerable<AssignedCarrier> suppliersIds = am.GetAssignedCarriers();
-            IEnumerable<AssignedCarrier> customersIds = am.GetAssignedCarriers();
-
-            List<string> lstSuppliers = new List<string>();
-            foreach (var a in suppliersIds)
-            {
-                lstSuppliers.Add(a.CarrierAccountId.ToString());
-            }
-            List<string> lstCustomers = new List<string>();
-            foreach (var a in customersIds)
-            {
-                lstCustomers.Add(a.CarrierAccountId.ToString());
-            }
-            
+            AnalyticManager analyticManager = new AnalyticManager();
             BillingStatisticManager manager = new BillingStatisticManager();
-            
-            double service = 0;
 
-            TOne.WhS.Analytics.Entities.BillingReportQuery query = new BillingReportQuery();
-            query.FromDate = parameters.FromTime;
-            query.ToDate = parameters.ToTime;
-            query.CustomerIds = parameters.CustomersId;
-            query.SupplierIds = parameters.SuppliersId;
-            query.CurrencyId = parameters.CurrencyId;
-
-
-            var listBillingReportRecords = _gdatamanager.GetFilteredBillingReportRecords(query); 
-            
-            List<ZoneSummary> listzoneSummaries = new List<ZoneSummary>();
-            foreach (var record in listBillingReportRecords)
+            Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
             {
-                ZoneSummary zoneSummary = new ZoneSummary();
-                zoneSummary.Zone = record.Zone;
-                zoneSummary.Calls = record.Calls;
-                zoneSummary.CommissionValue = record.CommissionValue;
-                zoneSummary.DurationInSeconds = record.DurationInSeconds;
-                zoneSummary.DurationNet = record.DurationNet;
-                listzoneSummaries.Add(zoneSummary);
-            }
-            List<ZoneSummaryFormatted> zoneSummaries = manager.FormatZoneSummaries(listzoneSummaries);
+                Query = new AnalyticQuery()
+                {
+                    DimensionFields = new List<string> { "Supplier", "SaleZone" },
+                    MeasureFields = new List<string>() { "Attempts", "CostRate", "SaleRate", "DurationNet", "DurationInMinutes",
+                    "CostNet", "CostCommissions", "CostExtraCharges", "SaleNet", "SaleCommissions", "SaleExtraCharges" },
+                    TableId = 8,
+                    FromTime = parameters.FromTime,
+                    ToTime = parameters.ToTime,
+                    CurrencyId = parameters.CurrencyId,
+                    ParentDimensions = new List<string>(),
+                    Filters = new List<DimensionFilter>()
+                },
+                SortByColumnName = "DimensionValues[0].Name"
+            };
 
-            //List<ZoneSummaryFormatted> zoneSummaries =
-            //    manager.GetZoneSummary(parameters.FromTime, parameters.ToTime, parameters.CustomersId, parameters.SuppliersId, parameters.IsCost,
-            //    parameters.CurrencyId, parameters.SupplierGroup, parameters.CustomerGroup, lstCustomers, lstSuppliers, parameters.GroupBySupplier, out service);
-            
-
-            decimal services = 0;
             if (parameters.IsCost)
-                if (zoneSummaries.Count != 0)
-                    services = (decimal)service;
+                analyticQuery.Query.DimensionFields.Add("CostRateType");
+            else
+                analyticQuery.Query.DimensionFields.Add("SaleRateType");
 
-            parameters.ServicesForCustomer = services;
-            parameters.NormalDuration = zoneSummaries.Where(y => y.RateTypeFormatted == "Normal").Sum(x => Math.Round(x.DurationInSeconds, 2));
+            if (!String.IsNullOrEmpty(parameters.CustomersId))
+            {
+                DimensionFilter dimensionFilter = new DimensionFilter()
+                {
+                    Dimension = "Customer",
+                    FilterValues = parameters.CustomersId.Split(',').ToList().Cast<object>().ToList()
+                };
+                analyticQuery.Query.Filters.Add(dimensionFilter);
+            }
 
-            parameters.OffPeakDuration = Math.Ceiling(zoneSummaries.Where(y => y.RateTypeFormatted == "OffPeak").Sum(x => Math.Round(x.DurationInSeconds, 2)));
+            if (!String.IsNullOrEmpty(parameters.SuppliersId))
+            {
+                DimensionFilter dimensionFilter = new DimensionFilter()
+                {
+                    Dimension = "Supplier",
+                    FilterValues = parameters.SuppliersId.Split(',').ToList().Cast<object>().ToList()
+                };
+                analyticQuery.Query.Filters.Add(dimensionFilter);
+            }
 
-            parameters.NormalNet = zoneSummaries.Where(y => y.RateTypeFormatted == "Normal").Sum(x => x.Net).Value;
+            List<ZoneSummaryFormatted> listZoneSummary = new List<ZoneSummaryFormatted>();
 
-            parameters.OffPeakNet = Math.Round(zoneSummaries.Where(y => y.RateTypeFormatted == "OffPeak").Sum(x => x.Net).Value, 0);
+            var result = analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
+            if(result != null)
+            foreach (var analyticRecord in result.Data)
+            {
+                ZoneSummaryFormatted zoneSummary = new ZoneSummaryFormatted();
+
+                var supplierValue = analyticRecord.DimensionValues[0];
+                if (supplierValue != null)
+                    zoneSummary.SupplierID = supplierValue.Name;
+
+                                
+                var saleZoneValue = analyticRecord.DimensionValues[1];
+                if (saleZoneValue != null)
+                    zoneSummary.Zone = saleZoneValue.Name;
+
+                if (parameters.IsCost)
+                {
+                    var costRateTypeValue = analyticRecord.DimensionValues[2];
+                    if (costRateTypeValue != null)
+                        zoneSummary.RateType = (int)costRateTypeValue.Value;
+                }
+                else
+                {
+                    var saleRateTypeValue = analyticRecord.DimensionValues[2];
+                    if (saleRateTypeValue != null)
+                        zoneSummary.RateType = (int)saleRateTypeValue.Value;
+                }
+
+                zoneSummary.RateTypeFormatted = ((RateTypeEnum) zoneSummary.RateType).ToString();
+
+                MeasureValue calls;
+                analyticRecord.MeasureValues.TryGetValue("Attempts", out calls);
+                zoneSummary.Calls = (calls == null ) ? 0 : Convert.ToInt32(calls.Value ?? 0);
+
+                MeasureValue rate;
+                if (parameters.IsCost)
+                    analyticRecord.MeasureValues.TryGetValue("CostRate", out rate);
+                else
+                    analyticRecord.MeasureValues.TryGetValue("SaleRate", out rate);
+                zoneSummary.Rate = (rate == null) ? 0.0 : Convert.ToInt32(rate.Value ?? 0.0);
+
+
+                MeasureValue durationNet;
+                analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
+                zoneSummary.DurationNet = Convert.ToDecimal(durationNet.Value ?? 0.0);
+                zoneSummary.DurationNetFormatted = manager.FormatNumber(zoneSummary.DurationNet);
+
+                MeasureValue durationInMinutes;
+                analyticRecord.MeasureValues.TryGetValue("DurationInMinutes", out durationInMinutes);
+                zoneSummary.DurationInSeconds = Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
+                zoneSummary.DurationInSecondsFormatted = manager.FormatNumber(zoneSummary.DurationInSeconds);
+
+                zoneSummary.RateFormatted = manager.FormatNumberDigitRate(zoneSummary.Rate);
+
+                //MeasureValue commissionValue;
+                //if (parameters.IsCost)
+                //    analyticRecord.MeasureValues.TryGetValue("CostCommissions", out commissionValue);
+                //else
+                //    analyticRecord.MeasureValues.TryGetValue("SaleCommissions", out commissionValue);
+
+                //zoneSummary.CommissionValue = Convert.ToDouble(commissionValue.Value ?? 0.0);
+                //zoneSummary.CommissionValueFormatted = manager.FormatNumber(zoneSummary.CommissionValue);
+
+                //MeasureValue extraChargeValue;
+                //if (parameters.IsCost)
+                //    analyticRecord.MeasureValues.TryGetValue("CostExtraCharges", out extraChargeValue);
+                //else
+                //    analyticRecord.MeasureValues.TryGetValue("SaleExtraCharges", out extraChargeValue);
+
+                //zoneSummary.ExtraChargeValue = Convert.ToDouble(extraChargeValue.Value ?? 0.0);
+
+                if (parameters.IsCost)
+                {
+                    MeasureValue net;
+                    analyticRecord.MeasureValues.TryGetValue("CostNet", out net);
+                    zoneSummary.Net = Convert.ToDouble(net.Value ?? 0.0);
+                    zoneSummary.NetFormatted = manager.FormatNumberDigitRate(zoneSummary.Net);
+
+                    MeasureValue commisionValue;
+                    analyticRecord.MeasureValues.TryGetValue("CostCommissions", out commisionValue);
+                    zoneSummary.CommissionValue = Convert.ToDouble(commisionValue.Value ?? 0.0);
+                    zoneSummary.CommissionValueFormatted = manager.FormatNumberDigitRate(zoneSummary.CommissionValue);
+
+                    MeasureValue extraChargesValue;
+                    analyticRecord.MeasureValues.TryGetValue("CostExtraCharges", out extraChargesValue);
+                    zoneSummary.ExtraChargeValue = Convert.ToDouble(extraChargesValue.Value ?? 0.0);
+                }
+                else
+                {
+                    MeasureValue net;
+                    analyticRecord.MeasureValues.TryGetValue("SaleNet", out net);
+                    zoneSummary.Net = Convert.ToDouble(net.Value ?? 0.0);
+                    zoneSummary.NetFormatted = manager.FormatNumberDigitRate(zoneSummary.Net);
+
+                    MeasureValue commisionValue;
+                    analyticRecord.MeasureValues.TryGetValue("SaleCommissions", out commisionValue);
+                    zoneSummary.CommissionValue = Convert.ToDouble(commisionValue.Value ?? 0.0);
+                    zoneSummary.CommissionValueFormatted = manager.FormatNumberDigitRate(zoneSummary.CommissionValue);
+
+                    MeasureValue extraChargesValue;
+                    analyticRecord.MeasureValues.TryGetValue("SaleExtraCharges", out extraChargesValue);
+                    zoneSummary.ExtraChargeValue = Convert.ToDouble(extraChargesValue.Value ?? 0.0);
+                }
+
+                listZoneSummary.Add(zoneSummary);
+            }
+
+            //parameters.ServicesForCustomer = services;
+            parameters.NormalDuration = listZoneSummary.Where(y => y.RateTypeFormatted == "Normal").Sum(x => Math.Round(x.DurationInSeconds, 2));
+
+            parameters.OffPeakDuration = Math.Ceiling(listZoneSummary.Where(y => y.RateTypeFormatted == "OffPeak").Sum(x => Math.Round(x.DurationInSeconds, 2)));
+
+            parameters.NormalNet = listZoneSummary.Where(y => y.RateTypeFormatted == "Normal").Sum(x => x.Net).Value;
+
+            parameters.OffPeakNet = Math.Round(listZoneSummary.Where(y => y.RateTypeFormatted == "OffPeak").Sum(x => x.Net).Value, 0);
 
             parameters.TotalAmount = parameters.OffPeakNet + parameters.NormalNet;
 
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
-            dataSources.Add("ZoneSummaries", zoneSummaries);
+            dataSources.Add("ZoneSummaries", listZoneSummary);
             return dataSources;
         }
 
