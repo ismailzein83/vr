@@ -47,7 +47,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 List<IZone> newZones;
                 newAndExistingZones.TryGetValue(importedZone.ZoneName, out newZones);
 
-                importedZone.NewZones = newZones.Select(itm => itm as NewZone).ToList();
+                importedZone.NewZones =newZones != null ? newZones.Select(itm => itm as NewZone).ToList() : new List<NewZone>();
                 importedZone.ExistingZones = existingZones.FindAllRecords(item => item.ZoneEntity.Name.Equals(importedZone.ZoneName, StringComparison.InvariantCultureIgnoreCase)).ToList();
                 importedZone.BED = importedZone.ImportedCodes.Min(item => item.BED);
                 FillZoneChangeTypeAndRecentZoneName(importedZone, existingZones);
@@ -85,11 +85,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         importedZone.RecentZoneName = recentZoneName;
                 }
 
-                else if (importedZone.NewZones != null && importedZone.NewZones.Count() > 0 && importedZone.ExistingZones.All(item => item.ExistingCodes.All(itm => itm.EED.HasValue)))
+                else if (importedZone.NewZones != null && importedZone.NewZones.Count() > 0 && importedZone.ExistingZones.All(item => item.ExistingCodes.All(itm => itm.EED.HasValue) && item.ExistingCodes.Any(itm => itm.ChangedCode == null)))
                     importedZone.ChangeType = ZoneChangeType.New;
             }
 
-            else if (importedZone.NewZones != null && importedZone.NewZones.Count() > 0 && importedZone.ExistingZones.All(item => item.ExistingCodes.All(itm => itm.EED.HasValue)))
+            else if (importedZone.NewZones != null && importedZone.NewZones.Count() > 0 && importedZone.ExistingZones.All(item => item.ExistingCodes.All(itm => itm.EED.HasValue) && item.ExistingCodes.Any(itm=> itm.ChangedCode == null)))
                 importedZone.ChangeType= ZoneChangeType.New;
 
             else if (importedZone.ExistingZones != null && importedZone.ExistingZones.Any(item => item.ChangedZone != null))
