@@ -1159,7 +1159,7 @@
                 }
             };
               
-            var retrieveDataContext = { eventType: eventType };
+            var retrieveDataContext = { eventType: eventType, isDataSorted: sortColumn != undefined };
             var promise = retrieveDataFunction(retrieveDataInput, onResponseReady, retrieveDataContext);//this function should return a promise in case it is getting data
             
             if (promise != undefined && promise != null) {

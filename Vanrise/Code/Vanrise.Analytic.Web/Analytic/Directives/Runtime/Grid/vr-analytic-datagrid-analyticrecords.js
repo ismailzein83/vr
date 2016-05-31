@@ -98,10 +98,12 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady, retrieveDataContext) {
 
                     ctrl.showGrid = true;
-                    if (retrieveDataContext.eventType != DataGridRetrieveDataEventType.Sorting)
+                    if (!retrieveDataContext.isDataSorted)
                         dataRetrievalInput.Query.OrderType = initialQueryOrderType;
                     else
                         dataRetrievalInput.Query.OrderType = undefined;
+                    if (dataRetrievalInput.Query.WithSummary && retrieveDataContext.eventType != DataGridRetrieveDataEventType.ExternalTrigger)
+                        dataRetrievalInput.Query.WithSummary = false;
 
                     return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                         .then(function (response) {
