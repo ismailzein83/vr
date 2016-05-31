@@ -1,0 +1,17 @@
+﻿<div ng-show="ctrl.showGrid">
+    <vr-datagrid datasource="blockedAttempts"
+                 on-ready="onGridReady"
+                 dataretrievalfunction="dataRetrievalFunction"
+                 pagingtype="'PagingOnScroll'"
+                 menuactions="gridMenuActions"
+                 defaultsortbyfieldname="'SwitchName'"
+                 defaultsortdirection="'DESC'">
+        <vr-datagridcolumn headertext="'Switch'" field="'SwitchName'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Release Code'" field="'Entity.ReleaseCode'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Release Source'" field="'Entity.ReleaseSource'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Attempts'" field="'Entity.Attempts'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'%'" field="'Percentage'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'First Attempt'" field="'Entity.FirstAttempt'" type="'Datetime'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Last Attempt'" field="'Entity.LastAttempt'" type="'Datetime'"></vr-datagridcolumn>
+    </vr-datagrid>
+</div>

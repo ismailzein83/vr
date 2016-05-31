@@ -61,6 +61,9 @@
     <Compile Include="CDRLog\CDRLog.cs" />
     <Compile Include="CDRLog\CDRLogDetail.cs" />
     <Compile Include="CDRLog\CDRLogFilter.cs" />
+    <Compile Include="ReleaseCode\ReleaseCodeDetail.cs" />
+    <Compile Include="ReleaseCode\ReleaseCode.cs" />
+    <Compile Include="ReleaseCode\ReleaseCodeDimension.cs" />
     <Compile Include="GenericAnalytic\AnalyticDimension.cs" />
     <Compile Include="GenericAnalytic\AnalyticDimensionValue.cs" />
     <Compile Include="GenericAnalytic\AnalyticMeasureField.cs" />
@@ -76,6 +79,8 @@
     <Compile Include="RawCDR\RawCDRLogDetail.cs" />
     <Compile Include="RawCDR\RawCDRLog.cs" />
     <Compile Include="RawCDR\RawCDRInput.cs" />
+    <Compile Include="ReleaseCode\ReleaseCodeFilter.cs" />
+    <Compile Include="ReleaseCode\ReleaseCodeQuery.cs" />
     <Compile Include="RepeatedNumber\RepeatedNumber.cs" />
     <Compile Include="RepeatedNumber\RepeatedNumberDetail.cs" />
     <Compile Include="RepeatedNumber\RepeatedNumberFilter.cs" />
@@ -85,6 +90,7 @@
     <Compile Include="VariationReport\VariationReportQuery.cs" />
     <Compile Include="VariationReport\VariationReportRecord.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

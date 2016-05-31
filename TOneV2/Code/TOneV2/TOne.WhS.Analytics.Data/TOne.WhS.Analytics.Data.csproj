@@ -57,6 +57,7 @@
     <Compile Include="IGenericAnalyticDataManager.cs" />
     <Compile Include="IGenericBillingDataManager.cs" />
     <Compile Include="IRawCDRDataManager.cs" />
+    <Compile Include="IReleaseCodeDataManager.cs" />
     <Compile Include="IRepeatedNumberDataManager.cs" />
     <Compile Include="IReportDefinitionDataManager.cs" />
     <Compile Include="IVariationReportDataManager.cs" />

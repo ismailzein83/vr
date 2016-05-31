@@ -142,6 +142,7 @@
     <Compile Include="Controllers\CDRController.cs" />
     <Compile Include="Controllers\GenericAnalyticController.cs" />
     <Compile Include="Controllers\RawCDRController.cs" />
+    <Compile Include="Controllers\ReleaseCodeController.cs" />
     <Compile Include="Controllers\RepeatedNumberController.cs" />
     <Compile Include="Controllers\ReportDefinitionController.cs" />
     <Compile Include="Controllers\VariationReportController.cs" />
@@ -169,8 +170,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WhS_Analytics\Constant\RealeaseCodeAnalyticDimensionEnum.js" />
     <Content Include="WhS_Analytics\Directives\CallStatus\vr-whs-analytics-callstatus-selector.js" />
     <Content Include="WhS_Analytics\Directives\PhoneNumber\vr-whs-analytics-phonenumber-selector.js" />
+    <Content Include="WhS_Analytics\Directives\ReleaseCodeStatistic\Templates\ReleaseCodeGridTemplate.html" />
+    <Content Include="WhS_Analytics\Directives\ReleaseCodeStatistic\vr-whs-analytics-releasecode-grid.js" />
+    <Content Include="WhS_Analytics\Directives\ReleaseCodeStatistic\vr-whs-analytics-releasecode-dimenssion-selector.js" />
     <Content Include="WhS_Analytics\Reports\Analytics\BillingReports.aspx" />
     <Content Include="WhS_Analytics\Constant\BillingCDRMeasureEnum.js" />
     <Content Include="WhS_Analytics\Constant\BillingCDROptionMeasureEnum.js" />
@@ -203,6 +208,7 @@
     <Content Include="WhS_Analytics\Directives\RepeatedNumber\vr-whs-analytics-repeatednumber-grid.js" />
     <Content Include="WhS_Analytics\Directives\VariationReport\Templates\VariationReportGridTemplate.html" />
     <Content Include="WhS_Analytics\Directives\VariationReport\vr-whs-analytics-variationreport-grid.js" />
+    <Content Include="WhS_Analytics\Services\APIServices\ReleaseCodeAPIService.js" />
     <Content Include="WhS_Analytics\Services\APIServices\BlockedAttemptsAPIService.js" />
     <Content Include="WhS_Analytics\Services\APIServices\CDRLogAPIService.js" />
     <Content Include="WhS_Analytics\Services\APIServices\GenericAnalyticAPIService.js" />
@@ -227,7 +233,9 @@
     <Content Include="WhS_Analytics\Views\RawCDR\RawCDRLogTemplateController.js" />
     <Content Include="WhS_Analytics\Views\RepeatedNumber\RepeatedNumber.html" />
     <Content Include="WhS_Analytics\Views\RepeatedNumber\RepeatedNumberController.js" />
+    <Content Include="WhS_Analytics\Views\TrafficAnalysis\ReleaseCodeStatistics.html" />
     <Content Include="WhS_Analytics\Views\TrafficAnalysis\BlockedAttempts.html" />
+    <Content Include="WhS_Analytics\Views\TrafficAnalysis\ReleaseCodeStatisticsController.js" />
     <Content Include="WhS_Analytics\Views\TrafficAnalysis\BlockedAttemptsController.js" />
     <Content Include="WhS_Analytics\Views\VariationReport\VariationReport.html" />
     <Content Include="WhS_Analytics\Views\VariationReport\VariationReportController.js" />
@@ -238,6 +246,7 @@
     <Content Include="WhS_Analytics\Views\TrafficAnalysis\TrafficMonitorReport.html" />
     <Content Include="WhS_Analytics\Views\TrafficAnalysis\TrafficMonitorReportController.js" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
