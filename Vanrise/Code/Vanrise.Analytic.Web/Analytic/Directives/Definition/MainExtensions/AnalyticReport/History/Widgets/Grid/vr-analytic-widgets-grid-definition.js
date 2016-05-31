@@ -2,9 +2,9 @@
 
     'use strict';
 
-    WidgetsGridDefinition.$inject = ["UtilsService", 'VRUIUtilsService','VR_Analytic_AnalyticTypeEnum','VR_Analytic_AnalyticItemConfigAPIService'];
+    WidgetsGridDefinition.$inject = ["UtilsService", 'VRUIUtilsService','VR_Analytic_AnalyticTypeEnum','VR_Analytic_AnalyticItemConfigAPIService','VR_Analytic_GridWidthEnum'];
 
-    function WidgetsGridDefinition(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticTypeEnum, VR_Analytic_AnalyticItemConfigAPIService) {
+    function WidgetsGridDefinition(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticTypeEnum, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_GridWidthEnum) {
         return {
             restrict: "E",
             scope: {
@@ -19,7 +19,7 @@
                 var widgetsGrid = new WidgetsGrid($scope, ctrl, $attrs);
                 widgetsGrid.initializeController();
             },
-            controllerAs: "Ctrl",
+            controllerAs: "gridCtrl",
             bindToController: true,
             templateUrl: "/Client/Modules/Analytic/Directives/Definition/MainExtensions/AnalyticReport/History/Widgets/Grid/Templates/GridWidgetDefinitionTemplate.html"
 
@@ -44,6 +44,9 @@
                     dimensionSelectorAPI = api;
                     dimensionReadyDeferred.resolve();
                 }
+
+                $scope.scopeModel.gridWidths = UtilsService.getArrayEnum(VR_Analytic_GridWidthEnum);
+           
                 $scope.scopeModel.dimensions = [];
                 $scope.scopeModel.isValidDimensions = function () {
 
@@ -56,6 +59,7 @@
                         AnalyticItemConfigId: dimension.AnalyticItemConfigId,
                         Title: dimension.Title,
                         Name: dimension.Name,
+                        SelectedGridWidth:VR_Analytic_GridWidthEnum.Normal,
                         IsRootDimension: false
                     };
                     $scope.scopeModel.dimensions.push(dataItem);
@@ -90,6 +94,7 @@
                         AnalyticItemConfigId: measure.AnalyticItemConfigId,
                         Title: measure.Title,
                         Name: measure.Name,
+                        SelectedGridWidth: VR_Analytic_GridWidthEnum.Normal,
                     };
                     $scope.scopeModel.measures.push(dataItem);
                 }
@@ -131,6 +136,7 @@
                                         Name: dimension.DimensionName,
                                         Title: dimension.Title,
                                         IsRootDimension: dimension.IsRootDimension,
+                                        SelectedGridWidth: UtilsService.getItemByVal( $scope.scopeModel.gridWidths,dimension.Width,"value"),
                                     });
                                 }
                             }
@@ -143,6 +149,7 @@
                                     $scope.scopeModel.measures.push({
                                         Name: measure.MeasureName,
                                         Title: measure.Title,
+                                        SelectedGridWidth: UtilsService.getItemByVal($scope.scopeModel.gridWidths, measure.Width, "value"),
                                     });
                                 }
                             }
@@ -218,7 +225,7 @@
                                 DimensionName: dimension.Name,
                                 Title: dimension.Title,
                                 IsRootDimension: dimension.IsRootDimension,
-
+                                Width: dimension.SelectedGridWidth.value,
                             });
                         }
                     }
@@ -231,6 +238,7 @@
                             measures.push({
                                 MeasureName: measure.Name,
                                 Title: measure.Title,
+                                Width: measure.SelectedGridWidth.value,
                             });
                         }
                     }

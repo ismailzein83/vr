@@ -1,6 +1,6 @@
-﻿<vr-columns width="1/2row">
-    <vr-select hideremoveicon datasource="scopeModel.compareOperators" selectedvalues="scopeModel.selectedCompareOperator" label="Time Format Template" datatextfield="description" datavaluefield="value" isrequired="true"></vr-select>
+﻿<vr-columns width="1/3row">
+    <vr-select hideremoveicon datasource="scopeModel.compareOperators" selectedvalues="scopeModel.selectedCompareOperator" label="Condition" datatextfield="description" datavaluefield="value" isrequired="true"></vr-select>
 </vr-columns>
-<vr-columns width="1/2row">
-    <vr-directivewrapper vr-loader="scopeModel.isLoadingDirective" ng-if="scopeModel.editor !=undefined" directive="scopeModel.editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="9" isrequired="true" selectionmode="single"></vr-directivewrapper>
+<vr-columns width="2/3row" >
+    <vr-directivewrapper ng-if="scopeModel.editor !=undefined" directive="scopeModel.editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="12" isrequired="true" selectionmode="single"></vr-directivewrapper>
 </vr-columns>

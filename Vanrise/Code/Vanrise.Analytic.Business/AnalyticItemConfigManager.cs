@@ -378,7 +378,8 @@ namespace Vanrise.Analytic.Business
                 AnalyticItemConfigId = analyticItemConfig.AnalyticItemConfigId,
                 Name = analyticItemConfig.Name,
                 Title = analyticItemConfig.Title,
-                Attribute = analyticItemConfig.Config.FieldType.GetGridColumnAttribute()
+                Attribute = analyticItemConfig.Config.FieldType.GetGridColumnAttribute(),
+                FieldType = analyticItemConfig.Config.FieldType
 
             };
         }

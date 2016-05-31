@@ -13,5 +13,6 @@ namespace Vanrise.Analytic.Entities
         public string Name { get; set; }
         public string Title { get; set; }
         public GridColumnAttribute Attribute { get; set; }
+        public GenericData.Entities.DataRecordFieldType FieldType { get; set; }
     }
 }

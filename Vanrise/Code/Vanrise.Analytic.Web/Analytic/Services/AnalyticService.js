@@ -12,7 +12,8 @@
             editRealTimeWidget: editRealTimeWidget,
             addRealTimeWidget: addRealTimeWidget,
             addMeasureStyle: addMeasureStyle,
-            editMeasureStyle: editMeasureStyle
+            editMeasureStyle: editMeasureStyle,
+            openGridWidgetSettings: openGridWidgetSettings
         });
 
         function OpenAnalyticReport() {
@@ -106,6 +107,22 @@
             };
 
             VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/MeasureStyleEditor.html', modalParameters, modalSettings);
+        }
+
+        function openGridWidgetSettings(onSaveSettings,context, measureStyleRules)
+        {
+            var settings = {
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onSaveSettings = onSaveSettings;
+            };
+            var parameters = {
+                context: context,
+                measureStyleRules: measureStyleRules
+            };
+
+            VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticGridWidgetSettings.html', parameters, settings);
         }
     }
 

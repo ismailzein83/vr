@@ -105,6 +105,7 @@
     <Content Include="Analytic\Constants\CompareOperatorEnum.js" />
     <Content Include="Analytic\Constants\ConnectionStringTypeEnum.js" />
     <Content Include="Analytic\Constants\ExpressionTypeEnum.js" />
+    <Content Include="Analytic\Constants\GridWidthEnum.js" />
     <Content Include="Analytic\Constants\ModuleConfig.js" />
     <Content Include="Analytic\Constants\OrderTypeEnum.js" />
     <Content Include="Analytic\Constants\OrderDirectionEnum.js" />
@@ -200,6 +201,8 @@
     <Content Include="Analytic\Services\APIServices\AnalyticItemConfigAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticReportAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticTableAPIService.js" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticGridWidgetSettings.html" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticGridWidgetSettingsController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticItemConfigEditor.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticItemConfigEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticReportManagement.html" />

@@ -30,10 +30,10 @@
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.compareOperators = UtilsService.getArrayEnum(VR_Analytic_CompareOperatorEnum);
+                $scope.scopeModel.selectedCompareOperator = VR_Analytic_CompareOperatorEnum.Equals
                 $scope.scopeModel.onDirectiveReady = function(api)
                 {
                     directiveAPI = api;
-
                     directiveReadyDeferred.resolve();
                 }
                 defineAPI();
@@ -60,7 +60,6 @@
                         });
                         promises.push(directiveLoadDeferred.promise);
                         return UtilsService.waitMultiplePromises(promises);
-
 
                     }
 

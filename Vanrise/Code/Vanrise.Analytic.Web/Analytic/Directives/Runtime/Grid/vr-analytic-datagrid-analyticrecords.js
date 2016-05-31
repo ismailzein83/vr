@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService', 'DataGridRetrieveDataEventType','VR_Analytic_StyleCodeEnum',
-    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService, DataGridRetrieveDataEventType, VR_Analytic_StyleCodeEnum) {
+app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService', 'DataGridRetrieveDataEventType','VR_Analytic_StyleCodeEnum','Analytic_AnalyticService','VR_Analytic_GridWidthEnum',
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService, DataGridRetrieveDataEventType, VR_Analytic_StyleCodeEnum, Analytic_AnalyticService, VR_Analytic_GridWidthEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -35,8 +35,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
             ctrl.parentDimensions = [];
             ctrl.measures = [];
             var initialQueryOrderType;
-
-
+            var gridPayload;
+            var measureStyleRules;
             ctrl.drillDownDimensions = [];
 
             ctrl.sortField = "";
@@ -45,9 +45,10 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
             var drillDown;
             var fromTime;
             var toTime;
-
+            var gridWidths;
             function initializeController() {
 
+                gridWidths = UtilsService.getArrayEnum(VR_Analytic_GridWidthEnum);
                 ctrl.mainGrid = (ctrl.parameters == undefined);
                 var styleColors = UtilsService.getArrayEnum(VR_Analytic_StyleCodeEnum);
                 ctrl.getMeasureColor = function (dataItem, colDef) {
@@ -59,6 +60,11 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     }
                 }
 
+                ctrl.gridLeftMenuActions = [
+                {
+                    name: "Settings",
+                    onClicked: editSettings
+                }];
 
                 ctrl.gridReady = function (api) {
                     gridApi = api;
@@ -96,7 +102,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 };
 
                 ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady, retrieveDataContext) {
-
+            
                     ctrl.showGrid = true;
                     if (!retrieveDataContext.isDataSorted)
                         dataRetrievalInput.Query.OrderType = initialQueryOrderType;
@@ -126,6 +132,32 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                             onResponseReady(response);
                         });
                 };
+
+
+                function editSettings() {
+                    var onSaveSettings = function (settings) {
+                        measureStyleRules = settings;
+                        if (gridPayload !=undefined)
+                        {
+                            if(gridPayload.Settings !=undefined)
+                                gridPayload.Settings.MeasureStyleRules = settings.MeasureStyleRules;
+
+                            var payload = {
+                                Settings: gridPayload.Settings,
+                                DimensionFilters: gridPayload.DimensionFilters,
+                                SelectedGroupingDimensions: gridPayload.SelectedGroupingDimensions,
+                                TableId: gridPayload.TableId,
+                                FromTime: fromTime,
+                                FilterGroup: gridPayload.FilterGroup,
+                                ToTime: toTime
+                            }
+                            loadGrid(payload);
+                        }
+                       
+                    };
+                    var measureStyleRules;
+                    Analytic_AnalyticService.openGridWidgetSettings(onSaveSettings, getSettingContext(), measureStyleRules);
+                }
 
 
                 // ------- Load Grid ------
@@ -206,7 +238,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                 ToTime: toTime,
                                 DrillDownDimensions: drillDownDimensions,
                                 TableId: payLoad.TableId,
-                                InitialQueryOrderType: initialQueryOrderType
+                                InitialQueryOrderType: initialQueryOrderType,
+                                MeasureStyleRules: measureStyleRules
                             }
                             return dataItem.gridAPI.load(drillDownPayLoad);
                         };
@@ -255,19 +288,27 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         ParentDimensions: UtilsService.getPropValuesFromArray(ctrl.parentDimensions, 'DimensionName'),
                         WithSummary: payLoad.Settings == undefined ? false : payLoad.Settings.WithSummary,
                         TableId: payLoad.TableId,
-                        MeasureStyleRules: payLoad.Settings !=undefined? payLoad.Settings.MeasureStyleRules:undefined
+                        MeasureStyleRules: measureStyleRules
                     }
                     return queryFinalized;
                 }
 
                 function loadDataFromRootGrid(payload) {
+                   
                     ctrl.dimensions.length = 0;
                     ctrl.groupingDimensions.length = 0;
                     loadAllGridDimensions(payload);
                     var dimensionForDrillDown = [];
                     for (var i = 0; i < ctrl.dimensions.length; i++) {
                         var dimension = ctrl.dimensions[i];
+                        var gridWidth = UtilsService.getItemByVal(gridWidths, dimension.Width, "value");
+                        if (gridWidth != undefined)
+                            dimension.Widthfactor = gridWidth.widthFactor;
+
+
                         if (payload.Settings != undefined) {
+                            gridPayload = payload;
+                            measureStyleRules = payload.Settings.MeasureStyleRules;
                             initialQueryOrderType = payload.Settings.OrderType;
                             if (payload.Settings.RootDimensionsFromSearchSection) {
                                 var groupingSearchDimension = UtilsService.getItemByVal(payload.SelectedGroupingDimensions, dimension.DimensionName, 'DimensionName');
@@ -302,6 +343,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     if (payload.Dimensions != undefined) {
                         ctrl.dimensions = payload.Dimensions;
                     }
+                    if (payload.MeasureStyleRules !=undefined)
+                        measureStyleRules = payload.MeasureStyleRules
                     if (payload.DimensionsConfig != undefined) {
                         ctrl.dimensionsConfig = payload.DimensionsConfig;
                     }
@@ -311,7 +354,12 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     if (payload.GroupingDimensions != undefined && payload.Settings == undefined) {
                         for (var i = 0; i < payload.GroupingDimensions.length; i++) {
                             var groupingDimension = payload.GroupingDimensions[i];
-                            ctrl.groupingDimensions.push(UtilsService.getItemByVal(ctrl.dimensions, groupingDimension.DimensionName, 'DimensionName'));
+                            var dimension = UtilsService.getItemByVal(ctrl.dimensions, groupingDimension.DimensionName, 'DimensionName');
+                            var gridWidth = UtilsService.getItemByVal(gridWidths, dimension.Width, "value");
+                            if (gridWidth != undefined)
+                                dimension.Widthfactor = gridWidth.widthFactor;
+                            ctrl.groupingDimensions.push(dimension);
+                           
                         }
                     }
                     if (payload.ParentDimensions != undefined)
@@ -328,11 +376,19 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
                     if (payload.Settings != undefined && payload.Settings.Measures != undefined) {
                         for (var i = 0; i < payload.Settings.Measures.length; i++) {
-                            ctrl.measures.push(payload.Settings.Measures[i]);
+                            var settingMeasure = payload.Settings.Measures[i];
+                            var gridWidth = UtilsService.getItemByVal(gridWidths, settingMeasure.Width, "value");
+                            if (gridWidth != undefined)
+                                settingMeasure.Widthfactor = gridWidth.widthFactor;
+                            ctrl.measures.push(settingMeasure);
                         }
                     } else if (payload.Measures != undefined) {
                         for (var i = 0; i < payload.Measures.length; i++) {
-                            ctrl.measures.push(payload.Measures[i]);
+                            var measure = payload.Measures[i];
+                            var gridWidthValue = UtilsService.getItemByVal(gridWidths, measure.Width, "value");
+                            if (gridWidthValue != undefined)
+                                measure.Widthfactor = gridWidthValue.widthFactor;
+                            ctrl.measures.push(measure);
                         }
                     }
                 }
@@ -471,6 +527,28 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
                 //------- END Add Grid Attributes ------------
 
+                function getSettingContext()
+                {
+                    var context = {
+                        getMeasures: function () {
+                            var selectedMeasures = [];
+                            for (var i = 0; i < ctrl.measures.length; i++) {
+                                var selectedMeasure = ctrl.measures[i];
+                                var matchItem = UtilsService.getItemByVal(ctrl.measuresConfig, selectedMeasure.MeasureName, "Name");
+                                if (matchItem != undefined) {
+                                    selectedMeasures.push({
+                                        Name: selectedMeasure.MeasureName,
+                                        Title: selectedMeasure.Title,
+                                        FieldType: matchItem.FieldType
+                                    });
+                                }
+                            }
+                            return selectedMeasures;
+
+                        }
+                    }
+                    return context;
+                }
             }
         }
         return directiveDefinitionObject;

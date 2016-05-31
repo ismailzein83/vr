@@ -36,25 +36,26 @@
 
             $scope.scopeModel.styleColors = UtilsService.getArrayEnum(VR_Analytic_StyleCodeEnum);
 
-
             $scope.scopeModel.isValidMeasureStyles = function()
             {
                 if ($scope.scopeModel.measureStyles.length == 0)
                     return "At least one style should be added.";
                 return null;
             }
-            $scope.scopeModel.addMeasureStyleRule = function()
+
+            $scope.scopeModel.addMeasureStyleRule = function ()
             {
                 var dataItem = {
                     id: $scope.scopeModel.measureStyles.length + 1,
                     configId: $scope.scopeModel.selectedMeasureStyleRuleTemplate.ExtensionConfigurationId,
                     editor: $scope.scopeModel.selectedMeasureStyleRuleTemplate.Editor,
                     name: $scope.scopeModel.selectedMeasureStyleRuleTemplate.Name,
+                    selectedStyleColor: VR_Analytic_StyleCodeEnum.Red,
                     onDirectiveReady:function(api)
                     {
                         dataItem.directiveAPI = api;
-                        var payload ={context:getContext(),Title:"Compare Value",FieldType:$scope.scopeModel.selectedMeasureName.FieldType};
-                        var setLoader = function (value) { $scope.scopeModel.isLoadingDirective = value };
+                        var payload = getPayload();
+                        var setLoader = function (value) { dataItem.isLoadingDirective = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, payload, setLoader);
                     }
                 }
@@ -69,10 +70,13 @@
                     return insert();
                 }
             };
+
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
+
         }
+
         function getContext()
         {
             var context = {
@@ -87,8 +91,10 @@
             
             return context;
         }
+
         function load() {
             $scope.scopeModel.isLoading = true;
+
             loadAllControls();
 
             function loadAllControls() {
@@ -124,7 +130,8 @@
                                 name: matchItem.Name,
                                 selectedStyleColor: UtilsService.getItemByVal($scope.scopeModel.styleColors, styleConditionItem.payload.StyleCode, 'value')
                             };
-                            var dataItemPayload = { context: getContext(), Title: "Compare Value", FieldType: $scope.scopeModel.selectedMeasureName.FieldType,RuleStyle: styleConditionItem.payload.Condition};
+                            var dataItemPayload = getPayload();
+                            dataItemPayload.RuleStyle = styleConditionItem.payload.Condition;
 
                             dataItem.onDirectiveReady = function (api) {
                                 dataItem.directiveAPI = api;
@@ -170,6 +177,15 @@
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
             }
+        }
+
+        function getPayload()
+        {
+            var payload = {
+                context: getContext(),
+                FieldType: $scope.scopeModel.selectedMeasureName.FieldType,
+            };
+            return payload;
         }
 
         function getFieldTypeConfigs() {

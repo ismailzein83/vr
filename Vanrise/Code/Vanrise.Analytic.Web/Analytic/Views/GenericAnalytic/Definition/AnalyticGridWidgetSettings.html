@@ -1,0 +1,29 @@
+﻿<div vr-modalcontent ng-controller="VR_Analytic_AnalyticGridWidgetSettingsController" vr-loader="scopeModel.isLoading" width="'60%'">
+    <vr-modalbody maxheight="'600px'">
+        <vr-form validationcontext="analyticGridWidgetSettingsGroup">
+            <vr-tabs>
+                <vr-tab header="'Setting'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-section title="Measure Style">
+                                <vr-row>
+                                    <vr-analytic-measurestyle-grid-editor on-ready="scopeModel.onMeasureStyleGridDirectiveReady"></vr-analytic-measurestyle-grid-editor>
+                                </vr-row>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="analyticGridWidgetSettingsGroup" data-onclick="scopeModel.saveSettings"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

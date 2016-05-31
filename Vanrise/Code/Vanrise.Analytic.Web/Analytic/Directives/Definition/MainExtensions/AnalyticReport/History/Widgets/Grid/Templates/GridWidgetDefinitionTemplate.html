@@ -23,6 +23,11 @@
                             <vr-datagridcolumn headertext="'Title'" widthfactor="10" disablesorting="true">
                                 <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
                             </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
+                                <vr-select datatextfield="description" datavaluefield="value" datasource="viewScope.scopeModel.gridWidths"
+                                           selectedvalues="dataItem.SelectedGridWidth" isrequired="true">
+                                </vr-select>
+                            </vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Root Dimension'" widthfactor="4" disablesorting="true">
                                 <vr-switch value="dataItem.IsRootDimension"></vr-switch>
                             </vr-datagridcolumn>
@@ -46,6 +51,11 @@
                             <vr-datagridcolumn headertext="'Measure Name'" field="'Name'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Title'" widthfactor="10" disablesorting="true">
                                 <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
+                                <vr-select datatextfield="description" datavaluefield="value" datasource="viewScope.scopeModel.gridWidths"
+                                           selectedvalues="dataItem.SelectedGridWidth" isrequired="true">
+                                </vr-select>
                             </vr-datagridcolumn>
                         </vr-datagrid>
                     </vr-validator>
