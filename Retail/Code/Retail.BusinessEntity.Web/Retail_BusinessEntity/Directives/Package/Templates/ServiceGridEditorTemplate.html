@@ -6,6 +6,9 @@
         <vr-datagrid datasource="ctrl.services" norowhighlightonclick="true"
                      on-ready="ctrl.onGridReady" ondeleterow="ctrl.removeService" menuactions="ctrl.servicesGridMenuActions" hidegridmenu>
             <vr-datagridcolumn headertext="'Service Type'" field="'ServiceType'" disablesorting="true"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Enabled'"  disablesorting="true">
+                <vr-icon icontype="dataItem.Enabled"></vr-icon>
+            </vr-datagridcolumn>
         </vr-datagrid>
     </vr-validator>
 </vr-columns>
