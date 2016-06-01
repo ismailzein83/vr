@@ -2,28 +2,28 @@
 
     "use strict";
 
-    accountStatusManagementController.$inject = ['$scope', "Fzero_FraudAnalysis_AccountStatusAPIService", "Fzero_FraudAnalysis_AccountStatusService", "CDRAnalysis_FA_CaseStatusEnum", "VRValidationService", "CDRAnalysis_FA_AccountStatusSourceEnum", "UtilsService", "VRUIUtilsService"];
+    accountStatusManagementController.$inject = ['$scope', "Fzero_FraudAnalysis_AccountStatusAPIService", "Fzero_FraudAnalysis_AccountStatusService", "CDRAnalysis_FA_CaseStatusEnum", "VRValidationService", "CDRAnalysis_FA_AccountStatusSourceEnum", "UtilsService", "VRUIUtilsService", "PeriodEnum"];
 
-    function accountStatusManagementController($scope, Fzero_FraudAnalysis_AccountStatusAPIService, Fzero_FraudAnalysis_AccountStatusService, CDRAnalysis_FA_CaseStatusEnum, VRValidationService, CDRAnalysis_FA_AccountStatusSourceEnum, UtilsService, VRUIUtilsService) {
+    function accountStatusManagementController($scope, Fzero_FraudAnalysis_AccountStatusAPIService, Fzero_FraudAnalysis_AccountStatusService, CDRAnalysis_FA_CaseStatusEnum, VRValidationService, CDRAnalysis_FA_AccountStatusSourceEnum, UtilsService, VRUIUtilsService, PeriodEnum) {
         var gridAPI;
         var userSelectorAPI;
         var userSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var timeRangeDirectiveAPI;
+        var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
 
         function defineScope() {
-
-            var Now = new Date();
-
-            var Yesterday = new Date();
-            Yesterday.setDate(Yesterday.getDate() - 1);
             $scope.accountNumber;
-            $scope.fromDate = Yesterday;
-            $scope.toDate = Now;
+            $scope.fromDate;
+            $scope.toDate;
+            $scope.today = PeriodEnum.Today;
 
-            $scope.validateTimeRange = function () {
-                return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+            $scope.onTimeRangeDirectiveReady = function (api) {
+                timeRangeDirectiveAPI = api;
+                timeRangeReadyPromiseDeferred.resolve();
             }
 
             $scope.searchClicked = function () {
@@ -61,7 +61,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadStaticSelectors, loadUserSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadStaticSelectors, loadUserSelector, loadTimeRangeSelector]).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -82,6 +82,14 @@
                 return userSelectorLoadDeferred.promise;
             }
 
+        }
+
+        function loadTimeRangeSelector() {
+            var timeRangeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            timeRangeReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, undefined, timeRangeLoadPromiseDeferred);
+            });
+            return timeRangeLoadPromiseDeferred.promise;
         }
 
         function getQuery() {

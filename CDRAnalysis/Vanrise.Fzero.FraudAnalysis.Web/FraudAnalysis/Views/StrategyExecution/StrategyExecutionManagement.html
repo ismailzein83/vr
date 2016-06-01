@@ -15,16 +15,10 @@
                     <vr-select datasource="filterDateTypes" datatextfield="description" datavaluefield="value" label="Filter Date Type" selectedvalues="selectedFilterDateType" hideremoveicon></vr-select>
                 </vr-columns>
 
-                <vr-columns width="normal">
-                    <vr-datetimepicker type="dateTime" value="fromDate" label="From" customvalidate="validateTimeRange()" isrequired></vr-datetimepicker>
-                </vr-columns>
-
-                <vr-columns width="normal">
-                    <vr-datetimepicker type="dateTime" value="toDate" label="To" customvalidate="validateTimeRange()"></vr-datetimepicker>
-                </vr-columns>
+                <vr-timerange on-ready="onTimeRangeDirectiveReady" type="'date'" from="fromDate" to="toDate" width="normal" isrequired="false" period="today"></vr-timerange>
 
                 <vr-columns width="normal" ng-show="advancedSelected">
-                    <cdranalysis-fa-period-selector on-ready="onPeriodSelectorReady" onselectionchanged="onPeriodSelectionChanged"></cdranalysis-fa-period-selector>
+                    <cdranalysis-fa-period-selector on-ready="onPeriodSelectorReady" label="Type" onselectionchanged="onPeriodSelectionChanged"></cdranalysis-fa-period-selector>
                 </vr-columns>
 
                 <vr-columns width="normal">

@@ -1,10 +1,12 @@
 ﻿"use strict";
 
 StrategyExecutionManagementController.$inject = ['$scope', "VRUIUtilsService", 'CDRAnalysis_FA_StrategyExecutionAPIService', 'VR_Sec_UserAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService',
-    'BusinessProcess_BPInstanceAPIService', 'StrategyAPIService', 'CDRAnalysis_FA_StrategyExecutionFilterDateTypes', 'CDRAnalysis_FA_SuspicionOccuranceStatusEnum', 'LabelColorsEnum', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService'];
+    'BusinessProcess_BPInstanceAPIService', 'StrategyAPIService', 'CDRAnalysis_FA_StrategyExecutionFilterDateTypes', 'CDRAnalysis_FA_SuspicionOccuranceStatusEnum', 'LabelColorsEnum', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'PeriodEnum'];
 
 function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnalysis_FA_StrategyExecutionAPIService, VR_Sec_UserAPIService, VRModalService, VRNotificationService, VRNavigationService,
-    UtilsService, VRValidationService, BusinessProcess_BPInstanceAPIService, StrategyAPIService, CDRAnalysis_FA_StrategyExecutionFilterDateTypes, CDRAnalysis_FA_SuspicionOccuranceStatusEnum, LabelColorsEnum, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService) {
+    UtilsService, VRValidationService, BusinessProcess_BPInstanceAPIService, StrategyAPIService, CDRAnalysis_FA_StrategyExecutionFilterDateTypes, CDRAnalysis_FA_SuspicionOccuranceStatusEnum, LabelColorsEnum, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, PeriodEnum) {
+    var timeRangeDirectiveAPI;
+    var timeRangeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
     var strategySelectorAPI;
     var strategySelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -23,6 +25,15 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnal
 
     function defineScope() {
 
+        $scope.fromDate;
+        $scope.toDate;
+        $scope.today = PeriodEnum.Today;
+
+        $scope.onTimeRangeDirectiveReady = function (api) {
+            timeRangeDirectiveAPI = api;
+            timeRangeDirectiveReadyDeferred.resolve();
+        }
+
         $scope.selectedSuspicionOccuranceStatuses = [];
 
         $scope.onStrategySelectorReady = function (api) {
@@ -39,18 +50,6 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnal
             userSelectorAPI = api;
             userSelectorReadyDeferred.resolve();
         };
-
-        var Now = new Date();
-
-        var Yesterday = new Date();
-        Yesterday.setDate(Yesterday.getDate() - 1);
-
-        $scope.fromDate = Yesterday;
-        $scope.toDate = Now;
-
-        $scope.validateTimeRange = function () {
-            return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
-        }
 
         $scope.gridMenuActions = [];
 
@@ -134,10 +133,20 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnal
         return periodSelectorLoadDeferred.promise;
     }
 
+    function loadTimeRangeDirective() {
+        var timeRangeDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+        timeRangeDirectiveReadyDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, undefined, timeRangeDirectiveLoadDeferred);
+        });
+
+        return timeRangeDirectiveLoadDeferred.promise;
+    }
+
     function load() {
         $scope.isInitializing = true;
 
-        return UtilsService.waitMultipleAsyncOperations([loadStrategySelector, loadUserSelector, loadPeriodSelector])
+        return UtilsService.waitMultipleAsyncOperations([loadStrategySelector, loadUserSelector, loadPeriodSelector, loadTimeRangeDirective])
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             })

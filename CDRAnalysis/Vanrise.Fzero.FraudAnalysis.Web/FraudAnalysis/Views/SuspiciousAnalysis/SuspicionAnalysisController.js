@@ -1,11 +1,14 @@
 ﻿"use strict";
 
-SuspicionAnalysisController.$inject = ["$scope", "StrategyAPIService", "CDRAnalysis_FA_SuspicionLevelEnum", "CDRAnalysis_FA_CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNotificationService", "VRModalService", "VRNavigationService", "VRValidationService", 'CDRAnalysis_FA_AccountCaseAPIService', 'VRUIUtilsService'];
+SuspicionAnalysisController.$inject = ["$scope", "StrategyAPIService", "CDRAnalysis_FA_SuspicionLevelEnum", "CDRAnalysis_FA_CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNotificationService", "VRModalService", "VRNavigationService", "VRValidationService", 'CDRAnalysis_FA_AccountCaseAPIService', 'VRUIUtilsService', 'PeriodEnum'];
 
-function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_SuspicionLevelEnum, CDRAnalysis_FA_CaseStatusEnum, LabelColorsEnum, UtilsService, VRNotificationService, VRModalService, VRNavigationService, VRValidationService, CDRAnalysis_FA_AccountCaseAPIService, VRUIUtilsService) {
+function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_SuspicionLevelEnum, CDRAnalysis_FA_CaseStatusEnum, LabelColorsEnum, UtilsService, VRNotificationService, VRModalService, VRNavigationService, VRValidationService, CDRAnalysis_FA_AccountCaseAPIService, VRUIUtilsService, PeriodEnum) {
 
     var strategySelectorAPI;
     var strategySelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+    var timeRangeDirectiveAPI;
+    var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
     var gridAPI = undefined;
 
@@ -13,24 +16,21 @@ function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_
     load();
 
     function defineScope() {
+        $scope.fromDate;
+        $scope.toDate;
+        $scope.today = PeriodEnum.Today;
+
+        $scope.onTimeRangeDirectiveReady = function (api) {
+            timeRangeDirectiveAPI = api;
+            timeRangeReadyPromiseDeferred.resolve();
+        }
+
         $scope.onStrategySelectorReady = function (api) {
             strategySelectorAPI = api;
             strategySelectorReadyDeferred.resolve();
         };
 
         $scope.accountNumber = undefined;
-
-        var Now = new Date();
-
-        var Yesterday = new Date();
-        Yesterday.setDate(Yesterday.getDate() - 1);
-
-        $scope.fromDate = Yesterday;
-        $scope.toDate = Now;
-
-        $scope.validateTimeRange = function () {
-            return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
-        }
 
         $scope.strategies = [];
 
@@ -53,7 +53,6 @@ function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_
         }
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            console.log(dataRetrievalInput)
             return CDRAnalysis_FA_AccountCaseAPIService.GetFilteredAccountSuspicionSummaries(dataRetrievalInput)
                 .then(function (response) {
 
@@ -115,7 +114,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadStrategySelector]).catch(function (error) {
+        return UtilsService.waitMultipleAsyncOperations([loadStrategySelector, loadTimeRangeSelector]).catch(function (error) {
             VRNotificationService.notifyExceptionWithClose(error, $scope);
         }).finally(function () {
             $scope.isInitializing = false;
@@ -127,6 +126,14 @@ function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_
                 VRUIUtilsService.callDirectiveLoad(strategySelectorAPI, undefined, strategySelectorLoadDeferred);
             });
             return strategySelectorLoadDeferred.promise;
+        }
+
+        function loadTimeRangeSelector() {
+            var timeRangeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            timeRangeReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, undefined, timeRangeLoadPromiseDeferred);
+            });
+            return timeRangeLoadPromiseDeferred.promise;
         }
     }
 

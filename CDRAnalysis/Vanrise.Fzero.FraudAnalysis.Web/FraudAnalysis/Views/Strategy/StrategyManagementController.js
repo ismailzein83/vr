@@ -2,9 +2,9 @@
 
     "use strict";
 
-    StrategyManagementController.$inject = ['$scope', 'CDRAnalysis_FA_StrategyService', 'CDRAnalysis_FA_KindEnum', 'CDRAnalysis_FA_StatusEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRValidationService', "StrategyAPIService"];
+    StrategyManagementController.$inject = ['$scope', 'CDRAnalysis_FA_StrategyService', 'CDRAnalysis_FA_KindEnum', 'CDRAnalysis_FA_StatusEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRValidationService', "StrategyAPIService", "PeriodEnum"];
 
-    function StrategyManagementController($scope, CDRAnalysis_FA_StrategyService, CDRAnalysis_FA_KindEnum, CDRAnalysis_FA_StatusEnum, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService, StrategyAPIService) {
+    function StrategyManagementController($scope, CDRAnalysis_FA_StrategyService, CDRAnalysis_FA_KindEnum, CDRAnalysis_FA_StatusEnum, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService, StrategyAPIService, PeriodEnum) {
         var timeRangeDirectiveAPI;
         var timeRangeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -21,6 +21,16 @@
         load();
 
         function defineScope() {
+            $scope.fromDate;
+            $scope.toDate;
+            $scope.year = PeriodEnum.CurrentYear;
+
+            $scope.onTimeRangeDirectiveReady = function (api) {
+                timeRangeDirectiveAPI = api;
+                timeRangeReadyPromiseDeferred.resolve();
+            }
+
+
 
             $scope.hasAddStrategyPermission = function () {
                 return StrategyAPIService.HasAddStrategyPermission();
@@ -58,9 +68,6 @@
                 CDRAnalysis_FA_StrategyService.addStrategy(onStrategyAdded);
             };
 
-            $scope.validateTimeRange = function () {
-                return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
-            };
         }
 
         function load() {
