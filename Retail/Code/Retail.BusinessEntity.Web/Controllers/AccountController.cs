@@ -1,11 +1,53 @@
-﻿using System;
+﻿using Retail.BusinessEntity.Business;
+using Retail.BusinessEntity.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
+using Vanrise.Web.Base;
 
 namespace Retail.BusinessEntity.Web.Controllers
 {
-    public class AccountController
+    [JSONWithTypeAttribute]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "Account")]
+    public class AccountController : BaseAPIController
     {
+        AccountManager _manager = new AccountManager();
+
+        [HttpPost]
+        [Route("GetFilteredAccounts")]
+        public object GetFilteredAccounts(Vanrise.Entities.DataRetrievalInput<AccountQuery> input)
+        {
+            return GetWebResponse(input, _manager.GetFilteredAccounts(input));
+        }
+
+        [HttpGet]
+        [Route("GetAccount")]
+        public Account GetAccount(int accountId)
+        {
+            return _manager.GetAccount(accountId);
+        }
+
+        [HttpGet]
+        [Route("GetAccountName")]
+        public string GetAccountName(int accountId)
+        {
+            return _manager.GetAccountName(accountId);
+        }
+
+        [HttpPost]
+        [Route("AddAccount")]
+        public Vanrise.Entities.InsertOperationOutput<AccountDetail> AddAccount(Account account)
+        {
+            return _manager.AddAccount(account);
+        }
+
+        [HttpPost]
+        [Route("UpdateAccount")]
+        public Vanrise.Entities.UpdateOperationOutput<AccountDetail> UpdateAccount(AccountToEdit account)
+        {
+            return _manager.UpdateAccount(account);
+        }
     }
 }
