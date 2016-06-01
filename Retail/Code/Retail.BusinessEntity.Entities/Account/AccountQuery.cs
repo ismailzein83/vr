@@ -4,9 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.Entities.Account
+namespace Retail.BusinessEntity.Entities
 {
-    class AccountQuery
+    public class AccountQuery
     {
+        public string Name { get; set; }
+
+        public IEnumerable<AccountType> AccountTypes { get; set; }
+
+        public int? ParentAccountId { get; set; }
     }
 }

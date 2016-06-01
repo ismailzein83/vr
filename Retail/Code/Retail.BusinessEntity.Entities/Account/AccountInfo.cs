@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.Entities.Account
+namespace Retail.BusinessEntity.Entities
 {
-    class AccountInfo
+    public class AccountInfo
     {
+        public int AccountId { get; set; }
+
+        public string Name { get; set; }
     }
 }

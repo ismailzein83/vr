@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.Entities.Account
+namespace Retail.BusinessEntity.Entities
 {
-    class AccountDetail
+    public class AccountDetail
     {
+        public Account Entity { get; set; }
     }
 }
