@@ -5,12 +5,12 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using TONEAPI.ClassCode;
-using Selenium;
+//using Selenium;
 
-using OpenQA.Selenium;
-using OpenQA;
-using OpenQA.Selenium.Support.PageObjects;
-using OpenQA.Selenium.Chrome;
+//using OpenQA.Selenium;
+//using OpenQA;
+//using OpenQA.Selenium.Support.PageObjects;
+//using OpenQA.Selenium.Chrome;
 namespace TONEAPI
 {
     public partial class WebForm1 : System.Web.UI.Page
@@ -320,30 +320,30 @@ namespace TONEAPI
         }
         protected void Button2_Click(object sender, EventArgs e)
         {// TODO Auto-generated method stub
-            // load the driver for the web browser
-            OpenQA.Selenium.IWebDriver driver = new OpenQA.Selenium.Firefox.FirefoxDriver();
-            //	WebDriver driver = new FirefoxDriver();
-            //System.setProperty("webdriver.chrome.driver", "D:\\Software installed\\chromedriver.exe");
-            driver.Navigate().GoToUrl("http://192.168.110.195:8585");
+            //// load the driver for the web browser
+            //OpenQA.Selenium.IWebDriver driver = new OpenQA.Selenium.Firefox.FirefoxDriver();
+            ////	WebDriver driver = new FirefoxDriver();
+            ////System.setProperty("webdriver.chrome.driver", "D:\\Software installed\\chromedriver.exe");
+            //driver.Navigate().GoToUrl("http://192.168.110.195:8585");
 
-            // tell the web driver to load the page
-            // driver.Get("http://192.168.110.195:8585");
+            //// tell the web driver to load the page
+            //// driver.Get("http://192.168.110.195:8585");
 
-            var element = driver.FindElement(By.XPath("//input[@placeholder=\"Username\"]"));
-            element.SendKeys("test");
-            driver.FindElement(By.XPath("//input[@placeholder=\"Username\"]")).SendKeys("admin@vanrise.com");
+            //var element = driver.FindElement(By.XPath("//input[@placeholder=\"Username\"]"));
+            //element.SendKeys("test");
+            //driver.FindElement(By.XPath("//input[@placeholder=\"Username\"]")).SendKeys("admin@vanrise.com");
 
 
-            //  HtmlElementCollection htmlcol = webBrowser1.Document.GetElementsByTagName("input");
+            ////  HtmlElementCollection htmlcol = webBrowser1.Document.GetElementsByTagName("input");
 
-            //foreach (HtmlElement he in htmlcol)
-            //{
-            //    if (he.innerHtml.Contains("Username"))
+            ////foreach (HtmlElement he in htmlcol)
+            ////{
+            ////    if (he.innerHtml.Contains("Username"))
 
-            //        he.SetAttribute("value", yourstring);
-            //    break;
-                //driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("1");
-                //driver.FindElement(By.XPath("//*[@class='btn btn-danger login-btn']")).Click();
+            ////        he.SetAttribute("value", yourstring);
+            ////    break;
+            //    //driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("1");
+            //    //driver.FindElement(By.XPath("//*[@class='btn btn-danger login-btn']")).Click();
 
 
             }
