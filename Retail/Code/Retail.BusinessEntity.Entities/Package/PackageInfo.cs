@@ -8,5 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class PackageInfo
     {
+        public int PackageId { get; set; }
+        public string Name { get; set; }
     }
 }

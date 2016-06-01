@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{25AB3F26-CC70-476E-888A-2A85377612D6}</ProjectGuid>
+    <ProjectGuid>{E4C4EF32-ADFB-48C3-A3D3-489A4FC53B89}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Retail.BusinessEntity.Data.SQL</RootNamespace>
-    <AssemblyName>Retail.BusinessEntity.Data.SQL</AssemblyName>
+    <RootNamespace>Retail.BusinessEntity.MainExtensions</RootNamespace>
+    <AssemblyName>Retail.BusinessEntity.MainExtensions</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -41,40 +41,20 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Data">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Data.SQL">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Entities">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountDataManager.cs" />
-    <Compile Include="PackageDataManager.cs" />
+    <Compile Include="Package\DataService.cs" />
+    <Compile Include="Package\SMSService.cs" />
+    <Compile Include="Package\VoiceService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Retail.BusinessEntity.Data\Retail.BusinessEntity.Data.csproj">
-      <Project>{45bee1a0-30fd-405d-b476-c3b2d0b2a21f}</Project>
-      <Name>Retail.BusinessEntity.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
       <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
       <Name>Retail.BusinessEntity.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
