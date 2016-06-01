@@ -21,7 +21,9 @@
         <asp:Label ID="Label3" runat="server" Text="Password" Width="65px"></asp:Label>
         <asp:TextBox ID="TextBox3" runat="server" Width="265px">1</asp:TextBox>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Start" Width="116px" />
+        <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Start API Test" Width="116px" />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <asp:Button ID="Button2" runat="server" OnClick="Button2_Click" Text="Start GUI Test" style="height: 26px" />
         <br />
         Token :
         <asp:TextBox ID="TextBox7" runat="server" Width="1076px"></asp:TextBox>
