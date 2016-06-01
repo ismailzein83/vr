@@ -11,10 +11,10 @@ namespace TONEAPI.ClassCode
         public class Switchobj
         {
             public object ResultKey { get; set; }
-            public IList<SwitchDatum> switchData { get; set; }
+            public List<Switchdatas> switchData { get; set; }
             public int TotalCount { get; set; }
         }
-        public class SwitchDatum
+        public class Switchdatas
         {
             public SwitchEntity switchEntity { get; set; }
         }
@@ -64,7 +64,7 @@ namespace TONEAPI.ClassCode
 
         public string createswitch(RestClient rs, Uri ur, string token, string data)
         {
-            string EndPoint = @"http://192.168.110.195:8585/api/WhS_BE/CarrierProfile/AddCarrierProfile";
+            string EndPoint = @"http://192.168.110.195:8585/api/WhS_BE/Switch/AddSwitch";
             var client = new RestClient(endpoint: EndPoint,
                               method: HttpVerb.POST);
             client.PostData = data;
