@@ -23,9 +23,21 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Retail", "Retail\Retail.sql
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{9B68ECEC-58EA-4266-B8AF-C793C903AB8F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Retail.BusinessEntity", "Retail.BusinessEntity", "{025EE35C-62EB-43DE-B92E-C8633EFEBD16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.BusinessEntity.Web", "Retail.BusinessEntity.Web\Retail.BusinessEntity.Web.csproj", "{47686853-E160-48EC-99BC-B81088AD84E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.BusinessEntity.Business", "Retail.BusinessEntity.Business\Retail.BusinessEntity.Business.csproj", "{194F2715-17DC-49FA-B701-2386AAA9EDDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.BusinessEntity.Data", "Retail.BusinessEntity.Data\Retail.BusinessEntity.Data.csproj", "{45BEE1A0-30FD-405D-B476-C3B2D0B2A21F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.BusinessEntity.Data.SQL", "Retail.BusinessEntity.Data.SQL\Retail.BusinessEntity.Data.SQL.csproj", "{25AB3F26-CC70-476E-888A-2A85377612D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.BusinessEntity.Entities", "Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj", "{C08FD318-049C-49CE-8BC4-85BF296CBAB9}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 11
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -49,6 +61,26 @@ Global
 		SccProjectTopLevelParentUniqueName5 = Retail.sln
 		SccProjectName5 = Resources
 		SccLocalPath5 = Resources
+		SccProjectUniqueName6 = Retail.BusinessEntity.Web\\Retail.BusinessEntity.Web.csproj
+		SccProjectTopLevelParentUniqueName6 = Retail.sln
+		SccProjectName6 = Retail.BusinessEntity.Web
+		SccLocalPath6 = Retail.BusinessEntity.Web
+		SccProjectUniqueName7 = Retail.BusinessEntity.Business\\Retail.BusinessEntity.Business.csproj
+		SccProjectTopLevelParentUniqueName7 = Retail.sln
+		SccProjectName7 = Retail.BusinessEntity.Business
+		SccLocalPath7 = Retail.BusinessEntity.Business
+		SccProjectUniqueName8 = Retail.BusinessEntity.Data\\Retail.BusinessEntity.Data.csproj
+		SccProjectTopLevelParentUniqueName8 = Retail.sln
+		SccProjectName8 = Retail.BusinessEntity.Data
+		SccLocalPath8 = Retail.BusinessEntity.Data
+		SccProjectUniqueName9 = Retail.BusinessEntity.Data.SQL\\Retail.BusinessEntity.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName9 = Retail.sln
+		SccProjectName9 = Retail.BusinessEntity.Data.SQL
+		SccLocalPath9 = Retail.BusinessEntity.Data.SQL
+		SccProjectUniqueName10 = Retail.BusinessEntity.Entities\\Retail.BusinessEntity.Entities.csproj
+		SccProjectTopLevelParentUniqueName10 = Retail.sln
+		SccProjectName10 = Retail.BusinessEntity.Entities
+		SccLocalPath10 = Retail.BusinessEntity.Entities
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +109,26 @@ Global
 		{9B68ECEC-58EA-4266-B8AF-C793C903AB8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B68ECEC-58EA-4266-B8AF-C793C903AB8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B68ECEC-58EA-4266-B8AF-C793C903AB8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47686853-E160-48EC-99BC-B81088AD84E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47686853-E160-48EC-99BC-B81088AD84E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47686853-E160-48EC-99BC-B81088AD84E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47686853-E160-48EC-99BC-B81088AD84E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{194F2715-17DC-49FA-B701-2386AAA9EDDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{194F2715-17DC-49FA-B701-2386AAA9EDDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{194F2715-17DC-49FA-B701-2386AAA9EDDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{194F2715-17DC-49FA-B701-2386AAA9EDDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45BEE1A0-30FD-405D-B476-C3B2D0B2A21F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45BEE1A0-30FD-405D-B476-C3B2D0B2A21F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45BEE1A0-30FD-405D-B476-C3B2D0B2A21F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45BEE1A0-30FD-405D-B476-C3B2D0B2A21F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25AB3F26-CC70-476E-888A-2A85377612D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25AB3F26-CC70-476E-888A-2A85377612D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25AB3F26-CC70-476E-888A-2A85377612D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25AB3F26-CC70-476E-888A-2A85377612D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C08FD318-049C-49CE-8BC4-85BF296CBAB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C08FD318-049C-49CE-8BC4-85BF296CBAB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C08FD318-049C-49CE-8BC4-85BF296CBAB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C08FD318-049C-49CE-8BC4-85BF296CBAB9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,5 +139,11 @@ Global
 		{5722F0F7-7F0C-4D2C-848A-7956A2D6D33C} = {E4939690-9DBD-4189-A9A7-98709548B55A}
 		{BAC71345-402F-46AC-8FEC-1401F493305E} = {DBCF7D23-8951-4886-9024-282788E5D24F}
 		{9B68ECEC-58EA-4266-B8AF-C793C903AB8F} = {C9D155CA-F029-4600-994D-B363EB3036AC}
+		{025EE35C-62EB-43DE-B92E-C8633EFEBD16} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
+		{47686853-E160-48EC-99BC-B81088AD84E3} = {025EE35C-62EB-43DE-B92E-C8633EFEBD16}
+		{194F2715-17DC-49FA-B701-2386AAA9EDDF} = {025EE35C-62EB-43DE-B92E-C8633EFEBD16}
+		{45BEE1A0-30FD-405D-B476-C3B2D0B2A21F} = {025EE35C-62EB-43DE-B92E-C8633EFEBD16}
+		{25AB3F26-CC70-476E-888A-2A85377612D6} = {025EE35C-62EB-43DE-B92E-C8633EFEBD16}
+		{C08FD318-049C-49CE-8BC4-85BF296CBAB9} = {025EE35C-62EB-43DE-B92E-C8633EFEBD16}
 	EndGlobalSection
 EndGlobal
