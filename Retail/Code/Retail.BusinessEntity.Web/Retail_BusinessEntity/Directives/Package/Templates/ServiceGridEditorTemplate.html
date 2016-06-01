@@ -2,8 +2,10 @@
     <vr-button type="Add" data-onclick="ctrl.addService" standalone></vr-button>
 </vr-columns>
 <vr-columns width="fullrow">
-    <vr-datagrid datasource="ctrl.services" norowhighlightonclick="true"
-                 on-ready="ctrl.onGridReady" ondeleterow="ctrl.removeService" menuactions="ctrl.servicesGridMenuActions" hidegridmenu>
-        <vr-datagridcolumn headertext="'Service Type'" field="'ServiceType'" disablesorting="true"></vr-datagridcolumn>
-    </vr-datagrid>
+    <vr-validator validate="ctrl.isValidServices()">
+        <vr-datagrid datasource="ctrl.services" norowhighlightonclick="true"
+                     on-ready="ctrl.onGridReady" ondeleterow="ctrl.removeService" menuactions="ctrl.servicesGridMenuActions" hidegridmenu>
+            <vr-datagridcolumn headertext="'Service Type'" field="'ServiceType'" disablesorting="true"></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-validator>
 </vr-columns>

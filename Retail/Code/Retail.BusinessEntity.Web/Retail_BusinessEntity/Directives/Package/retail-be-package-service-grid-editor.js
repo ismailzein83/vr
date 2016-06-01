@@ -29,6 +29,13 @@
             var templateConfigs = [];
             function initializeController() {
                 ctrl.services = [];
+
+                ctrl.isValidServices = function () {
+
+                    if (ctrl.services.length > 0)
+                        return null;
+                    return "At least one service should be added.";
+                }
                 ctrl.onGridReady = function (api) {
                     gridAPI = api;
 
