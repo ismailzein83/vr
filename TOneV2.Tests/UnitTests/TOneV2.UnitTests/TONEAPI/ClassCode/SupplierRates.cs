@@ -39,12 +39,13 @@ namespace TONEAPI.ClassCode
 
         public string getsupplierrate(RestClient rc , Uri ur, string token , string parameter)
         {
-          // string endpoint = "";
-
-            //RestClient rc2 = new RestClient(endpoint: endpoint, method: HttpVerb.GET, contenttype: "", postData: parameter);
+         
             string result = rc.MakeRequested(parameter, token);
 
-
+            var obj = Json
+          
+            
+            
             return result;
 
 
