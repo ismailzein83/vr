@@ -144,11 +144,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\PackageController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Retail_BusinessEntity\" />
+    <Folder Include="Retail_BusinessEntity\Directives\Package\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
@@ -163,6 +163,15 @@
       <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
       <Name>Retail.BusinessEntity.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Retail_BusinessEntity\Constant\ModuleConfig.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\PackageAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\PackageService.js" />
+    <Content Include="Retail_BusinessEntity\Views\Package\PackageEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\Package\PackageEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Package\PackageManagement.html" />
+    <Content Include="Retail_BusinessEntity\Views\Package\PackageManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
