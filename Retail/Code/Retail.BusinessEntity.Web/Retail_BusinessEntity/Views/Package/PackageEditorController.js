@@ -2,12 +2,15 @@
 
     "use strict";
 
-    packageEditorController.$inject = ['$scope', 'Retail_BE_PackageAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_ContactTypeEnum', 'VRUIUtilsService'];
+    packageEditorController.$inject = ['$scope', 'Retail_BE_PackageAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
 
-    function packageEditorController($scope, Retail_BE_PackageAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_ContactTypeEnum, VRUIUtilsService) {
+    function packageEditorController($scope, Retail_BE_PackageAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
         var isEditMode;
         var packageId;
         var packageEntity;
+
+        var serviceAPI;
+        var serviceReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -18,7 +21,6 @@
 
             if (parameters != undefined && parameters != null) {
                 packageId = parameters.PackageId;
-
             }
             isEditMode = (packageId != undefined);
 
@@ -26,16 +28,17 @@
 
         function defineScope() {
 
-            $scope.hasSavePackagePermission = function () {
-                if ($scope.scopeModal.isEditMode)
+            $scope.scopeModel = {};
+            $scope.scopeModel.hasSavePackagePermission = function () {
+                if ($scope.scopeModel.isEditMode)
                     return Retail_BE_PackageAPIService.HasUpdatePackagePermission();
                 else
                     return Retail_BE_PackageAPIService.HasAddPackagePermission();
             }
 
-            $scope.scopeModal = {};
+           
 
-            $scope.SavePackage = function () {
+            $scope.scopeModel.savePackage = function () {
                 if (isEditMode) {
                     return updatePackage();
                 }
@@ -43,14 +46,17 @@
                     return insertPackage();
                 }
             };
-      
+
+            $scope.scopeModel.onServiceDirectiveReady = function (api)
+            {
+                serviceAPI = api;
+                serviceReadyDeferred.resolve();
+            }
+
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
 
-            $scope.addService = function () {
-
-            };
         }
 
         function load() {
@@ -79,7 +85,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadServiceSection])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -88,14 +94,27 @@
               });
         }
 
+
+        function loadServiceSection() {
+            var loadServiceDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+            serviceReadyDeferred.promise.then(function () {
+                var payloadServiceDirective = {
+                    serviceEntity: packageEntity != undefined ? packageEntity.Settings : undefined
+                };
+                VRUIUtilsService.callDirectiveLoad(serviceAPI, payloadServiceDirective, loadServiceDirectivePromiseDeferred);
+            });
+            return loadServiceDirectivePromiseDeferred.promise;
+        }
+
+
         function setTitle() {
             $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(packageEntity ? packageEntity.Name : undefined, 'Package') : UtilsService.buildTitleForAddEditor('Package');
         }
    
         function loadStaticSection() {
             if (packageEntity != undefined) {
-                $scope.scopeModal.name = packageEntity.Name;
-                $scope.scopeModal.description = packageEntity.Description;
+                $scope.scopeModel.name = packageEntity.Name;
+                $scope.scopeModel.description = packageEntity.Description;
             }
 
         }
@@ -136,9 +155,9 @@
         function buildPackageObjFromScope() {
             var obj = {
                 PackageId: packageId,
-                Name: $scope.scopeModal.name,
-                Description: $scope.scopeModal.description,
-                Settings:undefined
+                Name: $scope.scopeModel.name,
+                Description: $scope.scopeModel.description,
+                Settings: { Services: serviceAPI != undefined ? serviceAPI.getData() : undefined, }
             };
             return obj;
         }

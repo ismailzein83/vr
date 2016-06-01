@@ -9,5 +9,8 @@ namespace Retail.BusinessEntity.MainExtensions.Package
 {
     public class SMSService : PackageService
     {
+        public int NbofCharPerMessage { get; set; }
+        public bool Unicode { get; set; }
+        public bool MMSSupport { get; set; }
     }
 }

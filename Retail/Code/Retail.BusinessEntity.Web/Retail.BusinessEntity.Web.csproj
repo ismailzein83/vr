@@ -150,9 +150,7 @@
     <Compile Include="Controllers\PackageController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
@@ -169,13 +167,23 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_BusinessEntity\Constant\AccountTypeEnum.js" />
+    <Content Include="Retail_BusinessEntity\Constant\ConnectionTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ModuleConfig.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountGridTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\retail-be-package-service-data.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\retail-be-package-service-sms.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\retail-be-package-service-voice.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\Templates\DataServiceTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\Templates\SMSServiceTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\Templates\VoiceServiceTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-service-grid-editor.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-service.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\Templates\PackageGridTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\Templates\ServiceGridEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Services\AccountService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PackageAPIService.js" />
@@ -188,6 +196,8 @@
     <Content Include="Retail_BusinessEntity\Views\Package\PackageEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageManagementController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Package\ServiceEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\Package\ServiceEditorController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

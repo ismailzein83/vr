@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 namespace Retail.BusinessEntity.Business
 {
@@ -78,7 +79,12 @@ namespace Retail.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
-     
+
+        public IEnumerable<ServiceTemplateConfig> GetServicesTemplateConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<ServiceTemplateConfig>(Constants.ServicesTemplateConfigsConfigType);
+        }
         #endregion
 
         #region Private Members

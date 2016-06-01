@@ -9,5 +9,8 @@ namespace Retail.BusinessEntity.MainExtensions.Package
 {
     public class VoiceService : PackageService
     {
+        public int DurationPerUnit { get; set; }
+        public int FractionUnit { get; set; }
+        public bool RoamingSupport { get; set; }
     }
 }

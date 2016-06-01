@@ -1,43 +1,47 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    packageAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_BE_ModuleConfig', 'SecurityService'];
+    packageAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Retail_BE_ModuleConfig', 'SecurityService'];
 
-    function packageAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig, SecurityService) {
+    function packageAPIService(BaseAPIService, UtilsService, Retail_BE_ModuleConfig, SecurityService) {
 
         var controllerName = "Package";
 
         function GetFilteredPackages(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetFilteredPackages"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetFilteredPackages"), input);
         }
 
         function GetPackage(packageId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetPackage"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetPackage"), {
                 packageId: packageId
             });
         }
 
         function GetPackagesInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetPackagesInfo"));
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetPackagesInfo"));
 
         }
 
         function UpdatePackage(packageObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "UpdatePackage"), packageObject);
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "UpdatePackage"), packageObject);
         }
 
         function AddPackage(packageObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "AddPackage"), packageObject);
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "AddPackage"), packageObject);
         }
 
         function HasUpdatePackagePermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['UpdatePackage']));
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['UpdatePackage']));
         }
 
         function HasAddPackagePermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['AddPackage']));
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['AddPackage']));
         }
 
+        function GetServicesTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetServicesTemplateConfigs"));
+
+        }
         return ({
             GetPackagesInfo: GetPackagesInfo,
             GetFilteredPackages: GetFilteredPackages,
@@ -45,7 +49,8 @@
             AddPackage: AddPackage,
             UpdatePackage: UpdatePackage,
             HasUpdatePackagePermission: HasUpdatePackagePermission,
-            HasAddPackagePermission: HasAddPackagePermission
+            HasAddPackagePermission: HasAddPackagePermission,
+            GetServicesTemplateConfigs: GetServicesTemplateConfigs
         });
     }
 

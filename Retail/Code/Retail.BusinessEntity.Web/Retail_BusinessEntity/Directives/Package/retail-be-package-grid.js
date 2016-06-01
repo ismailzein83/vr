@@ -72,7 +72,7 @@ function (UtilsService, VRNotificationService, Retail_BE_PackageAPIService, Reta
         }
 
         function hasUpdatePackagePermission() {
-            return WhS_BE_PackageAPIService.HasUpdatePackagePermission();
+            return Retail_BE_PackageAPIService.HasUpdatePackagePermission();
         }
 
         function editPackage(packageObj) {

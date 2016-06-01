@@ -20,5 +20,6 @@ namespace Retail.BusinessEntity.Entities
     public abstract class PackageService
     {
         public int ConfigId { get; set; }
+        public bool Enabled { get; set; }
     }
 }

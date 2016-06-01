@@ -52,5 +52,12 @@ namespace Retail.BusinessEntity.Web.Controllers
             PackageManager manager = new PackageManager();
             return manager.UpdatePackage(package);
         }
+        [HttpGet]
+        [Route("GetServicesTemplateConfigs")]
+        public IEnumerable<ServiceTemplateConfig> GetServicesTemplateConfigs()
+        {
+            PackageManager manager = new PackageManager();
+            return manager.GetServicesTemplateConfigs();
+        }
     }
 }

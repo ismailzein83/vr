@@ -7,7 +7,9 @@
     function PackageService(VRModalService) {
         return ({
             addPackage: addPackage,
-            editPackage: editPackage
+            editPackage: editPackage,
+            addService: addService,
+            editService: editService
         });
 
         function addPackage(onPackageAdded) {
@@ -33,6 +35,31 @@
                 modalScope.onPackageUpdated = onPackageUpdated;
             };
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Package/PackageEditor.html', parameters, modalSettings);
+        }
+
+        function addService(onServiceAdded) {
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+
+                modalScope.onServiceAdded = onServiceAdded;
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Package/ServiceEditor.html', null, settings);
+        }
+
+        function editService(serviceEntity, onServiceUpdated) {
+            var modalSettings = {
+            };
+
+            var parameters = {
+                serviceEntity: serviceEntity,
+            };
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onServiceUpdated = onServiceUpdated;
+            };
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Package/ServiceEditor.html', parameters, modalSettings);
         }
     }
 

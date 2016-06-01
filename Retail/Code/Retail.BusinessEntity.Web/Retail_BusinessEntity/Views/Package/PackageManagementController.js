@@ -12,7 +12,7 @@
 
         function defineScope() {
             $scope.hadAddPackagePermission = function () {
-                return Retail_BE_PackageService.HasAddPackagePermission();
+                return Retail_BE_PackageAPIService.HasAddPackagePermission();
             };
 
             $scope.onGridReady = function (api) {
@@ -45,7 +45,7 @@
             var onPackageAdded = function (packageObj) {
                 gridAPI.onPackageAdded(packageObj);
             };
-            WhS_BE_PackageService.addPackage(onPackageAdded);
+            Retail_BE_PackageService.addPackage(onPackageAdded);
         }
 
     }
