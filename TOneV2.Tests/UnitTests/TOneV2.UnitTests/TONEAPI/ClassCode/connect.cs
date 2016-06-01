@@ -31,5 +31,23 @@ namespace TONEAPI
 
 
         }
+
+        public DataSet getdata2(string Query)
+        {
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=TOneV2_QA;User ID=sa;Password=QAP@ssw0rd");
+
+            SqlDataAdapter da = new SqlDataAdapter();
+            myConn.Open();
+            DataSet ds1 = new DataSet();
+            string sQueryString1 = "";
+            sQueryString1 = Query;
+            da.SelectCommand = new SqlCommand(sQueryString1, myConn);
+            da.Fill(ds1, "table");
+            myConn.Close();
+            return ds1;
+
+
+
+        }
     }
 }
