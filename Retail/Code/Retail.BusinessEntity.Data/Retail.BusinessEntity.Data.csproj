@@ -49,6 +49,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BEDataManagerFactory.cs" />
+    <Compile Include="IDataManager.cs" />
+    <Compile Include="IPackageDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
