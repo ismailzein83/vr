@@ -52,6 +52,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account\Account.cs" />
+    <Compile Include="Account\AccountDetail.cs" />
+    <Compile Include="Account\AccountInfo.cs" />
+    <Compile Include="Account\AccountQuery.cs" />
     <Compile Include="Package\Package.cs" />
     <Compile Include="Package\PackageDetail.cs" />
     <Compile Include="Package\PackageInfo.cs" />
