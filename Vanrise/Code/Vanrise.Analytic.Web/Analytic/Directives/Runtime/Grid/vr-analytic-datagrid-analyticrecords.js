@@ -150,7 +150,11 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         }
                        
                     };
-                    var measureStyleRules;
+                    var measureStyleRulesSettings;
+                    if (gridPayload != undefined && gridPayload.Settings != undefined)
+                    {
+                        measureStyleRulesSettings = gridPayload.Settings.MeasureStyleRules;
+                    }
                     Analytic_AnalyticService.openGridWidgetSettings(onSaveSettings, getSettingContext(), measureStyleRules);
                 }
 
