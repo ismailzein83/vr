@@ -114,7 +114,6 @@ function BlockedLinesController($scope, ReportingAPIService, VRModalService, VRN
             ToDate: $scope.toDate,
             GroupDaily: $scope.groupDaily
         };
-        console.log(query)
         return mainGridAPI.retrieveData(query);
     }
 
