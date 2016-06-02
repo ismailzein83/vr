@@ -66,9 +66,10 @@ namespace QM.CLITester.iTestIntegration
                                 {
                                     GetTestProgressResult result;
                                     CallTestResult? callTestResult;
-
-                                    if (callTestManager.TryTestProgress(initiateTestInformation.Test_ID, null, null, 
-                                        out measure, out testProgress, out result, out callTestResult))
+                                    bool tryTestProgress = callTestManager.TryTestProgress(
+                                        initiateTestInformation.Test_ID, null, null,
+                                        out measure, out testProgress, out result, out callTestResult);
+                                    if (tryTestProgress && callTestResult!= null)
                                     {
                                         string code = (testProgress.CallResults.First().Destination).Substring(supplier.Settings.Prefix.Length,
                                             ((testProgress.CallResults.First().Destination).Length - supplier.Settings.Prefix.Length));
