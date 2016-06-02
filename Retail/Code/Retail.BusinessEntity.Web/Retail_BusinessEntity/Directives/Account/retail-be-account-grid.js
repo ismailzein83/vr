@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (Retail_BE_AccountAPIService, Retail_BE_AccountService, Retail_BE_AccountTypeEnum, UtilsService, VRUIUtilsService, VRNotificationService)
+app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountPackageService', 'Retail_BE_AccountTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (Retail_BE_AccountAPIService, Retail_BE_AccountService, Retail_BE_AccountPackageService, Retail_BE_AccountTypeEnum, UtilsService, VRUIUtilsService, VRNotificationService)
 {
     return {
         restrict: 'E',
@@ -27,7 +27,6 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
         function initializeController()
         {
             $scope.scopeModel = {};
-
             $scope.scopeModel.accounts = [];
 
             $scope.scopeModel.onGridReady = function (api)
@@ -90,6 +89,19 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
 
                     return parentAccount.subAccountGridAPI.load(subAccountGridPayload);
                 }
+            }, {
+                title: 'Packages',
+                directive: 'retail-be-accountpackage-grid',
+                loadDirective: function (accountPackageGridAPI, account)
+                {
+                    account.accountPackageGridAPI = accountPackageGridAPI;
+
+                    var accountPackageGridPayload = {
+                        AssignedToAccountId: account.Entity.AccountId
+                    };
+
+                    return account.accountPackageGridAPI.load(accountPackageGridPayload);
+                }
             }];
         }
 
@@ -142,7 +154,13 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
 
         function assignPackage(account)
         {
-            console.log('Not implemented');
+            gridAPI.expandRow(account);
+
+            var onAccountPackageAdded = function (addedAccountPackage) {
+                account.accountPackageGridAPI.onAccountPackageAdded(addedAccountPackage);
+            };
+
+            Retail_BE_AccountPackageService.assignPackageToAccount(account.Entity.AccountId, onAccountPackageAdded);
         }
         function hasAssignPackagePermission() { }
 

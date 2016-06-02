@@ -97,7 +97,6 @@
 
         function load()
         {
-            var promises = [];
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode)

@@ -171,6 +171,8 @@
     <Content Include="Retail_BusinessEntity\Constant\ConnectionTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ModuleConfig.js" />
     <Content Include="Retail_BusinessEntity\Constant\PaymentMethodEnum.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountPackage\retail-be-accountpackage-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountPackage\Templates\AccountPackageGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountGridTemplate.html" />
@@ -186,10 +188,14 @@
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-service.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\Templates\PackageGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\Templates\ServiceGridEditorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Services\AccountPackageService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\AccountPackageAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PackageAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\PackageService.js" />
+    <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountManagement.html" />

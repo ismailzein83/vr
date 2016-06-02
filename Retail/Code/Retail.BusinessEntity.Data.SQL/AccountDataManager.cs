@@ -11,11 +11,15 @@ namespace Retail.BusinessEntity.Data.SQL
 {
     public class AccountDataManager : BaseSQLDataManager, IAccountDataManager
     {
+        #region Constructors
+
         public AccountDataManager()
             : base(GetConnectionStringName("Retail_BE_DBConnStringKey", "RetailDBConnString"))
         {
 
         }
+
+        #endregion
 
         #region Public Methods
 

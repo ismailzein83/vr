@@ -1,0 +1,31 @@
+﻿<div vr-modalcontent ng-controller="Retail_BE_PackageAssignmentEditorController" width="'35%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formPackageAssignmentEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <retail-be-package-selector on-ready="scopeModel.onPackageSelectorReady" normal-col-num="6" isrequired="true" hideremoveicon></retail-be-package-selector>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Time Settings'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-datetimepicker label="Begin Effective Date" value="scopeModel.bed" type="dateTime"></vr-datetimepicker>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-datetimepicker label="End Effective Date" value="scopeModel.eed" type="dateTime"></vr-datetimepicker>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formPackageAssignmentEditor" data-onclick="scopeModel.save"></vr-button> <!-- haspermission="hasSaveGroupPermission" -->
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
