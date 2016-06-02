@@ -34,10 +34,10 @@
                 api.load = function (payload) {
                     if (payload != undefined) {
                         mainPayload = payload;
-                        if (payload.serviceEntity != undefined) {
-                            $scope.scopeModel.roamingSupport = payload.serviceEntity.RoamingSupport;
-                            $scope.scopeModel.fractionUnit = payload.serviceEntity.FractionUnit;
-                            $scope.scopeModel.durationPerUnit = payload.serviceEntity.DurationPerUnit;
+                        if (payload.serviceSettings != undefined) {
+                            $scope.scopeModel.roamingSupport = payload.serviceSettings.RoamingSupport;
+                            $scope.scopeModel.fractionUnit = payload.serviceSettings.FractionUnit;
+                            $scope.scopeModel.durationPerUnit = payload.serviceSettings.DurationPerUnit;
                         }
 
                     }

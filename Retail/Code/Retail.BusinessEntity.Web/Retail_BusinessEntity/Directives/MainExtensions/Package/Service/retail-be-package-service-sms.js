@@ -34,10 +34,10 @@
                 api.load = function (payload) {
                     if (payload != undefined) {
                         mainPayload = payload;
-                        if (payload.serviceEntity != undefined) {
-                            $scope.scopeModel.mMSSupport = payload.serviceEntity.MMSSupport;
-                            $scope.scopeModel.unicode = payload.serviceEntity.Unicode;
-                            $scope.scopeModel.nbofCharPerMessage = payload.serviceEntity.NbofCharPerMessage;
+                        if (payload.serviceSettings != undefined) {
+                            $scope.scopeModel.mMSSupport = payload.serviceSettings.MMSSupport;
+                            $scope.scopeModel.unicode = payload.serviceSettings.Unicode;
+                            $scope.scopeModel.nbofCharPerMessage = payload.serviceSettings.NbofCharPerMessage;
                         }
 
                     }

@@ -36,11 +36,11 @@
                 api.load = function (payload) {
                     if (payload != undefined) {
                         mainPayload = payload;
-                        if (payload.serviceEntity != undefined)
+                        if (payload.serviceSettings != undefined)
                         {
-                            $scope.scopeModel.selectedConnectionType = UtilsService.getItemByVal($scope.scopeModel.connectionTypes, payload.serviceEntity.ConnectionType, "value");
-                            $scope.scopeModel.downloadSpeed = payload.serviceEntity.DownloadSpeed;
-                            $scope.scopeModel.uploadSpeed = payload.serviceEntity.UploadSpeed;
+                            $scope.scopeModel.selectedConnectionType = UtilsService.getItemByVal($scope.scopeModel.connectionTypes, payload.serviceSettings.ConnectionType, "value");
+                            $scope.scopeModel.downloadSpeed = payload.serviceSettings.DownloadSpeed;
+                            $scope.scopeModel.uploadSpeed = payload.serviceSettings.UploadSpeed;
                         }
 
                     }

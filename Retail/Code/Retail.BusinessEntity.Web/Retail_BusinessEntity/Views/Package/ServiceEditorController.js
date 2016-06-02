@@ -10,7 +10,7 @@
         $scope.scopeModel = {};
         $scope.scopeModel.isEditMode = false;
 
-        var serviceAPI;
+        var serviceSettingsAPI;
         var serviceReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
@@ -27,7 +27,7 @@
 
         function defineScope() {
             $scope.scopeModel.onServiceDirectiveReady = function (api) {
-                serviceAPI = api;
+                serviceSettingsAPI = api;
                 serviceReadyDeferred.resolve();
             }
 
@@ -60,19 +60,29 @@
                         $scope.title = UtilsService.buildTitleForAddEditor("Service");
                 }
 
-                function loadServiceDirective()
+                function loadServiceSettingsDirective()
                 {
-                    var loadServiceDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                    var loadServiceSettingsDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     serviceReadyDeferred.promise.then(function () {
-                        var payloadServiceDirective = {
-                            serviceEntity: serviceEntity != undefined ? serviceEntity : undefined
+                        var payload = {
+                            serviceSettings: serviceEntity != undefined ? serviceEntity.Settings : undefined
                         };
-                        VRUIUtilsService.callDirectiveLoad(serviceAPI, payloadServiceDirective, loadServiceDirectivePromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoad(serviceSettingsAPI, payload, loadServiceSettingsDirectivePromiseDeferred);
                     });
-                    return loadServiceDirectivePromiseDeferred.promise;
+                    return loadServiceSettingsDirectivePromiseDeferred.promise;
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadServiceDirective]).finally(function () {
+                function loadStaticData()
+                {
+                    if(serviceEntity == undefined)
+                        return;
+
+                    $scope.scopeModel.name = serviceEntity.Name;
+                    $scope.scopeModel.description = serviceEntity.Description;
+                    $scope.scopeModel.enabled = serviceEntity.Enabled;
+                }
+
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadServiceSettingsDirective]).finally(function () {
                         $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -82,7 +92,12 @@
 
 
         function buildServiceObjectFromScope() {
-            var service = serviceAPI !=undefined?serviceAPI.getData():undefined
+            var service = {
+                Name: $scope.scopeModel.name,
+                Description: $scope.scopeModel.description,
+                Enabled: $scope.scopeModel.enabled,
+                Settings: serviceSettingsAPI.getData()
+            };
             return service;
         }
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.MainExtensions.Package
 {
-    public class SMSService : PackageService
+    public class SMSService : PackageServiceSettings
     {
         public int NbofCharPerMessage { get; set; }
         public bool Unicode { get; set; }

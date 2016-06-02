@@ -27,7 +27,7 @@
         };
         function getTamplate(attrs) {
             var withemptyline = 'withemptyline';
-            var label = "label='Service'";
+            var label = "label='Type'";
             if (attrs.hidelabel != undefined) {
                 label = "";
                 withemptyline = '';
@@ -45,12 +45,8 @@
                  + 'hideremoveicon>'
                  + '</vr-select>'
                  + ' </vr-columns>'
-
-                + '<vr-columns colnum="{{serviceCtrl.normalColNum}}">'
-                 + ' <vr-switch  label="Enabled" value="scopeModel.enabled">'
-                     + '</vr-switch>'
-                + ' </vr-columns>'
-                + '</vr-row>'
+                 + ' </vr-columns>'
+                 + '</vr-row>'
             + '<vr-row>'
               + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig !=undefined" directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{serviceCtrl.normalColNum}}" isrequired="serviceCtrl.isrequired" customvalidate="serviceCtrl.customvalidate" type="serviceCtrl.type"></vr-directivewrapper>'
             + '</vr-row>';
@@ -90,19 +86,19 @@
 
             function defineAPI() {
                 var api = {};
-                var serviceEntity;
+                var serviceSettings;
                 api.load = function (payload) {
                     var promises = [];
+
                     if (payload != undefined) {
-                        if (payload.serviceEntity != undefined) {
-                            serviceEntity = payload.serviceEntity;
-                            $scope.scopeModel.enabled = serviceEntity.Enabled;
+                        if (payload.serviceSettings != undefined) {
+                            serviceSettings = payload.serviceSettings;
                             directiveReadyDeferred = UtilsService.createPromiseDeferred();
                             var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                             directiveReadyDeferred.promise.then(function () {
                                 directiveReadyDeferred = undefined;
                                 var payloadDirective = {
-                                    serviceEntity: payload.serviceEntity
+                                    serviceSettings: payload.serviceSettings
                                 };
                                 VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, loadDirectivePromiseDeferred);
                             });
@@ -128,7 +124,6 @@
                         data = directiveAPI.getData();
                         if (data != undefined) {
                             data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
-                            data.Enabled = $scope.scopeModel.enabled;
                         }
                     }
                     return data;
@@ -141,8 +136,8 @@
                             for (var i = 0; i < response.length; i++) {
                                 $scope.scopeModel.templateConfigs.push(response[i]);
                             }
-                            if (serviceEntity != undefined)
-                                $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, serviceEntity.ConfigId, 'ExtensionConfigurationId');
+                            if (serviceSettings != undefined)
+                                $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, serviceSettings.ConfigId, 'ExtensionConfigurationId');
                             //else
                             //$scope.selectedTemplateConfig = $scope.templateConfigs[0];
                         }

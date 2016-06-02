@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.MainExtensions.Package
 {
-    public class VoiceService : PackageService
+    public class VoiceService : PackageServiceSettings
     {
         public int DurationPerUnit { get; set; }
         public int FractionUnit { get; set; }

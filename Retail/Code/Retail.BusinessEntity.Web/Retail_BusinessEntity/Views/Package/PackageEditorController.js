@@ -99,7 +99,7 @@
             var loadServiceDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
             serviceReadyDeferred.promise.then(function () {
                 var payloadServiceDirective = {
-                    serviceEntity: packageEntity != undefined ? packageEntity.Settings : undefined
+                    packageSettings: packageEntity != undefined ? packageEntity.Settings : undefined
                 };
                 VRUIUtilsService.callDirectiveLoad(serviceAPI, payloadServiceDirective, loadServiceDirectivePromiseDeferred);
             });

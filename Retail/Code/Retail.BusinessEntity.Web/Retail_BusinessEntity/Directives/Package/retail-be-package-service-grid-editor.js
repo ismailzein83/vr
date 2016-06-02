@@ -47,9 +47,9 @@
                 ctrl.addService = function () {
                     var onServiceAdded = function (serviceObj) {
 
-                       var type = UtilsService.getItemByVal(templateConfigs, serviceObj.ConfigId, 'ExtensionConfigurationId');
-                       if (type != undefined)
-                           serviceObj.ServiceType = type.Title;
+                       //var type = UtilsService.getItemByVal(templateConfigs, serviceObj.ConfigId, 'ExtensionConfigurationId');
+                       //if (type != undefined)
+                       //    serviceObj.ServiceType = type.Title;
                         ctrl.services.push(serviceObj);
                     }
                     Retail_BE_PackageService.addService(onServiceAdded);
@@ -70,15 +70,17 @@
                     var promises = [];
                     promises.push(getServicesTemplateConfigs());
                     return UtilsService.waitMultiplePromises(promises).then(function () {
-                        if (payload != undefined && payload.serviceEntity != undefined) {
+                        if (payload != undefined && payload.packageSettings != undefined) {
                             ctrl.services.length = 0;
-                            if (payload.serviceEntity.Services && payload.serviceEntity.Services.length > 0) {
-                                for (var y = 0; y < payload.serviceEntity.Services.length; y++) {
-                                    var currentService = payload.serviceEntity.Services[y];
-                                    var type = UtilsService.getItemByVal(templateConfigs, currentService.ConfigId, 'ExtensionConfigurationId');
-                                    if (type != undefined)
-                                        currentService.ServiceType = type.Title;
-                                    ctrl.services.push(currentService);
+                            if (payload.packageSettings.Services && payload.packageSettings.Services.length > 0) {
+                                for (var y = 0; y < payload.packageSettings.Services.length; y++) {
+                                    var currentService = payload.packageSettings.Services[y];
+                                    if (currentService.Settings != null) {
+                                        //var type = UtilsService.getItemByVal(templateConfigs, currentService.Settings.ConfigId, 'ExtensionConfigurationId');
+                                        //if (type != undefined)
+                                        //    currentService.ServiceType = type.Title;
+                                        ctrl.services.push(currentService);
+                                    }
                                 }
                             }
                         }
@@ -116,9 +118,9 @@
 
             function editService(serviceStyle) {
                 var onServiceUpdated = function (serviceObj) {
-                    var type = UtilsService.getItemByVal(templateConfigs, serviceObj.ConfigId, 'ExtensionConfigurationId');
-                    if (type != undefined)
-                        serviceObj.ServiceType = type.Title;
+                    //var type = UtilsService.getItemByVal(templateConfigs, serviceObj.ConfigId, 'ExtensionConfigurationId');
+                    //if (type != undefined)
+                    //    serviceObj.ServiceType = type.Title;
                     ctrl.services[ctrl.services.indexOf(serviceStyle)] = serviceObj;
                 }
                 Retail_BE_PackageService.editService(serviceStyle, onServiceUpdated);

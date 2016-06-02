@@ -3,14 +3,15 @@
         <vr-form name="formPackageEditor">
             <vr-tabs>
                 <vr-tab header="'Definition'">
-                    <vr-row removeline>
+                    <vr-row>
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModel.name" label="Package Name" isrequired></vr-textbox>
                         </vr-columns>
+                    </vr-row>
+                    <vr-row>
                         <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModel.description" label="Description" isrequired></vr-textbox>
+                            <vr-textarea value="scopeModel.description" label="Description" rows="3"></vr-textarea>
                         </vr-columns>
-
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Services'">

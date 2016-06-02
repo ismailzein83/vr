@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Retail.BusinessEntity.MainExtensions.Package
 {
     public enum ConnectionType { WIFI = 0, Ethernet = 1, EthernetFiber = 2 }
-    public class DataService : PackageService
+    public class DataService : PackageServiceSettings
     {
         public ConnectionType ConnectionType { get; set; }
         public int DownloadSpeed { get; set; }
