@@ -63,10 +63,10 @@
     <Folder Include="Properties" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
+    <Folder Include="Security\" />
+    <Folder Include="dbo\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\Tables\Facts.sql" />
-    <Build Include="dbo\Tables\Dim_User.sql" />
     <Build Include="dbo\Tables\Dim_Time.sql" />
     <Build Include="dbo\Tables\Dim_SuspicionLevel.sql" />
     <Build Include="dbo\Tables\Dim_SubscriberType.sql" />
@@ -79,5 +79,25 @@
     <Build Include="dbo\Tables\Dim_CallType.sql" />
     <Build Include="dbo\Tables\Dim_CallClass.sql" />
     <Build Include="dbo\Tables\Dim_BTS.sql" />
+    <Build Include="dbo\Tables\Fact_Cases.sql" />
+    <Build Include="dbo\Tables\Fact_Calls.sql" />
+    <Build Include="dbo\Tables\Dim_Users.sql" />
+    <Build Include="dbo\Tables\Dim_MSISDN.sql" />
+    <Build Include="dbo\Tables\Dim_IMEI.sql" />
+    <Build Include="dbo\Tables\Dim_AccountStatus.sql" />
+    <Build Include="Security\zahraa.sql" />
+    <Build Include="Security\VANRISE_wissam.ajamy.sql" />
+    <Build Include="Security\VANRISE_development.sql" />
+    <Build Include="Security\development.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
+    <Build Include="dbo\Stored Procedures\Populate_DW.sql" />
+    <Build Include="dbo\Stored Procedures\FillFactCallsHourly.sql" />
+    <Build Include="dbo\Stored Procedures\FillFactCallsDaily.sql" />
+    <Build Include="dbo\Stored Procedures\FillFact_Cases.sql" />
+    <Build Include="dbo\Stored Procedures\Fill_MSISDN.sql" />
+    <Build Include="dbo\Stored Procedures\Fill_IMEI.sql" />
+    <Build Include="dbo\Stored Procedures\Fill_DimTime.sql" />
+    <Build Include="dbo\Stored Procedures\Fill_Dimensions.sql" />
+    <Build Include="dbo\Stored Procedures\Fill_BTS.sql" />
   </ItemGroup>
 </Project>

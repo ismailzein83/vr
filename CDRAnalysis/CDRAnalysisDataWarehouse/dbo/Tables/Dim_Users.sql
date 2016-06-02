@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Dim_User] (
+﻿CREATE TABLE [dbo].[Dim_Users] (
     [Pk_UserId] INT          NOT NULL,
     [Name]      VARCHAR (50) NULL,
     CONSTRAINT [PK_Dim_Users] PRIMARY KEY CLUSTERED ([Pk_UserId] ASC)
