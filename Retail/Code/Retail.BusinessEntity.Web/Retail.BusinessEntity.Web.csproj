@@ -170,6 +170,7 @@
     <Content Include="Retail_BusinessEntity\Constant\AccountTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ConnectionTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ModuleConfig.js" />
+    <Content Include="Retail_BusinessEntity\Constant\PaymentMethodEnum.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountGridTemplate.html" />
