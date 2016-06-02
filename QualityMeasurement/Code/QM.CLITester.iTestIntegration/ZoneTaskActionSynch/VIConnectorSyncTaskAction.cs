@@ -47,7 +47,7 @@ namespace QM.CLITester.iTestIntegration
 
             if (allITestZones != null)
             {
-                ConcurrentQueue<ITestZone> qITestZones = new ConcurrentQueue<ITestZone>(allITestZones.Values.Take(50));
+                ConcurrentQueue<ITestZone> qITestZones = new ConcurrentQueue<ITestZone>(allITestZones.Values);
                 Parallel.For(0, vIConnectorSyncTaskActionArgument.ParallelThreadsCount, (i) =>
                     {
                         ITestZone itestZone;
