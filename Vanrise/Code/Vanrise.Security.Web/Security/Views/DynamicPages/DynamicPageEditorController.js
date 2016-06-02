@@ -622,7 +622,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
     }
 
     function loadTree() {
-        return VR_Sec_MenuAPIService.GetAllMenuItems()
+        return VR_Sec_MenuAPIService.GetAllMenuItems(true, true)
             .then(function (response) {
                 checkAllowDynamic(response);
                 $scope.scopeModal.menuList = response;

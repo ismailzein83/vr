@@ -199,7 +199,7 @@
                 });
 
                 function loadMenuItems() {
-                    return VR_Sec_MenuAPIService.GetAllMenuItems(false).then(function (response) {
+                    return VR_Sec_MenuAPIService.GetAllMenuItems(true,true).then(function (response) {
                         if (response) {
                             menuItems = [];
                             for (var i = 0; i < response.length; i++) {

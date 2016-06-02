@@ -61,7 +61,7 @@ namespace Vanrise.Security.Business
                     MenuItem rootItem = GetModuleMenu(item, modules, views, withEmptyChilds);
                     if (withEmptyChilds)
                         retVal.Add(rootItem);
-                    else if (rootItem.Childs != null && rootItem.Childs.Count > 0)
+                    else if (!CheckIfEmpty(rootItem))
                         retVal.Add(rootItem);
                 }
             }
@@ -69,6 +69,23 @@ namespace Vanrise.Security.Business
             return SortedMenuItems(retVal); ;
         }
 
+        public bool CheckIfEmpty(MenuItem rootItem)
+        {
+            bool result = true;
+            if (rootItem.MenuType == MenuType.View)
+                return false;
+          
+            else if (rootItem.MenuType == MenuType.Module && rootItem.Childs !=null && rootItem.Childs.Count > 0)
+            {
+                foreach (var item in rootItem.Childs)
+                {
+                       result =  CheckIfEmpty(item);
+                      if(!result)
+                          return result;
+                }
+            }
+            return result;
+        }
         public List<MenuItem> SortedMenuItems(List<MenuItem> menuItems)
         {
 
