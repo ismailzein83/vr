@@ -1,0 +1,15 @@
+﻿<vr-columns width="normal">
+    <vr-button type="Add" data-onclick="addZones" standalone></vr-button>
+</vr-columns>
+<vr-columns width="fullrow">
+    <vr-datagrid datasource="selectedZones" norowhighlightonclick="true"
+                 on-ready="onGridReady" ondeleterow="removeZone" hidegridmenu>
+        <vr-datagridcolumn headertext="'Location'" disablesorting="true">
+            <retail-be-countryzone-selector on-ready="dataItem.OnCountryZoneDirectiveReady"></retail-be-countryzone-selector>
+        </vr-datagridcolumn>
+
+        <vr-datagridcolumn headertext="'Rate'" disablesorting="true">
+            <vr-textbox type="number" value="dataItem.rate"></vr-textbox>
+        </vr-datagridcolumn>
+    </vr-datagrid>
+</vr-columns>

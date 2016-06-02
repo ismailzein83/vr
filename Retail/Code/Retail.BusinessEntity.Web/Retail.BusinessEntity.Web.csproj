@@ -148,6 +148,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountPackageController.cs" />
+    <Compile Include="Controllers\ZoneController.cs" />
     <Compile Include="Controllers\PackageController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -168,30 +169,43 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_BusinessEntity\Constant\AccountTypeEnum.js" />
+    <Content Include="Retail_BusinessEntity\Constant\ChargeTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ConnectionTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ModuleConfig.js" />
+    <Content Include="Retail_BusinessEntity\Constant\NetworkTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\PaymentMethodEnum.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountPackage\retail-be-accountpackage-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountPackage\Templates\AccountPackageGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountGridTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\retail-be-package-service-data.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\retail-be-package-service-sms.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\retail-be-package-service-voice.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\retail-be-package-servicesettings-voice.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\retail-be-package-servicesettings-data.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\retail-be-package-servicesettings-sms.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\VoiceType\retail-be-package-servicesettings-voice-type.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\Templates\DataServiceTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\Templates\SMSServiceTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\Templates\VoiceServiceTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\VoiceType\retail-be-package-servicesettings-voice-icx.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\VoiceType\retail-be-package-servicesettings-voice-international.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\VoiceType\retail-be-package-servicesettings-voice-national.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\VoiceType\Templates\ICXVoiceTypeTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\VoiceType\Templates\InterNationalVoiceTypeTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\VoiceType\Templates\NationalVoiceTypeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-service-grid-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-service.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\Templates\PackageGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\Templates\ServiceGridEditorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-countryzone-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-zone-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Zone\Templates\CountryZoneTemplate.html" />
     <Content Include="Retail_BusinessEntity\Services\AccountPackageService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountPackageAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\ZoneAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PackageAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\PackageService.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditor.html" />

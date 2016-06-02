@@ -61,6 +61,7 @@
     <Compile Include="AccountManager.cs" />
     <Compile Include="AccountPackageManager.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="ZoneManager.cs" />
     <Compile Include="PackageManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

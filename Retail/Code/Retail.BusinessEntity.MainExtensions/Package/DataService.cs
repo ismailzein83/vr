@@ -7,11 +7,22 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.MainExtensions.Package
 {
-    public enum ConnectionType { WIFI = 0, Ethernet = 1, EthernetFiber = 2 }
+    public enum ConnectionTypes { WIFI = 0, Ethernet = 1, EthernetFiber = 2 }
     public class DataService : PackageServiceSettings
     {
-        public ConnectionType ConnectionType { get; set; }
+        public ConnectionTypes ConnectionType { get; set; }
+
+      //  public LineType LineType { get; set; } 
         public int DownloadSpeed { get; set; }
         public int UploadSpeed { get; set; }
     }
+    public abstract class LineType
+    {
+        public int ConfigId { get; set; }
+    }
+    public abstract class ConnectionType
+    {
+        public int ConfigId { get; set; }
+    }
+   
 }

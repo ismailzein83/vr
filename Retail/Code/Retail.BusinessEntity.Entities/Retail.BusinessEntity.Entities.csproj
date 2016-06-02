@@ -64,7 +64,10 @@
     <Compile Include="Package\PackageInfo.cs" />
     <Compile Include="Package\PackageQuery.cs" />
     <Compile Include="Package\ServiceTemplateConfig.cs" />
+    <Compile Include="Package\ServiceVoiceTypeTemplateConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Zone\ZoneFilter.cs" />
+    <Compile Include="Zone\Zone.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

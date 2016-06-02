@@ -43,9 +43,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Package\ConnectionType\3GConnectionType.cs" />
+    <Compile Include="Package\ConnectionType\4GConnectionType.cs" />
+    <Compile Include="Package\ConnectionType\CableInternetConnectionType.cs" />
+    <Compile Include="Package\ConnectionType\CATVConnectionType.cs" />
+    <Compile Include="Package\ConnectionType\DSLConnectionType.cs" />
+    <Compile Include="Package\ConnectionType\FTTHConnectionType.cs" />
+    <Compile Include="Package\ConnectionType\IPTVConnectionType.cs" />
+    <Compile Include="Package\ConnectionType\VoipConnectionType.cs" />
+    <Compile Include="Package\ConnectionType\WirelessConnectionType.cs" />
     <Compile Include="Package\DataService.cs" />
+    <Compile Include="Package\LineType\CableProviderLineType.cs" />
+    <Compile Include="Package\LineType\FixLineType.cs" />
+    <Compile Include="Package\LineType\ISPLineType.cs" />
+    <Compile Include="Package\LineType\MobileLineType.cs" />
     <Compile Include="Package\SMSService.cs" />
     <Compile Include="Package\VoiceService.cs" />
+    <Compile Include="Package\VoiceType\ICXVoiceType.cs" />
+    <Compile Include="Package\VoiceType\InterNationalVoiceType.cs" />
+    <Compile Include="Package\VoiceType\NationalVoiceType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +70,7 @@
       <Name>Retail.BusinessEntity.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
