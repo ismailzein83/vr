@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountPackageService', 'Retail_BE_AccountTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (Retail_BE_AccountAPIService, Retail_BE_AccountService, Retail_BE_AccountPackageService, Retail_BE_AccountTypeEnum, UtilsService, VRUIUtilsService, VRNotificationService)
+app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountPackageService', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (Retail_BE_AccountAPIService, Retail_BE_AccountService, Retail_BE_AccountPackageService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountTypeEnum, UtilsService, VRUIUtilsService, VRNotificationService)
 {
     return {
         restrict: 'E',
@@ -28,11 +28,12 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
         {
             $scope.scopeModel = {};
             $scope.scopeModel.accounts = [];
+            $scope.scopeModel.menuActions = [];
 
             $scope.scopeModel.onGridReady = function (api)
             {
                 gridAPI = api;
-                drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(buildDrillDownTabs(), gridAPI, $scope.menuActions);
+                drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(buildDrillDownTabs(), gridAPI, $scope.scopeModel.menuActions);
                 defineAPI();
             };
 
@@ -76,50 +77,89 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
 
         function buildDrillDownTabs()
         {
-            return [{
-                title: 'Sub Accounts',
-                directive: 'retail-be-account-grid',
-                loadDirective: function (subAccountGridAPI, parentAccount)
-                {
-                    parentAccount.subAccountGridAPI = subAccountGridAPI;
+            var drillDownTabs = [];
 
+            drillDownTabs.push(buildSubAccountsTab());
+            drillDownTabs.push(buildAssignedPackagesTab());
+
+            function buildSubAccountsTab()
+            {
+                var subAccountsTab = {};
+
+                subAccountsTab.title = 'Sub Accounts';
+                subAccountsTab.directive = 'retail-be-account-grid';
+
+                subAccountsTab.loadDirective = function (subAccountGridAPI, parentAccount) {
+                    parentAccount.subAccountGridAPI = subAccountGridAPI;
                     var subAccountGridPayload = {
                         ParentAccountId: parentAccount.Entity.AccountId
                     };
-
                     return parentAccount.subAccountGridAPI.load(subAccountGridPayload);
-                }
-            }, {
-                title: 'Packages',
-                directive: 'retail-be-accountpackage-grid',
-                loadDirective: function (accountPackageGridAPI, account)
-                {
-                    account.accountPackageGridAPI = accountPackageGridAPI;
+                };
 
+                subAccountsTab.parentMenuActions = [{
+                    name: 'Add Sub Account',
+                    clicked: function (parentAccount) {
+                        if (subAccountsTab.setTabSelected != undefined)
+                            subAccountsTab.setTabSelected(parentAccount);
+                        var onSubAccountAdded = function (addedSubAccount) {
+                            parentAccount.subAccountGridAPI.onAccountAdded(addedSubAccount);
+                        };
+                        Retail_BE_AccountService.addAccount(parentAccount.Entity.AccountId, onSubAccountAdded);
+                    },
+                    haspermission: hasAddSubAccountPermission
+                }];
+
+                subAccountsTab.haspermission = function () {
+                    return Retail_BE_AccountAPIService.HasViewAccountsPermission();
+                };
+
+                return subAccountsTab;
+            }
+            function buildAssignedPackagesTab() {
+                var packagesTab = {};
+
+                packagesTab.title = 'Assigned Packages';
+                packagesTab.directive = 'retail-be-accountpackage-grid';
+
+                packagesTab.loadDirective = function (accountPackageGridAPI, account) {
+                    account.accountPackageGridAPI = accountPackageGridAPI;
                     var accountPackageGridPayload = {
                         AssignedToAccountId: account.Entity.AccountId
                     };
-
                     return account.accountPackageGridAPI.load(accountPackageGridPayload);
-                }
-            }];
+                };
+
+                packagesTab.parentMenuActions = [{
+                    name: 'Assign Package',
+                    clicked: function (account) {
+                        if (packagesTab.setTabSelected != undefined)
+                            packagesTab.setTabSelected(account);
+                        var onAccountPackageAdded = function (addedAccountPackage) {
+                            account.accountPackageGridAPI.onAccountPackageAdded(addedAccountPackage);
+                        };
+                        Retail_BE_AccountPackageService.assignPackageToAccount(account.Entity.AccountId, onAccountPackageAdded);
+                    },
+                    haspermission: hasAssignPackagePermission
+                }];
+
+                packagesTab.haspermission = function () {
+                    return Retail_BE_AccountPackageAPIService.HasViewAccountPackagesPermission();
+                };
+
+                return packagesTab;
+            }
+
+            return drillDownTabs;
         }
 
         function defineMenuActions()
         {
-            $scope.scopeModel.menuActions = [{
+            $scope.scopeModel.menuActions.push({
                 name: 'Edit',
                 clicked: editAccount,
-                //haspermission: hasEditAccountPermission
-            }, {
-                name: 'Add Sub Account',
-                clicked: addSubAccount,
-                //haspermission: hasAddSubAccountPermission
-            }, {
-                name: 'Assign Package',
-                clicked: assignPackage,
-                //haspermission: hasAddSubAccountPermission
-            }];
+                haspermission: hasEditAccountPermission
+            });
         }
 
         function editAccount(account)
@@ -134,7 +174,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             Retail_BE_AccountService.editAccount(account.Entity.AccountId, account.Entity.ParentAccountId, onAccountUpdated);
         }
         function hasEditAccountPermission() {
-            return WhS_BE_RoutingProductAPIService.HasUpdateRoutingProductPermission();
+            return Retail_BE_AccountAPIService.HasUpdateAccountPermission();
         }
 
         function addSubAccount(parentAccount)
@@ -149,7 +189,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             Retail_BE_AccountService.addAccount(parentAccount.Entity.AccountId, onSubAccountAdded);
         }
         function hasAddSubAccountPermission() {
-            return WhS_Routing_RouteRuleAPIService.HasAddRulePermission();
+            return Retail_BE_AccountAPIService.HasAddAccountPermission();
         }
 
         function assignPackage(account)
@@ -162,7 +202,9 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
 
             Retail_BE_AccountPackageService.assignPackageToAccount(account.Entity.AccountId, onAccountPackageAdded);
         }
-        function hasAssignPackagePermission() { }
+        function hasAssignPackagePermission() {
+            return Retail_BE_AccountPackageAPIService.HasAddAccountPackagePermission();
+        }
 
         function setAccountTypeDescription(account)
         {

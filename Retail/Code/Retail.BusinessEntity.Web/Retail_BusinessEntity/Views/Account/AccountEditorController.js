@@ -85,9 +85,9 @@
                 return (isEditMode) ? updateAccount() : insertAccount();
             };
 
-            $scope.hasSaveAccountPermission = function ()
+            $scope.scopeModel.hasSaveAccountPermission = function ()
             {
-                return (isEditMode) ? VR_Sec_GroupAPIService.HasEditGroupPermission() : VR_Sec_GroupAPIService.HasAddGroupPermission();
+                return (isEditMode) ? Retail_BE_AccountAPIService.HasUpdateAccountPermission() : Retail_BE_AccountAPIService.HasAddAccountPermission();
             };
 
             $scope.scopeModel.close = function () {

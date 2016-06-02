@@ -13,7 +13,7 @@
         }
 
         function GetAccountPackage(accountPackageId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddAccountPackage'), {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetAccountPackage'), {
                 accountPackageId: accountPackageId
             });
         }
@@ -22,13 +22,19 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddAccountPackage'), accountPackage);
         }
 
+        function HasViewAccountPackagesPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['GetFilteredAccountPackages']));
+        }
+
         function HasAddAccountPackagePermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['AddAccount']));
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['AddAccountPackage']));
         }
 
         return {
             GetFilteredAccountPackages: GetFilteredAccountPackages,
+            GetAccountPackage: GetAccountPackage,
             AddAccountPackage: AddAccountPackage,
+            HasViewAccountPackagesPermission: HasViewAccountPackagesPermission,
             HasAddAccountPackagePermission: HasAddAccountPackagePermission
         };
     }

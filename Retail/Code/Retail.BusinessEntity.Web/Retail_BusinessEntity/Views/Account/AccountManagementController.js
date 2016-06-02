@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountManagementController.$inject = ['$scope', 'Retail_BE_AccountService', 'Retail_BE_AccountTypeEnum', 'UtilsService'];
+    AccountManagementController.$inject = ['$scope', 'Retail_BE_AccountService', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountTypeEnum', 'UtilsService'];
 
-    function AccountManagementController($scope, Retail_BE_AccountService, Retail_BE_AccountTypeEnum, UtilsService)
+    function AccountManagementController($scope, Retail_BE_AccountService, Retail_BE_AccountAPIService, Retail_BE_AccountTypeEnum, UtilsService)
     {
         var gridAPI;
 
@@ -38,7 +38,7 @@
             };
 
             $scope.scopeModel.hasAddAccountPermission = function () {
-                return WhS_BE_RoutingProductAPIService.HasAddRoutingProductPermission();
+                return Retail_BE_AccountAPIService.HasAddAccountPermission();
             };
         }
 

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    PackageAssignmentEditorController.$inject = ['$scope', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    PackageAssignmentEditorController.$inject = ['$scope', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VRValidationService'];
 
-    function PackageAssignmentEditorController($scope, Retail_BE_AccountPackageAPIService, Retail_BE_AccountAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService)
+    function PackageAssignmentEditorController($scope, Retail_BE_AccountPackageAPIService, Retail_BE_AccountAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VRValidationService)
     {
         var isEditMode;
 
@@ -40,12 +40,16 @@
                 packageSelectorReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.validateTimeRange = function () {
+                return VRValidationService.validateTimeRange($scope.scopeModel.bed, $scope.scopeModel.eed);
+            };
+
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateAccountPackage() : insertAccountPackage();
             };
 
-            $scope.hasSaveAccountPackagePermission = function () {
-                return (isEditMode) ? VR_Sec_GroupAPIService.HasEditGroupPermission() : VR_Sec_GroupAPIService.HasAddGroupPermission();
+            $scope.scopeModel.hasSaveAccountPackagePermission = function () {
+                return (isEditMode) ? Retail_BE_AccountPackageAPIService.HasUpdateAccountPackagePermission() : Retail_BE_AccountPackageAPIService.HasAddAccountPackagePermission();
             };
 
             $scope.scopeModel.close = function () {
@@ -87,16 +91,24 @@
 
         function setTitle()
         {
-            if (isEditMode) {
-                var accountPackageName = (accountPackageEntity != undefined) ?
-                    accountPackageEntity.PackageName + ' for ' + accountPackageEntity.AccountName :
-                    undefined;
-                $scope.title = UtilsService.buildTitleForUpdateEditor(accountPackageName, 'Account Package');
+            if (isEditMode)
+            {
+                var accountName;
+                var packageName;
+                
+                if (accountPackageEntity != undefined) {
+                    accountName = accountPackageEntity.AccountName;
+                    packageName = accountPackageEntity.PackageName;
+                }
+
+                $scope.title = 'Edit Package Assignment to Account';
+
+                if (accountName != undefined && packageName != undefined)
+                    $scope.title += ': ' + accountName + ' - ' + packageName;
             }
             else {
                 return Retail_BE_AccountAPIService.GetAccountName(accountId).then(function (response) {
-                    var titleExtension = ' for ' + response;
-                    $scope.title = UtilsService.buildTitleForAddEditor('Account Package') + titleExtension;
+                    $scope.title = 'Assign Package for ' + response;
                 });
             }
         }
@@ -131,7 +143,7 @@
             var accountPackageObj = buildAccountPackageObjFromScope();
 
             return Retail_BE_AccountPackageAPIService.AddAccountPackage(accountPackageObj).then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded('Account Package', response, 'Name')) {
+                if (VRNotificationService.notifyOnItemAdded('Account Package', response)) {
                     if ($scope.onAccountPackageAdded != undefined)
                         $scope.onAccountPackageAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -143,13 +155,14 @@
             });
         }
 
-        function updateAccountPackage() {
+        function updateAccountPackage()
+        {
             $scope.scopeModel.isLoading = true;
 
             var accountPackageObj = buildAccountPackageObjFromScope();
 
             return Retail_BE_AccountPackageAPIService.UpdateAccountPackage(accountPackageObj).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated('Account Package', response, 'Name')) {
+                if (VRNotificationService.notifyOnItemUpdated('Account Package', response)) {
                     if ($scope.onAccountPackageUpdated != undefined) {
                         $scope.onAccountPackageUpdated(response.UpdatedObject);
                     }
