@@ -64,15 +64,7 @@ namespace Retail.BusinessEntity.Entities
         public string ContactPhone { get; set; }
 
         public PaymentMethod? PaymentMethod { get; set; }
-
-        public string CardNumber { get; set; }
-
-        public string CardHolderName { get; set; }
-
-        public DateTime? CardExpirationDate { get; set; }
-
-        public string CardSecurityCode { get; set; }
     }
 
-    public enum PaymentMethod { Card = 0, PayPal = 1 }
+    public enum PaymentMethod { Prepaid = 0, Postpaid = 1 }
 }

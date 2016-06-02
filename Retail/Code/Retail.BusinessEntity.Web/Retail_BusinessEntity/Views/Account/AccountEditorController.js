@@ -175,11 +175,6 @@
             {
                 $scope.scopeModel.billingSettings.selectedPaymentMethod =
                 UtilsService.getItemByVal($scope.scopeModel.paymentMethods, accountEntity.Settings.BillingSettings.PaymentMethod, 'value');
-
-                $scope.scopeModel.billingSettings.cardNumber = accountEntity.Settings.BillingSettings.CardNumber;
-                $scope.scopeModel.billingSettings.cardHolderName = accountEntity.Settings.BillingSettings.CardHolderName;
-                $scope.scopeModel.billingSettings.cardExpirationDate = accountEntity.Settings.BillingSettings.CardExpirationDate;
-                $scope.scopeModel.billingSettings.cardSecurityCode = accountEntity.Settings.BillingSettings.CardSecurityCode;
             }
         }
 
@@ -293,13 +288,8 @@
                 ContactPhone: $scope.scopeModel.billingSettings.contactPhone
             };
 
-            if ($scope.scopeModel.billingSettings.selectedPaymentMethod != undefined)
-            {
+            if ($scope.scopeModel.billingSettings.selectedPaymentMethod != undefined) {
                 obj.Settings.BillingSettings.PaymentMethod = $scope.scopeModel.billingSettings.selectedPaymentMethod.value;
-                obj.Settings.BillingSettings.CardNumber = $scope.scopeModel.billingSettings.cardNumber;
-                obj.Settings.BillingSettings.CardHolderName = $scope.scopeModel.billingSettings.cardHolderName;
-                obj.Settings.BillingSettings.CardExpirationDate = $scope.scopeModel.billingSettings.cardExpirationDate;
-                obj.Settings.BillingSettings.CardSecurityCode = $scope.scopeModel.billingSettings.cardSecurityCode;
             }
 
             if (!isEditMode) {

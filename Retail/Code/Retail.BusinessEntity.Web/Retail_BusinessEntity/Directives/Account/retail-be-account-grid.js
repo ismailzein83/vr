@@ -103,6 +103,10 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                 name: 'Add Sub Account',
                 clicked: addSubAccount,
                 //haspermission: hasAddSubAccountPermission
+            }, {
+                name: 'Assign Package',
+                clicked: assignPackage,
+                //haspermission: hasAddSubAccountPermission
             }];
         }
 
@@ -117,7 +121,6 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
 
             Retail_BE_AccountService.editAccount(account.Entity.AccountId, account.Entity.ParentAccountId, onAccountUpdated);
         }
-
         function hasEditAccountPermission() {
             return WhS_BE_RoutingProductAPIService.HasUpdateRoutingProductPermission();
         }
@@ -133,10 +136,15 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
 
             Retail_BE_AccountService.addAccount(parentAccount.Entity.AccountId, onSubAccountAdded);
         }
-
         function hasAddSubAccountPermission() {
             return WhS_Routing_RouteRuleAPIService.HasAddRulePermission();
         }
+
+        function assignPackage(account)
+        {
+            console.log('Not implemented');
+        }
+        function hasAssignPackagePermission() { }
 
         function setAccountTypeDescription(account)
         {
