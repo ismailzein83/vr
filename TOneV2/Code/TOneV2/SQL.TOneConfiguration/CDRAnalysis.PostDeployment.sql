@@ -88,7 +88,8 @@ as (select * from (values
 (84,'Month','Month',0,'{"ColumnID":"[Dim Time].[Date Instance]","ColumnName":"[Dim Time].[Month]"}',null),
 (85,'Month Name','Month Name',0,'{"ColumnID":"[Dim Time].[Date Instance]","ColumnName":"[Dim Time].[Month Name]"}',null),
 (86,'Week','Week',0,'{"ColumnID":"[Dim Time].[Date Instance]","ColumnName":"[Dim Time].[Week]"}',null),
-(87,'Year','Year',0,'{"ColumnID":"[Dim Time].[Date Instance]","ColumnName":"[Dim Time].[Year]"}',null)
+(87,'Year','Year',0,'{"ColumnID":"[Dim Time].[Date Instance]","ColumnName":"[Dim Time].[Year]"}',null),
+(88,'Default Time','Default Time',2,'{"Date":"[Dim Time].[Date]","Year":"[Dim Time].[Year]","MonthOfYear":"[Dim Time].[Month Of Year]","WeekOfMonth":"[Dim Time].[Week Of Month]","DayOfMonth":"[Dim Time].[Day Of Month]","Hour":"[Dim Time].[Hour]","IsDefault":"True"}',null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[DisplayName],[Type],[Configuration],[Rank]))
 merge	[BI].[SchemaConfiguration] as t
