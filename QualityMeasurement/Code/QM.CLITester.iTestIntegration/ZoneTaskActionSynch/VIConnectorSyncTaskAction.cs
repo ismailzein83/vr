@@ -47,7 +47,7 @@ namespace QM.CLITester.iTestIntegration
 
             if (allITestZones != null)
             {
-                ConcurrentQueue<ITestZone> qITestZones = new ConcurrentQueue<ITestZone>(allITestZones.Values);
+                ConcurrentQueue<ITestZone> qITestZones = new ConcurrentQueue<ITestZone>(allITestZones.Values.Take(50));
                 Parallel.For(0, vIConnectorSyncTaskActionArgument.ParallelThreadsCount, (i) =>
                     {
                         ITestZone itestZone;
@@ -71,8 +71,8 @@ namespace QM.CLITester.iTestIntegration
                                         out measure, out testProgress, out result, out callTestResult);
                                     if (tryTestProgress && callTestResult!= null)
                                     {
-                                        string code = (testProgress.CallResults.First().Destination).Substring(supplier.Settings.Prefix.Length,
-                                            ((testProgress.CallResults.First().Destination).Length - supplier.Settings.Prefix.Length));
+                                        //string code = (testProgress.CallResults.First().Destination).Substring(supplier.Settings.Prefix.Length,
+                                        //    ((testProgress.CallResults.First().Destination).Length - supplier.Settings.Prefix.Length));
                                        List<ConnectorZoneInfoToUpdate> listConnectorZoneInfoToUpdates = new List<ConnectorZoneInfoToUpdate>()
                                         {
                                             new ConnectorZoneInfoToUpdate()
@@ -85,9 +85,10 @@ namespace QM.CLITester.iTestIntegration
                                        zoneInfoManager.UpdateZones(Constants.CONNECTOR_TYPE, listConnectorZoneInfoToUpdates);
 
                                         LogInformation("Test Zone added: '{0} - {1}'", itestZone.CountryName, itestZone.ZoneName);
-                                        retryCount = vIConnectorSyncTaskActionArgument.MaximumRetryCount;
+                                        retryCount = vIConnectorSyncTaskActionArgument.MaximumRetryCount + 1;
                                     }
-                                    retryCount++;
+                                    if (!tryTestProgress)
+                                        retryCount++;
                                     Thread.Sleep(vIConnectorSyncTaskActionArgument.DownloadResultWaitTime * 1000);
                                 }
                             }

@@ -77,7 +77,8 @@ app.directive("qmBeConnectorzoneinfo", ['UtilsService', 'VRUIUtilsService', 'QM_
                     //CLITestConnector: CLITestConnectorObj,
                     MaximumRetryCount: $scope.maximumRetryCount,
                     ParallelThreadsCount: $scope.parallelThreadsCount,
-                    DownloadResultWaitTime: $scope.downloadResultWaitTime
+                    DownloadResultWaitTime: $scope.downloadResultWaitTime,
+                    TimeOut: $scope.timeOut
                 };
             };
 
@@ -95,6 +96,9 @@ app.directive("qmBeConnectorzoneinfo", ['UtilsService', 'VRUIUtilsService', 'QM_
 
                 if (payload != undefined && payload.data != undefined)
                     $scope.parallelThreadsCount = payload.data.ParallelThreadsCount;
+
+                if (payload != undefined && payload.data != undefined)
+                    $scope.timeout = payload.data.TimeOut;
 
                 var profileLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 profileReadyPromiseDeferred.promise
