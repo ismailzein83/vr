@@ -287,6 +287,24 @@ namespace TONEAPI
             }
 
 
+            // Sale Zones
+
+
+       
+            try
+            {
+                string _SZapi = "/api/WhS_BE/SaleZone/GetFilteredSaleZones";
+                string _SZpostdata = "{\"Query\":{\"SellingNumberId\":1,\"EffectiveOn\":\"2016-05-31T21:00:00.000Z\"},\"SortByColumnName\":\"Entity.SaleZoneId\",\"IsSortDescending\":false,\"ResultKey\":null,\"DataRetrievalResultType\":0,\"FromRow\":1,\"ToRow\":30}";
+                SaleZoneProcess _sz = new SaleZoneProcess();
+                string _szResult = _sz.GetSaleZones(TextBox7.Text, _SZapi, _SZpostdata);
+                testresults= testresults + _szResult;
+            }
+            catch
+            {
+
+                testresults = testresults + " Failed:";
+            }
+
             
 
 
@@ -344,7 +362,7 @@ namespace TONEAPI
             ////    break;
             //    //driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("1");
             //    //driver.FindElement(By.XPath("//*[@class='btn btn-danger login-btn']")).Click();
-
+           
 
             }
     }

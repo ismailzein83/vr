@@ -99,6 +99,8 @@
     <Compile Include="ClassCode\countries.cs" />
     <Compile Include="ClassCode\Countryclass.cs" />
     <Compile Include="ClassCode\RestClient.cs" />
+    <Compile Include="ClassCode\SaleZone.cs" />
+    <Compile Include="ClassCode\SaleZoneProcess.cs" />
     <Compile Include="ClassCode\SellingNumberingPlan.cs" />
     <Compile Include="ClassCode\SellingNumberPlanCode.cs" />
     <Compile Include="ClassCode\SupplierCodes.cs" />
