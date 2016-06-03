@@ -172,18 +172,89 @@ namespace Retail.BusinessEntity.Business
             });
         }
 
+        Dictionary<int, List<Account>> GetCachedAccountsByParent()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountsByParent", () =>
+            {
+                IEnumerable<Account> accounts = GetCachedAccounts().Values;
+                Dictionary<int, List<Account>> accountsByParent = new Dictionary<int, List<Account>>();
+                foreach (var account in accounts)
+                {
+                    if (account.ParentAccountId != null)
+                    {
+                        List<Account> accountsofParent;
+                        if (accountsByParent.TryGetValue((int)account.ParentAccountId, out accountsofParent))
+                        {
+                            accountsofParent.Add(account);
+                        }
+                        else
+                        {
+                            accountsofParent = new List<Account>() { account };
+                            accountsByParent.Add((int)account.ParentAccountId, accountsofParent);
+
+                        }
+                    }
+
+                }
+                return accountsByParent;
+            });
+        }
+
         #endregion
 
         #region Mappers
 
         private AccountDetail AccountDetailMapper(Account account)
         {
+            var accounts = GetCachedAccounts().Values;
+
             return new AccountDetail()
             {
-                Entity = account
+                Entity = account,
+                DirectSubAccountCount = GetDirectSubAccountsCount(account.AccountId, accounts),
+                InDirectSubAccountCount = GetIndirectSubAccountsCount(account.AccountId, accounts)
             };
         }
+        private int GetDirectSubAccountsCount(int accountId, IEnumerable<Account> accounts)
+        {
+            int count = 0;
+            foreach (var account in accounts)
+            {
+                if (account.ParentAccountId == accountId)
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+        private int GetIndirectSubAccountsCount(int accountId, IEnumerable<Account> accounts)
+        {
+            var accountsByParent = GetCachedAccountsByParent();
+            int count = 0;
+            foreach (var account in accounts)
+            {
+                if (account.ParentAccountId == accountId)
+                     count += GetIndirectSubAccountsCountRecursively(account, accountsByParent);
+            }
 
+            return count;
+        }
+        private int GetIndirectSubAccountsCountRecursively(Account account, Dictionary<int, List<Account>> accountsByParent)
+        {
+            List<Account> accountsForParents;
+            if (accountsByParent.TryGetValue(account.AccountId, out accountsForParents))
+            {
+                if (accountsForParents.Count ==0)
+                {
+                    return 0;
+                }
+                foreach (var accountofParent in accountsForParents)
+                {
+                    return 1 + GetIndirectSubAccountsCountRecursively(accountofParent, accountsByParent);
+                }
+            }
+            return 0;
+        }
         #endregion
     }
 }

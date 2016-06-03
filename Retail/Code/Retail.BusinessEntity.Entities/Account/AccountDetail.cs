@@ -9,5 +9,7 @@ namespace Retail.BusinessEntity.Entities
     public class AccountDetail
     {
         public Account Entity { get; set; }
+        public int DirectSubAccountCount { get; set; }
+        public int InDirectSubAccountCount { get; set; }
     }
 }
