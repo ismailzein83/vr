@@ -32,10 +32,11 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetPackagesInfo")]
-        public IEnumerable<PackageInfo> GetPackagesInfo()
+        public IEnumerable<PackageInfo> GetPackagesInfo(string filter = null)
         {
             PackageManager manager = new PackageManager();
-            return manager.GetPackagesInfo();
+            var deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<PackageFilter>(filter) : null;
+            return manager.GetPackagesInfo(deserializedFilter);
         }
 
         [HttpPost]

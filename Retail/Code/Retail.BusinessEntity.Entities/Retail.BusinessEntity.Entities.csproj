@@ -62,6 +62,7 @@
     <Compile Include="Package\Package.cs" />
     <Compile Include="Package\PackageDetail.cs" />
     <Compile Include="Package\PackageInfo.cs" />
+    <Compile Include="Package\PackageFilter.cs" />
     <Compile Include="Package\PackageQuery.cs" />
     <Compile Include="Package\ServiceTemplateConfig.cs" />
     <Compile Include="Package\ServiceVoiceTypeTemplateConfig.cs" />

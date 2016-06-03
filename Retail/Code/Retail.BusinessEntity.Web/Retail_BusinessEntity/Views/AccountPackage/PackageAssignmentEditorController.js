@@ -116,13 +116,17 @@
         function loadPackageSelector() {
             var packageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-            packageSelectorReadyDeferred.promise.then(function () {
-                var packageSelectorPayload;
+            packageSelectorReadyDeferred.promise.then(function ()
+            {
+                var packageSelectorPayload = {};
+
+                packageSelectorPayload.filter = {};
+                packageSelectorPayload.filter.AssignedToAccountId = accountId;
+
                 if (accountPackageEntity != undefined) {
-                    packageSelectorPayload = {
-                        selectedIds: accountPackageEntity.PackageId
-                    };
+                    packageSelectorPayload.selectedIds = accountPackageEntity.PackageId;
                 }
+
                 VRUIUtilsService.callDirectiveLoad(packageSelectorAPI, packageSelectorPayload, packageSelectorLoadDeferred);
             });
 

@@ -35,6 +35,12 @@ namespace Retail.BusinessEntity.Business
             return cachedAccountPackages.GetRecord(accountPackageId);
         }
 
+        public IEnumerable<int> GetPackageIdsAssignedToAccount(int accountId)
+        {
+            Dictionary<int, AccountPackage> cachedAccountPackages = this.GetCachedAccountPackages();
+            return cachedAccountPackages.MapRecords(itm => itm.Value.PackageId, itm => itm.Value.AccountId == accountId);
+        }
+
         public Vanrise.Entities.InsertOperationOutput<AccountPackageDetail> AddAccountPackage(AccountPackage accountPackage)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AccountPackageDetail>();

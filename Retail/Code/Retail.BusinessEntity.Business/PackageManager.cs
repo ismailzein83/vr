@@ -13,6 +13,7 @@ namespace Retail.BusinessEntity.Business
     public class PackageManager
     {
         #region ctor/Local Variables
+
         #endregion
 
         #region Public Methods
@@ -35,10 +36,23 @@ namespace Retail.BusinessEntity.Business
             Package package = GetPackage(packageId);
             return package != null ? package.Name : null;
         }
-        public IEnumerable<PackageInfo> GetPackagesInfo()
+        public IEnumerable<PackageInfo> GetPackagesInfo(PackageFilter filter)
         {
             var packages = GetCachedPackages();
-            return packages.MapRecords(PackageInfoMapper);
+
+            Func<Package, bool> filterExpression = null;
+
+            if (filter != null)
+            {
+                if (filter.AssignedToAccountId.HasValue)
+                {
+                    var accountPackageManager = new AccountPackageManager();
+                    IEnumerable<int> packageIdsAssignedToAccount = accountPackageManager.GetPackageIdsAssignedToAccount(filter.AssignedToAccountId.Value);
+                    filterExpression = (package) => !packageIdsAssignedToAccount.Contains(package.PackageId);
+                }
+            }
+
+            return packages.MapRecords(PackageInfoMapper, filterExpression);
         }
         public InsertOperationOutput<PackageDetail> AddPackage(Package package)
         {

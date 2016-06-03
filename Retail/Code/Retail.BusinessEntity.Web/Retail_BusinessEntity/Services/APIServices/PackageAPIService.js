@@ -17,9 +17,10 @@
             });
         }
 
-        function GetPackagesInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetPackagesInfo"));
-
+        function GetPackagesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetPackagesInfo"), {
+                filter: filter
+            });
         }
 
         function UpdatePackage(packageObject) {

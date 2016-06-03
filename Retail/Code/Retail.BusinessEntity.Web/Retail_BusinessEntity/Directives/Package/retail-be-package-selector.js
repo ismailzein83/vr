@@ -55,14 +55,17 @@ app.directive('retailBePackageSelector', ['Retail_BE_PackageAPIService', 'UtilsS
                 selectorAPI.clearDataSource();
 
                 var selectedIds;
+                var filter;
 
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
+                    filter = payload.filter;
                 }
 
-                return Retail_BE_PackageAPIService.GetPackagesInfo().then(function (response) {
-                    if (response != null) {
-
+                return Retail_BE_PackageAPIService.GetPackagesInfo(UtilsService.serializetoJson(filter)).then(function (response)
+                {
+                    if (response != null)
+                    {
                         for (var i = 0; i < response.length; i++) {
                             ctrl.datasource.push(response[i]);
                         }
