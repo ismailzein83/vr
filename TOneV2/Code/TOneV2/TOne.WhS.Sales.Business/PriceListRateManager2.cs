@@ -109,34 +109,13 @@ namespace TOne.WhS.Sales.Business
                     recentRateValue = existingRate.RateEntity.NormalRate;
                 if (existingRate.IsOverlapedWith(rateToChange))
                 {
-                    if (SameRates(rateToChange, existingRate))
+                    DateTime existingRateEED = Utilities.Max(rateToChange.BED, existingRate.BED);
+                    existingRate.ChangedRate = new ChangedRate
                     {
-                        if (rateToChange.EED == existingRate.EED)
-                        {
-                            shouldNotAddRate = true;
-                            break;
-                        }
-                        else if(rateToChange.EED.HasValue && rateToChange.EED.VRLessThan(existingRate.EED))
-                        {
-                            existingRate.ChangedRate = new ChangedRate
-                            {
-                                RateId = existingRate.RateEntity.SaleRateId,
-                                EED = rateToChange.EED.Value 
-                            };
-                            rateToChange.ChangedExistingRates.Add(existingRate);
-                        }
-
-                    }
-                    else
-                    {
-                        DateTime existingRateEED = Utilities.Max(rateToChange.BED, existingRate.BED);
-                        existingRate.ChangedRate = new ChangedRate
-                        {
-                            RateId = existingRate.RateEntity.SaleRateId,
-                            EED = existingRateEED
-                        };
-                        rateToChange.ChangedExistingRates.Add(existingRate);
-                    }
+                        RateId = existingRate.RateEntity.SaleRateId,
+                        EED = existingRateEED
+                    };
+                    rateToChange.ChangedExistingRates.Add(existingRate);
                 }
             }
 
@@ -219,8 +198,6 @@ namespace TOne.WhS.Sales.Business
             {
                 if (existingRate.EED.VRGreaterThan(rateToClose.CloseEffectiveDate))
                 {
-                    //if (String.Compare(existingRate.ParentZone.Name, rateToClose.ZoneName, true) != 0)
-                    //    rateToClose.HasOverlapedCodesInOtherZone = true;
                     existingRate.ChangedRate = new ChangedRate
                     {
                         RateId = existingRate.RateEntity.SaleRateId,
