@@ -141,8 +141,10 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
                 }
                 return fakedata;
             }
-            var Menu = {};
+            var Menu = null;
             if (attrs.enbalerowinsert != undefined) {
+                if (Menu == null)
+                    Menu = {};
                 Menu["row_above"] = {
                     disabled: function () {
                         //if first row, disable this option
@@ -159,16 +161,18 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
             }
                         
             if (attrs.enbalecolinsert != undefined) {
+                if(Menu == null)
+                    Menu = {};
                 Menu["col_left"] = true;
                 Menu["col_right"] = true;
-                /*Menu["remove_col"] = true;*/
+               
             }
-            if (Menu!=null)
+            if (Menu != null)
                 api.updateSettings({
                     contextMenu: {
                         items: Menu
                     }
-                })
+                });
             var inter;
             scope.i = 0;
             api.reLoadRefresh = function () {

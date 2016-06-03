@@ -8,7 +8,8 @@ app.directive('vrExcelWb', ['VR_ExcelConversion_ExcelAPIService', function (exce
         scope: {
             fileid: '=',
             onReady: '=',
-            sheetindex:"="
+            sheetindex: "=",
+
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -62,9 +63,16 @@ app.directive('vrExcelWb', ['VR_ExcelConversion_ExcelAPIService', function (exce
         var hasallowedit = "";
         if (attrs.allowedit != undefined)
             hasallowedit = "allowedit";
+
+        var enbalerowinsert = "";
+        var enbalecolinsert = "";
+        if (attrs.enbalerowinsert)
+            enbalerowinsert = "enbalerowinsert";
+        if (attrs.enbalecolinsert)
+            enbalecolinsert = "enbalecolinsert";
         return '<vr-tabs on-ready="onReadyTabs" vr-loader="ctrl.isloadingdata" onselectionchanged="ctrl.onSelectionTabChanged()" selectedindex="ctrl.wsindex">'
                + '<vr-tab  ng-repeat="dataItem in ctrl.scopeModel.datasource.Sheets"  header="dataItem.Name" tabobject="ctrl.scopeModel.tabObjects[$index]" vr-loader="isloadingdatatab{{$index}}">'
-               + '<vr-excel-ws data="dataItem" on-ready="onReadyWoorkSheet" fileid="ctrl.fileid" index="$index" ' + hasallowedit + '  ></vr-excel-ws>'
+               + '<vr-excel-ws data="dataItem" ' + enbalerowinsert + ' ' + enbalecolinsert + ' on-ready="onReadyWoorkSheet" fileid="ctrl.fileid" index="$index" ' + hasallowedit + '  ></vr-excel-ws>'
                + '</vr-tab>'
                + '</vr-tabs>';
     }
