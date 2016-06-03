@@ -11,7 +11,7 @@ function (WhS_BE_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService) {
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             var defaultRoutingProduct = new DefaultRoutingProduct(ctrl, $scope);
-            defaultRoutingProduct.initCtrl();
+            defaultRoutingProduct.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
@@ -19,19 +19,18 @@ function (WhS_BE_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService) {
     };
 
     function DefaultRoutingProduct(ctrl, $scope) {
-        this.initCtrl = initCtrl;
+        this.initializeController = initializeController;
 
         var defaultItem;
         var isFirstSelectionEvent;
         var isStateLoaded;
 
         var selectorAPI;
-        var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        function initCtrl() {
+        function initializeController() {
             ctrl.onSelectorReady = function (api) {
                 selectorAPI = api;
-                selectorReadyPromiseDeferred.resolve();
+                defineAPI();
             };
 
             ctrl.onSelectionChanged = function ()
@@ -51,13 +50,9 @@ function (WhS_BE_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService) {
                 defaultItem.IsDirty = true;
                 defaultItem.onChange();
             };
-
-            selectorReadyPromiseDeferred.promise.then(function () {
-                getAPI();
-            });
         }
 
-        function getAPI() {
+        function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
@@ -117,7 +112,7 @@ function (WhS_BE_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService) {
                 }
             };
 
-            if (ctrl.onReady && typeof (ctrl.onReady) == "function")
+            if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
     }

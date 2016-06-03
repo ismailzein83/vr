@@ -10,7 +10,7 @@ app.directive("vrWhsSalesFixedratecalculation", [function () {
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             var fixedRateCalculation = new FixedRateCalculation(ctrl, $scope);
-            fixedRateCalculation.initCtrl();
+            fixedRateCalculation.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
@@ -18,15 +18,15 @@ app.directive("vrWhsSalesFixedratecalculation", [function () {
     };
 
     function FixedRateCalculation(ctrl, $scope) {
-        this.initCtrl = initCtrl;
+        this.initializeController = initializeController;
 
         ctrl.fixedRate;
 
-        function initCtrl() {
-            getAPI();
+        function initializeController() {
+            defineAPI();
         }
 
-        function getAPI() {
+        function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
@@ -42,7 +42,7 @@ app.directive("vrWhsSalesFixedratecalculation", [function () {
                 };
             };
 
-            if (ctrl.onReady && typeof (ctrl.onReady) == "function")
+            if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
     }

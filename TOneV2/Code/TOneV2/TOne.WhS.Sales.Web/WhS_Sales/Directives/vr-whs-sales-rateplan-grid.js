@@ -10,32 +10,30 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             var ratePlanGrid = new RatePlanGrid($scope, ctrl);
-            ratePlanGrid.initCtrl();
+            ratePlanGrid.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
         templateUrl: "/Client/Modules/WhS_Sales/Directives/Templates/RatePlanGridTemplate.html"
     };
 
-    function RatePlanGrid($scope, ctrl) {
-        this.initCtrl = initCtrl;
+    function RatePlanGrid($scope, ctrl)
+    {
+        this.initializeController = initializeController;
 
         var gridAPI;
         var gridQuery;
         var gridDrillDownTabs;
 
-        function initCtrl() {
+        function initializeController() {
             $scope.zoneItems = [];
-            $scope.connector = {
-                costCalculationMethods: []
-            };
+            $scope.costCalculationMethods = [];
             
-            $scope.onGridReady = function (api) {
+            $scope.onGridReady = function (api)
+            {
                 gridAPI = api;
                 gridDrillDownTabs = VRUIUtilsService.defineGridDrillDownTabs(getGridDrillDownDefinitions(), gridAPI, null);
-
-                if (ctrl.onReady && typeof (ctrl.onReady) == "function")
-                    ctrl.onReady(getAPI());
+                defineAPI();
             };
             $scope.loadMoreData = function () {
                 return loadZoneItems();
@@ -75,17 +73,18 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             }];
         }
 
-        function getAPI() {
+        function defineAPI()
+        {
             var api = {};
 
             api.load = function (query) {
                 gridQuery = query;
 
                 if (query && query.CostCalculationMethods) {
-                    $scope.connector.costCalculationMethods = [];
+                    $scope.costCalculationMethods = [];
 
                     for (var i = 0; i < query.CostCalculationMethods.length; i++)
-                        $scope.connector.costCalculationMethods.push(query.CostCalculationMethods[i]);
+                        $scope.costCalculationMethods.push(query.CostCalculationMethods[i]);
                 }
 
                 $scope.rateCalculationMethod = query.RateCalculationMethod;
@@ -93,6 +92,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 gridAPI.clearDataAndContinuePaging();
                 return loadZoneItems();
             };
+
             api.getZoneChanges = function () {
                 var zoneChanges = [];
 
@@ -106,7 +106,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 return zoneChanges.length > 0 ? zoneChanges : null;
             };
 
-            return api;
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
         }
 
         function loadZoneItems() {
@@ -151,16 +152,16 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             function extendZoneItem(zoneItem) {
                 zoneItem.IsDirty = false;
-                zoneItem.currentRateEED = zoneItem.CurrentRateEED ? new Date(zoneItem.CurrentRateEED) : null; // Maintains the original value of zoneItem.CurrentRateEED in case the user deletes the new rate
+                zoneItem.currentRateEED = zoneItem.CurrentRateEED; // Maintains the original value of zoneItem.CurrentRateEED in case the user deletes the new rate
                 setRouteOptionProperties(zoneItem);
 
                 zoneItem.IsCurrentRateEditable = (zoneItem.IsCurrentRateEditable == null) ? false : zoneItem.IsCurrentRateEditable;
 
-                zoneItem.CurrentRateBED = (zoneItem.CurrentRateBED != null) ? new Date(zoneItem.CurrentRateBED) : null;
-                zoneItem.NewRateBED = (zoneItem.NewRateBED != null) ? new Date(zoneItem.NewRateBED) : null;
+                zoneItem.CurrentRateBED = zoneItem.CurrentRateBED;
+                zoneItem.NewRateBED = zoneItem.NewRateBED;
 
-                zoneItem.CurrentRateEED = (zoneItem.CurrentRateEED != null) ? new Date(zoneItem.CurrentRateEED) : null;
-                zoneItem.NewRateEED = (zoneItem.NewRateEED != null) ? new Date(zoneItem.NewRateEED) : null;
+                zoneItem.CurrentRateEED = zoneItem.CurrentRateEED;
+                zoneItem.NewRateEED = zoneItem.NewRateEED;
 
                 zoneItem.showNewRateBED = zoneItem.NewRate;
                 zoneItem.showNewRateEED = zoneItem.NewRate;
@@ -201,7 +202,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     zoneItem.IsDirty = true;
                 };
 
-                zoneItem.refreshZoneItem = function (zoneItem) {
+                zoneItem.refreshZoneItem = function (zoneItem)
+                {
                     var promises = [];
 
                     var saveChangesPromise = saveZoneItemChanges();
@@ -213,51 +215,41 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     var loadRouteOptionsDeferred = UtilsService.createPromiseDeferred();
                     promises.push(loadRouteOptionsDeferred.promise);
 
-                    saveChangesPromise.then(function () {
-                        var getZoneItemPromise = WhS_Sales_RatePlanAPIService.GetZoneItem(getZoneItemInput());
+                    saveChangesPromise.then(function ()
+                    {
+                        WhS_Sales_RatePlanAPIService.GetZoneItem(getZoneItemInput()).then(function (response)
+                        {
+                            getZoneItemDeferred.resolve();
 
-                        getZoneItemPromise.then(function (response) {
-                            if (response) {
-                                getZoneItemDeferred.resolve();
+                            var gridZoneItem = UtilsService.getItemByVal($scope.zoneItems, response.ZoneId, "ZoneId");
 
-                                var gridZoneItem = UtilsService.getItemByVal($scope.zoneItems, response.ZoneId, "ZoneId");
+                            gridZoneItem.EffectiveRoutingProductId = response.EffectiveRoutingProductId;
+                            gridZoneItem.EffectiveRoutingProductName = response.EffectiveRoutingProductName;
+                            gridZoneItem.CalculatedRate = response.CalculatedRate;
 
-                                if (gridZoneItem) {
-                                    gridZoneItem.EffectiveRoutingProductId = response.EffectiveRoutingProductId;
-                                    gridZoneItem.EffectiveRoutingProductName = response.EffectiveRoutingProductName;
-                                    gridZoneItem.CalculatedRate = response.CalculatedRate;
+                            var payload = {
+                                RoutingDatabaseId: gridQuery.RoutingDatabaseId,
+                                SaleZoneId: response.ZoneId,
+                                RoutingProductId: response.EffectiveRoutingProductId,
+                                RouteOptions: response.RouteOptions
+                            };
 
-                                    loadRouteOptionsDeferred.promise.finally(function () {
-                                        zoneItem.isLoadingRouteOptions = false;
-                                    });
+                            zoneItem.isLoadingRouteOptions = true;
+                            VRUIUtilsService.callDirectiveLoad(zoneItem.RouteOptionsAPI, payload, loadRouteOptionsDeferred);
 
-                                    var payload = {
-                                        RoutingDatabaseId: gridQuery.RoutingDatabaseId,
-                                        SaleZoneId: response.ZoneId,
-                                        RoutingProductId: response.EffectiveRoutingProductId,
-                                        RouteOptions: response.RouteOptions
-                                    };
+                            loadRouteOptionsDeferred.promise.finally(function () {
+                                zoneItem.isLoadingRouteOptions = false;
+                            });
 
-                                    zoneItem.isLoadingRouteOptions = true;
-                                    VRUIUtilsService.callDirectiveLoad(zoneItem.RouteOptionsAPI, payload, loadRouteOptionsDeferred);
-                                    
-                                    if (response.Costs) {
-                                        gridZoneItem.Costs = [];
-
-                                        for (var i = 0; i < response.Costs.length; i++) {
-                                            gridZoneItem.Costs[i] = response.Costs[i];
-                                        }
-                                    }
-                                    else {
-                                        gridZoneItem.Costs = null;
-                                    }
+                            if (response.Costs != null)
+                            {
+                                gridZoneItem.Costs = [];
+                                for (var i = 0; i < response.Costs.length; i++) {
+                                    gridZoneItem.Costs[i] = response.Costs[i];
                                 }
                             }
-                            else {
-                                getZoneItemDeferred.reject();
-                                loadRouteOptionsDeferred.reject();
-                            }
-                        }).catch(function (error) { getZoneItemDeferred.reject(); });
+
+                        }).catch(function (error) { getZoneItemDeferred.reject(error); });
                     });
 
                     UtilsService.waitMultiplePromises(promises).catch(function (error) {
@@ -363,6 +355,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                 function compareDates(date1, date2) {
                     if (date1 && date2) {
+                        if (typeof date1 == 'string')
+                            date1 = new Date(date1);
+                        if (typeof date2 == 'string')
+                            date2 = new Date(date2);
                         return (date1.getDay() == date2.getDay() && date1.getMonth() == date2.getMonth() && date1.getYear() == date2.getYear());
                     }
                     else if (!date1 && !date2)

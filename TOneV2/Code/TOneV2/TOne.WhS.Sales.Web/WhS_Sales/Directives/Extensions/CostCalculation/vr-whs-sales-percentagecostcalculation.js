@@ -24,71 +24,72 @@ app.directive("vrWhsSalesPercentagecostcalculation", ["WhS_Routing_RoutRuleSetti
         var directiveReadyDeferred = UtilsService.createPromiseDeferred();
         var directivePayload;
 
-        function initCtrl() {
-            defineScope();
+        function initCtrl()
+        {
+            $scope.title;
+            $scope.templates = [];
+            $scope.selectedTemplate;
 
-            if (ctrl.onReady && typeof (ctrl.onReady) == "function")
-                ctrl.onReady(getAPI());
+            $scope.onDirectiveReady = function (api) {
+                directiveAPI = api;
+                directiveReadyDeferred.resolve();
+            };
 
-            function defineScope() {
-                $scope.title;
-                $scope.templates = [];
-                $scope.selectedTemplate;
+            defineAPI();
+        }
 
-                $scope.onDirectiveReady = function (api) {
-                    directiveAPI = api;
-                    directiveReadyDeferred.resolve();
-                };
-            }
-            function getAPI() {
-                var api = {};
+        function defineAPI()
+        {
+            var api = {};
 
-                api.load = function (payload) {
-                    if (payload != undefined) {
-                        $scope.title = payload.Title;
-                        directivePayload = payload.PercentageSettings;
-                        $scope.selectedTemplate = payload.SelectedTemplate;
-                    }
+            api.load = function (payload) {
+                if (payload != undefined) {
+                    $scope.title = payload.Title;
+                    directivePayload = payload.PercentageSettings;
+                    $scope.selectedTemplate = payload.SelectedTemplate;
+                }
 
-                    var promises = [];
+                var promises = [];
 
-                    var getTemplatesPromise = getTemplates();
-                    promises.push(getTemplatesPromise);
+                var getTemplatesPromise = getTemplates();
+                promises.push(getTemplatesPromise);
 
-                    if (directivePayload) {
-                        directiveReadyDeferred.promise.then(function () {
-                            var directiveLoadDeferred = UtilsService.createPromiseDeferred();
-                            promises.push(directiveLoadDeferred.promise);
+                if (directivePayload) {
+                    directiveReadyDeferred.promise.then(function () {
+                        var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(directiveLoadDeferred.promise);
 
-                            $scope.isLoadingDirective = true;
-                            directiveLoadDeferred.promise.finally(function () { $scope.isLoadingDirective = false; });
+                        $scope.isLoadingDirective = true;
+                        directiveLoadDeferred.promise.finally(function () { $scope.isLoadingDirective = false; });
 
-                            VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
-                        });
-                    }
+                        VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
+                    });
+                }
 
-                    return UtilsService.waitMultiplePromises(promises);
-                };
-                api.getData = function () {
-                    return {
-                        $type: "TOne.WhS.Sales.MainExtensions.CostCalculation.PercentageCostCalculation, TOne.WhS.Sales.MainExtensions",
-                        Title: $scope.title,
-                        SelectedTemplate: $scope.selectedTemplate,
-                        PercentageSettings: directiveAPI ? directiveAPI.getData() : null
-                    };
-                };
-
-                return api;
-            }
-            function getTemplates() {
-                return WhS_Routing_RoutRuleSettingsAPIService.GetRouteOptionPercentageSettingsTemplates().then(function (response) {
-                    if (response) {
-                        for (var i = 0; i < response.length; i++) {
-                            $scope.templates.push(response[i]);
+                function getTemplates() {
+                    return WhS_Routing_RoutRuleSettingsAPIService.GetRouteOptionPercentageSettingsTemplates().then(function (response) {
+                        if (response) {
+                            for (var i = 0; i < response.length; i++) {
+                                $scope.templates.push(response[i]);
+                            }
                         }
-                    }
-                });
-            }
+                    });
+                }
+
+                return UtilsService.waitMultiplePromises(promises);
+            };
+
+            api.getData = function () {
+                return {
+                    $type: "TOne.WhS.Sales.MainExtensions.CostCalculation.PercentageCostCalculation, TOne.WhS.Sales.MainExtensions",
+                    Title: $scope.title,
+                    SelectedTemplate: $scope.selectedTemplate,
+                    PercentageSettings: directiveAPI ? directiveAPI.getData() : null
+                };
+            };
+
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
         }
     }
 }]);

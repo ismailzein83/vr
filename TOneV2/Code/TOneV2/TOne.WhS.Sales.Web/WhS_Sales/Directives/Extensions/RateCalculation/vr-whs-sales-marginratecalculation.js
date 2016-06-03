@@ -10,7 +10,7 @@ app.directive("vrWhsSalesMarginratecalculation", [function () {
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             var mixedRateCalculation = new MarginRateCalculation(ctrl, $scope);
-            mixedRateCalculation.initCtrl();
+            mixedRateCalculation.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
@@ -18,15 +18,15 @@ app.directive("vrWhsSalesMarginratecalculation", [function () {
     };
 
     function MarginRateCalculation(ctrl, $scope) {
-        this.initCtrl = initCtrl;
+        this.initializeController = initializeController;
 
         ctrl.margin;
 
-        function initCtrl() {
-            getAPI();
+        function initializeController() {
+            defineAPI();
         }
 
-        function getAPI() {
+        function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
@@ -42,7 +42,7 @@ app.directive("vrWhsSalesMarginratecalculation", [function () {
                 };
             };
 
-            if (ctrl.onReady && typeof (ctrl.onReady) == "function")
+            if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
     }

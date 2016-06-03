@@ -147,8 +147,7 @@ namespace TOne.WhS.Sales.Business
                 zoneItems = new List<ZoneItem>();
                 Changes changes = _dataManager.GetChanges(input.Filter.OwnerType, input.Filter.OwnerId, RatePlanStatus.Draft);
 
-                int? sellingProductId = input.Filter.OwnerType == SalePriceListOwnerType.Customer ?
-                    GetSellingProductId(input.Filter.OwnerType, input.Filter.OwnerId, DateTime.Now, false) : input.Filter.OwnerId;
+                int? sellingProductId = GetSellingProductId(input.Filter.OwnerType, input.Filter.OwnerId, DateTime.Now, false);
 
                 if (sellingProductId == null)
                     throw new Exception("Selling product does not exist");
@@ -217,16 +216,16 @@ namespace TOne.WhS.Sales.Business
         
         #endregion
 
-        public IEnumerable<TemplateConfig> GetCostCalculationMethodTemplates()
+        public IEnumerable<CostCalculationMethodSetting> GetCostCalculationMethodTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.CostCalculationMethod);
+            var extensionConfigManager = new ExtensionConfigurationManager();
+            return extensionConfigManager.GetExtensionConfigurations<CostCalculationMethodSetting>(Constants.CostCalculationMethod);
         }
 
-        public IEnumerable<TemplateConfig> GetRateCalculationMethodTemplates()
+        public IEnumerable<RateCalculationMethodSetting> GetRateCalculationMethodTemplates()
         {
-            TemplateConfigManager templateConfigManager = new TemplateConfigManager();
-            return templateConfigManager.GetTemplateConfigurations(Constants.RateCalculationMethod);
+            var extensionConfigManager = new ExtensionConfigurationManager();
+            return extensionConfigManager.GetExtensionConfigurations<RateCalculationMethodSetting>(Constants.RateCalculationMethod);
         }
 
         public ChangesSummary GetChangesSummary(SalePriceListOwnerType ownerType, int ownerId)

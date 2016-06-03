@@ -30,8 +30,6 @@
         var policySelectorAPI;
 
         var defaultItem;
-        var defaultItemAPI;
-        var defaultItemReadyDeferred = UtilsService.createPromiseDeferred();
 
         var gridAPI;
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
@@ -44,56 +42,50 @@
 
         function defineScope()
         {
-            $scope.showSellingProductSelector = true;
-            $scope.showCarrierAccountSelector = false;
+            /* These vars are reversed with every onOwnerTypeChanged. Therefore, the selling product selector will show when the event first occurs */
+            $scope.showSellingProductSelector = false;
+            $scope.showCarrierAccountSelector = true;
+            /* ***** */
 
             $scope.onOwnerTypeSelectorReady = function (api) {
                 ownerTypeSelectorAPI = api;
                 ownerTypeSelectorReadyDeferred.resolve();
             };
-            $scope.onOwnerTypeChanged = function () {
-                clearRatePlan();
-                $scope.showSaveButton = false;
-                $scope.showCancelButton = false;
+            $scope.onOwnerTypeChanged = function (item)
+            {
+                resetRatePlan();
 
                 var selectedId = ownerTypeSelectorAPI.getSelectedIds();
 
-                if (selectedId != undefined) {
-                    if (selectedId == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) {
-                        $scope.showSellingProductSelector = true;
-                        $scope.showCarrierAccountSelector = false;
-                        $scope.selectedCustomer = undefined;
-                    }
-                    else if (selectedId == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
-                        $scope.showSellingProductSelector = false;
-                        $scope.showCarrierAccountSelector = true;
-                        $scope.selectedSellingProduct = undefined;
-                    }
+                if (selectedId == undefined)
+                    return;
+
+                $scope.showSellingProductSelector = !$scope.showSellingProductSelector;
+                $scope.showCarrierAccountSelector = !$scope.showCarrierAccountSelector;
+
+                if (selectedId == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) {
+                    $scope.selectedCustomer = undefined;
+                }
+                else if (selectedId == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
+                    $scope.selectedSellingProduct = undefined;
                 }
             };
 
-            $scope.selectedSellingProduct = undefined;
             $scope.onSellingProductSelectorReady = function (api) {
                 sellingProductSelectorAPI = api;
                 sellingProductSelectorReadyDeferred.resolve();
             };
-            $scope.onSellingProductChanged = function () {
-                clearRatePlan();
-                $scope.showSaveButton = false;
-                $scope.showSettingsButton = false;
-                $scope.showCancelButton = false;
+            $scope.onSellingProductChanged = function ()
+            {
+                resetRatePlan();
             };
 
-            $scope.selectedCustomer = undefined;
             $scope.onCarrierAccountSelectorReady = function (api) {
                 carrierAccountSelectorAPI = api;
                 carrierAccountSelectorReadyDeferred.resolve();
             };
             $scope.onCarrierAccountChanged = function () {
-                clearRatePlan();
-                $scope.showSaveButton = false;
-                $scope.showSettingsButton = false;
-                $scope.showCancelButton = false;
+                resetRatePlan();
 
                 var selectedId = carrierAccountSelectorAPI.getSelectedIds();
 
@@ -122,10 +114,7 @@
 
             $scope.onRoutingDatabaseChanged = function ()
             {
-                clearRatePlan();
-                $scope.showSaveButton = false;
-                $scope.showSettingsButton = false;
-                $scope.showCancelButton = false;
+                resetRatePlan();
 
                 var selectedId = databaseSelectorAPI.getSelectedIds();
 
@@ -166,11 +155,6 @@
                 return saveChanges(true);
             };
 
-            $scope.onDefaultItemReady = function (api) {
-                defaultItemAPI = api;
-                defaultItemReadyDeferred.resolve();
-            };
-
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 gridReadyDeferred.resolve();
@@ -190,41 +174,51 @@
 
                 WhS_Sales_RatePlanService.sellNewCountries(customerId, onCountriesSold);
             };
-            $scope.editSettings = function () {
-                var onSettingsUpdated = function (updatedSettings) {
-                    if (updatedSettings) {
+            $scope.editSettings = function ()
+            {
+                var onSettingsUpdated = function (updatedSettings)
+                {
+                    if (updatedSettings != undefined)
+                    {
                         settings = {};
-
-                        if (updatedSettings.costCalculationMethods) {
+                        if (updatedSettings.costCalculationMethods != undefined)
+                        {
                             settings.costCalculationMethods = [];
-
                             for (var i = 0; i < updatedSettings.costCalculationMethods.length; i++) {
                                 settings.costCalculationMethods.push(updatedSettings.costCalculationMethods[i]);
                             }
                         }
-
-                        $scope.showPricingButton = settings.costCalculationMethods ? true : false;
+                        $scope.showPricingButton = (settings.costCalculationMethods != undefined);
                     }
 
                     $scope.showApplyButton = false;
                     pricingSettings = null;
 
                     VRNotificationService.showSuccess("Settings saved");
-                    loadGrid();
+
+                    loadGrid().catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    });
                 };
                 WhS_Sales_RatePlanService.editSettings(settings, onSettingsUpdated);
             };
-            $scope.editPricingSettings = function () {
-                var onPricingSettingsUpdated = function (updatedPricingSettings) {
+            $scope.editPricingSettings = function ()
+            {
+                var onPricingSettingsUpdated = function (updatedPricingSettings)
+                {
                     pricingSettings = updatedPricingSettings;
 
                     $scope.showApplyButton = true;
                     VRNotificationService.showSuccess("Pricing settings saved");
-                    loadGrid();
+
+                    loadGrid().catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    });
                 };
                 WhS_Sales_RatePlanService.editPricingSettings(settings, pricingSettings, onPricingSettingsUpdated);
             };
-            $scope.applyCalculatedRates = function () {
+            $scope.applyCalculatedRates = function ()
+            {
                 var promises = [];
 
                 var confirmPromise = VRNotificationService.showConfirmation("Are you sure you want to apply the calculated rates?");
@@ -249,22 +243,25 @@
                             RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null
                         };
 
-                        return WhS_Sales_RatePlanAPIService.ApplyCalculatedRates(input).then(function () {
+                        WhS_Sales_RatePlanAPIService.ApplyCalculatedRates(input).then(function ()
+                        {
                             applyDeferred.resolve();
                             VRNotificationService.showSuccess("Rates applied");
                             pricingSettings = null;
                             $scope.showCancelButton = true;
-                            loadGrid();
+                            
+                            loadGrid().catch(function (error) {
+                                VRNotificationService.notifyException(error, $scope);
+                            });
+
                         }).catch(function (error) {
-                            applyDeferred.reject();
+                            applyDeferred.reject(error);
                             VRNotificationService.notifyException(error, $scope);
                         });
                     }
                     else {
                         applyDeferred.resolve();
                     }
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
                 });
 
                 return UtilsService.waitMultiplePromises(promises);
@@ -374,8 +371,6 @@
             var loadGridDeferred = UtilsService.createPromiseDeferred();
             promises.push(loadGridDeferred.promise);
 
-            loadGridDeferred.promise;
-
             var checkIfDraftExistsPromise = checkIfDraftExists();
             promises.push(checkIfDraftExistsPromise);
 
@@ -388,7 +383,7 @@
                     loadGrid().then(function () {
                         loadGridDeferred.resolve();
                         showRatePlan(true); // At this point, there's no guarantee that the default item has loaded. But that's okay since the tab directive displays a loader for the default item
-                    }).catch(function (error) { loadGridDeferred.reject(); });
+                    }).catch(function (error) { loadGridDeferred.reject(error); });
                 }
                 else {
                     loadGridDeferred.resolve();
@@ -451,19 +446,12 @@
             }
         }
 
-        function loadGrid() {
+        function loadGrid()
+        {
             var gridLoadDeferred = UtilsService.createPromiseDeferred();
-
-            gridReadyDeferred.promise.then(function () {
-                var gridQuery = getGridQuery();
-                VRUIUtilsService.callDirectiveLoad(gridAPI, gridQuery, gridLoadDeferred);
-            });
-
-            gridLoadDeferred.promise.catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            });
-
-            return gridLoadDeferred.promise;
+            
+            var gridQuery = getGridQuery();
+            VRUIUtilsService.callDirectiveLoad(gridAPI, gridQuery, gridLoadDeferred);
 
             function getGridQuery() {
                 return {
@@ -478,41 +466,35 @@
                     RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null
                 };
             }
+
+            return gridLoadDeferred.promise;
         }
 
         function onDefaultItemChange() {
             saveChanges(true);
         }
 
-        function saveChanges(shouldLoadGrid) {
-            var saveChangesDeferred = UtilsService.createPromiseDeferred();
+        function saveChanges(shouldLoadGrid)
+        {
+            var promises = [];
 
             var input = getSaveChangesInput();
 
-            if (input.NewChanges) {
-                WhS_Sales_RatePlanAPIService.SaveChanges(input).then(function () {
-                    saveChangesDeferred.resolve();
-                    $scope.showCancelButton = true;
+            if (input.NewChanges != null)
+            {
+                var saveChangesPromise = WhS_Sales_RatePlanAPIService.SaveChanges(input);
+                promises.push(saveChangesPromise);
 
-                    if (shouldLoadGrid)
-                        loadGrid();
-                }).catch(function (error) {
-                    saveChangesDeferred.reject();
-                    VRNotificationService.notifyException(error, $scope);
+                saveChangesPromise.then(function ()
+                {
+                    $scope.showCancelButton = true;
+                    loadGridOnChangesSaved();
                 });
             }
-            else {
-                saveChangesDeferred.resolve();
-
-                if (shouldLoadGrid)
-                    loadGrid();
-            }
-
-            return saveChangesDeferred.promise;
+            else
+                loadGridOnChangesSaved();
 
             function getSaveChangesInput() {
-                var changes = null;
-
                 var defaultChanges = getDefaultChanges();
                 var zoneChanges = gridAPI.getZoneChanges();
 
@@ -539,18 +521,41 @@
                     return defaultChanges;
                 }
             }
+            function loadGridOnChangesSaved() {
+                if (shouldLoadGrid) {
+                    loadGrid().catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    });
+                }
+            }
+
+            return UtilsService.waitMultiplePromises(promises);
         }
 
-        function clearRatePlan() {
+        function resetRatePlan() {
+            resetZoneLetters();
+            showRatePlan(false);
+            showActionBarButtons(false);
+        }
+
+        function resetZoneLetters()
+        {
             $scope.zoneLetters.length = 0;
             $scope.connector.selectedZoneLetterIndex = 0;
-            showRatePlan(false);
         }
 
         function showRatePlan(show) {
             $scope.showZoneLetters = show;
             $scope.showDefaultItem = show;
             $scope.showGrid = show;
+        }
+
+        function showActionBarButtons(show)
+        {
+            $scope.showSaveButton = show;
+            $scope.showSettingsButton = show;
+            $scope.showPricingButton = show;
+            $scope.showCancelButton = show;
         }
 
         function defineSaveButtonMenuActions() {

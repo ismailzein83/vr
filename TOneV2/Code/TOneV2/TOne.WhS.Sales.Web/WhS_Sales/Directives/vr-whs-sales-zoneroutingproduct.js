@@ -10,79 +10,93 @@ function (UtilsService, VRUIUtilsService) {
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             var zoneRoutingProduct = new ZoneRoutingProduct(ctrl, $scope);
-            zoneRoutingProduct.initCtrl();
+            zoneRoutingProduct.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
         templateUrl: "/Client/Modules/WhS_Sales/Directives/Templates/ZoneRoutingProductTemplate.html"
     };
 
-    function ZoneRoutingProduct(ctrl, $scope) {
-        this.initCtrl = initCtrl;
+    function ZoneRoutingProduct(ctrl, $scope)
+    {
+        this.initializeController = initializeController;
 
         var zoneItem;
-        var counter = 0;
-        var selectorAPI;
-        var selectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var isFirstSelectionEvent;
+        var isStateLoaded;
 
-        function initCtrl() {
+        var selectorAPI;
+
+        function initializeController()
+        {
             ctrl.onSelectorReady = function (api) {
                 selectorAPI = api;
-                selectorReadyDeferred.resolve();
+                defineAPI();
             };
-            ctrl.onSelectionChange = function () {
-                counter++;
 
-                if ((!zoneItem.NewRoutingProductId && counter > 1) || (zoneItem.NewRoutingProductId && counter > 2)) {
-                    zoneItem.IsDirty = true;
+            ctrl.onSelectionChanged = function ()
+            {
+                var selectedId = selectorAPI.getSelectedIds();
 
-                    if (zoneItem.refreshZoneItem && typeof (zoneItem.refreshZoneItem) == "function")
-                        zoneItem.refreshZoneItem(zoneItem);
+                if (selectedId == undefined && isFirstSelectionEvent) {
+                    isFirstSelectionEvent = false;
+                    return;
                 }
+
+                if (isStateLoaded === false) {
+                    isStateLoaded = true;
+                    return;
+                }
+
+                zoneItem.IsDirty = true;
+                zoneItem.refreshZoneItem(zoneItem);
             };
-            selectorReadyDeferred.promise.then(function () {
-                getAPI();
-            });
         }
 
-        function getAPI() {
+        function defineAPI()
+        {
             var api = {};
-            api.load = function (payload) {
-                if (payload != undefined) {
+
+            api.load = function (payload)
+            {
+                isFirstSelectionEvent = true;
+                isStateLoaded = undefined;
+
+                var selectedIds;
+
+                if (payload != undefined)
+                {
                     zoneItem = payload;
                     ctrl.CurrentName = zoneItem.IsCurrentRoutingProductEditable === false ? zoneItem.CurrentRoutingProductName + " (Inherited)" : zoneItem.CurrentRoutingProductName;
+
+                    if (zoneItem.NewRoutingProductId != undefined) {
+                        isStateLoaded = false;
+                        selectedIds = zoneItem.NewRoutingProductId;
+                    }
+                    else if (zoneItem.CurrentRoutingProductId != undefined && zoneItem.RoutingProductChangeEED != undefined)
+                        selectedIds = -1;
                 }
 
                 var selectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-                selectorReadyDeferred.promise.then(function () {
-                    var selectedIds;
-                    if (zoneItem.NewRoutingProductId)
-                        selectedIds = [zoneItem.NewRoutingProductId];
-                    else if (zoneItem.CurrentRoutingProductId && zoneItem.RoutingProductChangeEED)
-                        selectedIds = [-1];
+                var selectorPayload = {
+                    filter: { ExcludedRoutingProductId: zoneItem.CurrentRoutingProductId, AssignableToZoneId: zoneItem.ZoneId },
+                    selectedIds: selectedIds,
+                    defaultItems: (zoneItem.IsCurrentRoutingProductEditable === true) ? [{ RoutingProductId: -1, Name: "(Reset To Default)" }] : null
+                };
 
-                    var selectorPayload = {
-                        filter: { ExcludedRoutingProductId: zoneItem.CurrentRoutingProductId, AssignableToZoneId: zoneItem.ZoneId },
-                        selectedIds: selectedIds,
-                        defaultItems: zoneItem.IsCurrentRoutingProductEditable ? [{ RoutingProductId: -1, Name: "(Reset To Default)" }] : null
-                    };
-                    
-                    $scope.isLoading = true;
-                    VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, selectorLoadDeferred);
-                    selectorLoadDeferred.promise.finally(function () {
-                        $scope.isLoading = false;
-                    });
-                });
+                VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, selectorLoadDeferred);
 
                 return selectorLoadDeferred.promise;
             };
+
             api.applyChanges = function (zoneItemChanges) {
                 if (zoneItem.IsDirty) {
                     setNewRoutingProduct(zoneItemChanges);
                     setRoutingProductChange(zoneItemChanges);
                 }
             };
+
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

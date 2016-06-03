@@ -11,124 +11,141 @@ function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             var costColumns = new CostColumns(ctrl, $scope);
-            costColumns.initCtrl();
+            costColumns.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
         templateUrl: "/Client/Modules/WhS_Sales/Directives/Extensions/CostCalculation/Templates/CostColumnsTemplate.html"
     };
 
-    function CostColumns(ctrl, $scope) {
-        this.initCtrl = initCtrl;
+    function CostColumns(ctrl, $scope)
+    {
+        this.initializeController = initializeController;
 
-        function initCtrl() {
-            defineScope();
-            getAPI();
+        function initializeController()
+        {
+            ctrl.templates = [];
+            ctrl.selectedTemplate;
+            ctrl.disableAddButton = true;
+            ctrl.dataItems = [];
 
-            function defineScope() {
-                ctrl.templates = [];
-                ctrl.selectedTemplate;
-                ctrl.disableAddButton = true;
-                ctrl.dataItems = [];
+            ctrl.onSelectorReady = function (api) {
+                defineAPI();
+            };
+            ctrl.onTemplateSelected = function (selectedItem) {
+                ctrl.disableAddButton = false;
+            };
+            ctrl.addDataItem = function () {
+                ctrl.dataItems.push(getDataItem(undefined, true));
+            };
+            ctrl.removeDataItem = function (dataItem) {
+                var index = UtilsService.getItemIndexByVal(ctrl.dataItems, dataItem.id, "id");
+                ctrl.dataItems.splice(index, 1);
+            };
+        }
 
-                ctrl.onTemplateSelected = function (selectedItem) {
-                    ctrl.disableAddButton = false;
-                };
-                ctrl.addDataItem = function () {
-                    ctrl.dataItems.push(getDataItem(null, true));
-                };
-                ctrl.removeDataItem = function (dataItem) {
-                    var index = UtilsService.getItemIndexByVal(ctrl.dataItems, dataItem.id, "id");
-                    ctrl.dataItems.splice(index, 1);
-                };
-            }
+        function defineAPI()
+        {
+            var api = {};
 
-            function getAPI() {
-                var api = {};
+            api.load = function (payload)
+            {
+                var promises = [];
+                ctrl.dataItems.length = 0;
 
-                api.load = function (payload) {
-                    ctrl.dataItems.length = 0;
-                    var promises = [];
+                var costCalculationMethods;
 
-                    var loadTemplatesDeferred = UtilsService.createPromiseDeferred();
-                    promises.push(loadTemplatesDeferred.promise);
+                if (payload != undefined) {
+                    costCalculationMethods = payload.costCalculationMethods;
+                }
 
-                    loadTemplates().then(function () {
-                        if (payload && payload.costCalculationMethods) {
-                            for (var i = 0; i < payload.costCalculationMethods.length; i++) {
-                                var dataItem = getDataItem(payload.costCalculationMethods[i], false);
-                                promises.push(dataItem.loadDeferred.promise);
-                                ctrl.dataItems.push(dataItem);
+                var loadTemplatesPromise = loadTemplates();
+                promises.push(loadTemplatesPromise);
+
+                var loadDirectivesDeferred = UtilsService.createPromiseDeferred();
+                promises.push(loadDirectivesDeferred.promise);
+
+                loadTemplatesPromise.then(function ()
+                {
+                    var directiveLoadPromises = [];
+
+                    if (costCalculationMethods != undefined)
+                    {
+                        for (var i = 0; i < costCalculationMethods.length; i++)
+                        {
+                            var dataItem = getDataItem(costCalculationMethods[i], false);
+                            directiveLoadPromises.push(dataItem.loadDeferred.promise);
+                            ctrl.dataItems.push(dataItem);
+                        }
+                    }
+
+                    UtilsService.waitMultiplePromises(directiveLoadPromises).then(function () {
+                        loadDirectivesDeferred.resolve();
+                    }).catch(function (error) {
+                        loadDirectivesDeferred.reject(error);
+                    });
+                });
+
+                function loadTemplates() {
+                    return WhS_Sales_RatePlanAPIService.GetCostCalculationMethodTemplates().then(function (templates) {
+                        if (templates != null) {
+                            for (var i = 0; i < templates.length; i++) {
+                                ctrl.templates.push(templates[i]);
                             }
                         }
-
-                        loadTemplatesDeferred.resolve(); // This ensures that all promises are taken into account
-                    }).catch(function () {
-                        loadTemplatesDeferred.reject();
                     });
-
-                    return UtilsService.waitMultiplePromises(promises);
-
-                    function loadTemplates() {
-                        return WhS_Sales_RatePlanAPIService.GetCostCalculationMethodTemplates().then(function (templates) {
-                            if (templates) {
-                                for (var i = 0; i < templates.length; i++) {
-                                    ctrl.templates.push(templates[i]);
-                                }
-                            }
-                        });
-                    }
-                };
-
-                api.getData = function () {
-                    var costCalculationMethods = [];
-
-                    for (var i = 0; i < ctrl.dataItems.length; i++) {
-                        var costCalculationMethod = ctrl.dataItems[i].directiveAPI.getData();
-                        costCalculationMethod.ConfigId = ctrl.dataItems[i].configId;
-                        costCalculationMethods.push(costCalculationMethod);
-                    }
-                    
-                    return costCalculationMethods.length > 0 ? costCalculationMethods : null;
-                };
-
-                if (ctrl.onReady && typeof ctrl.onReady == "function")
-                    ctrl.onReady(api);
-            }
-
-            function getDataItem(costCalculationMethod, showLoader) {
-                var dataItem = {};
-
-                dataItem.id = ctrl.dataItems.length;
-                
-                if (costCalculationMethod) {
-                    var template = UtilsService.getItemByVal(ctrl.templates, costCalculationMethod.ConfigId, "TemplateConfigID");
-
-                    if (template) {
-                        dataItem.configId = costCalculationMethod.ConfigId;
-                        dataItem.name = template.Name;
-                        dataItem.directive = template.Editor;
-                        dataItem.directivePayload = costCalculationMethod
-                    }
-                }
-                else {
-                    dataItem.configId = ctrl.selectedTemplate.TemplateConfigID;
-                    dataItem.name = ctrl.selectedTemplate.Name;
-                    dataItem.directive = ctrl.selectedTemplate.Editor;
-                    dataItem.directivePayload = undefined;
                 }
 
-                dataItem.loadDeferred = UtilsService.createPromiseDeferred();
-                dataItem.loadDeferred.promise.finally(function () { dataItem.isLoadingDirective = false; });
+                return UtilsService.waitMultiplePromises(promises);
+            };
 
-                dataItem.onDirectiveReady = function (api) {
-                    dataItem.directiveAPI = api;
-                    dataItem.isLoadingDirective = showLoader;
-                    VRUIUtilsService.callDirectiveLoad(api, dataItem.directivePayload, dataItem.loadDeferred);
-                };
+            api.getData = function () {
+                var costCalculationMethods = [];
 
-                return dataItem;
+                for (var i = 0; i < ctrl.dataItems.length; i++) {
+                    var costCalculationMethod = ctrl.dataItems[i].directiveAPI.getData();
+                    costCalculationMethod.ConfigId = ctrl.dataItems[i].configId;
+                    costCalculationMethods.push(costCalculationMethod);
+                }
+
+                return costCalculationMethods.length > 0 ? costCalculationMethods : null;
+            };
+
+            if (ctrl.onReady && typeof ctrl.onReady == "function")
+                ctrl.onReady(api);
+        }
+
+        function getDataItem(costCalculationMethod, showLoader)
+        {
+            var dataItem = {};
+
+            dataItem.id = ctrl.dataItems.length;
+
+            if (costCalculationMethod != undefined)
+            {
+                var template = UtilsService.getItemByVal(ctrl.templates, costCalculationMethod.ConfigId, "ExtensionConfigurationId");
+                dataItem.configId = costCalculationMethod.ConfigId;
+                dataItem.title = template.Title;
+                dataItem.directive = template.Editor;
+                dataItem.directivePayload = costCalculationMethod
             }
+            else {
+                dataItem.configId = ctrl.selectedTemplate.ExtensionConfigurationId;
+                dataItem.title = ctrl.selectedTemplate.Title;
+                dataItem.directive = ctrl.selectedTemplate.Editor;
+                dataItem.directivePayload = undefined;
+            }
+
+            dataItem.loadDeferred = UtilsService.createPromiseDeferred();
+            dataItem.loadDeferred.promise.finally(function () { dataItem.isLoadingDirective = false; });
+
+            dataItem.onDirectiveReady = function (api) {
+                dataItem.directiveAPI = api;
+                dataItem.isLoadingDirective = showLoader;
+                VRUIUtilsService.callDirectiveLoad(api, dataItem.directivePayload, dataItem.loadDeferred);
+            };
+
+            return dataItem;
         }
     }
 }]);

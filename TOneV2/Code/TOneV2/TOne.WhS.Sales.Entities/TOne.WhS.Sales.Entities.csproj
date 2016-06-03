@@ -59,10 +59,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CostCalculation\CostCalculationMethod.cs" />
+    <Compile Include="CostCalculation\CostCalculationMethodSetting.cs" />
     <Compile Include="CostCalculation\ICostCalculationMethodContext.cs" />
     <Compile Include="RateCalculation\IRateCalculationMethodContext.cs" />
     <Compile Include="RateCalculation\RateCalculationMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RateCalculation\RateCalculationMethodSetting.cs" />
     <Compile Include="RateManagement\Actions\Rate\RateToChange.cs" />
     <Compile Include="RateManagement\Actions\Rate\RateToClose.cs" />
     <Compile Include="RateManagement\Rate\ChangedRate.cs" />

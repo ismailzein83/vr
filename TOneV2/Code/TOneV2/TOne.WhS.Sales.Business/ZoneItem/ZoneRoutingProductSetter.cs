@@ -21,9 +21,6 @@ namespace TOne.WhS.Sales.Business
 
         IEnumerable<ZoneChanges> _zoneChanges;
 
-        SaleEntityZoneRoutingProduct _sellingProductCurrentZoneRoutingProduct;
-        SaleEntityZoneRoutingProduct _customerCurrentZoneRoutingProduct;
-
         SaleEntityZoneRoutingProduct _customerCurrentDefaultRoutingProduct;
         SaleEntityZoneRoutingProduct _sellingProductCurrentDefaultRoutingProduct;
 
@@ -72,22 +69,22 @@ namespace TOne.WhS.Sales.Business
 
         public void SetZoneRoutingProduct(ZoneItem zoneItem)
         {
-            _sellingProductCurrentZoneRoutingProduct = _routingProductLocator.GetSellingProductZoneRoutingProduct(_sellingProductId, zoneItem.ZoneId);
+            SaleEntityZoneRoutingProduct sellingProductCurrentZoneRoutingProduct = _routingProductLocator.GetSellingProductZoneRoutingProduct(_sellingProductId, zoneItem.ZoneId);
+            SaleEntityZoneRoutingProduct customerCurrentZoneRoutingProduct = null;
 
             if (_customerId != null)
             {
                 SaleEntityZoneRoutingProduct routingProduct = _routingProductLocator.GetCustomerZoneRoutingProduct((int)_customerId, _sellingProductId, zoneItem.ZoneId);
                 
                 if (routingProduct != null && routingProduct.Source == SaleEntityZoneRoutingProductSource.CustomerZone)
-                    _customerCurrentZoneRoutingProduct = routingProduct;
+                    customerCurrentZoneRoutingProduct = routingProduct;
             }
 
-            SaleEntityZoneRoutingProduct currentZoneRoutingProduct = _customerCurrentZoneRoutingProduct != null ? _customerCurrentZoneRoutingProduct : _sellingProductCurrentZoneRoutingProduct;
+            SaleEntityZoneRoutingProduct currentZoneRoutingProduct = customerCurrentZoneRoutingProduct != null ? customerCurrentZoneRoutingProduct : sellingProductCurrentZoneRoutingProduct;
             SetCurrentRoutingProductProperties(zoneItem, currentZoneRoutingProduct);
 
             SetZoneRoutingProductChanges(zoneItem);
-            SetZoneEffectiveRoutingProduct(zoneItem);
-            ResetZoneCurrentRoutingProducts();
+            SetZoneEffectiveRoutingProduct(zoneItem, sellingProductCurrentZoneRoutingProduct);
         }
 
         void SetCurrentRoutingProductProperties(ZoneItem zoneItem, SaleEntityZoneRoutingProduct currentZoneRoutingProduct)
@@ -125,23 +122,23 @@ namespace TOne.WhS.Sales.Business
             }
         }
 
-        void SetZoneEffectiveRoutingProduct(ZoneItem zoneItem)
+        void SetZoneEffectiveRoutingProduct(ZoneItem zoneItem, SaleEntityZoneRoutingProduct sellingProductCurrentZoneRoutingProduct)
         {
             if (zoneItem.NewRoutingProductId != null)
                 SetZoneEffectiveRoutingProductProperties(zoneItem, (int)zoneItem.NewRoutingProductId);
 
             else if (zoneItem.RoutingProductChangeEED != null)
-                SetZoneEffectiveRoutingProductToInherited(zoneItem);
+                SetZoneEffectiveRoutingProductToInherited(zoneItem, sellingProductCurrentZoneRoutingProduct);
 
             // If the current routing product isn't inherited
             else if (zoneItem.IsCurrentRoutingProductEditable != null && (bool)zoneItem.IsCurrentRoutingProductEditable)
                 SetZoneEffectiveRoutingProductProperties(zoneItem, (int)zoneItem.CurrentRoutingProductId); // If IsCurrentRoutingProductEditable != null, then CurrentRoutingProductId != null
             
             else
-                SetZoneEffectiveRoutingProductToInherited(zoneItem);
+                SetZoneEffectiveRoutingProductToInherited(zoneItem, sellingProductCurrentZoneRoutingProduct);
         }
 
-        void SetZoneEffectiveRoutingProductToInherited(ZoneItem zoneItem)
+        void SetZoneEffectiveRoutingProductToInherited(ZoneItem zoneItem, SaleEntityZoneRoutingProduct sellingProductCurrentZoneRoutingProduct)
         {
             if (_newDefaultRoutingProduct != null)
                 SetZoneEffectiveRoutingProductProperties(zoneItem, _newDefaultRoutingProduct.DefaultRoutingProductId);
@@ -161,9 +158,9 @@ namespace TOne.WhS.Sales.Business
                 {
                     SetZoneEffectiveRoutingProductProperties(zoneItem, _customerCurrentDefaultRoutingProduct.RoutingProductId);
                 }
-                else if (_sellingProductCurrentZoneRoutingProduct != null)
+                else if (sellingProductCurrentZoneRoutingProduct != null)
                 {
-                    SetZoneEffectiveRoutingProductProperties(zoneItem, _sellingProductCurrentZoneRoutingProduct.RoutingProductId);
+                    SetZoneEffectiveRoutingProductProperties(zoneItem, sellingProductCurrentZoneRoutingProduct.RoutingProductId);
                 }
                 else if (_sellingProductCurrentDefaultRoutingProduct != null)
                 {
@@ -176,12 +173,6 @@ namespace TOne.WhS.Sales.Business
         {
             zoneItem.EffectiveRoutingProductId = effectiveRoutingProductId;
             zoneItem.EffectiveRoutingProductName = _routingProductManager.GetRoutingProductName(effectiveRoutingProductId);
-        }
-
-        void ResetZoneCurrentRoutingProducts()
-        {
-            _sellingProductCurrentZoneRoutingProduct = null;
-            _customerCurrentZoneRoutingProduct = null;
         }
     }
 }

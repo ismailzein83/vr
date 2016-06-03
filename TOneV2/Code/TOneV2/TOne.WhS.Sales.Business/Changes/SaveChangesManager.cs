@@ -186,8 +186,6 @@ namespace TOne.WhS.Sales.Business
                             newZoneChanges.Add(zoneItemChanges);
                     }
 
-                    newZoneChanges.RemoveAll(item => item.NewRate == null && item.RateChange == null && item.NewRoutingProduct == null && item.RoutingProductChange == null);
-
                     return newZoneChanges;
                 });
         }

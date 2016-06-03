@@ -9,7 +9,7 @@ app.directive("vrWhsSalesRoutepercentagecostcalculation", [function () {
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             var routePercentageCostCalculation = new RoutePercentageCostCalculation($scope, ctrl);
-            routePercentageCostCalculation.initCtrl();
+            routePercentageCostCalculation.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
@@ -17,28 +17,32 @@ app.directive("vrWhsSalesRoutepercentagecostcalculation", [function () {
     };
 
     function RoutePercentageCostCalculation($scope, ctrl) {
-        this.initCtrl = initCtrl;
+        this.initializeController = initializeController;
 
-        function initCtrl() {
+        function initializeController()
+        {
             ctrl.title;
+            defineAPI();
+        }
 
-            if (ctrl.onReady && typeof (ctrl.onReady) == "function")
-                ctrl.onReady(getAPI());
+        function defineAPI()
+        {
+            var api = {};
 
-            function getAPI() {
-                var api = {};
-                api.load = function (payload) {
-                    if (payload != undefined)
-                        ctrl.title = payload.Title;
+            api.load = function (payload) {
+                if (payload != undefined)
+                    ctrl.title = payload.Title;
+            };
+
+            api.getData = function () {
+                return {
+                    $type: "TOne.WhS.Sales.MainExtensions.CostCalculation.RoutePercentageCostCalculation, TOne.WhS.Sales.MainExtensions",
+                    Title: ctrl.title
                 };
-                api.getData = function () {
-                    return {
-                        $type: "TOne.WhS.Sales.MainExtensions.CostCalculation.RoutePercentageCostCalculation, TOne.WhS.Sales.MainExtensions",
-                        Title: ctrl.title
-                    };
-                };
-                return api;
-            }
+            };
+
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
         }
     }
 }]);

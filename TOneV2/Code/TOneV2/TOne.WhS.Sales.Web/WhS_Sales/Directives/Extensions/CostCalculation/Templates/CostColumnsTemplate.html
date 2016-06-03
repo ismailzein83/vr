@@ -2,13 +2,14 @@
     <vr-columns width="fullrow">
         <vr-row>
             <vr-columns width="1/4row">
-                <vr-select label="Cost Calculation Method"
+                <vr-select on-ready="ctrl.onSelectorReady"
+                           label="Cost Calculation Method"
                            entityname="Cost Calculation Method"
                            datasource="ctrl.templates"
                            selectedvalues="ctrl.selectedTemplate"
                            onselectitem="ctrl.onTemplateSelected"
-                           datavaluefield="TemplateConfigID"
-                           datatextfield="Name"
+                           datavaluefield="ExtensionConfigurationId"
+                           datatextfield="Title"
                            hideremoveicon>
                 </vr-select>
             </vr-columns>
@@ -24,7 +25,7 @@
                              enabledraggablerow="true"
                              norowhighlightonclick="'true'"
                              hidegridmenu>
-                    <vr-datagridcolumn headertext="'Name'" field="'name'" widthfactor="2" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Name'" field="'title'" widthfactor="2" disablesorting></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Title'" disablesorting>
                         <span vr-loader="dataItem.isLoadingDirective">
                             <vr-directivewrapper directive="dataItem.directive" on-ready="dataItem.onDirectiveReady"></vr-directivewrapper>
