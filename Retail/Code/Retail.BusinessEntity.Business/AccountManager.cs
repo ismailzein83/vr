@@ -231,6 +231,10 @@ namespace Retail.BusinessEntity.Business
         }
         private int GetTotalSubAccountsCountRecursively(Account account, Dictionary<int, List<Account>> accountsByParent)
         {
+            if(accountsByParent == null)
+            {
+                throw new NullReferenceException("accountsByParent");
+            }
             List<Account> accountsForParents;
             if (accountsByParent.TryGetValue(account.AccountId, out accountsForParents))
             {
