@@ -1,0 +1,160 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{5E737C22-7D87-4E49-A976-AD560BDF01F4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{7B7FC985-A288-4EF3-8EFD-2148CC86D031}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtime", "Runtime", "{EF3DABD5-4585-4CD6-9DB3-D53B02D407D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{A8F7C501-4A82-44FD-BB14-40F3C8A5B024}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{745DEC47-DFE6-4F57-B2D9-DB213DFBA46E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Web.Base", "..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj", "{C527C7B2-A481-4D1D-B25A-4A540E812153}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Web", "..\..\Vanrise\Code\Vanrise.Web\Vanrise.Web.csproj", "{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "WHSAnalysis", "WHSAnalysis\WHSAnalysis.sqlproj", "{C093B862-D6CE-4579-8BB9-A4D148F4D307}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WHSAnalysis.BusinessEntity", "WHSAnalysis.BusinessEntity", "{73027745-8003-4BCE-AFE1-28AE30457062}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{3F9A9111-C3FF-4476-B134-71D91C90D883}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WHSAnalysis.Web", "WHSAnalysis.Web\WHSAnalysis.Web.csproj", "{E8A4D6BB-A86A-4F16-9BC2-72D16E9A4420}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WHSAnalysis.BusinessEntity.Business", "WHSAnalysis.BusinessEntity.Business\WHSAnalysis.BusinessEntity.Business.csproj", "{9AAA2573-445C-4BF8-8DD2-E7245E6FBA8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WHSAnalysis.BusinessEntity.Data", "WHSAnalysis.BusinessEntity.Data\WHSAnalysis.BusinessEntity.Data.csproj", "{E26AA9B2-FFE6-4965-B2D4-7ED9D1B620F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WHSAnalysis.BusinessEntity.Data.SQL", "WHSAnalysis.BusinessEntity.Data.SQL\WHSAnalysis.BusinessEntity.Data.SQL.csproj", "{B5C67F5C-47EF-441B-BEE5-8666A4A0E6AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WHSAnalysis.BusinessEntity.Entities", "WHSAnalysis.BusinessEntity.Entities\WHSAnalysis.BusinessEntity.Entities.csproj", "{C9467E51-595E-4161-B70E-74C9A8D0527C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WHSAnalysis.BusinessEntity.MainExtensions", "WHSAnalysis.BusinessEntity.MainExtensions\WHSAnalysis.BusinessEntity.MainExtensions.csproj", "{D6FB70B7-4BDA-4DA1-B01D-728DD71F9EAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WHSAnalysis.BusinessEntity.Web", "WHSAnalysis.BusinessEntity.Web\WHSAnalysis.BusinessEntity.Web.csproj", "{01C71EB5-6720-4941-9DB0-514ED74CFB32}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 12
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
+		SccProjectTopLevelParentUniqueName1 = WHSAnalysis.sln
+		SccProjectName1 = ../../Vanrise/Code/Vanrise.Web.Base
+		SccLocalPath1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base
+		SccProjectUniqueName2 = ..\\..\\Vanrise\\Code\\Vanrise.Web\\Vanrise.Web.csproj
+		SccProjectTopLevelParentUniqueName2 = WHSAnalysis.sln
+		SccProjectName2 = ../../Vanrise/Code/Vanrise.Web
+		SccLocalPath2 = ..\\..\\Vanrise\\Code\\Vanrise.Web
+		SccProjectUniqueName3 = WHSAnalysis\\WHSAnalysis.sqlproj
+		SccProjectTopLevelParentUniqueName3 = WHSAnalysis.sln
+		SccProjectName3 = WHSAnalysis
+		SccLocalPath3 = WHSAnalysis
+		SccProjectUniqueName4 = Resources\\Resources.csproj
+		SccProjectTopLevelParentUniqueName4 = WHSAnalysis.sln
+		SccProjectName4 = Resources
+		SccLocalPath4 = Resources
+		SccProjectUniqueName5 = WHSAnalysis.Web\\WHSAnalysis.Web.csproj
+		SccProjectTopLevelParentUniqueName5 = WHSAnalysis.sln
+		SccProjectName5 = WHSAnalysis.Web
+		SccLocalPath5 = WHSAnalysis.Web
+		SccProjectUniqueName6 = WHSAnalysis.BusinessEntity.Business\\WHSAnalysis.BusinessEntity.Business.csproj
+		SccProjectTopLevelParentUniqueName6 = WHSAnalysis.sln
+		SccProjectName6 = WHSAnalysis.BusinessEntity.Business
+		SccLocalPath6 = WHSAnalysis.BusinessEntity.Business
+		SccProjectUniqueName7 = WHSAnalysis.BusinessEntity.Data\\WHSAnalysis.BusinessEntity.Data.csproj
+		SccProjectTopLevelParentUniqueName7 = WHSAnalysis.sln
+		SccProjectName7 = WHSAnalysis.BusinessEntity.Data
+		SccLocalPath7 = WHSAnalysis.BusinessEntity.Data
+		SccProjectUniqueName8 = WHSAnalysis.BusinessEntity.Data.SQL\\WHSAnalysis.BusinessEntity.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName8 = WHSAnalysis.sln
+		SccProjectName8 = WHSAnalysis.BusinessEntity.Data.SQL
+		SccLocalPath8 = WHSAnalysis.BusinessEntity.Data.SQL
+		SccProjectUniqueName9 = WHSAnalysis.BusinessEntity.Entities\\WHSAnalysis.BusinessEntity.Entities.csproj
+		SccProjectTopLevelParentUniqueName9 = WHSAnalysis.sln
+		SccProjectName9 = WHSAnalysis.BusinessEntity.Entities
+		SccLocalPath9 = WHSAnalysis.BusinessEntity.Entities
+		SccProjectUniqueName10 = WHSAnalysis.BusinessEntity.MainExtensions\\WHSAnalysis.BusinessEntity.MainExtensions.csproj
+		SccProjectTopLevelParentUniqueName10 = WHSAnalysis.sln
+		SccProjectName10 = WHSAnalysis.BusinessEntity.MainExtensions
+		SccLocalPath10 = WHSAnalysis.BusinessEntity.MainExtensions
+		SccProjectUniqueName11 = WHSAnalysis.BusinessEntity.Web\\WHSAnalysis.BusinessEntity.Web.csproj
+		SccProjectTopLevelParentUniqueName11 = WHSAnalysis.sln
+		SccProjectName11 = WHSAnalysis.BusinessEntity.Web
+		SccLocalPath11 = WHSAnalysis.BusinessEntity.Web
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C093B862-D6CE-4579-8BB9-A4D148F4D307}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C093B862-D6CE-4579-8BB9-A4D148F4D307}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C093B862-D6CE-4579-8BB9-A4D148F4D307}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C093B862-D6CE-4579-8BB9-A4D148F4D307}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C093B862-D6CE-4579-8BB9-A4D148F4D307}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C093B862-D6CE-4579-8BB9-A4D148F4D307}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{3F9A9111-C3FF-4476-B134-71D91C90D883}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F9A9111-C3FF-4476-B134-71D91C90D883}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F9A9111-C3FF-4476-B134-71D91C90D883}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F9A9111-C3FF-4476-B134-71D91C90D883}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8A4D6BB-A86A-4F16-9BC2-72D16E9A4420}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8A4D6BB-A86A-4F16-9BC2-72D16E9A4420}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8A4D6BB-A86A-4F16-9BC2-72D16E9A4420}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8A4D6BB-A86A-4F16-9BC2-72D16E9A4420}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AAA2573-445C-4BF8-8DD2-E7245E6FBA8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AAA2573-445C-4BF8-8DD2-E7245E6FBA8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AAA2573-445C-4BF8-8DD2-E7245E6FBA8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AAA2573-445C-4BF8-8DD2-E7245E6FBA8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E26AA9B2-FFE6-4965-B2D4-7ED9D1B620F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E26AA9B2-FFE6-4965-B2D4-7ED9D1B620F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E26AA9B2-FFE6-4965-B2D4-7ED9D1B620F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E26AA9B2-FFE6-4965-B2D4-7ED9D1B620F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5C67F5C-47EF-441B-BEE5-8666A4A0E6AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5C67F5C-47EF-441B-BEE5-8666A4A0E6AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5C67F5C-47EF-441B-BEE5-8666A4A0E6AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5C67F5C-47EF-441B-BEE5-8666A4A0E6AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9467E51-595E-4161-B70E-74C9A8D0527C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9467E51-595E-4161-B70E-74C9A8D0527C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9467E51-595E-4161-B70E-74C9A8D0527C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9467E51-595E-4161-B70E-74C9A8D0527C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6FB70B7-4BDA-4DA1-B01D-728DD71F9EAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6FB70B7-4BDA-4DA1-B01D-728DD71F9EAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6FB70B7-4BDA-4DA1-B01D-728DD71F9EAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6FB70B7-4BDA-4DA1-B01D-728DD71F9EAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01C71EB5-6720-4941-9DB0-514ED74CFB32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01C71EB5-6720-4941-9DB0-514ED74CFB32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01C71EB5-6720-4941-9DB0-514ED74CFB32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01C71EB5-6720-4941-9DB0-514ED74CFB32}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C527C7B2-A481-4D1D-B25A-4A540E812153} = {745DEC47-DFE6-4F57-B2D9-DB213DFBA46E}
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0} = {745DEC47-DFE6-4F57-B2D9-DB213DFBA46E}
+		{C093B862-D6CE-4579-8BB9-A4D148F4D307} = {A8F7C501-4A82-44FD-BB14-40F3C8A5B024}
+		{73027745-8003-4BCE-AFE1-28AE30457062} = {7B7FC985-A288-4EF3-8EFD-2148CC86D031}
+		{3F9A9111-C3FF-4476-B134-71D91C90D883} = {5E737C22-7D87-4E49-A976-AD560BDF01F4}
+		{E8A4D6BB-A86A-4F16-9BC2-72D16E9A4420} = {745DEC47-DFE6-4F57-B2D9-DB213DFBA46E}
+		{9AAA2573-445C-4BF8-8DD2-E7245E6FBA8E} = {73027745-8003-4BCE-AFE1-28AE30457062}
+		{E26AA9B2-FFE6-4965-B2D4-7ED9D1B620F2} = {73027745-8003-4BCE-AFE1-28AE30457062}
+		{B5C67F5C-47EF-441B-BEE5-8666A4A0E6AF} = {73027745-8003-4BCE-AFE1-28AE30457062}
+		{C9467E51-595E-4161-B70E-74C9A8D0527C} = {73027745-8003-4BCE-AFE1-28AE30457062}
+		{D6FB70B7-4BDA-4DA1-B01D-728DD71F9EAB} = {73027745-8003-4BCE-AFE1-28AE30457062}
+		{01C71EB5-6720-4941-9DB0-514ED74CFB32} = {73027745-8003-4BCE-AFE1-28AE30457062}
+	EndGlobalSection
+EndGlobal
