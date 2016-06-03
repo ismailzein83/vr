@@ -9,7 +9,8 @@
             GetFilteredGenericRules: GetFilteredGenericRules,
             GetGenericRule: GetGenericRule,
             AddGenericRule: AddGenericRule,
-            UpdateGenericRule: UpdateGenericRule
+            UpdateGenericRule: UpdateGenericRule,
+            DeleteGenericRule: DeleteGenericRule
         };
 
         function GetFilteredGenericRules(input) {
@@ -30,6 +31,11 @@
         function UpdateGenericRule(genericRule) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRule', 'UpdateGenericRule'), genericRule);
         }
+
+        function DeleteGenericRule(genericRule) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRule', 'DeleteGenericRule'), genericRule);
+        }
+
     }
 
     appControllers.service('VR_GenericData_GenericRuleAPIService', GenericRuleAPIService);

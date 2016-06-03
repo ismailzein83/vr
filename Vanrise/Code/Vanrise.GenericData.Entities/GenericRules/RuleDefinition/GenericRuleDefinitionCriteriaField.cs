@@ -19,5 +19,7 @@ namespace Vanrise.GenericData.Entities
         public MappingRuleStructureBehaviorType RuleStructureBehaviorType { get; set; }
 
         public int Priority { get; set; }
+
+        public bool IsBaseSearch { get; set; }
     }
 }

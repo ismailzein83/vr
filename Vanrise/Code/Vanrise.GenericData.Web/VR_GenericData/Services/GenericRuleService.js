@@ -2,12 +2,13 @@
 
     'use strict';
 
-    genericRule.$inject = ['VRModalService'];
+    genericRule.$inject = ['VRModalService', 'VRNotificationService', 'VR_GenericData_GenericRuleAPIService'];
 
-    function genericRule(VRModalService) {
+    function genericRule(VRModalService, VRNotificationService, VR_GenericData_GenericRuleAPIService) {
         return ({
             addGenericRule: addGenericRule,
-            editGenericRule: editGenericRule
+            editGenericRule: editGenericRule,
+            deleteGenericRule: deleteGenericRule
         });
 
         function addGenericRule(genericRuleDefinitionId, onGenericRuleAdded) {
@@ -37,6 +38,25 @@
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericRule/GenericRuleEditor.html', modalParameters, modalSettings);
+        }
+
+        function deleteGenericRule(scope, genericRule, onGenericRuleDeleted) {
+            var message = 'Are you sure you want to delete the rule ?';
+            VRNotificationService.showConfirmation(message).then(function (confirmed) {
+                if (confirmed) {
+                    VR_GenericData_GenericRuleAPIService.DeleteGenericRule(genericRule).then(function (response) {
+                        if (response) {
+                            var deleted = VRNotificationService.notifyOnItemDeleted('Generic Rule', response);
+
+                            if (deleted && onGenericRuleDeleted && typeof onGenericRuleDeleted == 'function') {
+                                onGenericRuleDeleted();
+                            }
+                        }
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, scope);
+                    });
+                }
+            });
         }
     };
 

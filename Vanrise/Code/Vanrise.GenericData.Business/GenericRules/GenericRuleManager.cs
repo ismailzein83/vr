@@ -7,6 +7,7 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Rules;
 using Vanrise.Common;
 using Vanrise.Entities;
+using System.Globalization;
 
 namespace Vanrise.GenericData.Business
 {
@@ -19,6 +20,8 @@ namespace Vanrise.GenericData.Business
             var ruleDefinition = GetRuleDefinition(input.Query.RuleDefinitionId);
 
             Func<T, bool> filterExpression = (rule) => rule.DefinitionId == input.Query.RuleDefinitionId
+                && (string.IsNullOrEmpty(input.Query.Description) || (!string.IsNullOrEmpty(rule.Description) && rule.Description.IndexOf(input.Query.Description, StringComparison.OrdinalIgnoreCase) >= 0))
+                && (!input.Query.EffectiveDate.HasValue || (rule.BeginEffectiveTime <= input.Query.EffectiveDate.Value && (!rule.EndEffectiveTime.HasValue || input.Query.EffectiveDate.Value < rule.EndEffectiveTime)))
                 && (input.Query.CriteriaFieldValues == null || RuleCriteriaFilter(rule, ruleDefinition, input.Query.CriteriaFieldValues))
                 && (input.Query.SettingsFilterValue == null || RuleSettingsFilter(rule, ruleDefinition, input.Query.SettingsFilterValue));
 
@@ -41,7 +44,7 @@ namespace Vanrise.GenericData.Business
         {
             if (rule == null)
                 throw new ArgumentNullException("rule");
-            if(rule.Criteria == null || rule.Criteria.FieldsValues == null)
+            if (rule.Criteria == null || rule.Criteria.FieldsValues == null)
                 return null;
             //if (rule.Criteria == null)
             //    throw new ArgumentNullException("rule.Criteria");
@@ -111,6 +114,10 @@ namespace Vanrise.GenericData.Business
             return this.UpdateRule(rule as T) as Vanrise.Entities.UpdateOperationOutput<GenericRuleDetail>;
         }
 
+        public DeleteOperationOutput<GenericRuleDetail> DeleteGenericRule(int ruleId)
+        {
+            return this.DeleteRule(ruleId) as Vanrise.Entities.DeleteOperationOutput<GenericRuleDetail>;
+        }
         #endregion
 
         #region Private Methods
@@ -121,7 +128,7 @@ namespace Vanrise.GenericData.Business
 
             foreach (KeyValuePair<string, object> filter in filterValues)
             {
-                if (filter.Value == null) 
+                if (filter.Value == null)
                     continue;
 
                 DataRecordFieldType criteriaFieldType = ruleDefinition.CriteriaDefinition.Fields.MapRecord(itm => itm.FieldType, itm => itm.FieldName == filter.Key);
@@ -209,7 +216,7 @@ namespace Vanrise.GenericData.Business
                 SettingsDescription = rule.GetSettingsDescription(new GenericRuleSettingsDescriptionContext() { RuleDefinitionSettings = ruleDefinition.SettingsDefinition })
             };
         }
-        
+
         #endregion
     }
 }

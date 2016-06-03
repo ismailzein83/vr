@@ -32,7 +32,7 @@ namespace Vanrise.Rules
                 TypeId = ruleTypeId,
                 RuleDetails = Serializer.Serialize(rule),
                 BED = rule.BeginEffectiveTime,
-                EED = rule.EndEffectiveTime
+                EED = rule.EndEffectiveTime,
             };
             IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
             InsertOperationOutput<Q> insertOperationOutput = new InsertOperationOutput<Q>();

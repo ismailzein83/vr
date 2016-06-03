@@ -5,7 +5,8 @@
              menuactions="gridMenuActions"
              idfield="Entity.RuleId">
     <vr-datagridcolumn headertext="'Rule Id'" type="'Text'" field="'Entity.RuleId'"></vr-datagridcolumn>
-    <vr-datagridcolumn ng-repeat="field in ctrl.criteriaFields" headertext="field.Title" type="'Text'" field="'FieldValueDescriptions[' + $index + ']'" columnindex="1 + $index" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Description'" type="'Text'" field="'Entity.Description'"></vr-datagridcolumn>
+    <vr-datagridcolumn ng-repeat="field in ctrl.criteriaFields" headertext="field.Title" type="'Text'" field="'FieldValueDescriptions[' + $index + ']'" columnindex="2 + $index" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Settings'" type="'Text'" field="'SettingsDescription'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Begin Effective Date'" type="'Datetime'" field="'Entity.BeginEffectiveTime'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'End Effective Date'" type="'Datetime'" field="'Entity.EndEffectiveTime'"></vr-datagridcolumn>

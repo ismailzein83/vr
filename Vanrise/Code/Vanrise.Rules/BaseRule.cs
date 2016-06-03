@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Rules
 {
@@ -15,11 +11,10 @@ namespace Vanrise.Rules
             return false;
         }
 
+        public string Description { get; set; }
+
         public DateTime BeginEffectiveTime { get; set; }
 
         public DateTime? EndEffectiveTime { get; set; }
     }
-
-   
-
 }

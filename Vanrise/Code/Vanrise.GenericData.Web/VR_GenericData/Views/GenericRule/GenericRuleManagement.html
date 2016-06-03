@@ -3,14 +3,26 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
             <vr-row removeline>
-                <span ng-repeat="filter in scopeModel.filters">
+                <vr-columns colnum="fullrow">
+                    <vr-choices-filter selectedindex="selectedFilternIndex">
+                        <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
+                        <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
+                    </vr-choices-filter>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="normal" ng-show="advancedSelected">
+                    <vr-datetimepicker label="Effective On" value="scopeModel.effectiveDate" type="date"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns width="normal" ng-show="advancedSelected">
+                    <vr-textbox label="Description" value="scopeModel.description"></vr-textbox>
+                </vr-columns>
+                <span ng-repeat="filter in scopeModel.filters" ng-show="advancedSelected || (filter.isBaseSearch && basicSelected)">
                     <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady" normal-col-num="2"></vr-directivewrapper>
                 </span>
-                <span>
+                <span ng-show="advancedSelected">
                     <vr-directivewrapper directive="scopeModel.settingsFilterEditor" on-ready="onSettingsFilterDirectiveReady" normal-col-num="2"></vr-directivewrapper>
                 </span>
-                
-                    
             </vr-row>
         </div>
         <vr-row removeline>

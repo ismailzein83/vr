@@ -85,6 +85,10 @@
                 $scope.gridMenuActions = [{
                     name: 'Edit',
                     clicked: editGenericRule,
+                },
+                {
+                    name: 'Delete',
+                    clicked: deleteGenericRule,
                 }];
             }
 
@@ -93,6 +97,14 @@
                     gridAPI.itemUpdated(updatedGenericRule);
                 };
                 VR_GenericData_GenericRule.editGenericRule(genericRule.Entity.RuleId, genericRule.Entity.DefinitionId, onGenericRuleUpdated);
+            }
+
+
+            function deleteGenericRule(genericRule) {
+                var onGenericRuleDeleted = function () {
+                    gridAPI.itemDeleted(genericRule);
+                };
+                VR_GenericData_GenericRule.deleteGenericRule($scope, genericRule.Entity, onGenericRuleDeleted);
             }
         }
     }

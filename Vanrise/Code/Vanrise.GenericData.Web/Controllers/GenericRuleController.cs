@@ -46,6 +46,14 @@ namespace Vanrise.GenericData.Web.Controllers
             return manager.UpdateGenericRule(rule);
         }
 
+        [HttpPost]
+        [Route("DeleteGenericRule")]
+        public Vanrise.Entities.DeleteOperationOutput<GenericRuleDetail> DeleteGenericRule(GenericRule rule)
+        {
+            var manager = GetManager(rule.DefinitionId);
+            return manager.DeleteGenericRule(rule.RuleId);
+        }
+
         IGenericRuleManager GetManager(int ruleDefinitionId)
         {
             GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();

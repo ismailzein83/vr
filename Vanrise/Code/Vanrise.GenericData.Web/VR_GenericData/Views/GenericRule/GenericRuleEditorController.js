@@ -3,10 +3,10 @@
     "use strict";
 
     genericRuleEditorController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService',
-        'VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRuleTypeConfigAPIService', 'UtilsService', 'VRNavigationService', 'VRNotificationService', 'VRUIUtilsService'];
+        'VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRuleTypeConfigAPIService', 'UtilsService', 'VRNavigationService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService'];
 
     function genericRuleEditorController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService,
-        VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRuleTypeConfigAPIService, UtilsService, VRNavigationService, VRNotificationService, VRUIUtilsService) {
+        VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRuleTypeConfigAPIService, UtilsService, VRNavigationService, VRNotificationService, VRUIUtilsService, VRValidationService) {
 
         var isEditMode;
 
@@ -32,7 +32,7 @@
                 genericRuleId = parameters.genericRuleId;
                 genericRuleDefinitionId = parameters.genericRuleDefinitionId;
             }
-            
+
             isEditMode = (genericRuleId != undefined);
         }
 
@@ -51,12 +51,15 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
+            $scope.scopeModel.validateDates = function () {
+                return VRValidationService.validateTimeRange($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
+            };
+
 
             $scope.scopeModel.beginEffectiveDate = new Date();
             $scope.scopeModel.endEffectiveDate = undefined;
 
-            $scope.scopeModel.onSettingsDirectiveReady = function (api)
-            {
+            $scope.scopeModel.onSettingsDirectiveReady = function (api) {
                 settingsDirectiveAPI = api;
                 settingsDirectiveReadyPromiseDeferred.resolve();
             }
@@ -85,7 +88,7 @@
                 $scope.scopeModel.isLoading = false;
             });
 
-            
+
         }
 
         function getGenericRuleDefinition() {
@@ -100,8 +103,8 @@
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 }).finally(function () {
-                   $scope.scopeModel.isLoading = false;
-               });
+                    $scope.scopeModel.isLoading = false;
+                });
         }
 
         function getGenericRule() {
@@ -118,13 +121,12 @@
         function loadStaticSection() {
             if (genericRuleEntity == undefined)
                 return;
-
+            $scope.scopeModel.description = genericRuleEntity.Description;
             $scope.scopeModel.beginEffectiveDate = genericRuleEntity.BeginEffectiveTime;
             $scope.scopeModel.endEffectiveDate = genericRuleEntity.EndEffectiveTime;
         }
 
-        function loadCriteriaSection()
-        {
+        function loadCriteriaSection() {
             if (criteriaDefinitionFields == undefined)
                 return;
 
@@ -149,7 +151,7 @@
 
                     field.runtimeEditor.loadPromiseDeferred = UtilsService.createPromiseDeferred();
                     criteriaFieldsPromises.push(field.runtimeEditor.loadPromiseDeferred.promise);
-                    
+
                     field.runtimeEditor.onReadyPromiseDeferred.promise.then(function () {
                         var payload = {
                             fieldTitle: field.Title,
@@ -171,12 +173,11 @@
             });
 
             promises.push(loadFieldTypeConfigPromise);
-            
+
             return UtilsService.waitMultiplePromises(promises);
         }
 
-        function loadSettingsSection()
-        {
+        function loadSettingsSection() {
             if (genericRuleDefintion == undefined && genericRuleDefintion.SettingsDefinition != null)
                 return;
 
@@ -184,11 +185,11 @@
 
             var loadSettingsSectionPromiseDeferred = UtilsService.createPromiseDeferred();
             promises.push(loadSettingsSectionPromiseDeferred.promise);
-            
+
             var loadRuleTypeConfigPromise = VR_GenericData_GenericRuleTypeConfigAPIService.GetGenericRuleTypeById(genericRuleDefintion.SettingsDefinition.ConfigId).then(function (response) {
                 genericRuleTypeConfig = response;
                 $scope.scopeModel.settingsDirective = genericRuleTypeConfig.RuntimeEditor;
-                
+
                 settingsDirectiveReadyPromiseDeferred.promise.then(function () {
                     var payload = {
                         genericRuleDefinition: genericRuleDefintion,
@@ -200,12 +201,12 @@
 
             promises.push(loadRuleTypeConfigPromise);
 
-            return UtilsService.waitMultiplePromises(promises);            
+            return UtilsService.waitMultiplePromises(promises);
         }
 
         function buildGenericRuleObjFromScope() {
             var genericRuleCriteria = {};
-            
+
             if (criteriaDefinitionFields != undefined) {
                 genericRuleCriteria.FieldsValues = {};
                 var criteriaValuesExist = false;
@@ -229,7 +230,8 @@
                 Criteria: genericRuleCriteria,
                 Settings: settingsDirectiveAPI.getData(),
                 BeginEffectiveTime: $scope.scopeModel.beginEffectiveDate,
-                EndEffectiveTime: $scope.scopeModel.endEffectiveDate
+                EndEffectiveTime: $scope.scopeModel.endEffectiveDate,
+                Description: $scope.scopeModel.description
             };
 
             return genericRule;

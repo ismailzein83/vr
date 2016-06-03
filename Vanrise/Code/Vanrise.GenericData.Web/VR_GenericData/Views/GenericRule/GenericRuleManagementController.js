@@ -10,7 +10,7 @@
         var settingsFilterDirectiveAPI;
         var settingsFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-        
+
         loadParameters();
         defineScope();
         load();
@@ -27,10 +27,10 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-            
+
             $scope.scopeModel.filters = [];
 
-             
+
 
             $scope.onSettingsFilterDirectiveReady = function (api) {
                 settingsFilterDirectiveAPI = api;
@@ -40,7 +40,9 @@
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 var defFilter = {
-                    RuleDefinitionId: ruleDefinitionId
+                    RuleDefinitionId: ruleDefinitionId,
+                    EffectiveDate: $scope.scopeModel.effectiveDate,
+                    Description: $scope.scopeModel.description
                 };
                 gridAPI.loadGrid(defFilter);
             };
@@ -60,6 +62,8 @@
 
             function getFilterObject() {
                 var gridQuery = { RuleDefinitionId: ruleDefinitionId };
+                gridQuery.EffectiveDate = $scope.scopeModel.effectiveDate;
+                gridQuery.Description = $scope.scopeModel.description;
 
                 gridQuery.CriteriaFieldValues = {};
                 var criteriaFilterValuesExist = false;
@@ -92,11 +96,15 @@
             loadAllControls();
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([loadFilters]).catch(function (error) {
+                return UtilsService.waitMultipleAsyncOperations([setStaticData, loadFilters]).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 }).finally(function () {
                     $scope.isLoading = false;
                 });
+
+                function setStaticData() {
+                    $scope.scopeModel.effectiveDate = new Date();
+                }
 
                 function loadFilters() {
                     var promises = [];
@@ -161,6 +169,8 @@
 
                         filter = {};
                         filter.criteriaFieldName = criteriaField.FieldName;
+                        filter.isBaseSearch = criteriaField.IsBaseSearch;
+
                         filter.directiveEditor = filterEditor;
                         filter.directiveLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -215,7 +225,7 @@
                     }
                 }
 
-             
+
             }
         }
     }

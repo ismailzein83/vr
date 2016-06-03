@@ -7,7 +7,7 @@
     function GenericRuleDefinitionCriteriaFieldEditorController($scope, VR_GenericData_MappingRuleStructureBehaviorTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
         var isEditMode;
-        
+
         var criteriaFieldName;
         var criteriaFieldEntity;
         var criteriaFields; // criteriaFields are passed for validation
@@ -100,6 +100,8 @@
                 }
                 $scope.fieldName = criteriaFieldEntity.FieldName;
                 $scope.fieldTitle = criteriaFieldEntity.Title;
+                $scope.isBaseSearch = criteriaFieldEntity.IsBaseSearch;
+
                 $scope.selectedBehaviorType = UtilsService.getItemByVal($scope.behaviorTypes, criteriaFieldEntity.RuleStructureBehaviorType, 'value');
 
                 prepareGlobalVarsForValidation();
@@ -150,7 +152,8 @@
                 FieldName: $scope.fieldName,
                 Title: $scope.fieldTitle,
                 FieldType: dataRecordFieldTypeSelectiveAPI.getData(),
-                RuleStructureBehaviorType: $scope.selectedBehaviorType.value
+                RuleStructureBehaviorType: $scope.selectedBehaviorType.value,
+                IsBaseSearch: $scope.isBaseSearch
             };
         }
     }

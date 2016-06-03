@@ -123,7 +123,8 @@
                             Title: dataItem.Title,
                             FieldType: dataItem.FieldType,
                             RuleStructureBehaviorType: dataItem.RuleStructureBehaviorType,
-                            Priority: priority
+                            Priority: priority,
+                            IsBaseSearch: dataItem.IsBaseSearch
                         };
                     }
                 };
