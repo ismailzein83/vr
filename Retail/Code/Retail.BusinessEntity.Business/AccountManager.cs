@@ -207,15 +207,15 @@ namespace Retail.BusinessEntity.Business
         private AccountDetail AccountDetailMapper(Account account)
         {
             var accounts = GetCachedAccounts().Values;
-
+            var accountsByParent = GetCachedAccountsByParent();
             return new AccountDetail()
             {
                 Entity = account,
-                DirectSubAccountCount = GetDirectSubAccountsCount(account.AccountId, accounts),
-                InDirectSubAccountCount = GetIndirectSubAccountsCount(account.AccountId, accounts)
+                DirectSubAccountCount = GetSubAccountsCount(account.AccountId, accounts, false),
+                TotalSubAccountCount = GetSubAccountsCount(account.AccountId, accounts, true, accountsByParent)
             };
         }
-        private int GetDirectSubAccountsCount(int accountId, IEnumerable<Account> accounts)
+        private int GetSubAccountsCount(int accountId, IEnumerable<Account> accounts, bool isTotalSubAccountsInclude, Dictionary<int, List<Account>> accountsByParent = null)
         {
             int count = 0;
             foreach (var account in accounts)
@@ -223,34 +223,20 @@ namespace Retail.BusinessEntity.Business
                 if (account.ParentAccountId == accountId)
                 {
                     count++;
+                    if (isTotalSubAccountsInclude)
+                     count += GetTotalSubAccountsCountRecursively(account, accountsByParent);
                 }
             }
             return count;
         }
-        private int GetIndirectSubAccountsCount(int accountId, IEnumerable<Account> accounts)
-        {
-            var accountsByParent = GetCachedAccountsByParent();
-            int count = 0;
-            foreach (var account in accounts)
-            {
-                if (account.ParentAccountId == accountId)
-                     count += GetIndirectSubAccountsCountRecursively(account, accountsByParent);
-            }
-
-            return count;
-        }
-        private int GetIndirectSubAccountsCountRecursively(Account account, Dictionary<int, List<Account>> accountsByParent)
+        private int GetTotalSubAccountsCountRecursively(Account account, Dictionary<int, List<Account>> accountsByParent)
         {
             List<Account> accountsForParents;
             if (accountsByParent.TryGetValue(account.AccountId, out accountsForParents))
             {
-                if (accountsForParents.Count ==0)
-                {
-                    return 0;
-                }
                 foreach (var accountofParent in accountsForParents)
                 {
-                    return 1 + GetIndirectSubAccountsCountRecursively(accountofParent, accountsByParent);
+                    return 1 + GetTotalSubAccountsCountRecursively(accountofParent, accountsByParent);
                 }
             }
             return 0;
