@@ -8,7 +8,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIServi
         restrict: "E",
         scope: {
             onReady: "=",
-            shownumber: "="
+            dimenssion: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -28,6 +28,10 @@ function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIServi
 
         var gridAPI;
         this.initializeController = initializeController;
+        ctrl.showDimessionCol = function (d) {
+            
+            return ctrl.dimenssion != undefined && ctrl.dimenssion.indexOf(d) > -1  ;
+        }
 
         function initializeController() {
 
@@ -50,7 +54,8 @@ function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIServi
                 }
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_Analytics_ReleaseCodeAPIService.GetReleaseCodeData(dataRetrievalInput)
+                 ctrl.showGrid = true;            
+                return WhS_Analytics_ReleaseCodeAPIService.GetAllFilteredReleaseCodes(dataRetrievalInput)
                 .then(function (response) {
                     onResponseReady(response);
                 })

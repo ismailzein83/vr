@@ -29,7 +29,7 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
     function defineScope() {
         $scope.fromDate;
         $scope.toDate;
-
+        $scope.dimenssionvalues = [];
         $scope.today = PeriodEnum.Today;
 
         $scope.onTimeRangeDirectiveReady = function (api) {
@@ -95,10 +95,11 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
 
     function buildFilter() {
         var filter = {};
-        filter.SwitchIds = switchDirectiveAPI.getSelectedIds();
-        filter.CustomerIds = customerAccountDirectiveAPI.getSelectedIds();
-        filter.SaleZoneIds = saleZoneDirectiveAPI.getSelectedIds();
-        filter.GroupByNumber = $scope.groupbyNumber;
+        filter.Dimession = releaseCodeDimenssionDirectiveAPI.getSelectedIds();
+        $scope.dimenssionvalues = releaseCodeDimenssionDirectiveAPI.getSelectedIds();
+        //filter.CustomerIds = customerDirectiveAPI.getSelectedIds();
+        //filter.SaleZoneIds = saleZoneDirectiveAPI.getSelectedIds();
+        //filter.GroupByNumber = $scope.groupbyNumber;
         return filter;
     }
     function loadTimeRangeSelector() {

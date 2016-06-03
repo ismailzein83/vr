@@ -7,13 +7,13 @@
 
         var controllerName = "BlockedAttempts";
 
-        function GetReleaseCodeData(input) {
+        function GetAllFilteredReleaseCodes(input) {
 
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Analytics_ModuleConfig.moduleName, "ReleaseCode", "GetReleaseCodeData"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Analytics_ModuleConfig.moduleName, "ReleaseCode", "GetAllFilteredReleaseCodes"), input);
         }
 
         return ({
-            GetReleaseCodeData: GetReleaseCodeData
+            GetAllFilteredReleaseCodes: GetAllFilteredReleaseCodes
         });
     }
 

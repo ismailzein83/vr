@@ -8,6 +8,6 @@ namespace TOne.WhS.Analytics.Entities
 {
     public class ReleaseCodeFilter
     {
-        
+        public List<ReleaseCodeDimension> Dimession { get; set; }
     }
 }

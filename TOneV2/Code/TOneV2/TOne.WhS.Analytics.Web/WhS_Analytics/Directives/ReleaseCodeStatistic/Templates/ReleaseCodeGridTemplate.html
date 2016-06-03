@@ -4,13 +4,23 @@
                  dataretrievalfunction="dataRetrievalFunction"
                  pagingtype="'PagingOnScroll'"
                  menuactions="gridMenuActions"
-                 defaultsortbyfieldname="'SwitchName'"
+                 defaultsortbyfieldname="'Entity.SwitchId'"
                  defaultsortdirection="'DESC'">
         <vr-datagridcolumn headertext="'Switch'" field="'SwitchName'" type="'Text'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Release Code'" field="'Entity.ReleaseCode'" type="'Text'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Release Source'" field="'Entity.ReleaseSource'" type="'Text'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Attempts'" field="'Entity.Attempts'" type="'Text'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'%'" field="'Percentage'" type="'Text'"></vr-datagridcolumn>
+
+        <vr-datagridcolumn headertext="'Master Zone'" field="'ZoneName'" type="'Text'" ng-show="ctrl.showDimessionCol(0)"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'" type="'Text'" ng-show="ctrl.showDimessionCol(1)"></vr-datagridcolumn>
+       
+        <vr-datagridcolumn headertext="'Port In'" field="'Entity.PortIn'" type="'Text'" ng-show="ctrl.showDimessionCol(4)"></vr-datagridcolumn>
+
+        <vr-datagridcolumn headertext="'Port out'" field="'Entity.PortOut'" type="'Text'" ng-show="ctrl.showDimessionCol(5)"></vr-datagridcolumn>
+
+        <vr-datagridcolumn headertext="'Attempts'" field="'Entity.Attempt'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Failed Attempts'" field="'Entity.FailedAttempt'" type="'Text'"></vr-datagridcolumn>
+
+        <vr-datagridcolumn headertext="'%'" field="'Entity.Percentage'" type="'Text'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'First Attempt'" field="'Entity.FirstAttempt'" type="'Datetime'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Last Attempt'" field="'Entity.LastAttempt'" type="'Datetime'"></vr-datagridcolumn>
     </vr-datagrid>

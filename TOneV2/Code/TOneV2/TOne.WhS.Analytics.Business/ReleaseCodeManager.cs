@@ -17,44 +17,45 @@ namespace TOne.WhS.Analytics.Business
     {
         private readonly CarrierAccountManager _carrierAccountManager;
         private readonly SaleZoneManager _saleZoneManager;
-
+        private readonly SwitchManager _switchManager;
         public ReleaseCodeManager()
         {
             _carrierAccountManager = new CarrierAccountManager();
             _saleZoneManager = new SaleZoneManager();
+            _switchManager = new SwitchManager();
         }
-        public Vanrise.Entities.IDataRetrievalResult<ReleaseCodeDetail> GetAllFilteredReleaseCodes(Vanrise.Entities.DataRetrievalInput<ReleaseCodeQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<ReleaseCodeStatDetail> GetAllFilteredReleaseCodes(Vanrise.Entities.DataRetrievalInput<ReleaseCodeQuery> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new ReleaseCodeRequestHandler());
         }
 
-        public ReleaseCodeDetail ReleaseCodeDetailMapper(ReleaseCode releaseCode)
+        public ReleaseCodeStatDetail ReleaseCodeDetailMapper(ReleaseCodeStat releaseCode)
         {
-            //string customerName = _carrierAccountManager.GetCarrierAccountName(ReleaseCode.CustomerId);
-            //string supplierName = _carrierAccountManager.GetCarrierAccountName(ReleaseCode.SupplierId);
-            //string saleZoneName = _saleZoneManager.GetSaleZoneName(ReleaseCode.SaleZoneId);
-
-            ReleaseCodeDetail releaseCodeDetail = new ReleaseCodeDetail
+            
+            string supplierName = _carrierAccountManager.GetCarrierAccountName(releaseCode.SupplierId);
+            string switchName = _switchManager.GetSwitchName(releaseCode.SwitchId);
+            string zoneName = _saleZoneManager.GetSaleZoneName(releaseCode.MasterPlanZoneId);
+            ReleaseCodeStatDetail releaseCodeDetail = new ReleaseCodeStatDetail
             {
                 Entity = releaseCode,
-                //CustomerName = customerName,
-                //SupplierName = supplierName,
-                //SaleZoneName = saleZoneName
+                SupplierName = supplierName,
+                SwitchName = switchName,
+                ZoneName = zoneName
             };
             return releaseCodeDetail;
         }
 
         #region Private Classes
 
-        private class ReleaseCodeRequestHandler : BigDataRequestHandler<ReleaseCodeQuery, ReleaseCode, ReleaseCodeDetail>
+        private class ReleaseCodeRequestHandler : BigDataRequestHandler<ReleaseCodeQuery, ReleaseCodeStat, ReleaseCodeStatDetail>
         {
-            public override ReleaseCodeDetail EntityDetailMapper(ReleaseCode entity)
+            public override ReleaseCodeStatDetail EntityDetailMapper(ReleaseCodeStat entity)
             {
                 ReleaseCodeManager manager = new ReleaseCodeManager();
                 return manager.ReleaseCodeDetailMapper(entity);
             }
 
-            public override IEnumerable<ReleaseCode> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<ReleaseCodeQuery> input)
+            public override IEnumerable<ReleaseCodeStat> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<ReleaseCodeQuery> input)
             {
                 IReleaseCodeDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IReleaseCodeDataManager>();
                 return dataManager.GetAllFilteredReleaseCodes(input);

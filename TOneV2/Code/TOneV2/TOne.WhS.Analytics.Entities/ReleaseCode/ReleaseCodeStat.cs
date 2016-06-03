@@ -6,18 +6,22 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Analytics.Entities
 {
-    public class ReleaseCode
+    public class ReleaseCodeStat
     {
-        public string ReleasCode { get; set; }
-        public string ReleaseSource { get; set; }
         public int SwitchId { get; set; }
+        public string ReleaseCode { get; set; }
+        public string ReleaseSource { get; set; }
+
+        public long MasterPlanZoneId { get; set; }
         public long SaleZoneId { get; set; }
         public int CustomerId { get; set; }
         public int SupplierId { get; set; }
         public int Attempt { get; set; }
         public DateTime? FirstAttempt { get; set; }
         public DateTime? LastAttempt { get; set; }
-        public double Percentage { get; set; }
+        public decimal Percentage { get; set; }
+        public int FailedAttempt { get; set; }
+        public decimal DurationInMinutes { get; set; }
         public string PortIn { get; set; }
         public string PortOut { get; set; }
         public string GateWayIn { get; set; }

@@ -9,6 +9,6 @@ namespace TOne.WhS.Analytics.Data
 {
     public interface IReleaseCodeDataManager : IDataManager
     {
-        IEnumerable<ReleaseCode> GetAllFilteredReleaseCodes(Vanrise.Entities.DataRetrievalInput<ReleaseCodeQuery> input);
+        List<ReleaseCodeStat> GetAllFilteredReleaseCodes(Vanrise.Entities.DataRetrievalInput<ReleaseCodeQuery> input);
     }
 }
