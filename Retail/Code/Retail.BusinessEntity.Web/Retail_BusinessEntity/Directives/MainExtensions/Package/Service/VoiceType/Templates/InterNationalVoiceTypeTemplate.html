@@ -6,12 +6,12 @@
         <vr-datagrid datasource="selectedZones" norowhighlightonclick="true"
                      on-ready="onGridReady" ondeleterow="removeZone" hidegridmenu>
             <vr-datagridcolumn headertext="'Location'" disablesorting="true" widthfactor="7">
-                <retail-be-countryzone-selector on-ready="dataItem.OnCountryZoneDirectiveReady"></retail-be-countryzone-selector>
+                <retail-be-countryzone-selector on-ready="dataItem.OnCountryZoneDirectiveReady" isrequired="true"></retail-be-countryzone-selector>
             </vr-datagridcolumn>
 
             <vr-datagridcolumn headertext="'Rate'" disablesorting="true" widthfactor="3">
                 <vr-columns width="fullrow">
-                    <vr-textbox type="number" value="dataItem.rate"></vr-textbox>
+                    <vr-textbox type="number" value="dataItem.rate" isrequired="true"></vr-textbox>
                 </vr-columns>
             </vr-datagridcolumn>
         </vr-datagrid>

@@ -9,6 +9,7 @@
             restrict: 'E',
             scope: {
                 onReady: '=',
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
