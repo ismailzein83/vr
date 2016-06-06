@@ -723,14 +723,23 @@
                 }
                 if (pagingOnScrollEnabled) {
                     // to rigth padding in old data loading methode in bi
-                    if (ctrl.datasource.length <= 11)
+                    var div = $(ctrl.el).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
+
+                    if (ctrl.datasource.length <= 11){
+                       $(div).css({ "overflow-y": 'initial', "overflow-x": 'initial' })
                         ctrl.headerStyle = {
                             "padding-right": "0px"
                         }
-                    else
+                    }
+                       
+                    else {
+
+                        $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' })
                         ctrl.headerStyle = {
                             "padding-right": getScrollbarWidth() + "px"
                         }
+                    }
+                      
                 }
             }
 
@@ -835,12 +844,14 @@
         }
 
         function definePagingOnScroll($scope, loadMoreDataFunction) {
+           
             ctrl.isLoadingMoreData = false;
-
             if (loadMoreDataFunction != undefined) {
                 pagingOnScrollEnabled = true;
-                if (ctrl.maxheight1=undefined)
+                if (ctrl.maxheight!=undefined){
                     setMaxHeight(ctrl.maxheight);
+                }
+                   
                 else {
 
                     var sh = screen.height;
@@ -850,7 +861,7 @@
                     else
                         h = screen.height * 0.55;
 
-                    setMaxHeight(h+"px");
+                    setMaxHeight(h + "px");
                 }
             }
 
@@ -873,12 +884,19 @@
                             ctrl.isLoadingMoreData = false;
                             var div = $(ctrl.el).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
                             var hasVerticalScrollbar = div.scrollHeight > div.clientHeight;
-                            if (hasVerticalScrollbar)
+                            if (hasVerticalScrollbar) {
+                                $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' })
                                 ctrl.headerStyle = {
-                                    "padding-right": getScrollbarWidth()+"px"
+                                    "padding-right": getScrollbarWidth() + "px"
                                 }
-                            else ctrl.headerStyle = {
-                                "padding-right": "0px"
+
+                            }
+
+                            else {
+                                $(div).css({ "overflow-y": 'initial', "overflow-x": 'initial' })
+                                ctrl.headerStyle = {
+                                    "padding-right": "0px"
+                                }
                             }
                         });
                     }
