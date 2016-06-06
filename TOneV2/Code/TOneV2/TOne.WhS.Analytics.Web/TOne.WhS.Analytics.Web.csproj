@@ -135,6 +135,9 @@
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlZoneSummary.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlZoneSummaryDetailed.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
