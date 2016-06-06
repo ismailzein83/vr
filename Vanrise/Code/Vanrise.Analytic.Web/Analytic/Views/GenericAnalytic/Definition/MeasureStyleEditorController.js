@@ -8,6 +8,7 @@
 
         var measureStyleEntity;
         var fieldTypeConfigs = [];
+        var selectedMeasure;
         $scope.scopeModel = {};
         $scope.scopeModel.isEditMode = false;
         $scope.scopeModel.measureNames = [];
@@ -20,7 +21,7 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                $scope.scopeModel.measureFields = parameters.measureFields;
+                selectedMeasure = parameters.selectedMeasure;
                 measureStyleEntity = parameters.measureStyle;
             }
             $scope.scopeModel.isEditMode = (measureStyleEntity != undefined);
@@ -49,7 +50,7 @@
 
             $scope.scopeModel.addMeasureStyleRule = function ()
             {
-                var fieldType = UtilsService.getItemByVal(fieldTypeConfigs, $scope.scopeModel.selectedMeasureName.FieldType.ConfigId, "DataRecordFieldTypeConfigId");
+                var fieldType = UtilsService.getItemByVal(fieldTypeConfigs, selectedMeasure.FieldType.ConfigId, "DataRecordFieldTypeConfigId");
 
                 var dataItem = {
                     id: $scope.scopeModel.measureStyles.length + 1,
@@ -141,9 +142,6 @@
                 }
 
                 function loadStaticData() {
-                    if (measureStyleEntity != undefined) {
-                        $scope.scopeModel.selectedMeasureName = UtilsService.getItemByVal($scope.scopeModel.measureFields, measureStyleEntity.MeasureName, "Name");
-                    }
                 }
 
                 return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, getFieldTypeConfigs]).then(function () {
@@ -161,7 +159,7 @@
         function getPayload()
         {
             var payload = {
-                FieldType: $scope.scopeModel.selectedMeasureName.FieldType,
+                dataRecordTypeField: { Type: selectedMeasure.FieldType },
             };
             return payload;
         }
@@ -192,7 +190,7 @@
                 });
             }
             var measureStyleRule = {
-                MeasureName: $scope.scopeModel.selectedMeasureName.Name,
+                MeasureName: selectedMeasure.Name,
                 Rules: rules
             };
             return measureStyleRule;

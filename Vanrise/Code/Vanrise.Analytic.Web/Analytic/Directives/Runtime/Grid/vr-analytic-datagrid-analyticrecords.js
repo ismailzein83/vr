@@ -303,9 +303,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 }
 
                 function loadDataFromRootGrid(payload) {
-                   
-                    ctrl.dimensions.length = 0;
                     ctrl.groupingDimensions.length = 0;
+
                     loadAllGridDimensions(payload);
                     var dimensionForDrillDown = [];
                     for (var i = 0; i < ctrl.dimensions.length; i++) {
@@ -403,11 +402,28 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 }
 
                 function loadAllGridDimensions(payload) {
+                    ctrl.dimensions.length = 0;
                     var allDimensions = [];
                     if (payload.Settings != undefined) {
+
+                        if (payload.Settings.RootDimensionsFromSearchSection) {
+
+                            for (var i = 0; i < payload.SelectedGroupingDimensions.length; i++)
+                            {
+                                var selectedDimension = payload.SelectedGroupingDimensions[i];
+                                var dimensionObj = UtilsService.getItemByVal(payload.Settings.Dimensions, selectedDimension.DimensionName, 'DimensionName');
+                                if(dimensionObj !=undefined)
+                                {
+                                    allDimensions.push(dimensionObj);
+                                }
+                            }
+
+                        }
                         for (var i = 0; i < payload.Settings.Dimensions.length; i++) {
+                           
                             var dimension = payload.Settings.Dimensions[i];
-                            allDimensions.push(dimension);
+                            if (UtilsService.getItemByVal(allDimensions, dimension.DimensionName, 'DimensionName') == undefined)
+                                allDimensions.push(dimension);
                         }
                     }
                     ctrl.dimensions = allDimensions;

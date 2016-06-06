@@ -82,21 +82,21 @@
             VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/RealTimeWidgetEditor.html', modalParameters, modalSettings);
         }
 
-        function addMeasureStyle(onMeasureStyleAdded,measureFields) {
+        function addMeasureStyle(onMeasureStyleAdded,selectedMeasure) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onMeasureStyleAdded = onMeasureStyleAdded;
             };
             var modalParameters = {
-                measureFields: measureFields
+                selectedMeasure: selectedMeasure
             };
             VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/MeasureStyleEditor.html', modalParameters, modalSettings);
         }
 
-        function editMeasureStyle(measureStyle, onMeasureStyleUpdated, measureFields) {
+        function editMeasureStyle(measureStyle, onMeasureStyleUpdated, selectedMeasure) {
             var modalParameters = {
-                measureFields: measureFields,
+                selectedMeasure: selectedMeasure,
                 measureStyle: measureStyle
             };
 

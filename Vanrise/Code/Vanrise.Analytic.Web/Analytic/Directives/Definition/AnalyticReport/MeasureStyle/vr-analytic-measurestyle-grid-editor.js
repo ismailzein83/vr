@@ -30,6 +30,7 @@
             var counter = 0;
             function initializeController() {
                 ctrl.measureStyles = [];
+                ctrl.measureFields = [];
                 ctrl.onGridReady = function (api) {
                     gridAPI = api;
 
@@ -42,7 +43,7 @@
                     var onMeasureStyleAdded = function (measureStyleObj) {
                         ctrl.measureStyles.push(measureStyleObj);
                     }
-                    Analytic_AnalyticService.addMeasureStyle(onMeasureStyleAdded, getMeasureNames());
+                    Analytic_AnalyticService.addMeasureStyle(onMeasureStyleAdded, ctrl.selectedMeasureName);
                 }
 
                 ctrl.removeMeasureStyle = function (measureStyle) {
@@ -59,6 +60,7 @@
                     if (payload != undefined)
                     {
                         context = payload.context;
+                        ctrl.measureFields = getMeasureNames();
                         ctrl.measureStyles.length = 0;
                         if (payload.measureStyles && payload.measureStyles.length > 0) {
                             for (var y = 0; y < payload.measureStyles.length; y++) {
@@ -68,7 +70,10 @@
                         }
                     }
                 };
-
+                api.reloadMeasures = function()
+                {
+                    ctrl.measureFields = getMeasureNames();
+                }
                 api.getData = function () {
                     var measureStyles = [];
                     for (var i = 0; i < ctrl.measureStyles.length ; i++)
@@ -95,7 +100,8 @@
                 var onMeasureStyleUpdated = function (measureStyleObj) {
                     ctrl.measureStyles[ctrl.measureStyles.indexOf(measureStyle)] = measureStyleObj;
                 }
-                Analytic_AnalyticService.editMeasureStyle(measureStyle,  onMeasureStyleUpdated,getMeasureNames(measureStyle));
+                var selectedMeasure = UtilsService.getItemByVal(getMeasureNames(measureStyle), measureStyle.MeasureName, "Name");
+                Analytic_AnalyticService.editMeasureStyle(measureStyle, onMeasureStyleUpdated, selectedMeasure);
             }
 
             function getMeasureNames(measureStyle) {

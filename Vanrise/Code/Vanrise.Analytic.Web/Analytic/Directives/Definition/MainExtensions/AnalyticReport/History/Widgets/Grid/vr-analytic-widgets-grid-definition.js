@@ -83,11 +83,16 @@
                     measureSelectorAPI = api;
                     measureReadyDeferred.resolve();
                 }
+
                 $scope.scopeModel.isValidMeasures = function () {
 
                     if ($scope.scopeModel.measures.length > 0)
                         return null;
                     return "At least one measure should be selected.";
+                }
+                $scope.scopeModel.onSelectionMeasureChanged= function (measure) {
+                    if (measureStyleGridAPI != undefined)
+                        measureStyleGridAPI.reloadMeasures();
                 }
                 $scope.scopeModel.onSelectMeasureItem = function (measure) {
                     var dataItem = {
@@ -107,6 +112,8 @@
                     $scope.scopeModel.selectedMeasures.splice(index, 1);
                     var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.measures, dataItem.AnalyticItemConfigId, 'Name');
                     $scope.scopeModel.measures.splice(datasourceIndex, 1);
+                    if (measureStyleGridAPI != undefined)
+                        measureStyleGridAPI.reloadMeasures();
                 };
                 $scope.scopeModel.onMeasureStyleGridDirectiveReady = function(api)
                 {
