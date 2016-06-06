@@ -33,6 +33,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetSaleCodesByZoneID(zoneID, effectiveDate);
         }
 
+        public List<SaleCode> GetSaleCodesByCodeGroups(List<int> codeGroupsIds)
+        {
+            ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
+            return dataManager.GetSaleCodesByCodeGroups(codeGroupsIds);
+        }
+
         public List<SaleCode> GetSaleCodesEffectiveByZoneID(long zoneID, DateTime effectiveDate)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();

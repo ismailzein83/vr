@@ -13,6 +13,7 @@ namespace TOne.WhS.BusinessEntity.Data
 
         Vanrise.Entities.BigResult<Entities.SaleCode> GetSaleCodeFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SaleCodeQuery> input);
         List<SaleCode> GetSaleCodesByZoneID(long zoneID, DateTime effectiveDate);
+        List<SaleCode> GetSaleCodesByCodeGroups(List<int> codeGroupsIds);
 
         List<SaleCode> GetSaleCodesEffectiveByZoneID(long zoneID, DateTime effectiveDate);
 
