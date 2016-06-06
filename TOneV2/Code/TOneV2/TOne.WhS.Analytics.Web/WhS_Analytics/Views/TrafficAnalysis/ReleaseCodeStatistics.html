@@ -25,9 +25,13 @@
                 <span ng-show="advancedSelected">
                     <vr-whs-be-switch-selector normal-col-num="2" on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>
                 </span>
-                <span ng-show="advancedSelected">
+                <!--<span ng-show="advancedSelected">
                     <vr-common-country-selector normal-col-num="2" on-ready="onCountryDirectiveReady" ismultipleselection></vr-common-country-selector>
-                </span>
+                </span>-->
+
+                <vr-columns width="normal" ng-show="advancedSelected">
+                    <vr-whs-be-codegroup-selector normal-col-num="2" on-ready="onCodeGroupDirectiveReady" ismultipleselection></vr-whs-be-codegroup-selector>
+                </vr-columns>
             </vr-row>
         </div>
 

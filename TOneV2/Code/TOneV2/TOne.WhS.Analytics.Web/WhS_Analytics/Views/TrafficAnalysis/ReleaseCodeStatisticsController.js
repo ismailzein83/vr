@@ -23,6 +23,10 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
     var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
 
+    var codeGroupDirectiveAPI;
+    var codeGroupReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
     defineScope();
     load();
 
@@ -58,6 +62,10 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
             countryDirectiveAPI = api;
             countryReadyPromiseDeferred.resolve();
         }
+        $scope.onCodeGroupDirectiveReady = function (api) {
+            codeGroupDirectiveAPI = api;
+            codeGroupReadyPromiseDeferred.resolve();
+        }
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
         }
@@ -84,7 +92,7 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadTimeRangeSelector, loadReleaseCodeDimessionSection, loadCustomers, loadSuppliers, loadSwitches,  loadCountries])
+        return UtilsService.waitMultipleAsyncOperations([loadTimeRangeSelector, loadReleaseCodeDimessionSection, loadCustomers, loadSuppliers, loadSwitches, /*loadCountries,*/ loadCodeGroups])
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
@@ -97,9 +105,10 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
         var filter = {};
         filter.Dimession = releaseCodeDimenssionDirectiveAPI.getSelectedIds();
         $scope.dimenssionvalues = releaseCodeDimenssionDirectiveAPI.getSelectedIds();
-        //filter.CustomerIds = customerDirectiveAPI.getSelectedIds();
-        //filter.SaleZoneIds = saleZoneDirectiveAPI.getSelectedIds();
-        //filter.GroupByNumber = $scope.groupbyNumber;
+        filter.CustomerIds = customerDirectiveAPI.getSelectedIds();
+        filter.SupplierIds = supplierDirectiveAPI.getSelectedIds();
+        filter.SwitchIds = switchDirectiveAPI.getSelectedIds();
+        filter.CodeGroupIds = codeGroupDirectiveAPI.getSelectedIds();
         return filter;
     }
     function loadTimeRangeSelector() {
@@ -151,6 +160,14 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
         return loadCountryPromiseDeferred.promise;
     }
 
+    function loadCodeGroups() {
+        var loadCodeGroupPromiseDeferred = UtilsService.createPromiseDeferred();
+        codeGroupReadyPromiseDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(codeGroupDirectiveAPI, undefined, loadCodeGroupPromiseDeferred);
+        });
+
+        return loadCodeGroupPromiseDeferred.promise;
+    }
 
 
 

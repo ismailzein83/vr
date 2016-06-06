@@ -18,6 +18,7 @@ namespace TOne.WhS.Analytics.Business
         private readonly CarrierAccountManager _carrierAccountManager;
         private readonly SaleZoneManager _saleZoneManager;
         private readonly SwitchManager _switchManager;
+      
         public ReleaseCodeManager()
         {
             _carrierAccountManager = new CarrierAccountManager();
@@ -58,7 +59,12 @@ namespace TOne.WhS.Analytics.Business
             public override IEnumerable<ReleaseCodeStat> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<ReleaseCodeQuery> input)
             {
                 IReleaseCodeDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IReleaseCodeDataManager>();
-                return dataManager.GetAllFilteredReleaseCodes(input);
+                SaleCodeManager manager = new SaleCodeManager();
+                List<string> salecodesIds = new List<string>();
+                List<SaleCode> salecodes = manager.GetSaleCodesByCodeGroups(input.Query.Filter.CodeGroupIds);
+                salecodesIds = salecodes.Select(x => x.Code).ToList();
+
+                return dataManager.GetAllFilteredReleaseCodes(input, salecodesIds);
             }
         }
 

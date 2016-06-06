@@ -31,12 +31,14 @@ namespace TOne.WhS.Analytics.Data.SQL
         {
         }
         #endregion
-        private ReleaseCodeQuery query; 
+        private ReleaseCodeQuery query;
+        private List<string> codes; 
         #region Public Methods
 
-        public List<ReleaseCodeStat> GetAllFilteredReleaseCodes(Vanrise.Entities.DataRetrievalInput<Entities.ReleaseCodeQuery> input)
+        public List<ReleaseCodeStat> GetAllFilteredReleaseCodes(Vanrise.Entities.DataRetrievalInput<Entities.ReleaseCodeQuery> input , List<string> salecodesIds)
         {
             query = input.Query;
+            codes = salecodesIds;
             List<ReleaseCodeStat> releaseCodes = new List<ReleaseCodeStat>();        
             ExecuteReaderText(GetQuery(input.Query.Filter), (reader) =>
             {
@@ -147,7 +149,6 @@ namespace TOne.WhS.Analytics.Data.SQL
         }
         private void AddSelectColumnToQuery(StringBuilder selectColumnBuilder, string aliasTableName)
         {
-           // selectColumnBuilder.Append(String.Format(@"SwitchId,ReleaseCode,ReleaseSource,Attempt,SuccessfulAttempts,FirstAttempt,LastAttempt,DurationsInMinutes", aliasTableName));
             if (query.Filter.Dimession != null && query.Filter.Dimession.Count() > 0)
             {
 
@@ -181,17 +182,21 @@ namespace TOne.WhS.Analytics.Data.SQL
                
         private void AddFilterToQuery(ReleaseCodeFilter filter, StringBuilder whereBuilder)
         {
-            //AddFilter(whereBuilder, filter.SwitchIds, "SwitchId");
+            AddFilter(whereBuilder, filter.SwitchIds, "SwitchId");
+            AddFilter(whereBuilder, filter.SupplierIds, "SupplierID");
+            AddFilter(whereBuilder, filter.CustomerIds, "CustomerID");
+            AddFilter(whereBuilder, codes, "SaleCode");
+            
         }
         private void AddFilter<T>(StringBuilder whereBuilder, IEnumerable<T> values, string column)
         {
-            //if (values != null && values.Count() > 0)
-            //{
-            //    if (typeof(T) == typeof(string))
-            //        whereBuilder.AppendFormat(" {0} IN ('{1}') AND ", column, String.Join("', '", values));
-            //    else
-            //        whereBuilder.AppendFormat(" {0} IN ({1}) AND ", column, String.Join(", ", values));
-            //}
+            if (values != null && values.Count() > 0)
+            {
+                if (typeof(T) == typeof(string))
+                    whereBuilder.AppendFormat(" {0} IN ('{1}') AND ", column, String.Join("', '", values));
+                else
+                    whereBuilder.AppendFormat(" {0} IN ({1}) AND ", column, String.Join(", ", values));
+            }
         }
       
         #endregion

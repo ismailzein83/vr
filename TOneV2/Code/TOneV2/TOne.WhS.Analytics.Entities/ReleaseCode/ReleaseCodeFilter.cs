@@ -9,5 +9,9 @@ namespace TOne.WhS.Analytics.Entities
     public class ReleaseCodeFilter
     {
         public List<ReleaseCodeDimension> Dimession { get; set; }
+        public List<int> SwitchIds { get; set; }
+        public List<int> CustomerIds { get; set; }
+        public List<int> SupplierIds { get; set; }
+        public List<int> CodeGroupIds { get; set; }
     }
 }
