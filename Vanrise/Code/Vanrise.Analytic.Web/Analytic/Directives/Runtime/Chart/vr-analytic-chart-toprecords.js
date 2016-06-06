@@ -120,18 +120,20 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                 if (payLoad.DimensionsConfig != undefined) {
                     ctrl.dimensionsConfig = payLoad.DimensionsConfig;
                 }
-
                 if (payLoad.Settings != undefined) {
-                    if (payLoad.Settings.Dimensions != undefined) {
+                    if (payLoad.Settings.Dimensions != undefined && !payLoad.Settings.RootDimensionsFromSearch) {
                         ctrl.dimensions = payLoad.Settings.Dimensions;
                         for (var i = 0; i < payLoad.Settings.Dimensions.length; i++) {
                             var dimension = payLoad.Settings.Dimensions[i];
-                            var groupingDimension = UtilsService.getItemByVal(payLoad.SelectedGroupingDimensions, dimension.DimensionName, 'DimensionName');
-                            if (groupingDimension != undefined) {
                                 ctrl.groupingDimensions.push(dimension);
-
-                            }
                         }
+                    } else if (payLoad.Settings.RootDimensionsFromSearch) {
+                            if (payLoad.SelectedGroupingDimensions != undefined) {
+                                for (var i = 0; i < payLoad.SelectedGroupingDimensions.length; i++) {
+                                    var selectedDimension = payLoad.SelectedGroupingDimensions[i];
+                                    ctrl.groupingDimensions.push({ DimensionName: selectedDimension.DimensionName });
+                                }
+                            }
                     }
                     if (payLoad.Settings.Measures != undefined) {
                         for (var i = 0; i < payLoad.Settings.Measures.length; i++) {
@@ -143,11 +145,8 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                     for (var i = 0; i < payLoad.Measures.length; i++) {
                         ctrl.measures.push(payLoad.Measures[i]);
                     }
-                    if (payLoad.SelectedGroupingDimensions != undefined) {
-                        for (var i = 0; i < payLoad.SelectedGroupingDimensions.length; i++) {
-                            ctrl.groupingDimensions.push(UtilsService.getItemByVal(ctrl.dimensions, payLoad.SelectedGroupingDimensions[i].DimensionName, 'DimensionName'));
-                        }
-                    }
+                   
+                   
                 }
 
                 if (ctrl.groupingDimensions.length > 0)

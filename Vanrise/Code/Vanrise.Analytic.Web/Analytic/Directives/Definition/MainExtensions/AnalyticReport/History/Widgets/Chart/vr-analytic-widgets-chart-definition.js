@@ -95,7 +95,7 @@
                         var selectedDimensionIds;
                         var selectedMeasureIds;
                         if (payload.widgetEntity != undefined) {
-                            $scope.scopeModel.rootDimensionsFromSearch = payload.widgetEntity.RootDimensionsFromSearchSection;
+                            $scope.scopeModel.rootDimensionsFromSearch = payload.widgetEntity.RootDimensionsFromSearch;
                             selectedDimensionIds = [];
                             if (payload.widgetEntity.Dimensions != undefined && payload.widgetEntity.Dimensions.length > 0) {
                                 for (var i = 0; i < payload.widgetEntity.Dimensions.length; i++) {
@@ -182,7 +182,8 @@
                         Dimensions: getDimensions(),
                         TopRecords: $scope.scopeModel.topRecords,
                         OrderType: orderTypeSelectorAPI.getSelectedIds(),
-                        ChartType: $scope.scopeModel.selectedChartType.value
+                        ChartType: $scope.scopeModel.selectedChartType.value,
+                        RootDimensionsFromSearch:$scope.scopeModel.rootDimensionsFromSearch
                     }
                     return data;
                 }
@@ -192,16 +193,19 @@
 
                 function getDimensions() {
                     var dimensions;
-                    if ($scope.scopeModel.selectedDimensions != undefined && $scope.scopeModel.selectedDimensions.length > 0) {
-                        dimensions = [];
-                        for (var i = 0; i < $scope.scopeModel.selectedDimensions.length; i++) {
-                            var dimension = $scope.scopeModel.selectedDimensions[i];
-                            dimensions.push({
-                                DimensionName: dimension.Name,
-                                Title: dimension.Title,
-                                IsRootDimension: dimension.IsRootDimension,
+                    if (!$scope.scopeModel.rootDimensionsFromSearch)
+                    {
+                        if ($scope.scopeModel.selectedDimensions != undefined && $scope.scopeModel.selectedDimensions.length > 0) {
+                            dimensions = [];
+                            for (var i = 0; i < $scope.scopeModel.selectedDimensions.length; i++) {
+                                var dimension = $scope.scopeModel.selectedDimensions[i];
+                                dimensions.push({
+                                    DimensionName: dimension.Name,
+                                    Title: dimension.Title,
+                                    IsRootDimension: dimension.IsRootDimension,
 
-                            });
+                                });
+                            }
                         }
                     }
                     return dimensions;

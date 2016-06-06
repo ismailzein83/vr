@@ -3,8 +3,8 @@
     <vr-datagrid datasource="analyticrecordsctrl.datasource" defaultsortbyfieldname="analyticrecordsctrl.sortField"
                  pagingtype="'Pager'" dataretrievalfunction="analyticrecordsctrl.dataRetrievalFunction"
                  on-ready="analyticrecordsctrl.gridReady" enableautoexport="true" gridmenuactions="analyticrecordsctrl.gridLeftMenuActions">
-        <vr-datagridcolumn ng-repeat="dimension in analyticrecordsctrl.groupingDimensions" headertext="dimension.Title" type="dimension.Type" widthfactor="dimension.Widthfactor"
-                           numberprecision="dimension.NumberPrecision" field="dimension.Type.indexOf('Date') > -1 || dimension.Type.indexOf('Number') > -1 ? 'DimensionValues[' + $index + '].Value' : 'DimensionValues[' + $index + '].Name'" columnindex="$index" widthfactor="15" ></vr-datagridcolumn>
+        <vr-datagridcolumn ng-if="analyticrecordsctrl.groupingDimensions.length>0" ng-repeat="dimension in analyticrecordsctrl.groupingDimensions" headertext="dimension.Title" type="dimension.Type" widthfactor="dimension.Widthfactor"
+                           numberprecision="dimension.NumberPrecision" field="dimension.Type.indexOf('Date') > -1 || dimension.Type.indexOf('Number') > -1 ? 'DimensionValues[' + $index + '].Value' : 'DimensionValues[' + $index + '].Name'" columnindex="$index" widthfactor="15"></vr-datagridcolumn>
 
         <vr-datagridcolumn ng-repeat="measure in analyticrecordsctrl.measures" headertext="measure.Title" type="measure.Type" numberprecision="measure.NumberPrecision" widthfactor="{{measure.Widthfactor}}"
                            field="'MeasureValues.' + measure.MeasureName + '.Value'" tag="measure.MeasureName" summaryfield="'MeasureValues.' + measure.MeasureName + '.Value'" getcolor="analyticrecordsctrl.getMeasureColor"></vr-datagridcolumn>

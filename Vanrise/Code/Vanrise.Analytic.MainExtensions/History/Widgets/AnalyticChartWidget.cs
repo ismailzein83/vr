@@ -14,6 +14,7 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
         public AnalyticQueryOrderType OrderType { get; set; }
         public int? TopRecords { get; set; }
         public string ChartType { get; set; }
+        public bool RootDimensionsFromSearch { get; set; }
     }
 
     public class AnalyticChartWidgetDimension
