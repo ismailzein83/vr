@@ -169,7 +169,7 @@
 
                         filter = {};
                         filter.criteriaFieldName = criteriaField.FieldName;
-                        filter.isBaseSearch = criteriaField.IsBaseSearch;
+                        filter.showInBasicSearch = criteriaField.ShowInBasicSearch;
 
                         filter.directiveEditor = filterEditor;
                         filter.directiveLoadDeferred = UtilsService.createPromiseDeferred();

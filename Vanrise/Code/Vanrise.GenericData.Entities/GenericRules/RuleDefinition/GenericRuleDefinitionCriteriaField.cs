@@ -20,6 +20,6 @@ namespace Vanrise.GenericData.Entities
 
         public int Priority { get; set; }
 
-        public bool IsBaseSearch { get; set; }
+        public bool ShowInBasicSearch { get; set; }
     }
 }

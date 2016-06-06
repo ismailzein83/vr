@@ -17,7 +17,7 @@
                 <vr-columns width="normal" ng-show="advancedSelected">
                     <vr-textbox label="Description" value="scopeModel.description"></vr-textbox>
                 </vr-columns>
-                <span ng-repeat="filter in scopeModel.filters" ng-show="advancedSelected || (filter.isBaseSearch && basicSelected)">
+                <span ng-repeat="filter in scopeModel.filters" ng-show="advancedSelected || (filter.showInBasicSearch && basicSelected)">
                     <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady" normal-col-num="2"></vr-directivewrapper>
                 </span>
                 <span ng-show="advancedSelected">

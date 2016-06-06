@@ -100,7 +100,7 @@
                 }
                 $scope.fieldName = criteriaFieldEntity.FieldName;
                 $scope.fieldTitle = criteriaFieldEntity.Title;
-                $scope.isBaseSearch = criteriaFieldEntity.IsBaseSearch;
+                $scope.showInBasicSearch = criteriaFieldEntity.ShowInBasicSearch;
 
                 $scope.selectedBehaviorType = UtilsService.getItemByVal($scope.behaviorTypes, criteriaFieldEntity.RuleStructureBehaviorType, 'value');
 
@@ -153,7 +153,7 @@
                 Title: $scope.fieldTitle,
                 FieldType: dataRecordFieldTypeSelectiveAPI.getData(),
                 RuleStructureBehaviorType: $scope.selectedBehaviorType.value,
-                IsBaseSearch: $scope.isBaseSearch
+                ShowInBasicSearch: $scope.showInBasicSearch
             };
         }
     }

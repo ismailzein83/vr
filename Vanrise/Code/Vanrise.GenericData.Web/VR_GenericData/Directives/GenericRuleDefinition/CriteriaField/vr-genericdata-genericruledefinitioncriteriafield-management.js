@@ -124,7 +124,7 @@
                             FieldType: dataItem.FieldType,
                             RuleStructureBehaviorType: dataItem.RuleStructureBehaviorType,
                             Priority: priority,
-                            IsBaseSearch: dataItem.IsBaseSearch
+                            ShowInBasicSearch: dataItem.ShowInBasicSearch
                         };
                     }
                 };
