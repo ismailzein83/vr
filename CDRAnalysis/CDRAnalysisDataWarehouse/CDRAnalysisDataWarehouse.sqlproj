@@ -85,10 +85,8 @@
     <Build Include="dbo\Tables\Dim_MSISDN.sql" />
     <Build Include="dbo\Tables\Dim_IMEI.sql" />
     <Build Include="dbo\Tables\Dim_AccountStatus.sql" />
-    <Build Include="Security\zahraa.sql" />
     <Build Include="Security\VANRISE_wissam.ajamy.sql" />
     <Build Include="Security\VANRISE_development.sql" />
-    <Build Include="Security\development.sql" />
     <Build Include="Security\RoleMemberships.sql" />
     <Build Include="dbo\Stored Procedures\Populate_DW.sql" />
     <Build Include="dbo\Stored Procedures\FillFactCallsHourly.sql" />
