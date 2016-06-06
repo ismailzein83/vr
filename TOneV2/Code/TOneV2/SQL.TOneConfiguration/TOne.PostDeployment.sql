@@ -265,20 +265,13 @@ as (select * from (values
 (15,'By Rate','WhS_Routing_RouteRuleOptionFilterSettings','vr-whs-routing-routerulesettings-filter-rate',null,null),
 (16,'Fixed','WhS_Routing_RouteRuleOptionPercentageSettings','vr-whs-routing-routerulesettings-percentage-fixed',null,null),
 (17,'Specific Day','WhS_BE_PricingRuleRateTypeSettings','vr-whs-be-pricingrulesettings-ratetype-specific','TOne.WhS.BusinessEntity.MainExtensions.PricingRules.RateTypeSettings.SpecificDayRateTypeSettings, TOne.WhS.BusinessEntity.MainExtensions',null),
-(18,'Highest Rate','WhS_Routing_SupplierZoneToRPOptionType','vr-whs-routing-policy-rate-highest','TOne.WhS.Routing.Business.SupplierZoneToRPOptionHighestRatePolicy, TOne.WhS.Routing.Business',null),
-(19,'Lowest Rate','WhS_Routing_SupplierZoneToRPOptionType','vr-whs-routing-policy-rate-lowest','TOne.WhS.Routing.Business.SupplierZoneToRPOptionLowestRatePolicy, TOne.WhS.Routing.Business',null),
-(20,'Average Rate','WhS_Routing_SupplierZoneToRPOptionType','vr-whs-routing-policy-rate-average','TOne.WhS.Routing.Business.SupplierZoneToRPOptionAverageRatePolicy, TOne.WhS.Routing.Business',null),
-(21,'Average','WhS_Sales_CostCalculationMethod','vr-whs-sales-avgcostcalculation',null,null),
-(22,'Custom Percentage','WhS_Sales_CostCalculationMethod','vr-whs-sales-percentagecostcalculation',null,null),
-(23,'Route Percentage','WhS_Sales_CostCalculationMethod','vr-whs-sales-routepercentagecostcalculation',null,null),
+
 (24,'Text','VRGeneric_DataRecordFieldType','vr-genericdata-text','Vanrise.Common.MainExtensions.DataRecordFieldTextType, Vanrise.Common.MainExtensions',null),
 (25,'Number','VRGeneric_DataRecordFieldType','vr-genericdata-number','Vanrise.Common.MainExtensions.DataRecordFieldNumberType, Vanrise.Common.MainExtensions',null),
 (26,'DateTime','VRGeneric_DataRecordFieldType','vr-genericdata-datetime','Vanrise.Common.MainExtensions.DataRecordFieldDateTimeType,Vanrise.Common.MainExtensions',null),
 (27,'Choices','VRGeneric_DataRecordFieldType','vr-genericdata-choices','Vanrise.Common.MainExtensions.DataRecordFieldChoicesType, Vanrise.Common.MainExtensions',null),
 (28,'Boolean','VRGeneric_DataRecordFieldType','vr-genericdata-boolean','Vanrise.Common.MainExtensions.DataRecordFieldBooleanType, Vanrise.Common.MainExtensions',null),
-(29,'Fixed','WhS_Sales_RateCalculationMethod','vr-whs-sales-fixedratecalculation',null,null),
-(30,'Margin','WhS_Sales_RateCalculationMethod','vr-whs-sales-marginratecalculation',null,null),
-(31,'Margin Percentage','WhS_Sales_RateCalculationMethod','vr-whs-sales-marginpercentageratecalculation',null,null),
+
 (32,'Carrier Portal Connector','CP_SupplierPriceList_ConnectorUploadPriceList','vr-cp-supplierpricelist-connector',null,null),
 (33,'Margin','WhS_Sales_SellingRuleSettingsType','vr-whs-sales-sellingrulesettings-margin',null,null),
 (34,'Fixed','WhS_Sales_SellingRuleSettingsType','vr-whs-sales-sellingrulesettings-fixed',null,null),
@@ -699,7 +692,16 @@ set identity_insert [common].[ExtensionConfiguration] on;
 ;with cte_data([ID],[Title],[ConfigType],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(11,'Specific Suppliers Zones','WhS_BE_SupplierZoneGroup','{"Editor":"vr-whs-be-supplierzonegroup-selective","RuntimeEditor":""}')
+(1001,'Specific Suppliers Zones','WhS_BE_SupplierZoneGroup','{"Editor":"vr-whs-be-supplierzonegroup-selective","RuntimeEditor":""}'),
+(1002,'Highest Rate','WhS_Routing_SupplierZoneToRPOptionType','{"Editor":"vr-whs-routing-policy-rate-highest","BehaviorFQTN":"TOne.WhS.Routing.Business.SupplierZoneToRPOptionHighestRatePolicy, TOne.WhS.Routing.Business"}'),
+(1003,'Lowest Rate','WhS_Routing_SupplierZoneToRPOptionType','{"Editor":"vr-whs-routing-policy-rate-lowest","BehaviorFQTN":"TOne.WhS.Routing.Business.SupplierZoneToRPOptionLowestRatePolicy, TOne.WhS.Routing.Business"}'),
+(1004,'Average Rate','WhS_Routing_SupplierZoneToRPOptionType','{"Editor":"vr-whs-routing-policy-rate-average","BehaviorFQTN":"TOne.WhS.Routing.Business.SupplierZoneToRPOptionAverageRatePolicy, TOne.WhS.Routing.Business"}'),
+(1005,'Average','WhS_Sales_CostCalculationMethod','{"Editor":"vr-whs-sales-avgcostcalculation"}'),
+(1006,'Custom Percentage','WhS_Sales_CostCalculationMethod','{"Editor":"vr-whs-sales-percentagecostcalculation"}'),
+(1007,'Route Percentage','WhS_Sales_CostCalculationMethod','{"Editor":"vr-whs-sales-routepercentagecostcalculation"}'),
+(1008,'Fixed','WhS_Sales_RateCalculationMethod','{"Editor":"vr-whs-sales-fixedratecalculation"}'),
+(1009,'Margin','WhS_Sales_RateCalculationMethod','{"Editor":"vr-whs-sales-marginratecalculation"}'),
+(1010,'Margin Percentage','WhS_Sales_RateCalculationMethod','{"Editor":"vr-whs-sales-marginpercentageratecalculation"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
