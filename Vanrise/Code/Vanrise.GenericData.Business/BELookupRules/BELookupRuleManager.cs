@@ -102,12 +102,15 @@ namespace Vanrise.GenericData.Business
 
             protected override bool ShouldSetCacheExpired(int businessEntityDefinitionId)
             {
-                if (Vanrise.Caching.CacheManagerFactory.GetCacheManager<BELookupRuleDefinitionManager.CacheManager>().IsCacheExpired(ref _beLookupRuleDefinitionCacheLastCheck)
-                    || Vanrise.Caching.CacheManagerFactory.GetCacheManager<BusinessEntityDefinitionManager.CacheManager>().IsCacheExpired(ref _businessEntityDefinitionCacheLastCheck))
-                    return true;
+                return Vanrise.Caching.CacheManagerFactory.GetCacheManager<BELookupRuleDefinitionManager.CacheManager>().IsCacheExpired(ref _beLookupRuleDefinitionCacheLastCheck)
+                    | Vanrise.Caching.CacheManagerFactory.GetCacheManager<BusinessEntityDefinitionManager.CacheManager>().IsCacheExpired(ref _businessEntityDefinitionCacheLastCheck)
+                    | AreBEsChanged(businessEntityDefinitionId);
+            }
 
+            private bool AreBEsChanged(int businessEntityDefinitionId)
+            {
                 BEDefinitionCacheItem beDefinitionCacheItem;
-                if(!_beDefinitionCacheItems.TryGetValue(businessEntityDefinitionId, out beDefinitionCacheItem))
+                if (!_beDefinitionCacheItems.TryGetValue(businessEntityDefinitionId, out beDefinitionCacheItem))
                 {
                     var beManager = (new BusinessEntityDefinitionManager()).GetBusinessEntityManager(businessEntityDefinitionId);
                     if (beManager == null)
@@ -120,7 +123,7 @@ namespace Vanrise.GenericData.Business
                 }
                 DateTime? lastCheckTime = beDefinitionCacheItem.LastCheckTime;
                 bool isCacheExpired = beDefinitionCacheItem.BEManager.IsCacheExpired(new BusinessEntityIsCacheExpiredContext(businessEntityDefinitionId), ref lastCheckTime);
-                beDefinitionCacheItem.LastCheckTime = lastCheckTime;                
+                beDefinitionCacheItem.LastCheckTime = lastCheckTime;
                 return isCacheExpired;
             }
 
