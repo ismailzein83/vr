@@ -39,6 +39,11 @@ namespace Vanrise.Data
             return Math.Round(value, s_decimalPrecision);
         }
 
+        public static object GetDateTimeForBCP(DateTime value)
+        {
+            return value.ToString("yyyy-MM-dd HH:mm:ss.fff");
+        }
+
         public BaseDataManager()
             : this("MainDBConnString")
         {
