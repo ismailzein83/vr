@@ -103,7 +103,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                         else if (sqlDataType == "bit")
                             columnsValuesBuider.Append(String.Format(", record.{0} != null ? (record.{0} == true ? \"1\" : \"0\") : \"\"", columnSettings.ValueExpression));
                         else if (sqlDataType == "datetime")
-                            columnsValuesBuider.Append(String.Format(", (record.{0} != null && record.{0} != default(DateTime)) ? record.{0} : \"\"", columnSettings.ValueExpression));
+                            columnsValuesBuider.Append(String.Format(", (record.{0} != null && record.{0} != default(DateTime)) ? Vanrise.Data.BaseDataManager.GetDateTimeForBCP(record.{0}) : \"\"", columnSettings.ValueExpression));
                         else
                             columnsValuesBuider.Append(String.Format(", record.{0} != null ? record.{0} : \"\"", columnSettings.ValueExpression));
                         columnIndex++;
