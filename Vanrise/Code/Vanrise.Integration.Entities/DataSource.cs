@@ -31,8 +31,49 @@ namespace Vanrise.Integration.Entities
     {
         public BaseAdapterArgument AdapterArgument { get; set; }
 
+        public DataSourceMappingSettings MappingSettings { get; set; }
+
         public string MapperCustomCode { get; set; }
 
         public int ExecutionFlowId { get; set; }
+    }
+
+    public class DataSourceMappingSettings
+    {
+        public int DataRecordTypeId { get; set; }
+
+        public DataSourceParser Parser { get; set; }
+
+        public List<string> ParsedRecordStages { get; set; }
+
+        public DataSourceTransformationSettings TransformationSettings { get; set; }
+    }
+
+    public class DataSourceTransformationSettings
+    {
+        public int TransformationDefinitionId { get; set; }
+
+        public string InputRecordName { get; set; }
+
+        public List<DataSourceTransformationRecordStage> OutputRecordStages { get; set; }
+    }
+
+    public class DataSourceTransformationRecordStage
+    {
+        public string RecordName { get; set; }
+
+        public List<string> StageNames { get; set; }
+    }
+
+    public abstract class DataSourceParser
+    {
+        public abstract void Execute(IDataSourceParserContext context);
+    }
+
+    public interface IDataSourceParserContext
+    {
+        IImportedData ImportedData { get; }
+
+        List<dynamic> ParsedRecords { set; }
     }
 }
