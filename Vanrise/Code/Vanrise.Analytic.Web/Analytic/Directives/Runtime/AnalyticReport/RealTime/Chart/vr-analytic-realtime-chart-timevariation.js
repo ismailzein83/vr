@@ -46,7 +46,7 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
                     function getDirectiveAPI() {
 
                         directiveAPI.load = function (payload) {
-
+                            ctrl.showloader = true;
                             var query = getQuery(payload);
                             var dataRetrievalInput = {
                                 DataRetrievalResultType: 0,
@@ -58,7 +58,7 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
                             return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                                 .then(function (response) {
                                     renderCharts(response, payload.Settings.ChartType);
-                                    ctrl.showlaoder = false;
+                                    ctrl.showloader = false;
                                 });
 
                             function renderCharts(response, chartType) {
@@ -70,8 +70,8 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
                                         var chartRecord = {
                                            Time : response.Data[i].Time,
                                         };
+                                        chartRecord[ctrl.measures[m].MeasureName] = response.Data[i].MeasureValues[ctrl.measures[m].MeasureName].Value;
                                         chartData.push(chartRecord);
-                                        chartRecord[ctrl.measures[m].MeasureName] = response.Data[i].MeasureValues[ctrl.measures[m].MeasureName];
                                     }
                                 }
                                 var chartDefinition = {
@@ -82,7 +82,6 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
                                     titlePath: "Time",
                                     isDateTime: true
                                 };
-
                                 var seriesDefinitions = [];
                                 for (var i = 0; i < ctrl.measures.length; i++) {
                                     var measure = ctrl.measures[i];

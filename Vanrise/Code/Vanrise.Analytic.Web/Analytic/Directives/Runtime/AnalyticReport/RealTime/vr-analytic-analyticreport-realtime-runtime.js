@@ -37,7 +37,7 @@
                 $scope.scopeModel.sinceTimes = UtilsService.getArrayEnum(VR_Analytic_SinceTimeEnum);
 
                 $scope.scopeModel.selectedSinceTime = VR_Analytic_SinceTimeEnum.Time;
-
+                $scope.scopeModel.showSinceTime = true;
                 $scope.scopeModel.selectedTimeGroupingUnit = VR_Analytic_TimeGroupingUnitEnum.Day;
                 $scope.scopeModel.onSinceSelectionChanged = function () {
 

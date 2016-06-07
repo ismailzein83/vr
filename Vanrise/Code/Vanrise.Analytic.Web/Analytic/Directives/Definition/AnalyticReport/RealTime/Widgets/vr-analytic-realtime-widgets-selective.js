@@ -57,6 +57,11 @@
               + 'hideremoveicon>'
           + '</vr-select>'
            + ' </vr-columns>'
+
+                      + ' <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">'
+                + ' <vr-switch label="Show Title" value="scopeModel.showTitle"></vr-switch>'
+                + ' </vr-columns>'
+
            + '</vr-row>'
               + '<vr-directivewrapper directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{searchSettingsCtrl.normalColNum}}" isrequired="searchSettingsCtrl.isrequired" customvalidate="searchSettingsCtrl.customvalidate" type="searchSettingsCtrl.type"></vr-directivewrapper>';
             return template;
@@ -120,7 +125,7 @@
                             widgetEntity = payload.widgetEntity;
                             $scope.scopeModel.widgetTitle = payload.widgetEntity.WidgetTitle;
                             $scope.scopeModel.selectedColumnWidth = UtilsService.getItemByVal($scope.scopeModel.columnWidth, payload.widgetEntity.ColumnWidth, "value");
-                            
+                            $scope.scopeModel.showTitle = payload.widgetEntity.ShowTitle;
                             directiveReadyDeferred = UtilsService.createPromiseDeferred();
                             var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                             directiveReadyDeferred.promise.then(function () {
@@ -176,6 +181,7 @@
                             data.AnalyticTableId = $scope.scopeModel.selectedTable != undefined ? $scope.scopeModel.selectedTable.AnalyticTableId : undefined,
                             data.WidgetTitle = $scope.scopeModel.widgetTitle;
                             data.ColumnWidth = $scope.scopeModel.selectedColumnWidth.value;
+                            data.ShowTitle = $scope.scopeModel.showTitle;
 
                         }
                     }
