@@ -75,8 +75,8 @@ namespace TOne.WhS.Sales.Business
 
             if (changes != null && changes.DefaultChanges != null)
             {
-                NewDefaultRoutingProduct newRoutingProduct = changes.DefaultChanges.NewDefaultRoutingProduct;
-                DefaultRoutingProductChange routingProductChange = changes.DefaultChanges.DefaultRoutingProductChange;
+                DraftNewDefaultRoutingProduct newRoutingProduct = changes.DefaultChanges.NewDefaultRoutingProduct;
+                DraftChangedDefaultRoutingProduct routingProductChange = changes.DefaultChanges.DefaultRoutingProductChange;
 
                 if (newRoutingProduct != null)
                 {

@@ -24,19 +24,19 @@ namespace TOne.WhS.Sales.Data.SQL
 
         #region Public Methods
 
-        public bool InsertDefaultRoutingProduct(BusinessEntity.Entities.SalePriceListOwnerType ownerType, int ownerId, Entities.NewDefaultRoutingProduct newDefaultRoutingProduct)
+        public bool InsertDefaultRoutingProduct(BusinessEntity.Entities.SalePriceListOwnerType ownerType, int ownerId, Entities.DraftNewDefaultRoutingProduct newDefaultRoutingProduct)
         {
             int affectedRows = ExecuteNonQuerySP("TOneWhS_BE.sp_SaleEntityRoutingProduct_InsertOrUpdateDefault", ownerType, ownerId, newDefaultRoutingProduct.DefaultRoutingProductId, newDefaultRoutingProduct.BED, newDefaultRoutingProduct.EED);
             return affectedRows > 0;
         }
 
-        public bool UpdateDefaultRoutingProduct(BusinessEntity.Entities.SalePriceListOwnerType ownerType, int ownerId, Entities.DefaultRoutingProductChange defaultRoutingProductChange)
+        public bool UpdateDefaultRoutingProduct(BusinessEntity.Entities.SalePriceListOwnerType ownerType, int ownerId, Entities.DraftChangedDefaultRoutingProduct defaultRoutingProductChange)
         {
             int affectedRows = ExecuteNonQuerySP("TOneWhS_BE.sp_SaleEntityRoutingProduct_UpdateDefault", ownerType, ownerId, defaultRoutingProductChange.EED);
             return affectedRows > 0;
         }
 
-        public bool InsertZoneRoutingProducts(BusinessEntity.Entities.SalePriceListOwnerType ownerType, int ownerId, IEnumerable<Entities.NewZoneRoutingProduct> newZoneRoutingProducts)
+        public bool InsertZoneRoutingProducts(BusinessEntity.Entities.SalePriceListOwnerType ownerType, int ownerId, IEnumerable<Entities.DraftNewZoneRoutingProduct> newZoneRoutingProducts)
         {
             DataTable newZoneRoutingProductsTable = BuildNewZoneRoutingProductsTable(newZoneRoutingProducts);
 
@@ -53,7 +53,7 @@ namespace TOne.WhS.Sales.Data.SQL
             return affectedRows == newZoneRoutingProducts.Count();
         }
 
-        public bool UpdateZoneRoutingProducts(BusinessEntity.Entities.SalePriceListOwnerType ownerType, int ownerId, IEnumerable<Entities.ZoneRoutingProductChange> zoneRoutingProductChanges)
+        public bool UpdateZoneRoutingProducts(BusinessEntity.Entities.SalePriceListOwnerType ownerType, int ownerId, IEnumerable<Entities.DraftChangedZoneRoutingProduct> zoneRoutingProductChanges)
         {
             DataTable zoneRoutingProductChangesTable = BuildZoneRoutingProductChangesTable(zoneRoutingProductChanges);
 
@@ -74,7 +74,7 @@ namespace TOne.WhS.Sales.Data.SQL
 
         #region Private Methods
 
-        DataTable BuildNewZoneRoutingProductsTable(IEnumerable<NewZoneRoutingProduct> newZoneRoutingProducts)
+        DataTable BuildNewZoneRoutingProductsTable(IEnumerable<DraftNewZoneRoutingProduct> newZoneRoutingProducts)
         {
             DataTable table = new DataTable();
 
@@ -104,7 +104,7 @@ namespace TOne.WhS.Sales.Data.SQL
             return table;
         }
 
-        DataTable BuildZoneRoutingProductChangesTable(IEnumerable<ZoneRoutingProductChange> zoneRoutingProductChanges)
+        DataTable BuildZoneRoutingProductChangesTable(IEnumerable<DraftChangedZoneRoutingProduct> zoneRoutingProductChanges)
         {
             DataTable table = new DataTable();
 

@@ -24,8 +24,8 @@ namespace TOne.WhS.Sales.Business
         SaleEntityZoneRoutingProduct _customerCurrentDefaultRoutingProduct;
         SaleEntityZoneRoutingProduct _sellingProductCurrentDefaultRoutingProduct;
 
-        NewDefaultRoutingProduct _newDefaultRoutingProduct;
-        DefaultRoutingProductChange _defaultRoutingProductChange;
+        DraftNewDefaultRoutingProduct _newDefaultRoutingProduct;
+        DraftChangedDefaultRoutingProduct _defaultRoutingProductChange;
 
         public ZoneRoutingProductSetter(int sellingProductId, int? customerId, DateTime effectiveOn, Changes changes)
         {

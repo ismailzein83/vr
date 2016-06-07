@@ -8,8 +8,8 @@ namespace TOne.WhS.Sales.Entities
 {
     public class DefaultChanges
     {
-        public NewDefaultRoutingProduct NewDefaultRoutingProduct { get; set; }
+        public DraftNewDefaultRoutingProduct NewDefaultRoutingProduct { get; set; }
 
-        public DefaultRoutingProductChange DefaultRoutingProductChange { get; set; }
+        public DraftChangedDefaultRoutingProduct DefaultRoutingProductChange { get; set; }
     }
 }

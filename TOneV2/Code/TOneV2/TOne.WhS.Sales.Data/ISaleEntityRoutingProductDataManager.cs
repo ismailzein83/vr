@@ -10,12 +10,12 @@ namespace TOne.WhS.Sales.Data
 {
     public interface ISaleEntityRoutingProductDataManager : IDataManager
     {
-        bool InsertDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, NewDefaultRoutingProduct newDefaultRoutingProduct);
+        bool InsertDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, DraftNewDefaultRoutingProduct newDefaultRoutingProduct);
 
-        bool UpdateDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, DefaultRoutingProductChange defaultRoutingProductChange);
+        bool UpdateDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, DraftChangedDefaultRoutingProduct defaultRoutingProductChange);
 
-        bool InsertZoneRoutingProducts(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<NewZoneRoutingProduct> newZoneRoutingProducts);
+        bool InsertZoneRoutingProducts(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<DraftNewZoneRoutingProduct> newZoneRoutingProducts);
 
-        bool UpdateZoneRoutingProducts(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<ZoneRoutingProductChange> zoneRoutingProductChanges);
+        bool UpdateZoneRoutingProducts(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<DraftChangedZoneRoutingProduct> zoneRoutingProductChanges);
     }
 }

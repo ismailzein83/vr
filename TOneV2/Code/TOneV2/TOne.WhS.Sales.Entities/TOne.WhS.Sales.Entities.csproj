@@ -77,9 +77,13 @@
     <Compile Include="RateManagement\Rate\NewRate.cs" />
     <Compile Include="RateManagement\RoutingProduct\ChangedDefaultRoutingProduct.cs" />
     <Compile Include="RateManagement\RoutingProduct\ChangedSaleZoneRoutingProduct.cs" />
+    <Compile Include="RateManagement\RoutingProduct\DefaultRoutingProduct\DraftChangedDefaultRoutingProduct.cs" />
+    <Compile Include="RateManagement\RoutingProduct\DefaultRoutingProduct\DraftNewDefaultRoutingProduct.cs" />
     <Compile Include="RateManagement\RoutingProduct\ExistingDefaultRoutingProduct.cs" />
     <Compile Include="RateManagement\RoutingProduct\NewDefaultRoutingProduct.cs" />
     <Compile Include="RateManagement\RoutingProduct\NewSaleZoneRoutingProduct.cs" />
+    <Compile Include="RateManagement\RoutingProduct\ZoneRoutingProduct\DraftChangedZoneRoutingProduct.cs" />
+    <Compile Include="RateManagement\RoutingProduct\ZoneRoutingProduct\DraftNewZoneRoutingProduct.cs" />
     <Compile Include="RateManagement\Zone\ExistingZone.cs" />
     <Compile Include="RatePlanning\DefaultChanges.cs" />
     <Compile Include="RatePlanning\BaseChanges.cs" />
@@ -95,7 +99,6 @@
     <Compile Include="RatePlanning\Draft\DraftChangedRate.cs" />
     <Compile Include="RatePlanning\DefaultItem.cs" />
     <Compile Include="RatePlanning\ChangesSummary.cs" />
-    <Compile Include="RatePlanning\RoutingProductChanges.cs" />
     <Compile Include="RatePlanning\ServiceChanges.cs" />
     <Compile Include="RatePlanning\ZoneChanges.cs" />
     <Compile Include="RatePlanning\ZoneItem.cs" />
