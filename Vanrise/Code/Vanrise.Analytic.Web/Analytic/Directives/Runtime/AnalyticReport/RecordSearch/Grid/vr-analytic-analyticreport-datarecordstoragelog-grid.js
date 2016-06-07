@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageLogGridDirective.$inject = ['VR_GenericData_DataRecordStorageLogAPIService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService','UtilsService'];
+    DataRecordStorageLogGridDirective.$inject = ['VR_GenericData_DataRecordStorageLogAPIService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService','UtilsService','VR_Analytic_GridWidthEnum'];
 
-    function DataRecordStorageLogGridDirective(VR_GenericData_DataRecordStorageLogAPIService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, UtilsService) {
+    function DataRecordStorageLogGridDirective(VR_GenericData_DataRecordStorageLogAPIService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, UtilsService, VR_Analytic_GridWidthEnum) {
         return {
             restrict: 'E',
             scope: {
@@ -27,10 +27,11 @@
         function DataRecordStorageLogGrid($scope, ctrl, $attrs) {
             ctrl.showGrid = false;
             this.initializeController = initializeController;
-
+            var gridWidths;
             var gridAPI;
 
             function initializeController() {
+                gridWidths = UtilsService.getArrayEnum(VR_Analytic_GridWidthEnum);
                 ctrl.sortField = 'DateTimeField';
                 ctrl.sortDirection = undefined;
                 ctrl.dataRecordStorageLogs = [];
@@ -86,6 +87,9 @@
                                 break;
                             }
                         }
+                        var gridWidth = UtilsService.getItemByVal(gridWidths, column.Width, "value");
+                        if (gridWidth != undefined)
+                            column.Widthfactor = gridWidth.widthFactor;
                         ctrl.columns.push(column);
                     });
 

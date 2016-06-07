@@ -7,6 +7,6 @@
                  menuactions="ctrl.menuActions" defaultsortbyfieldname="'RecordTime'" defaultsortdirection="ctrl.sortDirection">
         <vr-datagridcolumn ng-repeat="column in ctrl.columns" headertext="column.FieldTitle" numberprecision="column.numberprecision" type="column.type"
                            field="'FieldValues.' + column.FieldName + '.Description'"
-                           tag="column" columnindex="$index"></vr-datagridcolumn>
+                           tag="column" columnindex="$index" widthfactor="column.Widthfactor"></vr-datagridcolumn>
     </vr-datagrid>
 </div>
