@@ -29,5 +29,6 @@ namespace Vanrise.Analytic.Entities
         public string FieldName { get; set; }
 
         public string FieldTitle { get; set; }
+        public string Width { get; set; }
     }
 }

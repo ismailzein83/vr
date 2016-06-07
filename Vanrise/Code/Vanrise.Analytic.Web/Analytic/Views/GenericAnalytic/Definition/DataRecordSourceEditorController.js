@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordSourceEditorController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataStoreConfigAPIService', 'VR_GenericData_DataStoreAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService'];
+    DataRecordSourceEditorController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataStoreConfigAPIService', 'VR_GenericData_DataStoreAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService','VR_Analytic_GridWidthEnum'];
 
-    function DataRecordSourceEditorController($scope, VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataStoreConfigAPIService, VR_GenericData_DataStoreAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService) {
+    function DataRecordSourceEditorController($scope, VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataStoreConfigAPIService, VR_GenericData_DataStoreAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, VR_Analytic_GridWidthEnum) {
 
         var isEditMode;
         var dataRecordSource;
@@ -17,7 +17,7 @@
 
         $scope.selectedFields = [];
         $scope.dataRecordTypeFields = [];
-        $scope.scopeModal = {};
+        $scope.scopeModel = {};
         var existingSources;
 
         loadParameters();
@@ -34,9 +34,12 @@
             isEditMode = (dataRecordSource != undefined);
         }
         function defineScope() {
+            $scope.scopeModel.gridWidths = UtilsService.getArrayEnum(VR_Analytic_GridWidthEnum);
+
             $scope.onDataRecordStorageSelectorReady = function (api) {
                 dataRecordStorageSelectorAPI = api;
             }
+
             $scope.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyDeferred.resolve();
@@ -93,7 +96,7 @@
             if (!existingSources || existingSources.length == 0) {
                 return true;
             }
-            if (existingSources.indexOf($scope.scopeModal.title.toLowerCase()) > -1) {
+            if (existingSources.indexOf($scope.scopeModel.title.toLowerCase()) > -1) {
                 return false;
             } else {
                 return true;
@@ -123,7 +126,7 @@
 
         function setData() {
             if (dataRecordSource != undefined) {
-                $scope.scopeModal.title = dataRecordSource.Title;
+                $scope.scopeModel.title = dataRecordSource.Title;
             }
         }
         function loadDataRecordTypeSelector() {
@@ -165,10 +168,10 @@
             var columns = [];
             for (var x = 0; x < $scope.selectedFields.length; x++) {
                 var currentItem = $scope.selectedFields[x];
-                columns.push({ FieldName: currentItem.FieldName, FieldTitle: currentItem.FieldTitle });
+                columns.push({ FieldName: currentItem.FieldName, FieldTitle: currentItem.FieldTitle, Width: currentItem.SelectedGridWidth.value });
             }
             var obj = {
-                Title: $scope.scopeModal.title,
+                Title: $scope.scopeModel.title,
                 DataRecordTypeId: $scope.selectedDataRecordType.DataRecordTypeId,
                 RecordStorageIds: dataRecordStorageSelectorAPI.getSelectedIds(),
                 GridColumns: columns
@@ -186,7 +189,7 @@
                 if (response != undefined) {
                     $scope.dataRecordTypeFields.length = 0;
                     angular.forEach(response, function (item) {
-                        var obj = { FieldName: item.Entity.Name, FieldTitle: item.Entity.Title };
+                        var obj = { FieldName: item.Entity.Name, FieldTitle: item.Entity.Title, SelectedGridWidth: VR_Analytic_GridWidthEnum.Normal, };
                         $scope.dataRecordTypeFields.push(obj);
                     });
                 }
@@ -203,8 +206,11 @@
                         for (var x = 0; x < dataRecordSource.GridColumns.length; x++) {
                             var currentColumn = dataRecordSource.GridColumns[x];
                             var selectedField = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentColumn.FieldName, "FieldName");
-                            if (selectedField !=undefined)
-                               $scope.selectedFields.push(selectedField);
+                            if (selectedField != undefined)
+                            {
+                                selectedField.SelectedGridWidth = UtilsService.getItemByVal($scope.scopeModel.gridWidths, currentColumn.Width,'value');
+                                $scope.selectedFields.push(selectedField);
+                            }
                         }
                     }
                 })

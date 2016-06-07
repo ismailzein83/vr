@@ -3,7 +3,7 @@
         <vr-form name="formDataRecordStorageEditor">
             <vr-row>
                 <vr-columns width="1/3row">
-                    <vr-textbox value="scopeModal.title" label="Title" isrequired></vr-textbox>
+                    <vr-textbox value="scopeModel.title" label="Title" isrequired></vr-textbox>
                 </vr-columns>
                 <vr-columns width="1/3row">
                     <vr-genericdata-datarecordtype-selector on-ready="onDataRecordTypeSelectorReady"
@@ -36,6 +36,11 @@
                                 <vr-datagridcolumn headertext="'Field Name'" widthfactor="5" field="'FieldName'" disablesorting="true"></vr-datagridcolumn>
                                 <vr-datagridcolumn headertext="'Field Title'" widthfactor="5" disablesorting="true">
                                     <vr-textbox value="dataItem.FieldTitle" isrequired="true"></vr-textbox>
+                                </vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
+                                    <vr-select datatextfield="description" datavaluefield="value" datasource="viewScope.scopeModel.gridWidths"
+                                               selectedvalues="dataItem.SelectedGridWidth" isrequired="true" hideremoveicon>
+                                    </vr-select>
                                 </vr-datagridcolumn>
                             </vr-datagrid>
                         </vr-validator>

@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnalyticItemAction\OpenRecordSearchItemAction.cs" />
     <Compile Include="StyleRuleConditions\CompareCondition.cs" />
     <Compile Include="StyleRuleConditions\RangeCondition.cs" />
     <Compile Include="History\Widgets\AnalyticPieChartWidget.cs" />
