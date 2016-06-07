@@ -15,11 +15,15 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
             selectedvalues: "=",
             showaddbutton: '@',
             hidelabel: '@',
+            onselectitem: "=",
+            ondeselectitem: "=",
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
 
-            ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
+            ctrl.selectedvalues;
+            if ($attrs.ismultipleselection != undefined)
+                ctrl.selectedvalues = [];
             ctrl.datasource = [];
 
             var ctor = new recordTypeFieldsCtor(ctrl, $scope, $attrs);
@@ -43,9 +47,9 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
         var label;
         if (attrs.hidelabel == undefined)
             if (attrs.label == undefined)
-                label = 'label="Field"';
+                label = ' label="Field"';
             else
-                label = 'label="' + attrs.label + '"';
+                label = ' label="' + attrs.label + '"';
 
         var disabled = "";
         if (attrs.isdisabled)
@@ -62,15 +66,19 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
 
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
-        return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' ' + hideremoveicon + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="Name"'
-               + 'entityname="Field" ' + label + '></vr-select>';
+        return ' <vr-select  datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' ' + hideremoveicon + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="Name" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" '
+               + 'entityname="Field" ' + label + ' '+ multipleselection +' ></vr-select>';
 
     }
 
     function recordTypeFieldsCtor(ctrl, $scope, $attrs) {
-
+        var selectorAPI;
         function initializeController() {
-            defineAPI();
+            ctrl.onSelectorReady = function (api) {
+                selectorAPI = api;
+                defineAPI();
+            };
+         
         }
 
         function defineAPI() {
@@ -81,9 +89,9 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
             }
 
             api.clearDataSource = function () {
-                ctrl.datasource.length = 0;
-                ctrl.selectedvalues = undefined;
+                selectorAPI.clearDataSource();
             }
+
 
 
             api.load = function (payload) {
@@ -96,11 +104,11 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
 
                 return VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(dataRecordTypeId).then(function (response) {
                     api.clearDataSource();
+                    if (response != undefined && response.Fields != undefined)
+                        for (var i = 0; i < response.Fields.length; i++) {
+                            ctrl.datasource.push(response.Fields[i]);
+                        }
 
-                    if (response.Fields != undefined)
-                        angular.forEach(response.Fields, function (item) {
-                            ctrl.datasource.push(item);
-                        });
                     if (selectedIds != undefined)
                         VRUIUtilsService.setSelectedValues(selectedIds, 'Name', $attrs, ctrl);
                 });

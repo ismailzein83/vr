@@ -9,7 +9,7 @@
                         </vr-columns>
                     </vr-row>
 
-                   
+
 
                     <vr-row>
                         <vr-columns width="1/4row">
@@ -90,16 +90,23 @@
                 </vr-tab>
                 <vr-tab header="'Grouping Columns'">
                     <vr-row>
+                        <vr-columns width="1/3row" vr-loader="scopeModal.isLoadingSummaryFields">
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModal.onSummaryDataRecordTypeFieldsSelectorReady"
+                                                                          selectedvalues="scopeModal.summaryFields"
+                                                                          isrequired="true"
+                                                                          ismultipleselection
+                                                                          label="Summary Fields"
+                                                                          hideremoveicon
+                                                                          onselectitem="scopeModal.onSelectSummaryFieldItem"
+                                                                          ondeselectitem="scopeModal.onDeselectSummaryFieldItem">
+                            </vr-genericdata-datarecordtypefields-selector>
+                        </vr-columns>
                         <vr-columns width="fullrow" vr-disabled="!scopeModal.enableColumnGrouping">
-                            <vr-button type="Add" data-onclick="scopeModal.addColumnGrouping" standalone></vr-button>
 
                             <vr-validator validate="scopeModal.isValidColumnGrouping()">
                                 <vr-datagrid datasource="scopeModal.datasourceColumnGrouping" norowhighlightonclick="true" menuactions="gridMenuActionsColumnGrouping"
                                              enabledraggablerow="true" idegridmenu hidegridmenu>
                                     <vr-datagridcolumn headertext="'Summary Item'" field="'SummaryFieldName'" disablesorting></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Raw Mapping'" disablesorting>
-                                        {{dataItem.RawFieldName != undefined ? dataItem.RawFieldName : "Expression"}}
-                                    </vr-datagridcolumn>
                                 </vr-datagrid>
                             </vr-validator>
                         </vr-columns>
