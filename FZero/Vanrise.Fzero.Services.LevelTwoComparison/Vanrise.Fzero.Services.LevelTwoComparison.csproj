@@ -88,9 +88,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="bin\Debug\LevelTwoComparison.InstallLog" />
-    <None Include="bin\Debug\LevelTwoComparison.InstallState" />
-    <None Include="bin\Debug\LevelTwoComparison.v11.suo" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="LevelTwoComparisonService.resx">
@@ -117,9 +114,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="bin\Debug\OpenPop.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Fzero.Bypass.TOne\Vanrise.Fzero.Bypass.TOne.csproj">
