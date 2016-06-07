@@ -18,9 +18,7 @@
                                             <vr-select datasource="viewScope.scopeModel.styleColors" selectedvalues="dataItem.selectedStyleColor"
                                                        datavaluefield="value" datatextfield="description" isrequired="true" hideremoveicon></vr-select>
                                         </vr-columns>
-
                                     </vr-datagridcolumn>
-                                    
                                        <vr-datagridcolumn headertext="'Measure Condition'" field="" disablesorting="true" widthfactor="10">
                                            <span vr-loader="dataItem.isLoadingDirective">
                                                <vr-directivewrapper directive="dataItem.editor" on-ready="dataItem.onDirectiveReady"></vr-directivewrapper>

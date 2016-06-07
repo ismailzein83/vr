@@ -40,13 +40,21 @@
                 };
 
                 ctrl.addMeasureStyle = function () {
-                    var onMeasureStyleAdded = function (measureStyleObj) {
-                        ctrl.measureStyles.push(measureStyleObj);
+                    if (ctrl.selectedMeasureName != undefined)
+                    {
+                        var onMeasureStyleAdded = function (measureStyleObj) {
+                            ctrl.measureStyles.push(measureStyleObj);
+                            ctrl.measureFields = getMeasureNames();
+                            ctrl.selectedMeasureName = undefined;
+                        }
+                        Analytic_AnalyticService.addMeasureStyle(onMeasureStyleAdded, ctrl.selectedMeasureName);
                     }
-                    Analytic_AnalyticService.addMeasureStyle(onMeasureStyleAdded, ctrl.selectedMeasureName);
+                   
                 }
 
                 ctrl.removeMeasureStyle = function (measureStyle) {
+                    var measures = getMeasureNames();
+                    ctrl.measureFields = getMeasureNames(measureStyle);
                     ctrl.measureStyles.splice(ctrl.measureStyles.indexOf(measureStyle), 1);
                 }
 
@@ -57,10 +65,8 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined)
-                    {
+                    if (payload != undefined) {
                         context = payload.context;
-                        ctrl.measureFields = getMeasureNames();
                         ctrl.measureStyles.length = 0;
                         if (payload.measureStyles && payload.measureStyles.length > 0) {
                             for (var y = 0; y < payload.measureStyles.length; y++) {
@@ -68,17 +74,29 @@
                                 ctrl.measureStyles.push(currentMeasureStyle);
                             }
                         }
+                        ctrl.measureFields = getMeasureNames();
                     }
                 };
-                api.reloadMeasures = function()
-                {
+                api.reloadMeasures = function () {
+
                     ctrl.measureFields = getMeasureNames();
+                    var measureFields = context.getMeasures();
+                    if (ctrl.measureStyles.length > 0)
+                    {
+                        for (var i = 0; i < ctrl.measureStyles.length ; i++) {
+                            var measureStyle = ctrl.measureStyles[i];
+                            if (UtilsService.getItemByVal(measureFields, measureStyle.MeasureName, "Name") == undefined)
+                            {
+                                ctrl.measureStyles.splice(ctrl.measureStyles.indexOf(measureStyle), 1);
+                            }
+                        }
+                    }
+                   
                 }
                 api.getData = function () {
                     var measureStyles = [];
-                    for (var i = 0; i < ctrl.measureStyles.length ; i++)
-                    {
-                        var measureStyle  =ctrl.measureStyles[i];
+                    for (var i = 0; i < ctrl.measureStyles.length ; i++) {
+                        var measureStyle = ctrl.measureStyles[i];
                         measureStyles.push({
                             MeasureName: measureStyle.MeasureName,
                             Rules: measureStyle.Rules
@@ -109,7 +127,7 @@
                 var measureFields = context.getMeasures();
                 for (var x = 0; x < measureFields.length; x++) {
                     var currentMeasureField = measureFields[x];
-                    if (measureStyle != undefined || UtilsService.getItemByVal(ctrl.measureStyles, currentMeasureField.Name, "MeasureName") == undefined) {
+                    if ((measureStyle != undefined && measureStyle.MeasureName == currentMeasureField.Name) || UtilsService.getItemByVal(ctrl.measureStyles, currentMeasureField.Name, "MeasureName") == undefined) {
                         measures.push(currentMeasureField);
                     }
                 }

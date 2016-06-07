@@ -13,7 +13,7 @@
         $scope.scopeModel.isEditMode = false;
         $scope.scopeModel.measureNames = [];
         $scope.scopeModel.measureStyles = [];
-
+        var countId = 0;
         loadParameters();
         defineScope();
         load();
@@ -34,6 +34,7 @@
                 $scope.scopeModel.measureStyles.splice($scope.scopeModel.measureStyles.indexOf(measureStyle), 1);
             }
 
+          
             $scope.scopeModel.onMeasureSelectionChanged = function()
             {
                 $scope.scopeModel.measureStyles.length = 0;
@@ -50,23 +51,7 @@
 
             $scope.scopeModel.addMeasureStyleRule = function ()
             {
-                var fieldType = UtilsService.getItemByVal(fieldTypeConfigs, selectedMeasure.FieldType.ConfigId, "DataRecordFieldTypeConfigId");
-
-                var dataItem = {
-                    id: $scope.scopeModel.measureStyles.length + 1,
-                    configId: fieldType !=undefined?fieldType.DataRecordFieldTypeConfigId: undefined,
-                    editor: fieldType !=undefined?  fieldType.RuleFilterEditor: undefined,
-                    name: fieldType != undefined ? fieldType.Name : undefined,
-                    selectedStyleColor: VR_Analytic_StyleCodeEnum.Red,
-                    onDirectiveReady:function(api)
-                    {
-                        dataItem.directiveAPI = api;
-                        var payload = getPayload();
-                        var setLoader = function (value) { dataItem.isLoadingDirective = value; };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, payload, setLoader);
-                    }
-                }
-                $scope.scopeModel.measureStyles.push(dataItem);
+                    addMeasureStyleRule();
             }
 
             $scope.scopeModel.saveMeasureStyle = function () {
@@ -84,6 +69,26 @@
 
         }
 
+        function addMeasureStyleRule() {
+            var fieldType = UtilsService.getItemByVal(fieldTypeConfigs, selectedMeasure.FieldType.ConfigId, "DataRecordFieldTypeConfigId");
+
+            var dataItem = {
+                id: countId++,
+                configId: fieldType != undefined ? fieldType.DataRecordFieldTypeConfigId : undefined,
+                editor: fieldType != undefined ? fieldType.RuleFilterEditor : undefined,
+                name: fieldType != undefined ? fieldType.Name : undefined,
+                selectedStyleColor: VR_Analytic_StyleCodeEnum.Red,
+                onDirectiveReady: function (api) {
+                    dataItem.directiveAPI = api;
+                    var payload = getPayload();
+                    var setLoader = function (value) {
+                        dataItem.isLoadingDirective = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, payload, setLoader);
+                }
+            }
+            $scope.scopeModel.measureStyles.push(dataItem);
+        }
         function load() {
             $scope.scopeModel.isLoading = true;
 
@@ -116,7 +121,7 @@
                                 return;
 
                             var dataItem = {
-                                id: $scope.scopeModel.measureStyles.length + 1,
+                                id: countId++,
                                 configId: matchItem.DataRecordFieldTypeConfigId,
                                 editor: matchItem.RuleFilterEditor,
                                 name: matchItem.Name,
@@ -145,7 +150,10 @@
                 }
 
                 return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, getFieldTypeConfigs]).then(function () {
-                    loadSelectedMeasureStyles().finally(function () {
+                    loadSelectedMeasureStyles().then(function () {
+                        if (!$scope.scopeModel.isEditMode)
+                            addMeasureStyleRule();
+                    } ).finally(function () {
                         $scope.scopeModel.isLoading = false;
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
