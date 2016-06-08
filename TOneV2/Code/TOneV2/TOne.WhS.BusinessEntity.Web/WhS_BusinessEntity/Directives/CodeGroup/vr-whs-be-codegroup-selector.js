@@ -67,7 +67,7 @@ app.directive('vrWhsBeCodegroupSelector', ['WhS_BE_CodeGroupAPIService', 'WhS_BE
         if (attrs.ismultipleselection != undefined)
             multipleselection = "ismultipleselection"
 
-        return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource"  isrequired="ctrl.isrequired"  ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Code" datavaluefield="CodeGroupId"'
+        return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource"  isrequired="ctrl.isrequired"  ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="CodeGroupId"'
                    + 'entityname="Code Group" ' + label + ' ' + addCliked + '></vr-select>';
        
     }

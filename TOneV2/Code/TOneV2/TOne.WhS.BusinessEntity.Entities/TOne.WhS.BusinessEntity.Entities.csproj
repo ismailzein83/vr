@@ -101,6 +101,7 @@
     <Compile Include="CodeCriteria\ICodeCriteriaGroupContext.cs" />
     <Compile Include="CodeCriteria\CodeCriteriaGroupSettings.cs" />
     <Compile Include="CodeCriteria\IRuleCodeTarget.cs" />
+    <Compile Include="CodeGroup\CodeGroupInfo.cs" />
     <Compile Include="CodeGroup\CodeGroupDetail.cs" />
     <Compile Include="CodeGroup\CodeGroup.cs" />
     <Compile Include="CodeGroup\CodeGroupQuery.cs" />

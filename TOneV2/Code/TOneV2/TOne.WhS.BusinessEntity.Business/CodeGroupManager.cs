@@ -21,6 +21,11 @@ namespace TOne.WhS.BusinessEntity.Business
     public class CodeGroupManager
     {
         #region ctor/Local Variables
+        private readonly CountryManager _countryManager;
+        public CodeGroupManager()
+        {
+            _countryManager = new CountryManager();
+        }
         #endregion
 
         #region Public Methods
@@ -40,14 +45,16 @@ namespace TOne.WhS.BusinessEntity.Business
             CodeIterator<CodeGroup> codeIterator = GetCodeIterator();
             return codeIterator.GetLongestMatch(code);
         }
-        public IEnumerable<CodeGroup> GetAllCodeGroups()
+        public IEnumerable<CodeGroupInfo> GetAllCodeGroups()
         {
             var allCodeGroups = GetCachedCodeGroups();
             if (allCodeGroups == null)
                 return null;
 
-            return allCodeGroups.Values;
+            return allCodeGroups.MapRecords(CodeGroupInfoMapper);
         }
+
+      
         public CodeGroup GetCodeGroup(int codeGroupId)
         {
             var codeGroups = GetCachedCodeGroups();
@@ -304,10 +311,20 @@ namespace TOne.WhS.BusinessEntity.Business
             CodeGroupDetail codeGroupDetail = new CodeGroupDetail();
             codeGroupDetail.Entity = codeGroup;
 
-            CountryManager manager = new CountryManager();
-            codeGroupDetail.CountryName = manager.GetCountryName(codeGroup.CountryId);
+
+            codeGroupDetail.CountryName = _countryManager.GetCountryName(codeGroup.CountryId);
 
             return codeGroupDetail;
+        }
+
+        private CodeGroupInfo CodeGroupInfoMapper(CodeGroup codeGroup)
+        {
+            string countryName = _countryManager.GetCountryName(codeGroup.CountryId);
+            return new CodeGroupInfo()
+            {
+                CodeGroupId = codeGroup.CodeGroupId,
+                Name = string.Format(@"{0} {1}", codeGroup.Code, countryName != null ? countryName : "")
+            };
         }
         #endregion
     }

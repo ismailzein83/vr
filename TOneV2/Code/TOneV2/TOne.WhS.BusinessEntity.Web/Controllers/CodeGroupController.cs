@@ -28,7 +28,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetAllCodeGroups")]
-        public IEnumerable<CodeGroup> GetAllCodeGroups()
+        public IEnumerable<CodeGroupInfo> GetAllCodeGroups()
         {
             CodeGroupManager manager = new CodeGroupManager();
             return manager.GetAllCodeGroups();
