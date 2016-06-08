@@ -302,5 +302,6 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetFiltered.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetFiltered.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetByCodeGroupIds.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_CreateTempByFiltered.sql" />
   </ItemGroup>
 </Project>
