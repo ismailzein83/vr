@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RealtimeAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VRTimerService', 'VR_Analytic_TimeGroupingUnitEnum', 'VR_GenericData_DataRecordTypeService', 'VR_Analytic_SinceTimeEnum','ColumnWidthEnum'];
+    RealtimeAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VRTimerService', 'VR_Analytic_TimeGroupingUnitEnum', 'VR_GenericData_DataRecordTypeService', 'VR_Analytic_SinceTimeEnum','ColumnWidthEnum','VR_Analytic_TimeUnitEnum'];
 
-    function RealtimeAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VRTimerService, VR_Analytic_TimeGroupingUnitEnum, VR_GenericData_DataRecordTypeService, VR_Analytic_SinceTimeEnum, ColumnWidthEnum) {
+    function RealtimeAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VRTimerService, VR_Analytic_TimeGroupingUnitEnum, VR_GenericData_DataRecordTypeService, VR_Analytic_SinceTimeEnum, ColumnWidthEnum, VR_Analytic_TimeUnitEnum) {
         return {
             restrict: "E",
             scope: {
@@ -36,10 +36,14 @@
                 $scope.scopeModel.timeGroupingUnits = UtilsService.getArrayEnum(VR_Analytic_TimeGroupingUnitEnum);
                 $scope.scopeModel.sinceTimes = UtilsService.getArrayEnum(VR_Analytic_SinceTimeEnum);
 
+
+                $scope.scopeModel.timeUnits = UtilsService.getArrayEnum(VR_Analytic_TimeUnitEnum);
+
+                
                 $scope.scopeModel.selectedSinceTime = VR_Analytic_SinceTimeEnum.Time;
                 $scope.scopeModel.showSinceTime = true;
-                $scope.scopeModel.selectedTimeGroupingUnit = VR_Analytic_TimeGroupingUnitEnum.Day;
-                $scope.scopeModel.selectedTimeUnit = VR_Analytic_TimeGroupingUnitEnum.Day;
+                $scope.scopeModel.selectedTimeGroupingUnit = VR_Analytic_TimeGroupingUnitEnum.Hour;
+                $scope.scopeModel.selectedTimeUnit = VR_Analytic_TimeUnitEnum.Days;
                 $scope.scopeModel.last = 2;
                 $scope.scopeModel.onSinceSelectionChanged = function () {
 
@@ -92,11 +96,11 @@
                                 if ($scope.scopeModel.selectedTimeUnit != undefined) {
                                     currentFromDate = new Date();
                                     switch ($scope.scopeModel.selectedTimeUnit.value) {
-                                        case VR_Analytic_TimeGroupingUnitEnum.Day.value:
+                                        case VR_Analytic_TimeUnitEnum.Days.value:
                                             currentFromDate.setDate(currentFromDate.getDate() - $scope.scopeModel.last);
                                             break;
 
-                                        case VR_Analytic_TimeGroupingUnitEnum.Hour.value:
+                                        case VR_Analytic_TimeUnitEnum.Hours.value:
                                             currentFromDate.setHours(currentFromDate.getHours() - $scope.scopeModel.last);
                                             break;
                                     }
