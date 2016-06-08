@@ -30,7 +30,7 @@
             var filterDimensionReadyDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
                 $scope.scopeModel = {};
-
+                $scope.scopeModel.timeInterval = 15;
                 $scope.scopeModel.filterDimensions = [];
 
                 $scope.scopeModel.onFilterDimensionSelectorDirectiveReady = function (api) {
@@ -73,6 +73,7 @@
                         var selectedFilterIds;
                         if (payload.searchSettings != undefined)
                         {
+                            $scope.scopeModel.timeInterval = payload.searchSettings.TimeIntervalInMin;
                             if (payload.searchSettings.Filters != undefined && payload.searchSettings.Filters.length > 0) {
 
                                 selectedFilterIds = [];
@@ -129,6 +130,7 @@
                     var data = {
                         $type: "Vanrise.Analytic.MainExtensions.RealTimeReport.SearchSettings.DefaultRealTimeReportSearch, Vanrise.Analytic.MainExtensions ",
                         Filters: filterDimensions,
+                        TimeIntervalInMin: $scope.scopeModel.timeInterval
                     }
                     return data;
                 }

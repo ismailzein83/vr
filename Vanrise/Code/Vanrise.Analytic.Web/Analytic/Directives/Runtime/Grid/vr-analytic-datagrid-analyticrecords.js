@@ -111,12 +111,12 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
                     return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                         .then(function (response) {
-                            setTimeout(function () { ctrl.groupingDimensions = groupingDimensions; })
+                            setTimeout(function () { ctrl.groupingDimensions = groupingDimensions; UtilsService.safeApply($scope); })
 
                             if (response && response.Data) {
                                 if (ctrl.drillDownDimensions.length > 0) {
                                     for (var i = 0; i < response.Data.length; i++) {
-
+                                         
                                         drillDown.setDrillDownExtensionObject(response.Data[i]);
                                     }
                                 }

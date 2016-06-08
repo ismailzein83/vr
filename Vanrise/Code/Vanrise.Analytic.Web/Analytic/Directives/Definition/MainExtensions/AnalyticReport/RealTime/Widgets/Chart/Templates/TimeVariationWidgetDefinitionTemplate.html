@@ -1,5 +1,8 @@
 ﻿<vr-row>
-    <vr-columns width="1/2row">
+    <vr-columns width="1/3row">
         <vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorDirectiveReady" isrequired="true" ismultipleselection selectedvalues="scopeModel.selectedMeasures" onselectitem="    scopeModel.onSelectMeasureItem" ondeselectitem="    scopeModel.onDeselectMeasureItem" hideselectedvaluessection></vr-analytic-measure-selector>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-select datasource="scopeModel.chartTypes" datatextfield="description" datavaluefield="value" label="Chart Type" selectedvalues="scopeModel.selectedChartType" isrequired="true" hidefilterbox hideremoveicon></vr-select>
     </vr-columns>
 </vr-row>

@@ -9,6 +9,7 @@ namespace Vanrise.Analytic.MainExtensions.RealTimeReport.SearchSettings
 {
     public class DefaultRealTimeReportSearch: RealTimeReportSearchSettings 
     {
+        public int TimeIntervalInMin { get; set; }
         public List<DefaultSearchSettingsFilter> Filters { get; set; }
 
     }

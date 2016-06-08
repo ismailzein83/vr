@@ -107,7 +107,7 @@
 
                     if (job != undefined)
                         VRTimerService.unregisterJob(job);
-                    job = VRTimerService.registerJob(search, $scope, 900);
+                    job = VRTimerService.registerJob(search, $scope, $scope.scopeModel.timeInterval * 60);
                     return search();
                 };
                
@@ -142,6 +142,7 @@
                 api.load = function (payload) {
                     if (payload != undefined) {
                         settings = payload.settings;
+                        $scope.scopeModel.timeInterval = settings.SearchSettings.TimeIntervalInMin;
                     }
                     var loadPromiseDeffer = UtilsService.createPromiseDeferred();
                     UtilsService.waitMultipleAsyncOperations([getWidgetsTemplateConfigs, getFieldTypeConfigs, loadMeasures, loadDimensions]).then(function () {

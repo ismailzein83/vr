@@ -2,9 +2,9 @@
 
     'use strict';
 
-    WidgetsChartDefinition.$inject = ["UtilsService", 'VRUIUtilsService'];
+    WidgetsChartDefinition.$inject = ["UtilsService", 'VRUIUtilsService','VR_ChartDefinitionTypeEnum'];
 
-    function WidgetsChartDefinition(UtilsService, VRUIUtilsService) {
+    function WidgetsChartDefinition(UtilsService, VRUIUtilsService, VR_ChartDefinitionTypeEnum) {
         return {
             restrict: "E",
             scope: {
@@ -27,14 +27,22 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.chartTypes = [];
+                $scope.scopeModel.selectedChartType;
                 $scope.scopeModel.onMeasureSelectorDirectiveReady = function (api) {
                     measureSelectorAPI = api;
                     measureReadyDeferred.resolve();
                 }
-
+                loadChartTypes();
                 defineAPI();
             }
-
+            function loadChartTypes() {
+                $scope.scopeModel.chartTypes = [];
+                for (var m in VR_ChartDefinitionTypeEnum) {
+                    $scope.scopeModel.chartTypes.push(VR_ChartDefinitionTypeEnum[m]);
+                }
+                $scope.scopeModel.selectedChartType = $scope.scopeModel.chartTypes[0];
+            }
             function defineAPI() {
                 var api = {};
 
@@ -44,6 +52,8 @@
                         var tableIds = payload.tableIds;
                         var selectedMeasureIds;
                         if (payload.widgetEntity != undefined) {
+                            $scope.scopeModel.selectedChartType = UtilsService.getItemByVal($scope.scopeModel.chartTypes, payload.widgetEntity.ChartType, "value");
+
                             selectedMeasureIds = [];
                             if (payload.widgetEntity.Measures != undefined && payload.widgetEntity.Measures.length > 0) {
                                 for (var i = 0; i < payload.widgetEntity.Measures.length; i++) {
@@ -82,6 +92,7 @@
                     var data = {
                         $type: "Vanrise.Analytic.MainExtensions.RealTimeReport.Widgets.TimeVariationChartWidget, Vanrise.Analytic.MainExtensions ",
                         Measures: getMeasures(),
+                        ChartType: $scope.scopeModel.selectedChartType.value,
                     }
                     return data;
                 }
@@ -100,6 +111,8 @@
                     console.log(measures);
                     return measures;
                 }
+
+
             }
         }
     }
