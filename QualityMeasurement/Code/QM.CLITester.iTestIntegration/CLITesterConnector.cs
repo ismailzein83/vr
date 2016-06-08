@@ -9,6 +9,8 @@ using System.Xml;
 using QM.CLITester.Business;
 using Vanrise.Common.Business;
 using QM.BusinessEntity.Business;
+using QM.BusinessEntity.Entities;
+
 namespace QM.CLITester.iTestIntegration
 {
     public class CLITesterConnector : CLITesterConnectorBase
@@ -187,6 +189,7 @@ namespace QM.CLITester.iTestIntegration
         private GetTestProgressOutput ResponseTestProgressBeta(string response, string testId, Object recentTestProgress, Measure recentMeasure)
         {
             GetTestProgressOutput testProgressOutput = new GetTestProgressOutput();
+            var connectorResultMappingManager = new ConnectorResultMappingManager();
 
             XmlDocument xml = new XmlDocument();
             if (!String.IsNullOrEmpty(response))
@@ -237,14 +240,33 @@ namespace QM.CLITester.iTestIntegration
                     }
                     testProgressOutput.Measure = resultTestProgress;
                     testProgressOutput.TestProgress = testProgress;
-                    if (testProgress.Result != "Processing" && testProgress.Result != "Awaiting CLI Result" && testProgress.Result != "Awaiting Result")
+
+                    var existingZones = connectorResultMappingManager.GetConnectorResultMappings(Constants.CONNECTOR_TYPE);
+
+                    ConnectorResultMapping notCompletedMapping = existingZones != null
+                        ? existingZones.FirstOrDefault(itm => itm.ResultId == (int)CallTestResult.NotCompleted) : null;
+
+                    ConnectorResultMapping notAnsweredMapping = existingZones != null
+                        ? existingZones.FirstOrDefault(itm => itm.ResultId == (int)CallTestResult.NotAnswered) : null;
+
+                    ConnectorResultMapping failedMapping = existingZones != null
+                        ? existingZones.FirstOrDefault(itm => itm.ResultId == (int)CallTestResult.Failed) : null;
+
+                    ConnectorResultMapping succeededMapping = existingZones != null
+                        ? existingZones.FirstOrDefault(itm => itm.ResultId == (int)CallTestResult.Succeeded) : null;
+
+                    ConnectorResultMapping fasMapping = existingZones != null
+                        ? existingZones.FirstOrDefault(itm => itm.ResultId == (int)CallTestResult.Fas) : null;
+
+                    if (!notCompletedMapping.ConnectorResults.Exists(connRes => testProgress.Result == connRes))
                     {
                         testProgressOutput.Result = GetTestProgressResult.TestCompleted;
 
-                        testProgressOutput.CallTestResult = (testProgress.Result == "CLI Failure") ? CallTestResult.Failed :
-                            (testProgress.Result == "CLI Success") ? CallTestResult.Succeeded :
-                            (testProgress.Result == "Call Failure" || testProgress.Result == "Call Timeout" || testProgress.Result == "No answer") ? CallTestResult.NotAnswered :
-                            (testProgress.Result == "Terminated elsewhere") ? CallTestResult.Fas :
+                        testProgressOutput.CallTestResult = 
+                            failedMapping.ConnectorResults.Exists(connRes => testProgress.Result == connRes) ? CallTestResult.Failed :
+                            succeededMapping.ConnectorResults.Exists(connRes => testProgress.Result == connRes) ? CallTestResult.Succeeded :
+                            notAnsweredMapping.ConnectorResults.Exists(connRes => testProgress.Result == connRes) ? CallTestResult.NotAnswered :
+                            fasMapping.ConnectorResults.Exists(connRes => testProgress.Result == connRes) ? CallTestResult.Fas :
                             CallTestResult.PartiallySucceeded;
 
                         return testProgressOutput;

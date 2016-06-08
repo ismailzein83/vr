@@ -68,6 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConnectorResultMappingManager.cs" />
     <Compile Include="ConnectorZoneInfoManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Supplier\ApplyExtendedSupplierSettingsContext.cs" />

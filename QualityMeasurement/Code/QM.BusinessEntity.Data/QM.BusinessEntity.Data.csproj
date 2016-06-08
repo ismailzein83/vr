@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BEDataManagerFactory.cs" />
+    <Compile Include="IConnectorResultMappingDataManager.cs" />
     <Compile Include="IConnectorZoneInfoDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="Supplier\ISupplierDataManager.cs" />

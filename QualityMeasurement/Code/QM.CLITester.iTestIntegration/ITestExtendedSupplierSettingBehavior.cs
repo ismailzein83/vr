@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -72,7 +73,7 @@ namespace QM.CLITester.iTestIntegration
 
         private void UpdateSupplier(Supplier supplier, string supplierITestId)
         {
-            string createSupplierResponse = _serviceActions.PostRequest("5020", String.Format("&sid={0}&name={1}&type=std&codec=alaw&prefix={2}", supplierITestId, supplier.Name, supplier.Settings.Prefix));
+            string createSupplierResponse = _serviceActions.PostRequest("5020", String.Format("&sid={0}&name={1}&type=std&codec=alaw&prefix={2}", supplierITestId, System.Web.HttpUtility.UrlEncode(supplier.Name), supplier.Settings.Prefix));
             CheckSupplierResponse(createSupplierResponse);
         }
 
