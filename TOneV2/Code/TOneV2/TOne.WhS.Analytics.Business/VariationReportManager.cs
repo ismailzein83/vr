@@ -91,7 +91,7 @@ namespace TOne.WhS.Analytics.Business
                             _carrierAccountManager.GetCarrierAccountName((int)entity.DimensionId);
                         break;
                 }
-                
+
                 if (entity.DimensionSuffix != VariationReportRecordDimensionSuffix.None)
                     entity.DimensionName = String.Format("{0}{1}", entity.DimensionName, String.Format(" / {0}", entity.DimensionSuffix));
 
@@ -113,8 +113,6 @@ namespace TOne.WhS.Analytics.Business
 
                     case VariationReportType.OutBoundMinutes:
                     case VariationReportType.OutBoundAmount:
-                    case VariationReportType.InOutBoundMinutes:
-                    case VariationReportType.InOutBoundAmount:
                     case VariationReportType.OutBoundProfit:
                         dimensionTitle = "Supplier";
                         break;
@@ -123,6 +121,11 @@ namespace TOne.WhS.Analytics.Business
                     case VariationReportType.TopDestinationAmount:
                     case VariationReportType.TopDestinationProfit:
                         dimensionTitle = "Zone";
+                        break;
+
+                    case VariationReportType.InOutBoundMinutes:
+                    case VariationReportType.InOutBoundAmount:
+                        dimensionTitle = "Carrier";
                         break;
                 }
                 return dimensionTitle;
@@ -274,7 +277,7 @@ namespace TOne.WhS.Analytics.Business
             {
                 return (average > 0) ? average : Decimal.MaxValue;
             }
-            
+
             #endregion
 
             #endregion
