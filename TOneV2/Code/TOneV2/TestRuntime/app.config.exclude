@@ -185,6 +185,7 @@
   </log4net>
   <!-- BEGIN CUSTOMER VARYING SECTION -->
   <appSettings>
+    <add key="VanriseCache_CleanMemoryThreshold" value="999999999999999"/>
     <add key="TABS License" value="BF-2F-B4-CD-36-CB-1D-4B-8F-55-1C-F4-99-CD-1B-E8::==QMwkDM5EDMyYjM4ADNxAjM:kVGdwlncj5WR09mT"/>
     <add key="LoggerPath" value="/TOne_RePricingService/Logger"/>
     <add key="hibernate.connection.connection_string" value="Server=192.168.110.185;Database=WebAPITest;User ID=Development;Password=dev!123"/>
