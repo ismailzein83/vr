@@ -61,6 +61,16 @@ namespace Vanrise.Common.Business
             return "Currency Not Found";
         }
 
+        public string GetCurrencySymbol(int currencyId)
+        {
+            Currency currency = this.GetCurrency(currencyId);
+
+            if (currency != null)
+                return currency.Symbol;
+
+            return "Currency Not Found";
+        }
+
         public Dictionary<int, Currency> GetCachedCurrencies()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCurrencies",
