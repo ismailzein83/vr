@@ -199,13 +199,11 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetBySupplierAndEffective.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetAllForActiveSuppliers.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetAll.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_CreateTempByFiltered.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierPriceList_SyncWithImportedData.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierPriceList_GetAll.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierPriceList_Get.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierCode_GetDistinctCodePrefixes.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierCode_GetActiveCodeByPrefix.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierCode_CreateTempByFiltered.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SellingNumberPlan_Update.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SellingNumberPlan_Insert.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleZoneIDManager_ReserveIDRange.sql" />
@@ -215,7 +213,6 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetExistingByZoneIDs.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetEffectiveByCustomers.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetByOwnerAndEffective.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_CreateTempByFiltered.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_CloseRates.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceList_GetAll.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_UpdateZoneRoutingProducts.sql" />
@@ -230,7 +227,6 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetDistinctCodePrefixes.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetByCodePrefix.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetAll.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_CreateTempByFiltered.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_RoutingProduct_GetBySaleZone.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_RateType_Update.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_RateType_Insert.sql" />
@@ -303,5 +299,8 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SwitchConnectivity_GetAll.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetEffectiveAfter.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetEffectiveAndPendingBySellingNumberPlan.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetFiltered.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetFiltered.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetByCodeGroupIds.sql" />
   </ItemGroup>
 </Project>
