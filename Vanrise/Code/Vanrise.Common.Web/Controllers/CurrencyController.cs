@@ -43,6 +43,14 @@ namespace Vanrise.Common.Web.Controllers
            return manager.GetSystemCurrency();
        }
 
+       [HttpGet]
+       [Route("GetSystemCurrencyId")]
+       public int GetSystemCurrencyId()
+       {
+           CurrencyManager manager = new CurrencyManager();
+           return manager.GetSystemCurrencyId();
+       }
+
        [HttpPost]
        [Route("AddCurrency")]
        public Vanrise.Entities.InsertOperationOutput<CurrencyDetail> AddCurrency(Currency currency)

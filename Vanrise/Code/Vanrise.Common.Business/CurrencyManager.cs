@@ -51,6 +51,12 @@ namespace Vanrise.Common.Business
             return systemCurrency;
         }
 
+        public int GetSystemCurrencyId()
+        {
+            Currency systemCurrency = this.GetSystemCurrency();
+            return systemCurrency.CurrencyId;
+        }
+
         public string GetCurrencyName(int currencyId)
         {
             Currency currency = this.GetCurrency(currencyId);
