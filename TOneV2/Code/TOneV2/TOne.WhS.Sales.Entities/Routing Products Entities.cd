@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TOne.WhS.Sales.Entities.RateToChange" BaseTypeListCollapsed="true">
+    <Position X="2.5" Y="4.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>IAAhAAAAAgCBAAAACAEAAAAAQAAAAAAIAAAAABAAAAE=</HashCode>
+      <FileName>RateManagement\Actions\Rate\RateToChange.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.RateToClose">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAAAIAAAAABAAAAE=</HashCode>
+      <FileName>RateManagement\Actions\Rate\RateToClose.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.DefaultRoutingProductToAdd">
+    <Position X="5" Y="4.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAACDAAAgAAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>RateManagement\Actions\RoutingProduct\DefaultRoutingProductToAdd.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.DefaultRoutingProductToClose">
+    <Position X="7.75" Y="4.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>RateManagement\Actions\RoutingProduct\DefaultRoutingProductToClose.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.SaleZoneRoutingProductToAdd">
+    <Position X="10.75" Y="4.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAIAAACBACAAAAAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>RateManagement\Actions\RoutingProduct\SaleZoneRoutingProductToAdd.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.SaleZoneRoutingProductToClose">
+    <Position X="13.5" Y="4.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAJAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RateManagement\Actions\RoutingProduct\SaleZoneRoutingProductToClose.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.ChangedRate">
+    <Position X="5.75" Y="11.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>RateManagement\Rate\ChangedRate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.ExistingRate" BaseTypeListCollapsed="true">
+    <Position X="6" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACBAAAAAAAAAQAAAACAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>RateManagement\Rate\ExistingRate.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.NewRate">
+    <Position X="3.25" Y="9" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAgCBAAAACBAAAAAAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>RateManagement\Rate\NewRate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.ChangedDefaultRoutingProduct">
+    <Position X="10.75" Y="11.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RateManagement\RoutingProduct\Default\ChangedDefaultRoutingProduct.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.ExistingDefaultRoutingProduct">
+    <Position X="10.75" Y="9" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACBAAAAAAAAAAAAAAAAAAAgAAAAAAAABAA=</HashCode>
+      <FileName>RateManagement\RoutingProduct\Default\ExistingDefaultRoutingProduct.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.NewDefaultRoutingProduct">
+    <Position X="8.25" Y="9" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAACBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RateManagement\RoutingProduct\Default\NewDefaultRoutingProduct.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.ChangedSaleZoneRoutingProduct">
+    <Position X="18.25" Y="11.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RateManagement\RoutingProduct\Zone\ChangedSaleZoneRoutingProduct.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.ExistingSaleZoneRoutingProduct">
+    <Position X="18.25" Y="9" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAACBAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>RateManagement\RoutingProduct\Zone\ExistingSaleZoneRoutingProduct.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.NewSaleZoneRoutingProduct">
+    <Position X="14.75" Y="9" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAACBAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RateManagement\RoutingProduct\Zone\NewSaleZoneRoutingProduct.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.ExistingZone" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="9" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAKAACBAAAAAAEAAAQAQAAQAAAAAAACAAAAAAA=</HashCode>
+      <FileName>RateManagement\Zone\ExistingZone.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.DraftChangedRate">
+    <Position X="2.5" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>RatePlanning\Draft\Rate\DraftChangedRate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.DraftNewRate" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAACAgCBAAAACAAAAAAAAAAAAAAIAAAAABAAAAE=</HashCode>
+      <FileName>RatePlanning\Draft\Rate\DraftNewRate.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.DraftChangedDefaultRoutingProduct">
+    <Position X="7.75" Y="0.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RatePlanning\Draft\RoutingProduct\Default\DraftChangedDefaultRoutingProduct.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.DraftNewDefaultRoutingProduct">
+    <Position X="4.75" Y="0.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACBAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RatePlanning\Draft\RoutingProduct\Default\DraftNewDefaultRoutingProduct.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.DraftChangedZoneRoutingProduct">
+    <Position X="13.5" Y="0.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAABAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RatePlanning\Draft\RoutingProduct\Zone\DraftChangedZoneRoutingProduct.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TOne.WhS.Sales.Entities.DraftNewZoneRoutingProduct">
+    <Position X="11" Y="0.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAACBAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RatePlanning\Draft\RoutingProduct\Zone\DraftNewZoneRoutingProduct.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
