@@ -44,7 +44,7 @@
                 $scope.scopeModel.showSinceTime = true;
                 $scope.scopeModel.selectedTimeGroupingUnit = VR_Analytic_TimeGroupingUnitEnum.Hour;
                 $scope.scopeModel.selectedTimeUnit = VR_Analytic_TimeUnitEnum.Days;
-                $scope.scopeModel.last = 2;
+                $scope.scopeModel.last = 1;
                 $scope.scopeModel.onSinceSelectionChanged = function () {
 
                     if ($scope.scopeModel.selectedSinceTime != undefined) {
