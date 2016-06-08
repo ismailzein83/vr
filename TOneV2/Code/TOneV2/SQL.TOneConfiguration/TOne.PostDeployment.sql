@@ -145,7 +145,8 @@ as (select * from (values
 (12112,'CDRs','CDRs',null,1214,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":37,"TypeId":13}',202,10),
 (12113,'Traffic Summary','Traffic Summary',null,1203,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":33,"TypeId":4}',202,1),
 (12214,'Repeated Numbers','Repeated Numbers','#/view/WhS_Analytics/Views/RepeatedNumber/RepeatedNumber',1214,'WhS_Analytics/RepeatedNumber/GetAllFilteredRepeatedNumbers',null,null,null,0,15),
-(12215,'Blocked Attempts','Blocked Attempts','#/view/WhS_Analytics/Views/TrafficAnalysis/BlockedAttempts',1214,'WhS_Analytics/BlockedAttempts/GetBlockedAttemptsData',null,null,null,0,20)
+(12215,'Blocked Attempts','Blocked Attempts','#/view/WhS_Analytics/Views/TrafficAnalysis/BlockedAttempts',1214,'WhS_Analytics/BlockedAttempts/GetBlockedAttemptsData',null,null,null,0,20),
+(12216,'Release Code Statistics','Release Code Statistics','#/view/WhS_Analytics/Views/TrafficAnalysis/ReleaseCodeStatistics',1214,'WhS_Analytics/ReleaseCode/GetAllFilteredReleaseCodes',null,null,null,0,7)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -198,6 +199,7 @@ as (select * from (values
 (3303,'WhS_BE_SwitchConnectivity','Switch Connectivity',2,0,'["View", "Add", "Edit"]'),
 (3304,'WhS_Analytics_RepeatedNumber','Repeated Number',1205,0,'["View"]'),
 (3305,'WhS_Analytics_BlockedAttempts','BlockedAttempts',1205,0,'["View"]'),
+(3622,'WhS_Analytics_ReleaseCode','Release Code',1205,0,'["View"]'),
 
 (3306,'WhS_BE_CarrierAccount','Carrier Account',201,0,'["View", "Add", "Edit", "Delete"]'),
 (3307,'WhS_BE_CarrierProfile','Carrier Profile',201,0,'["View"]'),
@@ -469,6 +471,7 @@ as (select * from (values
 ('WhS_Analytics/RepeatedNumber/GetAllFilteredRepeatedNumbers','WhS_Analytics_RepeatedNumber: View'),
 ('WhS_Analytics/VariationReport/GetFilteredVariationReportRecords','WhS_Analytics_Variation: View'),
 ('WhS_Analytics/BlockedAttempts/GetBlockedAttemptsData','WhS_Analytics_BlockedAttempts: View'),
+('WhS_Analytics/ReleaseCode/GetAllFilteredReleaseCodes','WhS_Analytics_ReleaseCode: View'),
 
 ('WhS_BE/SwitchConnectivity/GetFilteredSwitchConnectivities','WhS_BE_SwitchConnectivity: View'),
 ('WhS_BE/SwitchConnectivity/GetSwitchConnectivity','WhS_BE_SwitchConnectivity: View'),
