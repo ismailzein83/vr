@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities
 {
-    //TODO: Renamed it
-    public class NewDefaultRoutingProduct2
+    
+    public class NewDefaultRoutingProduct
     {
         public int RoutingProductId { get; set; }
 

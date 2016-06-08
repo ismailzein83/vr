@@ -77,18 +77,19 @@
     <Compile Include="RateManagement\Rate\NewRate.cs" />
     <Compile Include="RateManagement\RoutingProduct\ChangedDefaultRoutingProduct.cs" />
     <Compile Include="RateManagement\RoutingProduct\ChangedSaleZoneRoutingProduct.cs" />
-    <Compile Include="RateManagement\RoutingProduct\DefaultRoutingProduct\DraftChangedDefaultRoutingProduct.cs" />
-    <Compile Include="RateManagement\RoutingProduct\DefaultRoutingProduct\DraftNewDefaultRoutingProduct.cs" />
+    <Compile Include="RateManagement\RoutingProduct\ExistingSaleZoneRoutingProduct.cs" />
+    <Compile Include="RatePlanning\Draft\RoutingProduct\Default\DraftChangedDefaultRoutingProduct.cs" />
+    <Compile Include="RatePlanning\Draft\RoutingProduct\Default\DraftNewDefaultRoutingProduct.cs" />
     <Compile Include="RateManagement\RoutingProduct\ExistingDefaultRoutingProduct.cs" />
     <Compile Include="RateManagement\RoutingProduct\NewDefaultRoutingProduct.cs" />
     <Compile Include="RateManagement\RoutingProduct\NewSaleZoneRoutingProduct.cs" />
-    <Compile Include="RateManagement\RoutingProduct\ZoneRoutingProduct\DraftChangedZoneRoutingProduct.cs" />
-    <Compile Include="RateManagement\RoutingProduct\ZoneRoutingProduct\DraftNewZoneRoutingProduct.cs" />
+    <Compile Include="RatePlanning\Draft\RoutingProduct\Zone\DraftChangedZoneRoutingProduct.cs" />
+    <Compile Include="RatePlanning\Draft\RoutingProduct\Zone\DraftNewZoneRoutingProduct.cs" />
     <Compile Include="RateManagement\Zone\ExistingZone.cs" />
     <Compile Include="RatePlanning\DefaultChanges.cs" />
     <Compile Include="RatePlanning\BaseChanges.cs" />
     <Compile Include="RatePlanning\Changes.cs" />
-    <Compile Include="RatePlanning\Draft\DraftNewRate.cs" />
+    <Compile Include="RatePlanning\Draft\Rate\DraftNewRate.cs" />
     <Compile Include="RatePlanning\Enums.cs" />
     <Compile Include="RatePlanning\Input\ApplyCalculatedRatesInput.cs" />
     <Compile Include="RatePlanning\Input\ZoneItemInput.cs" />
@@ -96,7 +97,7 @@
     <Compile Include="RatePlanning\Input\ZoneItemsInput.cs" />
     <Compile Include="RatePlanning\Input\ZoneRateChangesQuery.cs" />
     <Compile Include="RatePlanning\Input\ZoneRoutingProductChangesQuery.cs" />
-    <Compile Include="RatePlanning\Draft\DraftChangedRate.cs" />
+    <Compile Include="RatePlanning\Draft\Rate\DraftChangedRate.cs" />
     <Compile Include="RatePlanning\DefaultItem.cs" />
     <Compile Include="RatePlanning\ChangesSummary.cs" />
     <Compile Include="RatePlanning\ServiceChanges.cs" />
@@ -121,7 +122,10 @@
       <Name>TOne.WhS.Routing.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="RateManagement\RoutingProduct\DefaultRoutingProduct\" />
+    <Folder Include="RateManagement\RoutingProduct\ZoneRoutingProduct\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
