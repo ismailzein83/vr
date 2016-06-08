@@ -75,14 +75,14 @@
     <Compile Include="RateManagement\Rate\ExistingRate.cs" />
     <Compile Include="RateManagement\Rate\IProcessRatesContext.cs" />
     <Compile Include="RateManagement\Rate\NewRate.cs" />
-    <Compile Include="RateManagement\RoutingProduct\ChangedDefaultRoutingProduct.cs" />
-    <Compile Include="RateManagement\RoutingProduct\ChangedSaleZoneRoutingProduct.cs" />
-    <Compile Include="RateManagement\RoutingProduct\ExistingSaleZoneRoutingProduct.cs" />
+    <Compile Include="RateManagement\RoutingProduct\Default\ChangedDefaultRoutingProduct.cs" />
+    <Compile Include="RateManagement\RoutingProduct\Zone\ChangedSaleZoneRoutingProduct.cs" />
+    <Compile Include="RateManagement\RoutingProduct\Zone\ExistingSaleZoneRoutingProduct.cs" />
     <Compile Include="RatePlanning\Draft\RoutingProduct\Default\DraftChangedDefaultRoutingProduct.cs" />
     <Compile Include="RatePlanning\Draft\RoutingProduct\Default\DraftNewDefaultRoutingProduct.cs" />
-    <Compile Include="RateManagement\RoutingProduct\ExistingDefaultRoutingProduct.cs" />
-    <Compile Include="RateManagement\RoutingProduct\NewDefaultRoutingProduct.cs" />
-    <Compile Include="RateManagement\RoutingProduct\NewSaleZoneRoutingProduct.cs" />
+    <Compile Include="RateManagement\RoutingProduct\Default\ExistingDefaultRoutingProduct.cs" />
+    <Compile Include="RateManagement\RoutingProduct\Default\NewDefaultRoutingProduct.cs" />
+    <Compile Include="RateManagement\RoutingProduct\Zone\NewSaleZoneRoutingProduct.cs" />
     <Compile Include="RatePlanning\Draft\RoutingProduct\Zone\DraftChangedZoneRoutingProduct.cs" />
     <Compile Include="RatePlanning\Draft\RoutingProduct\Zone\DraftNewZoneRoutingProduct.cs" />
     <Compile Include="RateManagement\Zone\ExistingZone.cs" />
@@ -122,10 +122,7 @@
       <Name>TOne.WhS.Routing.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="RateManagement\RoutingProduct\DefaultRoutingProduct\" />
-    <Folder Include="RateManagement\RoutingProduct\ZoneRoutingProduct\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
