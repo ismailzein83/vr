@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService', 'DataGridRetrieveDataEventType','VR_Analytic_StyleCodeEnum','Analytic_AnalyticService','VR_Analytic_GridWidthEnum',
+app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService', 'DataGridRetrieveDataEventType', 'VR_Analytic_StyleCodeEnum', 'Analytic_AnalyticService', 'VR_Analytic_GridWidthEnum',
     function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService, DataGridRetrieveDataEventType, VR_Analytic_StyleCodeEnum, Analytic_AnalyticService, VR_Analytic_GridWidthEnum) {
 
         var directiveDefinitionObject = {
@@ -35,6 +35,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
             ctrl.parentDrillDownDimensions = [];
             ctrl.parentDimensions = [];
             ctrl.measures = [];
+            ctrl.filterGroups = undefined;
             var initialQueryOrderType;
             var gridPayload;
             var measureStyleRules;
@@ -57,7 +58,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     var measure = dataItem.MeasureValues[colDef.tag];
                     if (measure != undefined) {
                         var style = UtilsService.getItemByVal(styleColors, measure.StyleCode, 'value');
-                        if (style !=undefined)
+                        if (style != undefined)
                             return style.styleCode;
                     }
                 }
@@ -98,7 +99,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 };
 
                 ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady, retrieveDataContext) {
-                 
+
                     ctrl.gridLeftMenuActions = getGridLeftMenuActions();
                     ctrl.showGrid = true;
                     if (!retrieveDataContext.isDataSorted)
@@ -111,7 +112,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                         .then(function (response) {
                             setTimeout(function () { ctrl.groupingDimensions = groupingDimensions; })
-                         
+
                             if (response && response.Data) {
                                 if (ctrl.drillDownDimensions.length > 0) {
                                     for (var i = 0; i < response.Data.length; i++) {
@@ -136,9 +137,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 function editSettings() {
                     var onSaveSettings = function (settings) {
                         measureStyleRules = settings;
-                        if (gridPayload !=undefined)
-                        {
-                            if(gridPayload.Settings !=undefined)
+                        if (gridPayload != undefined) {
+                            if (gridPayload.Settings != undefined)
                                 gridPayload.Settings.MeasureStyleRules = settings.MeasureStyleRules;
 
                             var payload = {
@@ -152,19 +152,17 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                             }
                             loadGrid(payload);
                         }
-                       
+
                     };
                     var measureStyleRulesSettings;
-                    if (gridPayload != undefined && gridPayload.Settings != undefined)
-                    {
+                    if (gridPayload != undefined && gridPayload.Settings != undefined) {
                         measureStyleRulesSettings = gridPayload.Settings.MeasureStyleRules;
                     }
                     Analytic_AnalyticService.openGridWidgetSettings(onSaveSettings, getSettingContext(), measureStyleRules);
                 }
 
                 function getGridLeftMenuActions() {
-                    if (gridPayload != undefined && gridPayload.Settings != undefined)
-                    {
+                    if (gridPayload != undefined && gridPayload.Settings != undefined) {
                         var gridLeftMenuActions = [{
                             name: "Settings",
                             onClicked: editSettings
@@ -180,10 +178,11 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     ctrl.parentDimensions.length = 0;
                     ctrl.drillDownDimensions.length = 0;
                     groupingDimensions.length = 0;
-             
+                    ctrl.filterGroups = payLoad.FilterGroup;
+
                     var filters = payLoad.DimensionFilters;
                     var queryFinalized = loadGridQuery(payLoad);
-                  
+
                     addGridAttributesForDimensions(groupingDimensions);
 
                     addGridAttributesForMeasures(ctrl.measures);
@@ -255,7 +254,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                 DrillDownDimensions: drillDownDimensions,
                                 TableId: payLoad.TableId,
                                 InitialQueryOrderType: initialQueryOrderType,
-                                MeasureStyleRules: measureStyleRules
+                                MeasureStyleRules: measureStyleRules,
+                                FilterGroup: ctrl.filterGroups
                             }
                             return dataItem.gridAPI.load(drillDownPayLoad);
                         };
@@ -358,7 +358,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     if (payload.Dimensions != undefined) {
                         ctrl.dimensions = payload.Dimensions;
                     }
-                    if (payload.MeasureStyleRules !=undefined)
+                    if (payload.MeasureStyleRules != undefined)
                         measureStyleRules = payload.MeasureStyleRules
                     if (payload.DimensionsConfig != undefined) {
                         ctrl.dimensionsConfig = payload.DimensionsConfig;
@@ -374,7 +374,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                             if (gridWidth != undefined)
                                 dimension.Widthfactor = gridWidth.widthFactor;
                             groupingDimensions.push(dimension);
-                           
+
                         }
                     }
                     if (payload.ParentDimensions != undefined)
@@ -410,25 +410,23 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
                 function loadAllGridDimensions(payload) {
                     ctrl.dimensions.length = 0;
-                   
+
                     var allDimensions = [];
                     if (payload.Settings != undefined) {
 
                         if (payload.Settings.RootDimensionsFromSearchSection) {
 
-                            for (var i = 0; i < payload.SelectedGroupingDimensions.length; i++)
-                            {
+                            for (var i = 0; i < payload.SelectedGroupingDimensions.length; i++) {
                                 var selectedDimension = payload.SelectedGroupingDimensions[i];
                                 var dimensionObj = UtilsService.getItemByVal(payload.Settings.Dimensions, selectedDimension.DimensionName, 'DimensionName');
-                                if(dimensionObj !=undefined)
-                                {
+                                if (dimensionObj != undefined) {
                                     allDimensions.push(dimensionObj);
                                 }
                             }
 
                         }
                         for (var i = 0; i < payload.Settings.Dimensions.length; i++) {
-                           
+
                             var dimension = payload.Settings.Dimensions[i];
                             if (UtilsService.getItemByVal(allDimensions, dimension.DimensionName, 'DimensionName') == undefined)
                                 allDimensions.push(dimension);
@@ -560,8 +558,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
                 //------- END Add Grid Attributes ------------
 
-                function getSettingContext()
-                {
+                function getSettingContext() {
                     var context = {
                         getMeasures: function () {
                             var selectedMeasures = [];
