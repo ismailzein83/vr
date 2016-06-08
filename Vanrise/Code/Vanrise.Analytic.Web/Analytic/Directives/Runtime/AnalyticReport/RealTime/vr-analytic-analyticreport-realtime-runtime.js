@@ -39,6 +39,8 @@
                 $scope.scopeModel.selectedSinceTime = VR_Analytic_SinceTimeEnum.Time;
                 $scope.scopeModel.showSinceTime = true;
                 $scope.scopeModel.selectedTimeGroupingUnit = VR_Analytic_TimeGroupingUnitEnum.Day;
+                $scope.scopeModel.selectedTimeUnit = VR_Analytic_TimeGroupingUnitEnum.Day;
+                $scope.scopeModel.last = 2;
                 $scope.scopeModel.onSinceSelectionChanged = function () {
 
                     if ($scope.scopeModel.selectedSinceTime != undefined) {
@@ -87,9 +89,9 @@
                                 break;
                             case VR_Analytic_SinceTimeEnum.Last.value:
 
-                                if ($scope.scopeModel.selectedTimeGroupingUnit != undefined) {
+                                if ($scope.scopeModel.selectedTimeUnit != undefined) {
                                     currentFromDate = new Date();
-                                    switch ($scope.scopeModel.selectedTimeGroupingUnit.value) {
+                                    switch ($scope.scopeModel.selectedTimeUnit.value) {
                                         case VR_Analytic_TimeGroupingUnitEnum.Day.value:
                                             currentFromDate.setDate(currentFromDate.getDate() - $scope.scopeModel.last);
                                             break;

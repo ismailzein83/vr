@@ -19,13 +19,17 @@
                            entityname="Since" selectedvalues="scopeModel.selectedSinceTime" datasource="scopeModel.sinceTimes" onselectionchanged="scopeModel.onSinceSelectionChanged" hideremoveicon></vr-select>
             </vr-columns>
 
-            <vr-columns colnum="2" ng-show="scopeModel.showSinceTime">
-                <vr-datetimepicker type="dateTime" label="From" value="scopeModel.fromdate" isrequired customvalidate="validateDateTime()"></vr-datetimepicker>
+            <vr-columns colnum="2" ng-show="scopeModel.showSinceTime" withemptyline>
+                <vr-datetimepicker type="dateTime" value="scopeModel.fromdate" isrequired="scopeModel.showSinceTime" customvalidate="validateDateTime()"></vr-datetimepicker>
             </vr-columns>
 
 
-            <vr-columns colnum="2" ng-show="scopeModel.showSinceLast">
-                <vr-textbox value="scopeModel.last" label="Last"></vr-textbox>
+            <vr-columns colnum="1" ng-show="scopeModel.showSinceLast" withemptyline>
+                <vr-textbox value="scopeModel.last" isrequired="scopeModel.showSinceLast"></vr-textbox>
+            </vr-columns>
+            <vr-columns colnum="1" ng-show="scopeModel.showSinceLast" withemptyline>
+                <vr-select datatextfield="description" datavaluefield="value" 
+                           entityname="Unit" selectedvalues="scopeModel.selectedTimeUnit" datasource="scopeModel.timeGroupingUnits" hideremoveicon></vr-select>
             </vr-columns>
             <vr-columns colnum="2">
                 <vr-select datatextfield="description" datavaluefield="value" label="Grouping Unit"
