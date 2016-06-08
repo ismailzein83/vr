@@ -16,18 +16,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
     {
     
         #region ctor/Local Variables
-        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
-
         public SupplierCodeDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
-        static SupplierCodeDataManager()
-        {
-            _columnMapper.Add("SupplierCodeId", "ID");
-            _columnMapper.Add("SupplierZoneName", "ZoneID");
-        }
+       
         #endregion
 
         #region Public Methods
@@ -59,30 +53,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetDistinctCodePrefixes", CodePrefixMapper, prefixLength, effectiveOn, isFuture);
         }
-        public Vanrise.Entities.BigResult<SupplierCode> GetFilteredSupplierCodes(Vanrise.Entities.DataRetrievalInput<SupplierCodeQuery> input)
-        {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                string zoneIds = null;
-                if (input.Query.ZoneIds != null && input.Query.ZoneIds.Count() > 0)
-                    zoneIds = string.Join<int>(",", input.Query.ZoneIds);
 
-                ExecuteNonQuerySP("[TOneWhS_BE].[sp_SupplierCode_CreateTempByFiltered]", tempTableName, input.Query.Code, input.Query.SupplierId, zoneIds, input.Query.EffectiveOn);
-            };
-
-            if (input.SortByColumnName != null)
-                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
-
-            return RetrieveData(input, createTempTableAction, SupplierCodeMapper, _columnMapper);
-        }
-
-        public IEnumerable<SupplierCode> GetAllFilteredSupplierCodes(Vanrise.Entities.DataRetrievalInput<SupplierCodeQuery> input)
+        public IEnumerable<SupplierCode> GetFilteredSupplierCodes(SupplierCodeQuery query)
         {
             string zoneIds = null;
-            if (input.Query.ZoneIds != null && input.Query.ZoneIds.Count() > 0)
-                zoneIds = string.Join<int>(",", input.Query.ZoneIds);
+            if (query.ZoneIds != null && query.ZoneIds.Count() > 0)
+                zoneIds = string.Join<int>(",", query.ZoneIds);
 
-            return GetItemsSP("[TOneWhS_BE].[sp_SupplierCode_GetFiltered]", SupplierCodeMapper, input.Query.Code, input.Query.SupplierId, zoneIds, input.Query.EffectiveOn);
+            return GetItemsSP("[TOneWhS_BE].[sp_SupplierCode_GetFiltered]", SupplierCodeMapper, query.Code, query.SupplierId, zoneIds, query.EffectiveOn);
         }
 
         public bool AreSupplierCodesUpdated(ref object updateHandle)

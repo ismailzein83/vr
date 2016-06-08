@@ -7,9 +7,7 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISupplierCodeDataManager:IDataManager
     {
-        BigResult<SupplierCode> GetFilteredSupplierCodes(Vanrise.Entities.DataRetrievalInput<SupplierCodeQuery> input);
-
-        IEnumerable<SupplierCode> GetAllFilteredSupplierCodes(Vanrise.Entities.DataRetrievalInput<SupplierCodeQuery> input);
+        IEnumerable<SupplierCode> GetFilteredSupplierCodes(SupplierCodeQuery query);
 
         List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime minimumDate);
         List<SupplierCode> GetSupplierCodes(int supplierId, DateTime effectiveOn);

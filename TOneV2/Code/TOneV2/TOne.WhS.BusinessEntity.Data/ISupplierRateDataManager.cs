@@ -7,9 +7,8 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISupplierRateDataManager : IDataManager
     {
-        BigResult<SupplierRate> GetFilteredSupplierRates(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input);
 
-        IEnumerable<SupplierRate> GetAllFilteredSupplierRates(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input);
+        IEnumerable<SupplierRate> GetFilteredSupplierRates(SupplierRateQuery input);
 
         List<SupplierRate> GetSupplierRates(int supplierId, DateTime minimumDate);
 

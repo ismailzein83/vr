@@ -33,21 +33,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #endregion
 
         #region Public Methods
-        public Vanrise.Entities.BigResult<Entities.SaleCode> GetSaleCodeFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SaleCodeQuery> input)
+        public IEnumerable<SaleCode> GetFilteredSaleCodes(SaleCodeQuery query)
         {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                string zonesids = null;
-                if (input.Query.ZonesIds != null && input.Query.ZonesIds.Count() > 0)
-                    zonesids = string.Join<int>(",", input.Query.ZonesIds);
+            string zonesids = null;
+            if (query.ZonesIds != null && query.ZonesIds.Count() > 0)
+                zonesids = string.Join<int>(",", query.ZonesIds);
 
-
-
-                ExecuteNonQuerySP("TOneWhS_BE.sp_SaleCode_CreateTempByFiltered", tempTableName, input.Query.EffectiveOn,input.Query.Code, input.Query.SellingNumberPlanId, zonesids);
-            };
-
-            return RetrieveData(input, createTempTableAction, SaleCodeMapper, _mapper);
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetFiltered", SaleCodeMapper, query.EffectiveOn, query.Code, query.SellingNumberPlanId, zonesids);
         }
+
         public IEnumerable<SaleCode> GetAllSaleCodes()
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetAll", SaleCodeMapper);

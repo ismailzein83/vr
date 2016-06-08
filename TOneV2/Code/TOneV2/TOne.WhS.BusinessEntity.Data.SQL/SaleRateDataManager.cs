@@ -15,15 +15,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
     {
 
         #region ctor/Local Variables
-        private static Dictionary<string, string> _mapper = new Dictionary<string, string>();
-        static SaleRateDataManager()
-        {
-            _mapper.Add("Entity.SaleRateId", "ID");
-            _mapper.Add("ZoneName", "ZoneID");
-            _mapper.Add("Entity.NormalRate", "Rate");
-            _mapper.Add("Entity.BED", "BED");
-            _mapper.Add("Entity.EED", "EED");
-        }
         public SaleRateDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
@@ -32,19 +23,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #endregion
 
         #region Public Methods
-        public Vanrise.Entities.BigResult<Entities.SaleRate> GetSaleRateFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SaleRateQuery> input)
+        public IEnumerable<SaleRate> GetFilteredSaleRates(SaleRateQuery query)
         {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
                 string zonesids = null;
-                if (input.Query.ZonesIds != null && input.Query.ZonesIds.Count() > 0)
-                    zonesids = string.Join<int>(",", input.Query.ZonesIds);
+                if (query.ZonesIds != null && query.ZonesIds.Count() > 0)
+                    zonesids = string.Join<int>(",", query.ZonesIds);
 
-                ExecuteNonQuerySP("TOneWhS_BE.sp_SaleRate_CreateTempByFiltered", tempTableName, input.Query.EffectiveOn, input.Query.SellingNumberPlanId, zonesids, input.Query.OwnerType, input.Query.OwnerId);
-            };
-
-            return RetrieveData(input, createTempTableAction, SaleRateMapper, _mapper);
+                return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetFiltered", SaleRateMapper, query.EffectiveOn, query.SellingNumberPlanId, zonesids, query.OwnerType, query.OwnerId);
         }
+
         public List<SaleRate> GetEffectiveSaleRates(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetByOwnerAndEffective", SaleRateMapper, ownerType, ownerId, effectiveOn);

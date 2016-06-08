@@ -563,6 +563,9 @@ namespace TOne.WhS.BusinessEntity.Business
                     carrierAccountDetail.SellingNumberPlanName = sellingNumberPlan.Name;
             }
 
+            if (carrierAccount.CarrierAccountSettings != null)
+                carrierAccountDetail.ActivationStatusDescription = Vanrise.Common.Utilities.GetEnumDescription(carrierAccount.CarrierAccountSettings.ActivationStatus);
+
             return carrierAccountDetail;
         }
         

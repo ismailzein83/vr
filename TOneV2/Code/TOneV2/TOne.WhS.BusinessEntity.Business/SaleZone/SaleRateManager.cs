@@ -24,7 +24,6 @@ namespace TOne.WhS.BusinessEntity.Business
             throw new NotImplementedException();
         }
 
-
         public List<SaleRate> GetSaleRatesEffectiveAfter(int sellingNumberPlanId, DateTime minimumDate)
         {
             ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
@@ -33,37 +32,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public Vanrise.Entities.IDataRetrievalResult<SaleRateDetail> GetFilteredSaleRates(Vanrise.Entities.DataRetrievalInput<SaleRateQuery> input)
         {
-            ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
-            Vanrise.Entities.BigResult<SaleRate> saleRates = dataManager.GetSaleRateFilteredFromTemp(input);
-            BigResult<SaleRateDetail> customerRouteDetailResult = new BigResult<SaleRateDetail>()
-            {
-                ResultKey = saleRates.ResultKey,
-                TotalCount = saleRates.TotalCount,
-                Data = saleRates.Data.MapRecords(SaleRateDetailMapper)
-            };
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult);
-        }
-        private SaleRateDetail SaleRateDetailMapper(SaleRate saleRate)
-        {
-            SaleZoneManager sz = new SaleZoneManager();
-            CurrencyManager currencyManager = new CurrencyManager();
-
-            int currencyId;
-            if (saleRate.CurrencyId.HasValue)
-                currencyId = saleRate.CurrencyId.Value;
-            else
-            {
-                SalePriceListManager salePriceListManager = new SalePriceListManager();
-                SalePriceList priceList = salePriceListManager.GetPriceList(saleRate.PriceListId);
-                currencyId = priceList.CurrencyId;
-            }
-
-            SaleRateDetail saleRateDetail = new SaleRateDetail();
-            saleRateDetail.Entity = saleRate;
-            saleRateDetail.ZoneName = sz.GetSaleZone(saleRate.ZoneId).Name;
-            saleRateDetail.CurrencyName = currencyManager.GetCurrencyName(currencyId);
-            return saleRateDetail;
+            return BigDataManager.Instance.RetrieveData(input, new SaleRateRequestHandler());
         }
 
         public SaleEntityZoneRate GetCachedCustomerZoneRate(int customerId, long saleZoneId, DateTime effectiveOn)
@@ -121,6 +90,52 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
             return dataManager.GetExistingRatesByZoneIds(ownerType, ownerId, zoneIds, minEED);
+        }
+
+        #endregion
+
+        #region Private Mappers
+
+        private SaleRateDetail SaleRateDetailMapper(SaleRate saleRate)
+        {
+            SaleZoneManager sz = new SaleZoneManager();
+            CurrencyManager currencyManager = new CurrencyManager();
+
+            int currencyId;
+            if (saleRate.CurrencyId.HasValue)
+                currencyId = saleRate.CurrencyId.Value;
+            else
+            {
+                SalePriceListManager salePriceListManager = new SalePriceListManager();
+                SalePriceList priceList = salePriceListManager.GetPriceList(saleRate.PriceListId);
+                currencyId = priceList.CurrencyId;
+            }
+
+            SaleRateDetail saleRateDetail = new SaleRateDetail();
+            saleRateDetail.Entity = saleRate;
+            saleRateDetail.ZoneName = sz.GetSaleZone(saleRate.ZoneId).Name;
+            saleRateDetail.CurrencyName = currencyManager.GetCurrencySymbol(currencyId);
+            return saleRateDetail;
+        }
+
+        #endregion
+
+
+        #region Private Classes
+
+        private class SaleRateRequestHandler : BigDataRequestHandler<SaleRateQuery, SaleRate, SaleRateDetail>
+        {
+            public override SaleRateDetail EntityDetailMapper(SaleRate entity)
+            {
+                SaleRateManager manager = new SaleRateManager();
+                return manager.SaleRateDetailMapper(entity);
+            }
+
+            public override IEnumerable<SaleRate> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SaleRateQuery> input)
+            {
+                ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+                return dataManager.GetFilteredSaleRates(input.Query);
+            }
         }
 
         #endregion

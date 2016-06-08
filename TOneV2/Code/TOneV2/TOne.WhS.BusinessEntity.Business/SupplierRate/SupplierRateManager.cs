@@ -104,16 +104,22 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Mappers
         private SupplierRateDetail SupplierRateDetailMapper(SupplierRate supplierRate)
         {
-            SupplierPriceListManager manager = new SupplierPriceListManager();
-            SupplierPriceList priceList = manager.GetPriceList(supplierRate.PriceListId);
+            CurrencyManager currencyManager = new CurrencyManager();
+            int currencyId;
 
-            int currencyId = supplierRate.CurrencyId.HasValue ? supplierRate.CurrencyId.Value : priceList.CurrencyId;
-            string currencyName = this.GetCurrencyName(currencyId);
+            if (supplierRate.CurrencyId.HasValue)
+                currencyId = supplierRate.CurrencyId.Value;
+            else
+            {
+                SupplierPriceListManager manager = new SupplierPriceListManager();
+                SupplierPriceList priceList = manager.GetPriceList(supplierRate.PriceListId);
+                currencyId= priceList.CurrencyId;
+            }
 
             return new SupplierRateDetail()
             {
                 Entity = supplierRate,
-                CurrencyName = currencyName,
+                CurrencyName = currencyManager.GetCurrencySymbol(currencyId),
                 SupplierZoneName = this.GetSupplierZoneName(supplierRate.ZoneId),
             };
         }
@@ -132,7 +138,7 @@ namespace TOne.WhS.BusinessEntity.Business
             public override IEnumerable<SupplierRate> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input)
             {
                 ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
-                return dataManager.GetAllFilteredSupplierRates(input);
+                return dataManager.GetFilteredSupplierRates(input.Query);
             }
         }
 

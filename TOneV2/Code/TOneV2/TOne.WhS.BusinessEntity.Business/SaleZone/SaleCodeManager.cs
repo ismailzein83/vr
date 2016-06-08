@@ -16,17 +16,9 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<SaleCodeDetail> GetFilteredSaleCodes(Vanrise.Entities.DataRetrievalInput<SaleCodeQuery> input)
         {
-            ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-            Vanrise.Entities.BigResult<SaleCode> saleCodes = dataManager.GetSaleCodeFilteredFromTemp(input);
-            BigResult<SaleCodeDetail> customerRouteDetailResult = new BigResult<SaleCodeDetail>()
-            {
-                ResultKey = saleCodes.ResultKey,
-                TotalCount = saleCodes.TotalCount,
-                Data = saleCodes.Data.MapRecords(SaleCodeDetailMapper)
-            };
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult);
+            return BigDataManager.Instance.RetrieveData(input, new SaleCodeRequestHandler());
         }
+
         public List<SaleCode> GetSaleCodesByZoneID(long zoneID, DateTime effectiveDate)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
@@ -112,6 +104,26 @@ namespace TOne.WhS.BusinessEntity.Business
             saleCodeDetail.Entity = saleCode;
             saleCodeDetail.ZoneName = szmnager.GetSaleZone(saleCode.ZoneId).Name;
             return saleCodeDetail;
+        }
+
+        #endregion
+
+
+        #region Private Classes
+
+        private class SaleCodeRequestHandler : BigDataRequestHandler<SaleCodeQuery, SaleCode, SaleCodeDetail>
+        {
+            public override SaleCodeDetail EntityDetailMapper(SaleCode entity)
+            {
+                SaleCodeManager manager = new SaleCodeManager();
+                return manager.SaleCodeDetailMapper(entity);
+            }
+
+            public override IEnumerable<SaleCode> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SaleCodeQuery> input)
+            {
+                ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
+                return dataManager.GetFilteredSaleCodes(input.Query);
+            }
         }
 
         #endregion

@@ -15,19 +15,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
     {
      
         #region ctor/Local Variables
-        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
         public SupplierRateDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
-
-        static SupplierRateDataManager()
-        {
-            _columnMapper.Add("CurrencyName", "CurrencyID");
-            _columnMapper.Add("SupplierZoneName", "ZoneID");
-            _columnMapper.Add("SupplierRateId", "ID");
-        }
+        
         #endregion
 
         #region Public Methods
@@ -61,32 +54,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetAll", SupplierRateMapper, effectiveOn, isEffectiveInFuture);
         }
-        public BigResult<SupplierRate> GetFilteredSupplierRates(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input)
-        {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                string zonesids = null;
-                if (input.Query.ZoneIds != null && input.Query.ZoneIds.Count() > 0)
-                    zonesids = string.Join<int>(",", input.Query.ZoneIds);
 
-
-                ExecuteNonQuerySP("[TOneWhS_BE].[sp_SupplierRate_CreateTempByFiltered]", tempTableName, input.Query.SupplierId, zonesids, input.Query.EffectiveOn);
-            };
-
-            if (input.SortByColumnName != null)
-                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
-
-            return RetrieveData(input, createTempTableAction, SupplierRateMapper, _columnMapper);
-        }
-
-        public IEnumerable<SupplierRate> GetAllFilteredSupplierRates(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input)
+        public IEnumerable<SupplierRate> GetFilteredSupplierRates(SupplierRateQuery query)
         {
             string zonesids = null;
-            if (input.Query.ZoneIds != null && input.Query.ZoneIds.Count() > 0)
-                zonesids = string.Join<int>(",", input.Query.ZoneIds);
+            if (query.ZoneIds != null && query.ZoneIds.Count() > 0)
+                zonesids = string.Join<int>(",", query.ZoneIds);
 
 
-            return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetFiltered]", SupplierRateMapper, input.Query.SupplierId, zonesids, input.Query.EffectiveOn);
+            return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetFiltered]", SupplierRateMapper, query.SupplierId, zonesids, query.EffectiveOn);
         }
 
         #endregion

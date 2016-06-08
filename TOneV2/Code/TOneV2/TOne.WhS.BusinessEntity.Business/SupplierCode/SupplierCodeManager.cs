@@ -83,7 +83,7 @@ namespace TOne.WhS.BusinessEntity.Business
             public override IEnumerable<SupplierCode> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SupplierCodeQuery> input)
             {
                 ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
-                return dataManager.GetAllFilteredSupplierCodes(input);
+                return dataManager.GetFilteredSupplierCodes(input.Query);
             }
         }
 
