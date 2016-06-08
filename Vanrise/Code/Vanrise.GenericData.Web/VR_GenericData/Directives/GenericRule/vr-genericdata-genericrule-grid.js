@@ -80,15 +80,22 @@
 
                 return directiveAPI;
             }
+            
+            //function defineMenuActions() {
+            //    $scope.gridMenuActions = [{
+            //        name: 'Edit',
+            //        clicked: editGenericRule,
+            //    },
+            //    {
+            //        name: 'Delete',
+            //        clicked: deleteGenericRule,
+            //    }];
+            //}
 
             function defineMenuActions() {
                 $scope.gridMenuActions = [{
                     name: 'Edit',
                     clicked: editGenericRule,
-                },
-                {
-                    name: 'Delete',
-                    clicked: deleteGenericRule,
                 }];
             }
 
