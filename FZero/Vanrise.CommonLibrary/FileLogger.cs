@@ -24,32 +24,11 @@ namespace Vanrise.CommonLibrary
             logger.Info(title + ": " + message );
         }
 
-
-        public static void WriteDebug(string title, string message)
-        {
-            log4net.Config.XmlConfigurator.Configure();
-            logger.Debug(title + ": " + message);
-        }
-
-        public static void WriteWarn(string title, string message)
-        {
-            log4net.Config.XmlConfigurator.Configure();
-            logger.Warn(title + ": " + message);
-        }
-
         public static void WriteError(string title, string message)
         {
             log4net.Config.XmlConfigurator.Configure();
             logger.Error(title + ": " + message);
         }
-
-
-        public static void WriteFatal(string title, string message)
-        {
-            log4net.Config.XmlConfigurator.Configure();
-            logger.Fatal(title + ": " + message);
-        }
-
         
     }
 }
