@@ -38,11 +38,11 @@
                
             </vr-columns>
             <vr-columns colnum="2">
-                <vr-select datatextfield="description" datavaluefield="value" label="Sampling Interval"
+                <vr-select datatextfield="description" datavaluefield="value" label="Grouping Interval"
                            entityname="Grouping Unit" selectedvalues="scopeModel.selectedTimeGroupingUnit" datasource="scopeModel.timeGroupingUnits" hideremoveicon></vr-select>
             </vr-columns>
             <vr-columns colnum="2">
-                <vr-textbox label="Refresh (Min)" value="scopeModel.timeInterval"></vr-textbox>
+                <vr-textbox label="Refresh (Min)" value="scopeModel.timeInterval" type="number" isrequired="true" minvalue="1"></vr-textbox>
             </vr-columns>
         </vr-row>
         <vr-row removeline ng-if="advancedSelected">
