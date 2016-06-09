@@ -60,21 +60,13 @@ namespace Vanrise.Common.Business
         public string GetCurrencyName(int currencyId)
         {
             Currency currency = this.GetCurrency(currencyId);
-
-            if (currency != null)
-                return currency.Name;
-
-            return "Currency Not Found";
+            return currency.Name;
         }
 
         public string GetCurrencySymbol(int currencyId)
         {
             Currency currency = this.GetCurrency(currencyId);
-
-            if (currency != null)
-                return currency.Symbol;
-
-            return "Currency Not Found";
+            return currency.Symbol;
         }
 
         public Dictionary<int, Currency> GetCachedCurrencies()
