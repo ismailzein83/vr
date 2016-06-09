@@ -110,7 +110,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
             };
             ctrl.tabindex = "";
             setTimeout(function(){
-                if ($($element).hasClass('divDisabled')) {
+                if ($($element).hasClass('divDisabled') || $($element).parents('.divDisabled').length > 0 ) {
                     ctrl.tabindex = "-1"
                 }
             },10)
