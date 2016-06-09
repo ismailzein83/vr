@@ -167,15 +167,20 @@ namespace Vanrise.GenericData.Business
                 GenericRuleDefinitionManager genericRuleDefinitionManager = new GenericRuleDefinitionManager();
                 GenericRuleDefinition ruleDefinition = genericRuleDefinitionManager.GetGenericRuleDefinition(ruleDefinitionId);
                 IEnumerable<T> rules = GetAllRules().FindAllRecords(itm => itm.DefinitionId == ruleDefinitionId);
-                List<BaseRuleStructureBehavior> ruleStructureBehaviors = new List<BaseRuleStructureBehavior>();
-                foreach (var ruleDefinitionCriteriaField in ruleDefinition.CriteriaDefinition.Fields.OrderBy(itm => itm.Priority))
-                {
-                    BaseRuleStructureBehavior ruleStructureBehavior = CreateRuleStructureBehavior(ruleDefinitionCriteriaField);
-                    ruleStructureBehaviors.Add(ruleStructureBehavior);
-                }
-                return new RuleTree(rules, ruleStructureBehaviors);
+                return BuildRuleTree(ruleDefinition.CriteriaDefinition, rules);
             });
 
+        }
+
+        public RuleTree BuildRuleTree(GenericRuleDefinitionCriteria ruleDefinitionCriteria, IEnumerable<T> rules)
+        {
+            List<BaseRuleStructureBehavior> ruleStructureBehaviors = new List<BaseRuleStructureBehavior>();
+            foreach (var ruleDefinitionCriteriaField in ruleDefinitionCriteria.Fields.OrderBy(itm => itm.Priority))
+            {
+                BaseRuleStructureBehavior ruleStructureBehavior = CreateRuleStructureBehavior(ruleDefinitionCriteriaField);
+                ruleStructureBehaviors.Add(ruleStructureBehavior);
+            }
+            return new RuleTree(rules, ruleStructureBehaviors);
         }
 
         private BaseRuleStructureBehavior CreateRuleStructureBehavior(GenericRuleDefinitionCriteriaField ruleDefinitionCriteriaField)

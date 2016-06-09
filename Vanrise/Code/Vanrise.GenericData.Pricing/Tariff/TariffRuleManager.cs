@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
+using Vanrise.Rules;
 using Vanrise.Rules.Pricing;
 
 namespace Vanrise.GenericData.Pricing
@@ -12,7 +13,17 @@ namespace Vanrise.GenericData.Pricing
     {
         public void ApplyTariffRule(IPricingRuleTariffContext context, int ruleDefinitionId, GenericRuleTarget target)
         {
-            var tariffPricingRule = GetMatchRule(ruleDefinitionId, target);
+            this.ApplyTariffRule(context, () => GetMatchRule(ruleDefinitionId, target), target);
+        }
+
+        public void ApplyTariffRule(IPricingRuleTariffContext context, RuleTree ruleTree, GenericRuleTarget target)
+        {
+            this.ApplyTariffRule(context, () => ruleTree.GetMatchRule(target) as TariffRule, target);
+        }
+
+        void ApplyTariffRule(IPricingRuleTariffContext context, Func<TariffRule> getMatchRule, GenericRuleTarget target)
+        {
+            var tariffPricingRule = getMatchRule();
             if (tariffPricingRule != null)
                 tariffPricingRule.Settings.ApplyTariffRule(context);
             else
