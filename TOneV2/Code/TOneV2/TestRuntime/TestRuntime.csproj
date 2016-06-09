@@ -701,6 +701,38 @@
       <Project>{b645c1d2-c038-4890-85aa-588fa3c3fc7a}</Project>
       <Name>TOne.WhS.Routing.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Sales.BP.Activities\TOne.WhS.Sales.BP.Activities.csproj">
+      <Project>{ba3e1017-95e3-4036-b941-d3f60586064e}</Project>
+      <Name>TOne.WhS.Sales.BP.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Sales.BP.Arguments\TOne.WhS.Sales.BP.Arguments.csproj">
+      <Project>{26331fab-47a3-40dd-975d-9a0a5022584f}</Project>
+      <Name>TOne.WhS.Sales.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Sales.BP\TOne.WhS.Sales.BP.csproj">
+      <Project>{90394987-7d82-4ca6-b280-9df0ce6d4792}</Project>
+      <Name>TOne.WhS.Sales.BP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Sales.Business\TOne.WhS.Sales.Business.csproj">
+      <Project>{101b3960-9114-451e-8344-4074998e32f6}</Project>
+      <Name>TOne.WhS.Sales.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Sales.Data.SQL\TOne.WhS.Sales.Data.SQL.csproj">
+      <Project>{98c7047c-bdb9-4ae1-a8ae-3b544a3bd22e}</Project>
+      <Name>TOne.WhS.Sales.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Sales.Data\TOne.WhS.Sales.Data.csproj">
+      <Project>{49d742c7-dbc2-4ff5-9197-0c504076a2fe}</Project>
+      <Name>TOne.WhS.Sales.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Sales.Entities\TOne.WhS.Sales.Entities.csproj">
+      <Project>{d604102b-eca7-4f50-b9a1-be46ee701dc0}</Project>
+      <Name>TOne.WhS.Sales.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Sales.MainExtensions\TOne.WhS.Sales.MainExtensions.csproj">
+      <Project>{fa418fbb-e474-44ce-a35b-4290213c55cf}</Project>
+      <Name>TOne.WhS.Sales.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.SupplierPriceList.BP.Activities\TOne.WhS.SupplierPriceList.BP.Activities.csproj">
       <Project>{f7438737-d6bb-4dbc-beff-813a524e6eca}</Project>
       <Name>TOne.WhS.SupplierPriceList.BP.Activities</Name>

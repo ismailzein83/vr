@@ -15,20 +15,30 @@ namespace TOne.WhS.Sales.Business
 {
     public class RatePlanManager
     {
+        #region Fields
+
         IRatePlanDataManager _dataManager;
         RoutingProductManager _routingProductManager;
+        
+        #endregion
+
+        #region Constructors
 
         public RatePlanManager()
         {
             _dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
             _routingProductManager = new RoutingProductManager();
         }
+        
+        #endregion
+
+        #region Public Methods
 
         public bool ValidateCustomer(int customerId, DateTime effectiveOn)
         {
             CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
             CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, effectiveOn, false);
-            
+
             return customerSellingProduct != null;
         }
 
@@ -129,7 +139,7 @@ namespace TOne.WhS.Sales.Business
 
             return zones;
         }
-        
+
         #endregion
 
         #region Get Zone Item(s)
@@ -158,7 +168,7 @@ namespace TOne.WhS.Sales.Business
 
                 ZoneRateSetter rateSetter = new ZoneRateSetter(input.Filter.OwnerType, input.Filter.OwnerId, sellingProductId, DateTime.Now, changes);
                 ZoneRoutingProductSetter routingProductSetter = new ZoneRoutingProductSetter((int)sellingProductId, customerId, DateTime.Now, changes);
-                
+
                 foreach (SaleZone zone in zones)
                 {
                     ZoneItem zoneItem = new ZoneItem()
@@ -213,7 +223,7 @@ namespace TOne.WhS.Sales.Business
 
             return zoneItem;
         }
-        
+
         #endregion
 
         public IEnumerable<CostCalculationMethodSetting> GetCostCalculationMethodTemplates()
@@ -298,6 +308,14 @@ namespace TOne.WhS.Sales.Business
         {
             return _dataManager.CancelRatePlanChanges(ownerType, ownerId);
         }
+
+        public Changes GetChanges(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            var stateManager = new StateManager();
+            return stateManager.GetChanges(ownerType, ownerId);
+        }
+        
+        #endregion
 
         #region Common Private Methods
 

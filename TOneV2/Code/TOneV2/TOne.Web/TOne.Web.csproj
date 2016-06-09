@@ -713,6 +713,10 @@
       <Project>{b6df1590-4aa6-4abd-ad8d-02e374696074}</Project>
       <Name>TOne.WhS.Routing.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Sales.BP.Arguments\TOne.WhS.Sales.BP.Arguments.csproj">
+      <Project>{26331fab-47a3-40dd-975d-9a0a5022584f}</Project>
+      <Name>TOne.WhS.Sales.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Sales.Data.SQL\TOne.WhS.Sales.Data.SQL.csproj">
       <Project>{98c7047c-bdb9-4ae1-a8ae-3b544a3bd22e}</Project>
       <Name>TOne.WhS.Sales.Data.SQL</Name>
