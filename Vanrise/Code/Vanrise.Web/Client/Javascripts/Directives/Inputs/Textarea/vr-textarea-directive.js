@@ -18,6 +18,12 @@
                 ctrl.validate = function () {
                     return VRValidationService.validate(ctrl.value, $scope, $attrs);
                 };
+                ctrl.tabindex = "";
+                setTimeout(function () {
+                    if ($($element).hasClass('divDisabled')) {
+                        ctrl.tabindex = "-1"
+                    }
+                }, 10)
             },
             compile: function (element, attrs) {
 
@@ -106,7 +112,7 @@
                         rows = attrs.rows;
                     var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false" >'
                             + '<vr-validator validate="ctrl.validate()">'
-                            + '<textarea  placeholder="{{ctrl.placelHolder}}" ng-readonly="ctrl.readOnly" id="mainInput"  ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" rows="'+rows+'" class="form-control" style="width: 100%; resize: none;" ></textarea>'
+                            + '<textarea tabindex="{{ctrl.tabindex}}"  placeholder="{{ctrl.placelHolder}}" ng-readonly="ctrl.readOnly" id="mainInput"  ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" rows="' + rows + '" class="form-control" style="width: 100%; resize: none;" ></textarea>'
                             + '</vr-validator>'
                             + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" html="true" style="color:#337AB7"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>';
                         + '</div>'

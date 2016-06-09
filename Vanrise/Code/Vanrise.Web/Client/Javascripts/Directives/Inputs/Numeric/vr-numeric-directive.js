@@ -172,6 +172,12 @@
                                 classes += ' with-label ';
                             return classes;
                         }
+                        ctrl.tabindex = "";
+                        setTimeout(function () {
+                            if ($($element).hasClass('divDisabled')) {
+                                ctrl.tabindex = "-1"
+                            }
+                        }, 10)
                         //BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
                     }
@@ -189,7 +195,7 @@
                 var numericTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
                                             + '<div  class="vr-numeric" >'
                                             + '<vr-validator validate="ctrl.validate()">'
-                                                   + '<input class="form-control  border-radius input-box" type="text" placeholder="{{ctrl.placelHolder}}" ng-change="ctrl.notifyUserChange()" id="mainInput" ng-model="ctrl.value" >'
+                                                   + '<input  tabindex="{{ctrl.tabindex}}" class="form-control  border-radius input-box" type="text" placeholder="{{ctrl.placelHolder}}" ng-change="ctrl.notifyUserChange()" id="mainInput" ng-model="ctrl.value" >'
                                                        + '</vr-validator>'
                                                 + '<span ng-if="ctrl.hint!=undefined"  bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" html="true" style="color:#337AB7;right: -10px;"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
                                                 + '<div class="vr-numeric-control" ng-class="ctrl.getNumericControlClass()">'

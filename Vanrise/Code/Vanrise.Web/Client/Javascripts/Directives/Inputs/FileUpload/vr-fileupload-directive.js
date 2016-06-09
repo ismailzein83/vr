@@ -18,6 +18,13 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
             ctrl.validate = function () {
                 return VRValidationService.validate(ctrl.value, $scope, $attrs);
             };
+            ctrl.tabindex = "";
+            setTimeout(function () {
+                if ($($element).hasClass('divDisabled')) {
+                    ctrl.tabindex = "-1"
+                }
+            }, 10)
+
 
             //var inputElement = $element.find('#mainInput');
             //var validationOptions = {};
@@ -246,7 +253,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                             + '<span ng-show="ctrl.file !=null || broken ==true" class="glyphicon glyphicon-remove hand-cursor vr-file-remove" aria-hidden="true" ng-click="ctrl.remove()"></span>'
                             + '<span vr-disabled="ctrl.file !=null" class="btn btn-success fileinput-button vr-file-btn">'
                                 +'<i class="glyphicon glyphicon-paperclip " style="top:0px"></i>'
-                                + '<input type="file" id="fileUpload">'
+                                + '<input type="file" tabindex="{{ctrl.tabindex}}" id="fileUpload">'
                             + '</span>'
                       + '</div>'
                   + '</vr-validator>'

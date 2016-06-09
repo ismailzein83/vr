@@ -330,6 +330,7 @@
                 //Exports
                 setTimeout(function () {
                     $('div[name=' + $attrs.id + ']').on('show.bs.dropdown', function () {
+                        
                         vrSelectSharedObject.onOpenDropDown($attrs.id);
 
                         setTimeout(function () { $('#filterInput').focus(); }, 1);
@@ -398,8 +399,13 @@
 
                     var divDropdown = angular.element(element[0].querySelector('.dropdown'));
                     var ulDropdown = angular.element(element[0].querySelector('.dropdown-menu'));
+                    var tabindex = '';
                     attrs.id = baseDirService.generateHTMLElementName();
                     divDropdown.attr('name', attrs.id);
+
+                    if ($(divDropdown).parents().hasClass('divDisabled') == true) {
+                        tabindex = 'tabindex=-1'
+                    }
                     //attrs.id = baseDirService.prepareDirectiveHTMLForValidation({}, divDropdown, undefined, divDropdown);
 
                     var validateButtonClass = '';
@@ -449,7 +455,7 @@
                     else {
                         var noCaret = attrs.nocaret != undefined;
                         var noborder = attrs.noborder != undefined;
-                        var buttonTemplate = '<button class="btn btn-default dropdown-toggle" style="width:100%;text-align: left;' + (noborder ? 'border:none' : '') + '" type="button" data-toggle="dropdown" '
+                        var buttonTemplate = '<button ' + tabindex + ' class="btn btn-default dropdown-toggle" style="width:100%;text-align: left;' + (noborder ? 'border:none' : '') + '" type="button" data-toggle="dropdown" '
                                             + ' aria-expanded="true"  ' + validateButtonClass + '>'
                                             + '<span style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px ); " ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'} " >{{ctrl.getLabel()}}</span>'
                                             + (noCaret === true ? '' : '<span style="position:absolute;top:13px;right:5px" class="caret"></span>')

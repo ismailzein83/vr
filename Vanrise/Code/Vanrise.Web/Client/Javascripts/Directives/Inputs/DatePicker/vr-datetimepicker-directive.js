@@ -46,7 +46,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
             ctrl.validate = function () {
                 return VRValidationService.validate(ctrl.value, $scope, $attrs);
             };
-
+          
             var format;
             var isDate;
             var isTime;
@@ -82,16 +82,14 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
 
                      });
                 }
-
+                
                 //if (divDatePicker.parents('.vr-datagrid').length > 0) {
                 //    divDatePicker.on('dp.show', function (e) {
-                //        var self = $(this);
-                //        var selfHeight = $(this).height();
-                //        var selfOffset = $(self).offset();
-                //        var dropDown = self.parent().find('.bootstrap-datetimepicker-widget')[0];
-                //        var containercell = $(self.parent().closest('.vr-datagrid-celltext')).offset();
-                //        $(dropDown).removeClass("pull-right");
-                //        $(dropDown).css({ position: 'fixed', top: 'auto', left: 'auto', marginTop: selfHeight, marginRight: -17 });
+                //        $('#gridBodyContainer').css({ "overflow-y": 'hidden', "overflow-x": 'hidden' })
+                        
+                //    });
+                //    divDatePicker.on('dp.hide', function (e) {
+                //        $('#gridBodyContainer').css({ "overflow-y": 'auto', "overflow-x": 'hidden' })
 
                 //    });
                 //}
@@ -110,6 +108,13 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                     divDatePicker.data("DateTimePicker").hide()
 
             };
+            ctrl.tabindex = "";
+            setTimeout(function(){
+                if ($($element).hasClass('divDisabled')) {
+                    ctrl.tabindex = "-1"
+                }
+            },10)
+           
             var isUserChange = false;
             var selectedDate;
             divDatePicker
@@ -319,7 +324,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
         template: function (element, attrs) {
             var startTemplate = '<div id="rootDiv" style="position: relative;">';
             var endTemplate = '</div>';
-
+           
             var labelTemplate = '';
             var n = 0;
             if (attrs.label != undefined)
@@ -347,7 +352,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                  '<div   >'
                   + '<vr-validator validate="ctrl.validate()">'
                   + '<div id="divDatePicker" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false"  ng-model="ctrl.value" class="input-group form-control" ng-style="ctrl.getInputeStyle()" style="border-radius: 4px;height: 26px;padding: 0px;display:block;">'
-                            + '<input class=" vr-date-input" ng-focus="ctrl.setDefaultDate()" placeholder="{{ctrl.placelHolder}}" ng-style="ctrl.getInputeStyle()" style="padding:0px 5px;height: 24px;width: 100%;"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
+                            + '<input tabindex="{{ctrl.tabindex}}" class=" vr-date-input" ng-focus="ctrl.setDefaultDate()" placeholder="{{ctrl.placelHolder}}" ng-style="ctrl.getInputeStyle()" style="padding:0px 5px;height: 24px;width: 100%;"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
                             + '<div  ng-show="showtd==true"  class="hand-cursor" style="max-width:' + 20 * n + 'px;position: absolute;z-index: 11;min-width: 20px;right: 0px;top:0px" >' + icontemplate + '</div>'
                       + '</div>'
                   + '</vr-validator>'
