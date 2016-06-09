@@ -69,7 +69,7 @@
                     return LabelColorsEnum.Warning.color;
                     break;
                 case Qm_CliTester_CallTestResultEnum.Fas.value:
-                    return LabelColorsEnum.Processed.color;
+                    return LabelColorsEnum.Failed.color;
                     break;
                 default:
                     return undefined;
