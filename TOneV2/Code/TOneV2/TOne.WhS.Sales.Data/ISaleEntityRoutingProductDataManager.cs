@@ -14,8 +14,8 @@ namespace TOne.WhS.Sales.Data
 
         bool UpdateDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, DraftChangedDefaultRoutingProduct defaultRoutingProductChange);
 
-        bool InsertZoneRoutingProducts(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<DraftNewZoneRoutingProduct> newZoneRoutingProducts);
+        bool InsertZoneRoutingProducts(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<DraftNewSaleZoneRoutingProduct> newZoneRoutingProducts);
 
-        bool UpdateZoneRoutingProducts(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<DraftChangedZoneRoutingProduct> zoneRoutingProductChanges);
+        bool UpdateZoneRoutingProducts(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<DraftChangedSaleZoneRoutingProduct> zoneRoutingProductChanges);
     }
 }

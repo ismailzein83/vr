@@ -144,18 +144,18 @@
       <FileName>RatePlanning\Draft\RoutingProduct\Default\DraftNewDefaultRoutingProduct.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TOne.WhS.Sales.Entities.DraftChangedZoneRoutingProduct">
+  <Class Name="TOne.WhS.Sales.Entities.DraftChangedSaleZoneRoutingProduct">
     <Position X="13.5" Y="0.75" Width="3" />
     <TypeIdentifier>
       <HashCode>AAAAAAACAAABAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>RatePlanning\Draft\RoutingProduct\Zone\DraftChangedZoneRoutingProduct.cs</FileName>
+      <FileName>RatePlanning\Draft\RoutingProduct\Zone\DraftChangedSaleZoneRoutingProduct.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TOne.WhS.Sales.Entities.DraftNewZoneRoutingProduct">
+  <Class Name="TOne.WhS.Sales.Entities.DraftNewSaleZoneRoutingProduct">
     <Position X="11" Y="0.75" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAACAACBAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>RatePlanning\Draft\RoutingProduct\Zone\DraftNewZoneRoutingProduct.cs</FileName>
+      <FileName>RatePlanning\Draft\RoutingProduct\Zone\DraftNewSaleZoneRoutingProduct.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

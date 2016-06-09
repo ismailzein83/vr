@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public class DraftNewZoneRoutingProduct
+    public class DraftNewSaleZoneRoutingProduct
     {
         public long ZoneId { get; set; }
 

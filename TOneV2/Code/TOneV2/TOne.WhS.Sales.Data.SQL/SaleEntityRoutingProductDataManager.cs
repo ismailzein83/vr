@@ -36,7 +36,7 @@ namespace TOne.WhS.Sales.Data.SQL
             return affectedRows > 0;
         }
 
-        public bool InsertZoneRoutingProducts(BusinessEntity.Entities.SalePriceListOwnerType ownerType, int ownerId, IEnumerable<Entities.DraftNewZoneRoutingProduct> newZoneRoutingProducts)
+        public bool InsertZoneRoutingProducts(BusinessEntity.Entities.SalePriceListOwnerType ownerType, int ownerId, IEnumerable<Entities.DraftNewSaleZoneRoutingProduct> newZoneRoutingProducts)
         {
             DataTable newZoneRoutingProductsTable = BuildNewZoneRoutingProductsTable(newZoneRoutingProducts);
 
@@ -53,7 +53,7 @@ namespace TOne.WhS.Sales.Data.SQL
             return affectedRows == newZoneRoutingProducts.Count();
         }
 
-        public bool UpdateZoneRoutingProducts(BusinessEntity.Entities.SalePriceListOwnerType ownerType, int ownerId, IEnumerable<Entities.DraftChangedZoneRoutingProduct> zoneRoutingProductChanges)
+        public bool UpdateZoneRoutingProducts(BusinessEntity.Entities.SalePriceListOwnerType ownerType, int ownerId, IEnumerable<Entities.DraftChangedSaleZoneRoutingProduct> zoneRoutingProductChanges)
         {
             DataTable zoneRoutingProductChangesTable = BuildZoneRoutingProductChangesTable(zoneRoutingProductChanges);
 
@@ -74,7 +74,7 @@ namespace TOne.WhS.Sales.Data.SQL
 
         #region Private Methods
 
-        DataTable BuildNewZoneRoutingProductsTable(IEnumerable<DraftNewZoneRoutingProduct> newZoneRoutingProducts)
+        DataTable BuildNewZoneRoutingProductsTable(IEnumerable<DraftNewSaleZoneRoutingProduct> newZoneRoutingProducts)
         {
             DataTable table = new DataTable();
 
@@ -104,7 +104,7 @@ namespace TOne.WhS.Sales.Data.SQL
             return table;
         }
 
-        DataTable BuildZoneRoutingProductChangesTable(IEnumerable<DraftChangedZoneRoutingProduct> zoneRoutingProductChanges)
+        DataTable BuildZoneRoutingProductChangesTable(IEnumerable<DraftChangedSaleZoneRoutingProduct> zoneRoutingProductChanges)
         {
             DataTable table = new DataTable();
 

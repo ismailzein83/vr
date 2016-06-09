@@ -10,9 +10,9 @@ namespace TOne.WhS.Sales.Entities
 
         public DraftChangedRate RateChange { get; set; }
 
-        public DraftNewZoneRoutingProduct NewRoutingProduct { get; set; }
+        public DraftNewSaleZoneRoutingProduct NewRoutingProduct { get; set; }
 
-        public DraftChangedZoneRoutingProduct RoutingProductChange { get; set; }
+        public DraftChangedSaleZoneRoutingProduct RoutingProductChange { get; set; }
 
         public NewService NewService { get; set; }
 
