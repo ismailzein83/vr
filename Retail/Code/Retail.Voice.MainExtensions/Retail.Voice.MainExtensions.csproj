@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C08FD318-049C-49CE-8BC4-85BF296CBAB9}</ProjectGuid>
+    <ProjectGuid>{59EFF472-B705-4AC1-B04C-C23ED4C82020}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Retail.BusinessEntity.Entities</RootNamespace>
-    <AssemblyName>Retail.BusinessEntity.Entities</AssemblyName>
+    <RootNamespace>Retail.Voice.MainExtensions</RootNamespace>
+    <AssemblyName>Retail.Voice.MainExtensions</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -41,60 +41,51 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Common">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Entities">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    <Reference Include="Vanrise.GenericData.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.GenericData.Entities">
+    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Pricing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Pricing.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Rules">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Security.Entities">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    <Reference Include="Vanrise.Rules.Pricing">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Pricing.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountPackage\AccountPackage.cs" />
-    <Compile Include="AccountPackage\AccountPackageDetail.cs" />
-    <Compile Include="AccountPackage\AccountPackageQuery.cs" />
-    <Compile Include="Account\Account.cs" />
-    <Compile Include="Account\AccountDetail.cs" />
-    <Compile Include="Account\AccountInfo.cs" />
-    <Compile Include="Account\AccountQuery.cs" />
-    <Compile Include="NewBEs\AccountService.cs" />
-    <Compile Include="NewBEs\AccountServiceSettings.cs" />
-    <Compile Include="NewBEs\ChargingPolicyParts\ChargingPolicyPart.cs" />
-    <Compile Include="NewBEs\ChargingPolicyParts\ChargingPolicyPartType.cs" />
-    <Compile Include="NewBEs\ChargingPolicyParts\ChargingPolicyRateType.cs" />
-    <Compile Include="NewBEs\ChargingPolicyParts\ChargingPolicyRateValue.cs" />
-    <Compile Include="NewBEs\ChargingPolicyParts\ChargingPolicyDurationTariff.cs" />
-    <Compile Include="NewBEs\ChargingPolicy.cs" />
-    <Compile Include="NewBEs\ChargingPolicySettings.cs" />
-    <Compile Include="NewBEs\ServicePackage.cs" />
-    <Compile Include="NewBEs\ServicePackageSettings.cs" />
-    <Compile Include="NewBEs\ServiceType.cs" />
-    <Compile Include="NewBEs\ServiceVolumeSettings.cs" />
-    <Compile Include="Package\Package.cs" />
-    <Compile Include="Package\PackageDetail.cs" />
-    <Compile Include="Package\PackageInfo.cs" />
-    <Compile Include="Package\PackageFilter.cs" />
-    <Compile Include="Package\PackageQuery.cs" />
-    <Compile Include="Package\ServiceTemplateConfig.cs" />
-    <Compile Include="Package\ServiceVoiceTypeTemplateConfig.cs" />
-    <Compile Include="PricingEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Zone\ZoneFilter.cs" />
-    <Compile Include="Zone\Zone.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Retail.BusinessEntity.Business\Retail.BusinessEntity.Business.csproj">
+      <Project>{194f2715-17dc-49fa-b701-2386aaa9eddf}</Project>
+      <Name>Retail.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
+      <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
+      <Name>Retail.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Voice.Business\Retail.Voice.Business.csproj">
+      <Project>{95ae4730-ee1b-4a0b-a785-baf36f130714}</Project>
+      <Name>Retail.Voice.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Voice.Entities\Retail.Voice.Entities.csproj">
+      <Project>{d1f8761c-baf9-4302-902a-a9ea86cc8ed6}</Project>
+      <Name>Retail.Voice.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -117,17 +117,6 @@ namespace Retail.BusinessEntity.Business
                    return packages.ToDictionary(cn => cn.PackageId, cn => cn);
                });
         }
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            IPackageDataManager _dataManager = BEDataManagerFactory.GetDataManager<IPackageDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return _dataManager.ArePackagesUpdated(ref _updateHandle);
-            }
-        }
-
         #endregion
 
         #region  Mappers
@@ -145,6 +134,21 @@ namespace Retail.BusinessEntity.Business
             packageDetail.Entity = package;
             return packageDetail;
         }
+        #endregion
+
+        #region Private Classes
+
+        internal class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IPackageDataManager _dataManager = BEDataManagerFactory.GetDataManager<IPackageDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.ArePackagesUpdated(ref _updateHandle);
+            }
+        }
+
         #endregion
     }
 }
