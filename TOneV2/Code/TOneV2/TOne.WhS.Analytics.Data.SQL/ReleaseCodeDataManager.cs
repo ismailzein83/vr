@@ -87,7 +87,6 @@ namespace TOne.WhS.Analytics.Data.SQL
             }, (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.From));
-                cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.To));
             });
             return releaseCodes;
         }
@@ -120,7 +119,8 @@ namespace TOne.WhS.Analytics.Data.SQL
             StringBuilder selectQueryPart = new StringBuilder();
             StringBuilder whereBuilder = new StringBuilder();
             StringBuilder groupByBuilder = new StringBuilder();
-            StringBuilder havingBuilder = new StringBuilder();           
+            StringBuilder havingBuilder = new StringBuilder();
+            AddFilterToQuery(filter, whereBuilder);
             queryBuilder.Append(String.Format(@"SELECT                                                
                                                #SELECTPART#                                              
                                                FROM {0} {1} WITH(NOLOCK ,INDEX(#TABLEINDEX#))
@@ -129,7 +129,8 @@ namespace TOne.WhS.Analytics.Data.SQL
                                               ", tableName, alias));
 
             whereBuilder.Append(String.Format(@"{0}.AttemptDateTime>= @FromDate ", alias));
-            AddFilterToQuery(filter, whereBuilder);
+            if (query.To.HasValue)
+                whereBuilder.AppendFormat("AND AttemptDateTime<= '{0}' ", query.To.Value);
             groupByBuilder.Append(String.Format(@"{0}.SwitchId, {0}.ReleaseCode,{0}.ReleaseSource", alias));
             selectQueryPart.Append(String.Format(@"         {0}.SwitchId,
                                                             {0}.ReleaseCode,{0}.ReleaseSource,
@@ -186,8 +187,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             AddFilter(whereBuilder, filter.SupplierIds, "SupplierID");
             AddFilter(whereBuilder, filter.CustomerIds, "CustomerID");
             AddFilter(whereBuilder, codes, "SaleCode");
-            if (query.To.HasValue)
-                whereBuilder.AppendFormat("AND AttemptDateTime<= '{0}' ", query.To.Value);
+          
             
         }
         private void AddFilter<T>(StringBuilder whereBuilder, IEnumerable<T> values, string column)
