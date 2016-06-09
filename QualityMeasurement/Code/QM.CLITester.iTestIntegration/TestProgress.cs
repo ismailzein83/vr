@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using QM.CLITester.Entities;
 
 namespace QM.CLITester.iTestIntegration
 {
@@ -29,5 +30,9 @@ namespace QM.CLITester.iTestIntegration
         public string Call { get; set; }        
         public string ReleaseCode { get; set; }
         public string ReceivedCli { get; set; }
+        public string Pdd { get; set; }
+        public string Mos { get; set; }
+        public CallTestResult CallTestResult { get; set; }
+        public string CallTestResultDescription { get; set; }
     }
 }

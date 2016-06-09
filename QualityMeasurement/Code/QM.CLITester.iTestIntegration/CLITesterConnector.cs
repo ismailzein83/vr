@@ -1,6 +1,7 @@
 ﻿using QM.CLITester.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -10,6 +11,7 @@ using QM.CLITester.Business;
 using Vanrise.Common.Business;
 using QM.BusinessEntity.Business;
 using QM.BusinessEntity.Entities;
+using Vanrise.Common;
 
 namespace QM.CLITester.iTestIntegration
 {
@@ -189,8 +191,7 @@ namespace QM.CLITester.iTestIntegration
         private GetTestProgressOutput ResponseTestProgressBeta(string response, string testId, Object recentTestProgress, Measure recentMeasure)
         {
             GetTestProgressOutput testProgressOutput = new GetTestProgressOutput();
-            var connectorResultMappingManager = new ConnectorResultMappingManager();
-
+            
             XmlDocument xml = new XmlDocument();
             if (!String.IsNullOrEmpty(response))
             {
@@ -202,31 +203,30 @@ namespace QM.CLITester.iTestIntegration
                 {
                     string xmlResponse = Regex.Replace(response, @"\t|\n|\r", "");
                     
-                    var node = xnListCall[0];
-                    var node2 = xnListTestOverView[0];
+                    var node = xnListTestOverView[0];
                     
                     var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-                    long unixTime = node["Start"] != null ? long.Parse(node["Start"].InnerText) : 0;
-
-                    Measure resultTestProgress = new Measure
-                    {
-                        Pdd = node["PDD"] != null ? Decimal.Parse(node["PDD"].InnerText) : 0,
-                        Mos = node["MOS"] != null ? Decimal.Parse(node["MOS"].InnerText) : 0,
-                        Duration = epoch.AddSeconds(unixTime),
-                        //ReleaseCode = node["Last_Code"] != null ? node["Last_Code"].InnerText : "",
-                        //ReceivedCli = node["CLI"] != null ? node["CLI"].InnerText : "",
-                        RingDuration = null
-                    };
-
+                    long unixTime = node["Init"] != null ? long.Parse(node["Init"].InnerText) : 0;
+                    decimal pdd = 0;
+                    decimal mos = 0;
+                    int countNotCompleted = 0; //Processing
+                    int countSucceeded = 0; // CLI Succcess
+                    int countFailed = 0; //CLI Failed
+                    int countNotAnswered = 0; //Call Failed
+                    int countFas = 0;
+                    int countTotalCalls = xnListCall.Count;
                     TestProgress testProgress = new TestProgress
                     {
-                        Name = node2["Name"] != null ? node2["Name"].InnerText : "",
-                        Result = node["Result"] != null ? node["Result"].InnerText : "",
+                        Name = node["Name"] != null ? node["Name"].InnerText : "",
+                        //Result = node["Result"] != null ? node["Result"].InnerText : "",
                         CallResults = new List<CallResult>(),
                         XmlResponse = xmlResponse
                     };
+
                     foreach (XmlNode callNode in xnListCall)
                     {
+                        pdd = pdd + Decimal.Parse(callNode["PDD"].InnerText);
+                        mos = mos + Decimal.Parse(callNode["MOS"].InnerText);
                         CallResult callResult = new CallResult
                         {
                             Source = callNode["Source"] != null ? callNode["Source"].InnerText : "",
@@ -234,41 +234,63 @@ namespace QM.CLITester.iTestIntegration
                             Ring = callNode["Ring"] != null ? callNode["Ring"].InnerText : "",
                             Call = callNode["Call"] != null ? callNode["Call"].InnerText : "",
                             ReleaseCode = callNode["Last_Code"] != null ? callNode["Last_Code"].InnerText : "",
-                            ReceivedCli = callNode["CLI"] != null ? callNode["CLI"].InnerText : ""
+                            ReceivedCli = callNode["CLI"] != null ? callNode["CLI"].InnerText : "",
+                            Pdd = callNode["PDD"] != null ? callNode["PDD"].InnerText : "",
+                            Mos = callNode["MOS"] != null ? callNode["MOS"].InnerText : "",
+                            CallTestResult = CallTestResult.PartiallySucceeded
                         };
+                        string callTestResult = callNode["Result"] != null ? callNode["Result"].InnerText : "";
+                        callResult.CallTestResult = GetCallTestResult(callTestResult);
+
+                        callResult.CallTestResultDescription =
+                            Utilities.GetEnumAttribute<CallTestResult, DescriptionAttribute>(callResult.CallTestResult).Description;
+
+                        switch (callResult.CallTestResult)
+                        {
+                            case CallTestResult.Succeeded:
+                                countSucceeded++;
+                                countNotCompleted++;
+                                break;
+                            case CallTestResult.Failed:
+                                countFailed++;
+                                countNotCompleted++;
+                                break;
+                            case CallTestResult.NotAnswered:
+                                countNotAnswered++;
+                                countNotCompleted++;
+                                break;
+                            case CallTestResult.Fas:
+                                countFas++;
+                                countNotCompleted++;
+                                break;
+                        }
                         testProgress.CallResults.Add(callResult);
                     }
+
+                    Measure resultTestProgress = new Measure
+                    {
+                        Pdd = pdd / countTotalCalls,
+                        Mos = mos / countTotalCalls,
+                        Duration = epoch.AddSeconds(unixTime),
+                        RingDuration = null
+                    };
                     testProgressOutput.Measure = resultTestProgress;
                     testProgressOutput.TestProgress = testProgress;
 
-                    var existingZones = connectorResultMappingManager.GetConnectorResultMappings(Constants.CONNECTOR_TYPE);
-
-                    ConnectorResultMapping notCompletedMapping = existingZones != null
-                        ? existingZones.FirstOrDefault(itm => itm.ResultId == (int)CallTestResult.NotCompleted) : null;
-
-                    ConnectorResultMapping notAnsweredMapping = existingZones != null
-                        ? existingZones.FirstOrDefault(itm => itm.ResultId == (int)CallTestResult.NotAnswered) : null;
-
-                    ConnectorResultMapping failedMapping = existingZones != null
-                        ? existingZones.FirstOrDefault(itm => itm.ResultId == (int)CallTestResult.Failed) : null;
-
-                    ConnectorResultMapping succeededMapping = existingZones != null
-                        ? existingZones.FirstOrDefault(itm => itm.ResultId == (int)CallTestResult.Succeeded) : null;
-
-                    ConnectorResultMapping fasMapping = existingZones != null
-                        ? existingZones.FirstOrDefault(itm => itm.ResultId == (int)CallTestResult.Fas) : null;
-
-                    if (!notCompletedMapping.ConnectorResults.Exists(connRes => testProgress.Result == connRes))
+                    if (countNotCompleted == countTotalCalls)
                     {
                         testProgressOutput.Result = GetTestProgressResult.TestCompleted;
 
-                        testProgressOutput.CallTestResult = 
-                            failedMapping.ConnectorResults.Exists(connRes => testProgress.Result == connRes) ? CallTestResult.Failed :
-                            succeededMapping.ConnectorResults.Exists(connRes => testProgress.Result == connRes) ? CallTestResult.Succeeded :
-                            notAnsweredMapping.ConnectorResults.Exists(connRes => testProgress.Result == connRes) ? CallTestResult.NotAnswered :
-                            fasMapping.ConnectorResults.Exists(connRes => testProgress.Result == connRes) ? CallTestResult.Fas :
-                            CallTestResult.PartiallySucceeded;
-
+                        testProgressOutput.CallTestResult =
+                            (countSucceeded == countTotalCalls)
+                                ? CallTestResult.Succeeded
+                                : (countFailed == countTotalCalls)
+                                    ? CallTestResult.Failed
+                                    : (countNotAnswered == countTotalCalls)
+                                        ? CallTestResult.NotAnswered
+                                        : (countFas == countTotalCalls)
+                                            ? CallTestResult.Fas
+                                            : CallTestResult.PartiallySucceeded;
                         return testProgressOutput;
                     }
 
@@ -287,6 +309,34 @@ namespace QM.CLITester.iTestIntegration
             return testProgressOutput;
         }
 
+        private CallTestResult GetCallTestResult(string testProgressResult)
+        {
+            var connectorResultMappingManager = new ConnectorResultMappingManager();
+
+            var existingZones = connectorResultMappingManager.GetConnectorResultMappings(Constants.CONNECTOR_TYPE);
+
+            ConnectorResultMapping notCompletedMapping = existingZones != null
+                ? existingZones.FirstOrDefault(itm => itm.ResultId == (int)CallTestResult.NotCompleted) : null;
+
+            ConnectorResultMapping notAnsweredMapping = existingZones != null
+                ? existingZones.FirstOrDefault(itm => itm.ResultId == (int)CallTestResult.NotAnswered) : null;
+
+            ConnectorResultMapping failedMapping = existingZones != null
+                ? existingZones.FirstOrDefault(itm => itm.ResultId == (int)CallTestResult.Failed) : null;
+
+            ConnectorResultMapping succeededMapping = existingZones != null
+                ? existingZones.FirstOrDefault(itm => itm.ResultId == (int)CallTestResult.Succeeded) : null;
+
+            ConnectorResultMapping fasMapping = existingZones != null
+                ? existingZones.FirstOrDefault(itm => itm.ResultId == (int)CallTestResult.Fas) : null;
+
+            return notCompletedMapping.ConnectorResults.Exists(connRes => testProgressResult == connRes) ? CallTestResult.NotCompleted :
+                failedMapping.ConnectorResults.Exists(connRes => testProgressResult == connRes) ? CallTestResult.Failed :
+                succeededMapping.ConnectorResults.Exists(connRes => testProgressResult == connRes) ? CallTestResult.Succeeded :
+                notAnsweredMapping.ConnectorResults.Exists(connRes => testProgressResult == connRes) ? CallTestResult.NotAnswered :
+                fasMapping.ConnectorResults.Exists(connRes => testProgressResult == connRes) ? CallTestResult.Fas :
+                CallTestResult.PartiallySucceeded;
+        }
         private bool CompareTestProgress(TestProgress recentTestProgress, TestProgress testProgress, Measure recentMeasure, Measure measure)
         {
             bool same = true;

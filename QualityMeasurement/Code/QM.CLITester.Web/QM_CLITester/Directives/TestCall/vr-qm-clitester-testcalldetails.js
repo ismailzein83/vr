@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrQmClitesterTestcalldetails", [
-function () {
+app.directive("vrQmClitesterTestcalldetails", [ "Qm_CliTester_TestCallService",
+function (Qm_CliTester_TestCallService) {
 
     var directiveDefinitionObject = {
 
@@ -44,7 +44,7 @@ function () {
             function getDirectiveAPI() {
 
                 directiveAPI.load = function (item) {
-                    
+
                     if (item.Entity.InitiateTestInformation != null && item.Entity.InitiateTestInformation != undefined) {
                         ctrl.testId = item.Entity.InitiateTestInformation.Test_ID;
                     }
@@ -77,6 +77,11 @@ function () {
                 return directiveAPI;
             }
         }
+
+        $scope.getColorResult = function (dataItem) {
+            console.log(dataItem);
+            return Qm_CliTester_TestCallService.getCallTestResultColor(dataItem.CallTestResult);
+        };
     }
 
     return directiveDefinitionObject;
