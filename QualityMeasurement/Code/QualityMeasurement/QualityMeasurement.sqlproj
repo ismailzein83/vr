@@ -108,5 +108,10 @@
     <Build Include="QM_BE\Stored Procedures\sp_ConnectorZoneInfo_Update.sql" />
     <Build Include="QM_BE\Stored Procedures\sp_ConnectorZoneInfo_Insert.sql" />
     <Build Include="QM_BE\Stored Procedures\sp_ConnectorZoneInfo_GetAll.sql" />
+    <Build Include="QM_BE\Tables\ConnectorResultMapping.sql" />
+    <Build Include="QM_BE\Stored Procedures\sp_ConnectorResultMapping_GetAll.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment.sql" />
   </ItemGroup>
 </Project>
