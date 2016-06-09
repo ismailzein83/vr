@@ -2,24 +2,23 @@
 
     "use strict";
 
-    supplierPriceListPreviewController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    supplierPriceListPreviewController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'WhS_SupPL_PreviewChangeTypeEnum', 'WhS_SupPL_PreviewGroupedBy', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function supplierPriceListPreviewController($scope, BusinessProcess_BPTaskAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function supplierPriceListPreviewController($scope, BusinessProcess_BPTaskAPIService, WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
         var bpTaskId;
         var processInstanceId;
 
         var validationMessageHistoryGridAPI;
         var validationMessageHistoryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var directiveWrapperAPI;
+        var directiveWrapperReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var zonePreviewDirectiveAPI;
-        var zonePreviewReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var viewChangeTypeSelectorAPI;
+        var viewChangeTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var codePreviewDirectiveAPI;
-        var codePreviewReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var ratePreviewDirectiveAPI;
-        var ratePreviewReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var groupedBySelectorAPI;
+        var groupedByReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
 
@@ -38,27 +37,19 @@
 
             $scope.scopeModal = {};
 
-            $scope.scopeModal.onZonePreviewDirectiveReady = function (api) {
-                zonePreviewDirectiveAPI = api;
-                zonePreviewReadyPromiseDeferred.resolve();
-            }
 
-            $scope.scopeModal.onCodePreviewDirectiveReady = function (api) {
-                codePreviewDirectiveAPI = api;
-                codePreviewReadyPromiseDeferred.resolve();
-            }
-
-            $scope.scopeModal.onRatePreviewDirectiveReady = function (api) {
-                ratePreviewDirectiveAPI = api;
-                ratePreviewReadyPromiseDeferred.resolve();
+            $scope.scopeModal.search = function () {
+                directiveWrapperReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                directiveWrapperReadyPromiseDeferred.resolve();
+                return loadPreviewDataSection();
             }
 
             $scope.scopeModal.continueTask = function () {
-               return executeTask(true);
+                return executeTask(true);
             }
 
             $scope.scopeModal.stopTask = function () {
-              return executeTask(false);
+                return executeTask(false);
             }
 
 
@@ -67,7 +58,33 @@
                 validationMessageHistoryReadyPromiseDeferred.resolve();
             }
 
-               
+
+            $scope.onViewChangeTypeSelectorReady = function (api) {
+                viewChangeTypeSelectorAPI = api;
+                viewChangeTypeReadyPromiseDeferred.resolve();
+            };
+
+            $scope.onGroupedBySelectorReady = function (api) {
+                groupedBySelectorAPI = api;
+                groupedByReadyPromiseDeferred.resolve();
+            };
+
+            $scope.onDirectiveWrapperReady = function (api) {
+                directiveWrapperAPI = api;
+
+                var setLoader = function (value) {
+                    $scope.scopeModal.isLoadingPreviewDataSection = value;
+                };
+
+                var previewDataPayload = {
+                    ProcessInstanceId: processInstanceId,
+                    OnlyModified: viewChangeTypeSelectorAPI.getSelectedIds(),
+                };
+
+
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModal, directiveWrapperAPI, previewDataPayload, setLoader, directiveWrapperReadyPromiseDeferred);
+            };
+
         }
 
         function executeTask(taskAction) {
@@ -82,7 +99,7 @@
                 ExecutionInformation: executionInformation
             };
 
-           return BusinessProcess_BPTaskAPIService.ExecuteTask(input).then(function (response) {
+            return BusinessProcess_BPTaskAPIService.ExecuteTask(input).then(function (response) {
                 $scope.modalContext.closeModal();
             }).catch(function (error) {
                 VRNotificationService.notifyException(error);
@@ -100,7 +117,7 @@
 
         function loadAllControls() {
 
-            return UtilsService.waitMultipleAsyncOperations([loadZonePreview, loadCodePreview, loadRatePreview, loadValidationMessageHistory])
+            return UtilsService.waitMultipleAsyncOperations([loadViewChangeTypeSelector, loadGroupedBySelector, loadPreviewDataSection, loadValidationMessageHistory])
                           .catch(function (error) {
                               VRNotificationService.notifyException(error);
                           })
@@ -110,47 +127,57 @@
 
         }
 
-        function loadZonePreview() {
-            var loadZonePreviewPromiseDeferred = UtilsService.createPromiseDeferred();
+        function loadViewChangeTypeSelector() {
+            var loadViewChangeTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            zonePreviewReadyPromiseDeferred.promise.then(function () {
-                var payload = {
-                    ProcessInstanceId: processInstanceId
-                }
-                VRUIUtilsService.callDirectiveLoad(zonePreviewDirectiveAPI, payload, loadZonePreviewPromiseDeferred)
-            })
-            return loadZonePreviewPromiseDeferred.promise;
+            viewChangeTypeReadyPromiseDeferred.promise.then(function () {
+                var viewChangeTypeSelectorPayload = {
+                    selectedIds: WhS_SupPL_PreviewChangeTypeEnum.OnlyModifiedEntities.value
+                };
+
+                VRUIUtilsService.callDirectiveLoad(viewChangeTypeSelectorAPI, viewChangeTypeSelectorPayload, loadViewChangeTypeSelectorPromiseDeferred);
+
+            });
+
+            return loadViewChangeTypeSelectorPromiseDeferred.promise;
         }
 
-        function loadCodePreview() {
-            var loadCodePreviewPromiseDeferred = UtilsService.createPromiseDeferred();
+        function loadGroupedBySelector() {
+            var loadGroupedBySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            codePreviewReadyPromiseDeferred.promise.then(function () {
-                var payload = {
-                    ProcessInstanceId: processInstanceId
-                }
-                VRUIUtilsService.callDirectiveLoad(codePreviewDirectiveAPI, payload, loadCodePreviewPromiseDeferred)
-            })
-            return loadCodePreviewPromiseDeferred.promise;
+            groupedByReadyPromiseDeferred.promise.then(function () {
+                var viewChangeTypeSelectorPayload = {
+                    selectedIds: WhS_SupPL_PreviewGroupedBy.Countries.description
+                };
+
+                VRUIUtilsService.callDirectiveLoad(groupedBySelectorAPI, viewChangeTypeSelectorPayload, loadGroupedBySelectorPromiseDeferred);
+
+            });
+
+            return loadGroupedBySelectorPromiseDeferred.promise;
         }
 
-        function loadRatePreview() {
-            var loadRatePreviewPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            ratePreviewReadyPromiseDeferred.promise.then(function () {
+
+        function loadPreviewDataSection() {
+            var loadPreviewDataPromiseDeferred = UtilsService.createPromiseDeferred();
+            directiveWrapperReadyPromiseDeferred.promise.then(function () {
+                directiveWrapperReadyPromiseDeferred = undefined;
                 var payload = {
-                    ProcessInstanceId: processInstanceId
+                    ProcessInstanceId: processInstanceId,
+                    OnlyModified: viewChangeTypeSelectorAPI.getSelectedIds()
                 }
-                VRUIUtilsService.callDirectiveLoad(ratePreviewDirectiveAPI, payload, loadRatePreviewPromiseDeferred)
+                VRUIUtilsService.callDirectiveLoad(directiveWrapperAPI, payload, loadPreviewDataPromiseDeferred)
             })
-            return loadRatePreviewPromiseDeferred.promise;
+            return loadPreviewDataPromiseDeferred.promise;
         }
+
 
         function loadValidationMessageHistory() {
             var loadValidationMessageHistoryPromiseDeferred = UtilsService.createPromiseDeferred();
 
             validationMessageHistoryReadyPromiseDeferred.promise.then(function () {
-                var payload ={
+                var payload = {
                     BPInstanceID: processInstanceId,
                 };
 

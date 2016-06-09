@@ -14,30 +14,21 @@ namespace TOne.WhS.SupplierPriceList.Business
     public class SupplierZonePreviewManager
     {
 
-        public Vanrise.Entities.IDataRetrievalResult<ZonePreviewDetail> GetFilteredZonePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<ZoneRatePreviewDetail> GetFilteredZonePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
         {
             ISupplierZonePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierZonePreviewDataManager>();
 
-            BigResult<ZonePreview> zonesPreview = dataManager.GetZonePreviewFilteredFromTemp(input);
-            BigResult<ZonePreviewDetail> zonePreviewDetailResult = new BigResult<ZonePreviewDetail>()
+            BigResult<ZoneRatePreviewDetail> zonesPreview = dataManager.GetZonePreviewFilteredFromTemp(input);
+            BigResult<ZoneRatePreviewDetail> zonePreviewDetailResult = new BigResult<ZoneRatePreviewDetail>()
             {
                 ResultKey = zonesPreview.ResultKey,
                 TotalCount = zonesPreview.TotalCount,
-                Data = zonesPreview.Data.MapRecords(ZonePreviewDetailMapper)
+                Data = zonesPreview.Data
             };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, zonePreviewDetailResult);
 
         }
-
-        private ZonePreviewDetail ZonePreviewDetailMapper(ZonePreview zonePreview)
-        {
-            ZonePreviewDetail zonePreviewDetail = new ZonePreviewDetail();
-            zonePreviewDetail.Entity = zonePreview;
-            zonePreviewDetail.ChangeTypeDecription = Utilities.GetEnumAttribute<ZoneChangeType, DescriptionAttribute>(zonePreview.ChangeType).Description;
-            return zonePreviewDetail;
-        }
-
 
     }
 }

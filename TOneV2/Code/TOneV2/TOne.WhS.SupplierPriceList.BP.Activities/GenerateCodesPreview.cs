@@ -16,24 +16,25 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public InArgument<IEnumerable<ImportedCode>> ImportedCodes { get; set; }
 
+        [RequiredArgument]
+        public InArgument<IEnumerable<ExistingCode>> NotImportedCodes { get; set; }
 
         [RequiredArgument]
         public InArgument<BaseQueue<IEnumerable<CodePreview>>> PreviewCodeQueue { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
-            IEnumerable<ImportedCode> importedCodesList = this.ImportedCodes.Get(context);
+            IEnumerable<ImportedCode> importedCodes = this.ImportedCodes.Get(context);
+            IEnumerable<ExistingCode> notImportedCodes = this.NotImportedCodes.Get(context);
+
             BaseQueue<IEnumerable<CodePreview>> previewCodeQueue = this.PreviewCodeQueue.Get(context);
 
             List<CodePreview> codePreviewList = new List<CodePreview>();
 
-            if (importedCodesList != null)
+            if (importedCodes != null)
             {
-                foreach (ImportedCode item in importedCodesList)
+                foreach (ImportedCode item in importedCodes)
                 {
-                    if (item.ChangeType == CodeChangeType.NotChanged)
-                        continue;
-
                     codePreviewList.Add(new CodePreview()
                     {
                         Code = item.Code,
@@ -42,6 +43,22 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         ZoneName = item.ZoneName,
                         BED = item.BED,
                         EED = item.EED
+                    });
+                }
+            }
+
+
+            if (notImportedCodes != null)
+            {
+                foreach (ExistingCode notImportedCode in notImportedCodes)
+                {
+                    codePreviewList.Add(new CodePreview()
+                    {
+                        Code = notImportedCode.CodeEntity.Code,
+                        ChangeType =notImportedCode.ChangedCode == null ? CodeChangeType.NotChanged : CodeChangeType.Deleted,
+                        ZoneName = notImportedCode.ParentZone.ZoneEntity.Name,
+                        BED = notImportedCodes.Max(item => item.BED),
+                        EED = notImportedCode.ChangedCode.EED
                     });
                 }
             }

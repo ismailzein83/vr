@@ -14,16 +14,16 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
     public class PreparePreviewZonesForApplyInput
     {
-        public BaseQueue<IEnumerable<ZonePreview>> InputQueue { get; set; }
+        public BaseQueue<IEnumerable<ZoneRatePreview>> InputQueue { get; set; }
 
         public BaseQueue<Object> OutputQueue { get; set; }
     }
 
-    public sealed class PreparePreviewZonesForDBApply : DependentAsyncActivity<PreparePreviewZonesForApplyInput>
+    public sealed class PreparePreviewZonesRatesForDBApply : DependentAsyncActivity<PreparePreviewZonesForApplyInput>
     {
 
         [RequiredArgument]
-        public InArgument<BaseQueue<IEnumerable<ZonePreview>>> InputQueue { get; set; }
+        public InArgument<BaseQueue<IEnumerable<ZoneRatePreview>>> InputQueue { get; set; }
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<Object>> OutputQueue { get; set; }
@@ -33,7 +33,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         {
             ISupplierZonePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierZonePreviewDataManager>();
             dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
-            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, CodePreviewList => CodePreviewList);
+            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, ZoneRatePreview => ZoneRatePreview);
         }
 
         protected override PreparePreviewZonesForApplyInput GetInputArgument2(AsyncCodeActivityContext context)

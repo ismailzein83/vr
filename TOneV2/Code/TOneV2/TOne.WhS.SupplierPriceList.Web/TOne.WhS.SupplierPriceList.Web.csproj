@@ -154,12 +154,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="WhS_SupplierPriceList\Directives\RatePreview\Templates\SupplierPriceListRatePreviewGridTemplate.html" />
-    <Content Include="WhS_SupplierPriceList\Directives\RatePreview\vr-spl-ratepreview-grid.js" />
+    <Content Include="WhS_SupplierPriceList\Constant\PreviewGroupedBy.js" />
+    <Content Include="WhS_SupplierPriceList\Constant\PreviewChangeTypeEnum.js" />
+    <Content Include="WhS_SupplierPriceList\Constant\RateChangeTypeEnum.js" />
+    <Content Include="WhS_SupplierPriceList\Constant\CodeChangeTypeEnum.js" />
+    <Content Include="WhS_SupplierPriceList\Constant\ZoneChangeTypeEnum.js" />
+    <Content Include="WhS_SupplierPriceList\Directives\ChangesPreview\vr-spl-groupedby-selector.js" />
+    <Content Include="WhS_SupplierPriceList\Directives\ChangesPreview\vr-spl-viewchangetype-selector.js" />
+    <Content Include="WhS_SupplierPriceList\Directives\CountryPreview\Templates\SupplierPriceListCountryPreviewGridTemplate.html" />
+    <Content Include="WhS_SupplierPriceList\Directives\CountryPreview\vr-spl-countrypreview-grid.js" />
     <Content Include="WhS_SupplierPriceList\Directives\ZonePreview\Templates\SupplierPriceListZonePreviewGridTemplate.html" />
     <Content Include="WhS_SupplierPriceList\Directives\ZonePreview\vr-spl-zonepreview-grid.js" />
     <Content Include="WhS_SupplierPriceList\Directives\CodePreview\Templates\SupplierPriceListCodePreviewGridTemplate.html" />
     <Content Include="WhS_SupplierPriceList\Directives\CodePreview\vr-spl-codepreview-grid.js" />
+    <Content Include="WhS_SupplierPriceList\Images\Closed.png" />
+    <Content Include="WhS_SupplierPriceList\Images\MovedFrom.png" />
+    <Content Include="WhS_SupplierPriceList\Images\MovedTo.png" />
+    <Content Include="WhS_SupplierPriceList\Images\NewZone.png" />
     <Content Include="WhS_SupplierPriceList\Services\APIServices\SupplierPriceListPreviewAPIService.js" />
     <Content Include="WhS_SupplierPriceList\Services\APIServices\SupplierPriceListAPIService.js" />
     <Content Include="WhS_SupplierPriceList\Services\SupplierPriceListService.js" />

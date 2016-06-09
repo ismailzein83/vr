@@ -8,12 +8,12 @@ using Vanrise.Data;
 
 namespace TOne.WhS.SupplierPriceList.Data
 {
-    public interface ISupplierZonePreviewDataManager : IDataManager, IBulkApplyDataManager<ZonePreview>
+    public interface ISupplierZonePreviewDataManager : IDataManager, IBulkApplyDataManager<ZoneRatePreview>
     {
         long ProcessInstanceId { set; }
 
         void ApplyPreviewZonesToDB(object preparedZones); 
         
-        Vanrise.Entities.BigResult<Entities.ZonePreview> GetZonePreviewFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SPLPreviewQuery> input);
+        Vanrise.Entities.BigResult<Entities.ZoneRatePreviewDetail> GetZonePreviewFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SPLPreviewQuery> input);
     }
 }

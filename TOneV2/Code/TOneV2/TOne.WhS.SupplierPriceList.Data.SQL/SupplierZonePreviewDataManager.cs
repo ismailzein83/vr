@@ -6,13 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.Data.SQL;
 using TOne.WhS.SupplierPriceList.Entities;
+using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.SupplierPriceList.Data.SQL
 {
     public class SupplierZonePreviewDataManager : BaseTOneDataManager, ISupplierZonePreviewDataManager
     {
-        readonly string[] _columns = { "ProcessInstanceID", "Name", "ChangeType", "BED", "EED" };
+        readonly string[] _columns = { "ProcessInstanceID", "CountryID", "ZoneName", "RecentZoneName", "ZoneChangeType", "ZoneBED", "ZoneEED", "CurrentRate", "CurrentRateBED", "CurrentRateEED", "ImportedRate", "ImportedRateBED", "RateChangeType" };
         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
         static SupplierZonePreviewDataManager()
         {
@@ -42,34 +43,42 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         }
 
 
-        public Vanrise.Entities.BigResult<Entities.ZonePreview> GetZonePreviewFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SPLPreviewQuery> input)
+        public Vanrise.Entities.BigResult<Entities.ZoneRatePreviewDetail> GetZonePreviewFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SPLPreviewQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
 
-                ExecuteNonQuerySP("[TOneWhS_SPL].[sp_SupplierZone_Preview_CreateTempByFiltered]", tempTableName, input.Query.ProcessInstanceId);
+                ExecuteNonQuerySP("[TOneWhS_SPL].[sp_SupplierZoneRate_Preview_CreateTempByFiltered]", tempTableName, input.Query.ProcessInstanceId, input.Query.CountryId, input.Query.OnlyModified);
             };
             if (input.SortByColumnName != null)
                 input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
 
-            return RetrieveData(input, createTempTableAction, ZonePreviewMapper, _columnMapper);
+            return RetrieveData(input, createTempTableAction, ZoneRatePreviewMapper, _columnMapper);
         }
 
 
-        object Vanrise.Data.IBulkApplyDataManager<ZonePreview>.InitialiazeStreamForDBApply()
+        object Vanrise.Data.IBulkApplyDataManager<ZoneRatePreview>.InitialiazeStreamForDBApply()
         {
             return base.InitializeStreamForBulkInsert();
         }
 
-        public void WriteRecordToStream(ZonePreview record, object dbApplyStream)
+        public void WriteRecordToStream(ZoneRatePreview record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}",
                 _processInstanceID,
-                record.Name,
-                (int)record.ChangeType,
-                record.BED,
-                record.EED);
+                record.CountryId,
+                record.ZoneName,
+                record.RecentZoneName,
+                (int)record.ChangeTypeZone,
+                record.ZoneBED,
+                record.ZoneEED,
+                record.CurrentRate,
+                record.CurrentRateBED,
+                record.CurrentRateEED,
+                record.ImportedRate,
+                record.ImportedRateBED,
+                (int)record.ChangeTypeRate);
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
@@ -79,7 +88,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             return new StreamBulkInsertInfo
             {
                 ColumnNames = _columns,
-                TableName = "TOneWhS_SPL.SupplierZone_Preview",
+                TableName = "TOneWhS_SPL.SupplierZoneRate_Preview",
                 Stream = streamForBulkInsert,
                 TabLock = false,
                 KeepIdentity = false,
@@ -87,16 +96,29 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             };
         }
 
-        private ZonePreview ZonePreviewMapper(IDataReader reader)
+        private ZoneRatePreviewDetail ZoneRatePreviewMapper(IDataReader reader)
         {
-            ZonePreview zonePreview = new ZonePreview
+            ZoneRatePreviewDetail zoneRatePreviewDetail = new ZoneRatePreviewDetail
             {
-                Name = reader["Name"] as string,
-                ChangeType = (ZoneChangeType)GetReaderValue<int>(reader, "ChangeType"),
-                BED = GetReaderValue<DateTime>(reader, "BED"),
-                EED = GetReaderValue<DateTime?>(reader, "EED")
+                ProcessInstanceId = (long)reader["ProcessInstanceID"],
+                ZoneName = reader["ZoneName"] as string,
+                RecentZoneName = reader["RecentZoneName"] as string,
+                ChangeTypeZone = (ZoneChangeType)GetReaderValue<int>(reader, "ZoneChangeType"),
+                ZoneBED = GetReaderValue<DateTime>(reader, "ZoneBED"),
+                ZoneEED = GetReaderValue<DateTime?>(reader, "ZoneEED"),
+                CurrentRate = GetReaderValue<decimal>(reader, "CurrentRate"),
+                CurrentRateBED = GetReaderValue<DateTime>(reader, "CurrentRateBED"),
+                CurrentRateEED = GetReaderValue<DateTime?>(reader, "CurrentRateEED"),
+                ImportedRate = GetReaderValue<decimal>(reader, "ImportedRate"),
+                ImportedRateBED = GetReaderValue<DateTime?>(reader, "ImportedRateBED"),
+                ChangeTypeRate = (RateChangeType)GetReaderValue<int>(reader, "RateChangeType"),
+                NewCodes = (int)reader["NewCodes"],
+                DeletedCodes = (int)reader["DeletedCodes"],
+                CodesMovedFrom = (int)reader["CodesMovedFrom"],
+                CodesMovedTo = (int)reader["CodesMovedTo"]
+
             };
-            return zonePreview;
+            return zoneRatePreviewDetail;
         }
     }
 }

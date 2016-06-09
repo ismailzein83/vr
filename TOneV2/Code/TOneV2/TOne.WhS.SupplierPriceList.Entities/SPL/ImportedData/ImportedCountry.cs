@@ -11,6 +11,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
     {
         public int CountryId { get; set; }
 
+        public List<ImportedZone> ImportedZones { get; set; }
         public List<ImportedCode> ImportedCodes { get; set; }
 
         public List<ImportedRate> ImportedRates { get; set; }

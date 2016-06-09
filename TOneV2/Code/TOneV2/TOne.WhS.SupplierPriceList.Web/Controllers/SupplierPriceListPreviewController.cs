@@ -21,6 +21,14 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
     public class WhS_SupplierPriceListPreviewController : BaseAPIController
     {
        [HttpPost]
+       [Route("GetFilteredCountryPreview")]
+       public object GetFilteredCountryPreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
+       {
+           SupplierCountryPreviewManager manager = new SupplierCountryPreviewManager();
+           return GetWebResponse(input, manager.GetFilteredCountryPreview(input));
+       }
+
+       [HttpPost]
        [Route("GetFilteredZonePreview")]
        public object GetFilteredZonePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
        {
@@ -36,12 +44,5 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
            return GetWebResponse(input, manager.GetFilteredCodePreview(input));
        }
 
-       [HttpPost]
-       [Route("GetFilteredRatePreview")]
-       public object GetFilteredRatePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
-       {
-           SupplierRatePreviewManager manager = new SupplierRatePreviewManager();
-           return GetWebResponse(input, manager.GetFilteredRatePreview(input));
-       }
     }
 }

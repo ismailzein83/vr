@@ -50,7 +50,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             Action<string> createTempTableAction = (tempTableName) =>
             {
 
-                ExecuteNonQuerySP("[TOneWhS_SPL].[sp_SupplierCode_Preview_CreateTempByFiltered]", tempTableName, input.Query.ProcessInstanceId);
+                ExecuteNonQuerySP("[TOneWhS_SPL].[sp_SupplierCode_Preview_CreateTempByFiltered]", tempTableName, input.Query.ProcessInstanceId, input.Query.ZoneName, input.Query.OnlyModified);
             };
 
             if (input.SortByColumnName != null)

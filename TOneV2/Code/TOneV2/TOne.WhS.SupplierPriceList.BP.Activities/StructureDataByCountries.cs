@@ -39,6 +39,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     {
                         importedCountry = new ImportedCountry();
                         importedCountry.CountryId = countryId;
+                        importedCountry.ImportedZones = new List<ImportedZone>();
                         importedCountry.ImportedCodes = new List<ImportedCode>();
                         importedCountry.ImportedRates = new List<ImportedRate>();
                         importedCountriesByCountryId.Add(countryId, importedCountry);
@@ -49,6 +50,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
                     foreach (ImportedRate rate in zone.ImportedRates)
                         importedCountry.ImportedRates.Add(rate);
+
+                    importedCountry.ImportedZones.Add(zone);
 
             }
 

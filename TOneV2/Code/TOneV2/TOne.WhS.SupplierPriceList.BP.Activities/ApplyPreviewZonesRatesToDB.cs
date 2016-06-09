@@ -17,7 +17,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public BaseQueue<Object> InputQueue { get; set; }
     }
 
-    public sealed class ApplyPreviewZonesToDB : DependentAsyncActivity<ApplyPreviewZonesToDBInput>
+    public sealed class ApplyPreviewZonesRatesToDB : DependentAsyncActivity<ApplyPreviewZonesToDBInput>
     {
         [RequiredArgument]
         public InArgument<BaseQueue<Object>> InputQueue { get; set; }

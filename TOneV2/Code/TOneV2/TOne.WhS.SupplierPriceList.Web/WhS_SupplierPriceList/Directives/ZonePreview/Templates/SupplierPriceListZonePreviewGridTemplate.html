@@ -2,10 +2,26 @@
              on-ready="onGridReady"
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
-             menuactions="[]"
-             defaultsortbyfieldname="Name">
-    <vr-datagridcolumn headertext="'Zone Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Change Type'" field="'ChangeTypeDecription'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Begin Effective Date'" field="'Entity.BED'" type="'Datetime'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'End Effective Date'" field="'Entity.EED'" type="'Datetime'"></vr-datagridcolumn>
+             menuactions="[]">
+    <vr-datagridcolumn headertext="'Zone Name'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Zone Change Type'">
+        <vr-icon iconurl="dataItem.ZoneStatusIconUrl" tooltip="dataItem.ZoneStatusIconTooltip"></vr-icon>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Zone BED'" field="'ZoneBED'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Zone EED'" field="'ZoneEED'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Current Rate'" field="'CurrentRate'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Current Rate BED'" field="'CurrentRateBED'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Current Rate EED'" field="'CurrentRateEED'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Rate Change Type'">
+        <vr-icon iconurl="dataItem.RateStatusIconUrl" tooltip="dataItem.RateStatusIconTooltip" inline></vr-icon>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Imported Rate'" field="'ImportedRate'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Imported Rate BED'" field="'ImportedRateBED'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'New Codes'" field="'NewCodes'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Deleted Codes'" field="'DeletedCodes'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Moved Codes From'" field="'CodesMovedFrom'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Moved Codes To'" field="'CodesMovedTo'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
 </vr-datagrid>

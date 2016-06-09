@@ -16,10 +16,17 @@
         function GetFilteredRatePreview(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, controllerName, "GetFilteredRatePreview"), input);
         }
+
+        function GetFilteredCountryPreview(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, controllerName, "GetFilteredCountryPreview"), input);
+        }
+
+        
         return ({
             GetFilteredZonePreview: GetFilteredZonePreview,
             GetFilteredCodePreview: GetFilteredCodePreview,
-            GetFilteredRatePreview: GetFilteredRatePreview
+            GetFilteredRatePreview: GetFilteredRatePreview,
+            GetFilteredCountryPreview: GetFilteredCountryPreview
         });
     }
 

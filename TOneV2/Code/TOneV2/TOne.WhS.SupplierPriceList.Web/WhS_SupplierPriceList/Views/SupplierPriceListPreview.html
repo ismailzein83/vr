@@ -1,31 +1,38 @@
 ﻿<div vr-modalcontent ng-controller="WhS_SupPL_SupplierPriceListPreviewController" vr-loader="isLoading" width="'70%'">
-    <vr-modalbody>
+    <vr-modalbody maxheight="'700px'">
         <vr-form name="formSellNewZones" vr-loader="scopeModal.isLoading">
             <vr-tabs>
-                <vr-tab header="'Zone'">
-                    <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-spl-zonepreview-grid on-ready="scopeModal.onZonePreviewDirectiveReady"></vr-spl-zonepreview-grid>
-                        </vr-columns>
+                <vr-tab header="'Preview Data'">
+                    <vr-row ng-hide="filterSectionCollapsed">
+                        <span>
+                            <vr-spl-viewchangetype-selector on-ready="onViewChangeTypeSelectorReady"
+                                                            normal-col-num="3"
+                                                            hideremoveicon="true">
+                        </span>
+                        <span>
+                            <vr-spl-groupedby-selector on-ready="onGroupedBySelectorReady"
+                                                       normal-col-num="3"
+                                                       hideremoveicon="true"
+                                                       selectedvalues="selectedGroupedBy">
+                        </span>
                     </vr-row>
-                </vr-tab>
-                <vr-tab header="'Code'">
-                    <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-spl-codepreview-grid on-ready="scopeModal.onCodePreviewDirectiveReady"></vr-spl-codepreview-grid>
-                        </vr-columns>
 
+                    <vr-row removeline>
+                        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+
+                            <div transclude-to="buttons">
+                                <vr-button type="Search" data-onclick="scopeModal.search"></vr-button>
+                            </div>
+                        </vr-actionbar>
                     </vr-row>
-                </vr-tab>
-                <vr-tab header="'Rate'">
+
                     <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-spl-ratepreview-grid on-ready="scopeModal.onRatePreviewDirectiveReady"></vr-spl-ratepreview-grid>
-                        </vr-columns>
-
+                        <span vr-loader="scopeModal.isLoadingPreviewDataSection">
+                            <vr-directivewrapper directive="selectedGroupedBy.dwGrid" on-ready="onDirectiveWrapperReady"></vr-directivewrapper>
+                        </span>
                     </vr-row>
-                </vr-tab>
 
+                </vr-tab>
                 <vr-tab header="'Rules Search'">
                     <vr-row>
                         <vr-columns width="fullrow">
@@ -35,9 +42,7 @@
                     </vr-row>
 
                 </vr-tab>
-
             </vr-tabs>
-
         </vr-form>
     </vr-modalbody>
     <div>
