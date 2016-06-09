@@ -36,6 +36,11 @@ namespace Vanrise.Analytic.Business
         {
             var templateConfigManager = new ExtensionConfigurationManager();
             return templateConfigManager.GetExtensionConfigurations<MeasureStyleRuleTemplate>(Constants.MeasureStyleRuleConfigType);
+        }
+        public IEnumerable<AnalyticItemActionTemplate> GetAnalyticItemActionsTemplateConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<AnalyticItemActionTemplate>(Constants.ItemActionConfigType);
         } 
     }
 }

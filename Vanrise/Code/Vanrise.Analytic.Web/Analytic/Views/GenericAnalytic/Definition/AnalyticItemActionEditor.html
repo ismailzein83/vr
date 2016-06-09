@@ -1,0 +1,22 @@
+﻿<div vr-modalcontent ng-controller="VR_Analytic_AnalyticItemActionEditorController" vr-loader="scopeModel.isLoading" width="'60%'">
+    <vr-modalbody maxheight="'600px'">
+        <vr-form validationcontext="analyticItemActionEditorGroup">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-columns width="fullrow">
+                        <vr-analytic-analyticitemaction on-ready="scopeModel.onEditorDirectiveReady" normal-col-num="2"></vr-analytic-analyticitemaction>
+                    </vr-columns>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="analyticItemActionEditorGroup"  data-onclick="scopeModel.saveAnalyticItemAction"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

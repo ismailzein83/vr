@@ -46,6 +46,7 @@
     <Compile Include="AnalyticItemAction.cs" />
     <Compile Include="AnalyticQuery.cs" />
     <Compile Include="AnalyticRecord.cs" />
+    <Compile Include="AnalyticItemActionTemplate.cs" />
     <Compile Include="AnalyticReport\AnalyticReport.cs" />
     <Compile Include="AnalyticReport\AnalyticReportConfiguration.cs" />
     <Compile Include="AnalyticReport\AnalyticReportDetail.cs" />

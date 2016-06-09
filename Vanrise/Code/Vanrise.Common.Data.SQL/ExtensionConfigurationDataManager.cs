@@ -41,6 +41,7 @@ namespace Vanrise.Common.Data.SQL
             {
                 extensionConfigurationObj.ExtensionConfigurationId = (int)reader["ID"];
                 extensionConfigurationObj.Title = reader["Title"] as string;
+                extensionConfigurationObj.Name = reader["Name"] as string;
             }
             return extensionConfigurationObj;
         }

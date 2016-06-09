@@ -1,11 +1,14 @@
-﻿<div vr-modalcontent ng-controller="Analytic_DataRecordSourceEditorController" width="'40%'" vr-loader="isLoading">
+﻿<div vr-modalcontent ng-controller="Analytic_DataRecordSourceEditorController" width="'60%'" vr-loader="isLoading">
     <vr-modalbody maxheight="'500px'">
         <vr-form name="formDataRecordStorageEditor">
             <vr-row>
-                <vr-columns width="1/3row">
-                    <vr-textbox value="scopeModel.title" label="Title" isrequired></vr-textbox>
+                <vr-columns width="1/4row">
+                    <vr-textbox value="scopeModel.title" label="Title" isrequired="true"></vr-textbox>
                 </vr-columns>
-                <vr-columns width="1/3row">
+                <vr-columns width="1/4row">
+                    <vr-textbox value="scopeModel.sourceName" label="Name" isrequired="true"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/4row">
                     <vr-genericdata-datarecordtype-selector on-ready="onDataRecordTypeSelectorReady"
                                                             selectedvalues="selectedDataRecordType"
                                                             onselectionchanged="onDataRecordTypeSelectionChanged"
@@ -14,7 +17,7 @@
                     </vr-genericdata-datarecordtype-selector>
                 </vr-columns>
 
-                <vr-columns width="1/3row" vr-loader="isRecordStorageLoading">
+                <vr-columns width="1/4row" vr-loader="isRecordStorageLoading">
                     <vr-genericdata-datarecordstorage-selector on-ready="onDataRecordStorageSelectorReady" isrequired="true"
                                                                selectedvalues="selectedDataRecordStorages" ismultipleselection>
                     </vr-genericdata-datarecordstorage-selector>
@@ -22,7 +25,7 @@
             </vr-row>
 
             <vr-row>
-                <vr-columns width="1/3row" vr-loader="isRecordTypeFieldsLoading">
+                <vr-columns width="1/4row" vr-loader="isRecordTypeFieldsLoading">
                     <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedFields"
                                datavaluefield="FieldName" datatextfield="FieldName" hideremoveicon ismultipleselection>
                     </vr-select>

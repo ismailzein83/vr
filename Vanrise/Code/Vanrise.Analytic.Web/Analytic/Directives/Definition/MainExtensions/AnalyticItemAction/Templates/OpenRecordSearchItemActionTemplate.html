@@ -1,0 +1,5 @@
+﻿<vr-analytic-analyticreport-selector on-ready="scopeModel.onDirectiveReady" normal-col-num="4" isrequired="true" onselectionchanged="scopeModel.onReportSelectionChanged"></vr-analytic-analyticreport-selector>
+
+<vr-columns width="1/3row" vr-loader="scopeModel.isLoadingSources">
+    <vr-select datasource="scopeModel.sources" on-ready="scopeModel.onSelectorReady" label="Source" hideremoveicon datatextfield="Title" datavaluefield="Name" selectedvalues="scopeModel.selectedSource" hidefilterbox isrequired="true"></vr-select>
+</vr-columns>

@@ -127,6 +127,7 @@
         function setData() {
             if (dataRecordSource != undefined) {
                 $scope.scopeModel.title = dataRecordSource.Title;
+                $scope.scopeModel.sourceName = dataRecordSource.Name;
             }
         }
         function loadDataRecordTypeSelector() {
@@ -172,6 +173,7 @@
             }
             var obj = {
                 Title: $scope.scopeModel.title,
+                Name: $scope.scopeModel.sourceName,
                 DataRecordTypeId: $scope.selectedDataRecordType.DataRecordTypeId,
                 RecordStorageIds: dataRecordStorageSelectorAPI.getSelectedIds(),
                 GridColumns: columns

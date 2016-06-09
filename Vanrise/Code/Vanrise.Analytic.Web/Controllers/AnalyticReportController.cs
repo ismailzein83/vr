@@ -52,7 +52,7 @@ namespace Vanrise.Analytic.Web.Controllers
         }
         [HttpGet]
         [Route("GetAnalyticReportConfigTypes")]
-        public IEnumerable<ExtensionConfiguration> GetAnalyticReportConfigTypes()
+        public IEnumerable<AnalyticReportConfiguration> GetAnalyticReportConfigTypes()
         {
             AnalyticReportManager manager = new AnalyticReportManager();
             return manager.GetAnalyticReportConfigTypes();

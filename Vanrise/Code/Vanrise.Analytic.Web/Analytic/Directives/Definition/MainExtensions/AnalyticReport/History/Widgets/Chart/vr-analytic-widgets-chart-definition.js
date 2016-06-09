@@ -71,7 +71,6 @@
                 }
 
                 $scope.scopeModel.onOrderTypeSelectorReady = function (api) {
-                    console.log('onOrderTypeSelectorReady');
                     orderTypeSelectorAPI = api;
                     orderTypeSelectorReadyDeferred.resolve();
                 };
@@ -164,7 +163,6 @@
                     });
 
                     orderTypeSelectorLoadDeferred.promise.then(function () {
-                        console.log('load.then');
                     });
 
                     return UtilsService.waitMultiplePromises(promises);

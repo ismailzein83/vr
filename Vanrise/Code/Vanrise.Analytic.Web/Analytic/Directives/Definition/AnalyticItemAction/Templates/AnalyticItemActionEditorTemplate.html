@@ -1,0 +1,9 @@
+﻿<vr-columns width="normal">
+    <vr-button type="Add" data-onclick="ctrl.addItemAction" standalone></vr-button>
+</vr-columns>
+<vr-columns width="fullrow">
+    <vr-datagrid datasource="ctrl.itemActions" norowhighlightonclick="true"
+                 on-ready="ctrl.onGridReady" ondeleterow="ctrl.removeItemAction" menuactions="ctrl.itemActionsGridMenuActions" hidegridmenu>
+        <vr-datagridcolumn headertext="'Action Title'" field="'Title'" disablesorting="true"></vr-datagridcolumn>
+    </vr-datagrid>
+</vr-columns>

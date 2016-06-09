@@ -34,7 +34,11 @@ namespace Vanrise.Analytic.Business
             var analyticReports = GetCachedAnalyticReports();
             if(filter !=null)
             {
-                return analyticReports.MapRecords(AnalyticReportInfoMapper, x => (x.AccessType == AccessType.Public || x.UserID == _loggedInUserId) && x.Settings.ConfigId == filter.TypeId);
+                Func<AnalyticReport, bool> filterExpression = (prod) =>
+                 (filter.TypeId == null || prod.Settings.ConfigId == filter.TypeId)
+                 && (filter.TypeName == null || prod.Settings.ConfigId == GetAnalyticReportConfigTypeByName(filter.TypeName).ExtensionConfigurationId)
+                 && (prod.AccessType == AccessType.Public || prod.UserID == _loggedInUserId);
+                 return analyticReports.MapRecords(AnalyticReportInfoMapper, filterExpression);
             }
 
             return analyticReports.MapRecords(AnalyticReportInfoMapper, x => x.AccessType == AccessType.Public || x.UserID == _loggedInUserId);
@@ -92,10 +96,18 @@ namespace Vanrise.Analytic.Business
 
             return updateOperationOutput;
         }
-        public IEnumerable<ExtensionConfiguration> GetAnalyticReportConfigTypes()
+        public IEnumerable<AnalyticReportConfiguration> GetAnalyticReportConfigTypes()
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<AnalyticReportConfiguration>(Constants.AnalyticReportConfigType);
+        }
+        public AnalyticReportConfiguration GetAnalyticReportConfigTypeByName(string name)
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            var analyticReportConfiguration = manager.GetExtensionConfigurationByName<AnalyticReportConfiguration>(name, Constants.AnalyticReportConfigType);
+            if (analyticReportConfiguration == null)
+                throw new NullReferenceException("analyticReportConfiguration");
+            return analyticReportConfiguration;
         }
         #endregion
 

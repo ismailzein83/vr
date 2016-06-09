@@ -9,8 +9,8 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticItemAction
 {
     public class OpenRecordSearchItemAction : Entities.AnalyticItemAction
     {
-        public int SourceIndex { get; set; }
-        public Vanrise.GenericData.Entities.RecordFilterGroup FilterGroup { get; set; }
+        public int ReportId { get; set; }
+        public string SourceName { get; set; }
         public override void Execute(IAnalyticItemActionContext context)
         {
             throw new NotImplementedException();

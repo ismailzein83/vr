@@ -69,6 +69,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AnalyticConfigurationController.cs" />
     <Compile Include="Controllers\AnalyticController.cs" />
+    <Compile Include="Controllers\AnalyticItemActionController.cs" />
     <Compile Include="Controllers\AnalyticItemConfigController.cs" />
     <Compile Include="Controllers\AnalyticReportController.cs" />
     <Compile Include="Controllers\AnalyticTableController.cs" />
@@ -112,6 +113,7 @@
     <Content Include="Analytic\Constants\SinceTimeEnum.js" />
     <Content Include="Analytic\Constants\StyleCodeEnum.js" />
     <Content Include="Analytic\Constants\TimeGroupingUnitEnum.js" />
+    <Content Include="Analytic\Constants\TimeUnitEnum.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-ordertype-selector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-aggregate-selector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-dimension-selector.js" />
@@ -133,6 +135,8 @@
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\vr-analytic-analyticconfig-dimension-grid.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\vr-analytic-analyticconfig-join-grid.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\vr-analytic-analyticconfig-measure-grid.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticItemAction\Templates\AnalyticItemActionEditorTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\AnalyticItemAction\vr-analytic-analyticitemaction-editor.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\History\Templates\HistoryAnalyticReportTemplates.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\History\vr-analytic-analyticreport-history-definition.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\MeasureStyle\vr-analytic-measurestyle-stylerulecondition.js" />
@@ -152,6 +156,9 @@
     <Content Include="Analytic\Directives\Definition\AnalyticReport\vr-analytic-analyticreport-selector.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticTable\Templates\AnalyticTableGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticTable\vr-analytic-analytictable-grid.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticItemAction\vr-analytic-analyticitemaction.js" />
+    <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticItemAction\Templates\OpenRecordSearchItemActionTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticItemAction\vr-analytic-analyticitemaction-openrecordsearch.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\History\Widgets\Chart\Templates\PieChartWidgetDefinitionTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\History\Widgets\Chart\Templates\ChartWidgetDefinitionTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\History\Widgets\Chart\vr-analytic-widgets-piechart-definition.js" />
@@ -194,6 +201,7 @@
     <Content Include="Analytic\Services\AnalyticItemActionService.js" />
     <Content Include="Analytic\Services\AnalyticItemConfigService.js" />
     <Content Include="Analytic\Services\AnalyticReportService.js" />
+    <Content Include="Analytic\Services\APIServices\AnalyticItemActionAPIService.js" />
     <Content Include="Analytic\Services\RecordSearchService.js" />
     <Content Include="Analytic\Services\AnalyticService.js" />
     <Content Include="Analytic\Services\AnalyticTableService.js" />
@@ -204,6 +212,8 @@
     <Content Include="Analytic\Services\APIServices\AnalyticTableAPIService.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticGridWidgetSettings.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticGridWidgetSettingsController.js" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticItemActionEditor.html" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticItemActionEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticItemConfigEditor.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticItemConfigEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticReportManagement.html" />

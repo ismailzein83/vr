@@ -6,8 +6,34 @@
 
     function AnalyticItemActionService(VRModalService) {
         return ({
-           
+            addItemAction: addItemAction,
+            editItemAction: editItemAction
         });
+
+        function addItemAction(onItemActionAdded) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onItemActionAdded = onItemActionAdded;
+            };
+            var modalParameters = {
+            };
+            VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticItemActionEditor.html', modalParameters, modalSettings);
+        }
+
+        function editItemAction(itemAction, onItemActionUpdated) {
+            var modalParameters = {
+                itemAction: itemAction
+            };
+            var modalSettings = {};
+
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onItemActionUpdated = onItemActionUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticItemActionEditor.html', modalParameters, modalSettings);
+        }
 
     };
 

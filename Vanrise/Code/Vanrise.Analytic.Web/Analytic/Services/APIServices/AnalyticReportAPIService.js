@@ -38,7 +38,7 @@
             GetAnalyticReportById: GetAnalyticReportById,
             UpdateAnalyticReport: UpdateAnalyticReport,
             AddAnalyticReport: AddAnalyticReport,
-            GetAnalyticReportConfigTypes: GetAnalyticReportConfigTypes
+            GetAnalyticReportConfigTypes: GetAnalyticReportConfigTypes,
         });
     }
 
