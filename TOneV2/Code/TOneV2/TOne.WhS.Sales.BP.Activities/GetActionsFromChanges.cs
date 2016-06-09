@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.BP.Activities
@@ -36,25 +37,27 @@ namespace TOne.WhS.Sales.BP.Activities
 
             if (changes != null && changes.ZoneChanges != null)
             {
-                foreach (ZoneChanges zoneItemChanges in changes.ZoneChanges)
+                var saleZoneManager = new SaleZoneManager();
+
+                foreach (ZoneChanges zoneChanges in changes.ZoneChanges)
                 {
-                    if (zoneItemChanges.NewRate != null)
+                    if (zoneChanges.NewRate != null)
                     {
                         ratesToChange.Add(new RateToChange()
                         {
-                            ZoneName = zoneItemChanges.NewRate.ZoneName,
-                            NormalRate = zoneItemChanges.NewRate.NormalRate,
+                            ZoneName = saleZoneManager.GetSaleZoneName(zoneChanges.ZoneId),
+                            NormalRate = zoneChanges.NewRate.NormalRate,
                             CurrencyId = currencyId,
-                            BED = zoneItemChanges.NewRate.BED,
-                            EED = zoneItemChanges.NewRate.EED
+                            BED = zoneChanges.NewRate.BED,
+                            EED = zoneChanges.NewRate.EED
                         });
                     }
-                    else if (zoneItemChanges.RateChange != null)
+                    else if (zoneChanges.RateChange != null) // Is this check necessary?
                     {
                         ratesToClose.Add(new RateToClose()
                         {
-                            ZoneName = zoneItemChanges.RateChange.RateId.ToString(),
-                            CloseEffectiveDate = zoneItemChanges.RateChange.EED
+                            ZoneName = saleZoneManager.GetSaleZoneName(zoneChanges.ZoneId),
+                            CloseEffectiveDate = zoneChanges.RateChange.EED
                         });
                     }
                 }
