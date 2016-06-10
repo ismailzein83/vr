@@ -39,8 +39,8 @@ namespace Vanrise.Common.Business
                 _cleanCacheSizePriorityFactor = 10;
             if (!int.TryParse(ConfigurationManager.AppSettings["BigDataCache_CleanAgePriorityFactor"], out _cleanCacheAgePriorityFactor))
                 _cleanCacheAgePriorityFactor = 1;
-            if (!int.TryParse(ConfigurationManager.AppSettings["BigDataCache_MinRecordCountToCache"], out _minRecordCountToCache))
-                _minRecordCountToCache = 50;
+            //if (!int.TryParse(ConfigurationManager.AppSettings["BigDataCache_MinRecordCountToCache"], out _minRecordCountToCache))
+            //    _minRecordCountToCache = 10;
 
             if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["BigDataCache_PingBigDataServiceTimeOutInterval"], out _pingBigDataServiceTimeOutInterval))
                 _pingBigDataServiceTimeOutInterval = TimeSpan.FromMilliseconds(500);
@@ -57,7 +57,7 @@ namespace Vanrise.Common.Business
         long _cleanCacheStopOnRecordCount;
         int _cleanCacheSizePriorityFactor;
         int _cleanCacheAgePriorityFactor;
-        int _minRecordCountToCache;
+        //int _minRecordCountToCache;
 
         TimeSpan _pingBigDataServiceTimeOutInterval;
         TimeSpan _pingBigDataServiceCheckInterval;
@@ -163,7 +163,10 @@ namespace Vanrise.Common.Business
                 Data = dataList,
                 RecordsCount = recordsCount
             };
-            if (recordsCount > _minRecordCountToCache)
+            //var minRecordCountToCache = _minRecordCountToCache;
+            //if (input.FromRow.HasValue && input.ToRow.HasValue)
+            //    minRecordCountToCache = input.ToRow.Value - input.FromRow.Value + 1;
+            if (recordsCount > 0)
             {
                 lock (this)
                 {
