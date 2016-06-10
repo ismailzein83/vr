@@ -15,16 +15,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         #region ctor/Local Variables
 
-        private static Dictionary<string, string> _mapper = new Dictionary<string, string>();
-        static SaleCodeDataManager()
-        {
-            _mapper = new Dictionary<string, string>();
-            _mapper.Add("Entity.SaleCodeId", "ID");
-            _mapper.Add("ZoneName", "ZoneID");
-            _mapper.Add("Entity.Code", "Code");
-            _mapper.Add("Entity.BED", "BED");
-            _mapper.Add("Entity.EED", "EED");
-        }
         public SaleCodeDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
