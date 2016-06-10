@@ -47,14 +47,8 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public IEnumerable<CodeGroupInfo> GetAllCodeGroups()
         {
-            var allCodeGroups = GetCachedCodeGroups();
-            if (allCodeGroups == null)
-                return null;
-
-            return allCodeGroups.MapRecords(CodeGroupInfoMapper);
+            return GetCachedCodeGroups().MapRecords(CodeGroupInfoMapper).OrderBy(x => x.Name);
         }
-
-      
         public CodeGroup GetCodeGroup(int codeGroupId)
         {
             var codeGroups = GetCachedCodeGroups();
@@ -264,7 +258,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (country == null)
                 throw new DataIntegrityValidationException(String.Format("Country '{0}' does not exist", cgCountryId));
         }
-        
+
         #endregion
 
         #region Private Members
