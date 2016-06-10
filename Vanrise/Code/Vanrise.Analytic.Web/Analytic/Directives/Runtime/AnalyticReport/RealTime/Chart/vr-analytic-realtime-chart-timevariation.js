@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotificationService', 'Analytic_AnalyticService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService',
-    function (UtilsService, VRNotificationService, Analytic_AnalyticService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService) {
+app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotificationService', 'Analytic_AnalyticService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService','VR_Analytic_TimeGroupingUnitEnum',
+    function (UtilsService, VRNotificationService, Analytic_AnalyticService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_TimeGroupingUnitEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -46,6 +46,7 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
                     function getDirectiveAPI() {
 
                         directiveAPI.load = function (payload) {
+                            console.log(payload);
                             ctrl.showloader = true;
                             var query = getQuery(payload);
                             var dataRetrievalInput = {
@@ -80,8 +81,16 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
                                 };
                                 var xAxisDefinition = {
                                     titlePath: "Time",
-                                    isDateTime: true
                                 };
+                                if(payload !=undefined)
+                                {
+                                    switch(payload.TimeGroupingUnit)
+                                    {
+                                        case VR_Analytic_TimeGroupingUnitEnum.Day.value: xAxisDefinition.isDate = true;break;
+                                        case VR_Analytic_TimeGroupingUnitEnum.Hour.value: xAxisDefinition.isDateTime = true; break;
+                                    }
+                                }
+                                
                                 var seriesDefinitions = [];
                                 for (var i = 0; i < ctrl.measures.length; i++) {
                                     var measure = ctrl.measures[i];

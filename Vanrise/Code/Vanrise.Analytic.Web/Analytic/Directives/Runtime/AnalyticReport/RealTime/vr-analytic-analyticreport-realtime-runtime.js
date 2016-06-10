@@ -82,8 +82,8 @@
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.widgets = [];
                 $scope.scopeModel.filters = [];
-                $scope.scopeModel.fromdate = "01/01/2015 00:00:00";
-
+                $scope.scopeModel.fromdate = new Date();
+                $scope.scopeModel.fromdate.setHours(0, 0, 0, 0);
                 $scope.scopeModel.search = function () {
                     if ($scope.scopeModel.selectedSinceTime != undefined) {
                         switch ($scope.scopeModel.selectedSinceTime.value) {
