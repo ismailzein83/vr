@@ -1,10 +1,11 @@
-﻿create procedure [Common].[SP_ExtensionConfiguration_GetByType]
+﻿CREATE procedure [common].[SP_ExtensionConfiguration_GetByType]
 @Type nvarchar(255)
 AS
 BEGIN
 	SELECT	ec.ID,
 			ec.Title,
-			ec.Settings
+			ec.Settings,
+			ec.Name
 
 	FROM	Common.ExtensionConfiguration ec 
 	WHERE ec.[ConfigType]=@Type

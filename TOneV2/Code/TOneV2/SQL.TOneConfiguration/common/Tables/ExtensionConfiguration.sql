@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [common].[ExtensionConfiguration] (
-    [ID]          INT            IDENTITY (1, 1) NOT NULL,
+    [ID]          INT            NOT NULL,
+    [Name]        NVARCHAR (255) NULL,
     [Title]       NVARCHAR (255) NULL,
     [ConfigType]  NVARCHAR (255) NULL,
     [Settings]    NVARCHAR (MAX) NULL,
@@ -7,4 +8,12 @@
     [timestamp]   ROWVERSION     NULL,
     CONSTRAINT [PK_ExtensionConfiguration] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
+
+
+
+
+
+
 
