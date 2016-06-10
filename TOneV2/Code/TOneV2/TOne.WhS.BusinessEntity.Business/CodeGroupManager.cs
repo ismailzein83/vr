@@ -171,7 +171,18 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 Country country = countryManager.GetCountry(code.Value.ToLower());
                 CodeGroup codeGroup = null;
-                if (country != null && !cachedCodeGroups.TryGetValue(code.Key, out codeGroup) && !String.IsNullOrEmpty(code.Key))
+
+                if (!Vanrise.Common.Utilities.IsNumeric(code.Key,false))
+                {
+                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
+                    colIndex++;
+                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue("CodeGroup must be numeric");
+                    uploadCodeGroupLog.CountOfCodeGroupsFailed++;
+                    colIndex = 0;
+                    rowIndex++;
+                }
+
+                else if (country != null && !cachedCodeGroups.TryGetValue(code.Key, out codeGroup) && !String.IsNullOrEmpty(code.Key))
                 {
                     importedCodeGroup.Add(new CodeGroup
                     {
