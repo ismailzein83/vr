@@ -25,7 +25,10 @@ namespace Vanrise.GenericData.Pricing
         {
             var tariffPricingRule = getMatchRule();
             if (tariffPricingRule != null)
+            {
                 tariffPricingRule.Settings.ApplyTariffRule(context);
+                context.Rule = tariffPricingRule;
+            }
             else
             {
                 var effectiveRate = context.Rate;

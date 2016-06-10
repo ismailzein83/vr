@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Rules.Pricing
 {
-    public interface IPricingRuleRateTypeContext
+    public interface IPricingRuleRateTypeContext : IRuleExecutionContext
     {
         Decimal NormalRate { get; }
 

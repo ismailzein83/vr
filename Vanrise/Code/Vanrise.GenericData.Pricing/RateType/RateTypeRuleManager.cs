@@ -30,6 +30,7 @@ namespace Vanrise.GenericData.Pricing
                 if (rateTypePricingRule != null)
                 {
                     rateTypePricingRule.Settings.ApplyRateTypeRule(context);
+                    context.Rule = rateTypePricingRule;
                     rateTypeApplied = true;
                 }
             }

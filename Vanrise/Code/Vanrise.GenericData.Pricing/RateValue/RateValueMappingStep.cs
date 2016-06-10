@@ -27,6 +27,8 @@ namespace Vanrise.GenericData.Pricing
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.NormalRate;", this.NormalRate, ruleContextVariableName);
             if (this.RatesByRateType != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.RatesByRateType;", this.RatesByRateType, ruleContextVariableName);
+
+            base.SetIdRuleMatched(context, ruleContextVariableName);
         }
     }
 }

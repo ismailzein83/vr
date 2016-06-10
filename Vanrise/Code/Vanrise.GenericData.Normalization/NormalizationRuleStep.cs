@@ -26,6 +26,8 @@ namespace Vanrise.GenericData.Normalization
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.ApplyNormalizationRule({1}, {2}, {3});",
                 ruleManagerVariableName, ruleContextVariableName, this.RuleDefinitionId, ruleTargetVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.NormalizedValue;", this.NormalizedValue, ruleContextVariableName);
+
+            base.SetIdRuleMatched(context, ruleContextVariableName);
         }
     }
 }

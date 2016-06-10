@@ -51,6 +51,7 @@ app.directive('vrGenericdataDatatransformationRulestepcommonPreview', ['UtilsSer
                             {
                                 ctrl.ruleFieldsMappings = payload.stepDetails.RuleFieldsMappings;
                                 ctrl.effectiveTime = payload.stepDetails.EffectiveTime
+                                ctrl.ruleId = payload.stepDetails.RuleId
                             }
                               
                         }
@@ -63,6 +64,7 @@ app.directive('vrGenericdataDatatransformationRulestepcommonPreview', ['UtilsSer
                     stepObj.stepDetails = changes;
                     ctrl.ruleFieldsMappings = changes.RuleFieldsMappings;
                     ctrl.effectiveTime = changes.EffectiveTime;
+                    ctrl.ruleId = changes.RuleId;
                 }
 
                 api.checkValidation = function () {
@@ -70,7 +72,7 @@ app.directive('vrGenericdataDatatransformationRulestepcommonPreview', ['UtilsSer
                 }
 
                 api.getData = function () {
-                    return stepObj.stepDetails
+                    return stepObj.stepDetails;
                 }
 
 

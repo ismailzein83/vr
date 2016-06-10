@@ -25,7 +25,10 @@ namespace Vanrise.GenericData.Pricing
         {
             var rateValueRule = getMatchRule();
             if (rateValueRule != null)
+            {
                 rateValueRule.Settings.ApplyRateValueRule(context);
+                context.Rule = rateValueRule;
+            }
         }
     }
 }

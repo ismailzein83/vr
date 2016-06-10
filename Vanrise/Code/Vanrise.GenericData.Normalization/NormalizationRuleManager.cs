@@ -17,6 +17,7 @@ namespace Vanrise.GenericData.Normalization
             if (normalizationPricingRule != null)
             {
                 normalizationPricingRule.Settings.ApplyNormalizationRule(context);
+                context.Rule = normalizationPricingRule;
             }
         }
     }

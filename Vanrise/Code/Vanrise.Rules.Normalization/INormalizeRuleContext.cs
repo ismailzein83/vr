@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Rules.Normalization
 {
-    public interface INormalizeRuleContext
+    public interface INormalizeRuleContext : IRuleExecutionContext
     {
         string Value { get; }
 

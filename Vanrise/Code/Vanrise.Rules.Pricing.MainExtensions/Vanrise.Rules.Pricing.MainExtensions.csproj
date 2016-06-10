@@ -67,6 +67,10 @@
       <Project>{a8a1a6c8-be71-4b51-b5b8-490645c32bf2}</Project>
       <Name>Vanrise.Rules.Pricing</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Rules\Vanrise.Rules.csproj">
+      <Project>{f8450e80-5d8e-4fea-a2e0-777cb05e0542}</Project>
+      <Name>Vanrise.Rules</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

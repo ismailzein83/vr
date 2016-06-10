@@ -25,6 +25,8 @@ namespace Vanrise.GenericData.Pricing
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.ApplyExtraChargeRule({1}, {2}, {3});",
                 ruleManagerVariableName, ruleContextVariableName, this.RuleDefinitionId, ruleTargetVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.Rate;", this.EffectiveRate, ruleContextVariableName);
+
+            base.SetIdRuleMatched(context, ruleContextVariableName);
         }
     }
 }

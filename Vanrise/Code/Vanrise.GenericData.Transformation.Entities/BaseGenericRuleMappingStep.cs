@@ -14,21 +14,33 @@ namespace Vanrise.GenericData.Transformation.Entities
 
         public string EffectiveTime { get; set; }
 
+        public string RuleId { get; set; }
         public List<GenericRuleCriteriaFieldMapping> RuleFieldsMappings { get; set; }
-        
-        protected void GenerateRuleTargetExecutionCode<T>(IDataTransformationCodeGenerationContext context, out string ruleTargetVariableName) 
+
+        protected void GenerateRuleTargetExecutionCode<T>(IDataTransformationCodeGenerationContext context, out string ruleTargetVariableName)
             where T : GenericRuleTarget
         {
             ruleTargetVariableName = context.GenerateUniqueMemberName("ruleTarget");
-            context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new {1}();", ruleTargetVariableName,  CSharpCompiler.TypeToString(typeof(T)));
+            context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new {1}();", ruleTargetVariableName, CSharpCompiler.TypeToString(typeof(T)));
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.EffectiveOn = {1};", ruleTargetVariableName, this.EffectiveTime);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.TargetFieldValues = new Dictionary<string, object>();", ruleTargetVariableName);
 
             foreach (var ruleFieldMapping in this.RuleFieldsMappings)
             {
                 context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null) {1}.TargetFieldValues.Add({3}{2}{3}, {0});",
-                    ruleFieldMapping.Value, ruleTargetVariableName, ruleFieldMapping.RuleCriteriaFieldName,"\"");
-            }            
+                    ruleFieldMapping.Value, ruleTargetVariableName, ruleFieldMapping.RuleCriteriaFieldName, "\"");
+            }
+        }
+
+        protected void SetIdRuleMatched(IDataTransformationCodeGenerationContext context, string ruleContextVariableName)
+        {
+            if (!string.IsNullOrEmpty(this.RuleId))
+            {
+                context.AddCodeToCurrentInstanceExecutionBlock("if({0}.Rule != null)", ruleContextVariableName);
+                context.AddCodeToCurrentInstanceExecutionBlock("{");
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.Rule.RuleId;", this.RuleId, ruleContextVariableName);
+                context.AddCodeToCurrentInstanceExecutionBlock("}");
+            }
         }
     }
 }

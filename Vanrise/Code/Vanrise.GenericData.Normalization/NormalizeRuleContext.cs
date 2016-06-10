@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Rules;
 using Vanrise.Rules.Normalization;
 
 namespace Vanrise.GenericData.Normalization
@@ -20,5 +21,7 @@ namespace Vanrise.GenericData.Normalization
             get;
             set;
         }
+
+       public BaseRule Rule { get; set; }
     }
 }

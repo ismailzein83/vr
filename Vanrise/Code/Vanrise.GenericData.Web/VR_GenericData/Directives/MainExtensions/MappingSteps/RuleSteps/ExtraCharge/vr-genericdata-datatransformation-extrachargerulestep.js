@@ -77,6 +77,7 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestep', ['UtilsServi
                             payloadRuleStep.ruleFieldsMappings = payload.stepDetails.RuleFieldsMappings;
                             payloadRuleStep.effectiveTime = payload.stepDetails.EffectiveTime;
                             payloadRuleStep.ruleDefinitionId = payload.stepDetails.RuleDefinitionId;
+                            payloadRuleStep.ruleId = payload.stepDetails.RuleId;
                         }
                         VRUIUtilsService.callDirectiveLoad(ruleStepCommonDirectiveAPI, payloadRuleStep, loadRuleStepCommonDirectivePromiseDeferred);
                     });

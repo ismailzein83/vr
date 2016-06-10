@@ -34,6 +34,8 @@ namespace Vanrise.GenericData.Pricing
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.EffectiveDurationInSeconds.Value;", this.EffectiveDurationInSeconds, ruleContextVariableName);
             if (this.TotalAmount != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.TotalAmount.Value;", this.TotalAmount, ruleContextVariableName);
+
+            base.SetIdRuleMatched(context, ruleContextVariableName);
         }
     }
 }

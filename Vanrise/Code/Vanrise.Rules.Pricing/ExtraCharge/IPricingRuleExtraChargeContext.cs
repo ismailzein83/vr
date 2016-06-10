@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Rules.Pricing
 {
-    public interface IPricingRuleExtraChargeContext
+    public interface IPricingRuleExtraChargeContext : IRuleExecutionContext
     {
         DateTime? TargetTime { get; }
 

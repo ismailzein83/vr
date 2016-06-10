@@ -14,7 +14,10 @@ namespace Vanrise.GenericData.Pricing
         {
             var tariffPricingRule = GetMatchRule(ruleDefinitionId, target);
             if (tariffPricingRule != null)
+            {
                 tariffPricingRule.Settings.ApplyExtraChargeRule(context);
+                context.Rule = tariffPricingRule;
+            }
         }
     }
 }

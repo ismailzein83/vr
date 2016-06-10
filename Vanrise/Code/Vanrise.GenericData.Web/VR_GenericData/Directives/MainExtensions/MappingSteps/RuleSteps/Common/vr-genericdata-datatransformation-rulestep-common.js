@@ -44,6 +44,9 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
             var effectiveTimeDirectiveAPI;
             var effectiveTimeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var ruleIdDirectiveAPI;
+            var ruleIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.ruleFieldsMappings = [];
 
@@ -55,6 +58,11 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                 $scope.onEffectiveTimeDirectiveReady = function (api) {
                     effectiveTimeDirectiveAPI = api; 
                     effectiveTimeDirectiveReadyPromiseDeferred.resolve();
+                }
+
+                $scope.onRuleIdDirectiveReady = function (api) {
+                    ruleIdDirectiveAPI = api;
+                    ruleIdDirectiveReadyPromiseDeferred.resolve();
                 }
 
                 $scope.onRuleSelectionChanged = function () {
@@ -163,7 +171,23 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                                 payloadEffectiveTime.selectedRecords = payload.effectiveTime;
                             VRUIUtilsService.callDirectiveLoad(effectiveTimeDirectiveAPI, payloadEffectiveTime, loadEffectiveTimeDirectivePromiseDeferred);
                         });
+
                         promises.push(loadEffectiveTimeDirectivePromiseDeferred.promise);
+
+
+                        var loadRuleIdDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        ruleIdDirectiveReadyPromiseDeferred.promise.then(function () {
+                            var payloadValue;
+                            if (payload != undefined) {
+                                payloadValue = {};
+                                if (payload != undefined && payload.context != undefined)
+                                    payloadValue.context = payload.context;
+                                    payloadValue.selectedRecords = payload.ruleId;
+                            }
+                            VRUIUtilsService.callDirectiveLoad(ruleIdDirectiveAPI, payloadValue, loadRuleIdDirectivePromiseDeferred);
+                        });
+                        promises.push(loadRuleIdDirectivePromiseDeferred.promise);
+
                         return UtilsService.waitMultiplePromises(promises);
                     }
                    
@@ -187,6 +211,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                     obj.ConfigId = ruleTypeEntity !=undefined? ruleTypeEntity.GenericRuleTypeConfigId:undefined;
                     obj.RuleDefinitionId = $scope.selectedRuleDefinition!=undefined? $scope.selectedRuleDefinition.GenericRuleDefinitionId:undefined;
                     obj.EffectiveTime = effectiveTimeDirectiveAPI != undefined ? effectiveTimeDirectiveAPI.getData() : undefined;
+                    obj.RuleId = ruleIdDirectiveAPI != undefined ? ruleIdDirectiveAPI.getData() : undefined;
                     obj.RuleFieldsMappings = ruleFieldsMappings;
 
                 }

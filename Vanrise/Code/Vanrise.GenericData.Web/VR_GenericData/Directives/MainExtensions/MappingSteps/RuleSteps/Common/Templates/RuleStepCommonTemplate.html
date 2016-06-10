@@ -4,7 +4,7 @@
     </vr-columns>
 </vr-row>
 
-<vr-genericdata-expressionbuilder on-ready="onEffectiveTimeDirectiveReady" label="Effective Time" isrequired="true"></vr-genericdata-expressionbuilder>    
+<vr-genericdata-expressionbuilder on-ready="onEffectiveTimeDirectiveReady" label="Effective Time" isrequired="true"></vr-genericdata-expressionbuilder>
 
 
 
@@ -18,6 +18,9 @@
                     <vr-genericdata-expressionbuilder on-ready="dataItem.onSourceMappingReady" hidelabel label="From" isrequired="true"></vr-genericdata-expressionbuilder>
                 </vr-datagridcolumn>
             </vr-datagrid>
+        </vr-section>
+        <vr-section title="Rule">
+            <vr-genericdata-expressionbuilder on-ready="onRuleIdDirectiveReady" label="Rule Id"></vr-genericdata-expressionbuilder>
         </vr-section>
     </vr-columns>
 </vr-row>
