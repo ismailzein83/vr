@@ -27,9 +27,9 @@
         };
         function getTamplate(attrs) {
             var withemptyline = 'withemptyline';
-            var label = "label='Action'";
+            var label = "label='Charging Policy'";
             if (attrs.hidelabel != undefined) {
-                label = "Actions";
+                label = "Charging Policies";
                 withemptyline = '';
             }
 
@@ -53,7 +53,7 @@
             var directiveAPI;
             var directiveReadyDeferred;
             var directivePayload;
-            var action;
+            var chargingPolicy;
             function initializeController() {
                 $scope.templateConfigs = [];
                 $scope.selectedTemplateConfig;

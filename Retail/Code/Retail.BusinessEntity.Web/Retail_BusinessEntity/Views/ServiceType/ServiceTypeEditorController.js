@@ -9,6 +9,8 @@
 
         var serviceTypeId;
         var serviceTypeEntity;
+        var chargingPolicyAPI;
+        var chargingPolicyReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -26,7 +28,11 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-
+            $scope.scopeModel.onChargingPolicyReady = function(api)
+            {
+                chargingPolicyAPI = api;
+                chargingPolicyReadyDeferred.resolve();
+            }
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateServiceType() : insertServiceType();
             };
@@ -61,11 +67,27 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadChargingPolicy]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
+        }
+
+
+        function loadChargingPolicy() {
+            var chargingPolicyLoadDeferred = UtilsService.createPromiseDeferred();
+
+            chargingPolicyReadyDeferred.promise.then(function () {
+                var chargingPolicyPayload;
+
+                if (serviceTypeEntity != undefined) {
+                }
+
+                VRUIUtilsService.callDirectiveLoad(chargingPolicyAPI, chargingPolicyPayload, chargingPolicyLoadDeferred);
+            });
+
+            return chargingPolicyLoadDeferred.promise;
         }
 
         function setTitle() {
