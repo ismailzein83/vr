@@ -87,6 +87,10 @@ namespace TOne.WhS.Analytics.Data.SQL
             }, (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.From));
+                if (input.Query.To.HasValue)
+                   cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.To));
+
+
             });
             return releaseCodes;
         }
@@ -130,7 +134,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
             whereBuilder.Append(String.Format(@"{0}.AttemptDateTime>= @FromDate ", alias));
             if (query.To.HasValue)
-                whereBuilder.AppendFormat("AND AttemptDateTime<= '{0}' ", query.To.Value);
+                whereBuilder.AppendFormat("AND {0}.AttemptDateTime<= @ToDate  ", alias);
             groupByBuilder.Append(String.Format(@"{0}.SwitchId, {0}.ReleaseCode,{0}.ReleaseSource", alias));
             selectQueryPart.Append(String.Format(@"         {0}.SwitchId,
                                                             {0}.ReleaseCode,{0}.ReleaseSource,
@@ -138,7 +142,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                                                             SUM( CASE WHEN {0}.DurationInSeconds > 0 THEN 1 ELSE 0 END) SuccessfulAttempts,
 			                                                Min({0}.AttemptDateTime) FirstAttempt,	
 			                                                Max({0}.AttemptDateTime) LastAttempt,
-                                                            CONVERT(DECIMAL(10,2),SUM({0}.DurationInSeconds)/60.) AS DurationsInMinutes  ", alias , tableIndex));
+                                                            CONVERT(DECIMAL,SUM({0}.DurationInSeconds)/60.) AS DurationsInMinutes  ", alias , tableIndex));
             AddSelectColumnToQuery(selectQueryPart, alias);
             AddGroupingToQuery(groupByBuilder, alias);
             queryBuilder.Replace("#SELECTPART#", selectQueryPart.ToString());
