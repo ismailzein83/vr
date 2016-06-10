@@ -21,10 +21,17 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateServiceType'), serviceType);
         }
 
+        function GetChargingPolicyTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetChargingPolicyTemplateConfigs'));
+        }
+
+        
+
         return {
             GetFilteredServiceTypes: GetFilteredServiceTypes,
             GetServiceType: GetServiceType,
             UpdateServiceType: UpdateServiceType,
+            GetChargingPolicyTemplateConfigs: GetChargingPolicyTemplateConfigs
         };
     }
 

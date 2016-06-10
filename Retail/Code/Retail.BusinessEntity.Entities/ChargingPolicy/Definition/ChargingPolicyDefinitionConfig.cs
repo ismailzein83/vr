@@ -9,6 +9,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class ChargingPolicyDefinitionConfig : ExtensionConfiguration
     {
+        public const string EXTENSION_TYPE = "Retail_BE_ChargingPolicyDefinition";
         public string Editor { get; set; }
     }
 }

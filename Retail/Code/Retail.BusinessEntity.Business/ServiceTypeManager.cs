@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 namespace Retail.BusinessEntity.Business
 {
@@ -36,11 +37,19 @@ namespace Retail.BusinessEntity.Business
             return (serviceType != null) ? serviceType.Name : null;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<ServiceTypeDetail> UpdateServiceType(ServiceTypeToEdit serviceType)
+        public Vanrise.Entities.UpdateOperationOutput<ServiceTypeDetail> UpdateServiceType(ServiceTypeToEdit updatedServiceType)
         {
-            ValidateServiceTypeToEdit(serviceType);
+            ValidateServiceTypeToEdit(updatedServiceType);
 
-            ServiceType updatedServiceType = new ServiceType();
+            ServiceType serviceType = GetServiceType(updatedServiceType.ServiceTypeId);
+            ServiceTypeSettings serviceTypeSettings = new ServiceTypeSettings
+            {
+                AccountServiceEditor = serviceType.Settings.AccountServiceEditor,
+                ServiceVolumeEditor = serviceType.Settings.ServiceVolumeEditor,
+                ChargingPolicyDefinitionSettings = updatedServiceType.ChargingPolicyDefinitionSettings,
+                Description = updatedServiceType.Description
+            };
+            serviceTypeSettings.ChargingPolicyDefinitionSettings.ChargingPolicyEditor = serviceType.Settings.ChargingPolicyDefinitionSettings.ChargingPolicyEditor;
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<ServiceTypeDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -48,7 +57,7 @@ namespace Retail.BusinessEntity.Business
 
             IServiceTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IServiceTypeDataManager>();
 
-            if (dataManager.Update(updatedServiceType))
+            if (dataManager.Update(updatedServiceType.ServiceTypeId, updatedServiceType.Title,serviceTypeSettings))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
@@ -60,6 +69,12 @@ namespace Retail.BusinessEntity.Business
             }
 
             return updateOperationOutput;
+        }
+
+        public IEnumerable<ChargingPolicyDefinitionConfig> GetChargingPolicyTemplateConfigs()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<ChargingPolicyDefinitionConfig>(ChargingPolicyDefinitionConfig.EXTENSION_TYPE);
         }
 
         #endregion

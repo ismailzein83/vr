@@ -35,5 +35,13 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.UpdateServiceType(serviceType);
         }
+
+        [HttpGet]
+        [Route("GetChargingPolicyTemplateConfigs")]
+        public IEnumerable<ChargingPolicyDefinitionConfig> GetChargingPolicyTemplateConfigs()
+        {
+            return _manager.GetChargingPolicyTemplateConfigs();
+        }
+        
     }
 }

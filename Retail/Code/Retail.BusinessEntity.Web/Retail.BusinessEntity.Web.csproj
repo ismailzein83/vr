@@ -193,6 +193,7 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\VoiceType\Templates\ICXVoiceTypeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\VoiceType\Templates\InterNationalVoiceTypeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\VoiceType\Templates\NationalVoiceTypeTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\retail-be-servicetype-chargingpolicy-definition.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-service-grid-editor.js" />

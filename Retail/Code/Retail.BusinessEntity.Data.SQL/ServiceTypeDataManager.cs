@@ -29,10 +29,10 @@ namespace Retail.BusinessEntity.Data.SQL
             return GetItemsSP("Retail.sp_ServiceType_GetAll", ServiceTypeMapper);
         }
 
-        public bool Update(ServiceType serviceType)
+        public bool Update(int serviceTypeId, string title, ServiceTypeSettings serviceTypeSettings)
         {
-            string serializedSettings = serviceType.Settings != null ? Vanrise.Common.Serializer.Serialize(serviceType.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Retail.sp_ServiceType_Update", serviceType.ServiceTypeId, serviceType.Name,  serializedSettings);
+            string serializedSettings = serviceTypeSettings != null ? Vanrise.Common.Serializer.Serialize(serviceTypeSettings) : null;
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_ServiceType_Update", serviceTypeId, title, serializedSettings);
             return (affectedRecords > 0);
         }
 
