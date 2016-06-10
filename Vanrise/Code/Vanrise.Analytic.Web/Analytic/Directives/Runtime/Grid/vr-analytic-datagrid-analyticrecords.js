@@ -174,6 +174,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 // ------- Load Grid ------
 
                 function loadGrid(payLoad) {
+                    BuildMenuAction(payLoad);
                     ctrl.groupingDimensions = [];
                     ctrl.parentDimensions.length = 0;
                     ctrl.drillDownDimensions.length = 0;
@@ -578,6 +579,22 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         }
                     }
                     return context;
+                }
+
+                function BuildMenuAction(payload) {
+                    ctrl.gridMenuActions = [];
+                    console.log(payload);
+                    if(payload !=undefined && payload.Settings !=undefined && payload.Settings.ItemActions !=undefined)
+                    {
+                        var itemActions = payload.Settings.ItemActions;
+                        for(var i=0;i<itemActions.length;i++)
+                        {
+                            ctrl.gridMenuActions.push({
+                                name: itemActions.Title,
+                                clicked: editAggregate,
+                            });
+                        }
+                    }
                 }
             }
         }

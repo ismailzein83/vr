@@ -91,6 +91,8 @@
     <Compile Include="PricingEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceType\ServiceTypeChargingPolicySettings.cs" />
+    <Compile Include="ServiceType\ServiceTypeDetail.cs" />
+    <Compile Include="ServiceType\ServiceTypeQuery.cs" />
     <Compile Include="ServiceType\ServiceTypeSettings.cs" />
     <Compile Include="ServiceType\ServiceTypeToEdit.cs" />
     <Compile Include="Zone\ZoneFilter.cs" />

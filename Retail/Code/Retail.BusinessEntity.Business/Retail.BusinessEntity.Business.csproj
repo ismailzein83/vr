@@ -68,6 +68,7 @@
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="PricingEntityCacheManager.cs" />
+    <Compile Include="ServiceTypeManager.cs" />
     <Compile Include="ZoneManager.cs" />
     <Compile Include="PackageManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

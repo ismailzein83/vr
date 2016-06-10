@@ -53,6 +53,7 @@
     <Compile Include="IAccountDataManager.cs" />
     <Compile Include="IAccountPackageDataManager.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IServiceTypeDataManager.cs" />
     <Compile Include="IZoneDataManager.cs" />
     <Compile Include="IPackageDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

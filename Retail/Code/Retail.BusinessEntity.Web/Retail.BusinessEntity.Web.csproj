@@ -148,6 +148,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountPackageController.cs" />
+    <Compile Include="Controllers\ServiceTypeController.cs" />
     <Compile Include="Controllers\ZoneController.cs" />
     <Compile Include="Controllers\PackageController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -198,6 +199,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-service.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\Templates\PackageGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\Templates\ServiceGridEditorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\ServiceType\Templates\ServiceTypeGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-countryzone-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-zone-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\Templates\CountryZoneTemplate.html" />
@@ -205,9 +208,11 @@
     <Content Include="Retail_BusinessEntity\Services\AccountService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountPackageAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\ServiceTypeAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ZoneAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PackageAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\PackageService.js" />
+    <Content Include="Retail_BusinessEntity\Services\ServiceTypeService.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountEditor.html" />
@@ -220,6 +225,10 @@
     <Content Include="Retail_BusinessEntity\Views\Package\PackageManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\Package\ServiceEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Package\ServiceEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeManagement.html" />
+    <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

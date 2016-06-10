@@ -1,0 +1,117 @@
+﻿using Retail.BusinessEntity.Data;
+using Retail.BusinessEntity.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Vanrise.Caching;
+using Vanrise.Common;
+using Vanrise.Entities;
+namespace Retail.BusinessEntity.Business
+{
+   public class ServiceTypeManager
+    {
+        #region Public Methods
+
+        public Vanrise.Entities.IDataRetrievalResult<ServiceTypeDetail> GetFilteredServiceTypes(Vanrise.Entities.DataRetrievalInput<ServiceTypeQuery> input)
+        {
+            Dictionary<int, ServiceType> cachedServiceTypes = this.GetCachedServiceTypes();
+
+            Func<ServiceType, bool> filterExpression = (serviceType) =>
+                (input.Query.Name == null || serviceType.Name.ToLower().Contains(input.Query.Name.ToLower()));
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedServiceTypes.ToBigResult(input, filterExpression, ServiceTypeDetailMapper));
+        }
+
+        public ServiceType GetServiceType(int serviceTypeId)
+        {
+            Dictionary<int, ServiceType> cachedServiceTypes = this.GetCachedServiceTypes();
+            return cachedServiceTypes.GetRecord(serviceTypeId);
+        }
+
+        public string GetServiceTypeName(int serviceTypeId)
+        {
+            ServiceType serviceType = this.GetServiceType(serviceTypeId);
+            return (serviceType != null) ? serviceType.Name : null;
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<ServiceTypeDetail> UpdateServiceType(ServiceTypeToEdit serviceType)
+        {
+            ValidateServiceTypeToEdit(serviceType);
+
+            ServiceType updatedServiceType = new ServiceType();
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<ServiceTypeDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            IServiceTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IServiceTypeDataManager>();
+
+            if (dataManager.Update(updatedServiceType))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = ServiceTypeDetailMapper(this.GetServiceType(serviceType.ServiceTypeId));
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
+        }
+
+        #endregion
+
+        #region Validation Methods
+
+        private void ValidateServiceTypeToEdit(ServiceTypeToEdit serviceType)
+        {
+            ServiceType serviceTypeEntity = this.GetServiceType(serviceType.ServiceTypeId);
+
+            if (serviceTypeEntity == null)
+                throw new DataIntegrityValidationException(String.Format("ServiceType '{0}' does not exist", serviceType.ServiceTypeId));
+        }
+        #endregion
+
+        #region Private Classes
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IServiceTypeDataManager _dataManager = BEDataManagerFactory.GetDataManager<IServiceTypeDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreServiceTypesUpdated(ref _updateHandle);
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        Dictionary<int, ServiceType> GetCachedServiceTypes()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetServiceTypes", () =>
+            {
+                IServiceTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IServiceTypeDataManager>();
+                IEnumerable<ServiceType> serviceTypes = dataManager.GetServiceTypes();
+                return serviceTypes.ToDictionary(kvp => kvp.ServiceTypeId, kvp => kvp);
+            });
+        }
+        #endregion
+
+        #region Mappers
+
+        private ServiceTypeDetail ServiceTypeDetailMapper(ServiceType serviceType)
+        {
+            return new ServiceTypeDetail()
+            {
+                Entity = serviceType,
+            };
+        }
+        #endregion
+    }
+}
