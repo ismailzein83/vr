@@ -9,10 +9,12 @@ namespace Retail.BusinessEntity.Entities
 {
     public class ChargingPolicyPartTypeConfig : ExtensionConfiguration
     {
+        public const string EXTENSION_TYPE = "Retail_BE_ChargingPolicyPartType";
+
         /// <summary>
-        /// this is a link to Extension Configuration name of the Charging Policy Parts of this type
+        /// this is a link to Extension Configuration Type of the Charging Policy Parts of this type
         /// e.g. Retail_BE_ChargingPolicyPart_DurationTariff, Retail_BE_ChargingPolicyPart_RateType
         /// </summary>
-        public string PartTypeName { get; set; }
+        public string PartTypeExtensionName { get; set; }
     }
 }

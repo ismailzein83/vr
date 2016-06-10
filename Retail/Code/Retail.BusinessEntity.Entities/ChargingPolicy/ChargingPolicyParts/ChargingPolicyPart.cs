@@ -10,7 +10,7 @@ namespace Retail.BusinessEntity.Entities
     {
         public int PartTypeId { get; set; }
 
-        public abstract string PartTypeName
+        public abstract string PartTypeExtensionName
         {
             get;
         }

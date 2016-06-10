@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.MainExtensions.ChargingPolicyParts.RateValues
 {
-    public class GenericRuleRateValueSettings : BaseChargingPolicyPartRuleSettings
+    public class SingleRateValueDefinition : ChargingPolicyPartDefinitionSettings
     {
     }
 }

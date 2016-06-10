@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.MainExtensions.ChargingPolicyParts.RateTypes
+namespace Retail.BusinessEntity.MainExtensions.ChargingPolicyParts.DurationTariffs
 {
-    public class GenericRuleRateTypeSettings : BaseChargingPolicyPartRuleSettings
+    public class GenericRuleDurationTariffDefinition : BaseChargingPolicyPartRuleDefinition
     {
     }
 }

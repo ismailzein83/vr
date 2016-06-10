@@ -7,10 +7,8 @@ using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class ChargingPolicyPartConfig : ExtensionConfiguration
+    public class ChargingPolicyDefinitionConfig : ExtensionConfiguration
     {
-        public string DefinitionEditor { get; set; }
-
-        public string RuntimeEditor { get; set; }
+        public string Editor { get; set; }
     }
 }

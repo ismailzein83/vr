@@ -13,7 +13,7 @@ namespace Retail.BusinessEntity.Entities
 
         public abstract void Execute(IChargingPolicyRateValueContext context);
         
-        public override string PartTypeName
+        public override string PartTypeExtensionName
         {
             get { return "Retail_BE_ChargingPolicyPart_RateValue"; }
         }

@@ -7,12 +7,12 @@ using Vanrise.GenericData.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public abstract class ChargingPolicyPartSettings
+    public abstract class ChargingPolicyPartDefinitionSettings
     {
 
     }
 
-    public abstract class BaseChargingPolicyPartRuleSettings : ChargingPolicyPartSettings
+    public abstract class BaseChargingPolicyPartRuleDefinition : ChargingPolicyPartDefinitionSettings
     {
         public GenericRuleDefinitionCriteria RuleCriteriaDefinition { get; set; }
 

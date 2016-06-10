@@ -11,7 +11,7 @@ namespace Retail.BusinessEntity.MainExtensions.ChargingPolicyParts
 {
     public static class Helper
     {
-        internal static RuleTree GetRuleTree(PricingEntity pricingEntity, long pricingEntityId, int serviceTypeId, string chargingPolicyPartTypeName, BaseChargingPolicyPartRuleSettings partRuleSettings, IEnumerable<Vanrise.GenericData.Entities.GenericRule> rules)
+        internal static RuleTree GetRuleTree(PricingEntity pricingEntity, long pricingEntityId, int serviceTypeId, string chargingPolicyPartTypeName, BaseChargingPolicyPartRuleDefinition partRuleSettings, IEnumerable<Vanrise.GenericData.Entities.GenericRule> rules)
         {
             string cacheName = String.Format("Helper_GetRuleTree_{0}_{1}_{2}", pricingEntityId, serviceTypeId, chargingPolicyPartTypeName);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<PricingEntityCacheManager>().GetOrCreateObject(cacheName, pricingEntity,

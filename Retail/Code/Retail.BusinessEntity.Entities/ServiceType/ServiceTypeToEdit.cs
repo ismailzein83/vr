@@ -14,6 +14,6 @@ namespace Retail.BusinessEntity.Entities
 
         public string Description { get; set; }
 
-        public ServiceTypeChargingPolicySettings ChargingPolicySettings { get; set; }
+        public ChargingPolicyDefinitionSettings ChargingPolicySettings { get; set; }
     }
 }

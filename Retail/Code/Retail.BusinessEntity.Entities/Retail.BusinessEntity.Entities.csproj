@@ -65,10 +65,11 @@
     <Compile Include="Account\AccountDetail.cs" />
     <Compile Include="Account\AccountInfo.cs" />
     <Compile Include="Account\AccountQuery.cs" />
-    <Compile Include="ChargingPolicy\ChargingPolicyParts\ChargingPolicyPartSettings.cs" />
+    <Compile Include="ChargingPolicy\ChargingPolicyParts\ChargingPolicyPartDefinitionSettings.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyParts\ChargingPolicyPartConfig.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyParts\ChargingPolicyPartTypeConfig.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyParts\IChargingPolicyPartExecutionContext.cs" />
+    <Compile Include="ChargingPolicy\Definition\ChargingPolicyDefinitionConfig.cs" />
     <Compile Include="NewBEs\AccountService.cs" />
     <Compile Include="NewBEs\AccountServiceSettings.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyParts\ChargingPolicyPart.cs" />
@@ -90,7 +91,7 @@
     <Compile Include="Package\ServiceVoiceTypeTemplateConfig.cs" />
     <Compile Include="PricingEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceType\ServiceTypeChargingPolicySettings.cs" />
+    <Compile Include="ChargingPolicy\Definition\ChargingPolicyDefinitionSettings.cs" />
     <Compile Include="ServiceType\ServiceTypeDetail.cs" />
     <Compile Include="ServiceType\ServiceTypeQuery.cs" />
     <Compile Include="ServiceType\ServiceTypeSettings.cs" />

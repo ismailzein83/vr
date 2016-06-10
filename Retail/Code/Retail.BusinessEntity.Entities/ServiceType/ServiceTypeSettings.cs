@@ -12,7 +12,7 @@ namespace Retail.BusinessEntity.Entities
 
         public string ChargingPolicyEditor { get; set; }
 
-        public ServiceTypeChargingPolicySettings ChargingPolicySettings { get; set; }
+        public ChargingPolicyDefinitionSettings ChargingPolicyDefinitionSettings { get; set; }
 
         public string AccountServiceEditor { get; set; }
 

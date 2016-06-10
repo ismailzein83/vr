@@ -14,7 +14,7 @@ namespace Retail.BusinessEntity.Entities
 
         int ServiceTypeId { get; }
 
-        ChargingPolicyPartSettings ChargingPolicyPartSettings { get; }
+        ChargingPolicyPartDefinitionSettings ChargingPolicyPartSettings { get; }
 
         Vanrise.GenericData.Entities.GenericRuleTarget RuleTarget { get; }
     }

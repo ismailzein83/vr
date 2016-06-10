@@ -13,7 +13,7 @@ namespace Retail.BusinessEntity.MainExtensions.ChargingPolicyParts.DurationTarif
 
         public override void Execute(IChargingPolicyDurationTariffContext context)
         {
-            var ruleTree = Helper.GetRuleTree(context.PricingEntity, context.PricingEntityId, context.ServiceTypeId, base.PartTypeName, context.ChargingPolicyPartSettings as BaseChargingPolicyPartRuleSettings, this.TariffRules);
+            var ruleTree = Helper.GetRuleTree(context.PricingEntity, context.PricingEntityId, context.ServiceTypeId, base.PartTypeExtensionName, context.ChargingPolicyPartSettings as BaseChargingPolicyPartRuleDefinition, this.TariffRules);
             var pricingRuleContext = Helper.CreateTariffRuleContext(context);
             var ruleManager = new Vanrise.GenericData.Pricing.TariffRuleManager();
             ruleManager.ApplyTariffRule(pricingRuleContext, ruleTree, context.RuleTarget);
