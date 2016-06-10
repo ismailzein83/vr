@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.MainExtensions.ChargingPolicyParts.DurationTariffs
 {
-    public class SingleTariff : ChargingPolicyDurationTariff
+    public class SingleDurationTariff : ChargingPolicyDurationTariff
     {
         public Vanrise.Rules.Pricing.PricingRuleTariffSettings TariffSettings { get; set; }
 

@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public enum ChargingPolicyPartType
+    public abstract class ChargingPolicyPart
     {
-        RateValue = 0,
-        RateType = 1,
-        DurationTariff = 2
+        public int PartTypeId { get; set; }
+
+        public abstract string PartTypeName
+        {
+            get;
+        }
     }
 }

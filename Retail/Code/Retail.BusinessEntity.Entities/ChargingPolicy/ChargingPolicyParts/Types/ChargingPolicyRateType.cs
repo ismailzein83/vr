@@ -12,22 +12,14 @@ namespace Retail.BusinessEntity.Entities
 
         public abstract void Execute(IChargingPolicyRateTypeContext context);
 
-        public override ChargingPolicyPartType PartType
+        public override string PartTypeName
         {
-            get { return ChargingPolicyPartType.RateType; }
+            get { return "Retail_BE_ChargingPolicyPart_RateType"; }
         }
     }
 
-    public interface IChargingPolicyRateTypeContext
+    public interface IChargingPolicyRateTypeContext : IChargingPolicyPartExecutionContext
     {
-        PricingEntity PricingEntity { get; }
-
-        long PricingEntityId { get; }
-
-        int ServiceTypeId { get; }
-
-        Vanrise.GenericData.Entities.GenericRuleTarget RuleTarget { get; }
-
         Decimal NormalRate { get; }
 
         Dictionary<int, Decimal> RatesByRateType { get; }

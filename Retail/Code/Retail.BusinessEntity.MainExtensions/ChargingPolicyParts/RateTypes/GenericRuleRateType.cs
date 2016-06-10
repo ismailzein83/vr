@@ -13,7 +13,7 @@ namespace Retail.BusinessEntity.MainExtensions.ChargingPolicyParts.RateTypes
 
         public override void Execute(IChargingPolicyRateTypeContext context)
         {
-            var ruleTree = Helper.GetRuleTree(context.PricingEntity, context.PricingEntityId, context.ServiceTypeId, ChargingPolicyPartType.RateType, this.RateTypeRules);
+            var ruleTree = Helper.GetRuleTree(context.PricingEntity, context.PricingEntityId, context.ServiceTypeId, base.PartTypeName, context.ChargingPolicyPartSettings as BaseChargingPolicyPartRuleSettings, this.RateTypeRules);
             var pricingRuleContext = Helper.CreateRateTypeRuleContext(context);
             var ruleManager = new Vanrise.GenericData.Pricing.RateTypeRuleManager();
             ruleManager.ApplyRateTypeRule(pricingRuleContext, ruleTree, context.RuleTarget);

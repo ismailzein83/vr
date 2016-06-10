@@ -9,7 +9,7 @@ namespace Retail.BusinessEntity.Business
 {
     public class ConfigurationManager
     {
-        public Vanrise.GenericData.Entities.GenericRuleDefinitionCriteria GetCriteriaDefinition(int serviceTypeId, ChargingPolicyPartType pricingPolicyPartType)
+        public Vanrise.GenericData.Entities.GenericRuleDefinitionCriteria GetCriteriaDefinition(int serviceTypeId, string chargingPolicyPartTypeName)
         {
             throw new NotImplementedException();
         }

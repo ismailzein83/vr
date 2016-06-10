@@ -64,13 +64,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChargingPolicyParts\DurationTariffs\GenericRuleTariff.cs" />
-    <Compile Include="ChargingPolicyParts\DurationTariffs\SingleTariff.cs" />
+    <Compile Include="ChargingPolicyParts\DurationTariffs\GenericRuleDurationTariff.cs" />
+    <Compile Include="ChargingPolicyParts\DurationTariffs\GenericRuleDurationTariffSettings.cs" />
+    <Compile Include="ChargingPolicyParts\DurationTariffs\SingleDurationTariff.cs" />
+    <Compile Include="ChargingPolicyParts\DurationTariffs\SingleDurationTariffSettings.cs" />
     <Compile Include="ChargingPolicyParts\Helper.cs" />
     <Compile Include="ChargingPolicyParts\RateTypes\GenericRuleRateType.cs" />
+    <Compile Include="ChargingPolicyParts\RateTypes\GenericRuleRateTypeSettings.cs" />
     <Compile Include="ChargingPolicyParts\RateTypes\SingleRateType.cs" />
+    <Compile Include="ChargingPolicyParts\RateTypes\SingleRateTypeSettings.cs" />
     <Compile Include="ChargingPolicyParts\RateValues\GenericRuleRateValue.cs" />
+    <Compile Include="ChargingPolicyParts\RateValues\GenericRuleRateValueSettings.cs" />
     <Compile Include="ChargingPolicyParts\RateValues\SingleRateValue.cs" />
+    <Compile Include="ChargingPolicyParts\RateValues\SingleRateValueSettings.cs" />
     <Compile Include="Package\ConnectionType\3GConnectionType.cs" />
     <Compile Include="Package\ConnectionType\4GConnectionType.cs" />
     <Compile Include="Package\ConnectionType\CableInternetConnectionType.cs" />

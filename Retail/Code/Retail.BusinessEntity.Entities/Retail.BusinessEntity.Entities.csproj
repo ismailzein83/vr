@@ -65,18 +65,21 @@
     <Compile Include="Account\AccountDetail.cs" />
     <Compile Include="Account\AccountInfo.cs" />
     <Compile Include="Account\AccountQuery.cs" />
+    <Compile Include="ChargingPolicy\ChargingPolicyParts\ChargingPolicyPartSettings.cs" />
+    <Compile Include="ChargingPolicy\ChargingPolicyParts\ChargingPolicyPartConfig.cs" />
+    <Compile Include="ChargingPolicy\ChargingPolicyParts\ChargingPolicyPartTypeConfig.cs" />
+    <Compile Include="ChargingPolicy\ChargingPolicyParts\IChargingPolicyPartExecutionContext.cs" />
     <Compile Include="NewBEs\AccountService.cs" />
     <Compile Include="NewBEs\AccountServiceSettings.cs" />
-    <Compile Include="NewBEs\ChargingPolicyParts\ChargingPolicyPart.cs" />
-    <Compile Include="NewBEs\ChargingPolicyParts\ChargingPolicyPartType.cs" />
-    <Compile Include="NewBEs\ChargingPolicyParts\ChargingPolicyRateType.cs" />
-    <Compile Include="NewBEs\ChargingPolicyParts\ChargingPolicyRateValue.cs" />
-    <Compile Include="NewBEs\ChargingPolicyParts\ChargingPolicyDurationTariff.cs" />
-    <Compile Include="NewBEs\ChargingPolicy.cs" />
-    <Compile Include="NewBEs\ChargingPolicySettings.cs" />
+    <Compile Include="ChargingPolicy\ChargingPolicyParts\ChargingPolicyPart.cs" />
+    <Compile Include="ChargingPolicy\ChargingPolicyParts\Types\ChargingPolicyRateType.cs" />
+    <Compile Include="ChargingPolicy\ChargingPolicyParts\Types\ChargingPolicyRateValue.cs" />
+    <Compile Include="ChargingPolicy\ChargingPolicyParts\Types\ChargingPolicyDurationTariff.cs" />
+    <Compile Include="ChargingPolicy\ChargingPolicy.cs" />
+    <Compile Include="ChargingPolicy\ChargingPolicySettings.cs" />
     <Compile Include="NewBEs\ServicePackage.cs" />
     <Compile Include="NewBEs\ServicePackageSettings.cs" />
-    <Compile Include="NewBEs\ServiceType.cs" />
+    <Compile Include="ServiceType\ServiceType.cs" />
     <Compile Include="NewBEs\ServiceVolumeSettings.cs" />
     <Compile Include="Package\Package.cs" />
     <Compile Include="Package\PackageDetail.cs" />
@@ -87,9 +90,13 @@
     <Compile Include="Package\ServiceVoiceTypeTemplateConfig.cs" />
     <Compile Include="PricingEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceType\ServiceTypeChargingPolicySettings.cs" />
+    <Compile Include="ServiceType\ServiceTypeSettings.cs" />
+    <Compile Include="ServiceType\ServiceTypeToEdit.cs" />
     <Compile Include="Zone\ZoneFilter.cs" />
     <Compile Include="Zone\Zone.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

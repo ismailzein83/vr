@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.MainExtensions.ChargingPolicyParts.DurationTariffs
 {
-    public class GenericRuleTariff : ChargingPolicyDurationTariff
+    public class GenericRuleDurationTariff : ChargingPolicyDurationTariff
     {
         public List<Vanrise.GenericData.Pricing.TariffRule> TariffRules { get; set; }
 
         public override void Execute(IChargingPolicyDurationTariffContext context)
         {
-            var ruleTree = Helper.GetRuleTree(context.PricingEntity, context.PricingEntityId, context.ServiceTypeId, ChargingPolicyPartType.DurationTariff, this.TariffRules);
+            var ruleTree = Helper.GetRuleTree(context.PricingEntity, context.PricingEntityId, context.ServiceTypeId, base.PartTypeName, context.ChargingPolicyPartSettings as BaseChargingPolicyPartRuleSettings, this.TariffRules);
             var pricingRuleContext = Helper.CreateTariffRuleContext(context);
             var ruleManager = new Vanrise.GenericData.Pricing.TariffRuleManager();
             ruleManager.ApplyTariffRule(pricingRuleContext, ruleTree, context.RuleTarget);
