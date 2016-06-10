@@ -14,15 +14,11 @@ namespace Vanrise.GenericData.Transformation
 {
     public class DataTransformationDefinitionManager
     {
-
         #region Public Methods
-
 
         public IEnumerable<DataTransformationDefinitionInfo> GetDataTransformationDefinitions(DataTransformationDefinitionFilter filter)
         {
-            var cachedDataTransformationDefinitions = GetCachedDataTransformationDefinitions();
-            return cachedDataTransformationDefinitions.MapRecords(DataTransformationDefinitionInfoMapper, null);
-
+            return this.GetCachedDataTransformationDefinitions().MapRecords(DataTransformationDefinitionInfoMapper).OrderBy(x => x.Name);
         }
 
         public IDataRetrievalResult<DataTransformationDefinitionDetail> GetFilteredDataTransformationDefinitions(DataRetrievalInput<DataTransformationDefinitionQuery> input)

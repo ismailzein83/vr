@@ -43,7 +43,7 @@ namespace Vanrise.Common.Business
 
         public IEnumerable<LogAttribute> GeLogAttributesById(int attribute)
         {
-            return GetCachedLogAttributes().FindAllRecords(itm => itm.AttributeType == attribute);
+            return GetCachedLogAttributes().FindAllRecords(itm => itm.AttributeType == attribute).OrderBy(x => x.Description);
         }
         private Dictionary<int, LogAttribute> GetCachedLogAttributes()
         {

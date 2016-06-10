@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
 
-
 namespace Vanrise.Common.Business
 {
     public class CityManager
     {
+        #region Public Methods
+
         public IDataRetrievalResult<CityDetail> GetFilteredCities(Vanrise.Entities.DataRetrievalInput<CityQuery> input)
         {
             var allCities = GetCachedCities();
@@ -18,48 +19,24 @@ namespace Vanrise.Common.Business
             Func<City, bool> filterExpression = (prod) =>
                  (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
-                 (input.Query.CountryIds == null ||  input.Query.CountryIds.Contains(prod.CountryId ));
+                 (input.Query.CountryIds == null || input.Query.CountryIds.Contains(prod.CountryId));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCities.ToBigResult(input, filterExpression, CityDetailMapper));
         }
 
-
-        public IEnumerable<City> GetAllCities()
+        public IEnumerable<CityInfo> GetCitiesInfo(int countryId)
         {
-            var allCities = GetCachedCities();
-            if (allCities == null)
-                return null;
-
-            return allCities.Values;
+            return this.GetCachedCities().MapRecords(CityInfoMapper, city => city.CountryId == countryId).OrderBy(city => city.Name);
         }
 
-
-        public IEnumerable<CityInfo> GetCitiesInfo(CityInfoFilter filter,int countryId)
+        public IEnumerable<int> GetDistinctCountryIdsByCityIds(IEnumerable<int> cityIds)
         {
-            IEnumerable<City> cities = null;
-
-            if (filter != null)
-            {
-                cities = this.GetCitiesByCountry(filter.CountryId);
-            }
-            else
-            {
-                var cachedCities = GetCachedCities();
-                if (cachedCities != null)
-                    cities = cachedCities.Values;
-            }
-
-            cities = this.GetCitiesByCountry(countryId);
-
-
-            return cities.MapRecords(CityInfoMapper);
+            return this.GetCachedCities().MapRecords(city => city.CountryId, city => cityIds.Contains(city.CityId)).Distinct();
         }
-
-
 
         public IEnumerable<CityInfo> GetCountryIdByCityIds(List<int> cityIds)
         {
-            IEnumerable<City> cities =this.GetCachedCities().Values;
+            IEnumerable<City> cities = this.GetCachedCities().Values;
             Func<City, bool> cityFilter = (city) =>
             {
                 if (!cityIds.Contains(city.CityId))
@@ -69,33 +46,12 @@ namespace Vanrise.Common.Business
             return cities.MapRecords(CityInfoMapper, cityFilter);
         }
 
-
-        private IEnumerable<City> GetCitiesByCountry(int? countryId)
-        {
-            Dictionary<int, City> cities = GetCachedCities();
-
-            Func<City, bool> filterExpression = (x) =>
-                (countryId == null || countryId == x.CountryId);
-            return cities.FindAllRecords(filterExpression);
-        }
-
-
-        public Dictionary<int, City> GetCachedCities()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCities",
-              () =>
-              {
-                  ICityDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICityDataManager>();
-                  IEnumerable<City> cities = dataManager.GetCities();
-                  return cities.ToDictionary(c => c.CityId, c => c);
-              });
-        }
-
         public City GetCity(int cityId)
         {
             var cities = GetCachedCities();
             return cities.GetRecord(cityId);
         }
+
         public Vanrise.Entities.InsertOperationOutput<CityDetail> AddCity(City city)
         {
             Vanrise.Entities.InsertOperationOutput<CityDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<CityDetail>();
@@ -121,6 +77,7 @@ namespace Vanrise.Common.Business
 
             return insertOperationOutput;
         }
+
         public Vanrise.Entities.UpdateOperationOutput<CityDetail> UpdateCity(City city)
         {
             ICityDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICityDataManager>();
@@ -144,17 +101,39 @@ namespace Vanrise.Common.Business
             return updateOperationOutput;
         }
 
+        #endregion
 
-        #region Private Members
-        public class CacheManager : Vanrise.Caching.BaseCacheManager
+        #region Private Classes
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ICityDataManager _dataManager = CommonDataManagerFactory.GetDataManager<ICityDataManager>();
             object _updateHandle;
+
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreCitiesUpdated(ref _updateHandle);
             }
         }
+
+        #endregion
+
+        #region Private Methods
+
+        private Dictionary<int, City> GetCachedCities()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCities",
+              () =>
+              {
+                  ICityDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICityDataManager>();
+                  IEnumerable<City> cities = dataManager.GetCities();
+                  return cities.ToDictionary(c => c.CityId, c => c);
+              });
+        }
+
+        #endregion
+
+        #region Mappers
 
         public CityDetail CityDetailMapper(City city)
         {

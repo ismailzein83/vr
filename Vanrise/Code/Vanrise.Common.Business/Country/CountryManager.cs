@@ -24,11 +24,7 @@ namespace Vanrise.Common.Business
 
         public IEnumerable<CountryInfo> GeCountriesInfo()
         {
-            var allCountries = GetCachedCountries();
-            if (allCountries == null)
-                return null;
-
-            return allCountries.MapRecords(CountryInfoMapper);
+            return this.GetCachedCountries().MapRecords(CountryInfoMapper).OrderBy(x => x.Name);
         }
 
         public IEnumerable<Country> GetAllCountries()

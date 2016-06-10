@@ -43,7 +43,7 @@ namespace Vanrise.GenericData.Business
                 // Set filterExpression
             }
 
-            return cachedBEDefinitions.MapRecords(BusinessEntityDefinitionInfoMapper, filterExpression);
+            return cachedBEDefinitions.MapRecords(BusinessEntityDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
         public IBusinessEntityManager GetBusinessEntityManager(int businessEntityDefinitionId)

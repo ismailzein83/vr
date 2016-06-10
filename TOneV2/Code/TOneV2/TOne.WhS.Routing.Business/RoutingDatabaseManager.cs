@@ -14,8 +14,7 @@ namespace TOne.WhS.Routing.Business
 
         public IEnumerable<RoutingDatabaseInfo> GetRoutingDatabaseInfo(RoutingDatabaseInfoFilter filter)
         {
-            IEnumerable<RoutingDatabase> routingDatabases = GetNotDeletedDatabases().Values;
-            return routingDatabases.MapRecords(RoutingDatabaseInfoMapper, x => x.ProcessType == filter.ProcessType);
+            return GetNotDeletedDatabases().MapRecords(RoutingDatabaseInfoMapper, x => x.ProcessType == filter.ProcessType).OrderBy(x => x.Title);
         }
 
         public Dictionary<int, RoutingDatabase> GetNotDeletedDatabases()

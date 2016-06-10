@@ -106,7 +106,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     return false;
                 return true;
             };
-            return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, zoneFilter);
+            return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, zoneFilter).OrderBy(x => x.Name);
         }
 
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(HashSet<long> saleZoneIds, SaleZoneFilterSettings saleZoneFilterSettings)
@@ -121,7 +121,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     return false;
                 return true;
             };
-            return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, zoneFilter);
+            return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, zoneFilter).OrderBy(x => x.Name);
         }
 
         public IEnumerable<SaleZoneInfo> GetSellingNumberPlanIdBySaleZoneIds(List<long> saleZoneIds)
@@ -133,7 +133,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     return false;
                 return true;
             };
-            return saleZones.MapRecords(SaleZoneInfoMapper, saleZoneFilter);
+            return saleZones.MapRecords(SaleZoneInfoMapper, saleZoneFilter).OrderBy(x => x.Name);
         }
 
         public string GetSaleZoneName(long saleZoneId)

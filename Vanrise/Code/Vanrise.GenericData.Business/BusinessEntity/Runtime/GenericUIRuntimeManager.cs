@@ -56,7 +56,7 @@ namespace Vanrise.GenericData.Business
              {
                  recordTypeIds.Add(extensibleBEItem.DataRecordTypeId);
              }
-             return dataRecordTypeManager.GetDataRecordTypeInfo(new DataRecordTypeInfoFilter { RecordTypeIds = recordTypeIds });
+             return dataRecordTypeManager.GetDataRecordTypeInfo(new DataRecordTypeInfoFilter { RecordTypeIds = recordTypeIds }).OrderBy(x => x.Name);
         }
 
         public GenericManagementRuntime GetManagementRuntime(int businessEntityDefinitionId)

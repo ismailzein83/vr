@@ -18,8 +18,7 @@ namespace Vanrise.GenericData.Business
 
         public IEnumerable<DataStoreInfo> GetDataStoresInfo()
         {
-            var cachedDataStores = GetCachedDataStores();
-            return cachedDataStores.MapRecords(DataStoreInfoMapper);
+            return this.GetCachedDataStores().MapRecords(DataStoreInfoMapper).OrderBy(x => x.Name);
         }
 
         public Vanrise.Entities.IDataRetrievalResult<DataStoreDetail> GetFilteredDataStores(Vanrise.Entities.DataRetrievalInput<DataStoreQuery> input)

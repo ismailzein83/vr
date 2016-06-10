@@ -70,12 +70,13 @@ namespace Vanrise.GenericData.Business
         }
         public IEnumerable<DataRecordStorageInfo> GetDataRecordsStorageInfo(DataRecordStorageFilter filter)
         {
-            IEnumerable<DataRecordStorage> cachedDataRecordsStorage = GetCachedDataRecordStorages().Values;
+            Func<DataRecordStorage, bool> filterExpression = null;
             if (filter != null)
             {
-                cachedDataRecordsStorage = cachedDataRecordsStorage.Where(x => x.DataRecordTypeId == filter.DataRecordTypeId);
+                if (filter.DataRecordTypeId.HasValue)
+                    filterExpression = (x) => x.DataRecordTypeId == filter.DataRecordTypeId;
             }
-            return cachedDataRecordsStorage.MapRecords(DataRecordStorageInfoMapper);
+            return this.GetCachedDataRecordStorages().MapRecords(DataRecordStorageInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
         public DataRecordStorage GetDataRecordStorage(int dataRecordStorageId)

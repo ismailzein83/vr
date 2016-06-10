@@ -52,8 +52,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<SwitchConnectivityInfo> GetSwitcheConnectivitiesInfo()
         {
-            var switchConnectivities = GetCachedSwitchConnectivities();
-            return switchConnectivities.MapRecords(SwitchConnectivityInfoMapper);
+            return GetCachedSwitchConnectivities().MapRecords(SwitchConnectivityInfoMapper).OrderBy(x => x.Name);
         }
 
         public Vanrise.Entities.InsertOperationOutput<SwitchConnectivityDetail> AddSwitchConnectivity(SwitchConnectivity switchConnectivity)

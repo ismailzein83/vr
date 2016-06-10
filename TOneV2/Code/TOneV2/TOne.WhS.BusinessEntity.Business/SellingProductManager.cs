@@ -54,14 +54,14 @@ namespace TOne.WhS.BusinessEntity.Business
                     return true;
                 };
             }
-            
-            return GetCachedSellingProducts().MapRecords(SellingProductInfoMapper, filterPredicate);
+
+            return GetCachedSellingProducts().MapRecords(SellingProductInfoMapper, filterPredicate).OrderBy(x => x.Name);
         }
 
         public IEnumerable<SellingProductInfo> GetAllSellingProduct()
         {
             var sellingProducts = GetCachedSellingProducts();
-            return sellingProducts.MapRecords(SellingProductInfoMapper);
+            return sellingProducts.MapRecords(SellingProductInfoMapper).OrderBy(x => x.Name);
         }
         public SellingProduct GetSellingProduct(int sellingProductId)
         {

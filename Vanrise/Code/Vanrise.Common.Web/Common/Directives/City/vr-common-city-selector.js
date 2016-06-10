@@ -70,7 +70,6 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
 
             var selectorAPI;
             var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-            var filter;
             var countryId;
 
             function initializeController() {
@@ -97,7 +96,7 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                     var countryId = countrySelectorAPI.getSelectedIds();
                     if (countryId != undefined) {
                         ctrl.isLoadingCities = true;
-                        getCitiesInfo(attrs, ctrl, undefined, filter, countryId).catch(function (error) {
+                        getCitiesInfo(attrs, ctrl, undefined, countryId).catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
                         }).finally(function () {
                             ctrl.isLoadingCities = false;
@@ -126,18 +125,18 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                 var api = {};
 
                 api.load = function (payload) {
+
                     selectorAPI.clearDataSource();
                     var selectedIds;
 
                     if (payload != undefined) {
-                        filter = payload.filter != undefined ? payload.filter : {};
                         selectedIds = payload.selectedIds;
                         countryId = payload.countryId;
                     }
 
                     if (countryId != undefined) {
                         ctrl.showCountrySelector = false;
-                        return getCitiesInfo(attrs, ctrl, selectedIds, filter, payload.countryId)
+                        return getCitiesInfo(attrs, ctrl, selectedIds, payload.countryId)
                     }
                     else {
                         ctrl.showCountrySelector = true;
@@ -162,14 +161,12 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                                 var setSelectedCityPromiseDeferred = UtilsService.createPromiseDeferred();
                                 promises.push(setSelectedCityPromiseDeferred.promise);
 
-                                VRCommon_CityAPIService.GetCountryIdByCityIds(selectedCityIds).then(function (response) {
-
+                                VRCommon_CityAPIService.GetDistinctCountryIdsByCityIds(selectedCityIds).then(function (response) {
+                                    
                                     var selectedCountryIds = [];
 
                                     for (var i = 0 ; i < response.length < 0 ; i++) {
-
-                                        if (selectedCountryIds.indexOf(response[i].CountryId) < 0)
-                                            selectedCountryIds.push(response[i].CountryId);
+                                        selectedCountryIds.push(response[i]);
                                     }
 
                                     var countryPayload = {
@@ -222,14 +219,8 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
 
         }
 
-        function getCitiesInfo(attrs, ctrl, selectedIds, filter, countryId) {
-
-            var serializedFilter = {};
-            if (filter != undefined) {
-                serializedFilter = UtilsService.serializetoJson(filter);
-            }
-
-            return VRCommon_CityAPIService.GetCitiesInfo(serializedFilter, countryId).then(function (response) {
+        function getCitiesInfo(attrs, ctrl, selectedIds, countryId) {
+            return VRCommon_CityAPIService.GetCitiesInfo(countryId).then(function (response) {
                 angular.forEach(response, function (itm) {
                     ctrl.datasource.push(itm);
                 });

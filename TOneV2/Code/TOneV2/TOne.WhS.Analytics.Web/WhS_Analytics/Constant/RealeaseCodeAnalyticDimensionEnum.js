@@ -1,8 +1,8 @@
 ﻿app.constant('WhS_Analytics_GenericAnalyticReleaseCodeDimensionsEnum', {
-    MasterZone: { name: "Master Zone", value: 0},
-    Supplier: { name: "Supplier", value: 1},
     //GateWayIn: { name: "GateWayIn", value: 2},
     //GateWayOut: { name: "GateWayOut", value: 3},
+    MasterZone: { name: "Master Zone", value: 0 },
     PortIn: { name: "PortIn", value: 4 },
-    PortOut: { name: "PortOut", value:5}
+    PortOut: { name: "PortOut", value: 5 },
+    Supplier: { name: "Supplier", value: 1 }
 });

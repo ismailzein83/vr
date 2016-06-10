@@ -47,8 +47,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public IEnumerable<CarrierProfileInfo> GetCarrierProfilesInfo()
         {
-            var carrierProfiles = GetCachedCarrierProfiles();
-            return carrierProfiles.MapRecords(CarrierProfileInfoMapper);
+            return GetCachedCarrierProfiles().MapRecords(CarrierProfileInfoMapper).OrderBy(x => x.Name);
         }
         public TOne.Entities.InsertOperationOutput<CarrierProfileDetail> AddCarrierProfile(CarrierProfile carrierProfile)
         {

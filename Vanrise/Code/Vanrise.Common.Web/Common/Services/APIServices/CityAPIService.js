@@ -10,17 +10,19 @@
         function GetFilteredCities(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetFilteredCities"), input);
         }
-        function GetCitiesInfo(serializedFilter,countryId) {
+
+        function GetCitiesInfo(countryId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetCitiesInfo"), {
-                serializedFilter: serializedFilter,
                 countryId: countryId
             });
         }
+
         function GetCity(cityId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetCity"), {
                 cityId: cityId
             });
         }
+
         function UpdateCity(cityObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "UpdateCity"), cityObject);
         }
@@ -37,8 +39,8 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['AddCity']));
         }
 
-        function GetCountryIdByCityIds(cityIds) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetCountryIdByCityIds"), cityIds);
+        function GetDistinctCountryIdsByCityIds(cityIds) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetDistinctCountryIdsByCityIds"), cityIds);
         }
 
         return ({
@@ -49,7 +51,7 @@
             UpdateCity: UpdateCity,
             HasEditCityPermission:HasEditCityPermission,
             AddCity: AddCity,
-            GetCountryIdByCityIds: GetCountryIdByCityIds
+            GetDistinctCountryIdsByCityIds: GetDistinctCountryIdsByCityIds
         });
     }
 

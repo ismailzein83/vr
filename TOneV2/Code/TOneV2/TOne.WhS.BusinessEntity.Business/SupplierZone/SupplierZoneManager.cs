@@ -25,27 +25,26 @@ namespace TOne.WhS.BusinessEntity.Business
                   && ((!input.Query.EffectiveOn.HasValue || !prod.EED.HasValue || (prod.EED > input.Query.EffectiveOn)));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allsupplierZones.ToBigResult(input, filterExpression, SupplierZoneDetailMapper));
-        }       
+        }
         public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfo(SupplierZoneInfoFilter filter, string searchValue)
         {
             IEnumerable<SupplierZone> supplierZones = null;
-            if(filter!=null)
+            if (filter != null)
                 supplierZones = GetSupplierZoneBySupplier(filter);
             else
-             supplierZones = GetCachedSupplierZones().Values;
-            return supplierZones.MapRecords(SupplierZoneInfoMapper, x => x.Name.ToLower().Contains(searchValue.ToLower()));
-           
-        }       
+                supplierZones = GetCachedSupplierZones().Values;
+            return supplierZones.MapRecords(SupplierZoneInfoMapper, x => x.Name.ToLower().Contains(searchValue.ToLower())).OrderBy(x => x.Name);
+        }
         public List<SupplierZone> GetSupplierZonesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
             ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
             return dataManager.GetSupplierZonesEffectiveAfter(supplierId, minimumDate);
-        }      
+        }
         public List<SupplierZone> GetSupplierZones(int supplierId, DateTime effectiveDate)
         {
             ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
             return dataManager.GetSupplierZones(supplierId, effectiveDate);
-        } 
+        }
         public SupplierZone GetSupplierZone(long zoneId)
         {
             var supplierZones = GetCachedSupplierZones();
@@ -59,7 +58,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfoByIds(List<long> selectedIds)
         {
             var allSupplierZones = GetCachedSupplierZones();
-            return allSupplierZones.MapRecords(SupplierZoneInfoMapper, x => selectedIds.Contains(x.SupplierZoneId));
+            return allSupplierZones.MapRecords(SupplierZoneInfoMapper, x => selectedIds.Contains(x.SupplierZoneId)).OrderBy(x => x.Name);
         }
         public long ReserveIDRange(int numberOfIDs)
         {
@@ -101,9 +100,9 @@ namespace TOne.WhS.BusinessEntity.Business
             Func<SupplierZone, bool> filterExpression = null;
             if (supplierZoneIds != null)
                 filterExpression = (itm) => (supplierZoneIds.Contains(itm.SupplierZoneId));
-           var supplierZoneIdsValues = supplierZones.FindAllRecords(filterExpression);
-           if (supplierZoneIdsValues != null)
-               return string.Join(", ", supplierZoneIdsValues.Select(x => x.Name));
+            var supplierZoneIdsValues = supplierZones.FindAllRecords(filterExpression);
+            if (supplierZoneIdsValues != null)
+                return string.Join(", ", supplierZoneIdsValues.Select(x => x.Name));
             return string.Empty;
         }
 
@@ -111,7 +110,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var templateConfigManager = new ExtensionConfigurationManager();
             return templateConfigManager.GetExtensionConfigurations<SupplierZoneGroupTemplate>(Constants.SupplierZoneGroupTemplate);
-        } 
+        }
 
         #endregion
 
@@ -166,7 +165,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var country = countryManager.GetCountry(supplierZone.CountryId);
             if (country != null)
                 supplierZoneDetail.CountryName = country.Name;
-            
+
             int supplierId = supplierZone.SupplierId;
             supplierZoneDetail.SupplierName = caManager.GetCarrierAccountName(supplierId);
             return supplierZoneDetail;

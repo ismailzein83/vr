@@ -91,7 +91,7 @@ namespace TOne.WhS.Routing.Business
             IEnumerable<RPRouteOptionPolicySetting> cachedConfigs = extensionConfigManager.GetExtensionConfigurations<RPRouteOptionPolicySetting>(Constants.SupplierZoneToRPOptionConfigType);
 
             if (filter == null)
-                return cachedConfigs;
+                return cachedConfigs.OrderBy(x => x.Title);
 
             int defaultPolicyId;
             IEnumerable<int> selectedPolicyIds = this.GetRoutingDatabasePolicyIds(filter.RoutingDatabaseId, out defaultPolicyId);
@@ -117,7 +117,7 @@ namespace TOne.WhS.Routing.Business
             if (!isDefaultPolicySet)
                 throw new DataIntegrityValidationException(String.Format("RPRoutingDatabase '{0}' does not have a default policy", filter.RoutingDatabaseId));
 
-            return filteredConfigs;
+            return filteredConfigs.OrderBy(x => x.Title);
         }
 
         #region Private Members

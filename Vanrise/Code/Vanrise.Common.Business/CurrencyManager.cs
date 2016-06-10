@@ -25,12 +25,9 @@ namespace Vanrise.Common.Business
 
         public IEnumerable<Currency> GetAllCurrencies()
         {
-            var allCountries = GetCachedCurrencies();
-            if (allCountries == null)
-                return null;
-
-            return allCountries.Values;
+            return this.GetCachedCurrencies().MapRecords(x => x).OrderBy(x => x.Name);
         }
+
         public Currency GetCurrency(int currencyId)
         {
             var currencies = GetCachedCurrencies();

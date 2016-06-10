@@ -27,10 +27,7 @@ namespace Vanrise.Business
 
         public IEnumerable<Vanrise.Entities.RateTypeInfo> GetAllRateTypes()
         {
-            var allRateTypes = GetCachedRateTypes();
-            if (allRateTypes == null)
-                return null;
-            return allRateTypes.Values.MapRecords(RateTypeInfoMapper);
+            return this.GetCachedRateTypes().MapRecords(RateTypeInfoMapper).OrderBy(x => x.Name);
         }
         public Vanrise.Entities.RateType GetRateType(int rateTypeId)
         {

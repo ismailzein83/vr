@@ -82,9 +82,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 excludedRoutingProductId = filter.ExcludedRoutingProductId;
             }
 
-
-
-            return routingProducts.MapRecords(RoutingProductInfoMapper, filterPredicate);
+            return routingProducts.MapRecords(RoutingProductInfoMapper, filterPredicate).OrderBy(x => x.Name);
         }
 
         public TOne.Entities.InsertOperationOutput<RoutingProduct> AddRoutingProduct(RoutingProduct routingProduct)

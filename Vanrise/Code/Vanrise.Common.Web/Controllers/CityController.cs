@@ -13,7 +13,6 @@ namespace Vanrise.Common.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "City")]
     public class VRCommon_CityController : BaseAPIController
     {
-
         [HttpPost]
         [Route("GetFilteredCities")]
         public object GetFilteredCities(Vanrise.Entities.DataRetrievalInput<CityQuery> input)
@@ -22,25 +21,21 @@ namespace Vanrise.Common.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredCities(input));
         }
 
-
         [HttpGet]
         [Route("GetCitiesInfo")]
-        public IEnumerable<CityInfo> GetCitiesInfo(string serializedFilter,int countryId)
+        public IEnumerable<CityInfo> GetCitiesInfo(int countryId)
         {
-            CityInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<CityInfoFilter>(serializedFilter) : null;
             CityManager manager = new CityManager();
-            return manager.GetCitiesInfo(filter,countryId);
+            return manager.GetCitiesInfo(countryId);
         }
-
 
         [HttpPost]
-        [Route("GetCountryIdByCityIds")]
-        public IEnumerable<CityInfo> GetCountryIdByCityIds(List<int> cityIds)
+        [Route("GetDistinctCountryIdsByCityIds")]
+        public IEnumerable<int> GetDistinctCountryIdsByCityIds(IEnumerable<int> cityIds)
         {
            CityManager manager = new CityManager();
-           return manager.GetCountryIdByCityIds(cityIds);
+           return manager.GetDistinctCountryIdsByCityIds(cityIds);
         }
-
 
         [HttpGet]
         [Route("GetCity")]
@@ -57,6 +52,7 @@ namespace Vanrise.Common.Web.Controllers
             CityManager manager = new CityManager();
             return manager.AddCity(city);
         }
+        
         [HttpPost]
         [Route("UpdateCity")]
         public Vanrise.Entities.UpdateOperationOutput<CityDetail> UpdateCity(City city)
@@ -64,6 +60,5 @@ namespace Vanrise.Common.Web.Controllers
             CityManager manager = new CityManager();
             return manager.UpdateCity(city);
         }
-       
     }
 }

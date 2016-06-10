@@ -17,8 +17,7 @@ namespace Vanrise.GenericData.Business
 
         public IEnumerable<DataRecordFieldChoiceInfo> GetDataRecordFieldChoicesInfo()
         {
-            var cachedDataRecordFieldChoices = GetCachedDataRecordFieldChoices();
-            return cachedDataRecordFieldChoices.MapRecords(DataRecordFieldChoiceInfoMapper);
+            return this.GetCachedDataRecordFieldChoices().MapRecords(DataRecordFieldChoiceInfoMapper).OrderBy(x => x.Name);
         }
 
         public Vanrise.Entities.IDataRetrievalResult<DataRecordFieldChoiceDetail> GetFilteredDataRecordFieldChoices(Vanrise.Entities.DataRetrievalInput<DataRecordFieldChoiceQuery> input)

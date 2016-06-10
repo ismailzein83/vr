@@ -17,8 +17,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<SellingNumberPlanInfo> GetSellingNumberPlans()
         {
-            return GetCachedSellingNumberPlans().Values.MapRecords(SellingNumberPlanInfoMapper);
-
+            return GetCachedSellingNumberPlans().Values.MapRecords(SellingNumberPlanInfoMapper).OrderBy(x => x.Name);
         }
 
         public SellingNumberPlan GetSellingNumberPlan(int numberPlanId)

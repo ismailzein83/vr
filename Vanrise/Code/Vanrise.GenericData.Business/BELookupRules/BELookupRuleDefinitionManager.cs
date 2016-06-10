@@ -34,7 +34,7 @@ namespace Vanrise.GenericData.Business
 
         public IEnumerable<BELookupRuleDefinitionInfo> GetBELookupRuleDefinitionsInfo(BELookupRuleDefinitionFilter filter)
         {
-            return this.GetCachedBELookupRuleDefinitions().MapRecords(BELookupRuleDefinitionInfoMapper);
+            return this.GetCachedBELookupRuleDefinitions().MapRecords(BELookupRuleDefinitionInfoMapper).OrderBy(x => x.Name);
         }
 
         public BELookupRuleDefinition GetBELookupRuleDefinition(int beLookupRuleDefinitionId)

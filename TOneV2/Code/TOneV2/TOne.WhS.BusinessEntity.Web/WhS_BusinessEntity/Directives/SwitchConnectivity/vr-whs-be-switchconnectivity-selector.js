@@ -45,7 +45,7 @@ function (WhS_BE_SwitchConnectivityAPIService, UtilsService, VRUIUtilsService) {
     function getTemplate(attrs) {
 
         var multipleselection = "";
-        var label = "switch Connectivity";
+        var label = "Switch Connectivity";
         if (attrs.ismultipleselection != undefined) {
             label = "Switch Connectivities";
             multipleselection = "ismultipleselection";

@@ -8,7 +8,5 @@ namespace Vanrise.Entities
 {
     public class CityInfoFilter
     {
-        public int? CountryId { get; set; }
-
     }
 }

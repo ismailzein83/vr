@@ -15,11 +15,8 @@ namespace Vanrise.GenericData.Business
         #region Public Methods
         public IEnumerable<DataStoreConfig> GetDataStoreConfigs()
         {
-            var cachedDataStore = GetCachedDataStoreConfigs();
-            return cachedDataStore.Values;
+            return this.GetCachedDataStoreConfigs().MapRecords(x => x).OrderBy(x => x.Name);
         }
-
-
 
         public DataStoreConfig GeDataStoreConfigById(int dataStoreConfigId)
         {

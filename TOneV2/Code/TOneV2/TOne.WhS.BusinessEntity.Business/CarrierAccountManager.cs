@@ -123,9 +123,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
             //TODO: fix this when we reach working with Account Manager module
             if (filter != null && filter.AssignableToUserId != null)
-                return GetCachedCarrierAccounts().MapRecords(AccountManagerCarrierMapper, filterPredicate);
+                return GetCachedCarrierAccounts().MapRecords(AccountManagerCarrierMapper, filterPredicate).OrderBy(x => x.Name);
             else
-                return GetCachedCarrierAccounts().MapRecords(CarrierAccountInfoMapper, filterPredicate);
+                return GetCachedCarrierAccounts().MapRecords(CarrierAccountInfoMapper, filterPredicate).OrderBy(x => x.Name);
         }
 
         public List<Vanrise.Entities.TemplateConfig> GetCustomersGroupTemplates()
