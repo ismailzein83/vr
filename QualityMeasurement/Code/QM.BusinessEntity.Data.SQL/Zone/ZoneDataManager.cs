@@ -11,18 +11,18 @@ namespace QM.BusinessEntity.Data.SQL
 {
     public class ZoneDataManager : BaseSQLDataManager, IZoneDataManager
     {
-         public ZoneDataManager() :
+        public ZoneDataManager() :
             base(GetConnectionStringName("QM_BE_DBConnStringKey", "QM_BE_DBConnString"))
         {
 
         }
 
 
-         public Zone GetZoneBySourceId(string sourceZoneId)
-         {
-             return GetItemSP("[QM_BE].sp_Zone_GetBySourceID", ZoneMapper, sourceZoneId);
-         }
-       
+        public Zone GetZoneBySourceId(string sourceZoneId)
+        {
+            return GetItemSP("[QM_BE].sp_Zone_GetBySourceID", ZoneMapper, sourceZoneId);
+        }
+
 
 
         public Zone ZoneMapper(IDataReader reader)
@@ -34,7 +34,7 @@ namespace QM.BusinessEntity.Data.SQL
                 SourceId = reader["SourceZoneID"] as string,
                 CountryId = (int)reader["CountryID"],
                 BeginEffectiveDate = (reader["BED"] as string) == null ? default(DateTime) : (DateTime)reader["BED"],
-                EndEffectiveDate = (reader["EED"] as string) == null ? default(DateTime) : (DateTime)reader["EED"],
+                EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED"),
                 Settings = Vanrise.Common.Serializer.Deserialize<ZoneSettings>(reader["Settings"] as string),
                 IsFromTestingConnectorZone = GetReaderValue<bool>(reader, "IsFromTestingConnectorZone")
             };
@@ -43,7 +43,7 @@ namespace QM.BusinessEntity.Data.SQL
 
         public List<Zone> GetZones()
         {
-                return GetItemsSP("[QM_BE].[sp_Zone_GetAll]", ZoneMapper);
+            return GetItemsSP("[QM_BE].[sp_Zone_GetAll]", ZoneMapper);
         }
 
         public void InsertZoneFromSource(Zone zone)
@@ -51,7 +51,7 @@ namespace QM.BusinessEntity.Data.SQL
             object settings = null;
             if (zone.Settings != null)
                 settings = Vanrise.Common.Serializer.Serialize(zone.Settings);
-            
+
             ExecuteNonQuerySP("[QM_BE].[sp_Zone_InsertFromSource]", zone.ZoneId, zone.Name, zone.SourceId, zone.CountryId, ToDBNullIfDefault(zone.BeginEffectiveDate), settings, zone.IsFromTestingConnectorZone);
         }
 
@@ -68,6 +68,6 @@ namespace QM.BusinessEntity.Data.SQL
         {
             return base.IsDataUpdated("QM_BE.Zone", ref updateHandle);
         }
-       
+
     }
 }

@@ -79,7 +79,6 @@ function (Qm_CliTester_TestCallService) {
         }
 
         $scope.getColorResult = function (dataItem) {
-            console.log(dataItem);
             return Qm_CliTester_TestCallService.getCallTestResultColor(dataItem.CallTestResult);
         };
     }
