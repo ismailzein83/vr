@@ -444,14 +444,19 @@ Use this for keyframe animations .disable-animations.ng-animate {
         border-bottom: 1px solid #C8C8C8 !important;
     }
 
-.mark-select:hover {
+a.mark-select{
+    outline:0;
+    color:#666;
+
+}
+a.mark-select:hover, a.mark-select:active, a.mark-select:focus {
     background-color: #D0D0D0 !important;
     border-color: #D0D0D0 !important;
     color: #fff !important;
     cursor: pointer !important;
-    cursor: hand !important;
-    /*border-top: 1px solid #C8C8C8 !important;*/
+    text-decoration:none;
 }
+
 
 .single-col-checklist {
     width: 226px;
