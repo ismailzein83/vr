@@ -97,6 +97,11 @@ namespace Vanrise.Common
             license.SetLicense("Aspose.Cells.lic");
         }
 
+        public static bool IsNumeric(string value, bool allowNegative)
+        {
+            long temp;
+            return allowNegative ? long.TryParse(value, out temp) : long.TryParse(value, out temp) && temp > 0;
+        }
 
         static ConcurrentDictionary<string, IPropValueReader> s_cachedProbValueReaders = new ConcurrentDictionary<string, IPropValueReader>();
 
