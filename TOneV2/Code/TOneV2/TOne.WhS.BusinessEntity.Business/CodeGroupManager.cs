@@ -328,7 +328,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return new CodeGroupInfo()
             {
                 CodeGroupId = codeGroup.CodeGroupId,
-                Name = string.Format(@"{0} {1}", codeGroup.Code, countryName != null ? countryName : "")
+                Name = string.Format(@"{0}{1}", countryName != null ? string.Format(@"{0} - ",countryName) : "", codeGroup.Code)
             };
         }
         #endregion
