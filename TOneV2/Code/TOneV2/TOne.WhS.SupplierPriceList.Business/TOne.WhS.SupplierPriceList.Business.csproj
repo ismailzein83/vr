@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeEEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\RateIncreasedCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\NumericCodeCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCodesZones\MissingCodesCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCodesZones\MissingRatesCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCodesZones\MissingBEDCondition.cs" />
