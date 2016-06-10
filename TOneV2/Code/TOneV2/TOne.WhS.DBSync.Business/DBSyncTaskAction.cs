@@ -5,6 +5,7 @@ using System.Linq;
 using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Runtime.Entities;
+using Vanrise.Common;
 
 
 namespace TOne.WhS.DBSync.Business
@@ -283,8 +284,9 @@ namespace TOne.WhS.DBSync.Business
 
         private static DBTable GetDBTableFromName(MigrationContext context, DBTableName dbTableName)
         {
-            DBTable table = context.DBTables.Values.Where(x => x.Name == Vanrise.Common.Utilities.GetEnumDescription(dbTableName)).FirstOrDefault();
-            return table;
+            string tableName = Vanrise.Common.Utilities.GetEnumDescription(dbTableName);
+           
+            return context.DBTables.Values.FindRecord(item => item.Name.Equals(tableName));
         }
     }
 }
