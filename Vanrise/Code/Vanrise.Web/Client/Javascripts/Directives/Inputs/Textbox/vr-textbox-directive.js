@@ -37,7 +37,20 @@
                         ctrl.tabindex = "-1"
                     }
                 }, 10)
-
+               
+                var $quan = $('.next-input');
+                $quan.on('keyup', function (e) {
+                    if (e.which === 40) {
+                        var ind = $quan.index(this);
+                        $quan.eq(ind + 1).focus()
+                    }
+                    if (e.which === 38) {
+                        var ind = $quan.index(this);
+                        var  el = $quan.eq(ind - 1);
+                        if(el)
+                          $quan.eq(ind - 1).focus();
+                    }
+                });
                 ctrl.validate = function () {                    
                     return VRValidationService.validate(ctrl.value, $scope, $attrs, validationOptions);
                 };
@@ -86,6 +99,10 @@
                                 var decimalArray = String(newValue).split(".");
                                 var negativeArray = String(newValue).split("-");
                                 //if (arr.length === 0) return;
+                                if (iAttrs.onlypositive != undefined && negativeArray.length > 1)
+                                    ctrl.value = oldValue;
+                                //if (iAttrs.allowndecimal == undefined && decimalArray.length > 1)
+                                //    ctrl.value = oldValue;
                                 if (decimalArray.length > 2)
                                     ctrl.value = oldValue;
                                 if (negativeArray.length > 2)
@@ -170,9 +187,14 @@
                 var type = 'text';
                 if (attrs.type != undefined && attrs.type === TextboxTypeEnum.Password.name)
                     type = 'password';
+                var keypress = '';
+                var keypressclass = '';
+                if (attrs.tonextinput != undefined) {
+                    keypressclass = 'next-input';
+                }
                 var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
                             + '<vr-validator validate="ctrl.validate()" >'
-                            + '<input  tabindex="{{ctrl.tabindex}}" ng-readonly="ctrl.readOnly" id="mainInput" placeholder="{{ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" size="10" class="form-control" data-autoclose="1" type="' + type + '" >'
+                            + '<input  tabindex="{{ctrl.tabindex}}" ng-readonly="ctrl.readOnly" id="mainInput" placeholder="{{ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" size="10" class="form-control ' + keypressclass + ' " data-autoclose="1" type="' + type + '" >'
                             + '</vr-validator>'
                             + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" html="true" style="color:#337AB7"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
                         + '</div>';
