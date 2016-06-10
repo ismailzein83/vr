@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordSourceEditorController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataStoreConfigAPIService', 'VR_GenericData_DataStoreAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService','VR_Analytic_GridWidthEnum'];
+    DataRecordSourceEditorController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataStoreConfigAPIService', 'VR_GenericData_DataStoreAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_Analytic_GridWidthEnum', 'ColumnWidthEnum'];
 
-    function DataRecordSourceEditorController($scope, VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataStoreConfigAPIService, VR_GenericData_DataStoreAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, VR_Analytic_GridWidthEnum) {
+    function DataRecordSourceEditorController($scope, VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataStoreConfigAPIService, VR_GenericData_DataStoreAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, VR_Analytic_GridWidthEnum, ColumnWidthEnum) {
 
         var isEditMode;
         var dataRecordSource;
@@ -16,6 +16,8 @@
         var dataRecordStorageSelectorReadyDeferred;
 
         $scope.selectedFields = [];
+        $scope.selectedDetails = [];
+
         $scope.dataRecordTypeFields = [];
         $scope.scopeModel = {};
         var existingSources;
@@ -35,6 +37,7 @@
         }
         function defineScope() {
             $scope.scopeModel.gridWidths = UtilsService.getArrayEnum(VR_Analytic_GridWidthEnum);
+            $scope.scopeModel.detailWidths = UtilsService.getArrayEnum(ColumnWidthEnum);
 
             $scope.onDataRecordStorageSelectorReady = function (api) {
                 dataRecordStorageSelectorAPI = api;
@@ -65,6 +68,10 @@
 
             $scope.removeField = function (field) {
                 $scope.selectedFields.splice($scope.selectedFields.indexOf(field), 1);
+            }
+
+            $scope.removeDetail = function (detail) {
+                $scope.selectedDetails.splice($scope.selectedDetails.indexOf(detail), 1);
             }
 
             $scope.isFieldGridValid = function () {
@@ -132,8 +139,6 @@
         }
         function loadDataRecordTypeSelector() {
             var dataRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-            //dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
             dataRecordTypeSelectorReadyDeferred.promise.then(function () {
                 var payload;
 
@@ -171,12 +176,20 @@
                 var currentItem = $scope.selectedFields[x];
                 columns.push({ FieldName: currentItem.FieldName, FieldTitle: currentItem.FieldTitle, Width: currentItem.SelectedGridWidth.value });
             }
+
+            var details = [];
+            for (var y = 0; y < $scope.selectedDetails.length; y++) {
+                var currentDetail = $scope.selectedDetails[y];
+                details.push({ FieldName: currentDetail.FieldName, FieldTitle: currentDetail.FieldTitle, ColumnWidth: currentDetail.SelectedDetailWidth.value });
+            }
+
             var obj = {
                 Title: $scope.scopeModel.title,
                 Name: $scope.scopeModel.sourceName,
                 DataRecordTypeId: $scope.selectedDataRecordType.DataRecordTypeId,
                 RecordStorageIds: dataRecordStorageSelectorAPI.getSelectedIds(),
-                GridColumns: columns
+                GridColumns: columns,
+                ItemDetails: details
             };
             return obj;
         }
@@ -185,13 +198,15 @@
         {
           
             $scope.selectedFields.length = 0;
+            $scope.selectedDetails.length = 0;
+
             var obj = { DataRecordTypeId: dataRecordTypeId };
             var serializedFilter = UtilsService.serializetoJson(obj);
             return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter).then(function (response) {
                 if (response != undefined) {
                     $scope.dataRecordTypeFields.length = 0;
                     angular.forEach(response, function (item) {
-                        var obj = { FieldName: item.Entity.Name, FieldTitle: item.Entity.Title, SelectedGridWidth: VR_Analytic_GridWidthEnum.Normal, };
+                        var obj = { FieldName: item.Entity.Name, FieldTitle: item.Entity.Title, SelectedGridWidth: VR_Analytic_GridWidthEnum.Normal, SelectedDetailWidth: ColumnWidthEnum.QuarterRow };
                         $scope.dataRecordTypeFields.push(obj);
                     });
                 }
@@ -204,6 +219,8 @@
                return loadDataRecord(dataRecordSource.DataRecordTypeId).then(function()
                {
                    $scope.selectedFields.length = 0;
+                   $scope.selectedDetails.length = 0;
+
                     if (dataRecordSource != undefined && dataRecordSource.GridColumns) {
                         for (var x = 0; x < dataRecordSource.GridColumns.length; x++) {
                             var currentColumn = dataRecordSource.GridColumns[x];
@@ -212,6 +229,17 @@
                             {
                                 selectedField.SelectedGridWidth = UtilsService.getItemByVal($scope.scopeModel.gridWidths, currentColumn.Width,'value');
                                 $scope.selectedFields.push(selectedField);
+                            }
+                        }
+                    }
+
+                    if (dataRecordSource != undefined && dataRecordSource.ItemDetails) {
+                        for (var y = 0; y < dataRecordSource.ItemDetails.length; y++) {
+                            var currentDetail = dataRecordSource.ItemDetails[y];
+                            var selectedDetail = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentDetail.FieldName, "FieldName");
+                            if (selectedDetail != undefined) {
+                                selectedDetail.SelectedDetailWidth = UtilsService.getItemByVal($scope.scopeModel.detailWidths, currentDetail.ColumnWidth, 'value');
+                                $scope.selectedDetails.push(selectedDetail);
                             }
                         }
                     }

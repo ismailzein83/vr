@@ -31,6 +31,11 @@ namespace Vanrise.GenericData.Business
             if (dataRecordStorage == null)
                 throw new NullReferenceException(String.Format("dataRecordStorage. Id '{0}'", dataRecordStorage.DataRecordStorageId));
 
+            if(input.Query.Columns == null)
+                throw new NullReferenceException("input.Query.Columns");
+
+            input.Query.Columns = new HashSet<string>(input.Query.Columns).ToList();
+
             var recordTypeManager = new DataRecordTypeManager();
             DataRecordType recordType = recordTypeManager.GetDataRecordType(dataRecordStorage.DataRecordTypeId);
             if (recordType == null)

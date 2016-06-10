@@ -22,6 +22,8 @@ namespace Vanrise.Analytic.Entities
         public List<int> RecordStorageIds { get; set; }
 
         public List<DRSearchPageGridColumn> GridColumns { get; set; }
+
+        public List<DRSearchPageItemDetail> ItemDetails { get; set; }
     }
 
     public class DRSearchPageGridColumn
@@ -29,6 +31,16 @@ namespace Vanrise.Analytic.Entities
         public string FieldName { get; set; }
 
         public string FieldTitle { get; set; }
+
         public string Width { get; set; }
+    }
+
+    public class DRSearchPageItemDetail
+    {
+        public string FieldName { get; set; }
+
+        public string FieldTitle { get; set; }
+
+        public int ColumnWidth { get; set; }
     }
 }

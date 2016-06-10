@@ -8,5 +8,11 @@
         <vr-datagridcolumn ng-repeat="column in ctrl.columns" headertext="column.FieldTitle" numberprecision="column.numberprecision" type="column.type"
                            field="'FieldValues.' + column.FieldName + '.Description'"
                            tag="column" columnindex="$index" widthfactor="column.Widthfactor"></vr-datagridcolumn>
+        <vr-datagridexpandablerow>
+            <vr-columns ng-repeat="detail in dataItem.details" colnum="{{detail.colnum}}">
+                <vr-label>{{detail.FieldName}}:</vr-label>
+                <vr-label isvalue>{{dataItem.FieldValues[detail.FieldName].Description}}</vr-label>
+            </vr-columns>
+        </vr-datagridexpandablerow>
     </vr-datagrid>
 </div>
