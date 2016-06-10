@@ -55,16 +55,6 @@
                     }
 
                     return loadSelector();
-
-                    function loadSelector() {
-                        var dataRecordStorageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                        var selectorPayload = {};
-                        selectorPayload.DataRecordTypeId = payload.DataRecordTypeId;
-                        if (selectedId != undefined)
-                            selectorPayload.selectedIds = selectedId;
-                        VRUIUtilsService.callDirectiveLoad(dataRecordStorageSelectorAPI, selectorPayload, dataRecordStorageSelectorLoadDeferred);
-                        return dataRecordStorageSelectorLoadDeferred.promise;
-                    }
                 }
 
                 api.getData = function () {
@@ -75,6 +65,16 @@
                 }
 
                 return api;
+            }
+
+            function loadSelector() {
+                var dataRecordStorageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                var selectorPayload = {};
+                selectorPayload.DataRecordTypeId = payload.DataRecordTypeId;
+                if (selectedId != undefined)
+                    selectorPayload.selectedIds = selectedId;
+                VRUIUtilsService.callDirectiveLoad(dataRecordStorageSelectorAPI, selectorPayload, dataRecordStorageSelectorLoadDeferred);
+                return dataRecordStorageSelectorLoadDeferred.promise;
             }
         }
     }
