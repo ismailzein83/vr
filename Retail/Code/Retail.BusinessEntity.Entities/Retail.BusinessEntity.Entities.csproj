@@ -100,6 +100,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ChargingPolicy\Definition\ChargingPolicyDefinitionSettings.cs" />
     <Compile Include="ServiceType\ServiceTypeDetail.cs" />
+    <Compile Include="ServiceType\ServiceTypeInfo.cs" />
     <Compile Include="ServiceType\ServiceTypeQuery.cs" />
     <Compile Include="ServiceType\ServiceTypeSettings.cs" />
     <Compile Include="ServiceType\ServiceTypeToEdit.cs" />
