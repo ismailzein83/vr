@@ -99,8 +99,8 @@
                                 var decimalArray = String(newValue).split(".");
                                 var negativeArray = String(newValue).split("-");
                                 //if (arr.length === 0) return;
-                                if (iAttrs.onlypositive != undefined && negativeArray.length > 1)
-                                    ctrl.value = oldValue;
+                                //if (iAttrs.onlypositive != undefined && negativeArray.length > 1)
+                                //    ctrl.value = oldValue;
                                 //if (iAttrs.allowndecimal == undefined && decimalArray.length > 1)
                                 //    ctrl.value = oldValue;
                                 if (decimalArray.length > 2)
