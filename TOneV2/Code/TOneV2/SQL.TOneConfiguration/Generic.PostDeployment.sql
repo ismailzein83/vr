@@ -65,7 +65,7 @@ as (select * from (values
 (3005,'Data Record Storages','Data Record Storage','#/view/VR_GenericData/Views/DataRecordStorage/DataRecordStorageManagement',301,'VR_GenericData/DataRecordStorage/GetFilteredDataRecordStorages',null,null,null,0,5),
 (3006,'Business Entity Definitions','Business Entity Definitions','#/view/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericBEDefinitionManagement',301,'VR_GenericData/BusinessEntityDefinition/GetFilteredBusinessEntityDefinitions',null,null,null,0,6),
 (3007,'Summary Transformation Definition','Summary Transformation Definition','#/view/VR_GenericData/Views/SummaryTransformationDefinition/SummaryTransformationDefinitionManagement',301,'VR_GenericData/SummaryTransformationDefinition/GetFilteredSummaryTransformationDefinitions',null,null,null,0,8),
-(3008,'BE Lookup Rule Definition','BE Lookup Rule Definition Management','#/view/VR_GenericData/Views/BELookupRuleDefinition/BELookupRuleDefinitionManagement',301,'WhS_BE/BELookupRuleDefinition/GetFilteredBELookupRuleDefinitions',null,null,null,0,11),
+(3008,'BE Lookup Rule Definition','BE Lookup Rule Definition Management','#/view/VR_GenericData/Views/BELookupRuleDefinition/BELookupRuleDefinitionManagement',301,'VR_GenericData/BELookupRuleDefinition/GetFilteredBELookupRuleDefinitions',null,null,null,0,11),
 (3009,'Data Record Field Choice','Data Record Field Choice','#/view/VR_GenericData/Views/DataRecordFieldChoice/DataRecordFieldChoiceManagement',301,'VR_GenericData/DataRecordFieldChoice/GetFilteredDataRecordFieldChoices',null,null,null,0,12)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
