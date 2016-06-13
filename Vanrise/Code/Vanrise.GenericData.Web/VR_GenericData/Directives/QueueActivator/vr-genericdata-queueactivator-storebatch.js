@@ -48,12 +48,6 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    var selectedId;
-
-                    if (payload != undefined && payload.QueueActivator != undefined) {
-                        selectedId = payload.QueueActivator.DataRecordStorageId;
-                    }
-
                     return loadSelector(payload);
                 }
 
@@ -69,6 +63,11 @@
 
             function loadSelector(payload) {
                 var dataRecordStorageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                var selectedId;
+                if (payload != undefined && payload.QueueActivator != undefined) {
+                    selectedId = payload.QueueActivator.DataRecordStorageId;
+                }
+
                 var selectorPayload = {};
                 selectorPayload.DataRecordTypeId = payload.DataRecordTypeId;
                 if (selectedId != undefined)
