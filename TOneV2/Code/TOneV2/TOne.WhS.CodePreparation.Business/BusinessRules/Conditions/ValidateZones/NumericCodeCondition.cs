@@ -24,7 +24,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 foreach (CodeToAdd codeToAdd in zoneToProcess.CodesToAdd)
                 {
-                    if (!Vanrise.Common.Utilities.IsNumeric(codeToAdd.Code, false))
+                    if (!Vanrise.Common.Utilities.IsNumeric(codeToAdd.Code, 0))
                         return false;
                 }
             }
@@ -33,7 +33,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
                 {
-                    if (!Vanrise.Common.Utilities.IsNumeric(codeToMove.Code, false))
+                    if (!Vanrise.Common.Utilities.IsNumeric(codeToMove.Code, 0))
                         return false;
                 }
             }
@@ -42,7 +42,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
                 {
-                    if (!Vanrise.Common.Utilities.IsNumeric(codeToClose.Code, false))
+                    if (!Vanrise.Common.Utilities.IsNumeric(codeToClose.Code, 0))
                         return false;
                 }
             }
@@ -52,7 +52,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has a Code which is not a numeric", (target as ZoneToProcess).ZoneName);
+            return string.Format("Zone {0} has a Code that is not a positive number", (target as ZoneToProcess).ZoneName);
         }
     }
 }

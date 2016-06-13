@@ -19,12 +19,12 @@ namespace TOne.WhS.SupplierPriceList.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ImportedCode importedCode = context.Target as ImportedCode;
-            return Vanrise.Common.Utilities.IsNumeric(importedCode.Code, false);
+            return Vanrise.Common.Utilities.IsNumeric(importedCode.Code, 0);
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Code {0} must be numeric", (target as ImportedCode).Code);
+            return string.Format("Code {0} must be a positive number", (target as ImportedCode).Code);
         }
     }
 }

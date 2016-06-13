@@ -172,11 +172,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 Country country = countryManager.GetCountry(code.Value.ToLower());
                 CodeGroup codeGroup = null;
 
-                if (!Vanrise.Common.Utilities.IsNumeric(code.Key,false))
+                if (!Vanrise.Common.Utilities.IsNumeric(code.Key, 0))
                 {
                     RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
                     colIndex++;
-                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue("CodeGroup must be numeric");
+                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue("CodeGroup must be a positive number");
                     uploadCodeGroupLog.CountOfCodeGroupsFailed++;
                     colIndex = 0;
                     rowIndex++;
@@ -196,6 +196,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
                 else
                 {
+                    //TODO: Code Group Is Empty validation mist preceed the validation on numberic value to be more precise
                     RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
 
                     colIndex++;
