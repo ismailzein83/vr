@@ -272,6 +272,31 @@
     <Reference Include="Vanrise.Queueing.Web">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Pricing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Pricing.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Pricing.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Pricing.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Web">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Runtime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
