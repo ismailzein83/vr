@@ -59,6 +59,9 @@ namespace Vanrise.Common
         public static Vanrise.Entities.BigResult<R> ToBigResult<T, Q, R>(this Dictionary<T, Q> dic, Vanrise.Entities.DataRetrievalInput input,
             Func<Q, bool> filterExpression, Func<Q, R> mapper)
         {
+            if (dic == null)
+                return null;
+
             IEnumerable<Q> filteredResults = dic.Values.ApplyFiltering(filterExpression);
             IEnumerable<R> processedResults = filteredResults.Select(mapper).ApplySortingAndPaging(input).ToList();
 
