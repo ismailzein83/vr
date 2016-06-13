@@ -124,8 +124,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_Voice\Constant\ModuleConfig.js" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\retail-voice-chargingpolicy-settings.js" />
     <Content Include="Retail_Voice\Directives\MainExtensions\retail-voice-chargingpolicydefinition.js" />
     <Content Include="Retail_Voice\Directives\MainExtensions\Templates\VoiceChargingPolicyDefinitionTemplate.html" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\Templates\VoiceChargingPolicySettingsTemplate.html" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
