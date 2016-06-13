@@ -38,5 +38,13 @@
     [ReleaseCode]                 VARCHAR (50)     NULL,
     [ReleaseSource]               VARCHAR (10)     NULL,
     [PortIN]                      VARCHAR (42)     NULL,
-    [PortOUT]                     VARCHAR (42)     NULL);
+    [PortOUT]                     VARCHAR (42)     NULL,
+    [CostRateTypeRuleId]          INT              NULL,
+    [SaleRateTypeRuleId]          INT              NULL,
+    [CostTariffRuleId]            INT              NULL,
+    [SaleTariffRuleId]            INT              NULL,
+    [CostExtraChargeRuleId]       INT              NULL,
+    [SaleExtraChargeRuleId]       INT              NULL);
+
+
 
