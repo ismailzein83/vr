@@ -197,6 +197,8 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\VoiceType\Templates\InterNationalVoiceTypeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\VoiceType\Templates\NationalVoiceTypeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\retail-be-servicetype-chargingpolicy-definition.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\retail-be-servicetype-chargingpolicy-partseditor.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\Templates\ChargingPolicyPartsEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-service-grid-editor.js" />
@@ -236,6 +238,8 @@
     <Content Include="Retail_BusinessEntity\Views\Package\PackageManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\Package\ServiceEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Package\ServiceEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\ServiceType\ChargingPolicyPartEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\ServiceType\ChargingPolicyPartEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeManagement.html" />

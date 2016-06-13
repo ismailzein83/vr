@@ -31,12 +31,17 @@
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetChargingPolicyTemplateConfigs'));
         }
 
+        function GetChargingPolicyPartTypeTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetChargingPolicyPartTypeTemplateConfigs'));
+        }
+
         return {
             GetFilteredServiceTypes: GetFilteredServiceTypes,
             GetServiceType: GetServiceType,
             GetServiceTypesInfo: GetServiceTypesInfo,
             UpdateServiceType: UpdateServiceType,
-            GetChargingPolicyTemplateConfigs: GetChargingPolicyTemplateConfigs
+            GetChargingPolicyTemplateConfigs: GetChargingPolicyTemplateConfigs,
+            GetChargingPolicyPartTypeTemplateConfigs: GetChargingPolicyPartTypeTemplateConfigs
         };
     }
 

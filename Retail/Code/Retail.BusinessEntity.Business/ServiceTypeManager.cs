@@ -81,6 +81,11 @@ namespace Retail.BusinessEntity.Business
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<ChargingPolicyDefinitionConfig>(ChargingPolicyDefinitionConfig.EXTENSION_TYPE);
         }
+        public IEnumerable<ChargingPolicyPartTypeConfig> GetChargingPolicyPartTypeTemplateConfigs()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<ChargingPolicyPartTypeConfig>(ChargingPolicyPartTypeConfig.EXTENSION_TYPE);
+        }
 
         #endregion
 
