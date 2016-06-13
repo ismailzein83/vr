@@ -51,12 +51,12 @@
 
                 ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VR_GenericData_DataRecordStorageLogAPIService.GetFilteredDataRecordStorageLogs(dataRetrievalInput).then(function (response) {
-                        if (response) {
-
+                        if (response && response.Data) {
                             for (var z = 0; z < response.Data.length; z++) {
                                 response.Data[z].details = itemDetails;
                             }
                         }
+
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
