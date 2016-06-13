@@ -42,6 +42,12 @@ namespace Retail.BusinessEntity.Business
             return (serviceType != null) ? serviceType.Name : null;
         }
 
+        public ChargingPolicyDefinitionSettings GetServiceTypeChargingPolicyDefinitionSettings(int serviceTypeId)
+        {
+            ServiceType serviceType = this.GetServiceType(serviceTypeId);
+            return (serviceType != null && serviceType.Settings != null) ? serviceType.Settings.ChargingPolicyDefinitionSettings : null;
+        }
+
         public Vanrise.Entities.UpdateOperationOutput<ServiceTypeDetail> UpdateServiceType(ServiceTypeToEdit updatedServiceType)
         {
             ValidateServiceTypeToEdit(updatedServiceType);

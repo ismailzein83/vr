@@ -23,6 +23,12 @@
             });
         }
 
+        function GetServiceTypeChargingPolicyDefinitionSettings(serviceTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetServiceTypeChargingPolicyDefinitionSettings'), {
+                serviceTypeId: serviceTypeId
+            });
+        }
+
         function UpdateServiceType(serviceType) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateServiceType'), serviceType);
         }
@@ -39,6 +45,7 @@
             GetFilteredServiceTypes: GetFilteredServiceTypes,
             GetServiceType: GetServiceType,
             GetServiceTypesInfo: GetServiceTypesInfo,
+            GetServiceTypeChargingPolicyDefinitionSettings: GetServiceTypeChargingPolicyDefinitionSettings,
             UpdateServiceType: UpdateServiceType,
             GetChargingPolicyTemplateConfigs: GetChargingPolicyTemplateConfigs,
             GetChargingPolicyPartTypeTemplateConfigs: GetChargingPolicyPartTypeTemplateConfigs

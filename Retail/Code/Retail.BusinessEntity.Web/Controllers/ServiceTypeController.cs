@@ -36,6 +36,13 @@ namespace Retail.BusinessEntity.Web.Controllers
             return _manager.GetServiceType(serviceTypeId);
         }
 
+        [HttpGet]
+        [Route("GetServiceTypeChargingPolicyDefinitionSettings")]
+        public ChargingPolicyDefinitionSettings GetServiceTypeChargingPolicyDefinitionSettings(int serviceTypeId)
+        {
+            return _manager.GetServiceTypeChargingPolicyDefinitionSettings(serviceTypeId);
+        }
+
         [HttpPost]
         [Route("UpdateServiceType")]
         public Vanrise.Entities.UpdateOperationOutput<ServiceTypeDetail> UpdateServiceType(ServiceTypeToEdit serviceType)
@@ -56,6 +63,5 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetChargingPolicyPartTypeTemplateConfigs();
         }
-        
     }
 }
