@@ -81,7 +81,8 @@
             chargingPolicyReadyDeferred.promise.then(function () {
                 var chargingPolicyPayload;
 
-                if (serviceTypeEntity != undefined) {
+                if (serviceTypeEntity != undefined && serviceTypeEntity.Settings !=undefined) {
+                    chargingPolicyPayload = { chargingPolicy: serviceTypeEntity.Settings.ChargingPolicyDefinitionSettings }
                 }
 
                 VRUIUtilsService.callDirectiveLoad(chargingPolicyAPI, chargingPolicyPayload, chargingPolicyLoadDeferred);
@@ -133,7 +134,6 @@
                 Description: $scope.scopeModel.description,
                 ChargingPolicyDefinitionSettings: chargingPolicyAPI.getData()
             };
-            console.log(obj);
             return obj;
         }
     }

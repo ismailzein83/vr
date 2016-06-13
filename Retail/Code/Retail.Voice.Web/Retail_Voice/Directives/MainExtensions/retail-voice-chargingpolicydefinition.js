@@ -39,13 +39,13 @@
 
                 api.load = function (payload) {
                     var promises = [];
-                    var voiceChargingPolicy;
+                    var chargingPolicy;
                     if (payload != undefined) {
-                        voiceChargingPolicy = payload.voiceChargingPolicy;
+                        chargingPolicy = payload.chargingPolicy;
                     }
                     var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     directiveReadyDeferred.promise.then(function () {
-                        var payloadDirective = voiceChargingPolicy;
+                        var payloadDirective =chargingPolicy !=undefined? { parts: chargingPolicy.PartsByTypeId }:undefined;
                         VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, loadDirectivePromiseDeferred);
                     });
                     promises.push(loadDirectivePromiseDeferred.promise);

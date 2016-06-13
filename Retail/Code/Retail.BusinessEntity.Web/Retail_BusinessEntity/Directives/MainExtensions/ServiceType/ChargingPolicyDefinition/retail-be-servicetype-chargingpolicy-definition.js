@@ -88,7 +88,7 @@
                             var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                             directiveReadyDeferred.promise.then(function () {
                                 directiveReadyDeferred = undefined;
-                                var payloadDirective = chargingPolicy;
+                                var payloadDirective = { chargingPolicy: chargingPolicy };
 
                                 VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, loadDirectivePromiseDeferred);
                             });

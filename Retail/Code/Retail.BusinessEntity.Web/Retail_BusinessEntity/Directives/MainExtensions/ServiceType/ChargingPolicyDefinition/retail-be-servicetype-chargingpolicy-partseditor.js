@@ -58,10 +58,16 @@
                 api.load = function (payload) {
                     if (payload != undefined) {
                         ctrl.parts.length = 0;
-                        if (payload.parts && payload.parts.length > 0) {
-                            for (var y = 0; y < payload.parts.length; y++) {
-                                var currentItemAction = payload.parts[y];
-                                ctrl.parts.push(currentItemAction);
+                       
+                        if (payload.parts) {
+                            for (var p in payload.parts)
+                            {
+                                if (p != "$type")
+                                {
+                                    var currentItemAction = payload.parts[p];
+                                    ctrl.parts.push(currentItemAction);
+                                }
+                              
                             }
                         }
                     }
