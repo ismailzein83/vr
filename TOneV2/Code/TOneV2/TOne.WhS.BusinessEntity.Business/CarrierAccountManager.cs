@@ -105,6 +105,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 filterPredicate = (carr) =>
                     {
+                        if (carr.CarrierAccountSettings != null && carr.CarrierAccountSettings.ActivationStatus == ActivationStatus.Inactive)
+                            return false;
+
                         if (!ShouldSelectCarrierAccount(carr, filter.GetCustomers, filter.GetSuppliers, filteredSupplierIds, filteredCustomerIds))
                             return false;
 

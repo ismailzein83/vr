@@ -1,9 +1,9 @@
 ﻿"use strict";
 
 app.directive("vrWhsBeCarrieraccountGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierAccountAPIService", "WhS_BE_CarrierAccountTypeEnum",
-    "WhS_BE_CustomerSellingProductService", "WhS_BE_CarrierAccountService", "VRUIUtilsService", "WhS_BE_CustomerSellingProductAPIService",
+    "WhS_BE_CustomerSellingProductService", "WhS_BE_CarrierAccountService", "VRUIUtilsService", "WhS_BE_CustomerSellingProductAPIService", "WhS_BE_CarrierAccountActivationStatusEnum",
 function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierAccountTypeEnum, WhS_BE_CustomerSellingProductService,
-    WhS_BE_CarrierAccountService, VRUIUtilsService, WhS_BE_CustomerSellingProductAPIService) {
+    WhS_BE_CarrierAccountService, VRUIUtilsService, WhS_BE_CustomerSellingProductAPIService, WhS_BE_CarrierAccountActivationStatusEnum) {
 
     var directiveDefinitionObject = {
 
@@ -122,12 +122,17 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
             }];
 
             $scope.gridMenuActions = function (dataItem) {
-                if (dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Customer.value || dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Exchange.value) {
+                if (!checkIfCarrierAccountIsInactive(dataItem.Entity) && (dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Customer.value || dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Exchange.value)) {
                     return menuActionsWithSellingProduct;
                 } else {
                     return defaultMenuActions;
                 }
             };
+
+            function checkIfCarrierAccountIsInactive(carrierAccount)
+            {
+                return (carrierAccount.CarrierAccountSettings != undefined && carrierAccount.CarrierAccountSettings.ActivationStatus == WhS_BE_CarrierAccountActivationStatusEnum.Inactive.value);
+            }
 
             function hasAddCustomerSellingProductPermission() {
                 return WhS_BE_CustomerSellingProductAPIService.HasAddCustomerSellingProductPermission();
