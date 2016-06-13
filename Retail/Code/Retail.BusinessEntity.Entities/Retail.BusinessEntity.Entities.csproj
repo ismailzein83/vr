@@ -58,6 +58,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountIdentification\AccountIdentification.cs" />
+    <Compile Include="AccountIdentification\Definition\AccountIdentificationDefinition.cs" />
+    <Compile Include="AccountIdentification\Definition\AccountIdentificationDefinitionConfig.cs" />
+    <Compile Include="AccountIdentification\Definition\AccountIdentificationDefinitionSettings.cs" />
+    <Compile Include="AccountIdentification\AccountIdentificationSettings.cs" />
     <Compile Include="AccountPackage\AccountPackage.cs" />
     <Compile Include="AccountPackage\AccountPackageDetail.cs" />
     <Compile Include="AccountPackage\AccountPackageQuery.cs" />
