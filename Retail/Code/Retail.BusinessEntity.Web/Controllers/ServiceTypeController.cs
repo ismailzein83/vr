@@ -23,6 +23,15 @@ namespace Retail.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetServiceTypesInfo")]
+        public IEnumerable<PackageInfo> GetServiceTypesInfo(string filter = null)
+        {
+            var deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<PackageFilter>(filter) : null;
+            //return _manager.GetServiceTypesInfo(deserializedFilter);
+            return null;
+        }
+
+        [HttpGet]
         [Route("GetServiceType")]
         public ServiceType GetServiceType(int serviceTypeId)
         {

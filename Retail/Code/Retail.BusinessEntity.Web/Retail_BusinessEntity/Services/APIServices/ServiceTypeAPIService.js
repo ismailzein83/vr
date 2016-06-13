@@ -17,6 +17,12 @@
             });
         }
 
+        function GetServiceTypesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetServiceTypesInfo'), {
+                filter: filter
+            });
+        }
+
         function UpdateServiceType(serviceType) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateServiceType'), serviceType);
         }
@@ -25,11 +31,10 @@
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetChargingPolicyTemplateConfigs'));
         }
 
-        
-
         return {
             GetFilteredServiceTypes: GetFilteredServiceTypes,
             GetServiceType: GetServiceType,
+            GetServiceTypesInfo: GetServiceTypesInfo,
             UpdateServiceType: UpdateServiceType,
             GetChargingPolicyTemplateConfigs: GetChargingPolicyTemplateConfigs
         };

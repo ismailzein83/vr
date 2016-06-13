@@ -70,10 +70,12 @@
     <Compile Include="Account\AccountDetail.cs" />
     <Compile Include="Account\AccountInfo.cs" />
     <Compile Include="Account\AccountQuery.cs" />
+    <Compile Include="ChargingPolicy\ChargingPolicyDetail.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyParts\ChargingPolicyPartDefinitionSettings.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyParts\ChargingPolicyPartConfig.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyParts\ChargingPolicyPartTypeConfig.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyParts\IChargingPolicyPartExecutionContext.cs" />
+    <Compile Include="ChargingPolicy\ChargingPolicyQuery.cs" />
     <Compile Include="ChargingPolicy\Definition\ChargingPolicyDefinitionConfig.cs" />
     <Compile Include="NewBEs\AccountService.cs" />
     <Compile Include="NewBEs\AccountServiceSettings.cs" />

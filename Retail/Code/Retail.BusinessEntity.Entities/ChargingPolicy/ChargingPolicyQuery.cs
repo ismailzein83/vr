@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public abstract class ChargingPolicySettings
+    public class ChargingPolicyQuery
     {
-        public List<ChargingPolicyPart> Parts { get; set; }
+        public string Name { get; set; }
+
+        public IEnumerable<int> ServiceTypeIds { get; set; }
     }
 }

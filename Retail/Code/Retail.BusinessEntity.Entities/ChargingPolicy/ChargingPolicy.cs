@@ -6,14 +6,22 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class ChargingPolicy
+    public class BaseChargingPolicy
     {
         public int ChargingPolicyId { get; set; }
 
         public string Name { get; set; }
 
-        public int ServiceTypeId { get; set; }
-
         public ChargingPolicySettings Settings { get; set; }
+    }
+
+    public class ChargingPolicy : BaseChargingPolicy
+    {
+        public int ServiceTypeId { get; set; }
+    }
+
+    public class ChargingPolicyToEdit : BaseChargingPolicy
+    {
+
     }
 }
