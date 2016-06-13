@@ -27,6 +27,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("OwnerID", typeof(int));
             dt.Columns.Add("CurrencyID", typeof(int));
             dt.Columns.Add("SourceID", typeof(string));
+            dt.Columns.Add("EffectiveOn", typeof(DateTime));
             dt.BeginLoadData();
             foreach (var item in salePriceLists)
             {
@@ -36,6 +37,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 row[index++] = item.OwnerId;
                 row[index++] = item.CurrencyId;
                 row[index++] = item.SourceId;
+                row[index++] = item.EffectiveOn;
                 dt.Rows.Add(row);
             }
             dt.EndLoadData();
@@ -44,7 +46,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, SalePriceList> GetSalePriceLists(bool useTempTables)
         {
-            return GetItemsText("SELECT ID,  OwnerType, OwnerID, CurrencyID, SourceID FROM"
+            return GetItemsText("SELECT ID,  OwnerType, OwnerID, CurrencyID, EffectiveOn, SourceID FROM"
                 + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SalePriceListMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
@@ -57,6 +59,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 PriceListId = (int)reader["ID"],
                 OwnerType = (SalePriceListOwnerType)GetReaderValue<int>(reader, "OwnerType"),
                 SourceId = reader["SourceID"] as string,
+                EffectiveOn = GetReaderValue<DateTime>(reader, "EffectiveOn")
             };
         }
 

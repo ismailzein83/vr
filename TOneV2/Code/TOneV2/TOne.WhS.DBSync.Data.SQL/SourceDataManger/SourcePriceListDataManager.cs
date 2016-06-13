@@ -26,17 +26,18 @@ namespace TOne.WhS.DBSync.Data.SQL
                 SupplierId = arg["SupplierID"] as string,
                 CustomerId = arg["CustomerID"] as string,
                 CurrencyId = arg["CurrencyID"] as string,
+                BED = (DateTime)arg["BeginEffectiveDate"],
                 SourceFileBytes = GetReaderValue<byte[]>(arg, "SourceFileBytes"),
                 SourceFileName = arg["SourceFileName"] as string,
             };
         }
 
-        const string query_getSaleSourcePriceLists = @"SELECT  PriceListID ,  SupplierID, CustomerID,  Description, CurrencyID,  BeginEffectiveDate,  EndEffectiveDate,
+        const string query_getSaleSourcePriceLists = @"SELECT  PriceListID ,  SupplierID, CustomerID,  Description, CurrencyID,  BeginEffectiveDate ,  EndEffectiveDate,
                                                                NULL SourceFileBytes, NULL SourceFileName FROM PriceList WITH (NOLOCK) where SupplierID = 'SYS' ";
 
-        const string query_getSupplierSourcePriceLists = @"SELECT  p.PriceListID PriceListID, p.SupplierID SupplierID, p.CustomerID CustomerID, 
-                                                           p.CurrencyID CurrencyID,  p.SourceFileName SourceFileName,
-                                                           data.SourceFileBytes SourceFileBytes FROM PriceList p WITH (NOLOCK) INNER JOIN PriceListData data WITH (NOLOCK)
-                                                           ON p.PriceListID = data.PriceListID where p.CustomerID = 'SYS'";
+        const string query_getSupplierSourcePriceLists = @"SELECT     p.PriceListID, p.SupplierID, p.CustomerID, p.CurrencyID, p.SourceFileName, p.BeginEffectiveDate , data.SourceFileBytes
+                                                            FROM         PriceList AS p WITH (NOLOCK) INNER JOIN
+                                                                                    PriceListData AS data WITH (NOLOCK) ON p.PriceListID = data.PriceListID
+                                                            WHERE     (p.CustomerID = 'SYS')";
     }
 }

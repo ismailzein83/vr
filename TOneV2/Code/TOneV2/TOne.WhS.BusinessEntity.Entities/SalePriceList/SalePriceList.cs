@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
@@ -20,5 +21,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int CurrencyId { get; set; }
 
         public string SourceId { get; set; }
+
+        public DateTime EffectiveOn { get; set; }
     }
 }

@@ -17,5 +17,6 @@ namespace TOne.WhS.DBSync.Entities
         public string CurrencyId { get; set; }
         public byte[] SourceFileBytes { get; set; }
         public string SourceFileName { get; set; }
+        public DateTime BED { get; set; }
     }
 }

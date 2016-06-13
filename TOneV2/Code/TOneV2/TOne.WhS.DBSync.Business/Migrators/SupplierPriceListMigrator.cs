@@ -68,7 +68,7 @@ namespace TOne.WhS.DBSync.Business
                     Content = sourceItem.SourceFileBytes,
                     Name = sourceItem.SourceFileName,
                     Extension = nameastab[nameastab.Length - 1],
-                    CreatedTime = DateTime.Now
+                    CreatedTime = sourceItem.BED
 
                 };
 
@@ -81,7 +81,9 @@ namespace TOne.WhS.DBSync.Business
                     FileId = fileId.Value,
                     SupplierId = carrierAccount.CarrierAccountId,
                     CurrencyId = currency.CurrencyId,
-                    SourceId = sourceItem.SourceId
+                    SourceId = sourceItem.SourceId,
+                    CreateTime = sourceItem.BED,
+                    EffectiveOn = sourceItem.BED
                 };
             else
                 return null;

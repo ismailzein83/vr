@@ -36,6 +36,6 @@ namespace TOne.WhS.DBSync.Data.SQL
                                                                 ca.AccountType AccountType, ca.NameSuffix NameSuffix, 
                                                                 cp.CurrencyID CurrencyID, ca.CarrierMask CarrierMask 
                                                                 FROM  CarrierAccount ca WITH (NOLOCK) INNER JOIN CarrierProfile cp 
-                                                                ON ca.ProfileID = cp.ProfileID ";
+                                                                ON ca.ProfileID = cp.ProfileID WHERE (ca.IsDeleted = 'N')";
     }
 }

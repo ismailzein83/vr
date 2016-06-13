@@ -28,6 +28,8 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("FileID", typeof(long));
             dt.Columns.Add("SourceID", typeof(string));
             dt.Columns.Add("ID", typeof(int));
+            dt.Columns.Add("CreatedTime", typeof(DateTime));
+            dt.Columns.Add("EffectiveOn", typeof(DateTime));
            
             dt.BeginLoadData();
             foreach (var item in supplierPriceList)
@@ -39,6 +41,8 @@ namespace TOne.WhS.DBSync.Data.SQL
                 row[index++] = item.FileId;
                 row[index++] = item.SourceId;
                 row[index++] = startingId++;
+                row[index++] = item.CreateTime;
+                row[index++] = item.EffectiveOn;
 
                 dt.Rows.Add(row);
             }
@@ -48,7 +52,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, SupplierPriceList> GetSupplierPriceLists(bool useTempTables)
         {
-            return GetItemsText("SELECT ID,  SupplierID, CurrencyID, FileID, CreatedTime, SourceID FROM"
+            return GetItemsText("SELECT ID,  SupplierID, CurrencyID, FileID, CreatedTime, EffectiveOn,SourceID FROM"
                 + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SupplierPriceListMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
@@ -61,6 +65,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 PriceListId = (int)reader["ID"],
                 FileId = (long)reader["FileID"],
                 CreateTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                EffectiveOn = GetReaderValue<DateTime>(reader, "EffectiveOn"),
                 SourceId = reader["SourceID"] as string,
             };
         }

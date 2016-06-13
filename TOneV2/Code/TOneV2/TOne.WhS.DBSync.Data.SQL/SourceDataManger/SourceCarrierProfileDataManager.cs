@@ -59,6 +59,6 @@ namespace TOne.WhS.DBSync.Data.SQL
                                                                [AccountManagerEmail]   ,[SMSPhoneNumber] ,[Website]  ,[BillingDisputeEmail]  , 
                                                                [TechnicalContact] ,[TechnicalEmail]   ,[CommercialContact]   ,[CommercialEmail] , 
                                                                [AccountManagerContact] FROM [dbo].[CarrierProfile]  
-                                                        WITH (NOLOCK)";
+                                                        WITH (NOLOCK) WHERE  (IsDeleted = 'N')";
     }
 }

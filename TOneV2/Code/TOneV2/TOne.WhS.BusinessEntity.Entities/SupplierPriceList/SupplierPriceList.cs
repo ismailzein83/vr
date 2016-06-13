@@ -13,6 +13,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int SupplierId { get; set; }
 
         public int CurrencyId { get; set; }
+
+        public DateTime EffectiveOn { get; set; }
         
         public long FileId { get; set; }
         
