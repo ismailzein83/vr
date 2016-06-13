@@ -148,6 +148,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountPackageController.cs" />
+    <Compile Include="Controllers\ChargingPolicyController.cs" />
     <Compile Include="Controllers\ServiceTypeController.cs" />
     <Compile Include="Controllers\ZoneController.cs" />
     <Compile Include="Controllers\PackageController.cs" />
@@ -180,6 +181,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountGridTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\retail-be-chargingpolicy-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\Templates\ChargingPolicyGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\retail-be-package-servicesettings-voice.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\retail-be-package-servicesettings-data.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\retail-be-package-servicesettings-sms.js" />
@@ -209,9 +212,11 @@
     <Content Include="Retail_BusinessEntity\Services\AccountService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountPackageAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\ChargingPolicyAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ServiceTypeAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ZoneAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PackageAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\ChargingPolicyService.js" />
     <Content Include="Retail_BusinessEntity\Services\PackageService.js" />
     <Content Include="Retail_BusinessEntity\Services\ServiceTypeService.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditor.html" />
@@ -220,6 +225,10 @@
     <Content Include="Retail_BusinessEntity\Views\Account\AccountEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountManagementController.js" />
+    <Content Include="Retail_BusinessEntity\Views\ChargingPolicy\ChargingPolicyEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\ChargingPolicy\ChargingPolicyEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\ChargingPolicy\ChargingPolicyManagement.html" />
+    <Content Include="Retail_BusinessEntity\Views\ChargingPolicy\ChargingPolicyManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageManagement.html" />
