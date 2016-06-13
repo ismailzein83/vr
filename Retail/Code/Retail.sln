@@ -45,9 +45,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Voice.MainExtensions
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Voice.Business", "Retail.Voice.Business\Retail.Voice.Business.csproj", "{95AE4730-EE1B-4A0B-A785-BAF36F130714}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Voice.Web", "Retail.Voice.Web\Retail.Voice.Web.csproj", "{D5D3AD98-E134-4ED3-9040-E50A2BF1C650}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 15
+		SccNumberOfProjects = 16
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -107,6 +109,10 @@ Global
 		SccProjectTopLevelParentUniqueName14 = Retail.sln
 		SccProjectName14 = Retail.Voice.Business
 		SccLocalPath14 = Retail.Voice.Business
+		SccProjectUniqueName15 = Retail.Voice.Web\\Retail.Voice.Web.csproj
+		SccProjectTopLevelParentUniqueName15 = Retail.sln
+		SccProjectName15 = Retail.Voice.Web
+		SccLocalPath15 = Retail.Voice.Web
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -171,6 +177,10 @@ Global
 		{95AE4730-EE1B-4A0B-A785-BAF36F130714}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95AE4730-EE1B-4A0B-A785-BAF36F130714}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95AE4730-EE1B-4A0B-A785-BAF36F130714}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5D3AD98-E134-4ED3-9040-E50A2BF1C650}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5D3AD98-E134-4ED3-9040-E50A2BF1C650}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5D3AD98-E134-4ED3-9040-E50A2BF1C650}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5D3AD98-E134-4ED3-9040-E50A2BF1C650}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -192,5 +202,6 @@ Global
 		{D1F8761C-BAF9-4302-902A-A9EA86CC8ED6} = {7C9239B5-93F0-4CDE-AC50-64CBB563A8D2}
 		{59EFF472-B705-4AC1-B04C-C23ED4C82020} = {7C9239B5-93F0-4CDE-AC50-64CBB563A8D2}
 		{95AE4730-EE1B-4A0B-A785-BAF36F130714} = {7C9239B5-93F0-4CDE-AC50-64CBB563A8D2}
+		{D5D3AD98-E134-4ED3-9040-E50A2BF1C650} = {7C9239B5-93F0-4CDE-AC50-64CBB563A8D2}
 	EndGlobalSection
 EndGlobal
