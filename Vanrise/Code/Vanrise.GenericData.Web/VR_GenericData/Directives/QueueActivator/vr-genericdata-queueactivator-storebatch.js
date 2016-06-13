@@ -54,7 +54,7 @@
                         selectedId = payload.QueueActivator.DataRecordStorageId;
                     }
 
-                    return loadSelector();
+                    return loadSelector(payload);
                 }
 
                 api.getData = function () {
@@ -67,7 +67,7 @@
                 return api;
             }
 
-            function loadSelector() {
+            function loadSelector(payload) {
                 var dataRecordStorageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                 var selectorPayload = {};
                 selectorPayload.DataRecordTypeId = payload.DataRecordTypeId;
