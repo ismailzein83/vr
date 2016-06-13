@@ -112,7 +112,6 @@
             $scope.scopeModel.isLoading = true;
 
             var serviceTypeObj = buildUpdateServiceTypeObjFromScope();
-
             return Retail_BE_ServiceTypeAPIService.UpdateServiceType(serviceTypeObj).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated('ServiceType', response, 'Name')) {
                     if ($scope.onServiceTypeUpdated != undefined) {
@@ -132,8 +131,9 @@
                 ServiceTypeId: serviceTypeId,
                 Title: $scope.scopeModel.title,
                 Description: $scope.scopeModel.description,
-                ChargingPolicySettings:undefined
+                ChargingPolicyDefinitionSettings: chargingPolicyAPI.getData()
             };
+            console.log(obj);
             return obj;
         }
     }

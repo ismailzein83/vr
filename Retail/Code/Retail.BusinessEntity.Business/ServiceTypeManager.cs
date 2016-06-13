@@ -60,7 +60,8 @@ namespace Retail.BusinessEntity.Business
                 ChargingPolicyDefinitionSettings = updatedServiceType.ChargingPolicyDefinitionSettings,
                 Description = updatedServiceType.Description
             };
-            serviceTypeSettings.ChargingPolicyDefinitionSettings.ChargingPolicyEditor = serviceType.Settings.ChargingPolicyDefinitionSettings.ChargingPolicyEditor;
+            if (serviceType.Settings.ChargingPolicyDefinitionSettings !=null)
+              serviceTypeSettings.ChargingPolicyDefinitionSettings.ChargingPolicyEditor = serviceType.Settings.ChargingPolicyDefinitionSettings.ChargingPolicyEditor;
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<ServiceTypeDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -91,6 +92,15 @@ namespace Retail.BusinessEntity.Business
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<ChargingPolicyPartTypeConfig>(ChargingPolicyPartTypeConfig.EXTENSION_TYPE);
+        }
+
+        public IEnumerable<ChargingPolicyPartConfig> GetChargingPolicyPartTemplateConfigs(int partTypeConfigId)
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            var partType = GetChargingPolicyPartTypeTemplateConfigs().FindRecord(itm => itm.ExtensionConfigurationId == partTypeConfigId);
+            if (partType == null)
+                throw new NullReferenceException(string.Format("partTypeConfigId: {0} doesn't have partType", partTypeConfigId));
+            return manager.GetExtensionConfigurations<ChargingPolicyPartConfig>(partType.PartTypeExtensionName);
         }
 
         #endregion

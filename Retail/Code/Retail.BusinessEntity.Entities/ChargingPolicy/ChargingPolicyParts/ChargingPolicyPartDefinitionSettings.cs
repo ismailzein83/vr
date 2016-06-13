@@ -9,7 +9,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public abstract class ChargingPolicyPartDefinitionSettings
     {
-
+        public int ConfigId { get; set; }
     }
 
     public abstract class BaseChargingPolicyPartRuleDefinition : ChargingPolicyPartDefinitionSettings

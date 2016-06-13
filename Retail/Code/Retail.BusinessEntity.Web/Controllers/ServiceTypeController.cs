@@ -63,5 +63,11 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetChargingPolicyPartTypeTemplateConfigs();
         }
+        [HttpGet]
+        [Route("GetChargingPolicyPartTemplateConfigs")]
+        public IEnumerable<ChargingPolicyPartConfig> GetChargingPolicyPartTemplateConfigs(int partTypeConfigId)
+        {
+            return _manager.GetChargingPolicyPartTemplateConfigs(partTypeConfigId);
+        }
     }
 }

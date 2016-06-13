@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ServicetypeChargingpolicyPartseditorDirective.$inject = ['VR_Analytic_AnalyticItemActionService', 'UtilsService'];
+    ServicetypeChargingpolicyPartseditorDirective.$inject = ['Retail_BE_ServiceTypeService', 'UtilsService'];
 
-    function ServicetypeChargingpolicyPartseditorDirective(VR_Analytic_AnalyticItemActionService, UtilsService) {
+    function ServicetypeChargingpolicyPartseditorDirective(Retail_BE_ServiceTypeService, UtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -20,7 +20,7 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Analytic/Directives/MainExtensions/ServiceType/ChargingPolicyDefinition/Templates/ChargingPolicyPartsEditor.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/ServiceType/ChargingPolicyDefinition/Templates/ChargingPolicyPartsEditor.html"
         };
 
         function ServicetypeChargingpolicyPartseditor($scope, ctrl, $attrs) {
@@ -39,10 +39,10 @@
                 };
 
                 ctrl.addPart = function () {
-                    var onPartAdded = function (partObj) {
+                    var onPartTypeAdded = function (partObj) {
                         ctrl.parts.push(partObj);
                     }
-                    VR_Analytic_AnalyticItemActionService.addPart(onPartAdded);
+                    Retail_BE_ServiceTypeService.addPartType(onPartTypeAdded);
                 }
 
                 ctrl.removePart = function (partObj) {
@@ -57,7 +57,6 @@
 
                 api.load = function (payload) {
                     if (payload != undefined) {
-                        context = payload.context;
                         ctrl.parts.length = 0;
                         if (payload.parts && payload.parts.length > 0) {
                             for (var y = 0; y < payload.parts.length; y++) {
@@ -69,10 +68,10 @@
                 };
 
                 api.getData = function () {
-                    var parts = [];
+                    var parts = {};
                     for (var i = 0; i < ctrl.parts.length ; i++) {
                         var part = ctrl.parts[i];
-                        parts.push(part);
+                        parts[part.PartConfigId] = part;
                     }
                     return parts;
                 }
@@ -83,15 +82,15 @@
             function defineMenuActions() {
                 ctrl.partsGridMenuActions = [{
                     name: 'Edit',
-                    clicked: editPart
+                    clicked: editPartType
                 }];
             }
 
-            function editPart(part) {
-                var onPartUpdated = function (partObj) {
+            function editPartType(part) {
+                var onPartTypeUpdated = function (partObj) {
                     ctrl.parts[ctrl.parts.indexOf(part)] = partObj;
                 }
-                VR_Analytic_AnalyticItemActionService.editPart(part, onPartUpdated);
+                Retail_BE_ServiceTypeService.editPartType(part, onPartTypeUpdated);
             }
         }
     }

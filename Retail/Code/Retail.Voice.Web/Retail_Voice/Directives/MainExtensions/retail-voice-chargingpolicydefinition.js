@@ -17,9 +17,8 @@
             },
             controllerAs: "voicechargingpolicyCtrl",
             bindToController: true,
-            template: function (element, attrs) {
-                return getTamplate(attrs);
-            }
+            templateUrl: "/Client/Modules/Retail_Voice/Directives/MainExtensions/Templates/VoiceChargingPolicyDefinitionTemplate.html"
+
         };
         function VoiceChargingpolicydefinition($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
@@ -32,7 +31,7 @@
                     directiveAPI = api;
                     directiveReadyDeferred.resolve();
                 };
-
+                defineAPI();
             }
 
             function defineAPI() {
@@ -44,7 +43,6 @@
                     if (payload != undefined) {
                         voiceChargingPolicy = payload.voiceChargingPolicy;
                     }
-                    directiveReadyDeferred = UtilsService.createPromiseDeferred();
                     var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     directiveReadyDeferred.promise.then(function () {
                         var payloadDirective = voiceChargingPolicy;
@@ -62,7 +60,11 @@
                 }
 
                 function getData() {
-                    var data;
+                    var directiveData = directiveAPI.getData();
+                    var data = {
+                        $type: "Retail.Voice.Entities.VoiceChargingPolicyDefinitionSettings, Retail.Voice.Entities",
+                        PartsByTypeId: directiveData
+                    }
                     return data;
                 }
             }

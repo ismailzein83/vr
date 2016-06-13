@@ -1,9 +1,9 @@
 ﻿<vr-columns width="normal">
-    <vr-button type="Add" data-onclick="ctrl.addItemAction" standalone></vr-button>
+    <vr-button type="Add" data-onclick="ctrl.addPart" standalone></vr-button>
 </vr-columns>
 <vr-columns width="fullrow">
-    <vr-datagrid datasource="ctrl.itemActions" norowhighlightonclick="true"
-                 on-ready="ctrl.onGridReady" ondeleterow="ctrl.removeItemAction" menuactions="ctrl.itemActionsGridMenuActions" hidegridmenu>
+    <vr-datagrid datasource="ctrl.parts" norowhighlightonclick="true"
+                 on-ready="ctrl.onGridReady" ondeleterow="ctrl.removePart" menuactions="ctrl.partsGridMenuActions" hidegridmenu>
         <vr-datagridcolumn headertext="'Part Type'" field="'Type'" disablesorting="true"></vr-datagridcolumn>
     </vr-datagrid>
 </vr-columns>

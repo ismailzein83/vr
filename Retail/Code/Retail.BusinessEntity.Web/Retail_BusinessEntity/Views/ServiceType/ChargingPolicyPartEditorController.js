@@ -8,9 +8,8 @@
         var isEditMode;
 
         var partEntity;
-
-        var chargingPolicyPartTypeAPI;
-        var chargingPolicyPartTypeReadyDeferred = UtilsService.createPromiseDeferred();
+        var partTypeAPI;
+        var partTypeReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -21,6 +20,7 @@
 
             if (parameters != undefined) {
                 partEntity = parameters.partEntity;
+                console.log(partEntity)
             }
 
             isEditMode = (partEntity != undefined);
@@ -28,11 +28,10 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.partTypes = [];
-
-            $scope.scopeModel.onChargingPolicyPartTypesReady = function (api) {
-                chargingPolicyPartTypeAPI = api;
-                chargingPolicyPartTypeReadyDeferred.resolve();
+ 
+            $scope.scopeModel.partTypeDirectiveReady = function (api) {
+                partTypeAPI = api;
+                partTypeReadyDeferred.resolve();
             }
 
             $scope.scopeModel.save = function () {
@@ -51,7 +50,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadChargingPolicyPartTypes]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadChargingPolicyPartTypes]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -59,32 +58,22 @@
         }
 
         function loadChargingPolicyPartTypes() {
-            return Retail_BE_ServiceTypeAPIService.GetChargingPolicyPartTypeTemplateConfigs().then(function (response) {
-                if (response != null) {
-                    for (var i = 0; i < response.length; i++) {
-                        $scope.scopeModel.partTypes.push(response[i]);
-                    }
-                    if (partEntity != undefined)
-                        $scope.scopeModel.selectedPartType = UtilsService.getItemByVal($scope.scopeModel.partTypes, partEntity.ConfigId, 'ExtensionConfigurationId');
-                    else
-                        $scope.scopeModel.selectedPartType = $scope.scopeModel.partTypes[0];
-                }
+            var loadPartTypePromiseDeferred = UtilsService.createPromiseDeferred();
+            partTypeReadyDeferred.promise.then(function () {
+                var payloadDirective = partEntity != undefined ? { partType: partEntity } : undefined;
+                VRUIUtilsService.callDirectiveLoad(partTypeAPI, payloadDirective, loadPartTypePromiseDeferred);
             });
+            return loadPartTypePromiseDeferred.promise;
         }
 
         function setTitle() {
             if (isEditMode) {
-                var serviceTypeTitle = (serviceTypeEntity != undefined) ? serviceTypeEntity.Title : undefined;
+                var serviceTypeTitle = (partEntity != undefined) ? partEntity.Title : undefined;
                 $scope.title = UtilsService.buildTitleForUpdateEditor(serviceTypeTitle, 'Charging Policy Part Type');
             }
             else {
                 $scope.title = UtilsService.buildTitleForAddEditor('Charging Policy Part Type');
             }
-        }
-
-        function loadStaticData() {
-            if (partEntity == undefined)
-                return;
         }
 
         function updatePartType() {
@@ -96,10 +85,8 @@
             $scope.modalContext.closeModal();
         }
 
-
         function insertPartType() {
             var partTypeObj = buildPartTypeObjFromScope();
-
             if ($scope.onPartTypeAdded != undefined) {
                 $scope.onPartTypeAdded(partTypeObj);
             }
@@ -108,12 +95,7 @@
 
         function buildPartTypeObjFromScope()
         {
-            var obj = {
-                ServiceTypeId: serviceTypeId,
-                Title: $scope.scopeModel.title,
-                Description: $scope.scopeModel.description,
-                ChargingPolicySettings: undefined
-            };
+            var obj = partTypeAPI.getData();
             return obj;
         }
     }

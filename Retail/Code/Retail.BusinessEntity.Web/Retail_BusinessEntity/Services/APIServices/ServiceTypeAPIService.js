@@ -40,7 +40,9 @@
         function GetChargingPolicyPartTypeTemplateConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetChargingPolicyPartTypeTemplateConfigs'));
         }
-
+        function GetChargingPolicyPartTemplateConfigs(partTypeConfigId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetChargingPolicyPartTemplateConfigs'), { partTypeConfigId: partTypeConfigId });
+        }
         return {
             GetFilteredServiceTypes: GetFilteredServiceTypes,
             GetServiceType: GetServiceType,
@@ -48,7 +50,8 @@
             GetServiceTypeChargingPolicyDefinitionSettings: GetServiceTypeChargingPolicyDefinitionSettings,
             UpdateServiceType: UpdateServiceType,
             GetChargingPolicyTemplateConfigs: GetChargingPolicyTemplateConfigs,
-            GetChargingPolicyPartTypeTemplateConfigs: GetChargingPolicyPartTypeTemplateConfigs
+            GetChargingPolicyPartTypeTemplateConfigs: GetChargingPolicyPartTypeTemplateConfigs,
+            GetChargingPolicyPartTemplateConfigs: GetChargingPolicyPartTemplateConfigs
         };
     }
 
