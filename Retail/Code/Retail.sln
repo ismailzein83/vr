@@ -47,9 +47,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Voice.Business", "Re
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Voice.Web", "Retail.Voice.Web\Retail.Voice.Web.csproj", "{D5D3AD98-E134-4ED3-9040-E50A2BF1C650}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Runtime", "Retail.Runtime\Retail.Runtime.csproj", "{C62C8B57-C645-4B1B-B202-6FB09BF2DAA3}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 16
+		SccNumberOfProjects = 17
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -113,6 +115,10 @@ Global
 		SccProjectTopLevelParentUniqueName15 = Retail.sln
 		SccProjectName15 = Retail.Voice.Web
 		SccLocalPath15 = Retail.Voice.Web
+		SccProjectUniqueName16 = Retail.Runtime\\Retail.Runtime.csproj
+		SccProjectTopLevelParentUniqueName16 = Retail.sln
+		SccProjectName16 = Retail.Runtime
+		SccLocalPath16 = Retail.Runtime
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -181,6 +187,10 @@ Global
 		{D5D3AD98-E134-4ED3-9040-E50A2BF1C650}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5D3AD98-E134-4ED3-9040-E50A2BF1C650}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5D3AD98-E134-4ED3-9040-E50A2BF1C650}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C62C8B57-C645-4B1B-B202-6FB09BF2DAA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C62C8B57-C645-4B1B-B202-6FB09BF2DAA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C62C8B57-C645-4B1B-B202-6FB09BF2DAA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C62C8B57-C645-4B1B-B202-6FB09BF2DAA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -203,5 +213,6 @@ Global
 		{59EFF472-B705-4AC1-B04C-C23ED4C82020} = {7C9239B5-93F0-4CDE-AC50-64CBB563A8D2}
 		{95AE4730-EE1B-4A0B-A785-BAF36F130714} = {7C9239B5-93F0-4CDE-AC50-64CBB563A8D2}
 		{D5D3AD98-E134-4ED3-9040-E50A2BF1C650} = {7C9239B5-93F0-4CDE-AC50-64CBB563A8D2}
+		{C62C8B57-C645-4B1B-B202-6FB09BF2DAA3} = {5335E72B-803E-4323-895F-4293DB0E9211}
 	EndGlobalSection
 EndGlobal
