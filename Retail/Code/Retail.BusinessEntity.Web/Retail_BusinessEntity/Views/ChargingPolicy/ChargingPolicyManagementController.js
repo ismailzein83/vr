@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ChargingPolicyManagementController.$inject = ['$scope', 'Retail_BE_ChargingPolicyService', 'Retail_BE_ChargingPolicyAPIService', 'UtilsService', 'VRNotificationService'];
+    ChargingPolicyManagementController.$inject = ['$scope', 'Retail_BE_ChargingPolicyService', 'Retail_BE_ChargingPolicyAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function ChargingPolicyManagementController($scope, Retail_BE_ChargingPolicyService, Retail_BE_ChargingPolicyAPIService, UtilsService, VRNotificationService)
+    function ChargingPolicyManagementController($scope, Retail_BE_ChargingPolicyService, Retail_BE_ChargingPolicyAPIService, UtilsService, VRUIUtilsService, VRNotificationService)
     {
         var serviceTypeSelectorAPI;
         var serviceTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -75,7 +75,7 @@
         function buildGridQuery() {
             return {
                 Name: $scope.scopeModel.name,
-                ServiceTypeIds: null
+                ServiceTypeIds: serviceTypeSelectorAPI.getSelectedIds()
             };
         }
     }

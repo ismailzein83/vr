@@ -11,7 +11,7 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 namespace Retail.BusinessEntity.Business
 {
-   public class ServiceTypeManager
+    public class ServiceTypeManager
     {
         #region Public Methods
 
@@ -23,6 +23,11 @@ namespace Retail.BusinessEntity.Business
                 (input.Query.Name == null || serviceType.Name.ToLower().Contains(input.Query.Name.ToLower()));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedServiceTypes.ToBigResult(input, filterExpression, ServiceTypeDetailMapper));
+        }
+
+        public IEnumerable<ServiceTypeInfo> GetServiceTypesInfo()
+        {
+            return this.GetCachedServiceTypes().MapRecords(ServiceTypeInfoMapper).OrderBy(x => x.Name);
         }
 
         public ServiceType GetServiceType(int serviceTypeId)
@@ -57,7 +62,7 @@ namespace Retail.BusinessEntity.Business
 
             IServiceTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IServiceTypeDataManager>();
 
-            if (dataManager.Update(updatedServiceType.ServiceTypeId, updatedServiceType.Title,serviceTypeSettings))
+            if (dataManager.Update(updatedServiceType.ServiceTypeId, updatedServiceType.Title, serviceTypeSettings))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
@@ -127,6 +132,12 @@ namespace Retail.BusinessEntity.Business
                 Entity = serviceType,
             };
         }
+
+        private ServiceTypeInfo ServiceTypeInfoMapper(ServiceType serviceType)
+        {
+            return new ServiceTypeInfo() { ServiceTypeId = serviceType.ServiceTypeId, Name = serviceType.Name };
+        }
+
         #endregion
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.Entities.ServiceType
+namespace Retail.BusinessEntity.Entities
 {
     public class ServiceTypeInfo
     {
