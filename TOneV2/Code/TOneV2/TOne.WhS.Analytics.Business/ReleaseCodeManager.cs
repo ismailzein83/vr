@@ -60,9 +60,13 @@ namespace TOne.WhS.Analytics.Business
             {
                 IReleaseCodeDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IReleaseCodeDataManager>();
                 SaleCodeManager manager = new SaleCodeManager();
-                List<string> salecodesIds = new List<string>();
-                List<SaleCode> salecodes = manager.GetSaleCodesByCodeGroups(input.Query.Filter.CodeGroupIds);
-                salecodesIds = salecodes.Select(x => x.Code).ToList();
+                List<string> salecodesIds = null;
+                if (input.Query.Filter.CodeGroupIds != null && input.Query.Filter.CodeGroupIds.Count() > 0)
+                {
+                    List<SaleCode> salecodes = manager.GetSaleCodesByCodeGroups(input.Query.Filter.CodeGroupIds);
+                    salecodesIds = salecodes.Select(x => x.Code).ToList();
+                }
+                
 
                 return dataManager.GetAllFilteredReleaseCodes(input, salecodesIds);
             }

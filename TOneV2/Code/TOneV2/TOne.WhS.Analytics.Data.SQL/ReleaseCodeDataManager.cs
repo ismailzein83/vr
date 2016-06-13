@@ -196,12 +196,17 @@ namespace TOne.WhS.Analytics.Data.SQL
         }
         private void AddFilter<T>(StringBuilder whereBuilder, IEnumerable<T> values, string column)
         {
-            if (values != null && values.Count() > 0)
+            if (values != null )
             {
-                if (typeof(T) == typeof(string))
+                if(values.Count() > 0){
+                   if (typeof(T) == typeof(string))
                     whereBuilder.AppendFormat(" {0} IN ('{1}') AND ", column, String.Join("', '", values));
-                else
+                  else
                     whereBuilder.AppendFormat(" {0} IN ({1}) AND ", column, String.Join(", ", values));
+                }
+                else if (values.Count() == 0){
+                    whereBuilder.AppendFormat(" 0 = 1 AND ");
+                }
             }
         }
       
