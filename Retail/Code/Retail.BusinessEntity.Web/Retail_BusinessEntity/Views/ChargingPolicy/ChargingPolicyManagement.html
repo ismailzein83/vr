@@ -5,16 +5,14 @@
                 <vr-columns width="normal">
                     <vr-textbox label="Name" value="scopeModel.name"></vr-textbox>
                 </vr-columns>
-                <vr-columns width="normal">
-                    <retail-be-servicetype-selector on-ready="scopeModel.onServiceTypeSelectorReady" ismultipleselection></retail-be-servicetype-selector>
-                </vr-columns>
+                <retail-be-servicetype-selector on-ready="scopeModel.onServiceTypeSelectorReady" normal-col-num="2" ismultipleselection></retail-be-servicetype-selector>
             </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
-                    <vr-button type="Add" data-onclick="scopeModel.add"></vr-button><!--  haspermission="scopeModel.hasAddChargingPolicyPermission" -->
+                    <vr-button type="Add" data-onclick="scopeModel.add" haspermission="scopeModel.hasAddChargingPolicyPermission"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>

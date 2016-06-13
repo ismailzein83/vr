@@ -63,7 +63,7 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
             $scope.scopeModel.menuActions.push({
                 name: 'Edit',
                 clicked: editChargingPolicy,
-                //haspermission: hasEditChargingPolicyPermission
+                haspermission: hasEditChargingPolicyPermission
             });
         }
 

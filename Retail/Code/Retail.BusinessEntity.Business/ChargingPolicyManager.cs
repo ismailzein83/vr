@@ -116,7 +116,7 @@ namespace Retail.BusinessEntity.Business
             var serviceTypeManager = new ServiceTypeManager();
             ServiceType serviceType = serviceTypeManager.GetServiceType(serviceTypeId);
             if (serviceType == null)
-                throw new DataIntegrityValidationException(String.Format("ServiceType '{0}' does not exist", serviceType));
+                throw new DataIntegrityValidationException(String.Format("ServiceType '{0}' does not exist", serviceTypeId));
 
             if (settings == null)
                 throw new MissingArgumentValidationException("ChargingPolicy.Settings");

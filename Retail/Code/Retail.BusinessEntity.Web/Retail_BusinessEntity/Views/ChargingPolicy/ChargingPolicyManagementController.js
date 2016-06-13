@@ -46,7 +46,6 @@
                 return Retail_BE_ChargingPolicyAPIService.HasAddChargingPolicyPermission();
             };
         }
-
         function load() {
             $scope.scopeModel.isLoading = true;
             loadAllControls();
@@ -60,7 +59,6 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
-
         function loadServiceTypeSelector()
         {
             var serviceTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -71,7 +69,6 @@
 
             return serviceTypeSelectorLoadDeferred.promise;
         }
-
         function buildGridQuery() {
             return {
                 Name: $scope.scopeModel.name,
