@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
-using Vanrise.GenericData.Entities.GenericRules;
+using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Transformation.Entities;
 
 namespace Retail.BusinessEntity.Business
