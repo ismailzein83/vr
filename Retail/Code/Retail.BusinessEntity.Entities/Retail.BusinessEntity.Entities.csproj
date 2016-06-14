@@ -80,6 +80,8 @@
     <Compile Include="ChargingPolicy\ChargingPolicyQuery.cs" />
     <Compile Include="ChargingPolicy\Definition\ChargingPolicyDefinitionConfig.cs" />
     <Compile Include="NewBEs\AccountService.cs" />
+    <Compile Include="NewBEs\AccountServiceDetail.cs" />
+    <Compile Include="NewBEs\AccountServiceQuery.cs" />
     <Compile Include="NewBEs\AccountServiceSettings.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyParts\ChargingPolicyPart.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyParts\Types\ChargingPolicyRateType.cs" />

@@ -8,6 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class AccountService
     {
+        public long AccountServiceId { get; set; }
         public long AccountId { get; set; }
 
         public int ServiceTypeId { get; set; }

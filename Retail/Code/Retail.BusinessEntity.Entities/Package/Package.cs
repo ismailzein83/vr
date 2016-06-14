@@ -15,18 +15,18 @@ namespace Retail.BusinessEntity.Entities
         public string Description { get; set; }
         
         public PackageSettings Settings { get; set; }
-    }
+    }    
     public class PackageSettings
     {
-        public List<PackageService> Services { get; set; }
-
-        public List<ServicePackageItem> Items { get; set; }
+        public List<ServicePackageItem> Services { get; set; }
 
     }
 
     public abstract class ServicePackageItem
     {
+        public int ConfigId { get; set; }
         public int ServiceTypeId { get; set; }
+      
     }
 
     public class ServicePackageChargingPolicyItem : ServicePackageItem

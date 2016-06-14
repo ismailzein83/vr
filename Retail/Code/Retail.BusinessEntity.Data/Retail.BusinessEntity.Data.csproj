@@ -52,6 +52,7 @@
     <Compile Include="BEDataManagerFactory.cs" />
     <Compile Include="IAccountDataManager.cs" />
     <Compile Include="IAccountPackageDataManager.cs" />
+    <Compile Include="IAccountServiceDataManager.cs" />
     <Compile Include="IChargingPolicyDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IServiceTypeDataManager.cs" />
