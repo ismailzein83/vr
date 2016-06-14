@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{E80C060E-B246-40CB-B9E7-EF33E82F4562}"
 EndProject
@@ -29,9 +29,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Generic", "Generic", "{2CE5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Generic.Web", "Mediation.Generic.Web\Mediation.Generic.Web.csproj", "{AB400620-7C45-46FE-9006-76A7A543C956}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Generic.Entities", "Mediation.Generic.Entities\Mediation.Generic.Entities.csproj", "{EDBD3A6E-4535-4B84-8C2A-2AE6AEDF5005}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Generic.QueueActivators", "Mediation.Generic.QueueActivators\Mediation.Generic.QueueActivators.csproj", "{0455B391-9661-41B7-90F5-F6E14FC30B2D}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 8
+		SccNumberOfProjects = 10
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -63,6 +67,14 @@ Global
 		SccProjectTopLevelParentUniqueName7 = Mediation.sln
 		SccProjectName7 = Mediation.Generic.Web
 		SccLocalPath7 = Mediation.Generic.Web
+		SccProjectUniqueName8 = Mediation.Generic.Entities\\Mediation.Generic.Entities.csproj
+		SccProjectTopLevelParentUniqueName8 = Mediation.sln
+		SccProjectName8 = Mediation.Generic.Entities
+		SccLocalPath8 = Mediation.Generic.Entities
+		SccProjectUniqueName9 = Mediation.Generic.QueueActivators\\Mediation.Generic.QueueActivators.csproj
+		SccProjectTopLevelParentUniqueName9 = Mediation.sln
+		SccProjectName9 = Mediation.Generic.QueueActivators
+		SccLocalPath9 = Mediation.Generic.QueueActivators
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +111,14 @@ Global
 		{AB400620-7C45-46FE-9006-76A7A543C956}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB400620-7C45-46FE-9006-76A7A543C956}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB400620-7C45-46FE-9006-76A7A543C956}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDBD3A6E-4535-4B84-8C2A-2AE6AEDF5005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDBD3A6E-4535-4B84-8C2A-2AE6AEDF5005}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDBD3A6E-4535-4B84-8C2A-2AE6AEDF5005}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDBD3A6E-4535-4B84-8C2A-2AE6AEDF5005}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0455B391-9661-41B7-90F5-F6E14FC30B2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0455B391-9661-41B7-90F5-F6E14FC30B2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0455B391-9661-41B7-90F5-F6E14FC30B2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0455B391-9661-41B7-90F5-F6E14FC30B2D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,5 +132,7 @@ Global
 		{3C0A3D12-DE56-4E05-A8C4-4CAB25EFD695} = {6AAA1D38-168D-4BDE-B786-C6DCF96B89DA}
 		{2CE5CE5E-EA99-448E-94AC-E90740D97697} = {E82A6672-DA4F-41B1-8696-C5CC1D4B1812}
 		{AB400620-7C45-46FE-9006-76A7A543C956} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
+		{EDBD3A6E-4535-4B84-8C2A-2AE6AEDF5005} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
+		{0455B391-9661-41B7-90F5-F6E14FC30B2D} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
 	EndGlobalSection
 EndGlobal

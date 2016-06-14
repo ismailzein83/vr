@@ -114,7 +114,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="Mediation_Generic\Directives\" />
     <Folder Include="Mediation_Generic\Services\APIServices\" />
     <Folder Include="Mediation_Generic\Views\" />
   </ItemGroup>
@@ -130,6 +129,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Mediation_Generic\Constant\ModuleConfig.js" />
+    <Content Include="Mediation_Generic\Constant\StorageStagingStatusEnum.js" />
+    <Content Include="Mediation_Generic\Directives\QueueActivator\Templates\QueueActivatorStoreStagingRecordsTemplate.html" />
+    <Content Include="Mediation_Generic\Directives\QueueActivator\mediation-generic-queueactivator-storestagingrecords.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

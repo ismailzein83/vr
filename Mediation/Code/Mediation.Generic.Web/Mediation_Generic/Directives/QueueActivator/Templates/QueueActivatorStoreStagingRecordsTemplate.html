@@ -1,0 +1,37 @@
+﻿<div vr-loader="scopeModel.isLoadingActivatorSection">
+
+    <vr-columns width="1/3row" vr-loader="scopeModel.isLoadingisRawRecordTypeFields">
+
+        <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onSessionIdDataRecordTypeFieldsSelectorReady"
+                                                      selectedvalues="scopeModel.selectedSessionIdDataRecordTypeFields"
+                                                      isrequired="true"
+                                                      label="Session Id Field"
+                                                      hideremoveicon>
+        </vr-genericdata-datarecordtypefields-selector>
+    </vr-columns>
+    <vr-columns width="1/3row" vr-loader="scopeModel.isLoadingisRawRecordTypeFields">
+
+        <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onTimeDataRecordTypeFieldsSelectorReady"
+                                                      selectedvalues="scopeModel.selectedTimeDataRecordTypeFields"
+                                                      isrequired="true"
+                                                      label="Time Field"
+                                                      hideremoveicon>
+        </vr-genericdata-datarecordtypefields-selector>
+    </vr-columns>
+
+    <vr-columns width="fullrow">
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-datagrid datasource="scopeModel.statusMappings"
+                             pagingtype="'PagingOnScroll'"
+                             menuactions="scopeModel.gridMenuActions"
+                             on-ready="onGridReady"
+                             idfield="Id">
+                    <vr-datagridcolumn headertext="'Status'" field="'Status'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Conditions'" field="'Condition'"></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </vr-columns>
+
+</div>
