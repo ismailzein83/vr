@@ -58,6 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountIdentification\AccountIdentificationQuery.cs" />
     <Compile Include="AccountIdentification\AccountIdentification.cs" />
     <Compile Include="AccountIdentification\AccountIdentificationDetail.cs" />
     <Compile Include="AccountIdentification\Definition\AccountIdentificationDefinition.cs" />

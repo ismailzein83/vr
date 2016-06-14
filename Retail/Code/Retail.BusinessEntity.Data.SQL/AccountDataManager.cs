@@ -28,7 +28,7 @@ namespace Retail.BusinessEntity.Data.SQL
             return GetItemsSP("Retail.sp_Account_GetAll", AccountMapper);
         }
 
-        public bool Insert(Account account, out int insertedId)
+        public bool Insert(Account account, out long insertedId)
         {
             object accountId;
             string serializedSettings = account.Settings != null ? Vanrise.Common.Serializer.Serialize(account.Settings) : null;
@@ -44,7 +44,7 @@ namespace Retail.BusinessEntity.Data.SQL
             return false;
         }
 
-        public bool Update(AccountToEdit account, int? parentId)
+        public bool Update(AccountToEdit account, long? parentId)
         {
             string serializedSettings = account.Settings != null ? Vanrise.Common.Serializer.Serialize(account.Settings) : null;
             int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_Update", account.AccountId, account.Name, account.Type, serializedSettings, parentId);
@@ -64,7 +64,7 @@ namespace Retail.BusinessEntity.Data.SQL
         {
             return new Account()
             {
-                AccountId = (int)reader["ID"],
+                AccountId = (long)reader["ID"],
                 Name = reader["Name"] as string,
                 Type = (AccountType)reader["Type"],
                 Settings = Vanrise.Common.Serializer.Deserialize<AccountSettings>(reader["Settings"] as string),

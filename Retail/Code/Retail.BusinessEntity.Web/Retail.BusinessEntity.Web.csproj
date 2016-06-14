@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\AccountIdentificationController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountPackageController.cs" />
     <Compile Include="Controllers\ChargingPolicyController.cs" />
@@ -180,6 +181,8 @@
     <Content Include="Retail_BusinessEntity\Constant\ModuleConfig.js" />
     <Content Include="Retail_BusinessEntity\Constant\NetworkTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\PaymentMethodEnum.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountIdentification\retail-be-accountidentification-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountIdentification\Templates\AccountIdentificationGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountPackage\retail-be-accountpackage-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountPackage\Templates\AccountPackageGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-grid.js" />
@@ -235,6 +238,7 @@
     <Content Include="Retail_BusinessEntity\Directives\Zone\Templates\CountryZoneTemplate.html" />
     <Content Include="Retail_BusinessEntity\Services\AccountPackageService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\AccountIdentificationAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountPackageAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ChargingPolicyAPIService.js" />

@@ -8,7 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class BaseAccount
     {
-        public int AccountId { get; set; }
+        public long AccountId { get; set; }
 
         public string Name { get; set; }
 
@@ -29,7 +29,7 @@ namespace Retail.BusinessEntity.Entities
     public class Account : BaseAccount
     {
         public const string BUSINESSENTITY_DEFINITION_NAME = "Retail_BE_SubscriberAccount";
-        public int? ParentAccountId { get; set; }
+        public long? ParentAccountId { get; set; }
     }
 
     public class AccountToEdit : BaseAccount

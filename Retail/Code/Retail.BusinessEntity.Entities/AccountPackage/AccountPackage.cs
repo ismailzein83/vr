@@ -10,7 +10,7 @@ namespace Retail.BusinessEntity.Entities
     {
         public int AccountPackageId { get; set; }
 
-        public int AccountId { get; set; }
+        public long AccountId { get; set; }
 
         public int PackageId { get; set; }
 

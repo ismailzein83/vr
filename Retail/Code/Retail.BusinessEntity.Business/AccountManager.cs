@@ -20,7 +20,7 @@ namespace Retail.BusinessEntity.Business
 
         public Vanrise.Entities.IDataRetrievalResult<AccountDetail> GetFilteredAccounts(Vanrise.Entities.DataRetrievalInput<AccountQuery> input)
         {
-            Dictionary<int, Account> cachedAccounts = this.GetCachedAccounts();
+            Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts();
 
             Func<Account, bool> filterExpression = (account) =>
                 (input.Query.Name == null || account.Name.ToLower().Contains(input.Query.Name.ToLower())) &&
@@ -33,13 +33,41 @@ namespace Retail.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedAccounts.ToBigResult(input, filterExpression, AccountDetailMapper));
         }
 
-        public Account GetAccount(int accountId)
+        public Account GetAccount(long accountId)
         {
-            Dictionary<int, Account> cachedAccounts = this.GetCachedAccounts();
+            Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts();
             return cachedAccounts.GetRecord(accountId);
         }
 
-        public string GetAccountName(int accountId)
+        public IEnumerable<AccountInfo> GetAccountsInfo(string nameFilter)
+        {
+            string nameFilterLower = nameFilter != null ? nameFilter.ToLower() : null;
+            IEnumerable<Account> accounts = GetCachedAccounts().Values;
+
+            Func<Account, bool> accountFilter = (account) =>
+             {
+                 if (nameFilterLower != null && !account.Name.ToLower().Contains(nameFilterLower))
+                     return false;
+                 return true;
+             };
+            return accounts.MapRecords(AccountInfoMapper, accountFilter).OrderBy(x => x.Name);
+        }
+
+
+        public IEnumerable<AccountInfo> GetAccountsInfoByIds(HashSet<long> accountIds)
+        {
+            IEnumerable<Account> accounts = GetCachedAccounts().Values;
+            Func<Account, bool> accountFilter = (account) =>
+            {
+                if (!accountIds.Contains(account.AccountId))
+                    return false;
+                return true;
+            };
+            return accounts.MapRecords(AccountInfoMapper, accountFilter).OrderBy(x => x.Name);
+        }
+
+
+        public string GetAccountName(long accountId)
         {
             Account account = this.GetAccount(accountId);
             return (account != null) ? account.Name : null;
@@ -55,7 +83,7 @@ namespace Retail.BusinessEntity.Business
             insertOperationOutput.InsertedObject = null;
 
             IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
-            int accountId = -1;
+            long accountId = -1;
 
             if (dataManager.Insert(account, out accountId))
             {
@@ -74,7 +102,7 @@ namespace Retail.BusinessEntity.Business
 
         public Vanrise.Entities.UpdateOperationOutput<AccountDetail> UpdateAccount(AccountToEdit account)
         {
-            int? parentId;
+            long? parentId;
             ValidateAccountToEdit(account, out parentId);
 
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountDetail>();
@@ -107,7 +135,7 @@ namespace Retail.BusinessEntity.Business
             ValidateAccount(account.AccountId, account.Name, account.ParentAccountId);
         }
 
-        private void ValidateAccountToEdit(AccountToEdit account, out int? parentAccountId)
+        private void ValidateAccountToEdit(AccountToEdit account, out long? parentAccountId)
         {
             Account accountEntity = this.GetAccount(account.AccountId);
 
@@ -119,7 +147,7 @@ namespace Retail.BusinessEntity.Business
 
             if (parentAccountId.HasValue)
             {
-                IEnumerable<int> subAccountIds = this.GetSubAccountIds(parentAccountId.Value);
+                IEnumerable<long> subAccountIds = this.GetSubAccountIds(parentAccountId.Value);
                 if (subAccountIds == null || subAccountIds.Count() == 0)
                     throw new DataIntegrityValidationException(String.Format("ParentAccount '{0}' does not have any sub accounts", parentAccountId));
                 if (!subAccountIds.Contains(account.AccountId))
@@ -127,7 +155,7 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
-        private void ValidateAccount(int accountId, string name, int? parentAccountId)
+        private void ValidateAccount(long accountId, string name, long? parentAccountId)
         {
             if (String.IsNullOrWhiteSpace(name))
                 throw new MissingArgumentValidationException("Account.Name");
@@ -140,9 +168,9 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
-        private IEnumerable<int> GetSubAccountIds(int parentAccountId)
+        private IEnumerable<long> GetSubAccountIds(long parentAccountId)
         {
-            Dictionary<int, Account> cachedAccounts = this.GetCachedAccounts();
+            Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts();
             return cachedAccounts.MapRecords(itm => itm.Value.AccountId, itm => itm.Value.ParentAccountId.HasValue && itm.Value.ParentAccountId == parentAccountId);
         }
 
@@ -165,7 +193,7 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        Dictionary<int, Account> GetCachedAccounts()
+        Dictionary<long, Account> GetCachedAccounts()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccounts", () =>
             {
@@ -175,25 +203,25 @@ namespace Retail.BusinessEntity.Business
             });
         }
 
-        Dictionary<int, List<Account>> GetCachedAccountsByParent()
+        Dictionary<long, List<Account>> GetCachedAccountsByParent()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountsByParent", () =>
             {
                 IEnumerable<Account> accounts = GetCachedAccounts().Values;
-                Dictionary<int, List<Account>> accountsByParent = new Dictionary<int, List<Account>>();
+                Dictionary<long, List<Account>> accountsByParent = new Dictionary<long, List<Account>>();
                 foreach (var account in accounts)
                 {
                     if (account.ParentAccountId != null)
                     {
                         List<Account> accountsofParent;
-                        if (accountsByParent.TryGetValue((int)account.ParentAccountId, out accountsofParent))
+                        if (accountsByParent.TryGetValue(account.ParentAccountId.Value, out accountsofParent))
                         {
                             accountsofParent.Add(account);
                         }
                         else
                         {
                             accountsofParent = new List<Account>() { account };
-                            accountsByParent.Add((int)account.ParentAccountId, accountsofParent);
+                            accountsByParent.Add(account.ParentAccountId.Value, accountsofParent);
 
                         }
                     }
@@ -206,13 +234,13 @@ namespace Retail.BusinessEntity.Business
         IEnumerable<GenericRuleDefinition> GetAccountsMappingRuleDefinitions()
         {
             BusinessEntityDefinitionManager beDefinitionManager = new BusinessEntityDefinitionManager();
-            var subscriberAccountBEDefinitionId = beDefinitionManager.GetBusinessEntityDefinitionId(Account.BUSINESSENTITY_DEFINITION_NAME);            
+            var subscriberAccountBEDefinitionId = beDefinitionManager.GetBusinessEntityDefinitionId(Account.BUSINESSENTITY_DEFINITION_NAME);
             GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
             var allMappingRuleDefinitions = ruleDefinitionManager.GetGenericRuleDefinitionsByType(MappingRule.RULE_DEFINITION_TYPE_NAME);
             return allMappingRuleDefinitions.FindAllRecords(itm =>
             {
                 var mappingRuleDefinitionSettings = itm.SettingsDefinition as MappingRuleDefinitionSettings;
-                if(mappingRuleDefinitionSettings != null)
+                if (mappingRuleDefinitionSettings != null)
                 {
                     var businessEntityFieldType = mappingRuleDefinitionSettings.FieldType as Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType;
                     if (businessEntityFieldType != null)
@@ -237,7 +265,16 @@ namespace Retail.BusinessEntity.Business
                 TotalSubAccountCount = GetSubAccountsCount(account.AccountId, accounts, true, accountsByParent)
             };
         }
-        private int GetSubAccountsCount(int accountId, IEnumerable<Account> accounts, bool isTotalSubAccountsInclude, Dictionary<int, List<Account>> accountsByParent = null)
+
+        private AccountInfo AccountInfoMapper(Account account)
+        {
+            return new AccountInfo
+            {
+                AccountId = account.AccountId,
+                Name = account.Name
+            };
+        }
+        private int GetSubAccountsCount(long accountId, IEnumerable<Account> accounts, bool isTotalSubAccountsInclude, Dictionary<long, List<Account>> accountsByParent = null)
         {
             int count = 0;
             foreach (var account in accounts)
@@ -246,14 +283,14 @@ namespace Retail.BusinessEntity.Business
                 {
                     count++;
                     if (isTotalSubAccountsInclude)
-                     count += GetTotalSubAccountsCountRecursively(account, accountsByParent);
+                        count += GetTotalSubAccountsCountRecursively(account, accountsByParent);
                 }
             }
             return count;
         }
-        private int GetTotalSubAccountsCountRecursively(Account account, Dictionary<int, List<Account>> accountsByParent)
+        private int GetTotalSubAccountsCountRecursively(Account account, Dictionary<long, List<Account>> accountsByParent)
         {
-            if(accountsByParent == null)
+            if (accountsByParent == null)
             {
                 throw new NullReferenceException("accountsByParent");
             }
@@ -290,7 +327,7 @@ namespace Retail.BusinessEntity.Business
             var accountNames = new List<string>();
             foreach (var entityId in context.EntityIds)
             {
-                string accountName = GetAccountName(Convert.ToInt32(entityId));
+                string accountName = GetAccountName((long)entityId);
                 if (accountName == null) throw new NullReferenceException("accountName");
                 accountNames.Add(accountName);
             }
@@ -306,8 +343,8 @@ namespace Retail.BusinessEntity.Business
         {
             if (context.FieldValueIds == null || context.FilterIds == null) return true;
 
-            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
-            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
+            var fieldValueIds = context.FieldValueIds.MapRecords(itm =>(long)(itm));
+            var filterIds = context.FilterIds.MapRecords(itm => (long)(itm));
             foreach (var filterId in filterIds)
             {
                 if (fieldValueIds.Contains(filterId))

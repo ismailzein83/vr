@@ -24,14 +24,29 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetAccount")]
-        public Account GetAccount(int accountId)
+        public Account GetAccount(long accountId)
         {
             return _manager.GetAccount(accountId);
         }
 
         [HttpGet]
+        [Route("GetAccountsInfo")]
+        public IEnumerable<AccountInfo> GetAccountsInfo(string nameFilter)
+        {
+            return _manager.GetAccountsInfo(nameFilter);
+        }
+
+
+        [HttpPost]
+        [Route("GetAccountsInfoByIds")]
+        public IEnumerable<AccountInfo> GetAccountsInfoByIds(HashSet<long> accountIds)
+        {
+            return _manager.GetAccountsInfoByIds(accountIds);
+        }
+
+        [HttpGet]
         [Route("GetAccountName")]
-        public string GetAccountName(int accountId)
+        public string GetAccountName(long accountId)
         {
             return _manager.GetAccountName(accountId);
         }

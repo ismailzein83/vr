@@ -12,6 +12,6 @@ namespace Retail.BusinessEntity.Entities
 
         public IEnumerable<AccountType> AccountTypes { get; set; }
 
-        public int? ParentAccountId { get; set; }
+        public long? ParentAccountId { get; set; }
     }
 }

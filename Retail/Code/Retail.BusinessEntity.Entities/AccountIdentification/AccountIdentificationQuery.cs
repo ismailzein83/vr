@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class AccountPackageQuery
+    public class AccountIdentificationQuery
     {
-        public long AssignedToAccountId { get; set; }
+        public long AccountId { get; set; }
     }
 }

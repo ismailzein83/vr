@@ -44,6 +44,16 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['UpdateAccount']));
         }
 
+        function GetAccountsInfo(nameFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountsInfo"), {
+                nameFilter: nameFilter
+            });
+        }
+
+        function GetAccountsInfoByIds(accountIds) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountsInfoByIds"), accountIds);
+        }
+
         return {
             GetFilteredAccounts: GetFilteredAccounts,
             GetAccount: GetAccount,
@@ -52,7 +62,9 @@
             UpdateAccount: UpdateAccount,
             HasViewAccountsPermission: HasViewAccountsPermission,
             HasAddAccountPermission: HasAddAccountPermission,
-            HasUpdateAccountPermission: HasUpdateAccountPermission
+            HasUpdateAccountPermission: HasUpdateAccountPermission,
+            GetAccountsInfo: GetAccountsInfo,
+            GetAccountsInfoByIds: GetAccountsInfoByIds
         };
     }
 

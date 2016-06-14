@@ -81,6 +81,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
 
             drillDownTabs.push(buildSubAccountsTab());
             drillDownTabs.push(buildAssignedPackagesTab());
+            drillDownTabs.push(buildIdentificationRulesTab());
 
             function buildSubAccountsTab()
             {
@@ -149,6 +150,26 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
 
                 return packagesTab;
             }
+
+
+
+            function buildIdentificationRulesTab() {
+                var identificationRuleTab = {};
+
+                identificationRuleTab.title = 'Identification Rules';
+                identificationRuleTab.directive = 'retail-be-accountidentification-grid';
+
+                identificationRuleTab.loadDirective = function (accountPackageGridAPI, account) {
+                    account.accountPackageGridAPI = accountPackageGridAPI;
+                    var accountPackageGridPayload = {
+                        AccountId: account.Entity.AccountId
+                    };
+                    return account.accountPackageGridAPI.load(accountPackageGridPayload);
+                };
+
+                return identificationRuleTab;
+            }
+
 
             return drillDownTabs;
         }

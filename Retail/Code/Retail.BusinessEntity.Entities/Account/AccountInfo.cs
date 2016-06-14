@@ -8,7 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class AccountInfo
     {
-        public int AccountId { get; set; }
+        public long AccountId { get; set; }
 
         public string Name { get; set; }
     }

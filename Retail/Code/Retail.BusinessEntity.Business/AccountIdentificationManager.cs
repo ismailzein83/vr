@@ -19,6 +19,14 @@ namespace Retail.BusinessEntity.Business
             return GetAllAccountsMappingRulesByAccountId().GetRecord(accountId);
         }
 
+
+        public Vanrise.Entities.IDataRetrievalResult<AccountIdentificationDetail> GetFilteredAccountIdentificationRules(Vanrise.Entities.DataRetrievalInput<AccountIdentificationQuery> input)
+        {
+            IEnumerable<MappingRule> mappingRules = this.GetAccountMappingRules(input.Query.AccountId);
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, mappingRules.ToBigResult(input, null, AccountIdentificationMapper));
+        }
+
         #region PrivateMethods
 
         private Dictionary<long, List<MappingRule>> GetAllAccountsMappingRulesByAccountId()
@@ -43,8 +51,8 @@ namespace Retail.BusinessEntity.Business
                     }
                     else
                         return null;
-                });           
-        }        
+                });
+        }
 
         HashSet<int> GetAccountMappingRuleDefinitionsIds()
         {
@@ -64,7 +72,7 @@ namespace Retail.BusinessEntity.Business
             DateTime? _ruleDefinitionCacheLastCheck;
             DateTime? _mappingRuleCacheLastCheck;
             MappingRuleManager mappingRuleManager = new MappingRuleManager();
-            
+
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return Vanrise.Caching.CacheManagerFactory.GetCacheManager<GenericRuleDefinitionManager.CacheManager>().IsCacheExpired(ref _ruleDefinitionCacheLastCheck)
@@ -74,5 +82,21 @@ namespace Retail.BusinessEntity.Business
         }
 
         #endregion
+
+        #region Private Mappers
+
+        AccountIdentificationDetail AccountIdentificationMapper(MappingRule mappingRule)
+        {
+            return new AccountIdentificationDetail()
+            {
+                GenericRuleId = mappingRule.RuleId,
+                Description = mappingRule.Description
+            };
+        }
+
+
+        #endregion
+
+
     }
 }
