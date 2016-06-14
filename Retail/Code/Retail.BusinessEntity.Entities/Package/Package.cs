@@ -36,7 +36,7 @@ namespace Retail.BusinessEntity.Entities
 
     public class ServicePackageVolumeItem : ServicePackageItem
     {
-        public ServiceVolumeSettings VolumeSettings { get; set; }
+        public VolumeSettings VolumeSettings { get; set; }
     }
 
     public class PackageService
