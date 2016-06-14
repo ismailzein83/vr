@@ -16,21 +16,37 @@ namespace Retail.BusinessEntity.Business
     {
         public IEnumerable<MappingRule> GetAccountMappingRules(long accountId)
         {
-            var accountMappingRuleDefinitions = GetAccountMappingRuleDefinitions();
-            if (accountMappingRuleDefinitions == null)
-                return null;
-            HashSet<int> accountMappingRuleDefinitionIds = new HashSet<int>(accountMappingRuleDefinitions.Select(itm => itm.GenericRuleDefinitionId));
-            MappingRuleManager mappingRuleManager = new MappingRuleManager();
-            return mappingRuleManager.GetAllRules().FindAllRecords(itm => accountMappingRuleDefinitionIds.Contains(itm.DefinitionId));
+            return GetAllAccountsMappingRulesByAccountId().GetRecord(accountId);
         }
 
-        IEnumerable<GenericRuleDefinition> GetAccountMappingRuleDefinitions()
+        private Dictionary<long, List<MappingRule>> GetAllAccountsMappingRulesByAccountId()
+        {            
+            HashSet<int> accountMappingRuleDefinitionIds = GetAccountMappingRuleDefinitionsIds();
+            MappingRuleManager mappingRuleManager = new MappingRuleManager();
+            var allRules = mappingRuleManager.GetAllRules().FindAllRecords(itm => accountMappingRuleDefinitionIds.Contains(itm.DefinitionId));
+            if (allRules != null)
+            {
+                Dictionary<long, List<MappingRule>> rulesByAccountIds = new Dictionary<long, List<MappingRule>>();
+                foreach(var rule in allRules)
+                {
+                    if(rule.Settings == null)
+                        throw new NullReferenceException(string.Format("rule.Settings. ruleId '{0}'", rule.RuleId));
+                    List<MappingRule> matchAccountRules = rulesByAccountIds.GetOrCreateItem(Convert.ToInt64(rule.Settings.Value));
+                    matchAccountRules.Add(rule);
+                }
+                return rulesByAccountIds;
+            }
+            else
+                return null;
+        }
+
+        HashSet<int> GetAccountMappingRuleDefinitionsIds()
         {
             BusinessEntityDefinitionManager beDefinitionManager = new BusinessEntityDefinitionManager();
             var subscriberAccountBEDefinitionId = beDefinitionManager.GetBusinessEntityDefinitionId(Account.BUSINESSENTITY_DEFINITION_NAME);
             GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
             var allMappingRuleDefinitions = ruleDefinitionManager.GetGenericRuleDefinitionsByType(MappingRule.RULE_DEFINITION_TYPE_NAME);
-            return allMappingRuleDefinitions.FindAllRecords(itm =>
+            var accountMappingRuleDefinitions = allMappingRuleDefinitions.FindAllRecords(itm =>
             {
                 var mappingRuleDefinitionSettings = itm.SettingsDefinition as MappingRuleDefinitionSettings;
                 if (mappingRuleDefinitionSettings != null)
@@ -41,6 +57,9 @@ namespace Retail.BusinessEntity.Business
                 }
                 return false;
             });
+            if (accountMappingRuleDefinitions == null)
+                return new HashSet<int>();
+            return new HashSet<int>(accountMappingRuleDefinitions.Select(itm => itm.GenericRuleDefinitionId));
         }
     }
 }

@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountIdentification\AccountIdentification.cs" />
+    <Compile Include="AccountIdentification\AccountIdentificationDetail.cs" />
     <Compile Include="AccountIdentification\Definition\AccountIdentificationDefinition.cs" />
     <Compile Include="AccountIdentification\Definition\AccountIdentificationDefinitionConfig.cs" />
     <Compile Include="AccountIdentification\Definition\AccountIdentificationDefinitionSettings.cs" />
