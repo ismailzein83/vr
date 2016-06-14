@@ -199,7 +199,7 @@ namespace Vanrise.GenericData.Business
 
         #region Protected Methods
 
-        protected override GenericRuleDetail MapToDetails(T rule)
+        public override GenericRuleDetail MapToDetails(T rule)
         {
             GenericRuleDefinition ruleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(rule.DefinitionId);
 

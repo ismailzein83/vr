@@ -12,7 +12,7 @@ namespace Vanrise.Rules
 {
     public abstract class RuleManager<T> : RuleManager<T, T> where T : BaseRule
     {
-        protected override T MapToDetails(T rule)
+        public override T MapToDetails(T rule)
         {
             return rule;
         }
@@ -21,7 +21,7 @@ namespace Vanrise.Rules
         where T : BaseRule
         where Q : class
     {
-        protected abstract Q MapToDetails(T rule);
+        public abstract Q MapToDetails(T rule);
 
         public virtual bool ValidateBeforeAdd(T rule) { return true; }
         public Vanrise.Entities.InsertOperationOutput<Q> AddRule(T rule)
