@@ -39,7 +39,9 @@ namespace Retail.Runtime.Mappers
             //Type dataCDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("DataCDR");
 
             var currentItemCount = 27;
-            DateTime creationDate = DateTime.Now;// default(DateTime);
+            var headerText = "H";
+
+            DateTime creationDate = default(DateTime);
             System.IO.StreamReader sr = ImportedData.StreamReader;
             while (!sr.EndOfStream)
             {
@@ -49,14 +51,13 @@ namespace Retail.Runtime.Mappers
 
                 string[] rowData = currentLine.Split(';');
 
-                //if (rowData.Length == 2)
-                //{
-                //    creationDate = DateTime.ParseExact(rowData[1], "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture);
-                //    continue;
-                //}
+                if (rowData.Length == 2 && rowData[0] == headerText)
+                {
+                    creationDate = DateTime.ParseExact(rowData[1], "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture);
+                    continue;
+                }
 
-                //else 
-                if (rowData.Length != currentItemCount)
+                else if (rowData.Length != currentItemCount)
                     continue;
 
                 dynamic cdr = Activator.CreateInstance(voiceCDRRuntimeType) as dynamic;
