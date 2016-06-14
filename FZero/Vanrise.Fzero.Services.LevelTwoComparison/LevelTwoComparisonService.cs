@@ -38,7 +38,7 @@ namespace Vanrise.Fzero.Services.LevelTwoComparison
         protected override void OnStart(string[] args)
         {
             base.RequestAdditionalTime(int.Parse(System.Configuration.ConfigurationManager.AppSettings["RequestAdditionalTime"].ToString()));
-            Debugger.Launch(); // launch and attach debugger
+            //Debugger.Launch(); // launch and attach debugger
 
             // Create a timer with a ten second interval.
             aTimer = new System.Timers.Timer(int.Parse(System.Configuration.ConfigurationManager.AppSettings["TimerInterval"].ToString()));
