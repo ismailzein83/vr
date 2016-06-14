@@ -207,7 +207,7 @@ namespace PSTN.BusinessEntity.Business
             return manager.GetTemplateConfigurations(Constants.SetAreaConfigType);
         }
 
-        protected override NormalizationRuleDetail MapToDetails(NormalizationRule rule)
+        public override NormalizationRuleDetail MapToDetails(NormalizationRule rule)
         {
             return NormalizationRuleDetailMapper(rule);
         }
