@@ -240,8 +240,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-zone-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\Templates\CountryZoneTemplate.html" />
     <Content Include="Retail_BusinessEntity\Services\AccountPackageService.js" />
+    <Content Include="Retail_BusinessEntity\Services\AccountIdentificationService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountService.js" />
-    <Content Include="Retail_BusinessEntity\Services\AccountServiceService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountIdentificationAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountPackageAPIService.js" />

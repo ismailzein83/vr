@@ -1,7 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountPackageService', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (Retail_BE_AccountAPIService, Retail_BE_AccountService, Retail_BE_AccountPackageService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountTypeEnum, UtilsService, VRUIUtilsService, VRNotificationService)
-{
+app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountPackageService', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (Retail_BE_AccountAPIService, Retail_BE_AccountService, Retail_BE_AccountPackageService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountTypeEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
     return {
         restrict: 'E',
         scope: {
@@ -17,30 +16,25 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
         templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Account/Templates/AccountGridTemplate.html'
     };
 
-    function AccountGrid($scope, ctrl, $attrs)
-    {
+    function AccountGrid($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
 
         var gridAPI;
         var drillDownManager;
 
-        function initializeController()
-        {
+        function initializeController() {
             $scope.scopeModel = {};
             $scope.scopeModel.accounts = [];
             $scope.scopeModel.menuActions = [];
 
-            $scope.scopeModel.onGridReady = function (api)
-            {
+            $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(buildDrillDownTabs(), gridAPI, $scope.scopeModel.menuActions);
                 defineAPI();
             };
 
-            $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady)
-            {
-                return Retail_BE_AccountAPIService.GetFilteredAccounts(dataRetrievalInput).then(function (response)
-                {
+            $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                return Retail_BE_AccountAPIService.GetFilteredAccounts(dataRetrievalInput).then(function (response) {
                     if (response && response.Data) {
                         for (var i = 0; i < response.Data.length; i++) {
                             setAccountTypeDescription(response.Data[i]);
@@ -56,16 +50,14 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             defineMenuActions();
         }
 
-        function defineAPI()
-        {
+        function defineAPI() {
             var api = {};
 
             api.load = function (query) {
                 return gridAPI.retrieveData(query);
             };
 
-            api.onAccountAdded = function (addedAccount)
-            {
+            api.onAccountAdded = function (addedAccount) {
                 setAccountTypeDescription(addedAccount);
                 drillDownManager.setDrillDownExtensionObject(addedAccount);
                 gridAPI.itemAdded(addedAccount);
@@ -75,16 +67,14 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                 ctrl.onReady(api);
         }
 
-        function buildDrillDownTabs()
-        {
+        function buildDrillDownTabs() {
             var drillDownTabs = [];
 
             drillDownTabs.push(buildSubAccountsTab());
             drillDownTabs.push(buildAssignedPackagesTab());
             drillDownTabs.push(buildIdentificationRulesTab());
 
-            function buildSubAccountsTab()
-            {
+            function buildSubAccountsTab() {
                 var subAccountsTab = {};
 
                 subAccountsTab.title = 'Sub Accounts';
@@ -159,13 +149,26 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                 identificationRuleTab.title = 'Identification Rules';
                 identificationRuleTab.directive = 'retail-be-accountidentification-grid';
 
-                identificationRuleTab.loadDirective = function (accountPackageGridAPI, account) {
-                    account.accountPackageGridAPI = accountPackageGridAPI;
-                    var accountPackageGridPayload = {
+                identificationRuleTab.loadDirective = function (accountIdentificationRulesGridAPI, account) {
+                    account.accountIdentificationRulesGridAPI = accountIdentificationRulesGridAPI;
+                    var accountIdentificationRulesGridAPIGridPayload = {
                         AccountId: account.Entity.AccountId
                     };
-                    return account.accountPackageGridAPI.load(accountPackageGridPayload);
+                    return account.accountIdentificationRulesGridAPI.load(accountIdentificationRulesGridAPIGridPayload);
                 };
+
+                identificationRuleTab.parentMenuActions = [{
+                    name: 'Assign Identification Rule',
+                    clicked: function (account) {
+                        if (identificationRuleTab.setTabSelected != undefined)
+                            identificationRuleTab.setTabSelected(account);
+
+                        var onAccountIdentificationRuleAssigned = function (assignedIdentificationRule) {
+                            account.accountIdentificationRulesGridAPI.onAccountIdentificationRuleAssigned(assignedIdentificationRule);
+                        };
+                        //Retail_BE_AccountIdentificationService.assignIdentificationRuleToAccount(account.Entity.AccountId, onAccountIdentificationRuleAssigned);
+                    }
+                }];
 
                 return identificationRuleTab;
             }
@@ -174,8 +177,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             return drillDownTabs;
         }
 
-        function defineMenuActions()
-        {
+        function defineMenuActions() {
             $scope.scopeModel.menuActions.push({
                 name: 'Edit',
                 clicked: editAccount,
@@ -183,10 +185,8 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             });
         }
 
-        function editAccount(account)
-        {
-            var onAccountUpdated = function (updatedAccount)
-            {
+        function editAccount(account) {
+            var onAccountUpdated = function (updatedAccount) {
                 setAccountTypeDescription(updatedAccount);
                 drillDownManager.setDrillDownExtensionObject(updatedAccount);
                 gridAPI.itemUpdated(updatedAccount);
@@ -198,12 +198,10 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             return Retail_BE_AccountAPIService.HasUpdateAccountPermission();
         }
 
-        function addSubAccount(parentAccount)
-        {
+        function addSubAccount(parentAccount) {
             gridAPI.expandRow(parentAccount);
 
-            var onSubAccountAdded = function (addedSubAccount)
-            {
+            var onSubAccountAdded = function (addedSubAccount) {
                 parentAccount.subAccountGridAPI.onAccountAdded(addedSubAccount);
             };
 
@@ -213,8 +211,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             return Retail_BE_AccountAPIService.HasAddAccountPermission();
         }
 
-        function assignPackage(account)
-        {
+        function assignPackage(account) {
             gridAPI.expandRow(account);
 
             var onAccountPackageAdded = function (addedAccountPackage) {
@@ -227,8 +224,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             return Retail_BE_AccountPackageAPIService.HasAddAccountPackagePermission();
         }
 
-        function setAccountTypeDescription(account)
-        {
+        function setAccountTypeDescription(account) {
             var accountType = UtilsService.getEnum(Retail_BE_AccountTypeEnum, 'value', account.Entity.Type);
             account.typeDescription = accountType.description;
         }

@@ -56,11 +56,16 @@ namespace Retail.BusinessEntity.Business
 
         HashSet<int> GetAccountMappingRuleDefinitionsIds()
         {
-            GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
-            var accountMappingRuleDefinitions = ruleDefinitionManager.GetCachedGenericRuleDefinitions().FindAllRecords(ruleDefinition => AccountMappingRuleDefinitionFilter.IsAccountIdentificationRuleDefinition(ruleDefinition));
+            var accountMappingRuleDefinitions = GetAccountMappingRuleDefinitions();
             if (accountMappingRuleDefinitions == null)
                 return new HashSet<int>();
             return new HashSet<int>(accountMappingRuleDefinitions.Select(itm => itm.GenericRuleDefinitionId));
+        }
+
+        private static IEnumerable<GenericRuleDefinition> GetAccountMappingRuleDefinitions()
+        {
+            GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
+            return ruleDefinitionManager.GetCachedGenericRuleDefinitions().FindAllRecords(ruleDefinition => AccountMappingRuleDefinitionFilter.IsAccountIdentificationRuleDefinition(ruleDefinition));
         }
 
         #endregion
