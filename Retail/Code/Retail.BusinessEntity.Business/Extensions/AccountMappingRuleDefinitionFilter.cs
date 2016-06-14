@@ -14,7 +14,12 @@ namespace Retail.BusinessEntity.Business
     {
         public bool IsMatched(IGenericRuleDefinitionFilterContext context)
         {
-            var mappingRuleDefinitionSettings = context.RuleDefinition.SettingsDefinition as MappingRuleDefinitionSettings;
+            return IsAccountIdentificationRuleDefinition(context.RuleDefinition);
+        }
+
+        internal static bool IsAccountIdentificationRuleDefinition(GenericRuleDefinition ruleDefinition)
+        {
+            var mappingRuleDefinitionSettings = ruleDefinition.SettingsDefinition as MappingRuleDefinitionSettings;
             if (mappingRuleDefinitionSettings != null)
             {
                 var businessEntityFieldType = mappingRuleDefinitionSettings.FieldType as Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType;

@@ -48,21 +48,8 @@ namespace Retail.BusinessEntity.Business
 
         HashSet<int> GetAccountMappingRuleDefinitionsIds()
         {
-            BusinessEntityDefinitionManager beDefinitionManager = new BusinessEntityDefinitionManager();
-            var subscriberAccountBEDefinitionId = beDefinitionManager.GetBusinessEntityDefinitionId(Account.BUSINESSENTITY_DEFINITION_NAME);
             GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
-            var allMappingRuleDefinitions = ruleDefinitionManager.GetGenericRuleDefinitionsByType(MappingRule.RULE_DEFINITION_TYPE_NAME);
-            var accountMappingRuleDefinitions = allMappingRuleDefinitions.FindAllRecords(itm =>
-            {
-                var mappingRuleDefinitionSettings = itm.SettingsDefinition as MappingRuleDefinitionSettings;
-                if (mappingRuleDefinitionSettings != null)
-                {
-                    var businessEntityFieldType = mappingRuleDefinitionSettings.FieldType as Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType;
-                    if (businessEntityFieldType != null)
-                        return businessEntityFieldType.BusinessEntityDefinitionId == subscriberAccountBEDefinitionId;
-                }
-                return false;
-            });
+            var accountMappingRuleDefinitions = ruleDefinitionManager.GetCachedGenericRuleDefinitions().FindAllRecords(ruleDefinition => AccountMappingRuleDefinitionFilter.IsAccountIdentificationRuleDefinition(ruleDefinition));
             if (accountMappingRuleDefinitions == null)
                 return new HashSet<int>();
             return new HashSet<int>(accountMappingRuleDefinitions.Select(itm => itm.GenericRuleDefinitionId));
