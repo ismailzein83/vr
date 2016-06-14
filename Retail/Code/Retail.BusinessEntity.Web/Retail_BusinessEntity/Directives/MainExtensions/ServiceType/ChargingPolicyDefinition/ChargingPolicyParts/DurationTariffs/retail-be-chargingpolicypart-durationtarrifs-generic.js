@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ChargingpolicypartDurationtarrifsGenericDirective.$inject = ['UtilsService'];
+    ChargingpolicypartDurationtarrifsGenericDirective.$inject = ['UtilsService','VRUIUtilsService'];
 
-    function ChargingpolicypartDurationtarrifsGenericDirective(UtilsService) {
+    function ChargingpolicypartDurationtarrifsGenericDirective(UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {

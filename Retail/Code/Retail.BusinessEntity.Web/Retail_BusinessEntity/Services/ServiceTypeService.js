@@ -22,9 +22,10 @@
 
 
 
-        function editPartType(partEntity, onPartTypeUpdated) {
+        function editPartType(partEntity, onPartTypeUpdated, context) {
             var parameters = {
                 partEntity: partEntity,
+                context: context
             };
             var settings = {};
 
@@ -35,8 +36,9 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/ServiceType/ChargingPolicyPartEditor.html', parameters, settings);
         };
 
-        function addPartType(onPartTypeAdded) {
+        function addPartType(onPartTypeAdded,context) {
             var parameters = {
+                context: context
             };
 
             var settings = {};

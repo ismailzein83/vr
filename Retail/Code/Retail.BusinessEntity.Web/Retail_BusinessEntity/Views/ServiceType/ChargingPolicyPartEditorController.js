@@ -8,6 +8,7 @@
         var isEditMode;
 
         var partEntity;
+        var context;
         var partTypeAPI;
         var partTypeReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -20,6 +21,7 @@
 
             if (parameters != undefined) {
                 partEntity = parameters.partEntity;
+                context = parameters.context;
             }
 
             isEditMode = (partEntity != undefined);
@@ -59,7 +61,7 @@
         function loadChargingPolicyPartTypes() {
             var loadPartTypePromiseDeferred = UtilsService.createPromiseDeferred();
             partTypeReadyDeferred.promise.then(function () {
-                var payloadDirective = partEntity != undefined ? { partType: partEntity } : undefined;
+                var payloadDirective = {context:context, partType : partEntity };
                 VRUIUtilsService.callDirectiveLoad(partTypeAPI, payloadDirective, loadPartTypePromiseDeferred);
             });
             return loadPartTypePromiseDeferred.promise;

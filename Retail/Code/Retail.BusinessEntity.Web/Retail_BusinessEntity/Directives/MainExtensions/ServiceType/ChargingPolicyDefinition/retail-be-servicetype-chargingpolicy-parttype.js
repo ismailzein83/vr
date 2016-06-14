@@ -56,7 +56,7 @@
             var partDirectiveAPI;
             var partDirectiveReadyDeffered;
             var partType;
-
+            var context;
             function initializeController() {
                 $scope.templateConfigs = [];
                 $scope.selectedTemplateConfig;
@@ -88,6 +88,7 @@
 
                 api.load = function (payload) {
                     var promises = [];
+                    context = payload.context; 
                     if (payload != undefined) {
                         partType = payload.partType;
                         if (partType != undefined) {
@@ -115,7 +116,9 @@
                             selectorAPI.clearDataSource();
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
-                                    $scope.templateConfigs.push(response[i]);
+                                    var item = response[i];
+                                    if (context != undefined && !context.checkIfPartTypeUsed(item.ExtensionConfigurationId))
+                                        $scope.templateConfigs.push(item);
                                 }
                                 if (partType != undefined)
                                     $scope.selectedTemplateConfig = UtilsService.getItemByVal($scope.templateConfigs, partType.PartTypeId, 'ExtensionConfigurationId');

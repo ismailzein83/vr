@@ -2,9 +2,12 @@
     <vr-button type="Add" data-onclick="ctrl.addPart" standalone></vr-button>
 </vr-columns>
 <vr-columns width="fullrow">
-    <vr-datagrid datasource="ctrl.parts" norowhighlightonclick="true"
-                 on-ready="ctrl.onGridReady" ondeleterow="ctrl.removePart" menuactions="ctrl.partsGridMenuActions" hidegridmenu>
-        <vr-datagridcolumn headertext="'Part Type'" field="'Entity.PartTypeTitle'" disablesorting="true"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Part'" field="'Entity.PartDefinitionSettings.PartTitle'" disablesorting="true"></vr-datagridcolumn>
-    </vr-datagrid>
+    <vr-validator validate="ctrl.validateParts()">
+        <vr-datagrid datasource="ctrl.parts" norowhighlightonclick="true"
+                     on-ready="ctrl.onGridReady" ondeleterow="ctrl.removePart" menuactions="ctrl.partsGridMenuActions" hidegridmenu>
+            <vr-datagridcolumn headertext="'Part Type'" field="'Entity.PartTypeTitle'" disablesorting="true"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Part'" field="'Entity.PartDefinitionSettings.PartTitle'" disablesorting="true"></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-validator>
+       
 </vr-columns>

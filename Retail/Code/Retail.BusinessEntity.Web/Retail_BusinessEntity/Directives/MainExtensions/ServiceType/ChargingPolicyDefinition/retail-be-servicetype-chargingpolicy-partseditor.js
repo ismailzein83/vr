@@ -45,13 +45,19 @@
                             Entity: partObj.Part
                         });
                     }
-                    Retail_BE_ServiceTypeService.addPartType(onPartTypeAdded);
+                    Retail_BE_ServiceTypeService.addPartType(onPartTypeAdded, getContext());
                 }
 
                 ctrl.removePart = function (partObj) {
                     ctrl.parts.splice(ctrl.parts.indexOf(partObj), 1);
                 }
 
+                ctrl.validateParts = function()
+                {
+                    if (ctrl.parts.length > 0)
+                        return null;
+                    return "One part at least should be added.";
+                }
                 defineMenuActions();
             }
 
@@ -97,9 +103,23 @@
                         Entity: partObj.Part
                     };
                 }
-                Retail_BE_ServiceTypeService.editPartType(part.Entity, onPartTypeUpdated);
+                Retail_BE_ServiceTypeService.editPartType(part.Entity, onPartTypeUpdated, getContext(part));
             }
 
+            function getContext(part)
+            {
+                var context = {
+                    checkIfPartTypeUsed :function(partTypeId)
+                    {
+                        if (part != undefined && partTypeId == part.Entity.PartTypeId)
+                            return false;
+                        if(UtilsService.getItemByVal(ctrl.parts, partTypeId, "Entity.PartTypeId") != undefined)
+                            return true;
+                        return false;
+                    }
+                }
+                return context;
+            }
         }
     }
 

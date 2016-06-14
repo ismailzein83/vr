@@ -113,6 +113,17 @@ namespace Retail.BusinessEntity.Business
 
             if (serviceTypeEntity == null)
                 throw new DataIntegrityValidationException(String.Format("ServiceType '{0}' does not exist", serviceType.ServiceTypeId));
+            if(serviceType.ChargingPolicyDefinitionSettings == null)
+                  throw new DataIntegrityValidationException(String.Format("ChargingPolicyDefinitionSettings is null"));
+
+             if(serviceType.ChargingPolicyDefinitionSettings.PartDefinitions == null)
+                  throw new DataIntegrityValidationException(String.Format("No parts definitions"));
+
+            foreach(var part in serviceType.ChargingPolicyDefinitionSettings.PartDefinitions)
+            {
+                if(serviceType.ChargingPolicyDefinitionSettings.PartDefinitions.Count(x=>x.PartTypeId == part.PartTypeId)>1)
+                    throw new DataIntegrityValidationException(String.Format("Same PartTypeId {0} used more than once", part.PartTypeId));
+            }
         }
         #endregion
 
