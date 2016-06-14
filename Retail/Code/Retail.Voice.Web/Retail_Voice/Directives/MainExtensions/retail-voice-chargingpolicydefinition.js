@@ -45,7 +45,7 @@
                     }
                     var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     directiveReadyDeferred.promise.then(function () {
-                        var payloadDirective =chargingPolicy !=undefined? { parts: chargingPolicy.Parts }:undefined;
+                        var payloadDirective = chargingPolicy != undefined ? { parts: chargingPolicy.PartDefinitions } : undefined;
                         VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, loadDirectivePromiseDeferred);
                     });
                     promises.push(loadDirectivePromiseDeferred.promise);
@@ -63,7 +63,7 @@
                     var directiveData = directiveAPI.getData();
                     var data = {
                         $type: "Retail.Voice.Entities.VoiceChargingPolicyDefinitionSettings, Retail.Voice.Entities",
-                        Parts: directiveData
+                        PartDefinitions: directiveData
                     }
                     return data;
                 }

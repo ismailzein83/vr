@@ -10,7 +10,7 @@ namespace Retail.BusinessEntity.Entities
     {
         public int ConfigId { get; set; }
         public virtual string ChargingPolicyEditor { get; set; }
-        public List<ChargingPolicyDefinitionPart> Parts { get; set; }
+        public List<ChargingPolicyDefinitionPart> PartDefinitions { get; set; }
     }
 
     public class ChargingPolicyDefinitionPart
