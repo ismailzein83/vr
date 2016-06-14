@@ -161,6 +161,7 @@
     <Compile Include="GenericRules\RuleDefinition\GenericRuleTypeConfig.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleViewSettings.cs" />
     <Compile Include="BusinessEntities\IBusinessEntityManager.cs" />
+    <Compile Include="GenericRules\RuleDefinition\IGenericRuleDefinitionFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataRecords\DataRecordQuery.cs" />
     <Compile Include="RecordFilter\DataRecordFilter.cs" />
