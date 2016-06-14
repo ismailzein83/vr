@@ -354,9 +354,17 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
 
         if (typeof obj == "string") {
             for (var i = 0; i < array.length; i++) {
-                if (array[i].toLowerCase() === obj.toLowerCase()) {
-                    return true;
+                if (!isNaN(array[i])) {
+                    if (array[i] === obj ) {
+                        return true;
+                    }
                 }
+                else {
+                    if (array[i].toLowerCase() === obj.toLowerCase()) {
+                        return true;
+                    }
+                }
+               
             }
         }
         else {
