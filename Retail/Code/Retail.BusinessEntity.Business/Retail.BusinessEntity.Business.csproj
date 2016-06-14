@@ -66,6 +66,9 @@
     <Reference Include="Vanrise.GenericData.MainExtensions">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Transformation.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Entities.dll</HintPath>
     </Reference>
@@ -74,7 +77,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountIdentificationManager.cs" />
     <Compile Include="AccountManager.cs" />
+    <Compile Include="Extensions\AccountMappingRuleDefinitionFilter.cs" />
     <Compile Include="AccountPackageManager.cs" />
     <Compile Include="ChargingPolicyManager.cs" />
     <Compile Include="ConfigurationManager.cs" />
