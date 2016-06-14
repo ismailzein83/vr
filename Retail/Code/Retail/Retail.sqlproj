@@ -76,5 +76,17 @@
     <Build Include="Retail\Stored Procedures\sp_Package_GetAll.sql" />
     <Build Include="Retail\Stored Procedures\sp_Package_Insert.sql" />
     <Build Include="Security\Retail.sql" />
+    <Build Include="Retail\Tables\Zone.sql" />
+    <Build Include="Retail\Tables\ServiceType.sql" />
+    <Build Include="Retail\Tables\ChargingPolicy.sql" />
+    <Build Include="Retail\Tables\AccountPackage.sql" />
+    <Build Include="Retail\Stored Procedures\sp_Zone_GetAll.sql" />
+    <Build Include="Retail\Stored Procedures\sp_ServiceType_Update.sql" />
+    <Build Include="Retail\Stored Procedures\sp_ServiceType_GetAll.sql" />
+    <Build Include="Retail\Stored Procedures\sp_ChargingPolicy_Update.sql" />
+    <Build Include="Retail\Stored Procedures\sp_ChargingPolicy_Insert.sql" />
+    <Build Include="Retail\Stored Procedures\sp_ChargingPolicy_GetAll.sql" />
+    <Build Include="Retail\Stored Procedures\sp_AccountPackage_Insert.sql" />
+    <Build Include="Retail\Stored Procedures\sp_AccountPackage_GetAll.sql" />
   </ItemGroup>
 </Project>
