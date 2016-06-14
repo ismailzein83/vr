@@ -191,8 +191,8 @@
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\Templates\ChargingPolicyGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\Templates\ChargingPolicyPartsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\Templates\ChargingPolicySettingsTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\retail-be-chargingpolicypart-durationtariff-single.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\retail-be-chargingpolicypart-ratevalue-single.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\retail-be-chargingpolicypart-durationtariff-single-runtimeeditor.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\retail-be-chargingpolicypart-ratevalue-single-runtimeeditor.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\Templates\SingleDurationTariffChargingPolicyPartTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\Templates\SingleRateValueChargingPolicyPartTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\retail-be-package-servicesettings-voice.js" />
