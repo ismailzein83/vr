@@ -8,10 +8,13 @@ using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.Transformation.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
-    public class AccountManager
+    public class AccountManager : IBusinessEntityManager
     {
         #region Public Methods
 
@@ -200,6 +203,25 @@ namespace Retail.BusinessEntity.Business
             });
         }
 
+        IEnumerable<GenericRuleDefinition> GetAccountsMappingRuleDefinitions()
+        {
+            BusinessEntityDefinitionManager beDefinitionManager = new BusinessEntityDefinitionManager();
+            var subscriberAccountBEDefinitionId = beDefinitionManager.GetBusinessEntityDefinitionId(Account.BUSINESSENTITY_DEFINITION_NAME);            
+            GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
+            var allMappingRuleDefinitions = ruleDefinitionManager.GetGenericRuleDefinitionsByType(MappingRule.RULE_DEFINITION_TYPE_NAME);
+            return allMappingRuleDefinitions.FindAllRecords(itm =>
+            {
+                var mappingRuleDefinitionSettings = itm.SettingsDefinition as MappingRuleDefinitionSettings;
+                if(mappingRuleDefinitionSettings != null)
+                {
+                    var businessEntityFieldType = mappingRuleDefinitionSettings.FieldType as Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType;
+                    if (businessEntityFieldType != null)
+                        return businessEntityFieldType.BusinessEntityDefinitionId == subscriberAccountBEDefinitionId;
+                }
+                return false;
+            });
+        }
+
         #endregion
 
         #region Mappers
@@ -245,6 +267,55 @@ namespace Retail.BusinessEntity.Business
             }
             return 0;
         }
+        #endregion
+
+        #region IBusinessEntityManager
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            var cachedAccounts = GetCachedAccounts();
+            if (cachedAccounts != null)
+                return cachedAccounts.Values.Select(itm => itm as dynamic).ToList();
+            else
+                return null;
+        }
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetAccount(context.EntityId);
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            var accountNames = new List<string>();
+            foreach (var entityId in context.EntityIds)
+            {
+                string accountName = GetAccountName(Convert.ToInt32(entityId));
+                if (accountName == null) throw new NullReferenceException("accountName");
+                accountNames.Add(accountName);
+            }
+            return String.Join(",", accountNames);
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
+
+        public bool IsMatched(IBusinessEntityMatchContext context)
+        {
+            if (context.FieldValueIds == null || context.FilterIds == null) return true;
+
+            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
+            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
+            foreach (var filterId in filterIds)
+            {
+                if (fieldValueIds.Contains(filterId))
+                    return true;
+            }
+            return false;
+        }
+
         #endregion
     }
 }

@@ -28,6 +28,7 @@ namespace Retail.BusinessEntity.Entities
 
     public class Account : BaseAccount
     {
+        public const string BUSINESSENTITY_DEFINITION_NAME = "Retail_BE_SubscriberAccount";
         public int? ParentAccountId { get; set; }
     }
 
