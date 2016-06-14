@@ -242,12 +242,12 @@ namespace Vanrise.Common
             return list;
         }
 
-        public static IEnumerable<T> VROrderList<T>(this IEnumerable<T> list, Vanrise.Entities.DataRetrievalInput input)
+        public static IOrderedEnumerable<T> VROrderList<T>(this IEnumerable<T> list, Vanrise.Entities.DataRetrievalInput input)
         {
             IPropValueReader propValueReader = Utilities.GetPropValueReader<T>(input.SortByColumnName);
             Func<T, Object> selector = x => propValueReader.GetPropertyValue(x);
 
-            IEnumerable<T> orderedList;
+            IOrderedEnumerable<T> orderedList;
             if (input.IsSortDescending)
                 orderedList = list.OrderByDescending(selector);
             else
