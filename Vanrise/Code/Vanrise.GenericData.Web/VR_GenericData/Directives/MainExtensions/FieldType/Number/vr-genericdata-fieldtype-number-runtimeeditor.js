@@ -55,7 +55,7 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_
                     $scope.scopeModel.isAddButtonDisabled = true;
                     return null;
                 }
-                if (UtilsService.contains($scope.scopeModel.values, $scope.scopeModel.value)) {
+                if (UtilsService.contains(getValuesAsNumber($scope.scopeModel.values), getValueAsNumber($scope.scopeModel.value))) {                   
                     $scope.scopeModel.isAddButtonDisabled = true;
                     return 'Value already exists';
                 }
