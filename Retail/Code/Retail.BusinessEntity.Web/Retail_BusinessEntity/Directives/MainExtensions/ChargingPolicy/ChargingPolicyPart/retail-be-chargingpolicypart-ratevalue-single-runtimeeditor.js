@@ -35,11 +35,24 @@ app.directive('retailBeChargingpolicypartRatevalueSingleRuntimeeditor', [functio
             var api = {};
 
             api.load = function (payload) {
-                return directiveAPI.load(payload);
+                var rateValueSettings;
+
+                if (payload != undefined) {
+                    rateValueSettings = payload.RateValueSettings;
+                }
+
+                var directivePayload = {
+                    settings: rateValueSettings
+                };
+
+                return directiveAPI.load(directivePayload);
             };
 
             api.getData = function () {
-                return directiveAPI.getData();
+                return {
+                    $type: 'Retail.BusinessEntity.MainExtensions.ChargingPolicyParts.RateValues.SingleRateValue, Retail.BusinessEntity.MainExtensions',
+                    RateValueSettings: directiveAPI.getData()
+                };
             };
 
             if (ctrl.onReady != null)

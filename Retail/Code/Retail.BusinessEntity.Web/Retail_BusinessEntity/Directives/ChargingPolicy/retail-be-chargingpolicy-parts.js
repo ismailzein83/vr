@@ -58,6 +58,7 @@ app.directive('retailBeChargingpolicyParts', ['Retail_BE_ServiceTypeAPIService',
 
                 function buildTab(partDefinition, part) {
                     var tab = {};
+                    tab.header = partDefinition.PartTypeTitle;
 
                     tab.directiveReadyDeferred = UtilsService.createPromiseDeferred();
                     tab.directiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -87,7 +88,13 @@ app.directive('retailBeChargingpolicyParts', ['Retail_BE_ServiceTypeAPIService',
             };
 
             api.getData = function () {
-                return [];
+                var data = [];
+                for (var i = 0; i < $scope.scopeModel.tabs.length; i++) {
+                    var tab = $scope.scopeModel.tabs[i];
+                    var tabData = tab.directiveAPI.getData();
+                    data.push(tabData);
+                }
+                return data;
             };
 
             if (ctrl.onReady != null)

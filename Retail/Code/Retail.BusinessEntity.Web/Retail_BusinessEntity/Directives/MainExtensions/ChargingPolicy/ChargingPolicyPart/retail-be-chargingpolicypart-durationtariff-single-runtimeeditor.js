@@ -35,11 +35,24 @@ app.directive('retailBeChargingpolicypartDurationtariffSingleRuntimeeditor', [fu
             var api = {};
 
             api.load = function (payload) {
-                return directiveAPI.load(payload);
+                var tariffSettings;
+
+                if (payload != undefined) {
+                    tariffSettings = payload.TariffSettings;
+                }
+
+                var directivePayload = {
+                    settings: tariffSettings
+                };
+
+                return directiveAPI.load(directivePayload);
             };
 
             api.getData = function () {
-                return directiveAPI.getData();
+                return {
+                    $type: 'Retail.BusinessEntity.MainExtensions.ChargingPolicyParts.DurationTariffs.SingleDurationTariff, Retail.BusinessEntity.MainExtensions',
+                    TariffSettings: directiveAPI.getData()
+                };
             };
 
             if (ctrl.onReady != null)

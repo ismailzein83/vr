@@ -22,8 +22,7 @@ app.directive('retailVoiceChargingpolicySettings', [function () {
 
         var partsDirectiveAPI;
 
-        function initializeController()
-        {
+        function initializeController() {
             $scope.scopeModel = {};
 
             $scope.scopeModel.onPartsDirectiveReady = function (api) {
