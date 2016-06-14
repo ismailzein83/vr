@@ -18,7 +18,8 @@ namespace Retail.Web
                 "~/Client/Modules/Queueing", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Runtime", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/VR_GenericData", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/Retail_Voice", "*.js", true));
+                "~/Client/Modules/Retail_Voice", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/VR_Rules", "*.js", true));
         }
     }
 }
