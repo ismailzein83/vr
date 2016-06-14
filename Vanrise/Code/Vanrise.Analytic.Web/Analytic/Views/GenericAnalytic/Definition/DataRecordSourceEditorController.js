@@ -227,6 +227,7 @@
                             var selectedField = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentColumn.FieldName, "FieldName");
                             if (selectedField != undefined)
                             {
+                                selectedField.FieldTitle = currentColumn.FieldTitle;
                                 selectedField.SelectedGridWidth = UtilsService.getItemByVal($scope.scopeModel.gridWidths, currentColumn.Width,'value');
                                 $scope.selectedFields.push(selectedField);
                             }
@@ -238,6 +239,7 @@
                             var currentDetail = dataRecordSource.ItemDetails[y];
                             var selectedDetail = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentDetail.FieldName, "FieldName");
                             if (selectedDetail != undefined) {
+                                selectedDetail.FieldTitle = currentDetail.FieldTitle;
                                 selectedDetail.SelectedDetailWidth = UtilsService.getItemByVal($scope.scopeModel.detailWidths, currentDetail.ColumnWidth, 'value');
                                 $scope.selectedDetails.push(selectedDetail);
                             }
