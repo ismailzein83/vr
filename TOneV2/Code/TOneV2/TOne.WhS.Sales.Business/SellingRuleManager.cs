@@ -14,7 +14,7 @@ namespace TOne.WhS.Sales.Business
     public class SellingRuleManager : Vanrise.Rules.RuleManager<SellingRule, SellingRuleDetail>
     {
 
-        protected override SellingRuleDetail MapToDetails(SellingRule rule)
+        public override SellingRuleDetail MapToDetails(SellingRule rule)
         {
             return new SellingRuleDetail()
             {

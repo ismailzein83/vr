@@ -111,7 +111,7 @@ namespace TOne.WhS.Routing.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeOptionRules.ToBigResult(input, filterExpression, MapToDetails));
         }
 
-        protected override RouteOptionRuleDetail MapToDetails(RouteOptionRule rule)
+        public override RouteOptionRuleDetail MapToDetails(RouteOptionRule rule)
         {
             return new RouteOptionRuleDetail
             {

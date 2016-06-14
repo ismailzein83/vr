@@ -33,7 +33,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return behaviors;
         }
-        protected override PurchasePricingRuleDetail MapToDetails(PurchasePricingRule rule)
+        public override PurchasePricingRuleDetail MapToDetails(PurchasePricingRule rule)
         {
             return new PurchasePricingRuleDetail
             {

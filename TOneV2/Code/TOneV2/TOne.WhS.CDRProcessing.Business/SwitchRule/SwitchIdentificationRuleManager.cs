@@ -53,7 +53,7 @@ namespace TOne.WhS.CDRProcessing.Business
                 && (input.Query.DataSourceIds == null || input.Query.DataSourceIds.Any(x=>prod.Criteria.DataSources.Contains(x)));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, base.GetFilteredRules(filterExpression).ToBigResult(input, filterExpression, MapToDetails));
         }
-        protected override SwitchIdentificationRuleDetail MapToDetails(SwitchIdentificationRule rule)
+        public override SwitchIdentificationRuleDetail MapToDetails(SwitchIdentificationRule rule)
         {
            
             Switch switchEntity = _switchManager.GetSwitch(rule.Settings.SwitchId);

@@ -45,7 +45,7 @@ namespace TOne.WhS.CDRProcessing.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, normalizationRules.ToBigResult(input, filterExpression, MapToDetails));
         }
 
-        protected override NormalizationRuleDetail MapToDetails(NormalizationRule rule)
+        public override NormalizationRuleDetail MapToDetails(NormalizationRule rule)
         {
             return new NormalizationRuleDetail
             {

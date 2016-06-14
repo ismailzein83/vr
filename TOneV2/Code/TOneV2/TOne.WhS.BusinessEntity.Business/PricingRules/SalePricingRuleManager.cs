@@ -58,7 +58,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return behaviors;
         }
-        protected override SalePricingRuleDetail MapToDetails(SalePricingRule rule)
+        public override SalePricingRuleDetail MapToDetails(SalePricingRule rule)
         {
             return new SalePricingRuleDetail
             {

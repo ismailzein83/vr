@@ -56,7 +56,7 @@ namespace TOne.WhS.CDRProcessing.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, base.GetFilteredRules(filterExpression).ToBigResult(input, filterExpression, MapToDetails));
         }
 
-        protected override SupplierIdentificationRuleDetail MapToDetails(SupplierIdentificationRule rule)
+        public override SupplierIdentificationRuleDetail MapToDetails(SupplierIdentificationRule rule)
         {
             return new SupplierIdentificationRuleDetail{
                 Entity=rule,
