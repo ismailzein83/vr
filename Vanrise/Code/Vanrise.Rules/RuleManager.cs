@@ -155,6 +155,11 @@ namespace Vanrise.Rules
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, GetRuleTypeId(), createObject);
         }
 
+        public bool IsCacheExpired(ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(GetRuleTypeId(), ref lastCheckTime);
+        }
+
         #region Private Methods
 
         static ConcurrentDictionary<string, int> s_ruleTypesIds = new ConcurrentDictionary<string, int>();
