@@ -134,6 +134,7 @@
                         data = partDirectiveAPI.getData();
                         if (data != undefined) {
                             data.PartTypeId = $scope.selectedTemplateConfig.ExtensionConfigurationId;
+                            data.PartTypeTitle = $scope.selectedTemplateConfig.Title;
                         }
                     }
                     return data;

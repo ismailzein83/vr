@@ -206,7 +206,9 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\VoiceType\Templates\ICXVoiceTypeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\VoiceType\Templates\InterNationalVoiceTypeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\VoiceType\Templates\NationalVoiceTypeTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\ChargingPolicyParts\DurationTariffs\retail-be-chargingpolicypart-durationtarrifs-generic.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\ChargingPolicyParts\DurationTariffs\retail-be-chargingpolicypart-durationtarrifs-single.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\ChargingPolicyParts\DurationTariffs\Templates\GenericDurationTariffsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\ChargingPolicyParts\DurationTariffs\Templates\SingleDurationTariffsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\retail-be-servicetype-chargingpolicy-definition.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\retail-be-servicetype-chargingpolicy-part.js" />

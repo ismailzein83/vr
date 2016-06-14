@@ -16,7 +16,7 @@ namespace Retail.BusinessEntity.Entities
     public class ChargingPolicyDefinitionPart
     {        
         public int PartTypeId { get; set; }
-
+        public string PartTypeTitle { get; set; }
         public ChargingPolicyPartDefinitionSettings PartDefinitionSettings { get; set; }
     }
 }

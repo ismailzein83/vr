@@ -40,8 +40,8 @@
 
                 ctrl.addPart = function () {
                     var onPartTypeAdded = function (partObj) {
-                        console.log(partObj);
-                        ctrl.parts.push(partObj);
+                        console.log(partObj)
+                        ctrl.parts.push({Entity:partObj.Part});
                     }
                     Retail_BE_ServiceTypeService.addPartType(onPartTypeAdded);
                 }
@@ -59,12 +59,10 @@
                 api.load = function (payload) {
                     if (payload != undefined) {
                         ctrl.parts.length = 0;
-                       
                         if (payload.parts) {
-
                             for (var i = 0; i < payload.parts.length ; i++) {
                                 var currentItemAction = payload.parts[i];
-                                ctrl.parts.push(currentItemAction);
+                                ctrl.parts.push({ Entity: currentItemAction });
                             }
                         }
                     }
@@ -74,7 +72,7 @@
                     var parts = [];
                     for (var i = 0; i < ctrl.parts.length ; i++) {
                         var part = ctrl.parts[i];
-                        parts.push(part);
+                        parts.push(part.Entity);
                     }
                     return parts;
                 }
@@ -91,10 +89,11 @@
 
             function editPartType(part) {
                 var onPartTypeUpdated = function (partObj) {
-                    ctrl.parts[ctrl.parts.indexOf(part)] = partObj;
+                    ctrl.parts[ctrl.parts.indexOf(part)] = { Entity: partObj.Part };
                 }
-                Retail_BE_ServiceTypeService.editPartType(part, onPartTypeUpdated);
+                Retail_BE_ServiceTypeService.editPartType(part.Entity, onPartTypeUpdated);
             }
+
         }
     }
 

@@ -99,7 +99,7 @@
 
                   
 
-                    return UtilsService.waitMultiplePromises(promises);
+                   
 
                     function getChargingPolicyPartTemplateConfigs(partTypeConfigId) {
                         return Retail_BE_ServiceTypeAPIService.GetChargingPolicyPartTemplateConfigs(partTypeConfigId).then(function (response) {
@@ -132,6 +132,7 @@
                         if(directiveData !=undefined)
                         {
                             directiveData.ConfigId = $scope.selectedTemplateConfig.ExtensionConfigurationId;
+                            directiveData.PartTitle = $scope.selectedTemplateConfig.Title;
                         }
                         data = {
                             $type:"Retail.BusinessEntity.Entities.ChargingPolicyDefinitionPart,Retail.BusinessEntity.Entities",

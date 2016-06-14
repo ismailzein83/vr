@@ -20,7 +20,6 @@
 
             if (parameters != undefined) {
                 partEntity = parameters.partEntity;
-                console.log(partEntity)
             }
 
             isEditMode = (partEntity != undefined);
@@ -95,8 +94,11 @@
 
         function buildPartTypeObjFromScope()
         {
-            var obj = partTypeAPI.getData();
-            return obj;
+            var part = partTypeAPI.getData();
+            var partTypeObj = {
+                Part: part
+            };
+            return partTypeObj;
         }
     }
 
