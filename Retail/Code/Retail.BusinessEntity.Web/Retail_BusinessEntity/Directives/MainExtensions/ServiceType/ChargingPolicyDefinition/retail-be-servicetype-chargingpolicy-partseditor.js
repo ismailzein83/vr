@@ -40,6 +40,7 @@
 
                 ctrl.addPart = function () {
                     var onPartTypeAdded = function (partObj) {
+                        console.log(partObj);
                         ctrl.parts.push(partObj);
                     }
                     Retail_BE_ServiceTypeService.addPartType(onPartTypeAdded);
@@ -60,24 +61,20 @@
                         ctrl.parts.length = 0;
                        
                         if (payload.parts) {
-                            for (var p in payload.parts)
-                            {
-                                if (p != "$type")
-                                {
-                                    var currentItemAction = payload.parts[p];
-                                    ctrl.parts.push(currentItemAction);
-                                }
-                              
+
+                            for (var i = 0; i < payload.parts.length ; i++) {
+                                var currentItemAction = payload.parts[i];
+                                ctrl.parts.push(currentItemAction);
                             }
                         }
                     }
                 };
 
                 api.getData = function () {
-                    var parts = {};
+                    var parts = [];
                     for (var i = 0; i < ctrl.parts.length ; i++) {
                         var part = ctrl.parts[i];
-                        parts[part.PartConfigId] = part;
+                        parts.push(part);
                     }
                     return parts;
                 }

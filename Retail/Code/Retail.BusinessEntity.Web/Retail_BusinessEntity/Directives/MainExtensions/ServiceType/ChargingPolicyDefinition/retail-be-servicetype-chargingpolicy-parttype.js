@@ -92,7 +92,7 @@
                             partDirectiveReadyDeffered = UtilsService.createPromiseDeferred();
                             partDirectiveReadyDeffered.promise.then(function () {
                                 partDirectiveReadyDeffered = undefined;
-                                var payloadDirective ={ PartDefinitionSettings:partType.PartDefinitionSettings,partTypeConfigId:partType.PartConfigId};
+                                var payloadDirective = { PartDefinitionSettings: partType.PartDefinitionSettings, partTypeConfigId: partType.PartTypeId };
                                 VRUIUtilsService.callDirectiveLoad(partDirectiveAPI, payloadDirective, loadPartPromiseDeferred);
                             });
                             promises.push(loadPartPromiseDeferred.promise);
@@ -112,7 +112,7 @@
                                     $scope.templateConfigs.push(response[i]);
                                 }
                                 if (partType != undefined)
-                                    $scope.selectedTemplateConfig = UtilsService.getItemByVal($scope.templateConfigs, partType.PartConfigId, 'ExtensionConfigurationId');
+                                    $scope.selectedTemplateConfig = UtilsService.getItemByVal($scope.templateConfigs, partType.PartTypeId, 'ExtensionConfigurationId');
                                 else
                                     $scope.selectedTemplateConfig = $scope.templateConfigs[0];
                             }
@@ -133,7 +133,7 @@
                     if ($scope.selectedTemplateConfig != undefined && partDirectiveAPI != undefined) {
                         data = partDirectiveAPI.getData();
                         if (data != undefined) {
-                            data.PartConfigId = $scope.selectedTemplateConfig.ExtensionConfigurationId;
+                            data.PartTypeId = $scope.selectedTemplateConfig.ExtensionConfigurationId;
                         }
                     }
                     return data;
