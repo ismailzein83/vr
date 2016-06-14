@@ -1,11 +1,12 @@
 ﻿'use strict';
 
-app.directive('retailBeChargingpolicyParts', [function ()
+app.directive('retailBeChargingpolicyParts', ['Retail_BE_ServiceTypeAPIService', 'UtilsService', 'VRUIUtilsService', function (Retail_BE_ServiceTypeAPIService, UtilsService, VRUIUtilsService)
 {
     return {
         restrict: 'E',
         scope: {
             onReady: '=',
+            normalColNum: '@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -24,6 +25,7 @@ app.directive('retailBeChargingpolicyParts', [function ()
         function initializeController()
         {
             $scope.scopeModel = {};
+            $scope.scopeModel.tabs = [];
             defineAPI();
         }
 
@@ -32,7 +34,56 @@ app.directive('retailBeChargingpolicyParts', [function ()
             var api = {};
 
             api.load = function (payload) {
-                
+                var partDefinitions;
+                var parts;
+
+                if (payload != undefined) {
+                    partDefinitions = payload.partDefinitions;
+                    parts = payload.parts;
+                }
+
+                if (partDefinitions == undefined)
+                    return;
+
+                var tabLoadPromises = [];
+
+                for (var i = 0; i < partDefinitions.length; i++) {
+                    var partDefinition = partDefinitions[i];
+                    var part = (parts != undefined) ? parts[i] : undefined;
+
+                    var tab = buildTab(partDefinition, part);
+                    tabLoadPromises.push(tab.directiveLoadDeferred.promise);
+                    $scope.scopeModel.tabs.push(tab);
+                }
+
+                function buildTab(partDefinition, part) {
+                    var tab = {};
+
+                    tab.directiveReadyDeferred = UtilsService.createPromiseDeferred();
+                    tab.directiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    tab.onDirectiveReady = function (api) {
+                        tab.directiveAPI = api;
+                        tab.directiveReadyDeferred.resolve();
+                    };
+                    
+                    tab.directiveReadyDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(tab.directiveAPI, part, tab.directiveLoadDeferred);
+                    });
+
+                    setRuntimeEditor();
+
+                    function setRuntimeEditor() {
+                        return Retail_BE_ServiceTypeAPIService.GetChargingPolicyPartTemplateConfigs(partDefinition.PartTypeId).then(function (partTemplates) {
+                            var partTemplate = UtilsService.getItemByVal(partTemplates, partDefinition.PartDefinitionSettings.ConfigId, 'ExtensionConfigurationId');
+                            tab.runtimeEditor = partTemplate.RuntimeEditor;
+                        });
+                    }
+
+                    return tab;
+                }
+
+                return UtilsService.waitMultiplePromises(tabLoadPromises);
             };
 
             api.getData = function () {

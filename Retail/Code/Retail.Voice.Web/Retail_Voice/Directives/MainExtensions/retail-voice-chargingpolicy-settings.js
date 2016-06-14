@@ -36,7 +36,23 @@ app.directive('retailVoiceChargingpolicySettings', [function () {
             var api = {};
 
             api.load = function (payload) {
-                
+                var partDefinitions;
+                var parts;
+
+                if (payload != undefined) {
+                    partDefinitions = payload.definitionSettings.PartDefinitions;
+
+                    if (payload.settings != undefined) {
+                        parts = payload.settings.Parts;
+                    }
+                }
+
+                var partsDirectivePayload = {
+                    partDefinitions: partDefinitions,
+                    parts: parts
+                };
+
+                return partsDirectiveAPI.load(partsDirectivePayload);
             };
 
             api.getData = function () {

@@ -1,14 +1,7 @@
-﻿<vr-tab header="'Tab 1'">
-    <vr-row>
-        <vr-columns width="1/3row">
-            <vr-textbox label="Value 1" value="scopeModel.valOne"></vr-textbox>
-        </vr-columns>
-    </vr-row>
-</vr-tab>
-<vr-tab header="'Tab 2'">
-    <vr-row>
-        <vr-columns width="1/3row">
-            <vr-textbox label="Value 2" value="scopeModel.valTwo"></vr-textbox>
+﻿<vr-tab header="'Header'" ng-repeat="tab in scopeModel.tabs">
+    <vr-row removeline>
+        <vr-columns colnum="{{ctrl.normalColNum}}">
+            <vr-directivewrapper directive="tab.runtimeEditor" on-ready="tab.onDirectiveReady"></vr-directivewrapper>
         </vr-columns>
     </vr-row>
 </vr-tab>
