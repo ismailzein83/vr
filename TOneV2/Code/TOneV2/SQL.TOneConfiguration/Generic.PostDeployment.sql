@@ -235,26 +235,26 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [genericdata].[GenericRuleTypeConfig] on;
-;with cte_data([ID],[Name],[Details])
+;with cte_data([ID],[Name],[Title],[Details])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'GenericRuleMapping','{"GenericRuleTypeConfigId":"1","Name":"GenericRuleMapping","Title":"Mapping","Editor":"vr-genericdata-genericruledefinitionsettings-mapping","RuntimeEditor":"vr-genericdata-genericrulesettings-mapping-runtimeeditor","RuleTypeFQTN":"Vanrise.GenericData.Transformation.Entities.MappingRule, Vanrise.GenericData.Transformation.Entities","RuleManagerFQTN":"Vanrise.GenericData.Transformation.MappingRuleManager, Vanrise.GenericData.Transformation","FilterEditor":"vr-genericdata-genericrulesettings-mapping-filtereditor"}'),
-(2,'VR_NormalizationRule','{"GenericRuleTypeConfigId":"2","Name":"VR_NormalizationRule","Title":"Normalization Rule","Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-normalizenumbersettings", "RuleTypeFQTN":"Vanrise.GenericData.Normalization.NormalizationRule, Vanrise.GenericData.Normalization", "RuleManagerFQTN":"Vanrise.GenericData.Normalization.NormalizationRuleManager, Vanrise.GenericData.Normalization"}'),
-(3,'VR_RateTypeRule','{"GenericRuleTypeConfigId":"4","Name":"VR_RateTypeRule","Title":"Rate Type Rule","Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-ratetype", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.RateTypeRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.RateTypeRuleManager, Vanrise.GenericData.Pricing"}'),
-(4,'VR_TariffRule','{"GenericRuleTypeConfigId":"6","Name":"VR_TariffRule","Title":"Tariff Rule","Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-tariff", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.TariffRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.TariffRuleManager, Vanrise.GenericData.Pricing"}'),
-(5,'VR_ExtraChargeRule','{"GenericRuleTypeConfigId":"7","Name":"VR_ExtraChargeRule","Title":"Extra Charge Rule","Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-extracharge", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.ExtraChargeRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.ExtraChargeRuleManager, Vanrise.GenericData.Pricing"}'),
-(6,'VR_RateValueRule','{"GenericRuleTypeConfigId":"11","Name":"VR_RateValueRule","Title":"Rate Value Rule","Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-ratevalue", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.RateValueRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.RateValueRuleManager, Vanrise.GenericData.Pricing"}')
+(1,'VR_MappingRule','Mapping Rule','{"GenericRuleTypeConfigId":"1","Name":"GenericRuleMapping","Title":"Mapping","Editor":"vr-genericdata-genericruledefinitionsettings-mapping","RuntimeEditor":"vr-genericdata-genericrulesettings-mapping-runtimeeditor","RuleTypeFQTN":"Vanrise.GenericData.Transformation.Entities.MappingRule, Vanrise.GenericData.Transformation.Entities","RuleManagerFQTN":"Vanrise.GenericData.Transformation.MappingRuleManager, Vanrise.GenericData.Transformation","FilterEditor":"vr-genericdata-genericrulesettings-mapping-filtereditor"}'),
+(2,'VR_NormalizationRule','Normalization Rule','{"GenericRuleTypeConfigId":"2","Name":"VR_NormalizationRule","Title":"Normalization Rule","Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-normalizenumbersettings", "RuleTypeFQTN":"Vanrise.GenericData.Normalization.NormalizationRule, Vanrise.GenericData.Normalization", "RuleManagerFQTN":"Vanrise.GenericData.Normalization.NormalizationRuleManager, Vanrise.GenericData.Normalization"}'),
+(3,'VR_RateTypeRule','Rate Type Rule','{"GenericRuleTypeConfigId":"3","Name":"VR_RateTypeRule","Title":"Rate Type Rule","Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-ratetype", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.RateTypeRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.RateTypeRuleManager, Vanrise.GenericData.Pricing"}'),
+(4,'VR_TariffRule','Tariff Rule','{"GenericRuleTypeConfigId":"4","Name":"VR_TariffRule","Title":"Tariff Rule","Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-tariff", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.TariffRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.TariffRuleManager, Vanrise.GenericData.Pricing"}'),
+(5,'VR_ExtraChargeRule','Extra Charge Rule','{"GenericRuleTypeConfigId":"5","Name":"VR_ExtraChargeRule","Title":"Extra Charge Rule","Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-extracharge", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.ExtraChargeRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.ExtraChargeRuleManager, Vanrise.GenericData.Pricing"}'),
+(6,'VR_RateValueRule','Rate Value Rule','{"GenericRuleTypeConfigId":"6","Name":"VR_RateValueRule","Title":"Rate Value Rule","Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-ratevalue", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.RateValueRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.RateValueRuleManager, Vanrise.GenericData.Pricing"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Details]))
+)c([ID],[Name],[Title],[Details]))
 merge	[genericdata].[GenericRuleTypeConfig] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Name] = s.[Name],[Details] = s.[Details]
+	[Name] = s.[Name], [Title] = s.[Title],[Details] = s.[Details]
 when not matched by target then
-	insert([ID],[Name],[Details])
-	values(s.[ID],s.[Name],s.[Details]);
+	insert([ID],[Name],[Title],[Details])
+	values(s.[ID],s.[Name],[Title],s.[Details]);
 set identity_insert [genericdata].[GenericRuleTypeConfig] off;
 
 --[genericdata].[ExpressionBuilderConfig]-----------------------------------------------------------
