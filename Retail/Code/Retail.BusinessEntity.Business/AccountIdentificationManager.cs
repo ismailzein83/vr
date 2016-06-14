@@ -19,26 +19,32 @@ namespace Retail.BusinessEntity.Business
             return GetAllAccountsMappingRulesByAccountId().GetRecord(accountId);
         }
 
+        #region PrivateMethods
+
         private Dictionary<long, List<MappingRule>> GetAllAccountsMappingRulesByAccountId()
-        {            
-            HashSet<int> accountMappingRuleDefinitionIds = GetAccountMappingRuleDefinitionsIds();
-            MappingRuleManager mappingRuleManager = new MappingRuleManager();
-            var allRules = mappingRuleManager.GetAllRules().FindAllRecords(itm => accountMappingRuleDefinitionIds.Contains(itm.DefinitionId));
-            if (allRules != null)
-            {
-                Dictionary<long, List<MappingRule>> rulesByAccountIds = new Dictionary<long, List<MappingRule>>();
-                foreach(var rule in allRules)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllAccountsMappingRulesByAccountId",
+                () =>
                 {
-                    if(rule.Settings == null)
-                        throw new NullReferenceException(string.Format("rule.Settings. ruleId '{0}'", rule.RuleId));
-                    List<MappingRule> matchAccountRules = rulesByAccountIds.GetOrCreateItem(Convert.ToInt64(rule.Settings.Value));
-                    matchAccountRules.Add(rule);
-                }
-                return rulesByAccountIds;
-            }
-            else
-                return null;
-        }
+                    HashSet<int> accountMappingRuleDefinitionIds = GetAccountMappingRuleDefinitionsIds();
+                    MappingRuleManager mappingRuleManager = new MappingRuleManager();
+                    var allRules = mappingRuleManager.GetAllRules().FindAllRecords(itm => accountMappingRuleDefinitionIds.Contains(itm.DefinitionId));
+                    if (allRules != null)
+                    {
+                        Dictionary<long, List<MappingRule>> rulesByAccountIds = new Dictionary<long, List<MappingRule>>();
+                        foreach (var rule in allRules)
+                        {
+                            if (rule.Settings == null)
+                                throw new NullReferenceException(string.Format("rule.Settings. ruleId '{0}'", rule.RuleId));
+                            List<MappingRule> matchAccountRules = rulesByAccountIds.GetOrCreateItem(Convert.ToInt64(rule.Settings.Value));
+                            matchAccountRules.Add(rule);
+                        }
+                        return rulesByAccountIds;
+                    }
+                    else
+                        return null;
+                });           
+        }        
 
         HashSet<int> GetAccountMappingRuleDefinitionsIds()
         {
@@ -61,5 +67,25 @@ namespace Retail.BusinessEntity.Business
                 return new HashSet<int>();
             return new HashSet<int>(accountMappingRuleDefinitions.Select(itm => itm.GenericRuleDefinitionId));
         }
+
+        #endregion
+
+        #region Private Classes
+
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            DateTime? _ruleDefinitionCacheLastCheck;
+            DateTime? _mappingRuleCacheLastCheck;
+            MappingRuleManager mappingRuleManager = new MappingRuleManager();
+            
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return Vanrise.Caching.CacheManagerFactory.GetCacheManager<GenericRuleDefinitionManager.CacheManager>().IsCacheExpired(ref _ruleDefinitionCacheLastCheck)
+                    |
+                    mappingRuleManager.IsCacheExpired(ref _mappingRuleCacheLastCheck);
+            }
+        }
+
+        #endregion
     }
 }
