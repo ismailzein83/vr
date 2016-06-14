@@ -25,6 +25,7 @@
                 return getTamplate(attrs);
             }
         };
+
         function getTamplate(attrs) {
             var withemptyline = 'withemptyline';
             var label = "label='Part'";
@@ -35,15 +36,16 @@
 
 
             var template =
-                    '<vr-columns colnum="{{chargingpolicypartCtrl.normalColNum * 2}}">'
-                     + ' <vr-select on-ready="onSelectorReady" datasource="templateConfigs" selectedvalues="selectedTemplateConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title"'
-                     + label + ' isrequired="chargingpolicypartCtrl.isrequired" hideremoveicon></vr-select></vr-columns>'
-            + '<vr-row>'
-               + '<vr-directivewrapper directive="selectedTemplateConfig.DefinitionEditor" on-ready="onDirectiveReady" normal-col-num="{{chargingpolicypartCtrl.normalColNum}}" isrequired="chargingpolicypartCtrl.isrequired" customvalidate="chargingpolicypartCtrl.customvalidate"></vr-directivewrapper>'
-             + '</vr-row>';
+                '<vr-columns colnum="{{chargingpolicypartCtrl.normalColNum * 2}}">' +
+                ' <vr-select on-ready="onSelectorReady" datasource="templateConfigs" selectedvalues="selectedTemplateConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title"' +
+                label + ' isrequired="chargingpolicypartCtrl.isrequired" hideremoveicon></vr-select></vr-columns>' +
+                '<vr-row>' +
+                '<vr-directivewrapper directive="selectedTemplateConfig.DefinitionEditor" on-ready="onDirectiveReady" normal-col-num="{{chargingpolicypartCtrl.normalColNum}}" isrequired="chargingpolicypartCtrl.isrequired" customvalidate="chargingpolicypartCtrl.customvalidate"></vr-directivewrapper>' +
+                '</vr-row>';
             return template;
 
         }
+
         function ServicetypeChargingpolicyPart($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var selectorAPI;
@@ -52,6 +54,7 @@
             var directiveReadyDeferred;
             var directivePayload;
             var part;
+
             function initializeController() {
                 $scope.templateConfigs = [];
                 $scope.selectedTemplateConfig;
@@ -80,8 +83,7 @@
                     if (payload != undefined) {
                         part = payload.PartDefinitionSettings;
                         var partTypeConfigId = payload.partTypeConfigId;
-                        if (part != undefined)
-                        {
+                        if (part != undefined) {
                             directiveReadyDeferred = UtilsService.createPromiseDeferred();
                             var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                             directiveReadyDeferred.promise.then(function () {
@@ -95,10 +97,6 @@
                         var getChargingPolicyPartTemplateConfigsPromise = getChargingPolicyPartTemplateConfigs(partTypeConfigId);
                         promises.push(getChargingPolicyPartTemplateConfigsPromise);
                     }
-
-                  
-
-                   
 
                     function getChargingPolicyPartTemplateConfigs(partTypeConfigId) {
                         return Retail_BE_ServiceTypeAPIService.GetChargingPolicyPartTemplateConfigs(partTypeConfigId).then(function (response) {
@@ -115,7 +113,7 @@
                         });
                     }
 
-
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = getData;
@@ -128,13 +126,12 @@
                     var data;
                     if ($scope.selectedTemplateConfig != undefined && directiveAPI != undefined) {
                         var directiveData = directiveAPI.getData();
-                        if(directiveData !=undefined)
-                        {
+                        if (directiveData != undefined) {
                             directiveData.ConfigId = $scope.selectedTemplateConfig.ExtensionConfigurationId;
                             directiveData.PartTitle = $scope.selectedTemplateConfig.Title;
                         }
                         data = {
-                            $type:"Retail.BusinessEntity.Entities.ChargingPolicyDefinitionPart,Retail.BusinessEntity.Entities",
+                            $type: "Retail.BusinessEntity.Entities.ChargingPolicyDefinitionPart,Retail.BusinessEntity.Entities",
                             PartDefinitionSettings: directiveData
                         };
                     }

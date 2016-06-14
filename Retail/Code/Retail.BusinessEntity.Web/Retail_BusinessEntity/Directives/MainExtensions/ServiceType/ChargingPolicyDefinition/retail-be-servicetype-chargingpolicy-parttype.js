@@ -25,6 +25,7 @@
                 return getTamplate(attrs);
             }
         };
+
         function getTamplate(attrs) {
             var withemptyline = 'withemptyline';
             var label = "label='Part Type'";
@@ -35,16 +36,17 @@
 
 
             var template =
-                '<vr-row>'
-                   + '<vr-columns colnum="{{parttypeCtrl.normalColNum * 2}}">'
-                     + ' <vr-select on-ready="onSelectorReady" datasource="templateConfigs" selectedvalues="selectedTemplateConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" onselectionchanged="onPartTypeSelectionChanged"'
-                     + label + ' isrequired="parttypeCtrl.isrequired" hideremoveicon></vr-select>'
-                   + ' </vr-columns>'
-              + '<retail-be-servicetype-chargingpolicy-part on-ready="partDirectiveReady"  isrequired="true" normal-col-num="{{parttypeCtrl.normalColNum}}"></retail-be-servicetype-chargingpolicy-part>'
-             + '</vr-row>';
+                '<vr-row>' +
+                '<vr-columns colnum="{{parttypeCtrl.normalColNum * 2}}">' +
+                ' <vr-select on-ready="onSelectorReady" datasource="templateConfigs" selectedvalues="selectedTemplateConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" onselectionchanged="onPartTypeSelectionChanged"' +
+                label + ' isrequired="parttypeCtrl.isrequired" hideremoveicon></vr-select>' +
+                ' </vr-columns>' +
+                '<retail-be-servicetype-chargingpolicy-part on-ready="partDirectiveReady"  isrequired="true" normal-col-num="{{parttypeCtrl.normalColNum}}"></retail-be-servicetype-chargingpolicy-part>' +
+                '</vr-row>';
             return template;
 
         }
+
         function ChargingpolicyDefinition($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var selectorAPI;
@@ -54,6 +56,7 @@
             var partDirectiveAPI;
             var partDirectiveReadyDeffered;
             var partType;
+
             function initializeController() {
                 $scope.templateConfigs = [];
                 $scope.selectedTemplateConfig;
@@ -63,15 +66,16 @@
                     defineAPI();
                 };
 
-                $scope.partDirectiveReady = function (api)
-                {
+                $scope.partDirectiveReady = function (api) {
                     partDirectiveAPI = api;
                     if (partDirectiveReadyDeffered)
-                      partDirectiveReadyDeffered.resolve();
+                        partDirectiveReadyDeffered.resolve();
                 }
 
                 $scope.onPartTypeSelectionChanged = function () {
-                    var directivePayload = $scope.selectedTemplateConfig != undefined ? { partTypeConfigId: $scope.selectedTemplateConfig.ExtensionConfigurationId } : undefined;
+                    var directivePayload = $scope.selectedTemplateConfig != undefined ? {
+                        partTypeConfigId: $scope.selectedTemplateConfig.ExtensionConfigurationId
+                    } : undefined;
                     var setLoader = function (value) {
                         $scope.isLoadingDirective = value;
                     };
@@ -86,17 +90,19 @@
                     var promises = [];
                     if (payload != undefined) {
                         partType = payload.partType;
-                        if (partType != undefined)
-                        {
+                        if (partType != undefined) {
                             var loadPartPromiseDeferred = UtilsService.createPromiseDeferred();
                             partDirectiveReadyDeffered = UtilsService.createPromiseDeferred();
                             partDirectiveReadyDeffered.promise.then(function () {
                                 partDirectiveReadyDeffered = undefined;
-                                var payloadDirective = { PartDefinitionSettings: partType.PartDefinitionSettings, partTypeConfigId: partType.PartTypeId };
+                                var payloadDirective = {
+                                    PartDefinitionSettings: partType.PartDefinitionSettings,
+                                    partTypeConfigId: partType.PartTypeId
+                                };
                                 VRUIUtilsService.callDirectiveLoad(partDirectiveAPI, payloadDirective, loadPartPromiseDeferred);
                             });
                             promises.push(loadPartPromiseDeferred.promise);
-                        } 
+                        }
                     }
 
                     var getChargingPolicyPartTypeTemplateConfigsPromise = getChargingPolicyPartTypeTemplateConfigs();

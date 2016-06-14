@@ -25,6 +25,7 @@
                 return getTamplate(attrs);
             }
         };
+
         function getTamplate(attrs) {
             var withemptyline = 'withemptyline';
             var label = "label='Charging Policy'";
@@ -35,17 +36,18 @@
 
 
             var template =
-                '<vr-row>'
-                   + '<vr-columns colnum="{{chargingpolicyCtrl.normalColNum * 2}}">'
-                     + ' <vr-select on-ready="onSelectorReady" datasource="templateConfigs" selectedvalues="selectedTemplateConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title"'
-                     + label + ' isrequired="chargingpolicyCtrl.isrequired" hideremoveicon></vr-select>'
-               + '</vr-row>'
-            + '<vr-row>'
-               + '<vr-directivewrapper directive="selectedTemplateConfig.Editor" on-ready="chargingpolicyCtrl.onDirectiveReady" normal-col-num="{{chargingpolicyCtrl.normalColNum}}" isrequired="chargingpolicyCtrl.isrequired" customvalidate="chargingpolicyCtrl.customvalidate"></vr-directivewrapper>'
-             + '</vr-row>';
+                '<vr-row>' +
+                '<vr-columns colnum="{{chargingpolicyCtrl.normalColNum * 2}}">' +
+                ' <vr-select on-ready="onSelectorReady" datasource="templateConfigs" selectedvalues="selectedTemplateConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title"' +
+                label + ' isrequired="chargingpolicyCtrl.isrequired" hideremoveicon></vr-select>' +
+                '</vr-row>' +
+                '<vr-row>' +
+                '<vr-directivewrapper directive="selectedTemplateConfig.Editor" on-ready="chargingpolicyCtrl.onDirectiveReady" normal-col-num="{{chargingpolicyCtrl.normalColNum}}" isrequired="chargingpolicyCtrl.isrequired" customvalidate="chargingpolicyCtrl.customvalidate"></vr-directivewrapper>' +
+                '</vr-row>';
             return template;
 
         }
+
         function ChargingpolicyDefinition($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var selectorAPI;
@@ -54,6 +56,7 @@
             var directiveReadyDeferred;
             var directivePayload;
             var chargingPolicy;
+
             function initializeController() {
                 $scope.templateConfigs = [];
                 $scope.selectedTemplateConfig;
@@ -64,7 +67,7 @@
                 };
 
                 ctrl.onDirectiveReady = function (api) {
-                    directiveAPI = api; 
+                    directiveAPI = api;
                     directivePayload = undefined;
                     var setLoader = function (value) {
                         $scope.isLoadingDirective = value;
@@ -80,15 +83,16 @@
                 api.load = function (payload) {
                     var promises = [];
                     if (payload != undefined) {
-           
+
                         chargingPolicy = payload.chargingPolicy;
-                        if (chargingPolicy != undefined)
-                        {
+                        if (chargingPolicy != undefined) {
                             directiveReadyDeferred = UtilsService.createPromiseDeferred();
                             var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                             directiveReadyDeferred.promise.then(function () {
                                 directiveReadyDeferred = undefined;
-                                var payloadDirective = { chargingPolicy: chargingPolicy };
+                                var payloadDirective = {
+                                    chargingPolicy: chargingPolicy
+                                };
 
                                 VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, loadDirectivePromiseDeferred);
                             });
@@ -99,11 +103,9 @@
                     var getChargingPolicyTemplateConfigsPromise = getChargingPolicyTemplateConfigs();
                     promises.push(getChargingPolicyTemplateConfigsPromise);
 
-                    return UtilsService.waitMultiplePromises(promises);
-
                     function getChargingPolicyTemplateConfigs() {
                         return Retail_BE_ServiceTypeAPIService.GetChargingPolicyTemplateConfigs().then(function (response) {
-                          
+
                             selectorAPI.clearDataSource();
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
@@ -117,6 +119,7 @@
                         });
                     }
 
+                    return UtilsService.waitMultiplePromises(promises);
 
                 };
 
