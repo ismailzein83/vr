@@ -12,6 +12,10 @@
         var chargingPolicyAPI;
         var chargingPolicyReadyDeferred = UtilsService.createPromiseDeferred();
 
+
+        var ruleDefinitionSelectorAPI;
+        var ruleDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -33,6 +37,12 @@
                 chargingPolicyAPI = api;
                 chargingPolicyReadyDeferred.resolve();
             }
+            $scope.scopeModel.onRuleDefinitionSelectorReady = function(api)
+            {
+                ruleDefinitionSelectorAPI = api;
+                ruleDefinitionSelectorReadyDeferred.resolve();
+            }
+
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateServiceType() : insertServiceType();
             };
@@ -67,7 +77,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadChargingPolicy]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadChargingPolicy, loadRuleDefinitionSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -109,6 +119,23 @@
 
         }
 
+        function loadRuleDefinitionSelector()
+        {
+            var ruleDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
+
+            ruleDefinitionSelectorReadyDeferred.promise.then(function () {
+                var ruleDefinitionPayload = { filter: { Filters: [{ $type: "Retail.BusinessEntity.Business.AccountMappingRuleDefinitionFilter,Retail.BusinessEntity.Business" }] } };
+
+                if (serviceTypeEntity != undefined && serviceTypeEntity.Settings != undefined) {
+                    ruleDefinitionPayload.selectedIds = serviceTypeEntity.Settings.IdentificationRuleDefinitionId;
+                }
+
+                VRUIUtilsService.callDirectiveLoad(ruleDefinitionSelectorAPI, ruleDefinitionPayload, ruleDefinitionLoadDeferred);
+            });
+
+            return ruleDefinitionLoadDeferred.promise;
+        }
+
         function updateServiceType() {
             $scope.scopeModel.isLoading = true;
 
@@ -128,10 +155,13 @@
         }
 
         function buildUpdateServiceTypeObjFromScope() {
+
+
             var obj = {
                 ServiceTypeId: serviceTypeId,
                 Title: $scope.scopeModel.title,
                 Description: $scope.scopeModel.description,
+                IdentificationRuleDefinitionId:ruleDefinitionSelectorAPI.getSelectedIds(),
                 ChargingPolicyDefinitionSettings: chargingPolicyAPI.getData()
             };
             return obj;

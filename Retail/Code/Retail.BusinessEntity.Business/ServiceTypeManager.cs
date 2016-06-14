@@ -58,7 +58,8 @@ namespace Retail.BusinessEntity.Business
                 AccountServiceEditor = serviceType.Settings.AccountServiceEditor,
                 ServiceVolumeEditor = serviceType.Settings.ServiceVolumeEditor,
                 ChargingPolicyDefinitionSettings = updatedServiceType.ChargingPolicyDefinitionSettings,
-                Description = updatedServiceType.Description
+                Description = updatedServiceType.Description,
+                IdentificationRuleDefinitionId = updatedServiceType.IdentificationRuleDefinitionId
             };
             if (serviceType.Settings.ChargingPolicyDefinitionSettings !=null)
               serviceTypeSettings.ChargingPolicyDefinitionSettings.ChargingPolicyEditor = serviceType.Settings.ChargingPolicyDefinitionSettings.ChargingPolicyEditor;

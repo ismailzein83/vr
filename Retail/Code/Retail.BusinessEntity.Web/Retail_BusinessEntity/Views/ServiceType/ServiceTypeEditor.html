@@ -13,6 +13,12 @@
                             <vr-textarea label="Description" value="scopeModel.description" isrequired></vr-textarea>
                         </vr-columns>
                     </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-genericdata-genericruledefinition-selector label="Rule Definition" on-ready="scopeModel.onRuleDefinitionSelectorReady" isrequired="true"></vr-genericdata-genericruledefinition-selector>
+                        </vr-columns>
+                    </vr-row>
+                 
                 </vr-tab>
                 <vr-tab header="'Charging Policy Definition'">
                     <vr-row>

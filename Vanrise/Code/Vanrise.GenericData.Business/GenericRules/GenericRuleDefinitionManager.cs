@@ -86,12 +86,21 @@ namespace Vanrise.GenericData.Business
 
             if (filter != null)
             {
-                filterExpression = (item) => (item.SettingsDefinition != null && item.SettingsDefinition.ConfigId == filter.RuleTypeId);
+                filterExpression = (item) =>   (item.SettingsDefinition != null && item.SettingsDefinition.ConfigId == filter.RuleTypeId)  || (filter.Filters != null && CheckIfFilterIsMatch(item, filter.Filters));
             }
 
             return cachedGenericRuleDefinitions.MapRecords(GenericRuleDefinitionInfoMapper, filterExpression);
         }
-
+        public bool CheckIfFilterIsMatch(GenericRuleDefinition ruleDefinition,List<IGenericRuleDefinitionFilter> filters)
+        {                    
+            GenericRuleDefinitionFilterContext context = new GenericRuleDefinitionFilterContext{ RuleDefinition = ruleDefinition};
+            foreach(var filter in filters)
+            {
+                if (!filter.IsMatched(context))
+                    return false;
+            }
+            return true;
+        }
         public IEnumerable<GenericRuleDefinition> GetGenericRuleDefinitionsByType(string ruleTypeName)
         {
             GenericRuleTypeConfigManager configManager = new GenericRuleTypeConfigManager();
