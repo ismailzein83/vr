@@ -9,6 +9,7 @@ namespace Vanrise.GenericData.Transformation.Entities
 {
     public class MappingRule : GenericRule
     {
+        public const string RULE_DEFINITION_TYPE_NAME = "VR_MappingRule";
         public MappingRuleSettings Settings { get; set; }
 
         public override string GetSettingsDescription(IGenericRuleSettingsDescriptionContext context)

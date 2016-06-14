@@ -26,6 +26,8 @@ namespace Vanrise.GenericData.Business
         {
             var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
             var businessEntityDefinition = cachedBEDefinitions.FindRecord(x=>x.Name == businessEntityDefinitionName);
+            if (businessEntityDefinition == null)
+                throw new NullReferenceException(String.Format("businessEntityDefinition. businessEntityDefinitionName '{0}'", businessEntityDefinitionName));
             return businessEntityDefinition.BusinessEntityDefinitionId;
         }
         public BusinessEntityDefinition GetBusinessEntityDefinition(int businessEntityDefinitionId)

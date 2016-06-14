@@ -92,6 +92,14 @@ namespace Vanrise.GenericData.Business
             return cachedGenericRuleDefinitions.MapRecords(GenericRuleDefinitionInfoMapper, filterExpression);
         }
 
+        public IEnumerable<GenericRuleDefinition> GetGenericRuleDefinitionsByType(string ruleTypeName)
+        {
+            GenericRuleTypeConfigManager configManager = new GenericRuleTypeConfigManager();
+            var ruleTypeConfigId = configManager.GetGenericRuleTypeIdByName(ruleTypeName);
+            Func<GenericRuleDefinition, bool> filterExpression = (item) => (item.SettingsDefinition != null && item.SettingsDefinition.ConfigId == ruleTypeConfigId);
+            return GetCachedGenericRuleDefinitions().FindAllRecords(filterExpression);
+        }
+
         public Vanrise.Security.Entities.View GetGenericRuleDefinitionView(int genericRuleDefinitionId)
         {
             var viewManager = new Vanrise.Security.Business.ViewManager();
