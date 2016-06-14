@@ -35,7 +35,6 @@
 
 
             var template =
-
                     '<vr-columns colnum="{{chargingpolicypartCtrl.normalColNum * 2}}">'
                      + ' <vr-select on-ready="onSelectorReady" datasource="templateConfigs" selectedvalues="selectedTemplateConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title"'
                      + label + ' isrequired="chargingpolicypartCtrl.isrequired" hideremoveicon></vr-select></vr-columns>'

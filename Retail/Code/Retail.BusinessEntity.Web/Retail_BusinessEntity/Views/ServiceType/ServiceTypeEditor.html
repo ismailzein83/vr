@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="Retail_BE_ServiceTypeEditorController" width="'60%'" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="Retail_BE_ServiceTypeEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formServiceTypeEditor">
             <vr-tabs>
@@ -16,8 +16,8 @@
                 </vr-tab>
                 <vr-tab header="'Charging Policy Definition'">
                     <vr-row>
-                        <vr-columns width="1/2row">
-                            <retail-be-servicetype-chargingpolicy-definition on-ready="scopeModel.onChargingPolicyReady" normal-col-num="3"></retail-be-servicetype-chargingpolicy-definition>
+                        <vr-columns width="fullrow">
+                            <retail-be-servicetype-chargingpolicy-definition on-ready="scopeModel.onChargingPolicyReady" normal-col-num="2"></retail-be-servicetype-chargingpolicy-definition>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

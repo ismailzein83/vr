@@ -40,7 +40,6 @@
 
                 ctrl.addPart = function () {
                     var onPartTypeAdded = function (partObj) {
-                        console.log(partObj)
                         ctrl.parts.push({Entity:partObj.Part});
                     }
                     Retail_BE_ServiceTypeService.addPartType(onPartTypeAdded);

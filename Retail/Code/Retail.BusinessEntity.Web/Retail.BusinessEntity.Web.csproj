@@ -158,9 +158,7 @@
     <Compile Include="Controllers\PackageController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\ChargingPolicyParts\RateValues\Templates\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
@@ -210,6 +208,10 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\ChargingPolicyParts\DurationTariffs\retail-be-chargingpolicypart-durationtarrifs-single.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\ChargingPolicyParts\DurationTariffs\Templates\GenericDurationTariffsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\ChargingPolicyParts\DurationTariffs\Templates\SingleDurationTariffsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\ChargingPolicyParts\RateValues\retail-be-chargingpolicypart-ratevalues-generic.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\ChargingPolicyParts\RateValues\retail-be-chargingpolicypart-ratevalues-single.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\ChargingPolicyParts\RateValues\Templates\GenericRateValuesTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\ChargingPolicyParts\RateValues\Templates\SingleRateValuesTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\retail-be-servicetype-chargingpolicy-definition.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\retail-be-servicetype-chargingpolicy-part.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\retail-be-servicetype-chargingpolicy-partseditor.js" />

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ChargingPolicyPartEditorController.$inject = ['$scope', 'Retail_BE_ServiceTypeAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    ChargingPolicyPartEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function ChargingPolicyPartEditorController($scope, Retail_BE_ServiceTypeAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function ChargingPolicyPartEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
         var isEditMode;
 
         var partEntity;

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ChargingpolicypartDurationtarrifsGenericDirective.$inject = ['UtilsService'];
+    ChargingpolicypartRatevaluesGenericDirective.$inject = ['UtilsService', 'VRUIUtilsService'];
 
-    function ChargingpolicypartDurationtarrifsGenericDirective(UtilsService) {
+    function ChargingpolicypartRatevaluesGenericDirective(UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -12,16 +12,16 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var chargingpolicypartDurationtarrifsGeneric = new ChargingpolicypartDurationtarrifsGeneric($scope, ctrl, $attrs);
-                chargingpolicypartDurationtarrifsGeneric.initializeController();
+                var chargingpolicypartRatevaluesGeneric = new ChargingpolicypartRatevaluesGeneric($scope, ctrl, $attrs);
+                chargingpolicypartRatevaluesGeneric.initializeController();
             },
-            controllerAs: "generictarrifCtrl",
+            controllerAs: "genericratevalueCtrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/ServiceType/ChargingPolicyDefinition/ChargingPolicyParts/DurationTariffs/Templates/GenericDurationTariffsTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/ServiceType/ChargingPolicyDefinition/ChargingPolicyParts/RateValues/Templates/GenericRateValuesTemplate.html"
 
         };
 
-        function ChargingpolicypartDurationtarrifsGeneric($scope, ctrl, $attrs) {
+        function ChargingpolicypartRatevaluesGeneric($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var directiveAPI;
             var directiveReadyDeferred= UtilsService.createPromiseDeferred();
@@ -59,7 +59,7 @@
 
                 function getData() {
                     var data = {
-                        $type: "Retail.BusinessEntity.MainExtensions.ChargingPolicyParts.DurationTariffs.GenericRuleDurationTariffDefinition,Retail.BusinessEntity.MainExtensions",
+                        $type: "Retail.BusinessEntity.MainExtensions.ChargingPolicyParts.RateValues.GenericRuleRateValueDefinition,Retail.BusinessEntity.MainExtensions",
                         RuleCriteriaDefinition: directiveAPI.getData()
                     };
                     return data;
@@ -68,6 +68,6 @@
         }
     }
 
-    app.directive('retailBeChargingpolicypartDurationtarrifsGeneric', ChargingpolicypartDurationtarrifsGenericDirective);
+    app.directive('retailBeChargingpolicypartRatevaluesGeneric', ChargingpolicypartRatevaluesGenericDirective);
 
 })(app);
