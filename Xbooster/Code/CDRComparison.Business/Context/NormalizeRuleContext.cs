@@ -11,5 +11,11 @@ namespace CDRComparison.Business
     {
         public string Value { get;  set; }
         public string NormalizedValue { get; set; }
+
+        public Vanrise.Rules.BaseRule Rule
+        {
+            get;
+            set;
+        }
     }
 }
