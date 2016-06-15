@@ -8,6 +8,8 @@ namespace Retail.BusinessEntity.Entities
 {
     public class BaseChargingPolicy
     {
+        public const string BUSINESSENTITY_DEFINITION_NAME = "Retail_BE_ChargingPolicy";
+
         public int ChargingPolicyId { get; set; }
 
         public string Name { get; set; }

@@ -14,7 +14,18 @@ namespace Retail.BusinessEntity.Business
     {
         public bool IsMatched(IGenericRuleDefinitionFilterContext context)
         {
+            ValidateInput(context);
             return IsAccountIdentificationRuleDefinition(context.RuleDefinition);
+        }
+
+        private void ValidateInput(IGenericRuleDefinitionFilterContext context)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            if (context.RuleDefinition == null)
+                throw new ArgumentNullException("context.RuleDefinition");
+            if (context.RuleDefinition.SettingsDefinition == null)
+                throw new ArgumentNullException(String.Format("context.RuleDefinition.SettingsDefinition. RuleDefinitionId '{0}'", context.RuleDefinition.GenericRuleDefinitionId));
         }
 
         internal static bool IsAccountIdentificationRuleDefinition(GenericRuleDefinition ruleDefinition)

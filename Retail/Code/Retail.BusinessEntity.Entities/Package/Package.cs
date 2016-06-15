@@ -8,6 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class Package
     {
+        public const string BUSINESSENTITY_DEFINITION_NAME = "Retail_BE_Package";
         public int PackageId { get; set; }
 
         public string Name { get; set; }

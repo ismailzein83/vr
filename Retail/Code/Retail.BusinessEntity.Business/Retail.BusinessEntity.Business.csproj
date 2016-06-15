@@ -85,6 +85,7 @@
     <Compile Include="ChargingPolicyManager.cs" />
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Extensions\ChargingPolicyRuleDefinitionFilter.cs" />
     <Compile Include="PricingEntityCacheManager.cs" />
     <Compile Include="ServiceTypeManager.cs" />
     <Compile Include="ZoneManager.cs" />
