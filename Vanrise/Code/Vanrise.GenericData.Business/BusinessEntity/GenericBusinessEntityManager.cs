@@ -149,23 +149,7 @@ namespace Vanrise.GenericData.Business
             //    return null;
             //return entityField.GetValue(entity.Details);
         }
-        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
-        {
-            var entityDefinitionSettings = context.EntityDefinition.Settings as GenericBEDefinitionSettings;
-            Dictionary<long, GenericBusinessEntity> cachedEntities = GetCachedGenericBusinessEntities(context.EntityDefinition.BusinessEntityDefinitionId);
-
-            List<string> descriptions = new List<string>();
-
-            foreach (long entityId in context.EntityIds)
-            {
-                GenericBusinessEntity entity = GetGenericBusinessEntity(entityId, context.EntityDefinition.BusinessEntityDefinitionId);
-                if (entity == null) throw new NullReferenceException("entity");
-                string entityDescription = GetFieldPathValue(entity, entityDefinitionSettings.FieldPath);
-                descriptions.Add(entityDescription);
-            }
-
-            return (descriptions.Count > 0) ? String.Join(",", descriptions) : null;
-        }
+       
         public GenericBusinessEntityTitle GetBusinessEntityTitle(int businessEntityDefinitionId,long? genericBussinessEntityId = null)
         {
            
@@ -185,19 +169,7 @@ namespace Vanrise.GenericData.Business
             }
             return entityTitle;
         }        
-        public bool IsMatched(IBusinessEntityMatchContext context)
-        {
-            if (context.FieldValueIds == null || context.FilterIds == null) return true;
-
-            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
-            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
-            foreach (var filterId in filterIds)
-            {
-                if (fieldValueIds.Contains(filterId))
-                    return true;
-            }
-            return false;
-        }
+       
         public int GetDataRecordTypeId(int businessEntityDefinitionId)
         {
             BusinessEntityDefinition beDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(businessEntityDefinitionId);
@@ -384,11 +356,7 @@ namespace Vanrise.GenericData.Business
        
         #endregion
 
-        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
-        {
-            return GetGenericBusinessEntity(context.EntityId, context.EntityDefinitionId);
-        }
-        
+        #region IBusinessEntityManager
         public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             var cachedEntities = GetCachedGenericBusinessEntities(context.EntityDefinitionId);
@@ -398,10 +366,26 @@ namespace Vanrise.GenericData.Business
                 return cachedEntities.Values.Select(itm => itm as dynamic).ToList();
         }
 
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetGenericBusinessEntity(context.EntityId, context.EntityDefinitionId);
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            var entityDefinitionSettings = context.EntityDefinition.Settings as GenericBEDefinitionSettings;
+            GenericBusinessEntity entity = GetGenericBusinessEntity((long)context.EntityId, context.EntityDefinition.BusinessEntityDefinitionId);
+            if (entity == null) throw new NullReferenceException(String.Format("entity. entityId '{0}'", context.EntityId));
+            string entityDescription = GetFieldPathValue(entity, entityDefinitionSettings.FieldPath);
+            return entityDescription;
+        }
+
         public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(context.EntityDefinitionId, ref lastCheckTime);
         }
+        #endregion
+
     }
     public class GenericBusinessEntityFilter
     {

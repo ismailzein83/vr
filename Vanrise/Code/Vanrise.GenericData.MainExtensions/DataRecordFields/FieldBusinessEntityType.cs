@@ -46,33 +46,54 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (value == null)
                 return null;
 
-            IEnumerable<object> selectedEntityIds = FieldTypeHelper.ConvertFieldValueToList<object>(value);
-            var entityIds = new List<object>();
-
-            if (selectedEntityIds != null)
-            {
-                if (selectedEntityIds.Count() == 0)
-                    return null;
-                else
-                    entityIds.AddRange(selectedEntityIds);
-            }
-            else
-                entityIds.Add(value);
-
             BusinessEntityDefinition beDefinition = GetBusinessEntityDefinition();
             var beManager = GetBusinessEntityManager();
-            return beManager.GetEntityDescription(new BusinessEntityDescriptionContext() { EntityDefinition = beDefinition, EntityIds = entityIds });
+            var entityDescriptions = new List<string>();
+
+            IEnumerable<object> valueAsList = FieldTypeHelper.ConvertFieldValueToList<object>(value);
+            if (valueAsList != null)
+            {
+                if (valueAsList.Count() == 0)
+                    return null;
+                else
+                {
+                    foreach (var entityId in valueAsList)
+                    {
+                        entityDescriptions.Add(beManager.GetEntityDescription(new BusinessEntityDescriptionContext() { EntityDefinition = beDefinition, EntityId = entityId }));
+                    }
+                }
+            }
+            else
+            {
+                entityDescriptions.Add(beManager.GetEntityDescription(new BusinessEntityDescriptionContext() { EntityDefinition = beDefinition, EntityId = value }));
+            }
+            return String.Join(",", entityDescriptions);
         }
 
         public override bool IsMatched(object fieldValue, object filterValue)
         {
-            var fieldValueObjList = fieldValue as List<object>;
-            fieldValueObjList = (fieldValueObjList == null) ? new List<object>() { fieldValue } : fieldValueObjList;
-
+            if (fieldValue == null || filterValue == null)
+                return true;
             var beFilter = filterValue as BusinessEntityFieldTypeFilter;
-
-            IBusinessEntityManager beManager = GetBusinessEntityManager(); // This statement is not necassary
-            return beManager.IsMatched(new BusinessEntityMatchContext() { FieldValueIds = fieldValueObjList, FilterIds = beFilter.BusinessEntityIds });
+            if (beFilter == null)
+                throw new NullReferenceException("beFilter");
+            if (beFilter.BusinessEntityIds.Count == 0)
+                return false;
+            Type filterValueType = beFilter.BusinessEntityIds[0].GetType();
+            var fieldValueAsList = fieldValue as List<object>;
+            if (fieldValueAsList != null)
+            {
+                foreach (var value in fieldValueAsList)
+                {
+                    if (beFilter.BusinessEntityIds.Contains(Convert.ChangeType(value, filterValueType)))
+                        return true;
+                }
+                return false;
+            }
+            else
+            {
+                return beFilter.BusinessEntityIds.Contains(Convert.ChangeType(fieldValue, filterValueType));
+            }
         }
 
         public override bool IsMatched(object fieldValue, RecordFilter recordFilter)

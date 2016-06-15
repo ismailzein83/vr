@@ -9,6 +9,7 @@ namespace Vanrise.GenericData.Entities
     public class BusinessEntityDescriptionContext : IBusinessEntityDescriptionContext
     {
         public BusinessEntityDefinition EntityDefinition { get; set; }
-        public List<object> EntityIds { get; set; }
+
+        public object EntityId { get; set; }
     }
 }

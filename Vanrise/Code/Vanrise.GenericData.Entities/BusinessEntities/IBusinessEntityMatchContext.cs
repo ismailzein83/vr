@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
 
-namespace Vanrise.GenericData.Entities
-{
-    public interface IBusinessEntityMatchContext
-    {
-        IEnumerable<object> FieldValueIds { get; set; }
+//namespace Vanrise.GenericData.Entities
+//{
+//    public interface IBusinessEntityMatchContext
+//    {
+//        IEnumerable<object> FieldValueIds { get; set; }
 
-        IEnumerable<object> FilterIds { get; set; }
-    }
-}
+//        object FieldValue { get; }
+
+//        IEnumerable<object> FilterIds { get; }
+//    }
+//}

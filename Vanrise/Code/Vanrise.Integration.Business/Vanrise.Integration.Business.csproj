@@ -42,9 +42,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.GenericData.Entities">
-      <HintPath>..\Output\Vanrise.GenericData.Entities.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Queueing">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
     </Reference>
@@ -77,6 +74,10 @@
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
+      <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
+      <Name>Vanrise.GenericData.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Integration.Data\Vanrise.Integration.Data.csproj">
       <Project>{88cd0723-c237-4632-8bbe-346a645b4c09}</Project>
