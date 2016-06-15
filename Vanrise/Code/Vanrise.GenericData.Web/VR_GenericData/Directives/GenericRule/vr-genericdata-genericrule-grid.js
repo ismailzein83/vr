@@ -28,6 +28,7 @@
 
             var gridAPI;
             var accessibility;
+            var criteriaFieldsToHide;
 
             function initializeController() {
                 ctrl.criteriaFields = [];
@@ -43,6 +44,14 @@
 
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VR_GenericData_GenericRuleAPIService.GetFilteredGenericRules(dataRetrievalInput).then(function (response) {
+                        if (response && response.Data) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                var dataItem = response.Data[i];
+                                if (dataItem.FieldValueDescriptions != null) {
+
+                                }
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
@@ -59,6 +68,7 @@
                     var promises = [];
 
                     accessibility = query.accessibility;
+                    criteriaFieldsToHide = query.criteriaFieldsToHide;
 
                     var getDefinitionPromise = VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinition(query.RuleDefinitionId);
                     promises.push(getDefinitionPromise);
@@ -69,7 +79,9 @@
                     getDefinitionPromise.then(function (response) {
                         ctrl.criteriaFields.length = 0;
                         for (var i = 0; i < response.CriteriaDefinition.Fields.length; i++) {
-                            ctrl.criteriaFields.push(response.CriteriaDefinition.Fields[i]);
+                            var criteriaFieldDefinition = response.CriteriaDefinition.Fields[i];
+                            if (isCriteriaFieldVisible(criteriaFieldDefinition.FieldName))
+                                ctrl.criteriaFields.push(criteriaFieldDefinition);
                         }
                         gridAPI.retrieveData(query).then(function () { retrieveDataDeferred.resolve(); }).catch(function (error) { retrieveDataDeferred.reject(error); });
                     });
@@ -82,6 +94,16 @@
                 };
 
                 return directiveAPI;
+            }
+
+            function isCriteriaFieldVisible(criteriaFieldName) {
+                if (criteriaFieldsToHide == undefined)
+                    return true;
+                for (var i = 0; i < criteriaFieldsToHide.length; i++) {
+                    if (criteriaFieldName == criteriaFieldsToHide[i])
+                        return false;
+                }
+                return true;
             }
             
             //function defineMenuActions() {
