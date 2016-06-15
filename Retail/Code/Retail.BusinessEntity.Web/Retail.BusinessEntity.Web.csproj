@@ -234,8 +234,10 @@
     <Content Include="Retail_BusinessEntity\Directives\Package\Templates\PackageGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\Templates\ServiceGridEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-ruledefinition-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\Templates\ServiceTypeGridTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\ServiceType\Templates\ServiceTypeRuleDefinitionEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-countryzone-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-zone-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\Templates\CountryZoneTemplate.html" />

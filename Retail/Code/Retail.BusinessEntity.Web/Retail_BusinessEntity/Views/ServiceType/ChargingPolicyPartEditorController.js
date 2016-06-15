@@ -69,7 +69,7 @@
 
         function setTitle() {
             if (isEditMode) {
-                var serviceTypeTitle = (partEntity != undefined) ? partEntity.Title : undefined;
+                var serviceTypeTitle = (partEntity != undefined) ? partEntity.PartTypeTitle : undefined;
                 $scope.title = UtilsService.buildTitleForUpdateEditor(serviceTypeTitle, 'Charging Policy Part Type');
             }
             else {

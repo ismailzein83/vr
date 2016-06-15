@@ -1,0 +1,14 @@
+﻿<vr-columns width="1/3row">
+    <vr-genericdata-genericruledefinition-selector label="Rule Definition" on-ready="ctrl.onRuleDefinitionSelectorReady" selectedvalues="ctrl.selectedRuleDefinitions" onselectitem="ctrl.onSelectItem" ondeselectitem="ctrl.onDeselectItem" ismultipleselection hideselectedvaluessection></vr-genericdata-genericruledefinition-selector>
+</vr-columns>
+<vr-columns width="2/3row" vr-loader="ctrl.isLoadingDirective">
+    <vr-validator validate="ctrl.isValid()">
+        <vr-datagrid datasource="ctrl.datasource"
+                     on-ready="onGridReady" ondeleterow="ctrl.removeFilter" hidegridmenu norowhighlightonclick="'true'">
+            <vr-datagridcolumn headertext="'Rule Definition Name'" field="'Name'" widthfactor="5"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Title'" widthfactor="10">
+                <vr-textbox value="dataItem.Title"></vr-textbox>
+            </vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-validator>
+</vr-columns>

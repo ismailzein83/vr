@@ -1,1 +1,8 @@
-﻿
+﻿<vr-datagrid datasource="scopeModel.accountServices"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions"
+             idfield="Entity.AccountId">
+    <vr-datagridcolumn headertext="'Account Name'" field="'AccountName'"></vr-datagridcolumn>
+</vr-datagrid>

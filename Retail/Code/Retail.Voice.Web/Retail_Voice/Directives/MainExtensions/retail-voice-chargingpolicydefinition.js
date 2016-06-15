@@ -25,12 +25,21 @@
 
             var directiveAPI;
             var directiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var ruleDefinitionEditorAPI;
+            var ruleDefinitionEditorReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.onPartsDirectiveReady = function (api) {
                     directiveAPI = api;
                     directiveReadyDeferred.resolve();
                 };
+
+                $scope.scopeModel.onRuleDefinitionEditorReady = function (api) {
+                    ruleDefinitionEditorAPI = api;
+                    ruleDefinitionEditorReadyDeferred.resolve();
+                }
                 defineAPI();
             }
 
@@ -50,6 +59,20 @@
                     });
                     promises.push(loadDirectivePromiseDeferred.promise);
                
+
+                    var ruleDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
+                    ruleDefinitionEditorReadyDeferred.promise.then(function () {
+                        var ruleDefinitionPayload;
+
+                        if (chargingPolicy != undefined) {
+                            ruleDefinitionPayload = { ruleDefinitions: chargingPolicy.RuleDefinitions };
+                        }
+
+                        VRUIUtilsService.callDirectiveLoad(ruleDefinitionEditorAPI, ruleDefinitionPayload, ruleDefinitionLoadDeferred);
+                    });
+                    promises.push(ruleDefinitionLoadDeferred.promise);
+
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -63,7 +86,8 @@
                     var directiveData = directiveAPI.getData();
                     var data = {
                         $type: "Retail.Voice.Entities.VoiceChargingPolicyDefinitionSettings, Retail.Voice.Entities",
-                        PartDefinitions: directiveData
+                        PartDefinitions: directiveData,
+                        RuleDefinitions: ruleDefinitionEditorAPI.getData()
                     }
                     return data;
                 }
