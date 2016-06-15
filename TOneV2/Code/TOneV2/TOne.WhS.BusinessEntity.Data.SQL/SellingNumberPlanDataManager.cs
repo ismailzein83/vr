@@ -4,12 +4,11 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.Data.SQL;
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
 {
-    public class SellingNumberPlanDataManager : BaseTOneDataManager, ISellingNumberPlanDataManager
+    public class SellingNumberPlanDataManager : Vanrise.Data.SQL.BaseSQLDataManager, ISellingNumberPlanDataManager
     {
        
         #region ctor/Local Variables

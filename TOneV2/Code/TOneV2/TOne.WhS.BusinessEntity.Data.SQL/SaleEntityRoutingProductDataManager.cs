@@ -5,13 +5,12 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.Data.SQL;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
 {
-    public class SaleEntityRoutingProductDataManager : BaseTOneDataManager, ISaleEntityRoutingProductDataManager
+    public class SaleEntityRoutingProductDataManager : Vanrise.Data.SQL.BaseSQLDataManager, ISaleEntityRoutingProductDataManager
     {
 
         #region ctor/Local Variables
