@@ -32,9 +32,16 @@ namespace Retail.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedChargingPolicies.ToBigResult(input, filterExpression, ChargingPolicyDetailMapper));
         }
-        public IEnumerable<ChargingPolicyInfo> GetChargingPoliciesInfo()
+        public IEnumerable<ChargingPolicyInfo> GetChargingPoliciesInfo(ChargingPolicyInfoFilter filter)
         {
-            return this.GetCachedChargingPolicies().MapRecords(ChargingPolicyInfoMapper).OrderBy(x => x.Name);
+
+            Func<ChargingPolicy, bool> filterExpression = null;
+            if (filter != null)
+            {
+                if (filter.ServiceTypeId.HasValue)
+                    filterExpression = (x) => x.ServiceTypeId == filter.ServiceTypeId;
+            }
+            return this.GetCachedChargingPolicies().MapRecords(ChargingPolicyInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
         public ChargingPolicy GetChargingPolicy(int chargingPolicyId)
         {

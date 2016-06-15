@@ -21,21 +21,30 @@ namespace Retail.BusinessEntity.Data.SQL
         #endregion
 
         #region Public Methods
-        public bool Insert(AccountService accountService, out int insertedId)
+        public bool Insert(AccountService accountService, out long insertedId)
         {
             object accountServiceId;
-
-            int recordsEffected = ExecuteNonQuerySP("Retail.sp_AccountService_Insert", out accountServiceId, accountService.AccountId, accountService.ServiceTypeId, accountService.ServiceChargingPolicyId, Vanrise.Common.Serializer.Serialize(accountService.Settings));
+            string serializedSettings = null;
+            if (accountService.Settings != null)
+            {
+                serializedSettings = Vanrise.Common.Serializer.Serialize(accountService.Settings);
+            }
+            int recordsEffected = ExecuteNonQuerySP("Retail.sp_AccountService_Insert", out accountServiceId, accountService.AccountId, accountService.ServiceTypeId, accountService.ServiceChargingPolicyId, serializedSettings);
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
-                insertedId = (int)accountServiceId;
+                insertedId = (long)accountServiceId;
             else
                 insertedId = 0;
             return insertedSuccesfully;
         }
         public bool Update(AccountService accountService)
         {
-            int recordsEffected = ExecuteNonQuerySP("Retail.sp_AccountService_Update", accountService.AccountServiceId, accountService.AccountId, accountService.ServiceTypeId, accountService.ServiceChargingPolicyId, Vanrise.Common.Serializer.Serialize(accountService.Settings));
+            string serializedSettings = null;
+            if(accountService.Settings !=null)
+            {
+                serializedSettings = Vanrise.Common.Serializer.Serialize(accountService.Settings);
+            }
+            int recordsEffected = ExecuteNonQuerySP("Retail.sp_AccountService_Update", accountService.AccountServiceId, accountService.AccountId, accountService.ServiceTypeId, accountService.ServiceChargingPolicyId,serializedSettings);
             return (recordsEffected > 0);
         }
         public bool AreAccountServicesUpdated(ref object updateHandle)

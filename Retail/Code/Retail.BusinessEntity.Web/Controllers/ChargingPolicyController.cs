@@ -25,9 +25,9 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetChargingPoliciesInfo")]
         public IEnumerable<ChargingPolicyInfo> GetChargingPoliciesInfo(string filter = null)
         {
-            return _manager.GetChargingPoliciesInfo();
+            ChargingPolicyInfoFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<ChargingPolicyInfoFilter>(filter) : null;
+            return _manager.GetChargingPoliciesInfo(deserializedFilter);
         }
-
         [HttpGet]
         [Route("GetChargingPolicy")]
         public ChargingPolicy GetChargingPolicy(int chargingPolicyId)

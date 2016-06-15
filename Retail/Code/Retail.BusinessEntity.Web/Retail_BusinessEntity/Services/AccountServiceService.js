@@ -10,8 +10,10 @@
             editAccountService: editAccountService,
         });
 
-        function addAccountService(onAccountServiceAdded) {
-            var settings = {};
+        function addAccountService(onAccountServiceAdded,accountId) {
+            var settings = {
+                accountId: accountId
+            };
 
             settings.onScopeReady = function (modalScope) {
 

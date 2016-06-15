@@ -74,6 +74,7 @@
     <Compile Include="Account\AccountQuery.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyDetail.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyInfo.cs" />
+    <Compile Include="ChargingPolicy\ChargingPolicyInfoFilter.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyParts\ChargingPolicyPartDefinitionSettings.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyParts\ChargingPolicyPartConfig.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyParts\ChargingPolicyPartTypeConfig.cs" />

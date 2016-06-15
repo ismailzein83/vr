@@ -9,7 +9,7 @@ namespace Retail.BusinessEntity.Data
 {
     public interface IAccountServiceDataManager:IDataManager
     {
-        bool Insert(AccountService accountService, out int insertedId);
+        bool Insert(AccountService accountService, out long insertedId);
         bool Update(AccountService accountService);
         bool AreAccountServicesUpdated(ref object updateHandle);
         List<AccountService> GetAccountServices();

@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("retailBeAccountServiceGrid", ["UtilsService", "VRNotificationService", "Retail_BE_AccountServiceAPIService",
+app.directive("retailBeAccountserviceGrid", ["UtilsService", "VRNotificationService", "Retail_BE_AccountServiceAPIService",
     "Retail_BE_AccountServiceService", "VRUIUtilsService",
 function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIService, Retail_BE_AccountServiceService, VRUIUtilsService) {
 
@@ -31,10 +31,13 @@ function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIServic
         this.initializeController = initializeController;
 
         function initializeController() {
+            $scope.scopeModel = {};
 
-            $scope.accountServices = [];
+            $scope.scopeModel.accountServices = [];
+
             defineMenuActions();
-            $scope.onGridReady = function (api) {
+
+            $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
@@ -51,7 +54,7 @@ function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIServic
                     return directiveAPI;
                 }
             };
-            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return Retail_BE_AccountServiceAPIService.GetFilteredAccountServices(dataRetrievalInput)
                     .then(function (response) {
                         onResponseReady(response);
@@ -64,7 +67,7 @@ function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIServic
         }
 
         function defineMenuActions() {
-            $scope.gridMenuActions = [{
+            $scope.scopeModel.gridMenuActions = [{
                 name: "Edit",
                 clicked: editAccountService,
                 haspermission: hasUpdateAccountServicePermission

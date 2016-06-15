@@ -1,6 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountPackageService', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountIdentificationService', 'Retail_BE_AccountTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (Retail_BE_AccountAPIService, Retail_BE_AccountService, Retail_BE_AccountPackageService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountIdentificationService, Retail_BE_AccountTypeEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
+app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountPackageService', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountIdentificationService', 'Retail_BE_AccountTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'Retail_BE_AccountServiceAPIService','Retail_BE_AccountServiceService',
+    function (Retail_BE_AccountAPIService, Retail_BE_AccountService, Retail_BE_AccountPackageService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountIdentificationService, Retail_BE_AccountTypeEnum, UtilsService, VRUIUtilsService, VRNotificationService, Retail_BE_AccountServiceAPIService, Retail_BE_AccountServiceService) {
     return {
         restrict: 'E',
         scope: {
@@ -73,6 +74,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             drillDownTabs.push(buildSubAccountsTab());
             drillDownTabs.push(buildAssignedPackagesTab());
             drillDownTabs.push(buildIdentificationRulesTab());
+            drillDownTabs.push(buildAssignedServicesTab());
 
             function buildSubAccountsTab() {
                 var subAccountsTab = {};
@@ -140,9 +142,6 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
 
                 return packagesTab;
             }
-
-
-
             function buildIdentificationRulesTab() {
                 var identificationRuleTab = {};
 
@@ -171,6 +170,32 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                 }];
 
                 return identificationRuleTab;
+            }
+
+            function buildAssignedServicesTab() {
+                var servicesTab = {};
+
+                servicesTab.title = 'Assigned Services';
+                servicesTab.directive = 'retail-be-accountservice-grid';
+
+                servicesTab.loadDirective = function (accountServiceGridAPI, account) {
+                    account.accountServiceGridAPI = accountServiceGridAPI;
+                    var accountServiceGridPayload = {
+                        AssignedToAccountId: account.Entity.AccountId
+                    };
+                    return account.accountServiceGridAPI.loadGrid(accountServiceGridPayload);
+                };
+
+                servicesTab.parentMenuActions = [{
+                    name: 'Assign Service',
+                    clicked: function (account) {
+                        if (servicesTab.setTabSelected != undefined)
+                            servicesTab.setTabSelected(account);
+                        assignService(account);
+                    },
+                    haspermission: hasAssignServicePermission
+                }];
+                return servicesTab;
             }
 
 
@@ -223,6 +248,19 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
         function hasAssignPackagePermission() {
             return Retail_BE_AccountPackageAPIService.HasAddAccountPackagePermission();
         }
+
+        function assignService(account) {
+            
+            var onAccountServiceAdded = function (addedAccountService) {
+                account.accountServiceGridAPI.onAccountServiceAdded(addedAccountService);
+            };
+
+            Retail_BE_AccountServiceService.addAccountService( onAccountServiceAdded,account.Entity.AccountId);
+        }
+        function hasAssignServicePermission() {
+            return Retail_BE_AccountServiceAPIService.HasAddAccountServicePermission();
+        }
+
 
         function setAccountTypeDescription(account) {
             var accountType = UtilsService.getEnum(Retail_BE_AccountTypeEnum, 'value', account.Entity.Type);

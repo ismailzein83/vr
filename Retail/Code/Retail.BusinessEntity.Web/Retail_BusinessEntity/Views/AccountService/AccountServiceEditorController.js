@@ -15,6 +15,11 @@
         var serviceTypeAPI;
         var serviceTypeReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var chargingPolicyAPI;
+        var chargingPolicyReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var serviceTypeSelectedPromiseDeferred;
+
         loadParameters();
         defineScope();
         load();
@@ -30,7 +35,6 @@
         }
 
         function defineScope() {
-
             $scope.scopeModel = {};
 
             $scope.scopeModel.hasSaveAccountServicePermission = function () {
@@ -59,6 +63,26 @@
                 serviceTypeReadyDeferred.resolve();
             }
 
+            $scope.scopeModel.onChargingPolicySelectorReady = function (api) {
+                chargingPolicyAPI = api;
+                chargingPolicyReadyDeferred.resolve();
+            }
+
+            $scope.scopeModel.onServiceTypeSelectionChanged = function () {
+                var serviceTypeId = serviceTypeAPI.getSelectedIds();
+                if(serviceTypeId !=undefined)
+                {
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isLoadingDirective = value;
+                    };
+                    var payloadChargingPolicyDirective = {
+                        filter: { ServiceTypeId: serviceTypeId },
+                        selectedIds: accountServiceEntity != undefined ? accountServiceEntity.ServiceChargingPolicyId : undefined,
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, chargingPolicyAPI, payloadChargingPolicyDirective, setLoader, serviceTypeSelectedPromiseDeferred);
+                }
+            }
+
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
@@ -66,7 +90,7 @@
         }
 
         function load() {
-            $scope.isLoading = true;
+            $scope.isLoading = false;
 
             if (isEditMode) {
                 getAccountService().then(function () {
@@ -91,7 +115,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadServiceTypeSelector, loadAccountSelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadServiceTypeSelector, loadAccountSelector, loadChargingPolicySelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -102,6 +126,9 @@
 
         function loadServiceTypeSelector() {
             var loadServiceTypeDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+            if (accountServiceEntity != undefined && accountServiceEntity.ServiceTypeId != undefined)
+                serviceTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+
             serviceTypeReadyDeferred.promise.then(function () {
                 var payloadServiceTypeDirective = {
                     selectedIds: accountServiceEntity != undefined ? accountServiceEntity.ServiceTypeId : undefined
@@ -122,8 +149,27 @@
             return loadAccountDirectivePromiseDeferred.promise;
         }
 
+        function loadChargingPolicySelector() {
+            if (accountServiceEntity == undefined || accountServiceEntity.ServiceTypeId == undefined)
+                return;
+            //if (serviceTypeSelectedPromiseDeferred == undefined)
+            //    serviceTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+            var loadChargingPolicyDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+            
+            UtilsService.waitMultiplePromises([chargingPolicyReadyDeferred.promise, serviceTypeSelectedPromiseDeferred.promise]).then(function () {
+                var payloadChargingPolicyDirective = {
+                    selectedIds: accountServiceEntity != undefined ? accountServiceEntity.ServiceChargingPolicyId : undefined,
+                    filter: accountServiceEntity != undefined ? { ServiceTypeId: accountServiceEntity.ServiceTypeId } : undefined
+                };
+                
+                VRUIUtilsService.callDirectiveLoad(chargingPolicyAPI, payloadChargingPolicyDirective, loadChargingPolicyDirectivePromiseDeferred);
+                serviceTypeSelectedPromiseDeferred = undefined;
+            });
+            return loadChargingPolicyDirectivePromiseDeferred.promise;
+        }
+
         function setTitle() {
-            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(accountServiceEntity ? accountServiceEntity.Name : undefined, 'AccountService') : UtilsService.buildTitleForAddEditor('AccountService');
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(accountServiceEntity ? accountServiceEntity.Name : undefined, 'Account Service') : UtilsService.buildTitleForAddEditor('Account Service');
         }
 
         function loadStaticSection() {
@@ -170,6 +216,7 @@
                 AccountServiceId: accountServiceId,
                 AccountId: accountAPI.getSelectedIds(),
                 ServiceTypeId: serviceTypeAPI.getSelectedIds(),
+                ServiceChargingPolicyId: chargingPolicyAPI.getSelectedIds(),
             };
             return obj;
         }

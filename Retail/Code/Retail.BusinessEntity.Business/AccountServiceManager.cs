@@ -36,7 +36,7 @@ namespace Retail.BusinessEntity.Business
             InsertOperationOutput<AccountServiceDetail> insertOperationOutput = new InsertOperationOutput<AccountServiceDetail>();
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int AccountServiceId = -1;
+            long AccountServiceId = -1;
             IAccountServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountServiceDataManager>();
             bool insertActionSucc = dataManager.Insert(AccountService, out AccountServiceId);
             if (insertActionSucc)
