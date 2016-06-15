@@ -69,7 +69,7 @@ namespace Retail.BusinessEntity.Data.SQL
                 AccountServiceId = (long)reader["ID"],
                 AccountId = (long)reader["AccountID"],
                 ServiceTypeId = (int)reader["ServiceTypeId"],
-                ServiceChargingPolicyId = (int)reader["ServiceTypeId"],
+                ServiceChargingPolicyId = (int)reader["ServiceChargingPolicyId"],
                 Settings = Vanrise.Common.Serializer.Deserialize<AccountServiceSettings>(reader["Settings"] as string)
             };
             return accountService;

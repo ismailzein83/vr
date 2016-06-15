@@ -66,7 +66,6 @@ app.directive('retailBeChargingpolicySelector', ['Retail_BE_ChargingPolicyAPISer
                         for (var i = 0; i < response.length; i++) {
                             ctrl.datasource.push(response[i]);
                         }
-
                         if (selectedIds != undefined) {
                             VRUIUtilsService.setSelectedValues(selectedIds, 'ChargingPolicyId', attrs, ctrl);
                         }

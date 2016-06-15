@@ -77,7 +77,6 @@
                     };
                     var payloadChargingPolicyDirective = {
                         filter: { ServiceTypeId: serviceTypeId },
-                        selectedIds: accountServiceEntity != undefined ? accountServiceEntity.ServiceChargingPolicyId : undefined,
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, chargingPolicyAPI, payloadChargingPolicyDirective, setLoader, serviceTypeSelectedPromiseDeferred);
                 }
@@ -152,8 +151,6 @@
         function loadChargingPolicySelector() {
             if (accountServiceEntity == undefined || accountServiceEntity.ServiceTypeId == undefined)
                 return;
-            //if (serviceTypeSelectedPromiseDeferred == undefined)
-            //    serviceTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
             var loadChargingPolicyDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
             
             UtilsService.waitMultiplePromises([chargingPolicyReadyDeferred.promise, serviceTypeSelectedPromiseDeferred.promise]).then(function () {
