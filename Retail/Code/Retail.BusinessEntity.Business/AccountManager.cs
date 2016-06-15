@@ -324,35 +324,14 @@ namespace Retail.BusinessEntity.Business
 
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            var accountNames = new List<string>();
-            foreach (var entityId in context.EntityIds)
-            {
-                string accountName = GetAccountName((long)entityId);
-                if (accountName == null) throw new NullReferenceException("accountName");
-                accountNames.Add(accountName);
-            }
-            return String.Join(",", accountNames);
+            return GetAccountName((long)context.EntityId);
         }
 
         public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
-
-        public bool IsMatched(IBusinessEntityMatchContext context)
-        {
-            if (context.FieldValueIds == null || context.FilterIds == null) return true;
-
-            var fieldValueIds = context.FieldValueIds.MapRecords(itm =>(long)(itm));
-            var filterIds = context.FilterIds.MapRecords(itm => (long)(itm));
-            foreach (var filterId in filterIds)
-            {
-                if (fieldValueIds.Contains(filterId))
-                    return true;
-            }
-            return false;
-        }
-
+        
         #endregion
     }
 }
