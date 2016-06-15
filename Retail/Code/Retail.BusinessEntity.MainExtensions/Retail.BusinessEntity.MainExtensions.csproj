@@ -97,6 +97,8 @@
     <Compile Include="Package\VoiceType\InterNationalVoiceType.cs" />
     <Compile Include="Package\VoiceType\NationalVoiceType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SwitchIntegrations\Radius.cs" />
+    <Compile Include="SwitchIntegrations\WebService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.BusinessEntity.Business\Retail.BusinessEntity.Business.csproj">

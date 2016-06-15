@@ -110,6 +110,10 @@
     <Compile Include="ServiceType\ServiceTypeQuery.cs" />
     <Compile Include="ServiceType\ServiceTypeSettings.cs" />
     <Compile Include="ServiceType\ServiceTypeToEdit.cs" />
+    <Compile Include="Switch\Switch.cs" />
+    <Compile Include="Switch\SwitchIntegration.cs" />
+    <Compile Include="Switch\SwitchIntegrationConfig.cs" />
+    <Compile Include="Switch\SwitchSettings.cs" />
     <Compile Include="Zone\ZoneFilter.cs" />
     <Compile Include="Zone\Zone.cs" />
   </ItemGroup>
