@@ -264,7 +264,8 @@ namespace Vanrise.Analytic.Data.SQL
         }
 
         private void BuildQueryAggregates(StringBuilder selectPartBuilder, int? requestedCurrencyId, IEnumerable<string> aggregateNames, HashSet<string> includeJoinConfigNames, HashSet<string> joinStatements, DateTime fromTime, DateTime toTime, Dictionary<string, Object> parameterValues, ref int parameterIndex)
-        {            
+        {
+            List<string> listCurrencySQLColumnName = new List<string>();
             foreach (var aggName in aggregateNames)
             {
                 var aggregateConfig = GetAggregateConfig(aggName);
@@ -273,24 +274,28 @@ namespace Vanrise.Analytic.Data.SQL
 
                 if (!String.IsNullOrEmpty(aggregateConfig.Config.CurrencySQLColumnName))
                 {
-                    string currencyTableAlias = String.Format("CurrExch_{0}", aggregateConfig.Config.CurrencySQLColumnName);
-                    string currencyTableStatement;
-                    string fromTimePrm = GenerateParameterName(ref parameterIndex);
-                    parameterValues.Add(fromTimePrm, fromTime);
-                    string toTimePrm = GenerateParameterName(ref parameterIndex);
-                    parameterValues.Add(toTimePrm, toTime);
-                    if (requestedCurrencyId.HasValue)
+                    if (!listCurrencySQLColumnName.Any(s => aggregateConfig.Config.CurrencySQLColumnName.Contains(s)))
                     {
-                        string currencyIdPrm = GenerateParameterName(ref parameterIndex);
-                        parameterValues.Add(currencyIdPrm, requestedCurrencyId.Value);
-                        currencyTableStatement = String.Format("(select * from Common.getExchangeRatesConvertedToCurrency({0} , {1}, {2}))", currencyIdPrm, fromTimePrm, toTimePrm);
-                    }
-                    else
-                        currencyTableStatement = String.Format("(select * from Common.getExchangeRates({0} , {1}))", fromTimePrm, toTimePrm);
-                    joinStatements.Add(String.Format(@"LEFT JOIN {0} AS {1} 
+                        string currencyTableAlias = String.Format("CurrExch_{0}", aggregateConfig.Config.CurrencySQLColumnName);
+                        string currencyTableStatement;
+                        string fromTimePrm = GenerateParameterName(ref parameterIndex);
+                        parameterValues.Add(fromTimePrm, fromTime);
+                        string toTimePrm = GenerateParameterName(ref parameterIndex);
+                        parameterValues.Add(toTimePrm, toTime);
+                        if (requestedCurrencyId.HasValue)
+                        {
+                            string currencyIdPrm = GenerateParameterName(ref parameterIndex);
+                            parameterValues.Add(currencyIdPrm, requestedCurrencyId.Value);
+                            currencyTableStatement = String.Format("(select * from Common.getExchangeRatesConvertedToCurrency({0} , {1}, {2}))", currencyIdPrm, fromTimePrm, toTimePrm);
+                        }
+                        else
+                            currencyTableStatement = String.Format("(select * from Common.getExchangeRates({0} , {1}))", fromTimePrm, toTimePrm);
+                        joinStatements.Add(String.Format(@"LEFT JOIN {0} AS {1} 
                                                             ON ant.{2} = {1}.CurrencyID AND ant.{3} >= {1}.BED AND ({1}.EED IS NULL OR ant.{3} < {1}.EED)"
-                                                            , currencyTableStatement, currencyTableAlias, aggregateConfig.Config.CurrencySQLColumnName, GetTable().Settings.TimeColumnName));
-                    currencyConversionStatement = String.Format("/ ISNULL({0}.Rate, 1)", currencyTableAlias);
+                                        , currencyTableStatement, currencyTableAlias, aggregateConfig.Config.CurrencySQLColumnName, GetTable().Settings.TimeColumnName));
+                        currencyConversionStatement = String.Format("/ ISNULL({0}.Rate, 1)", currencyTableAlias);
+                        listCurrencySQLColumnName.Add(aggregateConfig.Config.CurrencySQLColumnName);
+                    }
                 }
 
                 AddColumnToStringBuilder(selectPartBuilder, String.Format("{0}({1}{2}) AS {3}", aggregateConfig.Config.AggregateType, aggregateConfig.Config.SQLColumn, currencyConversionStatement, GetAggregateColumnAlias(aggregateConfig)));
