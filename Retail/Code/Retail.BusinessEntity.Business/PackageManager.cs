@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 namespace Retail.BusinessEntity.Business
 {
-    public class PackageManager
+    public class PackageManager : IBusinessEntityManager
     {
         #region ctor/Local Variables
 
@@ -147,6 +148,34 @@ namespace Retail.BusinessEntity.Business
             {
                 return _dataManager.ArePackagesUpdated(ref _updateHandle);
             }
+        }
+
+        #endregion
+
+        #region IBusinessEntityManager
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            var cachedPackages = GetCachedPackages();
+            if (cachedPackages != null)
+                return cachedPackages.Values.Select(itm => itm as dynamic).ToList();
+            else
+                return null;
+        }
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetPackage(context.EntityId);
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetPackageName((int)context.EntityId);
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
 
         #endregion

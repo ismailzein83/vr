@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
-    public class ChargingPolicyManager
+    public class ChargingPolicyManager : IBusinessEntityManager
     {
         #region Fields
 
@@ -35,6 +36,12 @@ namespace Retail.BusinessEntity.Business
         public ChargingPolicy GetChargingPolicy(int chargingPolicyId)
         {
             return this.GetCachedChargingPolicies().GetRecord(chargingPolicyId);
+        }
+
+        public string GetChargingPolicyName(int chargingPolicyId)
+        {
+            var chargingPolicy = GetChargingPolicy(chargingPolicyId);
+            return chargingPolicy != null ? chargingPolicy.Name : null;
         }
 
         public Vanrise.Entities.InsertOperationOutput<ChargingPolicyDetail> AddChargingPolicy(ChargingPolicy chargingPolicy)
@@ -177,6 +184,34 @@ namespace Retail.BusinessEntity.Business
             if (serviceType.Settings.ChargingPolicyDefinitionSettings == null)
                 throw new DataIntegrityValidationException("serviceType.Settings.ChargingPolicyDefinitionSettings");
             return serviceType.Settings.ChargingPolicyDefinitionSettings.RuleDefinitions;
+        }
+
+        #endregion
+
+        #region IBusinessEntityManager
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            var cachedChargingPolicies = GetCachedChargingPolicies();
+            if (cachedChargingPolicies != null)
+                return cachedChargingPolicies.Values.Select(itm => itm as dynamic).ToList();
+            else
+                return null;
+        }
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetChargingPolicy(context.EntityId);
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetChargingPolicyName((int)context.EntityId);
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
 
         #endregion
