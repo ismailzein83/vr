@@ -244,6 +244,9 @@ namespace Vanrise.Common
 
         public static IOrderedEnumerable<T> VROrderList<T>(this IEnumerable<T> list, Vanrise.Entities.DataRetrievalInput input)
         {
+            if (list == null)
+                return null;
+
             IPropValueReader propValueReader = Utilities.GetPropValueReader(input.SortByColumnName);
             Func<T, Object> selector = x => propValueReader.GetPropertyValue(x);
 
