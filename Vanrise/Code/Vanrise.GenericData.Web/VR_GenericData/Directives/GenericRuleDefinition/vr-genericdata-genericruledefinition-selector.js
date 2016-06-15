@@ -92,6 +92,10 @@
                     return VRUIUtilsService.getIdSelectedIds('GenericRuleDefinitionId', attrs, ctrl);
                 }
 
+                api.getDatasource = function () {
+                    return ctrl.datasource;
+                }
+
                 return api;
             }
             function onAddRuleDefinition () {
