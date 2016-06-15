@@ -12,9 +12,16 @@ namespace Retail.BusinessEntity.Entities
 
         public virtual string ChargingPolicyEditor { get; set; }
 
-        public List<int> RuleDefinitionIds { get; set; }
+        public List<ChargingPolicyRuleDefinition> RuleDefinitions { get; set; }
 
         public List<ChargingPolicyDefinitionPart> PartDefinitions { get; set; }
+    }
+
+    public class ChargingPolicyRuleDefinition
+    {
+        public string Title { get; set; }
+
+        public int RuleDefinitionId { get; set; }
     }
 
     public class ChargingPolicyDefinitionPart
