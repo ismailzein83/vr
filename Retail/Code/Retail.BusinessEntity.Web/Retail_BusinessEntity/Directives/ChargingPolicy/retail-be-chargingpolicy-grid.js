@@ -81,6 +81,10 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
             };
+
+            $scope.scopeModel.showExpandIcon = function (dataItem) {
+                return (dataItem.drillDownExtensionObject.drillDownDirectiveTabs.length > 0);
+            };
         }
         function defineAPI() {
             var api = {};
@@ -136,7 +140,8 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
                                 BusinessEntityIds: [dataItem.Entity.ServiceTypeId]
                             }
                         },
-                        accessibility: buildAccessibilityObj()
+                        accessibility: buildAccessibilityObj(),
+                        criteriaFieldsToHide: ['ChargingPolicy', 'ServiceType', 'Package']
                     };
                     return directiveAPI.loadGrid(ruleGridQuery);
                 };
