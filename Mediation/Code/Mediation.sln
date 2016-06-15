@@ -33,9 +33,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Generic.Entities"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Generic.QueueActivators", "Mediation.Generic.QueueActivators\Mediation.Generic.QueueActivators.csproj", "{0455B391-9661-41B7-90F5-F6E14FC30B2D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Generic.Data", "Mediation.Generic.Data\Mediation.Generic.Data.csproj", "{46FBF314-E310-4455-BC02-F4AC6E19E649}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Generic.Data.SQL", "Mediation.Generic.Data.SQL\Mediation.Generic.Data.SQL.csproj", "{BAC8DC29-0EED-4CF2-9174-2D5E6D8CDD11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Generic.Business", "Mediation.Generic.Business\Mediation.Generic.Business.csproj", "{6CE07A51-00DB-4CE7-BD4A-45A9EB8A5D10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Generic.BP", "Mediation.Generic.BP\Mediation.Generic.BP.csproj", "{904E691D-ED2C-4B47-997A-EEA12C2F4710}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Generic.BP.Activities", "Mediation.Generic.BP.Activities\Mediation.Generic.BP.Activities.csproj", "{4AFAFB2B-67CD-465E-85C5-7EE41316FAD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Generic.BP.Arguments", "Mediation.Generic.BP.Arguments\Mediation.Generic.BP.Arguments.csproj", "{C08816B3-1E52-4D76-8CFA-2672A00FAC64}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 10
+		SccNumberOfProjects = 16
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -75,6 +87,30 @@ Global
 		SccProjectTopLevelParentUniqueName9 = Mediation.sln
 		SccProjectName9 = Mediation.Generic.QueueActivators
 		SccLocalPath9 = Mediation.Generic.QueueActivators
+		SccProjectUniqueName10 = Mediation.Generic.Data\\Mediation.Generic.Data.csproj
+		SccProjectTopLevelParentUniqueName10 = Mediation.sln
+		SccProjectName10 = Mediation.Generic.Data
+		SccLocalPath10 = Mediation.Generic.Data
+		SccProjectUniqueName11 = Mediation.Generic.Data.SQL\\Mediation.Generic.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName11 = Mediation.sln
+		SccProjectName11 = Mediation.Generic.Data.SQL
+		SccLocalPath11 = Mediation.Generic.Data.SQL
+		SccProjectUniqueName12 = Mediation.Generic.Business\\Mediation.Generic.Business.csproj
+		SccProjectTopLevelParentUniqueName12 = Mediation.sln
+		SccProjectName12 = Mediation.Generic.Business
+		SccLocalPath12 = Mediation.Generic.Business
+		SccProjectUniqueName13 = Mediation.Generic.BP\\Mediation.Generic.BP.csproj
+		SccProjectTopLevelParentUniqueName13 = Mediation.sln
+		SccProjectName13 = Mediation.Generic.BP
+		SccLocalPath13 = Mediation.Generic.BP
+		SccProjectUniqueName14 = Mediation.Generic.BP.Activities\\Mediation.Generic.BP.Activities.csproj
+		SccProjectTopLevelParentUniqueName14 = Mediation.sln
+		SccProjectName14 = Mediation.Generic.BP.Activities
+		SccLocalPath14 = Mediation.Generic.BP.Activities
+		SccProjectUniqueName15 = Mediation.Generic.BP.Arguments\\Mediation.Generic.BP.Arguments.csproj
+		SccProjectTopLevelParentUniqueName15 = Mediation.sln
+		SccProjectName15 = Mediation.Generic.BP.Arguments
+		SccLocalPath15 = Mediation.Generic.BP.Arguments
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -119,6 +155,30 @@ Global
 		{0455B391-9661-41B7-90F5-F6E14FC30B2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0455B391-9661-41B7-90F5-F6E14FC30B2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0455B391-9661-41B7-90F5-F6E14FC30B2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46FBF314-E310-4455-BC02-F4AC6E19E649}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46FBF314-E310-4455-BC02-F4AC6E19E649}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46FBF314-E310-4455-BC02-F4AC6E19E649}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46FBF314-E310-4455-BC02-F4AC6E19E649}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAC8DC29-0EED-4CF2-9174-2D5E6D8CDD11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAC8DC29-0EED-4CF2-9174-2D5E6D8CDD11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAC8DC29-0EED-4CF2-9174-2D5E6D8CDD11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAC8DC29-0EED-4CF2-9174-2D5E6D8CDD11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CE07A51-00DB-4CE7-BD4A-45A9EB8A5D10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CE07A51-00DB-4CE7-BD4A-45A9EB8A5D10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CE07A51-00DB-4CE7-BD4A-45A9EB8A5D10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CE07A51-00DB-4CE7-BD4A-45A9EB8A5D10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{904E691D-ED2C-4B47-997A-EEA12C2F4710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{904E691D-ED2C-4B47-997A-EEA12C2F4710}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{904E691D-ED2C-4B47-997A-EEA12C2F4710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{904E691D-ED2C-4B47-997A-EEA12C2F4710}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AFAFB2B-67CD-465E-85C5-7EE41316FAD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AFAFB2B-67CD-465E-85C5-7EE41316FAD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AFAFB2B-67CD-465E-85C5-7EE41316FAD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AFAFB2B-67CD-465E-85C5-7EE41316FAD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C08816B3-1E52-4D76-8CFA-2672A00FAC64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C08816B3-1E52-4D76-8CFA-2672A00FAC64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C08816B3-1E52-4D76-8CFA-2672A00FAC64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C08816B3-1E52-4D76-8CFA-2672A00FAC64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -134,5 +194,11 @@ Global
 		{AB400620-7C45-46FE-9006-76A7A543C956} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
 		{EDBD3A6E-4535-4B84-8C2A-2AE6AEDF5005} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
 		{0455B391-9661-41B7-90F5-F6E14FC30B2D} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
+		{46FBF314-E310-4455-BC02-F4AC6E19E649} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
+		{BAC8DC29-0EED-4CF2-9174-2D5E6D8CDD11} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
+		{6CE07A51-00DB-4CE7-BD4A-45A9EB8A5D10} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
+		{904E691D-ED2C-4B47-997A-EEA12C2F4710} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
+		{4AFAFB2B-67CD-465E-85C5-7EE41316FAD3} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
+		{C08816B3-1E52-4D76-8CFA-2672A00FAC64} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
 	EndGlobalSection
 EndGlobal

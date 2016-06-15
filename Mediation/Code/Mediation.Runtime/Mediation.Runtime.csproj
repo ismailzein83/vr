@@ -229,6 +229,14 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mediation.Generic.Data.SQL\Mediation.Generic.Data.SQL.csproj">
+      <Project>{bac8dc29-0eed-4cf2-9174-2d5e6d8cdd11}</Project>
+      <Name>Mediation.Generic.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mediation.Generic.Data\Mediation.Generic.Data.csproj">
+      <Project>{46fbf314-e310-4455-bc02-f4ac6e19e649}</Project>
+      <Name>Mediation.Generic.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mediation.Generic.Entities\Mediation.Generic.Entities.csproj">
       <Project>{edbd3a6e-4535-4b84-8c2a-2ae6aedf5005}</Project>
       <Name>Mediation.Generic.Entities</Name>

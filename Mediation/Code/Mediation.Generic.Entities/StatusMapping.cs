@@ -12,6 +12,6 @@ namespace Mediation.Generic.Entities
     {
         public EventStatus Status { get; set; }
         public object FilterExpression { get; set; }
-        public List<RecordFilter> Filters { get; set; }
+        public RecordFilterGroup FilterGroup { get; set; }
     }
 }

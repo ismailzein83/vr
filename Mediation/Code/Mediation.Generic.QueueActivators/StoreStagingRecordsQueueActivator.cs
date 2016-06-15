@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Mediation.Generic.Data;
 using Mediation.Generic.Entities;
 using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.QueueActivators;
 using Vanrise.Queueing.Entities;
 
@@ -20,6 +20,8 @@ namespace Mediation.Generic.QueueActivators
 
         public override void ProcessItem(IQueueActivatorExecutionContext context)
         {
+            IStoreStagingRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IStoreStagingRecordsDataManager>();
+
             DataRecordBatch dataRecordBatch = context.ItemToProcess as DataRecordBatch;
             var queueItemType = context.CurrentStage.QueueItemType as DataRecordBatchQueueItemType;
             if (queueItemType == null)
@@ -27,7 +29,33 @@ namespace Mediation.Generic.QueueActivators
             var recordTypeId = queueItemType.DataRecordTypeId;
             var batchRecords = dataRecordBatch.GetBatchRecords(recordTypeId);
 
+            RecordFilterManager filterManager = new RecordFilterManager();
 
+            List<StoreStagingRecord> storeStagingRecords = new List<StoreStagingRecord>();
+            foreach (var batchRecord in batchRecords)
+            {
+                DataRecordFilterGenericFieldMatchContext dataRecordFilterContext = new DataRecordFilterGenericFieldMatchContext(batchRecord, recordTypeId);
+                StoreStagingRecord storeStagingRecord = new StoreStagingRecord();
+                storeStagingRecord.SessionId = (long)GetPropertyValue(batchRecord, SessionRecordTypeId);
+                storeStagingRecord.EventTime = (DateTime)GetPropertyValue(batchRecord, EventTimeRecordTypeId);
+                foreach (var statusMapping in StatusMappings)
+                {
+                    if (filterManager.IsFilterGroupMatch(statusMapping.FilterGroup, dataRecordFilterContext))
+                    {
+                        storeStagingRecord.EventStatus = statusMapping.Status;
+                        break;
+                    }
+                }
+                storeStagingRecord.EventDetails = batchRecord;
+                storeStagingRecords.Add(storeStagingRecord);
+            }
+            dataManager.SaveStoreStagingRecordsToDB(storeStagingRecords);
+        }
+
+        object GetPropertyValue(object batchRecord, string propertyName)
+        {
+            var reader = Vanrise.Common.Utilities.GetPropValueReader(propertyName);
+            return reader.GetPropertyValue(batchRecord);
         }
     }
 }

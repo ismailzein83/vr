@@ -41,8 +41,19 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.GenericData.QueueActivators">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.QueueActivators.dll</HintPath>
@@ -59,6 +70,10 @@
     <Compile Include="StoreStagingRecordsQueueActivator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mediation.Generic.Data\Mediation.Generic.Data.csproj">
+      <Project>{46fbf314-e310-4455-bc02-f4ac6e19e649}</Project>
+      <Name>Mediation.Generic.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mediation.Generic.Entities\Mediation.Generic.Entities.csproj">
       <Project>{edbd3a6e-4535-4b84-8c2a-2ae6aedf5005}</Project>
       <Name>Mediation.Generic.Entities</Name>

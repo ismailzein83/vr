@@ -400,6 +400,14 @@
       <Project>{3b35c6e1-fd21-4e32-a8bd-f11377a545a0}</Project>
       <Name>Vanrise.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mediation.Generic.Entities\Mediation.Generic.Entities.csproj">
+      <Project>{edbd3a6e-4535-4b84-8c2a-2ae6aedf5005}</Project>
+      <Name>Mediation.Generic.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mediation.Generic.QueueActivators\Mediation.Generic.QueueActivators.csproj">
+      <Project>{0455b391-9661-41b7-90f5-f6e14fc30b2d}</Project>
+      <Name>Mediation.Generic.QueueActivators</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

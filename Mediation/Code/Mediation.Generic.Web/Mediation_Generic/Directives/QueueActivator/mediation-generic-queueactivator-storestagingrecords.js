@@ -130,7 +130,7 @@
                     var mapping = $scope.scopeModel.statusMappings[i];
                     mappings.push({
                         Status: mapping.Status,
-                        Filters: mapping.FilterObj,
+                        FilterGroup: mapping.FilterObj,
                         FilterExpression: mapping.Expression
                     });
                 }
