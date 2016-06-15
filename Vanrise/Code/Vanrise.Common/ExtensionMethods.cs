@@ -269,6 +269,7 @@ namespace Vanrise.Common
             return pagedList;
         }
 
+
         public static IEnumerable<Q> VRCast<Q>(this IEnumerable list)
         {
             if (list == null)
@@ -301,6 +302,22 @@ namespace Vanrise.Common
         public static bool VRLessThan(this DateTime? date, DateTime? targetDate)
         {
             return !date.VRGreaterThan(targetDate);
+        }
+
+        public static DateTime? VRMinimumDate(this IEnumerable<DateTime?> dates)
+        {
+            if (dates == null)
+                return null;
+
+            return dates.OrderBy(itm => itm.HasValue ? itm.Value : DateTime.MaxValue).First();
+        }
+
+        public static DateTime? VRMaximumDate(this IEnumerable<DateTime?> dates)
+        {
+            if (dates == null)
+                return null;
+
+            return dates.OrderBy(itm => itm.HasValue ? itm.Value : DateTime.MaxValue).Last();
         }
 
         #endregion
