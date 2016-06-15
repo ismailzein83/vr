@@ -87,11 +87,18 @@ namespace Retail.BusinessEntity.Business
         #endregion
 
         #region  Mappers
-        private AccountServiceDetail AccountServiceDetailMapper(AccountService AccountService)
+        private AccountServiceDetail AccountServiceDetailMapper(AccountService accountService)
         {
-            AccountServiceDetail AccountServiceDetail = new AccountServiceDetail();
-            AccountServiceDetail.Entity = AccountService;
-            return AccountServiceDetail;
+            AccountServiceDetail accountServiceDetail = new AccountServiceDetail();
+            AccountManager accountManager = new AccountManager();
+            ServiceTypeManager serviceTypeManager = new Business.ServiceTypeManager();
+
+            var account = accountManager.GetAccount(accountService.AccountId);
+            var serviceType = serviceTypeManager.GetServiceType(accountService.ServiceTypeId);
+            accountServiceDetail.Entity = accountService;
+            accountServiceDetail.AccountName = account.Name;
+            accountServiceDetail.ServiceTypeTitle = serviceType.Title;
+            return accountServiceDetail;
         }
         #endregion
 

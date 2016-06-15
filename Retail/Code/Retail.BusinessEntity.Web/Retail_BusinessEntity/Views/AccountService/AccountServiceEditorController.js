@@ -18,6 +18,8 @@
         var chargingPolicyAPI;
         var chargingPolicyReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var accountId;
+
         var serviceTypeSelectedPromiseDeferred;
 
         loadParameters();
@@ -29,6 +31,8 @@
 
             if (parameters != undefined && parameters != null) {
                 accountServiceId = parameters.accountServiceId;
+                accountId = parameters.accountId;
+                
             }
             isEditMode = (accountServiceId != undefined);
 
@@ -36,7 +40,7 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-
+            $scope.scopeModel.accountSelectorDisabled = (accountId != undefined || accountServiceId != undefined);
             $scope.scopeModel.hasSaveAccountServicePermission = function () {
                 if ($scope.scopeModel.isEditMode)
                     return Retail_BE_AccountServiceAPIService.HasUpdateAccountServicePermission();
@@ -141,7 +145,7 @@
             var loadAccountDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
             accountReadyDeferred.promise.then(function () {
                 var payloadAccountDirective = {
-                    selectedIds: accountServiceEntity != undefined ? accountServiceEntity.AccountId : undefined
+                    selectedIds: accountServiceEntity != undefined ? accountServiceEntity.AccountId : accountId !=undefined?accountId:undefined
                 };
                 VRUIUtilsService.callDirectiveLoad(accountAPI, payloadAccountDirective, loadAccountDirectivePromiseDeferred);
             });

@@ -10,17 +10,19 @@
             editAccountService: editAccountService,
         });
 
-        function addAccountService(onAccountServiceAdded,accountId) {
-            var settings = {
+        function addAccountService(onAccountServiceAdded, accountId) {
+            var parameters = {
                 accountId: accountId
             };
-
+            var settings = {
+            };
+            
             settings.onScopeReady = function (modalScope) {
 
                 modalScope.onAccountServiceAdded = onAccountServiceAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountService/AccountServiceEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountService/AccountServiceEditor.html', parameters, settings);
         }
 
         function editAccountService(accountServiceId, onAccountServiceUpdated) {
