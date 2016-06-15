@@ -162,8 +162,21 @@ namespace Retail.BusinessEntity.Business
             return new ChargingPolicyDetail()
             {
                 Entity = chargingPolicy,
-                ServiceTypeName = _serviceTypeManager.GetServiceTypeName(chargingPolicy.ServiceTypeId)
+                ServiceTypeName = _serviceTypeManager.GetServiceTypeName(chargingPolicy.ServiceTypeId),
+                RuleDefinitions = this.GetChargingPolicyRuleDefinitions(chargingPolicy.ServiceTypeId)
             };
+        }
+
+        private IEnumerable<ChargingPolicyRuleDefinition> GetChargingPolicyRuleDefinitions(int serviceTypeId)
+        {
+            ServiceType serviceType = _serviceTypeManager.GetServiceType(serviceTypeId);
+            if (serviceType == null)
+                throw new DataIntegrityValidationException("serviceType");
+            if (serviceType.Settings == null)
+                throw new DataIntegrityValidationException("serviceType.Settings");
+            if (serviceType.Settings.ChargingPolicyDefinitionSettings == null)
+                throw new DataIntegrityValidationException("serviceType.Settings.ChargingPolicyDefinitionSettings");
+            return serviceType.Settings.ChargingPolicyDefinitionSettings.RuleDefinitions;
         }
 
         #endregion
