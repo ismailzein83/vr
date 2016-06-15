@@ -193,6 +193,7 @@
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\retail-be-chargingpolicy-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\retail-be-chargingpolicy-parts.js" />
+    <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\retail-be-chargingpolicy-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\retail-be-chargingpolicy-settings.js" />
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\Templates\ChargingPolicyGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\Templates\ChargingPolicyPartsTemplate.html" />

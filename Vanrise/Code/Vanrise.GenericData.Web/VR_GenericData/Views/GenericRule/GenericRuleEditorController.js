@@ -18,6 +18,9 @@
         var criteriaDefinitionFields;
         var criteriaFieldsValues;
 
+        var preDefinedData;
+        var accessibility;
+
         var settingsDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var settingsDirectiveAPI;
 
@@ -31,8 +34,9 @@
             if (parameters != undefined && parameters != null) {
                 genericRuleId = parameters.genericRuleId;
                 genericRuleDefinitionId = parameters.genericRuleDefinitionId;
+                preDefinedData = parameters.preDefinedData;
+                accessibility = parameters.accessibility;
             }
-
             isEditMode = (genericRuleId != undefined);
         }
 
@@ -129,7 +133,6 @@
         function loadCriteriaSection() {
             if (criteriaDefinitionFields == undefined)
                 return;
-
             var promises = [];
 
             var loadAllFieldsPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -152,13 +155,21 @@
                     field.runtimeEditor.loadPromiseDeferred = UtilsService.createPromiseDeferred();
                     criteriaFieldsPromises.push(field.runtimeEditor.loadPromiseDeferred.promise);
 
+                    if (accessibility != undefined && accessibility.criteriaAccessibility != undefined)
+                    {
+                        var accessibleField = accessibility.criteriaAccessibility[field.FieldName];
+                        if(accessibleField !=undefined)
+                        {
+                            field.notAccessible = accessibleField.notAccessible;
+                        }
+                    }
+
                     field.runtimeEditor.onReadyPromiseDeferred.promise.then(function () {
                         var payload = {
                             fieldTitle: field.Title,
                             fieldType: field.FieldType,
-                            fieldValue: (criteriaFieldsValues != undefined) ? criteriaFieldsValues[field.FieldName] : undefined
+                            fieldValue: (criteriaFieldsValues != undefined) ? criteriaFieldsValues[field.FieldName] : (preDefinedData != undefined ? preDefinedData.criteriaFieldsValues[field.FieldName] : undefined),
                         };
-
                         VRUIUtilsService.callDirectiveLoad(field.runtimeEditor.directiveAPI, payload, field.runtimeEditor.loadPromiseDeferred);
                     });
                 });
@@ -193,7 +204,7 @@
                 settingsDirectiveReadyPromiseDeferred.promise.then(function () {
                     var payload = {
                         genericRuleDefinition: genericRuleDefintion,
-                        settings: (genericRuleEntity != undefined && genericRuleEntity.Settings != null) ? genericRuleEntity.Settings : undefined
+                        settings: (genericRuleEntity != undefined && genericRuleEntity.Settings != null) ? genericRuleEntity.Settings : (preDefinedData !=undefined && preDefinedData.settings != undefined ? preDefinedData.settings : undefined)
                     };
                     VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, payload, loadSettingsSectionPromiseDeferred);
                 });

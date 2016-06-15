@@ -17,7 +17,13 @@
                 chargingPolicyId: chargingPolicyId
             });
         }
+        function GetChargingPoliciesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetChargingPoliciesInfo'), {
+                filter: filter
+            });
+        }
 
+        
         function AddChargingPolicy(chargingPolicy) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddChargingPolicy'), chargingPolicy);
         }
@@ -36,11 +42,13 @@
 
         return {
             GetFilteredChargingPolicies: GetFilteredChargingPolicies,
+            GetChargingPoliciesInfo:GetChargingPoliciesInfo,
             GetChargingPolicy: GetChargingPolicy,
             AddChargingPolicy: AddChargingPolicy,
             UpdateChargingPolicy: UpdateChargingPolicy,
             HasAddChargingPolicyPermission: HasAddChargingPolicyPermission,
-            HasUpdateChargingPolicyPermission: HasUpdateChargingPolicyPermission
+            HasUpdateChargingPolicyPermission: HasUpdateChargingPolicyPermission,
+
         };
     }
 

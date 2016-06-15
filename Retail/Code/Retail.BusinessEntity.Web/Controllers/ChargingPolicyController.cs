@@ -21,6 +21,12 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return GetWebResponse(input, _manager.GetFilteredChargingPolicies(input));
         }
+        [HttpGet]
+        [Route("GetChargingPoliciesInfo")]
+        public IEnumerable<ChargingPolicyInfo> GetChargingPoliciesInfo(string filter = null)
+        {
+            return _manager.GetChargingPoliciesInfo();
+        }
 
         [HttpGet]
         [Route("GetChargingPolicy")]

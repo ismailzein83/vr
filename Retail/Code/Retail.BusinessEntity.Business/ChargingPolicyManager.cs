@@ -17,7 +17,7 @@ namespace Retail.BusinessEntity.Business
         #region Fields
 
         ServiceTypeManager _serviceTypeManager = new ServiceTypeManager();
-        
+
         #endregion
 
         #region Public Methods
@@ -32,7 +32,10 @@ namespace Retail.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedChargingPolicies.ToBigResult(input, filterExpression, ChargingPolicyDetailMapper));
         }
-
+        public IEnumerable<ChargingPolicyInfo> GetChargingPoliciesInfo()
+        {
+            return this.GetCachedChargingPolicies().MapRecords(ChargingPolicyInfoMapper).OrderBy(x => x.Name);
+        }
         public ChargingPolicy GetChargingPolicy(int chargingPolicyId)
         {
             return this.GetCachedChargingPolicies().GetRecord(chargingPolicyId);
@@ -108,7 +111,7 @@ namespace Retail.BusinessEntity.Business
         private void ValidateChargingPolicyToEdit(ChargingPolicyToEdit chargingPolicy)
         {
             ChargingPolicy chargingPolicyEntity = this.GetChargingPolicy(chargingPolicy.ChargingPolicyId);
-            
+
             if (chargingPolicyEntity == null)
                 throw new DataIntegrityValidationException(String.Format("ChargingPolicy '{0}' does not exist", chargingPolicy.ChargingPolicyId));
 
@@ -173,7 +176,14 @@ namespace Retail.BusinessEntity.Business
                 RuleDefinitions = this.GetChargingPolicyRuleDefinitions(chargingPolicy.ServiceTypeId)
             };
         }
-
+        private ChargingPolicyInfo ChargingPolicyInfoMapper(ChargingPolicy chargingPolicy)
+        {
+            return new ChargingPolicyInfo
+            {
+                ChargingPolicyId = chargingPolicy.ChargingPolicyId,
+                Name = chargingPolicy.Name
+            };
+        }
         private IEnumerable<ChargingPolicyRuleDefinition> GetChargingPolicyRuleDefinitions(int serviceTypeId)
         {
             ServiceType serviceType = _serviceTypeManager.GetServiceType(serviceTypeId);

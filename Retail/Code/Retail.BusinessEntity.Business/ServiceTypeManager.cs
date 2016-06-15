@@ -9,9 +9,10 @@ using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 namespace Retail.BusinessEntity.Business
 {
-    public class ServiceTypeManager
+    public class ServiceTypeManager : IBusinessEntityManager
     {
         #region Public Methods
 
@@ -169,6 +170,34 @@ namespace Retail.BusinessEntity.Business
         private ServiceTypeInfo ServiceTypeInfoMapper(ServiceType serviceType)
         {
             return new ServiceTypeInfo() { ServiceTypeId = serviceType.ServiceTypeId, Name = serviceType.Name };
+        }
+
+        #endregion
+
+        #region IBusinessEntityManager
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            var cachedPackages = GetCachedServiceTypes();
+            if (cachedPackages != null)
+                return cachedPackages.Values.Select(itm => itm as dynamic).ToList();
+            else
+                return null;
+        }
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetServiceType(context.EntityId);
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetServiceTypeName((int)context.EntityId);
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
 
         #endregion
