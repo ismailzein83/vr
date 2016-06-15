@@ -73,9 +73,8 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
 
             drillDownTabs.push(buildSubAccountsTab());
             drillDownTabs.push(buildAssignedPackagesTab());
-            drillDownTabs.push(buildIdentificationRulesTab());
             drillDownTabs.push(buildAssignedServicesTab());
-
+            drillDownTabs.push(buildIdentificationRulesTab());
             function buildSubAccountsTab() {
                 var subAccountsTab = {};
 

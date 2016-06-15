@@ -4,7 +4,7 @@
 <vr-columns width="2/3row" vr-loader="ctrl.isLoadingDirective">
     <vr-validator validate="ctrl.isValid()">
         <vr-datagrid datasource="ctrl.datasource"
-                     on-ready="onGridReady" ondeleterow="ctrl.removeFilter" hidegridmenu norowhighlightonclick="'true'">
+                     on-ready="onGridReady" ondeleterow="ctrl.removeFilter" hidegridmenu norowhighlightonclick="'true'" enabledraggablerow="true">
             <vr-datagridcolumn headertext="'Rule Definition Name'" field="'Name'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Title'" widthfactor="10" disablesorting="true">
                 <vr-textbox value="dataItem.Title"></vr-textbox>
