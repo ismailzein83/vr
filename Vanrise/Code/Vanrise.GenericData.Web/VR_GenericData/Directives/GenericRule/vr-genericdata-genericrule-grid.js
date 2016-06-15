@@ -27,6 +27,7 @@
             this.initializeController = initializeController;
 
             var gridAPI;
+            var accessibility;
 
             function initializeController() {
                 ctrl.criteriaFields = [];
@@ -56,6 +57,8 @@
 
                 directiveAPI.loadGrid = function (query) {
                     var promises = [];
+
+                    accessibility = query.accessibility;
 
                     var getDefinitionPromise = VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinition(query.RuleDefinitionId);
                     promises.push(getDefinitionPromise);
@@ -103,7 +106,7 @@
                 var onGenericRuleUpdated = function (updatedGenericRule) {
                     gridAPI.itemUpdated(updatedGenericRule);
                 };
-                VR_GenericData_GenericRule.editGenericRule(genericRule.Entity.RuleId, genericRule.Entity.DefinitionId, onGenericRuleUpdated);
+                VR_GenericData_GenericRule.editGenericRule(genericRule.Entity.RuleId, genericRule.Entity.DefinitionId, onGenericRuleUpdated, accessibility);
             }
 
 

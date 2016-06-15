@@ -34,6 +34,8 @@ app.directive('retailBeChargingpolicyParts', ['Retail_BE_ServiceTypeAPIService',
             var api = {};
 
             api.load = function (payload) {
+                $scope.scopeModel.tabs.length = 0;
+
                 var partDefinitions;
                 var parts;
 

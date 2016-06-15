@@ -44,7 +44,7 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
                     menuAction.name = 'Add ' + ruleDefinition.Title;
                     menuAction.clicked = function (dataItem) {
                         var onGenericRuleAdded = function (addedGenericRule) {
-                            dataItem['ruleGrid' + ruleDefinition.RuleDefinitionId + 'API'].onGenericRuleAdded(dataItem);
+                            dataItem['ruleGrid' + ruleDefinition.RuleDefinitionId + 'API'].onGenericRuleAdded(addedGenericRule);
                         };
                         var preDefinedData = {
                             criteriaFieldsValues: {
@@ -52,13 +52,7 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
                                 'ServiceType': { Values: [dataItem.Entity.ServiceTypeId] }
                             }
                         };
-                        var accessibility = {
-                            criteriaAccessibility: {
-                                'ChargingPolicy': { notAccessible: true },
-                                'ServiceType': { notAccessible: true }
-                            },
-                            settingNotAccessible: false
-                        };
+                        var accessibility = buildAccessibilityObj();
                         VR_GenericData_GenericRule.addGenericRule(ruleDefinition.RuleDefinitionId, onGenericRuleAdded, preDefinedData, accessibility);
                     };
                     return menuAction;
@@ -88,7 +82,6 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
                 });
             };
         }
-
         function defineAPI() {
             var api = {};
 
@@ -111,19 +104,6 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
                 haspermission: hasEditChargingPolicyPermission
             }];
         }
-
-        function editChargingPolicy(chargingPolicy)
-        {
-            var onChargingPolicyUpdated = function (updatedChargingPolicy) {
-                gridAPI.itemUpdated(updatedChargingPolicy);
-            };
-
-            Retail_BE_ChargingPolicyService.editChargingPolicy(chargingPolicy.Entity.ChargingPolicyId, onChargingPolicyUpdated);
-        }
-        function hasEditChargingPolicyPermission() {
-            return Retail_BE_ChargingPolicyAPIService.HasUpdateChargingPolicyPermission();
-        }
-
         function buildDrillDownTabs(ruleDefinitions) {
             var drillDownTabs = [];
 
@@ -144,7 +124,20 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
                 drillDownTab.loadDirective = function (directiveAPI, dataItem) {
                     var propertyName = 'ruleGrid' + ruleDefinition.RuleDefinitionId + 'API';
                     dataItem[propertyName] = directiveAPI;
-                    var ruleGridQuery = { RuleDefinitionId: ruleDefinition.RuleDefinitionId };
+                    var ruleGridQuery = {
+                        RuleDefinitionId: ruleDefinition.RuleDefinitionId,
+                        CriteriaFieldValues: {
+                            'ChargingPolicy': {
+                                $type: 'Vanrise.GenericData.MainExtensions.DataRecordFields.Filters.BusinessEntityFieldTypeFilter,Vanrise.GenericData.MainExtensions',
+                                BusinessEntityIds: [dataItem.Entity.ChargingPolicyId]
+                            },
+                            'ServiceType': {
+                                $type: 'Vanrise.GenericData.MainExtensions.DataRecordFields.Filters.BusinessEntityFieldTypeFilter,Vanrise.GenericData.MainExtensions',
+                                BusinessEntityIds: [dataItem.Entity.ServiceTypeId]
+                            }
+                        },
+                        accessibility: buildAccessibilityObj()
+                    };
                     return directiveAPI.loadGrid(ruleGridQuery);
                 };
 
@@ -152,6 +145,27 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
             }
 
             return drillDownTabs;
+        }
+        function buildAccessibilityObj() {
+            return {
+                criteriaAccessibility: {
+                    'ChargingPolicy': { notAccessible: true },
+                    'ServiceType': { notAccessible: true }
+                },
+                settingNotAccessible: false
+            };
+        }
+
+        function editChargingPolicy(chargingPolicy)
+        {
+            var onChargingPolicyUpdated = function (updatedChargingPolicy) {
+                gridAPI.itemUpdated(updatedChargingPolicy);
+            };
+
+            Retail_BE_ChargingPolicyService.editChargingPolicy(chargingPolicy.Entity.ChargingPolicyId, onChargingPolicyUpdated);
+        }
+        function hasEditChargingPolicyPermission() {
+            return Retail_BE_ChargingPolicyAPIService.HasUpdateChargingPolicyPermission();
         }
     }
 }]);
