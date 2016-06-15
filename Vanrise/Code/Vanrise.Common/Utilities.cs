@@ -116,7 +116,7 @@ namespace Vanrise.Common
 
         static ConcurrentDictionary<string, IPropValueReader> s_cachedProbValueReaders = new ConcurrentDictionary<string, IPropValueReader>();
 
-        public static IPropValueReader GetPropValueReader<T>(string propertyPath)
+        public static IPropValueReader GetPropValueReader(string propertyPath)
         {
             IPropValueReader propValueReader;
             string key = propertyPath;
