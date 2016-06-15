@@ -16,7 +16,7 @@
                     </span>
                 </vr-tab>
                 <vr-tab header="'Rule Settings'">
-                    <vr-directivewrapper directive="scopeModel.settingsDirective" on-ready="scopeModel.onSettingsDirectiveReady" vr-disabled="scopeModel.settingNotAccessible" isrequired="true"></vr-directivewrapper>
+                    <vr-directivewrapper directive="scopeModel.settingsDirective" on-ready="scopeModel.onSettingsDirectiveReady" ng-hide="scopeModel.settingNotAccessible" isrequired="true"></vr-directivewrapper>
                 </vr-tab>
                 <vr-tab header="'Time Settings'">
                     <vr-row>
