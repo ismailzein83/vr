@@ -155,11 +155,9 @@
                     field.runtimeEditor.loadPromiseDeferred = UtilsService.createPromiseDeferred();
                     criteriaFieldsPromises.push(field.runtimeEditor.loadPromiseDeferred.promise);
 
-                    if (accessibility != undefined && accessibility.criteriaAccessibility != undefined)
-                    {
+                    if (accessibility != undefined && accessibility.criteriaAccessibility != undefined) {
                         var accessibleField = accessibility.criteriaAccessibility[field.FieldName];
-                        if(accessibleField !=undefined)
-                        {
+                        if (accessibleField != undefined) {
                             field.notAccessible = accessibleField.notAccessible;
                         }
                     }
@@ -168,7 +166,7 @@
                         var payload = {
                             fieldTitle: field.Title,
                             fieldType: field.FieldType,
-                            fieldValue: (criteriaFieldsValues != undefined) ? criteriaFieldsValues[field.FieldName] : (preDefinedData != undefined ? preDefinedData.criteriaFieldsValues[field.FieldName] : undefined),
+                            fieldValue: (criteriaFieldsValues != undefined) ? criteriaFieldsValues[field.FieldName] : (preDefinedData != undefined && preDefinedData.criteriaFieldsValues != undefined ? preDefinedData.criteriaFieldsValues[field.FieldName] : undefined),
                         };
                         VRUIUtilsService.callDirectiveLoad(field.runtimeEditor.directiveAPI, payload, field.runtimeEditor.loadPromiseDeferred);
                     });
@@ -204,7 +202,7 @@
                 settingsDirectiveReadyPromiseDeferred.promise.then(function () {
                     var payload = {
                         genericRuleDefinition: genericRuleDefintion,
-                        settings: (genericRuleEntity != undefined && genericRuleEntity.Settings != null) ? genericRuleEntity.Settings : (preDefinedData !=undefined && preDefinedData.settings != undefined ? preDefinedData.settings : undefined)
+                        settings: (genericRuleEntity != undefined && genericRuleEntity.Settings != null) ? genericRuleEntity.Settings : (preDefinedData != undefined && preDefinedData.settings != undefined ? preDefinedData.settings : undefined)
                     };
                     VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, payload, loadSettingsSectionPromiseDeferred);
                 });
