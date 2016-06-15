@@ -55,6 +55,10 @@ app.directive('retailBeAccountidentificationGrid', ['Retail_BE_AccountIdentifica
                 return gridAPI.retrieveData(query);
             };
 
+            api.onAccountIdentificationRuleAdded = function (addedIdentificationRule) {
+                gridAPI.itemAdded(addedIdentificationRule);
+            };
+
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

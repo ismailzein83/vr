@@ -21,6 +21,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetFilteredAccountIdentificationRules(input);
         }
+
        
     }
 }

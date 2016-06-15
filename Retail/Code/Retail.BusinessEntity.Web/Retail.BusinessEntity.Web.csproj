@@ -261,6 +261,8 @@
     <Content Include="Retail_BusinessEntity\Views\Account\AccountEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountManagementController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Account\AccountIdentificationAssignmentEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\Account\AccountIdentificationAssignmentEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ChargingPolicy\ChargingPolicyEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\ChargingPolicy\ChargingPolicyEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ChargingPolicy\ChargingPolicyManagement.html" />

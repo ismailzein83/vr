@@ -1,0 +1,19 @@
+﻿<div vr-modalcontent ng-controller="Retail_BE_AccountIdentificationAssignmentEditorController" width="'35%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formIdentificationRuleAssignmentEditor">
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-genericdata-genericruledefinition-selector label="Rule Definition" on-ready="scopeModel.onRuleDefinitionSelectorReady" isrequired="true"></vr-genericdata-genericruledefinition-selector>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formPackageAssignmentEditor" data-onclick="scopeModel.assignIdentificationRule"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

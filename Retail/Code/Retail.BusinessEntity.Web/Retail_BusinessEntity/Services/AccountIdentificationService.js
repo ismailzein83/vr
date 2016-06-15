@@ -7,20 +7,19 @@
     function AccountIdentificationService(VRModalService, VRNotificationService)
     {
 
-        function assignIdentificationRuleToAccount(accountId, onAccountIdentificationRuleAssigned)
+        function assignIdentificationRuleToAccount(accountId, onAccountIdentificationRuleAdded)
         {
             var parameters = {
-                accountId: accountId,
-                parentAccountId: parentAccountId
+                accountId: accountId
             };
 
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onAccountIdentificationRuleAssigned = onAccountIdentificationRuleAssigned;
+                modalScope.onAccountIdentificationRuleAdded = onAccountIdentificationRuleAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/AccountEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/AccountIdentificationAssignmentEditor.html', parameters, settings);
         };
 
         return {

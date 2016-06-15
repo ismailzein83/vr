@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountPackageService', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (Retail_BE_AccountAPIService, Retail_BE_AccountService, Retail_BE_AccountPackageService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountTypeEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
+app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountPackageService', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountIdentificationService', 'Retail_BE_AccountTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (Retail_BE_AccountAPIService, Retail_BE_AccountService, Retail_BE_AccountPackageService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountIdentificationService, Retail_BE_AccountTypeEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
     return {
         restrict: 'E',
         scope: {
@@ -163,10 +163,10 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                         if (identificationRuleTab.setTabSelected != undefined)
                             identificationRuleTab.setTabSelected(account);
 
-                        var onAccountIdentificationRuleAssigned = function (assignedIdentificationRule) {
-                            account.accountIdentificationRulesGridAPI.onAccountIdentificationRuleAssigned(assignedIdentificationRule);
+                        var onAccountIdentificationRuleAdded = function (addedIdentificationRule) {
+                            account.accountIdentificationRulesGridAPI.onAccountIdentificationRuleAdded(addedIdentificationRule);
                         };
-                        //Retail_BE_AccountIdentificationService.assignIdentificationRuleToAccount(account.Entity.AccountId, onAccountIdentificationRuleAssigned);
+                        Retail_BE_AccountIdentificationService.assignIdentificationRuleToAccount(account.Entity.AccountId, onAccountIdentificationRuleAdded);
                     }
                 }];
 
