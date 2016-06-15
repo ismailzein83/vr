@@ -20,7 +20,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 Query = new AnalyticQuery()
                 {
                     DimensionFields = new List<string> { "Supplier", "SaleZone", "SupplierZone" },
-                    MeasureFields = new List<string>() { "SaleNet", "CostNet", "SaleDuration", "CostDuration", "DurationInMinutes", "Attempts" },
+                    MeasureFields = new List<string>() { "SaleNet", "CostNet", "SaleDuration", "CostDuration", "DurationNet", "NumberOfCalls" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
@@ -57,6 +57,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             List<ZoneProfitFormatted> listZoneProfit = new List<ZoneProfitFormatted>();
             
             var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
+
+            if(result!= null)
             foreach (var analyticRecord in result.Data)
             {
                 ZoneProfitFormatted zoneProfit = new ZoneProfitFormatted();
@@ -83,13 +85,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 MeasureValue saleNet;
                 analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
 
-                zoneProfit.SaleNet = Convert.ToDouble(saleNet.Value ?? 0.0);
+                zoneProfit.SaleNet = Convert.ToDouble(saleNet== null ? 0.0 : saleNet.Value ?? 0.0);
                 zoneProfit.SaleNetFormated = zoneProfit.SaleNet == 0 ? "" : (zoneProfit.SaleNet.HasValue) ? 
                     manager.FormatNumberDigitRate(zoneProfit.SaleNet) : "0.00";
 
                 MeasureValue costNet;
                 analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
-                zoneProfit.CostNet = Convert.ToDouble(costNet.Value ?? 0.0);
+                zoneProfit.CostNet = Convert.ToDouble(costNet == null ? 0.0 : costNet.Value ?? 0.0);
                 zoneProfit.CostNetFormated = (zoneProfit.CostNet.HasValue)
                     ? manager.FormatNumberDigitRate(zoneProfit.CostNet)
                     : "0.00";
@@ -106,12 +108,12 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 zoneProfit.CostDurationFormated = manager.FormatNumberDigitRate(zoneProfit.CostDuration);
 
                 MeasureValue durationInMinutes;
-                analyticRecord.MeasureValues.TryGetValue("DurationInMinutes", out durationInMinutes);
+                analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationInMinutes);
                 zoneProfit.DurationNet = Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
                 zoneProfit.DurationNetFormated = manager.FormatNumber(zoneProfit.DurationNet);
 
                 MeasureValue calls;
-                analyticRecord.MeasureValues.TryGetValue("Attempts", out calls);
+                analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
                 zoneProfit.Calls = Convert.ToInt32(calls.Value ?? 0.0);
 
                 zoneProfit.Profit = zoneProfit.SaleNet == 0
