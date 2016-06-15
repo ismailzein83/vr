@@ -71,6 +71,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="RazorEngine, Version=3.8.2.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\RazorEngine.3.8.2\lib\net45\RazorEngine.dll</HintPath>
@@ -132,8 +135,23 @@
     </Reference>
     <Reference Include="System.Net.Http.WebRequest">
     </Reference>
-    <Reference Include="Vanrise.Analytic.Business">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Business.dll</HintPath>
+    <Reference Include="TOne.Entities">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.BusinessEntity.Business">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.BusinessEntity.Data">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.BusinessEntity.Data.SQL">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.BusinessEntity.Entities">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.BusinessEntity.Web">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Web.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Analytic.Data">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.dll</HintPath>
