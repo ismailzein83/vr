@@ -11,10 +11,10 @@
                 </vr-columns>
             </vr-row>
             <vr-row removeline>
-                <vr-columns width="normal" ng-show="advancedSelected">
+                <vr-columns width="normal">
                     <vr-datetimepicker label="Effective Date" value="scopeModel.effectiveDate" type="date"></vr-datetimepicker>
                 </vr-columns>
-                <vr-columns width="normal" ng-show="advancedSelected">
+                <vr-columns width="normal">
                     <vr-textbox label="Description" value="scopeModel.description"></vr-textbox>
                 </vr-columns>
                 <span ng-repeat="filter in scopeModel.filters" ng-show="advancedSelected || (filter.showInBasicSearch && basicSelected)">
