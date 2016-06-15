@@ -84,7 +84,7 @@ namespace Vanrise.GenericData.Business
         public DataRecordFieldType GetFieldType(string fieldPath, Dictionary<string, DataRecordField> dataRecordTypeFieldsByName, int dataRecordTypeId)
         {
             DataRecordField dataRecordTypeField;
-            if (dataRecordTypeFieldsByName.TryGetValue(fieldPath, out dataRecordTypeField ))
+            if (!dataRecordTypeFieldsByName.TryGetValue(fieldPath, out dataRecordTypeField))
                 throw new NullReferenceException(String.Format("DataRecordType '{0}' dataRecordTypeField '{1}'", dataRecordTypeId, fieldPath));
             return dataRecordTypeField.Type;
         }
