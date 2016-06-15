@@ -209,7 +209,7 @@
                     VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, payload, loadSettingsSectionPromiseDeferred);
                 });
             });
-
+            $scope.scopeModel.settingNotAccessible = accessibility != undefined ? accessibility.settingNotAccessible : undefined;
             promises.push(loadRuleTypeConfigPromise);
 
             return UtilsService.waitMultiplePromises(promises);
