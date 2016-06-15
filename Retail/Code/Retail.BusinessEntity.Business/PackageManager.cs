@@ -170,7 +170,7 @@ namespace Retail.BusinessEntity.Business
 
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            return GetPackageName((int)context.EntityId);
+            return GetPackageName(Convert.ToInt32(context.EntityId));
         }
 
         public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
