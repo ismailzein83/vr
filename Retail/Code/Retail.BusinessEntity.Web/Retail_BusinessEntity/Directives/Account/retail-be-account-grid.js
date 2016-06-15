@@ -181,7 +181,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                 servicesTab.loadDirective = function (accountServiceGridAPI, account) {
                     account.accountServiceGridAPI = accountServiceGridAPI;
                     var accountServiceGridPayload = {
-                        AssignedToAccountId: account.Entity.AccountId
+                        AccountId: account.Entity.AccountId
                     };
                     return account.accountServiceGridAPI.loadGrid(accountServiceGridPayload);
                 };

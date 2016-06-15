@@ -21,7 +21,7 @@ namespace Retail.BusinessEntity.Business
             var allAccountServices = GetCachedAccountServices();
 
             Func<AccountService, bool> filterExpression = (prod) =>
-                 (true);
+                 (input.Query.AccountId == null || prod.AccountId == input.Query.AccountId);
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allAccountServices.ToBigResult(input, filterExpression, AccountServiceDetailMapper));
         }
