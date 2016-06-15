@@ -9,5 +9,16 @@ namespace Retail.Voice.Entities
 {
     public class VoiceChargingPolicyDefinitionSettings : ChargingPolicyDefinitionSettings
     {
+        public override string ChargingPolicyEditor
+        {
+            get
+            {
+                return "retail-voice-chargingpolicy-settings";
+            }
+            set
+            {
+                
+            }
+        }
     }
 }
