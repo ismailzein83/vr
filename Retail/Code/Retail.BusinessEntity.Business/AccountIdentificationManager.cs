@@ -95,6 +95,7 @@ namespace Retail.BusinessEntity.Business
             return new AccountIdentificationDetail()
             {
                 GenericRuleId = mappingRule.RuleId,
+                GenericRuleDefinitionId = mappingRule.DefinitionId,
                 Description = mappingRule.Description
             };
         }

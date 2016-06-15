@@ -38,10 +38,6 @@
             $scope.scopeModel.assignIdentificationRule = function () {
                 $scope.modalContext.closeModal();
 
-                var onAccountIdentificationRuleAdded = function (ruleObj) {
-                    $scope.onAccountIdentificationRuleAdded(ruleObj);
-                };
-
                 VR_GenericData_GenericRule.addGenericRule(ruleDefinitionSelectorAPI.getSelectedIds(), onAccountIdentificationRuleAdded);
             }
         }
@@ -54,7 +50,13 @@
 
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadRuleDefinitionSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadRuleDefinitionSelector]).then(function () {
+               var identificationRules = ruleDefinitionSelectorAPI.getDatasource();
+               if (identificationRules.length == 1) {
+                   $scope.modalContext.closeModal();
+                   VR_GenericData_GenericRule.addGenericRule(identificationRules[0].GenericRuleDefinitionId, onAccountIdentificationRuleAdded);
+               }
+            }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -71,6 +73,7 @@
 
             ruleDefinitionSelectorReadyDeferred.promise.then(function () {
                 var ruleDefinitionPayload = {
+                    filter: { Filters: [{ $type: "Retail.BusinessEntity.Business.AccountMappingRuleDefinitionFilter,Retail.BusinessEntity.Business" }] }
                 };
 
                 VRUIUtilsService.callDirectiveLoad(ruleDefinitionSelectorAPI, ruleDefinitionPayload, ruleDefinitionLoadDeferred);
@@ -78,6 +81,15 @@
 
             return ruleDefinitionLoadDeferred.promise;
         }
+
+        function onAccountIdentificationRuleAdded(ruleObj) {
+            var accountIdentificationDetail = {
+                AccountId: ruleObj.Entity.Settings != undefined ? ruleObj.Entity.Settings.Value : accountId,
+                Description: ruleObj.Entity.Description
+            };
+
+            $scope.onAccountIdentificationRuleAdded(accountIdentificationDetail);
+        };
 
     }
 

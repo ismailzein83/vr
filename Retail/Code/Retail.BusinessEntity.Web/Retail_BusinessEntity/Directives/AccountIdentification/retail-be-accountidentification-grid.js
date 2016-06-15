@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountidentificationGrid', ['Retail_BE_AccountIdentificationAPIService', 'VRNotificationService',
-    function (Retail_BE_AccountIdentificationAPIService, VRNotificationService)
+app.directive('retailBeAccountidentificationGrid', ['Retail_BE_AccountIdentificationAPIService', 'VR_GenericData_GenericRule', 'VRNotificationService',
+    function (Retail_BE_AccountIdentificationAPIService, VR_GenericData_GenericRule, VRNotificationService)
 {
     return {
         restrict: 'E',
@@ -45,6 +45,8 @@ app.directive('retailBeAccountidentificationGrid', ['Retail_BE_AccountIdentifica
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
             };
+
+            defineMenuActions();
         }
 
         function defineAPI()
@@ -61,6 +63,28 @@ app.directive('retailBeAccountidentificationGrid', ['Retail_BE_AccountIdentifica
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
+        }
+
+
+        function defineMenuActions() {
+            $scope.scopeModel.menuActions.push({
+                name: 'Edit',
+                clicked: editAccountIdentificationRule
+            });
+        }
+
+        function editAccountIdentificationRule(identificationRule) {
+            var onAccountUpdated = function (updatedAccountIdentificationRule) {
+                var accountIdentificationDetail = {
+                    GenericRuleId: updatedAccountIdentificationRule.Entity.RuleId,
+                    GenericRuleDefinitionId: updatedAccountIdentificationRule.Entity.DefinitionId,
+                    Description: updatedAccountIdentificationRule.Entity.Description
+                };
+
+                gridAPI.itemUpdated(accountIdentificationDetail);
+            };
+
+            VR_GenericData_GenericRule.editGenericRule(identificationRule.GenericRuleId, identificationRule.GenericRuleDefinitionId, onAccountUpdated);
         }
 
 

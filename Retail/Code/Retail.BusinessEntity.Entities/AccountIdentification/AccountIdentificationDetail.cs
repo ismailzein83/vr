@@ -10,6 +10,15 @@ namespace Retail.BusinessEntity.Entities
     {
         public long GenericRuleId { get; set; }
 
+        public long GenericRuleDefinitionId { get; set; }
+
         public string Description { get; set; }
+
+        public DateTime? BED { get; set; }
+
+        public DateTime? EED { get; set; }
+
+        public String Criteria { get; set; }
+
     }
 }
