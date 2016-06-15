@@ -28,7 +28,7 @@ namespace Retail.BusinessEntity.Business
 
         public IEnumerable<ServiceTypeInfo> GetServiceTypesInfo()
         {
-            return this.GetCachedServiceTypes().MapRecords(ServiceTypeInfoMapper).OrderBy(x => x.Name);
+            return this.GetCachedServiceTypes().MapRecords(ServiceTypeInfoMapper).OrderBy(x => x.Title);
         }
 
         public ServiceType GetServiceType(int serviceTypeId)
@@ -169,7 +169,7 @@ namespace Retail.BusinessEntity.Business
 
         private ServiceTypeInfo ServiceTypeInfoMapper(ServiceType serviceType)
         {
-            return new ServiceTypeInfo() { ServiceTypeId = serviceType.ServiceTypeId, Name = serviceType.Name };
+            return new ServiceTypeInfo() { ServiceTypeId = serviceType.ServiceTypeId, Title = serviceType.Title };
         }
 
         #endregion
