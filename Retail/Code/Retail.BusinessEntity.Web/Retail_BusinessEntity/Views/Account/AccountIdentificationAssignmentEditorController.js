@@ -36,9 +36,7 @@
             };
 
             $scope.scopeModel.assignIdentificationRule = function () {
-                $scope.modalContext.closeModal();
-
-                VR_GenericData_GenericRule.addGenericRule(ruleDefinitionSelectorAPI.getSelectedIds(), onAccountIdentificationRuleAdded);
+               addGenericRule(ruleDefinitionSelectorAPI.getSelectedIds());
             }
         }
 
@@ -51,11 +49,11 @@
 
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadRuleDefinitionSelector]).then(function () {
-               var identificationRules = ruleDefinitionSelectorAPI.getDatasource();
-               if (identificationRules.length == 1) {
-                   $scope.modalContext.closeModal();
-                   VR_GenericData_GenericRule.addGenericRule(identificationRules[0].GenericRuleDefinitionId, onAccountIdentificationRuleAdded);
-               }
+                var identificationRules = ruleDefinitionSelectorAPI.getDatasource();
+
+                if (identificationRules.length == 1) {
+                    addGenericRule(identificationRules[0].GenericRuleDefinitionId);
+                }
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
@@ -82,14 +80,26 @@
             return ruleDefinitionLoadDeferred.promise;
         }
 
-        function onAccountIdentificationRuleAdded(ruleObj) {
-            var accountIdentificationDetail = {
-                AccountId: ruleObj.Entity.Settings != undefined ? ruleObj.Entity.Settings.Value : accountId,
-                Description: ruleObj.Entity.Description
+        function onAccountIdentificationRuleAdded() {
+            $scope.onAccountIdentificationRuleAdded();
+        };
+
+        function addGenericRule(genericRuleDefinitionId) {
+
+            var accessibility = {
+                settingNotAccessible: true
             };
 
-            $scope.onAccountIdentificationRuleAdded(accountIdentificationDetail);
-        };
+            var preDefinedData = {
+                settings: {
+                    Value: accountId,
+                }
+            }
+
+            $scope.modalContext.closeModal();
+
+            VR_GenericData_GenericRule.addGenericRule(genericRuleDefinitionId, onAccountIdentificationRuleAdded, preDefinedData, accessibility);
+        }
 
     }
 

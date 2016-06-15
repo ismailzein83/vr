@@ -21,8 +21,10 @@ app.directive('retailBeAccountidentificationGrid', ['Retail_BE_AccountIdentifica
     function AccountIdentificationGrid($scope, ctrl, $attrs)
     {
         this.initializeController = initializeController;
+       
 
         var gridAPI;
+        var accountId;
 
         function initializeController()
         {
@@ -54,11 +56,12 @@ app.directive('retailBeAccountidentificationGrid', ['Retail_BE_AccountIdentifica
             var api = {};
 
             api.load = function (query) {
+                accountId = query.AccountId;
                 return gridAPI.retrieveData(query);
             };
 
-            api.onAccountIdentificationRuleAdded = function (addedIdentificationRule) {
-                gridAPI.itemAdded(addedIdentificationRule);
+            api.onAccountIdentificationRuleAdded = function () {
+                return gridAPI.retrieveData({ AccountId: accountId });
             };
 
             if (ctrl.onReady != null)
@@ -74,17 +77,21 @@ app.directive('retailBeAccountidentificationGrid', ['Retail_BE_AccountIdentifica
         }
 
         function editAccountIdentificationRule(identificationRule) {
-            var onAccountUpdated = function (updatedAccountIdentificationRule) {
-                var accountIdentificationDetail = {
-                    GenericRuleId: updatedAccountIdentificationRule.Entity.RuleId,
-                    GenericRuleDefinitionId: updatedAccountIdentificationRule.Entity.DefinitionId,
-                    Description: updatedAccountIdentificationRule.Entity.Description
-                };
-
-                gridAPI.itemUpdated(accountIdentificationDetail);
+            var onAccountIdentificationUpdated = function () {
+                return gridAPI.retrieveData({ AccountId: accountId });
             };
 
-            VR_GenericData_GenericRule.editGenericRule(identificationRule.GenericRuleId, identificationRule.GenericRuleDefinitionId, onAccountUpdated);
+            var preDefinedData = {
+                settings: {
+                    Value: accountId,
+                }
+            }
+
+            var accessibility = {
+                settingNotAccessible :true
+            };
+
+            VR_GenericData_GenericRule.editGenericRule(identificationRule.GenericRuleId, identificationRule.GenericRuleDefinitionId,onAccountIdentificationUpdated, preDefinedData, accessibility);
         }
 
 

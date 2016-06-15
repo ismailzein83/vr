@@ -92,10 +92,35 @@ namespace Retail.BusinessEntity.Business
 
         AccountIdentificationDetail AccountIdentificationMapper(MappingRule mappingRule)
         {
+            GenericRuleManager<MappingRule> genericRuleManager = new GenericRuleManager<MappingRule>();
+            GenericRuleDetail genericRuleDetail = genericRuleManager.MapToDetails(mappingRule);
+            string criteria = "";
+            List<string> criteriaFieldsValues= new List<string>();
+
+            GenericRuleDefinitionManager genericRuleDefinitionManager = new GenericRuleDefinitionManager();
+            GenericRuleDefinition genericRuleDefiniton = genericRuleDefinitionManager.GetGenericRuleDefinition(mappingRule.DefinitionId);
+
+            GenericRuleDefinitionCriteria criteriaFields = genericRuleDefiniton.CriteriaDefinition;
+
+
+            for (int i = 0; i < genericRuleDetail.FieldValueDescriptions.Count(); i++)
+            {
+                string fieldValueDescription = genericRuleDetail.FieldValueDescriptions[i];
+                if (!string.IsNullOrEmpty(fieldValueDescription))
+                {
+                    criteriaFieldsValues.Add(string.Concat(criteriaFields.Fields[i].FieldName, ":", fieldValueDescription));
+                }
+            }
+
+           criteria =string.Join<string>(" ,", criteriaFieldsValues);
+
             return new AccountIdentificationDetail()
             {
                 GenericRuleId = mappingRule.RuleId,
                 GenericRuleDefinitionId = mappingRule.DefinitionId,
+                BED = mappingRule.BeginEffectiveTime,
+                EED = mappingRule.EndEffectiveTime,
+                Criteria = criteria,
                 Description = mappingRule.Description
             };
         }
