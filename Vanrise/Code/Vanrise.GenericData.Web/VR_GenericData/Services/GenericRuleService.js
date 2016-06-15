@@ -11,9 +11,11 @@
             deleteGenericRule: deleteGenericRule
         });
 
-        function addGenericRule(genericRuleDefinitionId, onGenericRuleAdded) {
+        function addGenericRule(genericRuleDefinitionId, onGenericRuleAdded, preDefinedData, accessibility) {
             var modalParameters = {
-                genericRuleDefinitionId: genericRuleDefinitionId
+                genericRuleDefinitionId: genericRuleDefinitionId,
+                preDefinedData: preDefinedData,
+                accessibility: accessibility
             };
 
             var modalSettings = {};
@@ -25,10 +27,11 @@
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericRule/GenericRuleEditor.html', modalParameters, modalSettings);
         }
 
-        function editGenericRule(genericRuleId, genericRuleDefinitionId, onGenericRuleUpdated) {
+        function editGenericRule(genericRuleId, genericRuleDefinitionId, onGenericRuleUpdated, accessibility) {
             var modalParameters = {
                 genericRuleId: genericRuleId,
-                genericRuleDefinitionId: genericRuleDefinitionId
+                genericRuleDefinitionId: genericRuleDefinitionId,
+                accessibility: accessibility
             };
 
             var modalSettings = {};
