@@ -170,28 +170,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            var switchConnectivityNames = new List<string>();
-            foreach (var entityId in context.EntityIds)
-            {
-                string switchConnectivityName = GetSwitchConnectivityName(Convert.ToInt32(entityId));
-                if (switchConnectivityName == null) throw new NullReferenceException("switchConnectivityName");
-                switchConnectivityNames.Add(switchConnectivityName);
-            }
-            return String.Join(",", switchConnectivityNames);
-        }
-
-        public bool IsMatched(IBusinessEntityMatchContext context)
-        {
-            if (context.FieldValueIds == null || context.FilterIds == null) return true;
-
-            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
-            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
-            foreach (var filterId in filterIds)
-            {
-                if (fieldValueIds.Contains(filterId))
-                    return true;
-            }
-            return false;
+            return GetSwitchConnectivityName(Convert.ToInt32(context.EntityId));
         }
 
         #endregion

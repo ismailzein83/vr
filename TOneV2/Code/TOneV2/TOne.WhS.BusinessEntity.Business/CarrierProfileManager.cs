@@ -98,28 +98,9 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            var carrierProfileNames = new List<string>();
-            foreach (var entityId in context.EntityIds)
-            {
-                string carrierProfileName = GetCarrierProfileName(Convert.ToInt32(entityId));
-                if (carrierProfileName == null) throw new NullReferenceException("carrierProfileName");
-                carrierProfileNames.Add(carrierProfileName);
-            }
-            return String.Join(",", carrierProfileNames);
+            return GetCarrierProfileName(Convert.ToInt32(context.EntityId));
         }
-        public bool IsMatched(IBusinessEntityMatchContext context)
-        {
-            if (context.FieldValueIds == null || context.FilterIds == null) return true;
 
-            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
-            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
-            foreach (var filterId in filterIds)
-            {
-                if (fieldValueIds.Contains(filterId))
-                    return true;
-            }
-            return false;
-        }
         #endregion
 
         #region Validation Methods

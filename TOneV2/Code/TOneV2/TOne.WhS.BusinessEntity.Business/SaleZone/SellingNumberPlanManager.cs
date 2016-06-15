@@ -114,28 +114,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            var sellingNumberPlanNames = new List<string>();
-            foreach (var entityId in context.EntityIds)
-            {
-                string sellingNumberPlanName = GetSellingNumberPlanName(Convert.ToInt32(entityId));
-                if (sellingNumberPlanName == null) throw new NullReferenceException("sellingNumberPlanName");
-                sellingNumberPlanNames.Add(sellingNumberPlanName);
-            }
-            return String.Join(",", sellingNumberPlanNames);
-        }
-
-        public bool IsMatched(IBusinessEntityMatchContext context)
-        {
-            if (context.FieldValueIds == null || context.FilterIds == null) return true;
-
-            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
-            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
-            foreach (var filterId in filterIds)
-            {
-                if (fieldValueIds.Contains(filterId))
-                    return true;
-            }
-            return false;
+            return GetSellingNumberPlanName(Convert.ToInt32(context.EntityId));
         }
 
         public SellingNumberPlan GetMasterSellingNumberPlan()

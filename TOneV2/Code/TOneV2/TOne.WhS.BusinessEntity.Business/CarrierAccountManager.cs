@@ -259,28 +259,7 @@ namespace TOne.WhS.BusinessEntity.Business
         
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            var carrierAccountNames = new List<string>();
-            foreach (var entityId in context.EntityIds)
-            {
-                string carrierAccountName = GetCarrierAccountName(Convert.ToInt32(entityId));
-                if (carrierAccountName == null) throw new NullReferenceException("carrierAccountName");
-                carrierAccountNames.Add(carrierAccountName);
-            }
-            return String.Join(",", carrierAccountNames);
-        }
-        
-        public bool IsMatched(IBusinessEntityMatchContext context)
-        {
-            if (context.FieldValueIds == null || context.FilterIds == null) return true;
-
-            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
-            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
-            foreach (var filterId in filterIds)
-            {
-                if (fieldValueIds.Contains(filterId))
-                    return true;
-            }
-            return false;
+            return GetCarrierAccountName(Convert.ToInt32(context.EntityId));
         }
 
         public int GetAccountNominalCapacity(int carrierAccountId)

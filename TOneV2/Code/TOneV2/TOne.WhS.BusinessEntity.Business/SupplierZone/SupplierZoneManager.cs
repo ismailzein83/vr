@@ -69,30 +69,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            var supplierZoneNames = new List<string>();
-            foreach (var entityId in context.EntityIds)
-            {
-                string supplierZoneName = GetSupplierZoneName(Convert.ToInt64(entityId));
-                if (supplierZoneName == null) throw new NullReferenceException("supplierZoneName");
-                supplierZoneNames.Add(supplierZoneName);
-            }
-            return String.Join(",", supplierZoneNames);
+            return GetSupplierZoneName((long)context.EntityId);
         }
-
-        public bool IsMatched(IBusinessEntityMatchContext context)
-        {
-            if (context.FieldValueIds == null || context.FilterIds == null) return true;
-
-            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt64(itm));
-            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt64(itm));
-            foreach (var filterId in filterIds)
-            {
-                if (fieldValueIds.Contains(filterId))
-                    return true;
-            }
-            return false;
-        }
-
 
         public string GetDescription(IEnumerable<long> supplierZoneIds)
         {

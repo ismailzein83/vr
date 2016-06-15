@@ -68,28 +68,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            var switchNames = new List<string>();
-            foreach (var entityId in context.EntityIds)
-            {
-                string switchName = GetSwitchName(Convert.ToInt32(entityId));
-                if (switchName == null) throw new NullReferenceException("switchName");
-                switchNames.Add(switchName);
-            }
-            return String.Join(",", switchNames);
-        }
-
-        public bool IsMatched(IBusinessEntityMatchContext context)
-        {
-            if (context.FieldValueIds == null || context.FilterIds == null) return true;
-
-            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
-            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
-            foreach (var filterId in filterIds)
-            {
-                if (fieldValueIds.Contains(filterId))
-                    return true;
-            }
-            return false;
+            return GetSwitchName(Convert.ToInt32(context.EntityId));
         }
 
         public Vanrise.Entities.InsertOperationOutput<SwitchDetail> AddSwitch(Switch whsSwitch)
