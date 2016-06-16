@@ -1,0 +1,97 @@
+﻿<div vr-modalcontent ng-controller="Mediation_Generic_MediationDefinitionEditorController" vr-loader="scopeModal.isLoading" width="'50%'">
+    <vr-modalbody>
+        <vr-form validationcontext="mediationDefinitionEditorGroup">
+            <vr-tabs>
+
+                <vr-tab header="'Definition'">
+
+                    <vr-row>
+                        <vr-columns width="1/4row">
+                            <vr-textbox label="Name" value="scopeModal.name" isrequired></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+
+                    <vr-row>
+                        <vr-columns width="1/4row">
+                            <vr-genericdata-datarecordtype-selector on-ready="scopeModal.onParsedDataRecordTypeSelectorReady"
+                                                                    selectedvalues="scopeModal.selectedParsedDataRecordType"
+                                                                    onselectionchanged="scopeModal.onParsedRecordTypeSelectionChanged"
+                                                                    isrequired="true"
+                                                                    label="Parsed Record Type"
+                                                                    hideremoveicon>
+                            </vr-genericdata-datarecordtype-selector>
+                        </vr-columns>
+                    </vr-row>
+
+                    <vr-row>
+                        <vr-columns width="1/4row">
+                            <vr-genericdata-datarecordtype-selector on-ready="scopeModal.onCookedDataRecordTypeSelectorReady"
+                                                                    selectedvalues="scopeModal.selectedSummaryDataRecordType"
+                                                                    onselectionchanged="scopeModal.onCookedRecordTypeSelectionChanged"
+                                                                    isrequired="true"
+                                                                    label="Cooked Record Type"
+                                                                    hideremoveicon>
+                            </vr-genericdata-datarecordtype-selector>
+                        </vr-columns>
+                    </vr-row>
+
+                </vr-tab>
+
+                <vr-tab header="'Parsed to Cooked Transformation'">
+
+                    <vr-row>
+
+                        <vr-columns width="1/3row">
+                            <vr-genericdata-datatransformationdefinition-selector on-ready="scopeModal.onDataTransformationDefinitionInsertReady"
+                                                                                  selectedvalues="scopeModal.selectedDataTransformationDefinitionInsert"
+                                                                                  onselectionchanged="scopeModal.onDataTransformationDefinitionInsertSelectionChanged"
+                                                                                  isrequired="true"
+                                                                                  hideremoveicon>
+
+                            </vr-genericdata-datatransformationdefinition-selector>
+                        </vr-columns>
+
+                    </vr-row>
+
+                    <vr-row>
+
+                        <vr-columns width="1/3row" vr-loader="scopeModal.isLoadingDataTransformationDefinitionInsertParsed">
+                            <vr-genericdata-datatransformationdefinitionrecord-selector on-ready="scopeModal.onDataTransformationDefinitionParsedRecordReady"
+                                                                                        selectedvalues="scopeModal.selectedDataTransformationDefinitionParsedRecord"
+                                                                                        isrequired="true"
+                                                                                        customlabel="Parsed Record"
+                                                                                        hideremoveicon>
+
+                            </vr-genericdata-datatransformationdefinitionrecord-selector>
+                        </vr-columns>
+
+                        <vr-columns width="1/3row" vr-loader="scopeModal.isLoadingDataTransformationDefinitionInsertCooked">
+                            <vr-genericdata-datatransformationdefinitionrecord-selector on-ready="scopeModal.onDataTransformationDefinitionCookedRecordReady"
+                                                                                        selectedvalues="scopeModal.selectedDataTransformationDefinitionCookedRecord"
+                                                                                        isrequired="true"
+                                                                                        customlabel="Cooked Record"
+                                                                                        hideremoveicon>
+
+                            </vr-genericdata-datatransformationdefinitionrecord-selector>
+                        </vr-columns>
+
+                    </vr-row>
+
+                </vr-tab>
+
+                <vr-tab header="'Bad CDR Identification'">
+
+                </vr-tab>
+
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="mediationDefinitionEditorGroup" data-onclick="scopeModal.SaveMediationDefinition" haspermission="hasSaveMediationDefinition"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

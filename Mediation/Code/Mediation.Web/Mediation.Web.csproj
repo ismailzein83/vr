@@ -400,6 +400,22 @@
       <Project>{3b35c6e1-fd21-4e32-a8bd-f11377a545a0}</Project>
       <Name>Vanrise.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mediation.Generic.BP.Arguments\Mediation.Generic.BP.Arguments.csproj">
+      <Project>{c08816b3-1e52-4d76-8cfa-2672a00fac64}</Project>
+      <Name>Mediation.Generic.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mediation.Generic.Business\Mediation.Generic.Business.csproj">
+      <Project>{6ce07a51-00db-4ce7-bd4a-45a9eb8a5d10}</Project>
+      <Name>Mediation.Generic.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mediation.Generic.Data.SQL\Mediation.Generic.Data.SQL.csproj">
+      <Project>{bac8dc29-0eed-4cf2-9174-2d5e6d8cdd11}</Project>
+      <Name>Mediation.Generic.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mediation.Generic.Data\Mediation.Generic.Data.csproj">
+      <Project>{46fbf314-e310-4455-bc02-f4ac6e19e649}</Project>
+      <Name>Mediation.Generic.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mediation.Generic.Entities\Mediation.Generic.Entities.csproj">
       <Project>{edbd3a6e-4535-4b84-8c2a-2ae6aedf5005}</Project>
       <Name>Mediation.Generic.Entities</Name>
@@ -407,6 +423,10 @@
     <ProjectReference Include="..\Mediation.Generic.QueueActivators\Mediation.Generic.QueueActivators.csproj">
       <Project>{0455b391-9661-41b7-90f5-f6e14fc30b2d}</Project>
       <Name>Mediation.Generic.QueueActivators</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mediation.Generic.Web\Mediation.Generic.Web.csproj">
+      <Project>{ab400620-7c45-46fe-9006-76a7a543c956}</Project>
+      <Name>Mediation.Generic.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

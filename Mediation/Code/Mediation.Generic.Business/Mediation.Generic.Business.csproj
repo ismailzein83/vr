@@ -41,9 +41,33 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Caching">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MediationDefinitionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mediation.Generic.Data.SQL\Mediation.Generic.Data.SQL.csproj">
+      <Project>{bac8dc29-0eed-4cf2-9174-2d5e6d8cdd11}</Project>
+      <Name>Mediation.Generic.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mediation.Generic.Data\Mediation.Generic.Data.csproj">
+      <Project>{46fbf314-e310-4455-bc02-f4ac6e19e649}</Project>
+      <Name>Mediation.Generic.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mediation.Generic.Entities\Mediation.Generic.Entities.csproj">
+      <Project>{edbd3a6e-4535-4b84-8c2a-2ae6aedf5005}</Project>
+      <Name>Mediation.Generic.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

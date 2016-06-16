@@ -52,6 +52,14 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.0.0\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
@@ -73,12 +81,6 @@
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http, Version=__MvcPagesVersion__, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.2\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http.WebHost, Version=__MvcPagesVersion__, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.2\lib\net45\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=__MvcPagesVersion__, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -103,6 +105,16 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -112,13 +124,10 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Mediation_Generic\Services\APIServices\" />
-    <Folder Include="Mediation_Generic\Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\MediationSettingDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -126,12 +135,28 @@
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mediation.Generic.Business\Mediation.Generic.Business.csproj">
+      <Project>{6ce07a51-00db-4ce7-bd4a-45a9eb8a5d10}</Project>
+      <Name>Mediation.Generic.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mediation.Generic.Entities\Mediation.Generic.Entities.csproj">
+      <Project>{edbd3a6e-4535-4b84-8c2a-2ae6aedf5005}</Project>
+      <Name>Mediation.Generic.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Mediation_Generic\Constant\ModuleConfig.js" />
     <Content Include="Mediation_Generic\Constant\StorageStagingStatusEnum.js" />
+    <Content Include="Mediation_Generic\Directives\MediationDefinition\mediation-generic-mediationdefinition-grid.js" />
+    <Content Include="Mediation_Generic\Directives\MediationDefinition\Templates\MediationDefinitionGrid.html" />
     <Content Include="Mediation_Generic\Directives\QueueActivator\Templates\QueueActivatorStoreStagingRecordsTemplate.html" />
     <Content Include="Mediation_Generic\Directives\QueueActivator\mediation-generic-queueactivator-storestagingrecords.js" />
+    <Content Include="Mediation_Generic\Services\APIServices\MediationDefinitionAPIService.js" />
+    <Content Include="Mediation_Generic\Services\MediationDefinitionService.js" />
+    <Content Include="Mediation_Generic\Views\MediationDefinition\MediationDefinitionEditorController.js" />
+    <Content Include="Mediation_Generic\Views\MediationDefinition\MediationDefinitionEditor.html" />
+    <Content Include="Mediation_Generic\Views\MediationDefinition\MediationDefinitionManagementController.js" />
+    <Content Include="Mediation_Generic\Views\MediationDefinition\MediationDefinitionManagement.html" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

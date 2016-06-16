@@ -1,0 +1,10 @@
+﻿<vr-datagrid datasource="mediationDefinitions"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.MediationDefinitionId">
+
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.MediationDefinitionId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>
