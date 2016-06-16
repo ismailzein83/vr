@@ -129,6 +129,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlCarrierDailyTrafficByDay.rdlc" />
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlCarrierSummary.rdlc" />
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlZoneProfits.rdlc">
       <SubType>Designer</SubType>
