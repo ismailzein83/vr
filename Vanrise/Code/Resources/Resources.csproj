@@ -108,6 +108,10 @@
     <Content Include="Databases\IDs ranges\Configuration\bp.BPDefinition.txt" />
     <Content Include="Databases\IDs ranges\Configuration\bp.BPTaskType.txt" />
     <Content Include="Databases\IDs ranges\Configuration\common.TemplateConfig.txt" />
+    <Content Include="Databases\IDs ranges\Configuration\genericdata.DataTransformationDefinition.txt" />
+    <Content Include="Databases\IDs ranges\Configuration\genericdata.DataTransformationStepConfig.txt" />
+    <Content Include="Databases\IDs ranges\Configuration\genericdata.GenericRuleDefinition.txt" />
+    <Content Include="Databases\IDs ranges\Configuration\genericdata.SummaryTransformationDefinition.txt" />
     <Content Include="Databases\IDs ranges\Configuration\queue.QueueActivatorConfig.txt" />
     <Content Include="Databases\IDs ranges\Configuration\sec.BusinessEntity.txt" />
     <Content Include="Databases\IDs ranges\Configuration\sec.BusinessEntityModule.txt" />
