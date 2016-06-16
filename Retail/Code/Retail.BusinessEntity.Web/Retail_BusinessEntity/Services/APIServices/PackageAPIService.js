@@ -48,6 +48,11 @@
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetVoiceTypesTemplateConfigs"));
 
         }
+        function GetServicePackageItemConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetServicePackageItemConfigs"));
+
+        }
+        
         return ({
             GetPackagesInfo: GetPackagesInfo,
             GetFilteredPackages: GetFilteredPackages,
@@ -57,7 +62,8 @@
             HasUpdatePackagePermission: HasUpdatePackagePermission,
             HasAddPackagePermission: HasAddPackagePermission,
             GetServicesTemplateConfigs: GetServicesTemplateConfigs,
-            GetVoiceTypesTemplateConfigs: GetVoiceTypesTemplateConfigs
+            GetVoiceTypesTemplateConfigs: GetVoiceTypesTemplateConfigs,
+            GetServicePackageItemConfigs: GetServicePackageItemConfigs
         });
     }
 

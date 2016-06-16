@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ServicePackageVolumeItemDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'Retail_BE_ConnectionTypeEnum'];
+    ServicePackageVolumeItemDirective.$inject = ["UtilsService", 'VRUIUtilsService'];
 
-    function ServicePackageVolumeItemDirective(UtilsService, VRUIUtilsService, Retail_BE_ConnectionTypeEnum) {
+    function ServicePackageVolumeItemDirective(UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/Package/ServicePackageItem/Templates/ServicePackageVolumeItemTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/Package/PackageItem/Templates/PackageVolumeItemTemplate.html"
 
         };
         function ServicePackageVolumeItem($scope, ctrl, $attrs) {
@@ -54,6 +54,6 @@
         }
     }
 
-    app.directive('retailBePackageServicepackageitemVolume', ServicePackageVolumeItemDirective);
+    app.directive('retailBePackagePackageitemVolume', ServicePackageVolumeItemDirective);
 
 })(app);

@@ -9,7 +9,9 @@
             addPackage: addPackage,
             editPackage: editPackage,
             addService: addService,
-            editService: editService
+            editService: editService,
+            addPackageItem: addPackageItem,
+            editPackageItem: editPackageItem
         });
 
         function addPackage(onPackageAdded) {
@@ -61,6 +63,32 @@
             };
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Package/ServiceEditor.html', parameters, modalSettings);
         }
+
+        function addPackageItem(onPackageItemAdded) {
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+
+                modalScope.onPackageItemAdded = onPackageItemAdded;
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Package/PackageItemEditor.html', null, settings);
+        }
+
+        function editPackageItem(packageItem, onPackageItemUpdated) {
+            var modalSettings = {
+            };
+
+            var parameters = {
+                packageItem: packageItem,
+            };
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onPackageItemUpdated = onPackageItemUpdated;
+            };
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Package/PackageItemEditor.html', parameters, modalSettings);
+        }
+
     }
 
     appControllers.service('Retail_BE_PackageService', PackageService);

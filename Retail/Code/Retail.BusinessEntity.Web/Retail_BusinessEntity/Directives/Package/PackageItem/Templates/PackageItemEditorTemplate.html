@@ -1,0 +1,10 @@
+﻿<vr-columns width="fullrow">
+    <vr-button type="Add" data-onclick="ctrl.addPackageItem" standalone></vr-button>
+</vr-columns>
+<vr-columns width="fullrow">
+    <vr-datagrid datasource="ctrl.packageItems" norowhighlightonclick="true"
+                 on-ready="ctrl.onGridReady" ondeleterow="ctrl.removePart" menuactions="ctrl.packageItemsGridMenuActions" hidegridmenu>
+        <vr-datagridcolumn headertext="'Part Type'" field="'Entity.PartTypeTitle'" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Part'" field="'Entity.PartDefinitionSettings.PartTitle'" disablesorting="true"></vr-datagridcolumn>
+    </vr-datagrid>
+</vr-columns>

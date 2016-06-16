@@ -203,10 +203,13 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\retail-be-chargingpolicypart-ratevalue-single-runtimeeditor.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\Templates\SingleDurationTariffChargingPolicyPartTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\Templates\SingleRateValueChargingPolicyPartTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\ServicePackageItem\retail-be-package-servicepackageitem-chargingpolicy.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\ServicePackageItem\retail-be-package-servicepackageitem-volume.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\ServicePackageItem\Templates\ServicePackageChargingPolicyItemTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\ServicePackageItem\Templates\ServicePackageVolumeItemTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\PackageItem\retail-be-package-packageitem-chargingpolicy.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageItem\retail-be-package-packageitem-editor.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\PackageItem\retail-be-package-packageitem-volume.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageItem\retail-be-package-packageitem.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageItem\Templates\PackageItemEditorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\PackageItem\Templates\ServicePackageChargingPolicyItemTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\PackageItem\Templates\ServicePackageVolumeItemTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\retail-be-package-servicesettings-voice.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\retail-be-package-servicesettings-data.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\retail-be-package-servicesettings-sms.js" />
@@ -283,6 +286,8 @@
     <Content Include="Retail_BusinessEntity\Views\ChargingPolicy\ChargingPolicyManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Package\PackageItemEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\Package\PackageItemEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\Package\ServiceEditor.html" />

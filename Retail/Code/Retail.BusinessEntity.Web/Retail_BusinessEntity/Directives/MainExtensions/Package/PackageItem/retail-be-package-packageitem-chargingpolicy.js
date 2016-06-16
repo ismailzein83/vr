@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ServicePackageChargingPolicyItemDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'Retail_BE_ConnectionTypeEnum'];
+    ServicePackageChargingPolicyItemDirective.$inject = ["UtilsService", 'VRUIUtilsService'];
 
-    function ServicePackageChargingPolicyItemDirective(UtilsService, VRUIUtilsService, Retail_BE_ConnectionTypeEnum) {
+    function ServicePackageChargingPolicyItemDirective(UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/Package/ServicePackageItem/Templates/ServicePackageChargingPolicyItemTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/Package/PackageItem/Templates/PackageChargingPolicyItemTemplate.html"
 
         };
         function ServicePackageChargingPolicyItem($scope, ctrl, $attrs) {
@@ -77,6 +77,6 @@
         }
     }
 
-    app.directive('retailBePackageServicepackageitemChargingpolicy', ServicePackageChargingPolicyItemDirective);
+    app.directive('retailBePackagePackageitemChargingpolicy', ServicePackageChargingPolicyItemDirective);
 
 })(app);
