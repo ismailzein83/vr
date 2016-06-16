@@ -21,34 +21,41 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             List<string> listDimensions = new List<string>();
             List<string> listMeasures = new List<string> { "NumberOfCalls", "DurationNet" };
 
-            if (parameters.GroupBySupplier)
-                listDimensions.Add("Supplier");
+            if (parameters.GroupBySupplier && parameters.IsCost)
+                listDimensions.Add("SupplierZone");
+            else
+                listDimensions.Add("SaleZone");
 
             if (parameters.IsCost)
                 listDimensions.Add("CostRateType");
             else
                 listDimensions.Add("SaleRateType");
-            
+
+            if (parameters.GroupBySupplier)
+                listDimensions.Add("Supplier");
+
             if (parameters.IsCost)
             {
                 listMeasures.Add("CostRate");
                 listMeasures.Add("CostDuration");
                 listMeasures.Add("CostNet");
                 listMeasures.Add("CostCommissions");
+                listMeasures.Add("CostExtraCharges");
             }
             else
-            {                
+            {
                 listMeasures.Add("SaleRate");
-                listMeasures.Add("SaleDurations");
+                listMeasures.Add("SaleDuration");
                 listMeasures.Add("SaleNet");
                 listMeasures.Add("SaleCommissions");
+                listMeasures.Add("SaleExtraCharges");
             }
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
             {
                 Query = new AnalyticQuery()
                 {
-                    DimensionFields = new List<string> { "SaleZone" },
-                    MeasureFields = new List<string>() {  },
+                    DimensionFields = listDimensions,
+                    MeasureFields = listMeasures,
                     TableId = 8,
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
@@ -86,104 +93,70 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             foreach (var analyticRecord in result.Data)
             {
                 ZoneSummaryFormatted zoneSummary = new ZoneSummaryFormatted();
+    
+                var zoneValue = analyticRecord.DimensionValues[0];
+                if (zoneValue != null)
+                    zoneSummary.Zone = zoneValue.Name;
 
-                var supplierValue = analyticRecord.DimensionValues[0];
-                if (supplierValue != null)
-                    zoneSummary.SupplierID = supplierValue.Name;
+                var rateTypeValue = analyticRecord.DimensionValues[1];
+                if (rateTypeValue != null)
+                    zoneSummary.RateType = (int)rateTypeValue.Value;
+                zoneSummary.RateTypeFormatted = ((RateTypeEnum)zoneSummary.RateType).ToString();
 
-                                
-                var saleZoneValue = analyticRecord.DimensionValues[1];
-                if (saleZoneValue != null)
-                    zoneSummary.Zone = saleZoneValue.Name;
+                if (parameters.GroupBySupplier)
+                {
+                    var supplierValue = analyticRecord.DimensionValues[2];
+                    if (supplierValue != null)
+                        zoneSummary.SupplierID = supplierValue.Name; 
+                }
 
+                MeasureValue calls;
+                analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
+                zoneSummary.Calls = (calls == null) ? 0 : Convert.ToInt32(calls.Value ?? 0);
+
+                MeasureValue durationNet;
+                analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
+                zoneSummary.DurationNet = (durationNet == null) ? 0 : Convert.ToDecimal(durationNet.Value ?? 0.0);
+                zoneSummary.DurationNetFormatted = manager.FormatNumber(zoneSummary.DurationNet);
+
+                MeasureValue rate;
                 if (parameters.IsCost)
-                {
-                    var costRateTypeValue = analyticRecord.DimensionValues[2];
-                    if (costRateTypeValue != null)
-                        zoneSummary.RateType = (int)costRateTypeValue.Value;
-                }
+                    analyticRecord.MeasureValues.TryGetValue("CostRate", out rate);
                 else
-                {
-                    var saleRateTypeValue = analyticRecord.DimensionValues[2];
-                    if (saleRateTypeValue != null)
-                        zoneSummary.RateType = (int)saleRateTypeValue.Value;
-                }
+                    analyticRecord.MeasureValues.TryGetValue("SaleRate", out rate);
+                zoneSummary.Rate = (rate == null) ? 0.0 : Convert.ToInt32(rate.Value ?? 0.0);
+                zoneSummary.RateFormatted = manager.FormatNumberDigitRate(zoneSummary.Rate);
 
-                zoneSummary.RateTypeFormatted = ((RateTypeEnum) zoneSummary.RateType).ToString();
+                MeasureValue durationInMinutes;
+                if (parameters.IsCost)
+                    analyticRecord.MeasureValues.TryGetValue("CostDuration", out durationInMinutes);
+                else
+                    analyticRecord.MeasureValues.TryGetValue("SaleDuration", out durationInMinutes);
+                zoneSummary.DurationInSeconds = (durationInMinutes == null) ? 0 : Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
+                zoneSummary.DurationInSecondsFormatted = manager.FormatNumber(zoneSummary.DurationInSeconds);
 
-                //MeasureValue calls;
-                //analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
-                //zoneSummary.Calls = (calls == null ) ? 0 : Convert.ToInt32(calls.Value ?? 0);
+                MeasureValue net;
+                if (parameters.IsCost)
+                    analyticRecord.MeasureValues.TryGetValue("CostNet", out net);
+                else
+                    analyticRecord.MeasureValues.TryGetValue("SaleNet", out net);
+                zoneSummary.Net = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
+                zoneSummary.NetFormatted = manager.FormatNumber(zoneSummary.DurationInSeconds);
 
-                //MeasureValue rate;
-                //if (parameters.IsCost)
-                //    analyticRecord.MeasureValues.TryGetValue("CostRate", out rate);
-                //else
-                //    analyticRecord.MeasureValues.TryGetValue("SaleRate", out rate);
-                //zoneSummary.Rate = (rate == null) ? 0.0 : Convert.ToInt32(rate.Value ?? 0.0);
+                MeasureValue commissionValue;
+                if (parameters.IsCost)
+                    analyticRecord.MeasureValues.TryGetValue("CostCommissions", out commissionValue);
+                else
+                    analyticRecord.MeasureValues.TryGetValue("SaleCommissions", out commissionValue);
+                zoneSummary.CommissionValue = (commissionValue == null) ? 0.0 : Convert.ToDouble(commissionValue.Value ?? 0.0);
+                zoneSummary.CommissionValueFormatted = manager.FormatNumber(zoneSummary.CommissionValue);
 
-
-                //MeasureValue durationNet;
-                //analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
-                //zoneSummary.DurationNet = Convert.ToDecimal(durationNet.Value ?? 0.0);
-                //zoneSummary.DurationNetFormatted = manager.FormatNumber(zoneSummary.DurationNet);
-
-                //MeasureValue durationInMinutes;
-                //analyticRecord.MeasureValues.TryGetValue("DurationInMinutes", out durationInMinutes);
-                //zoneSummary.DurationInSeconds = Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
-                //zoneSummary.DurationInSecondsFormatted = manager.FormatNumber(zoneSummary.DurationInSeconds);
-
-                //zoneSummary.RateFormatted = manager.FormatNumberDigitRate(zoneSummary.Rate);
-
-                //MeasureValue commissionValue;
-                //if (parameters.IsCost)
-                //    analyticRecord.MeasureValues.TryGetValue("CostCommissions", out commissionValue);
-                //else
-                //    analyticRecord.MeasureValues.TryGetValue("SaleCommissions", out commissionValue);
-
-                //zoneSummary.CommissionValue = Convert.ToDouble(commissionValue.Value ?? 0.0);
-                //zoneSummary.CommissionValueFormatted = manager.FormatNumber(zoneSummary.CommissionValue);
-
-                //MeasureValue extraChargeValue;
-                //if (parameters.IsCost)
-                //    analyticRecord.MeasureValues.TryGetValue("CostExtraCharges", out extraChargeValue);
-                //else
-                //    analyticRecord.MeasureValues.TryGetValue("SaleExtraCharges", out extraChargeValue);
-
-                //zoneSummary.ExtraChargeValue = Convert.ToDouble(extraChargeValue.Value ?? 0.0);
-
-                //if (parameters.IsCost)
-                //{
-                //    MeasureValue net;
-                //    analyticRecord.MeasureValues.TryGetValue("CostNet", out net);
-                //    zoneSummary.Net = Convert.ToDouble(net.Value ?? 0.0);
-                //    zoneSummary.NetFormatted = manager.FormatNumberDigitRate(zoneSummary.Net);
-
-                //    MeasureValue commisionValue;
-                //    analyticRecord.MeasureValues.TryGetValue("CostCommissions", out commisionValue);
-                //    zoneSummary.CommissionValue = Convert.ToDouble(commisionValue.Value ?? 0.0);
-                //    zoneSummary.CommissionValueFormatted = manager.FormatNumberDigitRate(zoneSummary.CommissionValue);
-
-                //    MeasureValue extraChargesValue;
-                //    analyticRecord.MeasureValues.TryGetValue("CostExtraCharges", out extraChargesValue);
-                //    zoneSummary.ExtraChargeValue = Convert.ToDouble(extraChargesValue.Value ?? 0.0);
-                //}
-                //else
-                //{
-                //    MeasureValue net;
-                //    analyticRecord.MeasureValues.TryGetValue("SaleNet", out net);
-                //    zoneSummary.Net = Convert.ToDouble(net.Value ?? 0.0);
-                //    zoneSummary.NetFormatted = manager.FormatNumberDigitRate(zoneSummary.Net);
-
-                //    MeasureValue commisionValue;
-                //    analyticRecord.MeasureValues.TryGetValue("SaleCommissions", out commisionValue);
-                //    zoneSummary.CommissionValue = Convert.ToDouble(commisionValue.Value ?? 0.0);
-                //    zoneSummary.CommissionValueFormatted = manager.FormatNumberDigitRate(zoneSummary.CommissionValue);
-
-                //    MeasureValue extraChargesValue;
-                //    analyticRecord.MeasureValues.TryGetValue("SaleExtraCharges", out extraChargesValue);
-                //    zoneSummary.ExtraChargeValue = Convert.ToDouble(extraChargesValue.Value ?? 0.0);
-                //}
+                MeasureValue extraChargeValue;
+                if (parameters.IsCost)
+                    analyticRecord.MeasureValues.TryGetValue("CostExtraCharges", out extraChargeValue);
+                else
+                    analyticRecord.MeasureValues.TryGetValue("SaleExtraCharges", out extraChargeValue);
+                zoneSummary.ExtraChargeValue = (extraChargeValue == null) ? 0.0 : Convert.ToDouble(extraChargeValue.Value ?? 0.0);
 
                 listZoneSummary.Add(zoneSummary);
             }
