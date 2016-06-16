@@ -252,11 +252,13 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountServiceAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ChargingPolicyAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ServiceTypeAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\SwitchAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ZoneAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PackageAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\ChargingPolicyService.js" />
     <Content Include="Retail_BusinessEntity\Services\PackageService.js" />
     <Content Include="Retail_BusinessEntity\Services\ServiceTypeService.js" />
+    <Content Include="Retail_BusinessEntity\Services\SwitchService.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountService\AccountServiceEditor.html" />
@@ -283,6 +285,10 @@
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeManagementController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Switch\SwitchEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\Switch\SwitchEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Switch\SwitchManagement.html" />
+    <Content Include="Retail_BusinessEntity\Views\Switch\SwitchManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
