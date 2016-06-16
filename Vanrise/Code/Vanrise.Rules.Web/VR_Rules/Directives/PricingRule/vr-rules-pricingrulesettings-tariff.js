@@ -8,9 +8,7 @@ function ($compile, VR_Rules_PricingRuleAPIService, UtilsService, VRUIUtilsServi
             onReady: '=',
         },
         controller: function ($scope, $element, $attrs) {
-
             var ctrl = this;
-            $scope.pricingRuleTariffSettings = [];
             var ctor = new bePricingRuleTariffSetting(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
@@ -26,8 +24,11 @@ function ($compile, VR_Rules_PricingRuleAPIService, UtilsService, VRUIUtilsServi
 
     function bePricingRuleTariffSetting(ctrl, $scope, $attrs) {
         var directiveReadyAPI;
-        var directiveReadyPromiseDeferred;
+        var directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         function initializeController() {
+            $scope.pricingRuleTariffSettings = [];
+
             $scope.onPricingRuleTariffTemplateDirectiveReady = function (api) {
                 directiveReadyAPI = api;
                 var setLoader = function (value) { $scope.isLoadingDirective = value };
@@ -35,7 +36,6 @@ function ($compile, VR_Rules_PricingRuleAPIService, UtilsService, VRUIUtilsServi
             }
             defineAPI();
         }
-
 
         function defineAPI() {
             var api = {};
@@ -45,35 +45,49 @@ function ($compile, VR_Rules_PricingRuleAPIService, UtilsService, VRUIUtilsServi
                 obj.ConfigId = $scope.selectedPricingRuleTariffSettings.TemplateConfigID;
                 return obj;
             }
+
             api.load = function (payload) {
+                var promises = [];
+
                 var settings;
 
                 if (payload != undefined) {
                     settings = payload.settings;
                 }
-                var promises = [];
-                var loadTariffTemplatesPromiseDeferred = VR_Rules_PricingRuleAPIService.GetPricingRuleTariffTemplates().then(function (response) {
-                    angular.forEach(response, function (itm) {
-                        $scope.pricingRuleTariffSettings.push(itm);
-                    });
-                    if (settings != undefined && settings.ConfigId != undefined) {
-                        for (var j = 0; j < $scope.pricingRuleTariffSettings.length; j++)
-                            if (settings.ConfigId == $scope.pricingRuleTariffSettings[j].TemplateConfigID)
-                                $scope.selectedPricingRuleTariffSettings = $scope.pricingRuleTariffSettings[j];
-                    }
-                });
-                promises.push(loadTariffTemplatesPromiseDeferred);
-                if (settings != undefined) {
-                    directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                
+                var loadTariffTemplatesPromise = loadTariffTemplates();
+                promises.push(loadTariffTemplatesPromise);
 
+                var loadDirectivePromise = loadDirective();
+                promises.push(loadDirectivePromise);
+
+                loadTariffTemplatesPromise.then(function () {
+                    if (settings != undefined)
+                        $scope.selectedPricingRuleTariffSettings = UtilsService.getItemByVal($scope.pricingRuleTariffSettings, settings.ConfigId, 'TemplateConfigID');
+                    else if ($scope.pricingRuleTariffSettings.length > 0)
+                        $scope.selectedPricingRuleTariffSettings = $scope.pricingRuleTariffSettings[0];
+                });
+
+                function loadTariffTemplates() {
+                    return VR_Rules_PricingRuleAPIService.GetPricingRuleTariffTemplates().then(function (response) {
+                        if (response != null) {
+                            for (var i = 0; i < response.length; i++) {
+                                $scope.pricingRuleTariffSettings.push(response[i]);
+                            }
+                        }
+                    })
+                }
+                function loadDirective() {
                     var directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    promises.push(directiveLoadPromiseDeferred.promise);
 
                     directiveReadyPromiseDeferred.promise.then(function () {
                         directiveReadyPromiseDeferred = undefined;
                         VRUIUtilsService.callDirectiveLoad(directiveReadyAPI, settings, directiveLoadPromiseDeferred);
                     });
+
+                    return directiveLoadPromiseDeferred.promise;
                 }
+
                 return UtilsService.waitMultiplePromises(promises);
             }
 
