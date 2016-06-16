@@ -9,6 +9,5 @@ namespace Retail.BusinessEntity.Entities
     public class ServiceTypeDetail
     {
         public ServiceType Entity { get; set; }
-        public string ChargingPolicyName { get; set; }
     }
 }

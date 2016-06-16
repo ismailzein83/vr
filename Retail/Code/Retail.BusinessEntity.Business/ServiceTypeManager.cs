@@ -141,14 +141,9 @@ namespace Retail.BusinessEntity.Business
 
         private ServiceTypeDetail ServiceTypeDetailMapper(ServiceType serviceType)
         {
-            ChargingPolicyManager chargingPolicyManager= new ChargingPolicyManager();
-            string chargingPolicyName = null;
-            if (serviceType.Settings!=null && serviceType.Settings.ChargingPolicyDefinitionSettings != null)
-                chargingPolicyName = chargingPolicyManager.GetChargingPolicyConfigTitle(serviceType.Settings.ChargingPolicyDefinitionSettings.ConfigId);
             return new ServiceTypeDetail()
             {
                 Entity = serviceType,
-                ChargingPolicyName = chargingPolicyName
             };
         }
 

@@ -107,11 +107,6 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public string GetChargingPolicyConfigTitle(int configId)
-        {
-            var config = GetChargingPolicyTemplateConfigs().FindRecord(x=>x.ExtensionConfigurationId==configId);
-            return (config != null) ? config.Title : null;
-        }
         public IEnumerable<ChargingPolicyPartTypeConfig> GetChargingPolicyPartTypeTemplateConfigs()
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
