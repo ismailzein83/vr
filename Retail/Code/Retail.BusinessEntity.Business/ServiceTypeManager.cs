@@ -40,7 +40,7 @@ namespace Retail.BusinessEntity.Business
         public string GetServiceTypeName(int serviceTypeId)
         {
             ServiceType serviceType = this.GetServiceType(serviceTypeId);
-            return (serviceType != null) ? serviceType.Name : null;
+            return (serviceType != null) ? serviceType.Title : null;
         }
 
         public ChargingPolicyDefinitionSettings GetServiceTypeChargingPolicyDefinitionSettings(int serviceTypeId)

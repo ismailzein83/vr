@@ -92,12 +92,11 @@ namespace Retail.BusinessEntity.Business
             AccountServiceDetail accountServiceDetail = new AccountServiceDetail();
             AccountManager accountManager = new AccountManager();
             ServiceTypeManager serviceTypeManager = new Business.ServiceTypeManager();
-
-            var account = accountManager.GetAccount(accountService.AccountId);
-            var serviceType = serviceTypeManager.GetServiceType(accountService.ServiceTypeId);
+            ChargingPolicyManager chargingPolicyManager = new ChargingPolicyManager();
             accountServiceDetail.Entity = accountService;
-            accountServiceDetail.AccountName = account.Name;
-            accountServiceDetail.ServiceTypeTitle = serviceType.Title;
+            accountServiceDetail.AccountName = accountManager.GetAccountName(accountService.AccountId);
+            accountServiceDetail.ServiceChargingPolicyName = chargingPolicyManager.GetChargingPolicyName(accountService.ServiceChargingPolicyId);
+            accountServiceDetail.ServiceTypeTitle = serviceTypeManager.GetServiceTypeName(accountService.ServiceTypeId);
             return accountServiceDetail;
         }
         #endregion

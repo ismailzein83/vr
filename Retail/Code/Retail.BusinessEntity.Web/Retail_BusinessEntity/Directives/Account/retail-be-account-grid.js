@@ -111,7 +111,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             function buildAssignedPackagesTab() {
                 var packagesTab = {};
 
-                packagesTab.title = 'Assigned Packages';
+                packagesTab.title = 'Packages';
                 packagesTab.directive = 'retail-be-accountpackage-grid';
 
                 packagesTab.loadDirective = function (accountPackageGridAPI, account) {
@@ -174,7 +174,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             function buildAssignedServicesTab() {
                 var servicesTab = {};
 
-                servicesTab.title = 'Assigned Services';
+                servicesTab.title = 'Services';
                 servicesTab.directive = 'retail-be-accountservice-grid';
 
                 servicesTab.loadDirective = function (accountServiceGridAPI, account) {
