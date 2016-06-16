@@ -49,9 +49,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Voice.Web", "Retail.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Runtime", "Retail.Runtime\Retail.Runtime.csproj", "{C62C8B57-C645-4B1B-B202-6FB09BF2DAA3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Retail.SMS", "Retail.SMS", "{DBCD35EE-87B3-403D-A0DC-2ACC3D0313D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.SMS.Entities", "Retail.SMS.Entities\Retail.SMS.Entities.csproj", "{95C33C91-E6F0-4D60-937B-61BD35564A6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.SMS.Web", "Retail.SMS.Web\Retail.SMS.Web.csproj", "{756D0871-0E8A-40EB-B63D-0671C8A8FD9C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Retail.Data", "Retail.Data", "{D2979848-35B3-464F-A335-62EE41236287}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Data.Web", "Retail.Data.Web\Retail.Data.Web.csproj", "{F5B44646-BA9C-408F-BE4F-CC37D0860616}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Data.MainExtensions", "Retail.Data.MainExtensions\Retail.Data.MainExtensions.csproj", "{750F4FDE-CADA-485C-906B-841673DF0300}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Data.Entities", "Retail.Data.Entities\Retail.Data.Entities.csproj", "{F8181947-ED07-4275-9816-82D61E6E0E00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.SMS.MainExtensions", "Retail.SMS.MainExtensions\Retail.SMS.MainExtensions.csproj", "{D18FF35B-6367-4CF2-B257-A8B777F23C16}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 17
+		SccNumberOfProjects = 23
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -119,6 +135,30 @@ Global
 		SccProjectTopLevelParentUniqueName16 = Retail.sln
 		SccProjectName16 = Retail.Runtime
 		SccLocalPath16 = Retail.Runtime
+		SccProjectUniqueName17 = Retail.SMS.Entities\\Retail.SMS.Entities.csproj
+		SccProjectTopLevelParentUniqueName17 = Retail.sln
+		SccProjectName17 = Retail.SMS.Entities
+		SccLocalPath17 = Retail.SMS.Entities
+		SccProjectUniqueName18 = Retail.SMS.Web\\Retail.SMS.Web.csproj
+		SccProjectTopLevelParentUniqueName18 = Retail.sln
+		SccProjectName18 = Retail.SMS.Web
+		SccLocalPath18 = Retail.SMS.Web
+		SccProjectUniqueName19 = Retail.Data.Web\\Retail.Data.Web.csproj
+		SccProjectTopLevelParentUniqueName19 = Retail.sln
+		SccProjectName19 = Retail.Data.Web
+		SccLocalPath19 = Retail.Data.Web
+		SccProjectUniqueName20 = Retail.Data.MainExtensions\\Retail.Data.MainExtensions.csproj
+		SccProjectTopLevelParentUniqueName20 = Retail.sln
+		SccProjectName20 = Retail.Data.MainExtensions
+		SccLocalPath20 = Retail.Data.MainExtensions
+		SccProjectUniqueName21 = Retail.Data.Entities\\Retail.Data.Entities.csproj
+		SccProjectTopLevelParentUniqueName21 = Retail.sln
+		SccProjectName21 = Retail.Data.Entities
+		SccLocalPath21 = Retail.Data.Entities
+		SccProjectUniqueName22 = Retail.SMS.MainExtensions\\Retail.SMS.MainExtensions.csproj
+		SccProjectTopLevelParentUniqueName22 = Retail.sln
+		SccProjectName22 = Retail.SMS.MainExtensions
+		SccLocalPath22 = Retail.SMS.MainExtensions
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -187,10 +227,34 @@ Global
 		{D5D3AD98-E134-4ED3-9040-E50A2BF1C650}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5D3AD98-E134-4ED3-9040-E50A2BF1C650}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5D3AD98-E134-4ED3-9040-E50A2BF1C650}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C62C8B57-C645-4B1B-B202-6FB09BF2DAA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C62C8B57-C645-4B1B-B202-6FB09BF2DAA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C62C8B57-C645-4B1B-B202-6FB09BF2DAA3}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{C62C8B57-C645-4B1B-B202-6FB09BF2DAA3}.Debug|Any CPU.Build.0 = Debug|x64
 		{C62C8B57-C645-4B1B-B202-6FB09BF2DAA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C62C8B57-C645-4B1B-B202-6FB09BF2DAA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95C33C91-E6F0-4D60-937B-61BD35564A6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95C33C91-E6F0-4D60-937B-61BD35564A6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95C33C91-E6F0-4D60-937B-61BD35564A6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95C33C91-E6F0-4D60-937B-61BD35564A6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{756D0871-0E8A-40EB-B63D-0671C8A8FD9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{756D0871-0E8A-40EB-B63D-0671C8A8FD9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{756D0871-0E8A-40EB-B63D-0671C8A8FD9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{756D0871-0E8A-40EB-B63D-0671C8A8FD9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5B44646-BA9C-408F-BE4F-CC37D0860616}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5B44646-BA9C-408F-BE4F-CC37D0860616}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5B44646-BA9C-408F-BE4F-CC37D0860616}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5B44646-BA9C-408F-BE4F-CC37D0860616}.Release|Any CPU.Build.0 = Release|Any CPU
+		{750F4FDE-CADA-485C-906B-841673DF0300}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{750F4FDE-CADA-485C-906B-841673DF0300}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{750F4FDE-CADA-485C-906B-841673DF0300}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{750F4FDE-CADA-485C-906B-841673DF0300}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8181947-ED07-4275-9816-82D61E6E0E00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8181947-ED07-4275-9816-82D61E6E0E00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8181947-ED07-4275-9816-82D61E6E0E00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8181947-ED07-4275-9816-82D61E6E0E00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D18FF35B-6367-4CF2-B257-A8B777F23C16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D18FF35B-6367-4CF2-B257-A8B777F23C16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D18FF35B-6367-4CF2-B257-A8B777F23C16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D18FF35B-6367-4CF2-B257-A8B777F23C16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -214,5 +278,13 @@ Global
 		{95AE4730-EE1B-4A0B-A785-BAF36F130714} = {7C9239B5-93F0-4CDE-AC50-64CBB563A8D2}
 		{D5D3AD98-E134-4ED3-9040-E50A2BF1C650} = {7C9239B5-93F0-4CDE-AC50-64CBB563A8D2}
 		{C62C8B57-C645-4B1B-B202-6FB09BF2DAA3} = {5335E72B-803E-4323-895F-4293DB0E9211}
+		{DBCD35EE-87B3-403D-A0DC-2ACC3D0313D6} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
+		{95C33C91-E6F0-4D60-937B-61BD35564A6C} = {DBCD35EE-87B3-403D-A0DC-2ACC3D0313D6}
+		{756D0871-0E8A-40EB-B63D-0671C8A8FD9C} = {DBCD35EE-87B3-403D-A0DC-2ACC3D0313D6}
+		{D2979848-35B3-464F-A335-62EE41236287} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
+		{F5B44646-BA9C-408F-BE4F-CC37D0860616} = {D2979848-35B3-464F-A335-62EE41236287}
+		{750F4FDE-CADA-485C-906B-841673DF0300} = {D2979848-35B3-464F-A335-62EE41236287}
+		{F8181947-ED07-4275-9816-82D61E6E0E00} = {D2979848-35B3-464F-A335-62EE41236287}
+		{D18FF35B-6367-4CF2-B257-A8B777F23C16} = {DBCD35EE-87B3-403D-A0DC-2ACC3D0313D6}
 	EndGlobalSection
 EndGlobal

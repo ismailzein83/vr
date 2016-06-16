@@ -14,3 +14,5 @@ VR_GenericData			C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
 VR_Rules				C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules
 Analytic				C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic
 WhS_BusinessEntity		C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Web\WhS_BusinessEntity
+Retail_SMS				C:\TFS\Retail\Code\Retail.SMS.Web\Retail_SMS
+Retail_Data				C:\TFS\Retail\Code\Retail.Data.Web\Retail_Data

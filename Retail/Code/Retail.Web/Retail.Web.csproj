@@ -442,6 +442,30 @@
       <Project>{47686853-e160-48ec-99bc-b81088ad84e3}</Project>
       <Name>Retail.BusinessEntity.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Data.Entities\Retail.Data.Entities.csproj">
+      <Project>{f8181947-ed07-4275-9816-82d61e6e0e00}</Project>
+      <Name>Retail.Data.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Data.MainExtensions\Retail.Data.MainExtensions.csproj">
+      <Project>{750f4fde-cada-485c-906b-841673df0300}</Project>
+      <Name>Retail.Data.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Data.Web\Retail.Data.Web.csproj">
+      <Project>{f5b44646-ba9c-408f-be4f-cc37d0860616}</Project>
+      <Name>Retail.Data.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.SMS.Entities\Retail.SMS.Entities.csproj">
+      <Project>{95c33c91-e6f0-4d60-937b-61bd35564a6c}</Project>
+      <Name>Retail.SMS.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.SMS.MainExtensions\Retail.SMS.MainExtensions.csproj">
+      <Project>{d18ff35b-6367-4cf2-b257-a8b777f23c16}</Project>
+      <Name>Retail.SMS.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.SMS.Web\Retail.SMS.Web.csproj">
+      <Project>{756d0871-0e8a-40eb-b63d-0671c8a8fd9c}</Project>
+      <Name>Retail.SMS.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Voice.Business\Retail.Voice.Business.csproj">
       <Project>{95ae4730-ee1b-4a0b-a785-baf36f130714}</Project>
       <Name>Retail.Voice.Business</Name>
