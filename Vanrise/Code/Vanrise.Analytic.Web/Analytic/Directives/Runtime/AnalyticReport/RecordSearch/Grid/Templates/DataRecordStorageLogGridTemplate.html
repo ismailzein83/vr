@@ -10,7 +10,7 @@
                            tag="column" columnindex="$index" widthfactor="column.Widthfactor"></vr-datagridcolumn>
         <vr-datagridexpandablerow>
             <vr-columns ng-repeat="detail in dataItem.details" colnum="{{detail.colnum}}">
-                <vr-label>{{detail.FieldName}}:</vr-label>
+                <vr-label>{{detail.FieldTitle}}:</vr-label>
                 <vr-label isvalue>{{dataItem.FieldValues[detail.FieldName].Description}}</vr-label>
             </vr-columns>
         </vr-datagridexpandablerow>
