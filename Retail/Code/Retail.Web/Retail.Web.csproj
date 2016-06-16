@@ -401,6 +401,7 @@
     <Content Include="Images\login.png" />
     <Content Include="Images\logoonheader.png" />
     <Content Include="Images\menu-icons\Administration.png" />
+    <Content Include="Images\menu-icons\billing.png" />
     <Content Include="Images\menu-icons\Business Entities.png" />
     <Content Include="Images\menu-icons\NOC.png" />
     <Content Include="Web.config">
