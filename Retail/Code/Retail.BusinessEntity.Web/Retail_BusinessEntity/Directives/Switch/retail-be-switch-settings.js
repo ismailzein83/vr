@@ -32,9 +32,7 @@
                 label = "";
                 withemptyline = '';
             }
-            var template =
-                '<vr-row>'
-                 + '<vr-columns colnum="{{ctrl.normalColNum}}">'
+            var template = '<vr-columns colnum="{{ctrl.normalColNum}}">'
                  + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                  + ' datasource="scopeModel.templateConfigs"'
                  + ' selectedvalues="scopeModel.selectedTemplateConfig"'
@@ -45,7 +43,6 @@
                  + 'hideremoveicon>'
                  + '</vr-select>'
                  + ' </vr-columns>'
-                 + '</vr-row>'
             + '<vr-row>'
               + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig !=undefined" directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate" type="ctrl.type"></vr-directivewrapper>'
             + '</vr-row>';
@@ -105,7 +102,7 @@
                         }
                     }
                     var getSwitchSettingsTemplateConfigsPromise = getSwitchSettingsTemplateConfigs();
-                    promises.push(getServicesTemplateConfigsPromise);
+                    promises.push(getSwitchSettingsTemplateConfigsPromise);
 
                     return UtilsService.waitMultiplePromises(promises);
                 };

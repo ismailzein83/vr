@@ -20,7 +20,7 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                switchEntity = parameters.switchEntity;
+                switchEntity = parameters.switchEntity.Entity;
             }
             $scope.scopeModel.isEditMode = (switchEntity != undefined);
         }
@@ -64,9 +64,9 @@
 
             function setTitle() {
                 if ($scope.scopeModel.isEditMode && switchEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor("Switch");
+                    $scope.title = UtilsService.buildTitleForUpdateEditor("Switch: " + switchEntity.Name);
                 else
-                    $scope.title = UtilsService.buildTitleForAddEditor("Switch");
+                    $scope.title = UtilsService.buildTitleForAddEditor("");
             }
 
             function loadSwitchSettingsDirective() {
@@ -88,7 +88,7 @@
             }
 
 
-        function buildServiceObjectFromScope() {
+        function buildSwitchObjectFromScope() {
             var service = {
                 Name: $scope.scopeModel.name,
             };
@@ -96,16 +96,16 @@
         }
 
         function insert() {
-            var serviceObj = buildServiceObjectFromScope();
+            var switchObj = buildSwitchObjectFromScope();
             if ($scope.onServiceAdded != undefined)
-                $scope.onServiceAdded(serviceObj);
+                $scope.onServiceAdded(switchObj);
             $scope.modalContext.closeModal();
         }
 
         function update() {
-            var serviceObj = buildServiceObjectFromScope();
+            var switchObj = buildSwitchObjectFromScope();
             if ($scope.onServiceUpdated != undefined)
-                $scope.onServiceUpdated(serviceObj);
+                $scope.onServiceUpdated(switchObj);
             $scope.modalContext.closeModal();
 
         }
