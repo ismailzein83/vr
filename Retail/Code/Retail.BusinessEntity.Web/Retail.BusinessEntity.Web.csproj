@@ -155,6 +155,7 @@
     <Compile Include="Controllers\AccountPackageController.cs" />
     <Compile Include="Controllers\AccountServiceController.cs" />
     <Compile Include="Controllers\ChargingPolicyController.cs" />
+    <Compile Include="Controllers\SwitchController.cs" />
     <Compile Include="Controllers\ServiceTypeController.cs" />
     <Compile Include="Controllers\ZoneController.cs" />
     <Compile Include="Controllers\PackageController.cs" />
@@ -239,6 +240,7 @@
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\Templates\ServiceTypeGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\Templates\ServiceTypeRuleDefinitionEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Switch\retail-be-switch-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Switch\retail-be-switch-settings.js" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-countryzone-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-zone-selector.js" />

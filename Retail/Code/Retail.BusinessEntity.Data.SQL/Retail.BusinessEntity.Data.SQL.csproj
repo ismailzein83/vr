@@ -61,6 +61,7 @@
     <Compile Include="AccountServiceDataManager.cs" />
     <Compile Include="ChargingPolicyDataManager.cs" />
     <Compile Include="ServiceTypeDataManager.cs" />
+    <Compile Include="SwitchDataManager.cs" />
     <Compile Include="ZoneDataManager.cs" />
     <Compile Include="PackageDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
