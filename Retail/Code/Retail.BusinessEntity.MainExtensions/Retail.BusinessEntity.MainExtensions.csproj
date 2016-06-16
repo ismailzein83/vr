@@ -97,6 +97,8 @@
     <Compile Include="Package\VoiceType\InterNationalVoiceType.cs" />
     <Compile Include="Package\VoiceType\NationalVoiceType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServicePackageItem\ServicePackageChargingPolicyItem.cs" />
+    <Compile Include="ServicePackageItem\ServicePackageVolumeItem.cs" />
     <Compile Include="SwitchIntegrations\Radius.cs" />
     <Compile Include="SwitchIntegrations\WebService.cs" />
   </ItemGroup>

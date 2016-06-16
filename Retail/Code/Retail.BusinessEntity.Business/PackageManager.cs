@@ -105,6 +105,12 @@ namespace Retail.BusinessEntity.Business
             var templateConfigManager = new ExtensionConfigurationManager();
             return templateConfigManager.GetExtensionConfigurations<ServiceVoiceTypeTemplateConfig>(Constants.ServiceVoiceTypeTemplateConfigType);
         }
+
+        public IEnumerable<ServicePackageItemConfig> GetServicePackageItemConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<ServicePackageItemConfig>(ServicePackageItemConfig.EXTENSION_TYPE);
+        }
         #endregion
 
         #region Private Members

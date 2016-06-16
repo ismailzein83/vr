@@ -67,5 +67,12 @@ namespace Retail.BusinessEntity.Web.Controllers
             PackageManager manager = new PackageManager();
             return manager.GetVoiceTypesTemplateConfigs();
         }
+        [HttpGet]
+        [Route("GetServicePackageItemConfigs")]
+        public IEnumerable<ServicePackageItemConfig> GetServicePackageItemConfigs()
+        {
+            PackageManager manager = new PackageManager();
+            return manager.GetServicePackageItemConfigs();
+        }
     }
 }

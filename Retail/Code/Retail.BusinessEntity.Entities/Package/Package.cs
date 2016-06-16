@@ -19,25 +19,18 @@ namespace Retail.BusinessEntity.Entities
     }    
     public class PackageSettings
     {
-        public List<ServicePackageItem> Services { get; set; }
+        public List<PackageItem> Services { get; set; }
 
     }
-
-    public abstract class ServicePackageItem
+    public class PackageItem
+    {
+        public int ServiceTypeId { get; set; }
+        public PackageItemSettings Settings { get; set; }
+    }
+    public abstract class PackageItemSettings
     {
         public int ConfigId { get; set; }
-        public int ServiceTypeId { get; set; }
       
-    }
-
-    public class ServicePackageChargingPolicyItem : ServicePackageItem
-    {
-        public ChargingPolicySettings ChargingPolicySettings { get; set; }
-    }
-
-    public class ServicePackageVolumeItem : ServicePackageItem
-    {
-        public VolumeSettings VolumeSettings { get; set; }
     }
 
     public class PackageService

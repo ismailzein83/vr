@@ -93,6 +93,7 @@
     <Compile Include="ChargingPolicy\ChargingPolicySettings.cs" />
     <Compile Include="NewBEs\ServicePackage.cs" />
     <Compile Include="NewBEs\ServicePackageSettings.cs" />
+    <Compile Include="Package\ServicePackageItemConfig.cs" />
     <Compile Include="ServiceType\ServiceType.cs" />
     <Compile Include="NewBEs\ServiceVolumeSettings.cs" />
     <Compile Include="Package\Package.cs" />

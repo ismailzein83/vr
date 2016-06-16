@@ -8,7 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class ServicePackageSettings
     {
-        public List<ServicePackageItem> Items { get; set; }
+        public List<PackageItem> Items { get; set; }
     }
 
    
