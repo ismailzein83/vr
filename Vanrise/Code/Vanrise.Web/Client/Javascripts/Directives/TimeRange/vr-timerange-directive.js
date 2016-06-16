@@ -91,6 +91,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
             }
 
             $scope.onBlurChanged = function () {
+                date = ctrl.period.getInterval();
                 var from = UtilsService.getShortDate(ctrl.from);
                 var oldFrom = UtilsService.getShortDate(date.from);
                 var to = UtilsService.getShortDate(ctrl.to);

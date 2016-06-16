@@ -583,7 +583,6 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
                 function BuildMenuAction(payload) {
                     ctrl.gridMenuActions = [];
-                    console.log(payload);
                     if(payload !=undefined && payload.Settings !=undefined && payload.Settings.ItemActions !=undefined)
                     {
                         var itemActions = payload.Settings.ItemActions;

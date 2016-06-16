@@ -58,22 +58,22 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                             }
                             return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                                 .then(function (response) {
-                                    if (response)
+                                    if (response && response.Data)
                                     {
                                         var data = [];
-                                        for (var i = 0; i < response.Data.length - (response.Data.length - 10);i++)
+                                        for (var i = 0; i < response.Data.length;i++)
                                         {
                                             data.push(response.Data[i]);
 
                                         }
+                                        renderCharts(data);
                                     }
-                                    renderCharts(data);
+                                   
                                     ctrl.showlaoder = false;
                                 });
 
                             function renderCharts(response) {
                                 var chartData = new Array();
-
                                 for (var m = 0; m < ctrl.measures.length; m++) {
                                     var measureObject = new Object();
 
@@ -132,14 +132,12 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
 
                 if (payLoad.Settings != undefined) {
                     if (payLoad.Settings.Dimensions != undefined) {
-                        console.log(payLoad);
                         ctrl.dimensions = payLoad.Settings.Dimensions;
                         for (var i = 0; i < payLoad.Settings.Dimensions.length; i++) {
                             var dimension = payLoad.Settings.Dimensions[i];
                             var groupingDimension = UtilsService.getItemByVal(ctrl.dimensions, dimension.DimensionName, 'DimensionName');
                             if (groupingDimension != undefined) {
                                 ctrl.groupingDimensions.push(dimension);
-
                             }
                         }
                     }
@@ -153,7 +151,9 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                     }
                     if (payLoad.GroupingDimensions != undefined) {
                         for (var i = 0; i < payLoad.GroupingDimensions.length; i++) {
-                            ctrl.groupingDimensions.push(UtilsService.getItemByVal(ctrl.dimensions, payLoad.GroupingDimensions[i].DimensionName, 'DimensionName'));
+                            var groupingDimensionObj = UtilsService.getItemByVal(ctrl.dimensions, payLoad.GroupingDimensions[i].DimensionName, 'DimensionName');
+                            if (groupingDimensionObj !=undefined)
+                                ctrl.groupingDimensions.push(groupingDimensionObj);
                         }
                     }
                 }
@@ -162,7 +162,6 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                     ctrl.sortField = 'DimensionValues[0].Name';
                 else
                     ctrl.sortField = 'MeasureValues.' + ctrl.measures[0].MeasureName;
-                console.log(payLoad.Settings);
                 var queryFinalized = {
                     Filters: payLoad.DimensionFilters,
                     DimensionFields: UtilsService.getPropValuesFromArray(ctrl.groupingDimensions, 'DimensionName'),
