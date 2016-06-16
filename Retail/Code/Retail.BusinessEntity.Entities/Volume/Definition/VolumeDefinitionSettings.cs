@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class ServicePackageSettings
+    public abstract class VolumeDefinitionSettings
     {
-        public List<PackageItem> Items { get; set; }
-    }
+        public int ConfigId { get; set; }
 
-   
+        public virtual string VolumeSettingsEditor { get; set; }
+    }
 }

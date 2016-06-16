@@ -14,6 +14,8 @@ namespace Retail.BusinessEntity.Entities
 
         public ChargingPolicyDefinitionSettings ChargingPolicyDefinitionSettings { get; set; }
 
+        public VolumeDefinitionSettings VolumeDefinitionSettings { get; set; }
+
         public string AccountServiceEditor { get; set; }
 
         public string ServiceVolumeEditor { get; set; }

@@ -91,8 +91,6 @@
     <Compile Include="ChargingPolicy\ChargingPolicyParts\Types\ChargingPolicyDurationTariff.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicy.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicySettings.cs" />
-    <Compile Include="NewBEs\ServicePackage.cs" />
-    <Compile Include="NewBEs\ServicePackageSettings.cs" />
     <Compile Include="Package\ServicePackageItemConfig.cs" />
     <Compile Include="ServiceType\ServiceType.cs" />
     <Compile Include="NewBEs\ServiceVolumeSettings.cs" />
@@ -117,6 +115,9 @@
     <Compile Include="Switch\SwitchIntegration.cs" />
     <Compile Include="Switch\SwitchIntegrationConfig.cs" />
     <Compile Include="Switch\SwitchSettings.cs" />
+    <Compile Include="Volume\Definition\VolumeDefinitionConfig.cs" />
+    <Compile Include="Volume\Definition\VolumeDefinitionSettings.cs" />
+    <Compile Include="Volume\VolumeSettings.cs" />
     <Compile Include="Zone\ZoneFilter.cs" />
     <Compile Include="Zone\Zone.cs" />
   </ItemGroup>
