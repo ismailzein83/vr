@@ -46,7 +46,7 @@ app.directive('retailBeServicetypeGrid', ['Retail_BE_ServiceTypeAPIService', 'Re
         function defineAPI() {
             var api = {};
 
-            api.load = function (query) {
+            api.loadGrid = function (query) {
                 return gridAPI.retrieveData(query);
             };
 

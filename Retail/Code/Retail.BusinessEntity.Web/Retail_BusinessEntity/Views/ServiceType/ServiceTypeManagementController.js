@@ -15,12 +15,12 @@
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
-                gridAPI.load({});
+                gridAPI.loadGrid({});
             };
 
             $scope.scopeModel.search = function () {
                 var query = buildGridQuery();
-                return gridAPI.load(query);
+                return gridAPI.loadGrid(query);
             };
 
         }

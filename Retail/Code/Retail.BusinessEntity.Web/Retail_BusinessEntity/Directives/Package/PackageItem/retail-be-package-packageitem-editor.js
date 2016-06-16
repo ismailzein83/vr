@@ -2,9 +2,9 @@
 
     'use strict';
 
-    PackageitemEditorDirective.$inject = ['Retail_BE_PackageService', 'UtilsService'];
+    PackageItemEditorDirective.$inject = ['Retail_BE_PackageService', 'UtilsService'];
 
-    function PackageitemEditorDirective(Retail_BE_PackageService, UtilsService) {
+    function PackageItemEditorDirective(Retail_BE_PackageService, UtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -12,8 +12,8 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var packageitemEditor = new PackageitemEditor($scope, ctrl, $attrs);
-                packageitemEditor.initializeController();
+                var packageItemEditor = new PackageItemEditor($scope, ctrl, $attrs);
+                packageItemEditor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -23,90 +23,80 @@
             templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/Package/PackageItem/Templates/PackageItemEditorTemplate.html"
         };
 
-        function PackageitemEditor($scope, ctrl, $attrs) {
+        function PackageItemEditor($scope, ctrl, $attrs) {
+
             this.initializeController = initializeController;
+
             var gridAPI;
-            var counter = 0;
 
             function initializeController() {
                 ctrl.packageItems = [];
 
                 ctrl.onGridReady = function (api) {
                     gridAPI = api;
-
-                    if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-                        ctrl.onReady(getDirectiveAPI());
-                    }
+                    defineAPI();
                 };
 
                 ctrl.addPackageItem = function () {
-                    var onPackageItemAdded = function (packageItemObj) {
-                        ctrl.packageItems.push({
-                            Entity: packageItemObj.PackageItem
-                        });
-                    }
+                    var onPackageItemAdded = function (addedPackageItem) {
+                        ctrl.packageItems.push(addedPackageItem);
+                    };
                     Retail_BE_PackageService.addPackageItem(onPackageItemAdded);
-                }
-
-                ctrl.removePart = function (partObj) {
-                    ctrl.packageItems.splice(ctrl.packageItems.indexOf(partObj), 1);
-                }
-
-                ctrl.validateParts = function () {
+                };
+                ctrl.removePackageItem = function (packageItem) {
+                    ctrl.packageItems.splice(ctrl.packageItems.indexOf(packageItem), 1);
+                };
+                ctrl.validatePackageItems = function () {
                     if (ctrl.packageItems.length > 0)
                         return null;
-                    return "One package item at least should be added.";
-                }
+                    return "Please add at least one package item";
+                };
+
                 defineMenuActions();
             }
-
-            function getDirectiveAPI() {
+            function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    ctrl.packageItems.length = 0;
+
+                    var packageItems;
+
                     if (payload != undefined) {
-                        ctrl.packageItems.length = 0;
-                        if (payload.packageItems) {
-                            for (var i = 0; i < payload.packageItems.length; i++) {
-                                var currentItemAction = payload.packageItems[i];
-                                ctrl.packageItems.push({
-                                    Entity: currentItemAction
-                                });
-                            }
+                        packageItems = payload.packageItems;
+                    }
+
+                    if (packageItems != undefined) {
+                        for (var i = 0; i < packageItems.length; i++) {
+                            ctrl.packageItems.push(packageItems[i]);
                         }
                     }
                 };
 
                 api.getData = function () {
-                    var packageItems = [];
-                    for (var i = 0; i < ctrl.packageItems.length; i++) {
-                        var packageItem = ctrl.packageItems[i];
-                        packageItems.push(packageItem.Entity);
-                    }
-                    return packageItems;
-                }
+                    return ctrl.packageItems;
+                };
 
-                return api;
+                if (ctrl.onReady != null) {
+                    ctrl.onReady(api);
+                }
             }
 
             function defineMenuActions() {
-                ctrl.packageItemsGridMenuActions = [{
+                ctrl.menuActions = [{
                     name: 'Edit',
                     clicked: editPackageItem
                 }];
             }
-
             function editPackageItem(packageItem) {
-                var onPackageItemUpdated = function (packageItemObj) {
-                    ctrl.packageItems[ctrl.packageItems.indexOf(packageItem)] = {
-                        Entity: packageItemObj.PackageItem
-                    };
-                }
-                Retail_BE_PackageService.editPackageItem(packageItem.Entity, onPackageItemUpdated);
+                var onPackageItemUpdated = function (updatedPackageItem) {
+                    ctrl.packageItems[ctrl.packageItems.indexOf(packageItem)] = updatedPackageItem.PackageItem;
+                };
+                Retail_BE_PackageService.editPackageItem(packageItem, onPackageItemUpdated);
             }
         }
     }
 
-    app.directive('retailBePackagePackageitemEditor', PackageitemEditorDirective);
+    app.directive('retailBePackagePackageitemEditor', PackageItemEditorDirective);
 
 })(app);

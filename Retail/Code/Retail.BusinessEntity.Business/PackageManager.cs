@@ -111,6 +111,27 @@ namespace Retail.BusinessEntity.Business
             var templateConfigManager = new ExtensionConfigurationManager();
             return templateConfigManager.GetExtensionConfigurations<ServicePackageItemConfig>(ServicePackageItemConfig.EXTENSION_TYPE);
         }
+
+        public IEnumerable<int> GetServiceTypeIds(int packageId)
+        {
+            Package package = this.GetPackage(packageId);
+            if (package != null && package.Settings != null && package.Settings.Services != null && package.Settings.Services.Count() > 0)
+                return package.Settings.Services.MapRecords(x => x.ServiceTypeId);
+            return null;
+        }
+
+        public IEnumerable<int> GetServiceTypeIds(IEnumerable<int> packageIds)
+        {
+            var serviceTypeIds = new List<int>();
+            foreach (int packageId in packageIds)
+            {
+                IEnumerable<int> packageServiceTypeIds = this.GetServiceTypeIds(packageId);
+                if (packageServiceTypeIds != null)
+                    serviceTypeIds.AddRange(packageServiceTypeIds);
+            }
+            return (serviceTypeIds.Count > 0) ? serviceTypeIds : null;
+        }
+
         #endregion
 
         #region Private Members

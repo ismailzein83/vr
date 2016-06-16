@@ -27,40 +27,73 @@ function (UtilsService, VRNotificationService, Retail_BE_PackageAPIService, Reta
 
     function PackageGrid($scope, ctrl, $attrs) {
 
-        var gridAPI;
         this.initializeController = initializeController;
+
+        var gridAPI;
+        var drillDownManager;
 
         function initializeController() {
 
             $scope.packages = [];
-            defineMenuActions();
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
-                    ctrl.onReady(getDirectiveAPI());
-
-                function getDirectiveAPI() {
-                    var directiveAPI = {};
-                    directiveAPI.loadGrid = function (query) {
-                        return gridAPI.retrieveData(query);
-                    }
-                    directiveAPI.onPackageAdded = function (packageObject) {
-                        gridAPI.itemAdded(packageObject);
-                    }
-                    return directiveAPI;
-                }
+                drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(buildDrillDownTabs(), gridAPI, $scope.gridMenuActions);
+                defineAPI();
             };
+
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return Retail_BE_PackageAPIService.GetFilteredPackages(dataRetrievalInput)
-                    .then(function (response) {
-                        onResponseReady(response);
-                    })
-                    .catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
-                    });
+                return Retail_BE_PackageAPIService.GetFilteredPackages(dataRetrievalInput).then(function (response) {
+                    if (response && response.Data) {
+                        for (var i = 0; i < response.Data.length; i++)
+                            drillDownManager.setDrillDownExtensionObject(response.Data[i]);
+                    }
+                    onResponseReady(response);
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
             };
 
+            defineMenuActions();
+        }
+        function defineAPI()
+        {
+            var api = {};
+
+            api.loadGrid = function (query) {
+                return gridAPI.retrieveData(query);
+            };
+
+            api.onPackageAdded = function (packageObject) {
+                drillDownManager.setDrillDownExtensionObject(packageObject);
+                gridAPI.itemAdded(packageObject);
+            };
+
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
+        }
+        
+        function buildDrillDownTabs() {
+            var drillDownTabs = [];
+
+            var servicesTab = buildServicesTab();
+            drillDownTabs.push(servicesTab);
+
+            function buildServicesTab() {
+                return {
+                    title: 'Services',
+                    directive: 'retail-be-servicetype-grid',
+                    loadDirective: function (directiveAPI, dataItem) {
+                        dataItem.serviceTypeGridAPI = directiveAPI;
+                        var serviceTypeGridQuery = {
+                            PackageIds: [dataItem.Entity.PackageId]
+                        };
+                        directiveAPI.loadGrid(serviceTypeGridQuery);
+                    }
+                };
+            }
+
+            return drillDownTabs;
         }
 
         function defineMenuActions() {
@@ -70,19 +103,16 @@ function (UtilsService, VRNotificationService, Retail_BE_PackageAPIService, Reta
                 haspermission: hasUpdatePackagePermission
             }];
         }
-
+        function editPackage(packageObj) {
+            var onPackageUpdated = function (packageObject) {
+                drillDownManager.setDrillDownExtensionObject(packageObject);
+                gridAPI.itemUpdated(packageObject);
+            };
+            Retail_BE_PackageService.editPackage(packageObj.Entity.PackageId, onPackageUpdated);
+        }
         function hasUpdatePackagePermission() {
             return Retail_BE_PackageAPIService.HasUpdatePackagePermission();
         }
-
-        function editPackage(packageObj) {
-            var onPackageUpdated = function (packageObject) {
-                gridAPI.itemUpdated(packageObject);
-
-            }
-            Retail_BE_PackageService.editPackage(packageObj.Entity.PackageId, onPackageUpdated);
-        }
-
     }
 
     return directiveDefinitionObject;

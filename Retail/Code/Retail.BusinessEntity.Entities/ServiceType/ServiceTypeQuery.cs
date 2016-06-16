@@ -9,5 +9,7 @@ namespace Retail.BusinessEntity.Entities
     public class ServiceTypeQuery
     {
         public string Name { get; set; }
+
+        public IEnumerable<int> PackageIds { get; set; }
     }
 }

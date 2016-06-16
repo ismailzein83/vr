@@ -2,8 +2,14 @@
     <vr-button type="Add" data-onclick="ctrl.addPackageItem" standalone></vr-button>
 </vr-columns>
 <vr-columns width="fullrow">
-    <vr-datagrid datasource="ctrl.packageItems" norowhighlightonclick="true"
-                 on-ready="ctrl.onGridReady" ondeleterow="ctrl.removePart" menuactions="ctrl.packageItemsGridMenuActions" hidegridmenu>
-        <vr-datagridcolumn headertext="'Package Item Title'" field="'Entity.PackageItemTitle'" disablesorting="true"></vr-datagridcolumn>
-    </vr-datagrid>
+    <vr-validator validate="ctrl.validatePackageItems()">
+        <vr-datagrid on-ready="ctrl.onGridReady"
+                     datasource="ctrl.packageItems"
+                     menuactions="ctrl.menuActions"
+                     ondeleterow="ctrl.removePackageItem"
+                     norowhighlightonclick="true"
+                     hidegridmenu>
+            <vr-datagridcolumn headertext="'Service Type'" field="'serviceTypeTitle'" disablesorting></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-validator>
 </vr-columns>

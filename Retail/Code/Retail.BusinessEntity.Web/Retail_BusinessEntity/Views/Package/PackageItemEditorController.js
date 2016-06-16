@@ -9,6 +9,7 @@
 
         var packageItemEntity;
         var selectorAPI;
+        var selectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var serviceTypeSelectorAPI;
         var serviceTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -27,12 +28,18 @@
                 packageItemEntity = parameters.packageItem;
             }
 
-            isEditMode = (packageItemEntity != undefined);
+            if (packageItemEntity != undefined) {
+                isEditMode = true;
+                $scope.isServiceTypeSelectorDisabled = true;
+            }
+            else {
+                isEditMode = false;
+                $scope.isServiceTypeSelectorDisabled = false;
+            }
         }
-
         function defineScope() {
             $scope.scopeModel = {};
-
+            
             $scope.scopeModel.templateConfigs = [];
             
             $scope.scopeModel.onServiceTypeSelectorReady = function (api) {
@@ -42,17 +49,18 @@
 
             $scope.scopeModel.onServiceTypeSelectorChanged = function () {
                 var selectedId = serviceTypeSelectorAPI.getSelectedIds();
-
-                if (selectedId != undefined)
+                if (selectedId == undefined)
                     return;
-                loadPackageItemsTemplateConfigs();
+                if (packageItemEntity != undefined)
+                    return;
+                loadPackageItemTemplateConfigs();
             };
-
 
             $scope.scopeModel.selectedTemplateConfig;
 
             $scope.scopeModel.onSelectorReady = function (api) {
                 selectorAPI = api;
+                selectorReadyDeferred.resolve();
             };
 
             $scope.scopeModel.onDirectiveReady = function (api) {
@@ -73,31 +81,27 @@
             };
 
         }
-
         function load() {
             $scope.scopeModel.isLoading = true;
             loadAllControls();
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadDirective, loadServiceTypeSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadServiceTypeSelector, loadDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
         }
-
-        function loadDirective() {
-            if (packageItemEntity == undefined)
-                return;
-            var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-            directiveReadyDeferred.promise.then(function () {
-                var payloadDirective = { packageItem: packageItemEntity.Settings };
-                VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, loadDirectivePromiseDeferred);
-            });
-            return loadDirectivePromiseDeferred.promise;
+        function setTitle() {
+            if (isEditMode) {
+                var packageItemTitle = (packageItemEntity != undefined) ? packageItemEntity.PackageItemTitle : undefined;
+                $scope.title = UtilsService.buildTitleForUpdateEditor(packageItemTitle, 'Package Item');
+            }
+            else {
+                $scope.title = UtilsService.buildTitleForAddEditor('Package Item');
+            }
         }
-
         function loadServiceTypeSelector() {
             var serviceSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -113,11 +117,11 @@
 
             return serviceSelectorLoadDeferred.promise;
         }
-
-        function loadPackageItemsTemplateConfigs() {
+        function loadPackageItemTemplateConfigs() {
+            selectorAPI.clearDataSource();
             return Retail_BE_PackageAPIService.GetServicePackageItemConfigs().then(function (response) {
                 if (selectorAPI != undefined)
-                    selectorAPI.clearDataSource();
+                    
                 if (response != null) {
                     for (var i = 0; i < response.length; i++) {
                         $scope.scopeModel.templateConfigs.push(response[i]);
@@ -127,46 +131,39 @@
                 }
             });
         }
+        function loadDirective() {
+            if (packageItemEntity == undefined)
+                return;
 
-        function setTitle() {
-            if (isEditMode) {
-                var packageItemTitle = (packageItemEntity != undefined) ? packageItemEntity.PackageItemTitle : undefined;
-                $scope.title = UtilsService.buildTitleForUpdateEditor(packageItemTitle, 'Package Item');
-            }
-            else {
-                $scope.title = UtilsService.buildTitleForAddEditor('Package Item');
-            }
+            directiveReadyDeferred = UtilsService.createPromiseDeferred();
+            var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+
+            directiveReadyDeferred.promise.then(function () {
+                var payloadDirective = { packageItem: packageItemEntity.Settings };
+                VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, loadDirectivePromiseDeferred);
+            });
+
+            return loadDirectivePromiseDeferred.promise;
         }
-
-        function updatePackageItem() {
-            var packageItemObj = buildPackageItemObjFromScope();
-
-            if ($scope.onPackageItemUpdated != undefined) {
-                $scope.onPackageItemUpdated(packageItemObj);
-            }
-            $scope.modalContext.closeModal();
-        }
-
+        
         function insertPackageItem() {
-            var packageItemObj = buildPackageItemObjFromScope();
-            if ($scope.onPackageItemAdded != undefined) {
-                $scope.onPackageItemAdded(packageItemObj);
-            }
+            if ($scope.onPackageItemAdded != undefined)
+                $scope.onPackageItemAdded(buildPackageItemObjFromScope());
             $scope.modalContext.closeModal();
         }
-
+        function updatePackageItem() {
+            if ($scope.onPackageItemUpdated != undefined)
+                $scope.onPackageItemUpdated(buildPackageItemObjFromScope());
+            $scope.modalContext.closeModal();
+        }
         function buildPackageItemObjFromScope() {
-            var packageItem = directiveAPI.getData();
-            if (packageItem != undefined)
-                packageItem.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
-
-            var packageItemObj = {
-                PackageItem: {
-                    Settings :packageItem,
-                    ServiceTypeId: serviceTypeSelectorAPI.getSelectedIds()
-                    }
+            var settings = directiveAPI.getData();
+            settings.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
+            return {
+                serviceTypeId: serviceTypeSelectorAPI.getSelectedIds(),
+                serviceTypeTitle: $scope.scopeModel.selectedServiceType.Title,
+                settings: settings
             };
-            return packageItemObj;
         }
     }
 
