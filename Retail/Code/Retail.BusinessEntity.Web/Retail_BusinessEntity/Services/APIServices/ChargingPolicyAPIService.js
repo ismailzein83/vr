@@ -39,6 +39,16 @@
         function HasUpdateChargingPolicyPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['UpdateChargingPolicy']));
         }
+        function GetChargingPolicyTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetChargingPolicyTemplateConfigs'));
+        }
+
+        function GetChargingPolicyPartTypeTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetChargingPolicyPartTypeTemplateConfigs'));
+        }
+        function GetChargingPolicyPartTemplateConfigs(partTypeConfigId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetChargingPolicyPartTemplateConfigs'), { partTypeConfigId: partTypeConfigId });
+        }
 
         return {
             GetFilteredChargingPolicies: GetFilteredChargingPolicies,
@@ -48,7 +58,9 @@
             UpdateChargingPolicy: UpdateChargingPolicy,
             HasAddChargingPolicyPermission: HasAddChargingPolicyPermission,
             HasUpdateChargingPolicyPermission: HasUpdateChargingPolicyPermission,
-
+            GetChargingPolicyTemplateConfigs: GetChargingPolicyTemplateConfigs,
+            GetChargingPolicyPartTypeTemplateConfigs: GetChargingPolicyPartTypeTemplateConfigs,
+            GetChargingPolicyPartTemplateConfigs: GetChargingPolicyPartTemplateConfigs
         };
     }
 

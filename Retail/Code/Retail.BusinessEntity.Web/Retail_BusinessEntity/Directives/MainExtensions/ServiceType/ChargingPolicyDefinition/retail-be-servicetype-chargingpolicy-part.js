@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ServicetypeChargingpolicyPartDirective.$inject = ['Retail_BE_ServiceTypeAPIService', 'UtilsService', 'VRUIUtilsService'];
+    ServicetypeChargingpolicyPartDirective.$inject = ['Retail_BE_ChargingPolicyAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function ServicetypeChargingpolicyPartDirective(Retail_BE_ServiceTypeAPIService, UtilsService, VRUIUtilsService) {
+    function ServicetypeChargingpolicyPartDirective(Retail_BE_ChargingPolicyAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -99,7 +99,7 @@
                     }
 
                     function getChargingPolicyPartTemplateConfigs(partTypeConfigId) {
-                        return Retail_BE_ServiceTypeAPIService.GetChargingPolicyPartTemplateConfigs(partTypeConfigId).then(function (response) {
+                        return Retail_BE_ChargingPolicyAPIService.GetChargingPolicyPartTemplateConfigs(partTypeConfigId).then(function (response) {
                             selectorAPI.clearDataSource();
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {

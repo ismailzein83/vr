@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ChargingpolicyDefinitionDirective.$inject = ['Retail_BE_ServiceTypeAPIService', 'UtilsService', 'VRUIUtilsService'];
+    ChargingpolicyDefinitionDirective.$inject = ['Retail_BE_ChargingPolicyAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function ChargingpolicyDefinitionDirective(Retail_BE_ServiceTypeAPIService, UtilsService, VRUIUtilsService) {
+    function ChargingpolicyDefinitionDirective(Retail_BE_ChargingPolicyAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -104,7 +104,7 @@
                     promises.push(getChargingPolicyTemplateConfigsPromise);
 
                     function getChargingPolicyTemplateConfigs() {
-                        return Retail_BE_ServiceTypeAPIService.GetChargingPolicyTemplateConfigs().then(function (response) {
+                        return Retail_BE_ChargingPolicyAPIService.GetChargingPolicyTemplateConfigs().then(function (response) {
 
                             selectorAPI.clearDataSource();
                             if (response != null) {

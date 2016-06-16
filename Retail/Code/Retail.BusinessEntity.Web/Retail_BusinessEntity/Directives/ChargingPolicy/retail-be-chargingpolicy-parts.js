@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeChargingpolicyParts', ['Retail_BE_ServiceTypeAPIService', 'UtilsService', 'VRUIUtilsService', function (Retail_BE_ServiceTypeAPIService, UtilsService, VRUIUtilsService)
+app.directive('retailBeChargingpolicyParts', ['Retail_BE_ChargingPolicyAPIService', 'UtilsService', 'VRUIUtilsService', function (Retail_BE_ChargingPolicyAPIService, UtilsService, VRUIUtilsService)
 {
     return {
         restrict: 'E',
@@ -77,7 +77,7 @@ app.directive('retailBeChargingpolicyParts', ['Retail_BE_ServiceTypeAPIService',
                     setRuntimeEditor();
 
                     function setRuntimeEditor() {
-                        return Retail_BE_ServiceTypeAPIService.GetChargingPolicyPartTemplateConfigs(partDefinition.PartTypeId).then(function (partTemplates) {
+                        return Retail_BE_ChargingPolicyAPIService.GetChargingPolicyPartTemplateConfigs(partDefinition.PartTypeId).then(function (partTemplates) {
                             var partTemplate = UtilsService.getItemByVal(partTemplates, partDefinition.PartDefinitionSettings.ConfigId, 'ExtensionConfigurationId');
                             tab.runtimeEditor = partTemplate.RuntimeEditor;
                         });

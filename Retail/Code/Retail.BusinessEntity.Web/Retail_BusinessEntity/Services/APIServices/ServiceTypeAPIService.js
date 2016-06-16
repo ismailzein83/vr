@@ -33,25 +33,14 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateServiceType'), serviceType);
         }
 
-        function GetChargingPolicyTemplateConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetChargingPolicyTemplateConfigs'));
-        }
 
-        function GetChargingPolicyPartTypeTemplateConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetChargingPolicyPartTypeTemplateConfigs'));
-        }
-        function GetChargingPolicyPartTemplateConfigs(partTypeConfigId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetChargingPolicyPartTemplateConfigs'), { partTypeConfigId: partTypeConfigId });
-        }
         return {
             GetFilteredServiceTypes: GetFilteredServiceTypes,
             GetServiceType: GetServiceType,
             GetServiceTypesInfo: GetServiceTypesInfo,
             GetServiceTypeChargingPolicyDefinitionSettings: GetServiceTypeChargingPolicyDefinitionSettings,
             UpdateServiceType: UpdateServiceType,
-            GetChargingPolicyTemplateConfigs: GetChargingPolicyTemplateConfigs,
-            GetChargingPolicyPartTypeTemplateConfigs: GetChargingPolicyPartTypeTemplateConfigs,
-            GetChargingPolicyPartTemplateConfigs: GetChargingPolicyPartTemplateConfigs
+
         };
     }
 

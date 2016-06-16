@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 
@@ -106,6 +107,29 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
 
+        public string GetChargingPolicyConfigTitle(int configId)
+        {
+            var config = GetChargingPolicyTemplateConfigs().FindRecord(x=>x.ExtensionConfigurationId==configId);
+            return (config != null) ? config.Title : null;
+        }
+        public IEnumerable<ChargingPolicyPartTypeConfig> GetChargingPolicyPartTypeTemplateConfigs()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<ChargingPolicyPartTypeConfig>(ChargingPolicyPartTypeConfig.EXTENSION_TYPE);
+        }
+        public IEnumerable<ChargingPolicyDefinitionConfig> GetChargingPolicyTemplateConfigs()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<ChargingPolicyDefinitionConfig>(ChargingPolicyDefinitionConfig.EXTENSION_TYPE);
+        }
+        public IEnumerable<ChargingPolicyPartConfig> GetChargingPolicyPartTemplateConfigs(int partTypeConfigId)
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            var partType = GetChargingPolicyPartTypeTemplateConfigs().FindRecord(itm => itm.ExtensionConfigurationId == partTypeConfigId);
+            if (partType == null)
+                throw new NullReferenceException(string.Format("partTypeConfigId: {0} doesn't have partType", partTypeConfigId));
+            return manager.GetExtensionConfigurations<ChargingPolicyPartConfig>(partType.PartTypeExtensionName);
+        }
         #endregion
 
         #region Validation Methods
