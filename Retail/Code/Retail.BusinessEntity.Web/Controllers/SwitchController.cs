@@ -10,17 +10,25 @@ using Vanrise.Web.Base;
 
 namespace Retail.BusinessEntity.Web.Controllers
 {
-   [RoutePrefix(Constants.ROUTE_PREFIX + "Switch")]
-   [JSONWithTypeAttribute]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "Switch")]
+    [JSONWithTypeAttribute]
     public class SwitchController : BaseAPIController
     {
+        SwitchManager _manager = new SwitchManager();
+
         [HttpGet]
         [Route("GetSwitchSettingsTemplateConfigs")]
-       public IEnumerable<SwitchIntegrationConfig> GetSwitchSettingsTemplateConfigs()
+        public IEnumerable<SwitchIntegrationConfig> GetSwitchSettingsTemplateConfigs()
         {
-            SwitchManager manager = new SwitchManager();
-            return manager.GetSwitchSettingsTemplateConfigs();
+            return _manager.GetSwitchSettingsTemplateConfigs();
         }
-       
+
+        [HttpPost]
+        [Route("GetFilteredSwitches")]
+        public object GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input)
+        {
+            return GetWebResponse(input, _manager.GetFilteredSwitches(input));
+        }
+
     }
 }

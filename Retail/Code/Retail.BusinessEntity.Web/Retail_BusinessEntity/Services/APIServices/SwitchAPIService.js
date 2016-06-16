@@ -12,8 +12,13 @@
 
         }
 
+        function GetFilteredSwitches(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetFilteredSwitches'), input);
+        }
+
         return ({
-            GetSwitchSettingsTemplateConfigs: GetSwitchSettingsTemplateConfigs
+            GetSwitchSettingsTemplateConfigs: GetSwitchSettingsTemplateConfigs,
+            GetFilteredSwitches: GetFilteredSwitches
         });
     }
 

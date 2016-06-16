@@ -5,9 +5,7 @@
                         <vr-columns width="1/2row">
                             <vr-textbox label="Name" value="scopeModel.name" isrequired></vr-textbox>
                         </vr-columns>
-                        <vr-columns width="1/2row">
-                            <!--<retail-be-switch-settings on-ready="scopeModel.onServiceDirectiveReady" normal-col-num="6"></retail-be-switch-settings>-->
-                        </vr-columns>
+                            <retail-be-switch-settings on-ready="scopeModel.onSwitchDirectiveReady" normal-col-num="6"></retail-be-switch-settings>
                     </vr-row>
 
         </vr-form>
@@ -15,7 +13,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formServiceTypeEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Save" formname="formSwitchEditor" data-onclick="scopeModel.save"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>
