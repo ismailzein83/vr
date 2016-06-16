@@ -71,9 +71,7 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
                     if (response && response.Data) {
                         for (var i = 0; i < response.Data.length; i++) {
                             var dataItem = response.Data[i];
-                            var drillDownTabs = buildDrillDownTabs(dataItem.RuleDefinitions);
-                            var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI, $scope.scopeModel.menuActions);
-                            drillDownManager.setDrillDownExtensionObject(dataItem);
+                            setDrillDownTabs(dataItem);
                         }
                     }
                     onResponseReady(response);
@@ -94,6 +92,7 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
             };
 
             api.onChargingPolicyAdded = function (addedChargingPolicy) {
+                setDrillDownTabs(addedChargingPolicy);
                 gridAPI.itemAdded(addedChargingPolicy);
             };
 
@@ -107,6 +106,11 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
                 clicked: editChargingPolicy,
                 haspermission: hasEditChargingPolicyPermission
             }];
+        }
+        function setDrillDownTabs(dataItem) {
+            var drillDownTabs = buildDrillDownTabs(dataItem.RuleDefinitions);
+            var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI, $scope.scopeModel.menuActions);
+            drillDownManager.setDrillDownExtensionObject(dataItem);
         }
         function buildDrillDownTabs(ruleDefinitions) {
             var drillDownTabs = [];
@@ -131,17 +135,17 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
                     var ruleGridQuery = {
                         RuleDefinitionId: ruleDefinition.RuleDefinitionId,
                         CriteriaFieldValues: {
-                            'ChargingPolicy': {
-                                $type: 'Vanrise.GenericData.MainExtensions.DataRecordFields.Filters.BusinessEntityFieldTypeFilter,Vanrise.GenericData.MainExtensions',
-                                BusinessEntityIds: [dataItem.Entity.ChargingPolicyId]
-                            },
                             'ServiceType': {
                                 $type: 'Vanrise.GenericData.MainExtensions.DataRecordFields.Filters.BusinessEntityFieldTypeFilter,Vanrise.GenericData.MainExtensions',
                                 BusinessEntityIds: [dataItem.Entity.ServiceTypeId]
+                            },
+                            'ChargingPolicy': {
+                                $type: 'Vanrise.GenericData.MainExtensions.DataRecordFields.Filters.BusinessEntityFieldTypeFilter,Vanrise.GenericData.MainExtensions',
+                                BusinessEntityIds: [dataItem.Entity.ChargingPolicyId]
                             }
                         },
                         accessibility: buildAccessibilityObj(),
-                        criteriaFieldsToHide: ['ChargingPolicy', 'ServiceType', 'Package']
+                        criteriaFieldsToHide: ['ServiceType', 'ChargingPolicy', 'Package']
                     };
                     return directiveAPI.loadGrid(ruleGridQuery);
                 };
@@ -154,8 +158,9 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
         function buildAccessibilityObj() {
             return {
                 criteriaAccessibility: {
+                    'ServiceType': { notAccessible: true },
                     'ChargingPolicy': { notAccessible: true },
-                    'ServiceType': { notAccessible: true }
+                    'Package': { notAccessible: true }
                 },
                 settingNotAccessible: false
             };
@@ -164,6 +169,7 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
         function editChargingPolicy(chargingPolicy)
         {
             var onChargingPolicyUpdated = function (updatedChargingPolicy) {
+                setDrillDownTabs(updatedChargingPolicy);
                 gridAPI.itemUpdated(updatedChargingPolicy);
             };
 
