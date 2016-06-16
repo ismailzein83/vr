@@ -58,6 +58,7 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                             }
                             return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                                 .then(function (response) {
+                                   
                                     if (response && response.Data)
                                     {
                                         var data = [];
@@ -67,8 +68,8 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
 
                                         }
                                         renderCharts(data);
-                                    }
-                                   
+                                    } 
+                               
                                     ctrl.showlaoder = false;
                                 });
 
@@ -89,7 +90,7 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                                             chartRecord["DimensionValue"] = dimensionName;
                                             chartData.push(chartRecord);
                                         }
-                                        chartRecord[ctrl.measures[m].MeasureName] = response[i].MeasureValues[ctrl.measures[m].MeasureName];
+                                        chartRecord[ctrl.measures[m].MeasureName] = response[i].MeasureValues[ctrl.measures[m].MeasureName].Value;
                                     }
                                 }
                                 var chartDefinition = {
