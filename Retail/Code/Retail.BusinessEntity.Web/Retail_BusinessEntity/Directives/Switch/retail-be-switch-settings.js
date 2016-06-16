@@ -11,8 +11,7 @@
                 onReady: "=",
                 normalColNum: '@',
                 label: '@',
-                customvalidate: '=',
-                type: "="
+                customvalidate: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -32,7 +31,9 @@
                 label = "";
                 withemptyline = '';
             }
-            var template = '<vr-columns colnum="{{ctrl.normalColNum}}">'
+            var template =
+                '<vr-row>'
+                 + '<vr-columns colnum="{{ctrl.normalColNum}}">'
                  + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                  + ' datasource="scopeModel.templateConfigs"'
                  + ' selectedvalues="scopeModel.selectedTemplateConfig"'
@@ -43,8 +44,10 @@
                  + 'hideremoveicon>'
                  + '</vr-select>'
                  + ' </vr-columns>'
+                 + ' </vr-columns>'
+                 + '</vr-row>'
             + '<vr-row>'
-              + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig !=undefined" directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate" type="ctrl.type"></vr-directivewrapper>'
+              + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig !=undefined" directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper>'
             + '</vr-row>';
             return template;
 
@@ -87,14 +90,14 @@
                     var promises = [];
 
                     if (payload != undefined) {
-                        if (payload.serviceSettings != undefined) {
-                            serviceSettings = payload.serviceSettings;
+                        if (payload.switchSettings != undefined) {
+                            switchSettings = payload.switchSettings;
                             directiveReadyDeferred = UtilsService.createPromiseDeferred();
                             var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                             directiveReadyDeferred.promise.then(function () {
                                 directiveReadyDeferred = undefined;
                                 var payloadDirective = {
-                                    serviceSettings: payload.serviceSettings
+                                    switchSettings: payload.switchSettings
                                 };
                                 VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, loadDirectivePromiseDeferred);
                             });

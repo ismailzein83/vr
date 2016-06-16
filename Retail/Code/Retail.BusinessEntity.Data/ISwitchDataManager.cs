@@ -7,5 +7,10 @@ namespace Retail.BusinessEntity.Data
     {
         IEnumerable<Switch> GetSwitches();
         bool AreSwitchUpdated(ref object updateHandle);
+
+        bool Insert(Switch switchItem, out int insertedId);
+
+        bool Update(Switch switchItem);
+
     }
 }

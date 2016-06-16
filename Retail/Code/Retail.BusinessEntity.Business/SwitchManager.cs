@@ -37,6 +37,60 @@ namespace Retail.BusinessEntity.Business
         }
 
 
+        public Switch GetSwitch(int switchId)
+        {
+            Dictionary<int, Switch> cachedSwitches = this.GetCachedSwitches();
+            return cachedSwitches.GetRecord(switchId);
+        }
+
+        public Vanrise.Entities.InsertOperationOutput<SwitchDetail> AddSwitch(Switch switchItem)
+        {
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<SwitchDetail>();
+
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+
+            ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+            int switchId = -1;
+
+            if (dataManager.Insert(switchItem, out switchId))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                switchItem.SwitchId = switchId;
+                insertOperationOutput.InsertedObject = SwitchDetailMapper(switchItem);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<SwitchDetail> UpdateSwitch(Switch switchItem)
+        {
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<SwitchDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+
+            if (dataManager.Update(switchItem))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = SwitchDetailMapper(this.GetSwitch(switchItem.SwitchId));
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
+        }
+
        
         #endregion
 

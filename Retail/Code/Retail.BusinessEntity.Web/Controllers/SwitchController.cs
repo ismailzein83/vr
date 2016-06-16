@@ -24,6 +24,22 @@ namespace Retail.BusinessEntity.Web.Controllers
         }
 
         [HttpPost]
+        [Route("AddSwitch")]
+        public Vanrise.Entities.InsertOperationOutput<SwitchDetail> AddSwitch(Switch switchItem)
+        {
+            return _manager.AddSwitch(switchItem);
+        }
+
+
+        [HttpPost]
+        [Route("UpdateSwitch")]
+        public Vanrise.Entities.UpdateOperationOutput<SwitchDetail> UpdateSwitch(Switch switchItem)
+        {
+            return _manager.UpdateSwitch(switchItem);
+        }
+
+
+        [HttpPost]
         [Route("GetFilteredSwitches")]
         public object GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input)
         {

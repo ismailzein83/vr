@@ -1,12 +1,21 @@
 ﻿<div vr-modalcontent ng-controller="Retail_BE_SwitchEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formSwitchEditor">
+            <vr-tabs>
+                <vr-tab header="'Definitions'">
                     <vr-row>
                         <vr-columns width="1/2row">
                             <vr-textbox label="Name" value="scopeModel.name" isrequired></vr-textbox>
                         </vr-columns>
-                            <retail-be-switch-settings on-ready="scopeModel.onSwitchDirectiveReady" normal-col-num="6"></retail-be-switch-settings>
                     </vr-row>
+                </vr-tab>
+                <vr-tab header="'Configuration'">
+                    <vr-row>
+                        <retail-be-switch-settings on-ready="scopeModel.onSwitchDirectiveReady" normal-col-num="6"></retail-be-switch-settings>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+           
 
         </vr-form>
     </vr-modalbody>

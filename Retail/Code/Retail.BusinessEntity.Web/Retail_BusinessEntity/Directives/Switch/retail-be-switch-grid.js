@@ -50,6 +50,14 @@ app.directive('retailBeSwitchGrid', ['Retail_BE_SwitchAPIService', 'Retail_BE_Sw
                     return gridAPI.retrieveData(query);
                 };
 
+                api.onSwitchAdded = function (addedSwitch) {
+                    gridAPI.itemAdded(addedSwitch);
+                }
+
+                api.onSwitchUpdated = function (updatedSwitch) {
+                    gridAPI.itemUpdated(updatedSwitch);
+                }
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

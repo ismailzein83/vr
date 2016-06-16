@@ -2,9 +2,9 @@
 
     "use strict";
 
-    SwitchEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    SwitchEditorController.$inject = ['$scope', 'UtilsService', 'Retail_BE_SwitchAPIService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
 
-    function SwitchEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function SwitchEditorController($scope, UtilsService, Retail_BE_SwitchAPIService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
         var switchEntity;
         $scope.scopeModel = {};
@@ -89,28 +89,53 @@
 
 
         function buildSwitchObjectFromScope() {
-            var service = {
+            var switchItem = {
+                SwitchId: switchEntity != undefined ? switchEntity.SwitchId : undefined,
                 Name: $scope.scopeModel.name,
+                Settings: switchSettingsAPI.getData()
             };
-            return service;
+            return switchItem;
         }
 
         function insert() {
+            $scope.scopeModel.isLoading = true;
+
             var switchObj = buildSwitchObjectFromScope();
-            if ($scope.onServiceAdded != undefined)
-                $scope.onServiceAdded(switchObj);
-            $scope.modalContext.closeModal();
+
+            return Retail_BE_SwitchAPIService.AddSwitch(switchObj).then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded('Switch', response, 'Name')) {
+                    if ($scope.onSwitchAdded != undefined)
+                        $scope.onSwitchAdded(response.InsertedObject);
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+          
         }
+
 
         function update() {
+            $scope.scopeModel.isLoading = true;
+
             var switchObj = buildSwitchObjectFromScope();
-            if ($scope.onServiceUpdated != undefined)
-                $scope.onServiceUpdated(switchObj);
-            $scope.modalContext.closeModal();
 
+            return Retail_BE_SwitchAPIService.UpdateSwitch(switchObj).then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated('Switch', response, 'Name')) {
+                    if ($scope.onSwitchUpdated != undefined) {
+                        $scope.onSwitchUpdated(response.UpdatedObject);
+                    }
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
         }
-
-
+           
     }
 
     appControllers.controller('Retail_BE_SwitchEditorController', SwitchEditorController);

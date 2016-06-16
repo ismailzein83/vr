@@ -8,5 +8,6 @@ namespace Retail.BusinessEntity.Entities
 {
     public abstract class SwitchIntegration
     {
+        public int ConfigId { get; set; }
     }
 }

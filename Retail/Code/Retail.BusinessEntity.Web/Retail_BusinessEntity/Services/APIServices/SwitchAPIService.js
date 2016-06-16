@@ -16,9 +16,19 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetFilteredSwitches'), input);
         }
 
+        function AddSwitch(switchItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddSwitch'), switchItem);
+        }
+
+        function UpdateSwitch(switchItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateSwitch'), switchItem);
+        }
+
         return ({
             GetSwitchSettingsTemplateConfigs: GetSwitchSettingsTemplateConfigs,
-            GetFilteredSwitches: GetFilteredSwitches
+            GetFilteredSwitches: GetFilteredSwitches,
+            AddSwitch: AddSwitch,
+            UpdateSwitch: UpdateSwitch
         });
     }
 
