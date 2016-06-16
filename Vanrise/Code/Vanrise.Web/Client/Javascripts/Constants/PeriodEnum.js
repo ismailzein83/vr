@@ -22,7 +22,7 @@
         }
         return {
             from: new Date(lastMonday.getFullYear(), lastMonday.getMonth(), lastMonday.getDate(), 00, 00, 00),
-            to: new Date().getTime()
+            to: new Date()
         }
     }
 
