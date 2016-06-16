@@ -339,11 +339,11 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'Text','{"DataRecordFieldTypeConfigId":"1","Name":"Text","Title":"Text","Editor":"vr-genericdata-fieldtype-text","RuntimeEditor":"vr-genericdata-fieldtype-text-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-text-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-text-rulefiltereditor"}'),
 (2,'Number','{"DataRecordFieldTypeConfigId":"2","Name":"Number","Title":"Number","Editor":"vr-genericdata-fieldtype-number","RuntimeEditor":"vr-genericdata-fieldtype-number-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-number-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-number-rulefiltereditor"}'),
-(3,'DateTime','{"DataRecordFieldTypeConfigId":"3","Name":"DateTime","Title":"DateTime","Editor":"vr-genericdata-fieldtype-datetime","RuntimeEditor":"vr-genericdata-fieldtype-datetime-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-datetime-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-datetime-rulefiltereditor"}'),
-(4,'Choices','{"DataRecordFieldTypeConfigId":"4","Name":"Choices","Title":"Choices","Editor":"vr-genericdata-fieldtype-choices","RuntimeEditor":"vr-genericdata-fieldtype-choices-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-choices-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-choices-rulefiltereditor"}'),
-(5,'Boolean','{"DataRecordFieldTypeConfigId":"5","Name":"Boolean","Title":"Boolean","Editor":"vr-genericdata-fieldtype-boolean","RuntimeEditor":"vr-genericdata-fieldtype-boolean-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-boolean-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-boolean-rulefiltereditor"}'),
-(6,'Business Entity','{"DataRecordFieldTypeConfigId":"6","Name":"Business Entity","Title":"Business Entity","Editor":"vr-genericdata-fieldtype-businessentity","RuntimeEditor":"vr-genericdata-fieldtype-businessentity-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-businessentity-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-businessentity-rulefiltereditor"}'),
-(7,'Array','{"DataRecordFieldTypeConfigId":"7","Name":"Array","Title":"Array","Editor":"vr-genericdata-fieldtype-array","RuntimeEditor":"vr-genericdata-fieldtype-array-runtimeeditor", "FilterEditor": "vr-genericdata-fieldtype-array-filtereditor"}')
+(3,'DateTime','{"DataRecordFieldTypeConfigId":"3","Name":"DateTime","Title":"DateTime","Editor":"vr-genericdata-fieldtype-datetime","RuleFilterEditor":"vr-genericdata-fieldtype-datetime-rulefiltereditor"}'),
+(6,'Choices','{"DataRecordFieldTypeConfigId":"6","Name":"Choices","Title":"Choices","Editor":"vr-genericdata-fieldtype-choices","RuntimeEditor":"vr-genericdata-fieldtype-choices-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-choices-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-choices-rulefiltereditor"}'),
+(7,'Boolean','{"DataRecordFieldTypeConfigId":"7","Name":"Boolean","Title":"Boolean","Editor":"vr-genericdata-fieldtype-boolean","RuleFilterEditor":"vr-genericdata-fieldtype-boolean-rulefiltereditor","RuntimeEditor":"vr-genericdata-fieldtype-boolean-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-boolean-filtereditor"}'),
+(9,'Business Entity','{"DataRecordFieldTypeConfigId":"9","Name":"Business Entity","Title":"Business Entity","Editor":"vr-genericdata-fieldtype-businessentity","RuntimeEditor":"vr-genericdata-fieldtype-businessentity-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-businessentity-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-businessentity-rulefiltereditor"}'),
+(10,'Array','{"DataRecordFieldTypeConfigId":"10","Name":"Array","Title":"Array","Editor":"vr-genericdata-fieldtype-array","RuntimeEditor":"vr-genericdata-fieldtype-array-runtimeeditor", "FilterEditor": "vr-genericdata-fieldtype-array-filtereditor"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Details]))
 merge	[genericdata].[DataRecordFieldTypeConfig] as t
@@ -354,7 +354,9 @@ when matched then
 	[Name] = s.[Name],[Details] = s.[Details]
 when not matched by target then
 	insert([ID],[Name],[Details])
-	values(s.[ID],s.[Name],s.[Details]);
+	values(s.[ID],s.[Name],s.[Details])
+when not matched by source then
+	delete;
 set identity_insert [genericdata].[DataRecordFieldTypeConfig] off;
 
 --[common].[TemplateConfig]-----------------60001 to 70000------------------------------------------
