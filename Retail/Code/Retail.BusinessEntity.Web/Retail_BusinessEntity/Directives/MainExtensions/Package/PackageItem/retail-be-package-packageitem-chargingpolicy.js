@@ -17,41 +17,38 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/Package/PackageItem/Templates/PackageChargingPolicyItemTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/Package/PackageItem/Templates/ServicePackageChargingPolicyItemTemplate.html"
 
         };
         function ServicePackageChargingPolicyItem($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var mainPayload;
             var settingsDirectiveAPI;
-            var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.onChargingPolicySettingReady = function(api)
+                $scope.scopeModel.onChargingPolicySettingReady = function (api)
                 {
                     settingsDirectiveAPI = api;
-                    settingsDirectiveReadyDeferred.resolve();
+                    defineAPI();
                 }
-                defineAPI();
+               
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    console.log(payload);
                     if (payload != undefined) {
                         mainPayload = payload;
                         var promises =[];
 
                         var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        settingsDirectiveReadyDeferred.promise.then(function () {
-                            var settingsDirectivePayload = {
-                                serviceTypeId: payload.ServiceTypeId,
-                                chargingPolicy: payload
-                            };
-                            VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
-                        });
+                        var settingsDirectivePayload = {
+                            serviceTypeId: payload.serviceTypeId,
+                            chargingPolicy: payload.chargingPolicy
+                        };
+                        VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
 
                         promises.push(settingsDirectiveLoadDeferred.promise);
 

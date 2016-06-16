@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/Package/PackageItem/Templates/PackageVolumeItemTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/Package/PackageItem/Templates/ServicePackageVolumeItemTemplate.html"
 
         };
         function ServicePackageVolumeItem($scope, ctrl, $attrs) {

@@ -20,7 +20,7 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/Package/PackageItem/Templates/PackageItemEditorTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/Package/PackageItem/Templates/PackageItemEditorTemplate.html"
         };
 
         function PackageitemEditor($scope, ctrl, $attrs) {
@@ -90,7 +90,7 @@
             }
 
             function defineMenuActions() {
-                ctrl.partsGridMenuActions = [{
+                ctrl.packageItemsGridMenuActions = [{
                     name: 'Edit',
                     clicked: editPackageItem
                 }];

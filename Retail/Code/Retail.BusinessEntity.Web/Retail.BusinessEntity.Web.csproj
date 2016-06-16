@@ -210,7 +210,6 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\SwitchIntegrations\Templates\RetailBESwitchIntegrationRadiusTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageItem\retail-be-package-packageitem-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\PackageItem\retail-be-package-packageitem-volume.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\PackageItem\retail-be-package-packageitem.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageItem\Templates\PackageItemEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\PackageItem\Templates\ServicePackageChargingPolicyItemTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\PackageItem\Templates\ServicePackageVolumeItemTemplate.html" />

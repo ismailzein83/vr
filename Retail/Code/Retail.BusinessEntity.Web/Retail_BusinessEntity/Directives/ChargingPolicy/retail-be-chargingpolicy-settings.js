@@ -42,8 +42,9 @@ app.directive('retailBeChargingpolicySettings', ['Retail_BE_ServiceTypeAPIServic
                 var serviceTypeId;
                 var chargingPolicy;
                 var chargingPolicyDefinitionSettings;
-
+                console.log(payload);
                 if (payload != undefined) {
+                   
                     serviceTypeId = payload.serviceTypeId;
                     chargingPolicy = payload.chargingPolicy;
                 }
