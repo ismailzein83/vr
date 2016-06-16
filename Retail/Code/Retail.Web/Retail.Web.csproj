@@ -495,6 +495,9 @@
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\Retail.pubxml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
