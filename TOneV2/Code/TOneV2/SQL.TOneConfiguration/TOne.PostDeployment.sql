@@ -804,7 +804,6 @@ set identity_insert [genericdata].[GenericRuleDefinition] off;
 --[common].[ExtensionConfiguration]-----------------1001	to 2000---------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-set identity_insert [common].[ExtensionConfiguration] on;
 ;with cte_data([ID],[Title],[ConfigType],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -829,4 +828,3 @@ when matched then
 when not matched by target then
 	insert([ID],[Title],[ConfigType],[Settings])
 	values(s.[ID],s.[Title],s.[ConfigType],s.[Settings]);
-set identity_insert [common].[ExtensionConfiguration] off;
