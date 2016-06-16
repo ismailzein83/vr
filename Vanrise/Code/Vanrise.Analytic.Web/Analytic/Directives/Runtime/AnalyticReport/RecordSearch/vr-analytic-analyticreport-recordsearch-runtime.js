@@ -160,6 +160,7 @@
                     ToTime: $scope.toDate,
                     GridColumns: $scope.selectedDRSearchPageStorageSource.GridColumns,
                     ItemDetails: $scope.selectedDRSearchPageStorageSource.ItemDetails,
+                    SortColumns: $scope.selectedDRSearchPageStorageSource.SortColumns,
                     FilterGroup: filterObj,
                     LimitResult: $scope.limit,
                     Direction: $scope.selectedOrderDirection.value,

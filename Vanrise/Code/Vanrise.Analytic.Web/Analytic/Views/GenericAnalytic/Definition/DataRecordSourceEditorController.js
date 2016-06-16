@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordSourceEditorController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataStoreConfigAPIService', 'VR_GenericData_DataStoreAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_Analytic_GridWidthEnum', 'ColumnWidthEnum'];
+    DataRecordSourceEditorController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataStoreConfigAPIService', 'VR_GenericData_DataStoreAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_Analytic_GridWidthEnum', 'ColumnWidthEnum', 'VR_Analytic_OrderDirectionEnum'];
 
-    function DataRecordSourceEditorController($scope, VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataStoreConfigAPIService, VR_GenericData_DataStoreAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, VR_Analytic_GridWidthEnum, ColumnWidthEnum) {
+    function DataRecordSourceEditorController($scope, VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataStoreConfigAPIService, VR_GenericData_DataStoreAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, VR_Analytic_GridWidthEnum, ColumnWidthEnum, VR_Analytic_OrderDirectionEnum) {
 
         var isEditMode;
         var dataRecordSource;
@@ -17,6 +17,7 @@
 
         $scope.selectedFields = [];
         $scope.selectedDetails = [];
+        $scope.selectedSortColumns = [];
 
         $scope.dataRecordTypeFields = [];
         $scope.scopeModel = {};
@@ -38,6 +39,7 @@
         function defineScope() {
             $scope.scopeModel.gridWidths = UtilsService.getArrayEnum(VR_Analytic_GridWidthEnum);
             $scope.scopeModel.detailWidths = UtilsService.getArrayEnum(ColumnWidthEnum);
+            $scope.scopeModel.orderDirectionList = UtilsService.getArrayEnum(VR_Analytic_OrderDirectionEnum);
 
             $scope.onDataRecordStorageSelectorReady = function (api) {
                 dataRecordStorageSelectorAPI = api;
@@ -73,6 +75,11 @@
             $scope.removeDetail = function (detail) {
                 $scope.selectedDetails.splice($scope.selectedDetails.indexOf(detail), 1);
             }
+
+            $scope.removeSortColumn = function (sortColumn) {
+                $scope.selectedSortColumns.splice($scope.selectedSortColumns.indexOf(sortColumn), 1);
+            }
+            
 
             $scope.isFieldGridValid = function () {
                 if ($scope.selectedFields.length == 0) {
@@ -183,13 +190,20 @@
                 details.push({ FieldName: currentDetail.FieldName, FieldTitle: currentDetail.FieldTitle, ColumnWidth: currentDetail.SelectedDetailWidth.value });
             }
 
+            var sortColumns = [];
+            for (var z = 0; z < $scope.selectedSortColumns.length; z++) {
+                var currentSortColumn = $scope.selectedSortColumns[z];
+                sortColumns.push({ FieldName: currentSortColumn.FieldName, IsDescending: currentSortColumn.SelectedOrderDirection.value });
+            }
+
             var obj = {
                 Title: $scope.scopeModel.title,
                 Name: $scope.scopeModel.sourceName,
                 DataRecordTypeId: $scope.selectedDataRecordType.DataRecordTypeId,
                 RecordStorageIds: dataRecordStorageSelectorAPI.getSelectedIds(),
                 GridColumns: columns,
-                ItemDetails: details
+                ItemDetails: details,
+                SortColumns: sortColumns
             };
             return obj;
         }
@@ -242,6 +256,17 @@
                                 selectedDetail.FieldTitle = currentDetail.FieldTitle;
                                 selectedDetail.SelectedDetailWidth = UtilsService.getItemByVal($scope.scopeModel.detailWidths, currentDetail.ColumnWidth, 'value');
                                 $scope.selectedDetails.push(selectedDetail);
+                            }
+                        }
+                    }
+
+                    if (dataRecordSource != undefined && dataRecordSource.SortColumns) {
+                        for (var z = 0; z < dataRecordSource.SortColumns.length; z++) {
+                            var currentSortColumn = dataRecordSource.SortColumns[z];
+                            var selectedSortColumn = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentSortColumn.FieldName, "FieldName");
+                            if (selectedSortColumn != undefined) {
+                                selectedSortColumn.SelectedOrderDirection = UtilsService.getItemByVal($scope.scopeModel.orderDirectionList, currentSortColumn.IsDescending, 'value');
+                                $scope.selectedSortColumns.push(selectedSortColumn);
                             }
                         }
                     }

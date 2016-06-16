@@ -4,11 +4,11 @@
                  dataretrievalfunction="ctrl.dataRetrievalFunction"
                  pagingtype="'PagingOnScroll'"
                  on-ready="ctrl.onGridReady"
-                 menuactions="ctrl.menuActions" defaultsortbyfieldname="'RecordTime'" defaultsortdirection="ctrl.sortDirection">
+                 menuactions="ctrl.menuActions" defaultsortbyfieldname="ctrl.defaultSortByFieldName" defaultsortdirection="ctrl.sortDirection">
         <vr-datagridcolumn ng-repeat="column in ctrl.columns" headertext="column.FieldTitle" numberprecision="column.numberprecision" type="column.type"
-                           field="'FieldValues.' + column.FieldName + '.Description'"
+                           field="column.Field"
                            tag="column" columnindex="$index" widthfactor="column.Widthfactor"></vr-datagridcolumn>
-        <vr-datagridexpandablerow>
+        <vr-datagridexpandablerow ng-if="ctrl.showDetails > 0">
             <vr-columns ng-repeat="detail in dataItem.details" colnum="{{detail.colnum}}">
                 <vr-label>{{detail.FieldTitle}}:</vr-label>
                 <vr-label isvalue>{{dataItem.FieldValues[detail.FieldName].Description}}</vr-label>

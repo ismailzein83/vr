@@ -31,7 +31,7 @@ namespace Vanrise.GenericData.Business
             if (dataRecordStorage == null)
                 throw new NullReferenceException(String.Format("dataRecordStorage. Id '{0}'", dataRecordStorage.DataRecordStorageId));
 
-            if(input.Query.Columns == null)
+            if (input.Query.Columns == null)
                 throw new NullReferenceException("input.Query.Columns");
 
             input.Query.Columns = new HashSet<string>(input.Query.Columns).ToList();
@@ -46,7 +46,7 @@ namespace Vanrise.GenericData.Business
             if (input.SortByColumnName.Contains("FieldValues"))
             {
                 string[] fieldValueproperty = input.SortByColumnName.Split('.');
-                input.SortByColumnName = string.Format(@"{0}[""{1}""].Description", fieldValueproperty[0], fieldValueproperty[1]);
+                input.SortByColumnName = string.Format(@"{0}[""{1}""].{2}", fieldValueproperty[0], fieldValueproperty[1], fieldValueproperty[2]);
             }
             return BigDataManager.Instance.RetrieveData(input, new DataRecordRequestHandler(recordType));
         }
@@ -235,6 +235,17 @@ namespace Vanrise.GenericData.Business
                 return dataRecordDetail;
             }
 
+            private List<DataRecordDetail> DataRecordDetailMapperList(IEnumerable<DataRecord> dataRecords)
+            {
+                if (dataRecords == null)
+                    return null;
+
+                List<DataRecordDetail> result = new List<DataRecordDetail>();
+                foreach (DataRecord dataRecord in dataRecords)
+                    result.Add(EntityDetailMapper(dataRecord));
+
+                return result;
+            }
             public override IEnumerable<DataRecord> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
             {
                 List<DataRecord> records = new List<DataRecord>();
@@ -247,6 +258,53 @@ namespace Vanrise.GenericData.Business
                     }
                 }
                 return records.Count > 0 ? input.Query.Direction == OrderDirection.Ascending ? records.OrderBy(itm => itm.RecordTime).Take(input.Query.LimitResult) : records.OrderByDescending(itm => itm.RecordTime).Take(input.Query.LimitResult) : null;
+            }
+            protected override Vanrise.Entities.BigResult<DataRecordDetail> AllRecordsToBigResult(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, IEnumerable<DataRecord> allRecords)
+            {
+                if (allRecords == null)
+                    return new Vanrise.Entities.BigResult<DataRecordDetail>()
+                {
+                    ResultKey = input.ResultKey,
+                    Data = null,
+                    TotalCount = 0
+                };
+
+
+                IEnumerable<DataRecordDetail> allRecordsDetails = DataRecordDetailMapperList(allRecords);
+
+                IOrderedEnumerable<DataRecordDetail> orderedRecords = allRecordsDetails.VROrderList(input);
+
+                if (input.Query.SortColumns != null && input.Query.SortColumns.Count > 0)
+                    orderedRecords = GetOrderedByFields(input.Query.SortColumns, orderedRecords);
+
+                IEnumerable<DataRecordDetail> pagedRecords = orderedRecords.VRGetPage(input);
+
+                var dataRecordBigResult = new Vanrise.Entities.BigResult<DataRecordDetail>()
+                {
+                    ResultKey = input.ResultKey,
+                    Data = pagedRecords,
+                    TotalCount = allRecordsDetails.Count()
+                };
+
+                return dataRecordBigResult;
+            }
+
+            private IOrderedEnumerable<DataRecordDetail> GetOrderedByFields(List<SortColumn> sortColumns, IOrderedEnumerable<DataRecordDetail> orderedRecords)
+            {
+                foreach (SortColumn sortColumn in sortColumns)
+                {
+                    DataRecordField field = RecordType.Fields.FirstOrDefault(itm => itm.Name == sortColumn.FieldName);
+                    if (field == null)
+                        continue;
+
+                    switch (field.Type.OrderType)
+                    {
+                        case DataRecordFieldOrderType.ByFieldDescription: orderedRecords = sortColumn.IsDescending ? orderedRecords.ThenByDescending(itm => itm.FieldValues[sortColumn.FieldName].Description) : orderedRecords.ThenBy(itm => itm.FieldValues[sortColumn.FieldName].Description); break;
+                        case DataRecordFieldOrderType.ByFieldValue: orderedRecords = sortColumn.IsDescending ? orderedRecords.ThenByDescending(itm => itm.FieldValues[sortColumn.FieldName].Value) : orderedRecords.ThenBy(itm => itm.FieldValues[sortColumn.FieldName].Value); break;
+                        default: break;
+                    }
+                }
+                return orderedRecords;
             }
 
             private List<DataRecord> GetDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, int dataRecordStorageId)

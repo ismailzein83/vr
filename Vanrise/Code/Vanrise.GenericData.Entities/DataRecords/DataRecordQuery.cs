@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
@@ -22,5 +19,14 @@ namespace Vanrise.GenericData.Entities
         public int LimitResult { get; set; }
 
         public OrderDirection Direction { get; set; }
+
+        public List<SortColumn> SortColumns { get; set; }
+    }
+
+    public class SortColumn
+    {
+        public string FieldName { get; set; }
+
+        public bool IsDescending { get; set; }
     }
 }

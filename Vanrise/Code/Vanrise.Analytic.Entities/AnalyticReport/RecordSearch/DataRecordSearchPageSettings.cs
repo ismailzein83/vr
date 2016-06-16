@@ -24,6 +24,8 @@ namespace Vanrise.Analytic.Entities
         public List<DRSearchPageGridColumn> GridColumns { get; set; }
 
         public List<DRSearchPageItemDetail> ItemDetails { get; set; }
+
+        public List<DRSearchPageSortColumn> SortColumns { get; set; }
     }
 
     public class DRSearchPageGridColumn
@@ -42,5 +44,12 @@ namespace Vanrise.Analytic.Entities
         public string FieldTitle { get; set; }
 
         public int ColumnWidth { get; set; }
+    }
+
+    public class DRSearchPageSortColumn
+    {
+        public string FieldName { get; set; }
+
+        public bool IsDescending { get; set; }
     }
 }
