@@ -12,6 +12,16 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         public string Supplier { get; set; }
         public string CustomerID { get; set; }
         public string Customer { get; set; }
+        public string SaleZoneName { get; set; }
+        public string CostZoneName { get; set; }
+        public double SaleAmount { get; set; }
+        public string SaleAmountFormatted { get; set; }
+        public double CostAmount { get; set; }
+        public string CostAmountFormatted { get; set; }
+        public double SaleRate { get; set; }
+        public string SaleRateFormatted { get; set; }
+        public double CostRate { get; set; }
+        public string CostRateFormatted { get; set; }
         public decimal? SaleDuration { get; set; }
         public string SaleDurationFormatted { get; set; }
         public decimal? CostDuration { get; set; }
@@ -30,6 +40,7 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         public string SaleExtraChargeValueFormatted { get; set; }
         public double? Profit { get; set; }
         public string ProfitFormatted { get; set; }
+        public string ProfitPercentage { get; set; }
         public decimal? AvgMin { get; set; }
         public string AvgMinFormatted { get; set; }
     }
