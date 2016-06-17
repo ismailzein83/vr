@@ -23,6 +23,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime? EED { get; set; }
 
         public string SourceId { get; set; }
+        public RateChangeType RateChange { get; set; }
     }
 
     public class SaleRatePriceList
