@@ -28,7 +28,19 @@
             function initializeController() {
                 ctrl.dataSource = [];
                 ctrl.columns = [];
-
+                $scope.isValueBool= function(column,value,fieldDescription)
+                {
+                    if (column.Attribute.Type.indexOf("Boolean")>-1)
+                    {
+                      
+                        column.fieldValue = value;
+                        return true;
+                    }else
+                    {
+                        column.fieldValue = fieldDescription;
+                        return false;
+                    }
+                }
                 ctrl.onGridReady = function (api) {
                     gridAPI = api;
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {

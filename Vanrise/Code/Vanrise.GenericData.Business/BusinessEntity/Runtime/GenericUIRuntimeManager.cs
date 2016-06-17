@@ -112,6 +112,7 @@ namespace Vanrise.GenericData.Business
                 foreach (var column in gridDesign.Columns)
                 {
                     var runtimeColumn = BuildRuntimeField<GenericGridRuntimeField>(column, dataRecordTypeFieldsByName, dataRecordTypeId);
+                    runtimeColumn.Attribute = runtimeColumn.FieldType.GetGridColumnAttribute();
                     genericGridRuntime.Columns.Add(runtimeColumn);
                 }
             }

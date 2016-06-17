@@ -50,7 +50,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override Vanrise.Entities.GridColumnAttribute GetGridColumnAttribute()
         {
-            return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", NumberPrecision = "NoDecimal" };
+            return new Vanrise.Entities.GridColumnAttribute() { Type = "Boolean", NumberPrecision = "NoDecimal" };
         }
 
         public override bool IsMatched(object fieldValue, RecordFilter recordFilter)

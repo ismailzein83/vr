@@ -5,6 +5,15 @@
              pagingtype="'PagingOnScroll'"
              idfield="Entity.GenericBusinessEntityId">
     <vr-datagridcolumn headertext="'ID'" field="'Entity.GenericBusinessEntityId'"></vr-datagridcolumn>
-    <vr-datagridcolumn ng-repeat="column in ctrl.columns" headertext="column.FieldTitle" field="'FieldValueDescriptions[' + $index + ']'" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn ng-repeat="column in ctrl.columns" headertext="column.FieldTitle" field="'FieldValueDescriptions[' + $index + ']'" tag="column" disablesorting>
+        <span ng-init="result = viewScope.isValueBool(colDef.tag,dataItem.Entity.Details[colDef.tag.FieldPath],dataItem.FieldValueDescriptions[viewScope.ctrl.columns.indexOf(colDef.tag)])">
+            <vr-icon ng-if="result" icontype="colDef.tag.fieldValue"></vr-icon>
+            <span ng-if="!result">
+                {{colDef.tag.fieldValue}}
+            </span>
+        </span>
+        
+           
+</vr-datagridcolumn>
 </vr-datagrid>
 
