@@ -2,7 +2,7 @@
 
     'use strict';
 
-    PackageItemEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService','Retail_BE_PackageAPIService'];
+    PackageItemEditorController.$inject = ['$scope','UtilsService','VRUIUtilsService','VRNavigationService','VRNotificationService','Retail_BE_PackageAPIService'];
 
     function PackageItemEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_PackageAPIService) {
         var isEditMode;
@@ -16,29 +16,27 @@
 
         var directiveAPI;
         var directiveReadyDeferred;
-
+           $scope.scopeModel = {};
         loadParameters();
         defineScope();
         load();
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-
             if (parameters != undefined) {
                 packageItemEntity = parameters.packageItem;
             }
-
             if (packageItemEntity != undefined) {
                 isEditMode = true;
-                $scope.isServiceTypeSelectorDisabled = true;
+                $scope.scopeModel.isServiceTypeSelectorDisabled = true;
             }
             else {
                 isEditMode = false;
-                $scope.isServiceTypeSelectorDisabled = false;
+                $scope.scopeModel.isServiceTypeSelectorDisabled = false;
             }
         }
         function defineScope() {
-            $scope.scopeModel = {};
+         
             
             $scope.scopeModel.templateConfigs = [];
             
@@ -87,15 +85,16 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadServiceTypeSelector, loadDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadServiceTypeSelector, loadDirective, loadPackageItemDirective]).catch(function(error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
         }
+
         function setTitle() {
             if (isEditMode) {
-                var packageItemTitle = (packageItemEntity != undefined) ? packageItemEntity.PackageItemTitle : undefined;
+                var packageItemTitle = (packageItemEntity != undefined) ? packageItemEntity.serviceTypeTitle : undefined;
                 $scope.title = UtilsService.buildTitleForUpdateEditor(packageItemTitle, 'Package Item');
             }
             else {
@@ -117,11 +116,16 @@
 
             return serviceSelectorLoadDeferred.promise;
         }
+
+        function loadPackageItemDirective() {
+            if (packageItemEntity == undefined)
+                return;
+           return  loadPackageItemTemplateConfigs();
+        }
         function loadPackageItemTemplateConfigs() {
-            selectorAPI.clearDataSource();
             return Retail_BE_PackageAPIService.GetServicePackageItemConfigs().then(function (response) {
                 if (selectorAPI != undefined)
-                    
+                     selectorAPI.clearDataSource();
                 if (response != null) {
                     for (var i = 0; i < response.length; i++) {
                         $scope.scopeModel.templateConfigs.push(response[i]);
@@ -134,12 +138,11 @@
         function loadDirective() {
             if (packageItemEntity == undefined)
                 return;
-
             directiveReadyDeferred = UtilsService.createPromiseDeferred();
             var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-
             directiveReadyDeferred.promise.then(function () {
-                var payloadDirective = { packageItem: packageItemEntity.Settings };
+                directiveReadyDeferred = undefined;
+                var payloadDirective = { serviceTypeId: packageItemEntity.ServiceTypeId, settings: packageItemEntity.Settings};
                 VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, loadDirectivePromiseDeferred);
             });
 
@@ -160,9 +163,9 @@
             var settings = directiveAPI.getData();
             settings.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
             return {
-                serviceTypeId: serviceTypeSelectorAPI.getSelectedIds(),
+                ServiceTypeId: serviceTypeSelectorAPI.getSelectedIds(),
                 serviceTypeTitle: $scope.scopeModel.selectedServiceType.Title,
-                settings: settings
+                Settings: settings
             };
         }
     }

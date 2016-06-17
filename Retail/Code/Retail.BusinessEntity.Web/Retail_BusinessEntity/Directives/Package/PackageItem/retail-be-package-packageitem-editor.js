@@ -2,9 +2,9 @@
 
     'use strict';
 
-    PackageItemEditorDirective.$inject = ['Retail_BE_PackageService', 'UtilsService'];
+    PackageItemEditorDirective.$inject = ['Retail_BE_PackageService', 'UtilsService', 'Retail_BE_ServiceTypeAPIService'];
 
-    function PackageItemEditorDirective(Retail_BE_PackageService, UtilsService) {
+    function PackageItemEditorDirective(Retail_BE_PackageService, UtilsService, Retail_BE_ServiceTypeAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -30,8 +30,8 @@
             var gridAPI;
 
             function initializeController() {
-                ctrl.packageItems = [];
-
+                ctrl.packageSettings = [];
+                ctrl.serviceTypes = [];
                 ctrl.onGridReady = function (api) {
                     gridAPI = api;
                     defineAPI();
@@ -39,42 +39,55 @@
 
                 ctrl.addPackageItem = function () {
                     var onPackageItemAdded = function (addedPackageItem) {
-                        ctrl.packageItems.push(addedPackageItem);
+                        ctrl.packageSettings.push({ Entity: addedPackageItem });
                     };
                     Retail_BE_PackageService.addPackageItem(onPackageItemAdded);
                 };
-                ctrl.removePackageItem = function (packageItem) {
-                    ctrl.packageItems.splice(ctrl.packageItems.indexOf(packageItem), 1);
+                ctrl.removePackageItem = function (packageSetting) {
+                    ctrl.packageSettings.splice(ctrl.packageSettings.indexOf(packageSetting), 1);
                 };
                 ctrl.validatePackageItems = function () {
-                    if (ctrl.packageItems.length > 0)
+                    if (ctrl.packageSettings.length > 0)
                         return null;
                     return "Please add at least one package item";
                 };
-
+            
                 defineMenuActions();
             }
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    ctrl.packageItems.length = 0;
 
-                    var packageItems;
+                    ctrl.packageSettings.length = 0;
+                   
+                    var packageSettings;
 
                     if (payload != undefined) {
-                        packageItems = payload.packageItems;
+                        packageSettings = payload.packageSettings;
                     }
-
-                    if (packageItems != undefined) {
-                        for (var i = 0; i < packageItems.length; i++) {
-                            ctrl.packageItems.push(packageItems[i]);
+                    return getServiceTypes().then(function () {
+                        if (packageSettings != undefined && packageSettings.Services != undefined) {
+                            for (var i = 0; i < packageSettings.Services.length; i++) {
+                                var service = packageSettings.Services[i];
+                                var  serviceType = UtilsService.getItemByVal(ctrl.serviceTypes, service.ServiceTypeId, "ServiceTypeId");
+                                if (serviceType != undefined)
+                                    service.serviceTypeTitle = serviceType.Title;
+                                ctrl.packageSettings.push({ Entity: service });
+                            }
                         }
-                    }
+
+                    });
                 };
 
                 api.getData = function () {
-                    return ctrl.packageItems;
+                    var packageSettings = [];
+                    for (var i = 0; i < ctrl.packageSettings.length; i++)
+                    {
+                        var packageSetting = ctrl.packageSettings[i];
+                        packageSettings.push(packageSetting.Entity);
+                    }
+                    return packageSettings;
                 };
 
                 if (ctrl.onReady != null) {
@@ -90,9 +103,19 @@
             }
             function editPackageItem(packageItem) {
                 var onPackageItemUpdated = function (updatedPackageItem) {
-                    ctrl.packageItems[ctrl.packageItems.indexOf(packageItem)] = updatedPackageItem.PackageItem;
+                    ctrl.packageSettings[ctrl.packageSettings.indexOf(packageItem)] = { Entity: updatedPackageItem };
                 };
-                Retail_BE_PackageService.editPackageItem(packageItem, onPackageItemUpdated);
+                Retail_BE_PackageService.editPackageItem(packageItem.Entity, onPackageItemUpdated);
+            }
+            function getServiceTypes()
+            {
+                return Retail_BE_ServiceTypeAPIService.GetServiceTypesInfo().then(function (response) {
+                    if (response != null) {
+                        for (var i = 0; i < response.length; i++) {
+                            ctrl.serviceTypes.push(response[i]);
+                        }
+                    }
+                });
             }
         }
     }

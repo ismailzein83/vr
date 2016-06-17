@@ -4,12 +4,12 @@
 <vr-columns width="fullrow">
     <vr-validator validate="ctrl.validatePackageItems()">
         <vr-datagrid on-ready="ctrl.onGridReady"
-                     datasource="ctrl.packageItems"
+                     datasource="ctrl.packageSettings"
                      menuactions="ctrl.menuActions"
                      ondeleterow="ctrl.removePackageItem"
                      norowhighlightonclick="true"
                      hidegridmenu>
-            <vr-datagridcolumn headertext="'Service Type'" field="'serviceTypeTitle'" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Service Type'" field="'Entity.serviceTypeTitle'" disablesorting></vr-datagridcolumn>
         </vr-datagrid>
     </vr-validator>
 </vr-columns>

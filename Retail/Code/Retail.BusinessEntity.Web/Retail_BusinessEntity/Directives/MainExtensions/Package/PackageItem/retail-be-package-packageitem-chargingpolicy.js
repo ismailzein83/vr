@@ -38,7 +38,6 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     if (payload != undefined) {
                         mainPayload = payload;
                         var promises =[];
@@ -46,7 +45,7 @@
                         var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
                         var settingsDirectivePayload = {
                             serviceTypeId: payload.serviceTypeId,
-                            chargingPolicy: payload.chargingPolicy
+                            chargingPolicy: payload.settings != undefined ? { Settings: payload.settings.ChargingPolicySettings }:undefined
                         };
                         VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
 
