@@ -82,12 +82,10 @@ function (UtilsService, VRNotificationService, Retail_BE_PackageAPIService, Reta
             function buildServicesTab() {
                 return {
                     title: 'Services',
-                    directive: 'retail-be-packageservice-grid',
+                    directive: 'retail-be-package-packageservice-grid',
                     loadDirective: function (directiveAPI, dataItem) {
                         dataItem.packageServiceGridAPI = directiveAPI;
-                        var packageServiceGridQuery = {
-                            PackageId: dataItem.Entity.PackageId
-                        };
+                        var packageServiceGridQuery = { PackageId: dataItem.Entity.PackageId };
                         directiveAPI.loadGrid(packageServiceGridQuery);
                     }
                 };
