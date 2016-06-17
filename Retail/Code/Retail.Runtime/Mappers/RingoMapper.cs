@@ -114,7 +114,7 @@ namespace Retail.Runtime.Mappers
             var smsCDRs = new List<dynamic>();
 
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
-            Type smsCDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("SmsCDR");
+            Type messageCDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("MessageCDR");
 
 
             var currentItemCount = 26;
@@ -139,7 +139,7 @@ namespace Retail.Runtime.Mappers
                 else if (rowData.Length != currentItemCount)
                     continue;
 
-                dynamic cdr = Activator.CreateInstance(smsCDRRuntimeType) as dynamic;
+                dynamic cdr = Activator.CreateInstance(messageCDRRuntimeType) as dynamic;
                 cdr.IdCDR = long.Parse(rowData[0]);
                 cdr.StartDate = DateTime.ParseExact(rowData[2], "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
 
@@ -147,7 +147,7 @@ namespace Retail.Runtime.Mappers
                 cdr.ParentIdCDR = !string.IsNullOrEmpty(parentIdCDR) ? long.Parse(parentIdCDR) : default(long?);
 
                 cdr.TrafficType = rowData[3];
-                cdr.TypeSms = rowData[4];
+                cdr.TypeMessage = rowData[4];
                 cdr.DirectionTraffic = rowData[5];
                 cdr.Calling = rowData[6];
                 cdr.Called = rowData[7];
@@ -185,7 +185,7 @@ namespace Retail.Runtime.Mappers
             }
 
             var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(smsCDRs, "#RECORDSCOUNT# of Raw CDRs");
-            mappedBatches.Add("SMS CDR Storage Stage", batch);
+            mappedBatches.Add("Message CDR Storage Stage", batch);
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
@@ -269,6 +269,94 @@ namespace Retail.Runtime.Mappers
 
             var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(dataCDRs, "#RECORDSCOUNT# of Raw CDRs");
             mappedBatches.Add("Gprs CDR Storage Stage", batch);
+
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+            LogVerbose("Finished");
+            return result;
+        }
+
+        public Vanrise.Integration.Entities.MappingOutput ImportingMmsCDR_File()
+        {
+            LogVerbose("Started");
+            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
+            var mmsCDRs = new List<dynamic>();
+
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type messageCDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("MessageCDR");
+
+
+            var currentItemCount = 27;
+            var headerText = "H";
+
+            DateTime creationDate = default(DateTime);
+            System.IO.StreamReader sr = ImportedData.StreamReader;
+            while (!sr.EndOfStream)
+            {
+                string currentLine = sr.ReadLine();
+                if (string.IsNullOrEmpty(currentLine))
+                    continue;
+
+                string[] rowData = currentLine.Split(';');
+
+                if (rowData.Length == 2 && rowData[0] == headerText)
+                {
+                    creationDate = DateTime.ParseExact(rowData[1], "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture);
+                    continue;
+                }
+
+                else if (rowData.Length != currentItemCount)
+                    continue;
+
+                dynamic cdr = Activator.CreateInstance(messageCDRRuntimeType) as dynamic;
+                cdr.IdCDR = long.Parse(rowData[0]);
+                cdr.StartDate = DateTime.ParseExact(rowData[2], "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+
+                
+
+                cdr.TrafficType = rowData[3];
+                cdr.TypeMessage = rowData[4];
+                cdr.DirectionTraffic = rowData[5];
+                cdr.Calling = rowData[6];
+                cdr.Called = rowData[7];
+                cdr.TypeNet = rowData[8];
+                cdr.SourceOperator = rowData[9];
+                cdr.DestinationOperator = rowData[10];
+                cdr.SourceArea = rowData[11];
+                cdr.DestinationArea = rowData[12];
+
+                string bill = rowData[13];
+                cdr.Bill = !string.IsNullOrEmpty(bill) ? int.Parse(bill) : default(int?);
+
+                cdr.Unit = rowData[14];
+
+                string credit = rowData[15];
+                cdr.Credit = !string.IsNullOrEmpty(credit) ? decimal.Parse(credit) : default(decimal?);
+
+                string balance = rowData[16];
+                cdr.Balance = !string.IsNullOrEmpty(balance) ? decimal.Parse(balance) : default(decimal?);
+
+                cdr.Bag = rowData[17];
+
+                string amount = rowData[18];
+                cdr.Amount = !string.IsNullOrEmpty(amount) ? decimal.Parse(amount) : default(decimal?);
+
+                cdr.TypeConsumed = rowData[19];
+                cdr.PricePlan = rowData[20];
+                cdr.Promotion = rowData[21];
+
+                string parentIdCDR = rowData[24];
+                cdr.ParentIdCDR = !string.IsNullOrEmpty(parentIdCDR) ? long.Parse(parentIdCDR) : default(long?);
+
+                cdr.FileName = rowData[25];
+                cdr.FileDate = DateTime.ParseExact(rowData[26], "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                cdr.CreationDate = creationDate;
+
+                mmsCDRs.Add(cdr);
+            }
+
+            var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(mmsCDRs, "#RECORDSCOUNT# of Raw CDRs");
+            mappedBatches.Add("Message CDR Storage Stage", batch);
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
