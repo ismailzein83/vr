@@ -6,7 +6,8 @@ app.directive('vrGenericdataFieldtypeBoolean', ['UtilsService',
             restrict: 'E',
             scope:
             {
-                onReady: '='
+                onReady: '=',
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
 

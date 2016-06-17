@@ -1,17 +1,15 @@
-﻿<vr-row removeline>
-    <vr-columns colnum="3">
-        <vr-switch label="Is Nullable" value="ctrl.isNullable" isrequired="true"></vr-switch>
-    </vr-columns>
-    <vr-columns width="1/2row">
-        <vr-select on-ready="ctrl.onSelectorReady"
-                   datasource="ctrl.dateTimeDataTypes"
-                   selectedvalues="ctrl.selectedDateTimeDataType"
-                   datavaluefield="value"
-                   datatextfield="description"
-                   label="Data Type"
-                   text="None"
-                   isrequired
-                   hideremoveicon>
-        </vr-select>
-    </vr-columns>
-</vr-row>
+﻿<vr-columns colnum="{{ctrl.normalColNum}}">
+    <vr-switch label="Is Nullable" value="ctrl.isNullable" isrequired="true"></vr-switch>
+</vr-columns>
+<vr-columns colnum="{{ctrl.normalColNum}}">
+    <vr-select on-ready="ctrl.onSelectorReady"
+               datasource="ctrl.dateTimeDataTypes"
+               selectedvalues="ctrl.selectedDateTimeDataType"
+               datavaluefield="value"
+               datatextfield="description"
+               label="Data Type"
+               text="None"
+               isrequired
+               hideremoveicon>
+    </vr-select>
+</vr-columns>

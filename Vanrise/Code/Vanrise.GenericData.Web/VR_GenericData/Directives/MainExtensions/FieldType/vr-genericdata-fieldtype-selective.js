@@ -25,34 +25,30 @@
                 return getDirectiveTemplate(attrs);
             }
         };
-        function getDirectiveTemplate(attrs)
-        {
+        function getDirectiveTemplate(attrs) {
             var label = 'label="Type"';
             var removeLine = "";
-            if (attrs.hidelabel != undefined)
-            {
+            if (attrs.hidelabel != undefined) {
                 label = "";
                 removeLine = "removeline";
             }
-              
 
-            return '<vr-row ' + removeLine + ' >'
-                      + '<vr-columns width="1/3row">'
-                            + '<vr-select on-ready="scopeModel.onSelectorReady"'
-                            + 'datasource="scopeModel.fieldTypeConfigs"'
-                            + 'selectedvalues="scopeModel.selectedFieldTypeConfig"'
-                            + 'datavaluefield="DataRecordFieldTypeConfigId"'
-                            + 'datatextfield="Title"'
-                            + label
-                            + ' text="None"'
-                             + ' isrequired'
-                             + ' hideremoveicon>'
-                     + '</vr-select>'
-                    + '</vr-columns>'
-                   + ' <vr-columns width="2/3row" ng-if="scopeModel.selectedFieldTypeConfig != undefined" vr-loader="scopeModel.isLoadingDirective">'
-                       + ' <vr-directivewrapper directive="scopeModel.selectedFieldTypeConfig.Editor" on-ready="scopeModel.onDirectiveReady"></vr-directivewrapper>'
-                   + '</vr-columns>'
-                   + ' </vr-row>';
+
+            return '<vr-columns width="1/3row">'
+                  + '<vr-select on-ready="scopeModel.onSelectorReady"'
+                  + 'datasource="scopeModel.fieldTypeConfigs"'
+                  + 'selectedvalues="scopeModel.selectedFieldTypeConfig"'
+                  + 'datavaluefield="DataRecordFieldTypeConfigId"'
+                  + 'datatextfield="Title"'
+                  + label
+                  + ' text="None"'
+                   + ' isrequired'
+                   + ' hideremoveicon>'
+           + '</vr-select>'
+          + '</vr-columns>'
+        + ' <span  ng-if="scopeModel.selectedFieldTypeConfig != undefined" vr-loader="scopeModel.isLoadingDirective">'
+             + ' <vr-directivewrapper normal-col-num="4" directive="scopeModel.selectedFieldTypeConfig.Editor" on-ready="scopeModel.onDirectiveReady"></vr-directivewrapper>'
+         + '</span>';
         }
         function DataRecordFieldTypeSelective($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
@@ -62,7 +58,7 @@
             var directiveAPI;
             var directiveReadyDeferred;
             var directivePayload;
-            
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.fieldTypeConfigs = [];
@@ -86,7 +82,7 @@
 
             function getDirectiveAPI() {
                 var api = {};
-                
+
                 api.load = function (payload) {
                     var promises = [];
                     var configId;

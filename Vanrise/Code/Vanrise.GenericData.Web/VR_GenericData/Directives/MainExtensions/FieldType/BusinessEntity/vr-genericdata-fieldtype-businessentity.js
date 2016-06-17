@@ -8,7 +8,8 @@
         return {
             restrict: 'E',
             scope: {
-                onReady: '='
+                onReady: '=',
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;

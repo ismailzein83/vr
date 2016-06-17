@@ -185,6 +185,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="VR_GenericData\Constants\FieldNumberDataPrecisionEnum.js" />
     <Content Include="VR_GenericData\Constants\RecordFilterOperatorEnum.js" />
     <Content Include="VR_GenericData\Constants\DateTimeDataTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\IntervalTypeEnum.js" />

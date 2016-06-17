@@ -1,9 +1,6 @@
-﻿
-<vr-row>
-    <vr-columns width="1/3row">
-        <vr-switch label="Is Nullable" value="ctrl.isNullable" isrequired="true"></vr-switch>
-    </vr-columns>
-    <vr-columns width="2/3row">
-        <vr-genericdata-businessentitydefinition-selector on-ready="ctrl.onSelectorReady" isrequired="true" hideremoveicon></vr-genericdata-businessentitydefinition-selector>
-    </vr-columns>
-</vr-row>
+﻿<vr-columns colnum="{{ctrl.normalColNum}}">
+    <vr-switch label="Is Nullable" value="ctrl.isNullable" isrequired="true"></vr-switch>
+</vr-columns>
+<vr-columns colnum="{{ctrl.normalColNum}}">
+    <vr-genericdata-businessentitydefinition-selector on-ready="ctrl.onSelectorReady" isrequired="true" hideremoveicon></vr-genericdata-businessentitydefinition-selector>
+</vr-columns>

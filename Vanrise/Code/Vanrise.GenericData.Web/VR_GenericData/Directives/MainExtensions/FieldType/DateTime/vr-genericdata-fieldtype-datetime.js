@@ -6,7 +6,8 @@ app.directive('vrGenericdataFieldtypeDatetime', ['UtilsService','VR_GenericData_
             restrict: 'E',
             scope:
             {
-                onReady: '='
+                onReady: '=',
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
 

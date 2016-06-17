@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
+using System.Globalization;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
+    public enum FieldNumberPrecision { Normal = 0, Long = 1 }
     public class FieldNumberType : DataRecordFieldType
     {
+        public FieldNumberPrecision DataPrecision { get; set; }
         public FieldNumberDataType DataType { get; set; }
         public bool IsNullable { get; set; }
 
@@ -37,12 +40,42 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
             IEnumerable<object> numberValues = FieldTypeHelper.ConvertFieldValueToList<object>(value);
 
+            string decimalPrecision = null;
+            switch (DataType)
+            {
+                case FieldNumberDataType.Decimal:
+                    switch (DataPrecision)
+                    {
+                        case FieldNumberPrecision.Long: decimalPrecision = "0.0000"; break;
+                        case FieldNumberPrecision.Normal: 
+                        default: decimalPrecision = "0.00"; break;
+                    }
+                    break;
+
+                default: break;
+            }
+
+
             if (numberValues == null)
-                return value.ToString();
+            {
+                if (string.IsNullOrEmpty(decimalPrecision))
+                    return value.ToString();
+                else
+                    return Convert.ToDecimal(value).ToString(decimalPrecision);
+            }
 
             var descriptions = new List<string>();
-            foreach (var numberValue in numberValues)
-                descriptions.Add(numberValue.ToString());
+
+            if (DataType == FieldNumberDataType.Decimal)
+            {
+                foreach (var numberValue in numberValues)
+                    descriptions.Add(Convert.ToDecimal(numberValue).ToString(decimalPrecision));
+            }
+            else
+            {
+                foreach (var numberValue in numberValues)
+                    descriptions.Add(numberValue.ToString());
+            }
             return String.Join(",", descriptions);
         }
 
@@ -97,7 +130,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             string numberPrecision;
             switch (DataType)
             {
-                case FieldNumberDataType.Decimal: numberPrecision = ""; break;
+                case FieldNumberDataType.Decimal:
+                    switch (DataPrecision)
+                    {
+                        case FieldNumberPrecision.Long: numberPrecision = "LongPrecision"; break;
+                        case FieldNumberPrecision.Normal:
+                        default: numberPrecision = ""; break;
+                    }
+                    
+                    break;
                 case FieldNumberDataType.BigInt:
                 case FieldNumberDataType.Int:
                 default: numberPrecision = "NoDecimal"; break;

@@ -1,9 +1,11 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeNumber', ['VR_GenericData_FieldNumberDataTypeEnum', 'UtilsService', function (VR_GenericData_FieldNumberDataTypeEnum, UtilsService) {
+app.directive('vrGenericdataFieldtypeNumber', ['VR_GenericData_FieldNumberDataTypeEnum', 'UtilsService', 'VR_GenericData_FieldNumberDataPrecisionEnum',
+    function (VR_GenericData_FieldNumberDataTypeEnum, UtilsService, VR_GenericData_FieldNumberDataPrecisionEnum) {
     return {
         restrict: 'E',
         scope: {
-            onReady: '='
+            onReady: '=',
+            normalColNum: '@'
         },
         controller: function ($scope, $element, $attrs) {
 
@@ -30,6 +32,7 @@ app.directive('vrGenericdataFieldtypeNumber', ['VR_GenericData_FieldNumberDataTy
     function numberTypeCtor(ctrl, $scope) {
 
         var selectorAPI;
+        var precisionSelectorAPI;
 
         function initializeController() {
             ctrl.numberDataTypes = [];
@@ -38,6 +41,10 @@ app.directive('vrGenericdataFieldtypeNumber', ['VR_GenericData_FieldNumberDataTy
                 selectorAPI = api;
                 defineAPI();
             };
+
+            ctrl.onPrecisionSelectorReady = function (api) {
+                precisionSelectorAPI = api;
+            };
         }
 
         function defineAPI() {
@@ -45,17 +52,24 @@ app.directive('vrGenericdataFieldtypeNumber', ['VR_GenericData_FieldNumberDataTy
 
             api.load = function (payload) {
                 var dataTypeValue;
+                var dataPrecisionValue;
 
                 if (payload != undefined) {
                     dataTypeValue = payload.DataType;
                     ctrl.isNullable = payload.IsNullable;
+                    dataPrecisionValue = payload.DataPrecision;
                 }
 
                 selectorAPI.clearDataSource();
                 ctrl.numberDataTypes = UtilsService.getArrayEnum(VR_GenericData_FieldNumberDataTypeEnum);
+                ctrl.numberDataPrecision = UtilsService.getArrayEnum(VR_GenericData_FieldNumberDataPrecisionEnum);
 
                 if (dataTypeValue != undefined) {
                     ctrl.selectedNumberDataType = UtilsService.getItemByVal(ctrl.numberDataTypes, dataTypeValue, 'value');
+                }
+
+                if (dataPrecisionValue != undefined) {
+                    ctrl.selectedNumberDataPrecision = UtilsService.getItemByVal(ctrl.numberDataPrecision, dataPrecisionValue, 'value');
                 }
             };
 
@@ -63,7 +77,8 @@ app.directive('vrGenericdataFieldtypeNumber', ['VR_GenericData_FieldNumberDataTy
                 return {
                     $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldNumberType, Vanrise.GenericData.MainExtensions",
                     DataType: ctrl.selectedNumberDataType.value,
-                    IsNullable: ctrl.isNullable
+                    IsNullable: ctrl.isNullable,
+                    DataPrecision: ctrl.selectedNumberDataPrecision.value
                 };
             };
 
