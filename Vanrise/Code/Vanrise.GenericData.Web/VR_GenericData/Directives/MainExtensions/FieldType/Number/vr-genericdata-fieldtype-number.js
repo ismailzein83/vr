@@ -78,7 +78,7 @@ app.directive('vrGenericdataFieldtypeNumber', ['VR_GenericData_FieldNumberDataTy
                     $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldNumberType, Vanrise.GenericData.MainExtensions",
                     DataType: ctrl.selectedNumberDataType.value,
                     IsNullable: ctrl.isNullable,
-                    DataPrecision: ctrl.selectedNumberDataPrecision.value
+                    DataPrecision: ctrl.selectedNumberDataPrecision != undefined ? ctrl.selectedNumberDataPrecision.value : undefined
                 };
             };
 
