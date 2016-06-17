@@ -146,7 +146,8 @@ function GridDrillDownTabs(drillDownDefinitions, gridAPI, gridMenuActions) {
         drillDownDirectiveTab.directive = drillDownDefinition.directive;
         drillDownDirectiveTab.loadDirective = function (directiveAPI) {
             return drillDownDefinition.loadDirective(directiveAPI, dataItem);
-        }
+        };
+        drillDownDirectiveTab.setTabSelected = drillDownDefinition.setTabSelected;
         dataItem.drillDownExtensionObject.drillDownDirectiveTabs.push(drillDownDirectiveTab);
     }
 
