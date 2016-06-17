@@ -89,6 +89,11 @@
             if (switchEntity == undefined)
                 return;
             $scope.scopeModel.name = switchEntity.Name;
+
+            if (switchEntity.Settings == null)
+                return;
+            $scope.scopeModel.description = switchEntity.Settings.Description;
+            $scope.scopeModel.location = switchEntity.Settings.Location;
         }
         function loadSettingsDirective()
         {
@@ -134,11 +139,16 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
-        function buildSwitchObjFromScope() {
+        function buildSwitchObjFromScope()
+        {
+            var settings = settingsDirectiveAPI.getData();
+            settings.Description = $scope.scopeModel.description;
+            settings.Location = $scope.scopeModel.location;
+
             return {
                 SwitchId: switchEntity != undefined ? switchEntity.SwitchId : undefined,
                 Name: $scope.scopeModel.name,
-                Settings: settingsDirectiveAPI.getData()
+                Settings: settings
             };
         }
     }

@@ -10,14 +10,11 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+
 namespace Retail.BusinessEntity.Business
 {
-    public class SwitchManager 
+    public class SwitchManager
     {
-        #region ctor/Local Variables
-
-        #endregion
-
         #region Public Methods
 
         public Vanrise.Entities.IDataRetrievalResult<SwitchDetail> GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input)
@@ -25,17 +22,20 @@ namespace Retail.BusinessEntity.Business
             Dictionary<int, Switch> cachedSwitches = this.GetCachedSwitches();
 
             Func<Switch, bool> filterExpression = (switchItem) =>
-                (input.Query.Name == null || switchItem.Name.ToLower().Contains(input.Query.Name.ToLower()));
+                (input.Query.Name == null || switchItem.Name.ToLower().Contains(input.Query.Name.ToLower())) &&
+                (input.Query.Description == null ||
+                    (switchItem.Settings.Description != null && switchItem.Settings.Description.ToLower().Contains(input.Query.Description.ToLower()))) &&
+                (input.Query.Location == null ||
+                    (switchItem.Settings.Location != null && switchItem.Settings.Location.ToLower().Contains(input.Query.Location.ToLower())));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedSwitches.ToBigResult(input, filterExpression, SwitchDetailMapper));
         }
-        
+
         public IEnumerable<SwitchIntegrationConfig> GetSwitchSettingsTemplateConfigs()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
             return templateConfigManager.GetExtensionConfigurations<SwitchIntegrationConfig>(SwitchIntegrationConfig.EXTENSION_TYPE);
         }
-
 
         public Switch GetSwitch(int switchId)
         {
@@ -91,7 +91,6 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-       
         #endregion
 
         #region Private Classes
@@ -109,9 +108,8 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
 
-
         #region Private Methods
-
+        
         Dictionary<int, Switch> GetCachedSwitches()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitches", () =>
@@ -121,20 +119,35 @@ namespace Retail.BusinessEntity.Business
                 return switches.ToDictionary(kvp => kvp.SwitchId, kvp => kvp);
             });
         }
+        
         #endregion
-
 
         #region Mappers
 
         private SwitchDetail SwitchDetailMapper(Switch switchItem)
         {
+            if (switchItem.Settings == null)
+                throw new NullReferenceException("switch.Settings");
+            if (switchItem.Settings.SwitchIntegration == null)
+                throw new NullReferenceException("switch.Settings.SwitchIntegration");
             return new SwitchDetail()
             {
-                Entity = switchItem
+                Entity = switchItem,
+                SwitchSettingsTypeName = this.GetSwitchSettingsTypeName(switchItem.Settings.SwitchIntegration.ConfigId)
             };
         }
 
-        #endregion
+        private string GetSwitchSettingsTypeName(int configId)
+        {
+            IEnumerable<ExtensionConfiguration> settingsConfigs = this.GetSwitchSettingsTemplateConfigs();
+            if (settingsConfigs == null)
+                throw new NullReferenceException("settingsConfigs");
+            ExtensionConfiguration settingsConfig = settingsConfigs.FindRecord(x => x.ExtensionConfigurationId == configId);
+            if (settingsConfig == null)
+                throw new NullReferenceException("settingsConfig");
+            return settingsConfig.Title;
+        }
 
+        #endregion
     }
 }

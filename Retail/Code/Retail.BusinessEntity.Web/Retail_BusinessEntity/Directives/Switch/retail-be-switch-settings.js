@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RetailBeSwitchSettingsDirective.$inject = ['Retail_BE_SwitchAPIService', 'UtilsService', 'VRUIUtilsService'];
+    SwitchSettingsDirective.$inject = ['Retail_BE_SwitchAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function RetailBeSwitchSettingsDirective(Retail_BE_SwitchAPIService, UtilsService, VRUIUtilsService) {
+    function SwitchSettingsDirective(Retail_BE_SwitchAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -15,8 +15,8 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var retailBePackageService = new RetailBePackageService($scope, ctrl, $attrs);
-                retailBePackageService.initializeController();
+                var switchSettings = new SwitchSettings($scope, ctrl, $attrs);
+                switchSettings.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
@@ -24,32 +24,8 @@
                 return getTamplate(attrs);
             }
         };
-        function getTamplate(attrs) {
-            var withemptyline = 'withemptyline';
-            var label = "label='Type'";
-            if (attrs.hidelabel != undefined) {
-                label = "";
-                withemptyline = '';
-            }
-            var template =
-                '<vr-row>'
-                    + '<vr-columns colnum="{{ctrl.normalColNum}}">'
-                        + ' <vr-select on-ready="scopeModel.onSelectorReady"'
-                            + ' datasource="scopeModel.templateConfigs"'
-                            + ' selectedvalues="scopeModel.selectedTemplateConfig"'
-                            + ' datavaluefield="ExtensionConfigurationId"'
-                            + ' datatextfield="Title"'
-                            + label
-                            + ' isrequired="true"'
-                            + 'hideremoveicon>'
-                        + '</vr-select>'
-                    + ' </vr-columns>'
-                + '</vr-row>'
-                + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper>'
-            return template;
-
-        }
-        function RetailBePackageService($scope, ctrl, $attrs)
+        
+        function SwitchSettings($scope, ctrl, $attrs)
         {
             this.initializeController = initializeController;
 
@@ -152,8 +128,34 @@
                 }
             }
         }
+
+        function getTamplate(attrs) {
+            var withemptyline = 'withemptyline';
+            var label = "label='Type'";
+            if (attrs.hidelabel != undefined) {
+                label = "";
+                withemptyline = '';
+            }
+            var template =
+                '<vr-row>'
+                    + '<vr-columns colnum="{{ctrl.normalColNum}}">'
+                        + ' <vr-select on-ready="scopeModel.onSelectorReady"'
+                            + ' datasource="scopeModel.templateConfigs"'
+                            + ' selectedvalues="scopeModel.selectedTemplateConfig"'
+                            + ' datavaluefield="ExtensionConfigurationId"'
+                            + ' datatextfield="Title"'
+                            + label
+                            + ' isrequired="true"'
+                            + 'hideremoveicon>'
+                        + '</vr-select>'
+                    + ' </vr-columns>'
+                + '</vr-row>'
+                + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper>'
+            return template;
+
+        }
     }
 
-    app.directive('retailBeSwitchSettings', RetailBeSwitchSettingsDirective);
+    app.directive('retailBeSwitchSettings', SwitchSettingsDirective);
 
 })(app);

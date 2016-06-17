@@ -44,10 +44,12 @@
         function buildGridQuery() {
             return {
                 Name: $scope.scopeModel.name,
+                Description: $scope.scopeModel.description,
+                Location: $scope.scopeModel.location
             };
         }
-
     }
 
     appControllers.controller('Retail_BE_SwitchManagementController', SwitchManagementController);
+
 })(appControllers);
