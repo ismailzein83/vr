@@ -134,6 +134,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlCarrierSummary.rdlc" />
+    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlRateLoss.rdlc" />
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlZoneProfits.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
