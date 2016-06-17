@@ -74,7 +74,7 @@ app.directive('retailBeSwitchGrid', ['Retail_BE_SwitchAPIService', 'Retail_BE_Sw
                     gridAPI.itemUpdated(updatedSwitch);
                 };
 
-                Retail_BE_SwitchService.editSwitch(switchItem, onSwitchUpdated);
+                Retail_BE_SwitchService.editSwitch(switchItem.Entity.SwitchId, onSwitchUpdated);
             }
         }
     }]);

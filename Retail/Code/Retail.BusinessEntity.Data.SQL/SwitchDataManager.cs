@@ -5,15 +5,16 @@ using Vanrise.Data.SQL;
 
 namespace Retail.BusinessEntity.Data.SQL
 {
-    public class SwitchDataManager :BaseSQLDataManager, ISwitchDataManager
+    public class SwitchDataManager : BaseSQLDataManager, ISwitchDataManager
     {
-           
-        #region ctor/Local Variables
+        #region Constructors
+
         public SwitchDataManager()
             : base(GetConnectionStringName("Retail_BE_DBConnStringKey", "Retail_BE_DBConnString"))
         {
 
         }
+
         #endregion
 
         #region Public Methods
@@ -25,9 +26,8 @@ namespace Retail.BusinessEntity.Data.SQL
 
         public bool AreSwitchUpdated(ref object updateHandle)
         {
-            return base.IsDataUpdated("Retail.ServiceType", ref updateHandle);
+            return base.IsDataUpdated("Retail_BE.Switch", ref updateHandle);
         }
-
 
         public bool Insert(Switch switchItem, out int insertedId)
         {
@@ -45,18 +45,12 @@ namespace Retail.BusinessEntity.Data.SQL
             return false;
         }
 
-
         public bool Update(Switch switchItem)
         {
             string serializedSettings = switchItem.Settings != null ? Vanrise.Common.Serializer.Serialize(switchItem.Settings) : null;
             int affectedRecords = ExecuteNonQuerySP("Retail.sp_Switch_Update", switchItem.SwitchId, switchItem.Name, serializedSettings);
             return (affectedRecords > 0);
         }
-
-
-        #endregion
-
-        #region Private Methods
 
         #endregion
 

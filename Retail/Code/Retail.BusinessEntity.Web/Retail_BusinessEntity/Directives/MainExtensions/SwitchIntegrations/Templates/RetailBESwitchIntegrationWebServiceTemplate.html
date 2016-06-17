@@ -1,10 +1,7 @@
 ﻿<vr-row>
-    <vr-columns width="fullrow">
+    <vr-columns width="1/2row">
         <vr-textbox label="URL" type="text" value="scopeModel.url" isrequired></vr-textbox>
     </vr-columns>
-</vr-row>
-
-<vr-row>
     <vr-columns width="1/2row">
         <vr-select label="Request Type"
                    selectedvalues="scopeModel.selectedRequestType"
@@ -12,12 +9,10 @@
                    isrequired
                    datavaluefield="value"
                    datatextfield="description"
-                   on-ready="scopeModel.onRequestTypesReady">
-
+                   on-ready="scopeModel.onSelectorReady">
         </vr-select>
     </vr-columns>
 </vr-row>
-
 <vr-row>
     <vr-columns width="fullrow">
         <vr-textarea label="Credential Logic" type="text" value="scopeModel.credentialLogic" rows="5" isrequired></vr-textarea>

@@ -23,30 +23,34 @@
         function WebServiceIntegration($scope, ctrl, $attrs) {
 
             this.initializeController = initializeController;
-            var mainPayload;
 
-            function initializeController() {
-
+            function initializeController()
+            {
                 $scope.scopeModel = {};
+                $scope.scopeModel.requestTypes = UtilsService.getArrayEnum(Retail_BE_WebServiceRequestTypeEnum);
 
-                $scope.scopeModel.onRequestTypesReady = function () {
-                    $scope.scopeModel.requestTypes = UtilsService.getArrayEnum(Retail_BE_WebServiceRequestTypeEnum);
-                }
-
-                defineAPI();
+                $scope.scopeModel.onSelectorReady = function (api) {
+                    defineAPI();
+                };
             }
 
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) {
-                    if (payload != undefined && payload.switchSettings != undefined) {
-                        $scope.scopeModel.url = payload.switchSettings.URL;
-                        $scope.scopeModel.credentialLogic = payload.switchSettings.CredentialLogic;
-                        $scope.scopeModel.mappingLogic = payload.switchSettings.MappingLogic;
-                        $scope.scopeModel.selectedRequestType = payload.switchSettings.RequestType
+                api.load = function (payload)
+                {
+                    var switchIntegration;
+
+                    if (payload != undefined) {
+                        switchIntegration = payload.switchIntegration;
                     }
 
+                    if (switchIntegration != undefined) {
+                        $scope.scopeModel.url = switchIntegration.URL;
+                        $scope.scopeModel.credentialLogic = switchIntegration.CredentialLogic;
+                        $scope.scopeModel.mappingLogic = switchIntegration.MappingLogic;
+                        $scope.scopeModel.selectedRequestType = UtilsService.getItemByVal($scope.scopeModel.requestTypes, switchIntegration.RequestType, 'value');
+                    }
                 };
 
                 api.getData = getData;

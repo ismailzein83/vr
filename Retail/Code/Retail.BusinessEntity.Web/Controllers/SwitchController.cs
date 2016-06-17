@@ -30,14 +30,12 @@ namespace Retail.BusinessEntity.Web.Controllers
             return _manager.AddSwitch(switchItem);
         }
 
-
         [HttpPost]
         [Route("UpdateSwitch")]
         public Vanrise.Entities.UpdateOperationOutput<SwitchDetail> UpdateSwitch(Switch switchItem)
         {
             return _manager.UpdateSwitch(switchItem);
         }
-
 
         [HttpPost]
         [Route("GetFilteredSwitches")]
@@ -46,5 +44,11 @@ namespace Retail.BusinessEntity.Web.Controllers
             return GetWebResponse(input, _manager.GetFilteredSwitches(input));
         }
 
+        [HttpGet]
+        [Route("GetSwitch")]
+        public Switch GetSwitch(int switchId)
+        {
+            return _manager.GetSwitch(switchId);
+        }
     }
 }

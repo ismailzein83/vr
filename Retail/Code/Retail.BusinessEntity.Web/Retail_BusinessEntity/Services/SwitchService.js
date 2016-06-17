@@ -16,12 +16,12 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Switch/SwitchEditor.html', null, settings);
         };
 
-        function editSwitch(switchEntity, onSwitchUpdated) {
+        function editSwitch(switchId, onSwitchUpdated) {
             var modalSettings = {
             };
 
             var parameters = {
-                switchEntity: switchEntity,
+                switchId: switchId,
             };
 
             modalSettings.onScopeReady = function (modalScope) {

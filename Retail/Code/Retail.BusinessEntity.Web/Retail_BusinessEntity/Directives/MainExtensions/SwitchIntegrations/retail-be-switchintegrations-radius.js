@@ -33,13 +33,19 @@
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) {
-                    if (payload != undefined && payload.switchSettings != undefined) {
-                        $scope.scopeModel.connectionString = payload.switchSettings.ConnectionString;
-                        $scope.scopeModel.tableName = payload.switchSettings.TableName;
-                        $scope.scopeModel.mappingLogic = payload.switchSettings.MappingLogic;
+                api.load = function (payload)
+                {
+                    var switchIntegration;
+
+                    if (payload != undefined) {
+                        switchIntegration = payload.switchIntegration;
                     }
 
+                    if (switchIntegration != undefined) {
+                        $scope.scopeModel.connectionString = switchIntegration.ConnectionString;
+                        $scope.scopeModel.tableName = switchIntegration.TableName;
+                        $scope.scopeModel.mappingLogic = switchIntegration.MappingLogic;
+                    }
                 };
 
                 api.getData = getData;
