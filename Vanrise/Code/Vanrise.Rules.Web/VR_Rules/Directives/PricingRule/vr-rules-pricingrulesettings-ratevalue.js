@@ -24,13 +24,14 @@
             templateUrl: "/Client/Modules/VR_Rules/Directives/PricingRule/Templates/PricingRuleRateValueSettings.html"
         };
 
-        function RateValueSettings(ctrl, $scope, $attrs) {
+        function RateValueSettings(ctrl, $scope, $attrs)
+        {
             this.initializeController = initializeController;
 
             var selectorAPI;
 
             var directiveAPI;
-            var directiveReadyDeferred;
+            var directiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.rateValueTemplates = [];
@@ -38,10 +39,7 @@
 
                 $scope.onSelectorReady = function (api) {
                     selectorAPI = api;
-
-                    if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-                        ctrl.onReady(getDirectiveAPI());
-                    }
+                    defineAPI();
                 };
 
                 $scope.onDirectiveReady = function (api) {
@@ -51,7 +49,7 @@
                 };
             }
 
-            function getDirectiveAPI() {
+            function defineAPI() {
                 var api = {};
 
                 api.getData = function () {
@@ -61,6 +59,8 @@
                 };
 
                 api.load = function (payload) {
+                    $scope.rateValueTemplates.length = 0;
+
                     var promises = [];
                     var settings;
 
@@ -68,38 +68,47 @@
                         settings = payload.settings;
                     }
                     
-                    var templatesPromise = VR_Rules_PricingRuleAPIService.GetPricingRuleRateValueTemplates();
-                    promises.push(templatesPromise);
+                    var loadTemplatesPromise = loadTemplates();
+                    promises.push(loadTemplatesPromise);
 
-                    var directiveLoadDeferred = UtilsService.createPromiseDeferred();
-                    promises.push(directiveLoadDeferred.promise);
+                    var loadDirectivePromise = loadDirective();
+                    promises.push(loadDirectivePromise);
 
-                    templatesPromise.then(function (response) {
-                        if (response != null) {
-                            for (var i = 0; i < response.length; i++) {
-                                $scope.rateValueTemplates.push(response[i]);
-                            }
-
-                            if (settings != undefined && settings.ConfigId != undefined) {
-                                directiveReadyDeferred = UtilsService.createPromiseDeferred();
-
-                                directiveReadyDeferred.promise.then(function () {
-                                    directiveReadyDeferred = undefined;
-                                    VRUIUtilsService.callDirectiveLoad(directiveAPI, payload, directiveLoadDeferred);
-                                });
-
-                                $scope.selectedRateValueTemplate = UtilsService.getItemByVal($scope.rateValueTemplates, settings.ConfigId, 'TemplateConfigID');
-                            }
-                            else {
-                                directiveLoadDeferred.resolve();
-                            }
+                    loadTemplatesPromise.then(function () {
+                        if (settings != undefined) {
+                            $scope.selectedRateValueTemplate = UtilsService.getItemByVal($scope.rateValueTemplates, settings.ConfigId, 'TemplateConfigID');
                         }
+                        else if ($scope.rateValueTemplates.length > 0)
+                            $scope.selectedRateValueTemplate = $scope.rateValueTemplates[0];
                     });
+
+                    function loadTemplates() {
+                        return VR_Rules_PricingRuleAPIService.GetPricingRuleRateValueTemplates().then(function (response) {
+                            if (response != null) {
+                                for (var i = 0; i < response.length; i++) {
+                                    $scope.rateValueTemplates.push(response[i]);
+                                }
+                            }
+                        });
+                    }
+                    function loadDirective() {
+                        var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        directiveReadyDeferred.promise.then(function () {
+                            directiveReadyDeferred = undefined;
+                            var directivePayload = { settings: settings };
+                            VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
+                        });
+
+                        return directiveLoadDeferred.promise;
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
-                return api;
+                if (ctrl.onReady != null) {
+                    ctrl.onReady(api);
+                }
             }
         }
     }
