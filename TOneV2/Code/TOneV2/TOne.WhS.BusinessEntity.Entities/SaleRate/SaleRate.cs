@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
@@ -31,6 +32,25 @@ namespace TOne.WhS.BusinessEntity.Entities
         public SalePriceList PriceList { get; set; }
 
         public string SourceId { get; set; }
+    }
+
+    public enum RateChangeType
+    {
+
+        [Description("Not Changed")]
+        NotChanged = 0,
+
+        [Description("New")]
+        New = 1,
+
+        [Description("Deleted")]
+        Deleted = 2,
+
+        [Description("Increase")]
+        Increase = 3,
+
+        [Description("Decrease")]
+        Decrease = 4
     }
 }
 
