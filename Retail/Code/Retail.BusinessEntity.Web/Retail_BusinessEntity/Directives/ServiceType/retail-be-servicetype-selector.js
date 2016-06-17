@@ -13,7 +13,8 @@ app.directive('retailBeServicetypeSelector', ['Retail_BE_ServiceTypeAPIService',
             ondeselectitem: '=',
             isrequired: '=',
             hideremoveicon: '@',
-            normalColNum: '@'
+            normalColNum: '@',
+            customvalidate:'='
         },
         controller: function ($scope, $element, $attrs) {
 
@@ -94,7 +95,7 @@ app.directive('retailBeServicetypeSelector', ['Retail_BE_ServiceTypeAPIService',
             multipleselection = "ismultipleselection";
         }
 
-        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + ' datatextfield="Title" datavaluefield="ServiceTypeId" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon"></vr-select></vr-columns>';
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + ' datatextfield="Title" datavaluefield="ServiceTypeId" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate"></vr-select></vr-columns>';
     }
 
 }]);

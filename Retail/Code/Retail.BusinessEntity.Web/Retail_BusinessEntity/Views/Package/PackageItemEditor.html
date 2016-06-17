@@ -10,7 +10,8 @@
                                                             selectedvalues="scopeModel.selectedServiceType"
                                                             normal-col-num="4"
                                                             isrequired="true"
-                                                            hideremoveicon="true">
+                                                            hideremoveicon="true"
+                                                            customvalidate="scopeModel.validateServiceTypeSelection()">
                             </retail-be-servicetype-selector>
                         </span>
                         <vr-columns width="1/3row">
@@ -19,7 +20,7 @@
                                        selectedvalues="scopeModel.selectedTemplateConfig"
                                        datavaluefield="ExtensionConfigurationId"
                                        datatextfield="Title"
-                                       label='Package Item Type'
+                                       label='Setting Type'
                                        isrequired="true"
                                        hideremoveicon>
                             </vr-select>

@@ -64,7 +64,10 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Package/ServiceEditor.html', parameters, modalSettings);
         }
 
-        function addPackageItem(onPackageItemAdded) {
+        function addPackageItem(onPackageItemAdded, context) {
+            var parameters = {
+                context: context
+            };
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
@@ -72,15 +75,16 @@
                 modalScope.onPackageItemAdded = onPackageItemAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Package/PackageItemEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Package/PackageItemEditor.html', parameters, settings);
         }
 
-        function editPackageItem(packageItem, onPackageItemUpdated) {
+        function editPackageItem(packageItem, onPackageItemUpdated,context) {
             var modalSettings = {
             };
 
             var parameters = {
                 packageItem: packageItem,
+                context: context
             };
 
             modalSettings.onScopeReady = function (modalScope) {

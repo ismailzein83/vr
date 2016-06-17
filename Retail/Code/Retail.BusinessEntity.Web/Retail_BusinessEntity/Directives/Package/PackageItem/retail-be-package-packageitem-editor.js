@@ -41,7 +41,7 @@
                     var onPackageItemAdded = function (addedPackageItem) {
                         ctrl.packageSettings.push({ Entity: addedPackageItem });
                     };
-                    Retail_BE_PackageService.addPackageItem(onPackageItemAdded);
+                    Retail_BE_PackageService.addPackageItem(onPackageItemAdded, getContext());
                 };
                 ctrl.removePackageItem = function (packageSetting) {
                     ctrl.packageSettings.splice(ctrl.packageSettings.indexOf(packageSetting), 1);
@@ -105,7 +105,7 @@
                 var onPackageItemUpdated = function (updatedPackageItem) {
                     ctrl.packageSettings[ctrl.packageSettings.indexOf(packageItem)] = { Entity: updatedPackageItem };
                 };
-                Retail_BE_PackageService.editPackageItem(packageItem.Entity, onPackageItemUpdated);
+                Retail_BE_PackageService.editPackageItem(packageItem.Entity, onPackageItemUpdated, getContext(packageItem));
             }
             function getServiceTypes()
             {
@@ -116,6 +116,20 @@
                         }
                     }
                 });
+            }
+
+            function getContext(service) {
+                var context = {
+                    checkIfServiceTypeUsed: function (serviceTypeId) {
+                      
+                        if (service != undefined && serviceTypeId == service.Entity.ServiceTypeId)
+                            return false;
+                        if (UtilsService.getItemByVal(ctrl.packageSettings, serviceTypeId, "Entity.ServiceTypeId") != undefined)
+                            return true;
+                        return false;
+                    }
+                }
+                return context;
             }
         }
     }

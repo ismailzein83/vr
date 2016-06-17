@@ -14,9 +14,10 @@
         var serviceTypeSelectorAPI;
         var serviceTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var context;
         var directiveAPI;
         var directiveReadyDeferred;
-           $scope.scopeModel = {};
+        $scope.scopeModel = {};
         loadParameters();
         defineScope();
         load();
@@ -25,6 +26,7 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
                 packageItemEntity = parameters.packageItem;
+                    context =parameters.context;
             }
             if (packageItemEntity != undefined) {
                 isEditMode = true;
@@ -74,6 +76,12 @@
                 return (isEditMode) ? updatePackageItem() : insertPackageItem();
             };
 
+            $scope.scopeModel.validateServiceTypeSelection = function () {
+
+                if (context != undefined && $scope.scopeModel.selectedServiceType !=undefined && context.checkIfServiceTypeUsed($scope.scopeModel.selectedServiceType.ServiceTypeId))
+                    return "Same service type already selected.";
+                return null;
+            }
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
