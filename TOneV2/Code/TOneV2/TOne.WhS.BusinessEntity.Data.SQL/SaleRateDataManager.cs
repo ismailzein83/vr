@@ -25,11 +25,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #region Public Methods
         public IEnumerable<SaleRate> GetFilteredSaleRates(SaleRateQuery query)
         {
-                string zonesids = null;
-                if (query.ZonesIds != null && query.ZonesIds.Count() > 0)
-                    zonesids = string.Join<int>(",", query.ZonesIds);
+            string zonesids = null;
+            if (query.ZonesIds != null && query.ZonesIds.Count() > 0)
+                zonesids = string.Join<int>(",", query.ZonesIds);
 
-                return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetFiltered", SaleRateMapper, query.EffectiveOn, query.SellingNumberPlanId, zonesids, query.OwnerType, query.OwnerId);
+            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetFiltered", SaleRateMapper, query.EffectiveOn, query.SellingNumberPlanId, zonesids, query.OwnerType, query.OwnerId);
         }
 
         public List<SaleRate> GetEffectiveSaleRates(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
@@ -42,6 +42,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetEffectiveAfter", SaleRateMapper, sellingNumberPlanId, minimumDate);
         }
 
+        public List<SaleRate> GetSaleRatesInBetweenPeriod(DateTime fromTime, DateTime tillTime)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetBetweenPeriod", SaleRateMapper, fromTime, tillTime);
+        }
         public List<SaleRate> GetEffectiveSaleRateByCustomers(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             DataTable dtActiveCustomers = CarrierAccountDataManager.BuildRoutingCustomerInfoTable(customerInfos);
@@ -67,7 +71,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #endregion
 
         #region Mappers
-        
+
         private SaleRate SaleRateMapper(IDataReader reader)
         {
             SaleRate saleRate = new SaleRate();
@@ -81,7 +85,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             saleRate.BED = (DateTime)reader["BED"];
             saleRate.EED = GetReaderValue<DateTime?>(reader, "EED");
-
+            // saleRate.RateChange = GetReaderValue<Entities.RateChangeType>(reader, "change");
             return saleRate;
         }
 
