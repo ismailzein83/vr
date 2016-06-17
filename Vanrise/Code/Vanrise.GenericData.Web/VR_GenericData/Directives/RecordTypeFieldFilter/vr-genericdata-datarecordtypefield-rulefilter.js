@@ -34,7 +34,7 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
                 $scope.scopeModel.onDataRecordTypeFieldEditorReady = function (api) {
                     dataRecordTypeFieldEditorApi = api;
 
-                    var payload = { dataRecordTypeField: $scope.scopeModel.dataRecordTypeField, filterObj: filterObj };
+                    var payload = { dataRecordTypeField: $scope.scopeModel.dataRecordTypeField };
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoading = value;
                     };
