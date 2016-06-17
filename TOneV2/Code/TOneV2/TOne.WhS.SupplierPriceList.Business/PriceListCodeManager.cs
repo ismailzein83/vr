@@ -114,7 +114,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             recentCodeZoneName = null;
             foreach (var existingCode in matchExistingCodes.OrderBy(itm => itm.CodeEntity.BED))
             {
-                if (existingCode.CodeEntity.BED < importedCode.BED)
+                if (existingCode.CodeEntity.BED <= importedCode.BED)
                     recentCodeZoneName = existingCode.ParentZone.ZoneEntity.Name;
                 if (existingCode.IsOverlapedWith(importedCode))
                 {
@@ -238,12 +238,17 @@ namespace TOne.WhS.SupplierPriceList.Business
             {
                 if (!importedCodeValues.Contains(existingCode.CodeEntity.Code))
                 {
-                    existingCode.ChangedCode = new ChangedCode
+                    //Get max between BED and Close Date to avoid closing a code with EED before BED
+                    DateTime? closureDate = Utilities.Max(codeCloseDate, existingCode.BED);
+                    if(closureDate.VRLessThan(existingCode.EED))
                     {
-                        CodeId = existingCode.CodeEntity.SupplierCodeId,
-                        EED = codeCloseDate < existingCode.BED ? existingCode.BED : codeCloseDate
-                    };
-
+                        //Only in this case closing has a meaning, otherwise no need to close the code
+                        existingCode.ChangedCode = new ChangedCode
+                        {
+                            CodeId = existingCode.CodeEntity.SupplierCodeId,
+                            EED = closureDate.Value
+                        };
+                    }
                 }
             }
         }

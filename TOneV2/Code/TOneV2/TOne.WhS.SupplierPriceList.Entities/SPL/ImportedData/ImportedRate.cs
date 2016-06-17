@@ -67,7 +67,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
     public class RateProcessInfo
     {
-        public Decimal? RecentRate { get; set; }
+        public ExistingRate RecentExistingRate { get; set; }
     }
 
     public enum RateChangeType
@@ -79,10 +79,13 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         [Description("New")]
         New = 1,
 
+        [Description("Deleted")]
+        Deleted = 2,
+
         [Description("Increase")]
-        Increase = 2,
+        Increase = 3,
 
         [Description("Decrease")]
-        Decrease = 3
+        Decrease = 4
     }
 }

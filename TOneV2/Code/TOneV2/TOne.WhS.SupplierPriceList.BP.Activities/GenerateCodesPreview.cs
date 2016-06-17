@@ -55,9 +55,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     codePreviewList.Add(new CodePreview()
                     {
                         Code = notImportedCode.CodeEntity.Code,
-                        ChangeType =notImportedCode.ChangedCode == null ? CodeChangeType.NotChanged : CodeChangeType.Deleted,
+                        ChangeType = CodeChangeType.Deleted,
                         ZoneName = notImportedCode.ParentZone.ZoneEntity.Name,
-                        BED = notImportedCodes.Max(item => item.BED),
+                        BED = notImportedCode.BED,
                         EED = notImportedCode.ChangedCode.EED
                     });
                 }

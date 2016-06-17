@@ -45,7 +45,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         RecentZoneName = importedZone.RecentZoneName,
                         ChangeTypeZone = importedZone.ChangeType,
                         ZoneBED = importedZone.BED,
-                        ZoneEED = importedZone.ChangeType == ZoneChangeType.NotChanged ? importedZone.ExistingZones.First().EED : null,
+                        ZoneEED = importedZone.EED,
                         CurrentRate = GetCurrentRate(importedZone),
                         ImportedRate = importedRateFirst.NormalRate,
                         ImportedRateBED = importedRateFirst.BED,
@@ -62,30 +62,29 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
                 foreach (ExistingZone notImportedZone in notImportedZones)
                 {
+                    //If a zone is renamed, do not show it in preview screen as an not imported zone
                     if(zonesRatesPreview.FindRecord(item => item.RecentZoneName != null && item.RecentZoneName.Equals(notImportedZone.Name, StringComparison.InvariantCultureIgnoreCase)) != null)
                         continue;
 
-                    ExistingRate existingRateFirst = notImportedZone.ExistingRates.First();
+                    //Get the changed rate, the one that was closed by this action
+                    ExistingRate closedExistingRate = notImportedZone.ExistingRates.Where(itm => itm.ChangedRate != null).FirstOrDefault();
                     zonesRatesPreview.Add(new ZoneRatePreview()
                     {
                         CountryId = notImportedZone.CountryId,
                         ZoneName = notImportedZone.Name,
-                        ChangeTypeZone = ZoneChangeType.Closed,
-                        ZoneBED = notImportedZones.Max(item => item.BED),
+                        ChangeTypeZone = ZoneChangeType.Deleted,
+                        ZoneBED = notImportedZone.BED,
                         ZoneEED = notImportedZone.ChangedZone.EED,
-                        CurrentRate = existingRateFirst.RateEntity.NormalRate,
-                        CurrentRateBED = notImportedZone.ExistingRates.Min(item => item.BED),
-                        CurrentRateEED = notImportedZone.ExistingRates.Max(item => item.EED.Value),
-                        ChangeTypeRate = RateChangeType.NotChanged
+                        CurrentRate = closedExistingRate.RateEntity.NormalRate,
+                        CurrentRateBED = closedExistingRate.BED,
+                        CurrentRateEED = closedExistingRate.EED,
+                        ChangeTypeRate = RateChangeType.Deleted
                     });
                 }
             }
 
             previewZonesRatesQueue.Enqueue(zonesRatesPreview);
         }
-
-
-       
 
         private int GetCountryId(ImportedZone importedZone)
         {
@@ -94,61 +93,40 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         }
 
 
-        private decimal GetCurrentRate(ImportedZone importedZone)
+        private decimal? GetCurrentRate(ImportedZone importedZone)
         {
-            ImportedRate importedRateFirst = importedZone.ImportedRates.First();
-            decimal? changedExistingRate = null;
-
-            if (importedRateFirst.ChangedExistingRates != null && importedRateFirst.ChangedExistingRates.Count() > 0)
-                changedExistingRate = importedRateFirst.ChangedExistingRates.First().RateEntity.NormalRate;
-
-            return changedExistingRate.HasValue ? changedExistingRate.Value : importedRateFirst.NormalRate;
+            ExistingRate recentExistingRate = GetRecentExistingRate(importedZone);
+            return recentExistingRate != null ? (decimal?)recentExistingRate.RateEntity.NormalRate : null;
         }
 
 
-        private DateTime GetCurrentRateBED(ImportedZone importedZone)
+        private DateTime? GetCurrentRateBED(ImportedZone importedZone)
         {
-            ImportedRate importedRateFirst = importedZone.ImportedRates.First();
-            DateTime? changedExistingRateBED = null;
-
-            if (importedRateFirst.ChangedExistingRates != null && importedRateFirst.ChangedExistingRates.Count() > 0)
-                changedExistingRateBED = importedRateFirst.ChangedExistingRates.First().BED;
-
-            return changedExistingRateBED.HasValue ? changedExistingRateBED.Value : importedRateFirst.BED;
+            ExistingRate recentExistingRate = GetRecentExistingRate(importedZone);
+            return recentExistingRate != null ? (DateTime?)recentExistingRate.BED : null;
         }
 
 
         private DateTime? GetCurrentRateEED(ImportedZone importedZone)
         {
-            ImportedRate importedRateFirst = importedZone.ImportedRates.First();
-
-            DateTime? changedExistingRateEED = null;
-
-            if (importedRateFirst.ChangedExistingRates != null && importedRateFirst.ChangedExistingRates.Count() > 0)
-                changedExistingRateEED = importedRateFirst.ChangedExistingRates.First().EED;
-
-            return changedExistingRateEED.HasValue ? changedExistingRateEED.Value : importedRateFirst.EED;
+            ExistingRate recentExistingRate = GetRecentExistingRate(importedZone);
+            return recentExistingRate != null ? (DateTime?)recentExistingRate.RateEntity.EED : null;
         }
-
 
         private RateChangeType GetRateChangeType(ImportedZone importedZone)
         {
-            if (importedZone.ChangeType == ZoneChangeType.New)
-                return RateChangeType.New;
-
-            ImportedRate importedRate = importedZone.ImportedRates.First();
-
-            if (importedRate.ChangedExistingRates != null && importedRate.ChangedExistingRates.Count() > 0)
-            {
-                decimal existingRate = importedRate.ChangedExistingRates.First().RateEntity.NormalRate;
-                if (existingRate > importedRate.NormalRate)
-                    return RateChangeType.Decrease;
-                else if (existingRate < importedRate.NormalRate)
-                    return RateChangeType.Increase;
-            }
-
-            return RateChangeType.NotChanged;
+            return GetImportedRate(importedZone).ChangeType;
         }
 
+        private ExistingRate GetRecentExistingRate(ImportedZone importedZone)
+        {
+            return GetImportedRate(importedZone).ProcessInfo.RecentExistingRate;
+        }
+
+        private ImportedRate GetImportedRate(ImportedZone importedZone)
+        {
+            //TODO: change this logic when on import multiple and different rates are allowed
+            return importedZone.ImportedRates.First();
+        }
     }
 }

@@ -68,14 +68,14 @@ namespace TOne.WhS.SupplierPriceList.Business
                 if (existingRatesByZoneName.TryGetValue(importedRate.ZoneName, out matchExistingRates))
                 {
                     bool shouldNotAddRate;
-                    Decimal? recentRateValue;
-                    CloseExistingOverlapedRates(importedRate, matchExistingRates, out shouldNotAddRate, out recentRateValue);
+                    ExistingRate recentExistingRate;
+                    CloseExistingOverlapedRates(importedRate, matchExistingRates, out shouldNotAddRate, out recentExistingRate);
                     if (!shouldNotAddRate)
                     {
-                        if (recentRateValue.HasValue)
+                        if (recentExistingRate != null)
                         {
-                            importedRate.ChangeType = importedRate.NormalRate > recentRateValue.Value ? RateChangeType.Increase : RateChangeType.Decrease;
-                            importedRate.ProcessInfo.RecentRate = recentRateValue;
+                            importedRate.ChangeType = importedRate.NormalRate > recentExistingRate.RateEntity.NormalRate ? RateChangeType.Increase : RateChangeType.Decrease;
+                            importedRate.ProcessInfo.RecentExistingRate = recentExistingRate;
                         }
                         else
                         {
@@ -122,14 +122,14 @@ namespace TOne.WhS.SupplierPriceList.Business
             }
         }
 
-        private void CloseExistingOverlapedRates(ImportedRate importedRate, List<ExistingRate> matchExistingRates, out bool shouldNotAddRate, out Decimal? recentRateValue)
+        private void CloseExistingOverlapedRates(ImportedRate importedRate, List<ExistingRate> matchExistingRates, out bool shouldNotAddRate, out ExistingRate recentExistingRate)
         {
             shouldNotAddRate = false;
-            recentRateValue = null;
+            recentExistingRate = null;
             foreach (var existingRate in matchExistingRates)
             {
-                if (existingRate.RateEntity.BED < importedRate.BED)
-                    recentRateValue = existingRate.RateEntity.NormalRate;
+                if (existingRate.RateEntity.BED <= importedRate.BED)
+                    recentExistingRate = existingRate;
                 if (existingRate.IsOverlapedWith(importedRate))
                 {
                     if (SameRates(importedRate, existingRate))

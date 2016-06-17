@@ -16,11 +16,11 @@ namespace TOne.WhS.SupplierPriceList.Entities
         [Description("New")]
         New = 1,
 
-        [Description("Closed")]
-        Closed = 2,
-
         [Description("Deleted")]
-        Deleted = 3,
+        Deleted = 2,
+
+        [Description("Re-Opened")]
+        ReOpened = 3,
 
         [Description("Renamed")]
         Renamed = 4
@@ -35,8 +35,8 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public ZoneChangeType ChangeTypeZone { get; set; }
         public DateTime ZoneBED { get; set; }
         public DateTime? ZoneEED { get; set; }
-        public decimal CurrentRate { get; set; }
-        public DateTime CurrentRateBED { get; set; }
+        public decimal? CurrentRate { get; set; }
+        public DateTime? CurrentRateBED { get; set; }
         public DateTime? CurrentRateEED { get; set; }
         public decimal? ImportedRate { get; set; }
         public DateTime? ImportedRateBED { get; set; }
@@ -53,8 +53,8 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public ZoneChangeType ChangeTypeZone { get; set; }
         public DateTime ZoneBED { get; set; }
         public DateTime? ZoneEED { get; set; }
-        public decimal CurrentRate { get; set; }
-        public DateTime CurrentRateBED { get; set; }
+        public decimal? CurrentRate { get; set; }
+        public DateTime? CurrentRateBED { get; set; }
         public DateTime? CurrentRateEED { get; set; }
         public decimal? ImportedRate { get; set; }
         public DateTime? ImportedRateBED { get; set; }

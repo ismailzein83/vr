@@ -20,10 +20,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<ImportedCode> importedCodes = ImportedCodes.Get(context);
-            HashSet<string> importedCodesHashSet = ToHashSet(importedCodes.Select(item => item.Code));
-
             IEnumerable<ExistingCode> existingCodes = ExistingCodes.Get(context);
             
+            HashSet<string> importedCodesHashSet = new HashSet<string>(importedCodes.Select(item => item.Code));
             IEnumerable<ExistingCode> notImportedCodes = PrepareNotImportedCodes(existingCodes, importedCodesHashSet);
 
 
@@ -42,13 +41,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             }
 
             return notImportedCodes;
-        }
-
-        private HashSet<T> ToHashSet<T>(IEnumerable<T> list)
-        {
-            HashSet<T> result = new HashSet<T>();
-            result.UnionWith(list);
-            return result;
         }
     }
 }

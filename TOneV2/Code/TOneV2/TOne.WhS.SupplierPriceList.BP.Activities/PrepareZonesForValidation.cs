@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Activities;
+﻿using System.Activities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using System.Linq;
 using System.Collections.Generic;
@@ -31,36 +30,43 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             ZonesByName newAndExistingZones = NewAndExistingZones.Get(context);
             IEnumerable<ExistingZone> existingZones = ExistingZones.Get(context);
 
-            HashSet<string> importedZoneNamesHashSet = ToHashSet(importedZones.Select(item => item.ZoneName));
+            HashSet<string> importedZoneNamesHashSet = new HashSet<string>(importedZones.Select(item => item.ZoneName), StringComparer.InvariantCultureIgnoreCase);
+
+            UpdateImportedZonesInfo(importedZones, newAndExistingZones, existingZones, importedZoneNamesHashSet);
+
             IEnumerable<ExistingZone> notImportedZones = PrepareNotImportedZones(existingZones, importedZoneNamesHashSet);
-            
-            UpdateImportedZonesInfo(importedZones, newAndExistingZones, existingZones);
-            
             NotImportedZones.Set(context, notImportedZones);
         }
 
 
-        private void UpdateImportedZonesInfo(IEnumerable<ImportedZone> importedZones, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones)
+        private void UpdateImportedZonesInfo(IEnumerable<ImportedZone> importedZones, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones, HashSet<string> importedZoneNamesHashSet)
         {
             foreach (ImportedZone importedZone in importedZones)
             {
-                List<IZone> newZones;
-                newAndExistingZones.TryGetValue(importedZone.ZoneName, out newZones);
+                List<IZone> matchedZones;
+                newAndExistingZones.TryGetValue(importedZone.ZoneName, out matchedZones);
 
-                importedZone.NewZones =newZones != null ? newZones.Select(itm => itm as NewZone).ToList() : new List<NewZone>();
-                importedZone.ExistingZones = existingZones.FindAllRecords(item => item.ZoneEntity.Name.Equals(importedZone.ZoneName, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                if(matchedZones != null)
+                    importedZone.NewZones.AddRange(matchedZones.Where(itm => itm is NewZone).Select(itm => itm as NewZone).ToList());
+
+                IEnumerable<ExistingZone> matchedExistingZones = existingZones.FindAllRecords(item => item.ZoneEntity.Name.Equals(importedZone.ZoneName, StringComparison.InvariantCultureIgnoreCase));
+                importedZone.ExistingZones.AddRange(matchedExistingZones);
+                
                 importedZone.BED = importedZone.ImportedCodes.Min(item => item.BED);
-                FillZoneChangeTypeAndRecentZoneName(importedZone, existingZones);
+                importedZone.ChangeType = GetZoneChangeType(importedZone, existingZones, importedZoneNamesHashSet);
+                importedZone.EED = (importedZone.ChangeType == ZoneChangeType.NotChanged) ? importedZone.ExistingZones.Select(x => x.EED).VRMinimumDate() : null;
             }
         }
 
-        private IEnumerable<ExistingZone> PrepareNotImportedZones(IEnumerable<ExistingZone> existingZones, HashSet<string> importedZoneNames)
+        private IEnumerable<ExistingZone> PrepareNotImportedZones(IEnumerable<ExistingZone> existingZones, HashSet<string> importedZoneNamesHashSet)
         {
             List<ExistingZone> notImportedZones = new List<ExistingZone>();
 
             foreach (ExistingZone existingZone in existingZones)
             {
-                if (existingZone.ChangedZone != null && !importedZoneNames.Contains(existingZone.ZoneEntity.Name))
+                string zoneName = existingZone.ZoneEntity.Name;
+                //To consider a zone as not imported, it should neither exist in the list of imported zones nor in the list of renamed zones
+                if (existingZone.ChangedZone != null && !importedZoneNamesHashSet.Contains(zoneName, StringComparer.InvariantCultureIgnoreCase))
                     notImportedZones.Add(existingZone);
             }
 
@@ -68,45 +74,31 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         }
 
 
-        private void FillZoneChangeTypeAndRecentZoneName(ImportedZone importedZone, IEnumerable<ExistingZone> existingZones)
+        private ZoneChangeType GetZoneChangeType(ImportedZone importedZone, IEnumerable<ExistingZone> existingZones, HashSet<string> importedZoneNamesHashSet)
         {
-
-            if (importedZone.ImportedCodes.All(item => item.ChangeType == CodeChangeType.Moved))
+            if(importedZone.ImportedCodes.Any(itm => itm.ChangeType == CodeChangeType.Moved))
             {
-                string recentZoneName = importedZone.ImportedCodes.First().ProcessInfo.RecentZoneName;
-                ExistingZone existingClosedZone = existingZones.FindRecord(item => item.Name.Equals(recentZoneName, StringComparison.InvariantCultureIgnoreCase));
+                //This zone can be a considered as renamed but with specific conditions, first let us take the zone name of the first moved code as original zone name
+                IEnumerable<ImportedCode> allMovedCodes = importedZone.ImportedCodes.Where(itm => itm.ChangeType == CodeChangeType.Moved);
+                string originalZoneName = allMovedCodes.First().ProcessInfo.RecentZoneName;
                 
-                //check if all importedCodes are moved from same zone and if all codes in old zone are closed and there's no newCodes and importedZone must be newZone
-                if(importedZone.ImportedCodes.All(item => item.ProcessInfo.RecentZoneName.Equals(recentZoneName, StringComparison.InvariantCultureIgnoreCase))
-                    && existingClosedZone.ExistingCodes.All(item => item.EED.HasValue) && existingClosedZone.NewCodes.Count() == 0
-                    && existingZones.FindRecord(item => item.ZoneEntity.Name.Equals(importedZone.ZoneName, StringComparison.InvariantCultureIgnoreCase)) == null)
+                //if all moved codes are coming from the same origine & this original zone name does not exist anymore in imported zones list
+                //then consider this as a renamed zone, otherwise the zone is considered as a new zone
+                if (allMovedCodes.All(itm => itm.ProcessInfo.RecentZoneName == originalZoneName) && !importedZoneNamesHashSet.Contains(originalZoneName, StringComparer.InvariantCultureIgnoreCase))
                 {
-                        importedZone.ChangeType = ZoneChangeType.Renamed;
-                        importedZone.RecentZoneName = recentZoneName;
+                    importedZone.RecentZoneName = originalZoneName;
+                    return ZoneChangeType.Renamed;
                 }
-
-                else if (importedZone.NewZones != null && importedZone.NewZones.Count() > 0 && importedZone.ExistingZones.All(item => item.ExistingCodes.All(itm => itm.EED.HasValue) && item.ExistingCodes.Any(itm => itm.ChangedCode == null)))
-                    importedZone.ChangeType = ZoneChangeType.New;
+                    
             }
 
-            else if (importedZone.NewZones != null && importedZone.NewZones.Count() > 0 && importedZone.ExistingZones.All(item => item.ExistingCodes.All(itm => itm.EED.HasValue) && item.ExistingCodes.Any(itm=> itm.ChangedCode == null)))
-                importedZone.ChangeType= ZoneChangeType.New;
+            if (importedZone.NewZones.Count() > 0 && importedZone.ExistingZones.Count == 0)
+                return ZoneChangeType.New;
 
-            else if (importedZone.ExistingZones != null && importedZone.ExistingZones.Any(item => item.ChangedZone != null))
-                importedZone.ChangeType = ZoneChangeType.Closed;
+            if (importedZone.NewZones.Count() > 0 && importedZone.ExistingZones.Count > 0)
+                return ZoneChangeType.ReOpened;
 
-            else
-                importedZone.ChangeType =  ZoneChangeType.NotChanged;
-
-        }
-
-
-
-        private HashSet<T> ToHashSet<T>(IEnumerable<T> list)
-        {
-            HashSet<T> result = new HashSet<T>();
-            result.UnionWith(list);
-            return result;
+            return ZoneChangeType.NotChanged;
         }
     }
 }

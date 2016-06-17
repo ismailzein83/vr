@@ -16,13 +16,31 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public List<ImportedRate> ImportedRates { get; set; }
 
-        public List<NewZone> NewZones { get; set; }
+        private List<NewZone> _newZones = new List<NewZone>();
 
-        public List<ExistingZone> ExistingZones { get; set; }
+        public List<NewZone> NewZones
+        { 
+            get
+            {
+                return this._newZones;
+            }
+        }
+
+        private List<ExistingZone> _existingZones = new List<ExistingZone>();
+
+        public List<ExistingZone> ExistingZones 
+        { 
+            get
+            {
+                return this._existingZones;
+            }
+        }
 
         public string RecentZoneName { get; set; }
 
         public DateTime BED { get; set; }
+
+        public DateTime? EED { get; set; }
         
         public ZoneChangeType ChangeType { get; set; }
 
