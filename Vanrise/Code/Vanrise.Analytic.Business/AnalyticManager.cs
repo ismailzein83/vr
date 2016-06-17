@@ -90,7 +90,7 @@ namespace Vanrise.Analytic.Business
                 {
                     foreach (var dimToCalculate in dimensionsToCalculate)
                     {
-                        var getDimensionValueContext = new GetDimensionValueContext(sqlRecord);
+                        var getDimensionValueContext = new GetDimensionValueContext(analyticTableQueryContext, sqlRecord);
                         sqlRecord.GroupingValuesByDimensionName.Add(dimToCalculate.Name, new DBAnalyticRecordGroupingValue
                         {
                             Value = dimToCalculate.Evaluator.GetDimensionValue(getDimensionValueContext)

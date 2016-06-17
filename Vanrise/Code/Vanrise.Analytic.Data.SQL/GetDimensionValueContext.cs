@@ -1,27 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Analytic.Entities;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
+//using Vanrise.Analytic.Entities;
 
-namespace Vanrise.Analytic.Data.SQL
-{
-    public class GetDimensionValueContext : IGetDimensionValueContext
-    {
-        DBAnalyticRecord _record;
-        public GetDimensionValueContext(DBAnalyticRecord record)
-        {
-            if (record == null)
-                throw new NullReferenceException("record");
-            _record = record;
-        }
-        public dynamic GetDimensionValue(string dimensionName)
-        {
-            DBAnalyticRecordGroupingValue groupingValue;
-            if (!_record.GroupingValuesByDimensionName.TryGetValue(dimensionName, out groupingValue))
-                throw new NullReferenceException(String.Format("groupingValue. dimName '{0}'", dimensionName));
-            return groupingValue.Value;
-        }
-    }
-}
+//namespace Vanrise.Analytic.Data.SQL
+//{
+//    public class GetDimensionValueContext : IGetDimensionValueContext
+//    {
+//        DBAnalyticRecord _record;
+//        IAnalyticTableQueryContext _analyticTableQueryContext;
+//        public GetDimensionValueContext(IAnalyticTableQueryContext analyticTableQueryContext, DBAnalyticRecord record)
+//        {
+//            if (analyticTableQueryContext == null)
+//                throw new ArgumentNullException("analyticTableQueryContext");
+//            if (analyticTableQueryContext.Query == null)
+//                throw new ArgumentNullException("analyticTableQueryContext.Query");
+//            if (record == null)
+//                throw new NullReferenceException("record");
+//            _record = record;
+//            _analyticTableQueryContext = analyticTableQueryContext;
+//        }
+//        public dynamic GetDimensionValue(string dimensionName)
+//        {
+//            DBAnalyticRecordGroupingValue groupingValue;
+//            if (!_record.GroupingValuesByDimensionName.TryGetValue(dimensionName, out groupingValue))
+//                throw new NullReferenceException(String.Format("groupingValue. dimName '{0}'", dimensionName));
+//            return groupingValue.Value;
+//        }
+
+
+//        public DateTime GetQueryFromTime()
+//        {
+//            return _analyticTableQueryContext.Query.FromTime;
+//        }
+
+//        public DateTime GetQueryToTime()
+//        {
+//            return _analyticTableQueryContext.Query.ToTime.HasValue ? _analyticTableQueryContext.Query.ToTime.Value : DateTime.Now;
+//        }
+
+//    }
+//}

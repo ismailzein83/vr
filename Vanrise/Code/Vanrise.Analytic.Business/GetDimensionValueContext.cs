@@ -10,11 +10,17 @@ namespace Vanrise.Analytic.Business
     public class GetDimensionValueContext : IGetDimensionValueContext
     {
         DBAnalyticRecord _record;
-        public GetDimensionValueContext(DBAnalyticRecord record)
+        IAnalyticTableQueryContext _analyticTableQueryContext;
+        public GetDimensionValueContext(IAnalyticTableQueryContext analyticTableQueryContext, DBAnalyticRecord record)
         {
+            if (analyticTableQueryContext == null)
+                throw new ArgumentNullException("analyticTableQueryContext");
+            if (analyticTableQueryContext.Query == null)
+                throw new ArgumentNullException("analyticTableQueryContext.Query");
             if (record == null)
                 throw new NullReferenceException("record");
             _record = record;
+            _analyticTableQueryContext = analyticTableQueryContext;
         }
         public dynamic GetDimensionValue(string dimensionName)
         {
@@ -22,6 +28,16 @@ namespace Vanrise.Analytic.Business
             if (!_record.GroupingValuesByDimensionName.TryGetValue(dimensionName, out groupingValue))
                 throw new NullReferenceException(String.Format("groupingValue. dimName '{0}'", dimensionName));
             return groupingValue.Value;
+        }
+        
+        public DateTime GetQueryFromTime()
+        {
+            return _analyticTableQueryContext.Query.FromTime;
+        }
+
+        public DateTime GetQueryToTime()
+        {
+            return _analyticTableQueryContext.Query.ToTime.HasValue ? _analyticTableQueryContext.Query.ToTime.Value : DateTime.Now;
         }
     }
 }
