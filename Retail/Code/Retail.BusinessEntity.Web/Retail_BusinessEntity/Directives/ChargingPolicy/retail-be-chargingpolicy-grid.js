@@ -35,14 +35,17 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
 
                 for (var i = 0; i < dataItem.RuleDefinitions.length; i++) {
                     var ruleDefinition = dataItem.RuleDefinitions[i];
-                    var menuAction = buildMenuAction(ruleDefinition);
+                    var menuAction = buildMenuAction(ruleDefinition, i);
                     menuActions.push(menuAction);
                 }
 
-                function buildMenuAction(ruleDefinition) {
+                function buildMenuAction(ruleDefinition, tabIndex) {
                     var menuAction = {};
                     menuAction.name = 'Add ' + ruleDefinition.Title;
-                    menuAction.clicked = function (dataItem) {
+                    menuAction.clicked = function (dataItem)
+                    {
+                        dataItem.drillDownExtensionObject.drillDownDirectiveTabs[tabIndex].setTabSelected(dataItem);
+
                         var onGenericRuleAdded = function (addedGenericRule) {
                             dataItem['ruleGrid' + ruleDefinition.RuleDefinitionId + 'API'].onGenericRuleAdded(addedGenericRule);
                         };
