@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class ServiceTypeQuery
+    public class PackageServiceQuery
     {
-        public string Name { get; set; }
+        public int PackageId { get; set; }
     }
 }

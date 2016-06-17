@@ -91,6 +91,7 @@
     <Compile Include="ChargingPolicy\ChargingPolicyParts\Types\ChargingPolicyDurationTariff.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicy.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicySettings.cs" />
+    <Compile Include="Package\PackageServiceQuery.cs" />
     <Compile Include="Package\ServicePackageItemConfig.cs" />
     <Compile Include="ServiceType\ServiceType.cs" />
     <Compile Include="NewBEs\ServiceVolumeSettings.cs" />

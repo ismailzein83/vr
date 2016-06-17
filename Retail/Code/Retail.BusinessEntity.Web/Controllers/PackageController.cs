@@ -10,8 +10,8 @@ using Vanrise.Web.Base;
 
 namespace Retail.BusinessEntity.Web.Controllers
 {
-   [RoutePrefix(Constants.ROUTE_PREFIX + "Package")]
-   [JSONWithTypeAttribute]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "Package")]
+    [JSONWithTypeAttribute]
     public class PackageController : BaseAPIController
     {
         [HttpPost]
@@ -46,6 +46,7 @@ namespace Retail.BusinessEntity.Web.Controllers
             PackageManager manager = new PackageManager();
             return manager.AddPackage(package);
         }
+
         [HttpPost]
         [Route("UpdatePackage")]
         public UpdateOperationOutput<PackageDetail> UpdatePackage(Package package)
@@ -53,6 +54,7 @@ namespace Retail.BusinessEntity.Web.Controllers
             PackageManager manager = new PackageManager();
             return manager.UpdatePackage(package);
         }
+
         [HttpGet]
         [Route("GetServicesTemplateConfigs")]
         public IEnumerable<ServiceTemplateConfig> GetServicesTemplateConfigs()
@@ -60,6 +62,7 @@ namespace Retail.BusinessEntity.Web.Controllers
             PackageManager manager = new PackageManager();
             return manager.GetServicesTemplateConfigs();
         }
+
         [HttpGet]
         [Route("GetVoiceTypesTemplateConfigs")]
         public IEnumerable<ServiceVoiceTypeTemplateConfig> GetVoiceTypesTemplateConfigs()
@@ -67,12 +70,21 @@ namespace Retail.BusinessEntity.Web.Controllers
             PackageManager manager = new PackageManager();
             return manager.GetVoiceTypesTemplateConfigs();
         }
+
         [HttpGet]
         [Route("GetServicePackageItemConfigs")]
         public IEnumerable<ServicePackageItemConfig> GetServicePackageItemConfigs()
         {
             PackageManager manager = new PackageManager();
             return manager.GetServicePackageItemConfigs();
+        }
+
+        [HttpPost]
+        [Route("GetFilteredPackageServices")]
+        public object GetFilteredPackageServices(Vanrise.Entities.DataRetrievalInput<PackageServiceQuery> input)
+        {
+            PackageManager manager = new PackageManager();
+            return GetWebResponse(input, manager.GetFilteredPackageServices(input));
         }
     }
 }

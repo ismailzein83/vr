@@ -211,6 +211,7 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\SwitchIntegrations\Templates\RetailBESwitchIntegrationRadiusTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageItem\retail-be-package-packageitem-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\PackageItem\retail-be-package-packageitem-volume.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageItem\retail-be-package-packageservice-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageItem\Templates\PackageItemEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\PackageItem\Templates\ServicePackageChargingPolicyItemTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\PackageItem\Templates\ServicePackageVolumeItemTemplate.html" />
@@ -240,6 +241,7 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\retail-be-servicetype-chargingpolicy-partseditor.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\retail-be-servicetype-chargingpolicy-parttype.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\Templates\ChargingPolicyPartsEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageItem\Templates\PackageServiceGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-service-grid-editor.js" />

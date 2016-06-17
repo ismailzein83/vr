@@ -112,24 +112,16 @@ namespace Retail.BusinessEntity.Business
             return templateConfigManager.GetExtensionConfigurations<ServicePackageItemConfig>(ServicePackageItemConfig.EXTENSION_TYPE);
         }
 
-        public IEnumerable<int> GetServiceTypeIds(int packageId)
+        public Vanrise.Entities.IDataRetrievalResult<PackageServiceDetail> GetFilteredPackageServices(Vanrise.Entities.DataRetrievalInput<PackageServiceQuery> input)
         {
-            Package package = this.GetPackage(packageId);
-            if (package != null && package.Settings != null && package.Settings.Services != null && package.Settings.Services.Count() > 0)
-                return package.Settings.Services.MapRecords(x => x.ServiceTypeId);
-            return null;
-        }
-
-        public IEnumerable<int> GetServiceTypeIds(IEnumerable<int> packageIds)
-        {
-            var serviceTypeIds = new List<int>();
-            foreach (int packageId in packageIds)
-            {
-                IEnumerable<int> packageServiceTypeIds = this.GetServiceTypeIds(packageId);
-                if (packageServiceTypeIds != null)
-                    serviceTypeIds.AddRange(packageServiceTypeIds);
-            }
-            return (serviceTypeIds.Count > 0) ? serviceTypeIds : null;
+            Package package = this.GetPackage(input.Query.PackageId);
+            if (package == null)
+                throw new NullReferenceException("package");
+            if (package.Settings == null)
+                throw new NullReferenceException("package.Settings");
+            if (package.Settings.Services == null)
+                throw new NullReferenceException("package.Settings.Services");
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, package.Settings.Services.ToBigResult(input, null, PackageServiceDetailMapper));
         }
 
         #endregion
@@ -148,6 +140,7 @@ namespace Retail.BusinessEntity.Business
         #endregion
 
         #region  Mappers
+
         private PackageInfo PackageInfoMapper(Package package)
         {
             return new PackageInfo()
@@ -156,12 +149,26 @@ namespace Retail.BusinessEntity.Business
                 Name = package.Name,
             };
         }
+
         private PackageDetail PackageDetailMapper(Package package)
         {
             PackageDetail packageDetail = new PackageDetail();
             packageDetail.Entity = package;
             return packageDetail;
         }
+
+        private PackageServiceDetail PackageServiceDetailMapper(PackageItem packageItem)
+        {
+            var serviceTypeManager = new ServiceTypeManager();
+            ChargingPolicyDefinitionSettings settings = serviceTypeManager.GetServiceTypeChargingPolicyDefinitionSettings(packageItem.ServiceTypeId);
+            return new PackageServiceDetail()
+            {
+                Entity = packageItem,
+                ServiceTypeName = serviceTypeManager.GetServiceTypeName(packageItem.ServiceTypeId),
+                RuleDefinitions = (settings != null) ? settings.RuleDefinitions : null
+            };
+        }
+
         #endregion
 
         #region Private Classes

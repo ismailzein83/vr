@@ -19,21 +19,11 @@ namespace Retail.BusinessEntity.Business
         public Vanrise.Entities.IDataRetrievalResult<ServiceTypeDetail> GetFilteredServiceTypes(Vanrise.Entities.DataRetrievalInput<ServiceTypeQuery> input)
         {
             Dictionary<int, ServiceType> cachedServiceTypes = this.GetCachedServiceTypes();
-            IEnumerable<int> serviceTypeIds = this.GetServiceTypeIdsByPackageIds(input.Query.PackageIds);
 
             Func<ServiceType, bool> filterExpression = (serviceType) =>
-                (input.Query.Name == null || serviceType.Name.ToLower().Contains(input.Query.Name.ToLower())) &&
-                (serviceTypeIds == null || serviceTypeIds.Contains(serviceType.ServiceTypeId));
+                (input.Query.Name == null || serviceType.Name.ToLower().Contains(input.Query.Name.ToLower()));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedServiceTypes.ToBigResult(input, filterExpression, ServiceTypeDetailMapper));
-        }
-
-        private IEnumerable<int> GetServiceTypeIdsByPackageIds(IEnumerable<int> packageIds)
-        {
-            if (packageIds == null || packageIds.Count() == 0)
-                return null;
-            var packageManager = new PackageManager();
-            return packageManager.GetServiceTypeIds(packageIds);
         }
 
         public IEnumerable<ServiceTypeInfo> GetServiceTypesInfo()

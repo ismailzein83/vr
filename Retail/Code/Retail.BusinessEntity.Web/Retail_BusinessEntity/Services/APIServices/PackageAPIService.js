@@ -53,6 +53,10 @@
 
         }
         
+        function GetFilteredPackageServices(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetFilteredPackageServices"), input);
+        }
+
         return ({
             GetPackagesInfo: GetPackagesInfo,
             GetFilteredPackages: GetFilteredPackages,
@@ -63,7 +67,8 @@
             HasAddPackagePermission: HasAddPackagePermission,
             GetServicesTemplateConfigs: GetServicesTemplateConfigs,
             GetVoiceTypesTemplateConfigs: GetVoiceTypesTemplateConfigs,
-            GetServicePackageItemConfigs: GetServicePackageItemConfigs
+            GetServicePackageItemConfigs: GetServicePackageItemConfigs,
+            GetFilteredPackageServices: GetFilteredPackageServices
         });
     }
 
