@@ -108,7 +108,7 @@ namespace TOne.WhS.DBSync.Business
                     CarrierAccountSettings = carrierAccountSettings,
                     CarrierProfileId = carrierProfile.CarrierProfileId,
                     CustomerSettings = carrierAccountCustomerSettings,
-                    NameSuffix = (String.IsNullOrEmpty(sourceItem.NameSuffix) ? carrierProfile.SourceId : sourceItem.NameSuffix),
+                    NameSuffix = sourceItem.NameSuffix,
                     SellingNumberPlanId = Context.DefaultSellingNumberPlanId,
                     SupplierSettings = carrierAccountSupplierSettings,
                     SourceId = sourceItem.SourceId
