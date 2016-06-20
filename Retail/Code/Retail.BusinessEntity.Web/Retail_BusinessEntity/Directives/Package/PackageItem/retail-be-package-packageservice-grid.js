@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBePackagePackageserviceGrid', ['Retail_BE_PackageAPIService', 'VR_GenericData_GenericRule', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (Retail_BE_PackageAPIService, VR_GenericData_GenericRule, UtilsService, VRUIUtilsService, VRNotificationService) {
+app.directive('retailBePackagePackageserviceGrid', ['Retail_BE_PackageAPIService', 'Retail_BE_ServiceTypeService', 'UtilsService', 'VRNotificationService', function (Retail_BE_PackageAPIService, Retail_BE_ServiceTypeService, UtilsService, VRNotificationService) {
     return {
         restrict: 'E',
         scope: {
@@ -29,38 +29,10 @@ app.directive('retailBePackagePackageserviceGrid', ['Retail_BE_PackageAPIService
 
             $scope.scopeModel.menuActions = function (dataItem) {
                 var menuActions = [];
-
-                if (dataItem.RuleDefinitions == null)
-                    return menuActions;
-
-                for (var i = 0; i < dataItem.RuleDefinitions.length; i++) {
-                    var ruleDefinition = dataItem.RuleDefinitions[i];
-                    var menuAction = buildMenuAction(ruleDefinition, i);
-                    menuActions.push(menuAction);
+                if (dataItem.menuActions != null) {
+                    for (var i = 0; i < dataItem.menuActions.length; i++)
+                        menuActions.push(dataItem.menuActions[i]);
                 }
-
-                function buildMenuAction(ruleDefinition, tabIndex) {
-                    var menuAction = {};
-                    menuAction.name = 'Add ' + ruleDefinition.Title;
-                    menuAction.clicked = function (dataItem)
-                    {
-                        dataItem.drillDownExtensionObject.drillDownDirectiveTabs[tabIndex].setTabSelected(dataItem);
-
-                        var onGenericRuleAdded = function (addedGenericRule) {
-                            dataItem['ruleGrid' + ruleDefinition.RuleDefinitionId + 'API'].onGenericRuleAdded(addedGenericRule);
-                        };
-                        var preDefinedData = {
-                            criteriaFieldsValues: {
-                                'Package': { Values: [packageId] },
-                                'ServiceType': { Values: [dataItem.Entity.ServiceTypeId] }
-                            }
-                        };
-                        var accessibility = buildAccessibilityObj();
-                        VR_GenericData_GenericRule.addGenericRule(ruleDefinition.RuleDefinitionId, onGenericRuleAdded, preDefinedData, accessibility);
-                    };
-                    return menuAction;
-                }
-
                 return menuActions;
             };
 
@@ -74,7 +46,7 @@ app.directive('retailBePackagePackageserviceGrid', ['Retail_BE_PackageAPIService
                     if (response && response.Data) {
                         for (var i = 0; i < response.Data.length; i++) {
                             var dataItem = response.Data[i];
-                            setDrillDownTabs(dataItem);
+                            Retail_BE_ServiceTypeService.defineServiceTypeRuleTabsAndMenuActions(dataItem, gridAPI, buildCriteriaFieldValues(dataItem));
                         }
                     }
                     onResponseReady(response);
@@ -99,62 +71,10 @@ app.directive('retailBePackagePackageserviceGrid', ['Retail_BE_PackageAPIService
                 ctrl.onReady(api);
         }
 
-        function setDrillDownTabs(dataItem) {
-            var drillDownTabs = buildDrillDownTabs(dataItem.RuleDefinitions);
-            var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI, $scope.scopeModel.menuActions);
-            drillDownManager.setDrillDownExtensionObject(dataItem);
-        }
-        function buildDrillDownTabs(ruleDefinitions) {
-            var drillDownTabs = [];
-
-            if (ruleDefinitions == null)
-                return drillDownTabs;
-
-            for (var i = 0; i < ruleDefinitions.length; i++) {
-                var drillDownTab = buildDrillDownTab(ruleDefinitions[i]);
-                drillDownTabs.push(drillDownTab);
-            }
-
-            function buildDrillDownTab(ruleDefinition) {
-                var drillDownTab = {};
-
-                drillDownTab.title = ruleDefinition.Title;
-                drillDownTab.directive = 'vr-genericdata-genericrule-grid';
-
-                drillDownTab.loadDirective = function (directiveAPI, dataItem) {
-                    var propertyName = 'ruleGrid' + ruleDefinition.RuleDefinitionId + 'API';
-                    dataItem[propertyName] = directiveAPI;
-                    var ruleGridQuery = {
-                        RuleDefinitionId: ruleDefinition.RuleDefinitionId,
-                        CriteriaFieldValues: {
-                            'Package': {
-                                $type: 'Vanrise.GenericData.MainExtensions.DataRecordFields.Filters.BusinessEntityFieldTypeFilter,Vanrise.GenericData.MainExtensions',
-                                BusinessEntityIds: [packageId]
-                            },
-                            'ServiceType': {
-                                $type: 'Vanrise.GenericData.MainExtensions.DataRecordFields.Filters.BusinessEntityFieldTypeFilter,Vanrise.GenericData.MainExtensions',
-                                BusinessEntityIds: [dataItem.Entity.ServiceTypeId]
-                            }
-                        },
-                        accessibility: buildAccessibilityObj(),
-                        criteriaFieldsToHide: ['ServiceType', 'ChargingPolicy', 'Package']
-                    };
-                    return directiveAPI.loadGrid(ruleGridQuery);
-                };
-
-                return drillDownTab;
-            }
-
-            return drillDownTabs;
-        }
-        function buildAccessibilityObj() {
+        function buildCriteriaFieldValues(dataItem) {
             return {
-                criteriaAccessibility: {
-                    'ServiceType': { notAccessible: true },
-                    'ChargingPolicy': { notAccessible: true },
-                    'Package': { notAccessible: true }
-                },
-                settingNotAccessible: false
+                'Package': packageId,
+                'ServiceType': dataItem.Entity.ServiceTypeId
             };
         }
     }
