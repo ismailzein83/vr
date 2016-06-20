@@ -36,6 +36,13 @@ namespace Retail.BusinessEntity.Web.Controllers
             return _manager.GetAccountTypesInfo();
         }
 
+        [HttpGet]
+        [Route("GetAccountTypePartDefinitionExtensionConfigs")]
+        public IEnumerable<AccountPartDefinitionConfig> GetAccountTypePartDefinitionExtensionConfigs()
+        {
+            return _manager.GetAccountTypePartDefinitionExtensionConfigs();
+        }
+
         [HttpPost]
         [Route("AddAccountType")]
         public Vanrise.Entities.InsertOperationOutput<AccountTypeDetail> AddAccountType(AccountType2 accountType)

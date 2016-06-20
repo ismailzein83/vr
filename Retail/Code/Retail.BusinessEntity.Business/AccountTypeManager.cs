@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Business
@@ -33,6 +34,12 @@ namespace Retail.BusinessEntity.Business
         public IEnumerable<AccountTypeInfo> GetAccountTypesInfo()
         {
             return this.GetCachedAccountTypes().MapRecords(AccountTypeInfoMapper).OrderBy(x => x.Title);
+        }
+
+        public IEnumerable<AccountPartDefinitionConfig> GetAccountTypePartDefinitionExtensionConfigs()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<AccountPartDefinitionConfig>(AccountPartDefinitionConfig.EXTENSION_TYPE);
         }
 
         public Vanrise.Entities.InsertOperationOutput<AccountTypeDetail> AddAccountType(AccountType2 accountType)

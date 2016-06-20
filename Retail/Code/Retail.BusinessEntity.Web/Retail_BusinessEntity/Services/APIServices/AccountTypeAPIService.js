@@ -24,6 +24,10 @@
             });
         }
 
+        function GetAccountTypePartDefinitionExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountTypePartDefinitionExtensionConfigs"));
+        }
+
         function AddAccountType(accountType) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddAccountType'), accountType);
         }
@@ -48,6 +52,7 @@
             GetFilteredAccountTypes: GetFilteredAccountTypes,
             GetAccountType: GetAccountType,
             GetAccountTypesInfo: GetAccountTypesInfo,
+            GetAccountTypePartDefinitionExtensionConfigs: GetAccountTypePartDefinitionExtensionConfigs,
             AddAccountType: AddAccountType,
             UpdateAccountType: UpdateAccountType,
             HasViewAccountTypesPermission: HasViewAccountTypesPermission,
