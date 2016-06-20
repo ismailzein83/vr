@@ -47,7 +47,7 @@
 
                 ctrl.addAccountPart = function () {
                     var onAccountPartDefinitionAdded = function (accountPart) {
-                        ctrl.accountParts.push(accountPart);
+                        ctrl.accountParts.push({ Entity: accountPart });
                     }
                     Retail_BE_AccountTypeService.addAccountPartDefinition(onAccountPartDefinitionAdded);
                 }
@@ -86,7 +86,7 @@
             }
 
             function defineMenuActions() {
-                ctrl.servicesGridMenuActions = [{
+                ctrl.accountPartsGridMenuActions = [{
                     name: 'Edit',
                     clicked: editAccountType
                 }];

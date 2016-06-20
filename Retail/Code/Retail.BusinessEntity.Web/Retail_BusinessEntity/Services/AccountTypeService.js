@@ -32,9 +32,36 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountType/AccountTypeEditor.html', parameters, settings);
         };
 
+        function addAccountPartDefinition(onAccountPartDefinitionAdded) {
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onAccountPartDefinitionAdded = onAccountPartDefinitionAdded
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountType/AccountPartDefinitionEditor.html', null, settings);
+        };
+
+        function editAccountPartDefinition(accountPartDefinitionObj, onAccountPartDefinitionUpdated) {
+            var parameters = {
+                accountPartDefinitionEntity: accountPartDefinitionObj
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onAccountPartDefinitionUpdated = onAccountPartDefinitionUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountType/AccountPartDefinitionEditor.html', parameters, settings);
+        };
+
+
         return {
             addAccountType: addAccountType,
-            editAccountType: editAccountType
+            editAccountType: editAccountType,
+            editAccountPartDefinition: editAccountPartDefinition,
+            addAccountPartDefinition: addAccountPartDefinition
         };
     }
 

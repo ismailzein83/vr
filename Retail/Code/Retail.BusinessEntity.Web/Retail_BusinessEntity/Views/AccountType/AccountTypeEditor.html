@@ -14,15 +14,11 @@
                 </vr-tab>
                 <vr-tab header="'Settings'">
                     <vr-row>
+                        <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady" normal-col-num="6" ismultipleselection></retail-be-accounttype-selector>
                         <vr-columns width="1/2row">
                             <vr-switch label="Can Be Root Account" value="scopeModel.canBeRootAccount"></vr-switch>
                         </vr-columns>
-                        <vr-columns width="1/2row">
-                            <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"></retail-be-accounttype-selector>
-                        </vr-columns>
-                        <vr-columns width="fullrow">
-                            <retail-be-accounttype-part-definition-editor on-ready="scopeModel.onAccountTypePartDefinitionReady"></retail-be-accounttype-part-definition-editor>
-                        </vr-columns>
+                        <retail-be-accounttype-part-definition-editor on-ready="scopeModel.onAccountTypePartDefinitionReady"></retail-be-accounttype-part-definition-editor>
                     </vr-row>
                 </vr-tab>
             </vr-tabs>

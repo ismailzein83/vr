@@ -7,8 +7,7 @@
     function AccountPartDefinitionEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountPartAvailabilityOptionsEnum, Retail_BE_AccountPartRequiredOptionsEnum) {
         var isEditMode;
 
-        var partEntity;
-        var context;
+        var accountPartDefinitionEntity;
         var accountPartDefinitionAPI;
         var accountPartDefinitionReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -20,11 +19,10 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
-                partEntity = parameters.partEntity;
-                context = parameters.context;
+                accountPartDefinitionEntity = parameters.accountPartDefinitionEntity;
             }
 
-            isEditMode = (partEntity != undefined);
+            isEditMode = (accountPartDefinitionEntity != undefined);
         }
 
         function defineScope() {
@@ -56,7 +54,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadAccountPartDefinitionTypes]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle,loadStaticData, loadAccountPartDefinitionTypes]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -66,15 +64,26 @@
         function loadAccountPartDefinitionTypes() {
             var loadAccountPartDefinitionPromiseDeferred = UtilsService.createPromiseDeferred();
             accountPartDefinitionReadyDeferred.promise.then(function () {
-                var payloadDirective = { context: context, accountPartDefinition: partEntity };
+                var payloadDirective;
+                if(accountPartDefinitionEntity !=undefined)
+                    payloadDirective = { partDefinitionSettings: accountPartDefinitionEntity.Settings };
                 VRUIUtilsService.callDirectiveLoad(accountPartDefinitionAPI, payloadDirective, loadAccountPartDefinitionPromiseDeferred);
             });
             return loadAccountPartDefinitionPromiseDeferred.promise;
         }
 
+        function loadStaticData()
+        {
+            if(accountPartDefinitionEntity !=undefined)
+            {
+                $scope.scopeModel.partUniqueName = accountPartDefinitionEntity.PartUniqueName;
+                $scope.scopeModel.selectedAccountPartAvailability = UtilsService.getItemByVal($scope.scopeModel.accountPartAvailability, accountPartDefinitionEntity.AvailabilitySettings, "value");
+                $scope.scopeModel.selectedAccountPartRequiredOptions = UtilsService.getItemByVal($scope.scopeModel.accountPartRequiredOptions, accountPartDefinitionEntity.RequiredSettings, "value");
+            }
+        }
         function setTitle() {
             if (isEditMode) {
-                var partUniqueName = (partEntity != undefined) ? partEntity.PartUniqueName : undefined;
+                var partUniqueName = (accountPartDefinitionEntity != undefined) ? accountPartDefinitionEntity.PartUniqueName : undefined;
                 $scope.title = UtilsService.buildTitleForUpdateEditor(partUniqueName, 'Account Part Definition');
             }
             else {
@@ -104,10 +113,8 @@
                 PartUniqueName: $scope.scopeModel.partUniqueName,
                 AvailabilitySettings: $scope.scopeModel.selectedAccountPartAvailability.value,
                 RequiredSettings: $scope.scopeModel.selectedAccountPartRequiredOptions.value,
-            }
-
-            var accountPartDefinitionObj = accountPartDefinitionAPI.getData();
-
+                Settings: accountPartDefinitionAPI.getData()
+            };
             return accountPartDefinitionObj;
         }
     }

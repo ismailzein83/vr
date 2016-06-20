@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccounttypeGrid', ['Retail_BE_AccountTypeAPIService', 'Retail_BE_AccountService', 'VRNotificationService', function (Retail_BE_AccountTypeAPIService, Retail_BE_AccountService, VRNotificationService) {
+app.directive('retailBeAccounttypeGrid', ['Retail_BE_AccountTypeAPIService', 'Retail_BE_AccountTypeService', 'VRNotificationService', function (Retail_BE_AccountTypeAPIService, Retail_BE_AccountTypeService, VRNotificationService) {
     return {
         restrict: 'E',
         scope: {
@@ -67,7 +67,7 @@ app.directive('retailBeAccounttypeGrid', ['Retail_BE_AccountTypeAPIService', 'Re
             var onAccountTypeUpdated = function (updatedAccountType) {
                 gridAPI.itemUpdated(updatedAccountType);
             };
-            Retail_BE_AccountService.editAccount(accountType.Entity.AccountTypeId, onAccountTypeUpdated);
+            Retail_BE_AccountTypeService.editAccountType(accountType.Entity.AccountTypeId, onAccountTypeUpdated);
         }
         function hasEditAccountTypePermission() {
             return Retail_BE_AccountTypeAPIService.HasUpdateAccountTypePermission();

@@ -196,7 +196,7 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountType\retail-be-accounttype-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountType\retail-be-accounttype-part-definition-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountType\retail-be-accounttype-selector.js" />
-    <Content Include="Retail_BusinessEntity\Directives\AccountType\retail-be-accountype-part-definition.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountType\retail-be-accounttype-part-definition.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountType\Templates\AccountTypeGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountType\Templates\AccountTypePartDefinitionSettingsSelectiveTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountType\Templates\AccountTypePartDefinitionTemplate.html" />

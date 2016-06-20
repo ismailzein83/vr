@@ -39,15 +39,14 @@
 
             function initializeController()
             {
-                ctrl.extensionConfig = [];
-                ctrl.selectedExtensionConfig;
-
-                ctrl.onSelectorReady = function (api) {
+                $scope.extensionConfigs = [];
+                $scope.selectedExtensionConfig;
+                $scope.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
                 };
 
-                ctrl.onDirectiveReady = function (api) {
+                $scope.onDirectiveReady = function (api) {
                     directiveAPI = api;
                     directivePayload = undefined;
                     var setLoader = function (value) {
@@ -62,8 +61,7 @@
 
                 api.load = function (payload)
                 {
-                    selectorAPI.clearDataSource();
-
+    
                     var promises = [];
                     var partDefinitionSettings;
 
@@ -83,14 +81,15 @@
                     function loadAccountTypePartDefinitionExtensionConfigs() {
                         return Retail_BE_AccountTypeAPIService.GetAccountTypePartDefinitionExtensionConfigs().then(function (response)
                         {
-                            if (response != null) {
+                            selectorAPI.clearDataSource();
+                            if (response != undefined) {
                                 for (var i = 0; i < response.length; i++) {
-                                    ctrl.extensionConfigs.push(response[i]);
+                                    $scope.extensionConfigs.push(response[i]);
                                 }
                                 if (partDefinitionSettings != undefined)
-                                    UtilsService.getItemByVal(ctrl.extensionConfigs, partDefinitionSettings.ConfigId, 'ExtensionConfigurationId') :
-                                else if (ctrl.extensionConfigs.length > 0)
-                                    ctrl.selectedExtensionConfig = ctrl.extensionConfigs[0];
+                                    $scope.selectedExtensionConfig =  UtilsService.getItemByVal($scope.extensionConfigs, partDefinitionSettings.ConfigId, 'ExtensionConfigurationId');
+                                else if ($scope.extensionConfigs.length > 0)
+                                    $scope.selectedExtensionConfig = $scope.extensionConfigs[0];
                             }
                         });
                     }
@@ -113,7 +112,8 @@
 
                 api.getData = function () {
                     var data = directiveAPI.getData();
-                    data.ConfigId = ctrl.selectedExtensionConfig.ExtensionConfigurationId;
+                    if (data != undefined)
+                        data.ConfigId = $scope.selectedExtensionConfig.ExtensionConfigurationId;
                     return data;
                 };
 
@@ -131,9 +131,9 @@
             }
 
             return '<vr-row><vr-columns colnum="{{ctrl.normalColNum * 2}}">'
-                    + '<vr-select on-ready="ctrl.onSelectorReady" datasource="ctrl.extensionConfigs" selectedvalues="ctrl.selectedExtensionConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" ' + label + ' isrequired="ctrl.isrequired" hideremoveicon></vr-select>'
+                    + '<vr-select on-ready="onSelectorReady" datasource="extensionConfigs" selectedvalues="selectedExtensionConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" ' + label + ' isrequired="ctrl.isrequired" hideremoveicon></vr-select>'
                 + '</vr-columns></vr-row>'
-                + '<vr-row><vr-directivewrapper directive="ctrl.selectedExtensionConfig.Editor" on-ready="ctrl.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper></vr-row>';
+                + '<vr-row><vr-directivewrapper directive="selectedExtensionConfig.DefinitionEditor" on-ready="onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper></vr-row>';
         }
     }
 

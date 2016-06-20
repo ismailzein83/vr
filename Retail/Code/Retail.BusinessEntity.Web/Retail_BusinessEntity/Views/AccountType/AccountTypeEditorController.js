@@ -177,9 +177,12 @@
                 AccountTypeId: accountTypeId,
                 Name: $scope.scopeModel.name,
                 Title: $scope.scopeModel.title,
-                CanBeRootAccount:$scope.scopeModel.canBeRootAccount,
-                SupportedParentAccountTypeIds:accountTypeSelectorAPI.getSelectedIds(),
-                PartDefinitions: accountTypePartDefinitionAPI.getData()
+                Settings:{
+                    CanBeRootAccount: $scope.scopeModel.canBeRootAccount,
+                    SupportedParentAccountTypeIds: accountTypeSelectorAPI.getSelectedIds(),
+                    PartDefinitions: accountTypePartDefinitionAPI.getData()
+                }
+               
             };
             return obj;
         }
