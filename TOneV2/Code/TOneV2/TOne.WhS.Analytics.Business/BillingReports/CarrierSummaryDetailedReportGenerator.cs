@@ -106,7 +106,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     carrierSummary.SaleAmount = Convert.ToDouble(saleNet.Value ?? 0.0);
                     carrierSummary.SaleAmountFormatted = manager.FormatNumber(carrierSummary.SaleAmount);
 
-                    carrierSummary.Profit = carrierSummary.SaleNet.Value - carrierSummary.CostNet.Value;
+                    carrierSummary.Profit = carrierSummary.SaleAmount - carrierSummary.CostAmount;
                     carrierSummary.ProfitFormatted = manager.FormatNumber(carrierSummary.Profit);
 
                     listCarrierSummaryDetailed.Add(carrierSummary);

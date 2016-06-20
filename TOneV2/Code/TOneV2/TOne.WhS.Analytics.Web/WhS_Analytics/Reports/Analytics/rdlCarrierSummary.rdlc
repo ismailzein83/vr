@@ -1021,11 +1021,18 @@
       </ConnectionProperties>
       <rd:DataSourceID>0d8933fe-d526-4590-9a99-0467bb01b33b</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="TOneWhSAnalyticsEntitiesBillingReport">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>72e2e0f6-80f1-4daf-b532-97c367f3d7af</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="CarrierSummary">
       <Query>
-        <DataSourceName>TOneAnalyticsBusiness</DataSourceName>
+        <DataSourceName>TOneWhSAnalyticsEntitiesBillingReport</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
@@ -1079,11 +1086,10 @@
         </Field>
       </Fields>
       <rd:DataSetInfo>
-        <rd:DataSetName>TOne.Analytics.Business</rd:DataSetName>
-        <rd:TableName>BillingStatisticManager</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetDailyCarrierSummary</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceSelectMethodSignature>System.Collections.Generic.List`1[TOne.Analytics.Entities.CarrierSummaryDailyFormatted] GetDailyCarrierSummary(System.DateTime, System.DateTime, System.String, System.String, Boolean, Boolean, System.Nullable`1[System.Int32], System.Nullable`1[System.Int32])</rd:ObjectDataSourceSelectMethodSignature>
-        <rd:ObjectDataSourceType>TOne.Analytics.Business.BillingStatisticManager, TOne.Analytics.Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:DataSetName>TOne.WhS.Analytics.Entities.BillingReport</rd:DataSetName>
+        <rd:TableName>CarrierSummaryDailyFormatted</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetCarrierSummaryDailyRDLCSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Analytics.Entities.BillingReport.CarrierSummaryDailyFormatted, TOne.WhS.Analytics.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>

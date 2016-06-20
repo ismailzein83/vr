@@ -16,11 +16,18 @@
       </ConnectionProperties>
       <rd:DataSourceID>3ed69208-956e-4383-929a-364146f09268</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="TOneWhSAnalyticsEntitiesBillingReport">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>39d6a8a9-a4c5-41e0-90f4-f4c2f3f6bb6d</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="CarrierSummary">
       <Query>
-        <DataSourceName>TOneAnalyticsBusiness</DataSourceName>
+        <DataSourceName>TOneWhSAnalyticsEntitiesBillingReport</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
@@ -43,6 +50,10 @@
         <Field Name="Attempts">
           <DataField>Attempts</DataField>
           <rd:TypeName>System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="AttemptsFormatted">
+          <DataField>AttemptsFormatted</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="DurationNet">
           <DataField>DurationNet</DataField>
@@ -70,11 +81,10 @@
         </Field>
       </Fields>
       <rd:DataSetInfo>
-        <rd:DataSetName>TOne.Analytics.Business</rd:DataSetName>
-        <rd:TableName>BillingStatisticManager</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetDailyCarrierSummary</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceSelectMethodSignature>System.Collections.Generic.List`1[TOne.Analytics.Entities.CarrierSummaryDailyFormatted] GetDailyCarrierSummary(System.DateTime, System.DateTime, System.String, System.String, Boolean, Boolean, System.Nullable`1[System.Int32], System.Nullable`1[System.Int32])</rd:ObjectDataSourceSelectMethodSignature>
-        <rd:ObjectDataSourceType>TOne.Analytics.Business.BillingStatisticManager, TOne.Analytics.Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:DataSetName>TOne.WhS.Analytics.Entities.BillingReport</rd:DataSetName>
+        <rd:TableName>CarrierSummaryDailyFormatted</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetCarrierSummaryDailyRDLCSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Analytics.Entities.BillingReport.CarrierSummaryDailyFormatted, TOne.WhS.Analytics.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
