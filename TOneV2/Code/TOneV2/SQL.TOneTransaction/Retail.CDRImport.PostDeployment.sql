@@ -57,7 +57,7 @@ when matched then
 	update set
 	[Name] = s.[Name],[ExecutionFlowDefinitionID] = s.[ExecutionFlowDefinitionID]
 when not matched by target then
-	insert([ID],[Name],[ExecutionFlowDefinitionID],[timestamp])
+	insert([ID],[Name],[ExecutionFlowDefinitionID])
 	values(s.[ID],s.[Name],s.[ExecutionFlowDefinitionID]);
 set identity_insert [queue].[ExecutionFlow] off;
 
@@ -105,7 +105,7 @@ using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Name] = s.[Name],[AdapterID] = s.[AdapterID],[AdapterState] = s.[AdapterState],[TaskId] = s.[TaskId],[Settings] = s.[Settings],[CreatedTime] = s.[CreatedTime],[timestamp] = s.[timestamp]
+	[Name] = s.[Name],[AdapterID] = s.[AdapterID],[AdapterState] = s.[AdapterState],[TaskId] = s.[TaskId],[Settings] = s.[Settings]
 when not matched by target then
 	insert([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings])
 	values(s.[ID],s.[Name],s.[AdapterID],s.[AdapterState],s.[TaskId],s.[Settings]);
