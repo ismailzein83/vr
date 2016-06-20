@@ -34,18 +34,7 @@ namespace Vanrise.Common.Business
             return this.GetCachedCities().MapRecords(city => city.CountryId, city => cityIds.Contains(city.CityId)).Distinct();
         }
 
-        public IEnumerable<CityInfo> GetCountryIdByCityIds(List<int> cityIds)
-        {
-            IEnumerable<City> cities = this.GetCachedCities().Values;
-            Func<City, bool> cityFilter = (city) =>
-            {
-                if (!cityIds.Contains(city.CityId))
-                    return false;
-                return true;
-            };
-            return cities.MapRecords(CityInfoMapper, cityFilter);
-        }
-
+    
         public City GetCity(int cityId)
         {
             var cities = GetCachedCities();
