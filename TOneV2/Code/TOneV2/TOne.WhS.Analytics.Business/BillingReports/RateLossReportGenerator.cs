@@ -71,6 +71,17 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 analyticQuery.Query.Filters.Add(dimensionFilter);
             }
 
+            if (!String.IsNullOrEmpty(parameters.ZonesId))
+            {
+                DimensionFilter dimensionFilter = new DimensionFilter()
+                {
+                    Dimension = "SaleZone",
+                    FilterValues = parameters.ZonesId.Split(',').ToList().Cast<object>().ToList()
+                };
+                analyticQuery.Query.Filters.Add(dimensionFilter);
+            }
+
+
             List<RateLossFormatted> listRateLossFromatted = new List<RateLossFormatted>();
 
             var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;

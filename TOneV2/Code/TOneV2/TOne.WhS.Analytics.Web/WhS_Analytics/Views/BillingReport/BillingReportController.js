@@ -14,6 +14,10 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
     var timeRangeDirectiveAPI;
     var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+
+    var saleZoneDirectiveAPI;
+    var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
     defineScope();
     load();
 
@@ -76,15 +80,23 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             currencyReadyPromiseDeferred.resolve();
         }
 
+        $scope.onSaleZoneDirectiveReady = function (api) {
+            saleZoneDirectiveAPI = api;
+            saleZoneReadyPromiseDeferred.resolve();
+        }
+
         $scope.openReport = function () {
+
             var customers = customerAccountDirectiveAPI.getSelectedIds();
-            var suppliers = supplierAccountDirectiveAPI.getSelectedIds();
             if (customers == undefined)
                 customers = "";
 
+            var suppliers = supplierAccountDirectiveAPI.getSelectedIds();
             if (suppliers == undefined)
                 suppliers = "";
 
+            var zones = (saleZoneDirectiveAPI != undefined && saleZoneDirectiveAPI.getSelectedIds()!= undefined) ? saleZoneDirectiveAPI.getSelectedIds() : "";
+       
             var paramsurl = "";
             paramsurl += "reportId=" + $scope.reporttype.ReportDefinitionId;
             paramsurl += "&fromDate=" + $scope.dateToString($scope.fromDate);
@@ -97,7 +109,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             paramsurl += "&isExchange=" + $scope.params.isExchange;
             paramsurl += "&margin=" + $scope.params.margin;
             paramsurl += "&top=" + $scope.params.top;
-            paramsurl += "&zone=" + (($scope.params.zones.length == 0) ? "" : getIdsList($scope.params.zones, 'ZoneId'));
+            paramsurl += "&zone=" + zones ;
             paramsurl += "&customer=" + customers;
             paramsurl += "&supplier=" + suppliers;
             paramsurl += "&currency=" + currencySelectorAPI.getSelectedIds();
@@ -110,7 +122,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             else
                 return $scope.export();
         }
-        $scope.resetReportParams = function() {
+        $scope.resetReportParams = function () {
             $scope.params = {
                 groupByCustomer: false,
                 selectedCustomers: [],
@@ -126,6 +138,8 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
                 top: 10,
                 pageBreak: false
             }
+            if(saleZoneDirectiveAPI!=undefined)
+                saleZoneDirectiveAPI.load()
         }
     }
 
@@ -135,7 +149,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadReportTypes, loadCurrencySelector, loadCustomers, loadSuppliers, loadTimeRangeSelector])
+        return UtilsService.waitMultipleAsyncOperations([loadReportTypes, loadCurrencySelector, loadCustomers, loadSuppliers, loadTimeRangeSelector, loadSaleZones])
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
@@ -194,6 +208,14 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
         return timeRangeLoadPromiseDeferred.promise;
     }
 
+    function loadSaleZones() {
+        var loadSaleZonesPromiseDeferred = UtilsService.createPromiseDeferred();
+        saleZoneReadyPromiseDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, undefined, loadSaleZonesPromiseDeferred);
+        });
+
+        return loadSaleZonesPromiseDeferred.promise;
+    }
 };
 
 appControllers.controller('WhS_Analytics_BillingReportsController', BillingReportsController);

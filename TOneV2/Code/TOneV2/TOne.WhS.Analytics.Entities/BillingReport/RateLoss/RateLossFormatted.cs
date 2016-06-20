@@ -8,6 +8,7 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
 {
     public class RateLossFormatted
     {
+       
         public string CostZone { get; set; }
         public string SaleZone { get; set; }
         public string SupplierID { get; set; }
@@ -31,5 +32,18 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         public string LossFormatted { get; set; }
         public string LossPerFormatted { get; set; }
         public string CarrierGroupsNames { get; set; }
+
+
+        /// <summary>
+        /// DO NOT REMOVE
+        /// the purpose of this method is to set the schema in the RDLC file
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        public RateLossFormatted() { }
+        public IEnumerable<RateLossFormatted> GetRateLossFormattedRDLCSchema()
+        {
+            return null;
+        }
     }
 }
