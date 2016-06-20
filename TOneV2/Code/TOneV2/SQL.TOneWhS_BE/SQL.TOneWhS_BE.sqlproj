@@ -302,5 +302,6 @@
     <Build Include="TOneWhS_SPL\Tables\SupplierZoneRate_Preview.sql" />
     <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierZoneRate_Preview_CreateTempByFiltered.sql" />
     <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierCountry_Preview_CreateTempByFiltered.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetBetweenPeriod.sql" />
   </ItemGroup>
 </Project>

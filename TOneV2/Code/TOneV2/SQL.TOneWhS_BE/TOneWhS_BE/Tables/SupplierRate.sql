@@ -9,10 +9,13 @@
     [EED]         DATETIME       NULL,
     [timestamp]   ROWVERSION     NULL,
     [SourceID]    VARCHAR (50)   NULL,
+    [Change]      SMALLINT       NULL,
     CONSTRAINT [PK_SupplierRate] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_SupplierRate_SupplierPriceList] FOREIGN KEY ([PriceListID]) REFERENCES [TOneWhS_BE].[SupplierPriceList] ([ID]),
     CONSTRAINT [FK_SupplierRate_SupplierZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE].[SupplierZone] ([ID])
 );
+
+
 
 
 
