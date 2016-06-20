@@ -1,5 +1,5 @@
-﻿CREATE TYPE [Retail].[EDR_GPRSType] AS TABLE (
-    [ID]              BIGINT           NULL,
+﻿CREATE TABLE [Retail_EDR].[GPRS] (
+    [ID]              BIGINT           IDENTITY (1, 1) NOT NULL,
     [StartDate]       DATETIME         NULL,
     [TypeGprs]        VARCHAR (32)     NULL,
     [Calling]         VARCHAR (32)     NULL,
@@ -20,5 +20,6 @@
     [IdCdrGprs]       BIGINT           NULL,
     [FileName]        VARCHAR (64)     NULL,
     [FileDate]        DATETIME         NULL,
-    [CreationDate]    DATETIME         NULL);
+    [CreationDate]    DATETIME         NULL
+);
 

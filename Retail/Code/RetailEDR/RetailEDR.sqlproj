@@ -68,25 +68,28 @@
     <Folder Include="Retail_Event\User Defined Types\" />
     <Folder Include="Retail\User Defined Types\" />
     <Folder Include="Security\" />
+    <Folder Include="Retail_EDR\" />
+    <Folder Include="Retail_EDR\Tables\" />
+    <Folder Include="Retail_EDR\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Retail_Event\Tables\VoiceEvent.sql" />
     <Build Include="Retail_Event\Tables\SMSEvent.sql" />
     <Build Include="Retail_Event\Tables\EventInfo.sql" />
     <Build Include="Retail_Event\Tables\DataEvent.sql" />
-    <Build Include="Retail\Tables\EDR_GPRS.sql" />
-    <Build Include="Retail\Tables\EDR_Message.sql" />
-    <Build Include="Retail\Tables\EDR_Voice.sql" />
     <Build Include="Retail_Event\User Defined Types\VoiceEventType.sql" />
     <Build Include="Retail_Event\User Defined Types\SMSEventType.sql" />
     <Build Include="Retail_Event\User Defined Types\EventInfoType.sql" />
     <Build Include="Retail_Event\User Defined Types\DataEventType.sql" />
-    <Build Include="Retail\User Defined Types\EDR_GPRSType.sql" />
-    <Build Include="Retail\User Defined Types\EDR_MessageType.sql" />
-    <Build Include="Retail\User Defined Types\EDR_VoiceType.sql" />
     <Build Include="Security\Retail_Event.sql" />
     <Build Include="Security\Retail_Analytics.sql" />
     <Build Include="Security\Retail.sql" />
-    <Build Include="Security\Retail_CDR.sql" />
+    <Build Include="Retail_EDR\Tables\GPRS.sql" />
+    <Build Include="Retail_EDR\Tables\Message.sql" />
+    <Build Include="Retail_EDR\Tables\Voice.sql" />
+    <Build Include="Retail_EDR\User Defined Types\VoiceType.sql" />
+    <Build Include="Retail_EDR\User Defined Types\MessageType.sql" />
+    <Build Include="Retail_EDR\User Defined Types\GPRSType.sql" />
+    <Build Include="Security\Retail_EDR.sql" />
   </ItemGroup>
 </Project>

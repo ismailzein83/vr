@@ -1,5 +1,5 @@
-﻿CREATE TABLE [Retail].[EDR_Voice] (
-    [ID]                  BIGINT           IDENTITY (1, 1) NOT NULL,
+﻿CREATE TYPE [Retail_EDR].[VoiceType] AS TABLE (
+    [ID]                  BIGINT           NULL,
     [IdCDR]               BIGINT           NULL,
     [StartDate]           DATETIME         NULL,
     [ParentIdCDR]         BIGINT           NULL,
@@ -26,6 +26,5 @@
     [Balance]             DECIMAL (20, 10) NULL,
     [MTCost]              VARCHAR (256)    NULL,
     [TermDesc]            VARCHAR (256)    NULL,
-    [TypeCalled]          VARCHAR (32)     NULL
-);
+    [TypeCalled]          VARCHAR (32)     NULL);
 

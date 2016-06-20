@@ -1,4 +1,4 @@
-﻿CREATE TYPE [Retail].[EDR_MessageType] AS TABLE (
+﻿CREATE TYPE [Retail_EDR].[MessageType] AS TABLE (
     [ID]                  BIGINT           NULL,
     [StartDate]           DATETIME         NULL,
     [IdCDR]               BIGINT           NULL,
