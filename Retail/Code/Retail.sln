@@ -65,9 +65,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Data.Entities", "Ret
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.SMS.MainExtensions", "Retail.SMS.MainExtensions\Retail.SMS.MainExtensions.csproj", "{D18FF35B-6367-4CF2-B257-A8B777F23C16}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RetailEDR", "RetailEDR\RetailEDR.sqlproj", "{0D1FB122-0323-4CFE-9F8A-D73281C544DE}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 23
+		SccNumberOfProjects = 24
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -159,6 +161,10 @@ Global
 		SccProjectTopLevelParentUniqueName22 = Retail.sln
 		SccProjectName22 = Retail.SMS.MainExtensions
 		SccLocalPath22 = Retail.SMS.MainExtensions
+		SccProjectUniqueName23 = RetailEDR\\RetailEDR.sqlproj
+		SccProjectTopLevelParentUniqueName23 = Retail.sln
+		SccProjectName23 = RetailEDR
+		SccLocalPath23 = RetailEDR
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -255,6 +261,12 @@ Global
 		{D18FF35B-6367-4CF2-B257-A8B777F23C16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D18FF35B-6367-4CF2-B257-A8B777F23C16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D18FF35B-6367-4CF2-B257-A8B777F23C16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D1FB122-0323-4CFE-9F8A-D73281C544DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D1FB122-0323-4CFE-9F8A-D73281C544DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D1FB122-0323-4CFE-9F8A-D73281C544DE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{0D1FB122-0323-4CFE-9F8A-D73281C544DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D1FB122-0323-4CFE-9F8A-D73281C544DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D1FB122-0323-4CFE-9F8A-D73281C544DE}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -286,5 +298,6 @@ Global
 		{750F4FDE-CADA-485C-906B-841673DF0300} = {D2979848-35B3-464F-A335-62EE41236287}
 		{F8181947-ED07-4275-9816-82D61E6E0E00} = {D2979848-35B3-464F-A335-62EE41236287}
 		{D18FF35B-6367-4CF2-B257-A8B777F23C16} = {DBCD35EE-87B3-403D-A0DC-2ACC3D0313D6}
+		{0D1FB122-0323-4CFE-9F8A-D73281C544DE} = {DBCF7D23-8951-4886-9024-282788E5D24F}
 	EndGlobalSection
 EndGlobal
