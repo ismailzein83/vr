@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    class AccountTypeQuery
+    public class AccountTypeQuery
     {
+        public string Name { get; set; }
     }
 }

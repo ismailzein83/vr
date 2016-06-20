@@ -64,6 +64,7 @@
     <Compile Include="AccountPackage\AccountPackageDetail.cs" />
     <Compile Include="AccountPackage\AccountPackageQuery.cs" />
     <Compile Include="AccountType\AccountTypeDetail.cs" />
+    <Compile Include="AccountType\AccountTypeInfo.cs" />
     <Compile Include="AccountType\AccountTypeQuery.cs" />
     <Compile Include="AccountType\Parts\AccountPart.cs" />
     <Compile Include="AccountType\AccountType.cs" />

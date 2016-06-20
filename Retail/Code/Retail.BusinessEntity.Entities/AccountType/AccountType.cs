@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class AccountType2
+    public class BaseAccountType
     {
         public int AccountTypeId { get; set; }
 
         public string Name { get; set; }
+
+        public string Title { get; set; }
 
         public AccountTypeSettings Settings { get; set; }
     }
 
     public class AccountTypeSettings
     {
-        public string Title { get; set; }
-
         public bool CanBeRootAccount { get; set; }
 
         public List<int> SupportedParentAccountTypeIds { get; set; }
@@ -26,4 +26,13 @@ namespace Retail.BusinessEntity.Entities
         public List<AccountPartDefinition> PartDefinitions { get; set; }
     }
 
+    public class AccountType2 : BaseAccountType
+    {
+        
+    }
+
+    public class AccountTypeToEdit : BaseAccountType
+    {
+
+    }
 }

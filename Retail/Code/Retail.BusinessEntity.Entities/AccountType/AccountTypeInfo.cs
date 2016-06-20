@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class AccountTypeDetail
+    public class AccountTypeInfo
     {
-        public AccountType2 Entity { get; set; }
+        public int AccountTypeId { get; set; }
+
+        public string Title { get; set; }
     }
 }
