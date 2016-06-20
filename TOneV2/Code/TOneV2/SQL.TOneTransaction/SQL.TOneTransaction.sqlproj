@@ -222,5 +222,6 @@
     <None Include="BusinessProcess.PostDeployment.sql" />
     <None Include="Runtime.PostDeployment.sql" />
     <None Include="TOne.CDRImport.PostDeployment.sql" />
+    <None Include="Retail.CDRImport.PostDeployment.sql" />
   </ItemGroup>
 </Project>
