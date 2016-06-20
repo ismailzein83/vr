@@ -64,6 +64,7 @@
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
     <Compile Include="BusinessManagers\IDataRecordTypeManager.cs" />
     <Compile Include="BusinessManagers\IGenericBusinessEntityManager.cs" />
+    <Compile Include="DataRecordCondition.cs" />
     <Compile Include="DataRecordFieldChoice\DataRecordFieldChoice.cs" />
     <Compile Include="DataRecordFieldChoice\DataRecordFieldChoiceDetail.cs" />
     <Compile Include="DataRecordFieldChoice\DataRecordFieldChoiceInfo.cs" />
