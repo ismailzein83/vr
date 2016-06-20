@@ -59,19 +59,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountIdentification\AccountIdentificationQuery.cs" />
-    <Compile Include="AccountIdentification\AccountIdentification.cs" />
     <Compile Include="AccountIdentification\AccountIdentificationDetail.cs" />
-    <Compile Include="AccountIdentification\Definition\AccountIdentificationDefinition.cs" />
-    <Compile Include="AccountIdentification\Definition\AccountIdentificationDefinitionConfig.cs" />
-    <Compile Include="AccountIdentification\Definition\AccountIdentificationDefinitionSettings.cs" />
-    <Compile Include="AccountIdentification\AccountIdentificationSettings.cs" />
     <Compile Include="AccountPackage\AccountPackage.cs" />
     <Compile Include="AccountPackage\AccountPackageDetail.cs" />
     <Compile Include="AccountPackage\AccountPackageQuery.cs" />
+    <Compile Include="AccountType\Parts\AccountPart.cs" />
+    <Compile Include="AccountType\AccountType.cs" />
+    <Compile Include="AccountType\Parts\Definition\AccountTypePartDefinition.cs" />
+    <Compile Include="AccountType\Parts\Definition\AccountTypePartDefinitionConfig.cs" />
     <Compile Include="Account\Account.cs" />
     <Compile Include="Account\AccountDetail.cs" />
     <Compile Include="Account\AccountInfo.cs" />
     <Compile Include="Account\AccountQuery.cs" />
+    <Compile Include="Account\AccountStatus.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyDetail.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyInfo.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyInfoFilter.cs" />
@@ -81,10 +81,10 @@
     <Compile Include="ChargingPolicy\ChargingPolicyParts\IChargingPolicyPartExecutionContext.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyQuery.cs" />
     <Compile Include="ChargingPolicy\Definition\ChargingPolicyDefinitionConfig.cs" />
-    <Compile Include="NewBEs\AccountService.cs" />
-    <Compile Include="NewBEs\AccountServiceDetail.cs" />
-    <Compile Include="NewBEs\AccountServiceQuery.cs" />
-    <Compile Include="NewBEs\AccountServiceSettings.cs" />
+    <Compile Include="AccountService\AccountService.cs" />
+    <Compile Include="AccountService\AccountServiceDetail.cs" />
+    <Compile Include="AccountService\AccountServiceQuery.cs" />
+    <Compile Include="AccountService\AccountServiceSettings.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyParts\ChargingPolicyPart.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyParts\Types\ChargingPolicyRateType.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyParts\Types\ChargingPolicyRateValue.cs" />
@@ -94,7 +94,6 @@
     <Compile Include="Package\PackageServiceQuery.cs" />
     <Compile Include="Package\ServicePackageItemConfig.cs" />
     <Compile Include="ServiceType\ServiceType.cs" />
-    <Compile Include="NewBEs\ServiceVolumeSettings.cs" />
     <Compile Include="Package\Package.cs" />
     <Compile Include="Package\PackageDetail.cs" />
     <Compile Include="Package\PackageInfo.cs" />

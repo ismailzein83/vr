@@ -25,20 +25,16 @@ namespace Retail.BusinessEntity.Entities
 
         public AccountBillingSettings BillingSettings { get; set; }
 
-        public List<AccountPart> Parts { get; set; }
+        public AccountPartCollection Parts { get; set; }
     }
 
     public class Account : BaseAccount
     {
         public const string BUSINESSENTITY_DEFINITION_NAME = "Retail_BE_SubscriberAccount";
+
         public long? ParentAccountId { get; set; }
     }
-
-    public abstract class AccountPart
-    {
-        public int ConfigId { get; set; }
-    }
-
+    
     public class AccountToEdit : BaseAccount
     {
 

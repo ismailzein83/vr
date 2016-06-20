@@ -44,20 +44,4 @@ namespace Retail.BusinessEntity.Entities
 
         public IEnumerable<ChargingPolicyRuleDefinition> RuleDefinitions { get; set; }
     }
-
-    public class PackageService
-    {
-        public string Name { get; set; }
-
-        public string Description { get; set; }
-
-        public bool Enabled { get; set; }
-
-        public PackageServiceSettings Settings { get; set; }
-    }
-
-    public abstract class PackageServiceSettings
-    {
-        public int ConfigId { get; set; }
-    }
 }

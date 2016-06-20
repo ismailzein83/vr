@@ -6,7 +6,5 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public abstract class AccountIdentificationSettings
-    {
-    }
+    public enum AccountStatus { Active = 0, InActive = 1 }
 }
