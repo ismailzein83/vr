@@ -17,8 +17,6 @@ namespace Retail.BusinessEntity.Entities
         /// </summary>
         public string PartUniqueName { get; set; }
 
-        public int PartTypeId { get; set; }
-
         public AccountPartDefinitionSettings Settings { get; set; }
 
         public AccountPartAvailabilityOptions AvailabilitySettings { get; set; }

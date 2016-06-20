@@ -21,7 +21,7 @@ namespace Retail.BusinessEntity.Entities
 
         public bool CanBeRootAccount { get; set; }
 
-        public List<int> SupportedSubAccountTypeIds { get; set; }
+        public List<int> SupportedParentAccountTypeIds { get; set; }
 
         public List<AccountPartDefinition> PartDefinitions { get; set; }
     }
