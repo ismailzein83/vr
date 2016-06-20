@@ -2234,6 +2234,8 @@ vr-label[breakline] .vr-control-label {
     min-width: initial;
     font-size: 11px;
     overflow-y: auto;
+    max-width: 200px;
+    text-align: justify;
 }
 
 .tooltip.bottom {
