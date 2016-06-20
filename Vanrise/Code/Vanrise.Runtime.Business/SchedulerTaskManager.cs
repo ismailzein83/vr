@@ -15,8 +15,8 @@ namespace Vanrise.Runtime.Business
             var allScheduledTasks = GetCachedSchedulerTasks();
 
             Func<SchedulerTask, bool> filterExpression = (itm) =>
-                (input.Query == null || ((string.IsNullOrEmpty(input.Query.NameFilter) || itm.Name.ToLower().Contains(input.Query.NameFilter.ToLower()))
-                && (input.Query.Filters == null || input.Query.Filters.Where(item => item.IsMatched(itm)).ToList().Count == input.Query.Filters.Count)));
+                (itm.ActionTypeId != 1) && (input.Query == null || ((string.IsNullOrEmpty(input.Query.NameFilter) || itm.Name.ToLower().Contains(input.Query.NameFilter.ToLower()))
+                && (input.Query.Filters == null || input.Query.Filters.FirstOrDefault(item => !item.IsMatched(itm)) == null)));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allScheduledTasks.ToBigResult(input, filterExpression, SchedulerTaskDetailMapper));
         }
@@ -61,7 +61,7 @@ namespace Vanrise.Runtime.Business
         {
             var allScheduledTasks = GetCachedSchedulerTasks();
             Func<SchedulerTask, bool> filterExpression = (itm) => (true);
-            
+
             IEnumerable<SchedulerTask> tasks = allScheduledTasks.FindAllRecords(filterExpression);
             if (tasks == null)
                 return null;
