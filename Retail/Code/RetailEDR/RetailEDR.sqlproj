@@ -87,5 +87,6 @@
     <Build Include="Security\Retail_Event.sql" />
     <Build Include="Security\Retail_Analytics.sql" />
     <Build Include="Security\Retail.sql" />
+    <Build Include="Security\Retail_CDR.sql" />
   </ItemGroup>
 </Project>
