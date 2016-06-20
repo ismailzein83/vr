@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
-    public class AccountPartGenericDefinition : AccountTypePartDefinition
+    public class AccountPartGenericDefinition : AccountPartDefinitionSettings
     {
         public int RecordTypeId { get; set; }
 

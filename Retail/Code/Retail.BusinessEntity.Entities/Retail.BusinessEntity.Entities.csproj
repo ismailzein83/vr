@@ -65,8 +65,8 @@
     <Compile Include="AccountPackage\AccountPackageQuery.cs" />
     <Compile Include="AccountType\Parts\AccountPart.cs" />
     <Compile Include="AccountType\AccountType.cs" />
-    <Compile Include="AccountType\Parts\Definition\AccountTypePartDefinition.cs" />
-    <Compile Include="AccountType\Parts\Definition\AccountTypePartDefinitionConfig.cs" />
+    <Compile Include="AccountType\Parts\Definition\AccountPartDefinition.cs" />
+    <Compile Include="AccountType\Parts\Definition\AccountPartDefinitionConfig.cs" />
     <Compile Include="Account\Account.cs" />
     <Compile Include="Account\AccountDetail.cs" />
     <Compile Include="Account\AccountInfo.cs" />

@@ -20,8 +20,6 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
         public string POBox { get; set; }
 
         public string Website { get; set; }
-
-        public string Email { get; set; }
         
         public List<string> PhoneNumbers { get; set; }
 

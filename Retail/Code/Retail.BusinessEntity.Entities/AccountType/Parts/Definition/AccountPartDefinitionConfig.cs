@@ -7,8 +7,10 @@ using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class AccountTypePartDefinitionConfig : ExtensionConfiguration
+    public class AccountPartDefinitionConfig : ExtensionConfiguration
     {
+        public const string EXTENSION_TYPE = "Retail_BE_AccountPartDefinition";
+
         public string DefinitionEditor { get; set; }
 
         public string RuntimeEditor { get; set; }

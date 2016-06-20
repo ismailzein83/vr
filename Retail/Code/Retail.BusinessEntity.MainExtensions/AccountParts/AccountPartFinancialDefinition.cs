@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
-    public class AccountPartFinancialDefinition : AccountTypePartDefinitionSettings
+    public class AccountPartFinancialDefinition : AccountPartDefinitionSettings
     {
     }
 }

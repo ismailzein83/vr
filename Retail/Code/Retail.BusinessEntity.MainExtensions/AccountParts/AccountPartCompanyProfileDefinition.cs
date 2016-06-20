@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
-    public class AccountPartCompanyProfileDefinition : AccountTypePartDefinitionSettings
+    public class AccountPartCompanyProfileDefinition : AccountPartDefinitionSettings
     {
         public List<string> ContactTypes { get; set; }
     }
