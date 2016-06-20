@@ -20,7 +20,7 @@ BEGIN
  --queue.ExecutionFlowDefinition---------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-set identity_insert [queue.ExecutionFlowDefinition] on;
+set identity_insert [queue].[ExecutionFlowDefinition] on;
 ;with cte_data([ID],[Name],[Title],[ExecutionTree],[Stages])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,14 +36,14 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Title],[ExecutionTree],[Stages])
 	values(s.[ID],s.[Name],s.[Title],s.[ExecutionTree],s.[Stages]);
-set identity_insert [queue.ExecutionFlowDefinition] off;
+set identity_insert [queue].[ExecutionFlowDefinition] off;
 
 
 
 --queue.ExecutionFlow-------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-set identity_insert [queue.ExecutionFlow] on;
+set identity_insert [queue].[ExecutionFlow] on;
 ;with cte_data([ID],[Name],[ExecutionFlowDefinitionID])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,13 +59,13 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[ExecutionFlowDefinitionID],[timestamp])
 	values(s.[ID],s.[Name],s.[ExecutionFlowDefinitionID]);
-set identity_insert [queue.ExecutionFlow] off;
+set identity_insert [queue].[ExecutionFlow] off;
 
 
 --runtime.ScheduleTask------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-set identity_insert [runtime.ScheduleTask] on;
+set identity_insert [runtime].[ScheduleTask] on;
 ;with cte_data([ID],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[ActionTypeId],[TaskSettings],[OwnerId])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,13 +84,13 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[ActionTypeId],[TaskSettings],[OwnerId])
 	values(s.[ID],s.[Name],s.[IsEnabled],s.[TaskType],s.[TriggerTypeId],s.[ActionTypeId],s.[TaskSettings],s.[OwnerId]);
-set identity_insert [runtime.ScheduleTask] off;
+set identity_insert [runtime].[ScheduleTask] off;
 
 
 --integration.DataSource----------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-set identity_insert [integration.DataSource] on;
+set identity_insert [integration].[DataSource] on;
 ;with cte_data([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -109,4 +109,4 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings])
 	values(s.[ID],s.[Name],s.[AdapterID],s.[AdapterState],s.[TaskId],s.[Settings]);
-set identity_insert [integration.DataSource] off;
+set identity_insert [integration].[DataSource] off;
