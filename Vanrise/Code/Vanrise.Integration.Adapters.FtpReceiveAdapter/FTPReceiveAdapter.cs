@@ -89,13 +89,13 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
 
 
 
-
+                var upperFtpAdapterArgumentExtension = ftpAdapterArgument.Extension.ToUpper();
                 base.LogInformation("{0} files are ready to be imported", currentItems.Count);
                 if (currentItems.Count > 0)
                 {
                     foreach (var fileObj in currentItems)
                     {
-                        if (!fileObj.IsDirectory && fileObj.Name.ToUpper().Contains(ftpAdapterArgument.Extension))
+                        if (!fileObj.IsDirectory && fileObj.Name.ToUpper().Contains(upperFtpAdapterArgumentExtension))
                         {
                             String filePath = ftpAdapterArgument.Directory + "/" + fileObj.Name;
                             CreateStreamReader(context.OnDataReceived, ftp, fileObj, filePath);
