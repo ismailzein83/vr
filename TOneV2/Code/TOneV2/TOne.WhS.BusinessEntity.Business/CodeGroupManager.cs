@@ -171,30 +171,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 Country country = countryManager.GetCountry(code.Value.ToLower());
                 CodeGroup codeGroup = null;
-
-                if (!Vanrise.Common.Utilities.IsNumeric(code.Key, 0))
-                {
-                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
-                    colIndex++;
-                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue("CodeGroup must be a positive number");
-                    uploadCodeGroupLog.CountOfCodeGroupsFailed++;
-                    colIndex = 0;
-                    rowIndex++;
-                }
-
-                else if (country != null && !cachedCodeGroups.TryGetValue(code.Key, out codeGroup) && !String.IsNullOrEmpty(code.Key))
-                {
-                    importedCodeGroup.Add(new CodeGroup
-                    {
-                        Code = code.Key,
-                        CountryId = country.CountryId
-                    });
-                    uploadCodeGroupLog.CountOfCodeGroupsAdded++;
-                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Succeed");
-                    colIndex = 0;
-                    rowIndex++;
-                }
-                else
+               
+               if (country == null || String.IsNullOrEmpty(code.Key))
                 {
                     //TODO: Code Group Is Empty validation mist preceed the validation on numberic value to be more precise
                     RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
@@ -212,6 +190,29 @@ namespace TOne.WhS.BusinessEntity.Business
                     colIndex = 0;
                     rowIndex++;
                 }
+                else if(!Vanrise.Common.Utilities.IsNumeric(code.Key, 0))
+                {
+                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
+                    colIndex++;
+                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue("CodeGroup must be a positive number");
+                    uploadCodeGroupLog.CountOfCodeGroupsFailed++;
+                    colIndex = 0;
+                    rowIndex++;
+                }
+
+               else if (!cachedCodeGroups.TryGetValue(code.Key, out codeGroup))
+               {
+                   importedCodeGroup.Add(new CodeGroup
+                   {
+                       Code = code.Key,
+                       CountryId = country.CountryId
+                   });
+                   uploadCodeGroupLog.CountOfCodeGroupsAdded++;
+                   RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Succeed");
+                   colIndex = 0;
+                   rowIndex++;
+               }
+    
             }
 
             ICodeGroupDataManager dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
