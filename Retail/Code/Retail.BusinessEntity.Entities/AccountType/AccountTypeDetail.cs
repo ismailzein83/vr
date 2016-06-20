@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.Entities.AccountType
+namespace Retail.BusinessEntity.Entities
 {
     class AccountTypeDetail
     {
