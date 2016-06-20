@@ -21,9 +21,8 @@
         load();
 
         function defineScope() {
-            $scope.fromDate;
+            $scope.fromDate = new Date(new Date().setHours(0, 0, 0, 0));
             $scope.toDate;
-            $scope.year = PeriodEnum.CurrentYear;
 
             $scope.onTimeRangeDirectiveReady = function (api) {
                 timeRangeDirectiveAPI = api;
@@ -53,6 +52,7 @@
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+                setGridQuery();
                 gridAPI.loadGrid(gridQuery);
             };
 

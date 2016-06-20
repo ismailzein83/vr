@@ -16,9 +16,8 @@ function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_
     load();
 
     function defineScope() {
-        $scope.fromDate;
+        $scope.fromDate = new Date(new Date().setHours(0, 0, 0, 0));
         $scope.toDate;
-        $scope.today = PeriodEnum.Today;
 
         $scope.onTimeRangeDirectiveReady = function (api) {
             timeRangeDirectiveAPI = api;

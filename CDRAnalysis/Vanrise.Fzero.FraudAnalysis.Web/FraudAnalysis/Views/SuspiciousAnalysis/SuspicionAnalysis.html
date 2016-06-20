@@ -15,7 +15,7 @@
                     <vr-textbox label="Account Number" value="accountNumber"></vr-textbox>
                 </vr-columns>
 
-                <vr-timerange on-ready="onTimeRangeDirectiveReady" type="dateTime" width="normal" period="today" from="fromDate" to="toDate"></vr-timerange>
+                <vr-timerange on-ready="onTimeRangeDirectiveReady" type="dateTime" width="normal" from="fromDate" to="toDate" hideperiodsection></vr-timerange>
 
                 <vr-columns width="normal" ng-show="advancedSelected">
                     <cdranalysis-fa-strategy-selector on-ready="onStrategySelectorReady" ismultipleselection></cdranalysis-fa-strategy-selector>
