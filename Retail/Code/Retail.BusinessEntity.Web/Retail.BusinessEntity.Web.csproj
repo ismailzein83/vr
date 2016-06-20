@@ -154,6 +154,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountPackageController.cs" />
     <Compile Include="Controllers\AccountServiceController.cs" />
+    <Compile Include="Controllers\AccountTypeController.cs" />
     <Compile Include="Controllers\ChargingPolicyController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
     <Compile Include="Controllers\ServiceTypeController.cs" />
@@ -190,6 +191,8 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountPackage\Templates\AccountPackageGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountService\retail-be-accountservice-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountService\Templates\AccountServiceGridTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountType\retail-be-accounttype-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountType\Templates\AccountTypeGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountGridTemplate.html" />
@@ -263,10 +266,12 @@
     <Content Include="Retail_BusinessEntity\Services\AccountIdentificationService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountServiceService.js" />
+    <Content Include="Retail_BusinessEntity\Services\AccountTypeService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountIdentificationAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountPackageAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountServiceAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\AccountTypeAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ChargingPolicyAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ServiceTypeAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\SwitchAPIService.js" />
@@ -280,6 +285,10 @@
     <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountService\AccountServiceEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountService\AccountServiceEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\AccountType\AccountTypeEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\AccountType\AccountTypeEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\AccountType\AccountTypeManagement.html" />
+    <Content Include="Retail_BusinessEntity\Views\AccountType\AccountTypeManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountManagement.html" />

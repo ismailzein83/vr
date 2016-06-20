@@ -80,6 +80,7 @@
     <Compile Include="AccountIdentificationManager.cs" />
     <Compile Include="AccountManager.cs" />
     <Compile Include="AccountServiceManager.cs" />
+    <Compile Include="AccountTypeManager.cs" />
     <Compile Include="Extensions\AccountMappingRuleDefinitionFilter.cs" />
     <Compile Include="AccountPackageManager.cs" />
     <Compile Include="ChargingPolicyManager.cs" />
