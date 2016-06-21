@@ -240,7 +240,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                 {
                     //Get max between BED and Close Date to avoid closing a code with EED before BED
                     DateTime? closureDate = Utilities.Max(codeCloseDate, existingCode.BED);
-                    if(closureDate.VRLessThan(existingCode.EED))
+                    if(!existingCode.CodeEntity.EED.HasValue && closureDate.VRLessThan(existingCode.EED))
                     {
                         //Only in this case closing has a meaning, otherwise no need to close the code
                         existingCode.ChangedCode = new ChangedCode
