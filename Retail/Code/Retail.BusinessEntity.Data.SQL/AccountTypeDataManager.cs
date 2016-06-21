@@ -23,12 +23,12 @@ namespace Retail.BusinessEntity.Data.SQL
 
         #region Public Methods
 
-        public IEnumerable<AccountType2> GetAccountTypes()
+        public IEnumerable<AccountType> GetAccountTypes()
         {
             return GetItemsSP("Retail_BE.sp_AccountType_GetAll", AccountTypeMapper);
         }
 
-        public bool Insert(AccountType2 accountType, out int insertedId)
+        public bool Insert(AccountType accountType, out int insertedId)
         {
             object accountTypeId;
             string serializedSettings = accountType.Settings != null ? Vanrise.Common.Serializer.Serialize(accountType.Settings) : null;
@@ -61,9 +61,9 @@ namespace Retail.BusinessEntity.Data.SQL
 
         #region Mappers
 
-        private AccountType2 AccountTypeMapper(IDataReader reader)
+        private AccountType AccountTypeMapper(IDataReader reader)
         {
-            return new AccountType2()
+            return new AccountType()
             {
                 AccountTypeId = (int)reader["ID"],
                 Name = reader["Name"] as string,

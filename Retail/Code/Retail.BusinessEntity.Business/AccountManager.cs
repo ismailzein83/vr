@@ -24,7 +24,7 @@ namespace Retail.BusinessEntity.Business
 
             Func<Account, bool> filterExpression = (account) =>
                 (input.Query.Name == null || account.Name.ToLower().Contains(input.Query.Name.ToLower())) &&
-                (input.Query.AccountTypes == null || input.Query.AccountTypes.Contains(account.Type)) &&
+                (input.Query.AccountTypeIds == null || input.Query.AccountTypeIds.Contains(account.TypeId)) &&
                 (
                     (!input.Query.ParentAccountId.HasValue && !account.ParentAccountId.HasValue) ||
                     (input.Query.ParentAccountId.HasValue && account.ParentAccountId.HasValue && account.ParentAccountId.Value == input.Query.ParentAccountId.Value)
@@ -256,11 +256,15 @@ namespace Retail.BusinessEntity.Business
 
         private AccountDetail AccountDetailMapper(Account account)
         {
+            var accountTypeManager = new AccountTypeManager();
+            
             var accounts = GetCachedAccounts().Values;
             var accountsByParent = GetCachedAccountsByParent();
+            
             return new AccountDetail()
             {
                 Entity = account,
+                AccountTypeTitle = accountTypeManager.GetAccountTypeName(account.TypeId),
                 DirectSubAccountCount = GetSubAccountsCount(account.AccountId, accounts, false),
                 TotalSubAccountCount = GetSubAccountsCount(account.AccountId, accounts, true, accountsByParent)
             };

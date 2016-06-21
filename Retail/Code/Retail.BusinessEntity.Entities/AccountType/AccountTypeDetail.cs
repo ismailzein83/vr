@@ -8,6 +8,6 @@ namespace Retail.BusinessEntity.Entities
 {
     public class AccountTypeDetail
     {
-        public AccountType2 Entity { get; set; }
+        public AccountType Entity { get; set; }
     }
 }

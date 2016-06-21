@@ -18,17 +18,23 @@ namespace Retail.BusinessEntity.Business
 
         public Vanrise.Entities.IDataRetrievalResult<AccountTypeDetail> GetFilteredAccountTypes(Vanrise.Entities.DataRetrievalInput<AccountTypeQuery> input)
         {
-            Dictionary<int, AccountType2> cachedAccountTypes = this.GetCachedAccountTypes();
+            Dictionary<int, AccountType> cachedAccountTypes = this.GetCachedAccountTypes();
             
-            Func<AccountType2, bool> filterExpression = (accountType) =>
+            Func<AccountType, bool> filterExpression = (accountType) =>
                 (input.Query.Name == null || accountType.Name.ToLower().Contains(input.Query.Name.ToLower()));
             
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedAccountTypes.ToBigResult(input, filterExpression, AccountTypeDetailMapper));
         }
 
-        public AccountType2 GetAccountType(int accountTypeId)
+        public AccountType GetAccountType(int accountTypeId)
         {
             return this.GetCachedAccountTypes().GetRecord(accountTypeId);
+        }
+
+        public string GetAccountTypeName(int accountTypeId)
+        {
+            AccountType accountType = this.GetAccountType(accountTypeId);
+            return (accountType != null) ? accountType.Title : null;
         }
 
         public IEnumerable<AccountTypeInfo> GetAccountTypesInfo()
@@ -42,7 +48,7 @@ namespace Retail.BusinessEntity.Business
             return manager.GetExtensionConfigurations<AccountPartDefinitionConfig>(AccountPartDefinitionConfig.EXTENSION_TYPE);
         }
 
-        public Vanrise.Entities.InsertOperationOutput<AccountTypeDetail> AddAccountType(AccountType2 accountType)
+        public Vanrise.Entities.InsertOperationOutput<AccountTypeDetail> AddAccountType(AccountType accountType)
         {
             ValidateAccountTypeToAdd(accountType);
 
@@ -98,14 +104,14 @@ namespace Retail.BusinessEntity.Business
 
         #region Validation Methods
 
-        private void ValidateAccountTypeToAdd(AccountType2 accountType)
+        private void ValidateAccountTypeToAdd(AccountType accountType)
         {
             ValidateAccountType(accountType.Name, accountType.Title, accountType.Settings);
         }
 
         private void ValidateAccountTypeToEdit(AccountTypeToEdit accountType)
         {
-            AccountType2 accountTypeEntity = this.GetAccountType(accountType.AccountTypeId);
+            AccountType accountTypeEntity = this.GetAccountType(accountType.AccountTypeId);
             if (accountTypeEntity == null)
                 throw new DataIntegrityValidationException(String.Format("AccountType '{0}' does not exist", accountType.AccountTypeId));
             ValidateAccountType(accountType.Name, accountType.Title, accountType.Settings);
@@ -139,12 +145,12 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        Dictionary<int, AccountType2> GetCachedAccountTypes()
+        Dictionary<int, AccountType> GetCachedAccountTypes()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountTypes", () =>
             {
                 IAccountTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountTypeDataManager>();
-                IEnumerable<AccountType2> accountTypes = dataManager.GetAccountTypes();
+                IEnumerable<AccountType> accountTypes = dataManager.GetAccountTypes();
                 return accountTypes.ToDictionary(kvp => kvp.AccountTypeId, kvp => kvp);
             });
         }
@@ -153,7 +159,7 @@ namespace Retail.BusinessEntity.Business
 
         #region Mappers
 
-        private AccountTypeDetail AccountTypeDetailMapper(AccountType2 accountType)
+        private AccountTypeDetail AccountTypeDetailMapper(AccountType accountType)
         {
             return new AccountTypeDetail()
             {
@@ -161,7 +167,7 @@ namespace Retail.BusinessEntity.Business
             };
         }
 
-        private AccountTypeInfo AccountTypeInfoMapper(AccountType2 accountType)
+        private AccountTypeInfo AccountTypeInfoMapper(AccountType accountType)
         {
             return new AccountTypeInfo
             {

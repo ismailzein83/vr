@@ -9,9 +9,9 @@ namespace Retail.BusinessEntity.Data
 {
     public interface IAccountTypeDataManager : IDataManager
     {
-        IEnumerable<AccountType2> GetAccountTypes();
+        IEnumerable<AccountType> GetAccountTypes();
 
-        bool Insert(AccountType2 accountType, out int insertedId);
+        bool Insert(AccountType accountType, out int insertedId);
 
         bool Update(AccountTypeToEdit accountType);
 

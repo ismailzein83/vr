@@ -2,15 +2,18 @@
 
     'use strict';
 
-    AccountEditorController.$inject = ['$scope', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountTypeEnum', 'Retail_BE_PaymentMethodEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    AccountEditorController.$inject = ['$scope', 'Retail_BE_AccountAPIService', 'Retail_BE_PaymentMethodEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function AccountEditorController($scope, Retail_BE_AccountAPIService, Retail_BE_AccountTypeEnum, Retail_BE_PaymentMethodEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService)
+    function AccountEditorController($scope, Retail_BE_AccountAPIService, Retail_BE_PaymentMethodEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService)
     {
         var isEditMode;
 
         var accountId;
         var accountEntity;
         var parentAccountId;
+
+        var accountTypeSelectorAPI;
+        var accountTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var countrySelectorAPI;
         var countrySelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -35,15 +38,18 @@
 
             isEditMode = (accountId != undefined);
         }
-
         function defineScope()
         {
             $scope.scopeModel = {};
             $scope.scopeModel.contactSettings = {};
             $scope.scopeModel.billingSettings = {};
 
-            $scope.scopeModel.accountTypes = UtilsService.getArrayEnum(Retail_BE_AccountTypeEnum);
             $scope.scopeModel.paymentMethods = UtilsService.getArrayEnum(Retail_BE_PaymentMethodEnum);
+
+            $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
+                accountTypeSelectorAPI = api;
+                accountTypeSelectorReadyDeferred.resolve();
+            };
 
             $scope.scopeModel.onCountrySelectorReady = function (api) {
                 countrySelectorAPI = api;
@@ -94,7 +100,6 @@
                 $scope.modalContext.closeModal()
             };
         }
-
         function load()
         {
             $scope.scopeModel.isLoading = true;
@@ -114,7 +119,6 @@
                 loadAllControls();
             }
         }
-
         function getAccount() {
             return Retail_BE_AccountAPIService.GetAccount(accountId).then(function (response) {
                 accountEntity = response;
@@ -122,13 +126,12 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticData]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadAccountTypeSelector, loadCountryCitySection, loadStaticData]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                    $scope.scopeModel.isLoading = false;
               });
         }
-
         function setTitle()
         {
             var title;
@@ -150,14 +153,12 @@
                 $scope.title = title;
             }
         }
-
         function loadStaticData()
         {
             if (accountEntity == undefined)
                 return;
 
             $scope.scopeModel.name = accountEntity.Name;
-            $scope.scopeModel.selectedAccountType = UtilsService.getItemByVal($scope.scopeModel.accountTypes, accountEntity.Type, 'value');
 
             $scope.scopeModel.contactSettings.town = accountEntity.Settings.ContactSettings.Town;
             $scope.scopeModel.contactSettings.street = accountEntity.Settings.ContactSettings.Street;
@@ -176,7 +177,18 @@
                 UtilsService.getItemByVal($scope.scopeModel.paymentMethods, accountEntity.Settings.BillingSettings.PaymentMethod, 'value');
             }
         }
+        function loadAccountTypeSelector() {
+            var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
+            accountTypeSelectorReadyDeferred.promise.then(function () {
+                var accountTypeSelectorPayload = (accountEntity != undefined) ? {
+                    selectedIds: accountEntity.TypeId
+                } : undefined;
+                VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, accountTypeSelectorPayload, accountTypeSelectorLoadDeferred);
+            });
+
+            return accountTypeSelectorLoadDeferred.promise;
+        }
         function loadCountryCitySection()
         {
             var promises = [];
@@ -237,7 +249,6 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
-
         function updateAccount()
         {
             $scope.scopeModel.isLoading = true;
@@ -259,13 +270,12 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
-
         function buildAccountObjFromScope()
         {
             var obj = {
                 AccountId: accountId,
                 Name: $scope.scopeModel.name,
-                Type: $scope.scopeModel.selectedAccountType.value
+                TypeId: accountTypeSelectorAPI.getSelectedIds()
             };
 
             obj.Settings = {};

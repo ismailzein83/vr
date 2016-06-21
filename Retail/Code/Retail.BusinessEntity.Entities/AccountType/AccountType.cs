@@ -26,7 +26,7 @@ namespace Retail.BusinessEntity.Entities
         public List<int> PartDefinitionIds { get; set; }
     }
 
-    public class AccountType2 : BaseAccountType
+    public class AccountType : BaseAccountType
     {
         
     }

@@ -181,7 +181,6 @@
   <ItemGroup>
     <Content Include="Retail_BusinessEntity\Constant\AccountPartAvailabilityOptionsEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountPartRequiredOptionsEnum.js" />
-    <Content Include="Retail_BusinessEntity\Constant\AccountTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ChargeTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ConnectionTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ModuleConfig.js" />

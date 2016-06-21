@@ -12,12 +12,10 @@ namespace Retail.BusinessEntity.Entities
 
         public string Name { get; set; }
 
-        public AccountType Type { get; set; }
+        public int TypeId { get; set; }
 
         public AccountSettings Settings { get; set; }
     }
-
-    public enum AccountType { Residential = 0, Enterprise = 1 }
 
     public class AccountSettings
     {

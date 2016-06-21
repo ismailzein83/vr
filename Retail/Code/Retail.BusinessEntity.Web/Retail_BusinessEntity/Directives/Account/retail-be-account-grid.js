@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountPackageService', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountIdentificationService', 'Retail_BE_AccountTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'Retail_BE_AccountServiceAPIService','Retail_BE_AccountServiceService',
-    function (Retail_BE_AccountAPIService, Retail_BE_AccountService, Retail_BE_AccountPackageService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountIdentificationService, Retail_BE_AccountTypeEnum, UtilsService, VRUIUtilsService, VRNotificationService, Retail_BE_AccountServiceAPIService, Retail_BE_AccountServiceService) {
+app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountPackageService', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountIdentificationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'Retail_BE_AccountServiceAPIService','Retail_BE_AccountServiceService',
+    function (Retail_BE_AccountAPIService, Retail_BE_AccountService, Retail_BE_AccountPackageService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountIdentificationService, UtilsService, VRUIUtilsService, VRNotificationService, Retail_BE_AccountServiceAPIService, Retail_BE_AccountServiceService) {
     return {
         restrict: 'E',
         scope: {
@@ -38,7 +38,6 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                 return Retail_BE_AccountAPIService.GetFilteredAccounts(dataRetrievalInput).then(function (response) {
                     if (response && response.Data) {
                         for (var i = 0; i < response.Data.length; i++) {
-                            setAccountTypeDescription(response.Data[i]);
                             drillDownManager.setDrillDownExtensionObject(response.Data[i]);
                         }
                     }
@@ -59,7 +58,6 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             };
 
             api.onAccountAdded = function (addedAccount) {
-                setAccountTypeDescription(addedAccount);
                 drillDownManager.setDrillDownExtensionObject(addedAccount);
                 gridAPI.itemAdded(addedAccount);
             };
@@ -211,7 +209,6 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
 
         function editAccount(account) {
             var onAccountUpdated = function (updatedAccount) {
-                setAccountTypeDescription(updatedAccount);
                 drillDownManager.setDrillDownExtensionObject(updatedAccount);
                 gridAPI.itemUpdated(updatedAccount);
             };
@@ -258,12 +255,6 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
         }
         function hasAssignServicePermission() {
             return Retail_BE_AccountServiceAPIService.HasAddAccountServicePermission();
-        }
-
-
-        function setAccountTypeDescription(account) {
-            var accountType = UtilsService.getEnum(Retail_BE_AccountTypeEnum, 'value', account.Entity.Type);
-            account.typeDescription = accountType.description;
         }
     }
 }]);

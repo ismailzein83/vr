@@ -24,7 +24,7 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetAccountType")]
-        public AccountType2 GetAccountType(int accountTypeId)
+        public AccountType GetAccountType(int accountTypeId)
         {
             return _manager.GetAccountType(accountTypeId);
         }
@@ -45,7 +45,7 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("AddAccountType")]
-        public Vanrise.Entities.InsertOperationOutput<AccountTypeDetail> AddAccountType(AccountType2 accountType)
+        public Vanrise.Entities.InsertOperationOutput<AccountTypeDetail> AddAccountType(AccountType accountType)
         {
             return _manager.AddAccountType(accountType);
         }
