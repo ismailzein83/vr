@@ -31,6 +31,33 @@
         function defineScope() {
             $scope.scopeModel = {};
 
+
+            $scope.scopeModel.datasource = [];
+            $scope.scopeModel.isValid = function () {
+
+                if ($scope.scopeModel.datasource.length > 0)
+                    return null;
+                return "You Should Select at least one Supplier ";
+            }
+        
+            $scope.scopeModel.onSelectItem = function (dataItem) {
+                  addAccountPart(dataItem);
+            }
+            $scope.scopeModel.onDeselectItem = function (dataItem) {
+                var datasourceIndex = $scope.scopeModel.datasource.indexOf(dataItem);
+                $scope.scopeModel.datasource.splice(datasourceIndex, 1);
+            }
+            $scope.scopeModel.removeFilter = function (dataItem) {
+                var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedPartDefinitions, dataItem.AccountPartDefinitionId, 'AccountPartDefinitionId');
+                $scope.scopeModel.selectedPartDefinitions.splice(index, 1);
+
+                var datasourceIndex = $scope.scopeModel.datasource.indexOf(dataItem);
+                $scope.scopeModel.datasource.splice(datasourceIndex, 1);
+            };
+
+            
+
+
             $scope.scopeModel.accountPartAvailability = UtilsService.getArrayEnum(Retail_BE_AccountPartAvailabilityOptionsEnum);
 
             $scope.scopeModel.accountPartRequiredOptions = UtilsService.getArrayEnum(Retail_BE_AccountPartRequiredOptionsEnum);
@@ -87,7 +114,7 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadAccountTypeSection, loadStaticData, loadPartDefinitionSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadAccountTypeSection, loadStaticData, loadPartDefinitionSection]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -102,6 +129,7 @@
                 $scope.title = UtilsService.buildTitleForAddEditor('Account Type');
             }
         }
+
         function loadStaticData() {
             if (accountTypeEntity == undefined)
                 return;
@@ -111,13 +139,10 @@
             if (accountTypeEntity.Settings != undefined)
             {
                 $scope.scopeModel.canBeRootAccount = accountTypeEntity.Settings.CanBeRootAccount;
-                if (accountTypeEntity.Settings.AccountTypePartSettings != undefined) {
-                    $scope.scopeModel.selectedAccountPartAvailability = UtilsService.getItemByVal($scope.scopeModel.accountPartAvailability, accountTypeEntity.Settings.AccountTypePartSettings.AvailabilitySettings, "value");
-                    $scope.scopeModel.selectedAccountPartRequiredOptions = UtilsService.getItemByVal($scope.scopeModel.accountPartRequiredOptions, accountTypeEntity.Settings.AccountTypePartSettings.RequiredSettings, "value");
-                }
             }
            
         }
+
         function loadAccountTypeSection() {
             var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             accountTypeSelectorReadyDeferred.promise.then(function () {
@@ -132,20 +157,43 @@
 
             return accountTypeSelectorLoadDeferred.promise;
         }
-        function loadPartDefinitionSelector()
-        {
-            var partDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
+        function loadPartDefinitionSection()
+        {
+            var partDefinitionIds;
+            if (accountTypeEntity != undefined && accountTypeEntity.Settings != null && accountTypeEntity.Settings.PartDefinitionSettings != undefined) {
+                partDefinitionIds = [];
+                for (var i = 0; i < accountTypeEntity.Settings.PartDefinitionSettings.length; i++) {
+                    var partDefinitionSetting = accountTypeEntity.Settings.PartDefinitionSettings[i];
+                    partDefinitionIds.push(partDefinitionSetting.PartDefinitionId);
+                }
+            }
+            var partDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             partDefinitionSelectorReadyDeferred.promise.then(function () {
-                var partDefinitionSelectorPayload = (accountTypeEntity != undefined && accountTypeEntity.Settings != null && accountTypeEntity.Settings.AccountTypePartSettings !=undefined) ? {
-                    selectedIds: accountTypeEntity.Settings.AccountTypePartSettings.PartDefinitionIds
-                } : undefined;
+                var partDefinitionSelectorPayload = partDefinitionIds !=undefined ? { selectedIds: partDefinitionIds } : undefined;
                 VRUIUtilsService.callDirectiveLoad(partDefinitionSelectorAPI, partDefinitionSelectorPayload, partDefinitionSelectorLoadDeferred);
             });
 
-            return partDefinitionSelectorLoadDeferred.promise;
+            return partDefinitionSelectorLoadDeferred.promise.then(function () {
+                if (accountTypeEntity != undefined && accountTypeEntity.Settings != null && accountTypeEntity.Settings.PartDefinitionSettings != undefined) {
+                    for (var i = 0; i < accountTypeEntity.Settings.PartDefinitionSettings.length; i++) {
+                        var selectedPartDefinition = $scope.scopeModel.selectedPartDefinitions[i];
+                        var partDefinitionSetting = accountTypeEntity.Settings.PartDefinitionSettings[i];
+                        addAccountPart(selectedPartDefinition, partDefinitionSetting);
+                    }
+                }
+            });
         }
 
+        function addAccountPart(part, payload) {
+            var dataItem = {
+                AccountPartDefinitionId: part.AccountPartDefinitionId,
+                title: part.Title,
+                selectedAccountPartAvailability:    payload !=undefined? UtilsService.getItemByVal($scope.scopeModel.accountPartAvailability, payload.AvailabilitySettings, "value"):undefined,
+                selectedAccountPartRequiredOptions :  payload !=undefined?UtilsService.getItemByVal($scope.scopeModel.accountPartRequiredOptions, payload.RequiredSettings, "value"):undefined,
+            };
+            $scope.scopeModel.datasource.push(dataItem);
+        }
         function insertAccountType() {
             $scope.scopeModel.isLoading = true;
 
@@ -182,6 +230,20 @@
             });
         }
         function buildAccountTypeObjFromScope() {
+            var partDefinitionSettings;
+            if ($scope.scopeModel.datasource.length > 0)
+            {
+                partDefinitionSettings = [];
+                for(var i=0 ; i < $scope.scopeModel.datasource.length ; i++)
+                {
+                    var dataItem = $scope.scopeModel.datasource[i];
+                    partDefinitionSettings.push({
+                        PartDefinitionId: dataItem.AccountPartDefinitionId,
+                        AvailabilitySettings: dataItem.selectedAccountPartAvailability.value,
+                        RequiredSettings: dataItem.selectedAccountPartRequiredOptions.value,
+                    });
+                }
+            }
             var obj = {
                 AccountTypeId: accountTypeId,
                 Name: $scope.scopeModel.name,
@@ -189,13 +251,8 @@
                 Settings:{
                     CanBeRootAccount: $scope.scopeModel.canBeRootAccount,
                     SupportedParentAccountTypeIds: accountTypeSelectorAPI.getSelectedIds(),
-                    AccountTypePartSettings: {
-                        PartDefinitionIds: partDefinitionSelectorAPI.getSelectedIds(),
-                        AvailabilitySettings: $scope.scopeModel.selectedAccountPartAvailability.value,
-                        RequiredSettings: $scope.scopeModel.selectedAccountPartRequiredOptions.value,
-                    }
+                    PartDefinitionSettings: partDefinitionSettings
                 }
-               
             };
             return obj;
         }

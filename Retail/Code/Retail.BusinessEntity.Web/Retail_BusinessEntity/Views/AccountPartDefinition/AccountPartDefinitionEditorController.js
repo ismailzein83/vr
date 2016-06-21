@@ -17,11 +17,9 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-
             if (parameters != undefined) {
                 accountPartDefinitionId = parameters.accountPartDefinitionId;
             }
-
             isEditMode = (accountPartDefinitionId != undefined);
         }
 
