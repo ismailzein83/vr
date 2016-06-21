@@ -82,10 +82,8 @@ namespace Retail.BusinessEntity.Business
             AccountPartDefinition accountPartDefinition = new AccountPartDefinition
             {
                 AccountPartDefinitionId = accountPartDefinitionToEdit.AccountPartDefinitionId,
-                AvailabilitySettings = accountPartDefinitionToEdit.AvailabilitySettings,
                 Name = accountPartDefinitionToEdit.Name,
                 Settings = accountPartDefinitionToEdit.Settings,
-                RequiredSettings = accountPartDefinitionToEdit.RequiredSettings,
                 Title = accountPartDefinitionToEdit.Title,
             };
 
