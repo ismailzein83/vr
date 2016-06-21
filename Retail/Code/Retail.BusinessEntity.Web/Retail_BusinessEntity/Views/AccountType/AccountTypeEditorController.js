@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountTypeEditorController.$inject = ['$scope', 'Retail_BE_AccountTypeAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    AccountTypeEditorController.$inject = ['$scope', 'Retail_BE_AccountTypeAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService','Retail_BE_AccountPartAvailabilityOptionsEnum','Retail_BE_AccountPartRequiredOptionsEnum'];
 
-    function AccountTypeEditorController($scope, Retail_BE_AccountTypeAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function AccountTypeEditorController($scope, Retail_BE_AccountTypeAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountPartAvailabilityOptionsEnum, Retail_BE_AccountPartRequiredOptionsEnum) {
         var isEditMode;
 
         var accountTypeId;
@@ -30,6 +30,11 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
+
+            $scope.scopeModel.accountPartAvailability = UtilsService.getArrayEnum(Retail_BE_AccountPartAvailabilityOptionsEnum);
+
+            $scope.scopeModel.accountPartRequiredOptions = UtilsService.getArrayEnum(Retail_BE_AccountPartRequiredOptionsEnum);
+
 
             $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
                 accountTypeSelectorAPI = api;
@@ -102,7 +107,16 @@
                 return;
             $scope.scopeModel.name = accountTypeEntity.Name;
             $scope.scopeModel.title = accountTypeEntity.Title;
-            $scope.scopeModel.canBeRootAccount = accountTypeEntity.CanBeRootAccount;
+
+            if (accountTypeEntity.Settings != undefined)
+            {
+                $scope.scopeModel.canBeRootAccount = accountTypeEntity.Settings.CanBeRootAccount;
+                if (accountTypeEntity.Settings.AccountTypePartSettings != undefined) {
+                    $scope.scopeModel.selectedAccountPartAvailability = UtilsService.getItemByVal($scope.scopeModel.accountPartAvailability, accountTypeEntity.Settings.AccountTypePartSettings.AvailabilitySettings, "value");
+                    $scope.scopeModel.selectedAccountPartRequiredOptions = UtilsService.getItemByVal($scope.scopeModel.accountPartRequiredOptions, accountTypeEntity.Settings.AccountTypePartSettings.RequiredSettings, "value");
+                }
+            }
+           
         }
         function loadAccountTypeSection() {
             var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -123,8 +137,8 @@
             var partDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             partDefinitionSelectorReadyDeferred.promise.then(function () {
-                var partDefinitionSelectorPayload = (accountTypeEntity != undefined && accountTypeEntity.Settings != null) ? {
-                    selectedIds: accountTypeEntity.Settings.PartDefinitionIds
+                var partDefinitionSelectorPayload = (accountTypeEntity != undefined && accountTypeEntity.Settings != null && accountTypeEntity.Settings.AccountTypePartSettings !=undefined) ? {
+                    selectedIds: accountTypeEntity.Settings.AccountTypePartSettings.PartDefinitionIds
                 } : undefined;
                 VRUIUtilsService.callDirectiveLoad(partDefinitionSelectorAPI, partDefinitionSelectorPayload, partDefinitionSelectorLoadDeferred);
             });
@@ -175,7 +189,11 @@
                 Settings:{
                     CanBeRootAccount: $scope.scopeModel.canBeRootAccount,
                     SupportedParentAccountTypeIds: accountTypeSelectorAPI.getSelectedIds(),
-                    PartDefinitionIds: partDefinitionSelectorAPI.getSelectedIds()
+                    AccountTypePartSettings: {
+                        PartDefinitionIds: partDefinitionSelectorAPI.getSelectedIds(),
+                        AvailabilitySettings: $scope.scopeModel.selectedAccountPartAvailability.value,
+                        RequiredSettings: $scope.scopeModel.selectedAccountPartRequiredOptions.value,
+                    }
                 }
                
             };

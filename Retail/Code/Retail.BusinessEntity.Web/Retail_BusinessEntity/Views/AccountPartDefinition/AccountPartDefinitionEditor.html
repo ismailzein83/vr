@@ -10,27 +10,7 @@
                         <vr-columns width="1/2row">
                             <vr-textbox label="Title" value="scopeModel.title" isrequired></vr-textbox>
                         </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-select label="Availability Settings"
-                                       datasource="scopeModel.accountPartAvailability"
-                                       selectedvalues="scopeModel.selectedAccountPartAvailability"
-                                       datavaluefield="value"
-                                       datatextfield="description"
-                                       isrequired="true"
-                                       hideremoveicon>
-                            </vr-select>
-                        </vr-columns>
 
-                        <vr-columns width="1/2row">
-                            <vr-select label="Required Settings"
-                                       datasource="scopeModel.accountPartRequiredOptions"
-                                       selectedvalues="scopeModel.selectedAccountPartRequiredOptions"
-                                       datavaluefield="value"
-                                       datatextfield="description"
-                                       isrequired="true"
-                                       hideremoveicon>
-                            </vr-select>
-                        </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Settings'">

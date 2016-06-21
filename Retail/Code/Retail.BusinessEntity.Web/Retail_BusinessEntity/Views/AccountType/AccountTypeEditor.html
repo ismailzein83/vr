@@ -20,13 +20,37 @@
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <retail-be-accountpartdefinition-selector on-ready="scopeModel.onPartDefinitionSelectorReady"
-                                                                  normal-col-num="6"
-                                                                  ismultipleselection="true"
-                                                                  isrequired="true">
-                        </retail-be-accountpartdefinition-selector>
+                        <vr-columns width="1/2row">
+                            <vr-select label="Availability Settings"
+                                       datasource="scopeModel.accountPartAvailability"
+                                       selectedvalues="scopeModel.selectedAccountPartAvailability"
+                                       datavaluefield="value"
+                                       datatextfield="description"
+                                       isrequired="true"
+                                       hideremoveicon>
+                            </vr-select>
+                        </vr-columns>
+
+                        <vr-columns width="1/2row">
+                            <vr-select label="Required Settings"
+                                       datasource="scopeModel.accountPartRequiredOptions"
+                                       selectedvalues="scopeModel.selectedAccountPartRequiredOptions"
+                                       datavaluefield="value"
+                                       datatextfield="description"
+                                       isrequired="true"
+                                       hideremoveicon>
+                            </vr-select>
+                        </vr-columns>
+
                     </vr-row>
-                </vr-tab>
+                        <vr-row>
+                            <retail-be-accountpartdefinition-selector on-ready="scopeModel.onPartDefinitionSelectorReady"
+                                                                      normal-col-num="6"
+                                                                      ismultipleselection="true"
+                                                                      isrequired="true">
+                            </retail-be-accountpartdefinition-selector>
+                        </vr-row>
+</vr-tab>
             </vr-tabs>
         </vr-form>
     </vr-modalbody>

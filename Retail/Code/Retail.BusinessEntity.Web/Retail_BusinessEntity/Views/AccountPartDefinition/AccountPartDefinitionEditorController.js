@@ -28,10 +28,6 @@
         function defineScope() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.accountPartAvailability = UtilsService.getArrayEnum(Retail_BE_AccountPartAvailabilityOptionsEnum);
-
-            $scope.scopeModel.accountPartRequiredOptions = UtilsService.getArrayEnum(Retail_BE_AccountPartRequiredOptionsEnum);
-
             $scope.scopeModel.accountPartDefinitionDirectiveReady = function (api) {
                 accountPartDefinitionAPI = api;
                 accountPartDefinitionReadyDeferred.resolve();
@@ -94,8 +90,6 @@
             if (accountPartDefinitionEntity != undefined) {
                 $scope.scopeModel.name = accountPartDefinitionEntity.Name;
                 $scope.scopeModel.title = accountPartDefinitionEntity.Title;
-                $scope.scopeModel.selectedAccountPartAvailability = UtilsService.getItemByVal($scope.scopeModel.accountPartAvailability, accountPartDefinitionEntity.AvailabilitySettings, "value");
-                $scope.scopeModel.selectedAccountPartRequiredOptions = UtilsService.getItemByVal($scope.scopeModel.accountPartRequiredOptions, accountPartDefinitionEntity.RequiredSettings, "value");
             }
         }
 
@@ -151,8 +145,6 @@
                 AccountPartDefinitionId: accountPartDefinitionId,
                 Name: $scope.scopeModel.name,
                 Title: $scope.scopeModel.title,
-                AvailabilitySettings: $scope.scopeModel.selectedAccountPartAvailability.value,
-                RequiredSettings: $scope.scopeModel.selectedAccountPartRequiredOptions.value,
                 Settings: accountPartDefinitionAPI.getData()
             };
             return accountPartDefinitionObj;
