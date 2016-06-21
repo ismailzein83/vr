@@ -33,7 +33,7 @@
                         <vr-columns width="fullrow">
                             <vr-validator validate="scopeModel.isValid()">
                                 <vr-datagrid datasource="scopeModel.datasource"
-                                             on-ready="onGridReady" ondeleterow="scopeModel.removeFilter" hidegridmenu norowhighlightonclick="'true'">
+                                             on-ready="onGridReady" ondeleterow="scopeModel.removeFilter" hidegridmenu norowhighlightonclick="'true'" enabledraggablerow="true">
                                     <vr-datagridcolumn headertext="'Title'" field="'title'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Required Settings'" widthfactor="10" disablesorting="true">
                                         <vr-select datasource="viewScope.scopeModel.accountPartRequiredOptions"
