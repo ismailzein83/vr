@@ -27,7 +27,8 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
 
         var gridAPI;
         var drillDownManager;
-        var OnlyModified;
+        var onlyModified;
+        var processInstanceId;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -43,7 +44,8 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
 
                     var directiveAPI = {};
                     directiveAPI.load = function (query) {
-                        OnlyModified = query.OnlyModified;
+                        processInstanceId = query.ProcessInstanceId;
+                        onlyModified = query.OnlyModified;
                         return gridAPI.retrieveData(query);
                     }
 
@@ -81,9 +83,9 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
                     zoneDataItem.codeGridAPI = directiveAPI;
 
                     var codeGridPayload = {
-                        ProcessInstanceId: zoneDataItem.ProcessInstanceId,
+                        ProcessInstanceId: processInstanceId,
                         ZoneName: zoneDataItem.ZoneName,
-                        OnlyModified: OnlyModified
+                        OnlyModified: onlyModified
                     };
 
                     return zoneDataItem.codeGridAPI.load(codeGridPayload);
@@ -102,11 +104,6 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
                 case WhS_SupPL_ZoneChangeTypeEnum.New.value:
                     dataItem.ZoneStatusIconUrl = "Client/Modules/WhS_SupplierPriceList/Images/NewZone.png";
                     dataItem.ZoneStatusIconTooltip = WhS_SupPL_ZoneChangeTypeEnum.New.description;
-                    break;
-
-                case WhS_SupPL_ZoneChangeTypeEnum.Closed.value:
-                    dataItem.ZoneStatusIconUrl = "Client/Modules/WhS_SupplierPriceList/Images/NewZone.png";
-                    dataItem.ZoneStatusIconTooltip = WhS_SupPL_ZoneChangeTypeEnum.Closed.description;
                     break;
 
                 case WhS_SupPL_ZoneChangeTypeEnum.Deleted.value:

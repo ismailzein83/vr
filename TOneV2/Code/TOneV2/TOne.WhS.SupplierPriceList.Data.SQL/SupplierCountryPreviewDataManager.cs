@@ -29,25 +29,15 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 
         }
 
-        public Vanrise.Entities.BigResult<Entities.CountryPreview> GetCountryPreviewFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SPLPreviewQuery> input)
+        public IEnumerable<CountryPreview> GetFilteredCountryPreview(SPLPreviewQuery query)
         {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-
-                ExecuteNonQuerySP("[TOneWhS_SPL].[sp_SupplierCountry_Preview_CreateTempByFiltered]", tempTableName, input.Query.ProcessInstanceId, input.Query.OnlyModified);
-            };
-            if (input.SortByColumnName != null)
-                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
-
-            return RetrieveData(input, createTempTableAction, CountryPreviewMapper);
+            return GetItemsSP("[TOneWhS_SPL].[sp_SupplierCountry_Preview_GetFiltered]",CountryPreviewMapper, query.ProcessInstanceId, query.OnlyModified);
         }
-
 
         private CountryPreview CountryPreviewMapper(IDataReader reader)
         {
             CountryPreview countryPreview = new CountryPreview
             {
-                ProcessInstanceId = (long)reader["ProcessInstanceID"],
                 CountryId = (int)reader["CountryId"],
                 NewZones = (int)reader["NewZones"],
                 DeletedZones = (int)reader["DeletedZones"],

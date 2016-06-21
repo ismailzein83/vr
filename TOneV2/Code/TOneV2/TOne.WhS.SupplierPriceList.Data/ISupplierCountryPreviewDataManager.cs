@@ -11,6 +11,6 @@ namespace TOne.WhS.SupplierPriceList.Data
     public interface ISupplierCountryPreviewDataManager : IDataManager
     {
         long ProcessInstanceId { set; }
-        Vanrise.Entities.BigResult<Entities.CountryPreview> GetCountryPreviewFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SPLPreviewQuery> input);
+        IEnumerable<CountryPreview> GetFilteredCountryPreview(SPLPreviewQuery query);
     }
 }

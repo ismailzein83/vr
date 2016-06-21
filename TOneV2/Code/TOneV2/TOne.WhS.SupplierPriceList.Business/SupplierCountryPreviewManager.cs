@@ -14,22 +14,11 @@ namespace TOne.WhS.SupplierPriceList.Business
 {
     public class SupplierCountryPreviewManager
     {
-
         public Vanrise.Entities.IDataRetrievalResult<CountryPreviewDetail> GetFilteredCountryPreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
         {
-            ISupplierCountryPreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierCountryPreviewDataManager>();
-
-            BigResult<CountryPreview> countriesPreview = dataManager.GetCountryPreviewFilteredFromTemp(input);
-            BigResult<CountryPreviewDetail> countryPreviewDetailResult = new BigResult<CountryPreviewDetail>()
-            {
-                ResultKey = countriesPreview.ResultKey,
-                TotalCount = countriesPreview.TotalCount,
-                Data = countriesPreview.Data.MapRecords(CountryPreviewDetailMapper)
-            };
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, countryPreviewDetailResult);
-
+            return BigDataManager.Instance.RetrieveData(input, new SupplierCountryPreviewRequestHandler());
         }
+
 
         private CountryPreviewDetail CountryPreviewDetailMapper(CountryPreview countryPreview)
         {
@@ -40,6 +29,26 @@ namespace TOne.WhS.SupplierPriceList.Business
             countryPreviewDetail.CountryName = manager.GetCountryName(countryPreview.CountryId);
             return countryPreviewDetail;
         }
+
+
+        #region Private Classes
+
+        private class SupplierCountryPreviewRequestHandler : BigDataRequestHandler<SPLPreviewQuery, CountryPreview, CountryPreviewDetail>
+        {
+            public override CountryPreviewDetail EntityDetailMapper(CountryPreview entity)
+            {
+                SupplierCountryPreviewManager manager = new SupplierCountryPreviewManager();
+                return manager.CountryPreviewDetailMapper(entity);
+            }
+
+            public override IEnumerable<CountryPreview> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
+            {
+                ISupplierCountryPreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierCountryPreviewDataManager>();
+                return dataManager.GetFilteredCountryPreview(input.Query);
+            }
+        }
+
+        #endregion
 
 
     }

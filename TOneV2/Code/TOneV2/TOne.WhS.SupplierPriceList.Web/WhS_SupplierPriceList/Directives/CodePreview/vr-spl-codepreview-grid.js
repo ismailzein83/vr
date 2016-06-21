@@ -92,6 +92,13 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_CodeChangeTypeE
                         }
                     break;
             }
+            dataItem.showMovedTo = true;
+            dataItem.showMovedFrom = true;
+            if (zoneName == dataItem.Entity.ZoneName)
+                dataItem.showMovedTo = false;
+
+            if (dataItem.Entity.RecentZoneName== null || zoneName == dataItem.Entity.RecentZoneName)
+                dataItem.showMovedFrom = false;
         }
 
     }

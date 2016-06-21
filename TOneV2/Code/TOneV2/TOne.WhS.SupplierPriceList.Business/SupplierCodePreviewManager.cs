@@ -8,6 +8,7 @@ using TOne.WhS.SupplierPriceList.Data;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Business
@@ -17,18 +18,31 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public Vanrise.Entities.IDataRetrievalResult<CodePreviewDetail> GetFilteredCodePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
         {
-            ISupplierCodePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierCodePreviewDataManager>();
-            BigResult<CodePreview> codesPreview = dataManager.GetCodePreviewFilteredFromTemp(input);
-            BigResult<CodePreviewDetail> codePreviewDetailResult = new BigResult<CodePreviewDetail>()
-            {
-                ResultKey = codesPreview.ResultKey,
-                TotalCount = codesPreview.TotalCount,
-                Data = codesPreview.Data.MapRecords(CodePreviewDetailMapper)
-            };
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, codePreviewDetailResult);
+            return BigDataManager.Instance.RetrieveData(input, new SupplierCodePreviewRequestHandler());
         }
 
+
+        #region Private Classes
+
+        private class SupplierCodePreviewRequestHandler : BigDataRequestHandler<SPLPreviewQuery, CodePreview, CodePreviewDetail>
+        {
+            public override CodePreviewDetail EntityDetailMapper(CodePreview entity)
+            {
+                SupplierCodePreviewManager manager = new SupplierCodePreviewManager();
+                return manager.CodePreviewDetailMapper(entity);
+            }
+
+            public override IEnumerable<CodePreview> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
+            {
+                ISupplierCodePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierCodePreviewDataManager>();
+                return dataManager.GetFilteredCodePreview(input.Query);
+            }
+        }
+
+        #endregion
+
+
+        #region Private Mappers
         private CodePreviewDetail CodePreviewDetailMapper(CodePreview codePreview)
         {
             CodePreviewDetail codePreviewDetail = new CodePreviewDetail();
@@ -36,5 +50,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             codePreviewDetail.ChangeTypeDecription = Utilities.GetEnumAttribute<CodeChangeType, DescriptionAttribute>(codePreview.ChangeType).Description;
             return codePreviewDetail;
         }
+
+        #endregion
     }
 }

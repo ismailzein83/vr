@@ -43,17 +43,9 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         }
 
 
-        public Vanrise.Entities.BigResult<Entities.ZoneRatePreviewDetail> GetZonePreviewFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SPLPreviewQuery> input)
+       public IEnumerable<ZoneRatePreviewDetail> GetFilteredZonePreview(SPLPreviewQuery query)
         {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-
-                ExecuteNonQuerySP("[TOneWhS_SPL].[sp_SupplierZoneRate_Preview_CreateTempByFiltered]", tempTableName, input.Query.ProcessInstanceId, input.Query.CountryId, input.Query.OnlyModified);
-            };
-            if (input.SortByColumnName != null)
-                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
-
-            return RetrieveData(input, createTempTableAction, ZoneRatePreviewMapper, _columnMapper);
+            return GetItemsSP("[TOneWhS_SPL].[sp_SupplierZoneRate_Preview_GetFiltered]", ZoneRatePreviewMapper, query.ProcessInstanceId, query.CountryId, query.OnlyModified);
         }
 
 
@@ -100,14 +92,13 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         {
             ZoneRatePreviewDetail zoneRatePreviewDetail = new ZoneRatePreviewDetail
             {
-                ProcessInstanceId = (long)reader["ProcessInstanceID"],
                 ZoneName = reader["ZoneName"] as string,
                 RecentZoneName = reader["RecentZoneName"] as string,
                 ChangeTypeZone = (ZoneChangeType)GetReaderValue<int>(reader, "ZoneChangeType"),
                 ZoneBED = GetReaderValue<DateTime>(reader, "ZoneBED"),
                 ZoneEED = GetReaderValue<DateTime?>(reader, "ZoneEED"),
-                CurrentRate = GetReaderValue<decimal>(reader, "CurrentRate"),
-                CurrentRateBED = GetReaderValue<DateTime>(reader, "CurrentRateBED"),
+                CurrentRate = GetReaderValue<decimal?>(reader, "CurrentRate"),
+                CurrentRateBED = GetReaderValue<DateTime?>(reader, "CurrentRateBED"),
                 CurrentRateEED = GetReaderValue<DateTime?>(reader, "CurrentRateEED"),
                 ImportedRate = GetReaderValue<decimal>(reader, "ImportedRate"),
                 ImportedRateBED = GetReaderValue<DateTime?>(reader, "ImportedRateBED"),
@@ -120,5 +111,9 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             };
             return zoneRatePreviewDetail;
         }
+
+
+
+        
     }
 }

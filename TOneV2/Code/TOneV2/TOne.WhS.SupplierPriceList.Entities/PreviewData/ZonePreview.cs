@@ -47,7 +47,6 @@ namespace TOne.WhS.SupplierPriceList.Entities
 
     public class ZoneRatePreviewDetail
     {
-        public long ProcessInstanceId { get; set; }
         public string ZoneName { get; set; }
         public string RecentZoneName { get; set; }
         public ZoneChangeType ChangeTypeZone { get; set; }

@@ -43,21 +43,11 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             InsertBulkToTable(preparedZones as BaseBulkInsertInfo);
         }
 
-        
-
-        public Vanrise.Entities.BigResult<Entities.CodePreview> GetCodePreviewFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SPLPreviewQuery> input)
+        public IEnumerable<CodePreview> GetFilteredCodePreview(SPLPreviewQuery query)
         {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-
-                ExecuteNonQuerySP("[TOneWhS_SPL].[sp_SupplierCode_Preview_CreateTempByFiltered]", tempTableName, input.Query.ProcessInstanceId, input.Query.ZoneName, input.Query.OnlyModified);
-            };
-
-            if (input.SortByColumnName != null)
-                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
-
-            return RetrieveData(input, createTempTableAction, CodePreviewMapper, _columnMapper);
+            return GetItemsSP("[TOneWhS_SPL].[sp_SupplierCode_Preview_GetFiltered]", CodePreviewMapper, query.ProcessInstanceId, query.ZoneName, query.OnlyModified);
         }
+ 
 
         object Vanrise.Data.IBulkApplyDataManager<CodePreview>.InitialiazeStreamForDBApply()
         {

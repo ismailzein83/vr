@@ -12,8 +12,8 @@ namespace TOne.WhS.SupplierPriceList.Data
     {
         long ProcessInstanceId { set; }
 
-        void ApplyPreviewCodesToDB(object preparedCodes); 
-        
-        Vanrise.Entities.BigResult<Entities.CodePreview> GetCodePreviewFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SPLPreviewQuery> input);
+        void ApplyPreviewCodesToDB(object preparedCodes);
+
+        IEnumerable<CodePreview> GetFilteredCodePreview(SPLPreviewQuery query);
     }
 }

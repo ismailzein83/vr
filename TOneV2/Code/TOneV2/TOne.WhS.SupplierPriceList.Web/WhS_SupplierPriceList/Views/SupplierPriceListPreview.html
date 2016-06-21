@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="WhS_SupPL_SupplierPriceListPreviewController" vr-loader="isLoading" width="'70%'">
+﻿<div vr-modalcontent ng-controller="WhS_SupPL_SupplierPriceListPreviewController" vr-loader="isLoading" width="'85%'">
     <vr-modalbody maxheight="'700px'">
         <vr-form name="formSellNewZones" vr-loader="scopeModal.isLoading">
             <vr-tabs>
@@ -6,24 +6,15 @@
                     <vr-row ng-hide="filterSectionCollapsed">
                         <span>
                             <vr-spl-viewchangetype-selector on-ready="onViewChangeTypeSelectorReady"
+                                                            onselectitem="onViewChangeTypeSelectItem"
                                                             normal-col-num="3"
-                                                            hideremoveicon="true">
-                        </span>
+                                                            hideremoveicon="true"></span>
                         <span>
                             <vr-spl-groupedby-selector on-ready="onGroupedBySelectorReady"
                                                        normal-col-num="3"
                                                        hideremoveicon="true"
                                                        selectedvalues="selectedGroupedBy">
                         </span>
-                    </vr-row>
-
-                    <vr-row removeline>
-                        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-
-                            <div transclude-to="buttons">
-                                <vr-button type="Search" data-onclick="scopeModal.search"></vr-button>
-                            </div>
-                        </vr-actionbar>
                     </vr-row>
 
                     <vr-row>

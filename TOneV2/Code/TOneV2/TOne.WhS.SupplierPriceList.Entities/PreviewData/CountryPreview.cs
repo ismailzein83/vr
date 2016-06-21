@@ -10,7 +10,6 @@ namespace TOne.WhS.SupplierPriceList.Entities
 {
     public class CountryPreview
     {
-        public long ProcessInstanceId { get; set; }
         public int CountryId { get; set; }
 
         public int NewZones { get; set; }

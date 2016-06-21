@@ -27,7 +27,8 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, VRUIUtilsService, VRNotif
 
         var gridAPI;
         var drillDownManager;
-        var OnlyModified;
+        var onlyModified;
+        var processInstanceId;
 
         this.initializeController = initializeController;
 
@@ -44,8 +45,8 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, VRUIUtilsService, VRNotif
 
                     var directiveAPI = {};
                     directiveAPI.load = function (query) {
-
-                        OnlyModified = query.OnlyModified;
+                        processInstanceId = query.ProcessInstanceId;
+                        onlyModified = query.OnlyModified;
                         return gridAPI.retrieveData(query);
                     }
 
@@ -59,8 +60,10 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, VRUIUtilsService, VRNotif
 
                         if (response && response.Data) {
                                 for (var i = 0; i < response.Data.length; i++) {
-                                    if (!OnlyModified)
+                                    if (!onlyModified)
                                         mapDataNeeded(response.Data[i]);
+                                    else
+                                        $scope.showStatusIcon = false;
                                     drillDownManager.setDrillDownExtensionObject(response.Data[i]);
                                 }
                         }
@@ -83,9 +86,9 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, VRUIUtilsService, VRNotif
                     countryDataItem.zoneRateGridAPI = directiveAPI;
 
                     var zoneRateGridPayload = {
-                        ProcessInstanceId: countryDataItem.Entity.ProcessInstanceId,
+                        ProcessInstanceId: processInstanceId,
                         CountryId: countryDataItem.Entity.CountryId,
-                        OnlyModified: OnlyModified
+                        OnlyModified: onlyModified
                     };
 
                     return countryDataItem.zoneRateGridAPI.load(zoneRateGridPayload);
@@ -99,9 +102,8 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, VRUIUtilsService, VRNotif
 
 
         function mapDataNeeded(dataItem) {
-            dataItem.ShowStatusIcon = false;
             if (dataItem.Entity.NewCodes > 0 || dataItem.Entity.MovedCodes > 0 || dataItem.Entity.DeletedCodes > 0) {
-                dataItem.ShowStatusIcon = true;
+                $scope.showStatusIcon = true;
                 dataItem.StatusIconUrl = "Client/Modules/WhS_SupplierPriceList/Images/NewZone.png";
             }
 

@@ -14,6 +14,6 @@ namespace TOne.WhS.SupplierPriceList.Data
 
         void ApplyPreviewZonesToDB(object preparedZones); 
         
-        Vanrise.Entities.BigResult<Entities.ZoneRatePreviewDetail> GetZonePreviewFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SPLPreviewQuery> input);
+        IEnumerable<ZoneRatePreviewDetail> GetFilteredZonePreview(SPLPreviewQuery query);
     }
 }

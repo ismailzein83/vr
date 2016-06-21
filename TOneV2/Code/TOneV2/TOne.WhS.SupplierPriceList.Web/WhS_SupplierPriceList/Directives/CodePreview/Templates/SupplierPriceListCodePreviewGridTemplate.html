@@ -11,7 +11,15 @@
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Begin Effective Date'" field="'Entity.BED'" type="'Datetime'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'End Effective Date'" field="'Entity.EED'" type="'Datetime'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Moved From'" field="'Entity.RecentZoneName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Moved To'" field="'Entity.ZoneName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Moved From'" type="'Text'">
+        <span ng-show="dataItem.showMovedFrom">
+            {{dataItem.Entity.RecentZoneName}}
+        </span>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Moved To'" type="'Text'">
+        <span ng-show="dataItem.showMovedTo">
+            {{dataItem.Entity.ZoneName}}
+        </span>
+    </vr-datagridcolumn>
 
 </vr-datagrid>

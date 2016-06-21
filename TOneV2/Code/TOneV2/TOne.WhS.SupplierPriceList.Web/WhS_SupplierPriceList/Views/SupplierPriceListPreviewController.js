@@ -7,6 +7,7 @@
     function supplierPriceListPreviewController($scope, BusinessProcess_BPTaskAPIService, WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
         var bpTaskId;
         var processInstanceId;
+        var changeType = true;
 
         var validationMessageHistoryGridAPI;
         var validationMessageHistoryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -37,13 +38,6 @@
 
             $scope.scopeModal = {};
 
-
-            $scope.scopeModal.search = function () {
-                directiveWrapperReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                directiveWrapperReadyPromiseDeferred.resolve();
-                return loadPreviewDataSection();
-            }
-
             $scope.scopeModal.continueTask = function () {
                 return executeTask(true);
             }
@@ -52,6 +46,14 @@
                 return executeTask(false);
             }
 
+            $scope.onViewChangeTypeSelectItem = function (dataItem) {
+                if (dataItem != undefined) {
+                    directiveWrapperReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                    directiveWrapperReadyPromiseDeferred.resolve();
+                    changeType = dataItem.value;
+                    return loadPreviewDataSection();
+                }
+            }
 
             $scope.scopeModal.onValidationMessageHistoryGridReady = function (api) {
                 validationMessageHistoryGridAPI = api;
@@ -165,7 +167,7 @@
                 directiveWrapperReadyPromiseDeferred = undefined;
                 var payload = {
                     ProcessInstanceId: processInstanceId,
-                    OnlyModified: viewChangeTypeSelectorAPI.getSelectedIds()
+                    OnlyModified: changeType
                 }
                 VRUIUtilsService.callDirectiveLoad(directiveWrapperAPI, payload, loadPreviewDataPromiseDeferred)
             })
