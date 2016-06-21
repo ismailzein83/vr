@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeServicetypeSelector', ['Retail_BE_AccountPartDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', function (Retail_BE_AccountPartDefinitionAPIService, UtilsService, VRUIUtilsService) {
+app.directive('retailBeAccountpartdefinitionSelector', ['Retail_BE_AccountPartDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', function (Retail_BE_AccountPartDefinitionAPIService, UtilsService, VRUIUtilsService) {
     return {
         restrict: 'E',
         scope: {
