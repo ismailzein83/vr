@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountPartDefinitionEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'Retail_BE_AccountPartAvailabilityOptionsEnum', 'Retail_BE_AccountPartRequiredOptionsEnum','Retail_BE_AccountPartDefinitionAPIService'];
+    AccountPartDefinitionEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService','Retail_BE_AccountPartDefinitionAPIService'];
 
-    function AccountPartDefinitionEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountPartAvailabilityOptionsEnum, Retail_BE_AccountPartRequiredOptionsEnum, Retail_BE_AccountPartDefinitionAPIService) {
+    function AccountPartDefinitionEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountPartDefinitionAPIService) {
         var isEditMode;
         var accountPartDefinitionId;
         var accountPartDefinitionEntity;
