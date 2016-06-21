@@ -1,13 +1,12 @@
-﻿using Retail.BusinessEntity.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.MainExtensions.ServicePackageItem
+namespace Retail.BusinessEntity.Entities
 {
-    public class ServicePackageVolumeItem : Entities.PackageItemSettings
+    public class VolumePackageItem : PackageItemSettings
     {
         public List<ConditionalServiceVolume> ConditionalVolumes { get; set; }
     }

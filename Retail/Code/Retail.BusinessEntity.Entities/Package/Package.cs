@@ -25,23 +25,8 @@ namespace Retail.BusinessEntity.Entities
 
     }
 
-    public class PackageItem
+    public abstract class PackageValidity
     {
-        public int ServiceTypeId { get; set; }
-        public PackageItemSettings Settings { get; set; }
-    }
 
-    public abstract class PackageItemSettings
-    {
-        public int ConfigId { get; set; }
-    }
-
-    public class PackageServiceDetail
-    {
-        public PackageItem Entity { get; set; }
-
-        public string ServiceTypeName { get; set; }
-
-        public IEnumerable<ChargingPolicyRuleDefinition> RuleDefinitions { get; set; }
     }
 }

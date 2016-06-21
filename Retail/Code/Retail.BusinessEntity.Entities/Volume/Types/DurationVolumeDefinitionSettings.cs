@@ -1,23 +1,22 @@
-﻿using Retail.BusinessEntity.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.Voice.Entities
+namespace Retail.BusinessEntity.Entities
 {
-    public class VoiceVolumeDefinitionSettings : VolumeDefinitionSettings
+    public class DurationVolumeDefinitionSettings : VolumeDefinitionSettings
     {
         public override string VolumeSettingsEditor
         {
             get
             {
-                return "retail-voice-volume-settings";
+                return "retail-be-durationvolumesettings";
             }
             set
             {
-                
+
             }
         }
     }

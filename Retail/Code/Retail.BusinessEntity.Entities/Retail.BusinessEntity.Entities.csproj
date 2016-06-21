@@ -94,6 +94,11 @@
     <Compile Include="ChargingPolicy\ChargingPolicyParts\Types\ChargingPolicyDurationTariff.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicy.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicySettings.cs" />
+    <Compile Include="Package\PackageItems\PackageItem.cs" />
+    <Compile Include="Package\PackageItems\Types\ChargingPolicyPackageItem.cs" />
+    <Compile Include="Package\PackageItems\Types\MoneyPackageItem.cs" />
+    <Compile Include="Package\PackageItems\Types\VolumePackageItem.cs" />
+    <Compile Include="Package\PackageServiceDetail.cs" />
     <Compile Include="Package\PackageServiceQuery.cs" />
     <Compile Include="Package\ServicePackageItemConfig.cs" />
     <Compile Include="ServiceType\ServiceType.cs" />
@@ -120,6 +125,9 @@
     <Compile Include="Switch\SwitchSettings.cs" />
     <Compile Include="Volume\Definition\VolumeDefinitionConfig.cs" />
     <Compile Include="Volume\Definition\VolumeDefinitionSettings.cs" />
+    <Compile Include="Volume\Types\DurationVolumeDefinitionSettings.cs" />
+    <Compile Include="Volume\Types\DurationVolumeSettings.cs" />
+    <Compile Include="Volume\Types\DurationVolumeTypeConfig.cs" />
     <Compile Include="Volume\VolumeSettings.cs" />
     <Compile Include="Zone\ZoneFilter.cs" />
     <Compile Include="Zone\Zone.cs" />

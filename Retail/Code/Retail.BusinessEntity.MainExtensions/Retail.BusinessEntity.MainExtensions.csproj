@@ -77,6 +77,8 @@
     <Compile Include="ChargingPolicyParts\RateValues\GenericRuleRateValueDefinition.cs" />
     <Compile Include="ChargingPolicyParts\RateValues\SingleRateValue.cs" />
     <Compile Include="ChargingPolicyParts\RateValues\SingleRateValueDefinition.cs" />
+    <Compile Include="DurationVolumes\VolumeByDuration.cs" />
+    <Compile Include="DurationVolumes\VolumePerUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServicePackageItem\ServicePackageChargingPolicyItem.cs" />
     <Compile Include="ServicePackageItem\ServicePackageVolumeItem.cs" />

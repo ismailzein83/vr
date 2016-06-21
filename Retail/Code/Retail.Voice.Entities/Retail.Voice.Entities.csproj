@@ -58,9 +58,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VoiceChargingPolicySettings.cs" />
     <Compile Include="VoiceChargingPolicyDefinitionSettings.cs" />
-    <Compile Include="VoiceVolumeDefinitionSettings.cs" />
-    <Compile Include="VoiceVolumeSettings.cs" />
-    <Compile Include="VoiceVolumeTypeConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
