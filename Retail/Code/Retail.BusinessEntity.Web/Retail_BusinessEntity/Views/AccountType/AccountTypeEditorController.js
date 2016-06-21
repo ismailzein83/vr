@@ -14,9 +14,6 @@
         var accountTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var accountTypeSelectedDeferred;
 
-        var accountTypePartDefinitionAPI;
-        var accountTypePartDefinitionReadyDeferred = UtilsService.createPromiseDeferred();
-
         var partDefinitionSelectorAPI;
         var partDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -120,20 +117,6 @@
             });
 
             return accountTypeSelectorLoadDeferred.promise;
-        }
-        function loadAccountTypePartDefinitioSection() {
-            var accountTypePartDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
-            accountTypePartDefinitionReadyDeferred.promise.then(function () {
-                var accountTypePartPayload;
-                if (accountTypeEntity != undefined && accountTypeEntity.Settings != null) {
-                    accountTypePartPayload = {
-                        partDefinitions: accountTypeEntity.Settings.PartDefinitions
-                    };
-                }
-                VRUIUtilsService.callDirectiveLoad(accountTypePartDefinitionAPI, accountTypePartPayload, accountTypePartDefinitionLoadDeferred);
-            });
-
-            return accountTypePartDefinitionLoadDeferred.promise;
         }
         function loadPartDefinitionSelector()
         {
