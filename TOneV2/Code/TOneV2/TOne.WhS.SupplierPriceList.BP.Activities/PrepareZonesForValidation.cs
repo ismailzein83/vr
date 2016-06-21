@@ -65,7 +65,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             foreach (ExistingZone existingZone in existingZones)
             {
                 string zoneName = existingZone.ZoneEntity.Name;
-                //To consider a zone as not imported, it should neither exist in the list of imported zones nor in the list of renamed zones
                 if (existingZone.ChangedZone != null && !importedZoneNamesHashSet.Contains(zoneName, StringComparer.InvariantCultureIgnoreCase))
                     notImportedZones.Add(existingZone);
             }
@@ -76,7 +75,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         private ZoneChangeType GetZoneChangeType(ImportedZone importedZone, IEnumerable<ExistingZone> existingZones, HashSet<string> importedZoneNamesHashSet)
         {
-            if(importedZone.ImportedCodes.Any(itm => itm.ChangeType == CodeChangeType.Moved))
+            if(importedZone.ExistingZones.Count == 0 && importedZone.ImportedCodes.Any(itm => itm.ChangeType == CodeChangeType.Moved))
             {
                 //This zone can be a considered as renamed but with specific conditions, first let us take the zone name of the first moved code as original zone name
                 IEnumerable<ImportedCode> allMovedCodes = importedZone.ImportedCodes.Where(itm => itm.ChangeType == CodeChangeType.Moved);
@@ -89,7 +88,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     importedZone.RecentZoneName = originalZoneName;
                     return ZoneChangeType.Renamed;
                 }
-                    
             }
 
             if (importedZone.NewZones.Count() > 0 && importedZone.ExistingZones.Count == 0)

@@ -297,8 +297,10 @@ namespace TOne.WhS.SupplierPriceList.Business
                 {
                     if (!hasCodes)
                         maxCodeEED = existingZone.BED;
-                    if (maxCodeEED != existingZone.EED)
+                    if (!existingZone.ZoneEntity.EED.HasValue && maxCodeEED != existingZone.EED)
                     {
+                        //TODO: a business rule that should not be here considers all closed zones as out of changes and cannot be close again
+                        //this check should be moved to a business rule after processing
                         existingZone.ChangedZone = new ChangedZone
                         {
                             ZoneId = existingZone.ZoneId,

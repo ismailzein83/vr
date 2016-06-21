@@ -70,6 +70,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         public ExistingRate RecentExistingRate { get; set; }
     }
 
+    //TODO: use the Rate Change Type of the one in Business Entities
     public enum RateChangeType
     {
 
