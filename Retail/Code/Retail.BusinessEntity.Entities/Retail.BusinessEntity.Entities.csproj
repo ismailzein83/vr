@@ -63,13 +63,16 @@
     <Compile Include="AccountPackage\AccountPackage.cs" />
     <Compile Include="AccountPackage\AccountPackageDetail.cs" />
     <Compile Include="AccountPackage\AccountPackageQuery.cs" />
+    <Compile Include="AccountPartDefinition\AccountPartDefinitionDetail.cs" />
+    <Compile Include="AccountPartDefinition\AccountPartDefinitionInfo.cs" />
+    <Compile Include="AccountPartDefinition\AccountPartDefinitionQuery.cs" />
     <Compile Include="AccountType\AccountTypeDetail.cs" />
     <Compile Include="AccountType\AccountTypeInfo.cs" />
     <Compile Include="AccountType\AccountTypeQuery.cs" />
     <Compile Include="AccountType\Parts\AccountPart.cs" />
     <Compile Include="AccountType\AccountType.cs" />
-    <Compile Include="AccountType\Parts\Definition\AccountPartDefinition.cs" />
-    <Compile Include="AccountType\Parts\Definition\AccountPartDefinitionConfig.cs" />
+    <Compile Include="AccountPartDefinition\AccountPartDefinition.cs" />
+    <Compile Include="AccountPartDefinition\AccountPartDefinitionConfig.cs" />
     <Compile Include="Account\Account.cs" />
     <Compile Include="Account\AccountDetail.cs" />
     <Compile Include="Account\AccountInfo.cs" />
@@ -132,7 +135,9 @@
     <Compile Include="Zone\ZoneFilter.cs" />
     <Compile Include="Zone\Zone.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="AccountType\Parts\Definition\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

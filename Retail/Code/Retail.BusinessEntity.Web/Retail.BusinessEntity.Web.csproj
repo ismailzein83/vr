@@ -153,6 +153,7 @@
     <Compile Include="Controllers\AccountIdentificationController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountPackageController.cs" />
+    <Compile Include="Controllers\AccountPartDefinitionController.cs" />
     <Compile Include="Controllers\AccountServiceController.cs" />
     <Compile Include="Controllers\AccountTypeController.cs" />
     <Compile Include="Controllers\ChargingPolicyController.cs" />
@@ -210,7 +211,9 @@
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\Templates\ChargingPolicyGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\Templates\ChargingPolicyPartsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\Templates\ChargingPolicySettingsTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-activation-part-definition.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-financial.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-activation.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeFinancialPartDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeActivationPartDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\retail-be-chargingpolicypart-durationtariff-single-runtimeeditor.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\retail-be-chargingpolicypart-ratevalue-single-runtimeeditor.js" />

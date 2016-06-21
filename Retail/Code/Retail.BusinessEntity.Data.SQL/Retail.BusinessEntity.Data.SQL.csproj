@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="AccountDataManager.cs" />
     <Compile Include="AccountPackageDataManager.cs" />
+    <Compile Include="AccountPartDefinitionDataManager.cs" />
     <Compile Include="AccountServiceDataManager.cs" />
     <Compile Include="AccountTypeDataManager.cs" />
     <Compile Include="ChargingPolicyDataManager.cs" />

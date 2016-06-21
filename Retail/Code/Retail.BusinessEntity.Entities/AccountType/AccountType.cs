@@ -23,7 +23,7 @@ namespace Retail.BusinessEntity.Entities
 
         public List<int> SupportedParentAccountTypeIds { get; set; }
 
-        public List<AccountPartDefinition> PartDefinitions { get; set; }
+        public List<int> PartDefinitionIds { get; set; }
     }
 
     public class AccountType2 : BaseAccountType

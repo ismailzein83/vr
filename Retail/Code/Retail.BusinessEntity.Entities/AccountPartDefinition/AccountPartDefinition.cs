@@ -10,19 +10,28 @@ namespace Retail.BusinessEntity.Entities
 
     public enum AccountPartRequiredOptions { Required = 0, RequiredIfNotInherited = 1, NotRequired = 2 }
 
-    public class AccountPartDefinition
+
+    public class BaseAccountPartDefinition
     {
         /// <summary>
         /// this value should be unique within the list of parts of the Account type
         /// </summary>
-        public string PartUniqueName { get; set; }
-
+        public int AccountPartDefinitionId { get; set; }
+        public string Name { get; set; }
+        public string Title { get; set; }
         public AccountPartDefinitionSettings Settings { get; set; }
-
         public AccountPartAvailabilityOptions AvailabilitySettings { get; set; }
-
         public AccountPartRequiredOptions RequiredSettings { get; set; }
     }
+    public class AccountPartDefinition : BaseAccountPartDefinition
+    {
+       
+    }
+    public class AccountPartDefinitionToEdit : BaseAccountPartDefinition
+    {
+
+    }
+
 
     public abstract class AccountPartDefinitionSettings
     {

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccounttypeActivationPartDefinition', [function () {
+app.directive('retailBeAccounttypePartDefinitionActivation', [function () {
     return {
         restrict: 'E',
         scope: {
