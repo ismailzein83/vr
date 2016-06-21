@@ -75,6 +75,7 @@
     <Compile Include="AccountPartDefinition\AccountPartDefinitionConfig.cs" />
     <Compile Include="Account\Account.cs" />
     <Compile Include="Account\AccountDetail.cs" />
+    <Compile Include="Account\AccountEditorRuntime.cs" />
     <Compile Include="Account\AccountInfo.cs" />
     <Compile Include="Account\AccountQuery.cs" />
     <Compile Include="Account\AccountStatus.cs" />

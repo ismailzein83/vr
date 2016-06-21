@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public enum AccountPartAvailabilityOptions { AlwaysAvailable = 0, AvailableIfNotInheritedOnly = 1 }
-
-    public enum AccountPartRequiredOptions { Required = 0, RequiredIfNotInherited = 1, NotRequired = 2 }
-
-
     public class BaseAccountPartDefinition
     {
         /// <summary>
@@ -20,8 +15,7 @@ namespace Retail.BusinessEntity.Entities
         public string Name { get; set; }
         public string Title { get; set; }
         public AccountPartDefinitionSettings Settings { get; set; }
-        public AccountPartAvailabilityOptions AvailabilitySettings { get; set; }
-        public AccountPartRequiredOptions RequiredSettings { get; set; }
+
     }
     public class AccountPartDefinition : BaseAccountPartDefinition
     {
