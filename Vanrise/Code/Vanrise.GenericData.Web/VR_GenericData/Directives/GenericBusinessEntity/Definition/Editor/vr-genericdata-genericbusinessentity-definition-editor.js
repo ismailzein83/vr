@@ -77,9 +77,8 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionEditor', ['UtilsServi
                     if(payload !=undefined)
                     {
                         recordTypeFields = payload.recordTypeFields;
-
+                        ctrl.sections.length = 0;
                         if (payload.sections != undefined) {
-                            ctrl.sections.length = 0;
                             var promises = [];
                             for (var i = 0; i < payload.sections.length; i++) {
                                 var section = payload.sections[i];
