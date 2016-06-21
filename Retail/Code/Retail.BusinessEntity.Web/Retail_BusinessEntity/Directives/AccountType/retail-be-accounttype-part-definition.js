@@ -19,7 +19,7 @@
                 var accountTypePartDefinition = new AccountTypePartDefinition($scope, ctrl, $attrs);
                 accountTypePartDefinition.initializeController();
             },
-            controllerAs: "ctrl",
+            controllerAs: "partDefinitionCtrl",
             bindToController: true,
             template: function (element, attrs) {
                 return getTamplate(attrs);
@@ -130,10 +130,10 @@
                 label = "label='Part Definitions'";
             }
 
-            return '<vr-row><vr-columns colnum="{{ctrl.normalColNum * 2}}">'
-                    + '<vr-select on-ready="onSelectorReady" datasource="extensionConfigs" selectedvalues="selectedExtensionConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" ' + label + ' isrequired="ctrl.isrequired" hideremoveicon></vr-select>'
+            return '<vr-row><vr-columns colnum="{{partDefinitionCtrl.normalColNum * 2}}">'
+                    + '<vr-select on-ready="onSelectorReady" datasource="extensionConfigs" selectedvalues="selectedExtensionConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" ' + label + ' isrequired="partDefinitionCtrl.isrequired" hideremoveicon></vr-select>'
                 + '</vr-columns></vr-row>'
-                + '<vr-row><vr-directivewrapper directive="selectedExtensionConfig.DefinitionEditor" on-ready="onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper></vr-row>';
+                + '<vr-row><vr-directivewrapper directive="selectedExtensionConfig.DefinitionEditor" on-ready="onDirectiveReady" normal-col-num="{{partDefinitionCtrl.normalColNum}}" isrequired="partDefinitionCtrl.isrequired" customvalidate="partDefinitionCtrl.customvalidate"></vr-directivewrapper></vr-row>';
         }
     }
 
