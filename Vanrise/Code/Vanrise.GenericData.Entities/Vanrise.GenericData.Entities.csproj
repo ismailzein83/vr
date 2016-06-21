@@ -166,6 +166,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataRecords\DataRecordQuery.cs" />
     <Compile Include="RecordFilter\DataRecordFilter.cs" />
+    <Compile Include="DataRecordVanriseType.cs" />
     <Compile Include="SummaryTransformation\SummaryTransformationDefinitionQuery.cs" />
     <Compile Include="SummaryTransformation\SummaryTransformationDefinitionInfoFilter.cs" />
     <Compile Include="SummaryTransformation\SummaryTransformationDefinitionInfo.cs" />
