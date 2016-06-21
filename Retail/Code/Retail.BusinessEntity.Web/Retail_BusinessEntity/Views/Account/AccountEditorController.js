@@ -117,9 +117,10 @@
             var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             accountTypeSelectorReadyDeferred.promise.then(function () {
-                var accountTypeSelectorPayload = (accountEntity != undefined) ? {
-                    selectedIds: accountEntity.TypeId
-                } : undefined;
+                var accountTypeSelectorPayload = {
+                    selectedIds: (accountEntity != undefined) ? accountEntity.TypeId : undefined,
+                    filter: { CanBeRootAccount: (parentAccountId == undefined) }
+                };
                 VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, accountTypeSelectorPayload, accountTypeSelectorLoadDeferred);
             });
 

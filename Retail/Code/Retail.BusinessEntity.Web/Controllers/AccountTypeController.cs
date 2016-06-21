@@ -33,7 +33,8 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetAccountTypesInfo")]
         public IEnumerable<AccountTypeInfo> GetAccountTypesInfo(string filter = null)
         {
-            return _manager.GetAccountTypesInfo();
+            AccountTypeFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<AccountTypeFilter>(filter) : null;
+            return _manager.GetAccountTypesInfo(deserializedFilter);
         }
 
         [HttpGet]

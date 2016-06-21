@@ -19,10 +19,10 @@ namespace Retail.BusinessEntity.Business
         public Vanrise.Entities.IDataRetrievalResult<AccountTypeDetail> GetFilteredAccountTypes(Vanrise.Entities.DataRetrievalInput<AccountTypeQuery> input)
         {
             Dictionary<int, AccountType> cachedAccountTypes = this.GetCachedAccountTypes();
-            
+
             Func<AccountType, bool> filterExpression = (accountType) =>
                 (input.Query.Name == null || accountType.Name.ToLower().Contains(input.Query.Name.ToLower()));
-            
+
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedAccountTypes.ToBigResult(input, filterExpression, AccountTypeDetailMapper));
         }
 
@@ -37,9 +37,17 @@ namespace Retail.BusinessEntity.Business
             return (accountType != null) ? accountType.Title : null;
         }
 
-        public IEnumerable<AccountTypeInfo> GetAccountTypesInfo()
+        public IEnumerable<AccountTypeInfo> GetAccountTypesInfo(AccountTypeFilter filter)
         {
-            return this.GetCachedAccountTypes().MapRecords(AccountTypeInfoMapper).OrderBy(x => x.Title);
+            Func<AccountType, bool> filterExpression = null;
+
+            if (filter != null)
+            {
+                if (filter.CanBeRootAccount.HasValue)
+                    filterExpression = (accountType) => accountType.Settings != null && accountType.Settings.CanBeRootAccount == filter.CanBeRootAccount.Value;
+            }
+
+            return this.GetCachedAccountTypes().MapRecords(AccountTypeInfoMapper, filterExpression).OrderBy(x => x.Title);
         }
 
         public IEnumerable<AccountPartDefinitionConfig> GetAccountTypePartDefinitionExtensionConfigs()
