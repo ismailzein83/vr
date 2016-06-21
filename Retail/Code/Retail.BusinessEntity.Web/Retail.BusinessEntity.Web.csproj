@@ -305,12 +305,10 @@
     <Content Include="Retail_BusinessEntity\Views\AccountPartDefinition\AccountPartDefinitionManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountService\AccountServiceEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountService\AccountServiceEditorController.js" />
-    <Content Include="Retail_BusinessEntity\Views\AccountType\AccountPartDefinitionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountType\AccountTypeEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountType\AccountTypeEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountType\AccountTypeManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountType\AccountTypeManagementController.js" />
-    <Content Include="Retail_BusinessEntity\Views\AccountType\AccountPartDefinitionEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountManagement.html" />
