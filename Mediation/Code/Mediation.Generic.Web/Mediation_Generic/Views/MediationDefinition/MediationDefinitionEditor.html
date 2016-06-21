@@ -37,6 +37,44 @@
 
                 </vr-tab>
 
+                <vr-tab header="'Parsed Record Type Identification '">
+                    <vr-columns width="1/4row" vr-loader="scopeModal.isLoadingParsedSessionID">
+
+                        <vr-genericdata-datarecordtypefields-selector on-ready="scopeModal.onParsedDataRecordSessionIDFieldSelectorReady"
+                                                                      selectedvalues="scopeModal.selectedParsedDataRecordTypeSessionId"
+                                                                      isrequired="true"
+                                                                      label="Session ID Field"
+                                                                      hideremoveicon>
+                        </vr-genericdata-datarecordtypefields-selector>
+                    </vr-columns>
+
+
+                    <vr-columns width="1/4row" vr-loader="scopeModal.isLoadingParsedTimeField">
+
+                        <vr-genericdata-datarecordtypefields-selector on-ready="scopeModal.onParsedDataRecordTimeFieldSelectorReady"
+                                                                      selectedvalues="scopeModal.selectedParsedDataRecordTypeTimeField"
+                                                                      isrequired="true"
+                                                                      label="Time Field"
+                                                                      hideremoveicon>
+                        </vr-genericdata-datarecordtypefields-selector>
+                    </vr-columns>
+
+                    <vr-columns width="fullrow">
+                        <vr-row>
+                            <vr-columns width="fullrow">
+                                <vr-datagrid datasource="scopeModal.statusMappings"
+                                             pagingtype="'PagingOnScroll'"
+                                             menuactions="scopeModal.gridMenuActions"
+                                             on-ready="scopeModal.onGridReady"
+                                             idfield="Id">
+                                    <vr-datagridcolumn headertext="'Status'" field="'Status'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Conditions'" field="'Condition'"></vr-datagridcolumn>
+                                </vr-datagrid>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-columns>
+                </vr-tab>
+
                 <vr-tab header="'Parsed to Cooked Transformation'">
 
                     <vr-row>

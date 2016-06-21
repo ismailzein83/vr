@@ -12,7 +12,15 @@ namespace Mediation.Generic.Entities
         public string Name { get; set; }
         public int ParsedRecordTypeId { get; set; }
         public int CookedRecordTypeId { get; set; }
+        public ParsedRecordIdentificationSetting ParsedRecordIdentificationSetting { get; set; }
         public UpdateCookedFromParsed CookedFromParsedSettings { get; set; }
+
+    }
+
+    public class ParsedRecordIdentificationSetting {
+        public string SessionRecordTypeId { get; set; }
+        public string EventTimeRecordTypeId { get; set; }
+        public List<StatusMapping> StatusMappings { get; set; }
 
     }
 
@@ -24,4 +32,5 @@ namespace Mediation.Generic.Entities
 
         public string CookedRecordName { get; set; }
     }
+
 }

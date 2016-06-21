@@ -2,13 +2,14 @@
 
     "use strict";
 
-    MediationDefinitionEditorController.$inject = ['$scope', 'Mediation_Generic_MediationDefinitionAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    MediationDefinitionEditorController.$inject = ['$scope', 'Mediation_Generic_MediationDefinitionAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldAPIService', 'Mediation_Generic_StorageStagingStatusEnum', 'VR_GenericData_DataRecordTypeService'];
 
-    function MediationDefinitionEditorController($scope, Mediation_Generic_MediationDefinitionAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function MediationDefinitionEditorController($scope, Mediation_Generic_MediationDefinitionAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService, Mediation_Generic_StorageStagingStatusEnum, VR_GenericData_DataRecordTypeService) {
 
         var isEditMode;
         var mediationDefinitionId;
         var mediationDefinitionEntity;
+        var gridAPI;
 
         //#region Definition Tab
 
@@ -19,6 +20,16 @@
         var dataCookedRecordTypeSelectorAPI;
         var dataCookedRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var dataCookedRecordTypeSelectedPromiseDeferred;
+
+        //#endregion
+
+        //#region Parsed Identification Tab
+
+        var dataParsedRecordTypeFieldsSessionIdSelectorAPI;
+        var dataParsedRecordTypeFieldsSessionIdSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var dataParsedRecordTypeFieldsTimeSelectorAPI;
+        var dataParsedRecordTypeFieldsTimeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         //#endregion
 
@@ -51,6 +62,7 @@
         function defineScope() {
 
             $scope.scopeModal = {};
+            $scope.scopeModal.statusMappings = [];
 
             //#region Definition Tab
 
@@ -65,6 +77,25 @@
                 dataCookedRecordTypeSelectorAPI = api;
                 dataCookedRecordTypeSelectorReadyDeferred.resolve();
             };
+
+            $scope.scopeModal.onParsedRecordTypeSelectionChanged = function () {
+                var selectedParsedDataRecordTypeId = dataParsedRecordTypeSelectorAPI.getSelectedIds();
+                if (selectedParsedDataRecordTypeId != undefined) {
+
+                    var setSessionIdLoader = function (value) { $scope.scopeModal.isLoadingParsedSessionID = value };
+                    var sessionIdPayload = {
+                        dataRecordTypeId: selectedParsedDataRecordTypeId
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataParsedRecordTypeFieldsSessionIdSelectorAPI, sessionIdPayload, setSessionIdLoader, dataParsedRecordTypeSelectedPromiseDeferred);
+
+
+                    var setTimeLoader = function (value) { $scope.scopeModal.isLoadingParsedSessionID = value };
+                    var timePayload = {
+                        dataRecordTypeId: selectedParsedDataRecordTypeId
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataParsedRecordTypeFieldsTimeSelectorAPI, timePayload, setTimeLoader, dataParsedRecordTypeSelectedPromiseDeferred);
+                }
+            }
 
             //#endregion
 
@@ -120,6 +151,22 @@
             };
             //#endregion
 
+            //#region Parsed Identification Tab
+
+            $scope.scopeModal.selectedParsedDataRecordTypeSessionId;
+            $scope.scopeModal.onParsedDataRecordSessionIDFieldSelectorReady = function (api) {
+                dataParsedRecordTypeFieldsSessionIdSelectorAPI = api;
+                dataParsedRecordTypeFieldsSessionIdSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModal.selectedParsedDataRecordTypeTimeField;
+            $scope.scopeModal.onParsedDataRecordTimeFieldSelectorReady = function (api) {
+                dataParsedRecordTypeFieldsTimeSelectorAPI = api;
+                dataParsedRecordTypeFieldsTimeSelectorReadyDeferred.resolve();
+            };
+
+            //#endregion
+
             $scope.hasSaveMediationDefinition = function () {
                 if (isEditMode) {
                     return Mediation_Generic_MediationDefinitionAPIService.HasUpdateMediationDefinition();
@@ -139,6 +186,10 @@
                 }
             };
 
+            $scope.scopeModal.onGridReady = function (api) {
+                gridAPI = api;
+            }
+
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal()
             };
@@ -148,6 +199,7 @@
         function load() {
 
             $scope.scopeModal.isLoading = true;
+            defineMenuActions();
 
             if (isEditMode) {
                 getMediationDefinition().then(function () {
@@ -186,11 +238,11 @@
             promises.push(dataParsedRecordTypeSelectorLoadDeferred.promise);
 
             var payloadParsedRecordTypeSelector;
-            if (mediationDefinitionEntity != undefined && mediationDefinitionEntity.ParsedItemRecordTypeId != undefined) {
+            if (mediationDefinitionEntity != undefined && mediationDefinitionEntity.ParsedRecordTypeId != undefined) {
                 dataParsedRecordTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 payloadParsedRecordTypeSelector = {
-                    selectedIds: mediationDefinitionEntity.ParsedItemRecordTypeId
+                    selectedIds: mediationDefinitionEntity.ParsedRecordTypeId
                 };
             }
 
@@ -206,11 +258,11 @@
             promises.push(dataCookedRecordTypeSelectorLoadDeferred.promise);
 
             var payloadCookedRecordTypeSelector;
-            if (mediationDefinitionEntity != undefined && mediationDefinitionEntity.CookedItemRecordTypeId != undefined) {
+            if (mediationDefinitionEntity != undefined && mediationDefinitionEntity.CookedRecordTypeId != undefined) {
                 dataCookedRecordTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 payloadCookedRecordTypeSelector = {
-                    selectedIds: mediationDefinitionEntity.CookedItemRecordTypeId
+                    selectedIds: mediationDefinitionEntity.CookedRecordTypeId
                 };
             }
 
@@ -219,28 +271,12 @@
                 VRUIUtilsService.callDirectiveLoad(dataCookedRecordTypeSelectorAPI, payloadCookedRecordTypeSelector, dataCookedRecordTypeSelectorLoadDeferred);
             });
 
-            if (mediationDefinitionEntity != undefined) {
-
-
-            }
             //#endregion
-
+            
             return UtilsService.waitMultiplePromises(promises);
         }
 
-        function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadDefinitionSection, setTitle, loadParsedToCookedSection])
-                 .catch(function (error) {
-                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                 })
-                .finally(function () {
-                    $scope.scopeModal.isLoading = false;
-                });
-        }
-
         function loadParsedToCookedSection() {
-
-
             var promises = [];
 
             var dataTransformationDefinitionInsertSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -251,7 +287,7 @@
                 dataTransformationDefinitionInsertSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 payload = {
-                    selectedIds: mediationDefinitionEntity.CookedFromParsedSettings.CookedFromParsedSettings.TransformationDefinitionId
+                    selectedIds: mediationDefinitionEntity.CookedFromParsedSettings.TransformationDefinitionId
                 };
             }
 
@@ -297,6 +333,20 @@
             //#endregion
 
             return UtilsService.waitMultiplePromises(promises);
+        }
+
+        function loadParsedIdentificationSection() {
+
+        }
+
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadDefinitionSection, setTitle, loadParsedToCookedSection, PrepareStatusMappings])
+                 .catch(function (error) {
+                     VRNotificationService.notifyExceptionWithClose(error, $scope);
+                 })
+                .finally(function () {
+                    $scope.scopeModal.isLoading = false;
+                });
         }
 
         function loadDefinitionSection() {
@@ -349,15 +399,122 @@
                 MediationDefinitionId: mediationDefinitionId,
                 ParsedRecordTypeId: dataParsedRecordTypeSelectorAPI.getSelectedIds(),
                 CookedRecordTypeId: dataCookedRecordTypeSelectorAPI.getSelectedIds(),
-                CookedFromParsedSettings: {
-                    TransformationDefinitionId: dataTransformationDefinitionInsertSelectorAPI.getSelectedIds(),
-                    ParsedRecordName: dataTransformationDefinitionRecordParsedSelectorAPI.getSelectedIds(),
-                    CookedRecordName: dataTransformationDefinitionRecordCookedSelectorAPI.getSelectedIds()
-                }
+                ParsedRecordIdentificationSetting: getParsedRecordIdentificationSetting(),
+                CookedFromParsedSettings: getCookedFromParsedSettings()
             }
             return item;
         }
 
+        function addFilter(dataItem) {
+
+            $scope.scopeModal.isLoading = true;
+            loadFields().then(function (response) {
+                if (response) {
+                    var fields = [];
+                    for (var i = 0; i < response.length; i++) {
+                        var dataRecordField = response[i];
+                        fields.push({
+                            FieldName: dataRecordField.Entity.Name,
+                            FieldTitle: dataRecordField.Entity.Title,
+                            Type: dataRecordField.Entity.Type,
+                        });
+                    }
+                    $scope.scopeModal.isLoading = false;
+
+                    var onDataRecordFieldTypeFilterAdded = function (filter, expression) {
+                        var obj = {
+                            FilterObj: filter,
+                            Expression: expression,
+                            Status: dataItem.Status,
+                            Id: dataItem.Id
+                        };
+                        gridAPI.itemUpdated(obj);
+                    }
+                    VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter(fields, dataItem.FilterObj, onDataRecordFieldTypeFilterAdded);
+                }
+            });
+        }
+
+        function resetFilter(dataItem) {
+            dataItem.Expression = undefined;
+            dataItem.FilterObj = null;
+        }
+
+        function defineMenuActions() {
+            $scope.scopeModal.gridMenuActions = [{
+                name: "Edit Condition",
+                clicked: addFilter
+            },
+            {
+                name: "Clear Condition",
+                clicked: resetFilter
+            }
+            ];
+        }
+
+        function loadFields() {
+            var obj = { DataRecordTypeId: dataParsedRecordTypeSelectorAPI.getSelectedIds() };
+            var serializedFilter = UtilsService.serializetoJson(obj);
+            return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter);
+        }
+
+        function getParsedRecordIdentificationSetting() {
+            return {
+                SessionRecordTypeId: dataParsedRecordTypeFieldsSessionIdSelectorAPI.getSelectedIds(),
+                EventTimeRecordTypeId: dataParsedRecordTypeFieldsTimeSelectorAPI.getSelectedIds(),
+                StatusMappings: getStatusMappings()
+            };
+        }
+
+        function getCookedFromParsedSettings() {
+            return {
+                TransformationDefinitionId: dataTransformationDefinitionInsertSelectorAPI.getSelectedIds(),
+                ParsedRecordName: dataTransformationDefinitionRecordParsedSelectorAPI.getSelectedIds(),
+                CookedRecordName: dataTransformationDefinitionRecordCookedSelectorAPI.getSelectedIds()
+            };
+        }
+
+        function getStatusMappings() {
+            var mappings = [];
+            for (var i = 0; i < $scope.scopeModal.statusMappings.length; i++) {
+                var mapping = $scope.scopeModal.statusMappings[i];
+                mappings.push({
+                    Status: mapping.Status,
+                    FilterGroup: mapping.FilterObj,
+                    FilterExpression: mapping.Expression
+                });
+            }
+            return mappings;
+        }
+
+        function PrepareStatusMappings() {
+            var stagingStatusEnums = UtilsService.getArrayEnum(Mediation_Generic_StorageStagingStatusEnum);
+            if (mediationDefinitionEntity != undefined && mediationDefinitionEntity.ParsedRecordIdentificationSetting != undefined) {
+                var statusMappings = mediationDefinitionEntity.ParsedRecordIdentificationSetting.StatusMappings;
+                for (var i = 0; i < statusMappings.length; i++) {
+                    var statusMappingObj = {
+                        Status: stagingStatusEnums[i].description,
+                        Expression: statusMappings[i].FilterExpression,
+                        FilterObj: statusMappings[i].Filters,
+                        Id: i
+                    };
+                    $scope.scopeModal.statusMappings.push(statusMappingObj);
+                }
+            }
+            else {
+
+                for (var i = 0; i < stagingStatusEnums.length; i++) {
+                    var statusMappingObj = {
+                        Status: stagingStatusEnums[i].description,
+                        Expression: undefined,
+                        FilterObj: undefined,
+                        Id: i
+                    };
+
+                    $scope.scopeModal.statusMappings.push(statusMappingObj);
+                }
+            }
+        }
     }
 
     appControllers.controller('Mediation_Generic_MediationDefinitionEditorController', MediationDefinitionEditorController);
