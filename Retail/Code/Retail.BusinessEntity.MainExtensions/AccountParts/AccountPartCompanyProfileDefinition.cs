@@ -9,6 +9,11 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
     public class AccountPartCompanyProfileDefinition : AccountPartDefinitionSettings
     {
-        public List<string> ContactTypes { get; set; }
+        public List<CompanyProfileContactType> ContactTypes { get; set; }
+    }
+    public class CompanyProfileContactType
+    {
+        public string Name { get; set; }
+        public string Title { get; set; }
     }
 }

@@ -214,11 +214,13 @@
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\Templates\ChargingPolicyGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\Templates\ChargingPolicyPartsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\Templates\ChargingPolicySettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-companyprofile.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-generic.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-financial.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-activation.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-residentialprofile.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeFinancialPartDefinitionTemplate - Copy.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeCompanyProfilePartDefinitionTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeFinancialPartDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeGenericPartDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeResidentialProfilePartDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeActivationPartDefinitionTemplate.html" />
