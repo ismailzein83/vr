@@ -107,7 +107,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
                     break;
 
                 case WhS_SupPL_ZoneChangeTypeEnum.Deleted.value:
-                    dataItem.ZoneStatusIconUrl = "Client/Modules/WhS_SupplierPriceList/Images/NewZone.png";
+                    dataItem.ZoneStatusIconUrl = "Client/Modules/WhS_SupplierPriceList/Images/Closed.png";
                     dataItem.ZoneStatusIconTooltip = WhS_SupPL_ZoneChangeTypeEnum.Deleted.description;
                     break;
 

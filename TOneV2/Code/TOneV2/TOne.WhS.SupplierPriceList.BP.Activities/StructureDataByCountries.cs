@@ -7,6 +7,7 @@ using TOne.WhS.SupplierPriceList.Entities.SPL;
 using TOne.WhS.SupplierPriceList.Entities;
 using Vanrise.Common.Business;
 using TOne.WhS.BusinessEntity.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -54,6 +55,22 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     importedCountry.ImportedZones.Add(zone);
 
             }
+
+            //CountryManager manager = new CountryManager();
+            //IEnumerable<Country> countries = manager.GetAllCountries();
+
+            //foreach (Country country in countries)
+            //{
+            //    if (!importedCountriesByCountryId.TryGetValue(country.CountryId, out importedCountry))
+            //    {
+            //        importedCountry = new ImportedCountry();
+            //        importedCountry.CountryId = country.CountryId;
+            //        importedCountry.ImportedZones = new List<ImportedZone>();
+            //        importedCountry.ImportedCodes = new List<ImportedCode>();
+            //        importedCountry.ImportedRates = new List<ImportedRate>();
+            //        importedCountriesByCountryId.Add(country.CountryId, importedCountry);
+            //    }
+            //}
 
             this.ImportedCountries.Set(context, importedCountriesByCountryId.Values);
         }
