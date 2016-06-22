@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccounttypePartRuntimeCompanyprofile', [function () {
+app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "VRUIUtilsService", function (UtilsService, VRUIUtilsService) {
     return {
         restrict: 'E',
         scope: {
@@ -24,50 +24,51 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', [function () {
         var cityDirectiveAPI;
         var cityReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var countrySelectedPromiseDeferred;
+
         var mainPayload;
 
         function initializeController() {
-            $scope.scopeModel = {};
 
-            $scope.scopeModal = {
+            $scope.scopeModel = {
                 contacts: [],
                 faxes: [],
                 phoneNumbers: []
 
             };
-            $scope.onCountryDirectiveReady = function (api) {
+            $scope.scopeModel.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
             }
 
-            $scope.onCityyDirectiveReady = function (api) {
+            $scope.scopeModel.onCityyDirectiveReady = function (api) {
                 cityDirectiveAPI = api;
                 cityReadyPromiseDeferred.resolve();
             }
 
-            $scope.scopeModal.disabledfax = true;
-            $scope.scopeModal.onFaxValueChange = function (value) {
-                $scope.scopeModal.disabledfax = (value == undefined);
+            $scope.scopeModel.disabledfax = true;
+            $scope.scopeModel.onFaxValueChange = function (value) {
+                $scope.scopeModel.disabledfax = (value == undefined);
             }
-            $scope.scopeModal.disabledphone = true;
-            $scope.scopeModal.onPhoneValueChange = function (value) {
-                $scope.scopeModal.disabledphone = (value == undefined);
+            $scope.scopeModel.disabledphone = true;
+            $scope.scopeModel.onPhoneValueChange = function (value) {
+                $scope.scopeModel.disabledphone = (value == undefined);
             }
 
-            $scope.addPhoneNumberOption = function () {
+            $scope.scopeModel.addPhoneNumberOption = function () {
 
-                $scope.scopeModal.phoneNumbers.push({
-                    phoneNumber: $scope.scopeModal.phoneNumberValue
+                $scope.scopeModel.phoneNumbers.push({
+                    phoneNumber: $scope.scopeModel.phoneNumberValue
                 });
-                $scope.scopeModal.phoneNumberValue = undefined;
-                $scope.scopeModal.disabledphone = true;
+                $scope.scopeModel.phoneNumberValue = undefined;
+                $scope.scopeModel.disabledphone = true;
             };
 
 
-            $scope.onCountrySelectionChanged = function () {
+            $scope.scopeModel.onCountrySelectionChanged = function () {
                 var selectedCountryId = countryDirectiveApi.getSelectedIds();
                 if (selectedCountryId != undefined) {
-                    var setLoader = function (value) { $scope.isLoadingCities = value };
+                    var setLoader = function (value) { $scope.scopeModel.isLoadingCities = value };
                     var payload = {
                         countryId: selectedCountryId
                     };
@@ -78,13 +79,13 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', [function () {
             }
 
 
-            $scope.addFaxOption = function () {
-                var fax = $scope.scopeModal.faxvalue;
-                $scope.scopeModal.faxes.push({
+            $scope.scopeModel.addFaxOption = function () {
+                var fax = $scope.scopeModel.faxvalue;
+                $scope.scopeModel.faxes.push({
                     fax: fax
                 });
-                $scope.scopeModal.faxvalue = undefined;
-                $scope.scopeModal.disabledfax = true;
+                $scope.scopeModel.faxvalue = undefined;
+                $scope.scopeModel.disabledfax = true;
             };
 
       
@@ -98,16 +99,38 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', [function () {
                 mainPayload = payload;
                 if (payload != undefined)
                 {
-                    if (payload.partDefinition != undefined)
+                    if (payload.partDefinition != undefined && payload.partDefinition.Settings !=undefined)
                     {
-                        $scope.scopeModal.contacts = [];
-                        for (var i = 0; i < payload.partDefinition.ContactTypes.length; i++) {
-                            var contactType = payload.partDefinition.ContactTypes[i];
+                        $scope.scopeModel.contacts.length = 0;
+                        for (var i = 0; i < payload.partDefinition.Settings.ContactTypes.length; i++) {
+                            var contactType = payload.partDefinition.Settings.ContactTypes[i];
+                            var settings;
+                            if(payload.partSettings !=undefined && payload.partSettings.Contacts !=undefined)
+                            {
+                                settings = UtilsService.getItemByVal(payload.partSettings.Contacts,contactType.Name,"ContactType");
+                            }
+                            addContact(contactType, settings);
+                         
+                        }
+                        function addContact(contactType,settings)
+                        {
+
+                           var phoneNumbers = [];
+                           if (settings != undefined && settings.PhoneNumbers !=undefined)
+                            {
+                               for (var i = 0; i < settings.PhoneNumbers.length; i++) {
+                                   phoneNumbers.push({
+                                        phoneNumber: settings.PhoneNumbers[i]
+                                    });
+                                }
+                            }
                             var contact = {
                                 label: contactType.Title,
+                                name:settings !=undefined?settings.ContactName:undefined,
+                                email: settings != undefined ? settings.Email : undefined,
                                 contactType: contactType.Name,
                                 disabledphone: true,
-                                phoneNumbers: [],
+                                phoneNumbers:settings !=undefined?phoneNumbers: [],
                                 addPhoneNumberOption: function () {
                                     contact.phoneNumbers.push({
                                         phoneNumber: contact.phoneNumberValue
@@ -119,28 +142,36 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', [function () {
                                     contact.disabledphone = (value == undefined);
                                 }
                             };
-                            $scope.scopeModal.contacts.push(contact);
+                            $scope.scopeModel.contacts.push(contact);
                         }
                     }
 
                     if (payload.partSettings != undefined) {
-                        $scope.scopeModal.email = payload.partSettings.Email;
-                        $scope.scopeModal.street = payload.partSettings.Street;
-                        $scope.scopeModal.town = payload.partSettings.Town;
-                        $scope.scopeModal.phoneNumbers = [];
-                        for (var i = 0; i < payload.partSettings.PhoneNumbers.length; i++) {
-                            $scope.scopeModal.phoneNumbers.push({
-                                phoneNumber: payload.partSettings.PhoneNumbers[i]
-                            });
+                        $scope.scopeModel.email = payload.partSettings.Email;
+                        $scope.scopeModel.street = payload.partSettings.Street;
+                        $scope.scopeModel.town = payload.partSettings.Town;
+                        $scope.scopeModel.website = payload.partSettings.Website
+                        $scope.scopeModel.poBox = payload.partSettings.POBox
+
+                        $scope.scopeModel.phoneNumbers = [];
+                        if (payload.partSettings.PhoneNumbers != undefined)
+                        {
+                            for (var i = 0; i < payload.partSettings.PhoneNumbers.length; i++) {
+                                $scope.scopeModel.phoneNumbers.push({
+                                    phoneNumber: payload.partSettings.PhoneNumbers[i]
+                                });
+                            }
                         }
-                        $scope.scopeModal.faxes = [];
-                        if (payload.partSettings.Faxes == undefined)
-                            payload.partSettings.Faxes = [];
-                        for (var j = 0; j < payload.partSettings.Faxes.length; j++) {
-                            $scope.scopeModal.faxes.push({
-                                fax: payload.partSettings.Faxes[j]
-                            });
+                        $scope.scopeModel.faxes = [];
+                        if (payload.partSettings.Faxes !=undefined)
+                        {
+                            for (var j = 0; j < payload.partSettings.Faxes.length; j++) {
+                                $scope.scopeModel.faxes.push({
+                                    fax: payload.partSettings.Faxes[j]
+                                });
+                            }
                         }
+                      
                     }
                 }
               
@@ -149,11 +180,11 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', [function () {
 
             api.getData = function () {
                 var contacts = [];
-                if ($scope.scopeModal.contacts.length > 0)
+                if ($scope.scopeModel.contacts.length > 0)
                 {
-                    for(var i=0;i<$scope.scopeModal.contacts.length;i++)
+                    for(var i=0;i<$scope.scopeModel.contacts.length;i++)
                     {
-                        var contact = $scope.scopeModal.contacts[i];
+                        var contact = $scope.scopeModel.contacts[i];
                         contacts.push({
                             ContactName: contact.name,
                             ContactType: contact.contactType,
@@ -167,12 +198,12 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', [function () {
                     $type: 'Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartCompanyProfile,Retail.BusinessEntity.MainExtensions',
                     CountryId: countryDirectiveApi.getSelectedIds(),
                     CityId: cityDirectiveAPI.getSelectedIds(),
-                    Town: $scope.scopeModal.town,
-                    Street: $scope.scopeModal.street,
-                    Website: $scope.scopeModal.website,
-                    POBox:$scope.scopeModal.poBox,
-                    PhoneNumbers: UtilsService.getPropValuesFromArray($scope.scopeModal.phoneNumbers, "phoneNumber"),
-                    Faxes: UtilsService.getPropValuesFromArray($scope.scopeModal.faxes, "fax"),
+                    Town: $scope.scopeModel.town,
+                    Street: $scope.scopeModel.street,
+                    Website: $scope.scopeModel.website,
+                    POBox:$scope.scopeModel.poBox,
+                    PhoneNumbers: UtilsService.getPropValuesFromArray($scope.scopeModel.phoneNumbers, "phoneNumber"),
+                    Faxes: UtilsService.getPropValuesFromArray($scope.scopeModel.faxes, "fax"),
                     Contacts: contacts,
                 };
             };

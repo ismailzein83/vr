@@ -1,77 +1,80 @@
 ﻿<vr-tab header="'General Info'">
     <vr-row removeline>
         <span>
-            <vr-common-country-selector selectedvalues="scopeModal.country" normal-col-num="6" onselectionchanged="scopeModal.onCountrySelectionChanged" on-ready="    scopeModal.onCountryDirectiveReady" isrequired showaddbutton></vr-common-country-selector>
+            <vr-common-country-selector selectedvalues="scopeModel.country" normal-col-num="6" onselectionchanged="scopeModel.onCountrySelectionChanged" on-ready="    scopeModel.onCountryDirectiveReady" isrequired></vr-common-country-selector>
         </span>
-        <span vr-loader="scopeModal.isLoadingCities">
-            <vr-common-city-selector showaddbutton normal-col-num="6" on-ready="scopeModal.onCityyDirectiveReady"></vr-common-city-selector>
+        <span vr-loader="scopeModel.isLoadingCities">
+            <vr-common-city-selector normal-col-num="6" on-ready="scopeModel.onCityyDirectiveReady"></vr-common-city-selector>
         </span>
 
     </vr-row>
 
     <vr-row removeline>
         <vr-columns width="1/2row">
-            <vr-textbox value="scopeModal.street" label="Street"></vr-textbox>
+            <vr-textbox value="scopeModel.street" label="Street"></vr-textbox>
         </vr-columns>
         <vr-columns width="1/2row">
-            <vr-textbox value="scopeModal.town" label="Town"></vr-textbox>
+            <vr-textbox value="scopeModel.town" label="Town"></vr-textbox>
         </vr-columns>
     </vr-row>
 
     <vr-row removeline>
         <vr-columns width="1/2row">
-            <vr-textbox value="scopeModal.website" label="Website"></vr-textbox>
+            <vr-textbox value="scopeModel.website" label="Website"></vr-textbox>
         </vr-columns>
         <vr-columns width="1/2row">
-            <vr-textbox value="scopeModal.poBox" label="POBox"></vr-textbox>
+            <vr-textbox value="scopeModel.poBox" label="POBox"></vr-textbox>
         </vr-columns>
     </vr-row>
 
     <vr-row removeline>
         <vr-columns width="1/4row">
-            <vr-textbox label="Phone" type="number" decimalprecision="0" onvaluechanged="scopeModal.onPhoneValueChange" value="scopeModal.phoneNumberValue"></vr-textbox>
+            <vr-textbox label="Phone" type="number" decimalprecision="0" onvaluechanged="scopeModel.onPhoneValueChange" value="scopeModel.phoneNumberValue"></vr-textbox>
         </vr-columns>
         <vr-columns withemptyline width="1/4row">
-            <vr-button type="Add" data-onclick="addPhoneNumberOption" vr-disabled="scopeModal.disabledphone" standalone></vr-button>
+            <vr-button type="Add" data-onclick="scopeModel.addPhoneNumberOption" vr-disabled="scopeModel.disabledphone" standalone></vr-button>
         </vr-columns>
 
         <vr-columns width="1/4row">
-            <vr-textbox value="scopeModal.faxvalue" type="number" onvaluechanged="scopeModal.onFaxValueChange" decimalprecision="0" label="Fax"></vr-textbox>
+            <vr-textbox value="scopeModel.faxvalue" type="number" onvaluechanged="scopeModel.onFaxValueChange" decimalprecision="0" label="Fax"></vr-textbox>
         </vr-columns>
         <vr-columns withemptyline width="1/4row">
-            <vr-button type="Add" data-onclick="addFaxOption" vr-disabled="scopeModal.disabledfax" standalone></vr-button>
+            <vr-button type="Add" data-onclick="scopeModel.addFaxOption" vr-disabled="scopeModel.disabledfax" standalone></vr-button>
         </vr-columns>
     </vr-row>
     <vr-row removeline>
         <vr-columns width="1/2row">
-            <vr-datalist maxitemsperrow="2" datasource="scopeModal.phoneNumbers" autoremoveitem="true">
+            <vr-datalist maxitemsperrow="2" datasource="scopeModel.phoneNumbers" autoremoveitem="true">
                 {{dataItem.phoneNumber}}
             </vr-datalist>
         </vr-columns>
         <vr-columns width="1/2row">
-            <vr-datalist maxitemsperrow="2" datasource="scopeModal.faxes" autoremoveitem="true">
+            <vr-datalist maxitemsperrow="2" datasource="scopeModel.faxes" autoremoveitem="true">
                 {{dataItem.fax}}
             </vr-datalist>
         </vr-columns>
     </vr-row>
 </vr-tab>
 <vr-tab header="'Contacts'">
-    <vr-row>
-        <vr-columns width="1/2row" ng-repeat="c in scopeModal.contacts">
-            <vr-label>{{c.label}}</vr-label>
+    <vr-section title="c.label" ng-repeat="c in scopeModel.contacts">
+        <vr-columns width="1/2row">
+            <vr-label>{{c.label}} Name </vr-label>
             <vr-textbox value="c.name" type="c.inputetype"></vr-textbox>
-            <vr-textbox value="c.email" type="c.inputetype"></vr-textbox>
-            <vr-columns width="1/4row">
-                <vr-textbox label="Phone" type="number" decimalprecision="0" onvaluechanged="c.onPhoneValueChange" value="c.phoneNumberValue"></vr-textbox>
-            </vr-columns>
-            <vr-columns withemptyline width="1/4row">
-                <vr-button type="Add" data-onclick="c.addPhoneNumberOption" vr-disabled="c.disabledphone" standalone></vr-button>
-            </vr-columns>
-            <vr-columns width="1/2row">
-                <vr-datalist maxitemsperrow="2" datasource="c.phoneNumbers" autoremoveitem="true">
-                    {{dataItem.phoneNumber}}
-                </vr-datalist>
-            </vr-columns>
         </vr-columns>
-    </vr-row>
+        <vr-columns width="1/2row">
+            <vr-label>{{c.label}} Email </vr-label>
+            <vr-textbox value="c.email" type="c.inputetype"></vr-textbox>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-textbox label="Phone" type="number" decimalprecision="0" onvaluechanged="c.onPhoneValueChange" value="c.phoneNumberValue"></vr-textbox>
+        </vr-columns>
+        <vr-columns withemptyline width="1/2row">
+            <vr-button type="Add" data-onclick="c.addPhoneNumberOption" vr-disabled="c.disabledphone" standalone></vr-button>
+        </vr-columns>
+        <vr-columns width="fullrow">
+            <vr-datalist maxitemsperrow="2" datasource="c.phoneNumbers" autoremoveitem="true">
+                {{dataItem.phoneNumber}}
+            </vr-datalist>
+        </vr-columns>
+    </vr-section>
 </vr-tab>
