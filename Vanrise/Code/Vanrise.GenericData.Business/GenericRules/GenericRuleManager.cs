@@ -55,7 +55,7 @@ namespace Vanrise.GenericData.Business
             {
                 var fieldType = GetCritieriaFieldType(rule, fieldName);
 
-                var fieldRuntimeType = fieldType.GetRuntimeType();
+                var fieldRuntimeType = fieldType.GetNonNullableRuntimeType();
 
                 var values = genericRuleCriteriaFieldValues.GetValues();
                 if (values != null)
