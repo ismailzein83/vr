@@ -94,6 +94,26 @@ app.directive('retailBeAccounttypePartRuntimeResidentialprofile', ["UtilsService
 
             api.load = function (payload) {
                 mainPayload = payload;
+                if(payload !=undefined)
+                {
+                    $scope.scopeModal.email = payload.Email;
+                    $scope.scopeModal.street = payload.Street;
+                    $scope.scopeModal.town = payload.Town;
+                    $scope.scopeModal.phoneNumbers = [];
+                    for (var i = 0; i < payload.PhoneNumbers.length; i++) {
+                        $scope.scopeModal.phoneNumbers.push({
+                            phoneNumber: payload.PhoneNumbers[i]
+                        });
+                    }
+                    $scope.scopeModal.faxes = [];
+                    if (payload.Faxes == undefined)
+                        payload.Faxes = [];
+                    for (var j = 0; j < payload.Faxes.length; j++) {
+                        $scope.scopeModal.faxes.push({
+                            fax: payload.Faxes[j]
+                        });
+                    }
+                }
                 return loadCountryCitySection();
             };
 
