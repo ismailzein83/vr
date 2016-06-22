@@ -2,7 +2,7 @@
 
     'use strict';
 
-    AccountTypeEditorController.$inject = ['$scope', 'Retail_BE_AccountTypeAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService','Retail_BE_AccountPartAvailabilityOptionsEnum','Retail_BE_AccountPartRequiredOptionsEnum'];
+    AccountTypeEditorController.$inject = ['$scope', 'Retail_BE_AccountTypeAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'Retail_BE_AccountPartAvailabilityOptionsEnum', 'Retail_BE_AccountPartRequiredOptionsEnum'];
 
     function AccountTypeEditorController($scope, Retail_BE_AccountTypeAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountPartAvailabilityOptionsEnum, Retail_BE_AccountPartRequiredOptionsEnum) {
         var isEditMode;
@@ -39,9 +39,9 @@
                     return null;
                 return "You Should Select at least one Supplier ";
             }
-        
+
             $scope.scopeModel.onSelectItem = function (dataItem) {
-                  addAccountPart(dataItem);
+                addAccountPart(dataItem);
             }
             $scope.scopeModel.onDeselectItem = function (dataItem) {
                 var datasourceIndex = $scope.scopeModel.datasource.indexOf(dataItem);
@@ -55,7 +55,7 @@
                 $scope.scopeModel.datasource.splice(datasourceIndex, 1);
             };
 
-            
+
 
 
             $scope.scopeModel.accountPartAvailability = UtilsService.getArrayEnum(Retail_BE_AccountPartAvailabilityOptionsEnum);
@@ -136,11 +136,10 @@
             $scope.scopeModel.name = accountTypeEntity.Name;
             $scope.scopeModel.title = accountTypeEntity.Title;
 
-            if (accountTypeEntity.Settings != undefined)
-            {
+            if (accountTypeEntity.Settings != undefined) {
                 $scope.scopeModel.canBeRootAccount = accountTypeEntity.Settings.CanBeRootAccount;
             }
-           
+
         }
 
         function loadAccountTypeSection() {
@@ -158,8 +157,7 @@
             return accountTypeSelectorLoadDeferred.promise;
         }
 
-        function loadPartDefinitionSection()
-        {
+        function loadPartDefinitionSection() {
             var partDefinitionIds;
             if (accountTypeEntity != undefined && accountTypeEntity.Settings != null && accountTypeEntity.Settings.PartDefinitionSettings != undefined) {
                 partDefinitionIds = [];
@@ -170,7 +168,7 @@
             }
             var partDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             partDefinitionSelectorReadyDeferred.promise.then(function () {
-                var partDefinitionSelectorPayload = partDefinitionIds !=undefined ? { selectedIds: partDefinitionIds } : undefined;
+                var partDefinitionSelectorPayload = partDefinitionIds != undefined ? { selectedIds: partDefinitionIds } : undefined;
                 VRUIUtilsService.callDirectiveLoad(partDefinitionSelectorAPI, partDefinitionSelectorPayload, partDefinitionSelectorLoadDeferred);
             });
 
@@ -189,8 +187,8 @@
             var dataItem = {
                 AccountPartDefinitionId: part.AccountPartDefinitionId,
                 title: part.Title,
-                selectedAccountPartAvailability:    payload !=undefined? UtilsService.getItemByVal($scope.scopeModel.accountPartAvailability, payload.AvailabilitySettings, "value"):undefined,
-                selectedAccountPartRequiredOptions :  payload !=undefined?UtilsService.getItemByVal($scope.scopeModel.accountPartRequiredOptions, payload.RequiredSettings, "value"):undefined,
+                selectedAccountPartAvailability: payload != undefined ? UtilsService.getItemByVal($scope.scopeModel.accountPartAvailability, payload.AvailabilitySettings, "value") : $scope.scopeModel.accountPartAvailability[0],
+                selectedAccountPartRequiredOptions: payload != undefined ? UtilsService.getItemByVal($scope.scopeModel.accountPartRequiredOptions, payload.RequiredSettings, "value") : $scope.scopeModel.accountPartRequiredOptions[0]
             };
             $scope.scopeModel.datasource.push(dataItem);
         }
@@ -231,11 +229,9 @@
         }
         function buildAccountTypeObjFromScope() {
             var partDefinitionSettings;
-            if ($scope.scopeModel.datasource.length > 0)
-            {
+            if ($scope.scopeModel.datasource.length > 0) {
                 partDefinitionSettings = [];
-                for(var i=0 ; i < $scope.scopeModel.datasource.length ; i++)
-                {
+                for (var i = 0 ; i < $scope.scopeModel.datasource.length ; i++) {
                     var dataItem = $scope.scopeModel.datasource[i];
                     partDefinitionSettings.push({
                         PartDefinitionId: dataItem.AccountPartDefinitionId,
@@ -248,7 +244,7 @@
                 AccountTypeId: accountTypeId,
                 Name: $scope.scopeModel.name,
                 Title: $scope.scopeModel.title,
-                Settings:{
+                Settings: {
                     CanBeRootAccount: $scope.scopeModel.canBeRootAccount,
                     SupportedParentAccountTypeIds: accountTypeSelectorAPI.getSelectedIds(),
                     PartDefinitionSettings: partDefinitionSettings

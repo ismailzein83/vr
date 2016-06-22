@@ -14,20 +14,25 @@
                 </vr-tab>
                 <vr-tab header="'Settings'">
                     <vr-row>
-                        <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady" normal-col-num="6" ismultipleselection="true" customlabel="Parent Account Types"></retail-be-accounttype-selector>
+                        <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
+                                                        normal-col-num="6"
+                                                        ismultipleselection="true"
+                                                        customlabel="Parent Account Types"
+                                                        isrequired="!scopeModel.canBeRootAccount">
+                        </retail-be-accounttype-selector>
                         <vr-columns width="1/2row">
                             <vr-switch label="Can Be Root Account" value="scopeModel.canBeRootAccount"></vr-switch>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
                         <retail-be-accountpartdefinition-selector on-ready="scopeModel.onPartDefinitionSelectorReady"
-                                                                    normal-col-num="6"
-                                                                    ismultipleselection="true"
-                                                                    isrequired="true"
-                                                                    onselectitem="scopeModel.onSelectItem"
-                                                                    ondeselectitem="scopeModel.onDeselectItem"
-                                                                    selectedvalues= "scopeModel.selectedPartDefinitions"
-                                                                    customlabel="Parts" >
+                                                                  normal-col-num="6"
+                                                                  ismultipleselection="true"
+                                                                  isrequired="true"
+                                                                  onselectitem="scopeModel.onSelectItem"
+                                                                  ondeselectitem="scopeModel.onDeselectItem"
+                                                                  selectedvalues="scopeModel.selectedPartDefinitions"
+                                                                  customlabel="Parts">
                         </retail-be-accountpartdefinition-selector>
                     </vr-row>
                     <vr-row>
