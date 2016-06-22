@@ -13,7 +13,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
-            BillingStatisticManager manager = new BillingStatisticManager();
             List<string> listGrouping = new List<string>();
             List<string> listMeasures = new List<string>();
 
@@ -118,42 +117,42 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 MeasureValue saleRate;
                 analyticRecord.MeasureValues.TryGetValue("SaleRate", out saleRate);
                 rateLossFromatted.SaleRate = Convert.ToDouble(saleRate.Value ?? 0.0);
-                rateLossFromatted.SaleRateFormatted = manager.FormatNumber(rateLossFromatted.SaleRate);
+                rateLossFromatted.SaleRateFormatted = ReportHelpers.FormatNumber(rateLossFromatted.SaleRate);
 
 
                 MeasureValue costRate;
                 analyticRecord.MeasureValues.TryGetValue("CostRate", out costRate);
                 rateLossFromatted.CostRate = Convert.ToDouble(costRate.Value ?? 0.0);
-                rateLossFromatted.CostRateFormatted = manager.FormatNumber(rateLossFromatted.CostRate);
+                rateLossFromatted.CostRateFormatted = ReportHelpers.FormatNumber(rateLossFromatted.CostRate);
 
 
                 MeasureValue saleDuration;
                 analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
                 rateLossFromatted.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
-                rateLossFromatted.SaleDurationFormatted = manager.FormatNumber(rateLossFromatted.SaleDuration);
+                rateLossFromatted.SaleDurationFormatted = ReportHelpers.FormatNumber(rateLossFromatted.SaleDuration);
 
 
                 MeasureValue costDuration;
                 analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
                 rateLossFromatted.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
-                rateLossFromatted.CostDurationFormatted = manager.FormatNumber(rateLossFromatted.CostDuration);
+                rateLossFromatted.CostDurationFormatted = ReportHelpers.FormatNumber(rateLossFromatted.CostDuration);
 
 
 
                 MeasureValue saleNet;
                 analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
                 rateLossFromatted.SaleNet = Convert.ToDouble(saleNet.Value ?? 0.0);
-                rateLossFromatted.SaleNetFormatted = manager.FormatNumber(rateLossFromatted.SaleNet);
+                rateLossFromatted.SaleNetFormatted = ReportHelpers.FormatNumber(rateLossFromatted.SaleNet);
 
 
                 MeasureValue costNet;
                 analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
                 rateLossFromatted.CostNet = Convert.ToDouble(costNet.Value ?? 0.0);
-                rateLossFromatted.CostNetFormatted = manager.FormatNumber(rateLossFromatted.CostNet);
+                rateLossFromatted.CostNetFormatted = ReportHelpers.FormatNumber(rateLossFromatted.CostNet);
 
 
-               rateLossFromatted.LossFormatted = manager.FormatNumber(rateLossFromatted.CostNet - rateLossFromatted.SaleNet);
-               rateLossFromatted.LossPerFormatted = manager.FormatNumber(((rateLossFromatted.CostNet - rateLossFromatted.SaleNet) * 100) / rateLossFromatted.CostNet);
+                rateLossFromatted.LossFormatted = ReportHelpers.FormatNumber(rateLossFromatted.CostNet - rateLossFromatted.SaleNet);
+               rateLossFromatted.LossPerFormatted = ReportHelpers.FormatNumber(((rateLossFromatted.CostNet - rateLossFromatted.SaleNet) * 100) / rateLossFromatted.CostNet);
 
 
                 listRateLossFromatted.Add(rateLossFromatted);

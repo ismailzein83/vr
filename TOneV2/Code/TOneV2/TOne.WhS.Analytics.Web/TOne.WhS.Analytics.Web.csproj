@@ -149,7 +149,6 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BlockedAttemptsController.cs" />
     <Compile Include="Controllers\CDRController.cs" />
-    <Compile Include="Controllers\GenericAnalyticController.cs" />
     <Compile Include="Controllers\RawCDRController.cs" />
     <Compile Include="Controllers\ReleaseCodeController.cs" />
     <Compile Include="Controllers\RepeatedNumberController.cs" />

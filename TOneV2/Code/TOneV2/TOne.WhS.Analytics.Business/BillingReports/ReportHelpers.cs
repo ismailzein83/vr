@@ -36,5 +36,35 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             return name;
         }
 
+        public static string FormatNumberDigitRate(Decimal? number)
+        {
+            int precision = 4;//Digit Rate 
+            return String.Format("{0:#0." + "".PadLeft(precision, '0') + "}", number);
+        }
+        public static string FormatNumberDigitRate(Double? number)
+        {
+            int precision = 4;//Digit Rate 
+            return String.Format("{0:#0." + "".PadLeft(precision, '0') + "}", number);
+        }
+
+        public static string FormatNumber(Decimal? number)
+        {
+            return String.Format("{0:#,###0.00}", number);
+        }
+
+        public static string FormatNumber(int? number)
+        {
+            return String.Format("{0:#,###0}", number);
+        }
+
+        public static string FormatNumberPercentage(Double? number)
+        {
+            return String.Format("{0:#,##0.00%}", number);
+        }
+        public static string FormatNumber(Double? number)
+        {
+            return String.Format("{0:#,###0.00}", number);
+        }
+
     }
 }

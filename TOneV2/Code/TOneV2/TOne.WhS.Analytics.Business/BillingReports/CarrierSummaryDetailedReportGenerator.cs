@@ -13,7 +13,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
-            BillingStatisticManager manager = new BillingStatisticManager();
 
             DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>
             {
@@ -78,38 +77,38 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     if (costRateValue != null)
                     {
                         carrierSummary.CostRate = Convert.ToDouble(costRateValue.Value ?? 0.0);
-                        carrierSummary.CostRateFormatted = manager.FormatNumber(carrierSummary.CostRate);
+                        carrierSummary.CostRateFormatted = ReportHelpers.FormatNumber(carrierSummary.CostRate);
                     }
                     var saleRateValue = analyticRecord.DimensionValues[5];
                     if (saleRateValue != null)
                     {
                         carrierSummary.SaleRate = Convert.ToDouble(saleRateValue.Value ?? 0.0);
-                        carrierSummary.SaleRateFormatted = manager.FormatNumber(carrierSummary.SaleRate);
+                        carrierSummary.SaleRateFormatted = ReportHelpers.FormatNumber(carrierSummary.SaleRate);
                     }
                     MeasureValue saleDuration;
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
                     carrierSummary.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
-                    carrierSummary.SaleDurationFormatted = manager.FormatNumber(carrierSummary.SaleDuration);
+                    carrierSummary.SaleDurationFormatted = ReportHelpers.FormatNumber(carrierSummary.SaleDuration);
 
                     MeasureValue costDuration;
                     analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
                     carrierSummary.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
-                    carrierSummary.CostDurationFormatted = manager.FormatNumber(carrierSummary.CostDuration);
+                    carrierSummary.CostDurationFormatted = ReportHelpers.FormatNumber(carrierSummary.CostDuration);
 
                     MeasureValue costNet;
                     analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
                     carrierSummary.CostAmount = Convert.ToDouble(costNet.Value ?? 0.0);
-                    carrierSummary.CostAmountFormatted = manager.FormatNumber(carrierSummary.CostAmount);
+                    carrierSummary.CostAmountFormatted = ReportHelpers.FormatNumber(carrierSummary.CostAmount);
 
                     MeasureValue saleNet;
                     analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
                     carrierSummary.SaleAmount = Convert.ToDouble(saleNet.Value ?? 0.0);
-                    carrierSummary.SaleAmountFormatted = manager.FormatNumber(carrierSummary.SaleAmount);
+                    carrierSummary.SaleAmountFormatted = ReportHelpers.FormatNumber(carrierSummary.SaleAmount);
 
                     MeasureValue profit;
                     analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
                     carrierSummary.Profit = Convert.ToDouble(profit.Value ?? 0.0);
-                    carrierSummary.ProfitFormatted = manager.FormatNumber(carrierSummary.Profit);
+                    carrierSummary.ProfitFormatted = ReportHelpers.FormatNumber(carrierSummary.Profit);
 
                     listCarrierSummaryDetailed.Add(carrierSummary);
                 }

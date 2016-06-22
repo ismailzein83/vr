@@ -13,7 +13,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
-            BillingStatisticManager manager = new BillingStatisticManager();
             List<string> listGrouping = new List<string>();
             List<string> listMeasures = new List<string>();
             listMeasures.Add("NumberOfCalls");
@@ -86,18 +85,18 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
                 carrierSummary.Attempts = Convert.ToInt32(calls.Value ?? 0.0);
 
-                carrierSummary.AttemptsFormatted = manager.FormatNumber(carrierSummary.Attempts);
+                carrierSummary.AttemptsFormatted = ReportHelpers.FormatNumber(carrierSummary.Attempts);
 
 
                 MeasureValue duration;
                 analyticRecord.MeasureValues.TryGetValue(parameters.IsCost ? "CostDuration" : "SaleDuration", out duration);
                 carrierSummary.Duration = Convert.ToDecimal(duration.Value ?? 0.0);
-                carrierSummary.DurationFormatted = manager.FormatNumber(carrierSummary.Duration);
+                carrierSummary.DurationFormatted = ReportHelpers.FormatNumber(carrierSummary.Duration);
 
                 MeasureValue net;
                 analyticRecord.MeasureValues.TryGetValue(parameters.IsCost ? "CostNet" : "SaleNet", out net);
                 carrierSummary.Net = Convert.ToDouble(net.Value ?? 0.0);
-                carrierSummary.NetFormatted = manager.FormatNumber(carrierSummary.Net);
+                carrierSummary.NetFormatted = ReportHelpers.FormatNumber(carrierSummary.Net);
 
                 
         

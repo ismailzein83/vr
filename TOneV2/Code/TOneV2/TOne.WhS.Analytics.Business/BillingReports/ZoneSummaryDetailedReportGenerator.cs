@@ -15,10 +15,10 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
-            BillingStatisticManager manager = new BillingStatisticManager();
 
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
             {
+
 
                 Query = new AnalyticQuery()
                 {
@@ -107,14 +107,14 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     MeasureValue durationNet;
                     analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
                     zoneSummary.DurationNet = Convert.ToDecimal(durationNet.Value ?? 0.0);
-                    zoneSummary.DurationNetFormatted = manager.FormatNumber(zoneSummary.DurationNet);
+                    zoneSummary.DurationNetFormatted = ReportHelpers.FormatNumber(zoneSummary.DurationNet);
 
                     MeasureValue durationInMinutes;
                     analyticRecord.MeasureValues.TryGetValue("DurationInMinutes", out durationInMinutes);
                     zoneSummary.DurationInSeconds = Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
-                    zoneSummary.DurationInSecondsFormatted = manager.FormatNumber(zoneSummary.DurationInSeconds);
+                    zoneSummary.DurationInSecondsFormatted = ReportHelpers.FormatNumber(zoneSummary.DurationInSeconds);
 
-                    zoneSummary.RateFormatted = manager.FormatNumberDigitRate(zoneSummary.Rate);
+                    zoneSummary.RateFormatted = ReportHelpers.FormatNumberDigitRate(zoneSummary.Rate);
 
                     //MeasureValue commissionValue;
                     //if (parameters.IsCost)
@@ -138,12 +138,12 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         MeasureValue net;
                         analyticRecord.MeasureValues.TryGetValue("CostNet", out net);
                         zoneSummary.Net = Convert.ToDouble(net.Value ?? 0.0);
-                        zoneSummary.NetFormatted = manager.FormatNumberDigitRate(zoneSummary.Net);
+                        zoneSummary.NetFormatted = ReportHelpers.FormatNumberDigitRate(zoneSummary.Net);
 
                         MeasureValue commisionValue;
                         analyticRecord.MeasureValues.TryGetValue("CostCommissions", out commisionValue);
                         zoneSummary.CommissionValue = Convert.ToDouble(commisionValue.Value ?? 0.0);
-                        zoneSummary.CommissionValueFormatted = manager.FormatNumberDigitRate(zoneSummary.CommissionValue);
+                        zoneSummary.CommissionValueFormatted = ReportHelpers.FormatNumberDigitRate(zoneSummary.CommissionValue);
 
                         MeasureValue extraChargesValue;
                         analyticRecord.MeasureValues.TryGetValue("CostExtraCharges", out extraChargesValue);
@@ -154,12 +154,12 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         MeasureValue net;
                         analyticRecord.MeasureValues.TryGetValue("SaleNet", out net);
                         zoneSummary.Net = Convert.ToDouble(net.Value ?? 0.0);
-                        zoneSummary.NetFormatted = manager.FormatNumberDigitRate(zoneSummary.Net);
+                        zoneSummary.NetFormatted = ReportHelpers.FormatNumberDigitRate(zoneSummary.Net);
 
                         MeasureValue commisionValue;
                         analyticRecord.MeasureValues.TryGetValue("SaleCommissions", out commisionValue);
                         zoneSummary.CommissionValue = Convert.ToDouble(commisionValue.Value ?? 0.0);
-                        zoneSummary.CommissionValueFormatted = manager.FormatNumberDigitRate(zoneSummary.CommissionValue);
+                        zoneSummary.CommissionValueFormatted = ReportHelpers.FormatNumberDigitRate(zoneSummary.CommissionValue);
 
                         MeasureValue extraChargesValue;
                         analyticRecord.MeasureValues.TryGetValue("SaleExtraCharges", out extraChargesValue);

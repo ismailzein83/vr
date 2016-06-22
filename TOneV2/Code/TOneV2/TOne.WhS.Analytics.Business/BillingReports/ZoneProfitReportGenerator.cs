@@ -13,7 +13,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
-            BillingStatisticManager manager = new BillingStatisticManager();
 
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
             {
@@ -86,31 +85,31 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
 
                 zoneProfit.SaleNet = Convert.ToDouble(saleNet== null ? 0.0 : saleNet.Value ?? 0.0);
-                zoneProfit.SaleNetFormated = zoneProfit.SaleNet == 0 ? "" : (zoneProfit.SaleNet.HasValue) ? 
-                    manager.FormatNumberDigitRate(zoneProfit.SaleNet) : "0.00";
+                zoneProfit.SaleNetFormated = zoneProfit.SaleNet == 0 ? "" : (zoneProfit.SaleNet.HasValue) ?
+                    ReportHelpers.FormatNumberDigitRate(zoneProfit.SaleNet) : "0.00";
 
                 MeasureValue costNet;
                 analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
                 zoneProfit.CostNet = Convert.ToDouble(costNet == null ? 0.0 : costNet.Value ?? 0.0);
                 zoneProfit.CostNetFormated = (zoneProfit.CostNet.HasValue)
-                    ? manager.FormatNumberDigitRate(zoneProfit.CostNet)
+                    ? ReportHelpers.FormatNumberDigitRate(zoneProfit.CostNet)
                     : "0.00";
 
                 MeasureValue saleDuration;
                 analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
                 zoneProfit.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
-                zoneProfit.SaleDurationFormated = zoneProfit.SaleNet == 0 ? "" : (zoneProfit.SaleDuration.HasValue) ? 
-                    manager.FormatNumber(zoneProfit.SaleDuration) : "0.00";
+                zoneProfit.SaleDurationFormated = zoneProfit.SaleNet == 0 ? "" : (zoneProfit.SaleDuration.HasValue) ?
+                    ReportHelpers.FormatNumber(zoneProfit.SaleDuration) : "0.00";
 
                 MeasureValue costDuration;
                 analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
                 zoneProfit.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
-                zoneProfit.CostDurationFormated = manager.FormatNumberDigitRate(zoneProfit.CostDuration);
+                zoneProfit.CostDurationFormated = ReportHelpers.FormatNumberDigitRate(zoneProfit.CostDuration);
 
                 MeasureValue durationInMinutes;
                 analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationInMinutes);
                 zoneProfit.DurationNet = Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
-                zoneProfit.DurationNetFormated = manager.FormatNumber(zoneProfit.DurationNet);
+                zoneProfit.DurationNetFormated = ReportHelpers.FormatNumber(zoneProfit.DurationNet);
 
                 MeasureValue calls;
                 analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
@@ -118,14 +117,14 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                 zoneProfit.Profit = zoneProfit.SaleNet == 0
                     ? ""
-                    : manager.FormatNumber((!zoneProfit.SaleNet.HasValue) ? 0 : zoneProfit.SaleNet - zoneProfit.CostNet);
+                    : ReportHelpers.FormatNumber((!zoneProfit.SaleNet.HasValue) ? 0 : zoneProfit.SaleNet - zoneProfit.CostNet);
                 zoneProfit.ProfitSum = (!zoneProfit.SaleNet.HasValue || zoneProfit.SaleNet == 0)
                     ? 0
                     : zoneProfit.SaleNet - zoneProfit.CostNet;
                 zoneProfit.ProfitPercentage = zoneProfit.SaleNet == 0
                     ? ""
                     : (zoneProfit.SaleNet.HasValue)
-                        ? manager.FormatNumber(((1 - zoneProfit.CostNet / zoneProfit.SaleNet)) * 100)
+                        ? ReportHelpers.FormatNumber(((1 - zoneProfit.CostNet / zoneProfit.SaleNet)) * 100)
                         : "-100%";
 
                 listZoneProfit.Add(zoneProfit);

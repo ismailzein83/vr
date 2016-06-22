@@ -17,7 +17,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
-            BillingStatisticManager manager = new BillingStatisticManager();
             List<string> listDimensions = new List<string>();
             List<string> listMeasures = new List<string> { "NumberOfCalls", "DurationNet" };
 
@@ -117,7 +116,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 MeasureValue durationNet;
                 analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
                 zoneSummary.DurationNet = (durationNet == null) ? 0 : Convert.ToDecimal(durationNet.Value ?? 0.0);
-                zoneSummary.DurationNetFormatted = manager.FormatNumber(zoneSummary.DurationNet);
+                zoneSummary.DurationNetFormatted = ReportHelpers.FormatNumber(zoneSummary.DurationNet);
 
                 MeasureValue rate;
                 if (parameters.IsCost)
@@ -125,7 +124,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 else
                     analyticRecord.MeasureValues.TryGetValue("SaleRate", out rate);
                 zoneSummary.Rate = (rate == null) ? 0.0 : Convert.ToInt32(rate.Value ?? 0.0);
-                zoneSummary.RateFormatted = manager.FormatNumberDigitRate(zoneSummary.Rate);
+                zoneSummary.RateFormatted = ReportHelpers.FormatNumberDigitRate(zoneSummary.Rate);
 
                 MeasureValue durationInMinutes;
                 if (parameters.IsCost)
@@ -133,7 +132,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 else
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out durationInMinutes);
                 zoneSummary.DurationInSeconds = (durationInMinutes == null) ? 0 : Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
-                zoneSummary.DurationInSecondsFormatted = manager.FormatNumber(zoneSummary.DurationInSeconds);
+                zoneSummary.DurationInSecondsFormatted = ReportHelpers.FormatNumber(zoneSummary.DurationInSeconds);
 
                 MeasureValue net;
                 if (parameters.IsCost)
@@ -141,7 +140,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 else
                     analyticRecord.MeasureValues.TryGetValue("SaleNet", out net);
                 zoneSummary.Net = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
-                zoneSummary.NetFormatted = manager.FormatNumber(zoneSummary.DurationInSeconds);
+                zoneSummary.NetFormatted = ReportHelpers.FormatNumber(zoneSummary.DurationInSeconds);
 
                 MeasureValue commissionValue;
                 if (parameters.IsCost)
@@ -149,7 +148,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 else
                     analyticRecord.MeasureValues.TryGetValue("SaleCommissions", out commissionValue);
                 zoneSummary.CommissionValue = (commissionValue == null) ? 0.0 : Convert.ToDouble(commissionValue.Value ?? 0.0);
-                zoneSummary.CommissionValueFormatted = manager.FormatNumber(zoneSummary.CommissionValue);
+                zoneSummary.CommissionValueFormatted = ReportHelpers.FormatNumber(zoneSummary.CommissionValue);
 
                 MeasureValue extraChargeValue;
                 if (parameters.IsCost)
