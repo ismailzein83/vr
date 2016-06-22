@@ -225,8 +225,10 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeResidentialProfilePartDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeActivationPartDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-activation.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-financial.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-residentialprofile.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeActivationPartRuntimeTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeFinancialPartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeResidentialProfilePartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\retail-be-chargingpolicypart-durationtariff-single-runtimeeditor.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\retail-be-chargingpolicypart-ratevalue-single-runtimeeditor.js" />

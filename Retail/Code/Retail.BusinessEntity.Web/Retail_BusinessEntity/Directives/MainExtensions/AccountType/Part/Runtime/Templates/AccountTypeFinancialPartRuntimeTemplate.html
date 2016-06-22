@@ -1,0 +1,31 @@
+﻿<vr-tab header="'Financial'">
+    <vr-row removeline>
+        <vr-columns width="1/3row">
+            <vr-select datasource="scopeModel.paymentMethods"
+                       selectedvalues="scopeModel.selectedPaymentMethod"
+                       datavaluefield="value"
+                       datatextfield="description"
+                       isrequired="true"
+                       hideremoveicon>
+            </vr-select>
+        </vr-columns>
+     
+    </vr-row>
+    <vr-row removeline>
+        <vr-common-currency-selector selectedvalues="scopeModel.currency" normal-col-num="6" on-ready="scopeModel.onCurrencyDirectiveReady" isrequired="true"></vr-common-currency-selector>
+    </vr-row>
+    <vr-row removeline>
+        <vr-columns width="1/3row">
+            <vr-textarea value="scopeModal.bankDetails" label="Bank Details"></vr-textarea>
+        </vr-columns>
+    </vr-row>
+</vr-tab>
+<vr-tab header="'Postpaid Settings'">
+    <vr-row removeline>
+        <vr-columns width="1/3row">
+            <vr-textbox value="scopeModal.duePeriodInDays" typeof="number" label="Due Period In Days"></vr-textbox>
+        </vr-columns>
+    </vr-row>
+</vr-tab>
+<vr-tab header="'Prepard Settings'">
+</vr-tab>
