@@ -32,7 +32,7 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestep', ['UtilsServi
         };
 
         function assignValueRuleStepCtor(ctrl, $scope) {
-            var ruleTypeName = "GenericRuleMapping";
+            var ruleTypeName = "VR_MappingRule";
             var ruleTypeEntity;
 
             var ruleStepCommonDirectiveAPI;
