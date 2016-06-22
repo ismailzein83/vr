@@ -304,6 +304,12 @@ namespace Vanrise.Common
             return !date.VRGreaterThan(targetDate) && (date != targetDate);
         }
 
+
+        public static bool VRLessThanOrEqual(this DateTime? date, DateTime? targetDate)
+        {
+            return !date.VRGreaterThan(targetDate);
+        }
+
         public static DateTime? VRMinimumDate(this IEnumerable<DateTime?> dates)
         {
             if (dates == null)
