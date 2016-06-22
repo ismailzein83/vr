@@ -93,6 +93,8 @@ app.directive('retailBeAccountpartdefinitionSelector', ['Retail_BE_AccountPartDe
             label = "Account Part Definition";
             multipleselection = "ismultipleselection";
         }
+        if (attrs.customlabel != undefined)
+            label = attrs.customlabel;
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + ' datatextfield="Title" datavaluefield="AccountPartDefinitionId" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate"></vr-select></vr-columns>';
     }

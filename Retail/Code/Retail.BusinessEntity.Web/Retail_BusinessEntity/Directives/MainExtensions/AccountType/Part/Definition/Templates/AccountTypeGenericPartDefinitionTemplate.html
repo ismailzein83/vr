@@ -1,8 +1,11 @@
-﻿<vr-row>
-    <vr-columns width="1/3row">
-        <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorDirectiveReady" isrequired="true" onselectionchanged="    scopeModel.onRecordTypeSelectionChanged" selectedvalues="scopeModal.selectedDataRecordType"></vr-genericdata-datarecordtype-selector>
-    </vr-columns>
-</vr-row>
-<vr-row>
-    <vr-genericdata-genericbusinessentity-definition-editor on-ready="scopeModel.onGenericDirectiveReady"></vr-genericdata-genericbusinessentity-definition-editor>
-</vr-row>
+﻿
+<vr-columns width="1/3row">
+    <vr-genericdata-datarecordtype-selector label="Record Type" on-ready="scopeModel.onDataRecordTypeSelectorDirectiveReady" isrequired="true" onselectionchanged="    scopeModel.onRecordTypeSelectionChanged" selectedvalues="scopeModal.selectedDataRecordType"></vr-genericdata-datarecordtype-selector>
+</vr-columns>
+
+<vr-columns width="fullrow" ng-show="scopeModal.selectedDataRecordType !=undefined">
+    <vr-section title="UI Design">
+        <vr-genericdata-genericbusinessentity-definition-editor on-ready="scopeModel.onGenericDirectiveReady"></vr-genericdata-genericbusinessentity-definition-editor>
+    </vr-section>
+</vr-columns>
+

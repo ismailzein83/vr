@@ -26,7 +26,8 @@
                                                                     isrequired="true"
                                                                     onselectitem="scopeModel.onSelectItem"
                                                                     ondeselectitem="scopeModel.onDeselectItem"
-                                                                    selectedvalues= "scopeModel.selectedPartDefinitions" >
+                                                                    selectedvalues= "scopeModel.selectedPartDefinitions"
+                                                                    customlabel="Parts" >
                         </retail-be-accountpartdefinition-selector>
                     </vr-row>
                     <vr-row>
@@ -35,18 +36,18 @@
                                 <vr-datagrid datasource="scopeModel.datasource"
                                              on-ready="onGridReady" ondeleterow="scopeModel.removeFilter" hidegridmenu norowhighlightonclick="'true'" enabledraggablerow="true">
                                     <vr-datagridcolumn headertext="'Title'" field="'title'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Required Settings'" widthfactor="10" disablesorting="true">
-                                        <vr-select datasource="viewScope.scopeModel.accountPartRequiredOptions"
-                                                   selectedvalues="dataItem.selectedAccountPartRequiredOptions"
+                                    <vr-datagridcolumn headertext="'Availability Settings'" widthfactor="10" disablesorting="true">
+                                        <vr-select datasource="viewScope.scopeModel.accountPartAvailability"
+                                                   selectedvalues="dataItem.selectedAccountPartAvailability"
                                                    datavaluefield="value"
                                                    datatextfield="description"
                                                    isrequired="true"
                                                    hideremoveicon>
                                         </vr-select>
                                     </vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Availability Settings'" widthfactor="10" disablesorting="true">
-                                        <vr-select datasource="viewScope.scopeModel.accountPartAvailability"
-                                                   selectedvalues="dataItem.selectedAccountPartAvailability"
+                                    <vr-datagridcolumn headertext="'Required Settings'" widthfactor="10" disablesorting="true">
+                                        <vr-select datasource="viewScope.scopeModel.accountPartRequiredOptions"
+                                                   selectedvalues="dataItem.selectedAccountPartRequiredOptions"
                                                    datavaluefield="value"
                                                    datatextfield="description"
                                                    isrequired="true"

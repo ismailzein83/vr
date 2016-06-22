@@ -51,7 +51,7 @@ app.directive('retailBeAccounttypePartDefinitionCompanyprofile', [function () {
                     for (var j = 0; j < $scope.scopeModel.contactTypes.length; j++) {
                        var currentContactType = $scope.scopeModel.contactTypes[j];
                        if (contactType.Name == currentContactType.Name && contactType.ContactId != currentContactType.ContactId)
-                            return "Contact type with same name exists.";
+                            return "Contact types with same name exist.";
                     }
                 }
                 if ($scope.scopeModel.contactTypes.length > 0)
