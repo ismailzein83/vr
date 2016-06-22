@@ -53,7 +53,6 @@ namespace Retail.BusinessEntity.Business
             return accounts.MapRecords(AccountInfoMapper, accountFilter).OrderBy(x => x.Name);
         }
 
-
         public IEnumerable<AccountInfo> GetAccountsInfoByIds(HashSet<long> accountIds)
         {
             IEnumerable<Account> accounts = GetCachedAccounts().Values;
@@ -65,7 +64,6 @@ namespace Retail.BusinessEntity.Business
             };
             return accounts.MapRecords(AccountInfoMapper, accountFilter).OrderBy(x => x.Name);
         }
-
 
         public string GetAccountName(long accountId)
         {
@@ -125,6 +123,71 @@ namespace Retail.BusinessEntity.Business
 
             return updateOperationOutput;
         }
+
+        #region Get Account Part Runtime
+
+        public AccountEditorRuntime GetAccountEditorRuntime(int accountTypeId, int? parentAccountId)
+        {
+            var accountEditorRuntime = new AccountEditorRuntime();
+
+            var accountPartDefinitionManager = new AccountPartDefinitionManager();
+            IEnumerable<AccountTypePartSettings> partSettingsList = this.GetAccountTypePartDefinitionSettingsList(accountTypeId);
+            var parts = new List<AccountPartRuntime>();
+
+            foreach (AccountTypePartSettings partSettings in partSettingsList)
+            {
+                if (partSettings.AvailabilitySettings == AccountPartAvailabilityOptions.AlwaysAvailable ||
+                    !this.IsPartFoundOrInherited(parentAccountId, partSettings.PartDefinitionId))
+                {
+                    AccountPartDefinition partDefinition = accountPartDefinitionManager.GetAccountPartDefinition(partSettings.PartDefinitionId);
+                    if (partDefinition == null)
+                        throw new NullReferenceException("partDefinition");
+                    parts.Add(new AccountPartRuntime()
+                    {
+                        PartDefinition = partDefinition,
+                        RequiredSettings = partSettings.RequiredSettings
+                    });
+                }
+            }
+
+            if (parts.Count > 0)
+                accountEditorRuntime.Parts = parts;
+
+            return accountEditorRuntime;
+        }
+
+        private bool IsPartFoundOrInherited(long? accountId, int partDefinitionId)
+        {
+            if (!accountId.HasValue)
+                return false;
+
+            Account account = this.GetAccount(accountId.Value);
+            if (account == null)
+                throw new NullReferenceException("account");
+
+            IEnumerable<AccountTypePartSettings> partSettingsList = this.GetAccountTypePartDefinitionSettingsList(account.TypeId);
+            AccountTypePartSettings partSettings = partSettingsList.FindRecord(x => x.PartDefinitionId == partDefinitionId);
+
+            if (partSettings != null)
+                return true;
+
+            return IsPartFoundOrInherited(account.ParentAccountId, partDefinitionId);
+        }
+
+        private IEnumerable<AccountTypePartSettings> GetAccountTypePartDefinitionSettingsList(int accountTypeId)
+        {
+            var accountTypeManager = new AccountTypeManager();
+            AccountType accountType = accountTypeManager.GetAccountType(accountTypeId);
+            if (accountType == null)
+                throw new NullReferenceException("accountType");
+            if (accountType.Settings == null)
+                throw new NullReferenceException("accountType.Settings");
+            if (accountType.Settings.PartDefinitionSettings == null)
+                throw new NullReferenceException("accountType.Settings.PartDefinitionSettings");
+            return accountType.Settings.PartDefinitionSettings;
+        }
+
+        #endregion
 
         #endregion
 
@@ -257,10 +320,10 @@ namespace Retail.BusinessEntity.Business
         private AccountDetail AccountDetailMapper(Account account)
         {
             var accountTypeManager = new AccountTypeManager();
-            
+
             var accounts = GetCachedAccounts().Values;
             var accountsByParent = GetCachedAccountsByParent();
-            
+
             return new AccountDetail()
             {
                 Entity = account,
@@ -335,7 +398,7 @@ namespace Retail.BusinessEntity.Business
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
-        
+
         #endregion
     }
 }

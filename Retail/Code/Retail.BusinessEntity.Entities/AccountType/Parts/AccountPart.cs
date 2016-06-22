@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public abstract class AccountPart
+    public class AccountPart
     {
-        public string PartUniqueName { get; set; }
+        //public string PartUniqueName { get; set; }
 
         public AccountPartSettings Settings { get; set; }
     }
@@ -18,15 +18,15 @@ namespace Retail.BusinessEntity.Entities
 
     }
 
-    public class AccountPartCollection : Dictionary<string, AccountPart>
+    public class AccountPartCollection : Dictionary<int, AccountPart>
     {
-        public AccountPart TryGet(string partUniqueName)
-        {
-            AccountPart accountPart;
-            if (this.TryGetValue(partUniqueName, out accountPart))
-                return accountPart;
-            else
-                return null;
-        }
+        //public AccountPart TryGet(string partUniqueName)
+        //{
+        //    AccountPart accountPart;
+        //    if (this.TryGetValue(partUniqueName, out accountPart))
+        //        return accountPart;
+        //    else
+        //        return null;
+        //}
     }
 }

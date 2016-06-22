@@ -1,9 +1,7 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<span ng-repeat="part in scopeModel.parts">
+    <vr-directivewrapper directive="part.runtimeEditor"
+                         on-ready="part.onDirectiveReady"
+                         title="{{part.title}}"
+                         normal-col-num="6">
+    </vr-directivewrapper>
+</span>

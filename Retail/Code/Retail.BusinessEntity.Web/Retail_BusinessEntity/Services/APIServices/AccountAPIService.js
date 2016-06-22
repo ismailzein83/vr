@@ -24,6 +24,13 @@
             });
         }
 
+        function GetAccountEditorRuntime(accountTypeId, parentAccountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetAccountEditorRuntime'), {
+                accountTypeId: accountTypeId,
+                parentAccountId: parentAccountId
+            });
+        }
+
         function AddAccount(account) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddAccount'), account);
         }
@@ -58,6 +65,7 @@
             GetFilteredAccounts: GetFilteredAccounts,
             GetAccount: GetAccount,
             GetAccountName: GetAccountName,
+            GetAccountEditorRuntime: GetAccountEditorRuntime,
             AddAccount: AddAccount,
             UpdateAccount: UpdateAccount,
             HasViewAccountsPermission: HasViewAccountsPermission,

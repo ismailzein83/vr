@@ -37,10 +37,10 @@ namespace Retail.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetAccountPartDefinitionPartDefinitionExtensionConfigs")]
-        public IEnumerable<AccountPartDefinitionConfig> GetAccountPartDefinitionPartDefinitionExtensionConfigs()
+        [Route("GetAccountPartDefinitionExtensionConfigs")]
+        public IEnumerable<AccountPartDefinitionConfig> GetAccountPartDefinitionExtensionConfigs()
         {
-            return _manager.GetAccountPartDefinitionPartDefinitionExtensionConfigs();
+            return _manager.GetAccountPartDefinitionExtensionConfigs();
         }
 
         [HttpPost]

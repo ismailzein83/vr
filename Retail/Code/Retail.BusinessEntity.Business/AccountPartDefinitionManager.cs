@@ -35,7 +35,7 @@ namespace Retail.BusinessEntity.Business
             return this.GetCachedAccountPartDefinitions().MapRecords(AccountPartDefinitionInfoMapper).OrderBy(x => x.Title);
         }
 
-        public IEnumerable<AccountPartDefinitionConfig> GetAccountPartDefinitionPartDefinitionExtensionConfigs()
+        public IEnumerable<AccountPartDefinitionConfig> GetAccountPartDefinitionExtensionConfigs()
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<AccountPartDefinitionConfig>(AccountPartDefinitionConfig.EXTENSION_TYPE);

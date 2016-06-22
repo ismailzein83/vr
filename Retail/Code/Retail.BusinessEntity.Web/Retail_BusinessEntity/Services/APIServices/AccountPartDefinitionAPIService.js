@@ -24,8 +24,8 @@
             });
         }
 
-        function GetAccountPartDefinitionPartDefinitionExtensionConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountPartDefinitionPartDefinitionExtensionConfigs"));
+        function GetAccountPartDefinitionExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountPartDefinitionExtensionConfigs"));
         }
 
         function AddAccountPartDefinition(accountPartDefinition) {
@@ -52,7 +52,7 @@
             GetFilteredAccountPartDefinitions: GetFilteredAccountPartDefinitions,
             GetAccountPartDefinition: GetAccountPartDefinition,
             GetAccountPartDefinitionsInfo: GetAccountPartDefinitionsInfo,
-            GetAccountPartDefinitionPartDefinitionExtensionConfigs: GetAccountPartDefinitionPartDefinitionExtensionConfigs,
+            GetAccountPartDefinitionExtensionConfigs: GetAccountPartDefinitionExtensionConfigs,
             AddAccountPartDefinition: AddAccountPartDefinition,
             UpdateAccountPartDefinition: UpdateAccountPartDefinition,
             HasViewAccountPartDefinitionsPermission: HasViewAccountPartDefinitionsPermission,

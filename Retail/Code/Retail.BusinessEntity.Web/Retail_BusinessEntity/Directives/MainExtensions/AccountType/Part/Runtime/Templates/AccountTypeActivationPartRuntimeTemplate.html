@@ -1,9 +1,14 @@
-﻿<vr-columns colnum="{{ctrl.normalColNum}}">
-    <vr-select datasource="scopeModel.accountStatus"
-               selectedvalues="scopeModel.selectedAccountStatus"
-               datavaluefield="value"
-               datatextfield="description"
-               isrequired="true"
-               hideremoveicon>
-    </vr-select>
-</vr-columns>
+﻿<vr-tab header="ctrl.title">
+    <vr-row>
+        <vr-columns colnum="{{ctrl.normalColNum}}">
+            <vr-select label="Account Status"
+                       datasource="scopeModel.accountStatus"
+                       selectedvalues="scopeModel.selectedAccountStatus"
+                       datavaluefield="value"
+                       datatextfield="description"
+                       isrequired="true"
+                       hideremoveicon="true">
+            </vr-select>
+        </vr-columns>
+    </vr-row>
+</vr-tab>

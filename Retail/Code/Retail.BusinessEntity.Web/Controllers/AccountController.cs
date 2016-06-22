@@ -36,7 +36,6 @@ namespace Retail.BusinessEntity.Web.Controllers
             return _manager.GetAccountsInfo(nameFilter);
         }
 
-
         [HttpPost]
         [Route("GetAccountsInfoByIds")]
         public IEnumerable<AccountInfo> GetAccountsInfoByIds(HashSet<long> accountIds)
@@ -49,6 +48,13 @@ namespace Retail.BusinessEntity.Web.Controllers
         public string GetAccountName(long accountId)
         {
             return _manager.GetAccountName(accountId);
+        }
+
+        [HttpGet]
+        [Route("GetAccountEditorRuntime")]
+        public AccountEditorRuntime GetAccountEditorRuntime(int accountTypeId, int? parentAccountId = null)
+        {
+            return _manager.GetAccountEditorRuntime(accountTypeId, parentAccountId);
         }
 
         [HttpPost]

@@ -1,10 +1,11 @@
 ﻿'use strict';
 
-app.directive('retailBeAccounttypePartRuntimeActivation', ["Retail_BE_AccountStatusEnum",function (Retail_BE_AccountStatusEnum) {
+app.directive('retailBeAccounttypePartRuntimeActivation', ["Retail_BE_AccountStatusEnum", 'UtilsService', function (Retail_BE_AccountStatusEnum, UtilsService) {
     return {
         restrict: 'E',
         scope: {
             onReady: '=',
+            title: '@',
             normalColNum: '@'
         },
         controller: function ($scope, $element, $attrs) {
@@ -29,13 +30,19 @@ app.directive('retailBeAccounttypePartRuntimeActivation', ["Retail_BE_AccountSta
         function defineAPI() {
             var api = {};
 
-            api.load = function (payload) {
-                if(payload != undefined)
-                {
-                    $scope.scopeModel.selectedAccountStatus = UtilsService.getItemByVal($scope.scopeModel.accountStatus, payload.Status,"value");
-                } else {
-                    $scope.scopeModel.selectedAccountStatus = $scope.scopeModel.accountStatus[0];
+            api.load = function (payload)
+            {
+                var partDefinition;
+                var partSettings;
+
+                if (payload != undefined) {
+                    partDefinition = payload.partDefinition;
+                    partSettings = payload.partSettings;
                 }
+
+                $scope.scopeModel.selectedAccountStatus = (partSettings != undefined) ?
+                    UtilsService.getItemByVal($scope.scopeModel.accountStatus, partSettings.Status, "value") :
+                    $scope.scopeModel.accountStatus[0];
             };
 
             api.getData = function () {
