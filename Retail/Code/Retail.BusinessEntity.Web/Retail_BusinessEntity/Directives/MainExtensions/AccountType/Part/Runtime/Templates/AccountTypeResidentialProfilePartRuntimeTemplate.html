@@ -1,47 +1,47 @@
 ﻿<vr-tab header="'Residential Profile'">
     <vr-row removeline>
         <span>
-            <vr-common-country-selector selectedvalues="country" normal-col-num="6" onselectionchanged="onCountrySelectionChanged" on-ready="onCountryDirectiveReady" isrequired showaddbutton></vr-common-country-selector>
+            <vr-common-country-selector selectedvalues="scopeModel.country" normal-col-num="6" onselectionchanged="scopeModel.onCountrySelectionChanged" on-ready="    scopeModel.onCountryDirectiveReady" isrequired></vr-common-country-selector>
         </span>
-        <span vr-loader="isLoadingCities">
-            <vr-common-city-selector showaddbutton normal-col-num="6" on-ready="onCityyDirectiveReady"></vr-common-city-selector>
+        <span vr-loader="scopeModel.isLoadingCities">
+            <vr-common-city-selector normal-col-num="6" on-ready="scopeModel.onCityyDirectiveReady"></vr-common-city-selector>
         </span>
     </vr-row>
     <vr-row removeline>
         <vr-columns width="1/3row">
-            <vr-textbox value="scopeModal.town" label="Town"></vr-textbox>
+            <vr-textbox value="scopeModel.town" label="Town"></vr-textbox>
         </vr-columns>
         <vr-columns width="1/3row">
-            <vr-textbox value="scopeModal.street" label="Street"></vr-textbox>
+            <vr-textbox value="scopeModel.street" label="Street"></vr-textbox>
         </vr-columns>
         <vr-columns width="1/3row">
-            <vr-textbox value="scopeModal.email" label="Email"></vr-textbox>
+            <vr-textbox value="scopeModel.email" label="Email"></vr-textbox>
         </vr-columns>
     </vr-row>
 
     <vr-row removeline>
         <vr-columns width="1/4row">
-            <vr-textbox label="Phone" type="number" decimalprecision="0" onvaluechanged="scopeModal.onPhoneValueChange" value="scopeModal.phoneNumberValue"></vr-textbox>
+            <vr-textbox label="Phone" type="number" decimalprecision="0" onvaluechanged="scopeModel.onPhoneValueChange" value="scopeModel.phoneNumberValue"></vr-textbox>
         </vr-columns>
         <vr-columns withemptyline width="1/4row">
-            <vr-button type="Add" data-onclick="addPhoneNumberOption" vr-disabled="scopeModal.disabledphone" standalone></vr-button>
+            <vr-button type="Add" data-onclick="scopeModel.addPhoneNumberOption" vr-disabled="scopeModel.disabledphone" standalone></vr-button>
         </vr-columns>
 
         <vr-columns width="1/4row">
-            <vr-textbox value="scopeModal.faxvalue" type="number" onvaluechanged="scopeModal.onFaxValueChange" decimalprecision="0" label="Fax"></vr-textbox>
+            <vr-textbox value="scopeModel.faxvalue" type="number" onvaluechanged="scopeModel.onFaxValueChange" decimalprecision="0" label="Fax"></vr-textbox>
         </vr-columns>
         <vr-columns withemptyline width="1/4row">
-            <vr-button type="Add" data-onclick="addFaxOption" vr-disabled="scopeModal.disabledfax" standalone></vr-button>
+            <vr-button type="Add" data-onclick="scopeModel.addFaxOption" vr-disabled="scopeModel.disabledfax" standalone></vr-button>
         </vr-columns>
     </vr-row>
     <vr-row removeline>
         <vr-columns width="1/2row">
-            <vr-datalist maxitemsperrow="2" datasource="scopeModal.phoneNumbers" autoremoveitem="true">
+            <vr-datalist maxitemsperrow="2" datasource="scopeModel.phoneNumbers" autoremoveitem="true">
                 {{dataItem.phoneNumber}}
             </vr-datalist>
         </vr-columns>
         <vr-columns width="1/2row">
-            <vr-datalist maxitemsperrow="2" datasource="scopeModal.faxes" autoremoveitem="true">
+            <vr-datalist maxitemsperrow="2" datasource="scopeModel.faxes" autoremoveitem="true">
                 {{dataItem.fax}}
             </vr-datalist>
         </vr-columns>

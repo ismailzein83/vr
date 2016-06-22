@@ -28,45 +28,46 @@ app.directive('retailBeAccounttypePartRuntimeResidentialprofile', ["UtilsService
         var countrySelectedPromiseDeferred;
         var mainPayload;
         function initializeController() {
-            $scope.scopeModal = {
+            $scope.scopeModel = {
                 contacts: [],
                 faxes: [],
                 phoneNumbers: []
 
             };
-            $scope.onCountryDirectiveReady = function (api) {
+            $scope.scopeModel.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
             }
 
-            $scope.onCityyDirectiveReady = function (api) {
+            $scope.scopeModel.onCityyDirectiveReady = function (api) {
                 cityDirectiveAPI = api;
                 cityReadyPromiseDeferred.resolve();
             }
 
-            $scope.scopeModal.disabledfax = true;
-            $scope.scopeModal.onFaxValueChange = function (value) {
-                $scope.scopeModal.disabledfax = (value == undefined);
+            $scope.scopeModel.disabledfax = true;
+            $scope.scopeModel.onFaxValueChange = function (value) {
+                $scope.scopeModel.disabledfax = (value == undefined);
             }
-            $scope.scopeModal.disabledphone = true;
-            $scope.scopeModal.onPhoneValueChange = function (value) {
-                $scope.scopeModal.disabledphone = (value == undefined);
+            $scope.scopeModel.disabledphone = true;
+            $scope.scopeModel.onPhoneValueChange = function (value) {
+                $scope.scopeModel.disabledphone = (value == undefined);
             }
 
-            $scope.addPhoneNumberOption = function () {
+            $scope.scopeModel.addPhoneNumberOption = function () {
 
-                $scope.scopeModal.phoneNumbers.push({
-                    phoneNumber: $scope.scopeModal.phoneNumberValue
+                $scope.scopeModel.phoneNumbers.push({
+                    phoneNumber: $scope.scopeModel.phoneNumberValue
                 });
-                $scope.scopeModal.phoneNumberValue = undefined;
-                $scope.scopeModal.disabledphone = true;
+                $scope.scopeModel.phoneNumberValue = undefined;
+                $scope.scopeModel.disabledphone = true;
             };
 
 
-            $scope.onCountrySelectionChanged = function () {
+            $scope.scopeModel.onCountrySelectionChanged = function () {
                 var selectedCountryId = countryDirectiveApi.getSelectedIds();
                 if (selectedCountryId != undefined) {
-                    var setLoader = function (value) { $scope.isLoadingCities = value };
+                    var setLoader = function (value) { $scope.scopeModel.isLoadingCities = value
+                };
                     var payload = {
                         countryId: selectedCountryId
                     };
@@ -77,13 +78,13 @@ app.directive('retailBeAccounttypePartRuntimeResidentialprofile', ["UtilsService
             }
 
 
-            $scope.addFaxOption = function () {
-                var fax = $scope.scopeModal.faxvalue;
-                $scope.scopeModal.faxes.push({
+            $scope.scopeModel.addFaxOption = function () {
+                var fax = $scope.scopeModel.faxvalue;
+                $scope.scopeModel.faxes.push({
                     fax: fax
                 });
-                $scope.scopeModal.faxvalue = undefined;
-                $scope.scopeModal.disabledfax = true;
+                $scope.scopeModel.faxvalue = undefined;
+                $scope.scopeModel.disabledfax = true;
             };
 
 
@@ -94,24 +95,28 @@ app.directive('retailBeAccounttypePartRuntimeResidentialprofile', ["UtilsService
 
             api.load = function (payload) {
                 mainPayload = payload;
-                if(payload !=undefined)
-                {
-                    $scope.scopeModal.email = payload.Email;
-                    $scope.scopeModal.street = payload.Street;
-                    $scope.scopeModal.town = payload.Town;
-                    $scope.scopeModal.phoneNumbers = [];
-                    for (var i = 0; i < payload.PhoneNumbers.length; i++) {
-                        $scope.scopeModal.phoneNumbers.push({
-                            phoneNumber: payload.PhoneNumbers[i]
-                        });
+                if (payload != undefined && payload.partSettings != undefined) {
+
+                    $scope.scopeModel.email = payload.partSettings.Email;
+                    $scope.scopeModel.street = payload.partSettings.Street;
+                    $scope.scopeModel.town = payload.partSettings.Town;
+                    $scope.scopeModel.phoneNumbers = [];
+                    if (payload.partSettings.PhoneNumbers !=undefined)
+                        {
+                            for (var i = 0; i < payload.partSettings.PhoneNumbers.length; i++) {
+                        $scope.scopeModel.phoneNumbers.push({
+                            phoneNumber: payload.partSettings.PhoneNumbers[i]
+                });
                     }
-                    $scope.scopeModal.faxes = [];
-                    if (payload.Faxes == undefined)
-                        payload.Faxes = [];
-                    for (var j = 0; j < payload.Faxes.length; j++) {
-                        $scope.scopeModal.faxes.push({
-                            fax: payload.Faxes[j]
-                        });
+                        }
+                    
+                    $scope.scopeModel.faxes = [];
+                    if (payload.partSettings.Faxes != undefined) {
+                        for (var j = 0; j < payload.partSettings.Faxes.length; j++) {
+                            $scope.scopeModel.faxes.push({
+                                fax: payload.partSettings.Faxes[j]
+                            });
+                        }
                     }
                 }
                 return loadCountryCitySection();
@@ -122,11 +127,11 @@ app.directive('retailBeAccounttypePartRuntimeResidentialprofile', ["UtilsService
                     $type: 'Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartResidentialProfile,Retail.BusinessEntity.MainExtensions',
                     CountryId: countryDirectiveApi.getSelectedIds(),
                     CityId: cityDirectiveAPI.getSelectedIds(),
-                    Town: $scope.scopeModal.town,
-                    Street: $scope.scopeModal.street,
-                    Email: $scope.scopeModal.email,
-                    PhoneNumbers: UtilsService.getPropValuesFromArray($scope.scopeModal.phoneNumbers, "phoneNumber"),
-                    Faxes: UtilsService.getPropValuesFromArray($scope.scopeModal.faxes, "fax")
+                    Town: $scope.scopeModel.town,
+                    Street: $scope.scopeModel.street,
+                    Email: $scope.scopeModel.email,
+                    PhoneNumbers: UtilsService.getPropValuesFromArray($scope.scopeModel.phoneNumbers, "phoneNumber"),
+                    Faxes: UtilsService.getPropValuesFromArray($scope.scopeModel.faxes, "fax")
                 };
             };
 
