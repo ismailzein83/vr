@@ -2,10 +2,9 @@
              on-ready="onGridReady"
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
-             defaultsortbyfieldname="'Entity.NewZones'"
              menuactions="[]">
 
-    <vr-datagridcolumn headertext="'Country'" field="'CountryName'" type="'Text'" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Country'" field="'CountryName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Country Change Type'" ng-show="showStatusIcon">
         <span>
             <vr-icon iconurl="dataItem.StatusIconUrl" tooltip="'Modified'"></vr-icon>

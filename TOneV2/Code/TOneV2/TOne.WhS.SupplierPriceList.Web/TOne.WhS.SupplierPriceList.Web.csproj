@@ -168,6 +168,9 @@
     <Content Include="WhS_SupplierPriceList\Directives\CodePreview\Templates\SupplierPriceListCodePreviewGridTemplate.html" />
     <Content Include="WhS_SupplierPriceList\Directives\CodePreview\vr-spl-codepreview-grid.js" />
     <Content Include="WhS_SupplierPriceList\Images\Closed.png" />
+    <Content Include="WhS_SupplierPriceList\Images\decrease.jpg" />
+    <Content Include="WhS_SupplierPriceList\Images\Renamed.png" />
+    <Content Include="WhS_SupplierPriceList\Images\increase.jpg" />
     <Content Include="WhS_SupplierPriceList\Images\MovedFrom.png" />
     <Content Include="WhS_SupplierPriceList\Images\MovedTo.png" />
     <Content Include="WhS_SupplierPriceList\Images\NewZone.png" />

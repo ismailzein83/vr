@@ -52,8 +52,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 IEnumerable<ExistingZone> matchedExistingZones = existingZones.FindAllRecords(item => item.ZoneEntity.Name.Equals(importedZone.ZoneName, StringComparison.InvariantCultureIgnoreCase));
                 importedZone.ExistingZones.AddRange(matchedExistingZones);
                 
-                importedZone.BED = importedZone.ImportedCodes.Min(item => item.BED);
                 importedZone.ChangeType = GetZoneChangeType(importedZone, existingZones, importedZoneNamesHashSet);
+                importedZone.BED = GetZoneBED(importedZone);
                 importedZone.EED = (importedZone.ChangeType == ZoneChangeType.NotChanged) ? importedZone.ExistingZones.Select(x => x.EED).VRMinimumDate() : null;
             }
         }
@@ -72,6 +72,19 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             return notImportedZones;
         }
 
+
+        private DateTime GetZoneBED(ImportedZone importedZone)
+        {
+            List<DateTime?> minDates = new List<DateTime?>();
+            
+            if (importedZone.NewZones.Count() > 0)
+                minDates.Add(importedZone.NewZones.Min(item => item.BED));
+
+            if (importedZone.ExistingZones.Count() > 0)
+                minDates.Add(importedZone.ExistingZones.Min(item => item.BED));
+
+            return minDates.VRMinimumDate().Value;          
+        }
 
         private ZoneChangeType GetZoneChangeType(ImportedZone importedZone, IEnumerable<ExistingZone> existingZones, HashSet<string> importedZoneNamesHashSet)
         {

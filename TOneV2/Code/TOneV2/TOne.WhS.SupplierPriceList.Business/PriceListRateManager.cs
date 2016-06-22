@@ -74,7 +74,11 @@ namespace TOne.WhS.SupplierPriceList.Business
                     {
                         if (recentExistingRate != null)
                         {
-                            importedRate.ChangeType = importedRate.NormalRate > recentExistingRate.RateEntity.NormalRate ? RateChangeType.Increase : RateChangeType.Decrease;
+                            if (importedRate.NormalRate > recentExistingRate.RateEntity.NormalRate)
+                                importedRate.ChangeType = RateChangeType.Increase;
+                            else if (importedRate.NormalRate < recentExistingRate.RateEntity.NormalRate)
+                                importedRate.ChangeType = RateChangeType.Decrease;
+
                             importedRate.ProcessInfo.RecentExistingRate = recentExistingRate;
                         }
                         else
