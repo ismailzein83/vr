@@ -56,7 +56,7 @@
     </vr-row>
 </vr-tab>
 <vr-tab header="'Contacts'">
-    <vr-section title="c.label" ng-repeat="c in scopeModel.contacts">
+    <vr-section title="{{c.label}}" ng-repeat="c in scopeModel.contacts">
         <vr-columns width="1/2row">
             <vr-label>{{c.label}} Name </vr-label>
             <vr-textbox value="c.name" type="c.inputetype"></vr-textbox>
@@ -66,7 +66,7 @@
             <vr-textbox value="c.email" type="c.inputetype"></vr-textbox>
         </vr-columns>
         <vr-columns width="1/2row">
-            <vr-textbox label="Phone" type="number" decimalprecision="0" onvaluechanged="c.onPhoneValueChange" value="c.phoneNumberValue"></vr-textbox>
+            <vr-textbox label="Phones" type="number" decimalprecision="0" onvaluechanged="c.onPhoneValueChange" value="c.phoneNumberValue"></vr-textbox>
         </vr-columns>
         <vr-columns withemptyline width="1/2row">
             <vr-button type="Add" data-onclick="c.addPhoneNumberOption" vr-disabled="c.disabledphone" standalone></vr-button>
