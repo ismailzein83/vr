@@ -14,6 +14,7 @@
 
         var accountTypeSelectorAPI;
         var accountTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var accountTypeSelectedDeferred;
 
         var accountEditorRuntime;
         var requiredPartsDirectiveAPI;
@@ -53,8 +54,12 @@
                 var selectedId = accountTypeSelectorAPI.getSelectedIds();
                 if (selectedId == undefined)
                     return;
+                if (accountTypeSelectedDeferred != undefined) {
+                    accountTypeSelectedDeferred.resolve();
+                    return;
+                }
                 $scope.scopeModel.isLoading = true;
-                loadAccountPartsSection().catch(function (error) {
+                loadRuntime().catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -88,7 +93,6 @@
             {
                 getAccount().then(function () {
                     loadAllControls().finally(function () {
-                        console.log('2');
                         accountEntity = undefined;
                     });
                 }).catch(function (error) {
@@ -107,21 +111,9 @@
             });
         }
         function loadAllControls() {
-
-            //var p1 = setTitle();
-            //var p2 = loadStaticData();
-            //var p3 = loadAccountTypeSelector();
-            //var p4 = loadAccountPartsSection();
-
-            //UtilsService.convertToPromiseIfUndefined(p1).finally(function () { console.log('p1'); });
-            //UtilsService.convertToPromiseIfUndefined(p2).finally(function () { console.log('p2'); });
-            //UtilsService.convertToPromiseIfUndefined(p3).finally(function () { console.log('p3'); });
-            //UtilsService.convertToPromiseIfUndefined(p4).finally(function () { console.log('p4'); });
-
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadAccountTypeSelector, loadAccountPartsSection]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadAccountTypeSelectorWithRuntime]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
-                console.log('1');
                 $scope.scopeModel.isLoading = false;
             });
         }
@@ -152,33 +144,49 @@
                 return;
             $scope.scopeModel.name = accountEntity.Name;
         }
-        function loadAccountTypeSelector()
+        function loadAccountTypeSelectorWithRuntime()
         {
-            var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            var promises = [];
 
-            accountTypeSelectorReadyDeferred.promise.then(function ()
-            {
-                var accountTypeSelectorPayload = {
-                    filter: { CanBeRootAccount: (parentAccountId == undefined) }
-                };
-                if (accountEntity != undefined) {
-                    accountTypeSelectorPayload.selectedIds = (accountEntity != undefined) ? accountEntity.TypeId : undefined;
-                }
+            var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            promises.push(accountTypeSelectorLoadDeferred.promise);
+
+            var accountTypeSelectorPayload = {
+                filter: { CanBeRootAccount: (parentAccountId == undefined) }
+            };
+
+            if (accountEntity != undefined) {
+                accountTypeSelectorPayload.selectedIds = accountEntity.TypeId;
+                accountTypeSelectedDeferred = UtilsService.createPromiseDeferred();
+            }
+
+            accountTypeSelectorReadyDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, accountTypeSelectorPayload, accountTypeSelectorLoadDeferred);
             });
 
-            return accountTypeSelectorLoadDeferred.promise;
+            if (accountEntity != undefined)
+            {
+                var runtimeLoadDeferred = UtilsService.createPromiseDeferred();
+                promises.push(runtimeLoadDeferred.promise);
+
+                accountTypeSelectedDeferred.promise.then(function ()
+                {
+                    accountTypeSelectedDeferred = undefined;
+
+                    loadRuntime().then(function () {
+                        runtimeLoadDeferred.resolve();
+                    }).catch(function (error) {
+                        runtimeLoadDeferred.reject(error);
+                    });
+                });
+            }
+
+            return UtilsService.waitMultiplePromises(promises);
         }
-        function loadAccountPartsSection()
+        function loadRuntime()
         {
-            if (!isEditMode && accountTypeSelectorAPI == undefined)
-                return;
-
             var promises = [];
-            var accountTypeId = (accountEntity != undefined) ? accountEntity.TypeId : accountTypeSelectorAPI.getSelectedIds();
-
-            var requiredPartDefinitions = [];
-            //$scope.scopeModel.notRequiredParts.length = 0;
+            var accountTypeId = accountTypeSelectorAPI.getSelectedIds();
 
             var getAccountEditorRuntimePromise = getAccountEditorRuntime();
             promises.push(getAccountEditorRuntimePromise);
@@ -189,10 +197,11 @@
             var loadPartsDeferred = UtilsService.createPromiseDeferred();
             promises.push(loadPartsDeferred.promise);
 
+            var requiredPartDefinitions = [];
+            $scope.scopeModel.notRequiredParts.length = 0;
+
             UtilsService.waitMultiplePromises([getAccountEditorRuntimePromise, loadAccountPartDefinitionExtensionConfigsPromise]).then(function ()
             {
-                $scope.scopeModel.notRequiredParts.length = 0;
-
                 if (accountEditorRuntime != undefined && accountEditorRuntime.Parts != null)
                 {
                     for (var i = 0; i < accountEditorRuntime.Parts.length; i++) {
@@ -291,12 +300,12 @@
                     return false;
                 return (accountEntity.Settings.Parts[partDefinitionId] != null);
             }
-            function getPartDefinitionRuntimeEditor(partDefinitionId) {
-                var partExtensionConfig = UtilsService.getItemByVal(partDefinitionExtensionConfigs, partDefinitionId, 'ExtensionConfigurationId');
-                return (partExtensionConfig != undefined) ? partExtensionConfig.RuntimeEditor : null;
-            }
 
             return UtilsService.waitMultiplePromises(promises);
+        }
+        function getPartDefinitionRuntimeEditor(partDefinitionId) {
+            var partExtensionConfig = UtilsService.getItemByVal(partDefinitionExtensionConfigs, partDefinitionId, 'ExtensionConfigurationId');
+            return (partExtensionConfig != undefined) ? partExtensionConfig.RuntimeEditor : null;
         }
 
         function insertAccount()
@@ -355,7 +364,6 @@
                 obj.ParentAccountId = parentAccountId;
             }
 
-            console.log(obj);
             return obj;
         }
         function buildAccountParts()

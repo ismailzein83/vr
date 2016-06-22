@@ -24,7 +24,7 @@
                 <span ng-repeat="notRequiredPart in scopeModel.notRequiredParts" vr-loader="notRequiredPart.isLoading">
                     <vr-directivewrapper directive="notRequiredPart.runtimeEditor"
                                          on-ready="notRequiredPart.onDirectiveReady"
-                                         title="notRequiredPart.definition.title"
+                                         title="{{notRequiredPart.definition.Title}}"
                                          normal-col-num="6"
                                          ng-if="notRequiredPart.isSelected">
                     </vr-directivewrapper>
