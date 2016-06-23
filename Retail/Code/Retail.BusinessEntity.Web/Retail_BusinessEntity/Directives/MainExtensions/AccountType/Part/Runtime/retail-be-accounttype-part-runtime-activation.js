@@ -5,7 +5,6 @@ app.directive('retailBeAccounttypePartRuntimeActivation', ["Retail_BE_AccountSta
         restrict: 'E',
         scope: {
             onReady: '=',
-            title: '@',
             normalColNum: '@'
         },
         controller: function ($scope, $element, $attrs) {

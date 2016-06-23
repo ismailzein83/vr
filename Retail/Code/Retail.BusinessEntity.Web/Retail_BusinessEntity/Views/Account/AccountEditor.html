@@ -1,9 +1,9 @@
-﻿<div vr-modalcontent ng-controller="Retail_BE_AccountEditorController" width="'35%'" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="Retail_BE_AccountEditorController" width="'40%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formAccountEditor">
             <vr-tabs>
                 <vr-tab header="'Definition'">
-                    <vr-row>
+                    <vr-row removeline>
                         <vr-columns width="1/2row">
                             <vr-textbox label="Name" value="scopeModel.name" isrequired></vr-textbox>
                         </vr-columns>
@@ -24,7 +24,6 @@
                 <span ng-repeat="notRequiredPart in scopeModel.notRequiredParts" vr-loader="notRequiredPart.isLoading">
                     <vr-directivewrapper directive="notRequiredPart.runtimeEditor"
                                          on-ready="notRequiredPart.onDirectiveReady"
-                                         title="{{notRequiredPart.definition.Title}}"
                                          normal-col-num="6"
                                          ng-if="notRequiredPart.isSelected">
                     </vr-directivewrapper>

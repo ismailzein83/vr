@@ -124,7 +124,7 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        #region Get Account Part Runtime
+        #region Get Account Editor Runtime
 
         public AccountEditorRuntime GetAccountEditorRuntime(int accountTypeId, int? parentAccountId)
         {
@@ -132,46 +132,35 @@ namespace Retail.BusinessEntity.Business
 
             var accountPartDefinitionManager = new AccountPartDefinitionManager();
             IEnumerable<AccountTypePartSettings> partSettingsList = this.GetAccountTypePartDefinitionSettingsList(accountTypeId);
-            var parts = new List<AccountPartRuntime>();
+            var runtimeParts = new List<AccountPartRuntime>();
 
             foreach (AccountTypePartSettings partSettings in partSettingsList)
             {
-                if (partSettings.AvailabilitySettings == AccountPartAvailabilityOptions.AlwaysAvailable ||
-                    !this.IsPartFoundOrInherited(parentAccountId, partSettings.PartDefinitionId))
+                bool isPartFoundOrInherited = this.IsPartFoundOrInherited(parentAccountId, partSettings.PartDefinitionId);
+
+                if (partSettings.AvailabilitySettings == AccountPartAvailabilityOptions.AlwaysAvailable || !isPartFoundOrInherited)
                 {
+                    var accountPartRuntime = new AccountPartRuntime();
+
                     AccountPartDefinition partDefinition = accountPartDefinitionManager.GetAccountPartDefinition(partSettings.PartDefinitionId);
                     if (partDefinition == null)
                         throw new NullReferenceException("partDefinition");
-                    parts.Add(new AccountPartRuntime()
-                    {
-                        PartDefinition = partDefinition,
-                        RequiredSettings = partSettings.RequiredSettings
-                    });
+
+                    accountPartRuntime.PartDefinition = partDefinition;
+
+                    if (partSettings.RequiredSettings == AccountPartRequiredOptions.RequiredIfNotInherited)
+                        accountPartRuntime.IsRequired = !isPartFoundOrInherited;
+                    else
+                        accountPartRuntime.IsRequired = (partSettings.RequiredSettings == AccountPartRequiredOptions.Required);
+
+                    runtimeParts.Add(accountPartRuntime);
                 }
             }
 
-            if (parts.Count > 0)
-                accountEditorRuntime.Parts = parts;
+            if (runtimeParts.Count > 0)
+                accountEditorRuntime.Parts = runtimeParts;
 
             return accountEditorRuntime;
-        }
-
-        private bool IsPartFoundOrInherited(long? accountId, int partDefinitionId)
-        {
-            if (!accountId.HasValue)
-                return false;
-
-            Account account = this.GetAccount(accountId.Value);
-            if (account == null)
-                throw new NullReferenceException("account");
-
-            IEnumerable<AccountTypePartSettings> partSettingsList = this.GetAccountTypePartDefinitionSettingsList(account.TypeId);
-            AccountTypePartSettings partSettings = partSettingsList.FindRecord(x => x.PartDefinitionId == partDefinitionId);
-
-            if (partSettings != null)
-                return true;
-
-            return IsPartFoundOrInherited(account.ParentAccountId, partDefinitionId);
         }
 
         private IEnumerable<AccountTypePartSettings> GetAccountTypePartDefinitionSettingsList(int accountTypeId)
@@ -185,6 +174,29 @@ namespace Retail.BusinessEntity.Business
             if (accountType.Settings.PartDefinitionSettings == null)
                 throw new NullReferenceException("accountType.Settings.PartDefinitionSettings");
             return accountType.Settings.PartDefinitionSettings;
+        }
+
+        private bool IsPartFoundOrInherited(long? accountId, int partDefinitionId)
+        {
+            if (!accountId.HasValue)
+                return false;
+
+            Account account = this.GetAccount(accountId.Value);
+            if (account == null)
+                throw new NullReferenceException("account");
+            if (account.Settings == null)
+                throw new NullReferenceException("account.Settings");
+
+            if (account.Settings.Parts == null)
+                return false;
+
+            AccountPart accountPart;
+            bool isPartFound = account.Settings.Parts.TryGetValue(partDefinitionId, out accountPart);
+
+            if (isPartFound)
+                return true;
+
+            return IsPartFoundOrInherited(account.ParentAccountId, partDefinitionId);
         }
 
         #endregion
@@ -324,12 +336,15 @@ namespace Retail.BusinessEntity.Business
             var accounts = GetCachedAccounts().Values;
             var accountsByParent = GetCachedAccountsByParent();
 
+            IEnumerable<int> supportedParentAccountTypeIds = accountTypeManager.GetSupportedParentAccountTypeIds(account.AccountId);
+
             return new AccountDetail()
             {
                 Entity = account,
                 AccountTypeTitle = accountTypeManager.GetAccountTypeName(account.TypeId),
                 DirectSubAccountCount = GetSubAccountsCount(account.AccountId, accounts, false),
-                TotalSubAccountCount = GetSubAccountsCount(account.AccountId, accounts, true, accountsByParent)
+                TotalSubAccountCount = GetSubAccountsCount(account.AccountId, accounts, true, accountsByParent),
+                CanAddSubAccounts = (supportedParentAccountTypeIds != null && supportedParentAccountTypeIds.Count() > 0)
             };
         }
 
@@ -341,6 +356,7 @@ namespace Retail.BusinessEntity.Business
                 Name = account.Name
             };
         }
+        
         private int GetSubAccountsCount(long accountId, IEnumerable<Account> accounts, bool isTotalSubAccountsInclude, Dictionary<long, List<Account>> accountsByParent = null)
         {
             int count = 0;
@@ -355,6 +371,7 @@ namespace Retail.BusinessEntity.Business
             }
             return count;
         }
+        
         private int GetTotalSubAccountsCountRecursively(Account account, Dictionary<long, List<Account>> accountsByParent)
         {
             if (accountsByParent == null)
@@ -371,6 +388,7 @@ namespace Retail.BusinessEntity.Business
             }
             return 0;
         }
+        
         #endregion
 
         #region IBusinessEntityManager

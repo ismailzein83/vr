@@ -12,5 +12,6 @@ namespace Retail.BusinessEntity.Entities
         public string AccountTypeTitle { get; set; }
         public int DirectSubAccountCount { get; set; }
         public int TotalSubAccountCount { get; set; }
+        public bool CanAddSubAccounts { get; set; }
     }
 }

@@ -15,6 +15,6 @@ namespace Retail.BusinessEntity.Entities
     {
         public AccountPartDefinition PartDefinition { get; set; }
 
-        public AccountPartRequiredOptions RequiredSettings { get; set; }
+        public bool IsRequired { get; set; }
     }
 }

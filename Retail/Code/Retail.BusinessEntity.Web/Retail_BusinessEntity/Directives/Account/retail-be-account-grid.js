@@ -30,7 +30,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
-                drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(buildDrillDownTabs(), gridAPI, $scope.scopeModel.menuActions);
+                drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(buildDrillDownTabs(), gridAPI, $scope.scopeModel.menuActions, true);
                 defineAPI();
             };
 
@@ -45,6 +45,10 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
+            };
+
+            $scope.scopeModel.getMenuActions = function (dataItem) {
+                return dataItem.drillDownExtensionObject.menuActions;
             };
 
             defineMenuActions();
@@ -85,6 +89,9 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                         ParentAccountId: parentAccount.Entity.AccountId
                     };
                     return parentAccount.subAccountGridAPI.load(subAccountGridPayload);
+                };
+                subAccountsTab.hideDrillDownFunction = function (dataItem) {
+                    return !dataItem.CanAddSubAccounts;
                 };
 
                 subAccountsTab.parentMenuActions = [{

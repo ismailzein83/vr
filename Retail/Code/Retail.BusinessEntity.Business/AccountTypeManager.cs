@@ -43,11 +43,34 @@ namespace Retail.BusinessEntity.Business
 
             if (filter != null)
             {
-                if (filter.CanBeRootAccount.HasValue)
-                    filterExpression = (accountType) => accountType.Settings != null && accountType.Settings.CanBeRootAccount == filter.CanBeRootAccount.Value;
+                if (filter.ParentAccountId.HasValue)
+                {
+                    IEnumerable<int> supportedParentAccountTypeIds = this.GetSupportedParentAccountTypeIds(filter.ParentAccountId.Value);
+                    filterExpression = (accountType) =>
+                        (supportedParentAccountTypeIds != null && supportedParentAccountTypeIds.Contains(accountType.AccountTypeId));
+                }
+                else
+                {
+                    filterExpression = (accountType) =>
+                        (accountType.Settings != null && accountType.Settings.CanBeRootAccount == true);
+                }
             }
 
             return this.GetCachedAccountTypes().MapRecords(AccountTypeInfoMapper, filterExpression).OrderBy(x => x.Title);
+        }
+
+        public IEnumerable<int> GetSupportedParentAccountTypeIds(long parentAccountId)
+        {
+            var accountManager = new AccountManager();
+            Account parentAccount = accountManager.GetAccount(parentAccountId);
+            if (parentAccount == null)
+                throw new NullReferenceException("parentAccount");
+            AccountType parentAccountType = this.GetAccountType(parentAccount.TypeId);
+            if (parentAccountType == null)
+                throw new NullReferenceException("parentAccountType");
+            if (parentAccountType.Settings == null)
+                throw new NullReferenceException("parentAccountType.Settings");
+            return parentAccountType.Settings.SupportedParentAccountTypeIds;
         }
 
         public IEnumerable<AccountPartDefinitionConfig> GetAccountTypePartDefinitionExtensionConfigs()

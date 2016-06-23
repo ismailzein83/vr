@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountEditorController.$inject = ['$scope', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountTypeAPIService', 'Retail_BE_AccountPartDefinitionAPIService', 'Retail_BE_AccountPartRequiredOptionsEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    AccountEditorController.$inject = ['$scope', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountTypeAPIService', 'Retail_BE_AccountPartDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function AccountEditorController($scope, Retail_BE_AccountAPIService, Retail_BE_AccountTypeAPIService, Retail_BE_AccountPartDefinitionAPIService, Retail_BE_AccountPartRequiredOptionsEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService)
+    function AccountEditorController($scope, Retail_BE_AccountAPIService, Retail_BE_AccountTypeAPIService, Retail_BE_AccountPartDefinitionAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService)
     {
         var isEditMode;
 
@@ -152,7 +152,7 @@
             promises.push(accountTypeSelectorLoadDeferred.promise);
 
             var accountTypeSelectorPayload = {
-                filter: { CanBeRootAccount: (parentAccountId == undefined) }
+                filter: { ParentAccountId: parentAccountId }
             };
 
             if (accountEntity != undefined) {
@@ -206,10 +206,10 @@
                 {
                     for (var i = 0; i < accountEditorRuntime.Parts.length; i++) {
                         var part = accountEditorRuntime.Parts[i];
-                        if (part.RequiredSettings == Retail_BE_AccountPartRequiredOptionsEnum.Required.value) {
+                        if (part.IsRequired) {
                             requiredPartDefinitions.push(part.PartDefinition);
                         }
-                        else if (part.RequiredSettings == Retail_BE_AccountPartRequiredOptionsEnum.NotRequired.value) {
+                        else {
                             var notRequiredPart = buildNotRequiredPart(part.PartDefinition);
                             $scope.scopeModel.notRequiredParts.push(notRequiredPart);
                         }

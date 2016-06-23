@@ -8,6 +8,6 @@ namespace Retail.BusinessEntity.Entities
 {
     public class AccountTypeFilter
     {
-        public bool? CanBeRootAccount { get; set; }
+        public int? ParentAccountId { get; set; }
     }
 }
