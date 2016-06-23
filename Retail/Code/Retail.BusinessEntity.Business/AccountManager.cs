@@ -336,7 +336,8 @@ namespace Retail.BusinessEntity.Business
             var accounts = GetCachedAccounts().Values;
             var accountsByParent = GetCachedAccountsByParent();
 
-            IEnumerable<int> supportedParentAccountTypeIds = accountTypeManager.GetSupportedParentAccountTypeIds(account.AccountId);
+            IEnumerable<AccountTypeInfo> accountTypeInfoEntities =
+                accountTypeManager.GetAccountTypesInfo(new AccountTypeFilter() { ParentAccountId = account.AccountId });
 
             return new AccountDetail()
             {
@@ -344,7 +345,7 @@ namespace Retail.BusinessEntity.Business
                 AccountTypeTitle = accountTypeManager.GetAccountTypeName(account.TypeId),
                 DirectSubAccountCount = GetSubAccountsCount(account.AccountId, accounts, false),
                 TotalSubAccountCount = GetSubAccountsCount(account.AccountId, accounts, true, accountsByParent),
-                CanAddSubAccounts = (supportedParentAccountTypeIds != null && supportedParentAccountTypeIds.Count() > 0)
+                CanAddSubAccounts = (accountTypeInfoEntities != null && accountTypeInfoEntities.Count() > 0)
             };
         }
 
@@ -356,7 +357,7 @@ namespace Retail.BusinessEntity.Business
                 Name = account.Name
             };
         }
-        
+
         private int GetSubAccountsCount(long accountId, IEnumerable<Account> accounts, bool isTotalSubAccountsInclude, Dictionary<long, List<Account>> accountsByParent = null)
         {
             int count = 0;
@@ -371,7 +372,7 @@ namespace Retail.BusinessEntity.Business
             }
             return count;
         }
-        
+
         private int GetTotalSubAccountsCountRecursively(Account account, Dictionary<long, List<Account>> accountsByParent)
         {
             if (accountsByParent == null)
@@ -388,7 +389,7 @@ namespace Retail.BusinessEntity.Business
             }
             return 0;
         }
-        
+
         #endregion
 
         #region IBusinessEntityManager

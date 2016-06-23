@@ -45,9 +45,17 @@ namespace Retail.BusinessEntity.Business
             {
                 if (filter.ParentAccountId.HasValue)
                 {
-                    IEnumerable<int> supportedParentAccountTypeIds = this.GetSupportedParentAccountTypeIds(filter.ParentAccountId.Value);
+                    var accountManager = new AccountManager();
+                    Account parentAccount = accountManager.GetAccount(filter.ParentAccountId.Value);
+                    if (parentAccount == null)
+                        throw new NullReferenceException("parentAccount");
+
                     filterExpression = (accountType) =>
-                        (supportedParentAccountTypeIds != null && supportedParentAccountTypeIds.Contains(accountType.AccountTypeId));
+                    (
+                        accountType.Settings != null &&
+                        accountType.Settings.SupportedParentAccountTypeIds != null &&
+                        accountType.Settings.SupportedParentAccountTypeIds.Contains(parentAccount.TypeId)
+                    );
                 }
                 else
                 {
