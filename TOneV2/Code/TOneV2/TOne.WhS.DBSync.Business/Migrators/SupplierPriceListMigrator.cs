@@ -14,7 +14,7 @@ namespace TOne.WhS.DBSync.Business
     {
         SupplierPriceListDBSyncDataManager dbSyncDataManager;
         SourcePriceListDataManager dataManager;
-        VRFileManager vrFileManager = new VRFileManager();
+        FileDBSyncDataManager fileDataManager;
         Dictionary<string, Currency> allCurrencies;
         Dictionary<string, CarrierAccount> allCarrierAccounts;
         public SupplierPriceListMigrator(MigrationContext context)
@@ -22,6 +22,7 @@ namespace TOne.WhS.DBSync.Business
         {
             dbSyncDataManager = new SupplierPriceListDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourcePriceListDataManager(Context.ConnectionString);
+            fileDataManager = new FileDBSyncDataManager(context.UseTempTables);
             TableName = dbSyncDataManager.GetTableName();
             var dbTableCurrency = Context.DBTables[DBTableName.Currency];
             var dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
@@ -72,7 +73,8 @@ namespace TOne.WhS.DBSync.Business
 
                 };
 
-                fileId = vrFileManager.AddFile(file);
+                   fileId =  fileDataManager.ApplyFile(file);
+               
             }
 
             if (currency != null && carrierAccount != null && fileId.HasValue)

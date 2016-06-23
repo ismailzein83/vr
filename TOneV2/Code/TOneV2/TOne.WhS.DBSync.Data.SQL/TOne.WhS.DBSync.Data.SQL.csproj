@@ -75,6 +75,7 @@
     <Compile Include="DBSyncDataManager\CarrierAccountDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\CarrierProfileDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\SupplierCodeDBSyncDataManager.cs" />
+    <Compile Include="DBSyncDataManager\FileDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\SupplierPriceListDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\SalePriceListDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\SaleCodeDBSyncDataManager.cs" />

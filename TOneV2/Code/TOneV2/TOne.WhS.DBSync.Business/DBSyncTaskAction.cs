@@ -131,6 +131,9 @@ namespace TOne.WhS.DBSync.Business
                     case DBTableName.SaleZone:
                         iDBSyncDataManager = new SaleZoneDBSyncDataManager(context.UseTempTables);
                         break;
+                    case DBTableName.File:
+                        iDBSyncDataManager = new FileDBSyncDataManager(context.UseTempTables);
+                        break;
 
                 }
                 AddDBTable(dtTables, table, iDBSyncDataManager.GetConnection(), iDBSyncDataManager.GetSchema(), migrationRequested);

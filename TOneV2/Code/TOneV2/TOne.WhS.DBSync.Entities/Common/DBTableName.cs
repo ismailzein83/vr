@@ -51,5 +51,8 @@ namespace TOne.WhS.DBSync.Entities
 
         [Description("SupplierPriceList")]
         SupplierPriceList,
+
+        [Description("File")]
+        File
     }
 }
