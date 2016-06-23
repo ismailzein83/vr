@@ -47,6 +47,13 @@
 
         //#endregion
 
+        //#region Cooked CDR Data Store Tab
+
+        var dataStoreSelectorAPI;
+        var dataStoreSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        //#endregion
+
         loadParameters();
         defineScope();
         load();
@@ -186,6 +193,11 @@
                 }
             };
 
+            $scope.scopeModal.onDataRecordStorageSelectorReady = function (api) {
+                dataStoreSelectorAPI = api;
+                dataStoreSelectorReadyDeferred.resolve();
+            };
+
             $scope.scopeModal.onGridReady = function (api) {
                 gridAPI = api;
             }
@@ -272,7 +284,7 @@
             });
 
             //#endregion
-            
+
             return UtilsService.waitMultiplePromises(promises);
         }
 
@@ -339,8 +351,28 @@
 
         }
 
+        function loadDataStoreSelector() {
+            var dataStoreSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            dataStoreSelectorReadyDeferred.promise.then(function () {
+                var payload;
+
+                if (mediationDefinitionEntity != undefined && mediationDefinitionEntity.CookedCDRDataStoreSetting != undefined) {
+                    payload = {
+                        selectedIds: mediationDefinitionEntity.CookedCDRDataStoreSetting.DataRecordStorageId,
+                        showaddbutton: true
+                    };
+                }
+
+                VRUIUtilsService.callDirectiveLoad(dataStoreSelectorAPI, payload, dataStoreSelectorLoadDeferred);
+            });
+
+            return dataStoreSelectorLoadDeferred.promise;
+        }
+
+
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadDefinitionSection, setTitle, loadParsedToCookedSection, PrepareStatusMappings])
+            return UtilsService.waitMultipleAsyncOperations([loadDefinitionSection, setTitle, loadParsedToCookedSection, PrepareStatusMappings, loadDataStoreSelector])
                  .catch(function (error) {
                      VRNotificationService.notifyExceptionWithClose(error, $scope);
                  })
@@ -460,8 +492,8 @@
 
         function getParsedRecordIdentificationSetting() {
             return {
-                SessionRecordTypeId: dataParsedRecordTypeFieldsSessionIdSelectorAPI.getSelectedIds(),
-                EventTimeRecordTypeId: dataParsedRecordTypeFieldsTimeSelectorAPI.getSelectedIds(),
+                SessionIdField: dataParsedRecordTypeFieldsSessionIdSelectorAPI.getSelectedIds(),
+                EventTimeField: dataParsedRecordTypeFieldsTimeSelectorAPI.getSelectedIds(),
                 StatusMappings: getStatusMappings()
             };
         }

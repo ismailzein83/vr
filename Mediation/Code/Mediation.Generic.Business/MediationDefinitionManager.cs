@@ -79,6 +79,24 @@ namespace Mediation.Generic.Business
             return insertOperationOutput;
         }
 
+        public IEnumerable<MediationDefinitionInfo> GetMediationDefinitionInfo()
+        {
+            var mediationDefinitions = GetCachedMediationDefinitions();
+            return mediationDefinitions.MapRecords(MediationDefinitionInfoMapper).OrderBy(x => x.Name); 
+        }
+
+        public IEnumerable<MediationDefinitionInfo> GetMediationDefinitionInfoByIds(HashSet<int> mediationDefinitionIds)
+        {
+            var mediationDefinitions = GetCachedMediationDefinitions();
+            Func<MediationDefinition, bool> mediationDefinitionFilter = (mediationDefinition) =>
+            {
+                if (!mediationDefinitionIds.Contains(mediationDefinition.MediationDefinitionId))
+                    return false;
+                return true;
+            };
+            return mediationDefinitions.MapRecords(MediationDefinitionInfoMapper, mediationDefinitionFilter).OrderBy(x => x.Name); ;
+        }
+
         #region Private Methods
         private Dictionary<int, MediationDefinition> GetCachedMediationDefinitions()
         {
@@ -109,11 +127,20 @@ namespace Mediation.Generic.Business
 
         #region Mappers
 
-        private MediationDefinitionDetail MediationDefinitionDetailMapper(MediationDefinition mediationDefinitionObject)
+        MediationDefinitionDetail MediationDefinitionDetailMapper(MediationDefinition mediationDefinitionObject)
         {
             MediationDefinitionDetail mediationDefinitionDetail = new MediationDefinitionDetail();
             mediationDefinitionDetail.Entity = mediationDefinitionObject;
             return mediationDefinitionDetail;
+        }
+
+        MediationDefinitionInfo MediationDefinitionInfoMapper(MediationDefinition mediationDefinitionObject)
+        {
+            return new MediationDefinitionInfo()
+            {
+                MediationDefinitionId = mediationDefinitionObject.MediationDefinitionId,
+                Name = mediationDefinitionObject.Name
+            };
         }
         #endregion
 

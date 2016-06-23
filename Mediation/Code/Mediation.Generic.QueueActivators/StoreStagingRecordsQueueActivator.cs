@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mediation.Generic.Business;
 using Mediation.Generic.Data;
 using Mediation.Generic.Entities;
 using Vanrise.GenericData.Business;
@@ -14,14 +15,15 @@ namespace Mediation.Generic.QueueActivators
     {
         DataRecordStorageManager _dataRecordStorageManager = new DataRecordStorageManager();
         DataStoreManager _dataStoreManager = new DataStoreManager();
-        public string SessionRecordTypeId { get; set; }
-        public string EventTimeRecordTypeId { get; set; }
-        public List<StatusMapping> StatusMappings { get; set; }
+
+        public int MediationDefinitionId { get; set; }
 
         public override void ProcessItem(IQueueActivatorExecutionContext context)
         {
             IStoreStagingRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IStoreStagingRecordsDataManager>();
 
+            MediationDefinitionManager mediationManager = new MediationDefinitionManager();
+            MediationDefinition mediationDefinition = mediationManager.GetMediationDefinition(MediationDefinitionId);
             DataRecordBatch dataRecordBatch = context.ItemToProcess as DataRecordBatch;
             var queueItemType = context.CurrentStage.QueueItemType as DataRecordBatchQueueItemType;
             if (queueItemType == null)
@@ -36,9 +38,9 @@ namespace Mediation.Generic.QueueActivators
             {
                 DataRecordFilterGenericFieldMatchContext dataRecordFilterContext = new DataRecordFilterGenericFieldMatchContext(batchRecord, recordTypeId);
                 StoreStagingRecord storeStagingRecord = new StoreStagingRecord();
-                storeStagingRecord.SessionId = (long)GetPropertyValue(batchRecord, SessionRecordTypeId);
-                storeStagingRecord.EventTime = (DateTime)GetPropertyValue(batchRecord, EventTimeRecordTypeId);
-                foreach (var statusMapping in StatusMappings)
+                storeStagingRecord.SessionId = (long)GetPropertyValue(batchRecord, mediationDefinition.ParsedRecordIdentificationSetting.SessionIdField);
+                storeStagingRecord.EventTime = (DateTime)GetPropertyValue(batchRecord, mediationDefinition.ParsedRecordIdentificationSetting.EventTimeField);
+                foreach (var statusMapping in mediationDefinition.ParsedRecordIdentificationSetting.StatusMappings)
                 {
                     if (filterManager.IsFilterGroupMatch(statusMapping.FilterGroup, dataRecordFilterContext))
                     {

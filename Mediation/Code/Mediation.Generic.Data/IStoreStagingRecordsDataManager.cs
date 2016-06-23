@@ -10,5 +10,11 @@ namespace Mediation.Generic.Data
         void SaveStoreStagingRecordsToDB(List<StoreStagingRecord> storeStagingRecords);
 
         IEnumerable<StoreStagingRecord> GetStoreStagingRecords();
+
+        IEnumerable<StoreStagingRecord> GetStoreStagingRecordsByStatus(EventStatus status);
+
+        IEnumerable<StoreStagingRecord> GetStoreStagingRecordsByIds(IEnumerable<int> eventIds);
+
+        int DataRecordTypeId { set; }
     }
 }

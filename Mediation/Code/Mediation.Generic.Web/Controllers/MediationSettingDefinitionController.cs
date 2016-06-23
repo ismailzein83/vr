@@ -24,6 +24,22 @@ namespace Vanrise.GenericData.Web.Controllers
             return mediationDefinitionManager.GetMediationDefinition(mediationDefinitionId);
         }
 
+        [HttpGet]
+        [Route("GetMediationDefinitionsInfo")]
+        public IEnumerable<MediationDefinitionInfo> GetMediationDefinitionsInfo()
+        {
+            MediationDefinitionManager mediationDefinitionManager = new MediationDefinitionManager();
+            return mediationDefinitionManager.GetMediationDefinitionInfo();
+        }
+        [HttpPost]
+        [Route("GetMediationDefinitionsInfoByIds")]
+        public IEnumerable<MediationDefinitionInfo> GetMediationDefinitionsInfoByIds(HashSet<int> accountIds)
+        {
+            MediationDefinitionManager mediationDefinitionManager = new MediationDefinitionManager();
+            return mediationDefinitionManager.GetMediationDefinitionInfoByIds(accountIds);
+        }
+
+        [HttpPost]
         [Route("UpdateMediationDefinition")]
         public Vanrise.Entities.UpdateOperationOutput<MediationDefinitionDetail> UpdateMediationDefinition(MediationDefinition mediationDefinition)
         {

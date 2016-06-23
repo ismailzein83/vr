@@ -13,7 +13,9 @@
             AddMediationDefinition: AddMediationDefinition,
             HasAddMediationDefinition: HasAddMediationDefinition,
             UpdateMediationDefinition: UpdateMediationDefinition,
-            HasUpdateMediationDefinition: HasUpdateMediationDefinition
+            HasUpdateMediationDefinition: HasUpdateMediationDefinition,
+            GetMediationDefinitionsInfo: GetMediationDefinitionsInfo,
+            GetMediationDefinitionsInfoByIds: GetMediationDefinitionsInfoByIds
         });
 
         function GetFilteredMediationDefinitions(input) {
@@ -34,6 +36,12 @@
         }
         function HasUpdateMediationDefinition() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Mediation_Generic_ModuleConfig.moduleName, controllerName, ['UpdateMediationDefinition']));
+        }
+        function GetMediationDefinitionsInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Mediation_Generic_ModuleConfig.moduleName, controllerName, "GetMediationDefinitionsInfo"));
+        }
+        function GetMediationDefinitionsInfoByIds(mediationDefinitionIds) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Mediation_Generic_ModuleConfig.moduleName, controllerName, "GetMediationDefinitionsInfoByIds"), mediationDefinitionIds);
         }
     }
 

@@ -70,6 +70,10 @@
     <Compile Include="StoreStagingRecordsQueueActivator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mediation.Generic.Business\Mediation.Generic.Business.csproj">
+      <Project>{6ce07a51-00db-4ce7-bd4a-45a9eb8a5d10}</Project>
+      <Name>Mediation.Generic.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mediation.Generic.Data\Mediation.Generic.Data.csproj">
       <Project>{46fbf314-e310-4455-bc02-f4ac6e19e649}</Project>
       <Name>Mediation.Generic.Data</Name>

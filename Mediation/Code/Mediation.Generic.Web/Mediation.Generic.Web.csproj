@@ -148,6 +148,7 @@
     <Content Include="Mediation_Generic\Constant\ModuleConfig.js" />
     <Content Include="Mediation_Generic\Constant\StorageStagingStatusEnum.js" />
     <Content Include="Mediation_Generic\Directives\MediationDefinition\mediation-generic-mediationdefinition-grid.js" />
+    <Content Include="Mediation_Generic\Directives\MediationDefinition\mediation-generic-mediationdefinition-selector.js" />
     <Content Include="Mediation_Generic\Directives\MediationDefinition\Templates\MediationDefinitionGrid.html" />
     <Content Include="Mediation_Generic\Directives\QueueActivator\Templates\QueueActivatorStoreStagingRecordsTemplate.html" />
     <Content Include="Mediation_Generic\Directives\QueueActivator\mediation-generic-queueactivator-storestagingrecords.js" />

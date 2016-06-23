@@ -12,6 +12,6 @@ namespace Mediation.Generic.Entities
         public long SessionId { get; set; }
         public DateTime EventTime { get; set; }
         public EventStatus EventStatus { get; set; }
-        public object EventDetails { get; set; }
+        public dynamic EventDetails { get; set; }
     }
 }

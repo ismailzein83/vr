@@ -49,12 +49,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MediationDefinition.cs" />
-    <Compile Include="MediationDefinitionDetail.cs" />
-    <Compile Include="MediationDefinitionQuery.cs" />
+    <Compile Include="MediationDefinition\MediationDefinition.cs" />
+    <Compile Include="MediationDefinition\MediationDefinitionDetail.cs" />
+    <Compile Include="MediationDefinition\MediationDefinitionInfo.cs" />
+    <Compile Include="MediationDefinition\MediationDefinitionQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatusMapping.cs" />
-    <Compile Include="StoreStagingRecord.cs" />
+    <Compile Include="StoreStaging\StoreStagingRecord.cs" />
+    <Compile Include="StoreStaging\StoreStagingRecordBatch.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
