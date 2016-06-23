@@ -56,6 +56,8 @@
     <Compile Include="BillingReport\DailySummary\DailySummary.cs" />
     <Compile Include="BillingReport\DailySummary\DailySummaryFormatted.cs" />
     <Compile Include="BillingReport\IReportGenerator.cs" />
+    <Compile Include="BillingReport\ProfitSummary\CarrierProfitSummary.cs" />
+    <Compile Include="BillingReport\ProfitSummary\CarrierProfitSummaryFormatted.cs" />
     <Compile Include="BillingReport\RateLoss\RateLoss.cs" />
     <Compile Include="BillingReport\RateLoss\RateLossFormatted.cs" />
     <Compile Include="BillingReport\RdlcParameter.cs" />
@@ -98,7 +100,6 @@
     <Compile Include="VariationReport\VariationReportQuery.cs" />
     <Compile Include="VariationReport\VariationReportRecord.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

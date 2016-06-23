@@ -64,6 +64,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BillingReports\CarrierSummaryProfitReportGenerator.cs" />
     <Compile Include="BillingReports\CarrierSummaryDetailedReportGenerator.cs" />
     <Compile Include="BillingReports\DailySummaryReportGenerator.cs" />
     <Compile Include="BillingReports\DailyCarrierSummaryByDayReportGenerator.cs" />

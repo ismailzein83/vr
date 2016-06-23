@@ -8,7 +8,7 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Analytics.Business.BillingReports
 {
-    public class CarrierSummaryDetailedReportGenerator : IReportGenerator
+    public class CarrierSummaryProfitReportGenerator : IReportGenerator
     {
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
@@ -18,7 +18,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 Query = new AnalyticQuery
                 {
-                    DimensionFields = new List<string> { "Customer", "Supplier", "SaleZone", "SupplierZone", "CostRate", "SaleRate" },
+                    DimensionFields = new List<string> { "Customer", "Supplier"},
                     MeasureFields = new List<string> { "SaleDuration", "SaleNet", "CostDuration", "CostNet","Profit" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
@@ -50,13 +50,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 analyticQuery.Query.Filters.Add(dimensionFilter);
             }
 
-            List<CarrierSummaryFormatted> listCarrierSummaryDetailed = new List<CarrierSummaryFormatted>();
+            List<CarrierProfitSummaryFormatted> listCarrierSummaryDetailed = new List<CarrierProfitSummaryFormatted>();
 
             var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
             if (result != null)
                 foreach (var analyticRecord in result.Data)
                 {
-                    CarrierSummaryFormatted carrierSummary = new CarrierSummaryFormatted();
+                    CarrierProfitSummaryFormatted carrierSummary = new CarrierProfitSummaryFormatted();
 
                     var customerValue = analyticRecord.DimensionValues[0];
                     if (customerValue != null)
@@ -64,27 +64,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     var supplierValue = analyticRecord.DimensionValues[1];
                     if (supplierValue != null)
                         carrierSummary.Supplier = supplierValue.Name;
-
-                    var saleZoneValue = analyticRecord.DimensionValues[2];
-                    if (saleZoneValue != null)
-                        carrierSummary.SaleZoneName = saleZoneValue.Name;
-
-                    var costZoneValue = analyticRecord.DimensionValues[3];
-                    if (costZoneValue != null)
-                        carrierSummary.CostZoneName = costZoneValue.Name;
-
-                    var costRateValue = analyticRecord.DimensionValues[4];
-                    if (costRateValue != null)
-                    {
-                        carrierSummary.CostRate = Convert.ToDouble(costRateValue.Value ?? 0.0);
-                        carrierSummary.CostRateFormatted = ReportHelpers.FormatNumber(carrierSummary.CostRate);
-                    }
-                    var saleRateValue = analyticRecord.DimensionValues[5];
-                    if (saleRateValue != null)
-                    {
-                        carrierSummary.SaleRate = Convert.ToDouble(saleRateValue.Value ?? 0.0);
-                        carrierSummary.SaleRateFormatted = ReportHelpers.FormatNumber(carrierSummary.SaleRate);
-                    }
+                                        
                     MeasureValue saleDuration;
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
                     carrierSummary.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
@@ -97,28 +77,32 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     MeasureValue costNet;
                     analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
-                    carrierSummary.CostAmount = Convert.ToDouble(costNet.Value ?? 0.0);
-                    carrierSummary.CostAmountFormatted = ReportHelpers.FormatNumber(carrierSummary.CostAmount);
+                    carrierSummary.CostNet = Convert.ToDouble(costNet.Value ?? 0.0);
+                    carrierSummary.CostNetFormatted = ReportHelpers.FormatNumber(carrierSummary.CostNet);
 
                     MeasureValue saleNet;
                     analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
 
-                    carrierSummary.SaleAmount = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
-                    carrierSummary.SaleAmountFormatted = ReportHelpers.FormatNumber(carrierSummary.SaleAmount);
+                    carrierSummary.SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
+                    carrierSummary.SaleNetFormatted = ReportHelpers.FormatNumber(carrierSummary.SaleNet);
 
                     MeasureValue profit;
                     analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
                     carrierSummary.Profit = Convert.ToDouble(profit.Value ?? 0.0);
                     carrierSummary.ProfitFormatted = ReportHelpers.FormatNumber(carrierSummary.Profit);
 
-                    carrierSummary.ProfitPercentage = carrierSummary.SaleAmount == 0 ? "" : (carrierSummary.SaleAmount!=0) ? ReportHelpers.FormatNumberPercentage(((1 - carrierSummary.CostAmount / carrierSummary.SaleAmount))) : "-100%";
+                    carrierSummary.AvgMin = (carrierSummary.SaleDuration.Value != 0) ? (decimal)(((double)carrierSummary.SaleNet.Value - (double)carrierSummary.CostNet.Value) / (double)carrierSummary.SaleDuration.Value) : 0;
+
+                    carrierSummary.AvgMinFormatted = (carrierSummary.SaleDuration.Value != 0 && carrierSummary.SaleDuration.Value != 0) ? ReportHelpers.FormatNumber((decimal)carrierSummary.SaleNet / carrierSummary.SaleDuration - (decimal)carrierSummary.CostNet / carrierSummary.SaleDuration) : "0.00";
+
+                    carrierSummary.ProfitPercentageFormatted = carrierSummary.SaleNet == 0 ? "" : (carrierSummary.SaleNet.HasValue) ? ReportHelpers.FormatNumberPercentage(((1 - carrierSummary.CostNet / carrierSummary.SaleNet))) : "-100%";
 
 
                     listCarrierSummaryDetailed.Add(carrierSummary);
                 }
 
             Dictionary<string, System.Collections.IEnumerable> dataSources =
-                new Dictionary<string, System.Collections.IEnumerable> { { "DetailedCarrier", listCarrierSummaryDetailed } };
+                new Dictionary<string, System.Collections.IEnumerable> { { "CarrierSummary", listCarrierSummaryDetailed } };
             return dataSources;
 
         }
