@@ -53,6 +53,8 @@
     <Compile Include="BillingReport\DailyCarrierSummary\CarrierSummaryDaily.cs" />
     <Compile Include="BillingReport\DailyCarrierSummary\CarrierSummaryDailyFormatted.cs" />
     <Compile Include="BillingReport\CarrierSummary\CarrierSummaryFormatted.cs" />
+    <Compile Include="BillingReport\DailySummary\DailySummary.cs" />
+    <Compile Include="BillingReport\DailySummary\DailySummaryFormatted.cs" />
     <Compile Include="BillingReport\IReportGenerator.cs" />
     <Compile Include="BillingReport\RateLoss\RateLoss.cs" />
     <Compile Include="BillingReport\RateLoss\RateLossFormatted.cs" />

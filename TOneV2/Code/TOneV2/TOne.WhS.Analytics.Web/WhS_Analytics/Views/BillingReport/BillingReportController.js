@@ -87,15 +87,11 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
 
         $scope.openReport = function () {
 
-            var customers = customerAccountDirectiveAPI.getSelectedIds();
-            if (customers == undefined)
-                customers = "";
+            var customers = (customerAccountDirectiveAPI != undefined && customerAccountDirectiveAPI.getSelectedIds() != undefined) ? customerAccountDirectiveAPI.getSelectedIds() : "";
 
-            var suppliers = supplierAccountDirectiveAPI.getSelectedIds();
-            if (suppliers == undefined)
-                suppliers = "";
+            var suppliers = (supplierAccountDirectiveAPI != undefined && supplierAccountDirectiveAPI.getSelectedIds() != undefined) ? supplierAccountDirectiveAPI.getSelectedIds() : "";
 
-            var zones = (saleZoneDirectiveAPI != undefined && saleZoneDirectiveAPI.getSelectedIds()!= undefined) ? saleZoneDirectiveAPI.getSelectedIds() : "";
+            var zones = (saleZoneDirectiveAPI != undefined && saleZoneDirectiveAPI.getSelectedIds() != undefined) ? saleZoneDirectiveAPI.getSelectedIds() : "";
        
             var paramsurl = "";
             paramsurl += "reportId=" + $scope.reporttype.ReportDefinitionId;
