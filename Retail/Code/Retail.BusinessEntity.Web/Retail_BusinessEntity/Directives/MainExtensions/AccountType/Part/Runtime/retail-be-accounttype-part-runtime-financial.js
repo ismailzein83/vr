@@ -98,7 +98,7 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["Retail_BE_PaymentMeth
                     CurrencyId: currencySelectorAPI.getSelectedIds(),
                     BankDetails: $scope.scopeModel.bankDetails,
                     PostpaidSettings: $scope.scopeModel.selectedPaymentMethod.value == Retail_BE_PaymentMethodEnum.Postpaid.value ? paymentMethodDirectiveAPI.getData() : undefined,
-                    PrepardSettings: $scope.scopeModel.selectedPaymentMethod.value == Retail_BE_PaymentMethodEnum.Prepaid.value ? paymentMethodDirectiveAPI.getData() : undefined,
+                    PrepaidSettings: $scope.scopeModel.selectedPaymentMethod.value == Retail_BE_PaymentMethodEnum.Prepaid.value ? paymentMethodDirectiveAPI.getData() : undefined,
                 };
             };
 

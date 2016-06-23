@@ -17,7 +17,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 
         public AccountPostpaidSettings PostpaidSettings { get; set; }
 
-        public AccountPrepaidSettings PrepardSettings { get; set; }
+        public AccountPrepaidSettings PrepaidSettings { get; set; }
     }
 
     public enum PaymentMethod { Prepaid = 0, Postpaid = 1 }
