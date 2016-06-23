@@ -9,8 +9,14 @@
             GetExtensibleBEItemRuntime: GetExtensibleBEItemRuntime,
             GetGenericManagementRuntime: GetGenericManagementRuntime,
             GetGenericEditorRuntime: GetGenericEditorRuntime,
-            GetDataRecordTypesInfo: GetDataRecordTypesInfo
+            GetDataRecordTypesInfo: GetDataRecordTypesInfo,
+            GetGenericEditorRuntimeSections: GetGenericEditorRuntimeSections
         };
+
+
+        function GetGenericEditorRuntimeSections(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericUIRuntime', 'GetGenericEditorRuntimeSections'), input);
+        }
 
         function GetExtensibleBEItemRuntime(dataRecordTypeId, businessEntityDefinitionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericUIRuntime', 'GetExtensibleBEItemRuntime'), {

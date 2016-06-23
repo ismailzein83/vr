@@ -43,7 +43,6 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                 var api = {};
 
                 api.load = function (payload) {
-                  
                     if (payload.fields != undefined) {
                         currentContext = payload.context;
                         var promises = [];

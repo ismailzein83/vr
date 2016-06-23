@@ -34,6 +34,13 @@ namespace Vanrise.GenericData.Web.Controllers
             GenericUIRuntimeManager manager = new GenericUIRuntimeManager();
             return manager.GetGenericEditorRuntime(businessEntityDefinitionId);
         }
+        [HttpPost]
+        [Route("GetGenericEditorRuntimeSections")]
+        public List<GenericEditorRuntimeSection> GetGenericEditorRuntimeSections(GenericEditorDefinitionSectionsInput input)
+        {
+            GenericUIRuntimeManager manager = new GenericUIRuntimeManager();
+            return manager.GetGenericEditorRuntimeSections(input.Sections, input.DataRecordTypeId);
+        }
         [HttpGet]
         [Route("GetDataRecordTypesInfo")]
         public IEnumerable<DataRecordTypeInfo> GetDataRecordTypesInfo(int businessEntityDefinitionId)
@@ -49,5 +56,11 @@ namespace Vanrise.GenericData.Web.Controllers
             Type managerType = Type.GetType(businessEntityDefinition.Settings.ManagerFQTN);
             return Activator.CreateInstance(managerType) as IExtensibleBEManager;
         }
+
+    }
+    public class GenericEditorDefinitionSectionsInput
+    {
+        public int DataRecordTypeId { get; set; }
+        public List<GenericEditorSection> Sections { get; set; }
     }
 }
