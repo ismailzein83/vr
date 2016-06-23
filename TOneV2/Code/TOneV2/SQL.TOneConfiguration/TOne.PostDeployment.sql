@@ -686,7 +686,7 @@ as (select * from (values
 (2,'WHS_BE_Customer', 'Customer','{"SelectorUIControl":"vr-whs-be-customer-selector","GroupSelectorUIControl":"vr-whs-be-customergroup","ManagerFQTN":"TOne.WhS.BusinessEntity.Business.CarrierAccountManager, TOne.WhS.BusinessEntity.Business", "IdType": "System.Int32"}'),
 (3,'WHS_BE_Supplier', 'Supplier','{"SelectorUIControl":"vr-whs-be-supplier-selector","GroupSelectorUIControl":"","ManagerFQTN":"TOne.WhS.BusinessEntity.Business.CarrierAccountManager, TOne.WhS.BusinessEntity.Business", "IdType": "System.Int32"}'),
 (4,'WHS_BE_SaleZone', 'Sale Zone','{"SelectorUIControl":"vr-whs-be-salezone-selector","GroupSelectorUIControl":"vr-whs-be-salezonegroup","ManagerFQTN":"TOne.WhS.BusinessEntity.Business.SaleZoneManager, TOne.WhS.BusinessEntity.Business","IdType":"System.Int64"}'),
-(5,'WHS_BE_CarrierAccount', 'Carrier Account','{"SelectorUIControl":"vr-whs-be-customer-selector","ManagerFQTN":"TOne.WhS.BusinessEntity.Business.CarrierAccountManager, TOne.WhS.BusinessEntity.Business", "IdType": "System.Int32"}')
+(5,'WHS_BE_CarrierAccount', 'Carrier Account','{"SelectorUIControl":"vr-whs-be-carrieraccountall-selector","ManagerFQTN":"TOne.WhS.BusinessEntity.Business.CarrierAccountManager, TOne.WhS.BusinessEntity.Business", "IdType": "System.Int32"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Settings]))
 merge	[genericdata].[BusinessEntityDefinition] as t
