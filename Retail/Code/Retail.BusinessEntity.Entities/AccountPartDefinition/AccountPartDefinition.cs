@@ -31,6 +31,5 @@ namespace Retail.BusinessEntity.Entities
     {
         
         public int ConfigId { get; set; }
-        public abstract Object GetDescription();
     }
 }

@@ -9,9 +9,5 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
     public class AccountPartResidentialProfileDefinition : AccountPartDefinitionSettings
     {
-        public override object GetDescription()
-        {
-            return "Residential Profile";
-        }
     }
 }

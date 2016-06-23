@@ -9,9 +9,5 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
     public class AccountPartFinancialDefinition : AccountPartDefinitionSettings
     {
-        public override Object GetDescription()
-        {
-            return "Financial";
-        }
     }
 }
