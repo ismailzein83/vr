@@ -44,7 +44,7 @@
                 addAccountPart(dataItem);
             }
             $scope.scopeModel.onDeselectItem = function (dataItem) {
-                var datasourceIndex = $scope.scopeModel.datasource.indexOf(dataItem);
+                var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.datasource, dataItem.AccountPartDefinitionId, 'AccountPartDefinitionId');
                 $scope.scopeModel.datasource.splice(datasourceIndex, 1);
             }
             $scope.scopeModel.removeFilter = function (dataItem) {
