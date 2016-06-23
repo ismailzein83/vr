@@ -10,6 +10,11 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
     public class AccountPartCompanyProfileDefinition : AccountPartDefinitionSettings
     {
         public List<CompanyProfileContactType> ContactTypes { get; set; }
+
+        public override Object GetDescription()
+        {
+            return "Company Profile";
+        }
     }
     public class CompanyProfileContactType
     {

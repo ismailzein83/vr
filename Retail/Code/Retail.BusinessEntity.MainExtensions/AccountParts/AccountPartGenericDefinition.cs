@@ -12,5 +12,10 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
         public int RecordTypeId { get; set; }
 
         public List<Vanrise.GenericData.Entities.GenericEditorSection> UISections { get; set; }
+
+        public override Object GetDescription()
+        {
+            return "Generic";
+        }
     }
 }
