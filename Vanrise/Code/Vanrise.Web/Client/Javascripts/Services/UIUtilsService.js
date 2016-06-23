@@ -42,7 +42,7 @@
         }
 
         function getIdSelectedIds(idProperty, attrs, ctrl) {
-            
+
             if (attrs.ismultipleselection != undefined) {
                 return UtilsService.getPropValuesFromArray(ctrl.selectedvalues, idProperty);
             }
@@ -78,8 +78,8 @@
                 return null;
         }
 
-        function defineGridDrillDownTabs(drillDownDefinitions, gridAPI, gridMenuActions) {
-            return new GridDrillDownTabs(drillDownDefinitions, gridAPI, gridMenuActions);
+        function defineGridDrillDownTabs(drillDownDefinitions, gridAPI, gridMenuActions, setMenuActionsOnDataItem) {
+            return new GridDrillDownTabs(UtilsService, drillDownDefinitions, gridAPI, gridMenuActions, setMenuActionsOnDataItem);
         }
 
         return ({
@@ -97,16 +97,21 @@
 })(appControllers);
 
 
-function GridDrillDownTabs(drillDownDefinitions, gridAPI, gridMenuActions) {
+function GridDrillDownTabs(UtilsService, drillDownDefinitions, gridAPI, gridMenuActions, setMenuActionsOnDataItem) {
 
     initialize();
     function initialize() {
+        var drillDownDefinitionId = 0;
         for (var i = 0; i < drillDownDefinitions.length; i++) {
             var drillDownDefinition = drillDownDefinitions[i];
+            drillDownDefinition.drillDownDefinitionId = drillDownDefinitionId++;
             defineDrillDownDefinitionMembers(drillDownDefinition);
-            if (drillDownDefinition.parentMenuActions != undefined) {
-                for (var j = 0; j < drillDownDefinition.parentMenuActions.length; j++) {
-                    defineDrillDownMenuAction(drillDownDefinition.parentMenuActions[j]);
+            if (!setMenuActionsOnDataItem) {
+                if (drillDownDefinition.parentMenuActions != undefined) {
+                    for (var j = 0; j < drillDownDefinition.parentMenuActions.length; j++) {
+                        var menuAction = createMenuAction(drillDownDefinition.parentMenuActions[j]);
+                        gridMenuActions.push(menuAction);
+                    }
                 }
             }
         }
@@ -115,33 +120,65 @@ function GridDrillDownTabs(drillDownDefinitions, gridAPI, gridMenuActions) {
     function defineDrillDownDefinitionMembers(drillDownDefinition) {
         drillDownDefinition.setTabSelected = function (dataItem) {
             gridAPI.expandRow(dataItem);
-            var tabIndex = drillDownDefinitions.indexOf(drillDownDefinition);
-            var drillDownTab = dataItem.drillDownExtensionObject.drillDownDirectiveTabs[tabIndex];
+            var drillDownTab = UtilsService.getItemByVal(dataItem.drillDownExtensionObject.drillDownDirectiveTabs, drillDownDefinition.drillDownDefinitionId, "drillDownDefinitionId");
             if (drillDownTab.tabObject == undefined)
                 drillDownTab.tabObject = {};
             drillDownTab.tabObject.isSelected = true;
         };
     }
 
-    function defineDrillDownMenuAction(drillDownDefinition) {
-        var menuAction = {
-            name: drillDownDefinition.name,
-            clicked: drillDownDefinition.clicked,
-            haspermission: drillDownDefinition.haspermission
+    function getDataItemMenuActions(dataItem) {
+        var dataItemMenuActions = [];
+        if (gridMenuActions != undefined) {
+            for (var i = 0; i < gridMenuActions.length ; i++) {
+                dataItemMenuActions.push(gridMenuActions[i]);
+            }
+        }
+        for (var i = 0; i < drillDownDefinitions.length; i++) {
+            var drillDownDefinition = drillDownDefinitions[i];
+            if (drillDownDefinition.hideDrillDownFunction == undefined || !drillDownDefinition.hideDrillDownFunction(dataItem)) {
+                if (drillDownDefinition.parentMenuActions != undefined) {
+                    for (var j = 0; j < drillDownDefinition.parentMenuActions.length; j++) {
+                        var menuAction = createMenuAction(drillDownDefinition.parentMenuActions[j]);
+                        dataItemMenuActions.push(menuAction);
+                    }
+                }
+
+            }
+        }
+        return dataItemMenuActions;
+    }
+
+    function createMenuAction(menuActionDefinition)
+    {
+        return {
+            name: menuActionDefinition.name,
+            clicked: menuActionDefinition.clicked,
+            haspermission: menuActionDefinition.haspermission
         };
-        gridMenuActions.push(menuAction);
     }
 
     function setDrillDownExtensionObject(dataItem) {
         dataItem.drillDownExtensionObject = {};
         dataItem.drillDownExtensionObject.drillDownDirectiveTabs = [];
         for (var i = 0; i < drillDownDefinitions.length; i++) {
-            addDrillDownTab(drillDownDefinitions[i], dataItem);
+            setDrillDownTab(drillDownDefinitions[i], dataItem);
+        }
+        if (setMenuActionsOnDataItem) {
+            dataItem.drillDownExtensionObject.menuActions = getDataItemMenuActions(dataItem);
+        }
+    }
+
+    function setDrillDownTab(drillDownDefinition, dataItem) {
+        if (drillDownDefinition.hideDrillDownFunction == undefined || !drillDownDefinition.hideDrillDownFunction(dataItem)) {
+            addDrillDownTab(drillDownDefinition, dataItem);
         }
     }
 
     function addDrillDownTab(drillDownDefinition, dataItem) {
         var drillDownDirectiveTab = {};
+
+        drillDownDirectiveTab.drillDownDefinitionId = drillDownDefinition.drillDownDefinitionId;
         drillDownDirectiveTab.title = drillDownDefinition.title;
         drillDownDirectiveTab.directive = drillDownDefinition.directive;
         drillDownDirectiveTab.loadDirective = function (directiveAPI) {
