@@ -44,6 +44,19 @@ namespace Vanrise.GenericData.Business
             BuildEditorRuntime(businessEntityDefinitionSettings.EditorDesign, editorRuntime, businessEntityDefinitionSettings.DataRecordTypeId);
             return editorRuntime;
         }
+        
+        public List<GenericEditorRuntimeSection> GetGenericEditorRuntimeSections(List<GenericEditorSection> sections, int dataRecordTypeId)
+        {
+            var runtimeSections = new List<GenericEditorRuntimeSection>();
+            foreach (var section in sections)
+            {
+                var runtimeSection = new GenericEditorRuntimeSection();
+                runtimeSection.SectionTitle = section.SectionTitle;
+                runtimeSections.Add(runtimeSection);
+                BuildEditorRuntimeRows(section, runtimeSection, dataRecordTypeId);
+            }
+            return runtimeSections;
+        }
 
         public IEnumerable<DataRecordTypeInfo> GetDataRecordTypesInfo(int businessEntityId)
         {
@@ -193,20 +206,16 @@ namespace Vanrise.GenericData.Business
         {
             BuildEditorRuntimeSections(genericEditor.Sections, editorRuntime, dataRecordTypeId);
         }
+
         private void BuildEditorRuntimeSections(List<GenericEditorSection> sections, GenericEditorRuntime editorRuntime, int dataRecordTypeId)
         {
             if (sections != null)
             {
-                editorRuntime.Sections = new List<GenericEditorRuntimeSection>();
-                foreach (var section in sections)
-                {
-                    var runtimeSection = new GenericEditorRuntimeSection();
-                    runtimeSection.SectionTitle = section.SectionTitle;
-                    editorRuntime.Sections.Add(runtimeSection);
-                    BuildEditorRuntimeRows(section, runtimeSection, dataRecordTypeId);
-                }
+                editorRuntime.Sections = GetGenericEditorRuntimeSections(sections, dataRecordTypeId);
+                
             }
         }
+
         private void BuildEditorRuntimeRows(GenericEditorSection section, GenericEditorRuntimeSection runtimeSection, int dataRecordTypeId)
         {
             if (section.Rows != null)
