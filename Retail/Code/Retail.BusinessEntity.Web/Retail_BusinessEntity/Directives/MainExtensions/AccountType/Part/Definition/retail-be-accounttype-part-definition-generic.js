@@ -39,10 +39,9 @@ app.directive('retailBeAccounttypePartDefinitionGeneric', ["VRUIUtilsService", "
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyPromiseDeferred.resolve();
             }
-            $scope.scopeModel.onRecordTypeSelectionChanged = function () {
-                var selectedDataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
-                if (selectedDataRecordTypeId != undefined) {
-                    getDataRecordType(selectedDataRecordTypeId).then(function () {
+            $scope.scopeModel.onRecordTypeSelectionChanged = function (value) {
+                if (value != undefined) {
+                    getDataRecordType(value.DataRecordTypeId).then(function () {
                         var payload = { recordTypeFields: recordTypeEntity.Fields };
                         var setLoader = function (value) { $scope.isLoading = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, genericDirectiveAPI, payload, setLoader, selectedDataRecordTypeReadyPromiseDeferred);
@@ -76,7 +75,7 @@ app.directive('retailBeAccounttypePartDefinitionGeneric', ["VRUIUtilsService", "
                 var sections = genericDirectiveAPI.getData();
                 return {
                     $type: 'Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartGenericDefinition,Retail.BusinessEntity.MainExtensions',
-                    RecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
+                    RecordTypeId: $scope.scopeModel.selectedDataRecordType.DataRecordTypeId,
                     UISections: sections !=undefined ?sections.Sections:undefined
                 };
             };
@@ -110,14 +109,14 @@ app.directive('retailBeAccounttypePartDefinitionGeneric', ["VRUIUtilsService", "
         }
 
         function getDataRecordType(dataRecordTypeId) {
-            if (currentPayload != undefined)
-                dataRecordTypeId = currentPayload.RecordTypeId;
+            var dataRecordTypeIdValue = dataRecordTypeId;
+            if (dataRecordTypeId == undefined && currentPayload != undefined)
+                dataRecordTypeIdValue = currentPayload.RecordTypeId;
 
-            if (dataRecordTypeId == undefined)
+            if (dataRecordTypeIdValue == undefined)
                 return;
-            return VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(dataRecordTypeId).then(function (response) {
+            return VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(dataRecordTypeIdValue).then(function (response) {
                 recordTypeEntity = response;
-
             });
         }
 
