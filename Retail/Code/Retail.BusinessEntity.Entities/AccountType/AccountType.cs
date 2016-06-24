@@ -23,7 +23,9 @@ namespace Retail.BusinessEntity.Entities
 
         public List<int> SupportedParentAccountTypeIds { get; set; }
 
-        public List<AccountTypePartSettings> PartDefinitionSettings { get; set; }  
+        public List<AccountTypePartSettings> PartDefinitionSettings { get; set; }
+
+        public List<AccountTypeActionSettings> SupportedActions { get; set; }
     }
 
     public enum AccountPartAvailabilityOptions { AlwaysAvailable = 0, AvailableIfNotInheritedOnly = 1 }
@@ -34,6 +36,11 @@ namespace Retail.BusinessEntity.Entities
         public AccountPartAvailabilityOptions AvailabilitySettings { get; set; }
         public AccountPartRequiredOptions RequiredSettings { get; set; }
         public int PartDefinitionId { get; set; }
+    }
+
+    public class AccountTypeActionSettings
+    {
+        public Guid ActionDefinitionId { get; set; }
     }
 
     public class AccountType : BaseAccountType

@@ -19,5 +19,12 @@ namespace Retail.BusinessEntity.Entities
         public string AccountServiceEditor { get; set; }
 
         public string ServiceVolumeEditor { get; set; }
+
+        public List<ServiceTypeActionSettings> SupportedActions { get; set; }
+    }
+
+    public class ServiceTypeActionSettings
+    {
+        public Guid ActionDefinitionId { get; set; }
     }
 }
