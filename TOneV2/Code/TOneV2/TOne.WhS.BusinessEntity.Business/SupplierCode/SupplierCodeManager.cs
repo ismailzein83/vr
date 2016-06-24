@@ -43,8 +43,18 @@ namespace TOne.WhS.BusinessEntity.Business
         public long ReserveIDRange(int numberOfIDs)
         {
             long startingId;
-            IDManager.Instance.ReserveIDRange(this.GetType(), numberOfIDs, out startingId);
+            IDManager.Instance.ReserveIDRange(this.GetSupplierCodeType(), numberOfIDs, out startingId);
             return startingId;
+        }
+
+        public int GetSupplierCodeTypeId()
+        {
+            return Vanrise.Common.Business.TypeManager.Instance.GetTypeId(this.GetSupplierCodeType());
+        }
+
+        public Type GetSupplierCodeType()
+        {
+           return this.GetType();
         }
 
         #endregion
