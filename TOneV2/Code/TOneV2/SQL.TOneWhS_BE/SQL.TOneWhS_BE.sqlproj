@@ -259,7 +259,6 @@
     <Build Include="TOneWhS_BE\Tables\CP_SaleZone_Changed.sql" />
     <Build Include="TOneWhS_BE\Tables\CP_SaleCode_New.sql" />
     <Build Include="TOneWhS_BE\Tables\CP_SaleCode_Changed.sql" />
-    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierCode_Preview_CreateTempByFiltered.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleZone_GetByDate.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceList_SyncWithImportedData.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetByDate.sql" />
@@ -300,8 +299,9 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetByCodeGroupIds.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_CreateTempByFiltered.sql" />
     <Build Include="TOneWhS_SPL\Tables\SupplierZoneRate_Preview.sql" />
-    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierZoneRate_Preview_CreateTempByFiltered.sql" />
-    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierCountry_Preview_CreateTempByFiltered.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetBetweenPeriod.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierZoneRate_Preview_GetFiltered.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierCountry_Preview_GetFiltered.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierCode_Preview_GetFiltered.sql" />
   </ItemGroup>
 </Project>
