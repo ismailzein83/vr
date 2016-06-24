@@ -46,7 +46,16 @@
 
                 return BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value)
-                        return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId);
+                    {
+                        var context = {
+                            onClose:function()
+                            {
+                            }
+                        }
+                        return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context);
+
+
+                    }
                 });
             }
 

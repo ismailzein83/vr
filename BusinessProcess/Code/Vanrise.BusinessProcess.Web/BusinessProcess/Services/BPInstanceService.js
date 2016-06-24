@@ -16,11 +16,12 @@
             return LabelColorsEnum.Info.color;
         };
 
-        function openProcessTracking(processInstanceId) {
+        function openProcessTracking(processInstanceId,context) {
 
             //VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPTrackingModal.html', {
             VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPInstance/BPInstanceTrackingModal.html', {
-                BPInstanceID: processInstanceId
+                BPInstanceID: processInstanceId,
+                context: context
             }, {
                 onScopeReady: function (modalScope) {
                     modalScope.title = "Business Process Progress: ";

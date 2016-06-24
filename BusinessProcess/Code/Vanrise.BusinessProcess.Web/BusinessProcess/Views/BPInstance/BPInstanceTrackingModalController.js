@@ -20,6 +20,15 @@
         var validationMessageHistoryGridAPI;
 
         var bpInstance;
+        var context;
+
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope);
+            if (parameters !== undefined && parameters !== null) {
+                bpInstanceID = parameters.BPInstanceID;
+                context = parameters.context;
+            }
+        }
 
         function defineScope() {
 
@@ -77,6 +86,11 @@
                 if ($scope.job) {
                     VRTimerService.unregisterJob($scope.job);
                 }
+
+                if (context != undefined) {
+                    if (context.onClose != undefined)
+                        context.onClose();
+                }
             };
             $scope.getStatusColor = function () {
                 if (bpInstance) {
@@ -132,12 +146,7 @@
             });
         }
 
-        function loadParameters() {
-            var parameters = VRNavigationService.getParameters($scope);
-            if (parameters !== undefined && parameters !== null) {
-                bpInstanceID = parameters.BPInstanceID;
-            }
-        }
+
 
         function load() {
             loadParameters();
