@@ -8,7 +8,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                 onReady: '=',
                 selectionmode: '@',
                 normalColNum: '@',
-                isrequired: '='
+                isrequired: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
