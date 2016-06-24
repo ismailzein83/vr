@@ -50,7 +50,7 @@ app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify
         if (options != undefined) {
             if (options.responseTypeAsBufferArray != undefined)
                 urlParameters.responseType = 'arraybuffer';
-            if (options.useCache != undefined && options.useCache === true) {}
+            if (options.useCache === true)
                 urlParameters.cache = true;
         }
         
