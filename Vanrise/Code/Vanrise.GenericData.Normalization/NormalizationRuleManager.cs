@@ -19,6 +19,8 @@ namespace Vanrise.GenericData.Normalization
                 normalizationPricingRule.Settings.ApplyNormalizationRule(context);
                 context.Rule = normalizationPricingRule;
             }
+            else
+                context.NormalizedValue = context.Value;
         }
     }
 }
