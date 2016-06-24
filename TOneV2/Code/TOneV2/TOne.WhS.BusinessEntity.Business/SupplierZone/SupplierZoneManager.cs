@@ -26,15 +26,37 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allsupplierZones.ToBigResult(input, filterExpression, SupplierZoneDetailMapper));
         }
-        public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfo(SupplierZoneInfoFilter filter, string searchValue)
+        public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfo(SupplierZoneInfoFilter filter, int supplierId, string searchValue)
         {
-            IEnumerable<SupplierZone> supplierZones = null;
-            if (filter != null)
-                supplierZones = GetSupplierZoneBySupplier(filter);
-            else
-                supplierZones = GetCachedSupplierZones().Values;
-            return supplierZones.MapRecords(SupplierZoneInfoMapper, x => x.Name.ToLower().Contains(searchValue.ToLower())).OrderBy(x => x.Name);
+            string nameFilterLower = searchValue != null ? searchValue.ToLower() : null;
+            
+            IEnumerable<SupplierZone> supplierZones = GetCachedSupplierZones().Values;
+            supplierZones =   supplierZones.FindAllRecords(item => item.SupplierId == supplierId);
+
+            Func<SupplierZone, bool> filterExpression = (item) =>
+               {
+                   if (filter != null && filter.SupplierId.HasValue && item.SupplierId != filter.SupplierId)
+                       return false;
+                   if (nameFilterLower != null && !item.Name.ToLower().Contains(nameFilterLower))
+                       return false;
+                   return true;
+               };
+            return supplierZones.MapRecords(SupplierZoneInfoMapper, filterExpression).OrderBy(item => item.Name);
         }
+
+        public IEnumerable<SupplierZoneInfo> GetSupplierZonesInfo(int supplierId)
+        {
+            IEnumerable<SupplierZone> supplierZones = GetCachedSupplierZones().Values;
+            supplierZones = supplierZones.FindAllRecords(item => item.SupplierId == supplierId).OrderBy(item => item.Name);
+          
+            return supplierZones.MapRecords(SupplierZoneInfoMapper);
+        }
+
+        public IEnumerable<int> GetDistinctSupplierIdssBySupplierZoneIds(IEnumerable<long> supplierZoneIds)
+        {
+            return this.GetCachedSupplierZones().MapRecords(zone => zone.SupplierId, zone => supplierZoneIds.Contains(zone.SupplierZoneId)).Distinct();
+        }
+
         public List<SupplierZone> GetSupplierZonesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
             ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();

@@ -23,12 +23,30 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
        [HttpGet]
        [Route("GetSupplierZoneInfo")]
-       public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfo(string serializedFilter, string searchValue)
+       public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfo(string serializedFilter, int supplierId, string searchValue)
        {
            SupplierZoneManager manager = new SupplierZoneManager();
            SupplierZoneInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<SupplierZoneInfoFilter>(serializedFilter) : null;
-           return manager.GetSupplierZoneInfo(filter, searchValue);
+           return manager.GetSupplierZoneInfo(filter,supplierId, searchValue);
        }
+
+       [HttpGet]
+       [Route("GetSupplierZonesInfo")]
+       public IEnumerable<SupplierZoneInfo> GetSupplierZonesInfo(int supplierId)
+       {
+           SupplierZoneManager manager = new SupplierZoneManager();
+           return manager.GetSupplierZonesInfo(supplierId);
+       }
+
+
+       [HttpPost]
+       [Route("GetDistinctSupplierIdssBySupplierZoneIds")]
+       public IEnumerable<int> GetDistinctSupplierIdssBySupplierZoneIds(IEnumerable<long> supplierZoneIds)
+       {
+           SupplierZoneManager manager = new SupplierZoneManager();
+           return manager.GetDistinctSupplierIdssBySupplierZoneIds(supplierZoneIds);
+       }
+
        [HttpGet]
        [Route("GetSupplierZoneInfoByIds")]
        public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfoByIds(string serializedObj)

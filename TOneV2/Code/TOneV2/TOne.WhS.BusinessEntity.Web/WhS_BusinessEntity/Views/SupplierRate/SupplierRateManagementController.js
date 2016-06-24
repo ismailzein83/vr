@@ -32,7 +32,7 @@
                 $scope.selectedSupplierZones.length = 0;
 
                 var payload = {
-                    filter: { SupplierId: selectedItem.CarrierAccountId },
+                    supplierId: selectedItem.CarrierAccountId
                 }
 
                 var setLoader = function (value) { $scope.isLoadingSaleZonesSection = value };

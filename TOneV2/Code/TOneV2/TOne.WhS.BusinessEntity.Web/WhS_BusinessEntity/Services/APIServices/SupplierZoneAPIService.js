@@ -11,9 +11,10 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetFilteredSupplierZones"), input);
         }
 
-        function GetSupplierZoneInfo(serializedFilter, searchValue) {
+        function GetSupplierZoneInfo(searchValue, supplierId, serializedFilter) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSupplierZoneInfo"), {
                 serializedFilter: serializedFilter,
+                supplierId :supplierId,
                 searchValue: searchValue
             });
 
@@ -28,11 +29,24 @@
         function GetSupplierZoneGroupTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSupplierZoneGroupTemplates"));
         }
+
+        function GetDistinctSupplierIdssBySupplierZoneIds(supplierZoneIds) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetDistinctSupplierIdssBySupplierZoneIds"), supplierZoneIds);
+        }
+
+        function GetSupplierZonesInfo(supplierId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSupplierZonesInfo"), {
+                SupplierId: supplierId
+            });
+        }
+
         return ({
             GetFilteredSupplierZones: GetFilteredSupplierZones,
             GetSupplierZoneInfo: GetSupplierZoneInfo,
             GetSupplierZoneInfoByIds: GetSupplierZoneInfoByIds,
-            GetSupplierZoneGroupTemplates: GetSupplierZoneGroupTemplates
+            GetSupplierZoneGroupTemplates: GetSupplierZoneGroupTemplates,
+            GetDistinctSupplierIdssBySupplierZoneIds: GetDistinctSupplierIdssBySupplierZoneIds,
+            GetSupplierZonesInfo: GetSupplierZonesInfo
         });
     }
 
