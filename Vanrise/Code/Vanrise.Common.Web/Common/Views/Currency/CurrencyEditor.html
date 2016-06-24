@@ -1,12 +1,15 @@
-﻿<div vr-modalcontent ng-controller="VRCommon_CurrencyEditorController" vr-loader="isLoading" >
+﻿<div vr-modalcontent ng-controller="VRCommon_CurrencyEditorController" vr-loader="isLoading">
     <vr-modalbody>
         <vr-form name="formCurrencyEditor">
             <vr-row removeline>
                 <vr-columns width="1/2row">
                     <vr-textbox value="name" label="Name" isrequired></vr-textbox>
                 </vr-columns>
+
                 <vr-columns width="1/2row">
-                    <vr-textbox value="symbol" label="Symbol" isrequired></vr-textbox>
+                    <span vr-disabled="disableSymbol">
+                        <vr-textbox value="symbol" label="Symbol" isrequired></vr-textbox>
+                    </span>
                 </vr-columns>
             </vr-row>
         </vr-form>

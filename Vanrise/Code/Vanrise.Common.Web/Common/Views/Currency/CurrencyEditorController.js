@@ -19,7 +19,7 @@
             if (parameters != undefined && parameters != null) {
                 currencyId = parameters.CurrencyId;
             }
-            editMode = (currencyId != undefined);
+            editMode = $scope.disableSymbol = (currencyId != undefined);
         }
 
         function defineScope() {
