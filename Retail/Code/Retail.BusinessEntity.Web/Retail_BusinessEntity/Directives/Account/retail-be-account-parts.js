@@ -69,7 +69,8 @@ app.directive('retailBeAccountParts', ['Retail_BE_AccountPartDefinitionAPIServic
                         part.directiveAPI = api;
                         var directivePayload = {
                             partDefinition: partDefinition,
-                            partSettings: (parts != undefined) ? parts[partDefinition.AccountPartDefinitionId].Settings : undefined
+                            partSettings: (parts != undefined && parts[partDefinition.AccountPartDefinitionId] != undefined) ?
+                                parts[partDefinition.AccountPartDefinitionId].Settings : undefined
                         };
                         VRUIUtilsService.callDirectiveLoad(part.directiveAPI, directivePayload, part.directiveLoadDeferred);
                     };

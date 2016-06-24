@@ -33,12 +33,6 @@
 
 
             $scope.scopeModel.datasource = [];
-            $scope.scopeModel.isValid = function () {
-
-                if ($scope.scopeModel.datasource.length > 0)
-                    return null;
-                return "You Should Select at least one Supplier ";
-            }
 
             $scope.scopeModel.onSelectItem = function (dataItem) {
                 addAccountPart(dataItem);
