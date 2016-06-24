@@ -26,19 +26,40 @@ namespace TOne.WhS.BusinessEntity.Business
         {
 
             var allCustomerSellingProducts = GetEffectiveSellingProducts(input.Query.EffectiveDate);
-
+            
             Func<CustomerSellingProduct, bool> filterExpression = (prod) =>
-                 (input.Query.CustomersIds == null || input.Query.CustomersIds.Contains(prod.CustomerId))
-                  &&
-                 (input.Query.SellingProductsIds == null || input.Query.SellingProductsIds.Contains(prod.SellingProductId));
+                {
+                    if (input.Query.CustomersIds != null && !input.Query.CustomersIds.Contains(prod.CustomerId))
+                        return false;
+
+                    if (input.Query.SellingProductsIds != null && !input.Query.SellingProductsIds.Contains(prod.SellingProductId))
+                        return false;
+
+                    if (isCarrierAccountInActive(prod.CustomerId))
+                        return false;
+
+                    return true;
+                };
+                
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCustomerSellingProducts.ToBigResult(input, filterExpression, CustomerSellingProductDetailMapper));
+        }
+
+        private bool isCarrierAccountInActive(int customerId)
+        {
+            CarrierAccount carrierAccount = _carrierAccountManager.GetCarrierAccount(customerId);
+
+            if (carrierAccount.CarrierAccountSettings != null && carrierAccount.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
+                return false;
+
+            return true;
         }
 
         private Dictionary<int, CustomerSellingProduct> GetEffectiveSellingProducts(DateTime? effectiveOn)
         {
             var allCustomerSellingProducts = GetCachedCustomerSellingProducts();
 
+           
             if (effectiveOn == null)
                 return allCustomerSellingProducts;
 
