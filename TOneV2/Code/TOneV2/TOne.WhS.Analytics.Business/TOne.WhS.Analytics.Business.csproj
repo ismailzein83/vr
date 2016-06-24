@@ -66,14 +66,16 @@
   <ItemGroup>
     <Compile Include="BillingReports\CarrierSummaryProfitReportGenerator.cs" />
     <Compile Include="BillingReports\CarrierSummaryDetailedReportGenerator.cs" />
+    <Compile Include="BillingReports\DailySummaryForcastingReportGenerator.cs" />
     <Compile Include="BillingReports\DailySummaryReportGenerator.cs" />
     <Compile Include="BillingReports\DailyCarrierSummaryByDayReportGenerator.cs" />
     <Compile Include="BillingReports\CarrierSummaryReportGenerator.cs" />
     <Compile Include="BillingReports\RateLossReportGenerator.cs" />
     <Compile Include="BillingReports\ReportHelpers.cs" />
-    <Compile Include="BillingReports\ZoneProfitReportGenerator.cs" />
-    <Compile Include="BillingReports\ZoneSummaryDetailedReportGenerator.cs" />
-    <Compile Include="BillingReports\ZoneSummaryReportGenerator.cs" />
+    <Compile Include="BillingReports\SupplierCostDetailsReportGenerator.cs" />
+    <Compile Include="BillingReports\ProfitByZoneReportGenerator.cs" />
+    <Compile Include="BillingReports\DetailedBillingByZoneReportGenerator.cs" />
+    <Compile Include="BillingReports\SummaryByZoneReportGenerator.cs" />
     <Compile Include="BlockedAttemptsManager.cs" />
     <Compile Include="CDRManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

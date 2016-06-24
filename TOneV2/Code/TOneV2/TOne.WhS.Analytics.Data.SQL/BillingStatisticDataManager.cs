@@ -18,7 +18,7 @@ namespace TOne.WhS.Analytics.Data.SQL
         }
         #endregion
 
-        public List<ZoneProfit> GetZoneProfit(DateTime fromDate, DateTime toDate, string customerIds, string supplierIds, int currencyId)
+        public List<ProfitByZone> GetZoneProfit(DateTime fromDate, DateTime toDate, string customerIds, string supplierIds, int currencyId)
         {
             return GetItemsSP("[TOneWhS_Billing].[SP_BillingRep_GetZoneProfitsV2]", (reader) => ZoneProfitMapper(reader),
                 fromDate,
@@ -29,9 +29,9 @@ namespace TOne.WhS.Analytics.Data.SQL
                 );
         }
 
-        public List<ZoneSummary> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, int currencyId, string supplierGroup, string customerGroup, List<string> customerIds, List<string> supplierIds, bool groupBySupplier, out double services)
+        public List<SummaryByZone> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, int currencyId, string supplierGroup, string customerGroup, List<string> customerIds, List<string> supplierIds, bool groupBySupplier, out double services)
         {
-            List<ZoneSummary> lstZoneSummary = new List<ZoneSummary>();
+            List<SummaryByZone> lstZoneSummary = new List<SummaryByZone>();
             double servicesFees = 0;
             string suppliersIds = null;
             if (supplierIds != null && supplierIds.Count > 0)
@@ -44,7 +44,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             {
                 while (reader.Read())
                 {
-                    lstZoneSummary.Add(new ZoneSummary
+                    lstZoneSummary.Add(new SummaryByZone
                     {
                         Zone = reader["Zone"] as string,
                         Calls = GetReaderValue<int>(reader, "Calls"),
@@ -83,9 +83,9 @@ namespace TOne.WhS.Analytics.Data.SQL
         }
 
         #region PrivatMethods
-        private ZoneProfit ZoneProfitMapper(IDataReader reader)
+        private ProfitByZone ZoneProfitMapper(IDataReader reader)
         {
-            ZoneProfit instance = new ZoneProfit
+            ProfitByZone instance = new ProfitByZone
             {
                 SaleZoneID =  GetReaderValue<long>(reader, "SaleZoneID"),
                 SupplierZoneID = GetReaderValue<long>(reader, "SupplierZoneID"),

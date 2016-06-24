@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Analytics.Entities.BillingReport
 {
-    public class ZoneProfit
+    public class ProfitByZone
     {
         public long SaleZoneID { get; set; }
         public long SupplierZoneID { get; set; }

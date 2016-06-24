@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Analytics.Entities.BillingReport
 {
-    public class ZoneProfitFormatted
+    public class ProfitByZoneFormatted
     {
         public string CostZone { get; set; }
         public string SaleZone { get; set; }
@@ -26,5 +26,18 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         public string Profit { get; set; }
         public double? ProfitSum { get; set; }
         public string ProfitPercentage { get; set; }
+
+                
+        /// <summary>
+        /// DO NOT REMOVE
+        /// the purpose of this method is to set the schema in the RDLC file
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        public ProfitByZoneFormatted() { }
+        public IEnumerable<ProfitByZoneFormatted> GetProfitByZoneFormattedRDLCSchema()
+        {
+            return null;
+        }
     }
 }

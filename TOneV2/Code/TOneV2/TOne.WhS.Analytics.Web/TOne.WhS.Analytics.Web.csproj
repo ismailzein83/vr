@@ -136,14 +136,16 @@
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlCarrierProfitSummary.rdlc" />
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlCarrierSummary.rdlc" />
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlDailySummary.rdlc" />
+    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlDailySummaryForcasting.rdlc" />
+    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlOutCustomerCostDetails.rdlc" />
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlRateLoss.rdlc" />
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlZoneProfits.rdlc">
+    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlProfitByZone.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlZoneSummary.rdlc">
+    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlSummaryByZone.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlZoneSummaryDetailed.rdlc">
+    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlDetailedBillingByZone.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

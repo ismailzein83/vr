@@ -53,6 +53,9 @@
     <Compile Include="BillingReport\DailyCarrierSummary\CarrierSummaryDaily.cs" />
     <Compile Include="BillingReport\DailyCarrierSummary\CarrierSummaryDailyFormatted.cs" />
     <Compile Include="BillingReport\CarrierSummary\CarrierSummaryFormatted.cs" />
+    <Compile Include="BillingReport\DailyForcasting\DailyForcasting.cs" />
+    <Compile Include="BillingReport\DailyForcasting\DailyForcastingFormatted.cs" />
+    <Compile Include="BillingReport\DailyForcasting\MyInterpolation.cs" />
     <Compile Include="BillingReport\DailySummary\DailySummary.cs" />
     <Compile Include="BillingReport\DailySummary\DailySummaryFormatted.cs" />
     <Compile Include="BillingReport\IReportGenerator.cs" />
@@ -64,10 +67,12 @@
     <Compile Include="BillingReport\RDLCReportDefinition.cs" />
     <Compile Include="BillingReport\ReportParameters.cs" />
     <Compile Include="BillingReport\ReportParameterSettings.cs" />
-    <Compile Include="BillingReport\ZoneProfit\ZoneProfit.cs" />
-    <Compile Include="BillingReport\ZoneProfit\ZoneProfitFormatted.cs" />
-    <Compile Include="BillingReport\ZoneSummary\ZoneSummary.cs" />
-    <Compile Include="BillingReport\ZoneSummary\ZoneSummaryFormatted.cs" />
+    <Compile Include="BillingReport\ProfitByZone\ProfitByZone.cs" />
+    <Compile Include="BillingReport\ProfitByZone\ProfitByZoneFormatted.cs" />
+    <Compile Include="BillingReport\SummaryByZone\SummaryByZone.cs" />
+    <Compile Include="BillingReport\DetailedBillingByZone\DetailedBillingByZone.cs" />
+    <Compile Include="BillingReport\DetailedBillingByZone\DetailedBillingByZoneFormatted.cs" />
+    <Compile Include="BillingReport\SummaryByZone\SummaryByZoneFormatted.cs" />
     <Compile Include="CDRLog\CDRLog.cs" />
     <Compile Include="CDRLog\CDRLogDetail.cs" />
     <Compile Include="CDRLog\CDRLogFilter.cs" />
@@ -95,6 +100,8 @@
     <Compile Include="RepeatedNumber\RepeatedNumberDetail.cs" />
     <Compile Include="RepeatedNumber\RepeatedNumberFilter.cs" />
     <Compile Include="RepeatedNumber\RepeatedNumberQuery.cs" />
+    <Compile Include="BillingReport\SupplierCostDetails\SupplierCostDetails.cs" />
+    <Compile Include="BillingReport\SupplierCostDetails\SupplierCostDetailsFormatted.cs" />
     <Compile Include="VariationReport\TimePeriod.cs" />
     <Compile Include="VariationReport\VariationReportBigResult.cs" />
     <Compile Include="VariationReport\VariationReportQuery.cs" />
