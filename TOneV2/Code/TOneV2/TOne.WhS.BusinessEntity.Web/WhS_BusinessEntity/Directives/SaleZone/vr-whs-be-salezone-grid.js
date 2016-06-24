@@ -27,7 +27,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleZoneAPIService, WhS_BE
 
         var gridAPI;
         this.initializeController = initializeController;
-
+        var effectiveOn;
         function initializeController() {
             $scope.showGrid = false;
             var gridDrillDownTabsObj;
@@ -45,7 +45,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleZoneAPIService, WhS_BE
                 drillDownDefinition.loadDirective = function (directiveAPI, saleZoneItem) {
                     saleZoneItem.saleCodeGridAPI = directiveAPI;
                     var payload = {
-                        query: { ZonesIds: [saleZoneItem.Entity.SaleZoneId] },
+                        query: { ZonesIds: [saleZoneItem.Entity.SaleZoneId], EffectiveOn: effectiveOn },
                         hidesalezonecolumn:true
                     };
                     return saleZoneItem.saleCodeGridAPI.loadGrid(payload);
@@ -60,7 +60,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleZoneAPIService, WhS_BE
                    
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-                       
+                        effectiveOn = query.EffectiveOn;
                         return gridAPI.retrieveData(query);
                     }
                    
