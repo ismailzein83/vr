@@ -82,8 +82,10 @@
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanDirectiveAPI, payload, setLoader);
                         }
                     }
-                    else
+                    else {
+                        $scope.scopeModal.sellingNumberPlan = undefined;
                         $scope.scopeModal.showSellingNumberPlan = false;
+                    }
                 }
 
             }
@@ -244,6 +246,7 @@
 
             if (!isEditMode) {
                 obj.CarrierProfileId = carrierProfileDirectiveAPI.getSelectedIds();
+                
                 obj.SellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
                 obj.AccountType = $scope.scopeModal.selectedCarrierAccountType.value;
             }
