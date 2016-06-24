@@ -102,6 +102,16 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetExistingRatesByZoneIds(ownerType, ownerId, zoneIds, minEED);
         }
 
+        public int GetSaleRateTypeId()
+        {
+            return Vanrise.Common.Business.TypeManager.Instance.GetTypeId(this.GetSaleRateType());
+        }
+
+        public Type GetSaleRateType()
+        {
+            return this.GetType();
+        }
+
         #endregion
 
         #region Private Mappers
