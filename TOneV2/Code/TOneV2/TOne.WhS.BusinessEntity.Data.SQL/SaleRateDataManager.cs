@@ -85,7 +85,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             saleRate.BED = (DateTime)reader["BED"];
             saleRate.EED = GetReaderValue<DateTime?>(reader, "EED");
-            // saleRate.RateChange = GetReaderValue<Entities.RateChangeType>(reader, "change");
+
+            saleRate.RateChange = (Entities.RateChangeType)GetReaderValue<byte>(reader, "Change");
             return saleRate;
         }
 
