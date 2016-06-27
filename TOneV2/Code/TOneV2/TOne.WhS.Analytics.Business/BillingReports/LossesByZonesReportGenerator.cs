@@ -8,7 +8,7 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Analytics.Business.BillingReports
 {
-    public class RateLossReportGenerator : IReportGenerator
+    public class LossesByZonesReportGenerator : IReportGenerator
     {
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
@@ -81,13 +81,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             }
 
 
-            List<RateLossFormatted> listRateLossFromatted = new List<RateLossFormatted>();
+            List<LossesByZonesFormatted> listRateLossFromatted = new List<LossesByZonesFormatted>();
 
             var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
             if(result != null)
             foreach (var analyticRecord in result.Data)
             {
-                RateLossFormatted rateLossFromatted = new RateLossFormatted();
+                LossesByZonesFormatted rateLossFromatted = new LossesByZonesFormatted();
 
                
 
@@ -171,7 +171,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.ToString(), IsVisible = true });
             list.Add("Supplier", new RdlcParameter { Value = "", IsVisible = true });
             list.Add("Customer", new RdlcParameter { Value = "", IsVisible = true });
-            list.Add("Title", new RdlcParameter { Value = "Rate Loss", IsVisible = true });
+            list.Add("Title", new RdlcParameter { Value = "Losses by Zones", IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
             list.Add("DigitRate", new RdlcParameter { Value = "2", IsVisible = true });

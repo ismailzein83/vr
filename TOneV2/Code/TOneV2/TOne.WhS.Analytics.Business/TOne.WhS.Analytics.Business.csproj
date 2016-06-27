@@ -71,7 +71,7 @@
     <Compile Include="BillingReports\SummaryByCarrierByDayReportGenerator.cs" />
     <Compile Include="BillingReports\SummaryByCarrierReportGenerator.cs" />
     <Compile Include="BillingReports\LossesByCarrierReportGenerator.cs" />
-    <Compile Include="BillingReports\RateLossReportGenerator.cs" />
+    <Compile Include="BillingReports\LossesByZonesReportGenerator.cs" />
     <Compile Include="BillingReports\ReportHelpers.cs" />
     <Compile Include="BillingReports\SupplierCostDetailsReportGenerator.cs" />
     <Compile Include="BillingReports\ProfitByZoneReportGenerator.cs" />
