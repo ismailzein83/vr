@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Analytics.Entities.BillingReport
 {
-    public class CarrierSummaryDailyFormatted
+    public class SummaryByCarrier
     {
         public string Day { get; set; }
         public string Date { get; set; }
@@ -27,8 +27,8 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         /// </summary>
         /// <returns></returns>
         /// 
-        public CarrierSummaryDailyFormatted() { }
-        public IEnumerable<CarrierSummaryDailyFormatted> GetCarrierSummaryDailyRDLCSchema()
+        public SummaryByCarrier() { }
+        public IEnumerable<SummaryByCarrier> GetSummaryByCarrierRDLCSchema()
         {
             return null;
         }

@@ -50,8 +50,7 @@
     <Compile Include="BillingReport\BillingReportQuery.cs" />
     <Compile Include="BillingReport\BillingReportRecord.cs" />
     <Compile Include="BillingReport\CarrierSummary\CarrierSummary.cs" />
-    <Compile Include="BillingReport\DailyCarrierSummary\CarrierSummaryDaily.cs" />
-    <Compile Include="BillingReport\DailyCarrierSummary\CarrierSummaryDailyFormatted.cs" />
+    <Compile Include="BillingReport\DailyCarrierSummary\SummaryByCarrier.cs" />
     <Compile Include="BillingReport\CarrierSummary\CarrierSummaryFormatted.cs" />
     <Compile Include="BillingReport\DailyForcasting\DailyForcasting.cs" />
     <Compile Include="BillingReport\DailyForcasting\DailyForcastingFormatted.cs" />

@@ -8,20 +8,14 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Analytics.Business.BillingReports
 {
-    public class DailyCarrierSummaryByDayReportGenerator : IReportGenerator
+    public class SummaryByCarrierReportGenerator : IReportGenerator
     {
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
             List<string> listGrouping = new List<string>();
-            listGrouping.Add("Day");
-
             List<string> listMeasures = new List<string>();
             listMeasures.Add("NumberOfCalls");
-            listMeasures.Add("DurationNet");
-
-            
-
             if(parameters.IsCost){
             
                 listGrouping.Add("Supplier");
@@ -74,20 +68,15 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 analyticQuery.Query.Filters.Add(dimensionFilter);
             }
 
-            List<CarrierSummaryDailyFormatted> listCarrierSummary = new List<CarrierSummaryDailyFormatted>();
+            List<SummaryByCarrier> listCarrierSummary = new List<SummaryByCarrier>();
 
             var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
             if(result != null)
             foreach (var analyticRecord in result.Data)
             {
-                CarrierSummaryDailyFormatted carrierSummary = new CarrierSummaryDailyFormatted();
+                SummaryByCarrier carrierSummary = new SummaryByCarrier();
 
-                var dayValue = analyticRecord.DimensionValues[0];
-                if (dayValue != null)
-                    carrierSummary.Day = dayValue.Name;
-
-
-                var carrierValue = analyticRecord.DimensionValues[1];
+                var carrierValue = analyticRecord.DimensionValues[0];
                 if (carrierValue != null)
                     carrierSummary.Carrier = carrierValue.Name;
 
@@ -97,12 +86,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 carrierSummary.Attempts = Convert.ToInt32(calls.Value ?? 0.0);
 
                 carrierSummary.AttemptsFormatted = ReportHelpers.FormatNumber(carrierSummary.Attempts);
-
-
-                MeasureValue durationNet;
-                analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
-                carrierSummary.DurationNet = Convert.ToDecimal(durationNet.Value ?? 0.0);
-                carrierSummary.DurationNetFormatted = ReportHelpers.FormatNumber(carrierSummary.DurationNet);
 
 
                 MeasureValue duration;
@@ -134,9 +117,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             list.Add("Title", new RdlcParameter { Value = string.Format("{0} Summary", parameters.IsCost ? "Suppliers" : "Customers"), IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
-            list.Add("DigitRate", new RdlcParameter { Value = "4", IsVisible = true });
-
-            list.Add("PageBreak", new RdlcParameter { Value = parameters.PageBreak.ToString(), IsVisible = true });
+            list.Add("DigitRate", new RdlcParameter { Value = "2", IsVisible = true });
 
             return list;
         }

@@ -129,12 +129,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlCarrierDailyTrafficByDay.rdlc" />
+    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlSummaryByCarrierByDay.rdlc" />
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlCarrierDetailedSummary.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlCarrierProfitSummary.rdlc" />
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlCarrierSummary.rdlc" />
+    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlSummaryByCarrier.rdlc" />
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlDailySummary.rdlc" />
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlDailySummaryForcasting.rdlc" />
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlOutCustomerCostDetails.rdlc" />
