@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.Analytics.Entities.BillingReport;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
@@ -18,8 +19,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 Query = new AnalyticQuery
                 {
-                    DimensionFields = new List<string> { "Customer", "Supplier", "SaleZone", "SupplierZone", "CostRate", "SaleRate" },
-                    MeasureFields = new List<string> { "SaleDuration", "SaleNet", "CostDuration", "CostNet","Profit" },
+                    DimensionFields = new List<string> { "Customer", "Supplier", "SaleZone", "SupplierZone", "CostRate", "SaleRate", "SaleRateId", "SaleRateChange", "SaleRateEffectiveDate" }, //, "CostRateId"
+                    MeasureFields = new List<string> { "SaleDuration", "SaleNet", "CostDuration", "CostNet", "Profit" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
@@ -85,6 +86,18 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         carrierSummary.SaleRate = Convert.ToDouble(saleRateValue.Value ?? 0.0);
                         carrierSummary.SaleRateFormatted = ReportHelpers.FormatNumber(carrierSummary.SaleRate);
                     }
+                    var saleRateChange = analyticRecord.DimensionValues[7];
+                    if (saleRateChange != null)
+                    {
+                        carrierSummary.SaleRateChange = saleRateChange.Value != null ? saleRateChange.Value.ToString() : "";
+                        carrierSummary.SaleRateChangeFormatted = carrierSummary.SaleRateChange;
+                    }
+                    var saleRateEffectiveDate = analyticRecord.DimensionValues[8];
+                    if (saleRateEffectiveDate != null)
+                    {
+                        carrierSummary.SaleRateEffectiveDate = Convert.ToDateTime(saleRateEffectiveDate.Value);
+                    }
+
                     MeasureValue saleDuration;
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
                     carrierSummary.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
@@ -111,7 +124,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     carrierSummary.Profit = Convert.ToDouble(profit.Value ?? 0.0);
                     carrierSummary.ProfitFormatted = ReportHelpers.FormatNumber(carrierSummary.Profit);
 
-                    carrierSummary.ProfitPercentage = carrierSummary.SaleAmount == 0 ? "" : (carrierSummary.SaleAmount!=0) ? ReportHelpers.FormatNumberPercentage(((1 - carrierSummary.CostAmount / carrierSummary.SaleAmount))) : "-100%";
+                    carrierSummary.ProfitPercentage = carrierSummary.SaleAmount == 0 ? "" : (carrierSummary.SaleAmount != 0) ? ReportHelpers.FormatNumberPercentage(((1 - carrierSummary.CostAmount / carrierSummary.SaleAmount))) : "-100%";
 
 
                     listCarrierSummaryDetailed.Add(carrierSummary);
