@@ -20,4 +20,15 @@ namespace Vanrise.Entities
         public string SourceId { get; set; }
 
     }
+
+    public class ExchangeRateWithEED
+    {
+        public int CurrencyId { get; set; }
+
+        public Decimal Rate { get; set; }
+
+        public DateTime BED { get; set; }
+
+        public DateTime? EED { get; set; }
+    }
 }
