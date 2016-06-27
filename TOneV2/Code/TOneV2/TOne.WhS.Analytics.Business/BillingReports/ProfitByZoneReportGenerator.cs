@@ -18,8 +18,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 Query = new AnalyticQuery()
                 {
-                    DimensionFields = new List<string> { "Supplier", "SaleZone", "SupplierZone" },
-                    MeasureFields = new List<string>() { "SaleNet", "CostNet", "SaleDuration", "CostDuration", "DurationNet", "NumberOfCalls" },
+                    DimensionFields = new List<string> { "Supplier", "SaleZone", "SupplierZone", "Customer" },
+                    MeasureFields = new List<string>() { "SaleNet", "CostNet", "SaleDuration" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
@@ -29,9 +29,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 },
                 SortByColumnName = "DimensionValues[0].Name"
             };
-
-            if (parameters.GroupByCustomer)
-                analyticQuery.Query.DimensionFields.Add("Customer");
 
             if (!String.IsNullOrEmpty(parameters.CustomersId))
             {
@@ -53,85 +50,56 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 analyticQuery.Query.Filters.Add(dimensionFilter);
             }
 
-            List<ProfitByZoneFormatted> listProfitByZone = new List<ProfitByZoneFormatted>();
+            List<LossesByCarrierFormatted> listLossesByCarrier = new List<LossesByCarrierFormatted>();
             
             var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
 
             if(result!= null)
             foreach (var analyticRecord in result.Data)
             {
-                ProfitByZoneFormatted profitByZone = new ProfitByZoneFormatted();
+                LossesByCarrierFormatted lossesByCarrier = new LossesByCarrierFormatted();
 
                 var supplierValue = analyticRecord.DimensionValues[0];
                 if (supplierValue != null)
-                    profitByZone.SupplierID = supplierValue.Name;
+                    lossesByCarrier.SupplierName = supplierValue.Name;
 
                 var saleZoneValue = analyticRecord.DimensionValues[1];
                 if (saleZoneValue != null)
-                    profitByZone.SaleZone = saleZoneValue.Name;
+                    lossesByCarrier.SaleZoneName = saleZoneValue.Name;
 
                 var zoneProfitValue = analyticRecord.DimensionValues[2];
                 if (zoneProfitValue != null)
-                    profitByZone.CostZone = zoneProfitValue.Name;
-                
-                if (parameters.GroupByCustomer)
-                {
-                    var customerValue = analyticRecord.DimensionValues[3];
-                    if (customerValue != null)
-                        profitByZone.CustomerID = customerValue.Name;
-                }
+                    lossesByCarrier.CostZoneName = zoneProfitValue.Name;
+
+                var customerValue = analyticRecord.DimensionValues[3];
+                if (customerValue != null)
+                    lossesByCarrier.CustomerName = customerValue.Name;
 
                 MeasureValue saleNet;
                 analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
 
-                profitByZone.SaleNet = Convert.ToDouble(saleNet== null ? 0.0 : saleNet.Value ?? 0.0);
-                profitByZone.SaleNetFormated = profitByZone.SaleNet == 0 ? "" : (profitByZone.SaleNet.HasValue) ?
-                    ReportHelpers.FormatNumberDigitRate(profitByZone.SaleNet) : "0.00";
+                lossesByCarrier.SaleNet = Convert.ToDouble(saleNet== null ? 0.0 : saleNet.Value ?? 0.0);
+                lossesByCarrier.SaleNetFormatted = lossesByCarrier.SaleNet == 0 ? "" : 
+                    ReportHelpers.FormatNumberDigitRate(lossesByCarrier.SaleNet);
 
                 MeasureValue costNet;
                 analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
-                profitByZone.CostNet = Convert.ToDouble(costNet == null ? 0.0 : costNet.Value ?? 0.0);
-                profitByZone.CostNetFormated = (profitByZone.CostNet.HasValue)
-                    ? ReportHelpers.FormatNumberDigitRate(profitByZone.CostNet)
-                    : "0.00";
+                lossesByCarrier.CostNet = Convert.ToDouble(costNet == null ? 0.0 : costNet.Value ?? 0.0);
+                lossesByCarrier.CostNetFormatted = lossesByCarrier.CostNet == 0 ? "" :
+                    ReportHelpers.FormatNumberDigitRate(lossesByCarrier.CostNet);
 
                 MeasureValue saleDuration;
                 analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
-                profitByZone.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
-                profitByZone.SaleDurationFormated = profitByZone.SaleNet == 0 ? "" : (profitByZone.SaleDuration.HasValue) ?
-                    ReportHelpers.FormatNumber(profitByZone.SaleDuration) : "0.00";
+                lossesByCarrier.Duration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
+                lossesByCarrier.DurationFormatted = lossesByCarrier.Duration == 0 ? "" :
+                    ReportHelpers.FormatNumberDigitRate(lossesByCarrier.Duration);
 
-                MeasureValue costDuration;
-                analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
-                profitByZone.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
-                profitByZone.CostDurationFormated = ReportHelpers.FormatNumberDigitRate(profitByZone.CostDuration);
 
-                MeasureValue durationInMinutes;
-                analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationInMinutes);
-                profitByZone.DurationNet = Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
-                profitByZone.DurationNetFormated = ReportHelpers.FormatNumber(profitByZone.DurationNet);
-
-                MeasureValue calls;
-                analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
-                profitByZone.Calls = Convert.ToInt32(calls.Value ?? 0.0);
-
-                profitByZone.Profit = profitByZone.SaleNet == 0
-                    ? ""
-                    : ReportHelpers.FormatNumber((!profitByZone.SaleNet.HasValue) ? 0 : profitByZone.SaleNet - profitByZone.CostNet);
-                profitByZone.ProfitSum = (!profitByZone.SaleNet.HasValue || profitByZone.SaleNet == 0)
-                    ? 0
-                    : profitByZone.SaleNet - profitByZone.CostNet;
-                profitByZone.ProfitPercentage = profitByZone.SaleNet == 0
-                    ? ""
-                    : (profitByZone.SaleNet.HasValue)
-                        ? ReportHelpers.FormatNumber(((1 - profitByZone.CostNet / profitByZone.SaleNet)) * 100)
-                        : "-100%";
-
-                listProfitByZone.Add(profitByZone);
+                listLossesByCarrier.Add(lossesByCarrier);
             }
-            
+
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
-            dataSources.Add("ZoneProfit", listProfitByZone);
+            dataSources.Add("CarrierLost", listLossesByCarrier);
             return dataSources;
         }
 
