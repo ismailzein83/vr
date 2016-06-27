@@ -2,12 +2,13 @@
 
     'use strict';
 
-    AnalyticItemActionService.$inject = ['VRModalService'];
+    AnalyticItemActionService.$inject = ['VRModalService','VR_Analytic_AnalyticItemActionAPIService','UtilsService'];
 
-    function AnalyticItemActionService(VRModalService) {
+    function AnalyticItemActionService(VRModalService, VR_Analytic_AnalyticItemActionAPIService, UtilsService) {
         return ({
             addItemAction: addItemAction,
-            editItemAction: editItemAction
+            editItemAction: editItemAction,
+            excuteItemAction: excuteItemAction
         });
 
         function addItemAction(onItemActionAdded) {
@@ -33,6 +34,36 @@
             };
 
             VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticItemActionEditor.html', modalParameters, modalSettings);
+        }
+
+        function excuteItemAction(itemAction)
+        {
+          return  VR_Analytic_AnalyticItemActionAPIService.GetAnalyticItemActionsTemplateConfigs().then(function (response) {
+
+              var templateConfig = UtilsService.getItemByVal(response, itemAction.ConfigId, "ExtensionConfigurationId");
+              if(templateConfig !=undefined)
+              {
+                  switch(templateConfig.Name)
+                  {
+                      case "VR_Analytic_Report_ItemAction_OpenRecordSearch": loadOpenRecordSearch(itemAction); break;
+                  }
+              }
+            });
+        }
+        function loadOpenRecordSearch(itemAction) {
+            var modalParameters = {
+                analyticReportId: itemAction.ReportId,
+                sourceName: itemAction.SourceName,
+            };
+            var modalSettings = {
+                useModalTemplate: true,
+                width: "80%",
+                title: itemAction.Title
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+            };
+
+            VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Runtime/GenericAnalyticReport.html', modalParameters, modalSettings);
         }
 
     };

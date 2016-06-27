@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService', 'DataGridRetrieveDataEventType', 'VR_Analytic_StyleCodeEnum', 'Analytic_AnalyticService', 'VR_Analytic_GridWidthEnum',
-    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService, DataGridRetrieveDataEventType, VR_Analytic_StyleCodeEnum, Analytic_AnalyticService, VR_Analytic_GridWidthEnum) {
+app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService', 'DataGridRetrieveDataEventType', 'VR_Analytic_StyleCodeEnum', 'Analytic_AnalyticService', 'VR_Analytic_GridWidthEnum','VR_Analytic_AnalyticItemActionService',
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService, DataGridRetrieveDataEventType, VR_Analytic_StyleCodeEnum, Analytic_AnalyticService, VR_Analytic_GridWidthEnum, VR_Analytic_AnalyticItemActionService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -25,6 +25,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
         function GenericGrid($scope, ctrl, $attrs) {
 
             this.initializeController = initializeController;
+            ctrl.gridMenuActions = [];
             ctrl.datasource = [];
             ctrl.dimensions = [];
             var groupingDimensions = [];
@@ -582,18 +583,22 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 }
 
                 function BuildMenuAction(payload) {
-                    ctrl.gridMenuActions = [];
+                    ctrl.gridMenuActions.length = 0;;
                     if(payload !=undefined && payload.Settings !=undefined && payload.Settings.ItemActions !=undefined)
                     {
                         var itemActions = payload.Settings.ItemActions;
                         for(var i=0;i<itemActions.length;i++)
                         {
+                            var itemAction = itemActions[i];
                             ctrl.gridMenuActions.push({
-                                name: itemActions.Title,
-                                clicked: editAggregate,
+                                name: itemAction.Title,
+                                clicked: function () {
+                                    return VR_Analytic_AnalyticItemActionService.excuteItemAction(itemAction);
+                                },
                             });
                         }
                     }
+                   
                 }
             }
         }
