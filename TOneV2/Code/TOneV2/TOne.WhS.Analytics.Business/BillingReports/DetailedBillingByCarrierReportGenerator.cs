@@ -9,7 +9,7 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Analytics.Business.BillingReports
 {
-    public class CarrierSummaryDetailedReportGenerator : IReportGenerator
+    public class DetailedBillingByCarrierReportGenerator : IReportGenerator
     {
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
@@ -153,7 +153,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 {"FromDate", new RdlcParameter {Value = parameters.FromTime.ToString(), IsVisible = true}},
                 {"ToDate", new RdlcParameter {Value = parameters.ToTime.ToString(), IsVisible = true}},
-                {"Title", new RdlcParameter {Value = "Detailed Carrier Summary", IsVisible = true}},
+                {"Title", new RdlcParameter {Value = "Detailed Billing by Carrier", IsVisible = true}},
                 {"Currency", new RdlcParameter {Value = parameters.CurrencyDescription, IsVisible = true}},
                 {"LogoPath", new RdlcParameter {Value = "logo", IsVisible = true}},
                 {"DigitRate", new RdlcParameter {Value = "2", IsVisible = true}}
