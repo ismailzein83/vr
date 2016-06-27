@@ -61,8 +61,8 @@
     <Compile Include="BillingReport\LossesByCarrier\LossesByCarrierFormatted.cs" />
     <Compile Include="BillingReport\ProfitSummary\CarrierProfitSummary.cs" />
     <Compile Include="BillingReport\ProfitSummary\CarrierProfitSummaryFormatted.cs" />
-    <Compile Include="BillingReport\RateLoss\RateLoss.cs" />
-    <Compile Include="BillingReport\RateLoss\RateLossFormatted.cs" />
+    <Compile Include="BillingReport\LossesByZones\LossesByZones.cs" />
+    <Compile Include="BillingReport\LossesByZones\LossesByZonesFormatted.cs" />
     <Compile Include="BillingReport\RdlcParameter.cs" />
     <Compile Include="BillingReport\RDLCReportDefinition.cs" />
     <Compile Include="BillingReport\ReportParameters.cs" />
