@@ -29,5 +29,13 @@ namespace Vanrise.Analytic.Entities
 
       //  public bool IsRequiredFromParent { get; set; }
         public GenericData.Entities.DataRecordFieldType FieldType { get; set; }
+        public List<DimensionFieldMapping> DimensionFieldMappings { get; set; }
     }
+
+    public class DimensionFieldMapping
+    {
+        public int DataRecordTypeId { get; set; }
+        public string FieldName { get; set; }
+    }
+
 }

@@ -32,6 +32,47 @@ namespace Vanrise.Analytic.Business
             return BigDataManager.Instance.RetrieveData(input, new AnalyticRecordRequestHandler(dataManager));
         }
 
+        public RecordFilterGroup GetRecordSearchFilterGroup(RecordSearchFilterGroupInput input)
+        {
+            AnalyticReportManager analyticReportManager = new Business.AnalyticReportManager();
+
+            var analyticReport = analyticReportManager.GetAnalyticReportById(input.ReportId);
+            var analyticReportSettings = analyticReport.Settings as Entities.DataRecordSearchPageSettings;
+            int dataRecordTypeId = -1;
+            foreach(var source in analyticReportSettings.Sources)
+            {
+                if(source.Name == input.SourceName)
+                {
+                    dataRecordTypeId = source.DataRecordTypeId;
+                    break;
+                }
+            }
+
+            DataRecordTypeManager dataRecordTypeManager = new GenericData.Business.DataRecordTypeManager();
+            var recordType = dataRecordTypeManager.GetDataRecordType(dataRecordTypeId);
+
+            AnalyticItemConfigManager analyticItemConfigManager = new Business.AnalyticItemConfigManager();
+
+            var analyticDimensions = analyticItemConfigManager.GetDimensions(input.TableId);
+            
+            foreach(var dimensionValue in input.DimensionValues)
+            {
+                AnalyticDimension dimension;
+                if(analyticDimensions.TryGetValue(dimensionValue.Name,out dimension))
+                {
+                    foreach(var dimensionFieldMapping in  dimension.Config.DimensionFieldMappings)
+                    {
+
+                    }
+                   
+                }
+                
+            }
+
+            RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
+            return recordFilterGroup;
+        }
+
         #region Private Methods
 
         internal List<AnalyticRecord> ProcessSQLRecords(IAnalyticTableQueryContext analyticTableQueryContext, List<string> requestedDimensionNames, List<string> parentDimensionNames, List<string> measureNames,List<MeasureStyleRule> measureStyleRules, List<DimensionFilter> dimensionFilters,

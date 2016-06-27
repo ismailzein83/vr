@@ -36,7 +36,7 @@
             VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticItemActionEditor.html', modalParameters, modalSettings);
         }
 
-        function excuteItemAction(itemAction)
+        function excuteItemAction(itemAction,settings)
         {
           return  VR_Analytic_AnalyticItemActionAPIService.GetAnalyticItemActionsTemplateConfigs().then(function (response) {
 
@@ -45,15 +45,21 @@
               {
                   switch(templateConfig.Name)
                   {
-                      case "VR_Analytic_Report_ItemAction_OpenRecordSearch": loadOpenRecordSearch(itemAction); break;
+                      case "VR_Analytic_Report_ItemAction_OpenRecordSearch": loadOpenRecordSearch(itemAction,settings); break;
                   }
               }
             });
         }
-        function loadOpenRecordSearch(itemAction) {
+        function loadOpenRecordSearch(itemAction,settings) {
             var modalParameters = {
                 analyticReportId: itemAction.ReportId,
-                sourceName: itemAction.SourceName,
+                settings: {
+                    SourceName: itemAction.SourceName,
+                    DimensionValues: settings.DimensionValues,
+                    FilterGroup: settings.FilterGroup,
+                    FromDate: settings.FromDate,
+                    ToDate: settings.ToDate,
+                },
             };
             var modalSettings = {
                 useModalTemplate: true,

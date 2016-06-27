@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
+using Vanrise.GenericData.Entities;
 using Vanrise.Web.Base;
 
 namespace Vanrise.Analytic.Web.Controllers
@@ -20,6 +21,13 @@ namespace Vanrise.Analytic.Web.Controllers
         {
             AnalyticManager manager = new AnalyticManager();
             return GetWebResponse(input, manager.GetFilteredRecords(input));
+        }
+        [HttpGet]
+        [Route("GetRecordSearchFilterGroup")]
+        public RecordFilterGroup GetRecordSearchFilterGroup(RecordSearchFilterGroupInput input)
+        {
+            AnalyticManager manager = new AnalyticManager();
+            return manager.GetRecordSearchFilterGroup(input);
         }
     }
 }

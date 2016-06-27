@@ -6,6 +6,8 @@
     function genericAnalyticReportController($scope, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_Analytic_AnalyticReportAPIService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticTypeEnum, VR_Analytic_AnalyticItemConfigAPIService) {
         var analyticReportId;
         var viewEntity;
+        var itemActionSettings;
+
         var templates = [];
         var directiveAPI;
         var directiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -19,6 +21,7 @@
 
             if (parameters != null) {
                 analyticReportId = parameters.analyticReportId;
+                itemActionSettings = parameters.settings;
             }
         }
 
@@ -53,7 +56,8 @@
             var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
             directiveReadyDeferred.promise.then(function () {
                 var payLoad = {
-                    settings: viewEntity.Settings
+                    settings: viewEntity.Settings,
+                    itemActionSettings: itemActionSettings
                 };
                 VRUIUtilsService.callDirectiveLoad(directiveAPI, payLoad, loadDirectivePromiseDeferred);
             });

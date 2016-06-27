@@ -62,7 +62,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
         var periodDirectiveAPI;
         var periodReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var date;
-
+        var periodSelectedPromiseDeferred;
         function initializeController() {
             var date;
             $scope.validateDateTime = function () {
@@ -77,10 +77,19 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
             }
 
             $scope.periodSelectionChanged = function () {
-                if (ctrl.period != undefined && ctrl.period.value != -1) {
-                    date = ctrl.period.getInterval();
-                    ctrl.from = date.from;
-                    ctrl.to = date.to;
+             
+                if (periodSelectedPromiseDeferred == undefined)
+                {
+                  
+                    if (ctrl.period != undefined && ctrl.period.value != -1) {
+                        date = ctrl.period.getInterval();
+                        ctrl.from = date.from;
+                        ctrl.to = date.to;
+                    }
+                }
+               else
+                {
+                    periodSelectedPromiseDeferred.resolve();
                 }
                 
             }
@@ -98,7 +107,6 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                 var oldTo = UtilsService.getShortDate(date.to);
                 if (from != oldFrom || to != oldTo)
                     ctrl.period = customize;
-
             }
 
             if ($attrs.hideperiodsection != undefined) {
@@ -111,9 +119,9 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
            
             api.load = function (payload) {
                 if (payload != undefined) {
-
                     ctrl.from = payload.fromData;
                     ctrl.to = payload.toDate;
+                   
                 }
 
                 if ($attrs.hideperiodsection != undefined) {
@@ -121,7 +129,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                 }
 
                 var loadPeriodPromiseDeferred = UtilsService.createPromiseDeferred();
-
+                periodSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                 periodReadyPromiseDeferred.promise.then(function () {
                     var payloadPeriod;
                     if (payload && payload.period != undefined) {
@@ -134,15 +142,29 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                     VRUIUtilsService.callDirectiveLoad(periodDirectiveAPI, payloadPeriod, loadPeriodPromiseDeferred);
                 });
 
-                return loadPeriodPromiseDeferred.promise.then(function()
+                return UtilsService.waitMultiplePromises([loadPeriodPromiseDeferred.promise,periodSelectedPromiseDeferred.promise]).then(function ()
                 {
                     if (payload && payload.period != undefined)
                     {
-                        date = periodDirectiveAPI.getData().getInterval();
-                        ctrl.from = date.from;
-                        ctrl.to = date.to;
+
+                        if (payload.fromData == undefined && payload.toDate == undefined)
+                        {
+                            date = periodDirectiveAPI.getData().getInterval();
+                            ctrl.from = date.from;
+                            ctrl.to = date.to;
+                        }
+                        if (payload.fromDate != undefined)
+                        {
+                            setTimeout(function () { ctrl.from = payload.fromDate; UtilsService.safeApply($scope);});
+                        }
+                        if (payload.toDate != undefined) {
+                            setTimeout(function () { ctrl.to = payload.toDate; UtilsService.safeApply($scope); });
+
+                           
+                        }
+                        periodSelectedPromiseDeferred = undefined;
                     }
-                   
+                    
                 })
             }
 

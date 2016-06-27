@@ -189,7 +189,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
                     addGridAttributesForMeasures(ctrl.measures);
 
-
+                     
 
 
                     var drillDownDefinitions = [];
@@ -590,10 +590,15 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         for(var i=0;i<itemActions.length;i++)
                         {
                             var itemAction = itemActions[i];
+                            var settings = {
+                                FromDate: payload.FromTime,
+                                ToDate: payload.ToTime,
+                                FilterGroup: payload.FilterGroup
+                            }
                             ctrl.gridMenuActions.push({
                                 name: itemAction.Title,
                                 clicked: function () {
-                                    return VR_Analytic_AnalyticItemActionService.excuteItemAction(itemAction);
+                                    return VR_Analytic_AnalyticItemActionService.excuteItemAction(itemAction, settings);
                                 },
                             });
                         }

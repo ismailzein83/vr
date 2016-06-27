@@ -9,6 +9,9 @@
         var isEditMode;
         var tableEntity;
         var tableId;
+        var dataRecordTypeSelectorAPI;
+        var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var connectionStringType;
         loadParameters();
         defineScope();
@@ -28,6 +31,12 @@
             connectionStringType = {
                 ConnectionString: { value: 0, description: "Connection String" },
                 ConnectionStringName: { value: 1, description: "Connection String Name" },
+            }
+
+            $scope.scopeModel.onDataRecordTypeSelectorReady = function (api)
+            {
+                dataRecordTypeSelectorAPI = api;
+                dataRecordTypeSelectorReadyDeferred.resolve();
             }
             $scope.scopeModel.connectionStringType = UtilsService.getArrayEnum(connectionStringType);
             $scope.scopeModel.selectedConnectionStringType = connectionStringType.ConnectionString;
@@ -75,7 +84,7 @@
             }
            
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([setTitle,loadStaticData]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -117,6 +126,24 @@
             }
 
         }
+        function loadDataRecordTypeSelector() {
+            var dataRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            dataRecordTypeSelectorReadyDeferred.promise.then(function () {
+                var payload;
+
+                if (tableEntity != undefined && tableEntity.Settings != undefined) {
+                    payload = {
+                        selectedIds: tableEntity.Settings.DataRecordTypeIds
+                    };
+                }
+
+                VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, payload, dataRecordTypeSelectorLoadDeferred);
+            });
+
+            return dataRecordTypeSelectorLoadDeferred.promise;
+        }
+
 
         function getTable() {
             return VR_Analytic_AnalyticTableAPIService.GetTableById(tableId).then(function (response) {
@@ -132,7 +159,8 @@
                     TableName: $scope.scopeModel.tableName,
                     TimeColumnName: $scope.scopeModel.timeColumnName,
                     ConnectionStringName: $scope.scopeModel.showConnectionStringName? $scope.scopeModel.connectionStringName:undefined,
-                    ConnectionString:$scope.scopeModel.showConnectionString? $scope.scopeModel.connectionString:undefined
+                    ConnectionString: $scope.scopeModel.showConnectionString ? $scope.scopeModel.connectionString : undefined,
+                    DataRecordTypeIds: dataRecordTypeSelectorAPI.getSelectedIds()
                 }
             }
             return table;

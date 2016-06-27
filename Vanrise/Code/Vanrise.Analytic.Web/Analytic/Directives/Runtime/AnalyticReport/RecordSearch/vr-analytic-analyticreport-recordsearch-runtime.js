@@ -30,6 +30,7 @@
             var timeRangeDirectiveAPI;
             var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var itemActionSettings;
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -105,6 +106,7 @@
                 api.load = function (payload) {
                     if (payload != undefined) {
                         settings = payload.settings;
+                        itemActionSettings = payload.itemActionSettings;
                     }
                     var loadPromiseDeffer = UtilsService.createPromiseDeferred();
                     UtilsService.waitMultipleAsyncOperations([setSourceSelector, setStaticData, loadTimeRangeDirective]).then(function () {
@@ -132,7 +134,9 @@
                 var loadTimeDimentionPromiseDeferred = UtilsService.createPromiseDeferred();
                 timeRangeReadyPromiseDeferred.promise.then(function () {
                     var timeRangePeriod = {
-                        period: PeriodEnum.Today.value
+                        period: PeriodEnum.Today.value,
+                        fromDate: itemActionSettings != undefined ? itemActionSettings.FromDate : undefined,
+                        toDate:itemActionSettings !=undefined?itemActionSettings.ToDate:undefined
                     };
 
                     VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, timeRangePeriod, loadTimeDimentionPromiseDeferred);
@@ -144,13 +148,19 @@
             function setSourceSelector() {
                 if (settings != undefined)
                     $scope.drSearchPageStorageSources = settings.Sources;
+                if(itemActionSettings !=undefined)
+                {
+                    $scope.selectedDRSearchPageStorageSource = UtilsService.getItemByVal($scope.drSearchPageStorageSources, itemActionSettings.SourceName, "Name");
+                }
             }
             function setStaticData() {
                 $scope.orderDirectionList = UtilsService.getArrayEnum(VR_Analytic_OrderDirectionEnum);
                 $scope.selectedOrderDirection = $scope.orderDirectionList[0];
-                $scope.fromDate = new Date();
+             //   $scope.fromDate = new Date();
                 $scope.limit = settings != undefined ? settings.NumberOfRecords : 100;
                 $scope.maxNumberOfRecords = settings != undefined ? settings.MaxNumberOfRecords : undefined;
+
+               
             }
 
             function setGridQuery() {

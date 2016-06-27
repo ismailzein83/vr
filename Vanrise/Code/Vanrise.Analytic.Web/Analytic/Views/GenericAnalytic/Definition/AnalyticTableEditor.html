@@ -38,7 +38,15 @@
                     <vr-columns width="2/3row" ng-show="scopeModel.showConnectionString">
                         <vr-textarea value="scopeModel.connectionString" label="Connection String" isrequired="scopeModel.showConnectionString"></vr-textarea>
                     </vr-columns>
-
+                  
+                    <vr-columns width="1/2row">
+                        <vr-genericdata-datarecordtype-selector selectedvalues="scopeModel.selectedDataRecordType"
+                                                                isrequired="true"
+                                                                hideremoveicon
+                                                                ismultipleselection
+                                                                on-ready="scopeModel.onDataRecordTypeSelectorReady"
+                                                                label="Mapping Record Types"></vr-genericdata-datarecordtype-selector>
+                    </vr-columns>
                 </vr-tab>
             </vr-tabs>
 
