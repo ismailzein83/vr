@@ -8,7 +8,7 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Analytics.Business.BillingReports
 {
-    public class CarrierSummaryProfitReportGenerator : IReportGenerator
+    public class ProfitByCustomerReportGenerator : IReportGenerator
     {
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
@@ -50,13 +50,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 analyticQuery.Query.Filters.Add(dimensionFilter);
             }
 
-            List<CarrierProfitSummaryFormatted> listCarrierSummaryDetailed = new List<CarrierProfitSummaryFormatted>();
+            List<ProfitByCustomerFormatted> listCarrierSummaryDetailed = new List<ProfitByCustomerFormatted>();
 
             var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
             if (result != null)
                 foreach (var analyticRecord in result.Data)
                 {
-                    CarrierProfitSummaryFormatted carrierSummary = new CarrierProfitSummaryFormatted();
+                    ProfitByCustomerFormatted carrierSummary = new ProfitByCustomerFormatted();
 
                     var customerValue = analyticRecord.DimensionValues[0];
                     if (customerValue != null)
@@ -138,7 +138,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
             list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.ToString(), IsVisible = true });
-            list.Add("Title", new RdlcParameter { Value = "Carrier Profit Summary", IsVisible = true });
+            list.Add("Title", new RdlcParameter { Value = "Profit by Customer", IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
             list.Add("DigitRate", new RdlcParameter { Value = "2", IsVisible = true });
