@@ -14,6 +14,8 @@ using TOne.Sales.Entities;
 using Aspose.Cells;
 using System.Net.Mime;
 using System.IO;
+using TOne.Business;
+using TOne.Entities;
 
 namespace TOne.Sales.Business
 {
@@ -47,8 +49,19 @@ namespace TOne.Sales.Business
                 rateManager.UpdateRateEED(MapEndedRates(saleLcrRates, customerId), customerId);
                 List<Rate> newRates = MapNewRates(saleLcrRates, priceListId, currencyId, customerId);
                 rateManager.SaveRates(newRates);
+                Workbook wbk = new Workbook();
+                wbk.Worksheets.RemoveAt("Sheet1");
+                Vanrise.Common.Utilities.ActivateAspose();
+                wbk.FileName = string.Format("PriceList_{0}", carrierAccount.CarrierAccountName);
+                wbk.FileFormat = FileFormatType.Excel97To2003;
+                CreateRatesWorkSheet(wbk, "Rates", newRates);
+                MemoryStream stream = wbk.SaveToStream();
+                stream.Seek(0, SeekOrigin.Begin);
+                byte[] bytes = stream.GetBuffer();
+                priceListManager.SavePricelistData(bytes, priceListId);
+
                 if (sendEmail)
-                    SendMail("Mobile Rate Change PriceList", newRates, carrierProfile);
+                    SendMail(stream, "Mobile Rate Change PriceList", newRates, carrierProfile);
 
             }
             return true;
@@ -120,14 +133,9 @@ namespace TOne.Sales.Business
             worksheet.Cells.SetColumnWidth(4, 25);
         }
 
-        public void SendMail(string subject, List<Rate> newRates, CarrierProfile carrierProfile)
+        public void SendMail(MemoryStream stream, string subject, List<Rate> newRates, CarrierProfile carrierProfile)
         {
             List<string> to = carrierProfile.BillingEmail.Split(new char[] { ',', ';' }).ToList();
-            Workbook wbk = new Workbook();
-            wbk.Worksheets.RemoveAt("Sheet1");
-            Vanrise.Common.Utilities.ActivateAspose();
-            CreateRatesWorkSheet(wbk, "Price List.xls", newRates);
-            MemoryStream stream = wbk.SaveToStream();
             stream.Seek(0, SeekOrigin.Begin);
             Attachment attacment = new Attachment(stream, "Price List.xls");
 
@@ -218,7 +226,7 @@ namespace TOne.Sales.Business
                         rate = new Rate()
                         {
                             PriceListId = currentRate.PriceListId,
-                            EndEffectiveDate = currentRate.BeginEffectiveDate,
+                            EndEffectiveDate = lcrRate.BED,
                             ZoneId = lcrRate.ZoneId
                         };
                     }

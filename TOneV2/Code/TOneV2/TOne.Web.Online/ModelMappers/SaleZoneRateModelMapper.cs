@@ -33,7 +33,8 @@ namespace TOne.Web.Online.ModelMappers
                 PriceListId = saleRate.PriceListId,
                 SupplierRates = MapSupplierRatesModel(saleRate.SupplierZoneRates),
                 BED = saleRate.BED,
-                EED = saleRate.EED
+                EED = saleRate.EED,
+                EffectiveCodes = string.Join(",", saleRate.EffectiveCodes)
             };
         }
         private static List<SupplierZoneRateModel> MapSupplierRatesModel(List<SupplierZoneRate> supplierZoneRates)

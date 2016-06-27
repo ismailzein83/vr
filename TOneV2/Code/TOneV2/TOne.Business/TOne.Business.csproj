@@ -136,6 +136,7 @@
     <Compile Include="SecurityManager.cs" />
     <Compile Include="SharedQueueManager.cs" />
     <Compile Include="ConfigParameterManager.cs" />
+    <Compile Include="SystemParameterManager.cs" />
     <Compile Include="UserManager.cs" />
   </ItemGroup>
   <ItemGroup>

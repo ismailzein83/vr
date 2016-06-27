@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,24 +43,43 @@ namespace TOne.BusinessEntity.Data.SQL
                 CurrencyId = reader["CurrencyId"] as string
             };
         }
-        
+
 
         public bool SavePriceList(PriceList pricelist, out int priceListId)
         {
             object id;
 
-            int recordesEffected = ExecuteNonQuerySP("BEntity.[sp_PriceList_Insert]", out id, 
-                                                                                      pricelist.SupplierId, 
+            int recordesEffected = ExecuteNonQuerySP("BEntity.[sp_PriceList_Insert]", out id,
+                                                                                      pricelist.SupplierId,
                                                                                       pricelist.CustomerId,
-                                                                                      pricelist.Description, 
-                                                                                      pricelist.CurrencyId, 
-                                                                                      pricelist.BeginEffectiveDate, 
-                                                                                      pricelist.EndEffectiveDate,pricelist.SourceFileName,
-                                                                                      pricelist.UserId, 
-                                                                                      pricelist.IsSend );
+                                                                                      pricelist.Description,
+                                                                                      pricelist.CurrencyId,
+                                                                                      pricelist.BeginEffectiveDate,
+                                                                                      pricelist.EndEffectiveDate, pricelist.SourceFileName,
+                                                                                      pricelist.UserId,
+                                                                                      pricelist.IsSend);
 
             priceListId = (recordesEffected > 0) ? (Int32)id : -1;
             return (recordesEffected > 0);
+        }
+
+
+        public bool SavePriceListData(byte[] data, int priceListId)
+        {
+            return ExecuteNonQueryText(@" INSERT INTO [PriceListData]
+                                     ([PriceListID],[SourceFileBytes])
+                                      VALUES(@PriceListId,@ImageData)", (cmd) =>
+                                                                      {
+                                                                          var dtPrm = new SqlParameter("@ImageData", SqlDbType.Image);
+
+                                                                          dtPrm.Value = data;
+                                                                          cmd.Parameters.Add(dtPrm);
+                                                                          dtPrm = new SqlParameter("@PriceListId", SqlDbType.Int);
+
+                                                                          dtPrm.Value = priceListId;
+                                                                          cmd.Parameters.Add(dtPrm);
+
+                                                                      }) > 0;
         }
     }
 }

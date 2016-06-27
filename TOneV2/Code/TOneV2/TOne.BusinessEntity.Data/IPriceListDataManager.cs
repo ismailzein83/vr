@@ -14,5 +14,7 @@ namespace TOne.BusinessEntity.Data
         PriceList GetPriceListById(int priceListId);
 
         bool SavePriceList(PriceList pricelist, out int priceListId);
+
+        bool SavePriceListData(byte[] data, int priceListId);
     }
 }

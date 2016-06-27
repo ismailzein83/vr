@@ -14,6 +14,7 @@ namespace TOne.LCR.Entities
         public int PriceListId { get; set; }
         public decimal Rate { get; set; }
         public long RateId { get; set; }
+        public string EffectiveCodes { get; set; }
         public List<SupplierLCR> SuppliersLcr { get; set; }
     }
 }

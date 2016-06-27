@@ -114,6 +114,10 @@
       <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>
       <Name>TOne.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.LCR.Data\TOne.LCR.Data.csproj">
+      <Project>{1c4e2326-4dd4-4bf4-8b8c-aa1c6fa0c4fc}</Project>
+      <Name>TOne.LCR.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

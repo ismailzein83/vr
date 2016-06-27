@@ -10,6 +10,7 @@ namespace TOne.Web.Online.Models
         public int ZoneId { get; set; }
         public int PriceListId { get; set; }
         public string ZoneName { get; set; }
+        public string EffectiveCodes { get; set; }
         public int FlaggedSericeId { get; set; }
         public string Symbol { get; set; }
         public string ServiceColor { get; set; }

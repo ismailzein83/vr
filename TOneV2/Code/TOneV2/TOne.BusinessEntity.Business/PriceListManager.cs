@@ -30,5 +30,9 @@ namespace TOne.BusinessEntity.Business
             return _dataManager.SavePriceList(pricelist, out priceListId);
         }
 
+        public bool SavePricelistData(byte[] data, int priceList)
+        {
+            return _dataManager.SavePriceListData(data, priceList);
+        }
     }
 }

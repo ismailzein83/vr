@@ -10,7 +10,8 @@ namespace TOne.Entities
     {
         sys_LastRouteBuild,
         sys_LastRouteSynch,
-        sys_LastRouteUpdate
+        sys_LastRouteUpdate,
+        CustomRateSheetCode
     }
 
     public enum ApplicationParameterEnum

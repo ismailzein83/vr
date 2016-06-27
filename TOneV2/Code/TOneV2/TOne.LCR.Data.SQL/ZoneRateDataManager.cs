@@ -139,6 +139,7 @@ namespace TOne.LCR.Data.SQL
         {
             CustomerSaleZones customerSaleZones = new CustomerSaleZones();
             int previousZoneId = 0;
+            CodeManager codeManager = new CodeManager();
             this.RoutingDatabaseType = Entities.RoutingDatabaseType.Current;
             ExecuteReaderText(string.Format(query_GetSaleZoneLCR, zoneName, customerId),
                 (reader) =>
@@ -151,6 +152,7 @@ namespace TOne.LCR.Data.SQL
                         {
                             customerSaleZone = CustomerSaleZoneMapper(reader);
                             customerSaleZone.ZoneId = zoneId;
+                            //customerSaleZone.EffectiveCodes = string.Join(",", codeManager.GetCodes(zoneId, DateTime.Now).Select(x => x.Value).ToArray());
                             customerSaleZones.Add(zoneId, customerSaleZone);
                             previousZoneId = zoneId;
                         }
