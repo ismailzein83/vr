@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Analytics.Entities.BillingReport
 {
-    public class CarrierProfitSummary
+    public class ProfitByCustomer
     {
 
         public string SupplierID { get; set; }
