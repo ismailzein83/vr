@@ -13,14 +13,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SupplierRateDataManager : BaseSQLDataManager, ISupplierRateDataManager
     {
-     
+
         #region ctor/Local Variables
         public SupplierRateDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
-        
+
         #endregion
 
         #region Public Methods
@@ -50,6 +50,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
             });
         }
+
+        public List<SupplierRate> GetSupplierRatesInBetweenPeriod(DateTime froDateTime, DateTime tillDateTime)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetBetweenPeriod", SupplierRateMapper, froDateTime, tillDateTime);
+        }
         public List<SupplierRate> GetAllSupplierRates(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetAll", SupplierRateMapper, effectiveOn, isEffectiveInFuture);
@@ -76,18 +81,22 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             SupplierRate supplierRate = new SupplierRate
             {
                 NormalRate = GetReaderValue<decimal>(reader, "NormalRate"),
-                OtherRates = reader["OtherRates"] as string != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string) : null,
-                SupplierRateId = (long)reader["ID"],
-                ZoneId = (long)reader["ZoneID"],
+                OtherRates =
+                    reader["OtherRates"] as string != null
+                        ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string)
+                        : null,
+                SupplierRateId = (long) reader["ID"],
+                ZoneId = (long) reader["ZoneID"],
                 PriceListId = GetReaderValue<int>(reader, "PriceListID"),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
-                CurrencyId = GetReaderValue<int?>(reader, "CurrencyId")
+                CurrencyId = GetReaderValue<int?>(reader, "CurrencyId"),
+                RateChange = (RateChangeType)GetReaderValue<byte>(reader, "Change")
             };
             return supplierRate;
         }
 
         #endregion
-    
+
     }
 }
