@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Analytics.Entities.BillingReport
 {
-    public class ProfitByZoneFormatted
+    public class ProfitByZone
     {
         public string CostZone { get; set; }
         public string SaleZone { get; set; }
@@ -34,8 +34,8 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         /// </summary>
         /// <returns></returns>
         /// 
-        public ProfitByZoneFormatted() { }
-        public IEnumerable<ProfitByZoneFormatted> GetProfitByZoneFormattedRDLCSchema()
+        public ProfitByZone() { }
+        public IEnumerable<ProfitByZone> GetProfitByZoneRDLCSchema()
         {
             return null;
         }

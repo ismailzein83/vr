@@ -18,6 +18,8 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
 
         public bool GroupByCustomer { get; set; }
 
+        public bool GroupByProfile { get; set; }
+
         public string CustomerAMUId { get; set; }
 
         public string SupplierAMUId { get; set; }

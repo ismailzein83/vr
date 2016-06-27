@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Analytics.Entities.BillingReport
 {
-    public class SummaryByZoneFormatted
+    public class SummaryByZone
     {
         public string Zone { get; set; }
 
@@ -38,8 +38,8 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         /// </summary>
         /// <returns></returns>
         /// 
-        public SummaryByZoneFormatted() { }
-        public IEnumerable<SummaryByZoneFormatted> GetSummaryByZoneFormattedRDLCSchema()
+        public SummaryByZone() { }
+        public IEnumerable<SummaryByZone> GetSummaryByZoneRDLCSchema()
         {
             return null;
         }

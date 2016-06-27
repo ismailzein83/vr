@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Analytics.Entities.BillingReport
 {
-    public class LossesByCarrierFormatted
+    public class LossesByCarrier
     {
         public string CustomerID { get; set; }
         public string CustomerName { get; set; }
@@ -32,8 +32,8 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         /// </summary>
         /// <returns></returns>
         /// 
-        public LossesByCarrierFormatted() { }
-        public IEnumerable<LossesByCarrierFormatted> GetLossesByCarrierFormattedRDLCSchema()
+        public LossesByCarrier() { }
+        public IEnumerable<LossesByCarrier> GetLossesByCarrierRDLCSchema()
         {
             return null;
         }
