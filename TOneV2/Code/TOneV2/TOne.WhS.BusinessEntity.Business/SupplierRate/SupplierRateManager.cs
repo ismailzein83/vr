@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
@@ -32,7 +33,16 @@ namespace TOne.WhS.BusinessEntity.Business
             SupplierZoneRateLocator supplierZoneRateLocator = new SupplierZoneRateLocator(new SupplierRateReadWithCache(effectiveOn));
             return supplierZoneRateLocator.GetSupplierZoneRate(supplierId, supplierZoneId);
         }
-
+        public Dictionary<long, SupplierRate> GetCachedSupplierRatesInBetweenPeriod(DateTime fromTime, DateTime tillTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierRateCacheManager>().GetOrCreateObject("GetSupplierRatesInBetweenPeriod",
+               () =>
+               {
+                   ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
+                   IEnumerable<SupplierRate> saleRates = dataManager.GetSupplierRatesInBetweenPeriod(fromTime, tillTime);
+                   return saleRates.ToDictionary(cn => cn.SupplierRateId, cn => cn);
+               });
+        }
         public CallCost GetCallCost(int supplierId, long supplierZoneId, int durationInSeconds, DateTime effectiveOn)
         {
             CallCost callSale = null;
@@ -81,11 +91,11 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return this.GetType();
         }
-       
+
         #endregion
 
         #region Private Members
-       
+
         private string GetCurrencyName(int? currencyId)
         {
             if (currencyId != null)
@@ -123,7 +133,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 SupplierPriceListManager manager = new SupplierPriceListManager();
                 SupplierPriceList priceList = manager.GetPriceList(supplierRate.PriceListId);
-                currencyId= priceList.CurrencyId;
+                currencyId = priceList.CurrencyId;
             }
 
             return new SupplierRateDetail()
