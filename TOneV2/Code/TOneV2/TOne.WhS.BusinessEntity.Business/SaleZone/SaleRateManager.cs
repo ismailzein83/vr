@@ -34,14 +34,14 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return BigDataManager.Instance.RetrieveData(input, new SaleRateRequestHandler());
         }
-        private Dictionary<long, SaleRate> GetCachedSaleRatesInBetweenPeriod(DateTime fromTime, DateTime tillTime)
+        public Dictionary<long, SaleRate> GetCachedSaleRatesInBetweenPeriod(DateTime fromTime, DateTime tillTime)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>().GetOrCreateObject("GetSaleRatesInBetweenPeriod",
                () =>
                {
                    ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
                    IEnumerable<SaleRate> saleRates = dataManager.GetSaleRatesInBetweenPeriod(fromTime, tillTime);
-                   return saleRates.ToDictionary(cn => cn.ZoneId, cn => cn);
+                   return saleRates.ToDictionary(cn => cn.SaleRateId, cn => cn);
                });
         }
 
