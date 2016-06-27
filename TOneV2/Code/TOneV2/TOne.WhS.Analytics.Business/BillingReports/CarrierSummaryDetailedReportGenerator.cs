@@ -19,7 +19,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 Query = new AnalyticQuery
                 {
-                    DimensionFields = new List<string> { "Customer", "Supplier", "SaleZone", "SupplierZone", "CostRate", "SaleRate", "SaleRateId", "SaleRateChange", "SaleRateEffectiveDate" }, //, "CostRateId"
+                    DimensionFields = new List<string> { "Customer", "Supplier", "SaleZone", "SupplierZone", "CostRate", "SaleRate", "SaleRateId", "SaleRateChange", "SaleRateEffectiveDate", "CostRateId", "CostRateChange", "CostRateEffectiveDate" },
                     MeasureFields = new List<string> { "SaleDuration", "SaleNet", "CostDuration", "CostNet", "Profit" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
@@ -96,6 +96,17 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     if (saleRateEffectiveDate != null)
                     {
                         carrierSummary.SaleRateEffectiveDate = Convert.ToDateTime(saleRateEffectiveDate.Value);
+                    }
+                    var costRateChange = analyticRecord.DimensionValues[10];
+                    if (costRateChange != null)
+                    {
+                        carrierSummary.CostRateChange = costRateChange.Value != null ? costRateChange.Value.ToString() : "";
+                        carrierSummary.CostRateChangeFormatted = carrierSummary.CostRateChange;
+                    }
+                    var costRateEffectiveDate = analyticRecord.DimensionValues[11];
+                    if (costRateEffectiveDate != null)
+                    {
+                        carrierSummary.CostRateEffectiveDate = Convert.ToDateTime(costRateEffectiveDate.Value);
                     }
 
                     MeasureValue saleDuration;
