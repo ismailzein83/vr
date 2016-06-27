@@ -41,7 +41,10 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         public double? Profit { get; set; }
         public string ProfitFormatted { get; set; }
         public string ProfitPercentage { get; set; }
+        public string SaleRateChange { get; set; }
+        public string SaleRateChangeFormatted { get; set; }
         public decimal? AvgMin { get; set; }
         public string AvgMinFormatted { get; set; }
+        public DateTime SaleRateEffectiveDate { get; set; }
     }
 }
