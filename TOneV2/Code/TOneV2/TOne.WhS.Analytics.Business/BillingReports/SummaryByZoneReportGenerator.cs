@@ -31,9 +31,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             else
                 listDimensions.Add("SaleRateType");
 
-            //check the profile
             if (parameters.GroupBySupplier)
-                listDimensions.Add("Supplier");
+            {
+                if(parameters.GroupByProfile)
+                    listDimensions.Add("SupplierProfile");
+                else
+                    listDimensions.Add("Supplier");
+            }
 
             if (parameters.IsCost)
             {
@@ -88,13 +92,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 analyticQuery.Query.Filters.Add(dimensionFilter);
             }
 
-            List<SummaryByZoneFormatted> listSummaryByZone = new List<SummaryByZoneFormatted>();
+            List<SummaryByZone> listSummaryByZone = new List<SummaryByZone>();
 
             var result = analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
             if(result != null)
             foreach (var analyticRecord in result.Data)
             {
-                SummaryByZoneFormatted summaryByZone = new SummaryByZoneFormatted();
+                SummaryByZone summaryByZone = new SummaryByZone();
     
                 var zoneValue = analyticRecord.DimensionValues[0];
                 if (zoneValue != null)

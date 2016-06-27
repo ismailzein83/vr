@@ -25,18 +25,22 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 listDimensions.Add("SaleZone");
 
             if (parameters.IsCost)
-                listDimensions.Add("Supplier");
+            {
+                if (parameters.GroupBySupplier)
+                {
+                    if (parameters.GroupByProfile) listDimensions.Add("SupplierProfile"); else listDimensions.Add("Supplier");   
+                }
+            }
             else
             {
                 if (parameters.GroupBySupplier)
                 {
-                    listDimensions.Add("Supplier");
-                    listDimensions.Add("Customer");
+                    if (parameters.GroupByProfile) listDimensions.Add("SupplierProfile"); else listDimensions.Add("Supplier");
+                    if (parameters.GroupByProfile) listDimensions.Add("CustomerProfile"); else listDimensions.Add("Customer");
                 }
                 else
-                    listDimensions.Add("Customer");
+                    if (parameters.GroupByProfile) listDimensions.Add("CustomerProfile"); else listDimensions.Add("Customer");
             }
-                
 
             if (parameters.IsCost)
             {
@@ -105,45 +109,35 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 analyticQuery.Query.Filters.Add(dimensionFilter);
             }
 
-            List<DetailedBillingByZoneFormatted> listDetailedBillingByZone = new List<DetailedBillingByZoneFormatted>();
+            List<DetailedBillingByZone> listDetailedBillingByZone = new List<DetailedBillingByZone>();
 
             var result = analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
             if (result != null)
                 foreach (var analyticRecord in result.Data)
                 {
-                    DetailedBillingByZoneFormatted detailedBillingByZone = new DetailedBillingByZoneFormatted();
+                    DetailedBillingByZone detailedBillingByZone = new DetailedBillingByZone();
 
                     var zoneValue = analyticRecord.DimensionValues[0];
                     if (zoneValue != null)
                         detailedBillingByZone.Zone = zoneValue.Name;
 
+
+
                     if (parameters.IsCost)
-                    {
-                        var supplierValue = analyticRecord.DimensionValues[1];
-                        if (supplierValue != null)
-                            detailedBillingByZone.SupplierID = supplierValue.Name; 
-                    }
-                    else
                     {
                         if (parameters.GroupBySupplier)
                         {
                             var supplierValue = analyticRecord.DimensionValues[1];
                             if (supplierValue != null)
-                                detailedBillingByZone.SupplierID = supplierValue.Name; 
-
-                            //listDimensions.Add("Customer");
-                        }
-                        else
-                        {
-                            var supplierValue = analyticRecord.DimensionValues[1];
-                            if (supplierValue != null)
-                                detailedBillingByZone.SupplierID = supplierValue.Name; 
+                                detailedBillingByZone.SupplierID = supplierValue.Name;
                         }
                     }
-
-                    var saleZoneValue = analyticRecord.DimensionValues[1];
-                    if (saleZoneValue != null)
-                        detailedBillingByZone.Zone = saleZoneValue.Name;
+                    else
+                    {
+                        var supplierValue = analyticRecord.DimensionValues[1];
+                        if (supplierValue != null)
+                            detailedBillingByZone.SupplierID = supplierValue.Name;
+                    }
 
                     MeasureValue durationNet;
                     analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);

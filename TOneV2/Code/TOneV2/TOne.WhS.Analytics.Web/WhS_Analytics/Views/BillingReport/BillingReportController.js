@@ -87,7 +87,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
         }
 
         $scope.openReport = function () {
-
+            console.log($scope.reporttype);
             var customers = (customerAccountDirectiveAPI != undefined && customerAccountDirectiveAPI.getSelectedIds() != undefined) ? customerAccountDirectiveAPI.getSelectedIds() : "";
 
             var suppliers = (supplierAccountDirectiveAPI != undefined && supplierAccountDirectiveAPI.getSelectedIds() != undefined) ? supplierAccountDirectiveAPI.getSelectedIds() : "";
