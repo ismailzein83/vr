@@ -141,7 +141,7 @@
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlDailySummary.rdlc" />
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlDailySummaryForcasting.rdlc" />
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlOutCustomerCostDetails.rdlc" />
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlRateLoss.rdlc" />
+    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlLossesByZones.rdlc" />
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlProfitByZone.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
