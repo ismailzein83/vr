@@ -133,7 +133,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlSummaryByCarrierByDay.rdlc" />
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlCarrierDetailedSummary.rdlc">
+    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlDetailedBillingByCarrier.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlCarrierProfitSummary.rdlc" />
