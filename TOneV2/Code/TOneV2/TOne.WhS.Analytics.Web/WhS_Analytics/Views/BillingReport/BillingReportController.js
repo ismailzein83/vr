@@ -42,6 +42,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
 
     $scope.params = {
         groupByCustomer: false,
+        groupByProfile: false,
         selectedCustomers: [],
         customer: null,
         selectedSuppliers: [],
@@ -98,6 +99,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             paramsurl += "&fromDate=" + $scope.dateToString($scope.fromDate);
             paramsurl += "&toDate=" + $scope.dateToString($scope.toDate);
             paramsurl += "&groupByCustomer=" + $scope.params.groupByCustomer;
+            paramsurl += "&groupByProfile=" + $scope.params.groupByProfile;
             paramsurl += "&isCost=" + $scope.params.isCost;
             paramsurl += "&service=" + $scope.params.service;
             paramsurl += "&commission=" + $scope.params.commission;
@@ -121,6 +123,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
         $scope.resetReportParams = function () {
             $scope.params = {
                 groupByCustomer: false,
+                groupByProfile: false,
                 selectedCustomers: [],
                 selectedSuppliers: [],
                 customer: null,
@@ -134,8 +137,8 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
                 top: 10,
                 pageBreak: false
             }
-            if(saleZoneDirectiveAPI!=undefined)
-                saleZoneDirectiveAPI.load()
+            if (saleZoneDirectiveAPI != undefined)
+                saleZoneDirectiveAPI.load();
         }
     }
 

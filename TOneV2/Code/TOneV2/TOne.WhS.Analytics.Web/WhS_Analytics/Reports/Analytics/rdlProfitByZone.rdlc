@@ -2082,9 +2082,9 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>TOne.WhS.Analytics.Entities.BillingReport</rd:DataSetName>
-        <rd:TableName>ProfitByZoneFormatted</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetProfitByZoneFormattedRDLCSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>TOne.WhS.Analytics.Entities.BillingReport.ProfitByZoneFormatted, TOne.WhS.Analytics.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:TableName>ProfitByZone</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetProfitByZoneRDLCSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Analytics.Entities.BillingReport.ProfitByZone, TOne.WhS.Analytics.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>

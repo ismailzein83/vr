@@ -28,6 +28,11 @@
                     <vr-switch value="params.groupByCustomer"></vr-switch>
                 </vr-columns>
 
+                <vr-columns colnum="2" ng-if="reporttype.ParameterSettings.RequiresGroupByProfile">
+                    <vr-label>Group By Profile</vr-label>
+                    <vr-switch value="params.groupByProfile"></vr-switch>
+                </vr-columns>
+
                 <vr-columns colnum="2" ng-if="reporttype.ParameterSettings.RequiresIsCost">
                     <vr-label>Is Cost</vr-label>
                     <vr-switch value="params.isCost"></vr-switch>

@@ -3602,9 +3602,9 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>TOne.WhS.Analytics.Entities.BillingReport</rd:DataSetName>
-        <rd:TableName>DetailedBillingByZoneFormatted</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetDetailedBillingByZoneFormattedRDLCSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>TOne.WhS.Analytics.Entities.BillingReport.DetailedBillingByZoneFormatted, TOne.WhS.Analytics.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:TableName>DetailedBillingByZone</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetDetailedBillingByZoneRDLCSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Analytics.Entities.BillingReport.DetailedBillingByZone, TOne.WhS.Analytics.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
