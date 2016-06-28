@@ -9,12 +9,13 @@
 <vr-columns width="normal">
     <vr-button type="Add" data-onclick="addSource" standalone></vr-button>
 </vr-columns>
-<vr-columns width="fullrow">
-    <vr-validator> 
-        <!--validate="ctrl.isSourceGridValid()"   on-ready="ctrl.onGridReady"  ondeleterow="ctrl.removeSource" menuactions="ctrl.sourcesGridMenuActions"  -->
-        <vr-datagrid datasource="[]" norowhighlightonclick="true" hidegridmenu>
-            <vr-datagridcolumn headertext="'Type'" field="'Title'" disablesorting="true"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Connection'" field="'Connection'" disablesorting="true"></vr-datagridcolumn>
+<vr-columns width="fullrow">    
+    <vr-validator validate="ctrl.isConnectionsGridValid()">
+        <!--   on-ready="ctrl.onGridReady"    -->
+        <vr-datagrid datasource="ctrl.connections" menuactions="ctrl.connectionsGridMenuActions" ondeleterow="ctrl.removeConnection" norowhighlightonclick="true" hidegridmenu>
+            <vr-datagridcolumn headertext="'Connection'" disablesorting="true">
+                {{dataItem.ConnectionString!=null ?dataItem.ConnectionString:dataItem.ConnectionStringName}}
+            </vr-datagridcolumn>
         </vr-datagrid>
     </vr-validator>
 </vr-columns>

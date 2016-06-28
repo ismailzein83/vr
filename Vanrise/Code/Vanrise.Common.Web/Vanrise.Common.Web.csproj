@@ -234,6 +234,7 @@
     <Content Include="Common\Services\APIServices\RateTypeAPIService.js" />
     <Content Include="Common\Services\CityService.js" />
     <Content Include="Common\Services\CurrencyExchangeRateService.js" />
+    <Content Include="Common\Services\ConnectionStringService.js" />
     <Content Include="Common\Services\SettingsService.js" />
     <Content Include="Common\Services\EmailTemplateService.js" />
     <Content Include="Common\Services\CurrencyService.js" />
@@ -253,7 +254,9 @@
     <Content Include="Common\Views\Country\CountryEditorController.js" />
     <Content Include="Common\Views\Country\CountryManagement.html" />
     <Content Include="Common\Views\Country\CountryManagementController.js" />
+    <Content Include="Common\Views\CurrencyExchangeRate\ConnectionEditor.html" />
     <Content Include="Common\Views\CurrencyExchangeRate\CurrencyExchangeRateEditor.html" />
+    <Content Include="Common\Views\CurrencyExchangeRate\ConnectionEditorController.js" />
     <Content Include="Common\Views\CurrencyExchangeRate\CurrencyExchangeRateEditorController.js" />
     <Content Include="Common\Views\CurrencyExchangeRate\CurrencyExchangeRateManagement.html" />
     <Content Include="Common\Views\CurrencyExchangeRate\CurrencyExchangeRateManagementController.js" />
