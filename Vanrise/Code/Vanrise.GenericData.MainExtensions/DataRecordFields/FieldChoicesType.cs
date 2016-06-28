@@ -105,6 +105,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", NumberPrecision = "NoDecimal" };
         }
+
+        public override RecordFilter ConvertToRecordFilter(object filterValue)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class Choice

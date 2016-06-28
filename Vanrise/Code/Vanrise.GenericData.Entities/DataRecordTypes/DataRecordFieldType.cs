@@ -24,6 +24,8 @@ namespace Vanrise.GenericData.Entities
 
         public abstract GridColumnAttribute GetGridColumnAttribute();
 
+        public abstract RecordFilter ConvertToRecordFilter(object filterValue);
+
         protected Type GetNullableType(Type type)
         {
             return (type.IsValueType) ? typeof(Nullable<>).MakeGenericType(type) : type;

@@ -27,7 +27,7 @@ namespace Vanrise.Analytic.Web.Controllers
         public RecordFilterGroup GetRecordSearchFilterGroup(RecordSearchFilterGroupInput input)
         {
             AnalyticManager manager = new AnalyticManager();
-            return manager.GetRecordSearchFilterGroup(input);
+            return manager.BuildRecordSearchFilterGroup(input);
         }
     }
 }

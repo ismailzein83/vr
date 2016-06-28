@@ -109,7 +109,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return numberListRecordFilter.CompareOperator == ListRecordFilterOperator.In ? isValueInFilter : !isValueInFilter;
         }
 
-        public RecordFilter ConvertToRecordFilter(object filterValue)
+        public override RecordFilter ConvertToRecordFilter(object filterValue)
         {
             return new NumberListRecordFilter
             {

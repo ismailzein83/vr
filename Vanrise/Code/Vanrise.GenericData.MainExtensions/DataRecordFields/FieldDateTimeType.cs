@@ -150,6 +150,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return new Vanrise.Entities.GridColumnAttribute() { Type = type, NumberPrecision = "NoDecimal" };
         }
+
+        public override RecordFilter ConvertToRecordFilter(object filterValue)
+        {
+            throw new NotImplementedException();
+        }
     }
     public enum FieldDateTimeDataType
     {

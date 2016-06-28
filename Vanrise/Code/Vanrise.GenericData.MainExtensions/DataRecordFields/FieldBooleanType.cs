@@ -62,5 +62,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 throw new NullReferenceException("booleanRecordFilter");
             return booleanRecordFilter.IsTrue == (bool)fieldValue;
         }
+
+        public override RecordFilter ConvertToRecordFilter(object filterValue)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

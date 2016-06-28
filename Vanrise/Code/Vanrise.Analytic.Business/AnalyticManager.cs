@@ -22,31 +22,21 @@ namespace Vanrise.Analytic.Business
                 return null;
             IAnalyticDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticDataManager>();
 
-            if (input.SortByColumnName.Contains("MeasureValues"))
+            if (input.SortByColumnName != null && input.SortByColumnName.Contains("MeasureValues"))
             {
                 string[] measureProperty = input.SortByColumnName.Split('.');
                 input.SortByColumnName = string.Format(@"{0}[""{1}""].Value", measureProperty[0], measureProperty[1]);
             }
+
             dataManager.AnalyticTableQueryContext = new AnalyticTableQueryContext(input.Query);
            
             return BigDataManager.Instance.RetrieveData(input, new AnalyticRecordRequestHandler(dataManager));
         }
 
-        public RecordFilterGroup GetRecordSearchFilterGroup(RecordSearchFilterGroupInput input)
+        public RecordFilterGroup BuildRecordSearchFilterGroup(RecordSearchFilterGroupInput input)
         {
-            AnalyticReportManager analyticReportManager = new Business.AnalyticReportManager();
 
-            var analyticReport = analyticReportManager.GetAnalyticReportById(input.ReportId);
-            var analyticReportSettings = analyticReport.Settings as Entities.DataRecordSearchPageSettings;
-            int dataRecordTypeId = -1;
-            foreach(var source in analyticReportSettings.Sources)
-            {
-                if(source.Name == input.SourceName)
-                {
-                    dataRecordTypeId = source.DataRecordTypeId;
-                    break;
-                }
-            }
+            int dataRecordTypeId = GetDataRecordTypeForReportBySourceName(input.ReportId, input.SourceName);
 
             DataRecordTypeManager dataRecordTypeManager = new GenericData.Business.DataRecordTypeManager();
             var recordType = dataRecordTypeManager.GetDataRecordType(dataRecordTypeId);
@@ -54,7 +44,11 @@ namespace Vanrise.Analytic.Business
             AnalyticItemConfigManager analyticItemConfigManager = new Business.AnalyticItemConfigManager();
 
             var analyticDimensions = analyticItemConfigManager.GetDimensions(input.TableId);
-            
+
+
+
+            RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
+
             foreach(var dimensionValue in input.DimensionValues)
             {
                 AnalyticDimension dimension;
@@ -62,16 +56,35 @@ namespace Vanrise.Analytic.Business
                 {
                     foreach(var dimensionFieldMapping in  dimension.Config.DimensionFieldMappings)
                     {
-
+                       var record =  recordType.Fields.FindRecord(x => x.Name == dimensionFieldMapping.FieldName);
+                      ///  record.Type.ConvertFilterMethod()
                     }
                    
                 }
                 
             }
 
-            RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
+          
             return recordFilterGroup;
         }
+
+        public int GetDataRecordTypeForReportBySourceName(int reportId,string sourceName)
+        {
+            AnalyticReportManager analyticReportManager = new Business.AnalyticReportManager();
+            var analyticReport = analyticReportManager.GetAnalyticReportById(reportId);
+            var analyticReportSettings = analyticReport.Settings as Entities.DataRecordSearchPageSettings;
+            int dataRecordTypeId = -1;
+            foreach (var source in analyticReportSettings.Sources)
+            {
+                if (source.Name == sourceName)
+                {
+                   dataRecordTypeId =  source.DataRecordTypeId;
+                }
+            }
+            return dataRecordTypeId;
+        }
+
+
 
         #region Private Methods
 
