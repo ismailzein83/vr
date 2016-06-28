@@ -151,6 +151,7 @@
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlDetailedBillingByZone.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlRoutingAnalysis.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
