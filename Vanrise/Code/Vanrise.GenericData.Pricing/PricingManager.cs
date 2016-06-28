@@ -49,7 +49,7 @@ namespace Vanrise.GenericData.Pricing
             _extraChargeRuleManager.ApplyExtraChargeRule(extraChargeRuleContext, extraChargeRuleDefinitionId, target);
             effectiveRate = extraChargeRuleContext.Rate;
             context.EffectiveRate = effectiveRate;
-            context.ExtraChargeValue = extraChargeRuleContext.ExtraChargeValue;
+            context.ExtraChargeRate = extraChargeRuleContext.ExtraChargeRate;
         }
 
         private void ApplyTariffRate(IPricingRulesContext context, GenericRuleTarget target, ref Decimal effectiveRate)

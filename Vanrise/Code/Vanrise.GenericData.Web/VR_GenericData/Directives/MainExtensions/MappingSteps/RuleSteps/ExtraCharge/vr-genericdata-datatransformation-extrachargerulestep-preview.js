@@ -55,9 +55,11 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestepPreview', ['Uti
                         if (payload.stepDetails != undefined) {
                             stepObj.initialRate = payload.stepDetails.InitialRate;
                             stepObj.effectiveRate = payload.stepDetails.EffectiveRate;
+                            stepObj.extraChargeRate = payload.stepDetails.ExtraChargeRate;
 
                             ctrl.initialRate = payload.stepDetails.InitialRate;
                             ctrl.effectiveRate = payload.stepDetails.EffectiveRate;
+                            ctrl.extraChargeRate = payload.stepDetails.ExtraChargeRate;
                         }
 
                     }
@@ -85,9 +87,11 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestepPreview', ['Uti
 
                     stepObj.initialRate = changes.InitialRate;
                     stepObj.effectiveRate = changes.EffectiveRate;
-
+                    stepObj.extraChargeRate = changes.ExtraChargeRate;
+                    
                     ctrl.initialRate = changes.InitialRate;
                     ctrl.effectiveRate = changes.EffectiveRate;
+                    ctrl.extraChargeRate = changes.ExtraChargeRate;
                 }
 
                 api.checkValidation = function () {
@@ -104,6 +108,8 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestepPreview', ['Uti
                     if (stepDetails != undefined) {
                         stepDetails.InitialRate = stepObj.initialRate;
                         stepDetails.EffectiveRate = stepObj.effectiveRate;
+                        stepDetails.ExtraChargeRate = stepObj.extraChargeRate;
+                        
                     }
                     return stepDetails;
                 }
@@ -121,6 +127,9 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestepPreview', ['Uti
                     return "Missing effective rate mapping.";
                 }
                
+                if (ctrl.extraChargeRate == undefined) {
+                    return "Missing extra charge rate mapping.";
+                }
                 return null;
             }
 

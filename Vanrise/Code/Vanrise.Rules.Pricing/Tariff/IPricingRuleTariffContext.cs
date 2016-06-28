@@ -18,6 +18,10 @@ namespace Vanrise.Rules.Pricing
 
         Decimal? EffectiveDurationInSeconds { set; }
 
-        Decimal? TotalAmount {  set; }
+        Decimal? TotalAmount { set; }
+
+        Decimal ExtraChargeRate { get; }
+
+        Decimal ExtraChargeValue { set; }
     }
 }

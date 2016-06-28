@@ -24,21 +24,22 @@ namespace Vanrise.GenericData.Pricing
         void ApplyTariffRule(IPricingRuleTariffContext context, Func<TariffRule> getMatchRule, GenericRuleTarget target)
         {
             var tariffPricingRule = getMatchRule();
-            if (tariffPricingRule != null)
-            {
-                tariffPricingRule.Settings.ApplyTariffRule(context);
-                context.Rule = tariffPricingRule;
-            }
-            else
-            {
-                var effectiveRate = context.Rate;
-                context.EffectiveRate = effectiveRate;
-                if (context.DurationInSeconds != null)
-                {
-                    context.EffectiveDurationInSeconds = context.DurationInSeconds;
-                    context.TotalAmount = effectiveRate * (context.DurationInSeconds.Value / 60);
-                }
-            }
+
+            if (tariffPricingRule == null)
+                throw new NullReferenceException("tariffPricingRule");
+
+            tariffPricingRule.Settings.ApplyTariffRule(context);
+            context.Rule = tariffPricingRule;
+            //else
+            //{
+            //    var effectiveRate = context.Rate;
+            //    context.EffectiveRate = effectiveRate;
+            //    if (context.DurationInSeconds != null)
+            //    {
+            //        context.EffectiveDurationInSeconds = context.DurationInSeconds;
+            //        context.TotalAmount = effectiveRate * (context.DurationInSeconds.Value / 60);
+            //    }
+            //}
         }
     }
 }

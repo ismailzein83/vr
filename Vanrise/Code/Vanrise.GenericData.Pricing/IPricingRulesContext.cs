@@ -20,7 +20,7 @@ namespace Vanrise.GenericData.Pricing
 
         int? RateTypeId { set; }
 
-        Decimal ExtraChargeValue { set; }
+        Decimal ExtraChargeRate { set; }
 
         Decimal? EffectiveDurationInSeconds { set; }
 

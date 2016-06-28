@@ -62,7 +62,7 @@
 
         loadParameters();
         defineScope();
-        defineMenuActionsColumnsGrouping();
+        //defineMenuActionsColumnsGrouping();
         load();
 
         function loadParameters() {
@@ -80,43 +80,43 @@
             $scope.scopeModal.enableTransformationforUpdate = true;
 
             $scope.scopeModal.summaryFields = [];
-            $scope.scopeModal.datasourceColumnGrouping = [];
+            //$scope.scopeModal.datasourceColumnGrouping = [];
 
             $scope.scopeModal.onSummaryDataRecordTypeFieldsSelectorReady = function (api) {
                 directiveSummaryReadyAPI = api;
                 directiveSummaryReadyPromiseDeferred.resolve();
             }
-            $scope.scopeModal.onSelectSummaryFieldItem = function (summaryItem) {
-                var dataItem = {
-                    SummaryFieldName: summaryItem.Name,
-                };
-                $scope.scopeModal.datasourceColumnGrouping.push(dataItem);
-            }
+            //$scope.scopeModal.onSelectSummaryFieldItem = function (summaryItem) {
+            //    var dataItem = {
+            //        SummaryFieldName: summaryItem.Name,
+            //    };
+            //    $scope.scopeModal.datasourceColumnGrouping.push(dataItem);
+            //}
 
-            $scope.scopeModal.onDeselectSummaryFieldItem = function (summaryItem) {
-                var itemIndex = UtilsService.getItemIndexByVal($scope.scopeModal.datasourceColumnGrouping, summaryItem.Name, 'SummaryFieldName');
-                $scope.scopeModal.datasourceColumnGrouping.splice(itemIndex, 1);
-            }
+            //$scope.scopeModal.onDeselectSummaryFieldItem = function (summaryItem) {
+            //    var itemIndex = UtilsService.getItemIndexByVal($scope.scopeModal.datasourceColumnGrouping, summaryItem.Name, 'SummaryFieldName');
+            //    $scope.scopeModal.datasourceColumnGrouping.splice(itemIndex, 1);
+            //}
 
-            $scope.scopeModal.isValidColumnGrouping = function () {
-                if ($scope.scopeModal.datasourceColumnGrouping != undefined && $scope.scopeModal.datasourceColumnGrouping.length > 0)
-                    return null;
-                return "You Should Select at least one column grouping ";
-            }
+            //$scope.scopeModal.isValidColumnGrouping = function () {
+            //    if ($scope.scopeModal.datasourceColumnGrouping != undefined && $scope.scopeModal.datasourceColumnGrouping.length > 0)
+            //        return null;
+            //    return "You Should Select at least one column grouping ";
+            //}
 
-            $scope.scopeModal.addColumnGrouping = function () {
-                var onDataItemAdded = function (itemAdded) {
-                    var alreadyExists = false;
-                    angular.forEach($scope.scopeModal.datasourceColumnGrouping, function (item) {
-                        if (item.SummaryFieldName == itemAdded.SummaryFieldName)
-                            alreadyExists = true;
-                    });
-                    if (!alreadyExists)
-                        $scope.scopeModal.datasourceColumnGrouping.push(itemAdded);
-                }
+            //$scope.scopeModal.addColumnGrouping = function () {
+            //    var onDataItemAdded = function (itemAdded) {
+            //        var alreadyExists = false;
+            //        angular.forEach($scope.scopeModal.datasourceColumnGrouping, function (item) {
+            //            if (item.SummaryFieldName == itemAdded.SummaryFieldName)
+            //                alreadyExists = true;
+            //        });
+            //        if (!alreadyExists)
+            //            $scope.scopeModal.datasourceColumnGrouping.push(itemAdded);
+            //    }
 
-                VR_GenericData_KeyFieldMappingService.addItem(dataRawRecordTypeSelectorAPI.getSelectedIds(), dataSummaryRecordTypeSelectorAPI.getSelectedIds(), onDataItemAdded, $scope.scopeModal.datasourceColumnGrouping);
-            };
+            //    VR_GenericData_KeyFieldMappingService.addItem(dataRawRecordTypeSelectorAPI.getSelectedIds(), dataSummaryRecordTypeSelectorAPI.getSelectedIds(), onDataItemAdded, $scope.scopeModal.datasourceColumnGrouping);
+            //};
 
             $scope.scopeModal.onBatchTimeIntervalSelectorReady = function (api) {
                 batchTimeIntervalSelectorAPI = api;
@@ -362,45 +362,45 @@
             };
         }
 
-        function defineMenuActionsColumnsGrouping() {
-            var defaultMenuActions = [
-            {
-                name: "Edit",
-                clicked: editColumnGrouping,
-            },
-            {
-                name: "Delete",
-                clicked: deleteColumnGrouping,
-            }];
+        //function defineMenuActionsColumnsGrouping() {
+        //    var defaultMenuActions = [
+        //    {
+        //        name: "Edit",
+        //        clicked: editColumnGrouping,
+        //    },
+        //    {
+        //        name: "Delete",
+        //        clicked: deleteColumnGrouping,
+        //    }];
 
-            $scope.gridMenuActionsColumnGrouping = function (dataItem) {
-                return defaultMenuActions;
-            }
-        }
+        //    $scope.gridMenuActionsColumnGrouping = function (dataItem) {
+        //        return defaultMenuActions;
+        //    }
+        //}
 
-        function editColumnGrouping(dataItem) {
-            var onDataItemUpdated = function (updatedDataItem) {
-                var alreadyExists = false;
-                angular.forEach($scope.scopeModal.datasourceColumnGrouping, function (item) {
-                    if (item.SummaryFieldName == updatedDataItem.SummaryFieldName)
-                        alreadyExists = true;
-                });
-                if (alreadyExists) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModal.datasourceColumnGrouping, dataItem.RawFieldName, 'RawFieldName');
-                    $scope.scopeModal.datasourceColumnGrouping[index] = updatedDataItem;
-                }
-            }
-            VR_GenericData_KeyFieldMappingService.editItem(dataRawRecordTypeSelectorAPI.getSelectedIds(), dataSummaryRecordTypeSelectorAPI.getSelectedIds(), dataItem, onDataItemUpdated, $scope.scopeModal.datasourceColumnGrouping);
-        }
+        //function editColumnGrouping(dataItem) {
+        //    var onDataItemUpdated = function (updatedDataItem) {
+        //        var alreadyExists = false;
+        //        angular.forEach($scope.scopeModal.datasourceColumnGrouping, function (item) {
+        //            if (item.SummaryFieldName == updatedDataItem.SummaryFieldName)
+        //                alreadyExists = true;
+        //        });
+        //        if (alreadyExists) {
+        //            var index = UtilsService.getItemIndexByVal($scope.scopeModal.datasourceColumnGrouping, dataItem.RawFieldName, 'RawFieldName');
+        //            $scope.scopeModal.datasourceColumnGrouping[index] = updatedDataItem;
+        //        }
+        //    }
+        //    VR_GenericData_KeyFieldMappingService.editItem(dataRawRecordTypeSelectorAPI.getSelectedIds(), dataSummaryRecordTypeSelectorAPI.getSelectedIds(), dataItem, onDataItemUpdated, $scope.scopeModal.datasourceColumnGrouping);
+        //}
 
-        function deleteColumnGrouping(dataItem) {
-            var onDataItemDeleted = function (deletedDataItem) {
-                var index = UtilsService.getItemIndexByVal($scope.scopeModal.datasourceColumnGrouping, dataItem.RawFieldName, 'RawFieldName');
-                $scope.scopeModal.datasourceColumnGrouping.splice(index, 1);
-            };
+        //function deleteColumnGrouping(dataItem) {
+        //    var onDataItemDeleted = function (deletedDataItem) {
+        //        var index = UtilsService.getItemIndexByVal($scope.scopeModal.datasourceColumnGrouping, dataItem.RawFieldName, 'RawFieldName');
+        //        $scope.scopeModal.datasourceColumnGrouping.splice(index, 1);
+        //    };
 
-            VR_GenericData_KeyFieldMappingService.deleteItem($scope, dataItem, onDataItemDeleted);
-        }
+        //    VR_GenericData_KeyFieldMappingService.deleteItem($scope, dataItem, onDataItemDeleted);
+        //}
 
         function load() {
             $scope.scopeModal.isLoading = true;
@@ -426,7 +426,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadSummaryInsertSection, loadSummaryUpdateSection, loadColumnGroup, loadBatchStartIdentificationSelector])
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadSummaryInsertSection, loadSummaryUpdateSection, loadBatchStartIdentificationSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -477,7 +477,7 @@
             // Load Summary Data Record Type
             var dataSummaryRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             promises.push(dataSummaryRecordTypeSelectorLoadDeferred.promise);
-            
+
             var payloadSummaryRecordTypeSelector;
             if (summaryTransformationDefinitionEntity != undefined && summaryTransformationDefinitionEntity.SummaryItemRecordTypeId != undefined) {
                 dataSummaryRecordTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -488,31 +488,31 @@
             }
 
             dataSummaryRecordTypeSelectorReadyDeferred.promise.then(function () {
-               
+
                 VRUIUtilsService.callDirectiveLoad(dataSummaryRecordTypeSelectorAPI, payloadSummaryRecordTypeSelector, dataSummaryRecordTypeSelectorLoadDeferred);
             });
 
             if (summaryTransformationDefinitionEntity != undefined) {
                 directiveSummarySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
 
-              var directiveSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-              directiveSummarySelectedPromiseDeferred.promise.then(function () {
-                  for (var i = 0; i < summaryTransformationDefinitionEntity.KeyFieldMappings.length; i++) {
-                      var dataItem = summaryTransformationDefinitionEntity.KeyFieldMappings[i];
+                var directiveSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                directiveSummarySelectedPromiseDeferred.promise.then(function () {
+                    for (var i = 0; i < summaryTransformationDefinitionEntity.KeyFieldMappings.length; i++) {
+                        var dataItem = summaryTransformationDefinitionEntity.KeyFieldMappings[i];
 
-                      selectedFieldNames.push( dataItem.SummaryFieldName);
-                  }
-
-
+                        selectedFieldNames.push(dataItem.SummaryFieldName);
+                    }
 
 
-                  var payloadDirective = { dataRecordTypeId: summaryTransformationDefinitionEntity.SummaryItemRecordTypeId, selectedIds: selectedFieldNames };
 
-                  directiveSummaryReadyPromiseDeferred.promise.then(function () {
-                      directiveSummarySelectedPromiseDeferred = undefined;
-                      VRUIUtilsService.callDirectiveLoad(directiveSummaryReadyAPI, payloadDirective, directiveSelectorLoadDeferred);
-                  });
-              });
+
+                    var payloadDirective = { dataRecordTypeId: summaryTransformationDefinitionEntity.SummaryItemRecordTypeId, selectedIds: selectedFieldNames };
+
+                    directiveSummaryReadyPromiseDeferred.promise.then(function () {
+                        directiveSummarySelectedPromiseDeferred = undefined;
+                        VRUIUtilsService.callDirectiveLoad(directiveSummaryReadyAPI, payloadDirective, directiveSelectorLoadDeferred);
+                    });
+                });
                 promises.push(directiveSelectorLoadDeferred.promise);
 
             }
@@ -588,23 +588,22 @@
             return batchStartIdentificationSelectorLoadDeferred.promise;
         }
 
-        function loadColumnGroup() {
-            if (summaryTransformationDefinitionEntity != undefined) {
-                for (var i = 0; i < summaryTransformationDefinitionEntity.KeyFieldMappings.length; i++) {
-                    var dataItem = summaryTransformationDefinitionEntity.KeyFieldMappings[i];
-                    $scope.scopeModal.datasourceColumnGrouping.push(
-                        {
-                            //RawFieldName: dataItem.RawFieldName,
-                            SummaryFieldName: dataItem.SummaryFieldName,
-                            //GetRawFieldExpression: dataItem.GetRawFieldExpression
-                        }
-                    );
-                }
+        //function loadColumnGroup() {
+        //    if (summaryTransformationDefinitionEntity != undefined) {
+        //        for (var i = 0; i < summaryTransformationDefinitionEntity.KeyFieldMappings.length; i++) {
+        //            var dataItem = summaryTransformationDefinitionEntity.KeyFieldMappings[i];
+        //            $scope.scopeModal.datasourceColumnGrouping.push(
+        //                {
+        //                    //RawFieldName: dataItem.RawFieldName,
+        //                    SummaryFieldName: dataItem.SummaryFieldName,
+        //                    //GetRawFieldExpression: dataItem.GetRawFieldExpression
+        //                }
+        //            );
+        //        }
 
-
-                $scope.scopeModal.enableColumnGrouping = true;
-            }
-        }
+        //        $scope.scopeModal.enableColumnGrouping = true;
+        //    }
+        //}
 
         function loadSummaryInsertSection() {
             // load Data Transformation Definition Insert Selector
@@ -721,7 +720,7 @@
         }
 
         function enableColumnGrouping() {
-            $scope.scopeModal.datasourceColumnGrouping.length = 0;
+            //$scope.scopeModal.datasourceColumnGrouping.length = 0;
             if (dataSummaryRecordTypeSelectorAPI.getSelectedIds() == undefined)
                 $scope.scopeModal.enableColumnGrouping = false;
             else
@@ -739,16 +738,16 @@
 
             var keyFieldMappings = [];
 
-            for (var i = 0; i < $scope.scopeModal.datasourceColumnGrouping.length; i++) {
-                var dataItem = $scope.scopeModal.datasourceColumnGrouping[i];
+            for (var i = 0; i < $scope.scopeModal.summaryFields.length; i++) {
+                var dataItem = $scope.scopeModal.summaryFields[i];
 
                 keyFieldMappings.push(
                     {
-                        SummaryFieldName: dataItem.SummaryFieldName,
-                        RawFieldName: dataItem.RawFieldName,
-                        GetRawFieldExpression: dataItem.GetRawFieldExpression
+                        SummaryFieldName: dataItem.Name,
+                        //RawFieldName: dataItem.RawFieldName,
+                        //GetRawFieldExpression: dataItem.GetRawFieldExpression
                     }
-            );
+                );
             }
 
 

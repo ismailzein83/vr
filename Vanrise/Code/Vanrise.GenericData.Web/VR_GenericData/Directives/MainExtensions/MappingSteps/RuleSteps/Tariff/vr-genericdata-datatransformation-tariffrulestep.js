@@ -53,6 +53,12 @@ app.directive('vrGenericdataDatatransformationTariffrulestep', ['UtilsService', 
             var totalAmountDirectiveAPI;
             var totalAmountDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var extraChargeRateDirectiveAPI;
+            var extraChargeRateDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var extraChargeValueDirectiveAPI;
+            var extraChargeValueDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.onRuleStepCommonReady = function (api) {
                     ruleStepCommonDirectiveAPI = api;
@@ -81,6 +87,16 @@ app.directive('vrGenericdataDatatransformationTariffrulestep', ['UtilsService', 
                 $scope.onTotalAmountDirectiveReady = function (api) {
                     totalAmountDirectiveAPI = api;
                     totalAmountDirectiveReadyPromiseDeferred.resolve();
+                }
+
+                $scope.onExtraChargeRateDirectiveReady = function (api) {
+                    extraChargeRateDirectiveAPI = api;
+                    extraChargeRateDirectiveReadyPromiseDeferred.resolve();
+                }
+
+                $scope.onExtraChargeValueDirectiveReady = function (api) {
+                    extraChargeValueDirectiveAPI = api;
+                    extraChargeValueDirectiveReadyPromiseDeferred.resolve();
                 }
                 defineAPI();
             }
@@ -183,6 +199,36 @@ app.directive('vrGenericdataDatatransformationTariffrulestep', ['UtilsService', 
                     });
 
                     promises.push(loadTotalAmountDirectivePromiseDeferred.promise);
+
+                    var loadExtraChargeRateDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                    extraChargeRateDirectiveReadyPromiseDeferred.promise.then(function () {
+                        var payloadExtraChargeRate;
+                        if (payload != undefined) {
+                            payloadExtraChargeRate = {};
+                            if (payload != undefined && payload.context != undefined)
+                                payloadExtraChargeRate.context = payload.context;
+                            if (payload != undefined && payload.stepDetails != undefined)
+                                payloadExtraChargeRate.selectedRecords = payload.stepDetails.ExtraChargeRate;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(extraChargeRateDirectiveAPI, payloadExtraChargeRate, loadExtraChargeRateDirectivePromiseDeferred);
+                    });
+
+                    promises.push(loadExtraChargeRateDirectivePromiseDeferred.promise);
+
+                    var loadExtraChargeValueDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                    extraChargeValueDirectiveReadyPromiseDeferred.promise.then(function () {
+                        var payloadExtraChargeValue;
+                        if (payload != undefined) {
+                            payloadExtraChargeValue = {};
+                            if (payload != undefined && payload.context != undefined)
+                                payloadExtraChargeValue.context = payload.context;
+                            if (payload != undefined && payload.stepDetails != undefined)
+                                payloadExtraChargeValue.selectedRecords = payload.stepDetails.ExtraChargeValue;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(extraChargeValueDirectiveAPI, payloadExtraChargeValue, loadExtraChargeValueDirectivePromiseDeferred);
+                    });
+
+                    promises.push(loadExtraChargeValueDirectivePromiseDeferred.promise);
                     return UtilsService.waitMultiplePromises(promises);
                 }
 
@@ -194,6 +240,8 @@ app.directive('vrGenericdataDatatransformationTariffrulestep', ['UtilsService', 
                         EffectiveRate: effectiveRateDirectiveAPI != undefined ? effectiveRateDirectiveAPI.getData() : undefined,
                         EffectiveDurationInSeconds: effectiveDurationInSecondsDirectiveAPI != undefined ? effectiveDurationInSecondsDirectiveAPI.getData() : undefined,
                         TotalAmount: totalAmountDirectiveAPI != undefined ? totalAmountDirectiveAPI.getData() : undefined,
+                        ExtraChargeRate: extraChargeRateDirectiveAPI != undefined ? extraChargeRateDirectiveAPI.getData() : undefined,
+                        ExtraChargeValue: extraChargeValueDirectiveAPI != undefined ? extraChargeValueDirectiveAPI.getData() : undefined
                     }
                     ruleStepCommonDirectiveAPI.setData(obj);
                     return obj;

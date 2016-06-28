@@ -12,6 +12,6 @@ namespace Vanrise.Rules.Pricing
 
         Decimal Rate { get; set; }
 
-        Decimal ExtraChargeValue { set; }
+        Decimal ExtraChargeRate { set; }
     }
 }

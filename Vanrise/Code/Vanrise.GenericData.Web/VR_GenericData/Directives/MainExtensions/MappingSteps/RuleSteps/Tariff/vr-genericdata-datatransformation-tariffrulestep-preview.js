@@ -58,12 +58,16 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
                             stepObj.effectiveRate = payload.stepDetails.EffectiveRate;
                             stepObj.effectiveDurationInSeconds = payload.stepDetails.EffectiveDurationInSeconds;
                             stepObj.totalAmount = payload.stepDetails.TotalAmount;
+                            stepObj.extraChargeRate = payload.stepDetails.ExtraChargeRate;
+                            stepObj.extraChargeValue = payload.stepDetails.ExtraChargeValue;
 
                             ctrl.initialRate = payload.stepDetails.InitialRate;
                             ctrl.durationInSeconds = payload.stepDetails.DurationInSeconds;
                             ctrl.effectiveRate = payload.stepDetails.EffectiveRate;
                             ctrl.effectiveDurationInSeconds = payload.stepDetails.EffectiveDurationInSeconds;
                             ctrl.totalAmount = payload.stepDetails.TotalAmount;
+                            ctrl.extraChargeRate = payload.stepDetails.ExtraChargeRate;
+                            ctrl.extraChargeValue = payload.stepDetails.ExtraChargeValue;
                         }
 
                     }
@@ -94,12 +98,16 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
                     stepObj.effectiveRate = changes.EffectiveRate;
                     stepObj.effectiveDurationInSeconds = changes.EffectiveDurationInSeconds;
                     stepObj.totalAmount = changes.TotalAmount;
+                    stepObj.extraChargeRate = changes.ExtraChargeRate;
+                    stepObj.extraChargeValue = changes.ExtraChargeValue;
 
                     ctrl.initialRate = changes.InitialRate;
                     ctrl.durationInSeconds = changes.DurationInSeconds;
                     ctrl.effectiveRate = changes.EffectiveRate;
                     ctrl.effectiveDurationInSeconds = changes.EffectiveDurationInSeconds;
                     ctrl.totalAmount = changes.TotalAmount;
+                    ctrl.extraChargeRate = changes.ExtraChargeRate;
+                    ctrl.extraChargeValue = changes.ExtraChargeValue;
                 }
 
                 api.checkValidation = function () {
@@ -119,6 +127,8 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
                         stepDetails.EffectiveRate = stepObj.effectiveRate;
                         stepDetails.EffectiveDurationInSeconds = stepObj.effectiveDurationInSeconds;
                         stepDetails.TotalAmount = stepObj.totalAmount;
+                        stepDetails.ExtraChargeRate = stepObj.extraChargeRate;
+                        stepDetails.ExtraChargeValue = stepObj.extraChargeValue;
                     }
                     return stepDetails;
                 }
@@ -132,9 +142,9 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
                 if (ctrl.initialRate == undefined) {
                     return "Missing initial rate mapping.";
                 }
-                if (ctrl.effectiveRate == undefined) {
-                    return "Missing effective rate mapping.";
-                }
+                //if (ctrl.effectiveRate == undefined) {
+                //    return "Missing effective rate mapping.";
+                //}
                 return null;
             }
 

@@ -23,7 +23,7 @@ namespace Vanrise.Rules.Pricing
             {
                 action.Execute(actionContext);
             }
-            context.ExtraChargeValue = actionContext.Rate - context.Rate;
+            context.ExtraChargeRate = actionContext.Rate - context.Rate;
             context.Rate = actionContext.Rate;
         }
     }

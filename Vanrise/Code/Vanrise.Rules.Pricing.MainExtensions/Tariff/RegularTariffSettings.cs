@@ -18,7 +18,7 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
 
         protected override void Execute(IPricingRuleTariffContext context)
         {
-
+            decimal extraChargeValue = 0;
             Decimal? totalAmount = 0;
             Decimal? accountedDuration = context.DurationInSeconds;
             if (FirstPeriod > 0)
@@ -41,6 +41,8 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
                     accountedDuration = Math.Ceiling(accountedDuration.Value / FractionUnit) * FractionUnit;
                     if (totalAmount.HasValue)
                         totalAmount += Math.Ceiling(accountedDuration.Value / FractionUnit) * context.Rate;// 60
+
+                    extraChargeValue = Math.Ceiling(accountedDuration.Value / FractionUnit) * context.ExtraChargeRate;
                 }
                 context.EffectiveRate = Math.Ceiling(FractionUnit * context.Rate / 60);
             }
@@ -58,6 +60,7 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
                 totalAmount += CallFee;
 
             context.TotalAmount = totalAmount;
+            context.ExtraChargeValue = extraChargeValue;
         }
 
         public override string GetDescription()

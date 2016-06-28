@@ -44,6 +44,9 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestep', ['UtilsServi
             var effectiveRateDirectiveAPI;
             var effectiveRateDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var extraChargeRateDirectiveAPI;
+            var extraChargeRateDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.onRuleStepCommonReady = function (api) {
                     ruleStepCommonDirectiveAPI = api;
@@ -59,6 +62,12 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestep', ['UtilsServi
                     effectiveRateDirectiveAPI = api;
                     effectiveRateDirectiveReadyPromiseDeferred.resolve();
                 }
+
+                $scope.onExtraChargeRateDirectiveReady = function (api) {
+                    extraChargeRateDirectiveAPI = api;
+                    extraChargeRateDirectiveReadyPromiseDeferred.resolve();
+                }
+                
 
                 defineAPI();
             }
@@ -115,6 +124,21 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestep', ['UtilsServi
 
                     promises.push(loadEffectiveRateDirectivePromiseDeferred.promise);
 
+                    var loadExtraChargeRateDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                    extraChargeRateDirectiveReadyPromiseDeferred.promise.then(function () {
+                        var payloadExtraChargeRate;
+                        if (payload != undefined) {
+                            payloadExtraChargeRate = {};
+                            if (payload != undefined && payload.context != undefined)
+                                payloadExtraChargeRate.context = payload.context;
+                            if (payload != undefined && payload.stepDetails != undefined)
+                                payloadExtraChargeRate.selectedRecords = payload.stepDetails.ExtraChargeRate;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(extraChargeRateDirectiveAPI, payloadExtraChargeRate, loadExtraChargeRateDirectivePromiseDeferred);
+                    });
+
+                    promises.push(loadExtraChargeRateDirectivePromiseDeferred.promise);
+
                     return UtilsService.waitMultiplePromises(promises);
                 }
 
@@ -123,6 +147,7 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestep', ['UtilsServi
                         $type: "Vanrise.GenericData.Pricing.ExtraChargeMappingStep, Vanrise.GenericData.Pricing",
                         InitialRate: initialRateDirectiveAPI != undefined ? initialRateDirectiveAPI.getData() : undefined,
                         EffectiveRate: effectiveRateDirectiveAPI != undefined ? effectiveRateDirectiveAPI.getData() : undefined,
+                        ExtraChargeRate: extraChargeRateDirectiveAPI != undefined ? extraChargeRateDirectiveAPI.getData() : undefined
                     }
                     ruleStepCommonDirectiveAPI.setData(obj);
                     return obj;

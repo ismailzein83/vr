@@ -12,6 +12,8 @@ namespace Vanrise.GenericData.Pricing
     {
         public string InitialRate { get; set; }
         public string EffectiveRate { get; set; }
+        public string ExtraChargeRate { get; set; }
+
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
             string ruleTargetVariableName;
@@ -26,6 +28,8 @@ namespace Vanrise.GenericData.Pricing
                 ruleManagerVariableName, ruleContextVariableName, this.RuleDefinitionId, ruleTargetVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.Rate;", this.EffectiveRate, ruleContextVariableName);
 
+            context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.ExtraChargeRate;", this.ExtraChargeRate, ruleContextVariableName);
+            
             base.SetIdRuleMatched(context, ruleContextVariableName);
         }
     }

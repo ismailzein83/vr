@@ -16,7 +16,9 @@ namespace Vanrise.GenericData.MainExtensions.MappingSteps
 
         public override void GenerateExecutionCode(Transformation.Entities.IDataTransformationCodeGenerationContext context)
         {
-           
+            var businessEntityManagerVariableName = context.GenerateUniqueMemberName("businessEntityManager");
+            context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Business.BusinessEntityManager();", businessEntityManagerVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.GetEntity({2}, {3});", BusinessEntity, businessEntityManagerVariableName, this.BusinessEntityDefinitionId, BusinessEntityId);
         }
     }
 }

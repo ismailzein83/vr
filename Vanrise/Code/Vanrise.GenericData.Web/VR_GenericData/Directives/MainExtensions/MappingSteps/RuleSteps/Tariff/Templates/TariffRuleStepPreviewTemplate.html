@@ -3,10 +3,12 @@
     <vr-columns width="3/4row">
         <vr-list maxitemsperrow="1">
             <vr-listitem ng-show="ctrl.initialRate !=undefined"><vr-label>Rule.InitialRate = {{ctrl.initialRate}}</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.extraChargeRate !=undefined"><vr-label>Rule.ExtraChargeRate = {{ctrl.extraChargeRate}}</vr-label></vr-listitem>
             <vr-listitem ng-show="ctrl.durationInSeconds !=undefined"><vr-label>Rule.DurationInSeconds = {{ctrl.durationInSeconds}}</vr-label></vr-listitem>
             <vr-listitem ng-show="ctrl.effectiveRate !=undefined"><vr-label>{{ctrl.effectiveRate}} = Rule.EffectiveRate</vr-label></vr-listitem>
             <vr-listitem ng-show="ctrl.effectiveDurationInSeconds !=undefined"><vr-label>{{ctrl.effectiveDurationInSeconds}} = Rule.EffectiveDurationInSeconds</vr-label></vr-listitem>
             <vr-listitem ng-show="ctrl.totalAmount !=undefined"><vr-label>{{ctrl.totalAmount}} = Rule.TotalAmount</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.extraChargeValue !=undefined"><vr-label>{{ctrl.extraChargeValue}} = Rule.ExtraChargeValue</vr-label></vr-listitem>
         </vr-list>
     </vr-columns>
 </vr-row>
