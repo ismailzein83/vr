@@ -21,9 +21,12 @@ namespace Vanrise.Common.MainExtensions
 
             if (resultTaskActionArgument.Token == null)
                 throw new Exception("Token is empty ");
+            if (resultTaskActionArgument.ConnectionStrings.Count ==0)
+                throw new Exception("Connection Strings list is empty");
+            
             string baseUrl = resultTaskActionArgument.URL ;
             string token = resultTaskActionArgument.Token;
-
+            List<ConnectionStringSetting> connstrings = resultTaskActionArgument.ConnectionStrings;
 
             XigniteCurrencyReader CurrencyReader = new XigniteCurrencyReader(baseUrl, token);
             List<XigniteCurrency> newRates = CurrencyReader.GetRealTimeRates();
@@ -67,8 +70,10 @@ namespace Vanrise.Common.MainExtensions
             Vanrise.Common.LoggerFactory.GetLogger().WriteInformation("currentExchangeRate Count: '{0}'", currentExchangeRate.Count);
             Vanrise.Common.LoggerFactory.GetLogger().WriteInformation("newRates Count: '{0}'", newRates.Count);
             Vanrise.Common.LoggerFactory.GetLogger().WriteInformation("ratesToInsert Count: '{0}'", ratesToInsert.Count);
-               
+
             currencyExchangeRateManager.InsertExchangeRates(ratesToInsert);
+
+            currencyExchangeRateManager.SwapNewExchangeRateWithEEDTable(connstrings);
 
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput
             {

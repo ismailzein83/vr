@@ -62,7 +62,7 @@ namespace Vanrise.Common.Business
 
             Dictionary<string, ExchangeRateInfo> currencyExchangeRates = new Dictionary<string, ExchangeRateInfo>();
 
-            foreach (var ex in filteredExchangeRates.OrderByDescending(itm => itm.ExchangeDate))
+            foreach (var ex in filteredExchangeRates.OrderByDescending(itm => itm.ExchangeDate ))
             {
                 var currency = allCurrencies[ex.CurrencyId];
 
@@ -97,6 +97,52 @@ namespace Vanrise.Common.Business
 
             return currencyExchangeRates;
 
+
+        }
+
+
+        public void SwapNewExchangeRateWithEEDTable(List<ConnectionStringSetting> connectionStrings)
+        {
+            var ordredExchangeRates = GetCachedCurrenciesExchangeRates().ToList().OrderBy(r=>r.Value.CurrencyId).ThenByDescending(r=>r.Value.ExchangeDate);
+            List<ExchangeRateWithEED> newrates = new List<ExchangeRateWithEED>();
+            ExchangeRateWithEED last = new ExchangeRateWithEED();
+            foreach (var nr in ordredExchangeRates)
+            {
+                if (nr.Value.CurrencyId == last.CurrencyId)
+                {
+
+                    ExchangeRateWithEED current = new ExchangeRateWithEED()
+                    {
+                             CurrencyId = nr.Value.CurrencyId,
+                             Rate = nr.Value.Rate,
+                             BED = nr.Value.ExchangeDate,
+                             EED = last.BED
+                    };
+                    newrates.Add(current);
+                    last = current;
+
+                }
+                else
+                {
+                    ExchangeRateWithEED current = new ExchangeRateWithEED()
+                    {
+                        CurrencyId = nr.Value.CurrencyId,
+                        Rate = nr.Value.Rate,
+                        BED = nr.Value.ExchangeDate
+                    };
+                    newrates.Add(current);
+                    last = current;
+                }
+            }
+            foreach (var c in connectionStrings)
+            {
+                ICurrencyExchangeRateWithEEDDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICurrencyExchangeRateWithEEDDataManager>();
+                dataManager.ConnectionString = c.ConnectionString;
+                dataManager.ConnectionStringName = c.ConnectionStringName;
+                dataManager.ApplyExchangeRateWithEESInDB(newrates);
+            }
+
+            
 
         }
 

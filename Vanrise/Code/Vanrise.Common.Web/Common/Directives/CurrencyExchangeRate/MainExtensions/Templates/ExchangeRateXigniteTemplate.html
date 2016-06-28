@@ -1,5 +1,4 @@
-﻿
-<vr-row>
+﻿<vr-row>
     <vr-columns width="fullrow">
         <vr-textbox label="URL" value="url" isrequired></vr-textbox>
     </vr-columns>
@@ -7,3 +6,15 @@
         <vr-textbox label="Token" value="token" isrequired></vr-textbox>
     </vr-columns>
 </vr-row>
+<vr-columns width="normal">
+    <vr-button type="Add" data-onclick="addSource" standalone></vr-button>
+</vr-columns>
+<vr-columns width="fullrow">
+    <vr-validator> 
+        <!--validate="ctrl.isSourceGridValid()"   on-ready="ctrl.onGridReady"  ondeleterow="ctrl.removeSource" menuactions="ctrl.sourcesGridMenuActions"  -->
+        <vr-datagrid datasource="[]" norowhighlightonclick="true" hidegridmenu>
+            <vr-datagridcolumn headertext="'Type'" field="'Title'" disablesorting="true"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Connection'" field="'Connection'" disablesorting="true"></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-validator>
+</vr-columns>
