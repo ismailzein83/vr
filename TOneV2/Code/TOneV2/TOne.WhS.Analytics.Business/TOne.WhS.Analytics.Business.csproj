@@ -68,6 +68,7 @@
     <Compile Include="BillingReports\DetailedBillingByCarrierReportGenerator.cs" />
     <Compile Include="BillingReports\DailySummaryForcastingReportGenerator.cs" />
     <Compile Include="BillingReports\DailySummaryReportGenerator.cs" />
+    <Compile Include="BillingReports\RoutingAnalysisReportGenerator.cs" />
     <Compile Include="BillingReports\SummaryByCarrierByDayReportGenerator.cs" />
     <Compile Include="BillingReports\SummaryByCarrierReportGenerator.cs" />
     <Compile Include="BillingReports\LossesByCarrierReportGenerator.cs" />
