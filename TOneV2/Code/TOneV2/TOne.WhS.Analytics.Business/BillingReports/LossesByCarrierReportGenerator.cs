@@ -94,6 +94,11 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     lossesByCarrier.DurationFormatted = lossesByCarrier.Duration == 0 ? "" :
                         ReportHelpers.FormatNumberDigitRate(lossesByCarrier.Duration);
 
+                    lossesByCarrier.Margin =
+                        ReportHelpers.FormatNumber(lossesByCarrier.SaleNet - lossesByCarrier.CostNet);
+                    
+                    lossesByCarrier.Percentage =
+                        ReportHelpers.FormatNumberPercentage(1 - lossesByCarrier.CostNet/lossesByCarrier.SaleNet);
 
                     listLossesByCarrier.Add(lossesByCarrier);
                 }

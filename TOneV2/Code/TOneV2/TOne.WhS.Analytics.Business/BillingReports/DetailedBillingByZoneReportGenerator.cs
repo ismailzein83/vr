@@ -162,7 +162,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     else
                         analyticRecord.MeasureValues.TryGetValue("SaleNet", out net);
                     detailedBillingByZone.Net = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
-                    detailedBillingByZone.NetFormatted = ReportHelpers.FormatNumber(detailedBillingByZone.DurationInSeconds);
+                    detailedBillingByZone.NetFormatted = ReportHelpers.FormatNumber(detailedBillingByZone.Net);
 
                     MeasureValue commissionValue;
                     if (parameters.IsCost)
@@ -241,7 +241,16 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     else
                         analyticRecord.MeasureValues.TryGetValue("SaleDiscount", out discount);
                     detailedBillingByZone.Discount = (discount == null) ? 0 : Convert.ToDouble(discount.Value ?? 0.0);
-                    
+
+                    detailedBillingByZone.TotalAmountFormatted =
+                        ReportHelpers.FormatNumber(detailedBillingByZone.Net + detailedBillingByZone.OffPeakNet +
+                                                   detailedBillingByZone.WeekEndNet);
+
+                    detailedBillingByZone.TotalDurationFormatted =
+                        ReportHelpers.FormatNumber(detailedBillingByZone.DurationInSeconds +
+                                                   detailedBillingByZone.OffPeakDurationInSeconds +
+                                                   detailedBillingByZone.WeekEndDurationInSeconds);
+
                     listDetailedBillingByZone.Add(detailedBillingByZone);
                 }
 
@@ -251,9 +260,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     services = (decimal)service;
 
             parameters.ServicesForCustomer = services;
-
-            parameters.TotalAmount = parameters.OffPeakNet + parameters.NormalNet;
-
+            
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
             dataSources.Add("ZoneSummaryDetailed", listDetailedBillingByZone);
             return dataSources;
