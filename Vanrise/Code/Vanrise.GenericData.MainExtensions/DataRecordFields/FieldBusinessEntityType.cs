@@ -109,6 +109,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return numberListRecordFilter.CompareOperator == ListRecordFilterOperator.In ? isValueInFilter : !isValueInFilter;
         }
 
+        public RecordFilter ConvertToRecordFilter(object filterValue)
+        {
+            return new NumberListRecordFilter
+            {
+                CompareOperator = ListRecordFilterOperator.In,
+                Values = new List<Decimal> { Convert.ToDecimal(filterValue) }
+            };
+        }
+
         #endregion
 
         #region Private Methods
