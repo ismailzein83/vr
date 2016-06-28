@@ -69,6 +69,8 @@
     <Compile Include="BillingReport\ReportParameterSettings.cs" />
     <Compile Include="BillingReport\ProfitByZone\ProfitByZoneFormatted.cs" />
     <Compile Include="BillingReport\DetailedBillingByZone\DetailedBillingByZoneFormatted.cs" />
+    <Compile Include="BillingReport\RoutingAnalysis\RoutingAnalysis.cs" />
+    <Compile Include="BillingReport\RoutingAnalysis\RoutingAnalysisFormatted.cs" />
     <Compile Include="BillingReport\SummaryByZone\SummaryByZoneFormatted.cs" />
     <Compile Include="CDRLog\CDRLog.cs" />
     <Compile Include="CDRLog\CDRLogDetail.cs" />
