@@ -8,7 +8,6 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
 {
     public class SalesAndProfitsByCustomer
     {
-        public string Carrier { get; set; }
         public decimal? SaleDuration { get; set; }
         public string SaleDurationFormatted { get; set; }
         public double? SaleNet { get; set; }

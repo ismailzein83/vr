@@ -129,6 +129,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlCostBySaleZone.rdlc" />
+    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlCostBySaleZoneSupplier.rdlc" />
+    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlSalesAndProfitsByCustomer.rdlc" />
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlRoutingByCustomer.rdlc" />
     <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlLossesByCarrier.rdlc">
       <SubType>Designer</SubType>
