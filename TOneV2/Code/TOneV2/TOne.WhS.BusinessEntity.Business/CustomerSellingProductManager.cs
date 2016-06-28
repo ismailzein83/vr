@@ -35,7 +35,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     if (input.Query.SellingProductsIds != null && !input.Query.SellingProductsIds.Contains(prod.SellingProductId))
                         return false;
 
-                    if (isCarrierAccountInActive(prod.CustomerId))
+                    if (!ShouldSelectCustomerSellingProduct(prod.CustomerId))
                         return false;
 
                     return true;
@@ -45,11 +45,14 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCustomerSellingProducts.ToBigResult(input, filterExpression, CustomerSellingProductDetailMapper));
         }
 
-        private bool isCarrierAccountInActive(int customerId)
+        private bool ShouldSelectCustomerSellingProduct(int customerId)
         {
             CarrierAccount carrierAccount = _carrierAccountManager.GetCarrierAccount(customerId);
 
-            if (carrierAccount.CarrierAccountSettings != null && carrierAccount.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
+            if (carrierAccount.CarrierAccountSettings == null)
+                return false;
+
+            if (carrierAccount.CarrierAccountSettings.ActivationStatus == ActivationStatus.Inactive)
                 return false;
 
             return true;
