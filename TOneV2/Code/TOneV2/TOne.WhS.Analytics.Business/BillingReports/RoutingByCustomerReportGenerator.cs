@@ -25,7 +25,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     ToTime = parameters.ToTime,
                     CurrencyId = parameters.CurrencyId,
                     ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>()
+                    Filters = new List<DimensionFilter>(),
+                    OrderType = AnalyticQueryOrderType.ByAllDimensions
                 },
                 SortByColumnName = "DimensionValues[0].Name"
             };
