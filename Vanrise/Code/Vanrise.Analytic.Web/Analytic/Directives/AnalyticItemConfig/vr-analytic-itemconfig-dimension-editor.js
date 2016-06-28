@@ -139,7 +139,7 @@
                             };
                             var dataItemPayload = { dataRecordTypeId: filterItem.payload.DataRecordTypeId,  };
 
-                            if (configEntity != undefined)
+                            if (configEntity != undefined && configEntity.DimensionFieldMappings !=undefined)
                             {
                                 var selectedRecordField = UtilsService.getItemByVal(configEntity.DimensionFieldMappings,filterItem.payload.DataRecordTypeId,"DataRecordTypeId");
                                 if (selectedRecordField != undefined)
