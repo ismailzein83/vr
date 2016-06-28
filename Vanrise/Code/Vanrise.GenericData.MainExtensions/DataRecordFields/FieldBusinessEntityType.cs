@@ -109,12 +109,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return numberListRecordFilter.CompareOperator == ListRecordFilterOperator.In ? isValueInFilter : !isValueInFilter;
         }
 
-        public override RecordFilter ConvertToRecordFilter(object filterValue)
+        public override RecordFilter ConvertToRecordFilter(List<Object> filterValues)
         {
             return new NumberListRecordFilter
             {
                 CompareOperator = ListRecordFilterOperator.In,
-                Values = new List<Decimal> { Convert.ToDecimal(filterValue) }
+                Values = filterValues.Select(value => Convert.ToDecimal(value)).ToList()
+
             };
         }
 

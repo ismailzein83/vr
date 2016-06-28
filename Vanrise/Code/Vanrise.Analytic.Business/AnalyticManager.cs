@@ -44,27 +44,27 @@ namespace Vanrise.Analytic.Business
             AnalyticItemConfigManager analyticItemConfigManager = new Business.AnalyticItemConfigManager();
 
             var analyticDimensions = analyticItemConfigManager.GetDimensions(input.TableId);
-
-
-
             RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
-
-            foreach(var dimensionValue in input.DimensionValues)
+            foreach(var dimensionFilter in input.DimensionFilters)
             {
                 AnalyticDimension dimension;
-                if(analyticDimensions.TryGetValue(dimensionValue.Name,out dimension))
+                if (analyticDimensions.TryGetValue(dimensionFilter.Dimension, out dimension))
                 {
                     foreach(var dimensionFieldMapping in  dimension.Config.DimensionFieldMappings)
                     {
                        var record =  recordType.Fields.FindRecord(x => x.Name == dimensionFieldMapping.FieldName);
-                      ///  record.Type.ConvertFilterMethod()
+                        if(record !=null)
+                        {
+                            var recordFilter = record.Type.ConvertToRecordFilter(dimensionFilter.FilterValues);
+                            recordFilter.FieldName = record.Name;
+                            if (recordFilterGroup.Filters == null)
+                                recordFilterGroup.Filters = new List<RecordFilter>();
+                            recordFilterGroup.Filters.Add(recordFilter);
+                        }
+                       
                     }
-                   
                 }
-                
             }
-
-          
             return recordFilterGroup;
         }
 

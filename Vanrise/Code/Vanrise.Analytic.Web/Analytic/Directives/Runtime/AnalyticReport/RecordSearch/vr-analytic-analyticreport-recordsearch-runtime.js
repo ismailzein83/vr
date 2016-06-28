@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RecordSearchAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_OrderDirectionEnum', 'VRValidationService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_DataRecordTypeService','PeriodEnum'];
+    RecordSearchAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_OrderDirectionEnum', 'VRValidationService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_DataRecordTypeService','PeriodEnum','VR_Analytic_AnalyticAPIService'];
 
-    function RecordSearchAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_OrderDirectionEnum, VRValidationService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_DataRecordTypeService, PeriodEnum) {
+    function RecordSearchAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_OrderDirectionEnum, VRValidationService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_DataRecordTypeService, PeriodEnum, VR_Analytic_AnalyticAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -107,6 +107,19 @@
                     if (payload != undefined) {
                         settings = payload.settings;
                         itemActionSettings = payload.itemActionSettings;
+                        if(itemActionSettings != undefined)
+                        {
+                            var input = {
+                                DimensionFilters: itemActionSettings.DimensionFilters,
+                                ReportId: itemActionSettings.AnalyticReportId,
+                                SourceName: itemActionSettings.SourceName,
+                                TableId: itemActionSettings.TableId,
+                            };
+                            VR_Analytic_AnalyticAPIService.GetRecordSearchFilterGroup(input).then(function (response) {
+                                filterObj = response;
+                            });
+                        }
+                       
                     }
                     var loadPromiseDeffer = UtilsService.createPromiseDeferred();
                     UtilsService.waitMultipleAsyncOperations([setSourceSelector, setStaticData, loadTimeRangeDirective]).then(function () {

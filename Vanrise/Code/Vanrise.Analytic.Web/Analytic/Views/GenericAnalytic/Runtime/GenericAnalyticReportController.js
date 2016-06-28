@@ -22,6 +22,8 @@
             if (parameters != null) {
                 analyticReportId = parameters.analyticReportId;
                 itemActionSettings = parameters.settings;
+                if (itemActionSettings != undefined )
+                  itemActionSettings.AnalyticReportId = analyticReportId;
             }
         }
 

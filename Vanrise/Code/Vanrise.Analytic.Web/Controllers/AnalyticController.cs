@@ -22,7 +22,7 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticManager manager = new AnalyticManager();
             return GetWebResponse(input, manager.GetFilteredRecords(input));
         }
-        [HttpGet]
+        [HttpPost]
         [Route("GetRecordSearchFilterGroup")]
         public RecordFilterGroup GetRecordSearchFilterGroup(RecordSearchFilterGroupInput input)
         {

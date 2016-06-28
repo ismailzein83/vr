@@ -55,10 +55,11 @@
                 analyticReportId: itemAction.ReportId,
                 settings: {
                     SourceName: itemAction.SourceName,
-                    DimensionValues: settings.DimensionValues,
+                    DimensionFilters: settings.DimensionFilters,
                     FilterGroup: settings.FilterGroup,
                     FromDate: settings.FromDate,
                     ToDate: settings.ToDate,
+                    TableId:settings.TableId
                 },
             };
             var modalSettings = {

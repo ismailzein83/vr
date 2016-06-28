@@ -151,7 +151,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return new Vanrise.Entities.GridColumnAttribute() { Type = type, NumberPrecision = "NoDecimal" };
         }
 
-        public override RecordFilter ConvertToRecordFilter(object filterValue)
+        public override RecordFilter ConvertToRecordFilter(List<Object> filterValue)
         {
             throw new NotImplementedException();
         }

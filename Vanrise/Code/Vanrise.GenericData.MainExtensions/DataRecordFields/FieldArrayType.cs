@@ -43,7 +43,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             throw new NotImplementedException();
         }
 
-        public override RecordFilter ConvertToRecordFilter(object filterValue)
+        public override RecordFilter ConvertToRecordFilter(List<Object> filterValues)
         {
             throw new NotImplementedException();
         }

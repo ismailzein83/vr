@@ -593,11 +593,19 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                             var settings = {
                                 FromDate: payload.FromTime,
                                 ToDate: payload.ToTime,
-                                FilterGroup: payload.FilterGroup
+                                FilterGroup: payload.FilterGroup,
+                                TableId: tableId,
+                                ReportId:1
                             }
                             ctrl.gridMenuActions.push({
                                 name: itemAction.Title,
-                                clicked: function () {
+                                clicked: function (dataItem) {
+                                    var dimensionValues = [];
+                                    dimensionValues.push({
+                                        Dimension: payload.SelectedGroupingDimensions[0].DimensionName,
+                                        FilterValues: [dataItem.DimensionValues[0].Value]
+                                    });
+                                    settings.DimensionFilters = dimensionValues;
                                     return VR_Analytic_AnalyticItemActionService.excuteItemAction(itemAction, settings);
                                 },
                             });
