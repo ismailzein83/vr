@@ -21,6 +21,7 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         public bool RequiresSupllierAMUId { get; set; }
 
         public bool RequiresGroupByCustomer { get; set; }
+        public bool RequiresGroupByProfile { get; set; }
 
         public bool RequiresIsCost { get; set; }
 

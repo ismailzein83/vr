@@ -58,7 +58,7 @@
     <Compile Include="BillingReport\DailySummary\DailySummary.cs" />
     <Compile Include="BillingReport\DailySummary\DailySummaryFormatted.cs" />
     <Compile Include="BillingReport\IReportGenerator.cs" />
-    <Compile Include="BillingReport\LossesByCarrier\LossesByCarrierFormatted.cs" />
+    <Compile Include="BillingReport\LossesByCarrier\LossesByCarrier.cs" />
     <Compile Include="BillingReport\ProfitByCustomer\ProfitByCustomer.cs" />
     <Compile Include="BillingReport\ProfitByCustomer\ProfitByCustomerFormatted.cs" />
     <Compile Include="BillingReport\LossesByZones\LossesByZones.cs" />
@@ -67,11 +67,12 @@
     <Compile Include="BillingReport\RDLCReportDefinition.cs" />
     <Compile Include="BillingReport\ReportParameters.cs" />
     <Compile Include="BillingReport\ReportParameterSettings.cs" />
-    <Compile Include="BillingReport\ProfitByZone\ProfitByZoneFormatted.cs" />
-    <Compile Include="BillingReport\DetailedBillingByZone\DetailedBillingByZoneFormatted.cs" />
+    <Compile Include="BillingReport\ProfitByZone\ProfitByZone.cs" />
+    <Compile Include="BillingReport\DetailedBillingByZone\DetailedBillingByZone.cs" />
     <Compile Include="BillingReport\RoutingAnalysis\RoutingAnalysis.cs" />
     <Compile Include="BillingReport\RoutingAnalysis\RoutingAnalysisFormatted.cs" />
-    <Compile Include="BillingReport\SummaryByZone\SummaryByZoneFormatted.cs" />
+    <Compile Include="BillingReport\SalesAndProfitsByCustomer\SalesAndProfitsByCustomer.cs" />
+    <Compile Include="BillingReport\SummaryByZone\SummaryByZone.cs" />
     <Compile Include="CDRLog\CDRLog.cs" />
     <Compile Include="CDRLog\CDRLogDetail.cs" />
     <Compile Include="CDRLog\CDRLogFilter.cs" />
