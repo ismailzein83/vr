@@ -9,11 +9,28 @@ using Vanrise.Analytic.Entities;
 using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 namespace Vanrise.Analytic.Business
 {
     public class AnalyticItemConfigManager
     {
         #region Public Methods
+
+        public AnalyticDimensionEditorRuntime GetAnalyticDimensionEditorRuntime(AnalyticDimensionEditorInput input)
+        {
+            AnalyticTableManager analyticTableManager = new AnalyticTableManager();
+            var analyticTable = analyticTableManager.GetAnalyticTableById(input.TableId);
+            AnalyticDimensionEditorRuntime analyticDimensionEditorRuntime = new AnalyticDimensionEditorRuntime();
+
+            if(analyticTable.Settings !=null && analyticTable.Settings.DataRecordTypeIds !=null)
+            {
+                DataRecordTypeInfoFilter filter = new DataRecordTypeInfoFilter { RecordTypeIds = analyticTable.Settings.DataRecordTypeIds };
+                DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
+                analyticDimensionEditorRuntime.DataRecordTypeInfo = dataRecordTypeManager.GetDataRecordTypeInfo(filter);
+            }
+            return analyticDimensionEditorRuntime;
+        }
         public Dictionary<string, AnalyticDimension> GetDimensions(int tableId)
         {
             string cacheName = String.Format("GetDimensions_{0}", tableId);

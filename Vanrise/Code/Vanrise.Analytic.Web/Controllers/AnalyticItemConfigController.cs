@@ -114,6 +114,13 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
             return manager.GetAnalyticItemConfigs(input.TableIds, input.ItemType);
         }
+        [HttpPost]
+        [Route("GetAnalyticDimensionEditorRuntime")]
+        public AnalyticDimensionEditorRuntime GetAnalyticDimensionEditorRuntime(AnalyticDimensionEditorInput input)
+        {
+            AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
+            return manager.GetAnalyticDimensionEditorRuntime(input);
+        }
 
     }
     public class AnalyticItemConfigFilterInput

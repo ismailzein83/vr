@@ -47,6 +47,9 @@
         function GetAnalyticItemConfigs(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetAnalyticItemConfigs"), input);
         }
+        function GetAnalyticDimensionEditorRuntime(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetAnalyticDimensionEditorRuntime"), input);
+        }
         return ({
             GetDimensionsInfo: GetDimensionsInfo,
             GetMeasuresInfo: GetMeasuresInfo,
@@ -56,7 +59,8 @@
             GetAnalyticItemConfigsById: GetAnalyticItemConfigsById,
             AddAnalyticItemConfig: AddAnalyticItemConfig,
             UpdateAnalyticItemConfig: UpdateAnalyticItemConfig,
-            GetAnalyticItemConfigs: GetAnalyticItemConfigs
+            GetAnalyticItemConfigs: GetAnalyticItemConfigs,
+            GetAnalyticDimensionEditorRuntime: GetAnalyticDimensionEditorRuntime
         });
     }
 

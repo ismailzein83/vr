@@ -1,19 +1,17 @@
-﻿<vr-columns width="fullrow">
+﻿<vr-tab header="'Settings'">
     <vr-row>
-        <vr-row>
-            <vr-columns width="1/3row">
-                <vr-select label="Expression Type" datasource="expressionType" selectedvalues="selectedExpressionType"
-                           datavaluefield="value" datatextfield="description" isrequired="true" onselectionchanged="onExpressionTypeSelectionChanged" hideremoveicon>
-            </vr-columns>
-        </vr-row>
-        <vr-row>
-            <vr-columns width="fullrow" ng-show="showSQLExpression">
-                <vr-textarea value="sqlExpression" label="SQL Expression" isrequired="showSQLExpression"></vr-textarea>
-            </vr-columns>
-            <vr-columns width="fullrow" ng-show="showSQLExpressionMethod">
-                <vr-textarea value="sqlExpressionMethod" label="SQL Expression Method" isrequired="showSQLExpressionMethod"></vr-textarea>
-            </vr-columns>
-        </vr-row>
+        <vr-columns width="1/3row">
+            <vr-select label="Expression Type" datasource="expressionType" selectedvalues="selectedExpressionType"
+                        datavaluefield="value" datatextfield="description" isrequired="true" onselectionchanged="onExpressionTypeSelectionChanged" hideremoveicon>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow" ng-show="showSQLExpression">
+            <vr-textarea value="sqlExpression" label="SQL Expression" isrequired="showSQLExpression"></vr-textarea>
+        </vr-columns>
+        <vr-columns width="fullrow" ng-show="showSQLExpressionMethod">
+            <vr-textarea value="sqlExpressionMethod" label="SQL Expression Method" isrequired="showSQLExpressionMethod"></vr-textarea>
+        </vr-columns>
     </vr-row>
     <vr-row>
         <vr-analytic-join-selector on-ready="onJoinSelectorDirectiveReady" normal-col-num="4" ismultipleselection></vr-analytic-join-selector>
@@ -23,13 +21,30 @@
         <vr-analytic-dimension-selector on-ready="onParentDimensionSelectorDirectiveReady" normal-col-num="4" customlabel="Parent Dimensions" ismultipleselection></vr-analytic-dimension-selector>
 
         <vr-analytic-dimension-selector on-ready="onRequiredParentDimensionSelectorDirectiveReady" normal-col-num="4" customlabel="Required Parent Dimension"></vr-analytic-dimension-selector>
-
-
     </vr-row>
-</vr-columns>
 
-<vr-columns width="fullrow">
     <vr-row>
         <vr-genericdata-fieldtype-selective on-ready="onFieldTypeReady" isrequired="true"></vr-genericdata-fieldtype-selective>
     </vr-row>
-</vr-columns>
+</vr-tab>
+<vr-tab header="'Mapping Record Fields'">
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-section title="Dimension Mapping Fields">
+                <vr-datagrid datasource="dimensionFieldMappings"
+                             on-ready="onGridReady"
+                             dataretrievalfunction="dataRetrievalFunction"
+                             pagingtype="'PagingOnScroll'"
+                             menuactions="gridMenuActions"
+                             idfield="Entity.DataRecordTypeId">
+
+                    <vr-datagridcolumn headertext="'Type Name'" field="'Name'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Field Name'" type="'Text'" disablesorting="true">
+                        <vr-genericdata-datarecordtypefields-selector on-ready="dataItem.onDataRecordTypeFieldsSelectorReady" hidelabel></vr-genericdata-datarecordtypefields-selector>
+                    </vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-section>
+            
+        </vr-columns>
+    </vr-row>
+</vr-tab>

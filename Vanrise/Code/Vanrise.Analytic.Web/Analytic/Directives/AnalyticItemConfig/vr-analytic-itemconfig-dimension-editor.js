@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ItemconfigDimensionEditorDirective.$inject = ['UtilsService', 'VRUIUtilsService','VR_Analytic_ExpressionTypeEnum'];
+    ItemconfigDimensionEditorDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_Analytic_ExpressionTypeEnum', 'VR_Analytic_AnalyticItemConfigAPIService'];
 
-    function ItemconfigDimensionEditorDirective(UtilsService, VRUIUtilsService, VR_Analytic_ExpressionTypeEnum) {
+    function ItemconfigDimensionEditorDirective(UtilsService, VRUIUtilsService, VR_Analytic_ExpressionTypeEnum, VR_Analytic_AnalyticItemConfigAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -48,7 +48,7 @@
 
             function initializeController() {
                 $scope.expressionType = UtilsService.getArrayEnum(VR_Analytic_ExpressionTypeEnum);
-
+                $scope.dimensionFieldMappings = [];
                 $scope.showSQLExpression = true;
                 $scope.showSQLExpressionMethod = false;
                 $scope.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpression;
@@ -112,6 +112,53 @@
                             }
                           
                         }
+
+
+                        getAnalyticDimensionEditorRuntime(tableId).then(function (response) {
+                            $scope.dimensionFieldMappings.length = 0;
+                            if (response && response.DataRecordTypeInfo != undefined)
+                            {
+                                for (var i = 0; i < response.DataRecordTypeInfo.length; i++) {
+                                    var filterItem = {
+                                        payload: response.DataRecordTypeInfo[i],
+                                        readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                    };
+                                    promises.push(filterItem.loadPromiseDeferred.promise);
+                                    addFilterItemToGrid(filterItem);
+                                }
+                            }
+                                
+                          });
+
+                        function addFilterItemToGrid(filterItem) {
+                          
+                            var dataItem = {
+                                Name: filterItem.payload.Name,
+                                DataRecordTypeId: filterItem.payload.DataRecordTypeId,
+                            };
+                            var dataItemPayload = { dataRecordTypeId: filterItem.payload.DataRecordTypeId,  };
+
+                            if (configEntity != undefined)
+                            {
+                                var selectedRecordField = UtilsService.getItemByVal(configEntity.DimensionFieldMappings,filterItem.payload.DataRecordTypeId,"DataRecordTypeId");
+                                if (selectedRecordField != undefined)
+                                    dataItemPayload.selectedIds = selectedRecordField.FieldName;
+                            }
+                            dataItem.onDataRecordTypeFieldsSelectorReady = function (api) {
+                                dataItem.directiveAPI = api;
+                                filterItem.readyPromiseDeferred.resolve();
+                            };
+
+                            filterItem.readyPromiseDeferred.promise
+                                .then(function () {
+                                    VRUIUtilsService.callDirectiveLoad(dataItem.directiveAPI, dataItemPayload, filterItem.loadPromiseDeferred);
+                                });
+
+                            $scope.dimensionFieldMappings.push(dataItem);
+                        }
+
+
                         var loadJoinDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         joinReadyDeferred.promise.then(function () {
                             var payloadJoinDirective = {
@@ -178,6 +225,19 @@
                     var requiredParentDimension = requiredParentDimensionSelectorAPI != undefined ? requiredParentDimensionSelectorAPI.getSelectedIds() : undefined;
                     var dependentDimensions = dependentDimensionSelectorAPI != undefined ? dependentDimensionSelectorAPI.getSelectedIds() : undefined;
 
+                    var dimensionFieldMappings = [];
+                    if($scope.dimensionFieldMappings.length >0)
+                    {
+                        for(var i=0;i<$scope.dimensionFieldMappings.length;i++)
+                        {
+                            var dimensionFieldMapping = $scope.dimensionFieldMappings[i];
+                            dimensionFieldMappings.push({
+                                DataRecordTypeId:dimensionFieldMapping.DataRecordTypeId,
+                                FieldName: dimensionFieldMapping.directiveAPI.getSelectedIds()
+                            });
+                        }
+                    }
+
                     var dimension = {
                         $type: "Vanrise.Analytic.Entities.AnalyticDimensionConfig ,Vanrise.Analytic.Entities",
                         SQLExpression: $scope.showSQLExpression ? $scope.sqlExpression : undefined,
@@ -186,7 +246,8 @@
                         JoinConfigNames: joinConfigNames,
                         Parents: parents,
                         RequiredParentDimension: requiredParentDimension,
-                        FieldType:fieldType,
+                        FieldType: fieldType,
+                        DimensionFieldMappings: dimensionFieldMappings
                      
                     };
                     return dimension;
@@ -195,6 +256,10 @@
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
+            }
+            function getAnalyticDimensionEditorRuntime(tableId)
+            {
+                return   VR_Analytic_AnalyticItemConfigAPIService.GetAnalyticDimensionEditorRuntime({ TableId: tableId })
             }
         }
     }

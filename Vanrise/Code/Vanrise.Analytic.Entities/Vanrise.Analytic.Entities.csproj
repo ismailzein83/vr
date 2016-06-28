@@ -80,6 +80,8 @@
     <Compile Include="Config\Dimension\AnalyticDimensionConfigInfo.cs" />
     <Compile Include="Config\Dimension\AnalyticDimensionConfigInfoFilter.cs" />
     <Compile Include="Config\Dimension\AnalyticDimensionConfigQuery.cs" />
+    <Compile Include="Config\Dimension\AnalyticDimensionEditorInput.cs" />
+    <Compile Include="Config\Dimension\AnalyticDimensionEditorRuntime.cs" />
     <Compile Include="Config\Dimension\IDimensionEvaluator.cs" />
     <Compile Include="Config\Join\AnalyticJoin.cs" />
     <Compile Include="Config\Join\AnalyticJoinConfigInfo.cs" />
