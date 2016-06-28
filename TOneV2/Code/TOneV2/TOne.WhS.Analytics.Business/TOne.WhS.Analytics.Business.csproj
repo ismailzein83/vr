@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="BillingReports\CostBySaleZoneReportGenerator.cs" />
     <Compile Include="BillingReports\CostBySaleZoneSupplierReportGenerator.cs" />
+    <Compile Include="BillingReports\ProfitByCarrierReportGenerator.cs" />
     <Compile Include="BillingReports\ProfitByCustomerReportGenerator.cs" />
     <Compile Include="BillingReports\DetailedBillingByCarrierReportGenerator.cs" />
     <Compile Include="BillingReports\DailySummaryForcastingReportGenerator.cs" />
