@@ -185,7 +185,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             var effectiveCustomerSellingProduct = GetEffectiveSellingProduct(customerId, DateTime.Now, false);
 
-            if (customerSellingProduct.BED.Date < DateTime.Now.Date || (effectiveCustomerSellingProduct != null && customerSellingProduct.BED < effectiveCustomerSellingProduct.BED))
+            if (customerSellingProduct.BED < DateTime.Now || (effectiveCustomerSellingProduct != null && customerSellingProduct.BED < effectiveCustomerSellingProduct.BED))
             {
                 return updateOperationOutput;
             }
