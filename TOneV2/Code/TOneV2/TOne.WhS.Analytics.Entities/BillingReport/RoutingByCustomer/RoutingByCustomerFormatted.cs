@@ -12,17 +12,17 @@ namespace TOne.WhS.Analytics.Entities.BillingReport.RoutingByCustomer
 
         public string Destination { get; set; }
 
-        public string SaleDuration { get; set; }
-
         public string SaleRate { get; set; }
 
         public string Supplier { get; set; }
 
-        public string CostDuration { get; set; }
-
         public string CostRate { get; set; }
-
-        public string Profit { get; set; }
+        public double? Profit { get; set; }
+        public double? SaleNet { get; set; }
+        public double? CostNet { get; set; }
+        public string ProfitFormatted { get; set; }
         public string ProfitPerc { get; set; }
+        public string CostDuration { get; set; }
+        public string SaleDuration { get; set; }
     }
 }
