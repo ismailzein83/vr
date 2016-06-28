@@ -73,6 +73,8 @@
     <Compile Include="BillingReport\RoutingAnalysis\RoutingAnalysisFormatted.cs" />
     <Compile Include="BillingReport\RoutingByCustomer\RoutingByCustomer.cs" />
     <Compile Include="BillingReport\RoutingByCustomer\RoutingByCustomerFormatted.cs" />
+    <Compile Include="BillingReport\SalesAndProfitsByCustomer\ProfitSummary.cs" />
+    <Compile Include="BillingReport\SalesAndProfitsByCustomer\SaleAmountSummary.cs" />
     <Compile Include="BillingReport\SalesAndProfitsByCustomer\SalesAndProfitsByCustomer.cs" />
     <Compile Include="BillingReport\SummaryByZone\SummaryByZone.cs" />
     <Compile Include="CDRLog\CDRLog.cs" />
