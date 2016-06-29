@@ -36,9 +36,9 @@
             var joinReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-            
-                $scope.analyticAggregateTypes = UtilsService.getArrayEnum(VR_Analytic_AnalyticAggregateTypeEnum);
-                $scope.onJoinSelectorDirectiveReady = function (api) {
+                $scope.scopeModel = {};
+                $scope.scopeModel.analyticAggregateTypes = UtilsService.getArrayEnum(VR_Analytic_AnalyticAggregateTypeEnum);
+                $scope.scopeModel.onJoinSelectorDirectiveReady = function (api) {
                     joinSelectorAPI = api;
                     joinReadyDeferred.resolve();
                 }
@@ -60,9 +60,9 @@
                         configEntity = payload.ConfigEntity;
                         if (configEntity != undefined)
                         {
-                            $scope.sqlColumn = configEntity.SQLColumn;
-                            $scope.selectedAnalyticAggregateType = UtilsService.getItemByVal($scope.analyticAggregateTypes, configEntity.AggregateType, "value");
-                            $scope.currencySQLColumnName = configEntity.CurrencySQLColumnName;
+                            $scope.scopeModel.sqlColumn = configEntity.SQLColumn;
+                            $scope.scopeModel.selectedAnalyticAggregateType = UtilsService.getItemByVal($scope.scopeModel.analyticAggregateTypes, configEntity.AggregateType, "value");
+                            $scope.scopeModel.currencySQLColumnName = configEntity.CurrencySQLColumnName;
 
                         }
                         var loadJoinDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -84,13 +84,13 @@
 
                 api.getData = function () {
                     var joinConfigNames  = joinSelectorAPI !=undefined?joinSelectorAPI.getSelectedIds():undefined;
-
+                    console.log($scope.scopeModel.sqlColumn);
                     var dimension = {
                         $type: "Vanrise.Analytic.Entities.AnalyticAggregateConfig ,Vanrise.Analytic.Entities",
-                        SQLColumn: $scope.sqlColumn,
-                        AggregateType: $scope.selectedAnalyticAggregateType.value,
+                        SQLColumn: $scope.scopeModel.sqlColumn,
+                        AggregateType: $scope.scopeModel.selectedAnalyticAggregateType.value,
                         JoinConfigNames: joinConfigNames,
-                        CurrencySQLColumnName: $scope.currencySQLColumnName,
+                        CurrencySQLColumnName: $scope.scopeModel.currencySQLColumnName,
                     };
                     return dimension;
                 }
