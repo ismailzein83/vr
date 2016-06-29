@@ -15,14 +15,15 @@ namespace Mediation.Generic.BP.Activities
         public InArgument<int> MediationDefinitionId { get; set; }
 
         [RequiredArgument]
-        public OutArgument<MediationDefinition> MediationDefinition { get; set; }
+        public InOutArgument<MediationDefinition> MediationDefinition { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
+            int mediationDefinitionId = MediationDefinitionId.Get(context);
             MediationDefinitionManager mediationDefinitionManager = new MediationDefinitionManager();
-            var mediationDefinition = mediationDefinitionManager.GetMediationDefinition(MediationDefinitionId.Get(context));
+            var mediationDefinition = mediationDefinitionManager.GetMediationDefinition(mediationDefinitionId);
             if (mediationDefinition == null)
-                throw new NullReferenceException("GetMediationDefinition: mediationDefinition");
+                throw new NullReferenceException(string.Format("GetMediationDefinition: mediationDefinitionId {0}", mediationDefinitionId));
             MediationDefinition.Set(context, mediationDefinition);
         }
     }

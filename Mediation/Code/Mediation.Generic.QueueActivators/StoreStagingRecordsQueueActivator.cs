@@ -20,7 +20,7 @@ namespace Mediation.Generic.QueueActivators
 
         public override void ProcessItem(IQueueActivatorExecutionContext context)
         {
-            IStoreStagingRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IStoreStagingRecordsDataManager>();
+            IMediationRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMediationRecordsDataManager>();
 
             MediationDefinitionManager mediationManager = new MediationDefinitionManager();
             MediationDefinition mediationDefinition = mediationManager.GetMediationDefinition(MediationDefinitionId);
@@ -33,25 +33,26 @@ namespace Mediation.Generic.QueueActivators
 
             RecordFilterManager filterManager = new RecordFilterManager();
 
-            List<StoreStagingRecord> storeStagingRecords = new List<StoreStagingRecord>();
+            List<MediationRecord> mediationRecords = new List<MediationRecord>();
             foreach (var batchRecord in batchRecords)
             {
                 DataRecordFilterGenericFieldMatchContext dataRecordFilterContext = new DataRecordFilterGenericFieldMatchContext(batchRecord, recordTypeId);
-                StoreStagingRecord storeStagingRecord = new StoreStagingRecord();
-                storeStagingRecord.SessionId = (long)GetPropertyValue(batchRecord, mediationDefinition.ParsedRecordIdentificationSetting.SessionIdField);
-                storeStagingRecord.EventTime = (DateTime)GetPropertyValue(batchRecord, mediationDefinition.ParsedRecordIdentificationSetting.EventTimeField);
+                MediationRecord mediationRecord = new MediationRecord();
+                mediationRecord.SessionId = (long)GetPropertyValue(batchRecord, mediationDefinition.ParsedRecordIdentificationSetting.SessionIdField);
+                mediationRecord.EventTime = (DateTime)GetPropertyValue(batchRecord, mediationDefinition.ParsedRecordIdentificationSetting.EventTimeField);
                 foreach (var statusMapping in mediationDefinition.ParsedRecordIdentificationSetting.StatusMappings)
                 {
                     if (filterManager.IsFilterGroupMatch(statusMapping.FilterGroup, dataRecordFilterContext))
                     {
-                        storeStagingRecord.EventStatus = statusMapping.Status;
+                        mediationRecord.EventStatus = statusMapping.Status;
                         break;
                     }
                 }
-                storeStagingRecord.EventDetails = batchRecord;
-                storeStagingRecords.Add(storeStagingRecord);
+                mediationRecord.EventDetails = batchRecord;
+                mediationRecord.MediationDefinitionId = mediationDefinition.MediationDefinitionId;
+                mediationRecords.Add(mediationRecord);
             }
-            dataManager.SaveStoreStagingRecordsToDB(storeStagingRecords);
+            dataManager.SaveMediationRecordsToDB(mediationRecords);
         }
 
         object GetPropertyValue(object batchRecord, string propertyName)

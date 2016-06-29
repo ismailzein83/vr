@@ -63,7 +63,7 @@
   <ItemGroup>
     <Compile Include="MediationDefinitionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StoreStagingRecordsManager.cs" />
+    <Compile Include="MediationRecordsManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mediation.Generic.Data.SQL\Mediation.Generic.Data.SQL.csproj">

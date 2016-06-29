@@ -59,6 +59,10 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
@@ -74,12 +78,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplyTransformationRecordsToDB.cs" />
+    <Compile Include="GetDataTransormationDefinition.cs" />
     <Compile Include="GetMediationDefinition.cs" />
-    <Compile Include="GetStoreStagingEventIds.cs" />
-    <Compile Include="LoadStoreStagingRecordsByIds.cs" />
-    <Compile Include="LoadStoreStagingRecordsByStatus.cs" />
+    <Compile Include="GetMediationEventIds.cs" />
+    <Compile Include="LoadMediationRecordsByIds.cs" />
+    <Compile Include="LoadMediationRecordsByStatus.cs" />
     <Compile Include="PrepareTransormationRecordsForDBApply.cs" />
-    <Compile Include="ProcessStagingRecordsBatch.cs" />
+    <Compile Include="ProcessMediationRecordsBatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

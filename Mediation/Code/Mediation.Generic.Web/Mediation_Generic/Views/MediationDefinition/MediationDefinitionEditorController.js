@@ -432,7 +432,8 @@
                 ParsedRecordTypeId: dataParsedRecordTypeSelectorAPI.getSelectedIds(),
                 CookedRecordTypeId: dataCookedRecordTypeSelectorAPI.getSelectedIds(),
                 ParsedRecordIdentificationSetting: getParsedRecordIdentificationSetting(),
-                CookedFromParsedSettings: getCookedFromParsedSettings()
+                CookedFromParsedSettings: getCookedFromParsedSettings(),
+                CookedCDRDataStoreSetting: getCookedCDRDataStoreSetting()
             }
             return item;
         }
@@ -503,6 +504,12 @@
                 TransformationDefinitionId: dataTransformationDefinitionInsertSelectorAPI.getSelectedIds(),
                 ParsedRecordName: dataTransformationDefinitionRecordParsedSelectorAPI.getSelectedIds(),
                 CookedRecordName: dataTransformationDefinitionRecordCookedSelectorAPI.getSelectedIds()
+            };
+        }
+
+        function getCookedCDRDataStoreSetting() {
+            return {
+                DataRecordStorageId: dataStoreSelectorAPI.getSelectedIds()
             };
         }
 

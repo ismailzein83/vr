@@ -61,23 +61,82 @@
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
+    <Reference Include="System.Activities.DurableInstancing" />
+    <Reference Include="System.Activities.Presentation" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.DurableInstancing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activities" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Workflow.Runtime" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Business">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Client">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Data.SQL">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Extensions">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Extensions.WFTaskAction">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.WFTaskAction.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.MainExtensions">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.WFActivities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Caching">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Data">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data.MySQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.MySQL.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Data.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
@@ -127,30 +186,6 @@
     </Reference>
     <Reference Include="Vanrise.GenericData.Transformation.MainExtensions">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.MainExtensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Integration.Adapters.FileReceiveAdapter">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FileReceiveAdapter.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Integration.Adapters.FTPReceiveAdapter">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FTPReceiveAdapter.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Integration.Adapters.MySQLReceiveAdapter">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.MySQLReceiveAdapter.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Integration.Adapters.SFTPReceiveAdapter">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.SFTPReceiveAdapter.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Integration.Adapters.SQLReceiveAdapter">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.SQLReceiveAdapter.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Integration.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Business.dll</HintPath>
@@ -206,6 +241,21 @@
     <Reference Include="Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ITask.cs" />
@@ -229,6 +279,22 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mediation.Generic.BP.Activities\Mediation.Generic.BP.Activities.csproj">
+      <Project>{4afafb2b-67cd-465e-85c5-7ee41316fad3}</Project>
+      <Name>Mediation.Generic.BP.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mediation.Generic.BP.Arguments\Mediation.Generic.BP.Arguments.csproj">
+      <Project>{c08816b3-1e52-4d76-8cfa-2672a00fac64}</Project>
+      <Name>Mediation.Generic.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mediation.Generic.BP\Mediation.Generic.BP.csproj">
+      <Project>{904e691d-ed2c-4b47-997a-eea12c2f4710}</Project>
+      <Name>Mediation.Generic.BP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mediation.Generic.Business\Mediation.Generic.Business.csproj">
+      <Project>{6ce07a51-00db-4ce7-bd4a-45a9eb8a5d10}</Project>
+      <Name>Mediation.Generic.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mediation.Generic.Data.SQL\Mediation.Generic.Data.SQL.csproj">
       <Project>{bac8dc29-0eed-4cf2-9174-2d5e6d8cdd11}</Project>
       <Name>Mediation.Generic.Data.SQL</Name>

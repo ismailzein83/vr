@@ -1,17 +1,24 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Mediation.Generic.BP.MediationProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
  xmlns:mgba="clr-namespace:Mediation.Generic.BP.Arguments;assembly=Mediation.Generic.BP.Arguments"
+ xmlns:mgba1="clr-namespace:Mediation.Generic.BP.Activities;assembly=Mediation.Generic.BP.Activities"
+ xmlns:mge="clr-namespace:Mediation.Generic.Entities;assembly=Mediation.Generic.Entities"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vgte="clr-namespace:Vanrise.GenericData.Transformation.Entities;assembly=Vanrise.GenericData.Transformation.Entities"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(mgba:MediationProcessInput)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Mediation.Generic.BP.MediationProcess_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System</x:String>
@@ -20,31 +27,258 @@
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
       <x:String>Mediation.Generic.BP.Arguments</x:String>
+      <x:String>Mediation.Generic.Entities</x:String>
+      <x:String>Vanrise.GenericData.Transformation.Entities</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>Vanrise.Queueing</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
-      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
-      <AssemblyReference>System.Data</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Business</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Transformation.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>Mediation.Generic.BP.Activities</AssemblyReference>
       <AssemblyReference>Mediation.Generic.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Mediation.Generic.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Mediation.Generic.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="Sequence_Main" sap2010:WorkflowViewState.IdRef="Sequence_1" sads:DebugSymbol.Symbol="d0BDOlxURlNcTWVkaWF0aW9uXENvZGVcTWVkaWF0aW9uLkdlbmVyaWMuQlBcTWVkaWF0aW9uUHJvY2Vzcy54YW1sASQDJIsBAgEB" />
-  <sap2010:WorkflowViewState.IdRef>Mediation.Generic.BP.MediationProcess_1</sap2010:WorkflowViewState.IdRef>
+  <Sequence DisplayName="Sequence_Main" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="mge:MediationDefinition" Name="mediationDefinition" />
+      <Variable x:TypeArguments="vgte:DataTransformationDefinition" Name="dataTransformationDefinition" />
+      <Variable x:TypeArguments="scg:IEnumerable(mge:MediationRecord)" Name="mediationRecords">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(mge:MediationRecord)">new List&lt;MediationRecord&gt;()</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="scg:IEnumerable(x:Int64)" Name="eventIds">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int64)">new List&lt;Int64&gt;()</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+    </Sequence.Variables>
+    <mgba1:GetMediationDefinition sap2010:WorkflowViewState.IdRef="GetMediationDefinition_1">
+      <mgba1:GetMediationDefinition.MediationDefinition>
+        <InOutArgument x:TypeArguments="mge:MediationDefinition">
+          <mca:CSharpReference x:TypeArguments="mge:MediationDefinition">mediationDefinition</mca:CSharpReference>
+        </InOutArgument>
+      </mgba1:GetMediationDefinition.MediationDefinition>
+      <mgba1:GetMediationDefinition.MediationDefinitionId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.MediationDefinitionId</mca:CSharpValue>
+        </InArgument>
+      </mgba1:GetMediationDefinition.MediationDefinitionId>
+    </mgba1:GetMediationDefinition>
+    <mgba1:GetDataTransormationDefinition sap2010:WorkflowViewState.IdRef="GetDataTransormationDefinition_1">
+      <mgba1:GetDataTransormationDefinition.DataTransformationDefinition>
+        <InOutArgument x:TypeArguments="vgte:DataTransformationDefinition">
+          <mca:CSharpReference x:TypeArguments="vgte:DataTransformationDefinition">dataTransformationDefinition</mca:CSharpReference>
+        </InOutArgument>
+      </mgba1:GetDataTransormationDefinition.DataTransformationDefinition>
+      <mgba1:GetDataTransormationDefinition.TransformationDefinitionId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">mediationDefinition.CookedFromParsedSettings.TransformationDefinitionId</mca:CSharpValue>
+        </InArgument>
+      </mgba1:GetDataTransormationDefinition.TransformationDefinitionId>
+    </mgba1:GetDataTransormationDefinition>
+    <mgba1:LoadMediationRecordsByStatus sap2010:WorkflowViewState.IdRef="LoadMediationRecordsByStatus_1">
+      <mgba1:LoadMediationRecordsByStatus.DataRecordTypeId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">mediationDefinition.ParsedRecordTypeId</mca:CSharpValue>
+        </InArgument>
+      </mgba1:LoadMediationRecordsByStatus.DataRecordTypeId>
+      <mgba1:LoadMediationRecordsByStatus.MediationDefinitionId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">mediationDefinition.MediationDefinitionId</mca:CSharpValue>
+        </InArgument>
+      </mgba1:LoadMediationRecordsByStatus.MediationDefinitionId>
+      <mgba1:LoadMediationRecordsByStatus.MediationRecords>
+        <OutArgument x:TypeArguments="scg:IEnumerable(mge:MediationRecord)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(mge:MediationRecord)">mediationRecords</mca:CSharpReference>
+        </OutArgument>
+      </mgba1:LoadMediationRecordsByStatus.MediationRecords>
+      <mgba1:LoadMediationRecordsByStatus.Status>
+        <InArgument x:TypeArguments="mge:EventStatus">
+          <mca:CSharpValue x:TypeArguments="mge:EventStatus">EventStatus.Stop</mca:CSharpValue>
+        </InArgument>
+      </mgba1:LoadMediationRecordsByStatus.Status>
+    </mgba1:LoadMediationRecordsByStatus>
+    <mgba1:GetMediationEventIds sap2010:WorkflowViewState.IdRef="GetMediationEventIds_1">
+      <mgba1:GetMediationEventIds.EventIds>
+        <OutArgument x:TypeArguments="scg:IEnumerable(x:Int64)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(x:Int64)">eventIds</mca:CSharpReference>
+        </OutArgument>
+      </mgba1:GetMediationEventIds.EventIds>
+      <mgba1:GetMediationEventIds.MediationRecords>
+        <InArgument x:TypeArguments="scg:IEnumerable(mge:MediationRecord)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(mge:MediationRecord)">mediationRecords</mca:CSharpValue>
+        </InArgument>
+      </mgba1:GetMediationEventIds.MediationRecords>
+    </mgba1:GetMediationEventIds>
+    <Parallel DisplayName="Parallel_ProcessMediationCDRs" sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <Parallel.Variables>
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadMediationRecordsStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(mge:MediationRecordBatch)" Name="queueMediationRecordsBatch">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(mge:MediationRecordBatch)">new MemoryQueue&lt;MediationRecordBatch&gt;()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="processMediationRecordsStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(mge:PreparedCdrBatch)" Name="queuePreparedCdrBatch">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(mge:PreparedCdrBatch)">new MemoryQueue&lt;PreparedCdrBatch&gt;()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareTransormationRecordsStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="queuePreparedTransformationRecords">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">new MemoryQueue&lt;Object&gt;()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
+      </Parallel.Variables>
+      <mgba1:LoadMediationRecordsByIds PreviousActivityStatus="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadMediationRecordsByIds_1">
+        <mgba1:LoadMediationRecordsByIds.EventIds>
+          <InArgument x:TypeArguments="scg:IEnumerable(x:Int64)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int64)">eventIds</mca:CSharpValue>
+          </InArgument>
+        </mgba1:LoadMediationRecordsByIds.EventIds>
+        <mgba1:LoadMediationRecordsByIds.MediationDefinition>
+          <InArgument x:TypeArguments="mge:MediationDefinition">
+            <mca:CSharpValue x:TypeArguments="mge:MediationDefinition">mediationDefinition</mca:CSharpValue>
+          </InArgument>
+        </mgba1:LoadMediationRecordsByIds.MediationDefinition>
+        <mgba1:LoadMediationRecordsByIds.MediationRecords>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(mge:MediationRecordBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(mge:MediationRecordBatch)">queueMediationRecordsBatch</mca:CSharpReference>
+          </InOutArgument>
+        </mgba1:LoadMediationRecordsByIds.MediationRecords>
+        <mgba1:LoadMediationRecordsByIds.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadMediationRecordsStatus</mca:CSharpReference>
+          </OutArgument>
+        </mgba1:LoadMediationRecordsByIds.Status>
+      </mgba1:LoadMediationRecordsByIds>
+      <mgba1:ProcessMediationRecordsBatch sap2010:WorkflowViewState.IdRef="ProcessMediationRecordsBatch_3">
+        <mgba1:ProcessMediationRecordsBatch.DataTransformationDefinition>
+          <InArgument x:TypeArguments="vgte:DataTransformationDefinition">
+            <mca:CSharpValue x:TypeArguments="vgte:DataTransformationDefinition">dataTransformationDefinition</mca:CSharpValue>
+          </InArgument>
+        </mgba1:ProcessMediationRecordsBatch.DataTransformationDefinition>
+        <mgba1:ProcessMediationRecordsBatch.MediationDefinition>
+          <InArgument x:TypeArguments="mge:MediationDefinition">
+            <mca:CSharpValue x:TypeArguments="mge:MediationDefinition">mediationDefinition</mca:CSharpValue>
+          </InArgument>
+        </mgba1:ProcessMediationRecordsBatch.MediationDefinition>
+        <mgba1:ProcessMediationRecordsBatch.MediationRecordsBatch>
+          <InArgument x:TypeArguments="vq:BaseQueue(mge:MediationRecordBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(mge:MediationRecordBatch)">queueMediationRecordsBatch</mca:CSharpValue>
+          </InArgument>
+        </mgba1:ProcessMediationRecordsBatch.MediationRecordsBatch>
+        <mgba1:ProcessMediationRecordsBatch.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(mge:PreparedCdrBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(mge:PreparedCdrBatch)">queuePreparedCdrBatch</mca:CSharpReference>
+          </InOutArgument>
+        </mgba1:ProcessMediationRecordsBatch.OutputQueue>
+        <mgba1:ProcessMediationRecordsBatch.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadMediationRecordsStatus</mca:CSharpValue>
+          </InArgument>
+        </mgba1:ProcessMediationRecordsBatch.PreviousActivityStatus>
+        <mgba1:ProcessMediationRecordsBatch.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">processMediationRecordsStatus</mca:CSharpReference>
+          </OutArgument>
+        </mgba1:ProcessMediationRecordsBatch.Status>
+      </mgba1:ProcessMediationRecordsBatch>
+      <mgba1:PrepareTransormationRecordsForDBApply sap2010:WorkflowViewState.IdRef="PrepareTransormationRecordsForDBApply_1">
+        <mgba1:PrepareTransormationRecordsForDBApply.DataRecordStorageId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">mediationDefinition.CookedCDRDataStoreSetting.DataRecordStorageId</mca:CSharpValue>
+          </InArgument>
+        </mgba1:PrepareTransormationRecordsForDBApply.DataRecordStorageId>
+        <mgba1:PrepareTransormationRecordsForDBApply.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedTransformationRecords</mca:CSharpReference>
+          </InOutArgument>
+        </mgba1:PrepareTransormationRecordsForDBApply.OutputQueue>
+        <mgba1:PrepareTransormationRecordsForDBApply.PreparedCdrBatch>
+          <InArgument x:TypeArguments="vq:BaseQueue(mge:PreparedCdrBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(mge:PreparedCdrBatch)">queuePreparedCdrBatch</mca:CSharpValue>
+          </InArgument>
+        </mgba1:PrepareTransormationRecordsForDBApply.PreparedCdrBatch>
+        <mgba1:PrepareTransormationRecordsForDBApply.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">processMediationRecordsStatus</mca:CSharpValue>
+          </InArgument>
+        </mgba1:PrepareTransormationRecordsForDBApply.PreviousActivityStatus>
+        <mgba1:PrepareTransormationRecordsForDBApply.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareTransormationRecordsStatus</mca:CSharpReference>
+          </OutArgument>
+        </mgba1:PrepareTransormationRecordsForDBApply.Status>
+      </mgba1:PrepareTransormationRecordsForDBApply>
+      <mgba1:ApplyTransformationRecordsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyTransformationRecordsToDB_1">
+        <mgba1:ApplyTransformationRecordsToDB.DataRecordStorageId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">mediationDefinition.CookedCDRDataStoreSetting.DataRecordStorageId</mca:CSharpValue>
+          </InArgument>
+        </mgba1:ApplyTransformationRecordsToDB.DataRecordStorageId>
+        <mgba1:ApplyTransformationRecordsToDB.InputQueue>
+          <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedTransformationRecords</mca:CSharpValue>
+          </InArgument>
+        </mgba1:ApplyTransformationRecordsToDB.InputQueue>
+        <mgba1:ApplyTransformationRecordsToDB.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareTransormationRecordsStatus</mca:CSharpValue>
+          </InArgument>
+        </mgba1:ApplyTransformationRecordsToDB.PreviousActivityStatus>
+      </mgba1:ApplyTransformationRecordsToDB>
+    </Parallel>
+    <sads:DebugSymbol.Symbol>d0BDOlxURlNcTWVkaWF0aW9uXENvZGVcTWVkaWF0aW9uLkdlbmVyaWMuQlBcTWVkaWF0aW9uUHJvY2Vzcy54YW1sK0QDhgIOAgEBSgtKhgECAQhPC09wAgECUwVeJAMBwgJfBWosAwG1AmsFgAEqAwGcAoEBBYwBIgMBjwKNAQWEAhACAQ5bC1tjAwHJAlYLVnMDAcMCZwtnjwEDAbwCYgtihgEDAbYCbgtubgMBrwJ4C3h9AwGpAnMLc3EDAaMCfQt9YAMBnQKJAQuJAXUDAZYChAELhAFpAwGQApIBDZIBlgECASeYAQ2YAY4BAgEbngENngF4AgEPogEHtwEpAwHeAbgBB9cBLAMBlQHYAQfyATUCAVjzAQeDAi4CATOvAQ2vAYsBAwGDArQBDbQBewMB9wGqAQ2qAW0DAesBpQENpQFjAwHfAcUBDcUBgwEDAdIBuwENuwGAAQMBxgHPAQ3PAXMDAboB1AEN1AF+AwGuAcABDcABbQMBogHKAQ3KAYIBAwGWAeoBDeoBdgMBiQHvAQ3vAYIBAgF94AEN4AGDAQIBceUBDeUBegIBZdsBDdsBiwECAVmAAg2AAnoCAUz7AQ37AXsCAUD2AQ32AYsBAgE0</sads:DebugSymbol.Symbol>
+  </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="200,99">
+      <sap2010:ViewStateData Id="GetMediationDefinition_1" sap:VirtualizedContainerService.HintSize="1034,22" />
+      <sap2010:ViewStateData Id="GetDataTransormationDefinition_1" sap:VirtualizedContainerService.HintSize="1034,22" />
+      <sap2010:ViewStateData Id="LoadMediationRecordsByStatus_1" sap:VirtualizedContainerService.HintSize="1034,22" />
+      <sap2010:ViewStateData Id="GetMediationEventIds_1" sap:VirtualizedContainerService.HintSize="1034,22" />
+      <sap2010:ViewStateData Id="LoadMediationRecordsByIds_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ProcessMediationRecordsBatch_3" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareTransormationRecordsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyTransformationRecordsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034,86" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1056,458">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Mediation.Generic.BP.MediationProcess_1" sap:VirtualizedContainerService.HintSize="240,179" />
+      <sap2010:ViewStateData Id="Mediation.Generic.BP.MediationProcess_1" sap:VirtualizedContainerService.HintSize="1096,538" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
