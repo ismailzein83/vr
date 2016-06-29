@@ -84,7 +84,6 @@
 
                 api.getData = function () {
                     var joinConfigNames  = joinSelectorAPI !=undefined?joinSelectorAPI.getSelectedIds():undefined;
-                    console.log($scope.scopeModel.sqlColumn);
                     var dimension = {
                         $type: "Vanrise.Analytic.Entities.AnalyticAggregateConfig ,Vanrise.Analytic.Entities",
                         SQLColumn: $scope.scopeModel.sqlColumn,
