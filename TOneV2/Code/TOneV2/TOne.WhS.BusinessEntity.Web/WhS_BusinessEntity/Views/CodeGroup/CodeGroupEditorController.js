@@ -23,7 +23,7 @@
                 countryId = parameters.CountryId;
             }
             editMode = (codeGroupId != undefined);
-            $scope.disableCountry = (countryId != undefined);
+            $scope.disableCountry = (codeGroupId != undefined);
             load();
         }
 
