@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.WhS.Analytics.Entities.BillingReport.ProfitByCarrier
+namespace TOne.WhS.Analytics.Entities.BillingReport
 {
     public class ProfitByCarrier
     {
