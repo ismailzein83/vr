@@ -12,26 +12,26 @@ namespace Mediation.Generic.Data.SQL
     public class MediationDefinitionDataManager : BaseSQLDataManager, IMediationDefinitionDataManager
     {
         public MediationDefinitionDataManager()
-            : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey"))
+            : base(GetConnectionStringName("Mediation_GenericConfig_DBConnStringKey", "Mediation_GenericConfig_DBConnString"))
         {
 
         }
 
         public List<MediationDefinition> GetMediationDefinitions()
         {
-            return GetItemsSP("[genericdata].[sp_MediationDefinition_GetAll]", MediationDefinitionMapper);
+            return GetItemsSP("[Mediation_Generic].[sp_MediationDefinition_GetAll]", MediationDefinitionMapper);
         }
 
         public bool AreMediationDefinitionsUpdated(ref object updateHandle)
         {
-            return base.IsDataUpdated("genericdata.MediationDefinition", ref updateHandle);
+            return base.IsDataUpdated("Mediation_Generic.MediationDefinition", ref updateHandle);
         }
 
         public bool UpdateMediationDefinition(MediationDefinition mediationDefinition)
         {
             string serializedObj = null;
             serializedObj = Vanrise.Common.Serializer.Serialize(mediationDefinition);
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_MediationDefinition_Update", mediationDefinition.MediationDefinitionId, mediationDefinition.Name, serializedObj);
+            int recordesEffected = ExecuteNonQuerySP("Mediation_Generic.sp_MediationDefinition_Update", mediationDefinition.MediationDefinitionId, mediationDefinition.Name, serializedObj);
             return (recordesEffected > 0);
         }
 
@@ -40,7 +40,7 @@ namespace Mediation.Generic.Data.SQL
             object mediationDefinitionID;
             string serializedObj = null;
             serializedObj = Vanrise.Common.Serializer.Serialize(mediationDefinition);
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_MediationDefinition_Insert", out mediationDefinitionID, mediationDefinition.Name, serializedObj);
+            int recordesEffected = ExecuteNonQuerySP("Mediation_Generic.sp_MediationDefinition_Insert", out mediationDefinitionID, mediationDefinition.Name, serializedObj);
             mediationDefinitionId = (recordesEffected > 0) ? (int)mediationDefinitionID : -1;
 
             return (recordesEffected > 0);

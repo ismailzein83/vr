@@ -9,8 +9,12 @@ using Vanrise.GenericData.Business;
 
 namespace Mediation.Generic.Data.SQL
 {
-    public class MediationRecordsDataManager : MediationGenericDataManager, IMediationRecordsDataManager
+    public class MediationRecordsDataManager : BaseSQLDataManager, IMediationRecordsDataManager
     {
+        public MediationRecordsDataManager()
+            : base(GetConnectionStringName("Mediation_GenericRecord_DBConnStringKey", "Mediation_GenericRecord_DBConnString"))
+        { }
+
         readonly string[] columns = { "EventId", "SessionId", "EventTime", "EventStatus", "MediationDefinitionId", "EventDetails" };
         DataRecordTypeManager _dataRecordTypeManager = new DataRecordTypeManager();
         int _dataRecordTypeId;
