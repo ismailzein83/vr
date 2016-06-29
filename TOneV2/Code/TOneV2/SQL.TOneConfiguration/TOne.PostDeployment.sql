@@ -70,22 +70,22 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1201,'Carriers',null,101,null,2,10),
 (1202,'Account Manager','Account Manager',null,'/images/menu-icons/Account.png',20,0),
-(1203,'Management','Management',null,'/images/menu-icons/Management.png',30,0),
-(1204,'Sale Area','Sale Area',null,'/images/menu-icons/Sale Area.png',40,0),
-(1205,'Sale Entities',null,1204,null,1,0),
-(1206,'Sale Rules',null,1204,null,1,0),
-(1207,'Purchase Area',null,null,'/images/menu-icons/Purchase Area.png',50,0),
-(1208,'Purchase Entities',null,1207,null,1,0),
-(1209,'Purchase Rules',null,1207,null,1,0),
-(1210,'Routing',null,null,null,10,0),
-(1211,'Routing Rules',null,1210,null,1,0),
-(1212,'CDR Process',null,null,'/images/menu-icons/plug.png',60,0),
-(1213,'CDR Process Rules',null,1212,null,1,0),
-(1214,'Traffic Analysis',null,null,'/images/menu-icons/NOC.png',70,1),
-(1215,'Billing',null,null,'/images/menu-icons/billing.png',80,0),
-(1216,'Reports',null,1215,null,1,0),
-(1217,'Prepaid-Postpaid',null,null,'/images/menu-icons/post paid - pre paid.png',90,0),
-(1218,'Plugins',null,null,'/images/menu-icons/plug.png',100,0)
+(1203,'Management','Management'			,null,'/images/menu-icons/Management.png',30,0),
+(1204,'Sale Area','Sale Area'			,null,'/images/menu-icons/Sale Area.png',40,0),
+(1205,'Sale Entities',null				,1204,null,1,0),
+(1206,'Sale Rules',null					,1204,null,1,0),
+(1207,'Purchase Area',null				,null,'/images/menu-icons/Purchase Area.png',50,0),
+(1208,'Purchase Entities',null			,1207,null,1,0),
+(1209,'Purchase Rules',null				,1207,null,1,0),
+(1210,'Routing',null					,null,'/images/menu-icons/Routing.png',10,0),
+(1211,'Routing Rules',null				,1210,null,1,0),
+(1212,'CDR Process',null				,null,'/images/menu-icons/plug.png',60,0),
+(1213,'CDR Process Rules'				,null,1212,null,1,0),
+(1214,'Traffic Analysis',null			,null,'/images/menu-icons/NOC.png',70,1),
+(1215,'Billing',null					,null,'/images/menu-icons/billing.png',80,0),
+(1216,'Reports',null					,1215,null,1,0),
+(1217,'Prepaid-Postpaid',null			,null,'/images/menu-icons/post paid - pre paid.png',90,0),
+(1218,'Plugins',null					,null,'/images/menu-icons/plug.png',100,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
