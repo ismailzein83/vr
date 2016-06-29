@@ -13,14 +13,16 @@ namespace TOne.WhS.Analytics.Data.SQL
 {
     public class VariationReportDataManager : BaseSQLDataManager, IVariationReportDataManager
     {
+        private const string DECIMAL_DATA_TYPE = "DECIMAL(20, 8)";
+
         #region Constructors
 
         public VariationReportDataManager()
-            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneV2DBConnString"))
+            : base(GetConnectionStringName("TOneWhS_Analytics_DBConnStringKey", "TOneV2DAnalyticsDBConnString"))
         {
 
         }
-        
+
         #endregion
 
         #region Public Methods
@@ -32,7 +34,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             return GetItemsText<VariationReportRecord>(GetVariationReportQuery(input.Query), (reader) => VariationReportRecordMapper(reader, input.Query), (cmd) =>
             {
                 var tableParameter = new SqlParameter("@TimePeriods", SqlDbType.Structured);
-                tableParameter.TypeName = "TOneWhS_Analytic.VariationReportTimePeriodType";
+                tableParameter.TypeName = "TOneWhS_Analytics.VariationReportTimePeriodType";
                 tableParameter.Value = timePeriodsTable;
                 cmd.Parameters.Add(tableParameter);
 
@@ -104,7 +106,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                     )
 
                     INSERT INTO @ConvertedExchangeRates
-                    SELECT * FROM Common.getExchangeRatesConvertedToCurrency({0}, @SmallestFromDate, @LargestToDate)",
+                    SELECT * FROM COMMON.getExchangeRatesConvertedToCurrency({0}, @SmallestFromDate, @LargestToDate)",
                     currencyId
                 );
             return null;
@@ -203,7 +205,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
                 #INTO_PART#
 
-                FROM TOneWhs_Analytic.BillingStats bs
+                FROM TOneWhS_Analytics.BillingStatsDaily bs
                 #JOIN_PART#
 
                 #WHERE_PART#
@@ -220,7 +222,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             string orderValue = GetOrderValuePart(intoTableName, query.ReportType, sumAggregation);
             singleResultQueryBuilder.Replace("#ORDER_VALUE_PART#", orderValue);
 
-            singleResultQueryBuilder.Replace("#AVERAGE_PART#", String.Format(", {0} AS Average", sumAggregation));
+            singleResultQueryBuilder.Replace("#AVERAGE_PART#", String.Format(", {0} AS Average", GetCastExpressionToDecimalStatement(sumAggregation)));
             singleResultQueryBuilder.Replace("#PERCENTAGE_PART#", GetPercentagePart(sumArgument, sumExtension, sumAggregation));
             singleResultQueryBuilder.Replace("#PREVIOUS_PERIOD_PERCENTAGE_PART#", GetPreviousPeriodPercentagePart(sumArgument, sumExtension));
 
@@ -255,8 +257,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                     throw new ArgumentException("reportType");
             }
             else
-                orderValuePartBuilder.Append(sumAggregation);
-
+                orderValuePartBuilder.Append(GetCastExpressionToDecimalStatement(sumAggregation));
 
             orderValuePartBuilder.Append(" AS OrderValue,");
             return orderValuePartBuilder.ToString();
@@ -269,17 +270,17 @@ namespace TOne.WhS.Analytics.Data.SQL
                 case VariationReportType.InBoundMinutes:
                 case VariationReportType.InBoundAmount:
                 case VariationReportType.Profit:
-                    return groupByProfile ? "CustomerAccounts.CarrierProfileID" : "CustomerID";
+                    return groupByProfile ? "CustomerProfileId" : "CustomerId";
 
                 case VariationReportType.OutBoundMinutes:
                 case VariationReportType.OutBoundAmount:
                 case VariationReportType.OutBoundProfit:
-                    return groupByProfile ? "SupplierAccounts.CarrierProfileID" : "SupplierID";
+                    return groupByProfile ? "SupplierProfileId" : "SupplierId";
 
                 case VariationReportType.TopDestinationMinutes:
                 case VariationReportType.TopDestinationAmount:
                 case VariationReportType.TopDestinationProfit:
-                    return "SaleZoneID";
+                    return "SaleZoneId";
 
                 default:
                     throw new ArgumentException("reportType");
@@ -288,31 +289,37 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         string GetPercentagePart(string sumArgument, string sumExtension, string sumAggregation)
         {
-            return String.Format
+            string percentageExpression = String.Format
             (
-                ", ((SUM(CASE WHEN p1.FromDate IS NOT NULL THEN {0} ELSE 0 END){1}) - ({2})) / dbo.ZeroToMax({2}) * 100 AS Percentage",
+                "((SUM(CASE WHEN p1.FromDate IS NOT NULL THEN {0} ELSE 0 END){1}) - ({2})) / dbo.ZeroToMax({2}) * 100",
                 sumArgument,
                 sumExtension,
                 sumAggregation
             );
+            return String.Format(", {0} AS Percentage", GetCastExpressionToDecimalStatement(percentageExpression));
         }
 
         string GetPreviousPeriodPercentagePart(string sumArgument, string sumExtension)
         {
-            return String.Format
+            string previousPeriodPercentageExpression = String.Format
             (
-                @", ((SUM(CASE WHEN p1.FromDate IS NOT NULL THEN {0} ELSE 0 END){1}) - (SUM(CASE WHEN p2.FromDate IS NOT NULL THEN {0} ELSE 0 END){1})) /
-                    dbo.ZeroToMax(SUM(CASE WHEN p2.FromDate IS NOT NULL THEN {0} ELSE 0 END){1}) * 100 AS PreviousPeriodPercentage",
+                @"((SUM(CASE WHEN p1.FromDate IS NOT NULL THEN {0} ELSE 0 END){1}) - (SUM(CASE WHEN p2.FromDate IS NOT NULL THEN {0} ELSE 0 END){1})) /
+                    dbo.ZeroToMax(SUM(CASE WHEN p2.FromDate IS NOT NULL THEN {0} ELSE 0 END){1}) * 100",
                 sumArgument,
                 sumExtension
             );
+            return String.Format(@", {0} AS PreviousPeriodPercentage", GetCastExpressionToDecimalStatement(previousPeriodPercentageExpression));
         }
 
         string GetSumPart(int numberOfPeriods, string sumArgument, string sumExtension)
         {
             StringBuilder sumPartBuilder = new StringBuilder();
             for (int i = 0; i < numberOfPeriods; i++)
-                sumPartBuilder.Append(String.Format(", SUM(CASE WHEN p{0}.FromDate IS NOT NULL THEN {1} ELSE 0 END){2} Period{0}Sum", i + 1, sumArgument, sumExtension));
+            {
+                int periodIndex = i + 1;
+                string sumExpression = String.Format("SUM(CASE WHEN p{0}.FromDate IS NOT NULL THEN {1} ELSE 0 END){2}", periodIndex, sumArgument, sumExtension);
+                sumPartBuilder.Append(String.Format(", {0} AS Period{1}Sum", GetCastExpressionToDecimalStatement(sumExpression), periodIndex));
+            }
             return sumPartBuilder.ToString();
         }
 
@@ -321,25 +328,25 @@ namespace TOne.WhS.Analytics.Data.SQL
         string GetSumArgument(VariationReportType reportType, IEnumerable<ParentDimension> parentDimensions)
         {
             if (reportType == VariationReportType.Profit || reportType == VariationReportType.OutBoundProfit || reportType == VariationReportType.TopDestinationProfit)
-                return "(SaleNets / ISNULL(SER.Rate, 1)) - (CostNets / ISNULL(CER.Rate, 1))";
+                return "(SaleNet / ISNULL(SaleRates.Rate, 1)) - (CostNet / ISNULL(CostRates.Rate, 1))";
 
             if (reportType == VariationReportType.InBoundMinutes)
-                return "SaleDuration";
+                return "SaleDurationInSeconds";
             if (reportType == VariationReportType.InBoundAmount)
-                return "SaleNets / ISNULL(SER.Rate, 1)";
+                return "SaleNet / ISNULL(SaleRates.Rate, 1)";
 
             if (reportType == VariationReportType.OutBoundMinutes)
-                return (parentDimensions == null) ? "CostDuration" : "SaleDuration";
+                return (parentDimensions == null) ? "CostDurationInSeconds" : "SaleDurationInSeconds";
             if (reportType == VariationReportType.OutBoundAmount)
-                return (parentDimensions == null) ? "CostNets / ISNULL(CER.Rate, 1)" : "SaleNets / ISNULL(SER.Rate, 1)";
+                return (parentDimensions == null) ? "CostNet / ISNULL(CostRates.Rate, 1)" : "SaleNet / ISNULL(SaleRates.Rate, 1)";
 
             ParentDimension directParentDimension = (parentDimensions != null) ? parentDimensions.ElementAt(parentDimensions.Count() - 1) : null;
 
             if (reportType == VariationReportType.TopDestinationMinutes)
-                return (directParentDimension == null || directParentDimension.Dimension == VariationReportDimension.Customer) ? "SaleDuration" : "CostDuration";
+                return (directParentDimension == null || directParentDimension.Dimension == VariationReportDimension.Customer) ? "SaleDurationInSeconds" : "CostDurationInSeconds";
             if (reportType == VariationReportType.TopDestinationAmount)
                 return (directParentDimension == null || directParentDimension.Dimension == VariationReportDimension.Customer) ?
-                    "SaleNets / ISNULL(SER.Rate, 1)" : "CostNets / ISNULL(CER.Rate, 1)";
+                    "SaleNet / ISNULL(SaleRates.Rate, 1)" : "CostNet / ISNULL(CostRates.Rate, 1)";
 
             throw new ArgumentException("reportType");
         }
@@ -377,17 +384,13 @@ namespace TOne.WhS.Analytics.Data.SQL
                 case VariationReportType.Profit:
                 case VariationReportType.OutBoundProfit:
                 case VariationReportType.TopDestinationProfit:
-                    joinPartBuilder.Append(String.Format(" LEFT JOIN @ConvertedExchangeRates SER on bs.SaleCurrency = SER.CurrencyID AND bs.CallDate >= SER.BED AND (SER.EED IS NULL OR bs.CallDate < SER.EED)"));
-                    joinPartBuilder.Append(String.Format(" LEFT JOIN @ConvertedExchangeRates CER on bs.CostCurrency = CER.CurrencyID AND bs.CallDate >= CER.BED AND (CER.EED IS NULL OR bs.CallDate < CER.EED)"));
+                    joinPartBuilder.Append(String.Format(" LEFT JOIN @ConvertedExchangeRates SaleRates on bs.SaleCurrencyId = SaleRates.CurrencyID AND bs.BatchStart >= SaleRates.BED AND (SaleRates.EED IS NULL OR bs.BatchStart < SaleRates.EED)"));
+                    joinPartBuilder.Append(String.Format(" LEFT JOIN @ConvertedExchangeRates CostRates on bs.CostCurrencyId = CostRates.CurrencyID AND bs.BatchStart >= CostRates.BED AND (CostRates.EED IS NULL OR bs.BatchStart < CostRates.EED)"));
                     break;
             }
             for (int i = 0; i < query.NumberOfPeriods; i++)
             {
-                joinPartBuilder.Append(String.Format(" LEFT JOIN @TimePeriods p{0} on bs.CallDate >= p{0}.FromDate AND bs.CallDate < p{0}.ToDate AND p{0}.PeriodIndex = {0}", i + 1));
-            }
-            if (query.GroupByProfile)
-            {
-                joinPartBuilder.Append(" INNER JOIN TOneWhS_BE.CarrierAccount CustomerAccounts ON BS.CustomerID = CustomerAccounts.ID INNER JOIN TOneWhS_BE.CarrierAccount SupplierAccounts ON BS.SupplierID = SupplierAccounts.ID");
+                joinPartBuilder.Append(String.Format(" LEFT JOIN @TimePeriods p{0} on bs.BatchStart >= p{0}.FromDate AND bs.BatchStart < p{0}.ToDate AND p{0}.PeriodIndex = {0}", i + 1));
             }
             return joinPartBuilder.ToString();
         }
@@ -396,7 +399,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         string GetWherePart(IEnumerable<ParentDimension> parentDimensions, bool groupByProfile)
         {
-            var wherePartBuilder = new StringBuilder("WHERE bs.CallDate >= @SmallestFromDate AND CallDate < @LargestToDate");
+            var wherePartBuilder = new StringBuilder("WHERE bs.BatchStart >= @SmallestFromDate AND BatchStart < @LargestToDate");
             if (parentDimensions != null)
             {
                 // The loop doesn't account for filter values that should be enclosed using single quotes
@@ -411,16 +414,21 @@ namespace TOne.WhS.Analytics.Data.SQL
             switch (dimension)
             {
                 case VariationReportDimension.Customer:
-                    return groupByProfile ? "CustomerAccounts.CarrierProfileID" : "CustomerID";
+                    return groupByProfile ? "CustomerProfileId" : "CustomerId";
                 case VariationReportDimension.Supplier:
-                    return groupByProfile ? "SupplierAccounts.CarrierProfileID" : "SupplierID";
+                    return groupByProfile ? "SupplierProfileId" : "SupplierId";
                 case VariationReportDimension.Zone:
-                    return "SaleZoneID";
+                    return "SaleZoneId";
             }
             throw new ArgumentException("dimension");
         }
 
         #endregion
+
+        private string GetCastExpressionToDecimalStatement(string expression)
+        {
+            return String.Format("CAST({0} AS {1})", expression, DECIMAL_DATA_TYPE);
+        }
 
         #endregion
 
@@ -444,8 +452,8 @@ namespace TOne.WhS.Analytics.Data.SQL
                 DimensionSuffix = (VariationReportRecordDimensionSuffix)reader["DimensionSuffix"],
                 OrderValue = (decimal)reader["OrderValue"],
                 Average = (decimal)reader["Average"],
-                Percentage = Convert.ToDecimal((double)reader["Percentage"]),
-                PreviousPeriodPercentage = Convert.ToDecimal((double)reader["PreviousPeriodPercentage"])
+                Percentage = (decimal)reader["Percentage"],
+                PreviousPeriodPercentage = (decimal)reader["PreviousPeriodPercentage"]
             };
 
             if (query != null)
@@ -461,4 +469,3 @@ namespace TOne.WhS.Analytics.Data.SQL
         #endregion
     }
 }
-
