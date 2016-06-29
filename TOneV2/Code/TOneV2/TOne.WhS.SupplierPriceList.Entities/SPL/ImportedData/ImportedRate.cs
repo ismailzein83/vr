@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Entities.SPL
@@ -70,23 +71,4 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         public ExistingRate RecentExistingRate { get; set; }
     }
 
-    //TODO: use the Rate Change Type of the one in Business Entities
-    public enum RateChangeType
-    {
-
-        [Description("Not Changed")]
-        NotChanged = 0,
-
-        [Description("New")]
-        New = 1,
-
-        [Description("Deleted")]
-        Deleted = 2,
-
-        [Description("Increase")]
-        Increase = 3,
-
-        [Description("Decrease")]
-        Decrease = 4
-    }
 }

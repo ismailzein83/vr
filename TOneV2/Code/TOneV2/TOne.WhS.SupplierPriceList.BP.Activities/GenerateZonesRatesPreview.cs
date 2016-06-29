@@ -8,6 +8,7 @@ using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Business;
 using Vanrise.Queueing;
 using Vanrise.Common;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
