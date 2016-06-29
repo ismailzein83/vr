@@ -80,5 +80,7 @@
     <Build Include="Security\COMMON.sql" />
     <Build Include="TOneWhS_Analytics\Tables\TrafficStatsDaily.sql" />
     <Build Include="TOneWhS_Analytics\User Defined Types\TrafficStatsDailyType.sql" />
+    <Build Include="TOneWhS_Analytics\Tables\BillingStatsDaily.sql" />
+    <Build Include="TOneWhS_Analytics\User Defined Types\BillingStatsDailyType.sql" />
   </ItemGroup>
 </Project>
