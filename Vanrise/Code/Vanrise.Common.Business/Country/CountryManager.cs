@@ -208,7 +208,17 @@ namespace Vanrise.Common.Business
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             return GetCountryName(Convert.ToInt32(context.EntityId));
-        }   
+        }
+
+        public int GetCountryTypeId()
+        {
+            return Vanrise.Common.Business.TypeManager.Instance.GetTypeId(this.GetCountryType());
+        }
+
+        public Type GetCountryType()
+        {
+            return this.GetType();
+        }
 
 
         #region Private Members

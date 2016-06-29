@@ -39,6 +39,11 @@ namespace Vanrise.Common.Business
             ReserveIDRange(TypeManager.Instance.GetTypeId(vanriseType), nbOfIds, out startingId);
         }
 
+        public bool UpdateIDManager(int typeId, long lastTakenId)
+        {
+            return _dataManager.UpdateIDManager(typeId, lastTakenId);
+        }
+
         private void ReserveIDRange(int typeId, int nbOfIds, out long startingId)
         {
             _dataManager.ReserveIDRange(typeId, nbOfIds, out startingId);

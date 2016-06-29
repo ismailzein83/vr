@@ -18,5 +18,12 @@ namespace Vanrise.Common.Data.SQL
         {
             startingId = (long)ExecuteScalarSP("[common].[sp_IDManager_ReserveIDRange]", typeId, nbOfIds);
         }
+
+
+        public bool UpdateIDManager(int typeId, long lastTakenId)
+        {
+            int recordsEffected = ExecuteNonQuerySP("common.sp_IDManager_Update", typeId, lastTakenId);
+            return (recordsEffected > 0);
+        }
     }
 }

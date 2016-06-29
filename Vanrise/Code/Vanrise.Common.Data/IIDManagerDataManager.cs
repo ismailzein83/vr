@@ -9,5 +9,7 @@ namespace Vanrise.Common.Data
     public interface IIDManagerDataManager : IDataManager
     {
         void ReserveIDRange(int typeId, int nbOfIds, out long startingId);
+
+        bool UpdateIDManager(int typeId, long lastTakenId);
     }
 }
