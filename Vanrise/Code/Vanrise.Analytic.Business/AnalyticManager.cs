@@ -50,10 +50,11 @@ namespace Vanrise.Analytic.Business
                 AnalyticDimension dimension;
                 if (analyticDimensions.TryGetValue(dimensionFilter.Dimension, out dimension))
                 {
-                    foreach(var dimensionFieldMapping in  dimension.Config.DimensionFieldMappings)
+                    var dimensionFieldMapping = dimension.Config.DimensionFieldMappings.Find(x => x.DataRecordTypeId == dataRecordTypeId);
+                    if(dimensionFieldMapping !=null)
                     {
-                       var record =  recordType.Fields.FindRecord(x => x.Name == dimensionFieldMapping.FieldName);
-                        if(record !=null)
+                        var record = recordType.Fields.FindRecord(x => x.Name == dimensionFieldMapping.FieldName);
+                        if (record != null)
                         {
                             var recordFilter = record.Type.ConvertToRecordFilter(dimensionFilter.FilterValues);
                             recordFilter.FieldName = record.Name;
@@ -61,13 +62,18 @@ namespace Vanrise.Analytic.Business
                                 recordFilterGroup.Filters = new List<RecordFilter>();
                             recordFilterGroup.Filters.Add(recordFilter);
                         }
-                       
                     }
+
                 }
             }
+            if(input.FilterGroup != null)
+            {
+                recordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.And;
+                recordFilterGroup.Filters.Add(ConvertRecordFilterGroup(input.FilterGroup, recordType, analyticDimensions));
+            }
+         
             return recordFilterGroup;
         }
-
         public int GetDataRecordTypeForReportBySourceName(int reportId,string sourceName)
         {
             AnalyticReportManager analyticReportManager = new Business.AnalyticReportManager();
@@ -83,8 +89,48 @@ namespace Vanrise.Analytic.Business
             }
             return dataRecordTypeId;
         }
+        public RecordFilterGroup ConvertRecordFilterGroup(RecordFilterGroup filterGroup, DataRecordType recordType, Dictionary<string, AnalyticDimension> analyticDimensions)
+        {
+            RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
+           
+            foreach(var filter in filterGroup.Filters)
+            {
+                ConvertChildRecordFilterGroup(recordFilterGroup, filter, recordType, analyticDimensions);
+            }
 
-
+            
+            return recordFilterGroup;
+        }
+        public void ConvertChildRecordFilterGroup(RecordFilterGroup recordFilterGroup, RecordFilter recordFilter, DataRecordType recordType, Dictionary<string, AnalyticDimension> analyticDimensions)
+        {
+            RecordFilterGroup childFilterGroup = recordFilter as RecordFilterGroup;
+            if (childFilterGroup != null)
+            {
+                foreach (var filter in childFilterGroup.Filters)
+                {
+                    ConvertChildRecordFilterGroup(childFilterGroup, filter, recordType, analyticDimensions);
+                }
+            }
+            if (recordFilter.FieldName != null)
+            {
+                if (recordFilterGroup.Filters == null)
+                    recordFilterGroup.Filters = new List<RecordFilter>();
+                AnalyticDimension dimension;
+                if (analyticDimensions.TryGetValue(recordFilter.FieldName, out dimension))
+                {
+                    var dimensionFieldMapping = dimension.Config.DimensionFieldMappings.Find(x => x.DataRecordTypeId == recordType.DataRecordTypeId);
+                    if (dimensionFieldMapping != null)
+                    {
+                        var record = recordType.Fields.FindRecord(x => x.Name == dimensionFieldMapping.FieldName);
+                        if (record != null)
+                        {
+                            recordFilter.FieldName = record.Name;
+                            recordFilterGroup.Filters.Add(recordFilter);
+                        }
+                    }
+                }
+            }
+        }
 
         #region Private Methods
 

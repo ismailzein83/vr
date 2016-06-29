@@ -25,7 +25,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
         function GenericGrid($scope, ctrl, $attrs) {
 
             this.initializeController = initializeController;
-            ctrl.gridMenuActions = [];
+            $scope.gridMenuActions = [];
             ctrl.datasource = [];
             ctrl.dimensions = [];
             var groupingDimensions = [];
@@ -110,6 +110,9 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     if (dataRetrievalInput.Query.WithSummary && retrieveDataContext.eventType != DataGridRetrieveDataEventType.ExternalTrigger)
                         dataRetrievalInput.Query.WithSummary = false;
 
+
+
+
                     return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                         .then(function (response) {
                             setTimeout(function () { ctrl.groupingDimensions = groupingDimensions; UtilsService.safeApply($scope); })
@@ -175,7 +178,28 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 // ------- Load Grid ------
 
                 function loadGrid(payLoad) {
-                    BuildMenuAction(payLoad);
+                    var itemActions;
+                    var parentDimensions;
+                    if (payLoad.Settings != undefined && payLoad.Settings.ItemActions != undefined)
+                    {
+                        itemActions = payLoad.Settings.ItemActions;
+                        parentDimensions = payLoad.SelectedGroupingDimensions;
+                    }
+                    else {
+                        itemActions = payLoad.ItemActions;
+                        parentDimensions = payLoad.ParentDimensions;
+                    }
+
+                    var selectedDimensions = [];
+                    if (payLoad.SelectedGroupingDimensions != undefined)
+                        selectedDimensions = payLoad.SelectedGroupingDimensions;
+                    else if (payLoad.GroupingDimensions != undefined)
+                        selectedDimensions = payLoad.GroupingDimensions;
+
+
+                    BuildMenuAction(payLoad.FromTime, payLoad.ToTime, payLoad.FilterGroup, itemActions, parentDimensions, payLoad.DimensionFilters, selectedDimensions);
+
+
                     ctrl.groupingDimensions = [];
                     ctrl.parentDimensions.length = 0;
                     ctrl.drillDownDimensions.length = 0;
@@ -257,7 +281,9 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                 TableId: payLoad.TableId,
                                 InitialQueryOrderType: initialQueryOrderType,
                                 MeasureStyleRules: measureStyleRules,
-                                FilterGroup: ctrl.filterGroups
+                                FilterGroup: ctrl.filterGroups,
+                                GridMenuActions: $scope.gridMenuActions,
+                                ItemActions: itemActions
                             }
                             return dataItem.gridAPI.load(drillDownPayLoad);
                         };
@@ -582,36 +608,56 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     return context;
                 }
 
-                function BuildMenuAction(payload) {
-                    ctrl.gridMenuActions.length = 0;;
-                    if(payload !=undefined && payload.Settings !=undefined && payload.Settings.ItemActions !=undefined)
+                function BuildMenuAction(fromTime, toTime, filterGroup, itemActions, parentDimensions, dimensionFilters, selectedDimensions) {
+
+
+                    $scope.gridMenuActions.length = 0;
+                    for(var i=0;i<itemActions.length;i++)
                     {
-                        var itemActions = payload.Settings.ItemActions;
-                        for(var i=0;i<itemActions.length;i++)
+                        var itemAction = itemActions[i];
+                        var settings = {
+                            FromDate: fromTime,
+                            ToDate: toTime,
+                            FilterGroup: filterGroup,
+                            TableId: tableId,
+                        }
+                        $scope.gridMenuActions.push({
+                            name: itemAction.Title,
+                            clicked: function (dataItem) {
+                                settings.DimensionFilters = getDimensionValues(parentDimensions, dataItem, dimensionFilters, selectedDimensions);
+                                return VR_Analytic_AnalyticItemActionService.excuteItemAction(itemAction, settings);
+                            },
+                        });
+                    }
+                }
+
+                function getDimensionValues(parentDimensions, dataItem, dimensionFilters, selectedDimensions)
+                {
+                    var dimensionValues = [];
+
+                    for (var i = 0; i < selectedDimensions.length; i++) {
+                        var selectedDimension = selectedDimensions[i];
+                        dimensionValues.push({
+                            Dimension: selectedDimension.DimensionName,
+                            FilterValues: [dataItem.DimensionValues[i].Value]
+                        });
+                    }
+
+
+                    for (var i = 0; i < parentDimensions.length; i++) {
+                        var parentDimension = parentDimensions[i];
+                        var dimensionFilter = UtilsService.getItemByVal(dimensionFilters, parentDimension.DimensionName, "Dimension");
+                        if (dimensionFilter != undefined && UtilsService.getItemByVal(dimensionValues, parentDimension.DimensionName, "Dimension") == undefined)
                         {
-                            var itemAction = itemActions[i];
-                            var settings = {
-                                FromDate: payload.FromTime,
-                                ToDate: payload.ToTime,
-                                FilterGroup: payload.FilterGroup,
-                                TableId: tableId,
-                                ReportId:1
-                            }
-                            ctrl.gridMenuActions.push({
-                                name: itemAction.Title,
-                                clicked: function (dataItem) {
-                                    var dimensionValues = [];
-                                    dimensionValues.push({
-                                        Dimension: payload.SelectedGroupingDimensions[0].DimensionName,
-                                        FilterValues: [dataItem.DimensionValues[0].Value]
-                                    });
-                                    settings.DimensionFilters = dimensionValues;
-                                    return VR_Analytic_AnalyticItemActionService.excuteItemAction(itemAction, settings);
-                                },
+                     
+                            dimensionValues.push({
+                                Dimension: parentDimension.DimensionName,
+                                FilterValues: dimensionFilter.FilterValues
                             });
                         }
+                       
                     }
-                   
+                    return dimensionValues;
                 }
             }
         }

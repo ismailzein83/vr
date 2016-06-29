@@ -114,8 +114,10 @@
                                 ReportId: itemActionSettings.AnalyticReportId,
                                 SourceName: itemActionSettings.SourceName,
                                 TableId: itemActionSettings.TableId,
+                                FilterGroup: itemActionSettings.FilterGroup
                             };
                             VR_Analytic_AnalyticAPIService.GetRecordSearchFilterGroup(input).then(function (response) {
+                          
                                 filterObj = response;
                             });
                         }
