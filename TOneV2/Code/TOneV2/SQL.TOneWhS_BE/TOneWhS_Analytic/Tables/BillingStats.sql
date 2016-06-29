@@ -27,8 +27,12 @@
     [SaleCommissions]  NUMERIC (20, 6) NULL,
     [CostDiscounts]    NUMERIC (20, 6) NULL,
     [SaleDiscounts]    NUMERIC (20, 6) NULL,
+    [SaleRateId]       BIGINT          NULL,
+    [CostRateId]       BIGINT          NULL,
     CONSTRAINT [IX_BillingStats_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 

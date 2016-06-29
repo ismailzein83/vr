@@ -303,5 +303,9 @@
     <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierZoneRate_Preview_GetFiltered.sql" />
     <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierCountry_Preview_GetFiltered.sql" />
     <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierCode_Preview_GetFiltered.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_SaleRate_New.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_SaleRate_Changed.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetBetweenPeriod.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetEffectiveAfterByOwner.sql" />
   </ItemGroup>
 </Project>

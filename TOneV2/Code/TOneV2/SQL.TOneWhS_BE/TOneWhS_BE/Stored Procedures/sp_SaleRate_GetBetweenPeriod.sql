@@ -16,5 +16,5 @@ BEGIN
 		  ,sr.EED
 		  ,sr.change
 	  FROM [TOneWhS_BE].SaleRate sr 
-	  Where sr.BED < @From AND (sr.EED IS NULL OR sr.EED > @Till)
+	  Where (sr.EED is null and sr.BED<@Till) or(sr.EED>@From and sr.EED<@Till)
 END

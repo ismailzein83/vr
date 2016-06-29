@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [TOneWhS_BE].[sp_SaleRate_GetByOwnerAndEffective]
+CREATE PROCEDURE [TOneWhS_BE].[sp_SaleRate_GetByOwnerAndEffective]
 	-- Add the parameters for the stored procedure here
 	@OwnerType INT,
 	@ownerId INT,
@@ -21,6 +21,7 @@ BEGIN
 		  ,sr.ZoneID
 		  ,sr.BED
 		  ,sr.EED
+		  ,sr.Change
 	  FROM [TOneWhS_BE].SaleRate sr LEFT JOIN [TOneWhS_BE].SalePriceList spl ON sr.PriceListID=spl.ID 
 	  Where  (sr.BED<=@Effective and (sr.EED is null or sr.EED > @Effective))
 		and spl.OwnerID=@ownerId

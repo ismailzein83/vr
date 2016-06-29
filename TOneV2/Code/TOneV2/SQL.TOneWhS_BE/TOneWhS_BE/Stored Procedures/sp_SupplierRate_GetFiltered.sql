@@ -21,6 +21,7 @@
                   , rate.[BED]
                   , rate.[EED]
                   , rate.[timestamp]
+                  ,rate.Change
          FROM [TOneWhS_BE].[SupplierRate] rate inner join [TOneWhS_BE].[SupplierPriceList] priceList on rate.PriceListID=priceList.ID
 
 		 WHERE (@SupplierId =0 OR priceList.SupplierID = @SupplierId)

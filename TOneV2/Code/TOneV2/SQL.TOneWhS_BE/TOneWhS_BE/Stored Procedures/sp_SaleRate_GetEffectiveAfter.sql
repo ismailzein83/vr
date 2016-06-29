@@ -3,7 +3,7 @@
 -- Create date: 05-18-2016
 -- Description:	Get Effective and Pending effective Sale Rates by Selling Number Plan
 -- =============================================
-Create PROCEDURE [TOneWhS_BE].[sp_SaleRate_GetEffectiveAfter]
+CREATE PROCEDURE [TOneWhS_BE].[sp_SaleRate_GetEffectiveAfter]
 	-- Add the parameters for the stored procedure here
 	@SellingNumberPlan INT,
 	@Effective DateTime
@@ -20,6 +20,7 @@ BEGIN
 		  ,sr.ZoneID
 		  ,sr.BED
 		  ,sr.EED
+		  ,sr.Change
 	  FROM [TOneWhS_BE].SaleRate sr INNER JOIN [TOneWhS_BE].SaleZone sz ON sr.ZoneID=sz.ID 
 	  Where  (sr.EED is null or sr.EED > @Effective)
 		and sz.SellingNumberPlanID=@SellingNumberPlan

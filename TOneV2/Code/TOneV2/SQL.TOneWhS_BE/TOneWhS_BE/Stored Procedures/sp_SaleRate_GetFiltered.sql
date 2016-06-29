@@ -1,4 +1,4 @@
-﻿Create PROCEDURE [TOneWhS_BE].[sp_SaleRate_GetFiltered]
+﻿CREATE PROCEDURE [TOneWhS_BE].[sp_SaleRate_GetFiltered]
 	@EffectiveOn dateTime = null,
 	@SellingNumberPlanID int ,
 	@ZonesIDs varchar(max),
@@ -23,6 +23,7 @@ BEGIN
 				  ,sr.[OtherRates]
 				  ,sr.[BED]
 				  ,sr.[EED]
+				  ,sr.Change
 			FROM 
 			TOneWhS_BE.SaleRate sr 
 			join   TOneWhS_BE.SalePriceList sp on sr.PriceListID = sp.ID

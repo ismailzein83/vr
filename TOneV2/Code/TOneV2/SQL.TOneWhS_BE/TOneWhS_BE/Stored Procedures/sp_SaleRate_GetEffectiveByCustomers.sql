@@ -22,6 +22,7 @@ BEGIN
 		  ,sr.ZoneID
 		  ,sr.BED
 		  ,sr.EED
+		  ,sr.Change
 	  FROM [TOneWhS_BE].SaleRate sr 
 	  JOIN [TOneWhS_BE].SalePriceList spl ON sr.PriceListID = spl.ID 
 	  Join @ActiveCustomersInfo ci on ci.CustomerId = spl.OwnerId
@@ -38,6 +39,7 @@ BEGIN
 		  ,sr.ZoneID
 		  ,sr.BED
 		  ,sr.EED
+		  ,sr.Change
 	  FROM [TOneWhS_BE].SaleRate sr 
 	  JOIN [TOneWhS_BE].SalePriceList spl ON sr.PriceListID = spl.ID 
 	   Where ((@IsFuture = 0 AND sr.BED <= @EffectiveTime AND (sr.EED > @EffectiveTime OR sr.EED IS NULL))

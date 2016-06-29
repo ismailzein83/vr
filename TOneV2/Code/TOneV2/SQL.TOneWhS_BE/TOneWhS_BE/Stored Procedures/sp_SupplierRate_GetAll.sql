@@ -1,5 +1,4 @@
-﻿
-Create PROCEDURE [TOneWhS_BE].[sp_SupplierRate_GetAll]
+﻿CREATE PROCEDURE [TOneWhS_BE].[sp_SupplierRate_GetAll]
 	@EffectiveTime DateTime,
 	@IsFuture bit
 	
@@ -15,6 +14,7 @@ BEGIN
 		  ,sr.ZoneID
 		  ,sr.BED
 		  ,sr.EED
+		  ,sr.Change
 	  FROM [TOneWhS_BE].SupplierRate sr LEFT JOIN [TOneWhS_BE].SupplierZone sz ON sr.ZoneID=sz.ID 
 	  Where (@IsFuture = 0 AND sr.BED <= @EffectiveTime AND (sr.EED > @EffectiveTime OR sr.EED IS NULL))
 			OR

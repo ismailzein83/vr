@@ -21,6 +21,7 @@ BEGIN
 		  ,sr.ZoneID
 		  ,sr.BED
 		  ,sr.EED
+		  ,sr.Change
 	  FROM [TOneWhS_BE].SupplierRate sr LEFT JOIN [TOneWhS_BE].SupplierPriceList pl ON sr.PriceListID = pl.ID 
 	  Where  (sr.EED is null or sr.EED > @when)
 		and pl.SupplierID=@SupplierId

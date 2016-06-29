@@ -24,7 +24,8 @@ BEGIN
 		Rate,
 		OtherRates,
 		BED,
-		EED
+		EED,
+		Change
 	FROM TOneWhS_BE.SaleRate
 	WHERE PriceListID IN (SELECT PriceListID FROM PriceListIDsCTE)
 		AND ZoneID IN (SELECT ZoneID FROM @ZoneIDsTable)
