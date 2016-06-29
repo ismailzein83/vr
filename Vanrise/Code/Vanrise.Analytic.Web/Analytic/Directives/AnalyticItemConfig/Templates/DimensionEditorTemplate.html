@@ -1,14 +1,14 @@
 ﻿<vr-tab header="'Settings'">
     <vr-row>
         <vr-columns width="1/3row">
-            <vr-select label="Expression Type" datasource="expressionType" selectedvalues="scopeModel.selectedExpressionType"
+            <vr-select label="Expression Type" datasource="scopeModel.expressionType" selectedvalues="scopeModel.selectedExpressionType"
                        datavaluefield="value" datatextfield="description" isrequired="true" onselectionchanged="scopeModel.onExpressionTypeSelectionChanged" hideremoveicon></vr-columns>
     </vr-row>
     <vr-row>
         <vr-columns width="fullrow" ng-show="scopeModel.showSQLExpression">
             <vr-textarea value="scopeModel.sqlExpression" label="SQL Expression" isrequired="scopeModel.showSQLExpression"></vr-textarea>
         </vr-columns>
-        <vr-columns width="fullrow" ng-show="showSQLExpressionMethod">
+        <vr-columns width="fullrow" ng-show="scopeModel.showSQLExpressionMethod">
             <vr-textarea value="scopeModel.sqlExpressionMethod" label="SQL Expression Method" isrequired="scopeModel.showSQLExpressionMethod"></vr-textarea>
         </vr-columns>
     </vr-row>
