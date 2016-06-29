@@ -37,6 +37,14 @@
                 }
             );
         }
+
+        function DownloadCountryLog(fileID) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "DownloadCountryLog"), { fileID: fileID }, {
+                returnAllResponseParameters: true,
+                responseTypeAsBufferArray: true
+            });
+        }
+
         function UploadCountries(fileId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "UploadCountries"), { fileId: fileId });
         }
@@ -65,6 +73,7 @@
             AddCountry: AddCountry,
             GetCountrySourceTemplates: GetCountrySourceTemplates,
             DownloadCountriesTemplate: DownloadCountriesTemplate,
+            DownloadCountryLog: DownloadCountryLog,
             UploadCountries: UploadCountries,
             HasAddCountryPermission: HasAddCountryPermission,
             HasUploadCountryPermission: HasUploadCountryPermission,

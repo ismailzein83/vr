@@ -6,6 +6,8 @@ using System.Linq;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+using System.Drawing;
+using System.IO;
 
 namespace Vanrise.Common.Business
 {
@@ -63,28 +65,67 @@ namespace Vanrise.Common.Business
             return GetCachedCountries().FindRecord(itm => itm.SourceId == sourceId);
         }
 
-        public string AddCountries(int fileId)
+        public UploadCountryLog AddCountries(int fileId)
         {
-            DataTable countryDataTable = new DataTable();
+            UploadCountryLog uploadCountryLog = new UploadCountryLog();
+
             VRFileManager fileManager = new VRFileManager();
             byte[] bytes = fileManager.GetFile(fileId).Content;
             var fileStream = new System.IO.MemoryStream(bytes);
             ExportTableOptions options = new ExportTableOptions();
             options.CheckMixedValueType = true;
             Workbook wbk = new Workbook(fileStream);
-            wbk.CalculateFormula();
-            string message = "";
-            int insertedCount = 0 ;
-            int notInsertedCount = 0;
+            Worksheet worksheet = wbk.Worksheets[0];
+            List<String> headers = new List<string>();
+            headers.Add(worksheet.Cells[0, 0].StringValue);
+            headers.Add("Result");
+            headers.Add("Error Message");
 
-            if (wbk.Worksheets[0].Cells.MaxDataRow > -1 && wbk.Worksheets[0].Cells.MaxDataColumn > -1)
-                countryDataTable = wbk.Worksheets[0].Cells.ExportDataTableAsString(0, 0, wbk.Worksheets[0].Cells.MaxDataRow + 1, wbk.Worksheets[0].Cells.MaxDataColumn + 1);
-            
-            for (int i = 1; i < countryDataTable.Rows.Count; i++)
+            wbk.CalculateFormula();
+            List<string> addedCountries = new List<string>();
+            int count = 1;
+            while (count < worksheet.Cells.Rows.Count)
             {
-                string importedCountryName = countryDataTable.Rows[i][0].ToString().Trim();
-                Country country = GetCachedCountries().FindRecord(it => it.Name.Equals(importedCountryName, StringComparison.InvariantCultureIgnoreCase));
-                if(!String.IsNullOrEmpty(importedCountryName))
+                string country = worksheet.Cells[count, 0].StringValue.Trim();
+                addedCountries.Add(country);
+                count++;
+            }
+
+
+            //Return Excel Result
+            Workbook returnedExcel = new Workbook();
+            Vanrise.Common.Utilities.ActivateAspose();
+            returnedExcel.Worksheets.Clear();
+            Worksheet CountryWorkSheet = returnedExcel.Worksheets.Add("Result");
+
+            int rowIndex = 0;
+            int colIndex = 0;
+
+            foreach (var header in headers)
+            {
+
+                CountryWorkSheet.Cells.SetColumnWidth(colIndex, 20);
+                CountryWorkSheet.Cells[rowIndex, colIndex].PutValue(header);
+                Cell cell = CountryWorkSheet.Cells.GetCell(rowIndex, colIndex);
+                Style style = cell.GetStyle();
+                style.Font.Name = "Times New Roman";
+                style.Font.Color = Color.FromArgb(255, 0, 0);
+                style.Font.Size = 14;
+                style.Font.IsBold = true;
+                cell.SetStyle(style);
+                colIndex++;
+            }
+            rowIndex++;
+            colIndex = 0;
+
+
+            foreach (var addedCountry in addedCountries)
+            {
+                CountryWorkSheet.Cells[rowIndex, colIndex].PutValue(addedCountry);
+                colIndex++;
+
+                Country country = GetCachedCountries().FindRecord(it => it.Name.Equals(addedCountry, StringComparison.InvariantCultureIgnoreCase));
+                if (!String.IsNullOrEmpty(addedCountry))
                 {
                     if (country == null)
                     {
@@ -92,27 +133,55 @@ namespace Vanrise.Common.Business
                         long startingId;
                         ReserveIDRange(1, out startingId);
                         country.CountryId = (int)startingId;
-                        country.Name = importedCountryName;
+                        country.Name = addedCountry;
 
                         ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
                         bool insertActionSucc = dataManager.Insert(country);
                         if (insertActionSucc)
-                            insertedCount++;
-                        else                           
-                            notInsertedCount++;
+                        {
+                            CountryWorkSheet.Cells[rowIndex, colIndex].PutValue("Succeed");
+                            uploadCountryLog.CountOfCountriesAdded++;
+                            colIndex = 0;
+                            rowIndex++;
+                        }
+                        else
+                        {
+                            CountryWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
+                            colIndex++;
+                            CountryWorkSheet.Cells[rowIndex, colIndex].PutValue("Country already exists");
+                            uploadCountryLog.CountOfCountriesExist++;
+                            colIndex = 0;
+                            rowIndex++;
+                        }
                     }
                     else
                     {
-                        notInsertedCount++;
+                        CountryWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
+                        colIndex++;
+                        CountryWorkSheet.Cells[rowIndex, colIndex].PutValue("Country already exists");
+                        uploadCountryLog.CountOfCountriesExist++;
+                        colIndex = 0;
+                        rowIndex++;
                     }
                 }
-                
-               
+                else
+                    colIndex = 0;
             }
-           
-            message = String.Format("{0} countries added and {1} are already exists", insertedCount, notInsertedCount);
 
-            return message;
+            MemoryStream memoryStream = new MemoryStream();
+            memoryStream = returnedExcel.SaveToStream();
+
+            VRFile saveFile = new VRFile()
+            {
+                Content = memoryStream.ToArray(),
+                Name = "CountryLog",
+                CreatedTime = DateTime.Now,
+                Extension = ".xlsx"
+            };
+            VRFileManager manager = new VRFileManager();
+            uploadCountryLog.fileID = manager.AddFile(saveFile);
+
+            return uploadCountryLog;
         }
         public Vanrise.Entities.InsertOperationOutput<CountryDetail> AddCountry(Country country)
         {
@@ -199,7 +268,7 @@ namespace Vanrise.Common.Business
                 if (item.Value.SourceId != null)
                 {
                     //if (sourceItemIds.Contains(item.Value.SourceId))
-                        existingItemIds.Add(item.Value.SourceId, (long)item.Value.CountryId);
+                    existingItemIds.Add(item.Value.SourceId, (long)item.Value.CountryId);
                 }
             }
             return existingItemIds;
@@ -220,6 +289,12 @@ namespace Vanrise.Common.Business
             return this.GetType();
         }
 
+        public byte[] DownloadCountryLog(long fileID)
+        {
+            VRFileManager fileManager = new VRFileManager();
+            VRFile file = fileManager.GetFile(fileID);
+            return file.Content;
+        }
 
         #region Private Members
 
@@ -288,7 +363,7 @@ namespace Vanrise.Common.Business
         }
 
         #endregion
-        
+
         public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             return GetAllCountries().Select(itm => itm as dynamic).ToList();

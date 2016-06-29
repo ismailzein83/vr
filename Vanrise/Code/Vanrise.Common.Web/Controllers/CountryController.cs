@@ -81,10 +81,20 @@ namespace Vanrise.Common.Web.Controllers
 
         [HttpGet]
         [Route("UploadCountries")]
-        public string UploadCountries(int fileID)
+        public UploadCountryLog UploadCountries(int fileID)
         {
             CountryManager manager = new CountryManager();
             return manager.AddCountries(fileID);
+        }
+
+
+        [HttpGet]
+        [Route("DownloadCountryLog")]
+        public object DownloadCountryLog(long fileID)
+        {
+            CountryManager manager = new CountryManager();
+            byte[] bytes = manager.DownloadCountryLog(fileID);
+            return GetExcelResponse(bytes, "ImportedCountriesResults.xls");
         }
     }
 }
