@@ -57,6 +57,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
@@ -72,6 +75,7 @@
     <Compile Include="Common\IDBSyncDataManager.cs" />
     <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\MigrationUtils.cs" />
+    <Compile Include="DBSyncDataManager\CustomerZoneDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\CarrierAccountDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\CarrierProfileDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\SupplierCodeDBSyncDataManager.cs" />
@@ -88,6 +92,7 @@
     <Compile Include="DBSyncDataManager\CurrencyExchangeRateDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\CurrencyDBSyncDataManager.cs" />
     <Compile Include="Common\MigrationManager.cs" />
+    <Compile Include="DBSyncDataManager\SwitchConnectivityDBSyncDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DBSyncDataManager\SwitchDBSyncDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCarrierAccountDataManager.cs" />
@@ -95,6 +100,7 @@
     <Compile Include="SourceDataManger\SourceCodeDataManager.cs" />
     <Compile Include="SourceDataManger\SourcePriceListDataManager.cs" />
     <Compile Include="SourceDataManger\SourceRateDataManager.cs" />
+    <Compile Include="SourceDataManger\SourceCarrierSwitchConnectivityDataManager.cs" />
     <Compile Include="SourceDataManger\SourceZoneDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCodeGroupDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCurrencyDataManager.cs" />

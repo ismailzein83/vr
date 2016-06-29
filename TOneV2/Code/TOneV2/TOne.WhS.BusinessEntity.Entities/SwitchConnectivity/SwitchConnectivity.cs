@@ -21,11 +21,12 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
+
     }
 
     public class SwitchConnectivity : BaseSwitchConnectivity
     {
-
+        public string SourceId { get; set; }
     }
 
     public class SwitchConnectivityToEdit : BaseSwitchConnectivity

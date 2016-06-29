@@ -31,17 +31,17 @@ namespace TOne.WhS.DBSync.Business
 
         }
 
-        public override void Migrate()
+        public override void Migrate(MigrationInfoContext context)
         {
-            base.Migrate();
+            SupplierPriceListManager manager = new SupplierPriceListManager();
+            context.GeneratedIdsInfoContext = new GeneratedIdsInfoContext();
+            context.GeneratedIdsInfoContext.TypeId = manager.GetSupplierPriceListTypeId();
+            base.Migrate(context);
         }
 
         public override void AddItems(List<SupplierPriceList> itemsToAdd)
         {
-            long startingId;
-            ReserveIDRange(itemsToAdd.Count(), out startingId);
-            int insertStartingId = int.Parse(startingId.ToString());
-            dbSyncDataManager.ApplySupplierPriceListsToTemp(itemsToAdd, insertStartingId);
+            dbSyncDataManager.ApplySupplierPriceListsToTemp(itemsToAdd, 1);
             TotalRows = itemsToAdd.Count;
         }
 
@@ -91,10 +91,6 @@ namespace TOne.WhS.DBSync.Business
                 return null;
         }
 
-        internal static void ReserveIDRange(int nbOfIds, out long startingId)
-        {
-            IDManager.Instance.ReserveIDRange(typeof(SupplierPriceListManager), nbOfIds, out startingId);
-        }
         public override void FillTableInfo(bool useTempTables)
         {
             DBTable dbTableSupplierPriceList = Context.DBTables[DBTableName.SupplierPriceList];

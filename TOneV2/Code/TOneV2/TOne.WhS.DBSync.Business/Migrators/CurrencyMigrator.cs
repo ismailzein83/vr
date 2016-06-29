@@ -18,9 +18,9 @@ namespace TOne.WhS.DBSync.Business
             TableName = dbSyncDataManager.GetTableName();
         }
 
-        public override void Migrate()
+        public override void Migrate(MigrationInfoContext context)
         {
-            base.Migrate();
+            base.Migrate(context);
         }
 
         public override void AddItems(List<Currency> itemsToAdd)

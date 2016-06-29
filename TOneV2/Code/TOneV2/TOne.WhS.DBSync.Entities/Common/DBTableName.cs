@@ -4,23 +4,15 @@ namespace TOne.WhS.DBSync.Entities
 {
     public enum DBTableName
     {
-        [Description("CurrencyExchangeRate")]
-        CurrencyExchangeRate,
+        [Description("Switch")]
+        Switch,
 
         [Description("Currency")]
         Currency,
 
-        [Description("Switch")]
-        Switch,
+        [Description("CurrencyExchangeRate")]
+        CurrencyExchangeRate,
 
-        [Description("CarrierProfile")]
-        CarrierProfile,
-
-        [Description("CarrierAccount")]
-        CarrierAccount,
-
-        [Description("SupplierZoneService")]
-        SupplierZoneService,
 
         [Description("Country")]
         Country,
@@ -28,17 +20,19 @@ namespace TOne.WhS.DBSync.Entities
         [Description("CodeGroup")]
         CodeGroup,
 
+        [Description("CarrierProfile")]
+        CarrierProfile,
+
+
+        [Description("CarrierAccount")]
+        CarrierAccount,
+
         [Description("SaleZone")]
         SaleZone,
 
         [Description("SupplierZone")]
         SupplierZone,
 
-        [Description("SaleRate")]
-        SaleRate ,
-
-        [Description("SupplierRate")]
-        SupplierRate,
 
         [Description("SaleCode")]
         SaleCode,
@@ -46,13 +40,31 @@ namespace TOne.WhS.DBSync.Entities
         [Description("SupplierCode")]
         SupplierCode,
 
+        [Description("SupplierZoneService")]
+        SupplierZoneService,
+
         [Description("SalePriceList")]
         SalePriceList,
 
         [Description("SupplierPriceList")]
         SupplierPriceList,
 
+        [Description("SaleRate")]
+        SaleRate,
+
+        [Description("SupplierRate")]
+        SupplierRate,
+
+        [Description("CustomerZone")]
+        CustomerZone,
+
+        [Description("CustomerSellingProduct")]
+        CustomerSellingProduct,
+
         [Description("File")]
-        File
+        File,
+
+        [Description("SwitchConnectivity")]
+        SwitchConnectivity
     }
 }

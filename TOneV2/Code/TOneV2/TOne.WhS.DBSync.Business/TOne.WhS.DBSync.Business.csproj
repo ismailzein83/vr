@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="Common\IMigrator.cs" />
     <Compile Include="Common\Migrator.cs" />
+    <Compile Include="Migrators\CustomerZoneMigrator.cs" />
     <Compile Include="Migrators\CarrierAccountMigrator.cs" />
     <Compile Include="Migrators\SupplierPriceListMigrator.cs" />
     <Compile Include="Migrators\SupplierRateMigrator.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Migrators\CarrierProfileMigrator.cs" />
     <Compile Include="Migrators\CountryMigrator.cs" />
     <Compile Include="Migrators\CurrencyMigrator.cs" />
+    <Compile Include="Migrators\SwitchConnectivityMigrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Migrators\SwitchMigrator.cs" />
     <Compile Include="DBSyncTaskAction.cs" />

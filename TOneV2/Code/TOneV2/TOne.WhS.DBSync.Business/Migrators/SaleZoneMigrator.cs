@@ -25,16 +25,17 @@ namespace TOne.WhS.DBSync.Business
             allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
         }
 
-        public override void Migrate()
+        public override void Migrate(MigrationInfoContext context)
         {
-            base.Migrate();
+            SaleZoneManager manager = new SaleZoneManager();
+            context.GeneratedIdsInfoContext = new GeneratedIdsInfoContext();
+            context.GeneratedIdsInfoContext.TypeId = manager.GetSaleZoneTypeId();
+            base.Migrate(context);
         }
 
         public override void AddItems(List<SaleZone> itemsToAdd)
         {
-            long startingId;
-            ReserveIDRange(itemsToAdd.Count(), out startingId);
-            dbSyncDataManager.ApplySaleZonesToTemp(itemsToAdd, startingId);
+            dbSyncDataManager.ApplySaleZonesToTemp(itemsToAdd, 1);
             TotalRows = itemsToAdd.Count;
         }
 

@@ -89,6 +89,16 @@ namespace TOne.WhS.BusinessEntity.Business
             return startingId;
         }
 
+        public int GetSupplierZoneTypeId()
+        {
+            return Vanrise.Common.Business.TypeManager.Instance.GetTypeId(this.GetSupplierZoneType());
+        }
+
+        public Type GetSupplierZoneType()
+        {
+            return this.GetType();
+        }
+
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             return GetSupplierZoneName((long)context.EntityId);

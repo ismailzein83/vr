@@ -24,9 +24,9 @@ namespace TOne.WhS.DBSync.Business
             allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
         }
 
-        public override void Migrate()
+        public override void Migrate(MigrationInfoContext context)
         {
-            base.Migrate();
+            base.Migrate(context);
         }
 
         public override void AddItems(List<SalePriceList> itemsToAdd)
@@ -67,9 +67,7 @@ namespace TOne.WhS.DBSync.Business
         }
         public override void FillTableInfo(bool useTempTables)
         {
-            DBTable dbTableSalePriceList = Context.DBTables[DBTableName.SalePriceList];
-            if (dbTableSalePriceList != null)
-                dbTableSalePriceList.Records = dbSyncDataManager.GetSalePriceLists(useTempTables);
+          
         }
     }
 }

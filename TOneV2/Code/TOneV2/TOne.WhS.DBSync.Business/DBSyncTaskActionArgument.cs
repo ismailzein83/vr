@@ -10,6 +10,7 @@ namespace TOne.WhS.DBSync.Business
         public string ConnectionString { get; set; }
         public bool UseTempTables { get; set; }
         public int DefaultSellingNumberPlanId { get; set; }
+        public int SellingProductId { get; set; }
         public List<DBTableName> MigrationRequestedTables { get; set; }
     }
 }

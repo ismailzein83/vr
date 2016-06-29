@@ -20,16 +20,17 @@ namespace TOne.WhS.DBSync.Business
             TableName = dbSyncDataManager.GetTableName();
         }
 
-        public override void Migrate()
+        public override void Migrate(MigrationInfoContext context)
         {
-            base.Migrate();
+            CountryManager manager = new CountryManager();
+            context.GeneratedIdsInfoContext = new GeneratedIdsInfoContext();
+            context.GeneratedIdsInfoContext.TypeId = manager.GetCountryTypeId();
+            base.Migrate(context);
         }
 
         public override void AddItems(List<Country> itemsToAdd)
         {
-            long startingId;
-            ReserveIDRange(itemsToAdd.Count(), out startingId);
-            dbSyncDataManager.ApplyCountriesToTemp(itemsToAdd, (int)startingId);
+            dbSyncDataManager.ApplyCountriesToTemp(itemsToAdd, 1);
             TotalRows = itemsToAdd.Count;
         }
 
@@ -45,11 +46,6 @@ namespace TOne.WhS.DBSync.Business
                 Name = sourceItem.Name,
                 SourceId = sourceItem.SourceId
             };
-        }
-
-        internal static void ReserveIDRange(int nbOfIds, out long startingId)
-        {
-            IDManager.Instance.ReserveIDRange(typeof(CountryManager), nbOfIds, out startingId);
         }
 
         public override void FillTableInfo(bool useTempTables)

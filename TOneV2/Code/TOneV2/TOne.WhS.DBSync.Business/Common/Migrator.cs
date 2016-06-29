@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Entities.EntitySynchronization;
@@ -15,7 +16,7 @@ namespace TOne.WhS.DBSync.Business
             Context = context;
         }
 
-        public virtual void Migrate()
+        public virtual void Migrate(MigrationInfoContext context)
         {
             Context.WriteInformation("Migrating table '" + TableName + "' started");
             var sourceItems = GetSourceItems();
@@ -29,6 +30,8 @@ namespace TOne.WhS.DBSync.Business
                         itemsToAdd.Add(item);
                 }
                 AddItems(itemsToAdd);
+                if (context.GeneratedIdsInfoContext != null)
+                    context.GeneratedIdsInfoContext.LastTakenId = TotalRows;
             }
             Context.WriteInformation(string.Format("Migrating table '" + TableName + "' ended: {0} rows ", TotalRows));
         }

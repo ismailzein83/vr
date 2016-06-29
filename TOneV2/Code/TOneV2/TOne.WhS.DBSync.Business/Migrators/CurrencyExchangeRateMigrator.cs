@@ -22,9 +22,9 @@ namespace TOne.WhS.DBSync.Business
             allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
         }
 
-        public override void Migrate()
+        public override void Migrate(MigrationInfoContext context)
         {
-            base.Migrate();
+            base.Migrate(context);
         }
 
         public override void AddItems(List<CurrencyExchangeRate> itemsToAdd)
@@ -57,9 +57,7 @@ namespace TOne.WhS.DBSync.Business
         }
         public override void FillTableInfo(bool useTempTables)
         {
-            DBTable dbTableCurrencyExchangeRate = Context.DBTables[DBTableName.CurrencyExchangeRate];
-            if (dbTableCurrencyExchangeRate != null)
-                dbTableCurrencyExchangeRate.Records = dbSyncDataManager.GetCurrencyExchangeRates(useTempTables);
+           
         }
     }
 }

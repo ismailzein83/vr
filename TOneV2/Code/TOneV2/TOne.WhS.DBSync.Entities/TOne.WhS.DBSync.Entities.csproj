@@ -53,6 +53,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TOne.WhS.BusinessEntity.Entities">
+      <HintPath>..\Output\TOne.WhS.BusinessEntity.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
@@ -65,10 +68,15 @@
     <Compile Include="Common\DBForeignKey.cs" />
     <Compile Include="Common\DBTable.cs" />
     <Compile Include="Common\DBTableName.cs" />
+    <Compile Include="Common\GeneratedIDsInfoContext.cs" />
     <Compile Include="Common\MigrationContext.cs" />
     <Compile Include="Common\MigrationCredentials.cs" />
+    <Compile Include="IDManagerEntity.cs" />
+    <Compile Include="SourceCarrierSwitchConnectivity.cs" />
+    <Compile Include="SourceCustomerSellingProduct.cs" />
     <Compile Include="SourceCarrierAccount.cs" />
     <Compile Include="SourceCode.cs" />
+    <Compile Include="SourceCustomerZone.cs" />
     <Compile Include="SourcePriceList.cs" />
     <Compile Include="SourceRate.cs" />
     <Compile Include="SourceZone.cs" />

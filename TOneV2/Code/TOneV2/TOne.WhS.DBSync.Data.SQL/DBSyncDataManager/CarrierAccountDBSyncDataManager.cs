@@ -45,7 +45,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 row[index++] = Vanrise.Common.Serializer.Serialize(item.SupplierSettings);
                 row[index++] = Vanrise.Common.Serializer.Serialize(item.CustomerSettings);
                 row[index++] = Vanrise.Common.Serializer.Serialize(item.CarrierAccountSettings);
-                row[index++] = item.SellingNumberPlanId;
+                row[index++] = item.SellingNumberPlanId.HasValue ? (object)item.SellingNumberPlanId.Value : DBNull.Value;
                 row[index++] = item.SourceId;
                 dt.Rows.Add(row);
             }

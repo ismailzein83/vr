@@ -171,6 +171,16 @@ namespace TOne.WhS.BusinessEntity.Business
             return GetSaleZoneName((long)context.EntityId);
         }
 
+        public int GetSaleZoneTypeId()
+        {
+            return Vanrise.Common.Business.TypeManager.Instance.GetTypeId(this.GetSaleZoneType());
+        }
+
+        public Type GetSaleZoneType()
+        {
+            return this.GetType();
+        }
+
         #endregion
         
         #region Private Members

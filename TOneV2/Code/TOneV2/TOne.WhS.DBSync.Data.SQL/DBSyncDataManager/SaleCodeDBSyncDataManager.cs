@@ -13,6 +13,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.SaleCode);
         string _Schema = "TOneWhS_BE";
         bool _UseTempTables;
+
         public SaleCodeDBSyncDataManager(bool useTempTables) :
             base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
@@ -85,5 +86,6 @@ namespace TOne.WhS.DBSync.Data.SQL
         {
             return _Schema;
         }
+       
     }
 }

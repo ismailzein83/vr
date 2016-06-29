@@ -28,5 +28,16 @@ namespace TOne.WhS.SupplierPriceList.Business
             ISupplierPriceListDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
             return dataManager.AddPriceListAndSyncImportedDataWithDB(priceListId, processInstanceId, supplierId, currencyId, fileId);
         }
+
+        public int GetSupplierPriceListTypeId()
+        {
+            return Vanrise.Common.Business.TypeManager.Instance.GetTypeId(this.GetSupplierPriceListType());
+        }
+
+        public Type GetSupplierPriceListType()
+        {
+            return this.GetType();
+        }
+       
     }
 }

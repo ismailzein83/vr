@@ -27,16 +27,17 @@ namespace TOne.WhS.DBSync.Business
             allCodeGroups = (Dictionary<string, CodeGroup>)dbTableCodeGroup.Records;
         }
 
-        public override void Migrate()
+        public override void Migrate(MigrationInfoContext context)
         {
-            base.Migrate();
+            SupplierCodeManager manager = new SupplierCodeManager();
+            context.GeneratedIdsInfoContext = new GeneratedIdsInfoContext();
+            context.GeneratedIdsInfoContext.TypeId = manager.GetSupplierCodeTypeId();
+            base.Migrate(context);
         }
 
         public override void AddItems(List<SupplierCode> itemsToAdd)
         {
-            long startingId;
-            ReserveIDRange(itemsToAdd.Count(), out startingId);
-            dbSyncDataManager.ApplySupplierCodesToTemp(itemsToAdd, startingId);
+            dbSyncDataManager.ApplySupplierCodesToTemp(itemsToAdd, 1);
             TotalRows = itemsToAdd.Count;
         }
 
@@ -71,15 +72,11 @@ namespace TOne.WhS.DBSync.Business
                 return null;
         }
 
-        internal static void ReserveIDRange(int nbOfIds, out long startingId)
-        {
-            IDManager.Instance.ReserveIDRange(typeof(SupplierCodeManager), nbOfIds, out startingId);
-        }
         public override void FillTableInfo(bool useTempTables)
         {
-            DBTable dbTableSupplierCode = Context.DBTables[DBTableName.SupplierCode];
-            if (dbTableSupplierCode != null)
-                dbTableSupplierCode.Records = dbSyncDataManager.GetSupplierCodes(useTempTables);
+
         }
     }
+
+   
 }

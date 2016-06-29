@@ -82,6 +82,17 @@ namespace TOne.WhS.BusinessEntity.Business
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
             return dataManager.GetSaleCodesByZoneIDs(zoneIds, effectiveDate);
         }
+
+        public int GetSaleCodeTypeId()
+        {
+            return Vanrise.Common.Business.TypeManager.Instance.GetTypeId(this.GetSaleCodeType());
+        }
+
+        public Type GetSaleCodeType()
+        {
+            return this.GetType();
+        }
+
         #endregion
 
         #region private Methode

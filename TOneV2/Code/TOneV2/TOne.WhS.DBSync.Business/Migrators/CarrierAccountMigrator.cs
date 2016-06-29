@@ -25,9 +25,9 @@ namespace TOne.WhS.DBSync.Business
             allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
         }
 
-        public override void Migrate()
+        public override void Migrate(MigrationInfoContext context)
         {
-            base.Migrate();
+            base.Migrate(context);
         }
 
         public override void AddItems(List<CarrierAccount> itemsToAdd)
@@ -109,7 +109,7 @@ namespace TOne.WhS.DBSync.Business
                     CarrierProfileId = carrierProfile.CarrierProfileId,
                     CustomerSettings = carrierAccountCustomerSettings,
                     NameSuffix = sourceItem.NameSuffix,
-                    SellingNumberPlanId = Context.DefaultSellingNumberPlanId,
+                    SellingNumberPlanId = accountType == CarrierAccountType.Supplier ? null : (int?)Context.DefaultSellingNumberPlanId,
                     SupplierSettings = carrierAccountSupplierSettings,
                     SourceId = sourceItem.SourceId
                 };

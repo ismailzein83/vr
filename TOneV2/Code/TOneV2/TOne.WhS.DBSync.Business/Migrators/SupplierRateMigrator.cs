@@ -30,16 +30,17 @@ namespace TOne.WhS.DBSync.Business
             allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
         }
 
-        public override void Migrate()
+        public override void Migrate(MigrationInfoContext context)
         {
-            base.Migrate();
+            SupplierRateManager manager = new SupplierRateManager();
+            context.GeneratedIdsInfoContext = new GeneratedIdsInfoContext();
+            context.GeneratedIdsInfoContext.TypeId = manager.GetSupplierRateTypeId();
+            base.Migrate(context);
         }
 
         public override void AddItems(List<SupplierRate> itemsToAdd)
         {
-            long startingId;
-            ReserveIDRange(itemsToAdd.Count(), out startingId);
-            dbSyncDataManager.ApplySupplierRatesToTemp(itemsToAdd, startingId);
+            dbSyncDataManager.ApplySupplierRatesToTemp(itemsToAdd, 1);
             TotalRows = itemsToAdd.Count;
         }
 
@@ -84,15 +85,12 @@ namespace TOne.WhS.DBSync.Business
             else
                 return null;
         }
-        internal static void ReserveIDRange(int nbOfIds, out long startingId)
-        {
-            IDManager.Instance.ReserveIDRange(typeof(SupplierRateManager), nbOfIds, out startingId);
-        }
+       
         public override void FillTableInfo(bool useTempTables)
         {
-            DBTable dbTableSupplierRate = Context.DBTables[DBTableName.SupplierRate];
-            if (dbTableSupplierRate != null)
-                dbTableSupplierRate.Records = dbSyncDataManager.GetSupplierRates(useTempTables);
+         
         }
+
     }
+
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using TOne.WhS.DBSync.Entities;
+using Vanrise.Common.Business;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.DBSync.Data.SQL
@@ -46,17 +47,61 @@ namespace TOne.WhS.DBSync.Data.SQL
             return Executed;
         }
 
-        public bool FinalizeMigration()
+
+        public bool TruncateTables()
         {
             bool Executed = false;
             try
             {
                 _ServerConnection.BeginTransaction();
+                GetAllDatabasesofTables();
+                ScriptAllFKs();
                 DropFKs();
-                DropOriginalTables();
-                RenameTempTables();
-                CreateIndexes();
+                Truncate();
+                _ServerConnection.CommitTransaction();
+                Executed = true;
+            }
+            catch (Exception ex)
+            {
+                _ServerConnection.RollBackTransaction();
+                throw ex;
+            }
+            return Executed;
+        }
+
+        public bool CreateForeignKeys()
+        {
+            bool Executed = false;
+            try
+            {
+                _ServerConnection.BeginTransaction();
                 CreateFKs();
+                _ServerConnection.CommitTransaction();
+                Executed = true;
+            }
+            catch (Exception ex)
+            {
+                _ServerConnection.RollBackTransaction();
+                throw ex;
+            }
+            return Executed;
+        }
+
+        public bool FinalizeMigration(bool useTempTables, List<IDManagerEntity> idManagerEntities)
+        {
+            bool Executed = false;
+            try
+            {
+                _ServerConnection.BeginTransaction();
+                UpdateIdManager(idManagerEntities);
+                if (useTempTables)
+                {
+                    DropFKs();
+                    DropOriginalTables();
+                    RenameTempTables();
+                    CreateIndexes();
+                    CreateFKs();
+                }
                 _ServerConnection.CommitTransaction();
                 Executed = true;
             }
@@ -128,6 +173,16 @@ namespace TOne.WhS.DBSync.Data.SQL
             }
         }
 
+        private bool UpdateIdManager(List<IDManagerEntity> idManagerEntities)
+        {
+            foreach (IDManagerEntity idManagerEntity in idManagerEntities)
+            {
+                if (!IDManager.Instance.UpdateIDManager(idManagerEntity.TypeId, idManagerEntity.LastTakenId))
+                    return false;
+            }
+            return true;
+        }
+
         private void GetAllDatabasesofTables()
         {
             foreach (DBTable dbTable in _Context.DBTables.Values)
@@ -193,6 +248,16 @@ namespace TOne.WhS.DBSync.Data.SQL
                     if (scriptedFK != string.Empty)
                         db.ScriptCreateFKs.Add(scriptedFK);
                 }
+        }
+
+        private void Truncate()
+        {
+            Array tablesToBeTruncated =  Enum.GetValues(typeof(DBTableName));
+            foreach (var db in databaseScripts)
+                foreach (Table table in _Server.Databases[db.Database].Tables)
+                    if (Enum.IsDefined(typeof(DBTableName), table.Name))
+                        table.TruncateData();
+
         }
 
         public void CreateTempTables()

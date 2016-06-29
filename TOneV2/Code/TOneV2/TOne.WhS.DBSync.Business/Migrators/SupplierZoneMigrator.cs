@@ -28,16 +28,17 @@ namespace TOne.WhS.DBSync.Business
             allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
         }
 
-        public override void Migrate()
+        public override void Migrate(MigrationInfoContext context)
         {
-            base.Migrate();
+            SupplierZoneManager manager = new SupplierZoneManager();
+            context.GeneratedIdsInfoContext = new GeneratedIdsInfoContext();
+            context.GeneratedIdsInfoContext.TypeId = manager.GetSupplierZoneTypeId();
+            base.Migrate(context);
         }
 
         public override void AddItems(List<SupplierZone> itemsToAdd)
         {
-            long startingId;
-            ReserveIDRange(itemsToAdd.Count(), out startingId);
-            dbSyncDataManager.ApplySupplierZonesToTemp(itemsToAdd, startingId);
+            dbSyncDataManager.ApplySupplierZonesToTemp(itemsToAdd, 1);
             TotalRows = itemsToAdd.Count;
         }
 
@@ -70,10 +71,6 @@ namespace TOne.WhS.DBSync.Business
                 return null;
         }
 
-        internal static void ReserveIDRange(int nbOfIds, out long startingId)
-        {
-            IDManager.Instance.ReserveIDRange(typeof(SupplierZoneManager), nbOfIds, out startingId);
-        }
         public override void FillTableInfo(bool useTempTables)
         {
             DBTable dbTableSupplierZone = Context.DBTables[DBTableName.SupplierZone];

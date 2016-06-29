@@ -14,6 +14,7 @@ namespace TOne.WhS.DBSync.Entities
         public MigrationCredentials MigrationCredentials { get; set; }
         public int DefaultSellingNumberPlanId { get; set; }
 
+        public int SellingProductId { get; set; }
 
         public void WriteException(Exception ex)
         {

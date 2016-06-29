@@ -31,6 +31,17 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allPriceLists.ToBigResult(input, filterExpression, SupplierPriceListDetailMapper));
         }
 
+
+        public int GetSupplierPriceListTypeId()
+        {
+            return Vanrise.Common.Business.TypeManager.Instance.GetTypeId(this.GetSupplierPriceListType());
+        }
+
+        public Type GetSupplierPriceListType()
+        {
+            return this.GetType();
+        }
+
         #endregion
 
         #region Private Members

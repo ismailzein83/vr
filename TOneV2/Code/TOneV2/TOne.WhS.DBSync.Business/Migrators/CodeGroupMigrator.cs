@@ -22,9 +22,9 @@ namespace TOne.WhS.DBSync.Business
             allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
         }
 
-        public override void Migrate()
+        public override void Migrate(MigrationInfoContext context)
         {
-            base.Migrate();
+            base.Migrate(context);
         }
 
         public override void AddItems(List<CodeGroup> itemsToAdd)

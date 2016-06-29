@@ -13,7 +13,7 @@ namespace TOne.WhS.DBSync.Business
 
     public class DBSyncTaskAction : SchedulerTaskAction
     {
-
+        List<IDManagerEntity> _idManagerEntities = new List<IDManagerEntity>();
 
         public override SchedulerTaskExecuteOutput Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions)
         {
@@ -26,11 +26,14 @@ namespace TOne.WhS.DBSync.Business
                 context.UseTempTables = dbSyncTaskActionArgument.UseTempTables;
                 context.ConnectionString = dbSyncTaskActionArgument.ConnectionString;
                 context.DefaultSellingNumberPlanId = dbSyncTaskActionArgument.DefaultSellingNumberPlanId;
+                context.SellingProductId = dbSyncTaskActionArgument.SellingProductId;
                 context.MigrationRequestedTables = dbSyncTaskActionArgument.MigrationRequestedTables;
                 context.DBTables = FillDBTables(context);
                 migrationManager = ConstructMigrationManager(context);
                 PrepareBeforeApplyingRecords(context, migrationManager);
+                //TruncateTables(context, migrationManager);
                 TransferData(context);
+                //CreateForeignKeys(context, migrationManager);
                 FinalizeMigration(context, migrationManager);
                 context.WriteInformation("Database Sync Task Action Executed");
 
@@ -134,6 +137,12 @@ namespace TOne.WhS.DBSync.Business
                     case DBTableName.File:
                         iDBSyncDataManager = new FileDBSyncDataManager(context.UseTempTables);
                         break;
+                    case DBTableName.CustomerZone:
+                        iDBSyncDataManager = new CustomerZoneDBSyncDataManager(context.UseTempTables, context.SellingProductId);
+                        break;
+                    case DBTableName.SwitchConnectivity:
+                        iDBSyncDataManager = new SwitchConnectivityDBSyncDataManager(context.UseTempTables);
+                        break;
 
                 }
                 AddDBTable(dtTables, table, iDBSyncDataManager.GetConnection(), iDBSyncDataManager.GetSchema(), migrationRequested);
@@ -166,14 +175,30 @@ namespace TOne.WhS.DBSync.Business
             return migrationCredential;
         }
 
+
+
+        private void TruncateTables(MigrationContext context, MigrationManager migrationManager)
+        {
+            if (!context.UseTempTables)
+            {
+                migrationManager.TruncateTables();
+            }
+        }
+
+        private void CreateForeignKeys(MigrationContext context, MigrationManager migrationManager)
+        {
+            if (!context.UseTempTables)
+            {
+                migrationManager.CreateForeignKeys();
+            }
+        }
+
+
         private void FinalizeMigration(MigrationContext context, MigrationManager migrationManager)
         {
-            if (context.UseTempTables)
-            {
                 context.WriteInformation("Finalizing Migration Started");
-                migrationManager.FinalizeMigration();
-                context.WriteInformation("Finalizing Migration Ended"); ;
-            }
+                migrationManager.FinalizeMigration(context.UseTempTables, _idManagerEntities);
+                context.WriteInformation("Finalizing Migration Ended");
         }
 
         private void PrepareBeforeApplyingRecords(MigrationContext context, MigrationManager migrationManager)
@@ -186,7 +211,7 @@ namespace TOne.WhS.DBSync.Business
             }
         }
 
-        private void CallMigrator(MigrationContext context, DBTable table)
+        private void CallMigrator(MigrationContext context, DBTable table, MigrationInfoContext migrationInfoContext)
         {
             IMigrator imgrator = null;
             switch ((DBTableName)System.Enum.Parse(typeof(DBTableName), table.Name))
@@ -250,13 +275,21 @@ namespace TOne.WhS.DBSync.Business
                 case DBTableName.SupplierRate:
                     imgrator = new SupplierRateMigrator(context);
                     break;
+
+                case DBTableName.CustomerZone:
+                    imgrator = new CustomerZoneMigrator(context);
+                    break;
+
+                case DBTableName.SwitchConnectivity:
+                    imgrator = new SwitchConnectivityMigrator(context);
+                    break;
             }
 
             if (imgrator != null)
             {
                 if (table.MigrationRequested)
                 {
-                    imgrator.Migrate();
+                    imgrator.Migrate(migrationInfoContext);
                     imgrator.FillTableInfo(context.UseTempTables);
                 }
                 else
@@ -268,27 +301,21 @@ namespace TOne.WhS.DBSync.Business
 
         private void TransferData(MigrationContext context)
         {
-            CallMigrator(context, GetDBTableFromName(context, DBTableName.Switch));
-            CallMigrator(context, GetDBTableFromName(context, DBTableName.Currency));
-            CallMigrator(context, GetDBTableFromName(context, DBTableName.CurrencyExchangeRate));
-            CallMigrator(context, GetDBTableFromName(context, DBTableName.Country));
-            CallMigrator(context, GetDBTableFromName(context, DBTableName.CodeGroup));
-            CallMigrator(context, GetDBTableFromName(context, DBTableName.CarrierProfile));
-            CallMigrator(context, GetDBTableFromName(context, DBTableName.CarrierAccount));
-            CallMigrator(context, GetDBTableFromName(context, DBTableName.SaleZone));
-            CallMigrator(context, GetDBTableFromName(context, DBTableName.SupplierZone));
-            CallMigrator(context, GetDBTableFromName(context, DBTableName.SaleCode));
-            CallMigrator(context, GetDBTableFromName(context, DBTableName.SupplierCode));
-            CallMigrator(context, GetDBTableFromName(context, DBTableName.SalePriceList));
-            CallMigrator(context, GetDBTableFromName(context, DBTableName.SupplierPriceList));
-            CallMigrator(context, GetDBTableFromName(context, DBTableName.SaleRate));
-            CallMigrator(context, GetDBTableFromName(context, DBTableName.SupplierRate));
+            foreach (var dbTableNameValue in Enum.GetValues(typeof(DBTableName)))
+            {
+                MigrationInfoContext migrationContext = new MigrationInfoContext();
+                CallMigrator(context, GetDBTableFromName(context, (DBTableName)dbTableNameValue), migrationContext);
+                if (migrationContext.GeneratedIdsInfoContext != null)
+                {
+                    _idManagerEntities.Add(new IDManagerEntity() { LastTakenId = migrationContext.GeneratedIdsInfoContext.LastTakenId, TypeId = migrationContext.GeneratedIdsInfoContext.TypeId });
+                }
+            }
         }
 
         private static DBTable GetDBTableFromName(MigrationContext context, DBTableName dbTableName)
         {
             string tableName = Vanrise.Common.Utilities.GetEnumDescription(dbTableName);
-           
+
             return context.DBTables.Values.FindRecord(item => item.Name.Equals(tableName));
         }
     }

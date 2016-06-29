@@ -27,19 +27,38 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
         };
 
         function DirectiveConstructor($scope, ctrl) {
+            var sellingNumberPlanId;
+            var sellingProductId;
 
             var sellingNumberPlanDirectiveAPI;
             var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var sellingProductDirectiveAPI;
+            var sellingProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.useTempTables = true;
-                $scope.migrationTables = UtilsService.getArrayEnum(WhS_BE_DBTableNameEnum);
-                $scope.migrationTablesSelectedValues = UtilsService.getArrayEnum(WhS_BE_DBTableNameEnum);
+                $scope.migrationTables = []; 
+                angular.forEach(UtilsService.getArrayEnum(WhS_BE_DBTableNameEnum), function (dbTable) {
+                    if (dbTable.defaultMigrate)
+                        $scope.migrationTables.push(dbTable);
+                });
+                $scope.migrationTablesSelectedValues = $scope.migrationTables; 
+
                 $scope.onSellingNumberPlanDirectiveReady = function (api) {
                     sellingNumberPlanDirectiveAPI = api;
                     sellingNumberPlanReadyPromiseDeferred.resolve();
                 }
-                defineAPI();
+
+                $scope.onSellingProductsDirectiveReady = function (api) {
+                    sellingProductDirectiveAPI = api;
+                    sellingProductReadyPromiseDeferred.resolve();
+                }
+
+                UtilsService.waitMultiplePromises([sellingNumberPlanReadyPromiseDeferred.promise, sellingProductReadyPromiseDeferred.promise]).then(function () {
+                    defineAPI();
+                });
+
             }
 
             function defineAPI() {
@@ -53,48 +72,75 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     schedulerTaskAction.ConnectionString = $scope.connectionString;
                     schedulerTaskAction.DefaultSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
                     schedulerTaskAction.UseTempTables = ($scope.useTempTables == true) ? true : false;
+                    schedulerTaskAction.SellingProductId = sellingProductDirectiveAPI.getSelectedIds();
                     var selectedTables = [];
 
                     $scope.migrationTablesSelectedValues;
                     angular.forEach($scope.migrationTablesSelectedValues, function (x) {
                         selectedTables.push(x.value);
                     });
+                    selectedTables.push(WhS_BE_DBTableNameEnum.CustomerZone.value);
                     schedulerTaskAction.MigrationRequestedTables = selectedTables;
 
-                    console.log(selectedTables)
                     return schedulerTaskAction;
                 };
 
                 api.load = function (payload) {
-                    var sellingNumberPlanId;
 
                     if (payload != undefined && payload.data != undefined) {
                         $scope.connectionString = payload.data.ConnectionString;
                         $scope.useTempTables = payload.data.UseTempTables;
                         sellingNumberPlanId = payload.data.DefaultSellingNumberPlanId;
+                        sellingProductId = payload.data.SellingProductId;
                         $scope.migrationTablesSelectedValues = [];
+
+
                         angular.forEach(payload.data.MigrationRequestedTables, function (x) {
-                            $scope.migrationTablesSelectedValues.push(UtilsService.getEnum(WhS_BE_DBTableNameEnum, 'value', x));
-                        });
+                            if (x != WhS_BE_DBTableNameEnum.CustomerZone.value)
+                                 $scope.migrationTablesSelectedValues.push(UtilsService.getEnum(WhS_BE_DBTableNameEnum, 'value', x));
+                        })
+
                     }
 
-                    var sellingNumberPlanPayload;
-                    var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
-                    if (sellingNumberPlanId != undefined) {
-                        sellingNumberPlanPayload = {
-                            selectedIds: sellingNumberPlanId
-                        };
-                    }
-                    sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
-                        VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, sellingNumberPlanPayload, loadSellingNumberPlanPromiseDeferred);
-                    });
-
-                    return loadSellingNumberPlanPromiseDeferred.promise
+                    return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlanSelector, loadSellingProductSelector])
+                         .catch(function (error) {
+                             VRNotificationService.notifyExceptionWithClose(error, $scope);
+                         });
 
                 }
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function loadSellingNumberPlanSelector() {
+
+                var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
+                  var sellingNumberPlanPayload = {
+                        selectedIds: sellingNumberPlanId
+                    };
+
+                    VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, sellingNumberPlanPayload, loadSellingNumberPlanPromiseDeferred);
+                });
+
+                return loadSellingNumberPlanPromiseDeferred.promise
+            }
+
+
+            function loadSellingProductSelector() {
+                var loadSellingProductPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                sellingProductReadyPromiseDeferred.promise.then(function () {
+                    var sellingProductPayload = {
+                        selectedIds: sellingProductId
+                    };
+
+                    VRUIUtilsService.callDirectiveLoad(sellingProductDirectiveAPI, sellingProductPayload, loadSellingProductPromiseDeferred);
+                });
+
+                return loadSellingProductPromiseDeferred.promise
             }
 
             this.initializeController = initializeController;
