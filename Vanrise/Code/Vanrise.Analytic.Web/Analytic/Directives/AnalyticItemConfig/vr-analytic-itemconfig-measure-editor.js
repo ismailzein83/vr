@@ -44,22 +44,22 @@
             var fieldTypeAPI;
             var fieldTypeReadyDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
-
-                $scope.onJoinSelectorDirectiveReady = function (api) {
+                $scope.scopeModel = {};
+                $scope.scopeModel.onJoinSelectorDirectiveReady = function (api) {
                     joinSelectorAPI = api;
                     joinReadyDeferred.resolve();
                 }
 
-                $scope.onDependentAggregateSelectorDirectiveReady = function (api) {
+                $scope.scopeModel.onDependentAggregateSelectorDirectiveReady = function (api) {
                     dependentAggregateDimensionSelectorAPI = api;
                     dependentAggregateDimensionReadyDeferred.resolve();
                 }
-                $scope.onDependentDimensionSelectorDirectiveReady = function (api) {
+                $scope.scopeModel.onDependentDimensionSelectorDirectiveReady = function (api) {
                     dependentDimensionSelectorAPI = api;
                     dependentDimensionReadyDeferred.resolve();
                 }
 
-                $scope.onFieldTypeReady = function (api) {
+                $scope.scopeModel.onFieldTypeReady = function (api) {
                     fieldTypeAPI = api;
                     fieldTypeReadyDeferred.resolve();
                 }
@@ -82,7 +82,7 @@
                         tableId = payload.tableId;
                         configEntity = payload.ConfigEntity;
                         if (configEntity != undefined) {
-                            $scope.sqlExpressionMethod = configEntity.GetValueMethod;
+                            $scope.scopeModel.sqlExpressionMethod = configEntity.GetValueMethod;
                         }
                         var loadJoinDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         joinReadyDeferred.promise.then(function () {
@@ -140,7 +140,7 @@
 
                     var dimension = {
                         $type: "Vanrise.Analytic.Entities.AnalyticMeasureConfig ,Vanrise.Analytic.Entities",
-                        GetValueMethod: $scope.sqlExpressionMethod,
+                        GetValueMethod: $scope.scopeModel.sqlExpressionMethod,
                         JoinConfigNames: joinConfigNames,
                         DependentAggregateNames: dependentAggregateNames,
                         DependentDimensions: dependentDimensions,

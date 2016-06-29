@@ -47,39 +47,40 @@
             var fieldTypeReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-                $scope.expressionType = UtilsService.getArrayEnum(VR_Analytic_ExpressionTypeEnum);
-                $scope.dimensionFieldMappings = [];
-                $scope.showSQLExpression = true;
-                $scope.showSQLExpressionMethod = false;
-                $scope.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpression;
-                $scope.onExpressionTypeSelectionChanged = function () {
-                    if ($scope.selectedExpressionType != undefined) {
+                $scope.scopeModel = {};
+                $scope.scopeModel.expressionType = UtilsService.getArrayEnum(VR_Analytic_ExpressionTypeEnum);
+                $scope.scopeModel.dimensionFieldMappings = [];
+                $scope.scopeModel.showSQLExpression = true;
+                $scope.scopeModel.showSQLExpressionMethod = false;
+                $scope.scopeModel.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpression;
+                $scope.scopeModel.onExpressionTypeSelectionChanged = function () {
+                    if ($scope.scopeModel.selectedExpressionType != undefined) {
 
-                        switch ($scope.selectedExpressionType.value) {
-                            case VR_Analytic_ExpressionTypeEnum.SQLExpression.value: $scope.showSQLExpression = true; $scope.showSQLExpressionMethod = false; break;
-                            case VR_Analytic_ExpressionTypeEnum.SQLExpressionMethod.value: $scope.showSQLExpressionMethod = true; $scope.showSQLExpression = false; break;
+                        switch ($scope.scopeModel.selectedExpressionType.value) {
+                            case VR_Analytic_ExpressionTypeEnum.SQLExpression.value: $scope.scopeModel.showSQLExpression = true; $scope.scopeModel.showSQLExpressionMethod = false; break;
+                            case VR_Analytic_ExpressionTypeEnum.SQLExpressionMethod.value: $scope.scopeModel.showSQLExpressionMethod = true; $scope.scopeModel.showSQLExpression = false; break;
                         }
 
                     }
                 }
 
-                $scope.onParentDimensionSelectorDirectiveReady = function (api) {
+                $scope.scopeModel.onParentDimensionSelectorDirectiveReady = function (api) {
                     parentDimensionSelectorAPI = api;
                     parentDimensionReadyDeferred.resolve();
                 }
-                $scope.onDependentDimensionSelectorDirectiveReady = function (api) {
+                $scope.scopeModel.onDependentDimensionSelectorDirectiveReady = function (api) {
                     dependentDimensionSelectorAPI = api;
                     dependentDimensionReadyDeferred.resolve();
                 }
-                $scope.onRequiredParentDimensionSelectorDirectiveReady = function (api) {
+                $scope.scopeModel.onRequiredParentDimensionSelectorDirectiveReady = function (api) {
                     requiredParentDimensionSelectorAPI = api;
                     requiredParentDimensionReadyDeferred.resolve();
                 }
-                $scope.onJoinSelectorDirectiveReady = function (api) {
+                $scope.scopeModel.onJoinSelectorDirectiveReady = function (api) {
                     joinSelectorAPI = api;
                     joinReadyDeferred.resolve();
                 }
-                $scope.onFieldTypeReady = function (api) {
+                $scope.scopeModel.onFieldTypeReady = function (api) {
                     fieldTypeAPI = api;
                     fieldTypeReadyDeferred.resolve();
                 }
@@ -102,20 +103,20 @@
                         if (configEntity != undefined)
                         {
                            
-                            $scope.sqlExpression = configEntity.SQLExpression;
-                            $scope.sqlExpressionMethod = configEntity.GetValueMethod;
+                            $scope.scopeModel.sqlExpression = configEntity.SQLExpression;
+                            $scope.scopeModel.sqlExpressionMethod = configEntity.GetValueMethod;
 
-                            if ($scope.sqlExpression != undefined) {
-                                $scope.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpression;
-                            } else if ($scope.sqlExpressionMethod != undefined) {
-                                $scope.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpressionMethod;
+                            if ($scope.scopeModel.sqlExpression != undefined) {
+                                $scope.scopeModel.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpression;
+                            } else if ($scope.scopeModel.sqlExpressionMethod != undefined) {
+                                $scope.scopeModel.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpressionMethod;
                             }
                           
                         }
 
 
                         getAnalyticDimensionEditorRuntime(tableId).then(function (response) {
-                            $scope.dimensionFieldMappings.length = 0;
+                            $scope.scopeModel.dimensionFieldMappings.length = 0;
                             if (response && response.DataRecordTypeInfo != undefined)
                             {
                                 for (var i = 0; i < response.DataRecordTypeInfo.length; i++) {
@@ -155,7 +156,7 @@
                                     VRUIUtilsService.callDirectiveLoad(dataItem.directiveAPI, dataItemPayload, filterItem.loadPromiseDeferred);
                                 });
 
-                            $scope.dimensionFieldMappings.push(dataItem);
+                            $scope.scopeModel.dimensionFieldMappings.push(dataItem);
                         }
 
 
@@ -226,11 +227,11 @@
                     var dependentDimensions = dependentDimensionSelectorAPI != undefined ? dependentDimensionSelectorAPI.getSelectedIds() : undefined;
 
                     var dimensionFieldMappings = [];
-                    if($scope.dimensionFieldMappings.length >0)
+                    if ($scope.scopeModel.dimensionFieldMappings.length > 0)
                     {
-                        for(var i=0;i<$scope.dimensionFieldMappings.length;i++)
+                        for (var i = 0; i < $scope.scopeModel.dimensionFieldMappings.length; i++)
                         {
-                            var dimensionFieldMapping = $scope.dimensionFieldMappings[i];
+                            var dimensionFieldMapping = $scope.scopeModel.dimensionFieldMappings[i];
                             dimensionFieldMappings.push({
                                 DataRecordTypeId:dimensionFieldMapping.DataRecordTypeId,
                                 FieldName: dimensionFieldMapping.directiveAPI.getSelectedIds()
@@ -240,8 +241,8 @@
 
                     var dimension = {
                         $type: "Vanrise.Analytic.Entities.AnalyticDimensionConfig ,Vanrise.Analytic.Entities",
-                        SQLExpression: $scope.showSQLExpression ? $scope.sqlExpression : undefined,
-                        GetValueMethod: $scope.showSQLExpressionMethod ? $scope.sqlExpressionMethod : undefined,
+                        SQLExpression: $scope.scopeModel.showSQLExpression ? $scope.scopeModel.sqlExpression : undefined,
+                        GetValueMethod: $scope.scopeModel.showSQLExpressionMethod ? $scope.scopeModel.sqlExpressionMethod : undefined,
                         DependentDimensions:dependentDimensions,
                         JoinConfigNames: joinConfigNames,
                         Parents: parents,

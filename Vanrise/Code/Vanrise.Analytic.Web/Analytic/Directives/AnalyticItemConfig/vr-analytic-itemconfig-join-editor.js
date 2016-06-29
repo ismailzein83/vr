@@ -34,6 +34,7 @@
             this.initializeController = initializeController;
            
             function initializeController() {
+                $scope.scopeModel = {};
                 defineAPI();
             }
 
@@ -48,7 +49,7 @@
                         tableId = payload.tableId;
                         configEntity = payload.ConfigEntity;
                         if (configEntity != undefined) {
-                            $scope.joinStatement = configEntity.JoinStatement;
+                            $scope.scopeModel.joinStatement = configEntity.JoinStatement;
                         }
                         return UtilsService.waitMultiplePromises(promises);
                     }
@@ -57,7 +58,7 @@
                 api.getData = function () {
                     var join = {
                         $type: "Vanrise.Analytic.Entities.AnalyticJoinConfig ,Vanrise.Analytic.Entities",
-                        JoinStatement: $scope.joinStatement,
+                        JoinStatement: $scope.scopeModel.joinStatement,
                     };
                     return join;
                 }

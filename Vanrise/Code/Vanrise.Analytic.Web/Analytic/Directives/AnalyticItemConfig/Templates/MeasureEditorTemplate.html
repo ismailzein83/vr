@@ -3,18 +3,18 @@
         <vr-columns width="fullrow">
             <vr-row removeline>
                 <vr-columns width="fullrow">
-                    <vr-textarea value="sqlExpressionMethod" label="SQL Expression Method" isrequired="true"></vr-textarea>
+                    <vr-textarea value="scopeModel.sqlExpressionMethod" label="SQL Expression Method" isrequired="true"></vr-textarea>
                 </vr-columns>
             </vr-row>
             <vr-row>
-                <vr-analytic-aggregate-selector on-ready="onDependentAggregateSelectorDirectiveReady" normal-col-num="4" ismultipleselection></vr-analytic-aggregate-selector>
-                <vr-analytic-join-selector on-ready="onJoinSelectorDirectiveReady" normal-col-num="4" ismultipleselection></vr-analytic-join-selector>
-                <vr-analytic-dimension-selector on-ready="onDependentDimensionSelectorDirectiveReady" normal-col-num="4" customlabel="Dependent Dimensions" ismultipleselection></vr-analytic-dimension-selector>
+                <vr-analytic-aggregate-selector on-ready="scopeModel.onDependentAggregateSelectorDirectiveReady" normal-col-num="4" ismultipleselection></vr-analytic-aggregate-selector>
+                <vr-analytic-join-selector on-ready="scopeModel.onJoinSelectorDirectiveReady" normal-col-num="4" ismultipleselection></vr-analytic-join-selector>
+                <vr-analytic-dimension-selector on-ready="scopeModel.onDependentDimensionSelectorDirectiveReady" normal-col-num="4" customlabel="Dependent Dimensions" ismultipleselection></vr-analytic-dimension-selector>
             </vr-row>
         </vr-columns>
         <vr-columns width="fullrow">
             <vr-row>
-                <vr-genericdata-fieldtype-selective on-ready="onFieldTypeReady" isrequired="true"></vr-genericdata-fieldtype-selective>
+                <vr-genericdata-fieldtype-selective on-ready="scopeModel.onFieldTypeReady" isrequired="true"></vr-genericdata-fieldtype-selective>
             </vr-row>
         </vr-columns>
     </vr-row>
