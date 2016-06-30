@@ -1755,7 +1755,7 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     /*display:inline-block;*/
     white-space: nowrap;
     text-overflow: ellipsis;
-    /*overflow: hidden;*/
+    overflow: hidden;
     padding: 3px 0px 0px 5px;
     /*line-height: 1;*/
     position: relative;
@@ -1763,7 +1763,7 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
 }
 
 .vr-datagrid-celltext {
-    display: inline-block;
+    display: inline-flex;
     width: 100%;
     text-overflow: ellipsis;
     white-space: nowrap;

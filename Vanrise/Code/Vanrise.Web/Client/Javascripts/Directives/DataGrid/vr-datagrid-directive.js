@@ -566,7 +566,7 @@
                 var currentColumnHtml = '$parent.ctrl.columnDefs[' + i + ']';
                 var dataItemColumnPropertyPath = "dataItem.columnsValues." + getDataItemColumnProperty(currentColumn);
                 
-                ctrl.rowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.width, \'display\':\'inline-block\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}"">';
+                ctrl.rowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.width, \'display\':\'inline-flex\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}"">';
                 if (currentColumn.type == "MultiProgress") {
                     var values = currentColumn.field.split("|");
                     ctrl.rowHtml += '<vr-progressbar gridvalue="';
@@ -855,13 +855,13 @@
                 else {
 
                     var sh = screen.height;
-                    var h;
+                    var h =28;
                     if (isInModal() == true)
-                        h = screen.height * 0.3;
+                        h += screen.height * 0.3;
                     else
-                        h = screen.height * 0.55;
+                        h += screen.height * 0.55;
 
-                    setMaxHeight(h + "px");
+                    setMaxHeight(h  + "px");
                 }
             }
 
