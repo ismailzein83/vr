@@ -47,18 +47,20 @@ namespace Vanrise.Analytic.Business
                 if (analyticDimensions.TryGetValue(dimensionFilter.Dimension, out dimension))
                 {
                     var dimensionFieldMapping = dimension.Config.DimensionFieldMappings.Find(x => x.DataRecordTypeId == dataRecordTypeId);
-                    if(dimensionFieldMapping !=null)
+                    if (dimensionFieldMapping == null)
                     {
-                        var record = recordType.Fields.FindRecord(x => x.Name == dimensionFieldMapping.FieldName);
-                        if (record != null)
-                        {
-                            var recordFilter = record.Type.ConvertToRecordFilter(dimensionFilter.FilterValues);
-                            recordFilter.FieldName = record.Name;
-                            if (recordFilterGroup.Filters == null)
-                                recordFilterGroup.Filters = new List<RecordFilter>();
-                            recordFilterGroup.Filters.Add(recordFilter);
-                        }
+                        throw new ArgumentNullException(string.Format("Dimension {0} is not mapped to record type {1}.", dimension.Name, recordType.Name));
                     }
+                    var record = recordType.Fields.FindRecord(x => x.Name == dimensionFieldMapping.FieldName);
+                    if (record == null)
+                    {
+                        throw new ArgumentNullException(string.Format("Record field mapping for dimension {0} not found.",dimension.Name));
+                    }
+                    var recordFilter = record.Type.ConvertToRecordFilter(dimensionFilter.FilterValues);
+                    recordFilter.FieldName = record.Name;
+                    if (recordFilterGroup.Filters == null)
+                        recordFilterGroup.Filters = new List<RecordFilter>();
+                    recordFilterGroup.Filters.Add(recordFilter);
                 }
             }
             if(input.FilterGroup != null)
