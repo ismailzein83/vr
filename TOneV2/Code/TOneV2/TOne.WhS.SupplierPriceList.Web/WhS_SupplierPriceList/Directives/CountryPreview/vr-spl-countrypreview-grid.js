@@ -104,7 +104,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, VRUIUtilsService, VRNotif
         function mapDataNeeded(dataItem) {
             if (dataItem.Entity.NewCodes > 0 || dataItem.Entity.MovedCodes > 0 || dataItem.Entity.DeletedCodes > 0) {
                 $scope.showStatusIcon = true;
-                dataItem.StatusIconUrl = "Client/Modules/WhS_SupplierPriceList/Images/NewZone.png";
+                dataItem.StatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/Modified.png";
             }
 
         }

@@ -89,17 +89,17 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
 
                 ctrl.onSupplierSelectionchanged = function () {
                     selectorApi.clearDataSource();
-
-                    var oldSupplierId = supplierId;
-
-                    supplierId = supplierDirectiveApi.getSelectedIds();
-                    if (supplierId == undefined)
-                        supplierId = oldSupplierId;
+                    if(supplierDirectiveApi.getSelectedIds() != undefined)
+                        supplierId = supplierDirectiveApi.getSelectedIds();
                 }
 
                 ctrl.searchSupplierZones = function (searchValue) {
                     if (supplierId == undefined)
-                        return;
+                    {
+                        var deferredPromise = UtilsService.createPromiseDeferred();
+                        deferredPromise.resolve();
+                        return deferredPromise.promise;
+                    }
 
                     var serializedFilter = {};
                     if (filter != undefined)
@@ -163,7 +163,7 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                                 promises.push(setSelectedSupplierZonesPromiseDeferred.promise);
 
 
-                                var loadSupplierZonesPromise = WhS_BE_SupplierZoneAPIService.GetDistinctSupplierIdssBySupplierZoneIds(selectedSupplierZoneIds).then(function (response) {
+                                var loadSupplierZonesPromise = WhS_BE_SupplierZoneAPIService.GetDistinctSupplierIdsBySupplierZoneIds(selectedSupplierZoneIds).then(function (response) {
 
                                     var selectedSupplierIds = [];
                                     for (var i = 0 ; i < response.length; i++) {
@@ -228,7 +228,6 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
         }
 
         function GetSupplierZonesInfo(attrs, ctrl, selectedIds, supplierId) {
-            ctrl.datasource = [];
             return WhS_BE_SupplierZoneAPIService.GetSupplierZonesInfo(supplierId).then(function (response) {
                 angular.forEach(response, function (item) {
                     ctrl.datasource.push(item);

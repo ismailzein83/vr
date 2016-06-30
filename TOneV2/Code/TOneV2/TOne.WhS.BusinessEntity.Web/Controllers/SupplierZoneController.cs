@@ -40,11 +40,11 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
 
        [HttpPost]
-       [Route("GetDistinctSupplierIdssBySupplierZoneIds")]
-       public IEnumerable<int> GetDistinctSupplierIdssBySupplierZoneIds(IEnumerable<long> supplierZoneIds)
+       [Route("GetDistinctSupplierIdsBySupplierZoneIds")]
+       public IEnumerable<int> GetDistinctSupplierIdsBySupplierZoneIds(IEnumerable<long> supplierZoneIds)
        {
            SupplierZoneManager manager = new SupplierZoneManager();
-           return manager.GetDistinctSupplierIdssBySupplierZoneIds(supplierZoneIds);
+           return manager.GetDistinctSupplierIdsBySupplierZoneIds(supplierZoneIds);
        }
 
        [HttpGet]

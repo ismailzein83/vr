@@ -61,7 +61,7 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService
                         var setLoader = function (value) { $scope.isLoadingSupplierZonesSelector = value };
 
                         var payload = {
-                            filter: { SupplierId: supplierId },
+                           supplierId: supplierId ,
                         }
 
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, payload, setLoader);
@@ -161,7 +161,7 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService
                             CarrierAccountId: selectedSupplier.CarrierAccountId,
                             name: selectedSupplier.Name
                         };
-                        var dataItemPayload = { selectedIds: filterItem.payload.SupplierZoneIds, filter: { SupplierId: selectedSupplier.CarrierAccountId } };
+                        var dataItemPayload = { selectedIds: filterItem.payload.SupplierZoneIds, supplierId: selectedSupplier.CarrierAccountId  };
 
                         dataItem.selectedSuplierZones = [];
                         dataItem.onDirectiveReady = function (api) {

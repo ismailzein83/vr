@@ -102,22 +102,22 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
             switch (dataItem.ChangeTypeZone) {
 
                 case WhS_SupPL_ZoneChangeTypeEnum.New.value:
-                    dataItem.ZoneStatusIconUrl = "Client/Modules/WhS_SupplierPriceList/Images/NewZone.png";
+                    dataItem.ZoneStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/New.png";
                     dataItem.ZoneStatusIconTooltip = WhS_SupPL_ZoneChangeTypeEnum.New.description;
                     break;
 
                 case WhS_SupPL_ZoneChangeTypeEnum.Deleted.value:
-                    dataItem.ZoneStatusIconUrl = "Client/Modules/WhS_SupplierPriceList/Images/Closed.png";
+                    dataItem.ZoneStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/Closed.png";
                     dataItem.ZoneStatusIconTooltip = WhS_SupPL_ZoneChangeTypeEnum.Deleted.description;
                     break;
 
                 case WhS_SupPL_ZoneChangeTypeEnum.ReOpened.value:
-                    dataItem.ZoneStatusIconUrl = "Client/Modules/WhS_SupplierPriceList/Images/NewZone.png";
+                    dataItem.ZoneStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/New.png";
                     dataItem.ZoneStatusIconTooltip = WhS_SupPL_ZoneChangeTypeEnum.ReOpened.description;
                     break;
 
                 case WhS_SupPL_ZoneChangeTypeEnum.Renamed.value:
-                    dataItem.ZoneStatusIconUrl = "Client/Modules/WhS_SupplierPriceList/Images/Renamed.png";
+                    dataItem.ZoneStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/Renamed.png";
                     dataItem.ZoneStatusIconTooltip = WhS_SupPL_ZoneChangeTypeEnum.Renamed.description;
                     break;
             }
@@ -125,17 +125,17 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
 
             switch (dataItem.ChangeTypeRate) {
                 case WhS_SupPL_RateChangeTypeEnum.New.value:
-                    dataItem.RateStatusIconUrl = "Client/Modules/WhS_SupplierPriceList/Images/NewZone.png";
+                    dataItem.RateStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/New.png";
                     dataItem.RateStatusIconTooltip = WhS_SupPL_RateChangeTypeEnum.New.description;
                     break;
 
                 case WhS_SupPL_RateChangeTypeEnum.Increase.value:
-                    dataItem.RateStatusIconUrl = "Client/Modules/WhS_SupplierPriceList/Images/increase.jpg";
+                    dataItem.RateStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/Increase.png";
                     dataItem.RateStatusIconTooltip = WhS_SupPL_RateChangeTypeEnum.Increase.description;
                     break;
 
                 case WhS_SupPL_RateChangeTypeEnum.Decrease.value:
-                    dataItem.RateStatusIconUrl = "Client/Modules/WhS_SupplierPriceList/Images/decrease.jpg";
+                    dataItem.RateStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/Decrease.png";
                     dataItem.RateStatusIconTooltip = WhS_SupPL_RateChangeTypeEnum.Decrease.description;
                     break;
 

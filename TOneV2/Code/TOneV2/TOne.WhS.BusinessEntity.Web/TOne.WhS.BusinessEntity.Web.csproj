@@ -323,11 +323,11 @@
     <Content Include="WhS_BusinessEntity\Images\Decrease.png" />
     <Content Include="WhS_BusinessEntity\Images\Increase.png" />
     <Content Include="WhS_BusinessEntity\Images\Modified.png" />
-    <Content Include="WhS_BusinessEntity\Images\MoveFrom.png" />
-    <Content Include="WhS_BusinessEntity\Images\MoveTo.png" />
+    <Content Include="WhS_BusinessEntity\Images\MovedFrom.png" />
+    <Content Include="WhS_BusinessEntity\Images\MovedTo.png" />
     <Content Include="WhS_BusinessEntity\Images\New.png" />
     <Content Include="WhS_BusinessEntity\Images\PendingClosed.png" />
-    <Content Include="WhS_BusinessEntity\Images\PendingOpen.png" />
+    <Content Include="WhS_BusinessEntity\Images\PendingEffective.png" />
     <Content Include="WhS_BusinessEntity\Images\Renamed.png" />
     <Content Include="WhS_BusinessEntity\Images\ReOpen.png" />
     <Content Include="WhS_BusinessEntity\Images\Zone.png" />

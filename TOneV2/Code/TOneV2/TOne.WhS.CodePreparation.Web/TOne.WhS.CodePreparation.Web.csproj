@@ -166,17 +166,6 @@
     <Content Include="WhS_CodePreparation\Constant\NewCPOutputResultEnum.js" />
     <Content Include="WhS_CodePreparation\Directives\CodePreparation\Templates\CodePreparationSaleCodesGridTemplate.html" />
     <Content Include="WhS_CodePreparation\Directives\CodePreparation\vr-whs-codepreparation-codesgrid.js" />
-    <Content Include="WhS_CodePreparation\Images\Closed.png" />
-    <Content Include="WhS_CodePreparation\Images\MovedFrom.png" />
-    <Content Include="WhS_CodePreparation\Images\MovedTo.png" />
-    <Content Include="WhS_CodePreparation\Images\New.png" />
-    <Content Include="WhS_CodePreparation\Images\NewZone.png" />
-    <Content Include="WhS_CodePreparation\Images\PendingClosed.png" />
-    <Content Include="WhS_CodePreparation\Images\PendingClosedZone.png" />
-    <Content Include="WhS_CodePreparation\Images\PendingEffectiveZone.png" />
-    <Content Include="WhS_CodePreparation\Images\PendingOpen.png" />
-    <Content Include="WhS_CodePreparation\Images\PendingOpened.png" />
-    <Content Include="WhS_CodePreparation\Images\ClosedZone.png" />
     <Content Include="WhS_CodePreparation\Services\CodePreparationService.js" />
     <Content Include="WhS_CodePreparation\Services\APIServices\CodePreparationAPIService.js" />
     <Content Include="WhS_CodePreparation\Views\CodePreparation.html" />

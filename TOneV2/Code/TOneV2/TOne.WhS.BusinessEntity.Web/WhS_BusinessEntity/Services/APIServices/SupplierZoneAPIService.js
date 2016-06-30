@@ -30,8 +30,8 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSupplierZoneGroupTemplates"));
         }
 
-        function GetDistinctSupplierIdssBySupplierZoneIds(supplierZoneIds) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetDistinctSupplierIdssBySupplierZoneIds"), supplierZoneIds);
+        function GetDistinctSupplierIdsBySupplierZoneIds(supplierZoneIds) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetDistinctSupplierIdsBySupplierZoneIds"), supplierZoneIds);
         }
 
         function GetSupplierZonesInfo(supplierId) {
@@ -45,7 +45,7 @@
             GetSupplierZoneInfo: GetSupplierZoneInfo,
             GetSupplierZoneInfoByIds: GetSupplierZoneInfoByIds,
             GetSupplierZoneGroupTemplates: GetSupplierZoneGroupTemplates,
-            GetDistinctSupplierIdssBySupplierZoneIds: GetDistinctSupplierIdssBySupplierZoneIds,
+            GetDistinctSupplierIdsBySupplierZoneIds: GetDistinctSupplierIdsBySupplierZoneIds,
             GetSupplierZonesInfo: GetSupplierZonesInfo
         });
     }

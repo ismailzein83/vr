@@ -29,18 +29,16 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfo(SupplierZoneInfoFilter filter, int supplierId, string searchValue)
         {
             string nameFilterLower = searchValue != null ? searchValue.ToLower() : null;
-            
-            IEnumerable<SupplierZone> supplierZones = GetCachedSupplierZones().Values;
-            supplierZones =   supplierZones.FindAllRecords(item => item.SupplierId == supplierId);
+
+            IEnumerable<SupplierZone> supplierZones = GetSupplierZonesBySupplier(supplierId);
 
             Func<SupplierZone, bool> filterExpression = (item) =>
                {
-                   if (filter != null && filter.SupplierId.HasValue && item.SupplierId != filter.SupplierId)
-                       return false;
                    if (nameFilterLower != null && !item.Name.ToLower().Contains(nameFilterLower))
                        return false;
                    return true;
                };
+
             return supplierZones.MapRecords(SupplierZoneInfoMapper, filterExpression).OrderBy(item => item.Name);
         }
 
@@ -48,11 +46,11 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             IEnumerable<SupplierZone> supplierZones = GetCachedSupplierZones().Values;
             supplierZones = supplierZones.FindAllRecords(item => item.SupplierId == supplierId).OrderBy(item => item.Name);
-          
+
             return supplierZones.MapRecords(SupplierZoneInfoMapper);
         }
 
-        public IEnumerable<int> GetDistinctSupplierIdssBySupplierZoneIds(IEnumerable<long> supplierZoneIds)
+        public IEnumerable<int> GetDistinctSupplierIdsBySupplierZoneIds(IEnumerable<long> supplierZoneIds)
         {
             return this.GetCachedSupplierZones().MapRecords(zone => zone.SupplierId, zone => supplierZoneIds.Contains(zone.SupplierZoneId)).Distinct();
         }
@@ -181,14 +179,17 @@ namespace TOne.WhS.BusinessEntity.Business
             return supplierZoneDetail;
         }
 
-        private IEnumerable<SupplierZone> GetSupplierZoneBySupplier(SupplierZoneInfoFilter filter)
-        {
-            var supplierZones = GetCachedSupplierZones();
-            Func<SupplierZone, bool> filterExpression = (item) =>
-                 (item.SupplierId == filter.SupplierId);
+        #endregion
 
-            return supplierZones.FindAllRecords(filterExpression);
+
+        #region Private Methods
+
+        private IEnumerable<SupplierZone> GetSupplierZonesBySupplier(int supplierId)
+        {
+            IEnumerable<SupplierZone> supplierZones = GetCachedSupplierZones().Values;
+            return supplierZones.FindAllRecords(item => item.SupplierId == supplierId);
         }
+
         #endregion
 
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)

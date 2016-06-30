@@ -72,22 +72,22 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_CodeChangeTypeE
         function mapDataNeeded(dataItem) {
             switch (dataItem.Entity.ChangeType) {
                 case WhS_SupPL_CodeChangeTypeEnum.New.value:
-                    dataItem.codeStatusIconUrl = "Client/Modules/WhS_SupplierPriceList/Images/NewZone.png";
+                    dataItem.codeStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/New.png";
                     dataItem.codeStatusIconTooltip = WhS_SupPL_CodeChangeTypeEnum.New.description;
                     break;
 
                 case WhS_SupPL_CodeChangeTypeEnum.Deleted.value:
-                    dataItem.codeStatusIconUrl = "Client/Modules/WhS_SupplierPriceList/Images/Closed.png";
+                    dataItem.codeStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/Closed.png";
                     dataItem.codeStatusIconTooltip = WhS_SupPL_CodeChangeTypeEnum.Deleted.description;
                     break;
 
                 case WhS_SupPL_CodeChangeTypeEnum.Moved.value:
                     if (dataItem.Entity.ZoneName != zoneName) {
-                            dataItem.codeStatusIconUrl = "Client/Modules/WhS_SupplierPriceList/Images/MovedFrom.png";
+                        dataItem.codeStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/MovedFrom.png";
                             dataItem.codeStatusIconTooltip = WhS_SupPL_CodeChangeTypeEnum.Moved.description + " to " + dataItem.Entity.ZoneName;
                         }
                         else {
-                            dataItem.codeStatusIconUrl = "Client/Modules/WhS_SupplierPriceList/Images/MovedTo.png";
+                        dataItem.codeStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/MovedTo.png";
                             dataItem.codeStatusIconTooltip = WhS_SupPL_CodeChangeTypeEnum.Moved.description + " from " + dataItem.Entity.RecentZoneName;
                         }
                     break;
