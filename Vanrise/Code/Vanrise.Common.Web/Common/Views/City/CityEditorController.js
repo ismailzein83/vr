@@ -26,7 +26,7 @@
                 disableCountry = parameters.disableCountry
             }
             editMode = (cityId != undefined);
-            $scope.disableCountry = ((countryId != undefined) && !editMode) || disableCountry == true;
+            $scope.disableCountry = editMode || disableCountry;
            
         }
 
