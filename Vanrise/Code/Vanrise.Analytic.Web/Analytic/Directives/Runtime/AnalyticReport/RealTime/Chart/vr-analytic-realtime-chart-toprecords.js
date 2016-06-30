@@ -57,7 +57,7 @@ app.directive("vrAnalyticRealtimeChartToprecords", ['UtilsService', 'VRNotificat
                             }
                             return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                                 .then(function (response) {
-                                    console.log(response);
+   
                                     renderCharts(response, payload.Settings.ChartType);
                                     ctrl.showlaoder = false;
                                 });
@@ -160,7 +160,6 @@ app.directive("vrAnalyticRealtimeChartToprecords", ['UtilsService', 'VRNotificat
                     ctrl.sortField = 'DimensionValues[0].Name';
                 else
                     ctrl.sortField = 'MeasureValues.' + ctrl.measures[0].MeasureName;
-                console.log(ctrl.dimensions);
                 var queryFinalized = {
                     Filters: payLoad.DimensionFilters,
                     DimensionFields: UtilsService.getPropValuesFromArray(ctrl.groupingDimensions, 'Name'),

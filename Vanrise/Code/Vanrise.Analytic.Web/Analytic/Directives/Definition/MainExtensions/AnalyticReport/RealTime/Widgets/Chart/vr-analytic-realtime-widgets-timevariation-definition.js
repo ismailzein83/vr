@@ -108,7 +108,6 @@
                             measures.push({ MeasureName: measure});
                         }
                     }
-                    console.log(measures);
                     return measures;
                 }
 

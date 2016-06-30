@@ -46,7 +46,6 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
                     function getDirectiveAPI() {
 
                         directiveAPI.load = function (payload) {
-                            console.log(payload);
                             ctrl.showloader = true;
                             var query = getQuery(payload);
                             var dataRetrievalInput = {

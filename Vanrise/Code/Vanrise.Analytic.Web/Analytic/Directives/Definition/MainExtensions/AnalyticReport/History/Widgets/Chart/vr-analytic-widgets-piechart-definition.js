@@ -67,7 +67,7 @@
 
                     if (payload != undefined && payload.tableIds != undefined) {
                         var tableIds = payload.tableIds;
-                        var selectedDimensionIds; console.log(payload)
+                        var selectedDimensionIds;
                         var selectedMeasureIds;
                         if (payload.widgetEntity != undefined) {
                             $scope.scopeModel.rootDimensionsFromSearch = payload.widgetEntity.RootDimensionsFromSearchSection;

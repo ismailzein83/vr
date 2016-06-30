@@ -293,7 +293,7 @@
         function insert() {
             $scope.scopeModel.isLoading = true;
             var viewEntityObj = buildViewObjectFromScope();
-            viewEntityObj.ViewTypeName = viewTypeName; console.log(viewEntityObj);
+            viewEntityObj.ViewTypeName = viewTypeName;
             return VR_Sec_ViewAPIService.AddView(viewEntityObj).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('Analytic Report', response, 'Name')) {
                     if ($scope.onViewAdded != undefined) {
