@@ -18,7 +18,7 @@ namespace TOne.WhS.Analytics.Data.SQL
         #region Constructors
 
         public BillingReportDataManager()
-            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneV2DBConnString"))
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneAnalyticsDBConnString"))
         {
 
         }
@@ -36,7 +36,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             string carrierId = isSale ? "BS.CustomerID" : "BS.SupplierID";
             string saleZone = isSale ? "BS.SaleZoneID" : "BS.CostZoneID";
             string query = String.Format(@"{4} ;WITH OrderedZones AS (SELECT TOP (@TopDestination) z.ZoneID, z.Name 
-                From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date,IX_Billing_Stats_{1})) , @ExchangeRates as {5},
+                From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date,IX_Billing_Stats_{1})) , @ConvertedExchangeRates as {5},
                 Zone z (NOLOCK) WHERE bs.CallDate 
                 BETWEEN @FromDate AND @ToDate AND {2} = @CustomerId AND z.ZoneID = {3} AND {5}.Currency = BS.{6}  
                 GROUP BY z.ZoneID, z.Name 
@@ -45,7 +45,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                 SELECT z.Name,Year(bs.CallDate) AS YearDuration, 
                 MONTH(BS.CallDate) AS MonthDuration, 
                 cast( (SUM({0} )/60 ) as decimal(13,4) ) AS SaleDuration 
-                From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date,IX_Billing_Stats_{1})), OrderedZones z , @ExchangeRates as ERC, @ExchangeRates as ERS
+                From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date,IX_Billing_Stats_{1})), OrderedZones z , @ConvertedExchangeRates as ERC, @ConvertedExchangeRates as ERS
 
                 WHERE bs.CallDate BETWEEN @FromDate AND @ToDate AND {2} = @CustomerId AND z.ZoneID = {3} 
                 And ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate 
@@ -86,7 +86,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                     )
 
                     INSERT INTO @ConvertedExchangeRates
-                    SELECT * FROM Common.getExchangeRatesConvertedToCurrency({0}, @SmallestFromDate, @LargestToDate)",
+                    SELECT * FROM Common.getExchangeRatesConvertedToCurrency({0}, @FromDate, @ToDate)",
                     currencyId
                 );
             return null;
