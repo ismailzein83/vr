@@ -63,9 +63,23 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return booleanRecordFilter.IsTrue == (bool)fieldValue;
         }
 
-        public override RecordFilter ConvertToRecordFilter(List<Object> filterValues)
+        public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
         {
-            throw new NotImplementedException();
+            var values = filterValues.Select(value => Convert.ToBoolean(value)).ToList();
+            RecordFilterGroup recordFilterGroup = new RecordFilterGroup
+            {
+                LogicalOperator = RecordQueryLogicalOperator.Or,
+                Filters = new List<RecordFilter>(),
+            };
+            foreach (var value in values)
+            {
+                recordFilterGroup.Filters.Add(new BooleanRecordFilter
+                {
+                    IsTrue = value,
+                    FieldName = fieldName
+                });
+            }
+            return recordFilterGroup;
         }
     }
 }

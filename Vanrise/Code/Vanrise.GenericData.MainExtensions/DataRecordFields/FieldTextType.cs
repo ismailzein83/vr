@@ -96,9 +96,24 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", NumberPrecision = "NoDecimal" };
         }
 
-        public override RecordFilter ConvertToRecordFilter(List<Object> filterValues)
+        public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
         {
-            throw new NotImplementedException();
+            var values = filterValues.Select(x=>x.ToString()).ToList();
+            RecordFilterGroup recordFilterGroup = new RecordFilterGroup
+            {
+                LogicalOperator = RecordQueryLogicalOperator.Or,
+                Filters = new List<RecordFilter>(),
+            };
+            foreach (var value in values)
+            {
+                recordFilterGroup.Filters.Add(new StringRecordFilter
+                {
+                    CompareOperator = StringRecordFilterOperator.Equals,
+                    Value = value,
+                    FieldName = fieldName
+                });
+            }
+            return recordFilterGroup;
         }
     }
 }

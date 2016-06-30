@@ -56,8 +56,8 @@ namespace Vanrise.Analytic.Business
                     {
                         throw new ArgumentNullException(string.Format("Record field mapping for dimension {0} not found.",dimension.Name));
                     }
-                    var recordFilter = record.Type.ConvertToRecordFilter(dimensionFilter.FilterValues);
-                    recordFilter.FieldName = record.Name;
+                    var recordFilter = record.Type.ConvertToRecordFilter(record.Name,dimensionFilter.FilterValues);
+                   // recordFilter.FieldName = record.Name;
                     if (recordFilterGroup.Filters == null)
                         recordFilterGroup.Filters = new List<RecordFilter>();
                     recordFilterGroup.Filters.Add(recordFilter);

@@ -146,7 +146,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return new Vanrise.Entities.GridColumnAttribute() { Type = "Number", NumberPrecision = numberPrecision };
         }
 
-        public override RecordFilter ConvertToRecordFilter(List<Object> filterValues)
+        public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
         {
             throw new NotImplementedException();
         }
