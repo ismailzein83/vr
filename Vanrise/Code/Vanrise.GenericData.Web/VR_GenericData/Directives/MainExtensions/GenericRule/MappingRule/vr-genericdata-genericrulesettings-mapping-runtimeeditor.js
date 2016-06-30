@@ -35,7 +35,7 @@ app.directive('vrGenericdataGenericrulesettingsMappingRuntimeeditor', ['UtilsSer
 
             function initializeController() {
                 $scope.scopeModel = {};
-
+                $scope.scopeModel.isrequired = ctrl.isrequired;
                 $scope.scopeModel.onRuntimeEditorDirectiveReady = function (api)
                 {
                     fieldTypeDirectiveAPI = api;
