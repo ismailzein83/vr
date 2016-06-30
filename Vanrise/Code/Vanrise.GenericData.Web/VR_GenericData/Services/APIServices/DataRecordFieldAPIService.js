@@ -7,8 +7,14 @@
     function DataRecordFieldAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
         return ({
             GetDataRecordFieldsInfo: GetDataRecordFieldsInfo,
-            GetDataRecordAttributes: GetDataRecordAttributes
+            GetDataRecordAttributes: GetDataRecordAttributes,
+            GetDataRecordFieldFormulaExtensionConfigs: GetDataRecordFieldFormulaExtensionConfigs
         });
+
+        function GetDataRecordFieldFormulaExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "DataRecordFields", "GetDataRecordFieldFormulaExtensionConfigs"));
+        }
+
 
         function GetDataRecordFieldsInfo(serializedFilter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "DataRecordFields", "GetDataRecordFieldsInfo"),

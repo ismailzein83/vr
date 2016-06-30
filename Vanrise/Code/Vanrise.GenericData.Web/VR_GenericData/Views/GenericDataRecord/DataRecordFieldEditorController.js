@@ -13,6 +13,10 @@
         var directiveReadyAPI;
         var directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var dataRecordTypeFieldsFormulaAPI;
+        var dataRecordTypeFieldsFormulaReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
         var dataRecordFieldAPI;
         loadParameters();
         defineScope();
@@ -39,6 +43,11 @@
                 }
             };
 
+            $scope.scopeModal.onDataRecordTypeFieldsFormulaReady = function(api)
+            {
+                dataRecordTypeFieldsFormulaAPI = api;
+                dataRecordTypeFieldsFormulaReadyPromiseDeferred.resolve();
+            }
             $scope.scopeModal.validateName = function () {
                 return validateName();
             }
@@ -46,7 +55,6 @@
             $scope.scopeModal.validateTitle = function () {
                 return validateTitle();
             }
-
 
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal()
@@ -64,7 +72,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, loadDataRecordFieldTypeDirective, setTitle])
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, loadDataRecordFieldTypeDirective, setTitle, loadDataRecordTypeFieldsFormulaDirective])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -97,6 +105,36 @@
             return dataRecordFieldTypeDirectiveLoadPromiseDeferred.promise;
         }
 
+        function loadDataRecordTypeFieldsFormulaDirective() {
+            var dataRecordTypeFieldsFormulaDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            dataRecordTypeFieldsFormulaReadyPromiseDeferred.promise.then(function () {
+                var dataRecordTypeFieldsFormulaPayload = { formula: dataRecordFieldEntity != undefined ? dataRecordFieldEntity.Formula : undefined, context: getContext() };
+
+                VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsFormulaAPI, dataRecordTypeFieldsFormulaPayload, dataRecordTypeFieldsFormulaDirectiveLoadPromiseDeferred);
+            });
+            return dataRecordTypeFieldsFormulaDirectiveLoadPromiseDeferred.promise;
+        }
+
+        function getContext()
+        {
+            var context = {
+                getFields :function()
+                {
+                    var fields = [];
+                    if (existingFields != undefined)
+                    {
+                        for (var i = 0; i < existingFields.length; i++) {
+                            var existingField = existingFields[i];
+                            fields.push({ fieldName: existingField.Name, fieldTitle: existingField.Title});
+                        }
+                    }
+                    return fields;
+                }
+            };
+            return context;
+        }
+
         function validateName() {
             if (isEditMode && $scope.scopeModal.name == dataRecordFieldEntity.Name)
                 return null;
@@ -113,33 +151,30 @@
             return null;
         }
 
-
         function buildDataRecordFieldObjectObjFromScope() {
             var dataRecordField = {};
             dataRecordField.Name = $scope.scopeModal.name;
             dataRecordField.Title = $scope.scopeModal.title;
             dataRecordField.Type = directiveReadyAPI.getData();
+            dataRecordField.Formula = dataRecordTypeFieldsFormulaAPI !=undefined ? dataRecordTypeFieldsFormulaAPI.getData():undefined;
             return dataRecordField;
         }
 
         function insertDataRecordField() {
 
             var dataRecordFieldObject = buildDataRecordFieldObjectObjFromScope();
-            //  if (VRNotificationService.notifyOnItemAdded("Data Record Field",undefined, "Name")) {
             if ($scope.onDataRecordFieldAdded != undefined)
                 $scope.onDataRecordFieldAdded(dataRecordFieldObject);
             $scope.modalContext.closeModal();
-            //   }
+
 
         }
 
         function updateDataRecordField() {
             var dataRecordFieldObject = buildDataRecordFieldObjectObjFromScope();
-            //    if (VRNotificationService.notifyOnItemUpdated("Data Record Field", undefined, "Name")) {
             if ($scope.onDataRecordFieldUpdated != undefined)
                 $scope.onDataRecordFieldUpdated(dataRecordFieldObject);
             $scope.modalContext.closeModal();
-            // }
         }
 
     }

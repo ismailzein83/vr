@@ -26,5 +26,12 @@ namespace Vanrise.GenericData.Web.Controllers
             DataRecordTypeManager manager = new DataRecordTypeManager();
             return manager.GetDataRecordAttributes(dataRecordTypeId);
         }
+        [HttpGet]
+        [Route("GetDataRecordFieldFormulaExtensionConfigs")]
+        public IEnumerable<DataRecordFieldFormulaConfig> GetDataRecordFieldFormulaExtensionConfigs()
+        {
+            DataRecordFieldManager manager = new DataRecordFieldManager();
+            return manager.GetDataRecordFieldFormulaExtensionConfigs();
+        }
     }
 }

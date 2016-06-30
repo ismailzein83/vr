@@ -7,6 +7,7 @@ using Vanrise.Caching;
 using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace Vanrise.GenericData.Business
 {
@@ -32,6 +33,12 @@ namespace Vanrise.GenericData.Business
             {
                 Entity = dataRecordField,
             };
+        }
+
+        public IEnumerable<DataRecordFieldFormulaConfig> GetDataRecordFieldFormulaExtensionConfigs()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<DataRecordFieldFormulaConfig>(DataRecordFieldFormulaConfig.EXTENSION_TYPE);
         }
     }
 }

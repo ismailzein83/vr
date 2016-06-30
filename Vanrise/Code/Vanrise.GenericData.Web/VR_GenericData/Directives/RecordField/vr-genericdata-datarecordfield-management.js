@@ -65,7 +65,8 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                             fields.push({
                                 Name: currentItem.Name,
                                 Type: currentItem.Type,
-                                Title: currentItem.Title
+                                Title: currentItem.Title,
+                                Formula: currentItem.Formula
                             });
                         }
 
