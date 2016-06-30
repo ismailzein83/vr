@@ -47,7 +47,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 listMeasures.Add("CostRate");
                 listMeasures.Add("CostDurationDetails");
                 listMeasures.Add("CostNet");
-                listMeasures.Add("CostCommissions");
+                //listMeasures.Add("CostCommissions");
                 listMeasures.Add("CostExtraCharges");
                 listMeasures.Add("CostOffPeakDuration");
                 listMeasures.Add("CostOffPeakRate");
@@ -55,14 +55,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 listMeasures.Add("CostWeekEndRate");
                 listMeasures.Add("CostWeekEndDuration");
                 listMeasures.Add("CostWeekEndNet");
-                listMeasures.Add("CostDiscount");
             }
             else
             {
                 listMeasures.Add("SaleRate");
                 listMeasures.Add("SaleDurationDetails");
                 listMeasures.Add("SaleNet");
-                listMeasures.Add("SaleCommissions");
+                //listMeasures.Add("SaleCommissions");
                 listMeasures.Add("SaleExtraCharges");
                 listMeasures.Add("SaleOffPeakDuration");
                 listMeasures.Add("SaleOffPeakRate");
@@ -70,7 +69,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 listMeasures.Add("SaleWeekEndRate");
                 listMeasures.Add("SaleWeekEndDuration");
                 listMeasures.Add("SaleWeekEndNet");
-                listMeasures.Add("SaleDiscount");
             }
 
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
@@ -164,13 +162,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     detailedBillingByZone.Net = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
                     detailedBillingByZone.NetFormatted = ReportHelpers.FormatNumber(detailedBillingByZone.Net);
 
-                    MeasureValue commissionValue;
-                    if (parameters.IsCost)
-                        analyticRecord.MeasureValues.TryGetValue("CostCommissions", out commissionValue);
-                    else
-                        analyticRecord.MeasureValues.TryGetValue("SaleCommissions", out commissionValue);
-                    detailedBillingByZone.CommissionValue = (commissionValue == null) ? 0.0 : Convert.ToDouble(commissionValue.Value ?? 0.0);
-                    detailedBillingByZone.CommissionValueFormatted = ReportHelpers.FormatNumber(detailedBillingByZone.CommissionValue);
+                    //MeasureValue commissionValue;
+                    //if (parameters.IsCost)
+                    //    analyticRecord.MeasureValues.TryGetValue("CostCommissions", out commissionValue);
+                    //else
+                    //    analyticRecord.MeasureValues.TryGetValue("SaleCommissions", out commissionValue);
+                    //detailedBillingByZone.CommissionValue = (commissionValue == null) ? 0.0 : Convert.ToDouble(commissionValue.Value ?? 0.0);
+                    //detailedBillingByZone.CommissionValueFormatted = ReportHelpers.FormatNumber(detailedBillingByZone.CommissionValue);
 
                     MeasureValue extraChargeValue;
                     if (parameters.IsCost)
@@ -234,13 +232,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         analyticRecord.MeasureValues.TryGetValue("SaleWeekEndNet", out weekEndNet);
                     detailedBillingByZone.WeekEndNet = (weekEndNet == null) ? 0 : Convert.ToDouble(weekEndNet.Value ?? 0.0);
                     detailedBillingByZone.WeekEndNetFormatted = ReportHelpers.FormatNumber(detailedBillingByZone.WeekEndNet);
-
-                    MeasureValue discount;
-                    if (parameters.IsCost)
-                        analyticRecord.MeasureValues.TryGetValue("CostDiscount", out discount);
-                    else
-                        analyticRecord.MeasureValues.TryGetValue("SaleDiscount", out discount);
-                    detailedBillingByZone.Discount = (discount == null) ? 0 : Convert.ToDouble(discount.Value ?? 0.0);
 
                     detailedBillingByZone.TotalAmountFormatted =
                         ReportHelpers.FormatNumber(detailedBillingByZone.Net + detailedBillingByZone.OffPeakNet +

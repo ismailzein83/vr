@@ -160,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BillingReportController.cs" />
     <Compile Include="Controllers\BlockedAttemptsController.cs" />
     <Compile Include="Controllers\CDRController.cs" />
     <Compile Include="Controllers\RawCDRController.cs" />
@@ -229,6 +230,7 @@
     <Content Include="WhS_Analytics\Directives\RepeatedNumber\vr-whs-analytics-repeatednumber-grid.js" />
     <Content Include="WhS_Analytics\Directives\VariationReport\Templates\VariationReportGridTemplate.html" />
     <Content Include="WhS_Analytics\Directives\VariationReport\vr-whs-analytics-variationreport-grid.js" />
+    <Content Include="WhS_Analytics\Services\APIServices\BillingReportAPIService.js" />
     <Content Include="WhS_Analytics\Services\APIServices\ReleaseCodeAPIService.js" />
     <Content Include="WhS_Analytics\Services\APIServices\BlockedAttemptsAPIService.js" />
     <Content Include="WhS_Analytics\Services\APIServices\CDRLogAPIService.js" />

@@ -1,6 +1,7 @@
-﻿BillingReportsController.$inject = ['$scope', 'WhS_Analytics_ReportDefinitionAPIService', 'VRNotificationService', 'UtilsService', 'AnalyticsService', 'SecurityService', 'VRUIUtilsService', 'PeriodEnum'];
+﻿BillingReportsController.$inject = ['$scope', 'WhS_Analytics_ReportDefinitionAPIService', 'VRNotificationService', 'UtilsService', 'AnalyticsService',
+    'SecurityService', 'VRUIUtilsService', 'PeriodEnum', 'WhS_Analytics_BillingReportAPIService'];
 
-function BillingReportsController($scope, ReportDefinitionAPIService, VRNotificationService, UtilsService, analyticsService, SecurityService, VRUIUtilsService, PeriodEnum) {
+function BillingReportsController($scope, ReportDefinitionAPIService, VRNotificationService, UtilsService, analyticsService, SecurityService, VRUIUtilsService, PeriodEnum, BillingReportAPIService) {
 
     var currencySelectorAPI;
     var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -20,6 +21,13 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
 
     defineScope();
     load();
+
+    $scope.export = function () {
+        var customers = (customerAccountDirectiveAPI != undefined && customerAccountDirectiveAPI.getSelectedIds() != undefined) ? customerAccountDirectiveAPI.getSelectedIds() : "";
+        return BillingReportAPIService.ExportCarrierProfile($scope.fromDate, $scope.toDate, $scope.params.top, customers, $scope.params.selectedCurrency.CurrencyID, $scope.params.selectedCurrency.Name).then(function (response) {
+            UtilsService.downloadFile(response.data, response.headers);
+        });
+    };
 
     $scope.reportsTypes = [];
 
@@ -87,7 +95,6 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
         }
 
         $scope.openReport = function () {
-            console.log($scope.reporttype);
             var customers = (customerAccountDirectiveAPI != undefined && customerAccountDirectiveAPI.getSelectedIds() != undefined) ? customerAccountDirectiveAPI.getSelectedIds() : "";
 
             var suppliers = (supplierAccountDirectiveAPI != undefined && supplierAccountDirectiveAPI.getSelectedIds() != undefined) ? supplierAccountDirectiveAPI.getSelectedIds() : "";
@@ -202,7 +209,11 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
     function loadTimeRangeSelector() {
         var timeRangeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
         timeRangeReadyPromiseDeferred.promise.then(function () {
-            VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, undefined, timeRangeLoadPromiseDeferred);
+            var payload = {
+                period: PeriodEnum.Today.value
+
+            }
+            VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, payload, timeRangeLoadPromiseDeferred);
         });
         return timeRangeLoadPromiseDeferred.promise;
     }

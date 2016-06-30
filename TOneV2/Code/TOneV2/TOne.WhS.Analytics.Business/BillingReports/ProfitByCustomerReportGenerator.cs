@@ -19,7 +19,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 Query = new AnalyticQuery
                 {
                     DimensionFields = new List<string> { "Customer", "Supplier"},
-                    MeasureFields = new List<string> { "SaleDuration", "SaleNet", "CostDuration", "CostNet", "CostExtraCharges", "SaleExtraCharges", "CostCommissions", "SaleCommissions", "Profit" },
+                    MeasureFields = new List<string> { "SaleDuration", "SaleNet", "CostDuration", "CostNet", "CostExtraCharges", "SaleExtraCharges", "Profit" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
@@ -104,15 +104,15 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
 
 
-                    MeasureValue costCommissionValue;
-                    analyticRecord.MeasureValues.TryGetValue("CostCommissions", out costCommissionValue);
-                    carrierSummary.CostCommissionValue = Convert.ToDouble(costCommissionValue.Value ?? 0.0);
-                    carrierSummary.CostCommissionValueFormatted = ReportHelpers.FormatNumber(carrierSummary.CostCommissionValue);
+                    //MeasureValue costCommissionValue;
+                    //analyticRecord.MeasureValues.TryGetValue("CostCommissions", out costCommissionValue);
+                    //carrierSummary.CostCommissionValue = Convert.ToDouble(costCommissionValue.Value ?? 0.0);
+                    //carrierSummary.CostCommissionValueFormatted = ReportHelpers.FormatNumber(carrierSummary.CostCommissionValue);
 
-                    MeasureValue saleCommissionValue;
-                    analyticRecord.MeasureValues.TryGetValue("SaleCommissions", out saleCommissionValue);
-                    carrierSummary.SaleCommissionValue = Convert.ToDouble(saleCommissionValue.Value ?? 0.0);
-                    carrierSummary.SaleCommissionValueFormatted = ReportHelpers.FormatNumber(carrierSummary.SaleCommissionValue);
+                    //MeasureValue saleCommissionValue;
+                    //analyticRecord.MeasureValues.TryGetValue("SaleCommissions", out saleCommissionValue);
+                    //carrierSummary.SaleCommissionValue = Convert.ToDouble(saleCommissionValue.Value ?? 0.0);
+                    //carrierSummary.SaleCommissionValueFormatted = ReportHelpers.FormatNumber(carrierSummary.SaleCommissionValue);
 
 
                     carrierSummary.AvgMin = (carrierSummary.SaleDuration.Value != 0) ? (decimal)(((double)carrierSummary.SaleNet.Value - (double)carrierSummary.CostNet.Value) / (double)carrierSummary.SaleDuration.Value) : 0;

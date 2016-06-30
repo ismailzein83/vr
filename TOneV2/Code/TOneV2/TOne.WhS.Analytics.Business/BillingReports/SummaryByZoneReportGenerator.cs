@@ -106,6 +106,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                 var rateTypeValue = analyticRecord.DimensionValues[1];
                 if (rateTypeValue != null)
+                    if (rateTypeValue.Value != null)
                     summaryByZone.RateType = (int)rateTypeValue.Value;
                 summaryByZone.RateTypeFormatted = ((RateTypeEnum)summaryByZone.RateType).ToString();
 
