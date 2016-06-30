@@ -151,9 +151,24 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return new Vanrise.Entities.GridColumnAttribute() { Type = type, NumberPrecision = "NoDecimal" };
         }
 
-        public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValue)
+        public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
         {
-            throw new NotImplementedException();
+            var values = filterValues.Select(value => Convert.ToDateTime(value)).ToList();
+            RecordFilterGroup recordFilterGroup = new RecordFilterGroup
+            {
+                LogicalOperator = RecordQueryLogicalOperator.Or,
+                Filters = new List<RecordFilter>(),
+            };
+            foreach (var value in values)
+            {
+                recordFilterGroup.Filters.Add(new DateTimeRecordFilter
+                {
+                    CompareOperator = DateTimeRecordFilterOperator.Equals,
+                    Value = value,
+                    FieldName = fieldName
+                });
+            }
+            return recordFilterGroup;
         }
     }
     public enum FieldDateTimeDataType
