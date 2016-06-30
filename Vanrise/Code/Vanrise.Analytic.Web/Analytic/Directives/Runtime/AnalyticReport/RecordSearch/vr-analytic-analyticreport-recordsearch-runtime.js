@@ -109,7 +109,6 @@
 
                 api.load = function (payload) {
                     if (payload != undefined) {
-                        console.log(payload);
                         settings = payload.settings;
                         autoSearch = payload.autoSearch;
                         itemActionSettings = payload.itemActionSettings;
