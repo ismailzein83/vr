@@ -26,7 +26,7 @@
             var settings;
             var gridQuery;
             var gridAPI;
-
+            var autoSearch;
             var timeRangeDirectiveAPI;
             var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -41,6 +41,10 @@
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
+                    if (autoSearch) {
+                        setGridQuery();
+                        gridAPI.loadGrid(gridQuery);
+                    }
                 };
 
                 $scope.search = function () {
@@ -105,7 +109,9 @@
 
                 api.load = function (payload) {
                     if (payload != undefined) {
+                        console.log(payload);
                         settings = payload.settings;
+                        autoSearch = payload.autoSearch;
                         itemActionSettings = payload.itemActionSettings;
                         if(itemActionSettings != undefined)
                         {
@@ -126,6 +132,10 @@
                     var loadPromiseDeffer = UtilsService.createPromiseDeferred();
                     UtilsService.waitMultipleAsyncOperations([setSourceSelector, setStaticData, loadTimeRangeDirective]).then(function () {
                         loadPromiseDeffer.resolve();
+                        if (autoSearch && gridAPI !=undefined)
+                        {
+                            gridAPI.loadGrid(gridQuery);
+                        }
                     }).catch(function (error) {
                         loadPromiseDeffer.reject(error);
                     });

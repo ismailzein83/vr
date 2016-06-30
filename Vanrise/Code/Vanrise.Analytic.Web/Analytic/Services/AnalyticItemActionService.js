@@ -59,8 +59,10 @@
                     FilterGroup: settings.FilterGroup,
                     FromDate: settings.FromDate,
                     ToDate: settings.ToDate,
-                    TableId:settings.TableId
+                    TableId: settings.TableId,
+                   
                 },
+                autoSearch: true
             };
             var modalSettings = {
                 useModalTemplate: true,

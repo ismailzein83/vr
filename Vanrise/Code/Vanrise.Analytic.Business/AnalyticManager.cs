@@ -35,14 +35,10 @@ namespace Vanrise.Analytic.Business
 
         public RecordFilterGroup BuildRecordSearchFilterGroup(RecordSearchFilterGroupInput input)
         {
-
             int dataRecordTypeId = GetDataRecordTypeForReportBySourceName(input.ReportId, input.SourceName);
-
             DataRecordTypeManager dataRecordTypeManager = new GenericData.Business.DataRecordTypeManager();
             var recordType = dataRecordTypeManager.GetDataRecordType(dataRecordTypeId);
-
             AnalyticItemConfigManager analyticItemConfigManager = new Business.AnalyticItemConfigManager();
-
             var analyticDimensions = analyticItemConfigManager.GetDimensions(input.TableId);
             RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
             foreach(var dimensionFilter in input.DimensionFilters)
@@ -63,15 +59,23 @@ namespace Vanrise.Analytic.Business
                             recordFilterGroup.Filters.Add(recordFilter);
                         }
                     }
-
                 }
             }
             if(input.FilterGroup != null)
             {
+                var filterGroup = ConvertRecordFilterGroup(input.FilterGroup, recordType, analyticDimensions);
                 recordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.And;
-                recordFilterGroup.Filters.Add(ConvertRecordFilterGroup(input.FilterGroup, recordType, analyticDimensions));
+                if(input.FilterGroup.LogicalOperator == RecordQueryLogicalOperator.And)
+                {
+                    foreach (var filter in filterGroup.Filters)
+                    {
+                        recordFilterGroup.Filters.Add(filter);
+                    }
+                }else
+                {
+                    recordFilterGroup.Filters.Add(filterGroup);
+                }
             }
-         
             return recordFilterGroup;
         }
         public int GetDataRecordTypeForReportBySourceName(int reportId,string sourceName)
@@ -92,29 +96,30 @@ namespace Vanrise.Analytic.Business
         public RecordFilterGroup ConvertRecordFilterGroup(RecordFilterGroup filterGroup, DataRecordType recordType, Dictionary<string, AnalyticDimension> analyticDimensions)
         {
             RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
-           
-            foreach(var filter in filterGroup.Filters)
+            recordFilterGroup.LogicalOperator = filterGroup.LogicalOperator;
+            foreach (var filter in filterGroup.Filters)
             {
                 ConvertChildRecordFilterGroup(recordFilterGroup, filter, recordType, analyticDimensions);
             }
-
-            
             return recordFilterGroup;
         }
         public void ConvertChildRecordFilterGroup(RecordFilterGroup recordFilterGroup, RecordFilter recordFilter, DataRecordType recordType, Dictionary<string, AnalyticDimension> analyticDimensions)
         {
             RecordFilterGroup childFilterGroup = recordFilter as RecordFilterGroup;
+            if (recordFilterGroup.Filters == null)
+                recordFilterGroup.Filters = new List<RecordFilter>();
             if (childFilterGroup != null)
             {
+                RecordFilterGroup childRecordFilterGroup = new RecordFilterGroup();
+                childRecordFilterGroup.LogicalOperator = childFilterGroup.LogicalOperator;
+                recordFilterGroup.Filters.Add(childRecordFilterGroup);
                 foreach (var filter in childFilterGroup.Filters)
                 {
-                    ConvertChildRecordFilterGroup(childFilterGroup, filter, recordType, analyticDimensions);
+                    ConvertChildRecordFilterGroup(childRecordFilterGroup, filter, recordType, analyticDimensions);
                 }
             }
-            if (recordFilter.FieldName != null)
+            else if (recordFilter.FieldName != null)
             {
-                if (recordFilterGroup.Filters == null)
-                    recordFilterGroup.Filters = new List<RecordFilter>();
                 AnalyticDimension dimension;
                 if (analyticDimensions.TryGetValue(recordFilter.FieldName, out dimension))
                 {
@@ -131,7 +136,7 @@ namespace Vanrise.Analytic.Business
                 }
             }
         }
-
+        
         #region Private Methods
 
         internal List<AnalyticRecord> ProcessSQLRecords(IAnalyticTableQueryContext analyticTableQueryContext, List<string> requestedDimensionNames, List<string> parentDimensionNames, List<string> measureNames,List<MeasureStyleRule> measureStyleRules, List<DimensionFilter> dimensionFilters,

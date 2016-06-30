@@ -7,7 +7,7 @@
         var analyticReportId;
         var viewEntity;
         var itemActionSettings;
-
+        var autoSearch;
         var templates = [];
         var directiveAPI;
         var directiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -22,6 +22,7 @@
             if (parameters != null) {
                 analyticReportId = parameters.analyticReportId;
                 itemActionSettings = parameters.settings;
+                autoSearch = parameters.autoSearch;
                 if (itemActionSettings != undefined )
                   itemActionSettings.AnalyticReportId = analyticReportId;
             }
@@ -59,7 +60,8 @@
             directiveReadyDeferred.promise.then(function () {
                 var payLoad = {
                     settings: viewEntity.Settings,
-                    itemActionSettings: itemActionSettings
+                    itemActionSettings: itemActionSettings,
+                    autoSearch: autoSearch
                 };
                 VRUIUtilsService.callDirectiveLoad(directiveAPI, payLoad, loadDirectivePromiseDeferred);
             });
