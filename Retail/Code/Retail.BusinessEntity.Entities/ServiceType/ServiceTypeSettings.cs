@@ -20,7 +20,20 @@ namespace Retail.BusinessEntity.Entities
 
         public string ServiceVolumeEditor { get; set; }
 
+        public List<ServiceTypeStatusSettings> SupportedStatuses { get; set; }
+
         public List<ServiceTypeActionSettings> SupportedActions { get; set; }
+
+        public Guid InitialStatusId { get; set; }
+
+        public Guid? InitiationActionDefinitionId { get; set; }
+    }
+
+    public class ServiceTypeStatusSettings
+    {
+        public Guid StatusDefinitionId { get; set; }
+
+        public bool IsChargeable { get; set; }
     }
 
     public class ServiceTypeActionSettings

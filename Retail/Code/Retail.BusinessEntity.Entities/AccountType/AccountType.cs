@@ -25,7 +25,13 @@ namespace Retail.BusinessEntity.Entities
 
         public List<AccountTypePartSettings> PartDefinitionSettings { get; set; }
 
+        public List<ActionTypeStatusSettings> SupportedStatuses { get; set; }
+
         public List<AccountTypeActionSettings> SupportedActions { get; set; }
+
+        public Guid InitialStatusId { get; set; }
+
+        public Guid? CreationActionDefinitionId { get; set; }
     }
 
     public enum AccountPartAvailabilityOptions { AlwaysAvailable = 0, AvailableIfNotInheritedOnly = 1 }
@@ -36,6 +42,13 @@ namespace Retail.BusinessEntity.Entities
         public AccountPartAvailabilityOptions AvailabilitySettings { get; set; }
         public AccountPartRequiredOptions RequiredSettings { get; set; }
         public int PartDefinitionId { get; set; }
+    }
+
+    public class ActionTypeStatusSettings
+    {
+        public Guid StatusDefinitionId { get; set; }
+
+        public bool IsChargeable { get; set; }
     }
 
     public class AccountTypeActionSettings

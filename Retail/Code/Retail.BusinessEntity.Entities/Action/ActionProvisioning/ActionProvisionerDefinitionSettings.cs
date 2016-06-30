@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public abstract class ServiceAction : BaseAction
+    public abstract class ActionProvisionerDefinitionSettings
     {
-        public long AccountId { get; set; }
-
-        public int ServiceTypeId { get; set; }
+        public int ConfigId { get; set; }
     }
 }

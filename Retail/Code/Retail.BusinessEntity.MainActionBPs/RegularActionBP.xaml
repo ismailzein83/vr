@@ -1,0 +1,199 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Retail.BusinessEntity.MainActionBPs.RegularActionBP"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:rbe="clr-namespace:Retail.BusinessEntity.Entities;assembly=Retail.BusinessEntity.Entities"
+ xmlns:rbma="clr-namespace:Retail.BusinessEntity.MainActionBPs.Activities;assembly=Retail.BusinessEntity.MainActionBPs.Activities"
+ xmlns:rbme="clr-namespace:Retail.BusinessEntity.MainActionBPs.Entities;assembly=Retail.BusinessEntity.MainActionBPs.Entities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(rbe:ActionBPInputArgument)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Retail.BusinessEntity.MainActionBPs.RegularActionBP_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>Retail.BusinessEntity.Entities</x:String>
+      <x:String>Retail.BusinessEntity.MainActionBPs.Entities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Retail.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>Retail.BusinessEntity.MainActionBPs.Activities</AssemblyReference>
+      <AssemblyReference>Retail.BusinessEntity.MainActionBPs.Entities</AssemblyReference>
+      <AssemblyReference>Retail.BusinessEntity.Business</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Retail.BusinessEntity.MainActionBPs</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="rbme:RegularActionBPSettings" Name="actionBPSettings" />
+      <Variable x:TypeArguments="rbe:ActionProvisioningOutput" Name="provisioningOutput" />
+      <Variable x:TypeArguments="rbe:StatusDefinition" Name="newStatusDefinition" />
+    </Sequence.Variables>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="rbme:RegularActionBPSettings">
+          <mca:CSharpReference x:TypeArguments="rbme:RegularActionBPSettings">actionBPSettings</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="rbme:RegularActionBPSettings">
+          <mca:CSharpValue x:TypeArguments="rbme:RegularActionBPSettings">Input.ActionBPSettings as Retail.BusinessEntity.MainActionBPs.Entities.RegularActionBPSettings</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
+      <Assign.To>
+        <OutArgument x:TypeArguments="rbe:StatusDefinition">
+          <mca:CSharpReference x:TypeArguments="rbe:StatusDefinition">newStatusDefinition</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="rbe:StatusDefinition">
+          <mca:CSharpValue x:TypeArguments="rbe:StatusDefinition">(new Retail.BusinessEntity.Business.StatusDefinitionManager()).GetStatusDefinition(actionBPSettings.NewStatusDefinitionId)</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
+    <rbma:ProvisionAction sap2010:WorkflowViewState.IdRef="ProvisionAction_1">
+      <rbma:ProvisionAction.ActionProvisioner>
+        <InArgument x:TypeArguments="rbe:ActionProvisioner">
+          <mca:CSharpValue x:TypeArguments="rbe:ActionProvisioner">Input.ActionProvisioner</mca:CSharpValue>
+        </InArgument>
+      </rbma:ProvisionAction.ActionProvisioner>
+      <rbma:ProvisionAction.EntityId>
+        <InArgument x:TypeArguments="x:Int64">
+          <mca:CSharpValue x:TypeArguments="x:Int64">Input.EntityId</mca:CSharpValue>
+        </InArgument>
+      </rbma:ProvisionAction.EntityId>
+      <rbma:ProvisionAction.EntityType>
+        <InArgument x:TypeArguments="rbe:EntityType">
+          <mca:CSharpValue x:TypeArguments="rbe:EntityType">Input.EntityType</mca:CSharpValue>
+        </InArgument>
+      </rbma:ProvisionAction.EntityType>
+      <rbma:ProvisionAction.ProvisioningOutput>
+        <OutArgument x:TypeArguments="rbe:ActionProvisioningOutput">
+          <mca:CSharpReference x:TypeArguments="rbe:ActionProvisioningOutput">provisioningOutput</mca:CSharpReference>
+        </OutArgument>
+      </rbma:ProvisionAction.ProvisioningOutput>
+    </rbma:ProvisionAction>
+    <If sap2010:WorkflowViewState.IdRef="If_1">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">provisioningOutput.Result == ActionProvisioningResult.Succeeded</mca:CSharpValue>
+        </InArgument>
+      </If.Condition>
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <If sap2010:WorkflowViewState.IdRef="If_2">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">newStatusDefinition.Settings.IsChargeable</mca:CSharpValue>
+              </InArgument>
+            </If.Condition>
+            <If.Then>
+              <rbma:CreateStatusBillingTransaction sap2010:WorkflowViewState.IdRef="CreateStatusBillingTransaction_1">
+                <rbma:CreateStatusBillingTransaction.EntityId>
+                  <InArgument x:TypeArguments="x:Int64">
+                    <mca:CSharpValue x:TypeArguments="x:Int64">Input.EntityId</mca:CSharpValue>
+                  </InArgument>
+                </rbma:CreateStatusBillingTransaction.EntityId>
+                <rbma:CreateStatusBillingTransaction.EntityType>
+                  <InArgument x:TypeArguments="rbe:EntityType">
+                    <mca:CSharpValue x:TypeArguments="rbe:EntityType">Input.EntityType</mca:CSharpValue>
+                  </InArgument>
+                </rbma:CreateStatusBillingTransaction.EntityType>
+                <rbma:CreateStatusBillingTransaction.StatusDefinitionId>
+                  <InArgument x:TypeArguments="s:Guid">
+                    <mca:CSharpValue x:TypeArguments="s:Guid">actionBPSettings.NewStatusDefinitionId</mca:CSharpValue>
+                  </InArgument>
+                </rbma:CreateStatusBillingTransaction.StatusDefinitionId>
+              </rbma:CreateStatusBillingTransaction>
+            </If.Then>
+          </If>
+          <rbma:UpdateEntityStatus sap2010:WorkflowViewState.IdRef="UpdateEntityStatus_1">
+            <rbma:UpdateEntityStatus.ActionProvisioningData>
+              <InArgument x:TypeArguments="x:Object">
+                <mca:CSharpValue x:TypeArguments="x:Object">provisioningOutput.ProvisioningData</mca:CSharpValue>
+              </InArgument>
+            </rbma:UpdateEntityStatus.ActionProvisioningData>
+            <rbma:UpdateEntityStatus.EntityId>
+              <InArgument x:TypeArguments="x:Int64">
+                <mca:CSharpValue x:TypeArguments="x:Int64">Input.EntityId</mca:CSharpValue>
+              </InArgument>
+            </rbma:UpdateEntityStatus.EntityId>
+            <rbma:UpdateEntityStatus.EntityType>
+              <InArgument x:TypeArguments="rbe:EntityType">
+                <mca:CSharpValue x:TypeArguments="rbe:EntityType">Input.EntityType</mca:CSharpValue>
+              </InArgument>
+            </rbma:UpdateEntityStatus.EntityType>
+            <rbma:UpdateEntityStatus.StatusDefinitionId>
+              <InArgument x:TypeArguments="s:Guid">
+                <mca:CSharpValue x:TypeArguments="s:Guid">actionBPSettings.NewStatusDefinitionId</mca:CSharpValue>
+              </InArgument>
+            </rbma:UpdateEntityStatus.StatusDefinitionId>
+          </rbma:UpdateEntityStatus>
+        </Sequence>
+      </If.Then>
+    </If>
+    <sads:DebugSymbol.Symbol>d0tDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5Lk1haW5BY3Rpb25CUHNcUmVndWxhckFjdGlvbkJQLnhhbWwaNQOlAQ4CAQE7BUYOAgFURwVSDgIBSVMFaBwCATRpBaMBCgIBAkMLQ7sBAgFaPgs+dQIBVU8LT88BAgFPSgtKcAIBSlsLW1YCAURlC2V3AgE/VgtWbQIBOmALYF8CATVsC2yJAQIBA3AJoQEUAgEIcQuKARACAR6LAQugASUCAQl0EXR5AgEfeA+IATUCASSdARGdAXMCARmOARGOAXICARSTARGTAVwCAQ+YARGYAWUCAQqFARWFAXcCAS97FXtgAgEqgAEVgAFpAgEl</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="611,62" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="611,62" />
+      <sap2010:ViewStateData Id="ProvisionAction_1" sap:VirtualizedContainerService.HintSize="611,22" />
+      <sap2010:ViewStateData Id="CreateStatusBillingTransaction_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="464,210" />
+      <sap2010:ViewStateData Id="UpdateEntityStatus_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="486,396">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="611,546">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="633,936">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Retail.BusinessEntity.MainActionBPs.RegularActionBP_1" sap:VirtualizedContainerService.HintSize="673,1016" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

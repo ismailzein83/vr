@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public abstract class AccountAction : BaseAction
+    public interface IBEManager
     {
-        public long AccountId { get; set; }
+
     }
 }

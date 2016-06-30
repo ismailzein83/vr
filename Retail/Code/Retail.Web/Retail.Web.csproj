@@ -436,6 +436,10 @@
       <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
       <Name>Retail.BusinessEntity.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.MainActionBPs.Entities\Retail.BusinessEntity.MainActionBPs.Entities.csproj">
+      <Project>{b6e5274a-9455-41e7-a07d-e78731dc1767}</Project>
+      <Name>Retail.BusinessEntity.MainActionBPs.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.BusinessEntity.MainExtensions\Retail.BusinessEntity.MainExtensions.csproj">
       <Project>{e4c4ef32-adfb-48c3-a3d3-489a4fc53b89}</Project>
       <Name>Retail.BusinessEntity.MainExtensions</Name>

@@ -83,12 +83,16 @@
     <Compile Include="AccountPartDefinitionManager.cs" />
     <Compile Include="AccountServiceManager.cs" />
     <Compile Include="AccountTypeManager.cs" />
+    <Compile Include="Action\ActionDefinitionManager.cs" />
+    <Compile Include="Action\ActionProvisioningContext.cs" />
     <Compile Include="Extensions\AccountMappingRuleDefinitionFilter.cs" />
     <Compile Include="AccountPackageManager.cs" />
     <Compile Include="ChargingPolicyManager.cs" />
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Extensions\ChargingPolicyRuleDefinitionFilter.cs" />
+    <Compile Include="StatusChargingManager.cs" />
+    <Compile Include="StatusDefinitionManager.cs" />
     <Compile Include="SwitchManager.cs" />
     <Compile Include="PricingEntityCacheManager.cs" />
     <Compile Include="ServiceTypeManager.cs" />

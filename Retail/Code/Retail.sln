@@ -67,9 +67,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.SMS.MainExtensions",
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RetailEDR", "RetailEDR\RetailEDR.sqlproj", "{0D1FB122-0323-4CFE-9F8A-D73281C544DE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.BusinessEntity.MainActionBPs", "Retail.BusinessEntity.MainActionBPs\Retail.BusinessEntity.MainActionBPs.csproj", "{0814DD36-FD4D-406E-861B-0155CC5EBAEF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.BusinessEntity.MainActionBPs.Activities", "Retail.BusinessEntity.MainActionBPs.Activities\Retail.BusinessEntity.MainActionBPs.Activities.csproj", "{48D55B41-D141-4CC8-97CA-06A6A7F993BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.BusinessEntity.MainActionBPs.Entities", "Retail.BusinessEntity.MainActionBPs.Entities\Retail.BusinessEntity.MainActionBPs.Entities.csproj", "{B6E5274A-9455-41E7-A07D-E78731DC1767}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 24
+		SccNumberOfProjects = 27
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -165,6 +171,18 @@ Global
 		SccProjectTopLevelParentUniqueName23 = Retail.sln
 		SccProjectName23 = RetailEDR
 		SccLocalPath23 = RetailEDR
+		SccProjectUniqueName24 = Retail.BusinessEntity.MainActionBPs\\Retail.BusinessEntity.MainActionBPs.csproj
+		SccProjectTopLevelParentUniqueName24 = Retail.sln
+		SccProjectName24 = Retail.BusinessEntity.MainActionBPs
+		SccLocalPath24 = Retail.BusinessEntity.MainActionBPs
+		SccProjectUniqueName25 = Retail.BusinessEntity.MainActionBPs.Activities\\Retail.BusinessEntity.MainActionBPs.Activities.csproj
+		SccProjectTopLevelParentUniqueName25 = Retail.sln
+		SccProjectName25 = Retail.BusinessEntity.MainActionBPs.Activities
+		SccLocalPath25 = Retail.BusinessEntity.MainActionBPs.Activities
+		SccProjectUniqueName26 = Retail.BusinessEntity.MainActionBPs.Entities\\Retail.BusinessEntity.MainActionBPs.Entities.csproj
+		SccProjectTopLevelParentUniqueName26 = Retail.sln
+		SccProjectName26 = Retail.BusinessEntity.MainActionBPs.Entities
+		SccLocalPath26 = Retail.BusinessEntity.MainActionBPs.Entities
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -267,6 +285,18 @@ Global
 		{0D1FB122-0323-4CFE-9F8A-D73281C544DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D1FB122-0323-4CFE-9F8A-D73281C544DE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0D1FB122-0323-4CFE-9F8A-D73281C544DE}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{0814DD36-FD4D-406E-861B-0155CC5EBAEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0814DD36-FD4D-406E-861B-0155CC5EBAEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0814DD36-FD4D-406E-861B-0155CC5EBAEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0814DD36-FD4D-406E-861B-0155CC5EBAEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48D55B41-D141-4CC8-97CA-06A6A7F993BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48D55B41-D141-4CC8-97CA-06A6A7F993BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48D55B41-D141-4CC8-97CA-06A6A7F993BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48D55B41-D141-4CC8-97CA-06A6A7F993BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6E5274A-9455-41E7-A07D-E78731DC1767}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6E5274A-9455-41E7-A07D-E78731DC1767}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6E5274A-9455-41E7-A07D-E78731DC1767}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6E5274A-9455-41E7-A07D-E78731DC1767}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -299,5 +329,8 @@ Global
 		{F8181947-ED07-4275-9816-82D61E6E0E00} = {D2979848-35B3-464F-A335-62EE41236287}
 		{D18FF35B-6367-4CF2-B257-A8B777F23C16} = {DBCD35EE-87B3-403D-A0DC-2ACC3D0313D6}
 		{0D1FB122-0323-4CFE-9F8A-D73281C544DE} = {DBCF7D23-8951-4886-9024-282788E5D24F}
+		{0814DD36-FD4D-406E-861B-0155CC5EBAEF} = {025EE35C-62EB-43DE-B92E-C8633EFEBD16}
+		{48D55B41-D141-4CC8-97CA-06A6A7F993BA} = {025EE35C-62EB-43DE-B92E-C8633EFEBD16}
+		{B6E5274A-9455-41E7-A07D-E78731DC1767} = {025EE35C-62EB-43DE-B92E-C8633EFEBD16}
 	EndGlobalSection
 EndGlobal

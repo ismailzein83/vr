@@ -20,6 +20,11 @@ namespace Retail.BusinessEntity.Entities
     public class AccountSettings
     {
         public AccountPartCollection Parts { get; set; }
+
+        /// <summary>
+        /// has value if it only has chargeable status in the account type's supported statuses
+        /// </summary>
+        public int? StatusChargingSetId { get; set; }
     }
 
     public class Account : BaseAccount
@@ -27,6 +32,10 @@ namespace Retail.BusinessEntity.Entities
         public const string BUSINESSENTITY_DEFINITION_NAME = "Retail_BE_SubscriberAccount";
 
         public long? ParentAccountId { get; set; }
+
+        public int StatusId { get; set; }
+
+        public ExecutedActionsData ExecutedActionsData { get; set; }
     }
     
     public class AccountToEdit : BaseAccount

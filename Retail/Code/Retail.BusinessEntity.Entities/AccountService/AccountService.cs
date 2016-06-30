@@ -18,5 +18,7 @@ namespace Retail.BusinessEntity.Entities
         public AccountServiceSettings Settings { get; set; }
 
         public int StatusId { get; set; }
+
+        public ExecutedActionsData ExecutedActionsData { get; set; }
     }
 }

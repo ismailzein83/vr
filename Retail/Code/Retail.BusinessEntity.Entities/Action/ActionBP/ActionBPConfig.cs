@@ -7,9 +7,9 @@ using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class ActionDefinitionConfig : ExtensionConfiguration
+    public class ActionBPConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "Retail_BE_ActionDefinition";
+        public const string EXTENSION_TYPE = "Retail_BE_ActionBP";
 
         public string DefinitionEditor { get; set; }
 

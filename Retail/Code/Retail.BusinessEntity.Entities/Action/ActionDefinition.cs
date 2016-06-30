@@ -11,10 +11,25 @@ namespace Retail.BusinessEntity.Entities
         public Guid ActionDefinitionId { get; set; }
 
         public string Name { get; set; }
+
+        public ActionDefinitionSettings Settings { get; set; }
     }
 
-    public abstract class ActionDefinitionSettings
+    public class ActionDefinitionSettings
     {
-        public int ConfigId { get; set; }
+        public string Description { get; set; }
+
+        public EntityType EntityType { get; set; }
+
+        public List<ActionStatusDefinition> SupportedOnStatuses { get; set; }
+
+        public ActionBPDefinitionSettings BPDefinitionSettings { get; set; }
+
+        public ActionProvisionerDefinitionSettings ProvisionerDefinitionSettings { get; set; }
+    }
+
+    public class ActionStatusDefinition
+    {
+        public Guid StatusDefinitionId { get; set; }
     }
 }

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public abstract class BaseAction
+    public interface IActionDefinitionManager : IBEManager
     {
+        ActionBPDefinitionSettings GetActionBPDefinitionSettings(Guid actionDefinitionId);
     }
 }

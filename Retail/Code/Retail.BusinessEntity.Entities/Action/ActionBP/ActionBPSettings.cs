@@ -6,13 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public abstract class RecurringChargeSettings
+    public abstract class ActionBPSettings 
     {
-        public int ConfigId { get; set; }
-    }
-
-    public interface RecurringChargeContext
-    {
-
     }
 }

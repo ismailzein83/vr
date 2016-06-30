@@ -9,5 +9,10 @@ namespace Retail.BusinessEntity.Entities
     public abstract class ChargingPolicySettings
     {
         public List<ChargingPolicyPart> Parts { get; set; }
+
+        /// <summary>
+        /// has value if it only has chargeable status in the service type's supported statuses
+        /// </summary>
+        public int? StatusChargingSetId { get; set; }
     }
 }
