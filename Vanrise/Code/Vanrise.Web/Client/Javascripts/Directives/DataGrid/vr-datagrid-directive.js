@@ -566,7 +566,7 @@
                 var currentColumnHtml = '$parent.ctrl.columnDefs[' + i + ']';
                 var dataItemColumnPropertyPath = "dataItem.columnsValues." + getDataItemColumnProperty(currentColumn);
                 
-                ctrl.rowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.width, \'display\':\'inline-flex\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}"">';
+                ctrl.rowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.width, \'display\':\'inline-flex\', \'vertical-align\':\'top\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}"">';
                 if (currentColumn.type == "MultiProgress") {
                     var values = currentColumn.field.split("|");
                     ctrl.rowHtml += '<vr-progressbar gridvalue="';
