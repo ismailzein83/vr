@@ -100,13 +100,17 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
             }
 
             $scope.onBlurChanged = function () {
-                date = ctrl.period.getInterval();
-                var from = UtilsService.getShortDate(ctrl.from);
-                var oldFrom = UtilsService.getShortDate(date.from);
-                var to = UtilsService.getShortDate(ctrl.to);
-                var oldTo = UtilsService.getShortDate(date.to);
-                if (from != oldFrom || to != oldTo)
-                    ctrl.period = customize;
+                if (ctrl.period != undefined && ctrl.period.value != -1)
+                {
+                    date = ctrl.period.getInterval();
+                    var from = UtilsService.getShortDate(ctrl.from);
+                    var oldFrom = UtilsService.getShortDate(date.from);
+                    var to = UtilsService.getShortDate(ctrl.to);
+                    var oldTo = UtilsService.getShortDate(date.to);
+                    if (from != oldFrom || to != oldTo)
+                        ctrl.period = customize;
+                }
+               
             }
 
             if ($attrs.hideperiodsection != undefined) {
