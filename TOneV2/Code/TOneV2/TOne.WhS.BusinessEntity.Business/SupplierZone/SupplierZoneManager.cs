@@ -210,5 +210,29 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
+
+
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            Func<SupplierZone, bool> filter;
+            switch (context.ParentEntityDefinition.Name)
+            {
+                case Vanrise.Entities.Country.BUSINESSENTITY_DEFINITION_NAME: filter = (zone) => zone.CountryId == context.ParentEntityId; break;
+                default: throw new NotImplementedException(String.Format("Business Entity Definition Name '{0}'", context.ParentEntityDefinition.Name));
+            }
+            return GetCachedSupplierZones().FindAllRecords(filter).MapRecords(zone => zone.SupplierZoneId as dynamic);
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            var supplierZone = context.Entity as SupplierZone;
+            if (supplierZone == null)
+                throw new NullReferenceException("supplierZone");
+            switch (context.ParentEntityDefinition.Name)
+            {
+                case Vanrise.Entities.Country.BUSINESSENTITY_DEFINITION_NAME: return supplierZone.CountryId;
+                default: throw new NotImplementedException(String.Format("Business Entity Definition Name '{0}'", context.ParentEntityDefinition.Name));
+            }
+        }
     }
 }

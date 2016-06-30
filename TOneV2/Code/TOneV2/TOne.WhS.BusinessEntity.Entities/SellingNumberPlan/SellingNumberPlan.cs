@@ -15,7 +15,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
     public class SellingNumberPlan : BaseSellingNumberPlan
     {
-        
+        public const string BUSINESSENTITY_DEFINITION_NAME = "WHS_BE_SellingNumberPlan";        
     }
 
     public class SellingNumberPlanToEdit : BaseSellingNumberPlan
