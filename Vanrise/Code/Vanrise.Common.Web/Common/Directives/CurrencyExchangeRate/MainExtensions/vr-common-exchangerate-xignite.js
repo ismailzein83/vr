@@ -49,7 +49,12 @@ app.directive("vrCommonExchangerateFxsauder", ['VRCommon_ConnectionStringService
                 }
                 return null;
             }
-
+            ctrl.addConnection = function () {
+                var onConnectionAdded = function (connectionObj) {                
+                    ctrl.connections.push(connectionObj);
+                }
+                VRCommon_ConnectionStringService.addConnectionString(onConnectionAdded);
+            }
             ctrl.removeConnection = function (source) {
                 ctrl.connections.splice(ctrl.connections.indexOf(source), 1);
             }
@@ -71,47 +76,24 @@ app.directive("vrCommonExchangerateFxsauder", ['VRCommon_ConnectionStringService
                 return {   
                     $type: "Vanrise.Common.MainExtensions.ExchangeRateTaskActionArgument, Vanrise.Common.MainExtensions",
                     URL: $scope.url,
-                    Token:$scope.token
+                    Token: $scope.token,
+                    ConnectionStrings: ctrl.connections
                 };
             };
 
 
-            api.load = function (payload) {
-                var ConnectionStrings =[{
-                        ConnectionString: "test",
-                        // ConnectionStringName:"Test Name"
-                    }, {
-                        //ConnectionString: "test",
-                        ConnectionStringName: "Test Name"
-                    }]
-                var counter = 0
-                if (ConnectionStrings && ConnectionStrings.length > 0) {
-                    for (var y = 0; y < ConnectionStrings.length; y++) {
-                        counter++;
-                        var currentObj = ConnectionStrings[y];
-                        currentObj.id = counter;
-                        ctrl.connections.push(currentObj);
-                    }
-                }
+            api.load = function (payload) {            
+               
                 if (payload != undefined && payload.data != undefined) {
                     $scope.url =  payload.data.URL ;
                     $scope.token = payload.data.Token;
                    
-                    //for (var y = 0; y < query.sources.length; y++) {
-                    //    counter++;
-                    //    var currentSource = query.sources[y];
-                    //    currentSource.id = counter;
-                    //    ctrl.sources.push(currentSource);
-                    //}
-                    //ctrl.connections = [];
-                    //ctrl.connections[ctrl.connections.length] = {
-                    //    ConnectionString: "test",
-                    //    // ConnectionStringName:"Test Name"
-                    //}
-                    //ctrl.connections[ctrl.connections.length] = {
-                    //    //ConnectionString: "test",
-                    //    ConnectionStringName: "Test Name"
-                    //}
+                    if (payload.data.ConnectionStrings && payload.data.ConnectionStrings.length > 0) {
+                        for (var y = 0; y < payload.data.ConnectionStrings.length; y++) {
+                            var currentObj = payload.data.ConnectionStrings[y];
+                            ctrl.connections.push(currentObj);
+                        }
+                    }
 
                 }
                 else 

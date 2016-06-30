@@ -7,14 +7,17 @@
     </vr-columns>
 </vr-row>
 <vr-columns width="normal">
-    <vr-button type="Add" data-onclick="addSource" standalone></vr-button>
+    <vr-button type="Add" data-onclick="ctrl.addConnection" standalone></vr-button>
 </vr-columns>
 <vr-columns width="fullrow">    
     <vr-validator validate="ctrl.isConnectionsGridValid()">
         <!--   on-ready="ctrl.onGridReady"    -->
         <vr-datagrid datasource="ctrl.connections" menuactions="ctrl.connectionsGridMenuActions" ondeleterow="ctrl.removeConnection" norowhighlightonclick="true" hidegridmenu>
             <vr-datagridcolumn headertext="'Connection'" disablesorting="true">
-                {{dataItem.ConnectionString!=null ?dataItem.ConnectionString:dataItem.ConnectionStringName}}
+               
+                 <div >
+                 {{dataItem.ConnectionString!=null ?dataItem.ConnectionString:dataItem.ConnectionStringName}}
+                </div> 
             </vr-datagridcolumn>
         </vr-datagrid>
     </vr-validator>

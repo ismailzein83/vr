@@ -25,8 +25,8 @@
             $scope.saveConnection = function () {
                 if (editMode)
                     return updateConnection();
-                //else
-                //    return insertConnection();
+                else
+                    return insertConnection();
             };
 
             $scope.close = function () {
@@ -74,9 +74,7 @@
            
         }
         function buildConnectionObj() {
-            var obj = {};
-            if (connectionEntity != undefined)
-                obj.id = connectionEntity.id;
+            var obj = {};          
             if ($scope.showConnectionString == true)
                 obj.ConnectionString = $scope.connectionString;
             if ($scope.showConnectionStringName == true)
@@ -92,10 +90,15 @@
             }
             $scope.modalContext.closeModal();
         }
-  
         function insertConnection() {
-          
+            var connectionObj = buildConnectionObj();
+            if ($scope.onConnectionAdded != undefined && typeof ($scope.onConnectionAdded) == 'function') {
+                $scope.onConnectionAdded(connectionObj);
+            }
+            $scope.modalContext.closeModal();
         }
+  
+        
     }
 
    appControllers.controller('VRCommon_ConnectionEditorController', connectionEditorController);

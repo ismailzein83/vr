@@ -10,17 +10,17 @@
             editConnectionString: editConnectionString
         };
 
-        function addConnectionString(onConnectionStringAdded) {
-            //var modalParameters = {
+        function addConnectionString(onConnectionAdded) {
+            var modalParameters = {
                
-            //};
-            //var modalSettings = {};
+            };
+            var modalSettings = {};
 
-            //modalSettings.onScopeReady = function (modalScope) {
-            //    modalScope.onConnectionStringAdded = onConnectionStringAdded;
-            //};
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onConnectionAdded = onConnectionAdded;
+            };
 
-            //VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/DataRecordSourceEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Common/Views/CurrencyExchangeRate/ConnectionEditor.html', modalParameters, modalSettings);
         }
 
         function editConnectionString(connection,  onConnectionUpdated) {
