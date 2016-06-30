@@ -15,6 +15,7 @@ namespace Vanrise.GenericData.Pricing
             var tariffPricingRule = GetMatchRule(ruleDefinitionId, target);
             if (tariffPricingRule != null)
             {
+                context.SourceCurrencyId = tariffPricingRule.Settings.CurrencyId;
                 tariffPricingRule.Settings.ApplyExtraChargeRule(context);
                 context.Rule = tariffPricingRule;
             }

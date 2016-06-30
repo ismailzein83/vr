@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
 {
@@ -18,14 +19,30 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
 
         protected override void Execute(IPricingRuleTariffContext context)
         {
+            CurrencyExchangeRateManager currencyExchangeManager = new CurrencyExchangeRateManager();
+            decimal convertedFirstPeriodRate;
+            decimal convertedCallFee;
+
+            if (context.DestinationCurrencyId.HasValue)
+            {
+                convertedFirstPeriodRate = currencyExchangeManager.ConvertValueToCurrency(FirstPeriodRate, context.SourceCurrencyId, context.DestinationCurrencyId.Value, context.TargetTime.Value);
+                convertedCallFee = currencyExchangeManager.ConvertValueToCurrency(CallFee, context.SourceCurrencyId, context.DestinationCurrencyId.Value, context.TargetTime.Value);
+            }
+            else
+            {
+                convertedFirstPeriodRate = FirstPeriodRate;
+                convertedCallFee = CallFee;
+            }
+
+            int? currencyId = context.DestinationCurrencyId;
             decimal extraChargeValue = 0;
             Decimal? totalAmount = 0;
             Decimal? accountedDuration = context.DurationInSeconds;
             if (FirstPeriod > 0)
             {
                 FirstPeriod = FirstPeriod;
-                Decimal firstPeriodRate = (FirstPeriodRate > 0) ? (Decimal)FirstPeriodRate : context.Rate;
-               
+                Decimal firstPeriodRate = (convertedFirstPeriodRate > 0) ? (Decimal)convertedFirstPeriodRate : context.Rate;
+
                 if (accountedDuration.HasValue)
                 {
                     accountedDuration -= (Decimal)FirstPeriod;
@@ -57,7 +74,7 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
             context.EffectiveDurationInSeconds = accountedDuration;
 
             if (totalAmount.HasValue)
-                totalAmount += CallFee;
+                totalAmount += convertedCallFee;
 
             context.TotalAmount = totalAmount;
             context.ExtraChargeValue = extraChargeValue;

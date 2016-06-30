@@ -60,7 +60,6 @@
         }
 
         function getFilterObject(category) {
-            console.log(category);
             return {
                 Name: $scope.name,
                 Category: category

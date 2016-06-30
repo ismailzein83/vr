@@ -13,6 +13,7 @@ namespace Vanrise.GenericData.Pricing
         public string InitialRate { get; set; }
         public string EffectiveRate { get; set; }
         public string ExtraChargeRate { get; set; }
+        public string CurrencyId { get; set; }
 
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
@@ -22,6 +23,10 @@ namespace Vanrise.GenericData.Pricing
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Pricing.ExtraChargeRuleContext();", ruleContextVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.TargetTime = {1};", ruleContextVariableName, this.EffectiveTime);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.Rate = {1};", ruleContextVariableName, this.InitialRate);
+
+            if (this.CurrencyId != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0}.DestinationCurrencyId = {1};", ruleContextVariableName, this.CurrencyId);
+
             var ruleManagerVariableName = context.GenerateUniqueMemberName("ruleManager");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Pricing.ExtraChargeRuleManager();", ruleManagerVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.ApplyExtraChargeRule({1}, {2}, {3});",
@@ -29,7 +34,7 @@ namespace Vanrise.GenericData.Pricing
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.Rate;", this.EffectiveRate, ruleContextVariableName);
 
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.ExtraChargeRate;", this.ExtraChargeRate, ruleContextVariableName);
-            
+
             base.SetIdRuleMatched(context, ruleContextVariableName);
         }
     }

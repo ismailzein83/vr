@@ -59,6 +59,9 @@ app.directive('vrGenericdataDatatransformationTariffrulestep', ['UtilsService', 
             var extraChargeValueDirectiveAPI;
             var extraChargeValueDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var currencyIdDirectiveAPI;
+            var currencyIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.onRuleStepCommonReady = function (api) {
                     ruleStepCommonDirectiveAPI = api;
@@ -98,6 +101,11 @@ app.directive('vrGenericdataDatatransformationTariffrulestep', ['UtilsService', 
                     extraChargeValueDirectiveAPI = api;
                     extraChargeValueDirectiveReadyPromiseDeferred.resolve();
                 }
+
+                $scope.onCurrencyIdDirectiveReady = function (api) {
+                    currencyIdDirectiveAPI = api;
+                    currencyIdDirectiveReadyPromiseDeferred.resolve();
+                    }
                 defineAPI();
             }
 
@@ -229,6 +237,23 @@ app.directive('vrGenericdataDatatransformationTariffrulestep', ['UtilsService', 
                     });
 
                     promises.push(loadExtraChargeValueDirectivePromiseDeferred.promise);
+
+
+                    var loadCurrencyIdDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                    currencyIdDirectiveReadyPromiseDeferred.promise.then(function () {
+                        var payloadCurrencyId;
+                        if (payload != undefined) {
+                            payloadCurrencyId = {};
+                            if (payload != undefined && payload.context != undefined)
+                                payloadCurrencyId.context = payload.context;
+                            if (payload != undefined && payload.stepDetails != undefined)
+                                payloadCurrencyId.selectedRecords = payload.stepDetails.CurrencyId;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(currencyIdDirectiveAPI, payloadCurrencyId, loadCurrencyIdDirectivePromiseDeferred);
+                    });
+
+                    promises.push(loadCurrencyIdDirectivePromiseDeferred.promise);
+
                     return UtilsService.waitMultiplePromises(promises);
                 }
 
@@ -241,7 +266,8 @@ app.directive('vrGenericdataDatatransformationTariffrulestep', ['UtilsService', 
                         EffectiveDurationInSeconds: effectiveDurationInSecondsDirectiveAPI != undefined ? effectiveDurationInSecondsDirectiveAPI.getData() : undefined,
                         TotalAmount: totalAmountDirectiveAPI != undefined ? totalAmountDirectiveAPI.getData() : undefined,
                         ExtraChargeRate: extraChargeRateDirectiveAPI != undefined ? extraChargeRateDirectiveAPI.getData() : undefined,
-                        ExtraChargeValue: extraChargeValueDirectiveAPI != undefined ? extraChargeValueDirectiveAPI.getData() : undefined
+                        ExtraChargeValue: extraChargeValueDirectiveAPI != undefined ? extraChargeValueDirectiveAPI.getData() : undefined,
+                        CurrencyId: currencyIdDirectiveAPI != undefined ? currencyIdDirectiveAPI.getData() : undefined
                     }
                     ruleStepCommonDirectiveAPI.setData(obj);
                     return obj;

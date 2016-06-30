@@ -15,8 +15,23 @@ namespace Vanrise.Runtime.Business
             var allScheduledTasks = GetCachedSchedulerTasks();
 
             Func<SchedulerTask, bool> filterExpression = (itm) =>
-                (itm.ActionTypeId != 1) && (input.Query == null || ((string.IsNullOrEmpty(input.Query.NameFilter) || itm.Name.ToLower().Contains(input.Query.NameFilter.ToLower()))
-                && (input.Query.Filters == null || input.Query.Filters.FirstOrDefault(item => !item.IsMatched(itm)) == null)));
+                {
+                    if (itm.ActionTypeId == 1)//1 is for Data Source Tasks
+                        return false;
+
+                    if (input.Query == null)
+                        return true;
+
+                    if (!string.IsNullOrEmpty(input.Query.NameFilter) && !itm.Name.ToLower().Contains(input.Query.NameFilter.ToLower()))
+                        return false;
+
+                    if (input.Query.Filters != null && input.Query.Filters.Any(item => !item.IsMatched(itm)))
+                        return false;
+
+                    return true;
+                };
+            //(itm.ActionTypeId != 1) && (input.Query == null || ((string.IsNullOrEmpty(input.Query.NameFilter) || itm.Name.ToLower().Contains(input.Query.NameFilter.ToLower()))
+            //&& (input.Query.Filters == null || input.Query.Filters.FirstOrDefault(item => !item.IsMatched(itm)) == null)));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allScheduledTasks.ToBigResult(input, filterExpression, SchedulerTaskDetailMapper));
         }

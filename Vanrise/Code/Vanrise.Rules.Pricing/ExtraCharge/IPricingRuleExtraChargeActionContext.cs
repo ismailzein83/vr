@@ -11,5 +11,9 @@ namespace Vanrise.Rules.Pricing
         DateTime? TargetTime { get; }
 
         Decimal Rate { get; set; }
+
+        int? DestinationCurrencyId { get; }
+
+        int SourceCurrencyId { get; }
     }
 }

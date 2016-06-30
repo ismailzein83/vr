@@ -60,6 +60,7 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
                             stepObj.totalAmount = payload.stepDetails.TotalAmount;
                             stepObj.extraChargeRate = payload.stepDetails.ExtraChargeRate;
                             stepObj.extraChargeValue = payload.stepDetails.ExtraChargeValue;
+                            stepObj.currencyId = payload.stepDetails.CurrencyId;
 
                             ctrl.initialRate = payload.stepDetails.InitialRate;
                             ctrl.durationInSeconds = payload.stepDetails.DurationInSeconds;
@@ -68,6 +69,7 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
                             ctrl.totalAmount = payload.stepDetails.TotalAmount;
                             ctrl.extraChargeRate = payload.stepDetails.ExtraChargeRate;
                             ctrl.extraChargeValue = payload.stepDetails.ExtraChargeValue;
+                            ctrl.currencyId = payload.stepDetails.CurrencyId;
                         }
 
                     }
@@ -100,6 +102,7 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
                     stepObj.totalAmount = changes.TotalAmount;
                     stepObj.extraChargeRate = changes.ExtraChargeRate;
                     stepObj.extraChargeValue = changes.ExtraChargeValue;
+                    stepObj.currencyId = changes.CurrencyId;
 
                     ctrl.initialRate = changes.InitialRate;
                     ctrl.durationInSeconds = changes.DurationInSeconds;
@@ -108,6 +111,7 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
                     ctrl.totalAmount = changes.TotalAmount;
                     ctrl.extraChargeRate = changes.ExtraChargeRate;
                     ctrl.extraChargeValue = changes.ExtraChargeValue;
+                    ctrl.currencyId = changes.CurrencyId;
                 }
 
                 api.checkValidation = function () {
@@ -129,6 +133,7 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
                         stepDetails.TotalAmount = stepObj.totalAmount;
                         stepDetails.ExtraChargeRate = stepObj.extraChargeRate;
                         stepDetails.ExtraChargeValue = stepObj.extraChargeValue;
+                        stepDetails.CurrencyId = stepObj.currencyId;
                     }
                     return stepDetails;
                 }

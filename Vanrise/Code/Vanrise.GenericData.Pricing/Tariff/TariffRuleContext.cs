@@ -27,5 +27,9 @@ namespace Vanrise.GenericData.Pricing
         public Decimal ExtraChargeRate { get; set; }
 
         public Decimal ExtraChargeValue { get; set; }
+
+        public int? DestinationCurrencyId { get; set; }
+
+        public int SourceCurrencyId { get; set; }
     }
 }

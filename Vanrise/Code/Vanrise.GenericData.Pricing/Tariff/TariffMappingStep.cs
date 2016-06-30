@@ -17,6 +17,7 @@ namespace Vanrise.GenericData.Pricing
         public string TotalAmount { get; set; }
         public string ExtraChargeRate { get; set; }
         public string ExtraChargeValue { get; set; }
+        public string CurrencyId { get; set; }
 
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
@@ -27,10 +28,13 @@ namespace Vanrise.GenericData.Pricing
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.TargetTime = {1};", ruleContextVariableName, this.EffectiveTime);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.Rate = {1};", ruleContextVariableName, this.InitialRate);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.ExtraChargeRate = {1};", ruleContextVariableName, this.ExtraChargeRate);
-            
+
+            if (this.CurrencyId != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0}.DestinationCurrencyId = {1};", ruleContextVariableName, this.CurrencyId);
+
             if (this.DurationInSeconds != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0}.DurationInSeconds = {1};", ruleContextVariableName, this.DurationInSeconds);
-            
+
             var ruleManagerVariableName = context.GenerateUniqueMemberName("ruleManager");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Pricing.TariffRuleManager();", ruleManagerVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.ApplyTariffRule({1}, {2}, {3});",
@@ -41,7 +45,7 @@ namespace Vanrise.GenericData.Pricing
 
             if (this.EffectiveDurationInSeconds != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.EffectiveDurationInSeconds.Value;", this.EffectiveDurationInSeconds, ruleContextVariableName);
-            
+
             if (this.TotalAmount != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.TotalAmount.Value;", this.TotalAmount, ruleContextVariableName);
 

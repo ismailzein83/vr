@@ -56,10 +56,12 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestepPreview', ['Uti
                             stepObj.initialRate = payload.stepDetails.InitialRate;
                             stepObj.effectiveRate = payload.stepDetails.EffectiveRate;
                             stepObj.extraChargeRate = payload.stepDetails.ExtraChargeRate;
+                            stepObj.currencyId = payload.stepDetails.CurrencyId;
 
                             ctrl.initialRate = payload.stepDetails.InitialRate;
                             ctrl.effectiveRate = payload.stepDetails.EffectiveRate;
                             ctrl.extraChargeRate = payload.stepDetails.ExtraChargeRate;
+                            ctrl.currencyId = payload.stepDetails.CurrencyId;
                         }
 
                     }
@@ -88,10 +90,12 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestepPreview', ['Uti
                     stepObj.initialRate = changes.InitialRate;
                     stepObj.effectiveRate = changes.EffectiveRate;
                     stepObj.extraChargeRate = changes.ExtraChargeRate;
+                    stepObj.currencyId = changes.CurrencyId;
                     
                     ctrl.initialRate = changes.InitialRate;
                     ctrl.effectiveRate = changes.EffectiveRate;
                     ctrl.extraChargeRate = changes.ExtraChargeRate;
+                    ctrl.currencyId = changes.CurrencyId;
                 }
 
                 api.checkValidation = function () {
@@ -109,7 +113,8 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestepPreview', ['Uti
                         stepDetails.InitialRate = stepObj.initialRate;
                         stepDetails.EffectiveRate = stepObj.effectiveRate;
                         stepDetails.ExtraChargeRate = stepObj.extraChargeRate;
-                        
+                        stepDetails.CurrencyId = stepObj.currencyId;
+
                     }
                     return stepDetails;
                 }

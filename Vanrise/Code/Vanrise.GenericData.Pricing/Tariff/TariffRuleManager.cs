@@ -28,6 +28,7 @@ namespace Vanrise.GenericData.Pricing
             if (tariffPricingRule == null)
                 throw new NullReferenceException("tariffPricingRule");
 
+            context.SourceCurrencyId = tariffPricingRule.Settings.CurrencyId;
             tariffPricingRule.Settings.ApplyTariffRule(context);
             context.Rule = tariffPricingRule;
             //else

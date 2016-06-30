@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Rules.Pricing.MainExtensions.ExtraCharge
 {
@@ -16,7 +17,24 @@ namespace Vanrise.Rules.Pricing.MainExtensions.ExtraCharge
 
         protected override void Execute(IPricingRuleExtraChargeActionContext context)
         {
-            if (context.Rate >= this.FromRate && context.Rate < this.ToRate)
+            DateTime effectiveOn = context.TargetTime.HasValue ? context.TargetTime.Value : DateTime.Now;
+            CurrencyExchangeRateManager currencyExchangeManager = new CurrencyExchangeRateManager();
+            decimal convertedFromRate;
+            decimal convertedToRate;
+
+            if (context.DestinationCurrencyId.HasValue)
+            {
+                convertedFromRate = currencyExchangeManager.ConvertValueToCurrency(FromRate, context.SourceCurrencyId, context.DestinationCurrencyId.Value, effectiveOn);
+                convertedToRate = currencyExchangeManager.ConvertValueToCurrency(ToRate, context.SourceCurrencyId, context.DestinationCurrencyId.Value, effectiveOn);
+            }
+            else
+            {
+                convertedFromRate = FromRate;
+                convertedToRate = ToRate;
+            }
+
+
+            if (context.Rate >= convertedFromRate && context.Rate < convertedToRate)
                 context.Rate += Math.Ceiling(this.ExtraPercentage * context.Rate / 100);
         }
 

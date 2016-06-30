@@ -36,14 +36,38 @@ function ($compile, DaysOfWeekEnum, UtilsService, VRValidationService) {
                     FromTime: ctrl.fromTime,
                     ToTime: ctrl.toTime
                 }
-                if (!UtilsService.contains(ctrl.times, filter))
+                if (!isFilterExisting())
                     ctrl.times.push(filter);
             }
+
+            ctrl.disableAddButton = function () {
+                if (ctrl.fromTime != undefined && ctrl.toTime != undefined && ctrl.validateTime() == undefined)
+                    return false;
+                return true;
+            }
+
             ctrl.validateTime = function () {
                 return VRValidationService.validateTimeRange(ctrl.fromTime, ctrl.toTime);
             }
+
+            function isFilterExisting() {
+                if (ctrl.times.length == 0)
+                    return false;
+
+                for (var x = 0; x < ctrl.times.length; x++) {
+                    var currentTime = ctrl.times[x];
+                    if (currentTime.FromTime == ctrl.fromTime && currentTime.ToTime == ctrl.toTime)
+                        return true;
+                }
+
+                return false;
+            }
+
             defineAPI();
         }
+
+
+
         function defineDaysOfWeek() {
             ctrl.daysOfWeek = [];
             for (var p in DaysOfWeekEnum)

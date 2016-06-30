@@ -26,7 +26,16 @@ function ($compile, VR_Rules_PricingRuleAPIService, UtilsService, VRUIUtilsServi
         var directiveReadyAPI;
         var directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var currencyDirectiveAPI;
+        var currencyDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         function initializeController() {
+
+            ctrl.onCurrencySelectReady = function (api) {
+                currencyDirectiveAPI = api;
+                currencyDirectiveReadyPromiseDeferred.resolve();
+            };
+
             $scope.pricingRuleTariffSettings = [];
 
             $scope.onPricingRuleTariffTemplateDirectiveReady = function (api) {
@@ -43,6 +52,7 @@ function ($compile, VR_Rules_PricingRuleAPIService, UtilsService, VRUIUtilsServi
             api.getData = function () {
                 var obj = directiveReadyAPI.getData();
                 obj.ConfigId = $scope.selectedPricingRuleTariffSettings.TemplateConfigID;
+                obj.CurrencyId = currencyDirectiveAPI.getSelectedIds();
                 return obj;
             }
 
@@ -54,7 +64,7 @@ function ($compile, VR_Rules_PricingRuleAPIService, UtilsService, VRUIUtilsServi
                 if (payload != undefined) {
                     settings = payload.settings;
                 }
-                
+
                 var loadTariffTemplatesPromise = loadTariffTemplates();
                 promises.push(loadTariffTemplatesPromise);
 
@@ -88,8 +98,25 @@ function ($compile, VR_Rules_PricingRuleAPIService, UtilsService, VRUIUtilsServi
                     return directiveLoadPromiseDeferred.promise;
                 }
 
+                var loadCurrencySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                var currencyPayload;
+
+                if (settings != undefined && settings.CurrencyId > 0) {
+                    currencyPayload = { selectedIds: settings.CurrencyId };
+                }
+                else {
+                    currencyPayload = { selectSystemCurrency: true };
+                }
+
+                currencyDirectiveReadyPromiseDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, currencyPayload, loadCurrencySelectorPromiseDeferred)
+
+                })
+                promises.push(loadCurrencySelectorPromiseDeferred.promise);
+
                 return UtilsService.waitMultiplePromises(promises);
             }
+
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

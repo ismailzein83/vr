@@ -25,9 +25,19 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
 
 
     function extraChargeCtor(ctrl, $scope, $attrs) {
+
+        var currencyDirectiveAPI;
+        var currencyDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         function initializeController() {
 
             ctrl.datasource = [];
+
+            ctrl.onCurrencySelectReady = function (api) {
+                currencyDirectiveAPI = api;
+                currencyDirectiveReadyPromiseDeferred.resolve();
+            };
+
             ctrl.isValid = function () {
 
                 if (ctrl.datasource.length > 0)
@@ -69,6 +79,7 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
             api.getData = function () {
                 var obj = {
                     $type: "Vanrise.Rules.Pricing.PricingRuleExtraChargeSettings, Vanrise.Rules.Pricing",
+                    CurrencyId : currencyDirectiveAPI.getSelectedIds(),
                     Actions: getActions(),
                 }
                 return obj;
@@ -150,6 +161,22 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
 
                     ctrl.datasource.push(dataItem);
                 }
+
+                var loadCurrencySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                var currencyPayload;
+
+                if (settings != undefined && settings.CurrencyId > 0) {
+                    currencyPayload = { selectedIds: settings.CurrencyId };
+                }
+                else {
+                    currencyPayload = { selectSystemCurrency: true };
+                }
+
+                currencyDirectiveReadyPromiseDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, currencyPayload, loadCurrencySelectorPromiseDeferred)
+
+                })
+                promises.push(loadCurrencySelectorPromiseDeferred.promise);
 
                 return UtilsService.waitMultiplePromises(promises);
             }

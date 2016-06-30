@@ -18,12 +18,28 @@ namespace Vanrise.Common.Business
         public Decimal ConvertValueToCurrency(decimal value, int currencyId, DateTime effectiveOn)
         {
             var exchangeRate = GetEffectiveExchangeRate(currencyId, effectiveOn);
-            if (exchangeRate != null)
-                return value * exchangeRate.Rate;
-            else
-                return value;
+            if (exchangeRate == null)
+                throw new NullReferenceException("exchangeRate");
 
+            return value * exchangeRate.Rate;
         }
+
+        public Decimal ConvertValueToCurrency(decimal value, int fromCurrencyId, int toCurrencyId, DateTime effectiveOn)
+        {
+            var fromExchangeRate = GetEffectiveExchangeRate(fromCurrencyId, effectiveOn);
+            if (fromExchangeRate == null)
+                throw new NullReferenceException(string.Format("fromExchangeRate: currency Id:{0}, Effective On: {1}", fromCurrencyId, effectiveOn.ToString()));
+
+            var toExchangeRate = GetEffectiveExchangeRate(toCurrencyId, effectiveOn);
+            if (toExchangeRate == null)
+                throw new NullReferenceException(string.Format("toExchangeRate: currency Id:{0}, Effective On: {1}", toCurrencyId, effectiveOn.ToString()));
+
+            if (fromExchangeRate.Rate == 0)
+                throw new ArgumentException(string.Format("fromExchangeRate is 0: currency Id:{0}, Effective On: {1}", fromCurrencyId, effectiveOn.ToString()));
+
+            return value * toExchangeRate.Rate / fromExchangeRate.Rate;
+        }
+
         public Vanrise.Entities.IDataRetrievalResult<CurrencyExchangeRateDetail> GetFilteredCurrenciesExchangeRates(Vanrise.Entities.DataRetrievalInput<CurrencyExchangeRateQuery> input)
         {
             var allCurrenciesExchangeRates = GetCachedCurrenciesExchangeRates();
@@ -62,7 +78,7 @@ namespace Vanrise.Common.Business
 
             Dictionary<string, ExchangeRateInfo> currencyExchangeRates = new Dictionary<string, ExchangeRateInfo>();
 
-            foreach (var ex in filteredExchangeRates.OrderByDescending(itm => itm.ExchangeDate ))
+            foreach (var ex in filteredExchangeRates.OrderByDescending(itm => itm.ExchangeDate))
             {
                 var currency = allCurrencies[ex.CurrencyId];
 
@@ -103,7 +119,7 @@ namespace Vanrise.Common.Business
 
         public void SwapNewExchangeRateWithEEDTable(List<ConnectionStringSetting> connectionStrings)
         {
-            var ordredExchangeRates = GetCachedCurrenciesExchangeRates().ToList().OrderBy(r=>r.Value.CurrencyId).ThenByDescending(r=>r.Value.ExchangeDate);
+            var ordredExchangeRates = GetCachedCurrenciesExchangeRates().ToList().OrderBy(r => r.Value.CurrencyId).ThenByDescending(r => r.Value.ExchangeDate);
             List<ExchangeRateWithEED> newrates = new List<ExchangeRateWithEED>();
             ExchangeRateWithEED last = new ExchangeRateWithEED();
             foreach (var nr in ordredExchangeRates)
@@ -113,10 +129,10 @@ namespace Vanrise.Common.Business
 
                     ExchangeRateWithEED current = new ExchangeRateWithEED()
                     {
-                             CurrencyId = nr.Value.CurrencyId,
-                             Rate = nr.Value.Rate,
-                             BED = nr.Value.ExchangeDate,
-                             EED = last.BED
+                        CurrencyId = nr.Value.CurrencyId,
+                        Rate = nr.Value.Rate,
+                        BED = nr.Value.ExchangeDate,
+                        EED = last.BED
                     };
                     newrates.Add(current);
                     last = current;
@@ -142,7 +158,7 @@ namespace Vanrise.Common.Business
                 dataManager.ApplyExchangeRateWithEESInDB(newrates);
             }
 
-            
+
 
         }
 
@@ -244,32 +260,33 @@ namespace Vanrise.Common.Business
             currencyExchangeRateDetail.Entity = currencyExchangeRate;
 
             CurrencyManager manager = new CurrencyManager();
-            if (currencyExchangeRate.CurrencyId != null)
+            if (currencyExchangeRate != null)
             {
-                int currencyId = (int)currencyExchangeRate.CurrencyId;
-                currencyExchangeRateDetail.CurrencyName = manager.GetCurrency(currencyId).Name;
-                currencyExchangeRateDetail.CurrencySymbol = manager.GetCurrency(currencyId).Symbol;
-                if (currencyExchangeRateDetail.CurrencySymbol == manager.GetSystemCurrency().Symbol) 
-                    currencyExchangeRateDetail.IsMain = true; 
+                int currencyId = currencyExchangeRate.CurrencyId;
+                var currentCurrency = manager.GetCurrency(currencyId);
+                currencyExchangeRateDetail.CurrencyName = currentCurrency.Name;
+                currencyExchangeRateDetail.CurrencySymbol = currentCurrency.Symbol;
+                if (currencyExchangeRateDetail.CurrencySymbol == manager.GetSystemCurrency().Symbol)
+                    currencyExchangeRateDetail.IsMain = true;
             }
 
             return currencyExchangeRateDetail;
         }
-        private CurrencyExchangeRateDetail CurrencyExchangeRateSymbolMapper(CurrencyExchangeRate currencyExchangeRate)
-        {
-            CurrencyExchangeRateDetail currencyExchangeRateDetail = new CurrencyExchangeRateDetail();
+        //private CurrencyExchangeRateDetail CurrencyExchangeRateSymbolMapper(CurrencyExchangeRate currencyExchangeRate)
+        //{
+        //    CurrencyExchangeRateDetail currencyExchangeRateDetail = new CurrencyExchangeRateDetail();
 
-            currencyExchangeRateDetail.Entity = currencyExchangeRate;
+        //    currencyExchangeRateDetail.Entity = currencyExchangeRate;
 
-            CurrencyManager manager = new CurrencyManager();
-            if (currencyExchangeRate.CurrencyId != null)
-            {
-                int currencyId = (int)currencyExchangeRate.CurrencyId;
-                currencyExchangeRateDetail.CurrencyName = manager.GetCurrency(currencyId).Name;
-            }
+        //    CurrencyManager manager = new CurrencyManager();
+        //    if (currencyExchangeRate != null)
+        //    {
+        //        int currencyId = currencyExchangeRate.CurrencyId;
+        //        currencyExchangeRateDetail.CurrencyName = manager.GetCurrency(currencyId).Name;
+        //    }
 
-            return currencyExchangeRateDetail;
-        }
+        //    return currencyExchangeRateDetail;
+        //}
         #endregion
     }
 }

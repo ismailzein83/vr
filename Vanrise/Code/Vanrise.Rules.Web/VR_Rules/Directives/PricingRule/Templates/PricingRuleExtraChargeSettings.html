@@ -1,5 +1,4 @@
-﻿
-<vr-row>
+﻿<vr-row>
     <vr-columns width="1/4row">
         <vr-select datatextfield="Name" datavaluefield="TemplateConfigID"
                    label="Filter Type" datasource="ctrl.extraChargeTemplates" selectedvalues="ctrl.selectedTemplate" onselectionchanged="ctrl.onActionTemplateChanged">
@@ -8,12 +7,15 @@
     <vr-columns width="normal" withemptyline>
         <vr-button type="Add" data-onclick="ctrl.addFilter" standalone vr-disabled="ctrl.disableAddButton"></vr-button>
     </vr-columns>
+    <vr-columns width="1/4row">
+        <vr-common-currency-selector on-ready="ctrl.onCurrencySelectReady" isrequired isdisabled="true"> </vr-common-currency-selector>
+    </vr-columns>
 </vr-row>
 <vr-row>
     <vr-columns width="fullrow" vr-loader="ctrl.isLoadingDirective">
         <vr-validator validate="ctrl.isValid()">
             <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true"
-                         on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu enabledraggablerow>
+                         on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu>
                 <vr-datagridcolumn headertext="'Filter Type'" field="'name'" widthfactor="5"></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Filter Settings'" widthfactor="15">
                     <vr-directivewrapper directive="dataItem.editor" on-ready="dataItem.onDirectiveReady" />
