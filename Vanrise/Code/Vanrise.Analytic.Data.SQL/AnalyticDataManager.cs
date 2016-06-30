@@ -298,7 +298,7 @@ namespace Vanrise.Analytic.Data.SQL
                     }
                 }
 
-                AddColumnToStringBuilder(selectPartBuilder, String.Format("{0}({1}{2}) AS {3}", aggregateConfig.Config.AggregateType, aggregateConfig.Config.SQLColumn, currencyConversionStatement, GetAggregateColumnAlias(aggregateConfig)));
+                AddColumnToStringBuilder(selectPartBuilder, String.Format("CONVERT(DECIMAL(20, 8), {0}({1}{2})) AS {3}", aggregateConfig.Config.AggregateType, aggregateConfig.Config.SQLColumn, currencyConversionStatement, GetAggregateColumnAlias(aggregateConfig)));
 
                 if (aggregateConfig.Config.JoinConfigNames != null)
                 {
