@@ -103,34 +103,34 @@ function (VRNotificationService, VRUIUtilsService, WhS_CP_CodePrepAPIService, Ut
                         break;
 
                     case WhS_CP_CodeItemDraftStatusEnum.MovedFrom.value:
-                        dataItem.DraftStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/MovedFrom.png";
+                        dataItem.DraftStatusIconUrl = WhS_CP_CodeItemDraftStatusEnum.MovedFrom.icon;
                         dataItem.DraftStatusIconTooltip = WhS_CP_CodeItemDraftStatusEnum.MovedTo.label + " " + dataItem.OtherCodeZoneName;
                         break;
                     case WhS_CP_CodeItemDraftStatusEnum.MovedTo.value:
-                        dataItem.DraftStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/MovedTo.png";
+                        dataItem.DraftStatusIconUrl = WhS_CP_CodeItemDraftStatusEnum.MovedTo.icon;
                         dataItem.DraftStatusIconTooltip = WhS_CP_CodeItemDraftStatusEnum.MovedFrom.label + " " + dataItem.OtherCodeZoneName;
                         break
                     case WhS_CP_CodeItemDraftStatusEnum.ExistingClosed.value:
-                        dataItem.DraftStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/Closed.png";
+                        dataItem.DraftStatusIconUrl = WhS_CP_CodeItemDraftStatusEnum.ExistingClosed.icon;
                         dataItem.DraftStatusIconTooltip = WhS_CP_CodeItemDraftStatusEnum.ExistingClosed.label;
                         break;
                     case WhS_CP_CodeItemDraftStatusEnum.New.value:
-                        dataItem.DraftStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/New.png";
+                        dataItem.DraftStatusIconUrl = WhS_CP_CodeItemDraftStatusEnum.New.icon;
                         dataItem.DraftStatusIconTooltip = WhS_CP_CodeItemDraftStatusEnum.New.label;
                         break;
                     case WhS_CP_CodeItemDraftStatusEnum.ClosedZoneCode.value:
-                        dataItem.DraftStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/Closed.png";
+                        dataItem.DraftStatusIconUrl = WhS_CP_CodeItemDraftStatusEnum.ClosedZoneCode.icon;
                         dataItem.DraftStatusIconTooltip = WhS_CP_CodeItemDraftStatusEnum.ClosedZoneCode.label;
                     
                 }
 
 
                 if (dataItem.Status == WhS_CP_CodeItemStatusEnum.PendingEffective.value) {
-                    dataItem.StatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/PendingEffective.png";
+                    dataItem.StatusIconUrl = WhS_CP_CodeItemStatusEnum.PendingEffective.icon;
                     dataItem.StatusIconTooltip = WhS_CP_CodeItemStatusEnum.PendingEffective.label;
                 }
                 else if (dataItem.Status == WhS_CP_CodeItemStatusEnum.PendingClosed.value) {
-                    dataItem.StatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/PendingClosed.png";
+                    dataItem.StatusIconUrl = WhS_CP_CodeItemStatusEnum.PendingClosed.icon;
                     dataItem.StatusIconTooltip = WhS_CP_CodeItemStatusEnum.PendingClosed.label;
                 }
 

@@ -519,7 +519,7 @@
         }
 
         function mapZoneToNode(zoneInfo) {
-            var icon = null;
+            var icon = "Client/Modules/WhS_BusinessEntity/Images/Zone.png";
             if ($scope.hasState) {
                 switch (zoneInfo.DraftStatus) {
                     case WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value:

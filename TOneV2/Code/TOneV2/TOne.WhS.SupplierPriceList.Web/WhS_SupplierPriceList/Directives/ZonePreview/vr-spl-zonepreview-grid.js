@@ -99,25 +99,32 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
 
 
         function mapDataNeeded(dataItem) {
+            if (!onlyModified) {
+                if (dataItem.NewCodes > 0 || dataItem.DeletedCodes > 0 || dataItem.CodesMovedTo > 0 || dataItem.CodesMovedFrom > 0 || dataItem.ChangeTypeRate != WhS_SupPL_RateChangeTypeEnum.NotChanged.value) {
+                    dataItem.ZoneStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/Modified.png";
+                    dataItem.ZoneStatusIconTooltip = "Modified";
+                }
+            }
+
             switch (dataItem.ChangeTypeZone) {
 
                 case WhS_SupPL_ZoneChangeTypeEnum.New.value:
-                    dataItem.ZoneStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/New.png";
+                    dataItem.ZoneStatusIconUrl = WhS_SupPL_ZoneChangeTypeEnum.New.icon;
                     dataItem.ZoneStatusIconTooltip = WhS_SupPL_ZoneChangeTypeEnum.New.description;
                     break;
 
                 case WhS_SupPL_ZoneChangeTypeEnum.Deleted.value:
-                    dataItem.ZoneStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/Closed.png";
+                    dataItem.ZoneStatusIconUrl = WhS_SupPL_ZoneChangeTypeEnum.Deleted.icon;
                     dataItem.ZoneStatusIconTooltip = WhS_SupPL_ZoneChangeTypeEnum.Deleted.description;
                     break;
 
                 case WhS_SupPL_ZoneChangeTypeEnum.ReOpened.value:
-                    dataItem.ZoneStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/New.png";
+                    dataItem.ZoneStatusIconUrl = WhS_SupPL_ZoneChangeTypeEnum.ReOpened.icon;
                     dataItem.ZoneStatusIconTooltip = WhS_SupPL_ZoneChangeTypeEnum.ReOpened.description;
                     break;
 
                 case WhS_SupPL_ZoneChangeTypeEnum.Renamed.value:
-                    dataItem.ZoneStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/Renamed.png";
+                    dataItem.ZoneStatusIconUrl = WhS_SupPL_ZoneChangeTypeEnum.Renamed.icon;
                     dataItem.ZoneStatusIconTooltip = WhS_SupPL_ZoneChangeTypeEnum.Renamed.description;
                     break;
             }
@@ -125,17 +132,17 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
 
             switch (dataItem.ChangeTypeRate) {
                 case WhS_SupPL_RateChangeTypeEnum.New.value:
-                    dataItem.RateStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/New.png";
+                    dataItem.RateStatusIconUrl = WhS_SupPL_RateChangeTypeEnum.New.icon;
                     dataItem.RateStatusIconTooltip = WhS_SupPL_RateChangeTypeEnum.New.description;
                     break;
 
                 case WhS_SupPL_RateChangeTypeEnum.Increase.value:
-                    dataItem.RateStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/Increase.png";
+                    dataItem.RateStatusIconUrl = WhS_SupPL_RateChangeTypeEnum.Increase.icon;
                     dataItem.RateStatusIconTooltip = WhS_SupPL_RateChangeTypeEnum.Increase.description;
                     break;
 
                 case WhS_SupPL_RateChangeTypeEnum.Decrease.value:
-                    dataItem.RateStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/Decrease.png";
+                    dataItem.RateStatusIconUrl = WhS_SupPL_RateChangeTypeEnum.Decrease.icon;
                     dataItem.RateStatusIconTooltip = WhS_SupPL_RateChangeTypeEnum.Decrease.description;
                     break;
 

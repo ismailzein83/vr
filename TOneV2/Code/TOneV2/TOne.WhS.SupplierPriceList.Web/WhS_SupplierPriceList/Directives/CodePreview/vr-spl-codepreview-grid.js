@@ -72,22 +72,22 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_CodeChangeTypeE
         function mapDataNeeded(dataItem) {
             switch (dataItem.Entity.ChangeType) {
                 case WhS_SupPL_CodeChangeTypeEnum.New.value:
-                    dataItem.codeStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/New.png";
+                    dataItem.codeStatusIconUrl = WhS_SupPL_CodeChangeTypeEnum.New.icon;
                     dataItem.codeStatusIconTooltip = WhS_SupPL_CodeChangeTypeEnum.New.description;
                     break;
 
                 case WhS_SupPL_CodeChangeTypeEnum.Deleted.value:
-                    dataItem.codeStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/Closed.png";
+                    dataItem.codeStatusIconUrl = WhS_SupPL_CodeChangeTypeEnum.Deleted.icon;
                     dataItem.codeStatusIconTooltip = WhS_SupPL_CodeChangeTypeEnum.Deleted.description;
                     break;
 
                 case WhS_SupPL_CodeChangeTypeEnum.Moved.value:
                     if (dataItem.Entity.ZoneName != zoneName) {
-                        dataItem.codeStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/MovedFrom.png";
+                        dataItem.codeStatusIconUrl = WhS_SupPL_CodeChangeTypeEnum.MovedFrom.icon;
                             dataItem.codeStatusIconTooltip = WhS_SupPL_CodeChangeTypeEnum.Moved.description + " to " + dataItem.Entity.ZoneName;
                         }
                         else {
-                        dataItem.codeStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/MovedTo.png";
+                        dataItem.codeStatusIconUrl = WhS_SupPL_CodeChangeTypeEnum.MovedTo.icon;
                             dataItem.codeStatusIconTooltip = WhS_SupPL_CodeChangeTypeEnum.Moved.description + " from " + dataItem.Entity.RecentZoneName;
                         }
                     break;
