@@ -1759,11 +1759,11 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     padding: 3px 0px 0px 5px;
     /*line-height: 1;*/
     position: relative;
-    max-width: 100%;
+    width: 100%;
 }
 
 .vr-datagrid-celltext {
-    display: inline-flex;
+    display: inline-block;
     width: 100%;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -2374,3 +2374,7 @@ vr-listitem div[class^="col"] {
     color: #333333 !important;
 }
 
+/*jstree-default .jstree-themeicon-custom*/
+.jstree-default .jstree-themeicon-custom { 
+  background-size: 18px 18px !important;
+}
