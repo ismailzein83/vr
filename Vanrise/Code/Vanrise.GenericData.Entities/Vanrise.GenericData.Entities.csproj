@@ -76,6 +76,7 @@
     <Compile Include="DataRecords\Filters.cs" />
     <Compile Include="DataRecords\DataRecordDetail.cs" />
     <Compile Include="DataRecords\DataRecordFieldValue.cs" />
+    <Compile Include="DataRecordTypes\DataRecordCalculatedField.cs" />
     <Compile Include="DataRecordTypes\DataRecordFieldInfoFilter.cs" />
     <Compile Include="DataRecordTypes\DataRecordFieldInfo.cs" />
     <Compile Include="DataStorage\IGetSummaryRecordStorageDataManagerContext.cs" />

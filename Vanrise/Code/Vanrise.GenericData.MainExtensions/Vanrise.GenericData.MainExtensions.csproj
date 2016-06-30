@@ -47,6 +47,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataRecordFieldFormulas\ParentBusinessEntityFieldFormula.cs" />
     <Compile Include="DataRecordFields\FieldArrayType.cs" />
     <Compile Include="DataRecordFields\FieldTypeHelper.cs" />
     <Compile Include="DataRecordFields\Filters\BusinessEntityFieldTypeFilter.cs" />

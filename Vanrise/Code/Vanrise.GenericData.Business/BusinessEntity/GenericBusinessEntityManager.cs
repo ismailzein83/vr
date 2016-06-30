@@ -386,6 +386,16 @@ namespace Vanrise.GenericData.Business
         }
         #endregion
 
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
     public class GenericBusinessEntityFilter
     {

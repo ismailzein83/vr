@@ -35,4 +35,34 @@ namespace Vanrise.GenericData.Entities
 
         BusinessEntityDefinition EntityDefinition { get; }
     }
+
+    public interface IBusinessEntityGetParentEntityIdContext
+    {
+        int EntityDefinitionId { get; }
+        
+        BusinessEntityDefinition EntityDefinition { get; }
+
+        int ParentEntityDefinitionId { get; }
+
+        BusinessEntityDefinition ParentEntityDefinition { get; }
+
+        dynamic EntityId { get; }
+
+        dynamic Entity { get; }
+    }
+
+    public interface IBusinessEntityGetIdsByParentEntityIdContext
+    {
+        int EntityDefinitionId { get; }
+
+        BusinessEntityDefinition EntityDefinition { get; }
+
+        int ParentEntityDefinitionId { get; }
+
+        BusinessEntityDefinition ParentEntityDefinition { get; }
+
+        dynamic ParentEntityId { get; }
+
+        dynamic ParentEntity { get; }
+    }
 }

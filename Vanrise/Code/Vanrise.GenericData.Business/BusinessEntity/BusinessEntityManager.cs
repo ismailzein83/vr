@@ -24,6 +24,27 @@ namespace Vanrise.GenericData.Business
             return beManager.GetEntity(getByIdContext);
         }
 
+        public dynamic GetParentEntityId(int businessEntityDefinitionId, int parentBusinessEntityDefinitionId, dynamic entityId)
+        {
+            var beManager = GetBEManager(businessEntityDefinitionId);
+            var context = new BusinessEntityGetParentEntityIdContext(businessEntityDefinitionId, parentBusinessEntityDefinitionId, entityId);
+            return beManager.GetParentEntityId(context);
+        }
+        
+        public IEnumerable<dynamic> GetChildEntitiesIds(int businessEntityDefinitionId, int childBusinessEntityDefinitionId, IEnumerable<dynamic> parentEntitiesIds)
+        {
+            List<dynamic> childEntitiesIds = new List<dynamic>();
+            var beManager = GetBEManager(businessEntityDefinitionId);
+            foreach(var parentEntityId in parentEntitiesIds)
+            {
+                var context = new BusinessEntityGetIdsByParentEntityIdContext(childBusinessEntityDefinitionId, businessEntityDefinitionId, parentEntityId);
+                var currentChildEntitiesIds = beManager.GetIdsByParentEntityId(context);
+                if (currentChildEntitiesIds != null)
+                    childEntitiesIds.AddRange(currentChildEntitiesIds);
+            }
+            return childEntitiesIds.Distinct().ToList();            
+        }
+
         private Entities.IBusinessEntityManager GetBEManager(int businessEntityDefinitionId)
         {
             var beManager = (new BusinessEntityDefinitionManager()).GetBusinessEntityManager(businessEntityDefinitionId);
@@ -31,6 +52,5 @@ namespace Vanrise.GenericData.Business
                 throw new NullReferenceException(String.Format("beManager. BusinessEntityDefinitionId '{0}'", businessEntityDefinitionId));
             return beManager;
         }
-
     }
 }

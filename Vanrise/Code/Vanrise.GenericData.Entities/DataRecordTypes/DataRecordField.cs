@@ -9,6 +9,8 @@ namespace Vanrise.GenericData.Entities
         public string Title { get; set; }
 
         public DataRecordFieldType Type { get; set; }
+
+        public DataRecordFieldFormula Formula { get; set; }
     }
 
     public class DataRecordGridColumnAttribute
