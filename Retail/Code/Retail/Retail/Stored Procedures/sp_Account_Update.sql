@@ -6,7 +6,7 @@
 CREATE PROCEDURE [Retail].[sp_Account_Update]
 	@ID INT,
 	@Name NVARCHAR(255),
-	@Type INT,
+	@TypeID INT,
 	@Settings NVARCHAR(MAX),
 	@ParentID INT
 AS
@@ -20,7 +20,7 @@ BEGIN
 	)
 	BEGIN
 		UPDATE Retail.Account
-		SET Name = @Name, [Type] = @Type, Settings = @Settings
+		SET Name = @Name, [TypeID] = @TypeID, Settings = @Settings
 		WHERE ID = @ID
 	END
 END

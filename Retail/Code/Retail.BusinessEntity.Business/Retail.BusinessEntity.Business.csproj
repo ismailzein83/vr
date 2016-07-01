@@ -77,14 +77,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountBalance\AccountLiveBalanceManager.cs" />
     <Compile Include="AccountIdentificationManager.cs" />
     <Compile Include="AccountManager.cs" />
     <Compile Include="AccountPartDefinitionManager.cs" />
     <Compile Include="AccountServiceManager.cs" />
     <Compile Include="AccountTypeManager.cs" />
     <Compile Include="Action\ActionDefinitionManager.cs" />
-    <Compile Include="Action\ActionProvisioningContext.cs" />
     <Compile Include="Extensions\AccountMappingRuleDefinitionFilter.cs" />
     <Compile Include="AccountPackageManager.cs" />
     <Compile Include="ChargingPolicyManager.cs" />

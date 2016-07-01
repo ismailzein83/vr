@@ -5,6 +5,9 @@
     [Settings]    NVARCHAR (MAX)  NULL,
     [CreatedTime] DATETIME        CONSTRAINT [DF_Package_CreatedTime] DEFAULT (getdate()) NULL,
     [timestamp]   ROWVERSION      NULL,
-    CONSTRAINT [PK_Package] PRIMARY KEY CLUSTERED ([ID] ASC)
+    CONSTRAINT [PK_Package] PRIMARY KEY CLUSTERED ([ID] ASC),
+    CONSTRAINT [IX_Package_Name] UNIQUE NONCLUSTERED ([Name] ASC)
 );
+
+
 

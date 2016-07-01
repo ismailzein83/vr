@@ -53,6 +53,9 @@
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
@@ -61,8 +64,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountBalance\AccountBalanceUpdate.cs" />
-    <Compile Include="AccountBalance\AccountLiveBalance.cs" />
     <Compile Include="AccountIdentification\AccountIdentificationQuery.cs" />
     <Compile Include="AccountIdentification\AccountIdentificationDetail.cs" />
     <Compile Include="AccountPackage\AccountPackage.cs" />
@@ -88,11 +89,8 @@
     <Compile Include="Action\ActionBP\ActionBPDefinitionSettings.cs" />
     <Compile Include="Action\ActionBP\ActionBPInputArgument.cs" />
     <Compile Include="Action\ActionBP\ActionBPSettings.cs" />
-    <Compile Include="Action\ActionProvisioning\ActionProvisioner.cs" />
-    <Compile Include="Action\ActionProvisioning\ActionProvisionerConfig.cs" />
     <Compile Include="Action\ActionDefinition.cs" />
     <Compile Include="Action\ActionBP\ActionBPConfig.cs" />
-    <Compile Include="Action\ActionProvisioning\ActionProvisionerDefinitionSettings.cs" />
     <Compile Include="Action\ExecutedActionsData.cs" />
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
     <Compile Include="BusinessManagers\IActionDefinitionManager.cs" />
@@ -116,6 +114,8 @@
     <Compile Include="ChargingPolicy\ChargingPolicyParts\Types\ChargingPolicyDurationTariff.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicy.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicySettings.cs" />
+    <Compile Include="CreditClass\CreditClass.cs" />
+    <Compile Include="CreditClass\CreditControlSettings.cs" />
     <Compile Include="EntityType.cs" />
     <Compile Include="Package\PackageItems\PackageItem.cs" />
     <Compile Include="Package\PackageItems\Types\ChargingPolicyPackageItem.cs" />

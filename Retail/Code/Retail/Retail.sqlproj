@@ -71,6 +71,11 @@
     <Folder Include="Retail_BE\Tables\" />
     <Folder Include="TOneWhS_BE\Functions\" />
     <Folder Include="TOneWhS_BE\Stored Procedures\" />
+    <Folder Include="VR_AccountBalance\" />
+    <Folder Include="VR_AccountBalance\Tables\" />
+    <Folder Include="Retail_BE\Stored Procedures\" />
+    <Folder Include="VR_AccountBalance\Stored Procedures\" />
+    <Folder Include="VR_AccountBalance\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Retail\Tables\Package.sql" />
@@ -132,5 +137,24 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_CodeGroup_Update.sql" />
     <Build Include="Security\TOneWhS_BE.sql" />
     <Build Include="Security\Retail_BE.sql" />
+    <Build Include="Retail_BE\Tables\StatusDefinition.sql" />
+    <Build Include="Retail_BE\Tables\StatusChargingSet.sql" />
+    <Build Include="Retail_BE\Tables\ActionDefinition.sql" />
+    <Build Include="Retail_BE\Tables\AccountType.sql" />
+    <Build Include="Retail_BE\Tables\AccountPartDefinition.sql" />
+    <Build Include="VR_AccountBalance\Tables\LiveBalance.sql" />
+    <Build Include="VR_AccountBalance\Tables\BillingTransaction.sql" />
+    <Build Include="VR_AccountBalance\Tables\BalanceHistory.sql" />
+    <Build Include="VR_AccountBalance\Tables\BalanceClosingPeriod.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_AccountType_Update.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_AccountType_Insert.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_AccountType_GetAll.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_AccountPartDefinition_Update.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_AccountPartDefinition_Insert.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_AccountPartDefinition_GetAll.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\bp_CreateClosingPeriod.sql" />
+    <Build Include="Security\VR_AccountBalance.sql" />
+    <Build Include="VR_AccountBalance\Tables\BalanceUsageQueue.sql" />
+    <Build Include="VR_AccountBalance\User Defined Types\BalanceUpdate.sql" />
   </ItemGroup>
 </Project>

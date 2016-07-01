@@ -5,7 +5,7 @@
 -- =============================================
 CREATE PROCEDURE [Retail].[sp_Account_Insert]
 	@Name NVARCHAR(255),
-	@Type INT,
+	@TypeID INT,
 	@Settings NVARCHAR(MAX),
 	@ParentID INT,
 	@ID INT OUT
@@ -17,8 +17,8 @@ BEGIN
 		WHERE Name = @Name AND ((@ParentID IS NULL AND ParentID IS NULL) OR (@ParentID IS NOT NULL AND ParentID = @ParentID))
 	)
 	BEGIN
-		INSERT INTO Retail.Account (Name, [Type], Settings, ParentID)
-		VALUES (@Name, @Type, @Settings, @ParentID)
+		INSERT INTO Retail.Account (Name, [TypeID], Settings, ParentID)
+		VALUES (@Name, @TypeID, @Settings, @ParentID)
 		SET @ID = @@IDENTITY
 	END
 END

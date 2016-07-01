@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class AccountBalanceUpdate
+    class CreditControlSettings
     {
-        public long AccountId { get; set; }
-
-        public Decimal Value { get; set; }
     }
 }

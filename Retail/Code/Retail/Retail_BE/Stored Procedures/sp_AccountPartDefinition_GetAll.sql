@@ -3,9 +3,9 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [Retail].[sp_Account_GetAll]
+CREATE PROCEDURE [Retail_BE].[sp_AccountPartDefinition_GetAll]
 AS
 BEGIN
-	SELECT ID, Name, [TypeID], Settings, ParentID
-	FROM Retail.Account
+	SELECT ID, Name, Title, Details
+	FROM Retail_BE.AccountPartDefinition
 END
