@@ -264,7 +264,8 @@ namespace Vanrise.Common
             if (input.FromRow.HasValue && input.ToRow.HasValue)
             {
                 int pageSize = (input.ToRow.Value - input.FromRow.Value) + 1;
-                pagedList = list.ToList().Skip(input.FromRow.Value - 1).Take(pageSize);
+                if (list != null)
+                    pagedList = list.ToList().Skip(input.FromRow.Value - 1).Take(pageSize);
             }
             return pagedList;
         }
@@ -357,7 +358,7 @@ namespace Vanrise.Common
             return entity.EED.VRGreaterThan(target.BED) && target.EED.VRGreaterThan(entity.BED);
         }
 
-        
+
         #endregion
 
         #region Assembly

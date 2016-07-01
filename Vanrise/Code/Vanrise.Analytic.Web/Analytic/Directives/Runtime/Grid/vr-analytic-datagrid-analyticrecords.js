@@ -612,22 +612,23 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
 
                     $scope.gridMenuActions.length = 0;
-                    for(var i=0;i<itemActions.length;i++)
-                    {
-                        var itemAction = itemActions[i];
-                        var settings = {
-                            FromDate: fromTime,
-                            ToDate: toTime,
-                            FilterGroup: filterGroup,
-                            TableId: tableId,
+                    if (itemActions != undefined) {
+                        for (var i = 0; i < itemActions.length; i++) {
+                            var itemAction = itemActions[i];
+                            var settings = {
+                                FromDate: fromTime,
+                                ToDate: toTime,
+                                FilterGroup: filterGroup,
+                                TableId: tableId,
+                            }
+                            $scope.gridMenuActions.push({
+                                name: itemAction.Title,
+                                clicked: function (dataItem) {
+                                    settings.DimensionFilters = getDimensionValues(parentDimensions, dataItem, dimensionFilters, selectedDimensions);
+                                    return VR_Analytic_AnalyticItemActionService.excuteItemAction(itemAction, settings);
+                                },
+                            });
                         }
-                        $scope.gridMenuActions.push({
-                            name: itemAction.Title,
-                            clicked: function (dataItem) {
-                                settings.DimensionFilters = getDimensionValues(parentDimensions, dataItem, dimensionFilters, selectedDimensions);
-                                return VR_Analytic_AnalyticItemActionService.excuteItemAction(itemAction, settings);
-                            },
-                        });
                     }
                 }
 

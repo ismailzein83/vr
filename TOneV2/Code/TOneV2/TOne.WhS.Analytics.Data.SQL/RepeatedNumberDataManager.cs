@@ -15,15 +15,15 @@ namespace TOne.WhS.Analytics.Data.SQL
         #region ctor/Local Variables
         private string mainCDRTableName = "[TOneWhS_CDR].[BillingCDR_Main]";
         private string mainCDRTableAlias = "MainCDR";
-        private string mainCDRTableIndex = "BillingCDR_Main_AttemptDateTime";
+        private string mainCDRTableIndex = "IX_BillingCDR_Main_AttemptDateTime";
 
         private string invalidCDRTableName = "[TOneWhS_CDR].[BillingCDR_Invalid]";
         private string invalidCDRTableAlias = "InValidCDR";
-        private string invalidCDRTableIndex = "BillingCDR_Invalid_AttemptDateTime";
+        private string invalidCDRTableIndex = "IX_BillingCDR_Invalid_AttemptDateTime";
 
         private string failedCDRTableName = "[TOneWhS_CDR].[BillingCDR_Failed]";
         private string failedCDRTableAlias = "FailedCDR";
-        private string failedCDRTableIndex = "BillingCDR_Failed_AttemptDateTime";
+        private string failedCDRTableIndex = "IX_BillingCDR_Failed_AttemptDateTime";
 
         public RepeatedNumberDataManager()
             : base(GetConnectionStringName("TOneWhS_CDR_DBConnStringKey", "TOneWhS_CDR_DBConnString"))

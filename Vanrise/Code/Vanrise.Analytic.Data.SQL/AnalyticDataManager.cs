@@ -16,6 +16,12 @@ namespace Vanrise.Analytic.Data.SQL
     public class AnalyticDataManager : BaseSQLDataManager, IAnalyticDataManager
     {
         #region Public Methods
+        public AnalyticDataManager()
+            : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
+        {
+
+        }
+
         public IEnumerable<DBAnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, out  HashSet<string> includedSQLDimensions)
         {            
             HashSet<string> includedSQLDimensions_Local;

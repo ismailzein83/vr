@@ -55,7 +55,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             queryBuilder.Append(String.Format(@"
                     SELECT   #SELECTCOLUMNPART#
                     FROM [TOneWhS_CDR].[BillingCDR_Invalid]
-                        WITH(NOLOCK ,INDEX(BillingCDR_Invalid_AttemptDateTime)) WHERE SupplierID is NULL AND DurationInSeconds=0 AND  AttemptDateTime>= @FromDate    
+                        WITH(NOLOCK ,INDEX(IX_BillingCDR_Invalid_AttemptDateTime)) WHERE SupplierID is NULL AND DurationInSeconds=0 AND  AttemptDateTime>= @FromDate    
                         #WHEREPART#  
                         #GROUPBYPART# 
                         "));

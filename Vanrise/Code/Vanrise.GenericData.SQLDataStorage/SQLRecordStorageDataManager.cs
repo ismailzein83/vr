@@ -37,6 +37,7 @@ namespace Vanrise.GenericData.SQLDataStorage
         }
 
         internal SQLRecordStorageDataManager(SQLDataStoreSettings dataStoreSettings, SQLDataRecordStorageSettings dataRecordStorageSettings, DataRecordStorage dataRecordStorage)
+            : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
         {
             this._dataStoreSettings = dataStoreSettings;
             this._dataRecordStorageSettings = dataRecordStorageSettings;
