@@ -236,7 +236,7 @@ as (select * from (values
 (4,'System Entities Definition','System Entities Definition','#/view/Security/Views/BusinessEntity/BusinessEntityDefinitionManagement',2,'VR_Sec/BusinessEntityNode/GetEntityModules',null,null,null,0,4),
 (5,'Views','Views'			,'#/view/Security/Views/View/ViewManagement'										,3,'VR_Sec/View/GetFilteredViews'	,null,null,null,0,1),
 (6,'Menus','Menus'			,'#/view/Security/Views/Menu/MenuManagement'										,3,'VR_Sec/View/UpdateViewsRank'	,null,null,null,0,2),
-(7,'Organizational Charts'	,'Organizational Charts','#/view/Security/Views/OrgChart/OrgChartManagement'		,3,null								,null,null,null,0,25)
+(7,'Organizational Charts'	,'Organizational Charts','#/view/Security/Views/OrgChart/OrgChartManagement'		,3,'VR_Sec/Users/GetFilteredUsers'	,null,null,null,0,25)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
