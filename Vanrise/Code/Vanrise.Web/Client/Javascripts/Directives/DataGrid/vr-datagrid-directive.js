@@ -915,7 +915,7 @@
             else
                 h = screen.height * 0.55;
 
-            var pagesize = (Math.ceil(parseInt((h / 25) * 1.5) / 10) * 10) < 25 ? 25 : (Math.ceil(parseInt((h / 25) * 1.5) / 10) * 10);
+            var pagesize = (Math.ceil(parseInt((h / 25) * 1.5) / 10) * 10) < 25 ? 25 : (Math.ceil(parseInt((h / 25) * 1.7) / 10) * 10);
             return pagesize;
         }
         function getScrollbarWidth() {            
