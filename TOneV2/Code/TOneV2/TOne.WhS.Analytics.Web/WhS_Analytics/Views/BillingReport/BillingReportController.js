@@ -24,7 +24,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
 
     $scope.export = function () {
         var customers = (customerAccountDirectiveAPI != undefined && customerAccountDirectiveAPI.getSelectedIds() != undefined) ? customerAccountDirectiveAPI.getSelectedIds() : "";
-        return BillingReportAPIService.ExportCarrierProfile($scope.fromDate, $scope.toDate, $scope.params.top, customers, $scope.params.selectedCurrency.CurrencyID, $scope.params.selectedCurrency.Name).then(function (response) {
+        return BillingReportAPIService.ExportCarrierProfile($scope.fromDate, $scope.toDate, $scope.params.top, customers, currencySelectorAPI.getSelectedIds(), $scope.selectedCurrency.Symbol).then(function (response) {
             UtilsService.downloadFile(response.data, response.headers);
         });
     };
@@ -100,7 +100,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             var suppliers = (supplierAccountDirectiveAPI != undefined && supplierAccountDirectiveAPI.getSelectedIds() != undefined) ? supplierAccountDirectiveAPI.getSelectedIds() : "";
 
             var zones = (saleZoneDirectiveAPI != undefined && saleZoneDirectiveAPI.getSelectedIds() != undefined) ? saleZoneDirectiveAPI.getSelectedIds() : "";
-       
+
             var paramsurl = "";
             paramsurl += "reportId=" + $scope.reporttype.ReportDefinitionId;
             paramsurl += "&fromDate=" + $scope.dateToString($scope.fromDate);
@@ -114,14 +114,13 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             paramsurl += "&isExchange=" + $scope.params.isExchange;
             paramsurl += "&margin=" + $scope.params.margin;
             paramsurl += "&top=" + $scope.params.top;
-            paramsurl += "&zone=" + zones ;
+            paramsurl += "&zone=" + zones;
             paramsurl += "&customer=" + customers;
             paramsurl += "&supplier=" + suppliers;
             paramsurl += "&currency=" + currencySelectorAPI.getSelectedIds();
             paramsurl += "&currencyDesc=" + (($scope.params.selectedCurrency == null) ? "United States Dollars" : encodeURIComponent($scope.params.selectedCurrency.Name));
             paramsurl += "&pageBreak=" + $scope.params.pageBreak;
             paramsurl += "&Auth-Token=" + encodeURIComponent(SecurityService.getUserToken());
-            console.log(paramsurl);
             if (!$scope.reporttype.ParameterSettings.CustomerIdNotOptional)
                 window.open("Client/Modules/WhS_Analytics/Reports/Analytics/BillingReports.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1");
             else
@@ -164,20 +163,12 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             });
     }
 
-    function getIdsList(tab, attname) {
-        var list = [];
-        for (var i = 0; i < tab.length ; i++)
-            list[list.length] = tab[i][attname];
-        return list.join(",");
-
-    }
-
     function loadCurrencySelector() {
         var currencyLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
         currencyReadyPromiseDeferred.promise
             .then(function () {
-                VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, undefined, currencyLoadPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, {selectSystemCurrency:true}, currencyLoadPromiseDeferred);
             });
         return currencyLoadPromiseDeferred.promise;
     }

@@ -18,7 +18,7 @@ namespace TOne.WhS.Analytics.Data.SQL
         #region Constructors
 
         public BillingReportDataManager()
-            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneAnalyticsDBConnString"))
+            : base(GetConnectionStringName("TOneWhS_Analytics_DBConnStringKey", "TOneAnalyticsDBConnString"))
         {
 
         }
@@ -27,38 +27,25 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         public List<Entities.BillingReport.BusinessCaseStatus> GetBusinessCaseStatus(DateTime fromDate, DateTime toDate, int carrierAccountId, int topDestination, bool isSale, bool isAmount, int currencyId)
         {
-            string DurationField = "BS.SaleDuration / 60.0";
-            string amountField = isSale ? "BS.Sale_Nets / ISNULL(ERS.Rate, 1) " : "BS.Cost_Nets / ISNULL(ERC.Rate, 1) ";
-            string exchangeTable = isSale ? "ERS" : "ERC";
-            string currencyField = isSale ? "Sale_Currency" : "Cost_Currency";
+            string DurationField = "BS.SaleDurationInSeconds ";
+            string amountField = isSale ? "BS.SaleNet / ISNULL(ERS.Rate, 1) " : "BS.CostNet / ISNULL(ERC.Rate, 1) ";
             string amountDuration = isAmount ? amountField : DurationField;
-            string carrier = isSale ? "Customer" : "Supplier";
-            string carrierId = isSale ? "BS.CustomerID" : "BS.SupplierID";
-            string saleZone = isSale ? "BS.SaleZoneID" : "BS.CostZoneID";
-            string query = String.Format(@"{4} ;WITH OrderedZones AS (SELECT TOP (@TopDestination) z.ZoneID, z.Name 
-                From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date,IX_Billing_Stats_{1})) , @ConvertedExchangeRates as {5},
-                Zone z (NOLOCK) WHERE bs.CallDate 
-                BETWEEN @FromDate AND @ToDate AND {2} = @CustomerId AND z.ZoneID = {3} AND {5}.Currency = BS.{6}  
-                GROUP BY z.ZoneID, z.Name 
-                ORDER BY SUM({0}) DESC ) 
-                
-                SELECT z.Name,Year(bs.CallDate) AS YearDuration, 
-                MONTH(BS.CallDate) AS MonthDuration, 
-                cast( (SUM({0} )/60 ) as decimal(13,4) ) AS SaleDuration 
-                From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date,IX_Billing_Stats_{1})), OrderedZones z , @ConvertedExchangeRates as ERC, @ConvertedExchangeRates as ERS
+            string carrierId = isSale ? "BS.CustomerId" : "BS.SupplierId";
 
-                WHERE bs.CallDate BETWEEN @FromDate AND @ToDate AND {2} = @CustomerId AND z.ZoneID = {3} 
-                And ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate 
-                And ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate
-                GROUP BY z.Name , Year(bs.CallDate), MONTH(BS.CallDate)",
+
+            string query = String.Format(@"{2}
+                SELECT TOP (@TopDestination)  BS.SaleZoneId AS ZoneId ,Year(BS.BatchStart) AS YearDuration, 
+                MONTH(BS.BatchStart) AS MonthDuration, 
+                cast( (SUM({0} )/60 ) as decimal(13,4) ) AS SaleDuration 
+                From [TOneWhS_Analytics].[BillingStatsDaily] BS WITH(NOLOCK,INDEX(IX_BillingStatsDaily_BatchStart,IX_BillingStatsDaily_Id)),
+                    @ConvertedExchangeRates as ERC, @ConvertedExchangeRates as ERS
+                WHERE BS.BatchStart BETWEEN @FromDate AND @ToDate AND {1} = @CustomerId 
+                And ERC.CurrencyID = BS.CostCurrencyId AND BS.BatchStart >= ERC.BED AND (ERC.EED IS NULL OR BS.BatchStart < ERC.EED) 
+                And ERS.CurrencyID = BS.SaleCurrencyId AND BS.BatchStart >= ERS.BED AND (ERS.EED IS NULL OR BS.BatchStart < ERS.EED)
+                GROUP BY BS.SaleZoneId , Year(BS.BatchStart), MONTH(BS.BatchStart)",
                 amountDuration,
-                carrier,
                 carrierId,
-                saleZone,
-                //CurrencyQuery(fromDate, toDate, currencyId),
-                GetExchangeRatesTable(currencyId),
-                exchangeTable,
-                currencyField
+                GetExchangeRatesTable(currencyId)
                 );
 
             return GetItemsText(query, BusinessCaseStatusMapper,
@@ -98,7 +85,7 @@ namespace TOne.WhS.Analytics.Data.SQL
         {
             BusinessCaseStatus instance = new BusinessCaseStatus
             {
-                Zone = reader["Name"] as string,
+                ZoneId = GetReaderValue<long>(reader, "ZoneId"),
                 Month = GetReaderValue<int>(reader, "MonthDuration"),
                 Year = GetReaderValue<int>(reader, "YearDuration"),
                 Durations = GetReaderValue<decimal>(reader, "SaleDuration")

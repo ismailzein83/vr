@@ -8,6 +8,7 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
 {
     public class BusinessCaseStatus
     {
+        public long ZoneId { get; set; }
         public string Zone { get; set; }
         public int Month { get; set; }
         public int Year { get; set; }

@@ -18,11 +18,13 @@ namespace TOne.WhS.Analytics.Business
     {
         private readonly IBillingReportDataManager _datamanager;
         private readonly CarrierAccountManager _carrierAccountManager;
+        private readonly SaleZoneManager _saleZoneManager;
 
         public BillingReportManager()
         {
             _datamanager = AnalyticsDataManagerFactory.GetDataManager<IBillingReportDataManager>();
             _carrierAccountManager = new CarrierAccountManager();
+            _saleZoneManager = new SaleZoneManager();
         }
 
         public List<BusinessCaseStatus> GetBusinessCaseStatusDurationAmount(BusinessCaseStatusQuery query, bool isSale)
@@ -103,20 +105,25 @@ namespace TOne.WhS.Analytics.Business
         }
         public List<BusinessCaseStatus> GetBusinessCaseStatus(BusinessCaseStatusQuery query, bool isSale, bool isAmount)
         {
-            return _datamanager.GetBusinessCaseStatus(query.fromDate, query.toDate, query.customerId, query.topDestination, isSale, isAmount, query.currencyId);
+            List<BusinessCaseStatus> listBusinessCaseStatus = _datamanager.GetBusinessCaseStatus(query.fromDate, query.toDate, query.customerId, query.topDestination, isSale, isAmount, query.currencyId);
+            for (int i = 0; i < listBusinessCaseStatus.Count; i++)
+            {
+                listBusinessCaseStatus[i].Zone = _saleZoneManager.GetSaleZoneName(listBusinessCaseStatus[i].ZoneId);
+            }
+            return listBusinessCaseStatus;
         }
 
         public ExcelResult ExportCarrierProfile(BusinessCaseStatusQuery businessCaseStatusQuery)
         {
             // Monthly Traffic Carrier As Customer (Amount,Durations) , Top N Destinations (Amount,Durations)  (3 datatables)
             List<BusinessCaseStatus> listBusinessCaseStatusDurationAmountSale = GetBusinessCaseStatusDurationAmount(businessCaseStatusQuery, true);
-            //List<BusinessCaseStatus> listBusinessCaseStatusSaleAmount = GetBusinessCaseStatus(businessCaseStatusQuery, true, true);
-            //List<BusinessCaseStatus> listBusinessCaseStatusSale = GetBusinessCaseStatus(businessCaseStatusQuery, true, false);
+            List<BusinessCaseStatus> listBusinessCaseStatusSaleAmount = GetBusinessCaseStatus(businessCaseStatusQuery, true, true);
+            List<BusinessCaseStatus> listBusinessCaseStatusSale = GetBusinessCaseStatus(businessCaseStatusQuery, true, false);
 
             // Monthly Traffic Carrier As Supplier (Amount,Durations) , Top N Destinations (Amount,Durations) (3 datatables)
             List<BusinessCaseStatus> listBusinessCaseStatusDurationAmount = GetBusinessCaseStatusDurationAmount(businessCaseStatusQuery, false);
-            //List<BusinessCaseStatus> listBusinessCaseStatusAmount = GetBusinessCaseStatus(businessCaseStatusQuery, false, true);
-            //List<BusinessCaseStatus> listBusinessCaseStatus = GetBusinessCaseStatus(businessCaseStatusQuery, false, false);
+            List<BusinessCaseStatus> listBusinessCaseStatusAmount = GetBusinessCaseStatus(businessCaseStatusQuery, false, true);
+            List<BusinessCaseStatus> listBusinessCaseStatus = GetBusinessCaseStatus(businessCaseStatusQuery, false, false);
 
             //export to excel
             ////////////////////////////////
@@ -132,13 +139,13 @@ namespace TOne.WhS.Analytics.Business
             string currency = String.Format("Currency: [{0}] {1}", businessCaseStatusQuery.currencyId, businessCaseStatusQuery.currencyName);
             string chartTitle = "Monthly Traffic " + _carrierAccountManager.GetCarrierAccountName(businessCaseStatusQuery.customerId) + " As Customer " + currency;
             CreateWorkSheetDurationAmount(wbk, "Monthly Traffic as Customer", listBusinessCaseStatusDurationAmountSale, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, chartTitle, style, currency);
-            //CreateWorkSheet(wbk, "Traf Top Dest Amt  Cus", listBusinessCaseStatusSaleAmount, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Amount Customer", style);
-            //CreateWorkSheet(wbk, "Traf Top Dest Dur Cus", listBusinessCaseStatusSale, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Duration Customer", style);
+            CreateWorkSheet(wbk, "Traf Top Dest Amt  Cus", listBusinessCaseStatusSaleAmount, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Amount Customer", style);
+            CreateWorkSheet(wbk, "Traf Top Dest Dur Cus", listBusinessCaseStatusSale, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Duration Customer", style);
 
             chartTitle = "Monthly Traffic " + _carrierAccountManager.GetCarrierAccountName(businessCaseStatusQuery.customerId) + " As Supplier " + currency;
             CreateWorkSheetDurationAmount(wbk, "Monthly Traffic as Supplier", listBusinessCaseStatusDurationAmount, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, chartTitle, style, currency);
-            //CreateWorkSheet(wbk, "Traf Top Dest Amt Sup", listBusinessCaseStatusAmount, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Amount Supplier", style);
-            //CreateWorkSheet(wbk, "Traf Top Dest Dur Sup", listBusinessCaseStatus, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Duration  Supplier", style);
+            CreateWorkSheet(wbk, "Traf Top Dest Amt Sup", listBusinessCaseStatusAmount, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Amount Supplier", style);
+            CreateWorkSheet(wbk, "Traf Top Dest Dur Sup", listBusinessCaseStatus, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Duration  Supplier", style);
 
             ExcelResult excelResult = new ExcelResult
             {

@@ -18,7 +18,7 @@ namespace TOne.WhS.Analytics.Data.SQL
         #region Constructors
 
         public VariationReportDataManager()
-            : base(GetConnectionStringName("TOneWhS_Analytics_DBConnStringKey", "TOneV2DAnalyticsDBConnString"))
+            : base(GetConnectionStringName("TOneWhS_Analytics_DBConnStringKey", "TOneAnalyticsDBConnString"))
         {
 
         }
