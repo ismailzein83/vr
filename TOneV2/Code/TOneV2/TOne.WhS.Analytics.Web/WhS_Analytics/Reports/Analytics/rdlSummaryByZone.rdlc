@@ -335,7 +335,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>C Val</Value>
+                              <Value>Extra charge</Value>
                               <Style>
                                 <FontSize>12pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1643,7 +1643,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Extra Charge</Value>
+                              <Value />
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1679,7 +1679,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Commission</Value>
+                              <Value>Extra Charge</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1971,7 +1971,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!ExtraChargeValue.Value),2)</Value>
+                              <Value />
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2007,7 +2007,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!CommissionValue.Value),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!ExtraChargeValue.Value),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
