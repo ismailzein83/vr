@@ -277,9 +277,6 @@
     <Build Include="TOneWhS_Analytic\Stored Procedures\sp_TrafficStatsMeasure_GroupBySupplierZone.sql" />
     <Build Include="TOneWhS_Analytic\Stored Procedures\sp_TrafficStatsMeasure_GroupBySaleZone_Supplier.sql" />
     <Build Include="TOneWhS_Analytic\User Defined Types\VariationReportTimePeriodType.sql" />
-    <Build Include="TOneWhS_Analytic\Tables\TrafficStatsWeekly.sql" />
-    <Build Include="TOneWhS_Analytic\Tables\TrafficStatsMonthly.sql" />
-    <Build Include="TOneWhS_Analytic\Tables\TrafficStatsHourly.sql" />
     <Build Include="TOneWhS_Billing\Tables\ReportDefinition.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetBySellingNumberPlanAndEffective.sql" />
     <Build Include="TOneWhS_Billing\Stored Procedures\SP_BillingRep_GetZoneProfitsV2.sql" />
