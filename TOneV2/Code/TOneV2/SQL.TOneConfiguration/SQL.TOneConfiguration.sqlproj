@@ -349,6 +349,7 @@
     <Build Include="common\Stored Procedures\sp_Setting_Update.sql" />
     <Build Include="common\Stored Procedures\sp_Setting_GetAll.sql" />
     <Build Include="common\Stored Procedures\sp_File_Insert_Temp.sql" />
+    <Build Include="common\Stored Procedures\sp_IDManager_Update.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
