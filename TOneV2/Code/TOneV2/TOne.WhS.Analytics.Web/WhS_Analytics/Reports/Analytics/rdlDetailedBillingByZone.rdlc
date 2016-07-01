@@ -588,7 +588,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>C Value</Value>
+                              <Value>Extra Charge</Value>
                               <Style>
                                 <FontSize>12pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2289,7 +2289,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Extra Charge</Value>
+                              <Value />
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2327,7 +2327,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Commission</Value>
+                              <Value>Extra Charge</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2669,14 +2669,14 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
                 <TablixCell />
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="textbox91">
+                    <Textbox Name="Textbox19">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!ExtraChargeValue.Value),2)</Value>
+                              <Value />
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2688,11 +2688,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <ZIndex>66</ZIndex>
-                      <Visibility>
-                        <Hidden>=IIF(Parameters!IsCommission.Value = "false" , True, False)</Hidden>
-                      </Visibility>
-                      <DataElementOutput>NoOutput</DataElementOutput>
+                      <rd:DefaultName>Textbox19</rd:DefaultName>
                       <Style>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2713,7 +2709,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!CommissionValue.Value),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!ExtraChargeValue.Value),2)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
