@@ -19,7 +19,7 @@ namespace Vanrise.Common.Business
         {
             var exchangeRate = GetEffectiveExchangeRate(currencyId, effectiveOn);
             if (exchangeRate == null)
-                throw new NullReferenceException("exchangeRate");
+                throw new NullReferenceException(string.Format("exchangeRate: currency Id:{0}, Effective On: {1}", currencyId, effectiveOn.ToString()));
 
             return value * exchangeRate.Rate;
         }
