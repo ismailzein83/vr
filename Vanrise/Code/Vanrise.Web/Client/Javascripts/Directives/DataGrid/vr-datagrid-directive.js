@@ -859,7 +859,7 @@
                     if (isInModal() == true)
                         h += screen.height * 0.3;
                     else
-                        h += screen.height * 0.55;
+                        h += screen.height * 0.52;
 
                     setMaxHeight(h  + "px");
                 }
