@@ -28,7 +28,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 if (parameters.GroupBySupplier)
                 {
-                    if (parameters.GroupByProfile) listDimensions.Add("SupplierProfile"); else listDimensions.Add("Supplier");   
+                    if (parameters.GroupByProfile) listDimensions.Add("SupplierProfile"); else listDimensions.Add("Supplier");
                 }
             }
             else
@@ -162,20 +162,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     detailedBillingByZone.Net = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
                     detailedBillingByZone.NetFormatted = ReportHelpers.FormatNumber(detailedBillingByZone.Net);
 
-                    //MeasureValue commissionValue;
-                    //if (parameters.IsCost)
-                    //    analyticRecord.MeasureValues.TryGetValue("CostCommissions", out commissionValue);
-                    //else
-                    //    analyticRecord.MeasureValues.TryGetValue("SaleCommissions", out commissionValue);
-                    //detailedBillingByZone.CommissionValue = (commissionValue == null) ? 0.0 : Convert.ToDouble(commissionValue.Value ?? 0.0);
-                    //detailedBillingByZone.CommissionValueFormatted = ReportHelpers.FormatNumber(detailedBillingByZone.CommissionValue);
-
                     MeasureValue extraChargeValue;
                     if (parameters.IsCost)
                         analyticRecord.MeasureValues.TryGetValue("CostExtraCharges", out extraChargeValue);
                     else
                         analyticRecord.MeasureValues.TryGetValue("SaleExtraCharges", out extraChargeValue);
                     detailedBillingByZone.ExtraChargeValue = (extraChargeValue == null) ? 0.0 : Convert.ToDouble(extraChargeValue.Value ?? 0.0);
+                    detailedBillingByZone.CommissionValueFormatted = ReportHelpers.FormatNumber(detailedBillingByZone.ExtraChargeValue);
 
                     MeasureValue durationDetails;
                     if (parameters.IsCost)
@@ -251,7 +244,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     services = (decimal)service;
 
             parameters.ServicesForCustomer = services;
-            
+
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
             dataSources.Add("ZoneSummaryDetailed", listDetailedBillingByZone);
             return dataSources;
