@@ -182,7 +182,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
             list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.ToString(), IsVisible = true });
-            list.Add("Title", new RdlcParameter { Value = String.Format("Summary By Zone ({0})", parameters.IsCost ? "Buy" : "Sale"), IsVisible = true });
+            list.Add("Title", new RdlcParameter { Value = String.Format("Summary By Zone ({0})", parameters.IsCost ? "Purchase" : "Sale"), IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
             list.Add("Customer", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.CustomersId, "Customers"), IsVisible = true });

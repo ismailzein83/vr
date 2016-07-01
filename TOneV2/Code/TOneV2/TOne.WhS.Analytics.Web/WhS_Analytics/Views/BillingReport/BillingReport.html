@@ -56,6 +56,15 @@
                     <vr-switch value="params.service"></vr-switch>
                 </vr-columns>-->
 
+                <vr-columns colnum="2" ng-if="reporttype.ParameterSettings.RequiresMargin">
+                    <vr-numeric label="Margin %" value="params.margin" minvalue="0" maxvalue="100" isrequired></vr-numeric>
+                </vr-columns>
+
+                <vr-columns colnum="2" ng-if="reporttype.ParameterSettings.RequiresTop">
+                    <vr-numeric label="Top" value="params.top" minvalue="5"></vr-numeric>
+                </vr-columns>
+                
+
                 <vr-columns colnum="2" ng-if="reporttype.ParameterSettings.RequiresIsCommission">
                     <vr-label>Extra Charges</vr-label>
                     <vr-switch value="params.commission"></vr-switch>
