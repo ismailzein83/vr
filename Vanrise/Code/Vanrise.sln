@@ -207,9 +207,23 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Security.Web.Intern
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Web.Internal", "Vanrise.Web.Internal\Vanrise.Web.Internal.csproj", "{26E63E06-E251-4518-B454-13517C7298FA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.BP.Activities", "Vanrise.Integration.BP.Activities\Vanrise.Integration.BP.Activities.csproj", "{CB389228-B8CE-4B8A-A7A6-82F136A3347A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AccountBalance", "AccountBalance", "{54F9406C-5476-4C69-9792-8F2C5DCCB64F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.AccountBalance.Entities", "Vanrise.AccountBalance.Entities\Vanrise.AccountBalance.Entities.csproj", "{5111E97A-C9AB-4BEF-8F75-32CC46526074}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.AccountBalance.Business", "Vanrise.AccountBalance.Business\Vanrise.AccountBalance.Business.csproj", "{6E2FF40B-84C5-4C36-B346-6202D0E70A92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.AccountBalance.BP", "Vanrise.AccountBalance.BP\Vanrise.AccountBalance.BP.csproj", "{67390AE9-D666-4383-8468-51D63AA4E880}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.AccountBalance.BP.Activities", "Vanrise.AccountBalance.BP.Activities\Vanrise.AccountBalance.BP.Activities.csproj", "{273A1C38-617B-48A4-925A-5D6A33F38881}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.AccountBalance.BP.Arguments", "Vanrise.AccountBalance.BP.Arguments\Vanrise.AccountBalance.BP.Arguments.csproj", "{ED541C78-4F5A-414D-83B4-7F8BE4FB9211}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 87
+		SccNumberOfProjects = 93
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -557,6 +571,30 @@ Global
 		SccProjectTopLevelParentUniqueName86 = Vanrise.sln
 		SccProjectName86 = Vanrise.Web.Internal
 		SccLocalPath86 = Vanrise.Web.Internal
+		SccProjectUniqueName87 = Vanrise.Integration.BP.Activities\\Vanrise.Integration.BP.Activities.csproj
+		SccProjectTopLevelParentUniqueName87 = Vanrise.sln
+		SccProjectName87 = Vanrise.Integration.BP.Activities
+		SccLocalPath87 = Vanrise.Integration.BP.Activities
+		SccProjectUniqueName88 = Vanrise.AccountBalance.Entities\\Vanrise.AccountBalance.Entities.csproj
+		SccProjectTopLevelParentUniqueName88 = Vanrise.sln
+		SccProjectName88 = Vanrise.AccountBalance.Entities
+		SccLocalPath88 = Vanrise.AccountBalance.Entities
+		SccProjectUniqueName89 = Vanrise.AccountBalance.Business\\Vanrise.AccountBalance.Business.csproj
+		SccProjectTopLevelParentUniqueName89 = Vanrise.sln
+		SccProjectName89 = Vanrise.AccountBalance.Business
+		SccLocalPath89 = Vanrise.AccountBalance.Business
+		SccProjectUniqueName90 = Vanrise.AccountBalance.BP\\Vanrise.AccountBalance.BP.csproj
+		SccProjectTopLevelParentUniqueName90 = Vanrise.sln
+		SccProjectName90 = Vanrise.AccountBalance.BP
+		SccLocalPath90 = Vanrise.AccountBalance.BP
+		SccProjectUniqueName91 = Vanrise.AccountBalance.BP.Activities\\Vanrise.AccountBalance.BP.Activities.csproj
+		SccProjectTopLevelParentUniqueName91 = Vanrise.sln
+		SccProjectName91 = Vanrise.AccountBalance.BP.Activities
+		SccLocalPath91 = Vanrise.AccountBalance.BP.Activities
+		SccProjectUniqueName92 = Vanrise.AccountBalance.BP.Arguments\\Vanrise.AccountBalance.BP.Arguments.csproj
+		SccProjectTopLevelParentUniqueName92 = Vanrise.sln
+		SccProjectName92 = Vanrise.AccountBalance.BP.Arguments
+		SccLocalPath92 = Vanrise.AccountBalance.BP.Arguments
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1275,6 +1313,54 @@ Global
 		{26E63E06-E251-4518-B454-13517C7298FA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26E63E06-E251-4518-B454-13517C7298FA}.Release|x64.ActiveCfg = Release|Any CPU
 		{26E63E06-E251-4518-B454-13517C7298FA}.Release|x86.ActiveCfg = Release|Any CPU
+		{CB389228-B8CE-4B8A-A7A6-82F136A3347A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB389228-B8CE-4B8A-A7A6-82F136A3347A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB389228-B8CE-4B8A-A7A6-82F136A3347A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CB389228-B8CE-4B8A-A7A6-82F136A3347A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CB389228-B8CE-4B8A-A7A6-82F136A3347A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB389228-B8CE-4B8A-A7A6-82F136A3347A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB389228-B8CE-4B8A-A7A6-82F136A3347A}.Release|x64.ActiveCfg = Release|Any CPU
+		{CB389228-B8CE-4B8A-A7A6-82F136A3347A}.Release|x86.ActiveCfg = Release|Any CPU
+		{5111E97A-C9AB-4BEF-8F75-32CC46526074}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5111E97A-C9AB-4BEF-8F75-32CC46526074}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5111E97A-C9AB-4BEF-8F75-32CC46526074}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5111E97A-C9AB-4BEF-8F75-32CC46526074}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5111E97A-C9AB-4BEF-8F75-32CC46526074}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5111E97A-C9AB-4BEF-8F75-32CC46526074}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5111E97A-C9AB-4BEF-8F75-32CC46526074}.Release|x64.ActiveCfg = Release|Any CPU
+		{5111E97A-C9AB-4BEF-8F75-32CC46526074}.Release|x86.ActiveCfg = Release|Any CPU
+		{6E2FF40B-84C5-4C36-B346-6202D0E70A92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E2FF40B-84C5-4C36-B346-6202D0E70A92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E2FF40B-84C5-4C36-B346-6202D0E70A92}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6E2FF40B-84C5-4C36-B346-6202D0E70A92}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6E2FF40B-84C5-4C36-B346-6202D0E70A92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E2FF40B-84C5-4C36-B346-6202D0E70A92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E2FF40B-84C5-4C36-B346-6202D0E70A92}.Release|x64.ActiveCfg = Release|Any CPU
+		{6E2FF40B-84C5-4C36-B346-6202D0E70A92}.Release|x86.ActiveCfg = Release|Any CPU
+		{67390AE9-D666-4383-8468-51D63AA4E880}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67390AE9-D666-4383-8468-51D63AA4E880}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67390AE9-D666-4383-8468-51D63AA4E880}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{67390AE9-D666-4383-8468-51D63AA4E880}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{67390AE9-D666-4383-8468-51D63AA4E880}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67390AE9-D666-4383-8468-51D63AA4E880}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67390AE9-D666-4383-8468-51D63AA4E880}.Release|x64.ActiveCfg = Release|Any CPU
+		{67390AE9-D666-4383-8468-51D63AA4E880}.Release|x86.ActiveCfg = Release|Any CPU
+		{273A1C38-617B-48A4-925A-5D6A33F38881}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{273A1C38-617B-48A4-925A-5D6A33F38881}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{273A1C38-617B-48A4-925A-5D6A33F38881}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{273A1C38-617B-48A4-925A-5D6A33F38881}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{273A1C38-617B-48A4-925A-5D6A33F38881}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{273A1C38-617B-48A4-925A-5D6A33F38881}.Release|Any CPU.Build.0 = Release|Any CPU
+		{273A1C38-617B-48A4-925A-5D6A33F38881}.Release|x64.ActiveCfg = Release|Any CPU
+		{273A1C38-617B-48A4-925A-5D6A33F38881}.Release|x86.ActiveCfg = Release|Any CPU
+		{ED541C78-4F5A-414D-83B4-7F8BE4FB9211}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED541C78-4F5A-414D-83B4-7F8BE4FB9211}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED541C78-4F5A-414D-83B4-7F8BE4FB9211}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{ED541C78-4F5A-414D-83B4-7F8BE4FB9211}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ED541C78-4F5A-414D-83B4-7F8BE4FB9211}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED541C78-4F5A-414D-83B4-7F8BE4FB9211}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED541C78-4F5A-414D-83B4-7F8BE4FB9211}.Release|x64.ActiveCfg = Release|Any CPU
+		{ED541C78-4F5A-414D-83B4-7F8BE4FB9211}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1370,5 +1456,11 @@ Global
 		{FF0E14A8-E630-41E0-864E-A084326E7612} = {8DFB44A5-B08F-439A-856A-174E03432484}
 		{BBD80AE0-AA85-4905-B3F4-79BC3B76689D} = {375D020B-2FA0-4D68-B841-E74E1FD15B16}
 		{26E63E06-E251-4518-B454-13517C7298FA} = {20A2407E-D892-41D2-8D77-6612045F9E51}
+		{CB389228-B8CE-4B8A-A7A6-82F136A3347A} = {A79B5E8C-36E5-408B-87E2-E7C54FA52810}
+		{5111E97A-C9AB-4BEF-8F75-32CC46526074} = {54F9406C-5476-4C69-9792-8F2C5DCCB64F}
+		{6E2FF40B-84C5-4C36-B346-6202D0E70A92} = {54F9406C-5476-4C69-9792-8F2C5DCCB64F}
+		{67390AE9-D666-4383-8468-51D63AA4E880} = {54F9406C-5476-4C69-9792-8F2C5DCCB64F}
+		{273A1C38-617B-48A4-925A-5D6A33F38881} = {54F9406C-5476-4C69-9792-8F2C5DCCB64F}
+		{ED541C78-4F5A-414D-83B4-7F8BE4FB9211} = {54F9406C-5476-4C69-9792-8F2C5DCCB64F}
 	EndGlobalSection
 EndGlobal

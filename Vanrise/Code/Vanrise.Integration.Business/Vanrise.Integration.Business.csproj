@@ -51,16 +51,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdapterImportDataContext.cs" />
-    <Compile Include="DataSourceImportedBatchManager.cs" />
-    <Compile Include="DataSourceLogger.cs" />
-    <Compile Include="DataSourceLogManager.cs" />
-    <Compile Include="DataSourceManager.cs" />
-    <Compile Include="DataSourceRuntimeInstanceManager.cs" />
-    <Compile Include="DataSourceRuntimeService.cs" />
-    <Compile Include="DataSourceStateManager.cs" />
-    <Compile Include="DSSchedulerTaskAction.cs" />
+    <Compile Include="Receive\AdapterImportDataContext.cs" />
+    <Compile Include="Receive\DataSourceImportedBatchManager.cs" />
+    <Compile Include="Receive\DataSourceLogger.cs" />
+    <Compile Include="Receive\DataSourceLogManager.cs" />
+    <Compile Include="Receive\DataSourceManager.cs" />
+    <Compile Include="Receive\DataSourceRuntimeInstanceManager.cs" />
+    <Compile Include="Receive\DataSourceRuntimeService.cs" />
+    <Compile Include="Receive\DataSourceStateManager.cs" />
+    <Compile Include="Receive\DSSchedulerTaskAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Send\ActionProvisioningContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Caching\Vanrise.Caching.csproj">
