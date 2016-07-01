@@ -44,17 +44,17 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
         if (attrs.hideperiodsection == undefined)
         {
             periodSection = '<vr-columns width="' + attrs.width + '">'
-                          + '<vr-period-selector on-ready="onPeriodDirectiveReady" selectedvalues="ctrltimerange.period" onselectionchanged="periodSelectionChanged"></vr-period-selector>'
+                          + '<vr-period-selector on-ready="scopeModel.onPeriodDirectiveReady" selectedvalues="ctrltimerange.period" onselectionchanged="scopeModel.periodSelectionChanged"></vr-period-selector>'
                           + '</vr-columns>'
             onblurchanged = ' onvaluechanged="onBlurChanged" '
         }
 
         return   periodSection
                + '<vr-columns width="' + attrs.width + '">'
-               + '    <vr-datetimepicker type="' + attrs.type + '" value="ctrltimerange.from" label="From" customvalidate="validateDateTime()" isrequired="true" ' + onblurchanged + '></vr-datetimepicker>'
+               + '    <vr-datetimepicker type="' + attrs.type + '" value="ctrltimerange.from" label="From" customvalidate="scopeModel.validateDateTime()" isrequired="true" ' + onblurchanged + '></vr-datetimepicker>'
                + '</vr-columns>'
                + '<vr-columns width="' + attrs.width + '">'
-               + '    <vr-datetimepicker type="' + attrs.type + '" value="ctrltimerange.to" label="To" customvalidate="validateDateTime()" isrequired="ctrltimerange.isrequired" ' + onblurchanged + '></vr-datetimepicker>'
+               + '    <vr-datetimepicker type="' + attrs.type + '" value="ctrltimerange.to" label="To" customvalidate="scopeModel.validateDateTime()" isrequired="ctrltimerange.isrequired" ' + onblurchanged + '></vr-datetimepicker>'
                + '</vr-columns>'
     }
 
@@ -65,18 +65,19 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
         var periodSelectedPromiseDeferred;
         function initializeController() {
             var date;
-            $scope.validateDateTime = function () {
+            $scope.scopeModel = {};
+            $scope.scopeModel.validateDateTime = function () {
                 return VRValidationService.validateTimeRange(ctrl.from, ctrl.to);
             }
 
-            $scope.onPeriodDirectiveReady = function (api)
+            $scope.scopeModel.onPeriodDirectiveReady = function (api)
             {
                 periodDirectiveAPI = api;
                 periodReadyPromiseDeferred.resolve();
                 defineAPI();
             }
 
-            $scope.periodSelectionChanged = function () {
+            $scope.scopeModel.periodSelectionChanged = function () {
                 if (periodSelectedPromiseDeferred == undefined)
                 {
                     if (ctrl.period != undefined && ctrl.period.value != -1) {
@@ -99,7 +100,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                 description: "Customize"
             }
 
-            $scope.onBlurChanged = function () {
+            $scope.scopeModel.onBlurChanged = function () {
                 if (ctrl.period != undefined && ctrl.period.value != -1)
                 {
                     date = ctrl.period.getInterval();
@@ -113,9 +114,6 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                
             }
 
-            //if ($attrs.hideperiodsection != undefined) {
-               
-            //}
             defineAPI();
         }
 
@@ -143,10 +141,9 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                 return UtilsService.waitMultiplePromises([loadPeriodPromiseDeferred.promise, periodSelectedPromiseDeferred.promise]).then(function () {
                     if (ctrl.period != undefined) {
                         date = periodDirectiveAPI.getData().getInterval();
-                        ctrl.from = date.from;
-                        ctrl.to = date.to;
+                        setTimeout(function () { ctrl.from = date.from; ctrl.to = date.to; UtilsService.safeApply($scope); });
                     }
-                    if ((payload && payload.period != undefined)) {
+                    if (payload && payload.period != undefined) {
                         if (payload.fromDate != undefined) {
                             setTimeout(function () { ctrl.from = payload.fromDate; UtilsService.safeApply($scope); });
                         }
