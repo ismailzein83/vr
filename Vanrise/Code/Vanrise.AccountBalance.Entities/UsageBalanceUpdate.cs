@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.AccountBalance.Entities
 {
-    public class BalanceUpdate
+    public class UsageBalanceUpdate
     {
         public long AccountId { get; set; }
 

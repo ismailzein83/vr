@@ -43,8 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BalanceCreate.cs" />
-    <Compile Include="BalanceUpdate.cs" />
+    <Compile Include="UsageBalanceUpdate.cs" />
     <Compile Include="BillingTransaction.cs" />
     <Compile Include="LiveBalance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
