@@ -313,7 +313,7 @@
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_3">
       <vbw:WriteTrackingMessage.Message>
         <InArgument x:TypeArguments="x:String">
-          <mca:CSharpValue x:TypeArguments="x:String">String.Format("Retreived existing {0} zones, {1} codes and {2} rates. Ready to start processing imported data.", ExistingZoneEntities.Count(), ExistingCodeEntities.Count(), ExistingRateEntities.Count())</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="x:String">String.Format("Retrieved existing {0} zones, {1} codes and {2} rates. Ready to start processing imported data.", ExistingZoneEntities.Count(), ExistingCodeEntities.Count(), ExistingRateEntities.Count())</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Message>
       <vbw:WriteTrackingMessage.Severity>
