@@ -35,13 +35,19 @@ namespace Vanrise.GenericData.Business
                 throw new NullReferenceException("input.Query.Columns");
 
             input.Query.Columns = new HashSet<string>(input.Query.Columns).ToList();
-
+          
             var recordTypeManager = new DataRecordTypeManager();
             DataRecordType recordType = recordTypeManager.GetDataRecordType(dataRecordStorage.DataRecordTypeId);
             if (recordType == null)
                 throw new NullReferenceException(String.Format("recordType ID '{0}'", dataRecordStorage.DataRecordTypeId));
             if (recordType.Fields == null)
                 throw new NullReferenceException(String.Format("recordType.Fields ID '{0}'", dataRecordStorage.DataRecordTypeId));
+
+            if(input.Query.FilterGroup !=null)
+            {
+                var filterGroup = ConvertFilterGroup(input.Query.FilterGroup, recordType);
+                input.Query.FilterGroup = filterGroup;
+            }
 
             if (input.SortByColumnName.Contains("FieldValues"))
             {
@@ -50,6 +56,58 @@ namespace Vanrise.GenericData.Business
             }
             return BigDataManager.Instance.RetrieveData(input, new DataRecordRequestHandler(recordType));
         }
+
+        private RecordFilterGroup ConvertFilterGroup(RecordFilterGroup filterGroup, DataRecordType recordType)
+        {
+            RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
+            recordFilterGroup.LogicalOperator = filterGroup.LogicalOperator;
+            foreach (var filter in filterGroup.Filters)
+            {
+                ConvertChildFilterGroup(recordFilterGroup, filter, recordType);
+            }
+            return recordFilterGroup;
+
+        }
+        public void ConvertChildFilterGroup(RecordFilterGroup recordFilterGroup, RecordFilter recordFilter, DataRecordType recordType)
+        {
+            RecordFilterGroup childFilterGroup = recordFilter as RecordFilterGroup;
+            if (recordFilterGroup.Filters == null)
+                recordFilterGroup.Filters = new List<RecordFilter>();
+            if (childFilterGroup != null)
+            {
+                RecordFilterGroup childRecordFilterGroup = new RecordFilterGroup();
+                childRecordFilterGroup.LogicalOperator = childFilterGroup.LogicalOperator;
+                recordFilterGroup.Filters.Add(childRecordFilterGroup);
+                foreach (var filter in childFilterGroup.Filters)
+                {
+                    ConvertChildFilterGroup(childRecordFilterGroup, filter, recordType);
+                }
+            }
+            else if (recordFilter.FieldName != null)
+            {
+                var record = recordType.Fields.FindRecord(x => x.Name == recordFilter.FieldName);
+                if (record != null)
+                {
+                    if (record.Formula != null)
+                    {
+                        DataRecordFieldFormulaConvertFilterContext context = new DataRecordFieldFormulaConvertFilterContext(recordType.DataRecordTypeId,recordFilter.FieldName);
+                        context.InitialFilter = recordFilter;
+                        var recordFilterObj = record.Formula.ConvertFilter(context);
+                        recordFilterGroup.Filters.Add(recordFilterObj);
+                    }
+                    else
+                    {
+                        recordFilter.FieldName = record.Name;
+                        recordFilterGroup.Filters.Add(recordFilter);
+                    }
+
+                }
+
+              
+            }
+        }
+
+
 
         public IDataRecordDataManager GetStorageDataManager(int recordStorageId)
         {

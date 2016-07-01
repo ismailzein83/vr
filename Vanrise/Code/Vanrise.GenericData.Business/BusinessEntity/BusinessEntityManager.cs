@@ -34,11 +34,11 @@ namespace Vanrise.GenericData.Business
         public IEnumerable<dynamic> GetChildEntitiesIds(int businessEntityDefinitionId, int childBusinessEntityDefinitionId, IEnumerable<dynamic> parentEntitiesIds)
         {
             List<dynamic> childEntitiesIds = new List<dynamic>();
-            var beManager = GetBEManager(businessEntityDefinitionId);
+            var childBeManager = GetBEManager(childBusinessEntityDefinitionId);
             foreach(var parentEntityId in parentEntitiesIds)
             {
                 var context = new BusinessEntityGetIdsByParentEntityIdContext(childBusinessEntityDefinitionId, businessEntityDefinitionId, parentEntityId);
-                var currentChildEntitiesIds = beManager.GetIdsByParentEntityId(context);
+                var currentChildEntitiesIds = childBeManager.GetIdsByParentEntityId(context);
                 if (currentChildEntitiesIds != null)
                     childEntitiesIds.AddRange(currentChildEntitiesIds);
             }
