@@ -10,7 +10,8 @@
     [timestamp]        ROWVERSION     NULL,
     CONSTRAINT [PK_SwitchConnectivity] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_SwitchConnectivity_CarrierAccount1] FOREIGN KEY ([CarrierAccountID]) REFERENCES [TOneWhS_BE].[CarrierAccount] ([ID]),
-    CONSTRAINT [FK_SwitchConnectivity_Switch1] FOREIGN KEY ([SwitchID]) REFERENCES [TOneWhS_BE].[Switch] ([ID]),
-    CONSTRAINT [UK_SwitchConnectivity] UNIQUE NONCLUSTERED ([Name] ASC)
+    CONSTRAINT [FK_SwitchConnectivity_Switch1] FOREIGN KEY ([SwitchID]) REFERENCES [TOneWhS_BE].[Switch] ([ID])
 );
+
+
 

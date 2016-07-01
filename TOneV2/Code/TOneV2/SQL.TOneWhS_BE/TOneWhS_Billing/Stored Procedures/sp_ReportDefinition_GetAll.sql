@@ -5,5 +5,5 @@ BEGIN
 Select [ReportDefinitionId]
       ,[ReportName]
       ,[Content]
-FROM [TOneWhS_Billing].[ReportDefinition]
+FROM [TOneWhS_Billing].[ReportDefinition] ORDER BY ReportName ASC
 END

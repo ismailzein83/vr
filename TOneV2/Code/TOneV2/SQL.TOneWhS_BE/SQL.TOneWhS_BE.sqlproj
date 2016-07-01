@@ -307,5 +307,8 @@
     <Build Include="TOneWhS_Sales\Tables\RP_SaleRate_Changed.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetBetweenPeriod.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetEffectiveAfterByOwner.sql" />
+    <Build Include="dbo\Functions\ParseStringList.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_SalePriceList_SyncWithTempData.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetDefaultRoutingProductsEffectiveAfter.sql" />
   </ItemGroup>
 </Project>
