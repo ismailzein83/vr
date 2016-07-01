@@ -80,6 +80,7 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalS
 
         function editTable(dataItem) {
             var onEditTable = function (tableObj) {
+                gridDrillDownTabs.setDrillDownExtensionObject(tableObj);
                 gridAPI.itemUpdated(tableObj);
             }
             VR_Analytic_AnalyticTableService.editAnalyticTable(dataItem.Entity.AnalyticTableId, onEditTable);
