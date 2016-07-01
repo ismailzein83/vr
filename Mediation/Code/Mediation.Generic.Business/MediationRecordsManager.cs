@@ -25,11 +25,11 @@ namespace Mediation.Generic.Business
             dataManager.DataRecordTypeId = dataRecordTypeId;
             return dataManager.GetMediationRecordsByStatus(mediationDefinitionId, status);
         }
-        public IEnumerable<MediationRecord> GetMediationRecordsByIds(int mediationDefinitionId, IEnumerable<long> eventIds, int dataRecordTypeId)
+        public IEnumerable<MediationRecord> GetMediationRecordsByIds(int mediationDefinitionId, IEnumerable<string> sessionIds, int dataRecordTypeId)
         {
             IMediationRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMediationRecordsDataManager>();
             dataManager.DataRecordTypeId = dataRecordTypeId;
-            return dataManager.GetMediationRecordsByIds(mediationDefinitionId, eventIds);
+            return dataManager.GetMediationRecordsByIds(mediationDefinitionId, sessionIds);
         }
 
     }

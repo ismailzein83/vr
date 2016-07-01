@@ -42,7 +42,7 @@ namespace Mediation.Generic.Data.SQL
         public void WriteRecordToStream(MediationRecord record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}", record.EventId, record.SessionId, record.EventTime, (short)record.EventStatus, record.MediationDefinitionId, Serializer.Serialize(record.EventDetails, true));
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}", record.EventId, record.SessionId, record.EventTime.ToString("yyy-MM-dd HH:mm:ss"), (short)record.EventStatus, record.MediationDefinitionId, Serializer.Serialize(record.EventDetails, true));
         }
 
         #endregion
@@ -64,13 +64,13 @@ namespace Mediation.Generic.Data.SQL
         {
             return GetItemsSP("[Mediation_Generic].[sp_MediationRecord_GetByStatus]", MediationRecordMapper, mediationDefinitionId, (short)status);
         }
-        public IEnumerable<MediationRecord> GetMediationRecordsByIds(int mediationDefinitionId, IEnumerable<long> eventIds)
+        public IEnumerable<MediationRecord> GetMediationRecordsByIds(int mediationDefinitionId, IEnumerable<string> sessionIds)
         {
             return GetItemsSPCmd("[Mediation_Generic].[sp_MediationRecord_GetByIds]", MediationRecordMapper, (cmd) =>
             {
                 var dtPrm = new SqlParameter("@Ids", SqlDbType.Structured);
-                dtPrm.TypeName = "dbo.BigintIDType";
-                dtPrm.Value = BuildEventIdsTable(eventIds);
+                dtPrm.TypeName = "dbo.[StringIDType]";
+                dtPrm.Value = BuildEventIdsTable(sessionIds);
                 cmd.Parameters.Add(dtPrm);
 
                 dtPrm = new SqlParameter("@MediationDefinitionId", SqlDbType.BigInt);
@@ -90,15 +90,15 @@ namespace Mediation.Generic.Data.SQL
         {
             InsertBulkToTable(preparedMediationRecords as BaseBulkInsertInfo);
         }
-        private DataTable BuildEventIdsTable(IEnumerable<long> eventIds)
+        private DataTable BuildEventIdsTable(IEnumerable<string> eventIds)
         {
             DataTable dtEventIds = new DataTable();
-            dtEventIds.Columns.Add("ID", typeof(Int32));
+            dtEventIds.Columns.Add("SessionId", typeof(string));
             dtEventIds.BeginLoadData();
             foreach (var id in eventIds)
             {
                 DataRow dr = dtEventIds.NewRow();
-                dr["ID"] = id;
+                dr["SessionId"] = id;
                 dtEventIds.Rows.Add(dr);
             }
             dtEventIds.EndLoadData();
@@ -114,7 +114,7 @@ namespace Mediation.Generic.Data.SQL
             return new MediationRecord()
             {
                 EventId = (int)reader["EventId"],
-                SessionId = (long)reader["SessionId"],
+                SessionId = reader["SessionId"] as string,
                 EventTime = GetReaderValue<DateTime>(reader, "EventTime"),
                 EventStatus = (EventStatus)GetReaderValue<byte>(reader, "EventStatus"),
                 MediationDefinitionId = (int)reader["MediationDefinitionId"],

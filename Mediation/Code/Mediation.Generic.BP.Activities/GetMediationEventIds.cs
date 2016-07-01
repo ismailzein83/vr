@@ -15,7 +15,7 @@ namespace Mediation.Generic.BP.Activities
         public InArgument<IEnumerable<MediationRecord>> MediationRecords { get; set; }
 
         [RequiredArgument]
-        public OutArgument<IEnumerable<long>> EventIds { get; set; }
+        public OutArgument<IEnumerable<string>> EventIds { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {

@@ -13,7 +13,7 @@ namespace Mediation.Generic.Data
 
         IEnumerable<MediationRecord> GetMediationRecordsByStatus(int mediationDefinitionId, EventStatus status);
 
-        IEnumerable<MediationRecord> GetMediationRecordsByIds(int mediationDefinitionId, IEnumerable<long> eventIds);
+        IEnumerable<MediationRecord> GetMediationRecordsByIds(int mediationDefinitionId, IEnumerable<string> sessionIds);
 
         int DataRecordTypeId { set; }
     }

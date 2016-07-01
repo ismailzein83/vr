@@ -12,7 +12,7 @@ namespace Mediation.Generic.BP.Activities
 {
     public class LoadMediationRecordsByIdsInput
     {
-        public IEnumerable<long> EventIds { get; set; }
+        public IEnumerable<string> EventIds { get; set; }
         public BaseQueue<MediationRecordBatch> MediationRecords { get; set; }
         public MediationDefinition MediationDefinition { get; set; }
     }
@@ -21,7 +21,7 @@ namespace Mediation.Generic.BP.Activities
     public sealed class LoadMediationRecordsByIds : DependentAsyncActivity<LoadMediationRecordsByIdsInput>
     {
         [RequiredArgument]
-        public InArgument<IEnumerable<long>> EventIds { get; set; }
+        public InArgument<IEnumerable<string>> EventIds { get; set; }
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<MediationRecordBatch>> MediationRecords { get; set; }
@@ -44,14 +44,14 @@ namespace Mediation.Generic.BP.Activities
             MediationRecordsManager manager = new MediationRecordsManager();
 
             var mediationRecords = manager.GetMediationRecordsByIds(inputArgument.MediationDefinition.MediationDefinitionId, inputArgument.EventIds, inputArgument.MediationDefinition.ParsedRecordTypeId);
-            long sessionId = 0;
-            Dictionary<long, List<MediationRecord>> records = new Dictionary<long, List<MediationRecord>>();
+            string sessionId = "";
+            Dictionary<string, List<MediationRecord>> records = new Dictionary<string, List<MediationRecord>>();
             List<MediationRecord> lstMediationRecords;
             foreach (var stagingRecord in mediationRecords)
             {
                 if (!records.TryGetValue(stagingRecord.SessionId, out lstMediationRecords))
                 {
-                    if (sessionId != 0)
+                    if (!string.IsNullOrEmpty(sessionId))
                         inputArgument.MediationRecords.Enqueue(new MediationRecordBatch() { MediationRecords = records[sessionId] });
                     sessionId = stagingRecord.SessionId;
                     lstMediationRecords = new List<MediationRecord>();
@@ -59,7 +59,8 @@ namespace Mediation.Generic.BP.Activities
                 }
                 lstMediationRecords.Add(stagingRecord);
             }
-            inputArgument.MediationRecords.Enqueue(new MediationRecordBatch() { MediationRecords = records[sessionId] });
+            if (records.TryGetValue(sessionId, out lstMediationRecords))
+                inputArgument.MediationRecords.Enqueue(new MediationRecordBatch() { MediationRecords = lstMediationRecords });
         }
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)

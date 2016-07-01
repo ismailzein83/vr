@@ -38,7 +38,7 @@ namespace Mediation.Generic.QueueActivators
             {
                 DataRecordFilterGenericFieldMatchContext dataRecordFilterContext = new DataRecordFilterGenericFieldMatchContext(batchRecord, recordTypeId);
                 MediationRecord mediationRecord = new MediationRecord();
-                mediationRecord.SessionId = (long)GetPropertyValue(batchRecord, mediationDefinition.ParsedRecordIdentificationSetting.SessionIdField);
+                mediationRecord.SessionId = GetPropertyValue(batchRecord, mediationDefinition.ParsedRecordIdentificationSetting.SessionIdField) as string;
                 mediationRecord.EventTime = (DateTime)GetPropertyValue(batchRecord, mediationDefinition.ParsedRecordIdentificationSetting.EventTimeField);
                 foreach (var statusMapping in mediationDefinition.ParsedRecordIdentificationSetting.StatusMappings)
                 {

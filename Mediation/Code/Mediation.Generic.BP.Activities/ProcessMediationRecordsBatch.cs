@@ -38,9 +38,8 @@ namespace Mediation.Generic.BP.Activities
             PreparedCdrBatch cdrBatch = new PreparedCdrBatch();
             MediationDefinitionManager mediationDefinitionManager = new MediationDefinitionManager();
             DataTransformer dataTransformer = new DataTransformer();
-                       
-            var cookedRecordType = inputArgument.DataTransformationDefinition.RecordTypes.FindRecord(c => c.RecordName == inputArgument.MediationDefinition.CookedFromParsedSettings.CookedRecordName);
 
+            var cookedRecordType = inputArgument.DataTransformationDefinition.RecordTypes.FindRecord(c => c.RecordName == inputArgument.MediationDefinition.CookedFromParsedSettings.CookedRecordName);
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItems = false;
@@ -52,7 +51,7 @@ namespace Mediation.Generic.BP.Activities
                         var output = dataTransformer.ExecuteDataTransformation(inputArgument.MediationDefinition.CookedFromParsedSettings.TransformationDefinitionId, (context) =>
                         {
                             var details = mediationRecordBatch.MediationRecords.Select(m => m.EventDetails).ToList();
-                            context.SetRecordValue("parsedCDRs", details);
+                            context.SetRecordValue(inputArgument.MediationDefinition.CookedFromParsedSettings.ParsedRecordName, details);
                         });
                         if (cookedRecordType.IsArray)
                             cdrBatch.Cdrs.AddRange(output.GetRecordValue(cookedRecordType.RecordName) as List<dynamic>);

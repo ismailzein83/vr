@@ -70,6 +70,7 @@
 
             $scope.scopeModal = {};
             $scope.scopeModal.statusMappings = [];
+            $scope.scopeModal.selectedStatusMappings = [];
 
             //#region Definition Tab
 
@@ -122,7 +123,7 @@
                     var setLoaderDataTransformationDefinitionInsertParsed = function (value) { $scope.scopeModal.isLoadingDataTransformationDefinitionInsertParsed = value };
                     var payloadfornDataTransformationDefinitionInsertParsed = {
                         dataTransformationDefinitionId: selectedDataTransformationDefinitionInsertId,
-                        filter: { DataRecordTypeIds: [selectedParsedDataRecordTypeId], IsArray: false }
+                        filter: { DataRecordTypeIds: [selectedParsedDataRecordTypeId], IsArray: true }
                     };
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataTransformationDefinitionRecordParsedSelectorAPI, payloadfornDataTransformationDefinitionInsertParsed, setLoaderDataTransformationDefinitionInsertParsed, dataTransformationDefinitionInsertSelectedPromiseDeferred);
@@ -202,6 +203,23 @@
                 gridAPI = api;
             }
 
+            $scope.scopeModal.ValidateStatusConditions = function () {
+
+                if ($scope.scopeModal.selectedStatusMappings.length > 0) {
+                    var listLength = $scope.scopeModal.selectedStatusMappings.length;
+                    var firstItem = $scope.scopeModal.selectedStatusMappings[0];
+                    var lastItem = $scope.scopeModal.selectedStatusMappings[listLength - 1];
+                    if (firstItem.FilterObj == undefined)
+                        return 'First Event Condition should be filled.';
+                    else if (listLength > 0 && lastItem.FilterObj != undefined)
+                       return 'Last Event Condition should be empty.';
+                }
+                else
+                    return 'At least one event should be selected.';
+                return null;
+
+            }
+
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal()
             };
@@ -276,6 +294,31 @@
                 payloadCookedRecordTypeSelector = {
                     selectedIds: mediationDefinitionEntity.CookedRecordTypeId
                 };
+
+
+                var dataSessionIdSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                promises.push(dataSessionIdSelectorLoadDeferred.promise);
+                UtilsService.waitMultiplePromises([dataParsedRecordTypeSelectedPromiseDeferred.promise, dataParsedRecordTypeFieldsSessionIdSelectorReadyDeferred.promise]).then(function () {
+                    var payloadDataRecordTypeSessionId;
+                    payloadDataRecordTypeSessionId = {
+                        dataRecordTypeId: mediationDefinitionEntity.ParsedRecordTypeId,
+                        selectedIds: mediationDefinitionEntity.ParsedRecordIdentificationSetting.SessionIdField
+                    };
+                    VRUIUtilsService.callDirectiveLoad(dataParsedRecordTypeFieldsSessionIdSelectorAPI, payloadDataRecordTypeSessionId, dataSessionIdSelectorLoadDeferred);
+                    dataParsedRecordTypeSelectedPromiseDeferred = undefined;
+                });
+
+
+                var dataTimeFieldSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                promises.push(dataTimeFieldSelectorLoadDeferred.promise);
+                UtilsService.waitMultiplePromises([dataParsedRecordTypeSelectedPromiseDeferred.promise, dataParsedRecordTypeFieldsTimeSelectorReadyDeferred.promise]).then(function () {
+                    var payloadDataRecordTypeTimeFields = {
+                        dataRecordTypeId: mediationDefinitionEntity.ParsedRecordTypeId,
+                        selectedIds: mediationDefinitionEntity.ParsedRecordIdentificationSetting.EventTimeField
+                    };
+                    VRUIUtilsService.callDirectiveLoad(dataParsedRecordTypeFieldsTimeSelectorAPI, payloadDataRecordTypeTimeFields, dataTimeFieldSelectorLoadDeferred);
+                    dataParsedRecordTypeSelectedPromiseDeferred = undefined;
+                });
             }
 
             dataCookedRecordTypeSelectorReadyDeferred.promise.then(function () {
@@ -319,7 +362,7 @@
                     var payload;
                     payload = {
                         dataTransformationDefinitionId: mediationDefinitionEntity.CookedFromParsedSettings.TransformationDefinitionId,
-                        filter: undefined,
+                        filter: { IsArray: true },
                         selectedIds: mediationDefinitionEntity.CookedFromParsedSettings.ParsedRecordName
                     };
                     VRUIUtilsService.callDirectiveLoad(dataTransformationDefinitionRecordParsedSelectorAPI, payload, dataTransformationDefinitionRecordParsedInsertSelectorLoadDeferred);
@@ -333,7 +376,7 @@
                     var payload;
                     payload = {
                         dataTransformationDefinitionId: mediationDefinitionEntity.CookedFromParsedSettings.TransformationDefinitionId,
-                        filter: undefined,
+                        filter: { IsArray: false },
                         selectedIds: mediationDefinitionEntity.CookedFromParsedSettings.CookedRecordName
                     };
                     VRUIUtilsService.callDirectiveLoad(dataTransformationDefinitionRecordCookedSelectorAPI, payload, dataTransformationDefinitionRecordCookedSelectorLoadDeferred);
@@ -369,7 +412,6 @@
 
             return dataStoreSelectorLoadDeferred.promise;
         }
-
 
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([loadDefinitionSection, setTitle, loadParsedToCookedSection, PrepareStatusMappings, loadDataStoreSelector])
@@ -515,12 +557,13 @@
 
         function getStatusMappings() {
             var mappings = [];
-            for (var i = 0; i < $scope.scopeModal.statusMappings.length; i++) {
-                var mapping = $scope.scopeModal.statusMappings[i];
+            for (var i = 0; i < $scope.scopeModal.selectedStatusMappings.length; i++) {
+                var mapping = $scope.scopeModal.selectedStatusMappings[i];
                 mappings.push({
                     Status: mapping.Status,
                     FilterGroup: mapping.FilterObj,
                     FilterExpression: mapping.Expression
+
                 });
             }
             return mappings;
@@ -528,31 +571,52 @@
 
         function PrepareStatusMappings() {
             var stagingStatusEnums = UtilsService.getArrayEnum(Mediation_Generic_StorageStagingStatusEnum);
+
+            for (var i = 0; i < stagingStatusEnums.length; i++) {
+                var statusMappingObj = {
+                    Status: stagingStatusEnums[i].description,
+                    Expression: undefined,
+                    FilterObj: undefined,
+                    Id: stagingStatusEnums[i].value
+                };
+
+                $scope.scopeModal.statusMappings.push(statusMappingObj);
+
+            }
+
             if (mediationDefinitionEntity != undefined && mediationDefinitionEntity.ParsedRecordIdentificationSetting != undefined) {
                 var statusMappings = mediationDefinitionEntity.ParsedRecordIdentificationSetting.StatusMappings;
                 for (var i = 0; i < statusMappings.length; i++) {
+                    var index = statusMappings[i].Status;
                     var statusMappingObj = {
-                        Status: stagingStatusEnums[i].description,
+                        Status: stagingStatusEnums[index].description,
                         Expression: statusMappings[i].FilterExpression,
-                        FilterObj: statusMappings[i].Filters,
-                        Id: i
+                        FilterObj: statusMappings[i].FilterGroup,
+                        Id: stagingStatusEnums[index].value
                     };
-                    $scope.scopeModal.statusMappings.push(statusMappingObj);
+                    $scope.scopeModal.selectedStatusMappings.push(statusMappingObj);
                 }
             }
             else {
-
-                for (var i = 0; i < stagingStatusEnums.length; i++) {
-                    var statusMappingObj = {
-                        Status: stagingStatusEnums[i].description,
-                        Expression: undefined,
-                        FilterObj: undefined,
-                        Id: i
-                    };
-
-                    $scope.scopeModal.statusMappings.push(statusMappingObj);
-                }
+                loadDefaultEventStatusMappings();
             }
+
+        }
+
+        function loadDefaultEventStatusMappings() {
+            var stagingStatusEnums = UtilsService.getArrayEnum(Mediation_Generic_StorageStagingStatusEnum)
+            $scope.scopeModal.selectedStatusMappings.push(getStatusFromEnumObj(stagingStatusEnums, 'Start'));
+            $scope.scopeModal.selectedStatusMappings.push(getStatusFromEnumObj(stagingStatusEnums, 'Stop'));
+        }
+
+        function getStatusFromEnumObj(enumArray, filterValue) {
+            var enumObj = UtilsService.getEnum(enumArray, 'description', filterValue);
+            return {
+                Status: enumObj.description,
+                Expression: undefined,
+                FilterObj: undefined,
+                Id: enumObj.value
+            };
         }
     }
 

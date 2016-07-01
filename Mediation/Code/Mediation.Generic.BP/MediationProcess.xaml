@@ -74,9 +74,9 @@
           <mca:CSharpValue x:TypeArguments="scg:IEnumerable(mge:MediationRecord)">new List&lt;MediationRecord&gt;()</mca:CSharpValue>
         </Variable.Default>
       </Variable>
-      <Variable x:TypeArguments="scg:IEnumerable(x:Int64)" Name="eventIds">
+      <Variable x:TypeArguments="scg:IEnumerable(x:String)" Name="eventIds">
         <Variable.Default>
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int64)">new List&lt;Int64&gt;()</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:String)">new List&lt;String&gt;()</mca:CSharpValue>
         </Variable.Default>
       </Variable>
     </Sequence.Variables>
@@ -128,8 +128,8 @@
     </mgba1:LoadMediationRecordsByStatus>
     <mgba1:GetMediationEventIds sap2010:WorkflowViewState.IdRef="GetMediationEventIds_1">
       <mgba1:GetMediationEventIds.EventIds>
-        <OutArgument x:TypeArguments="scg:IEnumerable(x:Int64)">
-          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(x:Int64)">eventIds</mca:CSharpReference>
+        <OutArgument x:TypeArguments="scg:IEnumerable(x:String)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(x:String)">eventIds</mca:CSharpReference>
         </OutArgument>
       </mgba1:GetMediationEventIds.EventIds>
       <mgba1:GetMediationEventIds.MediationRecords>
@@ -161,8 +161,8 @@
       </Parallel.Variables>
       <mgba1:LoadMediationRecordsByIds PreviousActivityStatus="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadMediationRecordsByIds_1">
         <mgba1:LoadMediationRecordsByIds.EventIds>
-          <InArgument x:TypeArguments="scg:IEnumerable(x:Int64)">
-            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int64)">eventIds</mca:CSharpValue>
+          <InArgument x:TypeArguments="scg:IEnumerable(x:String)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:String)">eventIds</mca:CSharpValue>
           </InArgument>
         </mgba1:LoadMediationRecordsByIds.EventIds>
         <mgba1:LoadMediationRecordsByIds.MediationDefinition>
