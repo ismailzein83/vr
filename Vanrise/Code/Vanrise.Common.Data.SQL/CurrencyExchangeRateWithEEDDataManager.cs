@@ -14,6 +14,23 @@ namespace Vanrise.Common.Data.SQL
         readonly string[] columns = { "CurrencyID", "Rate", "BED", "EED"};
         public void ApplyExchangeRateWithEESInDB(List<Vanrise.Entities.ExchangeRateWithEED> exchangeRates)
         {
+         ExecuteNonQueryText(@" 
+                                 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CurrencyExchangeRate_Old]') AND type in (N'U'))
+                                 BEGIN
+                                    DROP TABLE [dbo].[CurrencyExchangeRate_Old]
+                                 END
+
+                                 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CurrencyExchangeRate_Temp]') AND type in (N'U'))
+                                 BEGIN
+                                    DROP TABLE [dbo].[CurrencyExchangeRate_Temp]
+                                 END
+
+                                CREATE TABLE [dbo].[CurrencyExchangeRate_Temp] (
+                                CurrencyID int NOT NULL,
+                                Rate Decimal(18,6) NOT NULL,
+                                BED DATETIME NOT NULL,
+                                EED DATETIME) "
+            , null);
             var streamForBulkInsert = base.InitializeStreamForBulkInsert();
             foreach(var rate in exchangeRates)
             {
@@ -30,6 +47,30 @@ namespace Vanrise.Common.Data.SQL
                 ColumnNames = columns,
             };
             InsertBulkToTable(bulkInsertInfo);
+
+            ExecuteNonQueryText(@" BEGIN TRY
+                                      BEGIN TRANSACTION 
+                                        IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CurrencyExchangeRate]') AND type in (N'U'))
+		                                BEGIN
+		                                    EXEC sp_rename N'CurrencyExchangeRate', N'CurrencyExchangeRate_Old';
+	                                    END                                     
+                                        EXEC sp_rename N'CurrencyExchangeRate_Temp', N'CurrencyExchangeRate';
+                                    
+	                                  COMMIT ;
+                                    END TRY
+                                    BEGIN CATCH
+
+                                        IF @@TRANCOUNT > 0
+                                            ROLLBACK
+                                    END CATCH
+
+                                    IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CurrencyExchangeRate_Old]') AND type in (N'U'))
+		                            BEGIN
+		                                DROP TABLE [dbo].[CurrencyExchangeRate_Old]
+	                                END "
+           , null);
+
+
         }
 
         protected override string GetConnectionString()

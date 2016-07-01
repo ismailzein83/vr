@@ -10,5 +10,7 @@ namespace Vanrise.Common.MainExtensions
         public string Token { get; set; }
 
         public List<ConnectionStringSetting> ConnectionStrings { get; set; }
+
+        public bool EnableRateUpdate { get; set; }
     }
 }

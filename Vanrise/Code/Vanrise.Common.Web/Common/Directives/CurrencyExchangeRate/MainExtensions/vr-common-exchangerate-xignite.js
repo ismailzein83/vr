@@ -44,7 +44,7 @@ app.directive("vrCommonExchangerateFxsauder", ['VRCommon_ConnectionStringService
             var api = {};         
             ctrl.connections = [];
             ctrl.isConnectionsGridValid = function () {
-                if (ctrl.connections.length == 0) {
+                if (ctrl.connections.length == 0 && $scope.enableRateUpdate == false) {
                     return 'At least one connection string must be added.'
                 }
                 return null;
@@ -77,17 +77,20 @@ app.directive("vrCommonExchangerateFxsauder", ['VRCommon_ConnectionStringService
                     $type: "Vanrise.Common.MainExtensions.ExchangeRateTaskActionArgument, Vanrise.Common.MainExtensions",
                     URL: $scope.url,
                     Token: $scope.token,
-                    ConnectionStrings: ctrl.connections
+                    ConnectionStrings: ctrl.connections,
+                    EnableRateUpdate: $scope.enableRateUpdate
                 };
             };
 
 
             api.load = function (payload) {            
-               
+                $scope.url = "http://globalcurrencies.xignite.com/";
+                $scope.enableRateUpdate = true;
+
                 if (payload != undefined && payload.data != undefined) {
                     $scope.url =  payload.data.URL ;
                     $scope.token = payload.data.Token;
-                   
+                    $scope.enableRateUpdate = payload.data.EnableRateUpdate;
                     if (payload.data.ConnectionStrings && payload.data.ConnectionStrings.length > 0) {
                         for (var y = 0; y < payload.data.ConnectionStrings.length; y++) {
                             var currentObj = payload.data.ConnectionStrings[y];
@@ -96,9 +99,6 @@ app.directive("vrCommonExchangerateFxsauder", ['VRCommon_ConnectionStringService
                     }
 
                 }
-                else 
-                    $scope.url = "http://globalcurrencies.xignite.com/";
-
             }
 
 
