@@ -150,20 +150,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     summaryByZone.Net = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
                     summaryByZone.NetFormatted = ReportHelpers.FormatNumber(summaryByZone.DurationInSeconds);
 
-                    //MeasureValue commissionValue;
-                    //if (parameters.IsCost)
-                    //    analyticRecord.MeasureValues.TryGetValue("CostCommissions", out commissionValue);
-                    //else
-                    //    analyticRecord.MeasureValues.TryGetValue("SaleCommissions", out commissionValue);
-                    //summaryByZone.CommissionValue = (commissionValue == null) ? 0.0 : Convert.ToDouble(commissionValue.Value ?? 0.0);
-                    //summaryByZone.CommissionValueFormatted = ReportHelpers.FormatNumber(summaryByZone.CommissionValue);
-
                     MeasureValue extraChargeValue;
                     if (parameters.IsCost)
                         analyticRecord.MeasureValues.TryGetValue("CostExtraCharges", out extraChargeValue);
                     else
                         analyticRecord.MeasureValues.TryGetValue("SaleExtraCharges", out extraChargeValue);
                     summaryByZone.ExtraChargeValue = (extraChargeValue == null) ? 0.0 : Convert.ToDouble(extraChargeValue.Value ?? 0.0);
+                    summaryByZone.CommissionValueFormatted = ReportHelpers.FormatNumber(summaryByZone.ExtraChargeValue);
 
                     listSummaryByZone.Add(summaryByZone);
                 }
