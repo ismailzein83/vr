@@ -46,7 +46,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
             periodSection = '<vr-columns width="' + attrs.width + '">'
                           + '<vr-period-selector on-ready="scopeModel.onPeriodDirectiveReady" selectedvalues="ctrltimerange.period" onselectionchanged="scopeModel.periodSelectionChanged"></vr-period-selector>'
                           + '</vr-columns>'
-            onblurchanged = ' onvaluechanged="onBlurChanged" '
+            onblurchanged = ' onvaluechanged="scopeModel.onBlurChanged" '
         }
 
         return   periodSection
