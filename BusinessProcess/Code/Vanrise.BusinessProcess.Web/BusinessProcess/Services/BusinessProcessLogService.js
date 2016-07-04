@@ -9,7 +9,7 @@ app.service('BusinessProcess_BusinessProcessLogService', ['VRCommon_MasterLogSer
             
             var tabDefinition = {
                 title: "Business Process",
-                position: 4,
+                rank: 4,
                 directive: "bp-instance-log-search",
                 hasPermission: function () {
                    return BusinessProcess_BPInstanceAPIService.HasViewFilteredBPInstancesPermission()
