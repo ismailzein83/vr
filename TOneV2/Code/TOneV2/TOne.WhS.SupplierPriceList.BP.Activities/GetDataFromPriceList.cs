@@ -105,9 +105,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 if (!string.IsNullOrEmpty(worksheet.Cells[count, 2].StringValue))
                 {
                     decimal normalRate = (decimal)worksheet.Cells[count, 2].FloatValue;
-
-                    if (zoneRates.Count == 0 || (zoneRates.Any(x => x.NormalRate != normalRate) && zoneRates.Find(x => x.NormalRate == normalRate) == null))
-                    {
+                    //if (zoneRates.Count == 0 || (zoneRates.Any(x => x.NormalRate != normalRate) && zoneRates.Find(x => x.NormalRate == normalRate) == null))
+                    //{
                         zoneRates.Add(new ImportedRate()
                         {
                             ZoneName = zoneName,
@@ -116,17 +115,37 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                             BED = bEDDateFromExcel.Value,
                             EED = eEDDateFromExcel,
                         });
-                    }
+                    //}
                 }
 
                 count++;
+            }
+
+            //TODO: this logic is subject to changes after we are done with excel converter component
+            List<ImportedRate> allImportedRates = new List<ImportedRate>();
+            foreach (IEnumerable<ImportedRate> notOrderedList in dicImportedRates.Values)
+            {
+                if (notOrderedList.Count() == 0)
+                    continue;
+
+                IEnumerable<ImportedRate> orderedList = notOrderedList.OrderBy(x => x.BED);
+                bool allSame = !orderedList.Select(item => item.NormalRate)
+                      .Distinct()
+                      .Skip(1)
+                      .Any();
+
+                if (allSame)
+                    allImportedRates.Add(orderedList.First());
+                else
+                    allImportedRates.AddRange(orderedList);
             }
 
             TimeSpan spent = DateTime.Now.Subtract(startReading);
             context.WriteTrackingMessage(LogEntryType.Information, "Finished reading {0} records from the excel file. It took: {1}.", worksheet.Cells.Rows.Count, spent);
 
             ImportedCodes.Set(context, importedCodesList);
-            ImportedRates.Set(context, dicImportedRates.SelectMany(itm => itm.Value).ToList());
+            //ImportedRates.Set(context, dicImportedRates.SelectMany(itm => itm.Value).ToList());
+            ImportedRates.Set(context, allImportedRates);
             MinimumDate.Set(context, minimumDate);
         }
     }
