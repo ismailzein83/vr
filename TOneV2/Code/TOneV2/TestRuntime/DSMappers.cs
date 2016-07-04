@@ -31,9 +31,9 @@ namespace TestRuntime
                 cdr.IDonSwitch = Utils.GetReaderValue<long>(reader, "IDonSwitch");
                 cdr.Tag = reader["Tag"] as string;
                 cdr.AttemptDateTime = (DateTime)reader["AttemptDateTime"];
-                cdr.AlertDateTime = Utils.GetReaderValue<DateTime>(reader, "AlertDateTime");
-                cdr.ConnectDateTime = Utils.GetReaderValue<DateTime>(reader, "ConnectDateTime");
-                cdr.DisconnectDateTime = Utils.GetReaderValue<DateTime>(reader, "DisconnectDateTime");
+                cdr.AlertDateTime = Utils.GetReaderValue<DateTime?>(reader, "AlertDateTime");
+                cdr.ConnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "ConnectDateTime");
+                cdr.DisconnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
                 cdr.DurationInSeconds = Utils.GetReaderValue<Decimal>(reader, "DurationInSeconds");
                 cdr.InTrunk = reader["IN_TRUNK"] as string;
                 cdr.InCircuit = reader["IN_CIRCUIT"] != DBNull.Value ? Convert.ToInt64(reader["IN_CIRCUIT"]) : default(Int64);
