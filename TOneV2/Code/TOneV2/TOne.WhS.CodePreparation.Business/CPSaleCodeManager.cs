@@ -264,7 +264,7 @@ namespace TOne.WhS.CodePreparation.Business
                     codeItem.Message = string.Format("Code should be added under Country {0}.", country.Name);
                     codeOutput.CodeItems.Add(codeItem);
                 }
-                else if ((!allCodeItems.Any(item => item.Code == newCode.Code) && !newCodes.Any(item => item.Code == newCode.Code)) || deletedCodes.Any(x => x.Code == newCode.Code))
+                else if ((!allCodeItems.Any(item => item.Code == newCode.Code) && !newCodes.Any(item => item.Code == newCode.Code)))
                 {
                     newCodes.Add(newCode);
                     UpdateNewZonesHasChanges(changes.NewZones, newCode.ZoneName);

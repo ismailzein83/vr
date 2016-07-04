@@ -70,6 +70,8 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_CodeChangeTypeE
 
 
         function mapDataNeeded(dataItem) {
+            dataItem.showMovedTo = false;
+            dataItem.showMovedFrom = false;
             switch (dataItem.Entity.ChangeType) {
                 case WhS_SupPL_CodeChangeTypeEnum.New.value:
                     dataItem.codeStatusIconUrl = WhS_SupPL_CodeChangeTypeEnum.New.icon;
@@ -82,6 +84,8 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_CodeChangeTypeE
                     break;
 
                 case WhS_SupPL_CodeChangeTypeEnum.Moved.value:
+                    dataItem.showMovedTo = true;
+                    dataItem.showMovedFrom = true;
                     if (dataItem.Entity.ZoneName != zoneName) {
                         dataItem.codeStatusIconUrl = WhS_SupPL_CodeChangeTypeEnum.MovedFrom.icon;
                             dataItem.codeStatusIconTooltip = WhS_SupPL_CodeChangeTypeEnum.Moved.description + " to " + dataItem.Entity.ZoneName;
@@ -92,8 +96,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_CodeChangeTypeE
                         }
                     break;
             }
-            dataItem.showMovedTo = true;
-            dataItem.showMovedFrom = true;
+            
             if (zoneName == dataItem.Entity.ZoneName)
                 dataItem.showMovedTo = false;
 
