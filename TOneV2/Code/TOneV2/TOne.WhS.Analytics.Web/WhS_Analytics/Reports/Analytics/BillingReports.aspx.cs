@@ -10,6 +10,7 @@ using TOne.WhS.Analytics.Entities.BillingReport;
 using Microsoft.Reporting.WebForms;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Security.Business;
 namespace TOne.WhS.Analytics.Web.Reports.Analytics
 {
     public partial class BillingReports : System.Web.UI.Page
@@ -18,7 +19,6 @@ namespace TOne.WhS.Analytics.Web.Reports.Analytics
         {
             if (!IsPostBack)
             {
-
                 int reportId = Convert.ToInt32(Request.QueryString["reportId"]);
                 DateTime from = DateTime.ParseExact(Request.QueryString["fromDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 DateTime to = DateTime.ParseExact(Request.QueryString["toDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
