@@ -33,7 +33,7 @@
             }
 
             UtilsService.waitMultiplePromises(promises).then(function () {              
-                $scope.drillDownDirectiveTabs = $filter('orderBy')(accessibleTabs, 'title');
+                $scope.drillDownDirectiveTabs = $filter('orderBy')(accessibleTabs, 'position');
             });
 
            

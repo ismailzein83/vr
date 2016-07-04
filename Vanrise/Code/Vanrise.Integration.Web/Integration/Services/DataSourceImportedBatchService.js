@@ -10,6 +10,7 @@ app.service('VRCommon_DataSourceImportedBatchService', ['VRCommon_MasterLogServi
         function registerLogToMaster() {
             var tabDefinition = {
                 title: "Imported Batch",
+                position: 3,
                 hide:true,
                 directive: "vr-integration-importedbatch-search",
                 loadDirective: function (directiveAPI) {

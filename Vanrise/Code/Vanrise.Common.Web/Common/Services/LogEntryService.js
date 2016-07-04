@@ -11,6 +11,7 @@ app.service('VRCommon_LogEntryService', ['VRCommon_MasterLogService','VRCommon_L
                
                 var tabDefinition = {
                     title: "General",
+                    position:1,
                     directive: "vr-log-entry-search",
                     hide: true,
                     hasPermission: function (){
