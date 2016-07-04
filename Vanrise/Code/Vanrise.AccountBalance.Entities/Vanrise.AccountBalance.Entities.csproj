@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BalanceAlertRuleSettings.cs" />
     <Compile Include="UsageBalanceUpdate.cs" />
     <Compile Include="BillingTransaction.cs" />
     <Compile Include="LiveBalance.cs" />

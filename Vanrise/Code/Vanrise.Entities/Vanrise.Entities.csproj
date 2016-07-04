@@ -85,6 +85,7 @@
     <Compile Include="EntitySynchronization\ISourceItem.cs" />
     <Compile Include="EntitySynchronization\ISourceItemReader.cs" />
     <Compile Include="DataRetrieval\ExcelResult.cs" />
+    <Compile Include="VRExpression\VRExpression.cs" />
     <Compile Include="ExtensionConfiguration.cs" />
     <Compile Include="File\FileUploadResult.cs" />
     <Compile Include="File\VRFileQuery.cs" />
