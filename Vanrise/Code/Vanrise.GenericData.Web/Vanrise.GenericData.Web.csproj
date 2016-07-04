@@ -147,6 +147,7 @@
     <Compile Include="Controllers\DataStoreController.cs" />
     <Compile Include="Controllers\DataStoreConfigController.cs" />
     <Compile Include="Controllers\GenericRuleTypeConfigController.cs" />
+    <Compile Include="Controllers\RecordFilterController.cs" />
     <Compile Include="Controllers\SummaryTransformationDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -417,6 +418,7 @@
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataStoreConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleTypeConfigAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\RecordFilterAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\SummaryTransformationDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\BELookupRuleDefinitionService.js" />
     <Content Include="VR_GenericData\Services\BusinessEntityDefinitionService.js" />

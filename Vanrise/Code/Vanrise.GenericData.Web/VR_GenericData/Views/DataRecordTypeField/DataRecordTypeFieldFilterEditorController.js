@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageFilterEditorController.$inject = ['$scope', 'VRNavigationService', 'VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VRUIUtilsService','VRNotificationService'];
+    DataRecordStorageFilterEditorController.$inject = ['$scope', 'VRNavigationService', 'VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VRUIUtilsService','VRNotificationService','VR_GenericData_RecordFilterAPIService'];
 
-    function DataRecordStorageFilterEditorController($scope, VRNavigationService, VR_GenericData_DataRecordFieldAPIService, UtilsService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VRUIUtilsService, VRNotificationService) {
+    function DataRecordStorageFilterEditorController($scope, VRNavigationService, VR_GenericData_DataRecordFieldAPIService, UtilsService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VRUIUtilsService, VRNotificationService, VR_GenericData_RecordFilterAPIService) {
 
         var fields = [];
         var filterObj;
@@ -21,6 +21,7 @@
 
             if (parameters != undefined) {
                 fields = parameters.Fields;
+
                 filterObj = parameters.FilterObj;
             }
         }
@@ -33,11 +34,21 @@
             };
 
             $scope.save = function () {
-                if ($scope.onDataRecordFieldTypeFilterAdded != undefined) {
-                    $scope.onDataRecordFieldTypeFilterAdded(groupFilterAPI.getData(), groupFilterAPI.getExpression());
-                }
 
-                $scope.modalContext.closeModal();
+                var fieldsObj = [];
+                for (var i = 0; i < fields.length; i++)
+                {
+                    var field = fields[i];
+                    fieldsObj.push({ Name: field.FieldName, Type: field.Type })
+
+                }
+                return VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression({ RecordFields: fieldsObj, FilterGroup: groupFilterAPI.getData() }).then(function (response) {
+                    if ($scope.onDataRecordFieldTypeFilterAdded != undefined) {
+                        $scope.onDataRecordFieldTypeFilterAdded(groupFilterAPI.getData(), response);
+                    }
+                    $scope.modalContext.closeModal();
+                });
+               
             };
 
             $scope.close = function () {

@@ -150,5 +150,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", NumberPrecision = "NoDecimal" };
         }
+
+        public override string GetFilterDescription(RecordFilter filter)
+        {
+            NumberListRecordFilter numberListRecordFilter = filter as NumberListRecordFilter;
+            return string.Format(" {0} {1} ( {2} ) ", numberListRecordFilter.FieldName, Utilities.GetEnumDescription(numberListRecordFilter.CompareOperator), GetDescription(numberListRecordFilter.Values.Cast<Object>().ToList()));
+        }
     }
 }

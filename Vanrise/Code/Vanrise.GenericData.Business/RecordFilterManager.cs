@@ -3,12 +3,65 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.Business
 {
     public class RecordFilterManager
     {
+        public string BuildRecordFilterGroupExpression(RecordFilterGroup filterGroup, List<RecordFilterFieldInfo> recordFields)
+        {
+            StringBuilder expression = new StringBuilder();
+            bool firstFilter = true;
+            foreach (var filter in filterGroup.Filters)
+            {
+                BuildChildRecordFilterGroupExpression(filter, recordFields, expression, filterGroup.LogicalOperator, firstFilter);
+                firstFilter = false;
+            }
+            return expression.ToString();
+        }
+
+        public void BuildChildRecordFilterGroupExpression(RecordFilter recordFilter, List<RecordFilterFieldInfo> recordFields, StringBuilder expression, RecordQueryLogicalOperator logicalOperator, bool isFirstFilter)
+        {
+            
+            RecordFilterGroup childFilterGroup = recordFilter as RecordFilterGroup;
+            if (expression == null)
+                expression = new StringBuilder();
+            if (childFilterGroup != null)
+            {
+                expression.Append(string.Format(" {0} ", Utilities.GetEnumDescription(logicalOperator)));
+                bool firstFilter = true;
+                expression.Append(" ( ");
+                foreach (var filter in childFilterGroup.Filters)
+                {
+                    BuildChildRecordFilterGroupExpression(filter, recordFields, expression, childFilterGroup.LogicalOperator, firstFilter);
+                    firstFilter = false;
+                }
+                expression.Append(" ) ");
+            }
+
+            if (expression.Length != 0 && !isFirstFilter)
+                expression.Append(string.Format(" {0} ", Utilities.GetEnumDescription(logicalOperator)));
+
+            if (recordFilter is EmptyRecordFilter)
+            {
+                expression.Append(string.Format(" {0} Is Empty ", recordFilter.FieldName));
+            }
+            else if (recordFilter is NonEmptyRecordFilter)
+            {
+                expression.Append(string.Format(" {0} Is Non Empty ", recordFilter.FieldName));
+            }
+            else if (recordFilter.FieldName != null)
+            {
+                var record = recordFields.FindRecord(x => x.Name == recordFilter.FieldName);
+                if (record != null)
+                {
+                    expression.Append(record.Type.GetFilterDescription(recordFilter));
+                }
+            }
+        }
+
         public bool IsFilterGroupMatch(RecordFilterGroup filterGroup, IRecordFilterGenericFieldMatchContext context)
         {
             if(filterGroup == null)

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RecordSearchAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_OrderDirectionEnum', 'VRValidationService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_DataRecordTypeService','PeriodEnum','VR_Analytic_AnalyticAPIService'];
+    RecordSearchAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_OrderDirectionEnum', 'VRValidationService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_DataRecordTypeService','PeriodEnum','VR_Analytic_AnalyticAPIService','VR_GenericData_RecordFilterAPIService'];
 
-    function RecordSearchAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_OrderDirectionEnum, VRValidationService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_DataRecordTypeService, PeriodEnum, VR_Analytic_AnalyticAPIService) {
+    function RecordSearchAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_OrderDirectionEnum, VRValidationService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_DataRecordTypeService, PeriodEnum, VR_Analytic_AnalyticAPIService, VR_GenericData_RecordFilterAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -29,6 +29,7 @@
             var autoSearch;
             var timeRangeDirectiveAPI;
             var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var fields = [];
 
             var itemActionSettings;
             function initializeController() {
@@ -54,26 +55,14 @@
 
                 $scope.addFilter = function () {
                     if ($scope.selectedDRSearchPageStorageSource != undefined) {
-                        $scope.scopeModel.isLoading = true;
-                        loadFields().then(function (response) {
-                            if (response) {
-                                var fields = [];
-                                for (var i = 0; i < response.length; i++) {
-                                    var dataRecordField = response[i];
-                                    fields.push({
-                                        FieldName: dataRecordField.Entity.Name,
-                                        FieldTitle: dataRecordField.Entity.Title,
-                                        Type: dataRecordField.Entity.Type,
-                                    });
-                                }
-                                $scope.scopeModel.isLoading = false;
-                                var onDataRecordFieldTypeFilterAdded = function (filter, expression) {
-                                    filterObj = filter;
-                                    $scope.expression = expression;
-                                }
-                                VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter(fields, filterObj, onDataRecordFieldTypeFilterAdded);
+                        if (fields.length > 0)
+                        {
+                            var onDataRecordFieldTypeFilterAdded = function (filter, expression) {
+                                filterObj = filter;
+                                $scope.expression = expression;
                             }
-                        });
+                            VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter(fields, filterObj, onDataRecordFieldTypeFilterAdded);
+                        }
                     }
                 };
                 $scope.checkMaxNumberResords = function()
@@ -112,25 +101,38 @@
                         settings = payload.settings;
                         autoSearch = payload.autoSearch;
                         itemActionSettings = payload.itemActionSettings;
-                        if(itemActionSettings != undefined)
-                        {
-                            var input = {
-                                DimensionFilters: itemActionSettings.DimensionFilters,
-                                ReportId: itemActionSettings.AnalyticReportId,
-                                SourceName: itemActionSettings.SourceName,
-                                TableId: itemActionSettings.TableId,
-                                FilterGroup: itemActionSettings.FilterGroup
-                            };
-                            VR_Analytic_AnalyticAPIService.GetRecordSearchFilterGroup(input).then(function (response) {
-                          
-                                filterObj = response;
-                            });
-                        }
-                       
                     }
                     var loadPromiseDeffer = UtilsService.createPromiseDeferred();
                     UtilsService.waitMultipleAsyncOperations([setSourceSelector, setStaticData, loadTimeRangeDirective]).then(function () {
                         loadPromiseDeffer.resolve();
+
+                        if (itemActionSettings != undefined) {
+                            loadFields().then(function () {
+                                var input = {
+                                    DimensionFilters: itemActionSettings.DimensionFilters,
+                                    ReportId: itemActionSettings.AnalyticReportId,
+                                    SourceName: itemActionSettings.SourceName,
+                                    TableId: itemActionSettings.TableId,
+                                    FilterGroup: itemActionSettings.FilterGroup
+                                };
+                                VR_Analytic_AnalyticAPIService.GetRecordSearchFilterGroup(input).then(function (response) {
+                                    filterObj = response;
+                                    var recordFields = [];
+                                    for (var i = 0; i < fields.length; i++) {
+                                        var field = fields[i];
+                                        recordFields.push({
+                                            Name: field.FieldName,
+                                            Type: field.Type,
+                                        });
+                                    };
+
+                                    VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression({ RecordFields: recordFields, FilterGroup: filterObj }).then(function (response) {
+                                        $scope.expression = response;
+                                    });
+                                });
+                            })
+                        }
+
                         if (autoSearch && gridAPI !=undefined)
                         {
                             gridAPI.loadGrid(gridQuery);
@@ -151,7 +153,19 @@
             function loadFields() {
                 var obj = { DataRecordTypeId: $scope.selectedDRSearchPageStorageSource.DataRecordTypeId };
                 var serializedFilter = UtilsService.serializetoJson(obj);
-                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter);
+                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter).then(function (response) {
+                    if (response) {
+                        fields.length = 0;
+                        for (var i = 0; i < response.length; i++) {
+                            var dataRecordField = response[i];
+                            fields.push({
+                                FieldName: dataRecordField.Entity.Name,
+                                FieldTitle: dataRecordField.Entity.Title,
+                                Type: dataRecordField.Entity.Type,
+                            });
+                        };
+                    }
+                });
             }
 
             function loadTimeRangeDirective() {

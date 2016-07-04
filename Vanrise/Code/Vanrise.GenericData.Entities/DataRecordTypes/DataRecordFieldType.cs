@@ -26,6 +26,8 @@ namespace Vanrise.GenericData.Entities
 
         public abstract RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues);
 
+        public abstract string GetFilterDescription(RecordFilter filter);
+
         protected Type GetNullableType(Type type)
         {
             return (type.IsValueType) ? typeof(Nullable<>).MakeGenericType(type) : type;

@@ -115,6 +115,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 FieldName = fieldName
             };
         }
+
+        public override string GetFilterDescription(RecordFilter filter)
+        {
+            NumberListRecordFilter numberListRecordFilter = filter as NumberListRecordFilter;
+            return string.Format(" {0} {1} {2} ", numberListRecordFilter.FieldName, Utilities.GetEnumDescription(numberListRecordFilter.CompareOperator), GetDescription(numberListRecordFilter.Values));
+        }
     }
 
     public class Choice
