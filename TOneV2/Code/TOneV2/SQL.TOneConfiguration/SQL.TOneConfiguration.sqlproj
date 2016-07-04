@@ -97,6 +97,7 @@
     <Folder Include="cloud\" />
     <Folder Include="cloud\Tables\" />
     <Folder Include="cloud\Stored Procedures\" />
+    <Folder Include="dbo\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -350,6 +351,7 @@
     <Build Include="common\Stored Procedures\sp_Setting_GetAll.sql" />
     <Build Include="common\Stored Procedures\sp_File_Insert_Temp.sql" />
     <Build Include="common\Stored Procedures\sp_IDManager_Update.sql" />
+    <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
