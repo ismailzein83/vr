@@ -23,22 +23,25 @@ namespace TOne.WhS.CodePreparation.Business
         {
             ICPParametersContext cpContext = context.GetExtension<ICPParametersContext>();
 
-            Dictionary<string, ExistingZone> existingZonesByZoneName = cpContext.ExistingZonesByZoneName;
+            Dictionary<string, ExistingZoneInfo> existingZonesByZoneName = new Dictionary<string, ExistingZoneInfo>(StringComparer.InvariantCultureIgnoreCase);
+            existingZonesByZoneName = cpContext.ExistingZonesInfoByZoneName;
 
 
             AddedZone addedZone = context.Target as AddedZone;
 
-            ExistingZone existingZoneInContext;
+            ExistingZoneInfo existingZoneInfoInContext;
 
-            if (existingZonesByZoneName.TryGetValue(addedZone.Name, out existingZoneInContext) )
-               return existingZoneInContext.CountryId == addedZone.CountryId;
+            if (existingZonesByZoneName.TryGetValue(addedZone.Name, out existingZoneInfoInContext))
+                return existingZoneInfoInContext.CountryId == addedZone.CountryId;
 
             return true;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} already exist", (target as AddedZone).Name);
+            CountryManager manager = new CountryManager();
+            AddedZone addedZone = target as AddedZone;
+            return string.Format("Zone {0} has a code that belongs to the code group of country {1}", addedZone.Name , manager.GetCountryName(addedZone.CountryId));
         }
 
     }

@@ -16,7 +16,7 @@ namespace TOne.WhS.CodePreparation.BP.Arguments
         public bool IsFromExcel { get; set; }
         public override string GetTitle()
         {
-            return String.Format("CodePreparation Process Started for Package: {0}", SellingNumberPlanId);
+            return String.Format("Numbering Plan Process Started for Package: {0}", SellingNumberPlanId);
         }
     }
 }

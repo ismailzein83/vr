@@ -51,6 +51,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public int SellingNumberPlanId { get; set; }
 
 
-        public Dictionary<string, ExistingZone> ExistingZonesByZoneName { get; set; }
+        public Dictionary<string, ExistingZoneInfo> ExistingZonesInfoByZoneName { get; set; }
     }
 }

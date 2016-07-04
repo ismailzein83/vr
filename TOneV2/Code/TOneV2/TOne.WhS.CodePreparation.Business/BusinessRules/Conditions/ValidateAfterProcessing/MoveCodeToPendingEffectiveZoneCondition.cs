@@ -20,38 +20,32 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ICPParametersContext cpContext = context.GetExtension<ICPParametersContext>();
-            Dictionary<string, ExistingZone> existingZonesByZoneName = cpContext.ExistingZonesByZoneName;  //TODO: Zone.BED must be filled in ZoneToProcess
-
             ZoneToProcess zoneTopProcess = context.Target as ZoneToProcess;
+            DateTime minExistingZonesBED = DateTime.MinValue;
+            if (zoneTopProcess.ExistingZones.Count() > 0)
+                minExistingZonesBED = zoneTopProcess.ExistingZones.Min(item => item.BED);
 
             if (zoneTopProcess.CodesToAdd != null)
             {
+
                 foreach (CodeToAdd codeToAdd in zoneTopProcess.CodesToAdd)
                 {
                     if (codeToAdd.ChangedExistingCodes.Count() > 0)
                     {
-                        ExistingZone existingZoneInContext;
-                        existingZonesByZoneName.TryGetValue(codeToAdd.ZoneName, out existingZoneInContext);
-
-                        ExistingCode changedExistingCode= codeToAdd.ChangedExistingCodes.FindRecord(item => item.CodeEntity.Code == codeToAdd.Code);
-
-                        if (existingZoneInContext != null && existingZoneInContext.BED > DateTime.Today && changedExistingCode != null &&
-                            !codeToAdd.ZoneName.Equals(changedExistingCode.ParentZone.Name,StringComparison.InvariantCultureIgnoreCase))
+                        ExistingCode changedExistingCode = codeToAdd.ChangedExistingCodes.FindRecord(item => item.CodeEntity.Code == codeToAdd.Code);
+                        
+                        if (minExistingZonesBED != DateTime.MinValue && minExistingZonesBED.Date > DateTime.Today.Date && changedExistingCode != null &&
+                             !codeToAdd.ZoneName.Equals(changedExistingCode.ParentZone.Name, StringComparison.InvariantCultureIgnoreCase))
                             return false;
-
                     }
                 }
             }
-
 
             if (zoneTopProcess.CodesToMove != null)
             {
                 foreach (CodeToMove codeToMove in zoneTopProcess.CodesToMove)
                 {
-                    ExistingZone existingZoneInContext;
-                    existingZonesByZoneName.TryGetValue(codeToMove.ZoneName, out existingZoneInContext);
-                    if (existingZoneInContext != null && existingZoneInContext.BED > DateTime.Today)
+                    if (minExistingZonesBED != DateTime.MinValue && minExistingZonesBED > DateTime.Today.Date)
                         return false;
                 }
             }

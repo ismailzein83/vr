@@ -38,7 +38,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     codePreviewList.Add(new CodePreview()
                     {
                         Code = item.Code,
-                        ChangeType = item.ChangeType,
+                        ChangeType = GetCodeChangeType(item),
                         RecentZoneName = item.ProcessInfo.RecentZoneName,
                         ZoneName = item.ZoneName,
                         BED = item.BED,
@@ -66,6 +66,21 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             previewCodeQueue.Enqueue(codePreviewList);
 
 
+        }
+
+
+        private CodeChangeType GetCodeChangeType(ImportedCode importedCode)
+        {
+            if (importedCode.ChangeType == CodeChangeType.New && importedCode.ChangedExistingCodes.Count() > 0)
+            {
+                ExistingCode existingCode = importedCode.ChangedExistingCodes.OrderBy(item => item.BED).First();
+                if (existingCode != null && existingCode.EED.HasValue && existingCode.EED.Value.Date.Equals(importedCode.BED.Date))
+                    return CodeChangeType.NotChanged;
+
+                return importedCode.ChangeType;
+            }
+
+            return importedCode.ChangeType;
         }
     }
 }

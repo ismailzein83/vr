@@ -42,7 +42,12 @@
                 return BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
                         $scope.modalContext.closeModal();
-                        return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId);
+                        var context = {
+                            onClose: function () {
+                                $scope.onCodePreparationUpdated();
+                            }
+                        }
+                        return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context);
                     }
                 });
             }

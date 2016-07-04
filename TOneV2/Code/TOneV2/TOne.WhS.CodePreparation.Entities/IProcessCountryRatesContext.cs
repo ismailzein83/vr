@@ -11,7 +11,7 @@ namespace TOne.WhS.CodePreparation.Entities
     {
        
         IEnumerable<ExistingZone> ExistingZones { get; }
-
+        IEnumerable<ExistingRate> ExistingRates { get; }
         IEnumerable<ChangedRate> ChangedRates { set; }
     }
 }

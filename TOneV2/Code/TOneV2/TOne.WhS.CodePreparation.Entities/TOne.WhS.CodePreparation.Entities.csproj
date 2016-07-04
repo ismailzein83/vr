@@ -56,6 +56,7 @@
     <Compile Include="ChangedData\ChangedZone.cs" />
     <Compile Include="AddedCode.cs" />
     <Compile Include="ExistingRate.cs" />
+    <Compile Include="ExistingZoneInfo.cs" />
     <Compile Include="ExistingZone.cs" />
     <Compile Include="ICPParametersContext.cs" />
     <Compile Include="ImportedData\ImportedCode.cs" />

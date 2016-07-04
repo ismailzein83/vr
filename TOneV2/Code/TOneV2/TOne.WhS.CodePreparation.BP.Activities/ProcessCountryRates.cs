@@ -15,6 +15,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
     {
         public Dictionary<long, ExistingZone> ExistingZonesByZoneId { get; set; }
 
+        public IEnumerable<ExistingRate> ExistingRates { get; set; }
+
     }
 
     public class ProcessCountryRatesOutput
@@ -30,6 +32,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<Dictionary<long, ExistingZone>> ExistingZonesByZoneId { get; set; }
 
         [RequiredArgument]
+        public InArgument<IEnumerable<ExistingRate>> ExistingRates { get; set; }
+
+        [RequiredArgument]
         public OutArgument<IEnumerable<ChangedRate>> ChangedRates { get; set; }
 
 
@@ -42,7 +47,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             ProcessCountryRatesContext processCountryRateContext = new ProcessCountryRatesContext()
             {
-                ExistingZones = existingZones
+                ExistingZones = existingZones,
+                ExistingRates = inputArgument.ExistingRates,
             };
 
             PriceListRateManager plCodeManager = new PriceListRateManager();
@@ -59,6 +65,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         {
             return new ProcessCountryRatesInput()
             {
+                ExistingRates = this.ExistingRates.Get(context),
                 ExistingZonesByZoneId = this.ExistingZonesByZoneId.Get(context)
             };
         }

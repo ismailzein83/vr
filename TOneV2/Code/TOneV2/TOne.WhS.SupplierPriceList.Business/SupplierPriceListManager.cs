@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using TOne.WhS.SupplierPriceList.Data;
 using Vanrise.Common.Business;
+
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
@@ -37,6 +40,13 @@ namespace TOne.WhS.SupplierPriceList.Business
         public Type GetSupplierPriceListType()
         {
             return this.GetType();
+        }
+
+        public byte[] DownloadImportSupplierPriceListTemplate()
+        {
+            string physicalFilePath = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["ImportPriceListTemplatePath"]);
+            byte[] bytes = File.ReadAllBytes(physicalFilePath);
+            return bytes;
         }
        
     }

@@ -76,8 +76,22 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
         }
     }
 
-    public class ExistingZonesByName : Dictionary<string, List<ExistingZone>>
+    public class ExistingZonesByName
     {
+        private Dictionary<string, List<ExistingZone>> _existingZonesByName;
 
+        public ExistingZonesByName()
+        {
+            _existingZonesByName = new Dictionary<string, List<ExistingZone>>();
+        }
+        public void Add(string key, List<ExistingZone> values)
+        {
+            _existingZonesByName.Add(key.ToLower(), values);
+        }
+
+        public bool TryGetValue(string key, out List<ExistingZone> value)
+        {
+            return _existingZonesByName.TryGetValue(key.ToLower(), out value);
+        }
     }
 }

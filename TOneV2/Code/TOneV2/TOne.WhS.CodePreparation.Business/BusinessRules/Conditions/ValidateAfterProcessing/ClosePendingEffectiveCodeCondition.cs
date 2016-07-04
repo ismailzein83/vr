@@ -22,7 +22,7 @@ namespace TOne.WhS.CodePreparation.Business
             ExistingZone existingZone = context.Target as ExistingZone;
             foreach (ExistingCode existingCode in existingZone.ExistingCodes)
             {
-                if (existingCode.ChangedCode != null && existingCode.BED > DateTime.Today)
+                if (existingCode.ChangedCode != null && existingCode.BED.Date > DateTime.Today.Date)
                     return false;
             }
 

@@ -39,13 +39,15 @@
             $scope.selectedCodes = [];
 
             $scope.applyCodePreparationState = function () {
-                var onCodePreparationStateApplied = function () {
+                var onCodePreparationApplied = function () {
+                    $scope.onSellingNumberPlanSelectorChanged();
                 };
-                return WhS_CP_CodePrepAPIService.ApplyCodePreparationState(filter.sellingNumberPlanId, onCodePreparationStateApplied);
+                return WhS_CP_CodePrepAPIService.ApplyCodePreparationState(filter.sellingNumberPlanId, onCodePreparationApplied);
             }
 
             $scope.uploadCodePreparation = function () {
                 var onCodePreparationUpdated = function () {
+                    $scope.onSellingNumberPlanSelectorChanged();
                 };
                 return WhS_CP_CodePrepAPIService.UploadCodePreparationSheet(filter.sellingNumberPlanId, onCodePreparationUpdated);
             }
@@ -197,6 +199,11 @@
 
             }
 
+
+            $scope.refreshCountries = function () {
+               
+            }
+
         }
 
 
@@ -227,6 +234,7 @@
 
         function onZoneAdded(addedZones) {
             if (addedZones != undefined) {
+                clearCodesSelection();
                 hideShowState(true);
                 var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.nodeId, 'nodeId');
                 var countryNode = $scope.nodes[countryIndex];
@@ -242,6 +250,7 @@
         }
 
         function onZoneClosed() {
+            clearCodesSelection();
             hideShowState(true);
 
             var zoneNode = getCurrentZoneNode();
@@ -263,6 +272,7 @@
         }
 
         function onZoneRenamed(renamedZone) {
+            clearCodesSelection();
             hideShowState(true);
 
             var zoneNode = getCurrentZoneNode();
@@ -286,6 +296,7 @@
 
         function onCodeAdded(addedCodes) {
             if (addedCodes != undefined) {
+                clearCodesSelection();
                 hideShowState(true);
                 for (var i = 0; i < addedCodes.length; i++)
                     codesGridAPI.onCodeAdded(addedCodes[i]);
@@ -378,9 +389,6 @@
                 }
             });
         }
-
-
-
 
         function clearCodesSelection() {
             $scope.selectedCodes.length = 0;

@@ -29,7 +29,7 @@ namespace TOne.WhS.CodePreparation.Business
                 {
                     ExistingCode existingCodeToClose = codeToClose.ChangedExistingCodes.FindRecord(item=>item.CodeEntity.Code == codeToClose.Code);
 
-                    if (existingCodeToClose.CodeEntity.EED.HasValue)
+                    if (existingCodeToClose != null && existingCodeToClose.CodeEntity.EED.HasValue)
                         return false;
                 }
 
@@ -42,7 +42,7 @@ namespace TOne.WhS.CodePreparation.Business
                 {
                     ExistingCode existingCodeToMove = codeToMove.ChangedExistingCodes.FindRecord(item => item.CodeEntity.Code == codeToMove.Code);
 
-                    if (existingCodeToMove.CodeEntity.EED.HasValue)
+                    if (existingCodeToMove != null && existingCodeToMove.CodeEntity.EED.HasValue)
                         return false;
                 }
 

@@ -15,7 +15,7 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
         {
             CodePreparationManager manager = new CodePreparationManager();
             byte[] bytes = manager.DownloadImportCodePreparationTemplate();
-            return GetExcelResponse(bytes, "Code Preparation Template.xls");  
+            return GetExcelResponse(bytes, "Numbering Plan Template.xls");  
         }
 
         [HttpGet]

@@ -14,6 +14,7 @@ namespace TOne.WhS.CodePreparation.Business
         public void ProcessCountryRates(IProcessCountryRatesContext context)
         {
             CloseRatesForClosedZones(context.ExistingZones);
+            context.ChangedRates = context.ExistingRates.Where(itm => itm.ChangedRate != null).Select(itm => itm.ChangedRate);
         }
 
         private void CloseRatesForClosedZones(IEnumerable<ExistingZone> existingZones)
