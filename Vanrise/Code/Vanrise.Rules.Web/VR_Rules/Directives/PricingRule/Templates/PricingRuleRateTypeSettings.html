@@ -14,16 +14,17 @@
         <vr-validator validate="ctrl.isValid()">
             <vr-datagrid datasource="ctrl.datasource"
                          on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu norowhighlightonclick="'true'">
-                <vr-datagridcolumn headertext="'Filter Type'" field="'name'" widthfactor="5"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Filter Type'" field="'name'" widthfactor="5">
+                </vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Filter Settings'" widthfactor="15">
                     <div vr-loader="ctrl.isLoadingDirective">
                         <vr-directivewrapper directive="dataItem.editor" on-ready="dataItem.onDirectiveReady" />
                     </div>
                 </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Rate Type'" widthfactor="5">
+                <vr-datagridcolumn headertext="'Rate Type'" widthfactor="5" >
                     <vr-row removeline>
-                        <vr-columns width="fullrow">
-                            <div vr-loader="ctrl.isLoadingRateTypeDirective">
+                        <vr-columns width="fullrow" >
+                            <div vr-loader="ctrl.isLoadingRateTypeDirective" style="padding-bottom:20px;position:relative;top:20px">
                                 <vr-common-ratetype-selector on-ready="dataItem.onRateTypeSelectorReady" hidelabel isrequired></vr-common-ratetype-selector>
                             </div>
                         </vr-columns>
