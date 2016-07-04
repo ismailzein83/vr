@@ -56,7 +56,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                    + '  datavaluefield="SaleZoneId"'
                    + '  datatextfield="Name"'
                    + '  ' + multipleselection
-                   + '  isrequired="saleZoneSelectorRequired"'
+                   + '  isrequired="ctrl.isSaleZoneRequired()"'
                    + '  vr-disabled="ctrl.isdisabled"'
                    + '  label="' + label + '"'
                    + '  >'
@@ -104,11 +104,6 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                     sellingNumberPlanId = sellingDirectiveApi.getSelectedIds();
                     if (sellingNumberPlanId == undefined)
                         sellingNumberPlanId = oldsellingNumberPlanId;
-
-                    if (sellingDirectiveApi.getSelectedIds() != undefined)
-                        $scope.saleZoneSelectorRequired = true;
-                    else
-                        $scope.saleZoneSelectorRequired = false;
                 }
 
 
@@ -123,6 +118,12 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                     return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(nameFilter, sellingNumberPlanId, serializedFilter);
                 }
 
+                saleZoneSelectorCtrl.isSaleZoneRequired = function () {
+                    if (saleZoneSelectorCtrl.isSellingNumberPlanVisible)
+                        return sellingDirectiveApi.getSelectedIds() != undefined;
+                    else
+                        return saleZoneSelectorCtrl.isrequired;
+                };
 
                 UtilsService.waitMultiplePromises([sellingReadyPromiseDeferred.promise, selectorReadyPromiseDeferred.promise]).then(function () {
                     defineAPI();
