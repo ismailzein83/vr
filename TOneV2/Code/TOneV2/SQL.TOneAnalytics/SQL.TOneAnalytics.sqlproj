@@ -70,10 +70,10 @@
     <Folder Include="Security\" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_Analytics\Tables\TrafficStats15Min.sql" />
-    <Build Include="COMMON\Tables\CurrencyExchangeRate.sql" />
     <Build Include="COMMON\Functions\getExchangeRatesConvertedToCurrency.sql" />
     <Build Include="COMMON\Functions\getExchangeRates.sql" />
     <Build Include="TOneWhS_Analytics\User Defined Types\TrafficStats15MinType.sql" />
@@ -85,5 +85,6 @@
     <Build Include="TOneWhS_Analytics\User Defined Types\BillingStatsDailyType.sql" />
     <Build Include="dbo\Functions\ZeroToMax.sql" />
     <Build Include="TOneWhS_Analytics\User Defined Types\VariationReportTimePeriodType.sql" />
+    <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
   </ItemGroup>
 </Project>
