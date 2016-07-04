@@ -36,7 +36,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
     $scope.optionsCurrencies = [];
 
     $scope.periods = analyticsService.getPeriods();
-    $scope.selectedPeriod = $scope.periods[1];
+    $scope.selectedPeriod = $scope.periods[6];
     
     $scope.onCustomerAccountDirectiveReady = function (api) {
         customerAccountDirectiveAPI = api;
@@ -127,6 +127,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
                 return $scope.export();
         }
         $scope.resetReportParams = function () {
+            $scope.selectedPeriod = $scope.periods[6];
             $scope.params = {
                 groupByCustomer: false,
                 groupByProfile: false,
