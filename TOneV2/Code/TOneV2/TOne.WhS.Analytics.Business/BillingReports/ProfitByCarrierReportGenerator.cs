@@ -16,11 +16,14 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             AnalyticManager analyticManager = new AnalyticManager();
 
             #region customer part
+
+            List<string> listCustomerDimensions = new List<string> { parameters.GroupByProfile ? "CustomerProfile" : "Customer" };
+
             DataRetrievalInput<AnalyticQuery> analyticCustomerQuery = new DataRetrievalInput<AnalyticQuery>
             {
                 Query = new AnalyticQuery
                 {
-                    DimensionFields = new List<string> { "Customer" },
+                    DimensionFields = listCustomerDimensions,
                     MeasureFields = new List<string> { "SaleNet", "CostNet", "Profit" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
@@ -53,11 +56,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             }
             #endregion
             #region supplier part
+            List<string> listSupplierDimensions = new List<string> { parameters.GroupByProfile ? "SupplierProfile" : "Supplier" };
+
             DataRetrievalInput<AnalyticQuery> analyticSupplierQuery = new DataRetrievalInput<AnalyticQuery>
             {
                 Query = new AnalyticQuery
                 {
-                    DimensionFields = new List<string> { "Supplier" },
+                    DimensionFields = listSupplierDimensions,
                     MeasureFields = new List<string> { "SaleNet", "CostNet", "Profit" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
@@ -154,7 +159,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 {"FromDate", new RdlcParameter {Value = parameters.FromTime.ToString(), IsVisible = true}},
                 {"ToDate", new RdlcParameter {Value = parameters.ToTime.ToString(), IsVisible = true}},
-                {"Title", new RdlcParameter {Value = "Profit by Carrier", IsVisible = true}},
+                {"Title", new RdlcParameter {Value =parameters.GroupByProfile ? "Carrier profile Profit": "Profit by Carrier", IsVisible = true}},
                 {"Currency", new RdlcParameter {Value = parameters.CurrencyDescription, IsVisible = true}},
                 {"LogoPath", new RdlcParameter {Value = "logo", IsVisible = true}},
                 {"DigitRate", new RdlcParameter {Value = "2", IsVisible = true}}
