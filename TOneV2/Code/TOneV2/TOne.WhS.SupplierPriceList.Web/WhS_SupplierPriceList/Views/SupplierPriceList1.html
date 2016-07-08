@@ -1,0 +1,47 @@
+﻿<vr-panel ng-controller="WhS_SupPL_PriceListConversionController">
+    <vr-form name="formFilter" vr-loader="scopeModel.isLoading">
+        <vr-validation-group validationcontext="inPutExcelGroupValid">
+            <div>
+                <vr-row removeline>
+                    <vr-columns colnum="2">
+                        <vr-fileupload extension="xls,xlsx,csv,xlsb" value="scopeModel.inPutFile" label="Input Excel" isrequired="true"> </vr-fileupload>
+                    </vr-columns>
+                </vr-row>
+                <vr-row removeline>
+                    <vr-columns width="1/2row">
+                        <vr-section title="Excel Viewer">
+                            <vr-excel-wb fileid="scopeModel.inPutFile.fileId" on-ready="scopeModel.onReadyWoorkBook"></vr-excel-wb>
+                        </vr-section>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <vr-section title="Input Price List Mapping">
+                            <vr-row>
+                                <vr-columns width="1/2row">
+                                    <vr-row>
+                                        <whs-suppl-inputpricelisttemplate-selector on-ready="scopeModel.onInputPriceListTemplateSelectorReady" onselectionchanged="scopeModel.onInputPriceListTemplateSelectionChanged" normal-col-num="12"></whs-suppl-inputpricelisttemplate-selector>
+                                    </vr-row>
+                                </vr-columns>
+                            </vr-row>
+                            <vr-row>
+                                <vr-columns width="fullrow" vr-loader="scopeModal.isLoadingInputPriceListTemplate">
+                                    <whs-suppl-inputpricelistconfiguration-selective on-ready="scopeModel.onInputConfigurationSelectiveReady" normal-col-num="2"></whs-suppl-inputpricelistconfiguration-selective>
+                                </vr-columns>
+                            </vr-row>
+                        </vr-section>
+                    </vr-columns>
+                </vr-row>
+            </div>
+        </vr-validation-group>
+        <vr-row>
+            <vr-row removeline>
+                <vr-actionbar showcollapsebutton="false">
+                    <div transclude-to="buttons">
+                        <vr-button type="Save" formname="formFilter" validationcontext="formFilter" data-onclick="scopeModel.saveInputConfiguration" haspermission="hassaveInputConfigurationPermission"></vr-button>
+                        <vr-button type="Convert" formname="formFilter" validationcontext="formFilter" data-onclick="scopeModel.startConvert" ></vr-button>
+
+                    </div>
+                </vr-actionbar>
+            </vr-row>
+        </vr-row>
+    </vr-form>
+</vr-panel>

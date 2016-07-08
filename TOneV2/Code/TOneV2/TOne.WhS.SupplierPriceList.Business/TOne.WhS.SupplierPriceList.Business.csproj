@@ -46,6 +46,10 @@
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
@@ -65,6 +69,12 @@
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeEEDCondition.cs" />
@@ -80,9 +90,11 @@
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ZoneEEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ZoneBEDCondition.cs" />
+    <Compile Include="Context\InputPriceListExecutionContext.cs" />
     <Compile Include="ImportPriceListManager.cs" />
     <Compile Include="PriceListCodeManager.cs" />
     <Compile Include="PriceListRateManager.cs" />
+    <Compile Include="PriceListTemplateManager.cs" />
     <Compile Include="ProcessCountryCodesContext.cs" />
     <Compile Include="ProcessCountryRatesContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

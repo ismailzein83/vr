@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using TOne.WhS.SupplierPriceList.Data;
+using TOne.WhS.SupplierPriceList.Entities;
 using Vanrise.Common.Business;
 
 
@@ -48,6 +49,12 @@ namespace TOne.WhS.SupplierPriceList.Business
             byte[] bytes = File.ReadAllBytes(physicalFilePath);
             return bytes;
         }
-       
+
+        public PriceList ConvertPriceList(Entities.PriceListInput input)
+        {
+            InputPriceListExecutionContext inPutContext = new InputPriceListExecutionContext();
+            inPutContext.InputFileId = input.InputFileId;
+            return input.InputPriceListSettings.Execute(inPutContext);
+        }
     }
 }

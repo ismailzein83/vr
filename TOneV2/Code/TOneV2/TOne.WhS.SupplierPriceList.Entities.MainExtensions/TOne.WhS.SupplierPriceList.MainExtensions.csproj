@@ -7,8 +7,8 @@
     <ProjectGuid>{5FB37AB5-F52C-4C8C-A14A-83338918AFEB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TOne.WhS.SupplierPriceList.Entities.MainExtensions</RootNamespace>
-    <AssemblyName>TOne.WhS.SupplierPriceList.Entities.MainExtensions</AssemblyName>
+    <RootNamespace>TOne.WhS.SupplierPriceList.MainExtensions</RootNamespace>
+    <AssemblyName>TOne.WhS.SupplierPriceList.MainExtensions</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -41,8 +41,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.ExcelConversion.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.ExcelConversion.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InputPriceListSettings\BasicInputPriceListSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
