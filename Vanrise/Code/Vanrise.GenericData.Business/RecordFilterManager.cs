@@ -30,7 +30,8 @@ namespace Vanrise.GenericData.Business
                 expression = new StringBuilder();
             if (childFilterGroup != null)
             {
-                expression.Append(string.Format(" {0} ", Utilities.GetEnumDescription(logicalOperator)));
+                if (expression.Length != 0)
+                  expression.Append(string.Format(" {0} ", Utilities.GetEnumDescription(logicalOperator)));
                 bool firstFilter = true;
                 expression.Append(" ( ");
                 foreach (var filter in childFilterGroup.Filters)

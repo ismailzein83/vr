@@ -104,7 +104,7 @@
                     }
                     var loadPromiseDeffer = UtilsService.createPromiseDeferred();
                     UtilsService.waitMultipleAsyncOperations([setSourceSelector, setStaticData, loadTimeRangeDirective]).then(function () {
-                        loadPromiseDeffer.resolve();
+                       
 
                         if (itemActionSettings != undefined) {
                             loadFields().then(function () {
@@ -128,9 +128,17 @@
 
                                     VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression({ RecordFields: recordFields, FilterGroup: filterObj }).then(function (response) {
                                         $scope.expression = response;
+                                        loadPromiseDeffer.resolve();
+                                    }).catch(function (error) {
+                                        loadPromiseDeffer.reject(error);
                                     });
-                                });
+                                }).catch(function (error) {
+                                    loadPromiseDeffer.reject(error);
+                                });;
                             })
+                        } else
+                        {
+                            loadPromiseDeffer.resolve();
                         }
 
                         if (autoSearch && gridAPI !=undefined)
