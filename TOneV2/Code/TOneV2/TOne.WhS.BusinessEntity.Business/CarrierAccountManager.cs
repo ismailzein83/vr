@@ -12,7 +12,7 @@ using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class CarrierAccountManager : IBusinessEntityManager
+    public class CarrierAccountManager : IBusinessEntityManager, ICarrierAccountManager
     {
         #region ctor/Local Variables
         CarrierProfileManager _carrierProfileManager;
@@ -248,15 +248,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 return customer.SellingNumberPlanId;
         }
         
-        public string GetCarrierAccountName(int carrierAccountId)
-        {
-            CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
-            if (carrierAccount == null)
-                return null;
-            string profileName = _carrierProfileManager.GetCarrierProfileName(carrierAccount.CarrierProfileId);
-            return GetCarrierAccountName(profileName, carrierAccount.NameSuffix);
-        }
-        
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             return GetCarrierAccountName(Convert.ToInt32(context.EntityId));
@@ -280,6 +271,29 @@ namespace TOne.WhS.BusinessEntity.Business
             return totalNominalCapacity;
         }
         
+        #endregion
+
+        #region ICarrierAccountManager Memebers
+
+        public List<CarrierAccount> GetAllSuppliers()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CarrierAccount> GetSuppliers(IEnumerable<int> suppliersIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetCarrierAccountName(int carrierAccountId)
+        {
+            CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
+            if (carrierAccount == null)
+                return null;
+            string profileName = _carrierProfileManager.GetCarrierProfileName(carrierAccount.CarrierProfileId);
+            return GetCarrierAccountName(profileName, carrierAccount.NameSuffix);
+        }
+
         #endregion
 
         #region Validation Methods

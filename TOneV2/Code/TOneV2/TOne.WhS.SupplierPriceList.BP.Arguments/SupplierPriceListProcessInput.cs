@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.SupplierPriceList.BP.Arguments
@@ -20,7 +21,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Arguments
 
         public override string GetTitle()
         {
-            return String.Format("SupplierPriceList Process Started for Supplier: {0}", SupplierAccountId);
+            ICarrierAccountManager carrierAccountManager = BEManagerFactory.GetManager<ICarrierAccountManager>();
+            string supplierName = carrierAccountManager.GetCarrierAccountName(SupplierAccountId);
+            return String.Format("SupplierPriceList Process Started for Supplier: {0}", supplierName);
         }
     }
 }

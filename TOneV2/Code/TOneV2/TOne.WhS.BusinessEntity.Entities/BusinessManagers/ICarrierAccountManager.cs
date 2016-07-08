@@ -11,5 +11,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         List<CarrierAccount> GetAllSuppliers();
 
         List<CarrierAccount> GetSuppliers(IEnumerable<int> suppliersIds);
+
+        string GetCarrierAccountName(int carrierAccountId);
     }
 }
