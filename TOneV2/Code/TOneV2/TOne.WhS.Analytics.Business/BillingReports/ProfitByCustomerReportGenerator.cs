@@ -119,7 +119,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     carrierSummary.AvgMinFormatted = (carrierSummary.SaleDuration.Value != 0 && carrierSummary.SaleDuration.Value != 0) ? ReportHelpers.FormatNumber((decimal)carrierSummary.SaleNet / carrierSummary.SaleDuration - (decimal)carrierSummary.CostNet / carrierSummary.SaleDuration) : "0.00";
 
-                    carrierSummary.ProfitPercentageFormatted = carrierSummary.SaleNet == 0 ? "" : (carrierSummary.SaleNet.HasValue) ? ReportHelpers.FormatNumberPercentage(((1 - carrierSummary.CostNet / carrierSummary.SaleNet))) : "-100%";
+                    carrierSummary.ProfitPercentageFormatted = carrierSummary.SaleNet == 0 ? "" : (carrierSummary.SaleNet.HasValue) ? ReportHelpers.FormatNumberPercentage(carrierSummary.Profit / carrierSummary.SaleNet) : "-100%";
 
 
                     listCarrierSummaryDetailed.Add(carrierSummary);
