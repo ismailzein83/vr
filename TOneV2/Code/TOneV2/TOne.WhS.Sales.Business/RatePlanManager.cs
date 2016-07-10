@@ -19,7 +19,7 @@ namespace TOne.WhS.Sales.Business
 
         IRatePlanDataManager _dataManager;
         RoutingProductManager _routingProductManager;
-        
+
         #endregion
 
         #region Constructors
@@ -29,7 +29,7 @@ namespace TOne.WhS.Sales.Business
             _dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
             _routingProductManager = new RoutingProductManager();
         }
-        
+
         #endregion
 
         #region Public Methods
@@ -229,13 +229,13 @@ namespace TOne.WhS.Sales.Business
         public IEnumerable<CostCalculationMethodSetting> GetCostCalculationMethodTemplates()
         {
             var extensionConfigManager = new ExtensionConfigurationManager();
-            return extensionConfigManager.GetExtensionConfigurations<CostCalculationMethodSetting>(Constants.CostCalculationMethod);
+            return extensionConfigManager.GetExtensionConfigurations<CostCalculationMethodSetting>(Constants.CostCalculationMethod).OrderBy(x => x.Title);
         }
 
         public IEnumerable<RateCalculationMethodSetting> GetRateCalculationMethodTemplates()
         {
             var extensionConfigManager = new ExtensionConfigurationManager();
-            return extensionConfigManager.GetExtensionConfigurations<RateCalculationMethodSetting>(Constants.RateCalculationMethod);
+            return extensionConfigManager.GetExtensionConfigurations<RateCalculationMethodSetting>(Constants.RateCalculationMethod).OrderBy(x => x.Title);
         }
 
         public ChangesSummary GetChangesSummary(SalePriceListOwnerType ownerType, int ownerId)
@@ -314,7 +314,20 @@ namespace TOne.WhS.Sales.Business
             var stateManager = new StateManager();
             return stateManager.GetChanges(ownerType, ownerId);
         }
-        
+
+        public bool SyncTempDataWithDB(long processInstanceId, int? salePriceListId, SalePriceListOwnerType ownerType, int ownerId, int currencyId, DateTime effectiveOn)
+        {
+            var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+            return ratePlanDataManager.SyncTempDataWithDB(processInstanceId, salePriceListId, ownerType, ownerId, currencyId, effectiveOn);
+        }
+
+        public long ReserveSaleEntityRoutingProductIdRange(int numberOfIds)
+        {
+            long startingId;
+            IDManager.Instance.ReserveIDRange(this.GetType(), numberOfIds, out startingId);
+            return startingId;
+        }
+
         #endregion
 
         #region Common Private Methods

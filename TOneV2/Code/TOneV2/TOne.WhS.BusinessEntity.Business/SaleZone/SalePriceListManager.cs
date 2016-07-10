@@ -35,6 +35,13 @@ namespace TOne.WhS.BusinessEntity.Business
             return salePriceList;
         }
 
+        public long ReserveIdRange(int numberOfIds)
+        {
+            long startingId;
+            IDManager.Instance.ReserveIDRange(this.GetType(), numberOfIds, out startingId);
+            return startingId;
+        }
+
         #endregion
 
         #region  Private Members

@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
     public class RateToChange : Vanrise.Entities.IDateEffectiveSettings
     {
+        public long ZoneId { get; set; }
+
         public string ZoneName { get; set; }
 
         public Decimal NormalRate { get; set; }
 
-        public Decimal? RecentNormalRate { get; set; }
+        public ExistingRate RecentExistingRate { get; set; }
 
         public Dictionary<int, Decimal> OtherRates { get; set; }
 
@@ -44,11 +47,11 @@ namespace TOne.WhS.Sales.Entities
         }
     }
 
-    public enum RateChangeType
-    {
-        New = 0,
-        Increase = 1,
-        Decrease = 2,
-        Close = 3
-    }
+    //public enum RateChangeType
+    //{
+    //    New = 0,
+    //    Increase = 1,
+    //    Decrease = 2,
+    //    Close = 3
+    //}
 }

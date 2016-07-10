@@ -7,7 +7,7 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public class ExistingSaleZoneRoutingProduct
+    public class ExistingSaleZoneRoutingProduct : Vanrise.Entities.IDateEffectiveSettings
     {
         public SaleZoneRoutingProduct SaleZoneRoutingProductEntity { get; set; }
 
@@ -21,6 +21,26 @@ namespace TOne.WhS.Sales.Entities
         public DateTime? EED
         {
             get { return ChangedSaleZoneRoutingProduct != null ? ChangedSaleZoneRoutingProduct.EED : SaleZoneRoutingProductEntity.EED; }
+        }
+    }
+
+    public class ExistingSaleZoneRoutingProductsByZoneName
+    {
+        private Dictionary<string, List<ExistingSaleZoneRoutingProduct>> _existingSaleZoneRoutingProductsByZoneName;
+
+        public ExistingSaleZoneRoutingProductsByZoneName()
+        {
+            _existingSaleZoneRoutingProductsByZoneName = new Dictionary<string, List<ExistingSaleZoneRoutingProduct>>();
+        }
+
+        public void Add(string key, List<ExistingSaleZoneRoutingProduct> value)
+        {
+            _existingSaleZoneRoutingProductsByZoneName.Add(key.ToLower(), value);
+        }
+
+        public bool TryGetValue(string key, out List<ExistingSaleZoneRoutingProduct> value)
+        {
+            return _existingSaleZoneRoutingProductsByZoneName.TryGetValue(key.ToLower(), out value);
         }
     }
 }

@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities
 {
-    
     public class NewDefaultRoutingProduct
     {
+        public int SaleEntityRoutingProductId { get; set; }
+
         public int RoutingProductId { get; set; }
 
         public DateTime BED { get; set; }

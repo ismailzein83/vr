@@ -8,6 +8,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class DefaultRoutingProduct
     {
+        public long SaleEntityRoutingProductId { get; set; }
+
         public SalePriceListOwnerType OwnerType { get; set; }
 
         public int OwnerId { get; set; }

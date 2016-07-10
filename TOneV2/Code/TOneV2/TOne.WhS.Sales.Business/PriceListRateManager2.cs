@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
 
@@ -10,11 +11,72 @@ namespace TOne.WhS.Sales.Business
 {
     public class PriceListRateManager2
     {
+        #region Public Methods
+
         public void ProcessCountryRates(IProcessRatesContext context)
         {
             ProcessRates(context.RatesToChange, context.RatesToClose, context.ExistingRates, context.ExistingZones);
-            context.NewRates = context.RatesToChange.SelectMany(itm => itm.NewRates);
-            context.ChangedRates = context.ExistingRates.Where(itm => itm.ChangedRate != null).Select(itm => itm.ChangedRate);
+            if (context.RatesToChange != null)
+                context.NewRates = context.RatesToChange.SelectMany(itm => itm.NewRates);
+            if (context.ExistingRates != null)
+                context.ChangedRates = context.ExistingRates.Where(itm => itm.ChangedRate != null).Select(itm => itm.ChangedRate);
+        }
+        
+        #endregion
+
+        #region Private Methods
+
+        private void ProcessRates(IEnumerable<RateToChange> ratesToChange, IEnumerable<RateToClose> ratesToClose, IEnumerable<ExistingRate> existingRates, IEnumerable<ExistingZone> existingZones)
+        {
+            ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
+            ExistingRatesByZoneName existingRatesByZoneName = StructureExistingRatesByZoneName(existingRates);
+
+            if (ratesToChange != null)
+            {
+                foreach (RateToChange rateToChange in ratesToChange)
+                {
+                    //List<NewRate> ratesToAdd = new List<NewRate>();
+                    List<ExistingRate> matchExistingRates;
+                    if (existingRatesByZoneName.TryGetValue(rateToChange.ZoneName, out matchExistingRates))
+                    {
+                        bool shouldNotAddRate;
+                        ExistingRate recentExistingRate;
+                        CloseExistingOverlapedRates(rateToChange, matchExistingRates, out shouldNotAddRate, out recentExistingRate);
+                        if (!shouldNotAddRate)
+                        {
+                            if (recentExistingRate != null)
+                            {
+                                if (rateToChange.NormalRate > recentExistingRate.RateEntity.NormalRate)
+                                    rateToChange.ChangeType = RateChangeType.Increase;
+                                else if (rateToChange.NormalRate < recentExistingRate.RateEntity.NormalRate)
+                                    rateToChange.ChangeType = RateChangeType.Decrease;
+
+                                rateToChange.RecentExistingRate = recentExistingRate;
+                            }
+                            else
+                            {
+                                rateToChange.ChangeType = RateChangeType.New;
+                            }
+                            ProcessRateToChange(rateToChange, existingZonesByName);
+                        }
+                    }
+                    else
+                    {
+                        rateToChange.ChangeType = RateChangeType.New;
+                        ProcessRateToChange(rateToChange, existingZonesByName);
+                    }
+                }
+            }
+
+            if (ratesToClose != null)
+            {
+                foreach (RateToClose rateToClose in ratesToClose)
+                {
+                    List<ExistingRate> matchExistingRates;
+                    if (existingRatesByZoneName.TryGetValue(rateToClose.ZoneName, out matchExistingRates))
+                        CloseExistingRates(rateToClose, matchExistingRates);
+                }
+            }
         }
 
         private ExistingZonesByName StructureExistingZonesByName(IEnumerable<ExistingZone> existingZones)
@@ -42,71 +104,33 @@ namespace TOne.WhS.Sales.Business
             ExistingRatesByZoneName existingRatesByZoneName = new ExistingRatesByZoneName();
             List<ExistingRate> existingRatesList = null;
 
-            foreach (ExistingRate item in existingRates)
+            if (existingRates != null)
             {
-                if (!existingRatesByZoneName.TryGetValue(item.ParentZone.Name, out existingRatesList))
+                foreach (ExistingRate item in existingRates)
                 {
-                    existingRatesList = new List<ExistingRate>();
-                    existingRatesByZoneName.Add(item.ParentZone.Name, existingRatesList);
-                }
-
-                existingRatesList.Add(item);
-            }
-
-            return existingRatesByZoneName;  
-        }
-
-        private void ProcessRates(IEnumerable<RateToChange> ratesToChange, IEnumerable<RateToClose> ratesToClose, IEnumerable<ExistingRate> existingRates, IEnumerable<ExistingZone> existingZones)
-        {
-            ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
-            ExistingRatesByZoneName existingRatesByZoneName = StructureExistingRatesByZoneName(existingRates);
-            
-            foreach (RateToChange rateToChange in ratesToChange)
-            {
-                List<NewRate> ratesToAdd = new List<NewRate>();
-                List<ExistingRate> matchExistingRates;
-                if (existingRatesByZoneName.TryGetValue(rateToChange.ZoneName, out matchExistingRates))
-                {
-                    bool shouldNotAddRate;
-                    Decimal? recentRateValue;
-                    CloseExistingOverlapedRates(rateToChange, matchExistingRates, out shouldNotAddRate, out recentRateValue);
-                    if (!shouldNotAddRate)
+                    if (!existingRatesByZoneName.TryGetValue(item.ParentZone.Name, out existingRatesList))
                     {
-                        if (recentRateValue.HasValue)
-                        {
-                            rateToChange.ChangeType = rateToChange.NormalRate > recentRateValue.Value ? RateChangeType.Increase : RateChangeType.Decrease;
-                            rateToChange.RecentNormalRate = recentRateValue;
-                        }
-                        else
-                        {
-                            rateToChange.ChangeType = RateChangeType.New;
-                        }
-                        ProcessRateToChange(rateToChange, existingZonesByName);
+                        existingRatesList = new List<ExistingRate>();
+                        existingRatesByZoneName.Add(item.ParentZone.Name, existingRatesList);
                     }
-                }
-                else
-                {
-                    rateToChange.ChangeType = RateChangeType.New;
-                    ProcessRateToChange(rateToChange, existingZonesByName);
+
+                    existingRatesList.Add(item);
                 }
             }
 
-            foreach (RateToClose rateToClose in ratesToClose)
-            {
-                List<ExistingRate> matchExistingRates;
-                if (existingRatesByZoneName.TryGetValue(rateToClose.ZoneName, out matchExistingRates))
-                    CloseExistingRates(rateToClose, matchExistingRates);
-            }
+            return existingRatesByZoneName;
         }
 
-        private void CloseExistingOverlapedRates(RateToChange rateToChange, List<ExistingRate> matchExistingRates, out bool shouldNotAddRate, out Decimal? recentRateValue)
+        #region Process Rates To Change
+
+        private void CloseExistingOverlapedRates(RateToChange rateToChange, List<ExistingRate> matchExistingRates, out bool shouldNotAddRate, out ExistingRate recentExistingRate)
         {
             shouldNotAddRate = false;
-            recentRateValue = null;
+            recentExistingRate = null;
             foreach (var existingRate in matchExistingRates)
             {
-                if (existingRate.RateEntity.BED < rateToChange.BED)
-                    recentRateValue = existingRate.RateEntity.NormalRate;
+                if (existingRate.RateEntity.BED <= rateToChange.BED)
+                    recentExistingRate = existingRate;
                 if (existingRate.IsOverlapedWith(rateToChange))
                 {
                     DateTime existingRateEED = Utilities.Max(rateToChange.BED, existingRate.BED);
@@ -125,7 +149,7 @@ namespace TOne.WhS.Sales.Business
         {
             List<ExistingZone> matchExistingZones;
             existingZones.TryGetValue(rateToChange.ZoneName, out matchExistingZones);
-            
+
 
             DateTime currentRateBED = rateToChange.BED;
             bool shouldAddMoreRates = true;
@@ -164,38 +188,44 @@ namespace TOne.WhS.Sales.Business
             rateToChange.NewRates.Add(newRate);
         }
 
-        private bool SameRates(RateToChange importedRate, ExistingRate existingRate)
-        {
-            return importedRate.BED == existingRate.RateEntity.BED
-               && importedRate.NormalRate == existingRate.RateEntity.NormalRate
-               && importedRate.CurrencyId == existingRate.RateEntity.CurrencyId
-               //TODO: compare CurrencyId of the Pricelists
-               && SameRateOtherRates(importedRate, existingRate);
-        }
+        #endregion
 
-        private bool SameRateOtherRates(RateToChange importedRate, ExistingRate existingRate)
-        {
-            int importedRatesCount = importedRate.OtherRates != null ? importedRate.OtherRates.Count : 0;
-            int existingRatesCount = existingRate.RateEntity.OtherRates != null ? existingRate.RateEntity.OtherRates.Count : 0;
-            if (importedRatesCount != existingRatesCount)
-                return false;
-            if (importedRatesCount == 0)
-                return true;
-            //if rates Count is > 0, then both dictionaries are not null
+        #region Process Rates To Close
 
-            foreach(var importedRateEntry in importedRate.OtherRates)
-            {
-                Decimal matchExistingRate;
-                if (!existingRate.RateEntity.OtherRates.TryGetValue(importedRateEntry.Key, out matchExistingRate) || importedRateEntry.Value != matchExistingRate)
-                    return false;
-            }
-            return true;
-        }
+        //private bool SameRates(RateToChange importedRate, ExistingRate existingRate)
+        //{
+        //    return importedRate.BED == existingRate.RateEntity.BED
+        //       && importedRate.NormalRate == existingRate.RateEntity.NormalRate
+        //       && importedRate.CurrencyId == existingRate.RateEntity.CurrencyId
+        //        //TODO: compare CurrencyId of the Pricelists
+        //       && SameRateOtherRates(importedRate, existingRate);
+        //}
+
+        //private bool SameRateOtherRates(RateToChange importedRate, ExistingRate existingRate)
+        //{
+        //    int importedRatesCount = importedRate.OtherRates != null ? importedRate.OtherRates.Count : 0;
+        //    int existingRatesCount = existingRate.RateEntity.OtherRates != null ? existingRate.RateEntity.OtherRates.Count : 0;
+        //    if (importedRatesCount != existingRatesCount)
+        //        return false;
+        //    if (importedRatesCount == 0)
+        //        return true;
+        //    //if rates Count is > 0, then both dictionaries are not null
+
+        //    foreach (var importedRateEntry in importedRate.OtherRates)
+        //    {
+        //        Decimal matchExistingRate;
+        //        if (!existingRate.RateEntity.OtherRates.TryGetValue(importedRateEntry.Key, out matchExistingRate) || importedRateEntry.Value != matchExistingRate)
+        //            return false;
+        //    }
+        //    return true;
+        //}
 
         private void CloseExistingRates(RateToClose rateToClose, List<ExistingRate> matchExistingRates)
         {
-            foreach (var existingRate in matchExistingRates)
+            foreach (var existingRate in matchExistingRates.OrderBy(x => x.BED))
             {
+                rateToClose.Rate = existingRate.RateEntity.NormalRate; // rateToClose.Rate is displayed in the preview page
+
                 if (existingRate.EED.VRGreaterThan(rateToClose.CloseEffectiveDate))
                 {
                     existingRate.ChangedRate = new ChangedRate
@@ -207,5 +237,9 @@ namespace TOne.WhS.Sales.Business
                 }
             }
         }
+
+        #endregion
+
+        #endregion
     }
 }

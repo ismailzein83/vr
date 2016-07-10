@@ -621,8 +621,8 @@
                 var getSystemCurrencyIdPromise = getSystemCurrencyId();
                 promises.push(getSystemCurrencyIdPromise);
 
-                var createNewProcessDeferred = UtilsService.createPromiseDeferred();
-                promises.push(createNewProcessDeferred.promise);
+                var createProcessDeferred = UtilsService.createPromiseDeferred();
+                promises.push(createProcessDeferred.promise);
 
                 getSystemCurrencyIdPromise.then(function ()
                 {
@@ -630,7 +630,8 @@
                         $type: 'TOne.WhS.Sales.BP.Arguments.RatePlanInput, TOne.WhS.Sales.BP.Arguments',
                         OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
                         OwnerId: getOwnerId(),
-                        CurrencyId: systemCurrencyId
+                        CurrencyId: systemCurrencyId,
+                        EffectiveDate: new Date()
                     };
 
                     var input = {
@@ -639,11 +640,20 @@
 
                     BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response)
                     {
-                        createNewProcessDeferred.resolve();
-                        if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value)
-                            BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId);
+                        createProcessDeferred.resolve();
+                        if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
+
+                            var processTrackingContext = {
+                                onClose: function () {
+                                    VRNotificationService.showSuccess("Price list saved");
+                                    loadRatePlan();
+                                }
+                            };
+
+                            BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, processTrackingContext);
+                        }
                     }).catch(function (error) {
-                        createNewProcessDeferred.reject(error);
+                        createProcessDeferred.reject(error);
                     });
                 });
 

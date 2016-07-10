@@ -8,6 +8,8 @@ namespace TOne.WhS.Sales.Entities
 {
     public class NewSaleZoneRoutingProduct
     {
+        public long SaleEntityRoutingProductId { get; set; }
+
         public int RoutingProductId { get; set; }
 
         public long SaleZoneId { get; set; }

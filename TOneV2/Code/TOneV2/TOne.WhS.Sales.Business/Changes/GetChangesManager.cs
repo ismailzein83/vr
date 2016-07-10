@@ -56,7 +56,7 @@ namespace TOne.WhS.Sales.Business
                     {
                         IEnumerable<SaleEntityZoneRate> currentZoneRates = GetCurrentRatesByZoneIds(newRates.MapRecords(itm => itm.ZoneId));
 
-                        foreach (DraftNewRate newRate in newRates)
+                        foreach (DraftRateToChange newRate in newRates)
                         {
                             var currentRate = currentZoneRates.FindRecord(itm => itm.Rate.ZoneId == newRate.ZoneId);
 
@@ -126,14 +126,14 @@ namespace TOne.WhS.Sales.Business
                         if (detail.CurrentRate != null && detail.NewRate != null)
                         {
                             if (detail.NewRate > detail.CurrentRate)
-                                detail.ChangeType = Entities.RateChangeType.Increase;
+                                detail.ChangeType = RateChangeType.Increase;
                             else if (detail.NewRate < detail.CurrentRate)
-                                detail.ChangeType = Entities.RateChangeType.Decrease;
+                                detail.ChangeType = RateChangeType.Decrease;
                         }
                         else if (detail.NewRate != null)
-                            detail.ChangeType = Entities.RateChangeType.New;
+                            detail.ChangeType = RateChangeType.New;
                         else
-                            detail.ChangeType = Entities.RateChangeType.Close;
+                            detail.ChangeType = RateChangeType.Deleted;
 
                         details.Add(detail);
                     }

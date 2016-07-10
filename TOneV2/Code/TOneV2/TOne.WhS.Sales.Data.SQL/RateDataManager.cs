@@ -26,7 +26,7 @@ namespace TOne.WhS.Sales.Data.SQL
 
         #region Public Methods
 
-        public bool CloseRates(IEnumerable<Entities.DraftChangedRate> rateChanges)
+        public bool CloseRates(IEnumerable<Entities.DraftRateToClose> rateChanges)
         {
             DataTable rateChangesTable = BuildRateChangesTable(rateChanges);
 
@@ -40,7 +40,7 @@ namespace TOne.WhS.Sales.Data.SQL
             return affectedRows > 0;
         }
 
-        public bool InsertRates(IEnumerable<Entities.DraftNewRate> newRates, int priceListId)
+        public bool InsertRates(IEnumerable<Entities.DraftRateToChange> newRates, int priceListId)
         {
             DataTable newRatesTable = BuildNewRatesTable(newRates, priceListId);
 
@@ -58,7 +58,7 @@ namespace TOne.WhS.Sales.Data.SQL
 
         #region Private Methods
 
-        DataTable BuildNewRatesTable(IEnumerable<DraftNewRate> newRates, int priceListId)
+        DataTable BuildNewRatesTable(IEnumerable<DraftRateToChange> newRates, int priceListId)
         {
             DataTable table = new DataTable();
 
@@ -72,7 +72,7 @@ namespace TOne.WhS.Sales.Data.SQL
 
             table.BeginLoadData();
 
-            foreach (DraftNewRate newRate in newRates)
+            foreach (DraftRateToChange newRate in newRates)
             {
                 DataRow row = table.NewRow();
                 row["ZoneID"] = newRate.ZoneId;
@@ -93,7 +93,7 @@ namespace TOne.WhS.Sales.Data.SQL
             return table;
         }
 
-        DataTable BuildRateChangesTable(IEnumerable<DraftChangedRate> rateChanges)
+        DataTable BuildRateChangesTable(IEnumerable<DraftRateToClose> rateChanges)
         {
             DataTable table = new DataTable();
 
@@ -102,7 +102,7 @@ namespace TOne.WhS.Sales.Data.SQL
 
             table.BeginLoadData();
 
-            foreach (DraftChangedRate rateChange in rateChanges)
+            foreach (DraftRateToClose rateChange in rateChanges)
             {
                 DataRow row = table.NewRow();
                 row["RateID"] = rateChange.RateId;

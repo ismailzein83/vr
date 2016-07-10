@@ -6,16 +6,9 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public class DefaultRoutingProductToAdd
+    public class DefaultRoutingProductToAdd : Vanrise.Entities.IDateEffectiveSettings
     {
-        NewDefaultRoutingProduct _newDefaultRoutingProduct = new NewDefaultRoutingProduct();
-        public NewDefaultRoutingProduct NewDefaultRoutingProduct
-        {
-            get
-            {
-                return _newDefaultRoutingProduct;
-            }
-        }
+        public NewDefaultRoutingProduct NewDefaultRoutingProduct { get; set; }
 
         List<ExistingDefaultRoutingProduct> _changedExistingDefaultRoutingProducts = new List<ExistingDefaultRoutingProduct>();
 

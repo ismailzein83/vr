@@ -311,14 +311,16 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             }
         }
 
-        function applyChanges(zoneChanges, zoneItem) {
-            if (zoneItem.IsDirty) {
+        function applyChanges(zoneChanges, zoneItem)
+        {
+            if (zoneItem.IsDirty)
+            {
                 var zoneItemChanges = {
                     ZoneId: zoneItem.ZoneId
                 };
 
-                setNewRate(zoneItemChanges, zoneItem);
-                setRateChange(zoneItemChanges, zoneItem);
+                setDraftRateToChange(zoneItemChanges, zoneItem);
+                setDraftRateToClose(zoneItemChanges, zoneItem);
 
                 for (var i = 0; i < zoneItem.drillDownExtensionObject.drillDownDirectiveTabs.length; i++) {
                     var item = zoneItem.drillDownExtensionObject.drillDownDirectiveTabs[i];
@@ -330,7 +332,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 zoneChanges.push(zoneItemChanges);
             }
 
-            function setNewRate(zoneChanges, zoneItem) {
+            function setDraftRateToChange(zoneChanges, zoneItem) {
                 zoneChanges.NewRate = null;
 
                 if (zoneItem.NewRate) {
@@ -342,8 +344,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     };
                 }
             }
-
-            function setRateChange(zoneChanges, zoneItem) {
+            function setDraftRateToClose(zoneChanges, zoneItem) {
                 zoneChanges.RateChange = null;
                 
                 if (zoneItem.IsCurrentRateEditable && !compareDates(zoneItem.CurrentRateEED, zoneItem.currentRateEED)) {

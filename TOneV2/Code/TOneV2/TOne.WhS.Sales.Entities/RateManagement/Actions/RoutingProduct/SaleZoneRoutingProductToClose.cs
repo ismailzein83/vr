@@ -8,10 +8,14 @@ namespace TOne.WhS.Sales.Entities
 {
     public class SaleZoneRoutingProductToClose
     {
+        public long ZoneId { get; set; }
+
+        public string ZoneName { get; set; }
+        
         public DateTime CloseEffectiveDate { get; set; }
-
+        
         List<ExistingSaleZoneRoutingProduct> _changedExistingSaleZoneRoutingProducts = new List<ExistingSaleZoneRoutingProduct>();
-
+        
         public List<ExistingSaleZoneRoutingProduct> ChangedExistingSaleZoneRoutingProducts
         {
             get

@@ -1,0 +1,12 @@
+﻿<vr-datagrid datasource="scopeModel.ratePreviews"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions">
+    <vr-datagridcolumn headertext="'Zone'" field="'Entity.ZoneName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Current Rate'" field="'Entity.CurrentRate'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'New Rate'" field="'Entity.NewRate'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Change Type'" field="'ChangeTypeDescription'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Effective On'" field="'Entity.EffectiveOn'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Effective Until'" field="'Entity.EffectiveUntil'" type="'Datetime'"></vr-datagridcolumn>
+</vr-datagrid>

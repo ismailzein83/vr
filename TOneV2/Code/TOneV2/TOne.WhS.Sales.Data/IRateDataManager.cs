@@ -9,7 +9,7 @@ namespace TOne.WhS.Sales.Data
 {
     public interface IRateDataManager : IDataManager
     {
-        bool CloseRates(IEnumerable<DraftChangedRate> rateChanges);
-        bool InsertRates(IEnumerable<DraftNewRate> newRates, int priceListId);
+        bool CloseRates(IEnumerable<DraftRateToClose> rateChanges);
+        bool InsertRates(IEnumerable<DraftRateToChange> newRates, int priceListId);
     }
 }

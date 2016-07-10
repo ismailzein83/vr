@@ -10,7 +10,7 @@ namespace TOne.WhS.Sales.Business
 {
     public class PriceListRateManager
     {
-        public void ProcessNewRate(DraftNewRate newRate, IEnumerable<ExistingRate> existingZoneRates)
+        public void ProcessNewRate(DraftRateToChange newRate, IEnumerable<ExistingRate> existingZoneRates)
         {
             if(existingZoneRates != null)
             {

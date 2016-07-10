@@ -8,7 +8,7 @@ namespace TOne.WhS.Sales.Entities
 {
     public class ChangedSaleZoneRoutingProduct
     {
-        public int RoutingProductId { get; set; }
+        public long SaleEntityRoutingProductId { get; set; }
 
         public DateTime? EED { get; set; }
     }

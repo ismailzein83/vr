@@ -7,7 +7,7 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public class ExistingDefaultRoutingProduct
+    public class ExistingDefaultRoutingProduct : Vanrise.Entities.IDateEffectiveSettings
     {
         public DefaultRoutingProduct DefaultRoutingProductEntity { get; set; }
 

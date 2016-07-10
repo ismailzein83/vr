@@ -6,9 +6,9 @@ namespace TOne.WhS.Sales.Entities
     {
         public long ZoneId { get; set; }
 
-        public DraftNewRate NewRate { get; set; }
+        public DraftRateToChange NewRate { get; set; }
 
-        public DraftChangedRate RateChange { get; set; }
+        public DraftRateToClose RateChange { get; set; }
 
         public DraftNewSaleZoneRoutingProduct NewRoutingProduct { get; set; }
 

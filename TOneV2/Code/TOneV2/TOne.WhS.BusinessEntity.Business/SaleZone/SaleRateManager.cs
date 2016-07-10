@@ -19,15 +19,17 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             throw new NotImplementedException();
         }
-        public List<SaleRate> GetSaleRates(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
-        {
-            throw new NotImplementedException();
-        }
 
         public List<SaleRate> GetSaleRatesEffectiveAfter(int sellingNumberPlanId, DateTime minimumDate)
         {
             ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
             return dataManager.GetSaleRatesEffectiveAfter(sellingNumberPlanId, minimumDate);
+        }
+
+        public IEnumerable<SaleRate> GetSaleRatesEffectiveAfter(SalePriceListOwnerType ownerType, int ownerId, DateTime minimumDate)
+        {
+            ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+            return dataManager.GetSaleRatesEffectiveAfter(ownerType, ownerId, minimumDate);
         }
 
         public Vanrise.Entities.IDataRetrievalResult<SaleRateDetail> GetFilteredSaleRates(Vanrise.Entities.DataRetrievalInput<SaleRateQuery> input)
@@ -110,6 +112,13 @@ namespace TOne.WhS.BusinessEntity.Business
         public Type GetSaleRateType()
         {
             return this.GetType();
+        }
+
+        public long ReserveIdRange(int numberOfIds)
+        {
+            long startingId;
+            IDManager.Instance.ReserveIDRange(this.GetType(), numberOfIds, out startingId);
+            return startingId;
         }
 
         #endregion

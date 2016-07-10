@@ -12,7 +12,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SaleEntityRoutingProductDataManager : Vanrise.Data.SQL.BaseSQLDataManager, ISaleEntityRoutingProductDataManager
     {
-
         #region ctor/Local Variables
         public SaleEntityRoutingProductDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
@@ -64,7 +63,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return base.IsDataUpdated("TOneWhS_BE.SaleEntityRoutingProduct", ref updateHandle);
         }
-
+        public IEnumerable<DefaultRoutingProduct> GetDefaultRoutingProductsEffectiveAfter(SalePriceListOwnerType ownerType, int ownerId, DateTime minimumDate)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetDefaultRoutingProductsEffectiveAfter", DefaultRoutingProductMapper, ownerType, ownerId, minimumDate);
+        }
+        public IEnumerable<SaleZoneRoutingProduct> GetSaleZoneRoutingProductsEffectiveAfter(SalePriceListOwnerType ownerType, int ownerId, DateTime minimumDate)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetSaleZoneRoutingProductsEffectiveAfter", SaleZoneRoutingProductMapper, ownerType, ownerId, minimumDate);
+        }
         #endregion
 
         #region Private Methods
@@ -76,6 +82,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return new DefaultRoutingProduct()
             {
+                SaleEntityRoutingProductId = (long)reader["ID"],
                 RoutingProductId = GetReaderValue<Int32>(reader, "RoutingProductID"),
                 OwnerType = GetReaderValue<SalePriceListOwnerType>(reader, "OwnerType"),
                 OwnerId = (int)reader["OwnerID"],
@@ -88,6 +95,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return new SaleZoneRoutingProduct()
             {
+                SaleEntityRoutingProductId = (long)reader["ID"],
                 RoutingProductId = GetReaderValue<Int32>(reader, "RoutingProductID"),
                 OwnerType = GetReaderValue<SalePriceListOwnerType>(reader, "OwnerType"),
                 OwnerId = (int)reader["OwnerID"],
@@ -95,7 +103,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
                 SaleZoneId = GetReaderValue<long>(reader, "ZoneID")
             };
-
         }
 
         #endregion

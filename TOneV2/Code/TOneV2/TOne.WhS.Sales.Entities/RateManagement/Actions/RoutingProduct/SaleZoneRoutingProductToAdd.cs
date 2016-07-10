@@ -6,19 +6,24 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public class SaleZoneRoutingProductToAdd
+    public class SaleZoneRoutingProductToAdd : Vanrise.Entities.IDateEffectiveSettings
     {
-        NewSaleZoneRoutingProduct _newSaleZoneRoutingProduct = new NewSaleZoneRoutingProduct();
-        public NewSaleZoneRoutingProduct NewSaleZoneRoutingProduct
+        public long ZoneId { get; set; }
+        public string ZoneName { get; set; }
+        public int ZoneRoutingProductId { get; set; }
+        public DateTime BED { get; set; }
+        public DateTime? EED { get; set; }
+
+        private List<NewSaleZoneRoutingProduct> _newSaleZoneRoutingProducts = new List<NewSaleZoneRoutingProduct>();
+        public List<NewSaleZoneRoutingProduct> NewSaleZoneRoutingProducts
         {
             get
             {
-                return _newSaleZoneRoutingProduct;
+                return _newSaleZoneRoutingProducts;
             }
         }
 
-        List<ExistingSaleZoneRoutingProduct> _changedExistingSaleZoneRoutingProducts = new List<ExistingSaleZoneRoutingProduct>();
-
+        private List<ExistingSaleZoneRoutingProduct> _changedExistingSaleZoneRoutingProducts = new List<ExistingSaleZoneRoutingProduct>();
         public List<ExistingSaleZoneRoutingProduct> ChangedExistingSaleZoneRoutingProducts
         {
             get
@@ -26,9 +31,5 @@ namespace TOne.WhS.Sales.Entities
                 return _changedExistingSaleZoneRoutingProducts;
             }
         }
-
-        public DateTime BED { get; set; }
-
-        public DateTime? EED { get; set; }
     }
 }

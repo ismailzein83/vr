@@ -15,6 +15,8 @@ namespace TOne.WhS.Sales.BP.Arguments
 
         public int CurrencyId { get; set; }
 
+        public DateTime EffectiveDate { get; set; }
+
         public override string GetTitle()
         {
             string ownerTypeDescription = Vanrise.Common.Utilities.GetEnumDescription(this.OwnerType);

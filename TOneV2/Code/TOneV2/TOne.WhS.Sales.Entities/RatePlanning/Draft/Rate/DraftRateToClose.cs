@@ -7,7 +7,7 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public class DraftChangedRate
+    public class DraftRateToClose
     {
         public long RateId { get; set; }
 

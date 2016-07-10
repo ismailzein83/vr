@@ -71,13 +71,19 @@
     <Compile Include="RateManagement\Actions\RoutingProduct\DefaultRoutingProductToClose.cs" />
     <Compile Include="RateManagement\Actions\RoutingProduct\SaleZoneRoutingProductToAdd.cs" />
     <Compile Include="RateManagement\Actions\RoutingProduct\SaleZoneRoutingProductToClose.cs" />
+    <Compile Include="RateManagement\Preview\RatePlanPreviewQuery.cs" />
+    <Compile Include="RateManagement\Preview\RatePlanPreviewSummary.cs" />
+    <Compile Include="RateManagement\Preview\RatePreview.cs" />
+    <Compile Include="RateManagement\Preview\SaleZoneRoutingProductPreview.cs" />
     <Compile Include="RateManagement\Rate\ChangedRate.cs" />
     <Compile Include="RateManagement\Rate\ExistingRate.cs" />
     <Compile Include="RateManagement\Rate\IProcessRatesContext.cs" />
     <Compile Include="RateManagement\Rate\NewRate.cs" />
     <Compile Include="RateManagement\RoutingProduct\Default\ChangedDefaultRoutingProduct.cs" />
+    <Compile Include="RateManagement\RoutingProduct\Default\IProcessDefaultRoutingProductContext.cs" />
     <Compile Include="RateManagement\RoutingProduct\Zone\ChangedSaleZoneRoutingProduct.cs" />
     <Compile Include="RateManagement\RoutingProduct\Zone\ExistingSaleZoneRoutingProduct.cs" />
+    <Compile Include="RateManagement\RoutingProduct\Zone\IProcessZoneRoutingProductsContext.cs" />
     <Compile Include="RatePlanning\Draft\RoutingProduct\Default\DraftChangedDefaultRoutingProduct.cs" />
     <Compile Include="RatePlanning\Draft\RoutingProduct\Default\DraftNewDefaultRoutingProduct.cs" />
     <Compile Include="RateManagement\RoutingProduct\Default\ExistingDefaultRoutingProduct.cs" />
@@ -89,7 +95,7 @@
     <Compile Include="RatePlanning\DefaultChanges.cs" />
     <Compile Include="RatePlanning\BaseChanges.cs" />
     <Compile Include="RatePlanning\Changes.cs" />
-    <Compile Include="RatePlanning\Draft\Rate\DraftNewRate.cs" />
+    <Compile Include="RatePlanning\Draft\Rate\DraftRateToChange.cs" />
     <Compile Include="RatePlanning\Enums.cs" />
     <Compile Include="RatePlanning\Input\ApplyCalculatedRatesInput.cs" />
     <Compile Include="RatePlanning\Input\ZoneItemInput.cs" />
@@ -97,7 +103,7 @@
     <Compile Include="RatePlanning\Input\ZoneItemsInput.cs" />
     <Compile Include="RatePlanning\Input\ZoneRateChangesQuery.cs" />
     <Compile Include="RatePlanning\Input\ZoneRoutingProductChangesQuery.cs" />
-    <Compile Include="RatePlanning\Draft\Rate\DraftChangedRate.cs" />
+    <Compile Include="RatePlanning\Draft\Rate\DraftRateToClose.cs" />
     <Compile Include="RatePlanning\DefaultItem.cs" />
     <Compile Include="RatePlanning\ChangesSummary.cs" />
     <Compile Include="RatePlanning\ServiceChanges.cs" />

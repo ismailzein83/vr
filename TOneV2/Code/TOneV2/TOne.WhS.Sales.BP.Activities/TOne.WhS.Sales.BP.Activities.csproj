@@ -37,14 +37,27 @@
     <Reference Include="System" />
     <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.DurableInstancing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Caching">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -56,14 +69,45 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GetActionsFromChanges.cs" />
+    <Compile Include="ApplyRatePlanPreviewSummaryToDB.cs" />
+    <Compile Include="ApplyRatePreviewsToDB.cs" />
+    <Compile Include="ApplySaleZoneRoutingProductPreviewsToDB.cs" />
+    <Compile Include="PrepareRatePlanPreviewSummary.cs" />
+    <Compile Include="PrepareRatePreviews.cs" />
+    <Compile Include="PrepareSaleZoneRoutingProductPreviews.cs" />
+    <Compile Include="ReserveSalePriceListId.cs" />
+    <Compile Include="ApplyChangedDefaultRoutingProductsToDB.cs" />
+    <Compile Include="ApplyChangedRatesToDB.cs" />
+    <Compile Include="ApplyChangedZoneRoutingProductsToDB.cs" />
+    <Compile Include="ApplyNewDefaultRoutingProductToDB.cs" />
+    <Compile Include="ApplyNewRatesToDB.cs" />
+    <Compile Include="ApplyNewSaleZoneRoutingProductsToDB.cs" />
+    <Compile Include="GetExistingSaleEntityZoneRoutingProducts.cs" />
+    <Compile Include="PrepareActions.cs" />
     <Compile Include="GetChanges.cs" />
+    <Compile Include="GetExistingSaleEntityDefaultRoutingProducts.cs" />
+    <Compile Include="GetExistingSaleRates.cs" />
+    <Compile Include="GetExistingSaleZones.cs" />
+    <Compile Include="PrepareExistingDefaultRoutingProducts.cs" />
+    <Compile Include="PrepareExistingRates.cs" />
+    <Compile Include="PrepareExistingSaleZoneRoutingProducts.cs" />
+    <Compile Include="PrepareExistingZones.cs" />
+    <Compile Include="ProcessDefaultRoutingProduct.cs" />
+    <Compile Include="ProcessRates.cs" />
+    <Compile Include="ProcessSaleZoneRoutingProducts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReserveIdsForNewEntities.cs" />
+    <Compile Include="SyncTempDataWithDB.cs" />
+    <Compile Include="UpdateState.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
       <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
       <Name>TOne.WhS.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Data\TOne.WhS.BusinessEntity.Data.csproj">
+      <Project>{616524aa-3c88-43e4-87da-2e2f2410fdbe}</Project>
+      <Name>TOne.WhS.BusinessEntity.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
@@ -72,6 +116,14 @@
     <ProjectReference Include="..\TOne.WhS.Sales.Business\TOne.WhS.Sales.Business.csproj">
       <Project>{101b3960-9114-451e-8344-4074998e32f6}</Project>
       <Name>TOne.WhS.Sales.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Sales.Data.SQL\TOne.WhS.Sales.Data.SQL.csproj">
+      <Project>{98c7047c-bdb9-4ae1-a8ae-3b544a3bd22e}</Project>
+      <Name>TOne.WhS.Sales.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Sales.Data\TOne.WhS.Sales.Data.csproj">
+      <Project>{49d742c7-dbc2-4ff5-9197-0c504076a2fe}</Project>
+      <Name>TOne.WhS.Sales.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Sales.Entities\TOne.WhS.Sales.Entities.csproj">
       <Project>{d604102b-eca7-4f50-b9a1-be46ee701dc0}</Project>

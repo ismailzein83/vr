@@ -15,6 +15,7 @@ namespace TOne.WhS.Sales.Data.SQL
     {
         public RatePlanDataManager() : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString")) { }
 
+        // Remove this method after finishing the workflow
         public bool InsertPriceList(SalePriceList priceList, out int priceListId)
         {
             object insertedId;
@@ -23,6 +24,14 @@ namespace TOne.WhS.Sales.Data.SQL
 
             priceListId = (int)insertedId;
 
+            return affectedRows > 0;
+        }
+
+        public bool InsertSalePriceList(SalePriceListOwnerType ownerType, int ownerId, int currencyId, DateTime effectiveOn, out int salePriceListId)
+        {
+            object insertedId;
+            int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_SalePriceList_Insert", out insertedId, ownerType, ownerId, currencyId);
+            salePriceListId = (int)insertedId;
             return affectedRows > 0;
         }
 
@@ -58,6 +67,12 @@ namespace TOne.WhS.Sales.Data.SQL
         {
             int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_RatePlan_CancelChanges", ownerType, ownerId);
             return affectedRows > 0;
+        }
+
+        public bool SyncTempDataWithDB(long processInstanceId, int? salePriceListId, SalePriceListOwnerType ownerType, int ownerId, int currencyId, DateTime effectiveOn)
+        {
+            int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_SalePriceList_SyncWithTempData", processInstanceId, salePriceListId, ownerType, ownerId, currencyId, effectiveOn);
+            return (affectedRows > 0);
         }
     }
 }
