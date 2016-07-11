@@ -1,12 +1,14 @@
 ﻿<vr-row removeline>
     <vr-columns width="1/2row" haschildcolumns>
         <vr-validator validate="ctrl.validate()">
-            <vr-columns width="1/2row">
-                <vr-textbox value="ctrl.fromRate" type="number" label="From Rate" isrequired minvalue="0"></vr-textbox>
-            </vr-columns>
-            <vr-columns width="1/2row">
-                <vr-textbox value="ctrl.toRate" type="number" label="To Rate" isrequired minvalue="0"></vr-textbox>
-            </vr-columns>
+            <div style="overflow:auto">
+                <vr-columns width="1/2row">
+                    <vr-textbox value="ctrl.fromRate" type="number" label="From Rate" isrequired minvalue="0"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="ctrl.toRate" type="number" label="To Rate" isrequired minvalue="0"></vr-textbox>
+                </vr-columns>
+            </div>
         </vr-validator>
     </vr-columns>
     <vr-columns width="1/4row">
