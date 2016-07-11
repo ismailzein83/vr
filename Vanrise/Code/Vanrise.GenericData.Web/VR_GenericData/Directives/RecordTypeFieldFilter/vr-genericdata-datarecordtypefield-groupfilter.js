@@ -41,7 +41,7 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                 };
                 ctrl.rules.push(rule);
             }
-            $scope.removeRule = function (rule) { 
+            $scope.removeRule = function (rule) {
                 ctrl.rules.splice(ctrl.rules.indexOf(rule), 1);
             }
 
@@ -75,59 +75,79 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
                     $scope.conditions = UtilsService.getArrayEnum(VR_GenericData_RecordQueryLogicalOperatorEnum);
                     if (payload != undefined) {
                         context = payload.context;
-                        
+
                         filterObj = payload.filterObj;
                         if (filterObj) {
-                            buildData(filterObj.Filters);
+                            buildData(filterObj.Filters, promises);
                             ctrl.condition = payload.filterObj.LogicalOperator;//UtilsService.getEnum(VR_GenericData_RecordQueryLogicalOperatorEnum, 'value', payload.filterObj.LogicalOperator).description;
-                            
+
                         }
                     }
+                    return UtilsService.waitMultiplePromises(promises);
                 }
 
-                var buildData = function (items) {
+                var buildData = function (items, promises) {
                     if (items) {
-                        
                         for (var x = 0; x < items.length; x++) {
                             var currentItem = items[x];
-                            if (currentItem.$type == 'Vanrise.GenericData.Entities.RecordFilterGroup, Vanrise.GenericData.Entities') {
-                                buildGroup(currentItem);
-                            }
-                            else {
-                                buildRule(currentItem);
-                            }
-                        }
-                    }
-                }
 
-                var buildRule = function (currentItem) {
-                    var rule = {
-                        onRuleFilterReady: function (api) {
                             var payload = {
                                 context: context,
                                 filterObj: currentItem
                             };
-                            api.load(payload);
-                            rule.api = api;
+
+                            var filterItem = {
+                                payload: payload,
+                                readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                            };
+                            promises.push(filterItem.loadPromiseDeferred.promise);
+
+                            if (currentItem.$type == 'Vanrise.GenericData.Entities.RecordFilterGroup, Vanrise.GenericData.Entities') {
+                                buildGroup(filterItem);
+                            }
+                            else {
+                                buildRule(filterItem);
+                            }
                         }
+                    }
+                }
+
+                var buildRule = function (filterItem) {
+                    var rule = {};
+                    var filterItemPayload = filterItem.payload;
+
+                    rule.onRuleFilterReady = function (api) {
+                        rule.api = api;
+                        filterItem.readyPromiseDeferred.resolve();
                     };
+
+                    filterItem.readyPromiseDeferred.promise
+                        .then(function () {
+                            VRUIUtilsService.callDirectiveLoad(rule.api, filterItemPayload, filterItem.loadPromiseDeferred);
+                        });
+
                     ctrl.rules.push(rule);
                 }
 
-                var buildGroup = function (currentItem) {
-                    var group = {
-                        onGroupFilterReady: function (api) {
-                            var payload = {
-                                context: context,
-                                filterObj: currentItem
-                            };
-                            api.load(payload);
-                            group.api = api;
-                        }
+                var buildGroup = function (filterItem) {
+
+                    var group = {};
+                    var filterItemPayload = filterItem.payload;
+
+                    group.onGroupFilterReady = function (api) {
+                        group.api = api;
+                        filterItem.readyPromiseDeferred.resolve();
                     };
+
+                    filterItem.readyPromiseDeferred.promise
+                        .then(function () {
+                            VRUIUtilsService.callDirectiveLoad(group.api, filterItemPayload, filterItem.loadPromiseDeferred);
+                        });
 
                     ctrl.groups.push(group);
                 }
