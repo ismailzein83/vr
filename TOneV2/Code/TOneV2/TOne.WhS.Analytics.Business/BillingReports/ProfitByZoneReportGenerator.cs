@@ -27,7 +27,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     ParentDimensions = new List<string>(),
                     Filters = new List<DimensionFilter>()
                 },
-                SortByColumnName = "DimensionValues[0].Name"
+                SortByColumnName = "DimensionValues[1].Name"
             };
 
             if (parameters.GroupByCustomer)
