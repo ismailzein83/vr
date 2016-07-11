@@ -77,12 +77,18 @@
                     }
                 }
                 $scope.onDRSearchPageStorageSourceChanged = function () {
-                    $scope.isloadingFilter = true;
-                    loadFields().then(function () {
-                        $scope.expression = undefined;
-                        $scope.isloadingFilter = false;
-                        filterObj = null;
-                    });
+                    filterObj = null;
+                    $scope.expression = undefined;
+                    if ($scope.selectedDRSearchPageStorageSource != undefined)
+                    {
+                        $scope.isloadingFilter = true;
+                        loadFields().then(function () {
+                           
+                            $scope.isloadingFilter = false;
+                            
+                        });
+                    }
+                   
                 }
 
                 $scope.resetFilter = function () {
@@ -111,6 +117,7 @@
                        
 
                         if (itemActionSettings != undefined) {
+                            
                             loadFields().then(function () {
                                 var input = {
                                     DimensionFilters: itemActionSettings.DimensionFilters,
