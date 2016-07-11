@@ -23,7 +23,7 @@
             <vr-validator validate="ctrl.isConnectionsGridValid()">
                 <vr-datagrid datasource="ctrl.connections" menuactions="ctrl.connectionsGridMenuActions" ondeleterow="ctrl.removeConnection" norowhighlightonclick="true" hidegridmenu>
                     <vr-datagridcolumn headertext="'Connection'" disablesorting="true">
-                        <div>
+                        <div style="overflow: hidden;text-overflow: ellipsis;" >
                             {{dataItem.ConnectionString!=null ?dataItem.ConnectionString:dataItem.ConnectionStringName}}
                         </div>
                     </vr-datagridcolumn>
