@@ -92,6 +92,7 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                       
                         
                 }
+               
             }
             api.refreshTree = function (datasource) {
                 
@@ -199,9 +200,14 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                     if (data.node != undefined) {
                         ctrl.selecteditem = data.node.original.sourceItem;
                         $scope.$apply();
+                       
                     }
   
                 });
+                treeElement.on('set_state.jstree', function (e, data) {
+                      api.scrollToSelectedNode();
+                });
+               
             };
 
             api.renameNode = function (newName) {
@@ -219,6 +225,15 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                 var parentNode = treeElement.jstree('get_selected');
                 if (parentNode != undefined) {
                     var nodeId = treeElement.jstree(true).create_node(parentNode, treeItem);
+                }
+            }
+
+            api.scrollToSelectedNode = function () {
+                var node = treeElement.jstree('get_selected');
+
+                if (node != undefined && node.length > 0)
+                {
+                    document.getElementById(node[0]).scrollIntoView();
                 }
             }
 
