@@ -48,6 +48,25 @@ namespace TOne.WhS.CodePreparation.Business
 
             }
 
+
+            if (zoneToProcess.CodesToAdd != null)
+            {
+               
+                foreach (CodeToAdd codeToAdd in zoneToProcess.CodesToAdd)
+                {
+                    if (codeToAdd.ChangedExistingCodes.Count() > 0)
+                    {
+                        ExistingCode changedExistingCode = codeToAdd.ChangedExistingCodes.FindRecord(item => item.CodeEntity.Code == codeToAdd.Code);
+
+                        //Checking if there is a codeToMove in a wrong way "Adding Code that already effective in a zone to another zone"
+                        //by checking if changedExistingCode.ParentZoneName != codeToAdd.ZoneName
+                        if (!codeToAdd.ZoneName.Equals(changedExistingCode.ParentZone.Name, StringComparison.InvariantCultureIgnoreCase) &&
+                            changedExistingCode.CodeEntity.EED.HasValue)
+                            return false;
+                    }
+                }
+            }
+
             return true;
         }
 
