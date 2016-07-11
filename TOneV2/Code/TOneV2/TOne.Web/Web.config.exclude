@@ -5,7 +5,7 @@
   -->
 <configuration>
   <configSections>
-    
+
     <section name="vanriseLogging" type="Vanrise.Common.LoggingConfiguration.LoggingConfig, Vanrise.Common" />
   </configSections>
 
@@ -60,10 +60,10 @@
     <add key="Currency" value="USD"/>
     <add key="TOneWhS_TS_DBConnStringKey" value="TOneV2DBConnString"/>
     <add key="TOneWhS_Analytics_DBConnStringKey" value="TOneAnalyticsDBConnString"/>
-    
-    
+
+
     <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t"/>
-    <add key="ImportPriceListTemplatePath" value="/Client/Modules/WhS_SupplierPriceList/Template/Supplier Price List Sample.xlsx"/>
+    <add key="ImportPriceListTemplatePath" value="/Client/Modules/WhS_SupplierPriceList/Template/Supplier Price List Sample.xls"/>
     <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/WhS_CodePreparation/Template/Code preperation sample.xls"/>
     <add key="DownloadCodeGroupTemplatePath" value="/Client/Modules/WhS_BusinessEntity/Templates/CodeGroupTemplate.xlsx"/>
     <add key="TempPasswordValidity" value="24:00:00"/>

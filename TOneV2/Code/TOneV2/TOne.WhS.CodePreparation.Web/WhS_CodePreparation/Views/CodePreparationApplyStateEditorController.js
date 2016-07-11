@@ -70,7 +70,7 @@
 
 
         function setTitle() {
-            $scope.title = UtilsService.buildTitleForUploadEditor("Apply Numbering Plan State");
+            $scope.title = "Apply Numbering Plan State";
         }
 
 

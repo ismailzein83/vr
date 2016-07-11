@@ -33,7 +33,7 @@
             $scope.selectedSellingNumberPlan;
             $scope.currentNode;
 
-            hideShowStateAndClearSelection(false);
+            
             hideShowSaleCodes(false);
 
             $scope.selectedCodes = [];
