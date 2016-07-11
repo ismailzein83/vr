@@ -23,13 +23,13 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
             byte[] bytes = File.ReadAllBytes(physicalFilePath);
             return GetExcelResponse(bytes, "Supplier Price List Template.xls");  
         }
-       
+
         [HttpPost]
-        [Route("ConvertPriceList")]
-        public object ConvertPriceList(PriceListInput input)
+        [Route("ValidateSupplierPriceList")]
+        public bool ValidateSupplierPriceList(SupplierPriceListInput input)
         {
             SupplierPriceListManager manager = new SupplierPriceListManager();
-            return manager.ConvertPriceList(input);
+            return manager.ValidateSupplierPriceList(input);
         }
     }
 }

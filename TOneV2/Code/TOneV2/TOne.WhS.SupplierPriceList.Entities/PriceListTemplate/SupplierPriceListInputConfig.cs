@@ -7,9 +7,9 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Entities
 {
-    public class PriceListInputConfig : ExtensionConfiguration
+    public class SupplierPriceListInputConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "WhS_SupPL_InputPriceListConfiguration";
+        public const string EXTENSION_TYPE = "WhS_SupPL_SupplierPriceListConfiguration";
         public string Editor { get; set; }
 
     }

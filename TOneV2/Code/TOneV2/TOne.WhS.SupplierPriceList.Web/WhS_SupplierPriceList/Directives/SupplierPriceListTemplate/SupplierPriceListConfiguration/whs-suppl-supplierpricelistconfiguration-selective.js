@@ -2,9 +2,9 @@
 
     'use strict';
 
-    InputpricelistconfigurationSelective.$inject = ['WhS_SupPL_PriceListTemplateAPIService', 'UtilsService', 'VRUIUtilsService'];
+    SupplierpricelistconfigurationSelective.$inject = ['WhS_SupPL_SupplierPriceListTemplateAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function InputpricelistconfigurationSelective(WhS_SupPL_PriceListTemplateAPIService, UtilsService, VRUIUtilsService) {
+    function SupplierpricelistconfigurationSelective(WhS_SupPL_SupplierPriceListTemplateAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -17,8 +17,8 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var inputpricelistconfiguration = new Inputpricelistconfiguration($scope, ctrl, $attrs);
-                inputpricelistconfiguration.initializeController();
+                var supplierpricelistconfiguration = new Supplierpricelistconfiguration($scope, ctrl, $attrs);
+                supplierpricelistconfiguration.initializeController();
             },
             controllerAs: "fieldmappingCtrl",
             bindToController: true,
@@ -28,7 +28,7 @@
         };
         function getTamplate(attrs) {
             var withemptyline = 'withemptyline';
-            var label = "label='Input Configuration'";
+            var label = "label='Supplier Configuration'";
             if (attrs.hidelabel != undefined) {
                 label = "";
                 withemptyline = '';
@@ -52,7 +52,7 @@
             return template;
 
         }
-        function Inputpricelistconfiguration($scope, ctrl, $attrs) {
+        function Supplierpricelistconfiguration($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var selectorAPI;
             var context;
@@ -89,8 +89,8 @@
 
                 api.load = function (payload) {
                     var promises = [];
-                    var getInputPriceListConfigurationPromise = getInputPriceListConfiguration();
-                    promises.push(getInputPriceListConfigurationPromise);
+                    var getSupplierPriceListConfigurationPromise = getSupplierPriceListConfiguration();
+                    promises.push(getSupplierPriceListConfigurationPromise);
                     if (payload != undefined) {
                         context = payload.context;
                         configDetails = payload.configDetails;
@@ -106,8 +106,8 @@
                         promises.push(loadDirectivePromiseDeferred.promise);
                     }
 
-                    function getInputPriceListConfiguration() {
-                        return WhS_SupPL_PriceListTemplateAPIService.GetInputPriceListConfigurationTemplateConfigs().then(function (response) {
+                    function getSupplierPriceListConfiguration() {
+                        return WhS_SupPL_SupplierPriceListTemplateAPIService.GetSupplierPriceListConfigurationTemplateConfigs().then(function (response) {
                             selectorAPI.clearDataSource();
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
@@ -157,6 +157,6 @@
         }
     }
 
-    app.directive('whsSupplInputpricelistconfigurationSelective', InputpricelistconfigurationSelective);
+    app.directive('whsSupplSupplierpricelistconfigurationSelective', SupplierpricelistconfigurationSelective);
 
 })(app);

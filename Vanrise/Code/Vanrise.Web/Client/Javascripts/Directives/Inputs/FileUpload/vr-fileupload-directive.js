@@ -148,7 +148,9 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                     });
 
                 }
-               
+                else {
+                    ctrl.file = null
+                }
             });
             ctrl.downloadFile = function(){
                 var id = ctrl.value.fileId;

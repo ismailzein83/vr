@@ -29,12 +29,14 @@ app.directive('vrExcelWb', ['VR_ExcelConversion_ExcelAPIService', function (exce
                 });
             }
            
-            $scope.$watch('ctrl.fileid', function () {                
+            $scope.$watch('ctrl.fileid', function () {
                 if (ctrl.fileid != null && ctrl.fileid != undefined && ctrl.fileid != 0) {
                     ctrl.previewExcel();
                 }
                 else {
                     ctrl.scopeModel.datasource.length = 0;
+                    ctrl.tabsApi.removeAllTabs();
+                    ctrl.scopeModel.tabObjects.length = 0;
                 }
             });
           

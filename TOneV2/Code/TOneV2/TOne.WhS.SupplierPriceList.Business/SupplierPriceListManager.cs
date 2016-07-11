@@ -41,11 +41,13 @@ namespace TOne.WhS.SupplierPriceList.Business
             return this.GetType();
         }
 
-        public PriceList ConvertPriceList(Entities.PriceListInput input)
+        public bool ValidateSupplierPriceList(Entities.SupplierPriceListInput input)
         {
-            InputPriceListExecutionContext inPutContext = new InputPriceListExecutionContext();
-            inPutContext.InputFileId = input.InputFileId;
-            return input.InputPriceListSettings.Execute(inPutContext);
+            SupplierPriceListExecutionContext context = new SupplierPriceListExecutionContext();
+            context.InputFileId = input.InputFileId;
+            return true;
         }
+
+
     }
 }

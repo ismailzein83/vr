@@ -7,10 +7,10 @@ using TOne.WhS.SupplierPriceList.Entities;
 using Vanrise.ExcelConversion.Business;
 using Vanrise.ExcelConversion.Entities;
 
-namespace TOne.WhS.SupplierPriceList.MainExtensions.InputPriceListSettings
+namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
 {
     public enum CodeLayout { CodeOnEachRow = 0, Delimitedcode = 1 }
-    public class BasicInputPriceListSettings : Entities.InputPriceListSettings
+    public class BasicSupplierPriceListSettings : Entities.SupplierPriceListSettings
     {
         #region Properties
         public ExcelConversionSettings ExcelConversionSettings { get; set; }
@@ -23,13 +23,15 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.InputPriceListSettings
         #endregion
 
         #region Override
-
-        public override PriceList Execute(IInputPriceListExecutionContext context)
+       
+        public override PriceList Execute(ISupplierPriceListExecutionContext context)
         {
             ExcelConvertor excelConvertor = new ExcelConvertor();
             ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(context.InputFileId, this.ExcelConversionSettings, true, this.IsCommaDecimalSeparator);
             return ConvertToPriceListItem(convertedExcel);
         }
+
+
         #endregion
 
         #region Private Methods
@@ -274,7 +276,6 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.InputPriceListSettings
             }
             return rateByZone;
         }
-
         private void ValidateCode(Dictionary<string, List<PriceListCode>> codesByZone, Dictionary<string, PriceListRate> rateByZone)
         {
             foreach (var zone in codesByZone)
@@ -314,9 +315,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.InputPriceListSettings
             public decimal Rate { get; set; }
             public DateTime? RateEffectiveDate { get; set; }
         }
-
-
+      
         #endregion
-
     }
 }

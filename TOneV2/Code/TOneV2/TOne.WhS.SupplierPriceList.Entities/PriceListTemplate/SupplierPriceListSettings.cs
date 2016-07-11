@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.SupplierPriceList.Entities
 {
-    public interface IInputPriceListExecutionContext
+    public abstract class SupplierPriceListSettings
     {
-        int InputFileId { get; }
+        public int ConfigId { get; set; }
+        public abstract PriceList Execute(ISupplierPriceListExecutionContext context);
     }
 }

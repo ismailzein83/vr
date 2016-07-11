@@ -13,8 +13,8 @@
                 responseTypeAsBufferArray: true
             });
         }
-        function ConvertPriceList(input) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, controllerName, "ConvertPriceList"), input);
+        function ValidateSupplierPriceList(input) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, controllerName, "ValidateSupplierPriceList"), input);
         }
         function HasDownloadSupplierPriceListTemplatePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_SupPL_ModuleConfig.moduleName, controllerName, ['DownloadSupplierPriceListTemplate']));
@@ -22,7 +22,7 @@
 
         return ({
             DownloadSupplierPriceListTemplate: DownloadSupplierPriceListTemplate,
-            ConvertPriceList:ConvertPriceList,
+            ValidateSupplierPriceList: ValidateSupplierPriceList,
             HasDownloadSupplierPriceListTemplatePermission: HasDownloadSupplierPriceListTemplatePermission
         });
     }

@@ -7,7 +7,7 @@ using TOne.WhS.SupplierPriceList.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
-    public class InputPriceListExecutionContext : IInputPriceListExecutionContext
+    public class SupplierPriceListExecutionContext : ISupplierPriceListExecutionContext
     {
         public int InputFileId { get; set; }
     }

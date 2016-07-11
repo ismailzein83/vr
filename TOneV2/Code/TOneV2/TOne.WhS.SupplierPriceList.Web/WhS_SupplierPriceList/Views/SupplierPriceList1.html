@@ -3,31 +3,38 @@
         <vr-validation-group validationcontext="inPutExcelGroupValid">
             <div>
                 <vr-row removeline>
-                    <vr-columns colnum="2">
-                        <vr-fileupload extension="xls,xlsx,csv,xlsb" value="scopeModel.inPutFile" label="Input Excel" isrequired="true"> </vr-fileupload>
+                    <vr-whs-be-carrieraccount-selector getsuppliers on-ready="scopeModel.onCarrierAccountDirectiveReady" normal-col-num="2" selectedvalues="scopeModel.selectedSupplier" onselectitem="scopeModel.carrierAccountSelectItem" isrequired="true"></vr-whs-be-carrieraccount-selector>
+
+                    <vr-columns width="normal" vr-loader="scopeModel.isLoadingCurrencySelector">
+                        <vr-common-currency-selector on-ready="scopeModel.onCurrencyDirectiveReady" isrequired></vr-common-currency-selector>
+                    </vr-columns>
+
+                    <vr-columns width="normal">
+                        <vr-datetimepicker type="date" label="PriceList Date" value="priceListDate" isrequired></vr-datetimepicker>
                     </vr-columns>
                 </vr-row>
                 <vr-row removeline>
-                    <vr-columns width="1/2row">
+                    <vr-columns colnum="2" ng-if="scopeModel.selectedSupplier != undefined">
+                        <vr-fileupload extension="xls,xlsx,csv,xlsb" value="scopeModel.inPutFile" label="File Excel" isrequired="true"> </vr-fileupload>
+                    </vr-columns>
+                </vr-row>
+                <vr-row removeline>
+                    <vr-columns width="1/2row" ng-if="scopeModel.selectedSupplier != undefined">
                         <vr-section title="Excel Viewer">
                             <vr-excel-wb fileid="scopeModel.inPutFile.fileId" on-ready="scopeModel.onReadyWoorkBook"></vr-excel-wb>
                         </vr-section>
                     </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-section title="Input Price List Mapping">
-                            <vr-row>
-                                <vr-columns width="1/2row">
-                                    <vr-row>
-                                        <whs-suppl-inputpricelisttemplate-selector on-ready="scopeModel.onInputPriceListTemplateSelectorReady" onselectionchanged="scopeModel.onInputPriceListTemplateSelectionChanged" normal-col-num="12"></whs-suppl-inputpricelisttemplate-selector>
-                                    </vr-row>
-                                </vr-columns>
-                            </vr-row>
-                            <vr-row>
-                                <vr-columns width="fullrow" vr-loader="scopeModal.isLoadingInputPriceListTemplate">
-                                    <whs-suppl-inputpricelistconfiguration-selective on-ready="scopeModel.onInputConfigurationSelectiveReady" normal-col-num="2"></whs-suppl-inputpricelistconfiguration-selective>
-                                </vr-columns>
-                            </vr-row>
-                        </vr-section>
+                    <vr-columns width="1/2row" ng-if="scopeModel.selectedSupplier != undefined">
+                        <vr-validation-group validationcontext="scopeModel.configurationValidation">
+                            <vr-section title="Supplier Price List Mapping">
+                                <vr-row>
+                                    <vr-columns width="fullrow" vr-loader="scopeModal.isLoadingInputPriceListTemplate">
+                                        <whs-suppl-supplierpricelistconfiguration-selective on-ready="scopeModel.onInputConfigurationSelectiveReady" normal-col-num="2"></whs-suppl-supplierpricelistconfiguration-selective>
+                                    </vr-columns>
+                                </vr-row>
+                            </vr-section>
+                        </vr-validation-group>
+
                     </vr-columns>
                 </vr-row>
             </div>
@@ -36,8 +43,8 @@
             <vr-row removeline>
                 <vr-actionbar showcollapsebutton="false">
                     <div transclude-to="buttons">
-                        <vr-button type="Save" formname="formFilter" validationcontext="formFilter" data-onclick="scopeModel.saveInputConfiguration" haspermission="hassaveInputConfigurationPermission"></vr-button>
-                        <vr-button type="Convert" formname="formFilter" validationcontext="formFilter" data-onclick="scopeModel.startConvert" ></vr-button>
+                        <vr-button type="Save" formname="formFilter" ng-show="scopeModel.selectedSupplier != undefined" validationcontext="scopeModel.configurationValidation" data-onclick="scopeModel.saveInputConfiguration" haspermission="hassaveInputConfigurationPermission"></vr-button>
+                        <vr-button type="Validate" formname="formFilter" validationcontext="formFilter" data-onclick="scopeModel.validate"></vr-button>
 
                     </div>
                 </vr-actionbar>

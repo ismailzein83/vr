@@ -2,9 +2,9 @@
 
     'use strict';
 
-    InputpricelistconfigurationBasic.$inject = ["UtilsService", "VRUIUtilsService", 'WhS_SupPL_CodeLayoutEnum', 'VR_ExcelConversion_FieldTypeEnum'];
+    SupplierpricelistconfigurationBasic.$inject = ["UtilsService", "VRUIUtilsService", 'WhS_SupPL_CodeLayoutEnum', 'VR_ExcelConversion_FieldTypeEnum'];
 
-    function InputpricelistconfigurationBasic(UtilsService, VRUIUtilsService, WhS_SupPL_CodeLayoutEnum, VR_ExcelConversion_FieldTypeEnum) {
+    function SupplierpricelistconfigurationBasic(UtilsService, VRUIUtilsService, WhS_SupPL_CodeLayoutEnum, VR_ExcelConversion_FieldTypeEnum) {
         return {
             restrict: "E",
             scope: {
@@ -15,15 +15,15 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var inputpricelistconfiguration = new Inputpricelistconfiguration($scope, ctrl, $attrs);
-                inputpricelistconfiguration.initializeController();
+                var supplierpricelistconfiguration = new Supplierpricelistconfiguration($scope, ctrl, $attrs);
+                supplierpricelistconfiguration.initializeController();
             },
-            controllerAs: "inPutbasicCtrl",
+            controllerAs: "supplierbasicCtrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/WhS_SupplierPriceList/Directives/MainExtensions/PriceListTemplate/InputPriceListConfiguration/Templates/BasicInputPriceListConfiguration.html"
+            templateUrl: "/Client/Modules/WhS_SupplierPriceList/Directives/MainExtensions/SupplierPriceListTemplate/SupplierPriceListConfiguration/Templates/BasicSupplierPriceListConfiguration.html"
         };
 
-        function Inputpricelistconfiguration($scope, ctrl, $attrs) {
+        function Supplierpricelistconfiguration($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var rateListAPI;
             var rateListMappingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -180,7 +180,7 @@
                         DateTimeFormat: $scope.scopeModel.dateTimeFormat
                     }
                     var basicConfiguration = {
-                        $type: "TOne.WhS.SupplierPriceList.MainExtensions.InputPriceListSettings.BasicInputPriceListSettings,TOne.WhS.SupplierPriceList.MainExtensions",
+                        $type: "TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings.BasicSupplierPriceListSettings,TOne.WhS.SupplierPriceList.MainExtensions",
                         ExcelConversionSettings: obj,
                         CodeLayout: $scope.scopeModel.selectedCodeLayout != undefined ? $scope.scopeModel.selectedCodeLayout.value : undefined,
                         HasCodeRange: $scope.scopeModel.hasCodeRange,
@@ -207,6 +207,6 @@
         }
     }
 
-    app.directive('whsSupplInputpricelistconfigurationBasic', InputpricelistconfigurationBasic);
+    app.directive('whsSupplSupplierpricelistconfigurationBasic', SupplierpricelistconfigurationBasic);
 
 })(app);

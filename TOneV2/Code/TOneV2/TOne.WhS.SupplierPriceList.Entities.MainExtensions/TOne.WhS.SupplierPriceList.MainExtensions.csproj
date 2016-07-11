@@ -49,7 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InputPriceListSettings\BasicInputPriceListSettings.cs" />
+    <Compile Include="SupplierPriceListSettings\BasicSupplierPriceListSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

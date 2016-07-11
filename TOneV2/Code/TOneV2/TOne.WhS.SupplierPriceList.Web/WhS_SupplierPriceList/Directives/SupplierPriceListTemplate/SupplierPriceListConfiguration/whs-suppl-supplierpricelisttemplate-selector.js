@@ -2,9 +2,9 @@
 
     'use strict';
 
-    InputpricelisttemplateSelector.$inject = ['WhS_SupPL_PriceListTemplateAPIService', 'UtilsService', 'VRUIUtilsService'];
+    SupplierpricelisttemplateSelector.$inject = ['WhS_SupPL_SupplierPriceListTemplateAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function InputpricelisttemplateSelector(WhS_SupPL_PriceListTemplateAPIService, UtilsService, VRUIUtilsService) {
+    function SupplierpricelisttemplateSelector(WhS_SupPL_SupplierPriceListTemplateAPIService, UtilsService, VRUIUtilsService) {
 
         return {
             restrict: 'E',
@@ -69,7 +69,7 @@
                         selectedIds = payload.selectedIds;
                     }
 
-                    return WhS_SupPL_PriceListTemplateAPIService.GetInputPriceListTemplates(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return WhS_SupPL_SupplierPriceListTemplateAPIService.GetSupplierPriceListTemplatesInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                         ctrl.datasource.length = 0;
 
                         if (response != null) {
@@ -111,6 +111,6 @@
         }
     }
 
-    app.directive('whsSupplInputpricelisttemplateSelector', InputpricelisttemplateSelector);
+    app.directive('whsSupplSupplierpricelisttemplateSelector', SupplierpricelisttemplateSelector);
 
 })(app);

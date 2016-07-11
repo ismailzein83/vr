@@ -88,11 +88,11 @@
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ZoneEEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ZoneBEDCondition.cs" />
-    <Compile Include="Context\InputPriceListExecutionContext.cs" />
+    <Compile Include="Context\SupplierPriceListExecutionContext.cs" />
     <Compile Include="ImportPriceListManager.cs" />
     <Compile Include="PriceListCodeManager.cs" />
     <Compile Include="PriceListRateManager.cs" />
-    <Compile Include="PriceListTemplateManager.cs" />
+    <Compile Include="SupplierPriceListTemplateManager.cs" />
     <Compile Include="ProcessCountryCodesContext.cs" />
     <Compile Include="ProcessCountryRatesContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
