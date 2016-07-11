@@ -276,13 +276,12 @@ namespace Vanrise.Analytic.Data.SQL
             {
                 var aggregateConfig = GetAggregateConfig(aggName);
 
-                string currencyConversionStatement = null;
-
                 if (!String.IsNullOrEmpty(aggregateConfig.Config.CurrencySQLColumnName))
                 {
-                    if (!listCurrencySQLColumnName.Any(s => aggregateConfig.Config.CurrencySQLColumnName.Contains(s)))
-                    {
-                        string currencyTableAlias = String.Format("CurrExch_{0}", aggregateConfig.Config.CurrencySQLColumnName);
+                    string currencySQLColumnNameLower = aggregateConfig.Config.CurrencySQLColumnName.Trim().ToLower();
+                    string currencyTableAlias = String.Format("CurrExch_{0}", currencySQLColumnNameLower);
+                    if (!listCurrencySQLColumnName.Contains(currencySQLColumnNameLower))
+                    {                        
                         string currencyTableStatement;
                         string fromTimePrm = GenerateParameterName(ref parameterIndex);
                         parameterValues.Add(fromTimePrm, fromTime);
@@ -299,12 +298,17 @@ namespace Vanrise.Analytic.Data.SQL
                         joinStatements.Add(String.Format(@"LEFT JOIN {0} AS {1} 
                                                             ON ant.{2} = {1}.CurrencyID AND ant.{3} >= {1}.BED AND ({1}.EED IS NULL OR ant.{3} < {1}.EED)"
                                         , currencyTableStatement, currencyTableAlias, aggregateConfig.Config.CurrencySQLColumnName, GetTable().Settings.TimeColumnName));
-                        currencyConversionStatement = String.Format("/ ISNULL({0}.Rate, 1)", currencyTableAlias);
-                        listCurrencySQLColumnName.Add(aggregateConfig.Config.CurrencySQLColumnName);
-                    }
-                }
 
-                AddColumnToStringBuilder(selectPartBuilder, String.Format("CONVERT(DECIMAL(20, 8), {0}({1}{2})) AS {3}", aggregateConfig.Config.AggregateType, aggregateConfig.Config.SQLColumn, currencyConversionStatement, GetAggregateColumnAlias(aggregateConfig)));
+                        listCurrencySQLColumnName.Add(currencySQLColumnNameLower);
+                    }
+                   
+                    string currencyConversionStatement = String.Format("/ ISNULL({0}.Rate, 1)", currencyTableAlias);
+                    AddColumnToStringBuilder(selectPartBuilder, String.Format("CONVERT(DECIMAL(20, 8), {0}({1}{2})) AS {3}", aggregateConfig.Config.AggregateType, aggregateConfig.Config.SQLColumn, currencyConversionStatement, GetAggregateColumnAlias(aggregateConfig)));
+                }
+                else
+                {
+                    AddColumnToStringBuilder(selectPartBuilder, String.Format("{0}({1}) AS {2}", aggregateConfig.Config.AggregateType, aggregateConfig.Config.SQLColumn, GetAggregateColumnAlias(aggregateConfig)));
+                }
 
                 if (aggregateConfig.Config.JoinConfigNames != null)
                 {
