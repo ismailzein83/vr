@@ -12,8 +12,11 @@ namespace Vanrise.Common.Business
     {
         public CurrencyExchangeRate GetEffectiveExchangeRate(int currencyId, DateTime effectiveOn)
         {
-            var allCurrenciesExchangeRates = GetCachedCurrenciesExchangeRates();
-            return allCurrenciesExchangeRates.FindRecord(x => x.CurrencyId == currencyId && x.ExchangeDate >= effectiveOn);
+            var allCurrenciesExchangeRates = GetOrderedCachedCurrenciesExchangeRates();
+            IOrderedEnumerable<CurrencyExchangeRate> exchangeRates = allCurrenciesExchangeRates.GetRecord(currencyId);
+            if (exchangeRates != null && exchangeRates.Count() > 0)
+                return exchangeRates.FindRecord(itm => itm.ExchangeDate <= effectiveOn);
+            return null;
         }
         public Decimal ConvertValueToCurrency(decimal value, int currencyId, DateTime effectiveOn)
         {
@@ -178,6 +181,41 @@ namespace Vanrise.Common.Business
                    ICurrencyExchangeRateDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICurrencyExchangeRateDataManager>();
                    IEnumerable<CurrencyExchangeRate> exchangeRates = dataManager.GetCurrenciesExchangeRate();
                    return exchangeRates.ToDictionary(ex => ex.CurrencyExchangeRateId, ex => ex);
+               });
+        }
+
+        public Dictionary<int, IOrderedEnumerable<CurrencyExchangeRate>> GetOrderedCachedCurrenciesExchangeRates()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetOrderedCachedCurrenciesExchangeRates",
+               () =>
+               {
+                   Dictionary<int, IOrderedEnumerable<CurrencyExchangeRate>> exchangeRateList = new Dictionary<int, IOrderedEnumerable<CurrencyExchangeRate>>();
+
+                   Dictionary<long, CurrencyExchangeRate> data = GetCachedCurrenciesExchangeRates();
+                   if (data != null)
+                   {
+                       Dictionary<int, List<CurrencyExchangeRate>> result = new Dictionary<int, List<CurrencyExchangeRate>>();
+                       foreach (KeyValuePair<long, CurrencyExchangeRate> item in data)
+                       {
+                           List<CurrencyExchangeRate> exchangeRates;
+                           if (result.TryGetValue(item.Value.CurrencyId, out exchangeRates))
+                           {
+                               exchangeRates.Add(item.Value);
+                           }
+                           else
+                           {
+                               exchangeRates = new List<CurrencyExchangeRate>();
+                               exchangeRates.Add(item.Value);
+                               result.Add(item.Value.CurrencyId, exchangeRates);
+                           }
+                       }
+
+                       foreach (KeyValuePair<int, List<CurrencyExchangeRate>> item in result)
+                       {
+                           exchangeRateList.Add(item.Key, item.Value.OrderByDescending(itm => itm.ExchangeDate));
+                       }
+                   }
+                   return exchangeRateList;
                });
         }
         public CurrencyExchangeRate GetCurrencyExchangeRate(int currencyExchangeRateId)

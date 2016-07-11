@@ -24,7 +24,11 @@ function ($compile) {
 
 
     function percentageExtraChargeCtor(ctrl, $scope, $attrs) {
-
+        ctrl.validate = function () {
+            if (ctrl.fromRate != undefined && ctrl.toRate != undefined && parseFloat(ctrl.fromRate) > parseFloat(ctrl.toRate))
+                return 'From Rate should be less than To Rate';
+            return undefined;
+        }
         function initializeController() {
 
             defineAPI();
