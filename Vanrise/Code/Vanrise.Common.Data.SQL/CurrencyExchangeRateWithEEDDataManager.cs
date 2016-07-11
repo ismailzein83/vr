@@ -34,7 +34,7 @@ namespace Vanrise.Common.Data.SQL
             var streamForBulkInsert = base.InitializeStreamForBulkInsert();
             foreach(var rate in exchangeRates)
             {
-                streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", rate.CurrencyId, rate.Rate, rate.BED, rate.EED);
+                streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", rate.CurrencyId, Math.Round(rate.Rate, 6), rate.BED, rate.EED);
             }
             streamForBulkInsert.Close();
             var bulkInsertInfo = new StreamBulkInsertInfo
