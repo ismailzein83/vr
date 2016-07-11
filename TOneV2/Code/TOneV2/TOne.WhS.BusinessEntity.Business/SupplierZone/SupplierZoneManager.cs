@@ -99,7 +99,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            return GetSupplierZoneName((long)context.EntityId);
+            return GetSupplierZoneName(Convert.ToInt64(context.EntityId));
         }
 
         public string GetDescription(IEnumerable<long> supplierZoneIds)

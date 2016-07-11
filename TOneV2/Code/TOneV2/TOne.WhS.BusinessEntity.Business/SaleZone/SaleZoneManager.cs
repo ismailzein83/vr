@@ -168,7 +168,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            return GetSaleZoneName((long)context.EntityId);
+            return GetSaleZoneName(Convert.ToInt64(context.EntityId));
         }
 
         public int GetSaleZoneTypeId()
