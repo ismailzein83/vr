@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.CodePreparation.BP.Arguments
@@ -16,7 +17,9 @@ namespace TOne.WhS.CodePreparation.BP.Arguments
         public bool IsFromExcel { get; set; }
         public override string GetTitle()
         {
-            return String.Format("Numbering Plan Process Started for Package: {0}", SellingNumberPlanId);
+            ISellingNumberPlanManager sellingNumberPlanManager = BEManagerFactory.GetManager<ISellingNumberPlanManager>();
+            string sellingNumberPlanName = sellingNumberPlanManager.GetSellingNumberPlanName(SellingNumberPlanId);
+            return String.Format("Numbering Plan Process Started for Selling Number Plan: {0}", sellingNumberPlanName);
         }
     }
 }

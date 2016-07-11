@@ -19,8 +19,8 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
         [Route("DownloadSupplierPriceListTemplate")]
         public object DownloadSupplierPriceListTemplate()
         {
-            SupplierPriceListManager manager = new SupplierPriceListManager();
-            byte[] bytes = manager.DownloadImportSupplierPriceListTemplate();
+            string physicalFilePath = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["ImportPriceListTemplatePath"]);
+            byte[] bytes = File.ReadAllBytes(physicalFilePath);
             return GetExcelResponse(bytes, "Supplier Price List Template.xls");  
         }
        

@@ -13,6 +13,6 @@ namespace TOne.WhS.CodePreparation.Entities
 
         int SellingNumberPlanId { get; }
 
-        Dictionary<string, ExistingZoneInfo> ExistingZonesInfoByZoneName { get; }
+       ExistingZoneInfoByZoneName ExistingZonesInfoByZoneName { get; }
     }
 }

@@ -49,8 +49,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public DateTime EffectiveDate { get; set; }
 
         public int SellingNumberPlanId { get; set; }
-
-
-        public Dictionary<string, ExistingZoneInfo> ExistingZonesInfoByZoneName { get; set; }
+      
+        public ExistingZoneInfoByZoneName ExistingZonesInfoByZoneName { get; set; }
     }
 }

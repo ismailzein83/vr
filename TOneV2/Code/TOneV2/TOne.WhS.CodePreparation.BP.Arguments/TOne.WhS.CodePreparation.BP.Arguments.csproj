@@ -52,6 +52,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
+      <Project>{70ce755d-00ae-4e12-8f07-e4df91346293}</Project>
+      <Name>TOne.BusinessEntity.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>

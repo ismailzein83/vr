@@ -11,7 +11,7 @@ using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class SellingNumberPlanManager : IBusinessEntityManager
+    public class SellingNumberPlanManager : IBusinessEntityManager , ISellingNumberPlanManager
     {
         #region Public Methods
 
@@ -102,15 +102,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return string.Empty;
         }
 
-        public string GetSellingNumberPlanName(int sellingNumberPlanId)
-        {
-            SellingNumberPlan sellingNumberPlan = GetSellingNumberPlan(sellingNumberPlanId);
-
-            if (sellingNumberPlan != null)
-                return sellingNumberPlan.Name;
-
-            return null;
-        }
+       
 
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
@@ -145,6 +137,20 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
 
+        #endregion
+
+        #region ISellingNumberPlanManager Memebers
+       
+        public string GetSellingNumberPlanName(int sellingNumberPlanId)
+        {
+            SellingNumberPlan sellingNumberPlan = GetSellingNumberPlan(sellingNumberPlanId);
+
+            if (sellingNumberPlan != null)
+                return sellingNumberPlan.Name;
+
+            return null;
+        }
+       
         #endregion
 
         #region Validation Methods
@@ -225,5 +231,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             throw new NotImplementedException();
         }
+
+       
     }
 }

@@ -24,19 +24,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             }
         }
         long _processInstanceID;
-        public void Insert(long processInstanceID, IEnumerable<ChangedRate> changedRates)
-        {
-
-            object dbApplyStream = InitialiazeStreamForDBApply();
-
-            foreach (ChangedRate rate in changedRates)
-            {
-                WriteRecordToStream(rate, dbApplyStream);
-            }
-
-            object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
-
-        }
+       
         public object InitialiazeStreamForDBApply()
         {
             return base.InitializeStreamForBulkInsert();
@@ -64,9 +52,8 @@ namespace TOne.WhS.CodePreparation.Data.SQL
                 FieldSeparator = '^',
             };
         }
-        public void ApplyChangedRatesToDB(object preparedObject, long processInstanceID)
+        public void ApplyChangedRatesToDB(object preparedObject)
         {
-            _processInstanceID = processInstanceID;
             InsertBulkToTable(preparedObject as BaseBulkInsertInfo);
         }
 

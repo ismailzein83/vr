@@ -11,8 +11,6 @@ namespace TOne.WhS.CodePreparation.Data
     public interface IChangedSaleRateDataManager : IDataManager, IBulkApplyDataManager<ChangedRate>
     {
         long ProcessInstanceId { set; }
-        void Insert(long processInstanceID, IEnumerable<ChangedRate> changedRates);
-
-        void ApplyChangedRatesToDB(object preparedObject, long processInstanceID);
+        void ApplyChangedRatesToDB(object preparedObject);
     }
 }

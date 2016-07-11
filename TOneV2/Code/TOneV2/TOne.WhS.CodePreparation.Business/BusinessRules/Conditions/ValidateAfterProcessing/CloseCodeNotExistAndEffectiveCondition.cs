@@ -27,7 +27,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
                 {
-                    if (codeToClose.ChangedExistingCodes.Count() == 0 && !codeToClose.ChangedExistingCodes.Any(item => item.CodeEntity.Code == codeToClose.Code))
+                    if (codeToClose.ChangedExistingCodes.Count() == 0 || !codeToClose.ChangedExistingCodes.Any(item => item.CodeEntity.Code == codeToClose.Code))
                         return false;
                 }
             }

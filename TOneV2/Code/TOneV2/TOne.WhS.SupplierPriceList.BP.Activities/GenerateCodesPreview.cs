@@ -74,10 +74,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             if (importedCode.ChangeType == CodeChangeType.New && importedCode.ChangedExistingCodes.Count() > 0)
             {
                 ExistingCode existingCode = importedCode.ChangedExistingCodes.OrderBy(item => item.BED).First();
-                if (existingCode != null && existingCode.EED.HasValue && existingCode.EED.Value.Date.Equals(importedCode.BED.Date))
+                if (existingCode.EED.HasValue && existingCode.EED.Value.Equals(importedCode.BED))
                     return CodeChangeType.NotChanged;
-
-                return importedCode.ChangeType;
             }
 
             return importedCode.ChangeType;

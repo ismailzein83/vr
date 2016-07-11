@@ -3,6 +3,8 @@ using System.Web.Http;
 using TOne.WhS.CodePreparation.Business;
 using Vanrise.Web.Base;
 using TOne.WhS.CodePreparation.Entities;
+using System.IO;
+using System.Web;
 
 namespace TOne.WhS.CodePreparation.Web.Controllers
 {
@@ -13,8 +15,8 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
         [Route("DownloadImportCodePreparationTemplate")]
         public object DownloadImportCodePreparationTemplate()
         {
-            CodePreparationManager manager = new CodePreparationManager();
-            byte[] bytes = manager.DownloadImportCodePreparationTemplate();
+            string physicalFilePath = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["ImportCodePreparationTemplatePath"]);
+            byte[] bytes = File.ReadAllBytes(physicalFilePath);
             return GetExcelResponse(bytes, "Numbering Plan Template.xls");  
         }
 

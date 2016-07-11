@@ -27,27 +27,25 @@ namespace TOne.WhS.CodePreparation.Business
 
             if (zoneTopProcess.CodesToAdd != null)
             {
-
+              
                 foreach (CodeToAdd codeToAdd in zoneTopProcess.CodesToAdd)
                 {
                     if (codeToAdd.ChangedExistingCodes.Count() > 0)
                     {
                         ExistingCode changedExistingCode = codeToAdd.ChangedExistingCodes.FindRecord(item => item.CodeEntity.Code == codeToAdd.Code);
                         
-                        if (minExistingZonesBED != DateTime.MinValue && minExistingZonesBED.Date > DateTime.Today.Date && changedExistingCode != null &&
+                        //Checking if there is a codeToMove in a wrong way "Adding Code that already effective in a zone to another zone"
+                        //by checking if changedExistingCode.ParentZoneName != codeToAdd.ZoneName
+                        if (minExistingZonesBED != DateTime.MinValue && minExistingZonesBED > DateTime.Today.Date && changedExistingCode != null &&
                              !codeToAdd.ZoneName.Equals(changedExistingCode.ParentZone.Name, StringComparison.InvariantCultureIgnoreCase))
                             return false;
                     }
                 }
             }
 
-            if (zoneTopProcess.CodesToMove != null)
+            if (zoneTopProcess.CodesToMove != null && zoneTopProcess.CodesToMove.Count() > 0)
             {
-                foreach (CodeToMove codeToMove in zoneTopProcess.CodesToMove)
-                {
-                    if (minExistingZonesBED != DateTime.MinValue && minExistingZonesBED > DateTime.Today.Date)
-                        return false;
-                }
+                return !(minExistingZonesBED != DateTime.MinValue && minExistingZonesBED > DateTime.Today.Date);
             }
 
             return true;

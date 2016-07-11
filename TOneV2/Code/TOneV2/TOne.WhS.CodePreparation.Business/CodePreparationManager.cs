@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +13,6 @@ using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Common.Business;
 using System.ComponentModel;
-using System.Web;
 
 namespace TOne.WhS.CodePreparation.Business
 {
@@ -27,13 +25,6 @@ namespace TOne.WhS.CodePreparation.Business
             if (changes == null)
                 changes = new Changes();
             return changes;
-        }
-
-        public byte[] DownloadImportCodePreparationTemplate()
-        {
-            string physicalFilePath = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["ImportCodePreparationTemplatePath"]);
-            byte[] bytes = File.ReadAllBytes(physicalFilePath);
-            return bytes;
         }
 
         public bool CheckCodePreparationState(int sellingNumberPlanId)

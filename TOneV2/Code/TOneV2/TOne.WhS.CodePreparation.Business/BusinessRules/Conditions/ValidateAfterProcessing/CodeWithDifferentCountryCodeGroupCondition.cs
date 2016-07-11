@@ -23,15 +23,14 @@ namespace TOne.WhS.CodePreparation.Business
         {
             ICPParametersContext cpContext = context.GetExtension<ICPParametersContext>();
 
-            Dictionary<string, ExistingZoneInfo> existingZonesByZoneName = new Dictionary<string, ExistingZoneInfo>(StringComparer.InvariantCultureIgnoreCase);
-            existingZonesByZoneName = cpContext.ExistingZonesInfoByZoneName;
+            ExistingZoneInfoByZoneName existingZonesInfoByZoneName = cpContext.ExistingZonesInfoByZoneName;
 
 
             AddedZone addedZone = context.Target as AddedZone;
 
             ExistingZoneInfo existingZoneInfoInContext;
 
-            if (existingZonesByZoneName.TryGetValue(addedZone.Name, out existingZoneInfoInContext))
+            if (existingZonesInfoByZoneName.TryGetValue(addedZone.Name, out existingZoneInfoInContext))
                 return existingZoneInfoInContext.CountryId == addedZone.CountryId;
 
             return true;

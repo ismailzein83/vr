@@ -20,7 +20,7 @@ namespace TOne.WhS.CodePreparation.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ICPParametersContext cpContext = context.GetExtension<ICPParametersContext>();
-            if (cpContext.EffectiveDate.Date >= DateTime.Now.Date)
+            if (cpContext.EffectiveDate >= DateTime.Now.Date)
                 return true;
 
             CountryToProcess country = context.Target as CountryToProcess;

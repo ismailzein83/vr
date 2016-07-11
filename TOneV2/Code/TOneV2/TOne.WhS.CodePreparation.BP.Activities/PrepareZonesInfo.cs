@@ -17,7 +17,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
     public class PrepareZonesInfoOutput
     {
-        public Dictionary<string, ExistingZoneInfo> ExistingZonesInfoByZoneName { get; set; }
+        public ExistingZoneInfoByZoneName ExistingZonesInfoByZoneName { get; set; }
     }
     public sealed class PrepareZonesInfo : BaseAsyncActivity<PrepareZonesInfoInput, PrepareZonesInfoOutput>
     {
@@ -35,17 +35,19 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         protected override PrepareZonesInfoOutput DoWorkWithResult(PrepareZonesInfoInput inputArgument, AsyncActivityHandle handle)
         {
             IEnumerable<SaleZone> existingZones = inputArgument.ExistingZoneEntities;
-            Dictionary<String, ExistingZoneInfo> existingZonesInfoDic = new Dictionary<string, ExistingZoneInfo>(StringComparer.InvariantCultureIgnoreCase);
+          
+            ExistingZoneInfoByZoneName existingZonesInfoByZoneName = new ExistingZoneInfoByZoneName();
 
+            ExistingZoneInfo existingZoneInfo;
             foreach (SaleZone saleZone in existingZones)
             {
-                if (!existingZonesInfoDic.ContainsKey(saleZone.Name))
-                    existingZonesInfoDic.Add(saleZone.Name, new ExistingZoneInfo() { CountryId = saleZone.CountryId });
+                if (!existingZonesInfoByZoneName.TryGetValue(saleZone.Name, out existingZoneInfo))
+                    existingZonesInfoByZoneName.Add(saleZone.Name, new ExistingZoneInfo() { CountryId = saleZone.CountryId });
             }
 
             return new PrepareZonesInfoOutput()
             {
-                ExistingZonesInfoByZoneName = existingZonesInfoDic
+                ExistingZonesInfoByZoneName = existingZonesInfoByZoneName
             };
         }
 

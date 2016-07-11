@@ -32,7 +32,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 {
                     hasItem = inputArgument.InputQueue.TryDequeue((preparedCodeMatch) =>
                     {
-                        dataManager.ApplyChangedRatesToDB(preparedCodeMatch, processInstanceID);
+                        dataManager.ApplyChangedRatesToDB(preparedCodeMatch);
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });
