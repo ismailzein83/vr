@@ -77,8 +77,12 @@
                     }
                 }
                 $scope.onDRSearchPageStorageSourceChanged = function () {
-                    $scope.expression = undefined;
-                    filterObj = null;
+                    $scope.isloadingFilter = true;
+                    loadFields().then(function () {
+                        $scope.expression = undefined;
+                        $scope.isloadingFilter = false;
+                        filterObj = null;
+                    });
                 }
 
                 $scope.resetFilter = function () {
@@ -134,7 +138,7 @@
                                     });
                                 }).catch(function (error) {
                                     loadPromiseDeffer.reject(error);
-                                });;
+                                });
                             })
                         } else
                         {

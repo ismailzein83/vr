@@ -32,7 +32,7 @@
             </vr-columns>
         </vr-row>
         <vr-row removeline ng-if="advancedSelected">
-            <vr-columns width="fullrow">
+            <vr-columns width="fullrow" vr-loader="isloadingFilter">
                 <vr-section title="Advanced Filter">
                     <vr-row ng-show="expression !=undefined" removeline>
                         <vr-columns width="fullrow"><vr-label isvalue breakline>{{expression}}</vr-label></vr-columns>
