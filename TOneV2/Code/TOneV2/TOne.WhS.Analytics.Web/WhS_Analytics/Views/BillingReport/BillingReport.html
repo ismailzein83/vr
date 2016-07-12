@@ -9,11 +9,11 @@
             </vr-row>
             <vr-row removeline ng-show="reporttype">
                 <span ng-show="reporttype.ParameterSettings.RequiresCustomerId">
-                        <vr-whs-be-carrieraccount-selector ng-show="reporttype.ParameterSettings.CustomerIdNotOptional == true" isrequired="reporttype.ParameterSettings.CustomerIdNotOptional" normal-col-num="2" getcustomers  on-ready="onSingleCustomerAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
-                        <vr-whs-be-carrieraccount-selector ng-show="reporttype.ParameterSettings.CustomerIdNotOptional != true" normal-col-num="2" getcustomers ismultipleselection on-ready="onCustomerAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
+                    <vr-whs-be-carrieraccount-selector ng-show="reporttype.ParameterSettings.CustomerIdNotOptional == true" selectedvalues="singleCustomer" isrequired="reporttype.ParameterSettings.CustomerIdNotOptional" normal-col-num="2" getcustomers on-ready="onSingleCustomerAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
+                    <vr-whs-be-carrieraccount-selector ng-show="reporttype.ParameterSettings.CustomerIdNotOptional != true" selectedvalues="customers" normal-col-num="2" getcustomers ismultipleselection on-ready="onCustomerAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
                 </span>
                 <span ng-show="reporttype.ParameterSettings.RequiresSupplierId">
-                    <vr-whs-be-carrieraccount-selector normal-col-num="2" getsuppliers ismultipleselection on-ready="onSupplierAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
+                    <vr-whs-be-carrieraccount-selector normal-col-num="2" getsuppliers selectedvalues="suppliers" ismultipleselection on-ready="onSupplierAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
                 </span>
                 <vr-timerange on-ready="onTimeRangeDirectiveReady" type="dateTime" width="normal" period="selectedPeriod" from="fromDate" to="toDate" isrequired="true"></vr-timerange>
 

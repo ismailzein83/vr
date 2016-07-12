@@ -135,6 +135,9 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
         }
         $scope.resetReportParams = function () {
             $scope.selectedPeriod = $scope.periods[6];
+            $scope.singleCustomer = null;
+            $scope.customers = [];
+            $scope.suppliers = [];
             $scope.params = {
                 groupByCustomer: false,
                 groupByProfile: false,
