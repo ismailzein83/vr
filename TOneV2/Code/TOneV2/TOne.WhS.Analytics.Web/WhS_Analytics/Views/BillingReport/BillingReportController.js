@@ -9,6 +9,9 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
     var customerAccountDirectiveAPI;
     var customerAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+    var singleCustomerAccountDirectiveAPI;
+    var singleCustomerAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
     var supplierAccountDirectiveAPI;
     var supplierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -23,7 +26,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
     load();
 
     $scope.export = function () {
-        var customers = (customerAccountDirectiveAPI != undefined && customerAccountDirectiveAPI.getSelectedIds() != undefined) ? customerAccountDirectiveAPI.getSelectedIds() : "";
+        var customers = (singleCustomerAccountDirectiveAPI != undefined && singleCustomerAccountDirectiveAPI.getSelectedIds() != undefined) ? singleCustomerAccountDirectiveAPI.getSelectedIds() : "";
         return BillingReportAPIService.ExportCarrierProfile($scope.fromDate, $scope.toDate, $scope.params.top, customers, currencySelectorAPI.getSelectedIds(), $scope.selectedCurrency.Symbol).then(function (response) {
             UtilsService.downloadFile(response.data, response.headers);
         });
@@ -41,6 +44,10 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
     $scope.onCustomerAccountDirectiveReady = function (api) {
         customerAccountDirectiveAPI = api;
         customerAccountReadyPromiseDeferred.resolve();
+    }
+    $scope.onSingleCustomerAccountDirectiveReady = function (api) {
+        singleCustomerAccountDirectiveAPI = api;
+        singleCustomerAccountReadyPromiseDeferred.resolve();
     }
 
     $scope.onSupplierAccountDirectiveReady = function (api) {
@@ -155,7 +162,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadReportTypes, loadCurrencySelector, loadCustomers, loadSuppliers, loadTimeRangeSelector, loadSaleZones])
+        return UtilsService.waitMultipleAsyncOperations([loadReportTypes, loadCurrencySelector, loadCustomers, loadSingleCustomers, loadSuppliers, loadTimeRangeSelector, loadSaleZones])
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
@@ -187,6 +194,14 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
         });
 
         return loadCustomerAccountPromiseDeferred.promise;
+    }
+    function loadSingleCustomers() {
+        var loadSingleCustomerAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+        singleCustomerAccountReadyPromiseDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(singleCustomerAccountDirectiveAPI, undefined, loadSingleCustomerAccountPromiseDeferred);
+        });
+
+        return loadSingleCustomerAccountPromiseDeferred.promise;
     }
 
     function loadSuppliers() {
