@@ -142,6 +142,7 @@
     <Compile Include="ServiceType\ServiceTypeToEdit.cs" />
     <Compile Include="RecurringPeriod\RecurringPeriodSettings.cs" />
     <Compile Include="Status\StatusChargingSet.cs" />
+    <Compile Include="Status\StatusDefinitionDetail.cs" />
     <Compile Include="Status\StatusDefinition.cs" />
     <Compile Include="Switch\SwitchDetail.cs" />
     <Compile Include="Switch\SwitchQuery.cs" />

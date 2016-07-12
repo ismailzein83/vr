@@ -1,0 +1,42 @@
+﻿
+<vr-panel ng-controller="Retail_BE_StatusDefinitionManagementController">
+    <vr-form name="formFilter">
+
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Add" data-onclick="addNewSellingNumberPlan" haspermission="hasAddSellingNumberPlanPermission"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+
+        <vr-datagrid datasource="scopeModel.statusDefinition"
+                     dataretrievalfunction="scopeModel.dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     on-ready="scopeModel.onGridReady"
+                     menuactions="scopeModel.menuActions"
+                     idfield="Entity.StatusDefinitionId">
+            <vr-datagridcolumn headertext="'Id'" field="'Entity.StatusDefinitionId'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Settings'" field="'Entity.Settings'"></vr-datagridcolumn>
+        </vr-datagrid>
+
+
+        <!--<vr-row>
+            <table border="1">
+                <tr>
+                    <th>{{id}}</th>
+                    <th>Name</th>
+                    <th>Settings</th>
+                </tr>
+                <tr ng-repeat="dataRow in statusData">
+                    <td>{{dataRow.Entity.StatusDefinitionId}}</td>
+                    <td>{{dataRow.Entity.Name}}</td>
+                    <td>{{dataRow.Entity.Settings}}</td>
+                </tr>
+            </table>
+        </vr-row>-->
+
+    </vr-form>
+</vr-panel>

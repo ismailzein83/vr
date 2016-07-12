@@ -157,6 +157,7 @@
     <Compile Include="Controllers\AccountServiceController.cs" />
     <Compile Include="Controllers\AccountTypeController.cs" />
     <Compile Include="Controllers\ChargingPolicyController.cs" />
+    <Compile Include="Controllers\StatusDefinitionController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
     <Compile Include="Controllers\ServiceTypeController.cs" />
     <Compile Include="Controllers\ZoneController.cs" />
@@ -311,6 +312,8 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountTypeAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ChargingPolicyAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ServiceTypeAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\StatusDefinitionAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\StatusDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\SwitchAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ZoneAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PackageAPIService.js" />
@@ -354,6 +357,8 @@
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeManagementController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Status\StatusDefinitionManagement.html" />
+    <Content Include="Retail_BusinessEntity\Views\Status\StatusDefinitionManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\Switch\SwitchEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Switch\SwitchEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Switch\SwitchManagement.html" />
