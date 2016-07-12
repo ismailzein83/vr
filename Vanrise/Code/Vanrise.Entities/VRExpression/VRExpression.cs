@@ -20,6 +20,8 @@ namespace Vanrise.Entities
 
     public abstract class VRExpressionVariableValue
     {
+        public int ConfigId { get; set; }
+
         public abstract dynamic GetValue(IVRExpressionVariableValueContext context);
     }
 
