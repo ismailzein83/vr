@@ -102,10 +102,18 @@
                         ctrl.increment = function () {
                             var avrege;
                             if (isNaN(parseFloat(ctrl.value))) {
-                                if (ctrl.minValue == undefined || ctrl.maxValue == undefined)
-                                    avrege = parseInt( 0 );
-                                else
-                                    avrege = (ctrl.maxValue + ctrl.minValue) / 2 + (((ctrl.maxValue + ctrl.minValue) / 2 % ctrl.stepValue));
+                                if (ctrl.maxValue != undefined) {
+                                    avrege =ctrl.maxValue ;
+                                }
+                                 if (ctrl.minValue != undefined )
+                                    avrege = ctrl.minValue ;
+
+                                 if (ctrl.minValue == undefined && ctrl.maxValue == undefined)
+                                     avrege = parseInt(0);
+
+                                 if (ctrl.minValue != undefined && ctrl.maxValue != undefined)
+                                     avrege = (ctrl.maxValue + ctrl.minValue) / 2 + (((ctrl.maxValue + ctrl.minValue) / 2 % ctrl.stepValue));
+
                                 ctrl.value = avrege ;
                                 ctrl.notifyUserChange();
 
@@ -120,10 +128,18 @@
                         ctrl.decrement = function () {
                             var avrege;
                             if (isNaN(parseFloat(ctrl.value))) {
-                                if (ctrl.minValue == undefined || ctrl.maxValue == undefined)
-                                    avrege = 0;
-                                else
+                                if (ctrl.maxValue != undefined) {
+                                    avrege = ctrl.maxValue;
+                                }
+                                if (ctrl.minValue != undefined)
+                                    avrege = ctrl.minValue;
+
+                                if (ctrl.minValue == undefined && ctrl.maxValue == undefined)
+                                    avrege = parseInt(0);
+
+                                if (ctrl.minValue != undefined && ctrl.maxValue != undefined)
                                     avrege = (ctrl.maxValue + ctrl.minValue) / 2 + (((ctrl.maxValue + ctrl.minValue) / 2 % ctrl.stepValue));
+
                                 ctrl.value = avrege;
                                 ctrl.notifyUserChange();
 
