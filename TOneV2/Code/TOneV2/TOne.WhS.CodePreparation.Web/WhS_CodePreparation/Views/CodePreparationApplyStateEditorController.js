@@ -41,50 +41,47 @@
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
                         $scope.modalContext.closeModal();
                         var context = {
-                            onClose: function () {
-                                $scope.onCodePreparationApplied();
-                            }
+                            onClose:  $scope.onCodePreparationApplied
                         }
-                        return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context);
                     }
-
+                    return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context);
                 });
-            }
         }
+    }
 
-        function load() {
-            $scope.isLoading = true;
-            loadAllControls();
-        }
-
-
-        function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadEffectiveDate])
-               .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
-              .finally(function () {
-                  $scope.isLoading = false;
-              });
-        }
+    function load() {
+        $scope.isLoading = true;
+        loadAllControls();
+    }
 
 
-        function setTitle() {
-            $scope.title = "Apply Numbering Plan State";
-        }
+    function loadAllControls() {
+        return UtilsService.waitMultipleAsyncOperations([setTitle, loadEffectiveDate])
+           .catch(function (error) {
+               VRNotificationService.notifyExceptionWithClose(error, $scope);
+           })
+          .finally(function () {
+              $scope.isLoading = false;
+          });
+    }
 
 
-        function loadEffectiveDate() {
+    function setTitle() {
+        $scope.title = "Apply Numbering Plan State";
+    }
 
-            return WhS_CP_CodePrepAPIService.GetEffectiveDateOffset(sellingNumberPlanId).then(function (offset) {
-                var effectiveDate= new Date();
-                effectiveDate.setDate(effectiveDate.getDate() + offset);
-                $scope.effectiveDate = effectiveDate;
-            })
-        }
 
-    };
+    function loadEffectiveDate() {
 
-    appControllers.controller('WhS_CP_CodePreparationApplyStateEditorController', CodePreparationApplyStateEditorController);
+        return WhS_CP_CodePrepAPIService.GetEffectiveDateOffset(sellingNumberPlanId).then(function (offset) {
+            var effectiveDate= new Date();
+            effectiveDate.setDate(effectiveDate.getDate() + offset);
+            $scope.effectiveDate = effectiveDate;
+        })
+    }
+
+};
+
+appControllers.controller('WhS_CP_CodePreparationApplyStateEditorController', CodePreparationApplyStateEditorController);
 
 })(appControllers);

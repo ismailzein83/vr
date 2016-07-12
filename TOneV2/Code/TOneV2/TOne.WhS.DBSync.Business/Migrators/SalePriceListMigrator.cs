@@ -67,7 +67,9 @@ namespace TOne.WhS.DBSync.Business
         }
         public override void FillTableInfo(bool useTempTables)
         {
-          
+            DBTable dbTableSalePriceList = Context.DBTables[DBTableName.SalePriceList];
+            if (dbTableSalePriceList != null)
+                dbTableSalePriceList.Records = dbSyncDataManager.GetSalePriceLists(useTempTables);
         }
     }
 }

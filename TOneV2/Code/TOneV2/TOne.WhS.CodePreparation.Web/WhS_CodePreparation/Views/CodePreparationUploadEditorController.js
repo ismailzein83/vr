@@ -43,13 +43,11 @@
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
                         $scope.modalContext.closeModal();
                         var context = {
-                            onClose: function () {
-                                $scope.onCodePreparationUpdated();
+                            onClose: $scope.onCodePreparationUpdated
                             }
                         }
                         return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context);
-                    }
-                });
+                    });
             }
 
             $scope.downloadTemplate = function () {

@@ -34,7 +34,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 newAndExistingZones.TryGetValue(zoneToProcess.ZoneName, out addedZones);
                
                 if (addedZones != null)
-                    zoneToProcess.AddedZones.AddRange(addedZones.Select(item => item as AddedZone));
+                    zoneToProcess.AddedZones.AddRange(addedZones.Where(itm => itm is AddedZone).Select(item => item as AddedZone));
                 
                 if (existingZones != null)
                     zoneToProcess.ExistingZones.AddRange(existingZones.FindAllRecords(item => item.Name.Equals(zoneToProcess.ZoneName, StringComparison.InvariantCultureIgnoreCase)));

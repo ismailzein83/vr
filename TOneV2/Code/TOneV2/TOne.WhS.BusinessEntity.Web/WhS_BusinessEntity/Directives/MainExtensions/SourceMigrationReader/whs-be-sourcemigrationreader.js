@@ -34,7 +34,6 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
             var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var sellingProductDirectiveAPI;
-            var sellingProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.useTempTables = true;
@@ -48,16 +47,30 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                 $scope.onSellingNumberPlanDirectiveReady = function (api) {
                     sellingNumberPlanDirectiveAPI = api;
                     sellingNumberPlanReadyPromiseDeferred.resolve();
+                    defineAPI();
                 }
 
                 $scope.onSellingProductsDirectiveReady = function (api) {
                     sellingProductDirectiveAPI = api;
-                    sellingProductReadyPromiseDeferred.resolve();
                 }
 
-                UtilsService.waitMultiplePromises([sellingNumberPlanReadyPromiseDeferred.promise, sellingProductReadyPromiseDeferred.promise]).then(function () {
-                    defineAPI();
-                });
+                $scope.onSellingNumberPlanSelectionChanged = function () {
+                    var selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
+                    if (selectedSellingNumberPlanId != undefined) {
+                        var setLoader = function (value) { $scope.isLoadingSellingProduct = value };
+
+                        var sellingProductPayload = {
+                            filter: {
+                                SellingNumberPlanId: selectedSellingNumberPlanId
+                            },
+                            selectedIds: sellingProductId
+                        };
+                        sellingProductId = undefined;
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingProductDirectiveAPI, sellingProductPayload, setLoader);
+                    }
+                    else if (sellingProductDirectiveAPI != undefined)
+                        sellingProductDirectiveAPI.clearDataSource();
+                }
 
             }
 
@@ -102,7 +115,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
 
                     }
 
-                    return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlanSelector, loadSellingProductSelector])
+                    return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlanSelector])
                          .catch(function (error) {
                              VRNotificationService.notifyExceptionWithClose(error, $scope);
                          });
@@ -126,21 +139,6 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                 });
 
                 return loadSellingNumberPlanPromiseDeferred.promise
-            }
-
-
-            function loadSellingProductSelector() {
-                var loadSellingProductPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                sellingProductReadyPromiseDeferred.promise.then(function () {
-                    var sellingProductPayload = {
-                        selectedIds: sellingProductId
-                    };
-
-                    VRUIUtilsService.callDirectiveLoad(sellingProductDirectiveAPI, sellingProductPayload, loadSellingProductPromiseDeferred);
-                });
-
-                return loadSellingProductPromiseDeferred.promise
             }
 
             this.initializeController = initializeController;
