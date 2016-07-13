@@ -15,6 +15,8 @@ namespace Mediation.Generic.Data
 
         IEnumerable<MediationRecord> GetMediationRecordsByIds(int mediationDefinitionId, IEnumerable<string> sessionIds);
 
+        bool DeleteMediationRecordsBySessionIds(int mediationDefinitionId, IEnumerable<string> sessionIds);
+
         int DataRecordTypeId { set; }
     }
 

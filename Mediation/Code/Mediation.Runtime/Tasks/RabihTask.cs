@@ -17,7 +17,7 @@ namespace Mediation.Runtime.Tasks
     {
         public void Execute()
         {
-            //RunImportProcess();
+            RunImportProcess();
 
             RunCookingProcess();
         }
@@ -41,7 +41,7 @@ namespace Mediation.Runtime.Tasks
             {
                 InputArguments = new MediationProcessInput()
                 {
-                    MediationDefinitionId = 1,
+                    MediationDefinitionId = 2,
                     UserId = 1
                 }
             });

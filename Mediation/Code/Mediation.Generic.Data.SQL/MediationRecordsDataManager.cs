@@ -78,6 +78,21 @@ namespace Mediation.Generic.Data.SQL
                 cmd.Parameters.Add(dtPrm);
             });
         }
+        public bool DeleteMediationRecordsBySessionIds(int mediationDefinitionId, IEnumerable<string> sessionIds)
+        {
+            return ExecuteNonQuerySPCmd("[Mediation_Generic].[sp_MediationRecord_DeleteBySessionIds]", (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@Ids", SqlDbType.Structured);
+                dtPrm.TypeName = "dbo.[StringIDType]";
+                dtPrm.Value = BuildEventIdsTable(sessionIds);
+                cmd.Parameters.Add(dtPrm);
+
+                dtPrm = new SqlParameter("@MediationDefinitionId", SqlDbType.BigInt);
+                dtPrm.Value = mediationDefinitionId;
+                cmd.Parameters.Add(dtPrm);
+            }) > 0;
+        }
+
         public int DataRecordTypeId
         {
             set { _dataRecordTypeId = value; }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Activities;
 using Mediation.Generic.Entities;
 using Mediation.Generic.Business;
+using Mediation.Generic.Data;
 
 namespace Mediation.Generic.BP.Activities
 {
@@ -25,6 +26,8 @@ namespace Mediation.Generic.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
+            IMediationRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMediationRecordsDataManager>();
+            dataManager.DataRecordTypeId = DataRecordTypeId.Get(context);
             MediationRecordsManager manager = new MediationRecordsManager();
             IEnumerable<MediationRecord> mediationRecords = manager.GetMediationRecordsByStatus(MediationDefinitionId.Get(context), Status.Get(context), DataRecordTypeId.Get(context));
             MediationRecords.Set(context, mediationRecords);

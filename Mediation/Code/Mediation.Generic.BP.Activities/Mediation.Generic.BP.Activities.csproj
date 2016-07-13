@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplyTransformationRecordsToDB.cs" />
+    <Compile Include="DeleteProcessedMediationRecords.cs" />
     <Compile Include="GetDataTransormationDefinition.cs" />
     <Compile Include="GetMediationDefinition.cs" />
     <Compile Include="GetMediationEventIds.cs" />

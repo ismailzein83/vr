@@ -46,5 +46,56 @@ namespace Mediation.Generic.Business
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
             return result;
         }
+
+        public Vanrise.Integration.Entities.MappingOutput GetResult_Version31(object data, Vanrise.Integration.Entities.MappedBatchItemsToEnqueue mappedBatches)
+        {
+            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
+            var cdrs = new List<dynamic>();
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type mediationCDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("ParsedCDR_31");
+            try
+            {
+                System.IO.StreamReader sr = ImportedData.StreamReader;
+                while (!sr.EndOfStream)
+                {
+                    string currentLine = sr.ReadLine();
+                    if (string.IsNullOrEmpty(currentLine))
+                        continue;
+                    string[] rowData = currentLine.Split(Spliter);
+                    dynamic cdr = Activator.CreateInstance(mediationCDRRuntimeType) as dynamic;
+                    cdr.TC_VERSIONID = rowData[0].Trim('"');
+                    cdr.TC_CALLID = rowData[13].Trim('"');
+                    cdr.TC_LOGTYPE = rowData[1].Trim('"');
+                    cdr.TC_TIMESTAMP = DateTime.ParseExact(rowData[3].Trim('"'), "yyyyMMddHHmmss:fff", System.Globalization.CultureInfo.InvariantCulture);
+
+                    cdr.TC_DISCONNECTREASON = rowData[4].Trim('"');
+                    cdr.TC_CALLPROGRESSSTATE = rowData[5].Trim('"');
+                    cdr.TC_ACCOUNT = rowData[6].Trim('"');
+                    cdr.TC_ORIGINATORID = rowData[7].Trim('"');
+                    cdr.TC_ORIGINATORNUMBER = rowData[8].Trim('"');
+                    cdr.TC_ORIGINALFROMNUMBER = rowData[9].Trim('"');
+                    cdr.TC_ORIGINALDIALEDNUMBER = rowData[10].Trim('"');
+                    cdr.TC_TERMINATORID = rowData[11].Trim('"');
+                    cdr.TC_TERMINATORNUMBER = rowData[12].Trim('"');
+                    cdr.TC_INCOMINGGWID = rowData[15].Trim('"');
+                    cdr.TC_OUTGOINGGWID = rowData[16].Trim('"');
+                    cdr.TC_TRANSFERREDCALLID = rowData[20].Trim('"');
+                    cdrs.Add(cdr);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                throw ex;
+            }
+
+            MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs");
+            mappedBatches.Add("Mediation Store Batch V31", batch);
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+            return result;
+        }
+
     }
 }
