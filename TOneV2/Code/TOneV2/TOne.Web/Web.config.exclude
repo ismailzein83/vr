@@ -32,6 +32,7 @@
     <add name="BIConnectionString" connectionString="Provider=MSOLAP;Data Source = http://192.168.110.185:1214/msmdpump.dll; Initial Catalog = ToneDebTest01_BI_Latest; User Id = vanrise\olap.access; Password = 0l@p@cce$$" />
     <add name="QueueItemDBConnString" connectionString="Data Source=.;Initial Catalog=TOneQueueDB;User ID=sa; Password=p@ssw0rd" />
     <add name="RoutingDBConnStringTemplateKey" connectionString="Data Source=192.168.110.185;Initial Catalog=TOneV2_Dev_Routing_{0};user id=development;password=dev!123"/>
+    <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>
   <appSettings>
     <add key="vs:EnableBrowserLink" value="false"/>
