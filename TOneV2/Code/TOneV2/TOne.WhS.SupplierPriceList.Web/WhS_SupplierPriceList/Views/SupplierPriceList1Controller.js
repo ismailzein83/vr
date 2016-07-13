@@ -1,8 +1,8 @@
 ﻿(
     function (appControllers) {
         "use strict";
-        priceListConversionController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_SupPL_SupplierPriceListAPIService', 'WhS_SupPL_SupplierPriceListTemplateService', 'WhS_SupPL_SupplierPriceListTemplateAPIService','WhS_BE_CarrierAccountAPIService'];
-        function priceListConversionController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_SupPL_SupplierPriceListAPIService, WhS_SupPL_SupplierPriceListTemplateService, WhS_SupPL_SupplierPriceListTemplateAPIService, WhS_BE_CarrierAccountAPIService) {
+        priceListConversionController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_SupPL_SupplierPriceListAPIService', 'WhS_SupPL_SupplierPriceListTemplateService', 'WhS_SupPL_SupplierPriceListTemplateAPIService','WhS_BE_CarrierAccountAPIService','BusinessProcess_BPInstanceAPIService','WhS_BP_CreateProcessResultEnum','BusinessProcess_BPInstanceService'];
+        function priceListConversionController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_SupPL_SupplierPriceListAPIService, WhS_SupPL_SupplierPriceListTemplateService, WhS_SupPL_SupplierPriceListTemplateAPIService, WhS_BE_CarrierAccountAPIService, BusinessProcess_BPInstanceAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService) {
 
             var inputWorkBookApi;
             var inputPriceListName;
@@ -71,37 +71,11 @@
                     inputConfigurationAPI = api;
                 }
 
-                $scope.scopeModel.validate = function () {
-
-                    var onOutputPriceListTemplateChoosen = function (choosenPriceListTemplateObj) {
-                        if (choosenPriceListTemplateObj != undefined && choosenPriceListTemplateObj.pricelistTemplateIds != undefined) {
-                            $scope.scopeModel.isLoading = true;
-                            var promises = [];
-                            var requests = [];
-                            for (var i = 0; i < choosenPriceListTemplateObj.pricelistTemplateIds.length; i++) {
-
-                                var fileName = UtilsService.getUploadedFileName($scope.scopeModel.inPutFile.fileName);
-
-                                var supplierPriceListInput = {
-                                    InputFileId: $scope.scopeModel.inPutFile.fileId,
-                                    SupplierPriceListSettings: buildInputConfigurationObj(),
-                                }
-                                promises.push(validate(supplierPriceListInput));
-                            }
-                            return UtilsService.waitMultiplePromises(promises).finally(function () {
-                                $scope.scopeModel.isLoading = false;;
-                            }).catch(function (error) {
-                            });
-                        }
-                    };
-                 
-                }
-
                 $scope.scopeModel.saveInputConfiguration = function () {
                     if (priceListTemplateEntity)
-                        return updatePriceListTemplate();
+                        return saveExistingPriceListTemplate();
                     else
-                        return insertPriceListTemplate();
+                        return saveNewPriceListTemplate();
                 }
 
                 $scope.scopeModel.onInputPriceListTemplateSelectorReady = function (api) {
@@ -138,10 +112,88 @@
 
                 }
 
+                $scope.scopeModel.startImport = function () {
+                    
+                    var promiseDeffered = UtilsService.createPromiseDeferred();
+
+
+                    if (!priceListTemplateEntity)
+                    {
+                        var priceListTemplateObject = buildPriceListTemplateObjFromScope(true);
+                        insertPriceListTemplate(priceListTemplateObject).then(function (response) {
+                            if (response != undefined && response.InsertedObject != undefined)
+                            {
+                                startImportSupplierPriceList(response.InsertedObject.SupplierPriceListTemplateId).then(function () {
+                                    promiseDeffered.resolve();
+                                }).catch(function (error) {
+                                    promiseDeffered.reject(error);
+                                });
+                            } else {
+                                promiseDeffered.resolve();
+                            }
+                        }).catch(function (error) {
+                            promiseDeffered.reject(error);
+                        });;
+                    }else
+                    {
+                        var priceListTemplateObject = buildPriceListTemplateObjFromScope(true);
+
+                        return updatePriceListTemplate(priceListTemplateObject).then(function (response) {
+                                if (response != undefined && response.UpdatedObject != undefined) {
+                                    startImportSupplierPriceList(response.UpdatedObject.SupplierPriceListTemplateId).then(function () {
+                                        promiseDeffered.resolve();
+                                    }).catch(function (error) {
+                                        promiseDeffered.reject(error);
+                                    });
+                                }else
+                                {
+                                    promiseDeffered.resolve();
+                                }
+                        }).catch(function (error) {
+                            promiseDeffered.reject(error);
+                        });
+                    }
+                    return promiseDeffered.promise;
+                }
+
                 function hassaveInputConfigurationPermission() {
                     return WhS_SupPL_SupplierPriceListTemplateAPIService.HassaveInputConfigurationPermission();
                 };
                
+            }
+
+            function startImportSupplierPriceList(supplierPriceListTemplateId)
+            {
+                var promiseDeffered = UtilsService.createPromiseDeferred();
+
+                var inputArguments = {
+                    $type: "TOne.WhS.SupplierPriceList.BP.Arguments.SupplierPriceListProcessInput, TOne.WhS.SupplierPriceList.BP.Arguments",
+                    SupplierAccountId: carrierAccountDirectiveAPI.getSelectedIds(),
+                    CurrencyId: currencyDirectiveAPI.getSelectedIds(),
+                    FileId: $scope.scopeModel.inPutFile.fileId,
+                    PriceListDate: $scope.scopeModel.priceListDate,
+                    SupplierPriceListTemplateId: supplierPriceListTemplateId
+                };
+                var input = {
+                    InputArguments: inputArguments
+                };
+                 BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
+                    if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
+                        var context = {
+                            onClose: function () {
+                            }
+                        }
+                         BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context).then(function () {
+                            promiseDeffered.resolve();
+                         }).catch(function (error) {
+                             promiseDeffered.reject(error);
+                         });
+                    }else
+                    {
+                        promiseDeffered.resolve();
+                    }
+                });
+                return promiseDeffered.promise;
             }
 
             function load() {
@@ -238,22 +290,31 @@
                     return inputConfigurationAPI.getData();
             }
 
-            function buildPriceListTemplateObjFromScope() {
+            function buildPriceListTemplateObjFromScope(isDraft) {
                 var priceListTemplateObject = {
                     SupplierPriceListTemplateId: priceListTemplateEntity != undefined ? priceListTemplateEntity.SupplierPriceListTemplateId : undefined,
                     SupplierId: carrierAccountDirectiveAPI.getSelectedIds(),
-                    ConfigDetails: buildInputConfigurationObj()
                 };
+
+                if(!isDraft)
+                {
+                   priceListTemplateObject.ConfigDetails =  buildInputConfigurationObj();
+                }
+                if(isDraft)
+                {
+                    if (priceListTemplateEntity != undefined && priceListTemplateEntity.ConfigDetails != undefined)
+                    {
+                        priceListTemplateObject.ConfigDetails = priceListTemplateEntity.ConfigDetails;
+                    }
+                    priceListTemplateObject.Draft = buildInputConfigurationObj();
+                }
                 return priceListTemplateObject;
             }
 
-            function insertPriceListTemplate() {
+            function saveNewPriceListTemplate() {
                 $scope.scopeModel.isLoading = true;
-
                 var priceListTemplateObject = buildPriceListTemplateObjFromScope();
-
-                return WhS_SupPL_SupplierPriceListTemplateAPIService.AddSupplierPriceListTemplate(priceListTemplateObject)
-                .then(function (response) {
+                return insertPriceListTemplate(priceListTemplateObject).then(function (response) {
                     VRNotificationService.notifyOnItemAdded('Supplier Price List Template', response, 'Name');
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
@@ -263,20 +324,26 @@
 
             }
 
-            function updatePriceListTemplate() {
+            function insertPriceListTemplate(priceListTemplateObject) {
+                return WhS_SupPL_SupplierPriceListTemplateAPIService.AddSupplierPriceListTemplate(priceListTemplateObject);
+            }
+
+            function saveExistingPriceListTemplate() {
                 $scope.scopeModel.isLoading = true;
-
                 var priceListTemplateObject = buildPriceListTemplateObjFromScope();
-
-                return WhS_SupPL_SupplierPriceListTemplateAPIService.UpdateSupplierPriceListTemplate(priceListTemplateObject).then(function (response) {
-                    VRNotificationService.notifyOnItemUpdated('Supplier Price List Template', response, 'Name');
+                return updatePriceListTemplate(priceListTemplateObject).then(function (response) {
+                    VRNotificationService.notifyOnItemAdded('Supplier Price List Template', response, 'Name');
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 });
             }
-          
+
+            function updatePriceListTemplate(priceListTemplateObject) {
+                return WhS_SupPL_SupplierPriceListTemplateAPIService.UpdateSupplierPriceListTemplate(priceListTemplateObject);
+            }
+
             function validate(supplierPriceListInput) {
                 return WhS_SupPL_SupplierPriceListAPIService.ValidateSupplierPriceList(supplierPriceListInput).then(function (response) {
                     UtilsService.downloadFile(response.data, response.headers);

@@ -10,6 +10,7 @@ namespace TOne.WhS.SupplierPriceList.Entities
     {
         public int SupplierPriceListTemplateId { get; set; }
         public int SupplierId { get; set; }
-        public Object ConfigDetails { get; set; }
+        public SupplierPriceListSettings ConfigDetails { get; set; }
+        public SupplierPriceListSettings Draft { get; set; }
     }
 }

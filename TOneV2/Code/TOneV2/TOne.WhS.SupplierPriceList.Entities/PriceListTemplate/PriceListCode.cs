@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.SupplierPriceList.Entities
 {
-     public class PriceList
+    public class PriceListCode
     {
-        public List<PriceListRecord> Records { get; set; }
+        public string ZoneName { get; set; }
+        public string Code { get; set; }
+        public DateTime? EffectiveDate { get; set; }
     }
 }

@@ -28,60 +28,60 @@ namespace TestRuntime.Tasks
             SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
 
             var runtimeServices = new List<RuntimeService>();
-            runtimeServices.Add(queueActivationService);
+           // runtimeServices.Add(queueActivationService);
 
             runtimeServices.Add(bpService);
 
-            runtimeServices.Add(schedulerService);
+           // runtimeServices.Add(schedulerService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
 
-            //var tree = Vanrise.Common.Serializer.Serialize(queueFlowTree);
-            var myflow = AllFlows.GetImportCDRFlow();
-            var tree1 = Vanrise.Common.Serializer.Serialize("test");
+            ////var tree = Vanrise.Common.Serializer.Serialize(queueFlowTree);
+            //var myflow = AllFlows.GetImportCDRFlow();
+            //var tree1 = Vanrise.Common.Serializer.Serialize("test");
 
 
 
 
-            AnalyticDimensionConfig AnalyticDimensionConfig = new AnalyticDimensionConfig()
-            {
-                FieldType = new FieldTextType(),
-                //GroupByColumns = new List<string>() { "ant.SaleZoneID", "salz.Name" },
-                IdColumn = "ISNULL(ant.SaleZoneID,'N/A')",
-                JoinConfigNames = new List<string>() { "SaleZoneJoin" },
-                NameColumn = "salz.Name"
+            //AnalyticDimensionConfig AnalyticDimensionConfig = new AnalyticDimensionConfig()
+            //{
+            //    FieldType = new FieldTextType(),
+            //    //GroupByColumns = new List<string>() { "ant.SaleZoneID", "salz.Name" },
+            //    IdColumn = "ISNULL(ant.SaleZoneID,'N/A')",
+            //    JoinConfigNames = new List<string>() { "SaleZoneJoin" },
+            //    NameColumn = "salz.Name"
 
-            };
-            AnalyticDimensionConfig AnalyticDimensionConfig1 = new AnalyticDimensionConfig()
-            {
-                FieldType = new FieldTextType(),
-                //GroupByColumns = new List<string>() { "ant.SupplierZoneID", "suppz.Name" },
-                IdColumn = "ISNULL(ant.SupplierZoneID,'N/A')",
-                JoinConfigNames = new List<string>() { "SupplierZoneJoin" },
-                NameColumn = "suppz.Name"
+            //};
+            //AnalyticDimensionConfig AnalyticDimensionConfig1 = new AnalyticDimensionConfig()
+            //{
+            //    FieldType = new FieldTextType(),
+            //    //GroupByColumns = new List<string>() { "ant.SupplierZoneID", "suppz.Name" },
+            //    IdColumn = "ISNULL(ant.SupplierZoneID,'N/A')",
+            //    JoinConfigNames = new List<string>() { "SupplierZoneJoin" },
+            //    NameColumn = "suppz.Name"
 
-            };
-            var test = Vanrise.Common.Serializer.Serialize(AnalyticDimensionConfig);
-            var test1 = Vanrise.Common.Serializer.Serialize(AnalyticDimensionConfig1);
-
-
+            //};
+            //var test = Vanrise.Common.Serializer.Serialize(AnalyticDimensionConfig);
+            //var test1 = Vanrise.Common.Serializer.Serialize(AnalyticDimensionConfig1);
 
 
 
-            AnalyticMeasure AnalyticMeasure = new AnalyticMeasure()
-            {
-                AnalyticMeasureConfigId = 2,
-                Config = new AnalyticMeasureConfig()
-                {
-                    JoinConfigNames = null,
-                    //GetSQLExpressionMethod = "",
-                    //SQLExpression = "Sum(ant.DeliveredAttempts)",
-                    //SummaryFunction = AnalyticSummaryFunction.Sum
-                }
-            };
-            var test5 = Vanrise.Common.Serializer.Serialize(AnalyticMeasure);
-            Vanrise.Common.Serializer.Serialize(AnalyticMeasure);
+
+
+            //AnalyticMeasure AnalyticMeasure = new AnalyticMeasure()
+            //{
+            //    AnalyticMeasureConfigId = 2,
+            //    Config = new AnalyticMeasureConfig()
+            //    {
+            //        JoinConfigNames = null,
+            //        //GetSQLExpressionMethod = "",
+            //        //SQLExpression = "Sum(ant.DeliveredAttempts)",
+            //        //SummaryFunction = AnalyticSummaryFunction.Sum
+            //    }
+            //};
+            //var test5 = Vanrise.Common.Serializer.Serialize(AnalyticMeasure);
+            //Vanrise.Common.Serializer.Serialize(AnalyticMeasure);
                
             //QueueExecutionFlowManager executionFlowManager = new QueueExecutionFlowManager();
             //var queuesByStages = executionFlowManager.GetQueuesByStages(2);

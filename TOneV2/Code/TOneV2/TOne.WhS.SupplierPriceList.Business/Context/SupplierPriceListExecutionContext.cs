@@ -9,6 +9,6 @@ namespace TOne.WhS.SupplierPriceList.Business
 {
     public class SupplierPriceListExecutionContext : ISupplierPriceListExecutionContext
     {
-        public int InputFileId { get; set; }
+        public long InputFileId { get; set; }
     }
 }

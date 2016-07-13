@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.SupplierPriceList.Entities
 {
-    public interface ISupplierPriceListExecutionContext
+    public class PriceListRate
     {
-        long InputFileId { get; }
+        public string ZoneName { get; set; }
+        public decimal? Rate { get; set; }
+        public DateTime? EffectiveDate { get; set; }
     }
 }

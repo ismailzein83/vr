@@ -18,7 +18,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Arguments
 
         public DateTime PriceListDate { get; set; }
 
-
+        public int SupplierPriceListTemplateId { get; set; }
         public override string GetTitle()
         {
             ICarrierAccountManager carrierAccountManager = BEManagerFactory.GetManager<ICarrierAccountManager>();

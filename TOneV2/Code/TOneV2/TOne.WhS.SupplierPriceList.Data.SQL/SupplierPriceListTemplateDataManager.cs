@@ -32,14 +32,34 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         {
             object priceListTemplateId;
 
-            int affectedRows = ExecuteNonQuerySP("[TOneWhS_SPL].sp_SupplierPriceListTemplate_Insert", out priceListTemplateId,  supplierPriceListTemplate.SupplierId, Vanrise.Common.Serializer.Serialize(supplierPriceListTemplate.ConfigDetails));
+            string serializedDraft = null;
+            if(supplierPriceListTemplate.Draft != null)
+            {
+                serializedDraft = Vanrise.Common.Serializer.Serialize(supplierPriceListTemplate.Draft);
+            }
+            string serializedConfigDetails = null;
+            if(supplierPriceListTemplate.ConfigDetails != null)
+            {
+                serializedConfigDetails = Vanrise.Common.Serializer.Serialize(supplierPriceListTemplate.ConfigDetails);
+            }
+            int affectedRows = ExecuteNonQuerySP("[TOneWhS_SPL].sp_SupplierPriceListTemplate_Insert", out priceListTemplateId, supplierPriceListTemplate.SupplierId, serializedConfigDetails, serializedDraft);
             insertedObjectId = (affectedRows > 0) ? (int)priceListTemplateId : -1;
 
             return (affectedRows > 0);
         }
         public bool UpdateSupplierPriceListTemplate(SupplierPriceListTemplate supplierPriceListTemplate)
         {
-            int affectedRows = ExecuteNonQuerySP("[TOneWhS_SPL].sp_SupplierPriceListTemplate_Update", supplierPriceListTemplate.SupplierPriceListTemplateId, supplierPriceListTemplate.SupplierId, Vanrise.Common.Serializer.Serialize(supplierPriceListTemplate.ConfigDetails));
+            string serializedDraft = null;
+            if (supplierPriceListTemplate.Draft != null)
+            {
+                serializedDraft = Vanrise.Common.Serializer.Serialize(supplierPriceListTemplate.Draft);
+            }
+            string serializedConfigDetails = null;
+            if (supplierPriceListTemplate.ConfigDetails != null)
+            {
+                serializedConfigDetails = Vanrise.Common.Serializer.Serialize(supplierPriceListTemplate.ConfigDetails);
+            }
+            int affectedRows = ExecuteNonQuerySP("[TOneWhS_SPL].sp_SupplierPriceListTemplate_Update", supplierPriceListTemplate.SupplierPriceListTemplateId, supplierPriceListTemplate.SupplierId, serializedConfigDetails, serializedDraft);
             return (affectedRows > 0);
         }
         #endregion
@@ -51,7 +71,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             {
                 SupplierPriceListTemplateId = (int)reader["ID"],
                 SupplierId = GetReaderValue<int>(reader, "SupplierId"),
-                ConfigDetails = Vanrise.Common.Serializer.Deserialize(reader["ConfigDetails"] as string)
+                ConfigDetails =reader["ConfigDetails"] != null? Vanrise.Common.Serializer.Deserialize<SupplierPriceListSettings>(reader["ConfigDetails"] as string):null,
+                Draft =  reader["Draft"] != null? Vanrise.Common.Serializer.Deserialize<SupplierPriceListSettings>(reader["Draft"] as string):null,
             };
             return instance;
         }

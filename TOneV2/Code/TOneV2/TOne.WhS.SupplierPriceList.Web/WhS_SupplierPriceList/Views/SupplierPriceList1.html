@@ -10,7 +10,7 @@
                     </vr-columns>
 
                     <vr-columns width="normal">
-                        <vr-datetimepicker type="date" label="PriceList Date" value="priceListDate" isrequired></vr-datetimepicker>
+                        <vr-datetimepicker type="date" label="PriceList Date" value="scopeModel.priceListDate" isrequired></vr-datetimepicker>
                     </vr-columns>
                 </vr-row>
                 <vr-row removeline>
@@ -44,8 +44,7 @@
                 <vr-actionbar showcollapsebutton="false">
                     <div transclude-to="buttons">
                         <vr-button type="Save" formname="formFilter" ng-show="scopeModel.selectedSupplier != undefined" validationcontext="scopeModel.configurationValidation" data-onclick="scopeModel.saveInputConfiguration" haspermission="hassaveInputConfigurationPermission"></vr-button>
-                        <vr-button type="Validate" formname="formFilter" validationcontext="formFilter" data-onclick="scopeModel.validate"></vr-button>
-
+                        <vr-button type="Upload" validationcontext="inPutExcelGroupValid" data-onclick="scopeModel.startImport"></vr-button>
                     </div>
                 </vr-actionbar>
             </vr-row>

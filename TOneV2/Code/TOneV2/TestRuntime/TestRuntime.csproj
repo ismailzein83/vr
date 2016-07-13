@@ -326,6 +326,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.ExcelConversion.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.ExcelConversion.MainExtensions">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
     </Reference>
@@ -763,9 +770,25 @@
       <Project>{9aff405d-99a3-4316-a3a9-1f0db11eb785}</Project>
       <Name>TOne.WhS.SupplierPriceList.BP</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.Business\TOne.WhS.SupplierPriceList.Business.csproj">
+      <Project>{ecd63186-7d8e-4cbb-8e90-c1fff4a806a0}</Project>
+      <Name>TOne.WhS.SupplierPriceList.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.SupplierPriceList.Data.SQL\TOne.WhS.SupplierPriceList.Data.SQL.csproj">
       <Project>{7b2361d9-b37e-482e-8eba-9d88ac7d6829}</Project>
       <Name>TOne.WhS.SupplierPriceList.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.Data\TOne.WhS.SupplierPriceList.Data.csproj">
+      <Project>{81edf44d-73a3-4abf-8085-f9a69917b986}</Project>
+      <Name>TOne.WhS.SupplierPriceList.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.Entities.MainExtensions\TOne.WhS.SupplierPriceList.MainExtensions.csproj">
+      <Project>{5fb37ab5-f52c-4c8c-a14a-83338918afeb}</Project>
+      <Name>TOne.WhS.SupplierPriceList.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.Entities\TOne.WhS.SupplierPriceList.Entities.csproj">
+      <Project>{0940dc86-5421-4324-87cd-3f3ad458f4f6}</Project>
+      <Name>TOne.WhS.SupplierPriceList.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

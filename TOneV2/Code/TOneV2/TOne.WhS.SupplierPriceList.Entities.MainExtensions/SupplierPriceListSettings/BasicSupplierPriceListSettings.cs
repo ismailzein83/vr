@@ -12,91 +12,40 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
     public enum CodeLayout { CodeOnEachRow = 0, Delimitedcode = 1 }
     public class BasicSupplierPriceListSettings : Entities.SupplierPriceListSettings
     {
+     
         #region Properties
+     
         public ExcelConversionSettings ExcelConversionSettings { get; set; }
         public CodeLayout CodeLayout { get; set; }
         public char Delimiter { get; set; }
         public bool HasCodeRange { get; set; }
         public char RangeSeparator { get; set; }
-
         public bool IsCommaDecimalSeparator { get; set; }
+       
         #endregion
 
         #region Override
-       
-        public override PriceList Execute(ISupplierPriceListExecutionContext context)
+        public override ConvertedPriceList Execute(ISupplierPriceListExecutionContext context)
         {
             ExcelConvertor excelConvertor = new ExcelConvertor();
             ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(context.InputFileId, this.ExcelConversionSettings, true, this.IsCommaDecimalSeparator);
             return ConvertToPriceListItem(convertedExcel);
         }
-
-
+      
         #endregion
 
         #region Private Methods
-        private PriceList ConvertToPriceListItem(ConvertedExcel convertedExcel)
+        private ConvertedPriceList ConvertToPriceListItem(ConvertedExcel convertedExcel)
         {
-            Dictionary<string, string> zoneByZone = BuildZoneByZone(convertedExcel);
-            Dictionary<string, PriceListRate> rateByZone = BuildRateByZone(convertedExcel);
-            Dictionary<string, List<PriceListCode>> codesByZone = BuildCodesByZone(convertedExcel);
-            ValidateCode(codesByZone, rateByZone);
-            PriceList priceListItem = ConvertToPriceList(rateByZone, codesByZone, zoneByZone);
-            return priceListItem;
-        }
-        private PriceList ConvertToPriceList(Dictionary<string, PriceListRate> rateByZone, Dictionary<string, List<PriceListCode>> codesByZone, Dictionary<string, string> zoneByZone)
-        {
-            PriceList priceListItem = new Entities.PriceList();
-            priceListItem.Records = new List<PriceListRecord>();
-            foreach (var obj in codesByZone)
+            return new ConvertedPriceList
             {
-                PriceListRecord priceListRecord = new Entities.PriceListRecord();
-                string zoneName;
-                if (zoneByZone.TryGetValue(obj.Key, out zoneName))
-                {
-                    priceListRecord.Zone = zoneName;
-                }
-                List<PriceListCode> codes;
-                if (codesByZone.TryGetValue(obj.Key, out codes))
-                {
-                    priceListRecord.Codes = codes;
-                };
-                PriceListRate rate;
-                if (rateByZone.TryGetValue(obj.Key, out rate))
-                {
-                    priceListRecord.Rate = rate.Rate;
-                    priceListRecord.RateEffectiveDate = rate.RateEffectiveDate;
-                }
-                priceListItem.Records.Add(priceListRecord);
-            }
-
-
-            return priceListItem;
+                PriceListCodes = BuildPriceListCodes(convertedExcel),
+                PriceListRates = BuildPriceListRates(convertedExcel),
+            };
         }
-        private Dictionary<string, string> BuildZoneByZone(ConvertedExcel convertedExcel)
+        private List<PriceListCode> BuildPriceListCodes(ConvertedExcel convertedExcel)
         {
-            Dictionary<string, string> zoneByZone = new Dictionary<string, string>();
-            ConvertedExcelList CodeConvertedExcelList;
-            if (convertedExcel.Lists.TryGetValue("CodeList", out CodeConvertedExcelList))
-            {
-                foreach (var obj in CodeConvertedExcelList.Records)
-                {
-                    ConvertedExcelField zoneField;
-                    string zoneName;
-                    if (obj.Fields.TryGetValue("Zone", out zoneField))
-                    {
-                        if (!zoneByZone.TryGetValue(zoneField.FieldValue.ToString().Trim().ToLower(), out zoneName))
-                        {
-                            zoneByZone.Add(zoneField.FieldValue.ToString().Trim().ToLower(), zoneField.FieldValue.ToString());
-                        }
-                    }
-                }
-            }
-            return zoneByZone;
-        }
-        private Dictionary<string, List<PriceListCode>> BuildCodesByZone(ConvertedExcel convertedExcel)
-        {
-            Dictionary<string, List<PriceListCode>> codesByZone = new Dictionary<string, List<PriceListCode>>();
+            List<PriceListCode> priceListCodes = new List<PriceListCode>();
             ConvertedExcelList CodeConvertedExcelList;
             if (convertedExcel.Lists.TryGetValue("CodeList", out CodeConvertedExcelList))
             {
@@ -111,7 +60,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                     if (obj.Fields.TryGetValue("CodeGroup", out codeGroupField))
                     {
                         if (codeGroupField.FieldValue != null)
-                            codeGroup = codeGroupField.FieldValue.ToString().Trim();
+                            codeGroup = codeGroupField.FieldValue.ToString();
                     };
                     if (obj.Fields.TryGetValue("EffectiveDate", out codeEffectiveDateField))
                     {
@@ -120,24 +69,28 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                     };
                     if (obj.Fields.TryGetValue("Zone", out zoneField))
                     {
+                        string zone = null;
+                        if (zoneField.FieldValue != null)
+                            zone = zoneField.FieldValue.ToString();
 
                         if (obj.Fields.TryGetValue("Code", out codeField))
                         {
-
-
-                            List<PriceListCode> codes;
                             if (codeField.FieldValue == null)
                             {
-                                throw new Exception(string.Format("Zone {0} has no code defined.", zoneField.FieldValue));
+                                priceListCodes.Add(new PriceListCode
+                                {
+                                    ZoneName = zone,
+                                    Code = null,
+                                    EffectiveDate = result
+                                });
+                                continue;
                             }
-                            string code = codeField.FieldValue.ToString().Trim();
-                            List<PriceListCode> resolvedCodes = new List<PriceListCode>();
+                            string code = codeField.FieldValue.ToString();
                             if (this.CodeLayout == CodeLayout.Delimitedcode)
                             {
                                 var codesObj = code.Trim().Split(this.Delimiter).ToList();
                                 foreach (string codeValue in codesObj)
                                 {
-
                                     string codeValueTrimmed = codeValue.Trim();
                                     if (codeValueTrimmed == string.Empty)
                                         continue;
@@ -153,10 +106,11 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                                 while (firstCode <= lastCode)
                                                 {
                                                     string increasedCode = (firstCode++).ToString().Trim();
-                                                    resolvedCodes.Add(new PriceListCode
+                                                    priceListCodes.Add(new PriceListCode
                                                     {
                                                         Code = codeGroup != null ? string.Concat(codeGroup, increasedCode) : increasedCode,
-                                                        CodeEffectiveDate = result
+                                                        EffectiveDate = result,
+                                                        ZoneName = zone,
                                                     });
                                                 }
                                             }
@@ -168,58 +122,44 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                         }
                                         else
                                         {
-                                            resolvedCodes.Add(new PriceListCode
+                                            priceListCodes.Add(new PriceListCode
                                             {
                                                 Code = codeGroup != null ? string.Concat(codeGroup, codeValueTrimmed) : codeValueTrimmed,
-                                                CodeEffectiveDate = result
+                                                EffectiveDate = result,
+                                                ZoneName = zone,
                                             });
                                         }
                                     }
                                     else
                                     {
-                                        resolvedCodes.Add(new PriceListCode
+                                        priceListCodes.Add(new PriceListCode
                                         {
                                             Code = codeGroup != null ? string.Concat(codeGroup, codeValueTrimmed) : codeValueTrimmed,
-                                            CodeEffectiveDate = result
+                                            EffectiveDate = result,
+                                            ZoneName = zone,
                                         });
                                     }
                                 }
                             }
                             else
                             {
-                                resolvedCodes.Add(new PriceListCode
+                                priceListCodes.Add(new PriceListCode
                                 {
                                     Code = codeGroup != null ? string.Concat(codeGroup, code) : code,
-                                    CodeEffectiveDate = result
+                                    EffectiveDate = result,
+                                    ZoneName = zone,
                                 });
                             }
-                            var zoneName = zoneField.FieldValue.ToString().Trim().ToLower();
-                            if (!codesByZone.TryGetValue(zoneName, out codes))
-                            {
-                                codesByZone.Add(zoneName, resolvedCodes);
-                            }
-                            else
-                            {
-                                codes.AddRange(resolvedCodes);
-                                codesByZone[zoneName] = codes;
-                            }
-
                         }
-                        else
-                        {
-                            throw new Exception(string.Format("Zone {0} has no code defined.", zoneField.FieldValue));
-                        };
                     }
-
-
                 }
             }
-            return codesByZone;
+            return priceListCodes;
         }
-        private Dictionary<string, PriceListRate> BuildRateByZone(ConvertedExcel convertedExcel)
+        private List<PriceListRate> BuildPriceListRates(ConvertedExcel convertedExcel)
         {
+            List<PriceListRate> priceListRates = new List<PriceListRate>();
             ConvertedExcelList RateConvertedExcelList;
-            Dictionary<string, PriceListRate> rateByZone = new Dictionary<string, PriceListRate>();
             if (convertedExcel.Lists.TryGetValue("RateList", out RateConvertedExcelList))
             {
                 foreach (var obj in RateConvertedExcelList.Records)
@@ -235,87 +175,24 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                     };
                     if (obj.Fields.TryGetValue("Zone", out zoneField))
                     {
-                        PriceListRate rate;
                         if (obj.Fields.TryGetValue("Rate", out rateField))
                         {
-                            if (rateField.FieldValue == null)
+                            decimal? rate = null;
+                            if(rateField.FieldValue != null)
+                                rate = (decimal)rateField.FieldValue;
+                            priceListRates.Add(new PriceListRate
                             {
-                                throw new Exception(string.Format("Zone {0} has no rate defined.", zoneField.FieldValue));
-                            }
-                            var zoneName = zoneField.FieldValue.ToString().Trim().ToLower();
-
-                            if (!rateByZone.TryGetValue(zoneName, out rate))
-                            {
-                                rateByZone.Add(zoneName, new PriceListRate
-                                {
-                                    Rate = (decimal)rateField.FieldValue,
-                                    RateEffectiveDate = result
-                                });
-                            }
-                            else
-                            {
-                                if (rate.Rate == (decimal)rateField.FieldValue)
-                                {
-                                    continue;
-
-                                }
-                                else
-                                {
-                                    throw new Exception(string.Format("Zone {0} can have only one Rate.", zoneField.FieldValue));
-                                }
-                            }
+                                ZoneName = zoneField.FieldValue !=null? zoneField.FieldValue.ToString() : null,
+                                Rate = rateField.FieldValue != null? (decimal)rateField.FieldValue : default(decimal?),
+                                EffectiveDate = result
+                            });
                         }
-                        else
-                        {
-                            throw new Exception(string.Format("Zone {0} has no rate defined.", zoneField.FieldValue));
-                        }
-
-
                     }
                 }
             }
-            return rateByZone;
+            return priceListRates;
         }
-        private void ValidateCode(Dictionary<string, List<PriceListCode>> codesByZone, Dictionary<string, PriceListRate> rateByZone)
-        {
-            foreach (var zone in codesByZone)
-            {
-                var codes = zone.Value;
-                foreach (var zoneObj in codesByZone)
-                {
-                    if (zone.Key != zoneObj.Key)
-                    {
-                        var code = zoneObj.Value.FirstOrDefault(x => codes.Any(y => y.Code == x.Code));
-                        if (code != null)
-                        {
-                            throw new Exception(string.Format("Code {0} must be assigned to only one zone.", code.Code));
-
-                        }
-                    }
-
-                }
-                foreach (var code in codes)
-                {
-                    if (codes.Where(x => x.Code == code.Code).Count() > 1)
-                    {
-                        throw new Exception(string.Format("Code {0} should not be duplicated.", code.Code));
-                    }
-                }
-
-                PriceListRate rateObj = null;
-
-                if (!rateByZone.TryGetValue(zone.Key, out rateObj))
-                {
-                    throw new Exception(string.Format("Zone {0} has no rate defined.", zone.Key));
-                }
-            }
-        }
-        private class PriceListRate
-        {
-            public decimal Rate { get; set; }
-            public DateTime? RateEffectiveDate { get; set; }
-        }
-      
         #endregion
+
     }
 }
