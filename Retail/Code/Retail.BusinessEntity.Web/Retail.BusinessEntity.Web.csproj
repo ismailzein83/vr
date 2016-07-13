@@ -156,6 +156,7 @@
     <Compile Include="Controllers\AccountPartDefinitionController.cs" />
     <Compile Include="Controllers\AccountServiceController.cs" />
     <Compile Include="Controllers\AccountTypeController.cs" />
+    <Compile Include="Controllers\ActionDefinitionController.cs" />
     <Compile Include="Controllers\ChargingPolicyController.cs" />
     <Compile Include="Controllers\StatusDefinitionController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />

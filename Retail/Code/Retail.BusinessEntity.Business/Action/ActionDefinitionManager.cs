@@ -1,20 +1,95 @@
-﻿using Retail.BusinessEntity.Entities;
+﻿using Retail.BusinessEntity.Data;
+using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Vanrise.Caching;
+using Vanrise.Common;
 namespace Retail.BusinessEntity.Business
 {
     public class ActionDefinitionManager : IActionDefinitionManager
     {
+  
+        #region Public Methods
+        public Vanrise.Entities.IDataRetrievalResult<ActionDefinitionDetail> GetFilteredActionDefinitions(Vanrise.Entities.DataRetrievalInput<ActionDefinitionQuery> input)
+        {
+            Dictionary<Guid, ActionDefinition> cachedActionDefinitiones = this.GetCachedActionDefinitions();
+
+            Func<ActionDefinition, bool> filterExpression = (actionDefinition) =>
+                (input.Query.Name == null || actionDefinition.Name.ToLower().Contains(input.Query.Name.ToLower()));
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedActionDefinitiones.ToBigResult(input, filterExpression, ActionDefinitionDetailMapper));
+        }
         public ActionDefinition GetActionDefinition(Guid actionDefinitionId)
         {
-            throw new NotImplementedException();
+            Dictionary<Guid, ActionDefinition> cachedActionDefinitiones = this.GetCachedActionDefinitions();
+            return cachedActionDefinitiones.GetRecord(actionDefinitionId);
+        }
+        public Vanrise.Entities.InsertOperationOutput<ActionDefinitionDetail> AddActionDefinition(ActionDefinition actionDefinition)
+        {
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<ActionDefinitionDetail>();
+
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+
+            IActionDefinitionDataManager dataManager = BEDataManagerFactory.GetDataManager<IActionDefinitionDataManager>();
+            actionDefinition.ActionDefinitionId = Guid.NewGuid();
+
+            if (dataManager.Insert(actionDefinition))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                insertOperationOutput.InsertedObject = ActionDefinitionDetailMapper(actionDefinition);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
+        }
+        public Vanrise.Entities.UpdateOperationOutput<ActionDefinitionDetail> UpdateActionDefinition(ActionDefinition actionDefinition)
+        {
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<ActionDefinitionDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            IActionDefinitionDataManager dataManager = BEDataManagerFactory.GetDataManager<IActionDefinitionDataManager>();
+
+            if (dataManager.Update(actionDefinition))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = ActionDefinitionDetailMapper(this.GetActionDefinition(actionDefinition.ActionDefinitionId));
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
+        }
+        #endregion
+
+        #region Private Classes
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IActionDefinitionDataManager _dataManager = BEDataManagerFactory.GetDataManager<IActionDefinitionDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreActionDefinitionUpdated(ref _updateHandle);
+            }
         }
 
+        #endregion
 
+        #region Private Methods
         public ActionBPDefinitionSettings GetActionBPDefinitionSettings(Guid actionDefinitionId)
         {
             var actionDefinitionSettings = GetActionDefinitionSettings(actionDefinitionId);
@@ -32,5 +107,26 @@ namespace Retail.BusinessEntity.Business
                 throw new NullReferenceException(String.Format("actionDefinition.Settings. Id '{0}'", actionDefinitionId));
             return actionDefinition.Settings;
         }
+        Dictionary<Guid, ActionDefinition> GetCachedActionDefinitions()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetActionDefinitions", () =>
+            {
+                IActionDefinitionDataManager dataManager = BEDataManagerFactory.GetDataManager<IActionDefinitionDataManager>();
+                IEnumerable<ActionDefinition> actionDefinitiones = dataManager.GetActionDefinitions();
+                return actionDefinitiones.ToDictionary(kvp => kvp.ActionDefinitionId, kvp => kvp);
+            });
+        }
+
+        #endregion
+
+        #region Mappers
+        private ActionDefinitionDetail ActionDefinitionDetailMapper(ActionDefinition actionDefinition)
+        {
+            return new ActionDefinitionDetail()
+            {
+                Entity = actionDefinition,
+            };
+        }
+        #endregion
     }
 }

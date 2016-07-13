@@ -61,6 +61,7 @@
     <Compile Include="AccountPartDefinitionDataManager.cs" />
     <Compile Include="AccountServiceDataManager.cs" />
     <Compile Include="AccountTypeDataManager.cs" />
+    <Compile Include="ActionDefinitionDataManager.cs" />
     <Compile Include="ChargingPolicyDataManager.cs" />
     <Compile Include="ServiceTypeDataManager.cs" />
     <Compile Include="StatusDefinitionDataManager.cs" />
