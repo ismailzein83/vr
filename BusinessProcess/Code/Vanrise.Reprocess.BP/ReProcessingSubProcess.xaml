@@ -1,0 +1,220 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Reprocess.BP.ReProcessingSubProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vrba="clr-namespace:Vanrise.Reprocess.BP.Arguments;assembly=Vanrise.Reprocess.BP.Arguments"
+ xmlns:vrba1="clr-namespace:Vanrise.Reprocess.BP.Activities;assembly=Vanrise.Reprocess.BP.Activities"
+ xmlns:vre="clr-namespace:Vanrise.Reprocess.Entities;assembly=Vanrise.Reprocess.Entities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(vrba:ReProcessingSubProcessInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Vanrise.Reprocess.BP.ReProcessingSubProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>Vanrise.Reprocess.BP.Arguments</x:String>
+      <x:String>Vanrise.Reprocess.Entities</x:String>
+      <x:String>Vanrise.Reprocess.BP.Activities</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Reprocess.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.Reprocess.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.Reprocess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Vanrise.Reprocess.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="vre:ReprocessDefinition" Name="reprocessDefinition" />
+      <Variable x:TypeArguments="vrba1:StageManager" Name="stageManager" />
+    </Sequence.Variables>
+    <vrba1:GetReprocessDefinition sap2010:WorkflowViewState.IdRef="GetReprocessDefinition_1">
+      <vrba1:GetReprocessDefinition.ReprocessDefinition>
+        <OutArgument x:TypeArguments="vre:ReprocessDefinition">
+          <mca:CSharpReference x:TypeArguments="vre:ReprocessDefinition">reprocessDefinition</mca:CSharpReference>
+        </OutArgument>
+      </vrba1:GetReprocessDefinition.ReprocessDefinition>
+      <vrba1:GetReprocessDefinition.ReprocessDefinitionId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReprocessDefinitionId</mca:CSharpValue>
+        </InArgument>
+      </vrba1:GetReprocessDefinition.ReprocessDefinitionId>
+    </vrba1:GetReprocessDefinition>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="vrba1:StageManager">
+          <mca:CSharpReference x:TypeArguments="vrba1:StageManager">stageManager</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="vrba1:StageManager">
+          <mca:CSharpValue x:TypeArguments="vrba1:StageManager">new StageManager(reprocessDefinition)</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <Parallel.Variables>
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadDataToReprocessStatus" />
+      </Parallel.Variables>
+      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+        <vrba1:LoadDataToReprocess sap2010:WorkflowViewState.IdRef="LoadDataToReprocess_1">
+          <vrba1:LoadDataToReprocess.FromTime>
+            <InArgument x:TypeArguments="s:DateTime">
+              <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromTime</mca:CSharpValue>
+            </InArgument>
+          </vrba1:LoadDataToReprocess.FromTime>
+          <vrba1:LoadDataToReprocess.OutputStageNames>
+            <InArgument x:TypeArguments="scg:List(x:String)">
+              <mca:CSharpValue x:TypeArguments="scg:List(x:String)">reprocessDefinition.InitiationStageNames</mca:CSharpValue>
+            </InArgument>
+          </vrba1:LoadDataToReprocess.OutputStageNames>
+          <vrba1:LoadDataToReprocess.RecordStorageId>
+            <InArgument x:TypeArguments="x:Int32">
+              <mca:CSharpValue x:TypeArguments="x:Int32">reprocessDefinition.SourceRecordStorageId</mca:CSharpValue>
+            </InArgument>
+          </vrba1:LoadDataToReprocess.RecordStorageId>
+          <vrba1:LoadDataToReprocess.StageManager>
+            <InArgument x:TypeArguments="vrba1:StageManager">
+              <mca:CSharpValue x:TypeArguments="vrba1:StageManager">stageManager</mca:CSharpValue>
+            </InArgument>
+          </vrba1:LoadDataToReprocess.StageManager>
+          <vrba1:LoadDataToReprocess.Status>
+            <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+              <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadDataToReprocessStatus</mca:CSharpReference>
+            </OutArgument>
+          </vrba1:LoadDataToReprocess.Status>
+          <vrba1:LoadDataToReprocess.ToTime>
+            <InArgument x:TypeArguments="s:DateTime">
+              <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToTime</mca:CSharpValue>
+            </InArgument>
+          </vrba1:LoadDataToReprocess.ToTime>
+        </vrba1:LoadDataToReprocess>
+        <vrba1:EvaluateStagesStatus sap2010:WorkflowViewState.IdRef="EvaluateStagesStatus_1">
+          <vrba1:EvaluateStagesStatus.LoadDataToReprocessStatus>
+            <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+              <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadDataToReprocessStatus</mca:CSharpValue>
+            </InArgument>
+          </vrba1:EvaluateStagesStatus.LoadDataToReprocessStatus>
+          <vrba1:EvaluateStagesStatus.StageManager>
+            <InArgument x:TypeArguments="vrba1:StageManager">
+              <mca:CSharpValue x:TypeArguments="vrba1:StageManager">stageManager</mca:CSharpValue>
+            </InArgument>
+          </vrba1:EvaluateStagesStatus.StageManager>
+        </vrba1:EvaluateStagesStatus>
+      </Sequence>
+      <ParallelForEach x:TypeArguments="vrba1:ReprocessStage" DisplayName="ParallelForEach&lt;ReprocessStage&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_1">
+        <ParallelForEach.Values>
+          <InArgument x:TypeArguments="scg:IEnumerable(vrba1:ReprocessStage)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vrba1:ReprocessStage)">stageManager.GetReprocessingStages()</mca:CSharpValue>
+          </InArgument>
+        </ParallelForEach.Values>
+        <ActivityAction x:TypeArguments="vrba1:ReprocessStage">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="vrba1:ReprocessStage" Name="stage" />
+          </ActivityAction.Argument>
+          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+            <vrba1:ExecuteStage sap2010:WorkflowViewState.IdRef="ExecuteStage_1">
+              <vrba1:ExecuteStage.PreviousActivityStatus>
+                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">stage.PreviousStatus</mca:CSharpValue>
+                </InArgument>
+              </vrba1:ExecuteStage.PreviousActivityStatus>
+              <vrba1:ExecuteStage.Stage>
+                <InArgument x:TypeArguments="vrba1:ReprocessStage">
+                  <mca:CSharpValue x:TypeArguments="vrba1:ReprocessStage">stage</mca:CSharpValue>
+                </InArgument>
+              </vrba1:ExecuteStage.Stage>
+              <vrba1:ExecuteStage.StageManager>
+                <InArgument x:TypeArguments="vrba1:StageManager">
+                  <mca:CSharpValue x:TypeArguments="vrba1:StageManager">stageManager</mca:CSharpValue>
+                </InArgument>
+              </vrba1:ExecuteStage.StageManager>
+              <vrba1:ExecuteStage.Status>
+                <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">stage.Status</mca:CSharpReference>
+                </OutArgument>
+              </vrba1:ExecuteStage.Status>
+            </vrba1:ExecuteStage>
+            <vrba1:EvaluateStagesStatus sap2010:WorkflowViewState.IdRef="EvaluateStagesStatus_2">
+              <vrba1:EvaluateStagesStatus.LoadDataToReprocessStatus>
+                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadDataToReprocessStatus</mca:CSharpValue>
+                </InArgument>
+              </vrba1:EvaluateStagesStatus.LoadDataToReprocessStatus>
+              <vrba1:EvaluateStagesStatus.StageManager>
+                <InArgument x:TypeArguments="vrba1:StageManager">
+                  <mca:CSharpValue x:TypeArguments="vrba1:StageManager">stageManager</mca:CSharpValue>
+                </InArgument>
+              </vrba1:EvaluateStagesStatus.StageManager>
+            </vrba1:EvaluateStagesStatus>
+          </Sequence>
+        </ActivityAction>
+      </ParallelForEach>
+    </Parallel>
+    <sads:DebugSymbol.Symbol>d0xDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nU3ViUHJvY2Vzcy54YW1sHjgDuQEOAgEBPQVIJAIBZEkFVA4CAVtVBbcBEAIBAkULRWMCAWlAC0BzAgFlUQtReAIBYEwLTGcCAVxZB4YBEgIBMIcBB7YBGQIBA1oJeSUCATx6CYUBJgIBMYoBDYoBjAECASuRAQu0ARYCAQRnD2d1AgFWYg9ifwIBUXEPcXwCAUxdD11dAgFHbA9sYwIBQnYPdlsCAT19D310AgE3ggEPggFjAgEykgENpwEiAgESqAENswEqAgEFlQETlQFzAgElmgETmgFiAgEfpAETpAFzAgEZnwETnwFnAgETqwETqwF4AgEMsAETsAFnAgEG</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="GetReprocessDefinition_1" sap:VirtualizedContainerService.HintSize="663,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="663,62" />
+      <sap2010:ViewStateData Id="LoadDataToReprocess_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="EvaluateStagesStatus_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,358">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExecuteStage_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="EvaluateStagesStatus_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="287,358" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="663,404" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="685,692">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Vanrise.Reprocess.BP.ReProcessingSubProcess_1" sap:VirtualizedContainerService.HintSize="725,772" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
