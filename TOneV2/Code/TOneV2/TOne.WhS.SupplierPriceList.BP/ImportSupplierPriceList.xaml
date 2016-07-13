@@ -149,33 +149,38 @@
       </Variable>
     </Sequence.Variables>
     <twsba1:SetImportSPLContext sap2010:WorkflowViewState.IdRef="SetImportSPLContext_1" />
-    <twsba1:GetDataFromPriceList sap2010:WorkflowViewState.IdRef="GetDataFromPriceList_1">
-      <twsba1:GetDataFromPriceList.CurrencyId>
+    <twsba1:LoadSupplierPriceListData sap2010:WorkflowViewState.IdRef="LoadSupplierPriceListData_1">
+      <twsba1:LoadSupplierPriceListData.CurrencyId>
         <InArgument x:TypeArguments="x:Int32">
           <mca:CSharpValue x:TypeArguments="x:Int32">Input.CurrencyId</mca:CSharpValue>
         </InArgument>
-      </twsba1:GetDataFromPriceList.CurrencyId>
-      <twsba1:GetDataFromPriceList.FileId>
+      </twsba1:LoadSupplierPriceListData.CurrencyId>
+      <twsba1:LoadSupplierPriceListData.FileId>
         <InArgument x:TypeArguments="x:Int64">
           <mca:CSharpValue x:TypeArguments="x:Int64">Input.FileId</mca:CSharpValue>
         </InArgument>
-      </twsba1:GetDataFromPriceList.FileId>
-      <twsba1:GetDataFromPriceList.ImportedCodes>
+      </twsba1:LoadSupplierPriceListData.FileId>
+      <twsba1:LoadSupplierPriceListData.ImportedCodes>
         <OutArgument x:TypeArguments="scg:IEnumerable(twses:ImportedCode)">
           <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ImportedCode)">ImportedCodes</mca:CSharpReference>
         </OutArgument>
-      </twsba1:GetDataFromPriceList.ImportedCodes>
-      <twsba1:GetDataFromPriceList.ImportedRates>
+      </twsba1:LoadSupplierPriceListData.ImportedCodes>
+      <twsba1:LoadSupplierPriceListData.ImportedRates>
         <OutArgument x:TypeArguments="scg:IEnumerable(twses:ImportedRate)">
           <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ImportedRate)">ImportedRates</mca:CSharpReference>
         </OutArgument>
-      </twsba1:GetDataFromPriceList.ImportedRates>
-      <twsba1:GetDataFromPriceList.MinimumDate>
+      </twsba1:LoadSupplierPriceListData.ImportedRates>
+      <twsba1:LoadSupplierPriceListData.MinimumDate>
         <OutArgument x:TypeArguments="s:DateTime">
           <mca:CSharpReference x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpReference>
         </OutArgument>
-      </twsba1:GetDataFromPriceList.MinimumDate>
-    </twsba1:GetDataFromPriceList>
+      </twsba1:LoadSupplierPriceListData.MinimumDate>
+      <twsba1:LoadSupplierPriceListData.SupplierPriceListTemplateId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierPriceListTemplateId</mca:CSharpValue>
+        </InArgument>
+      </twsba1:LoadSupplierPriceListData.SupplierPriceListTemplateId>
+    </twsba1:LoadSupplierPriceListData>
     <twsba1:StructureDataByZones sap2010:WorkflowViewState.IdRef="StructureDataByZones_1">
       <twsba1:StructureDataByZones.ImportedCodes>
         <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedCode)">
@@ -816,12 +821,12 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="SetImportSPLContext_1" sap:VirtualizedContainerService.HintSize="2662,22" />
-      <sap2010:ViewStateData Id="GetDataFromPriceList_1" sap:VirtualizedContainerService.HintSize="2662,22" />
+      <sap2010:ViewStateData Id="LoadSupplierPriceListData_1" sap:VirtualizedContainerService.HintSize="2662,22" />
       <sap2010:ViewStateData Id="StructureDataByZones_1" sap:VirtualizedContainerService.HintSize="2662,22" />
       <sap2010:ViewStateData Id="CombineLists`1_1" sap:VirtualizedContainerService.HintSize="2662,22" />
       <sap2010:ViewStateData Id="ExecuteRules_1" sap:VirtualizedContainerService.HintSize="2662,22" />
