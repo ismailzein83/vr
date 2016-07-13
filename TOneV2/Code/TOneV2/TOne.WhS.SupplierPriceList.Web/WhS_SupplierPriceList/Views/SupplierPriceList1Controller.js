@@ -47,7 +47,7 @@
                             priceListTemplateEntity = response;
                             var payload = {
                                 context: buildContext(),
-                                configDetails: response != undefined ? response.ConfigDetails : undefined
+                                configDetails: response != undefined && response.ConfigDetails !=undefined ? response.ConfigDetails : undefined
                             };
                             var setLoader = function (value) {
                                 $scope.scopeModel.isLoadingSupplierPriceListTemplate = value;
@@ -76,13 +76,13 @@
                     
                     var promiseDeffered = UtilsService.createPromiseDeferred();
 
-
                     if (!priceListTemplateEntity)
                     {
                         var priceListTemplateObject = buildPriceListTemplateObjFromScope(true);
                         insertPriceListTemplate(priceListTemplateObject).then(function (response) {
                             if (response != undefined && response.InsertedObject != undefined)
                             {
+                                priceListTemplateEntity = response.InsertedObject;
                                 startImportSupplierPriceList(response.InsertedObject.SupplierPriceListTemplateId).then(function () {
                                     promiseDeffered.resolve();
                                 }).catch(function (error) {
@@ -99,8 +99,10 @@
                         var priceListTemplateObject = buildPriceListTemplateObjFromScope(true);
 
                         return updatePriceListTemplate(priceListTemplateObject).then(function (response) {
-                                if (response != undefined && response.UpdatedObject != undefined) {
+                            if (response != undefined && response.UpdatedObject != undefined) {
+                                priceListTemplateEntity = response.UpdatedObject;
                                     startImportSupplierPriceList(response.UpdatedObject.SupplierPriceListTemplateId).then(function () {
+                                        
                                         promiseDeffered.resolve();
                                     }).catch(function (error) {
                                         promiseDeffered.reject(error);
@@ -146,15 +148,9 @@
                             onClose: function () {
                             }
                         }
-                         BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context).then(function () {
-                            promiseDeffered.resolve();
-                         }).catch(function (error) {
-                             promiseDeffered.reject(error);
-                         });
-                    }else
-                    {
-                        promiseDeffered.resolve();
+                        BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context);
                     }
+                    promiseDeffered.resolve();
                 });
                 return promiseDeffered.promise;
             }
@@ -255,6 +251,9 @@
                 $scope.scopeModel.isLoading = true;
                 var priceListTemplateObject = buildPriceListTemplateObjFromScope();
                 return insertPriceListTemplate(priceListTemplateObject).then(function (response) {
+                    if (response != undefined)
+                      priceListTemplateEntity = response.InsertedObject;
+
                     VRNotificationService.notifyOnItemAdded('Supplier Price List Template', response, 'Name');
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
@@ -272,6 +271,8 @@
                 $scope.scopeModel.isLoading = true;
                 var priceListTemplateObject = buildPriceListTemplateObjFromScope();
                 return updatePriceListTemplate(priceListTemplateObject).then(function (response) {
+                    if (response != undefined)
+                        priceListTemplateEntity = response.UpdatedObject;
                     VRNotificationService.notifyOnItemAdded('Supplier Price List Template', response, 'Name');
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
