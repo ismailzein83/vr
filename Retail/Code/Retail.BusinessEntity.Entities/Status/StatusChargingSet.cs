@@ -8,7 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class StatusChargingSet
     {
-        public int StatusChargingPackageId { get; set; }
+        public int StatusChargingSetId { get; set; }
 
         public string Name { get; set; }
 

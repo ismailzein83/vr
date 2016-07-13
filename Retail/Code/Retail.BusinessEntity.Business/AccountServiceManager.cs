@@ -30,6 +30,15 @@ namespace Retail.BusinessEntity.Business
             var AccountServices = GetCachedAccountServices();
             return AccountServices.GetRecord(AccountServiceId);
         }
+
+        public AccountService GetAccountService(long accountId, int serviceTypeId)
+        {
+            var accountServices = GetCachedAccountServices();
+            if (accountServices != null)
+                return accountServices.FindRecord(itm => itm.AccountId == accountId && itm.ServiceTypeId == serviceTypeId);
+            else
+                return null;
+        }
        
         public InsertOperationOutput<AccountServiceDetail> AddAccountService(AccountService AccountService)
         {

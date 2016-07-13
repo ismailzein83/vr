@@ -41,6 +41,18 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.AccountBalance.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Business">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Caching">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
     </Reference>
@@ -72,6 +84,10 @@
     <Reference Include="Vanrise.GenericData.Transformation.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
@@ -88,6 +104,7 @@
     <Compile Include="ChargingPolicyManager.cs" />
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Extensions\BalanceAlertAccountAction.cs" />
     <Compile Include="Extensions\ChargingPolicyRuleDefinitionFilter.cs" />
     <Compile Include="StatusChargingManager.cs" />
     <Compile Include="StatusDefinitionManager.cs" />

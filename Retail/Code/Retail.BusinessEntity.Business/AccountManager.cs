@@ -124,6 +124,33 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
 
+        public bool HasAccountPayment(long accountId, bool getInherited, out IAccountPayment accountPayment)
+        {
+            var account = GetAccount(accountId);
+            if (account == null)
+                throw new NullReferenceException(String.Format("account '{0}'", accountId));
+
+            if(account.Settings == null)
+                throw new NullReferenceException(String.Format("account.Settings '{0}'", accountId));
+
+            if(account.Settings.Parts != null)
+            {
+                foreach(var part in account.Settings.Parts)
+                {
+                    accountPayment = part.Value as IAccountPayment;
+                    if (accountPayment != null)
+                        return true;
+                }
+            }
+            if (getInherited && account.ParentAccountId.HasValue)
+                return HasAccountPayment(account.ParentAccountId.Value, true, out accountPayment);
+            else
+            {
+                accountPayment = null;
+                return false;
+            }
+        }
+
         #region Get Account Editor Runtime
 
         public AccountEditorRuntime GetAccountEditorRuntime(int accountTypeId, int? parentAccountId)

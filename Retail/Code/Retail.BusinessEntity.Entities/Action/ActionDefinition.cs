@@ -22,6 +22,11 @@ namespace Retail.BusinessEntity.Entities
 
         public EntityType EntityType { get; set; }
 
+        /// <summary>
+        /// = ServiceTypeId in case EntityType = EntityType.AccountService
+        /// </summary>
+        public int? EntityTypeId { get; set; }
+
         public List<ActionStatusDefinition> SupportedOnStatuses { get; set; }
 
         public ActionBPDefinitionSettings BPDefinitionSettings { get; set; }

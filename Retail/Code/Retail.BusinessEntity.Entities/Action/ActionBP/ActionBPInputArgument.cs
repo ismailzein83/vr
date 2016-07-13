@@ -11,8 +11,6 @@ namespace Retail.BusinessEntity.Entities
     {
         public Guid ActionDefinitionId { get; set; }
 
-        public EntityType EntityType { get; set; }
-
         public long EntityId { get; set; }
 
         public ActionProvisioner ActionProvisioner { get; set; }

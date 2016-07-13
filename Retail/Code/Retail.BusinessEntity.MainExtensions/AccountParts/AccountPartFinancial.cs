@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
-    public class AccountPartFinancial : AccountPartSettings
+    public class AccountPartFinancial : AccountPartSettings, IAccountPayment
     {
         public PaymentMethod PaymentMethod { get; set; }
 
@@ -18,6 +18,12 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
         public AccountPostpaidSettings PostpaidSettings { get; set; }
 
         public AccountPrepaidSettings PrepaidSettings { get; set; }
+
+        public int PaymentMethodId { get; set; }
+
+        public int CreditClassId { get; set; }
+
+        public int StatusChargingSetId { get; set; }
     }
 
     public enum PaymentMethod { Prepaid = 0, Postpaid = 1 }

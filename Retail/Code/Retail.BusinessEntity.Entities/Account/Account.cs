@@ -42,4 +42,32 @@ namespace Retail.BusinessEntity.Entities
     {
 
     }
+
+    
+
+    public interface IAccountPayment
+    {
+        int PaymentMethodId { get; }
+
+        int CurrencyId { get; }
+
+        int CreditClassId { get; }
+
+        string BankDetails { get; }
+
+        int StatusChargingSetId { get; }
+    }
+
+    public class PaymentMethod
+    {
+        public int PaymentMethodId { get; set; }
+
+        public string Name { get; set; }
+
+        public PaymentMethodSettings Settings { get; set; }
+    }
+
+    public class PaymentMethodSettings
+    {
+    }
 }
