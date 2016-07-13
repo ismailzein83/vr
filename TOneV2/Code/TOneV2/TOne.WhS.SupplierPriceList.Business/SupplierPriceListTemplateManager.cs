@@ -27,6 +27,20 @@ namespace TOne.WhS.SupplierPriceList.Business
             SupplierPriceListTemplate supplierPriceListTemplate = priceListTemplates.GetRecord(supplierId);
             return (supplierPriceListTemplate != null) ? supplierPriceListTemplate : null;
         }
+
+        public SupplierPriceListSettings GetSupplierPriceListTemplateSettings(int priceListTemplateId, bool getDraftIfExists)
+        {
+            Dictionary<int, SupplierPriceListTemplate> priceListTemplates = GetCachedSupplierPriceListTemplates();
+            SupplierPriceListTemplate supplierPriceListTemplate = priceListTemplates.GetRecord(priceListTemplateId);
+
+            SupplierPriceListSettings settings = supplierPriceListTemplate.ConfigDetails;
+            if (getDraftIfExists && supplierPriceListTemplate.Draft != null)
+            {
+                settings = supplierPriceListTemplate.Draft;
+            }
+            return settings;
+        }
+
         public Vanrise.Entities.InsertOperationOutput<SupplierPriceListTemplate> AddSupplierPriceListTemplate(SupplierPriceListTemplate supplierPriceListTemplate)
         {
             InsertOperationOutput<SupplierPriceListTemplate> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<SupplierPriceListTemplate>();
