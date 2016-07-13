@@ -15,7 +15,8 @@ app.directive('vrGenericdataDatatransformationdefinitionSelector', ['VR_GenericD
                 onselectitem: "=",
                 ondeselectitem: "=",
                 isdisabled: "=",
-                customlabel: "@"
+                customlabel: "=",
+                hideremoveicon: "="
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -62,12 +63,16 @@ app.directive('vrGenericdataDatatransformationdefinitionSelector', ['VR_GenericD
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
+            var hideremoveicon;
+            if (attrs.hideremoveicon != undefined)
+                hideremoveicon =' hideremoveicon ';
+
             var addCliked = '';
             if (attrs.showaddbutton != undefined)
                 addCliked = 'onaddclicked="addDataTransformationDefiniton"';
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="DataTransformationDefinitionId" isrequired="ctrl.isrequired"'
+                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="DataTransformationDefinitionId" isrequired="ctrl.isrequired" ' + hideremoveicon
                 + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Data Transformation Definiton" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>'
         }

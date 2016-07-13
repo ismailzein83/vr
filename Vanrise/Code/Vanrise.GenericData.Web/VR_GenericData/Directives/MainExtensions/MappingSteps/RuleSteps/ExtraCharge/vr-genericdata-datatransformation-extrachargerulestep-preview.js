@@ -132,9 +132,9 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestepPreview', ['Uti
                     return "Missing effective rate mapping.";
                 }
                
-                if (ctrl.extraChargeRate == undefined) {
-                    return "Missing extra charge rate mapping.";
-                }
+                //if (ctrl.extraChargeRate == undefined) {
+                //    return "Missing extra charge rate mapping.";
+                //}
                 return null;
             }
 

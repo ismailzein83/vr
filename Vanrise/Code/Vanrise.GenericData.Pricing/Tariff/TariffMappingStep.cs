@@ -27,7 +27,9 @@ namespace Vanrise.GenericData.Pricing
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Pricing.TariffRuleContext();", ruleContextVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.TargetTime = {1};", ruleContextVariableName, this.EffectiveTime);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.Rate = {1};", ruleContextVariableName, this.InitialRate);
-            context.AddCodeToCurrentInstanceExecutionBlock("{0}.ExtraChargeRate = {1};", ruleContextVariableName, this.ExtraChargeRate);
+
+            if (this.ExtraChargeRate != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0}.ExtraChargeRate = {1};", ruleContextVariableName, this.ExtraChargeRate);
 
             if (this.CurrencyId != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0}.DestinationCurrencyId = {1};", ruleContextVariableName, this.CurrencyId);

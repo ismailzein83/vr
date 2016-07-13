@@ -33,7 +33,8 @@ namespace Vanrise.GenericData.Pricing
                 ruleManagerVariableName, ruleContextVariableName, this.RuleDefinitionId, ruleTargetVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.Rate;", this.EffectiveRate, ruleContextVariableName);
 
-            context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.ExtraChargeRate;", this.ExtraChargeRate, ruleContextVariableName);
+            if (ExtraChargeRate != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.ExtraChargeRate;", this.ExtraChargeRate, ruleContextVariableName);
 
             base.SetIdRuleMatched(context, ruleContextVariableName);
         }
