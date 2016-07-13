@@ -27,19 +27,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         }
 
         long _processInstanceID;
-        public void Insert(long processInstanceID, IEnumerable<AddedCode> codesList)
-        {
-
-            object dbApplyStream = InitialiazeStreamForDBApply();
-
-            foreach (AddedCode code in codesList)
-            {
-                WriteRecordToStream(code, dbApplyStream);
-            }
-
-            object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
-        }
-
+      
         public object FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
@@ -75,10 +63,10 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         }
 
 
-        public void ApplyNewCodesToDB(object preparedCodes, long processInstanceID)
+        public void ApplyNewCodesToDB(object preparedCodes)
         {
-            _processInstanceID = processInstanceID;
             InsertBulkToTable(preparedCodes as BaseBulkInsertInfo);
         }
+
     }
 }

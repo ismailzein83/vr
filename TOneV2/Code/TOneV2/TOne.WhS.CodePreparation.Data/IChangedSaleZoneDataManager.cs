@@ -11,8 +11,6 @@ namespace TOne.WhS.CodePreparation.Data
     public interface IChangedSaleZoneDataManager : IDataManager, IBulkApplyDataManager<ChangedZone>
     {
         long ProcessInstanceId { set; }
-        void Insert(long processInstanceID, IEnumerable<ChangedZone> changedZones);
-
-        void ApplyChangedZonesToDB(object preparedZones, long processInstanceID);
+        void ApplyChangedZonesToDB(object preparedZones);
     }
 }

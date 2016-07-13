@@ -22,7 +22,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         protected override void DoWork(ApplyNewCodesToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            long processInstanceID = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
             INewSaleCodeDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<INewSaleCodeDataManager>();
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -31,7 +30,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 {
                     hasItem = inputArgument.InputQueue.TryDequeue((preparedCodes) =>
                     {
-                        dataManager.ApplyNewCodesToDB(preparedCodes, processInstanceID);
+                        dataManager.ApplyNewCodesToDB(preparedCodes);
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });

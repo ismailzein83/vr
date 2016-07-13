@@ -34,18 +34,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             }
         }
         long _processInstanceID;
-        public void Insert(int sellingNumberPlanId, long processInstanceID, IEnumerable<AddedZone> zonesList)
-        {
-            object dbApplyStream = InitialiazeStreamForDBApply();
-           
-            foreach (AddedZone zone in zonesList)
-            {
-                WriteRecordToStream(zone, dbApplyStream);
-            }
-
-            object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
-  
-        }
+      
         public object InitialiazeStreamForDBApply()
         {
             return base.InitializeStreamForBulkInsert();
@@ -78,12 +67,12 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             };
         }
 
-        public void ApplyNewZonesToDB(object preparedZones, int sellingNumberPlanId, long processInstanceID)
+        public void ApplyNewZonesToDB(object preparedZones)
         {
-            _sellingNumberPlanId = sellingNumberPlanId;
-            _processInstanceID = processInstanceID;
             InsertBulkToTable(preparedZones as BaseBulkInsertInfo);
 
         }
+
+      
     }
 }

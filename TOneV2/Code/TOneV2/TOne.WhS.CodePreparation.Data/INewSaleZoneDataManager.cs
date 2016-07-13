@@ -14,8 +14,6 @@ namespace TOne.WhS.CodePreparation.Data
 
         int SellingNumberPlanId { set; }
 
-        void Insert(int sellingNumberPlanId, long processInstanceID, IEnumerable<AddedZone> zonesList);
-
-        void ApplyNewZonesToDB(object preparedZones, int sellingNumberPlanId, long processInstanceID);
+        void ApplyNewZonesToDB(object preparedZones);
     }
 }

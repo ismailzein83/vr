@@ -26,8 +26,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         
         protected override void DoWork(ApplyNewZonesToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            int sellingNumberPlanId = inputArgument.SellingNumberPlanId;
-            long processInstanceID = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
             INewSaleZoneDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<INewSaleZoneDataManager>();
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -36,7 +34,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 {
                     hasItem = inputArgument.InputQueue.TryDequeue((preparedZones) =>
                     {
-                        dataManager.ApplyNewZonesToDB(preparedZones, sellingNumberPlanId, processInstanceID);
+                        dataManager.ApplyNewZonesToDB(preparedZones);
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });

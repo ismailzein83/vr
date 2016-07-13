@@ -10,10 +10,6 @@ namespace TOne.WhS.CodePreparation.Business
 {
     public class ChangedSaleCodeManager
     {
-        public void Insert(long processInstanceID, IEnumerable<ChangedCode> changedCodes)
-        {
-            IChangedSaleCodeDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<IChangedSaleCodeDataManager>();
-            dataManager.Insert(processInstanceID, changedCodes);
-        }
+      
     }
 }

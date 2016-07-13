@@ -22,8 +22,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         protected override void DoWork(ApplyChangedZonesToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-           
-            long processInstanceID = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
             IChangedSaleZoneDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<IChangedSaleZoneDataManager>();
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
@@ -33,7 +31,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 {
                     hasItem = inputArgument.InputQueue.TryDequeue((preparedZones) =>
                     {
-                        dataManager.ApplyChangedZonesToDB(preparedZones, processInstanceID);
+                        dataManager.ApplyChangedZonesToDB(preparedZones);
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });

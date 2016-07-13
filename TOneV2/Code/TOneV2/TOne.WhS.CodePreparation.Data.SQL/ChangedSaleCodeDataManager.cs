@@ -24,19 +24,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             }
         }
         long _processInstanceID;
-        public void Insert(long processInstanceID, IEnumerable<ChangedCode> changedCodes)
-        {
-
-            object dbApplyStream = InitialiazeStreamForDBApply();
-
-            foreach (ChangedCode code in changedCodes)
-            {
-                WriteRecordToStream(code, dbApplyStream);
-            }
-
-            object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
-
-        }
+      
         public object InitialiazeStreamForDBApply()
         {
             return base.InitializeStreamForBulkInsert();
@@ -64,9 +52,8 @@ namespace TOne.WhS.CodePreparation.Data.SQL
                 FieldSeparator = '^',
             };
         }
-        public void ApplyChangedCodesToDB(object preparedObject, long processInstanceID)
+        public void ApplyChangedCodesToDB(object preparedObject)
         {
-            _processInstanceID = processInstanceID;
             InsertBulkToTable(preparedObject as BaseBulkInsertInfo);
         }
     }
