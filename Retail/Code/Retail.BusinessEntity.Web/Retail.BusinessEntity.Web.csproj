@@ -186,6 +186,7 @@
     <Content Include="Retail_BusinessEntity\Constant\AccountStatusEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ChargeTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ConnectionTypeEnum.js" />
+    <Content Include="Retail_BusinessEntity\Constant\EntityTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ModuleConfig.js" />
     <Content Include="Retail_BusinessEntity\Constant\NetworkTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\PaymentMethodEnum.js" />
@@ -209,6 +210,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountPartsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\ActionDefinition\retail-be-actiondefinition-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\ActionDefinition\Templates\ActionDefinitionGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\retail-be-chargingpolicy-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\retail-be-chargingpolicy-parts.js" />
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\retail-be-chargingpolicy-selector.js" />
@@ -305,12 +308,14 @@
     <Content Include="Retail_BusinessEntity\Services\AccountService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountServiceService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountTypeService.js" />
+    <Content Include="Retail_BusinessEntity\Services\ActionDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountIdentificationAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountPackageAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountPartDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountServiceAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountTypeAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\ActionDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ChargingPolicyAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ServiceTypeAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\StatusDefinitionAPIService.js" />
@@ -340,6 +345,10 @@
     <Content Include="Retail_BusinessEntity\Views\Account\AccountManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountIdentificationAssignmentEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountIdentificationAssignmentEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\ActionDefinition\ActionDefinitionEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\ActionDefinition\ActionDefinitionEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\ActionDefinition\ActionDefinitionManagement.html" />
+    <Content Include="Retail_BusinessEntity\Views\ActionDefinition\ActionDefinitionManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\ChargingPolicy\ChargingPolicyEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\ChargingPolicy\ChargingPolicyEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ChargingPolicy\ChargingPolicyManagement.html" />
