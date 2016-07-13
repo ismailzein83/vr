@@ -912,7 +912,8 @@ as (select * from (values
 (1007,'Route Percentage','WhS_Sales_CostCalculationMethod','{"Editor":"vr-whs-sales-routepercentagecostcalculation"}'),
 (1008,'Fixed','WhS_Sales_RateCalculationMethod','{"Editor":"vr-whs-sales-fixedratecalculation"}'),
 (1009,'Margin','WhS_Sales_RateCalculationMethod','{"Editor":"vr-whs-sales-marginratecalculation"}'),
-(1010,'Margin Percentage','WhS_Sales_RateCalculationMethod','{"Editor":"vr-whs-sales-marginpercentageratecalculation"}')
+(1010,'Margin Percentage','WhS_Sales_RateCalculationMethod','{"Editor":"vr-whs-sales-marginpercentageratecalculation"}'),
+(1011,'Basic','WhS_SupPL_SupplierPriceListConfiguration','{"Editor":"whs-suppl-supplierpricelistconfiguration-basic"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
