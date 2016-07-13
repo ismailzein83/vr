@@ -158,7 +158,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
             }
         }
 
-        private void UpdateExistingFromNew(Dictionary<string, SummaryItemInProcess<Q>> existingSummaryItemsByKey, R newSummaryBatch)
+        public void UpdateExistingFromNew(Dictionary<string, SummaryItemInProcess<Q>> existingSummaryItemsByKey, R newSummaryBatch)
         {
             if (newSummaryBatch == null)
                 throw new NullReferenceException("newSummaryBatch");
@@ -216,13 +216,6 @@ namespace Vanrise.Common.Business.SummaryTransformation
             public Dictionary<string, T> ItemsBySummaryKey { get; set; }
         }
 
-        private class SummaryItemInProcess<T> where T : ISummaryItem
-        {
-            public T SummaryItem { get; set; }
-
-            public bool ShouldUpdate { get; set; }
-        }
-
         #endregion
 
         public virtual string UniqueTypeName
@@ -230,4 +223,12 @@ namespace Vanrise.Common.Business.SummaryTransformation
             get { return this.GetType().AssemblyQualifiedName; }
         }
     }
+    
+    public class SummaryItemInProcess<T> where T : ISummaryItem
+    {
+        public T SummaryItem { get; set; }
+
+        public bool ShouldUpdate { get; set; }
+    }
+
 }
