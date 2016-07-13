@@ -35,12 +35,13 @@ namespace TOne.WhS.DBSync.Business
             context.GeneratedIdsInfoContext = new GeneratedIdsInfoContext();
             context.GeneratedIdsInfoContext.TypeId = manager.GetSaleRateTypeId();
             base.Migrate(context);
+            
         }
 
         public override void AddItems(List<SaleRate> itemsToAdd)
         {
             dbSyncDataManager.ApplySaleRatesToTemp(itemsToAdd);
-            TotalRows = itemsToAdd.Count;
+            TotalRowsSuccess = itemsToAdd.Count;
         }
 
         public override IEnumerable<SourceRate> GetSourceItems()
@@ -83,7 +84,10 @@ namespace TOne.WhS.DBSync.Business
                     SourceId = sourceItem.SourceId
                 };
             else
+            {
+                TotalRowsFailed++;
                 return null;
+            }
         }
         public override void FillTableInfo(bool useTempTables)
         {

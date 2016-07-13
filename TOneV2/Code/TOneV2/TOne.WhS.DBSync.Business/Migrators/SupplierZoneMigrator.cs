@@ -39,7 +39,7 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<SupplierZone> itemsToAdd)
         {
             dbSyncDataManager.ApplySupplierZonesToTemp(itemsToAdd, 1);
-            TotalRows = itemsToAdd.Count;
+            TotalRowsSuccess = itemsToAdd.Count;
         }
 
         public override IEnumerable<SourceZone> GetSourceItems()
@@ -68,7 +68,10 @@ namespace TOne.WhS.DBSync.Business
                     SourceId = sourceItem.SourceId
                 };
             else
+            {
+                TotalRowsFailed++;
                 return null;
+            }
         }
 
         public override void FillTableInfo(bool useTempTables)

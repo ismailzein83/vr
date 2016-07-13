@@ -31,7 +31,7 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<Country> itemsToAdd)
         {
             dbSyncDataManager.ApplyCountriesToTemp(itemsToAdd, 1);
-            TotalRows = itemsToAdd.Count;
+            TotalRowsSuccess = itemsToAdd.Count;
         }
 
         public override IEnumerable<SourceCodeGroup> GetSourceItems()

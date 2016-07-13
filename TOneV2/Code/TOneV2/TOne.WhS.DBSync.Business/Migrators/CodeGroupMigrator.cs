@@ -30,7 +30,7 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<CodeGroup> itemsToAdd)
         {
             dbSyncDataManager.ApplyCodeGroupsToTemp(itemsToAdd);
-            TotalRows = itemsToAdd.Count;
+            TotalRowsSuccess = itemsToAdd.Count;
         }
 
         public override IEnumerable<SourceCodeGroup> GetSourceItems()
@@ -52,7 +52,10 @@ namespace TOne.WhS.DBSync.Business
                                 SourceId = sourceItem.SourceId
                             };
             else
+            {
+                TotalRowsFailed++;
                 return null;
+            }
         }
 
         public override void FillTableInfo(bool useTempTables)

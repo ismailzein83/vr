@@ -16,6 +16,9 @@ namespace TOne.WhS.DBSync.Entities
 
         public int SellingProductId { get; set; }
 
+        public int OffPeakRateTypeId { get; set; }
+        public int WeekendRateTypeId { get; set; }
+
         public void WriteException(Exception ex)
         {
             LoggerFactory.GetExceptionLogger().WriteException(ex);

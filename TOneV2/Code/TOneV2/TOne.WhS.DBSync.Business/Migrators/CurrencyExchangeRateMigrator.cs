@@ -30,7 +30,7 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<CurrencyExchangeRate> itemsToAdd)
         {
             dbSyncDataManager.ApplyCurrencyExchangeRatesToTemp(itemsToAdd);
-            TotalRows = itemsToAdd.Count;
+            TotalRowsSuccess = itemsToAdd.Count;
         }
 
         public override IEnumerable<SourceCurrencyExchangeRate> GetSourceItems()
@@ -53,7 +53,10 @@ namespace TOne.WhS.DBSync.Business
                     SourceId = sourceItem.SourceId
                 };
             else
+            {
+                TotalRowsFailed++;
                 return null;
+            }
         }
         public override void FillTableInfo(bool useTempTables)
         {

@@ -32,7 +32,7 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<SalePriceList> itemsToAdd)
         {
             dbSyncDataManager.ApplySalePriceListsToTemp(itemsToAdd);
-            TotalRows = itemsToAdd.Count;
+            TotalRowsSuccess = itemsToAdd.Count;
         }
 
         public override IEnumerable<SourcePriceList> GetSourceItems()
@@ -63,7 +63,10 @@ namespace TOne.WhS.DBSync.Business
                     EffectiveOn = sourceItem.BED
                 };
             else
+            {
+                TotalRowsFailed++;
                 return null;
+            }
         }
         public override void FillTableInfo(bool useTempTables)
         {

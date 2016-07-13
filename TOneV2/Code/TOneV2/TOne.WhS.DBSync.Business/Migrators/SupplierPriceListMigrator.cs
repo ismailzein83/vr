@@ -42,7 +42,7 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<SupplierPriceList> itemsToAdd)
         {
             dbSyncDataManager.ApplySupplierPriceListsToTemp(itemsToAdd, 1);
-            TotalRows = itemsToAdd.Count;
+            TotalRowsSuccess = itemsToAdd.Count;
         }
 
         public override IEnumerable<SourcePriceList> GetSourceItems()
@@ -77,18 +77,22 @@ namespace TOne.WhS.DBSync.Business
                
             }
 
-            if (currency != null && carrierAccount != null && fileId.HasValue)
+
+            if (currency != null && carrierAccount != null)
                 return new SupplierPriceList
                 {
-                    FileId = fileId.Value,
+                    FileId = fileId,
                     SupplierId = carrierAccount.CarrierAccountId,
                     CurrencyId = currency.CurrencyId,
                     SourceId = sourceItem.SourceId,
                     CreateTime = sourceItem.BED,
                     EffectiveOn = sourceItem.BED
                 };
-            else
+            else {
+                TotalRowsFailed++;
                 return null;
+            }
+            
         }
 
         public override void FillTableInfo(bool useTempTables)

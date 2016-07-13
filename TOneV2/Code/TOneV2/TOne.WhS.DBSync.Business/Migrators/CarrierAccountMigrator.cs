@@ -33,7 +33,7 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<CarrierAccount> itemsToAdd)
         {
             dbSyncDataManager.ApplyCarrierAccountsToTemp(itemsToAdd);
-            TotalRows = itemsToAdd.Count;
+            TotalRowsSuccess = itemsToAdd.Count;
 
         }
 
@@ -116,7 +116,11 @@ namespace TOne.WhS.DBSync.Business
             }
 
             else
+            {
+                TotalRowsFailed++;
                 return null;
+            }
+                
 
         }
 

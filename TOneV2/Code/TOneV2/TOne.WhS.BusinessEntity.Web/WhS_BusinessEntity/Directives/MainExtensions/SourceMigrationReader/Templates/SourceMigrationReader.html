@@ -1,14 +1,25 @@
 ﻿<vr-row>
 
-    <vr-columns width="1/2row" ng-show="false" >
+    <vr-columns width="1/2row" ng-show="false">
         <vr-switch value="useTempTables" label="Use Temporary Tables"></vr-switch>
     </vr-columns>
 
     <vr-whs-be-sellingnumberplan-selector normal-col-num="6" on-ready="onSellingNumberPlanDirectiveReady" onselectionchanged="onSellingNumberPlanSelectionChanged" isrequired="true">
     </vr-whs-be-sellingnumberplan-selector>
-    <span vr-loader="ctrl.isLoadingSellingProduct">
-        <vr-whs-be-sellingproduct-selector on-ready="onSellingProductsDirectiveReady" normal-col-num="6" isrequired="true"></vr-whs-be-sellingproduct-selector>
-    </span>
+
+        <span vr-loader="ctrl.isLoadingSellingProduct">
+            <vr-whs-be-sellingproduct-selector on-ready="onSellingProductsDirectiveReady" normal-col-num="6" isrequired="true"></vr-whs-be-sellingproduct-selector>
+        </span>
+  </vr-row>
+<vr-row>
+    <vr-columns colnum="6">
+        <vr-common-ratetype-selector on-ready="onOffPeakRateTypeSelectorReady" customlabel="OffPeak Rate" isrequired></vr-common-ratetype-selector>
+    </vr-columns>
+
+    <vr-columns colnum="6">
+        <vr-common-ratetype-selector on-ready="onWeekendRateTypeSelectorReady" customlabel="Weekend Rate" isrequired></vr-common-ratetype-selector>
+    </vr-columns>
+
     <vr-columns colnum="6">
         <vr-select isrequired="true" datatextfield="description" datavaluefield="value" label="Migration Tables" datasource="migrationTables" selectedvalues="migrationTablesSelectedValues" ismultipleselection>
         </vr-select>
@@ -17,7 +28,5 @@
     <vr-columns width="fullrow">
         <vr-textarea label="Connection String" value="connectionString" isrequired />
     </vr-columns>
-
-
 
 </vr-row>

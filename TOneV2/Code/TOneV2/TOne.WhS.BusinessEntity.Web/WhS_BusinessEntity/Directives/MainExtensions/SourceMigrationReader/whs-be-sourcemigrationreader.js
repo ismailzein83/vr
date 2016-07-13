@@ -29,29 +29,47 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
         function DirectiveConstructor($scope, ctrl) {
             var sellingNumberPlanId;
             var sellingProductId;
+            var offPeakRateTypeId;
+            var weekendRateTypeId;
 
             var sellingNumberPlanDirectiveAPI;
             var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var offPeakRateTypeSelectorAPI;
+            var offPeakRateTypeSelectorReadyPrmoiseDeferred = UtilsService.createPromiseDeferred();
+
+            var weekendRateTypeSelectorAPI;
+            var weekendRateTypeSelectorReadyPrmoiseDeferred = UtilsService.createPromiseDeferred();
 
             var sellingProductDirectiveAPI;
 
             function initializeController() {
                 $scope.useTempTables = true;
-                $scope.migrationTables = []; 
+                $scope.migrationTables = [];
                 angular.forEach(UtilsService.getArrayEnum(WhS_BE_DBTableNameEnum), function (dbTable) {
                     if (dbTable.defaultMigrate)
                         $scope.migrationTables.push(dbTable);
                 });
-                $scope.migrationTablesSelectedValues = $scope.migrationTables; 
+                $scope.migrationTablesSelectedValues = $scope.migrationTables;
 
                 $scope.onSellingNumberPlanDirectiveReady = function (api) {
                     sellingNumberPlanDirectiveAPI = api;
                     sellingNumberPlanReadyPromiseDeferred.resolve();
-                    defineAPI();
                 }
 
                 $scope.onSellingProductsDirectiveReady = function (api) {
                     sellingProductDirectiveAPI = api;
+                }
+
+
+                $scope.onOffPeakRateTypeSelectorReady = function (api) {
+                    offPeakRateTypeSelectorAPI = api;
+                    offPeakRateTypeSelectorReadyPrmoiseDeferred.resolve();
+                }
+
+                $scope.onWeekendRateTypeSelectorReady = function (api) {
+                    weekendRateTypeSelectorAPI = api;
+                    weekendRateTypeSelectorReadyPrmoiseDeferred.resolve();
                 }
 
                 $scope.onSellingNumberPlanSelectionChanged = function () {
@@ -72,6 +90,10 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                         sellingProductDirectiveAPI.clearDataSource();
                 }
 
+                UtilsService.waitMultiplePromises([sellingNumberPlanReadyPromiseDeferred.promise, offPeakRateTypeSelectorReadyPrmoiseDeferred.promise, weekendRateTypeSelectorReadyPrmoiseDeferred.promise]).then(function () {
+                    defineAPI();
+                });
+
             }
 
             function defineAPI() {
@@ -86,6 +108,8 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     schedulerTaskAction.DefaultSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
                     schedulerTaskAction.UseTempTables = ($scope.useTempTables == true) ? true : false;
                     schedulerTaskAction.SellingProductId = sellingProductDirectiveAPI.getSelectedIds();
+                    schedulerTaskAction.OffPeakRateTypeId = offPeakRateTypeSelectorAPI.getSelectedIds();
+                    schedulerTaskAction.WeekendRateTypeId = weekendRateTypeSelectorAPI.getSelectedIds();
                     var selectedTables = [];
 
                     $scope.migrationTablesSelectedValues;
@@ -105,17 +129,19 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                         $scope.useTempTables = payload.data.UseTempTables;
                         sellingNumberPlanId = payload.data.DefaultSellingNumberPlanId;
                         sellingProductId = payload.data.SellingProductId;
+                        offPeakRateTypeId = payload.data.OffPeakRateTypeId;
+                        weekendRateTypeId = payload.data.WeekendRateTypeId;
                         $scope.migrationTablesSelectedValues = [];
 
 
                         angular.forEach(payload.data.MigrationRequestedTables, function (x) {
                             if (x != WhS_BE_DBTableNameEnum.CustomerZone.value)
-                                 $scope.migrationTablesSelectedValues.push(UtilsService.getEnum(WhS_BE_DBTableNameEnum, 'value', x));
+                                $scope.migrationTablesSelectedValues.push(UtilsService.getEnum(WhS_BE_DBTableNameEnum, 'value', x));
                         })
 
                     }
 
-                    return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlanSelector])
+                    return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlanSelector, loadOffPeakRateTypeSelector, loadWeekendRateTypeSelector])
                          .catch(function (error) {
                              VRNotificationService.notifyExceptionWithClose(error, $scope);
                          });
@@ -131,7 +157,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                 var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
-                  var sellingNumberPlanPayload = {
+                    var sellingNumberPlanPayload = {
                         selectedIds: sellingNumberPlanId
                     };
 
@@ -140,6 +166,34 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
 
                 return loadSellingNumberPlanPromiseDeferred.promise
             }
+
+
+            function loadOffPeakRateTypeSelector() {
+                var loadOffPeakRateTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                offPeakRateTypeSelectorReadyPrmoiseDeferred.promise.then(function () {
+                   var offPeakRatePayload = {
+                        selectedIds: offPeakRateTypeId
+                    }
+                    VRUIUtilsService.callDirectiveLoad(offPeakRateTypeSelectorAPI, offPeakRatePayload, loadOffPeakRateTypeSelectorPromiseDeferred);
+                });
+
+                return loadOffPeakRateTypeSelectorPromiseDeferred.promise
+            }
+
+            function loadWeekendRateTypeSelector() {
+                var loadWeekendRateTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                weekendRateTypeSelectorReadyPrmoiseDeferred.promise.then(function () {
+                  var  weekendRatePayload = {
+                        selectedIds: weekendRateTypeId
+                    }
+                  VRUIUtilsService.callDirectiveLoad(weekendRateTypeSelectorAPI, weekendRatePayload, loadWeekendRateTypeSelectorPromiseDeferred);
+                });
+
+                return loadWeekendRateTypeSelectorPromiseDeferred.promise
+            }
+
 
             this.initializeController = initializeController;
         }

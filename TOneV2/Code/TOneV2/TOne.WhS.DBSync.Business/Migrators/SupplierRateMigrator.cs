@@ -16,6 +16,8 @@ namespace TOne.WhS.DBSync.Business
         Dictionary<string, SupplierZone> allSupplierZones;
         Dictionary<string, SupplierPriceList> allSupplierPriceLists;
         Dictionary<string, Currency> allCurrencies;
+        int _offPeakRateTypeId;
+        int _weekendRateTypeId;
         public SupplierRateMigrator(MigrationContext context)
             : base(context)
         {
@@ -28,6 +30,8 @@ namespace TOne.WhS.DBSync.Business
             allSupplierZones = (Dictionary<string, SupplierZone>)dbTableSupplierZone.Records;
             allSupplierPriceLists = (Dictionary<string, SupplierPriceList>)dbTableSupplierPriceList.Records;
             allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
+            _offPeakRateTypeId = context.OffPeakRateTypeId;
+            _weekendRateTypeId = context.WeekendRateTypeId;
         }
 
         public override void Migrate(MigrationInfoContext context)
@@ -41,7 +45,7 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<SupplierRate> itemsToAdd)
         {
             dbSyncDataManager.ApplySupplierRatesToTemp(itemsToAdd, 1);
-            TotalRows = itemsToAdd.Count;
+            TotalRowsSuccess = itemsToAdd.Count;
         }
 
         public override IEnumerable<SourceRate> GetSourceItems()
@@ -65,10 +69,10 @@ namespace TOne.WhS.DBSync.Business
 
             Dictionary<int, decimal> otherRates = new Dictionary<int, decimal>();
             if (sourceItem.OffPeakRate.HasValue)
-                otherRates.Add((int)RateTypeEnum.OffPeak, sourceItem.OffPeakRate.Value);
+                otherRates.Add(_offPeakRateTypeId, sourceItem.OffPeakRate.Value);
 
             if (sourceItem.WeekendRate.HasValue)
-                otherRates.Add((int)RateTypeEnum.Weekend, sourceItem.WeekendRate.Value);
+                otherRates.Add(_weekendRateTypeId, sourceItem.WeekendRate.Value);
 
             if (supplierZone != null && supplierPriceList != null && currency != null && sourceItem.BeginEffectiveDate.HasValue && sourceItem.Rate.HasValue)
                 return new SupplierRate
@@ -83,12 +87,15 @@ namespace TOne.WhS.DBSync.Business
                     SourceId = sourceItem.SourceId
                 };
             else
+            {
+                TotalRowsFailed++;
                 return null;
+            }
         }
-       
+
         public override void FillTableInfo(bool useTempTables)
         {
-         
+
         }
 
     }

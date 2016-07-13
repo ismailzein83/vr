@@ -30,7 +30,7 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<CustomerZones> itemsToAdd)
         {
             dbSyncDataManager.ApplyCustomerZoneToTemp(itemsToAdd);
-            TotalRows = itemsToAdd.Count;
+            TotalRowsSuccess = itemsToAdd.Count;
 
         }
 

@@ -23,11 +23,12 @@ namespace TOne.WhS.DBSync.Data.SQL
             {
                 SourceId = arg["CurrencyID"].ToString(),
                 Name = arg["Name"] as string,
+                IsMainCurrency = arg["IsMainCurrency"].ToString().Equals("Y", System.StringComparison.InvariantCultureIgnoreCase) ? true : false,
                 Symbol = arg["CurrencyID"].ToString(),
             };
             return sourceCurrency;
         }
 
-        const string query_getSourceCurrencies = @"SELECT [CurrencyID]  ,[Name]  FROM [dbo].[Currency] WITH (NOLOCK)";
+        const string query_getSourceCurrencies = @"SELECT [CurrencyID] ,[IsMainCurrency] ,[Name]  FROM [dbo].[Currency] WITH (NOLOCK)";
     }
 }

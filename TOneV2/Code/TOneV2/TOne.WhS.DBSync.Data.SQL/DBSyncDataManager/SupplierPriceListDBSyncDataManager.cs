@@ -25,7 +25,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
             dt.Columns.Add("SupplierID", typeof(int));
             dt.Columns.Add("CurrencyID", typeof(int));
-            dt.Columns.Add("FileID", typeof(long));
+            dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "FileID", DataType = typeof(long) });
             dt.Columns.Add("SourceID", typeof(string));
             dt.Columns.Add("ID", typeof(int));
             dt.Columns.Add("CreatedTime", typeof(DateTime));
@@ -38,7 +38,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 int index = 0;
                 row[index++] = item.SupplierId;
                 row[index++] = item.CurrencyId;
-                row[index++] = item.FileId;
+                row[index++] = item.FileId.HasValue ? (object)item.FileId.Value : DBNull.Value;
                 row[index++] = item.SourceId;
                 row[index++] = startingId++;
                 row[index++] = item.CreateTime;
@@ -63,7 +63,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 SupplierId = (int)reader["SupplierID"],
                 CurrencyId = (int)reader["CurrencyID"],
                 PriceListId = (int)reader["ID"],
-                FileId = (long)reader["FileID"],
+                FileId = GetReaderValue <long?>(reader, "FileID"),
                 CreateTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
                 EffectiveOn = GetReaderValue<DateTime>(reader, "EffectiveOn"),
                 SourceId = reader["SourceID"] as string,

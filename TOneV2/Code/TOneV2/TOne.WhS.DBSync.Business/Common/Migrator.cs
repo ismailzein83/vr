@@ -10,7 +10,8 @@ namespace TOne.WhS.DBSync.Business
     {
         public string TableName { get; set; }
         public MigrationContext Context { get; set; }
-        public int TotalRows { get; set; }
+        public int TotalRowsSuccess { get; set; }
+        public int TotalRowsFailed { get; set; }
         protected Migrator(MigrationContext context)
         {
             Context = context;
@@ -31,9 +32,11 @@ namespace TOne.WhS.DBSync.Business
                 }
                 AddItems(itemsToAdd);
                 if (context.GeneratedIdsInfoContext != null)
-                    context.GeneratedIdsInfoContext.LastTakenId = TotalRows;
+                    context.GeneratedIdsInfoContext.LastTakenId = TotalRowsSuccess;
             }
-            Context.WriteInformation(string.Format("Migrating table '" + TableName + "' ended: {0} rows ", TotalRows));
+            if(TotalRowsFailed > 0)
+                Context.WriteWarning(string.Format("Migrating table '" + TableName + "' : {0} rows failed", TotalRowsFailed));
+            Context.WriteInformation(string.Format("Migrating table '" + TableName + "' ended: {0} rows ", TotalRowsSuccess));
         }
 
         public abstract void FillTableInfo(bool useTempTables);

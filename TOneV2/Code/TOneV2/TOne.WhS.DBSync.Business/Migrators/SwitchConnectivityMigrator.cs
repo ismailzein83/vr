@@ -33,7 +33,7 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<SwitchConnectivity> itemsToAdd)
         {
             dbSyncDataManager.ApplySwitchesConnectivityToTemp(itemsToAdd);
-            TotalRows = itemsToAdd.Count;
+            TotalRowsSuccess = itemsToAdd.Count;
         }
 
         public override IEnumerable<SourceCarrierSwitchConnectivity> GetSourceItems()
@@ -81,7 +81,10 @@ namespace TOne.WhS.DBSync.Business
                 };
             }
 
+
+            TotalRowsFailed++;
             return null;
+
         }
 
         public override void FillTableInfo(bool useTempTables)

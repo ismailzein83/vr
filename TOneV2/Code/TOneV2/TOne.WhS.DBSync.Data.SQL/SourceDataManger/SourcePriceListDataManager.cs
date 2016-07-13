@@ -36,7 +36,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                                                                NULL SourceFileBytes, NULL SourceFileName FROM PriceList WITH (NOLOCK) where SupplierID = 'SYS' ";
 
         const string query_getSupplierSourcePriceLists = @"SELECT     p.PriceListID, p.SupplierID, p.CustomerID, p.CurrencyID, p.SourceFileName, p.BeginEffectiveDate , data.SourceFileBytes
-                                                            FROM         PriceList AS p WITH (NOLOCK) INNER JOIN
+                                                            FROM         PriceList AS p WITH (NOLOCK) LEFT JOIN
                                                                                     PriceListData AS data WITH (NOLOCK) ON p.PriceListID = data.PriceListID
                                                             WHERE     (p.CustomerID = 'SYS')";
     }

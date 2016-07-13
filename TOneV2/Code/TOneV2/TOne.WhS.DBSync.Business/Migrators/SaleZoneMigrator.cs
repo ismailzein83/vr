@@ -36,7 +36,7 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<SaleZone> itemsToAdd)
         {
             dbSyncDataManager.ApplySaleZonesToTemp(itemsToAdd, 1);
-            TotalRows = itemsToAdd.Count;
+            TotalRowsSuccess = itemsToAdd.Count;
         }
 
         public override IEnumerable<SourceZone> GetSourceItems()
@@ -60,7 +60,10 @@ namespace TOne.WhS.DBSync.Business
                         SourceId = sourceItem.SourceId
                     };
             else
+            {
+                TotalRowsFailed++;
                 return null;
+            }
         }
 
         internal static void ReserveIDRange(int nbOfIds, out long startingId)

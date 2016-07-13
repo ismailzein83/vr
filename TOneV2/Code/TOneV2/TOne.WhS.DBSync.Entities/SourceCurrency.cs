@@ -13,6 +13,7 @@ namespace TOne.WhS.DBSync.Entities
 
         public string Name { get; set; }
 
+        public bool IsMainCurrency { get; set; }
         public string Symbol { get; set; }
     }
 }

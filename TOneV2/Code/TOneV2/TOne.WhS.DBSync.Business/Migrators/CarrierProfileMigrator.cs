@@ -33,7 +33,7 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<CarrierProfile> itemsToAdd)
         {
             dbSyncDataManager.ApplyCarrierProfilesToTemp(itemsToAdd);
-            TotalRows = itemsToAdd.Count;
+            TotalRowsSuccess = itemsToAdd.Count;
         }
 
         public override IEnumerable<SourceCarrierProfile> GetSourceItems()
