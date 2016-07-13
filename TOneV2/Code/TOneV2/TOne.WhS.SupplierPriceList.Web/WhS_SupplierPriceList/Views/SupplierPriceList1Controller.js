@@ -1,16 +1,12 @@
 ﻿(
     function (appControllers) {
         "use strict";
-        priceListConversionController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_SupPL_SupplierPriceListAPIService', 'WhS_SupPL_SupplierPriceListTemplateService', 'WhS_SupPL_SupplierPriceListTemplateAPIService','WhS_BE_CarrierAccountAPIService','BusinessProcess_BPInstanceAPIService','WhS_BP_CreateProcessResultEnum','BusinessProcess_BPInstanceService'];
-        function priceListConversionController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_SupPL_SupplierPriceListAPIService, WhS_SupPL_SupplierPriceListTemplateService, WhS_SupPL_SupplierPriceListTemplateAPIService, WhS_BE_CarrierAccountAPIService, BusinessProcess_BPInstanceAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService) {
+        priceListConversionController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_SupPL_SupplierPriceListAPIService', 'WhS_SupPL_SupplierPriceListTemplateAPIService','WhS_BE_CarrierAccountAPIService','BusinessProcess_BPInstanceAPIService','WhS_BP_CreateProcessResultEnum','BusinessProcess_BPInstanceService'];
+        function priceListConversionController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_SupPL_SupplierPriceListAPIService, WhS_SupPL_SupplierPriceListTemplateAPIService, WhS_BE_CarrierAccountAPIService, BusinessProcess_BPInstanceAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService) {
 
             var inputWorkBookApi;
-            var inputPriceListName;
-            var inputConfigurationAPI;
-            var inputConfigurationReadyPromiseDeferred;
-
-            var inputPriceListTemplateAPI;
-            var inputPriceListTemplateReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var supplierPriceListConfigurationAPI;
+            var supplierPriceListConfigurationReadyPromiseDeferred;
 
             var carrierAccountDirectiveAPI;
             var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -43,22 +39,20 @@
                         $scope.scopeModel.isLoadingCurrencySelector = true;
                         $scope.scopeModel.inPutFile = undefined;
                         WhS_BE_CarrierAccountAPIService.GetCarrierAccountCurrency(selectedCarrierAccountId).then(function (currencyId) {
-
                             currencyDirectiveAPI.selectedCurrency(currencyId);
                             $scope.scopeModel.isLoadingCurrencySelector = false;
                         });
 
-                        WhS_SupPL_SupplierPriceListTemplateAPIService.GetSupplierPriceListTemplateBySupplierId(selectedCarrierAccountId).then(function (response) {
+                         getPriceListTemplate(selectedCarrierAccountId).then(function (response) {
                             priceListTemplateEntity = response;
-                           
                             var payload = {
                                 context: buildContext(),
                                 configDetails: response != undefined ? response.ConfigDetails : undefined
                             };
                             var setLoader = function (value) {
-                                $scope.scopeModel.isLoadingInputPriceListTemplate = value;
+                                $scope.scopeModel.isLoadingSupplierPriceListTemplate = value;
                             };
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, inputConfigurationAPI, payload, setLoader, inputConfigurationReadyPromiseDeferred);
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierPriceListConfigurationAPI, payload, setLoader, supplierPriceListConfigurationReadyPromiseDeferred);
                         });
                     }
                 }
@@ -67,49 +61,15 @@
                     inputWorkBookApi = api;
                 }
 
-                $scope.scopeModel.onInputConfigurationSelectiveReady = function (api) {
-                    inputConfigurationAPI = api;
+                $scope.scopeModel.onSupplierPriceListConfigurationSelectiveReady = function (api) {
+                    supplierPriceListConfigurationAPI = api;
                 }
 
-                $scope.scopeModel.saveInputConfiguration = function () {
+                $scope.scopeModel.saveSupplierPriceListConfiguration = function () {
                     if (priceListTemplateEntity)
                         return saveExistingPriceListTemplate();
                     else
                         return saveNewPriceListTemplate();
-                }
-
-                $scope.scopeModel.onInputPriceListTemplateSelectorReady = function (api) {
-                    inputPriceListTemplateAPI = api;
-                    inputPriceListTemplateReadyPromiseDeferred.resolve();
-                }
-
-                $scope.scopeModel.onInputPriceListTemplateSelectionChanged = function (api) {
-                    if (inputPriceListTemplateAPI != undefined && inputPriceListTemplateAPI.getSelectedIds() == undefined) {
-                        inputPriceListName = undefined;
-                    }
-                    if (inputPriceListTemplateAPI != undefined && !$scope.scopeModel.isLoading && inputConfigurationAPI != undefined && inputPriceListTemplateAPI.getSelectedIds() != undefined) {
-                        $scope.scopeModel.isLoading = true;
-                        getPriceListTemplate(inputPriceListTemplateAPI.getSelectedIds()).then(function (response) {
-
-                            if (response) {
-                                inputPriceListName = response.Name;
-                                var payload = {
-                                    context: buildContext(),
-                                    configDetails: response.ConfigDetails
-                                };
-                                var setLoader = function (value) {
-                                    $scope.scopeModel.isLoadingInputPriceListTemplate = value;
-                                };
-                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, inputConfigurationAPI, payload, setLoader, inputConfigurationReadyPromiseDeferred);
-                            }
-
-
-                        }).finally(function () {
-                            $scope.scopeModel.isLoading = false;
-                        });
-
-                    }
-
                 }
 
                 $scope.scopeModel.startImport = function () {
@@ -156,10 +116,13 @@
                     return promiseDeffered.promise;
                 }
 
-                function hassaveInputConfigurationPermission() {
-                    return WhS_SupPL_SupplierPriceListTemplateAPIService.HassaveInputConfigurationPermission();
-                };
-               
+                $scope.scopeModel.hassaveSupplierPriceListConfigurationPermission = function()
+                {
+                    if (priceListTemplateEntity)
+                        return WhS_SupPL_SupplierPriceListTemplateAPIService.HasUpdateSupplierPriceListTemplatePermission();
+                    else
+                        return WhS_SupPL_SupplierPriceListTemplateAPIService.HasaddSupplierPriceListTemplatePermission();
+                }
             }
 
             function startImportSupplierPriceList(supplierPriceListTemplateId)
@@ -212,19 +175,6 @@
                });
             }
 
-            function loadInputConfiguration() {
-                var loadInputConfigurationPromiseDeferred = UtilsService.createPromiseDeferred();
-                inputConfigurationReadyPromiseDeferred.promise.then(function () {
-                    inputConfigurationReadyPromiseDeferred = undefined;
-                    var payload = {
-                        context: buildContext(),
-                    };
-                    VRUIUtilsService.callDirectiveLoad(inputConfigurationAPI, payload, loadInputConfigurationPromiseDeferred);
-                });
-
-                return loadInputConfigurationPromiseDeferred.promise;
-            }
-
             function loadCarrierAccountSelector() {
                 var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -248,18 +198,8 @@
 
             }
 
-            function loadInputPriceListTemplateSelector() {
-                var loadInputPriceListTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
-                inputPriceListTemplateReadyPromiseDeferred.promise.then(function () {
-                    var payload;
-                    VRUIUtilsService.callDirectiveLoad(inputPriceListTemplateAPI, payload, loadInputPriceListTemplatePromiseDeferred);
-                });
-
-                return loadInputPriceListTemplatePromiseDeferred.promise;
-            }
-
-            function getPriceListTemplate(priceListTemplateId) {
-                return WhS_SupPL_SupplierPriceListTemplateAPIService.GetPriceListTemplate(priceListTemplateId);
+            function getPriceListTemplate(selectedCarrierAccountId) {
+                return WhS_SupPL_SupplierPriceListTemplateAPIService.GetSupplierPriceListTemplateBySupplierId(selectedCarrierAccountId);
             }
 
             function buildContext() {
@@ -285,9 +225,9 @@
                 return context;
             }
 
-            function buildInputConfigurationObj() {
-                if (inputConfigurationAPI != undefined)
-                    return inputConfigurationAPI.getData();
+            function buildSupplierPriceListConfigurationObj() {
+                if (supplierPriceListConfigurationAPI != undefined)
+                    return supplierPriceListConfigurationAPI.getData();
             }
 
             function buildPriceListTemplateObjFromScope(isDraft) {
@@ -298,7 +238,7 @@
 
                 if(!isDraft)
                 {
-                   priceListTemplateObject.ConfigDetails =  buildInputConfigurationObj();
+                    priceListTemplateObject.ConfigDetails = buildSupplierPriceListConfigurationObj();
                 }
                 if(isDraft)
                 {
@@ -306,7 +246,7 @@
                     {
                         priceListTemplateObject.ConfigDetails = priceListTemplateEntity.ConfigDetails;
                     }
-                    priceListTemplateObject.Draft = buildInputConfigurationObj();
+                    priceListTemplateObject.Draft = buildSupplierPriceListConfigurationObj();
                 }
                 return priceListTemplateObject;
             }
@@ -342,13 +282,6 @@
 
             function updatePriceListTemplate(priceListTemplateObject) {
                 return WhS_SupPL_SupplierPriceListTemplateAPIService.UpdateSupplierPriceListTemplate(priceListTemplateObject);
-            }
-
-            function validate(supplierPriceListInput) {
-                return WhS_SupPL_SupplierPriceListAPIService.ValidateSupplierPriceList(supplierPriceListInput).then(function (response) {
-                    UtilsService.downloadFile(response.data, response.headers);
-                }).catch(function (error) {
-                });
             }
 
         }

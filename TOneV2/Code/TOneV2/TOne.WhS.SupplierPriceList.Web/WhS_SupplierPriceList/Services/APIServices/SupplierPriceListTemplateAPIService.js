@@ -48,7 +48,7 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_SupPL_ModuleConfig.moduleName, controllerName, ['UpdateSupplierPriceListTemplate']));
         }
 
-        function HassaveInputConfigurationPermission() {
+        function HassaveSupplierPriceListConfigurationPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(moduleConfig.moduleName, controllerName, ['UpdateSupplierPriceListTemplate', 'AddSupplierPriceListTemplate']));
         }
 
@@ -60,7 +60,7 @@
             GetSupplierPriceListTemplatesInfo: GetSupplierPriceListTemplatesInfo,
             HasaddSupplierPriceListTemplatePermission: HasaddSupplierPriceListTemplatePermission,
             HasUpdateSupplierPriceListTemplatePermission: HasUpdateSupplierPriceListTemplatePermission,
-            HassaveInputConfigurationPermission: HassaveInputConfigurationPermission,
+            HassaveSupplierPriceListConfigurationPermission: HassaveSupplierPriceListConfigurationPermission,
             GetSupplierPriceListTemplateBySupplierId: GetSupplierPriceListTemplateBySupplierId
         });
     }
