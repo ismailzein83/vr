@@ -81,14 +81,15 @@ namespace Vanrise.ExcelConversion.Business
                 ListName = listMapping.ListName,
                 Records = new List<ConvertedExcelRecord>()
             };
+
+            int maxdatacol = workSheet.Cells.MaxDataColumn + 1;
             for (int i = listMapping.FirstRowIndex; i <= lastRowIndex; i++)
             {
                 var row = workSheet.Cells.Rows[i];
 
-                if (stopOnFirstEmptyRow && CheckIsRowEmpty(workSheet, row))
+                if (stopOnFirstEmptyRow && CheckIsRowEmpty(row, maxdatacol))
                 {
-                    convertedExcel.Lists.Add(lst);
-                    return;
+                    break;
                 }
                 var convertedRecord = new ConvertedExcelRecord { Fields = new ConvertedExcelFieldsByName() };
 
@@ -160,9 +161,8 @@ namespace Vanrise.ExcelConversion.Business
                 return fldValue;
         }
 
-        private bool CheckIsRowEmpty(Worksheet workSheet,Row row)
+        private bool CheckIsRowEmpty(Row row, int maxdatacol)
         {
-            int maxdatacol = workSheet.Cells.MaxDataColumn +1 ;
             for(var i=0; i<=maxdatacol; i++)
             {
                 var cell = row.GetCellOrNull(i);
