@@ -10,11 +10,8 @@ namespace Vanrise.Common.Business
     {
         public T GetSetting<T>(string type) where T : SettingData
         {
-            var allSettings = GetCachedSettings();
-            if (allSettings == null || allSettings.Count == 0)
-                return null;
-
-            return allSettings.FindRecord(itm => itm.Type == type).Data as T;
+            var setting = GetCachedSettingsByType().GetRecord(type);
+            return setting != null ? setting.Data as T : null;
         }
 
         public IDataRetrievalResult<SettingDetail> GetFilteredSettings(DataRetrievalInput<SettingQuery> input)
@@ -89,6 +86,19 @@ namespace Vanrise.Common.Business
                    ISettingDataManager dataManager = CommonDataManagerFactory.GetDataManager<ISettingDataManager>();
                    IEnumerable<Setting> settings = dataManager.GetSettings();
                    return settings.ToDictionary(item => item.SettingId, item => item);
+               });
+        }
+
+        private Dictionary<string, Setting> GetCachedSettingsByType()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedSettingsByType",
+               () =>
+               {
+                   var cachedSettings = GetCachedSettings();
+                   if (cachedSettings == null)
+                       return null;
+                   else
+                       return cachedSettings.Values.ToDictionary(itm => itm.Type, itm => itm);
                });
         }
 

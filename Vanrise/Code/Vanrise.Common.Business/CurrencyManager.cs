@@ -36,22 +36,21 @@ namespace Vanrise.Common.Business
 
         public Currency GetSystemCurrency()
         {
-            SettingManager settingManager = new SettingManager();
-            CurrencySettingData currencyData = settingManager.GetSetting<CurrencySettingData>(Constants.BaseCurrencySettingType);
-            if (currencyData == null)
-                throw new NullReferenceException("CurrencySettingData");
-
-            var systemCurrency = GetCurrency(currencyData.CurrencyId);
+            var systemCurrencyId = GetSystemCurrencyId();
+            var systemCurrency = GetCurrency(systemCurrencyId);
             if (systemCurrency == null)
-                throw new NullReferenceException(String.Format("systemCurrency ID: '{0}'", currencyData.CurrencyId));
+                throw new NullReferenceException(String.Format("systemCurrency ID: '{0}'", systemCurrencyId));
 
             return systemCurrency;
         }
 
         public int GetSystemCurrencyId()
         {
-            Currency systemCurrency = this.GetSystemCurrency();
-            return systemCurrency.CurrencyId;
+            SettingManager settingManager = new SettingManager();
+            CurrencySettingData currencyData = settingManager.GetSetting<CurrencySettingData>(Constants.BaseCurrencySettingType);
+            if (currencyData == null)
+                throw new NullReferenceException("CurrencySettingData");
+            return currencyData.CurrencyId;
         }
 
         public string GetCurrencyName(int currencyId)

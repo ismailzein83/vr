@@ -20,27 +20,37 @@ namespace Vanrise.Common.Business
         }
         public Decimal ConvertValueToCurrency(decimal value, int currencyId, DateTime effectiveOn)
         {
-            var exchangeRate = GetEffectiveExchangeRate(currencyId, effectiveOn);
-            if (exchangeRate == null)
-                throw new NullReferenceException(string.Format("exchangeRate: currency Id:{0}, Effective On: {1}", currencyId, effectiveOn.ToString()));
+            if (currencyId == new CurrencyManager().GetSystemCurrencyId())
+                return value;
+            else
+            {
+                var exchangeRate = GetEffectiveExchangeRate(currencyId, effectiveOn);
+                if (exchangeRate == null)
+                    throw new NullReferenceException(string.Format("exchangeRate: currency Id:{0}, Effective On: {1}", currencyId, effectiveOn.ToString()));
 
-            return value * exchangeRate.Rate;
+                return value * exchangeRate.Rate;
+            }
         }
 
         public Decimal ConvertValueToCurrency(decimal value, int fromCurrencyId, int toCurrencyId, DateTime effectiveOn)
         {
-            var fromExchangeRate = GetEffectiveExchangeRate(fromCurrencyId, effectiveOn);
-            if (fromExchangeRate == null)
-                throw new NullReferenceException(string.Format("fromExchangeRate: currency Id:{0}, Effective On: {1}", fromCurrencyId, effectiveOn.ToString()));
+            if (fromCurrencyId == toCurrencyId)
+                return value;
+            else
+            {
+                var fromExchangeRate = GetEffectiveExchangeRate(fromCurrencyId, effectiveOn);
+                if (fromExchangeRate == null)
+                    throw new NullReferenceException(string.Format("fromExchangeRate: currency Id:{0}, Effective On: {1}", fromCurrencyId, effectiveOn.ToString()));
 
-            var toExchangeRate = GetEffectiveExchangeRate(toCurrencyId, effectiveOn);
-            if (toExchangeRate == null)
-                throw new NullReferenceException(string.Format("toExchangeRate: currency Id:{0}, Effective On: {1}", toCurrencyId, effectiveOn.ToString()));
+                var toExchangeRate = GetEffectiveExchangeRate(toCurrencyId, effectiveOn);
+                if (toExchangeRate == null)
+                    throw new NullReferenceException(string.Format("toExchangeRate: currency Id:{0}, Effective On: {1}", toCurrencyId, effectiveOn.ToString()));
 
-            if (fromExchangeRate.Rate == 0)
-                throw new ArgumentException(string.Format("fromExchangeRate is 0: currency Id:{0}, Effective On: {1}", fromCurrencyId, effectiveOn.ToString()));
+                if (fromExchangeRate.Rate == 0)
+                    throw new ArgumentException(string.Format("fromExchangeRate is 0: currency Id:{0}, Effective On: {1}", fromCurrencyId, effectiveOn.ToString()));
 
-            return value * toExchangeRate.Rate / fromExchangeRate.Rate;
+                return value * toExchangeRate.Rate / fromExchangeRate.Rate;
+            }
         }
 
         public Vanrise.Entities.IDataRetrievalResult<CurrencyExchangeRateDetail> GetFilteredCurrenciesExchangeRates(Vanrise.Entities.DataRetrievalInput<CurrencyExchangeRateQuery> input)
