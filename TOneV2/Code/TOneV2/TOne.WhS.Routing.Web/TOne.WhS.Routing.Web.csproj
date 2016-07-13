@@ -196,6 +196,8 @@
     <Content Include="WhS_Routing\Directives\ProcessInput\vr-whs-routing-buildrouteprocess.js" />
     <Content Include="WhS_Routing\Directives\ProcessInput\vr-whs-routing-rpbuildproduct.js" />
     <Content Include="WhS_Routing\Directives\ProcessInput\vr-whs-routing-buildbycodeprefix.js" />
+    <Content Include="WhS_Routing\Directives\RouteConfiguration\Templates\RouteConfigurationTemplate.html" />
+    <Content Include="WhS_Routing\Directives\RouteConfiguration\vr-whs-routing-route-configuration-editor.js" />
     <Content Include="WhS_Routing\Directives\RouteOptionRule\Templates\RouteOptionRuleGridTemplate.html" />
     <Content Include="WhS_Routing\Directives\RouteOptionRule\vr-whs-be-routeoptionrule-grid.js" />
     <Content Include="WhS_Routing\Directives\RPRoute\Templates\RPRouteDetailTemplate.html" />

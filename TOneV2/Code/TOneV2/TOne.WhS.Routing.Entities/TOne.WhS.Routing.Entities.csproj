@@ -66,6 +66,7 @@
     <Compile Include="CodeSaleZone.cs" />
     <Compile Include="IRPRouteRuleExecutionContext.cs" />
     <Compile Include="ISupplierZoneToRPOptionPolicyExecutionContext.cs" />
+    <Compile Include="RouteConfigurationSettingData.cs" />
     <Compile Include="RPRouteOptionPolicyFilter.cs" />
     <Compile Include="RPRouteOptionPolicySetting.cs" />
     <Compile Include="TrafficStatsMeasure\TrafficStatsMeasure.cs" />

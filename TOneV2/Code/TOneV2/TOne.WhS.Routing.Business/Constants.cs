@@ -21,5 +21,7 @@ namespace TOne.WhS.Routing.Business
         public const string RouteOptionRuleConfigType = "WhS_Routing_RouteOptionRuleSettingsType";
 
         public const string SupplierZoneToRPOptionConfigType = "WhS_Routing_SupplierZoneToRPOptionType";
+
+        public const string RouteConfiguration = "WhS_Routing_RouteConfiguration";
     }
 }

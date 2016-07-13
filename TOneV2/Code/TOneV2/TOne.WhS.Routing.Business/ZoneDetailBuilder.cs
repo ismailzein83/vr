@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
+using Vanrise.Common.Business;
+using Vanrise.GenericData.Transformation;
 
 namespace TOne.WhS.Routing.Business
 {
@@ -15,8 +17,6 @@ namespace TOne.WhS.Routing.Business
 
         public void BuildCustomerZoneDetails(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture, Action<CustomerZoneDetail> onCustomerZoneDetailAvailable)
         {
-            //int customerId = 1;
-
             SaleEntityZoneRoutingProductLocator customerZoneRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(customerInfos, effectiveOn, isEffectiveInFuture));
             SaleEntityZoneRateLocator customerZoneRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(customerInfos, effectiveOn, isEffectiveInFuture));
 
@@ -24,6 +24,13 @@ namespace TOne.WhS.Routing.Business
             CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
 
             Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
+
+            DateTime effectiveDate = effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now;
+
+            SettingManager settingManager = new SettingManager();
+            RouteConfigurationSettingData data = settingManager.GetSetting<RouteConfigurationSettingData>(Constants.RouteConfiguration);
+
+            DataTransformer dataTransformer = new DataTransformer();
 
             foreach (RoutingCustomerInfo customerInfo in customerInfos)
             {
@@ -34,7 +41,7 @@ namespace TOne.WhS.Routing.Business
                 CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerInfo.CustomerId, effectiveOn, isEffectiveInFuture);
                 if (customerSellingProduct == null)
                     continue;
-                SalePricingRuleManager salePricingRuleManager = new SalePricingRuleManager();
+
                 foreach (var customerZone in customerSaleZones)
                 {
                     SaleEntityZoneRate customerZoneRate = customerZoneRateLocator.GetCustomerZoneRate(customerInfo.CustomerId, customerSellingProduct.SellingProductId, customerZone.SaleZoneId);
@@ -42,21 +49,22 @@ namespace TOne.WhS.Routing.Business
                     if (customerZoneRate != null)
                     {
                         int currencyId = customerZoneRate.Rate.CurrencyId.HasValue ? customerZoneRate.Rate.CurrencyId.Value : customerZoneRate.PriceList.CurrencyId;
-                        SalePricingRulesInput salePricingRulesInput = new SalePricingRulesInput
-                        {
-                            CustomerId = customerInfo.CustomerId,
-                            SaleZoneId = customerZone.SaleZoneId,
-                            SellingProductId = customerSellingProduct.SellingProductId,
-                            Rate = customerZoneRate.Rate,
-                            EffectiveOn = effectiveOn,
-                            IsEffectiveInFuture = isEffectiveInFuture
-                        };
-                        //TODO: Check with Samer (Null Reference)
-                        var pricingRulesResult = salePricingRuleManager.ApplyPricingRules(salePricingRulesInput);
 
-                        var rateValue = pricingRulesResult != null ? pricingRulesResult.Rate : customerZoneRate.Rate.NormalRate;
-                        rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now);
+                        var output = dataTransformer.ExecuteDataTransformation(data.CustomerTransformationId, (context) =>
+                        {
+                            context.SetRecordValue("CustomerId", customerInfo.CustomerId);
+                            context.SetRecordValue("SaleZoneId", customerZone.SaleZoneId);
+                            context.SetRecordValue("SaleCurrencyId", currencyId);
+                            context.SetRecordValue("NormalRate", customerZoneRate.Rate.NormalRate);
+                            context.SetRecordValue("OtherRates", customerZoneRate.Rate.OtherRates);
+                            context.SetRecordValue("EffectiveDate", effectiveDate);
+                        });
+
+                        decimal rateValue = output.GetRecordValue("EffectiveRate");
+
+                        rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, effectiveDate);
                         var customerZoneRoutingProduct = customerZoneRoutingProductLocator.GetCustomerZoneRoutingProduct(customerInfo.CustomerId, customerSellingProduct.SellingProductId, customerZone.SaleZoneId);
+
                         CustomerZoneDetail customerZoneDetail = new CustomerZoneDetail
                         {
                             CustomerId = customerInfo.CustomerId,
@@ -84,34 +92,43 @@ namespace TOne.WhS.Routing.Business
         {
             SupplierRateManager supplierRateManager = new SupplierRateManager();
             var supplierRates = supplierRateManager.GetRates(effectiveOn, isEffectiveInFuture, supplierInfos);
-            SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
-            Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
-            PurchasePricingRuleManager purchasePricingRuleManager = new PurchasePricingRuleManager();
+
             if (supplierRates != null)
             {
+                SettingManager settingManager = new SettingManager();
+                RouteConfigurationSettingData data = settingManager.GetSetting<RouteConfigurationSettingData>(Constants.RouteConfiguration);
+
+                DataTransformer dataTransformer = new DataTransformer();
+
+                SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
+                Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
+
+                DateTime effectiveDate = effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now;
                 foreach (var supplierRate in supplierRates)
                 {
                     var priceList = supplierPriceListManager.GetPriceList(supplierRate.PriceListId);
                     int currencyId = supplierRate.CurrencyId.HasValue ? supplierRate.CurrencyId.Value : priceList.CurrencyId;
-                    PurchasePricingRulesInput purchasePricingRulesInput = new PurchasePricingRulesInput
+
+                    var output = dataTransformer.ExecuteDataTransformation(data.SupplierTransformationId, (context) =>
                     {
-                        SupplierId = priceList.SupplierId,
-                        SupplierZoneId = supplierRate.ZoneId,
-                        Rate = supplierRate,
-                        EffectiveOn = effectiveOn,
-                        IsEffectiveInFuture = isEffectiveInFuture
-                    };
+                        context.SetRecordValue("SupplierId", priceList.SupplierId);
+                        context.SetRecordValue("SupplierZoneId", supplierRate.ZoneId);
+                        context.SetRecordValue("SupplierCurrencyId", currencyId);
+                        context.SetRecordValue("NormalRate", supplierRate.NormalRate);
+                        context.SetRecordValue("OtherRates", supplierRate.OtherRates);
+                        context.SetRecordValue("EffectiveDate", effectiveDate);
+                    });
 
-                    var pricingRulesResult = purchasePricingRuleManager.ApplyPricingRules(purchasePricingRulesInput);
+                    decimal rateValue = output.GetRecordValue("EffectiveRate");
+                    rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, effectiveDate);
 
-                    var rateValue = pricingRulesResult != null ? pricingRulesResult.Rate : supplierRate.NormalRate;
-                    rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now);
                     SupplierZoneDetail supplierZoneDetail = new SupplierZoneDetail
                     {
                         SupplierId = priceList.SupplierId,
                         SupplierZoneId = supplierRate.ZoneId,
                         EffectiveRateValue = rateValue
                     };
+
                     onSupplierZoneDetailAvailable(supplierZoneDetail);
                 }
             }
