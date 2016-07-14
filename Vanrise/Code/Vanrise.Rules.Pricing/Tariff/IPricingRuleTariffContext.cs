@@ -14,6 +14,9 @@ namespace Vanrise.Rules.Pricing
 
         Decimal? DurationInSeconds { get; }
 
+        /// <summary>
+        /// This rate is calculated for 1 minute
+        /// </summary>
         Decimal EffectiveRate { set; }
 
         Decimal? EffectiveDurationInSeconds { set; }

@@ -61,7 +61,8 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
 
                     extraChargeValue = Math.Ceiling(accountedDuration.Value / FractionUnit) * context.ExtraChargeRate;
                 }
-                context.EffectiveRate = Math.Ceiling(FractionUnit * context.Rate / 60);
+                //context.EffectiveRate = Math.Ceiling(FractionUnit * context.Rate / 60);
+                context.EffectiveRate = 60 * context.Rate / FractionUnit;
             }
             else
             {
