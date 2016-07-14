@@ -93,6 +93,7 @@
     <Compile Include="Action\ActionDefinition.cs" />
     <Compile Include="Action\ActionBP\ActionBPConfig.cs" />
     <Compile Include="Action\ActionDefinitionDetail.cs" />
+    <Compile Include="Action\ActionDefinitionInfo.cs" />
     <Compile Include="Action\ActionDefinitionQuery.cs" />
     <Compile Include="Action\ExecutedActionsData.cs" />
     <Compile Include="Action\ProvisionerDefinitionConfig.cs" />

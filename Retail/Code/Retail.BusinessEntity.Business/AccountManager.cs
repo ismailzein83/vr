@@ -365,14 +365,16 @@ namespace Retail.BusinessEntity.Business
 
             IEnumerable<AccountTypeInfo> accountTypeInfoEntities =
                 accountTypeManager.GetAccountTypesInfo(new AccountTypeFilter() { ParentAccountId = account.AccountId });
-
+            ActionDefinitionManager manager = new ActionDefinitionManager();
+            IEnumerable<ActionDefinitionInfo> actionDefinitions = manager.GetActionDefinitionInfoByEntityType(EntityType.Account);
             return new AccountDetail()
             {
                 Entity = account,
                 AccountTypeTitle = accountTypeManager.GetAccountTypeName(account.TypeId),
                 DirectSubAccountCount = GetSubAccountsCount(account.AccountId, accounts, false),
                 TotalSubAccountCount = GetSubAccountsCount(account.AccountId, accounts, true, accountsByParent),
-                CanAddSubAccounts = (accountTypeInfoEntities != null && accountTypeInfoEntities.Count() > 0)
+                CanAddSubAccounts = (accountTypeInfoEntities != null && accountTypeInfoEntities.Count() > 0),
+                ActionDefinitions = actionDefinitions
             };
         }
 

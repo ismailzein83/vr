@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountPackageService', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountIdentificationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'Retail_BE_AccountServiceAPIService','Retail_BE_AccountServiceService',
-    function (Retail_BE_AccountAPIService, Retail_BE_AccountService, Retail_BE_AccountPackageService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountIdentificationService, UtilsService, VRUIUtilsService, VRNotificationService, Retail_BE_AccountServiceAPIService, Retail_BE_AccountServiceService) {
+app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountPackageService', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountIdentificationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'Retail_BE_AccountServiceAPIService','Retail_BE_AccountServiceService','Retail_BE_ActionRuntimeService',
+    function (Retail_BE_AccountAPIService, Retail_BE_AccountService, Retail_BE_AccountPackageService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountIdentificationService, UtilsService, VRUIUtilsService, VRNotificationService, Retail_BE_AccountServiceAPIService, Retail_BE_AccountServiceService, Retail_BE_ActionRuntimeService) {
     return {
         restrict: 'E',
         scope: {
@@ -46,12 +46,34 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
             };
+            defineMenuActions();
 
             $scope.scopeModel.getMenuActions = function (dataItem) {
-                return dataItem.drillDownExtensionObject.menuActions;
+                var menuActions = [];
+                if (dataItem.drillDownExtensionObject.menuActions != undefined) {
+                    for (var i = 0; i < dataItem.drillDownExtensionObject.menuActions.length; i++) {
+                        var menuAction = dataItem.drillDownExtensionObject.menuActions[i];
+                        menuActions.push(menuAction);
+                    }
+                }
+                if (dataItem.ActionDefinitions != undefined) {
+                    for (var i = 0; i < dataItem.ActionDefinitions.length; i++) {
+                        var actionDefinition = dataItem.ActionDefinitions[i];
+                        menuActions.push(defineActionDefinitionMenuAction(actionDefinition));
+                    }
+                }
+                return menuActions;
             };
 
-            defineMenuActions();
+            function defineActionDefinitionMenuAction(actionDefinition) {
+                return {
+                    name: actionDefinition.Name,
+                    clicked: function (dataItem) {
+                        return Retail_BE_ActionRuntimeService.openActionRuntime(dataItem.Entity.AccountId, actionDefinition.ActionDefinitionId);
+                    }
+                };
+            }
+          
         }
 
         function defineAPI() {

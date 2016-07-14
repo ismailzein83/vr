@@ -316,6 +316,7 @@
     <Content Include="Retail_BusinessEntity\Services\AccountServiceService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountTypeService.js" />
     <Content Include="Retail_BusinessEntity\Services\ActionDefinitionService.js" />
+    <Content Include="Retail_BusinessEntity\Services\ActionRuntimeService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountIdentificationAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountPackageAPIService.js" />
@@ -352,10 +353,12 @@
     <Content Include="Retail_BusinessEntity\Views\Account\AccountManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountIdentificationAssignmentEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountIdentificationAssignmentEditorController.js" />
-    <Content Include="Retail_BusinessEntity\Views\ActionDefinition\ActionDefinitionEditor.html" />
-    <Content Include="Retail_BusinessEntity\Views\ActionDefinition\ActionDefinitionEditorController.js" />
-    <Content Include="Retail_BusinessEntity\Views\ActionDefinition\ActionDefinitionManagement.html" />
-    <Content Include="Retail_BusinessEntity\Views\ActionDefinition\ActionDefinitionManagementController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Action\Definition\ActionDefinitionEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\Action\Definition\ActionDefinitionEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Action\Definition\ActionDefinitionManagement.html" />
+    <Content Include="Retail_BusinessEntity\Views\Action\Definition\ActionDefinitionManagementController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Action\Runtime\ActionRuntimeEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\Action\Runtime\ActionRutimeEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ChargingPolicy\ChargingPolicyEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\ChargingPolicy\ChargingPolicyEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ChargingPolicy\ChargingPolicyManagement.html" />

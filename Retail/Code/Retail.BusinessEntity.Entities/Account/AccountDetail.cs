@@ -13,5 +13,6 @@ namespace Retail.BusinessEntity.Entities
         public int DirectSubAccountCount { get; set; }
         public int TotalSubAccountCount { get; set; }
         public bool CanAddSubAccounts { get; set; }
+        public IEnumerable<ActionDefinitionInfo>  ActionDefinitions { get; set; }
     }
 }

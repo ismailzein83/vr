@@ -84,6 +84,14 @@ namespace Retail.BusinessEntity.Business
             var extensionConfiguration = new ExtensionConfigurationManager();
             return extensionConfiguration.GetExtensionConfigurations<ProvisionerDefinitionConfig>(ProvisionerDefinitionConfig.EXTENSION_TYPE);
         }
+
+        public IEnumerable<ActionDefinitionInfo> GetActionDefinitionInfoByEntityType(EntityType entityType)
+        {
+            Dictionary<Guid, ActionDefinition> cachedActionDefinitiones = this.GetCachedActionDefinitions();
+            Func<ActionDefinition,bool> filterExpression= (item) =>  (item.Settings.EntityType == entityType);
+            return cachedActionDefinitiones.MapRecords(ActionDefinitionInfoMapper, filterExpression);
+        }
+
         #endregion
 
         #region Private Classes
@@ -135,6 +143,14 @@ namespace Retail.BusinessEntity.Business
             return new ActionDefinitionDetail()
             {
                 Entity = actionDefinition,
+            };
+        }
+        private ActionDefinitionInfo ActionDefinitionInfoMapper(ActionDefinition actionDefinition)
+        {
+            return new ActionDefinitionInfo()
+            {
+                ActionDefinitionId = actionDefinition.ActionDefinitionId,
+                Name = actionDefinition.Name
             };
         }
         #endregion

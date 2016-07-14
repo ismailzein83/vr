@@ -1,0 +1,17 @@
+﻿<div vr-modalcontent ng-controller="Retail_BE_ActionRuntimeEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formActionRuntimeEditor">
+            <vr-tabs>
+                <vr-directivewrapper directive="scopeModel.selectedExtensionConfig.RuntimeEditor" on-ready="scopeModel.onDirectiveReady" isrequired="true" ></vr-directivewrapper>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Start" formname="formActionRuntimeEditor" data-onclick="scopeModel.start"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

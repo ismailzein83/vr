@@ -13,7 +13,7 @@
                 modalScope.onActionDefinitionAdded = onActionDefinitionAdded
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/ActionDefinition/ActionDefinitionEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Action/Definition/ActionDefinitionEditor.html', null, settings);
         };
 
         function editActionDefinition(actionDefinitionId, onActionDefinitionUpdated) {
@@ -27,7 +27,7 @@
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onActionDefinitionUpdated = onActionDefinitionUpdated;
             };
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/ActionDefinition/ActionDefinitionEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Action/Definition/ActionDefinitionEditor.html', parameters, modalSettings);
         }
 
         return {
