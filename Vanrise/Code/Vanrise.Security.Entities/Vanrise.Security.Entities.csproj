@@ -84,6 +84,7 @@
     <Compile Include="RandomPasswordHelper.cs" />
     <Compile Include="Group\Group.cs" />
     <Compile Include="Group\GroupDetail.cs" />
+    <Compile Include="RequiredPermissionSettings.cs" />
     <Compile Include="SystemAction\SystemAction.cs" />
     <Compile Include="Tenant\Tenant.cs" />
     <Compile Include="Tenant\TenantDetail.cs" />

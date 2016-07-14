@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
@@ -27,5 +28,7 @@ namespace Vanrise.Analytic.Entities
 
         public string TimeColumnName { get; set; }
         public List<int> DataRecordTypeIds { get; set; }
+
+        public RequiredPermissionSettings RequiredPermission { get; set; }
     }
 }
