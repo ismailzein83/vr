@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("GetFilteredStatusDefinition")]
-        public object GetFilteredStatusDefinition(Vanrise.Entities.DataRetrievalInput<StatusDefinitionDetail> input)
+        public object GetFilteredStatusDefinition(Vanrise.Entities.DataRetrievalInput<StatusDefinitionQuery> input)
         {
             return GetWebResponse(input, _manager.GetFilteredStatusDefinition(input));
         }

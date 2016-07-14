@@ -18,10 +18,10 @@ namespace Retail.BusinessEntity.Business
             throw new NotImplementedException();
         }
 
-        public IDataRetrievalResult<StatusDefinitionDetail> GetFilteredStatusDefinition(DataRetrievalInput<StatusDefinitionDetail> input)
+        public IDataRetrievalResult<StatusDefinitionDetail> GetFilteredStatusDefinition(DataRetrievalInput<StatusDefinitionQuery> input)
         {
             var allStatusDefinitions = GetCachedStatusDefinitions();
-            //Func<StatusDefinition, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            Func<StatusDefinition, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allStatusDefinitions.ToBigResult(input, null, StatusDefinitionDetailMapper));
         }
 
