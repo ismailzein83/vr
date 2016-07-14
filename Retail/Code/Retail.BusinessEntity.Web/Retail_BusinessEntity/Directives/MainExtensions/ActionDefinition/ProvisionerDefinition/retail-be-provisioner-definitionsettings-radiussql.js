@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/ActionDefinition/ProvisionerDefinition/Templates/RadiusProvisionerDefinitionSettingsTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/ActionDefinition/ProvisionerDefinition/Templates/RadiusSQLProvisionerDefinitionSettingsTemplate.html"
 
         };
         function RadiusProvisionerDefinitionSetting($scope, ctrl, $attrs) {
@@ -34,6 +34,11 @@
                 api.load = function (payload) {
                     if (payload != undefined) {
                         mainPayload = payload;
+                        if(payload.provisionerDefinitionSettings !=undefined)
+                        {
+                            $scope.scopeModel.query = payload.provisionerDefinitionSettings.Query;
+                            $scope.scopeModel.connectionString = payload.provisionerDefinitionSettings.ConnectionString;
+                        }
                     }
 
                 };
@@ -46,7 +51,9 @@
 
                 function getData() {
                     var data = {
-                        $type: "Retail.BusinessEntity.MainExtensions.TestProvisionerDefinitionSetting,Retail.BusinessEntity.MainExtensions",
+                        $type: "Retail.BusinessEntity.MainExtensions.RadiusSQLProvisionerDefinitionSetting,Retail.BusinessEntity.MainExtensions",
+                        Query: $scope.scopeModel.query,
+                        ConnectionString: $scope.scopeModel.connectionString
                     }
                     return data;
                 }
@@ -54,6 +61,6 @@
         }
     }
 
-    app.directive('retailBeProvisionerDefinitionsettingsRadius', ProvisionerDefinitionsettingsRadiusDirective);
+    app.directive('retailBeProvisionerDefinitionsettingsRadiussql', ProvisionerDefinitionsettingsRadiusDirective);
 
 })(app);

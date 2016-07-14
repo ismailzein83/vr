@@ -246,8 +246,8 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeResidentialProfilePartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ActionDefinition\ActionBPDefinition\retail-be-actionbpdefinition-definitionsettings-regular.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ActionDefinition\ActionBPDefinition\Templates\RegularActionBPDefinitionSettingsTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ActionDefinition\ProvisionerDefinition\retail-be-provisioner-definitionsettings-radius.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ActionDefinition\ProvisionerDefinition\Templates\RadiusProvisionerDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ActionDefinition\ProvisionerDefinition\retail-be-provisioner-definitionsettings-radiussql.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ActionDefinition\ProvisionerDefinition\Templates\RadiusSQLProvisionerDefinitionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\retail-be-chargingpolicypart-durationtariff-single-runtimeeditor.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\retail-be-chargingpolicypart-ratevalue-single-runtimeeditor.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\Templates\SingleDurationTariffChargingPolicyPartTemplate.html" />

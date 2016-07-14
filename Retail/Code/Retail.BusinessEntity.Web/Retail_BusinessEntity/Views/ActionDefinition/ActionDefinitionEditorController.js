@@ -102,7 +102,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadServiceTypeSelector, loadActionBPDefinitionExtensionConfigs]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadServiceTypeSelector, loadActionBPDefinitionExtensionConfigs, loadDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -161,6 +161,22 @@
                         $scope.scopeModel.selectedExtensionConfig = $scope.scopeModel.extensionConfigs[0];
                 }
             });
+        }
+
+        function loadDirective() {
+            if (actionDefinitionEntity != undefined && actionDefinitionEntity.Settings != undefined && actionDefinitionEntity.Settings.BPDefinitionSettings != undefined) {
+                directiveReadyDeferred = UtilsService.createPromiseDeferred();
+                var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+                directiveReadyDeferred.promise.then(function () {
+                    directiveReadyDeferred = undefined;
+                    var directivePayload = {
+                        bpDefinitionSettings: actionDefinitionEntity.Settings.BPDefinitionSettings
+                    };
+                    VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
+                });
+                return directiveLoadDeferred.promise;
+            }
+
         }
 
         function insertActionDefinition() {

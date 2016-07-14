@@ -99,7 +99,7 @@
     <Compile Include="AccountParts\AccountPartGenericDefinition.cs" />
     <Compile Include="AccountParts\AccountPartResidentialProfile.cs" />
     <Compile Include="AccountParts\AccountPartResidentialProfileDefinition.cs" />
-    <Compile Include="TestProvisionerDefinitionSetting.cs" />
+    <Compile Include="RadiusSQLProvisionerDefinitionSetting.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.BusinessEntity.Business\Retail.BusinessEntity.Business.csproj">

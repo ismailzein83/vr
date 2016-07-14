@@ -7,7 +7,9 @@ using Vanrise.Integration.Entities;
 
 namespace Retail.BusinessEntity.MainExtensions
 {
-    public class TestProvisionerDefinitionSetting : ActionProvisionerDefinitionSettings
+    public class RadiusSQLProvisionerDefinitionSetting : ActionProvisionerDefinitionSettings
     {
+        public string ConnectionString { get; set; }
+        public string Query { get; set; }
     }
 }

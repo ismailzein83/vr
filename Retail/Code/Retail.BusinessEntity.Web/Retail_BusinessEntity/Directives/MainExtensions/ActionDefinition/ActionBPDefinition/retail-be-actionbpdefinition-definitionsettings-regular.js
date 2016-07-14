@@ -49,7 +49,7 @@
                     var provisionerdefinitionSettingLoadDeferred = UtilsService.createPromiseDeferred();
 
                     provisionerdefinitionSettingReadyDeferred.promise.then(function () {
-                        var definitionSettingPayload = payload != undefined ? payload.provisionerDefinitionSettings : undefined
+                        var definitionSettingPayload = payload != undefined && payload.bpDefinitionSettings != undefined ? { provisionerDefinitionSettings: payload.bpDefinitionSettings.ProvisionerDefinitionSettings } : undefined
                         VRUIUtilsService.callDirectiveLoad(provisionerdefinitionSettingAPI, definitionSettingPayload, provisionerdefinitionSettingLoadDeferred);
                     });
                     return provisionerdefinitionSettingLoadDeferred.promise;
