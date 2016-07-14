@@ -25,11 +25,20 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateActionDefinition'), actionDefinition);
         }
 
+        function GetActionBPDefinitionExtensionConfigs()
+        {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetActionBPDefinitionExtensionConfigs'));
+        }
+        function GetProvisionerDefinitionExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetProvisionerDefinitionExtensionConfigs'));
+        }
         return ({
             GetFilteredActionDefinitions: GetFilteredActionDefinitions,
             GetActionDefinition: GetActionDefinition,
             AddActionDefinition: AddActionDefinition,
-            UpdateActionDefinition: UpdateActionDefinition
+            UpdateActionDefinition: UpdateActionDefinition,
+            GetActionBPDefinitionExtensionConfigs: GetActionBPDefinitionExtensionConfigs,
+            GetProvisionerDefinitionExtensionConfigs: GetProvisionerDefinitionExtensionConfigs
         });
     }
 

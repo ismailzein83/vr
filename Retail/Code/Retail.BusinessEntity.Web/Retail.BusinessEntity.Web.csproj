@@ -210,6 +210,7 @@
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountPartsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\ActionDefinition\ProvisionerDefinition\retail-be-provisioner-definitionsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\ActionDefinition\retail-be-actiondefinition-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\ActionDefinition\Templates\ActionDefinitionGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\retail-be-chargingpolicy-grid.js" />
@@ -243,6 +244,10 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeFinancialPostpaidPartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeGenericPartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeResidentialProfilePartRuntimeTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ActionDefinition\ActionBPDefinition\retail-be-actionbpdefinition-definitionsettings-regular.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ActionDefinition\ActionBPDefinition\Templates\RegularActionBPDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ActionDefinition\ProvisionerDefinition\retail-be-provisioner-definitionsettings-test.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ActionDefinition\ProvisionerDefinition\Templates\TestProvisionerDefinitionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\retail-be-chargingpolicypart-durationtariff-single-runtimeeditor.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\retail-be-chargingpolicypart-ratevalue-single-runtimeeditor.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\Templates\SingleDurationTariffChargingPolicyPartTemplate.html" />

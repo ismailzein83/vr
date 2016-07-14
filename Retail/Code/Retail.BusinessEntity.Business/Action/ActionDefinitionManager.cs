@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 namespace Retail.BusinessEntity.Business
 {
     public class ActionDefinitionManager : IActionDefinitionManager
@@ -72,6 +74,16 @@ namespace Retail.BusinessEntity.Business
 
             return updateOperationOutput;
         }
+        public IEnumerable<ActionBPDefinitionConfig> GetActionBPDefinitionExtensionConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<ActionBPDefinitionConfig>(ActionBPDefinitionConfig.EXTENSION_TYPE);
+        }
+        public IEnumerable<ProvisionerDefinitionConfig> GetProvisionerDefinitionExtensionConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<ProvisionerDefinitionConfig>(ProvisionerDefinitionConfig.EXTENSION_TYPE);
+        }
         #endregion
 
         #region Private Classes
@@ -97,7 +109,6 @@ namespace Retail.BusinessEntity.Business
                 throw new NullReferenceException(String.Format("actionDefinition.Settings.BPDefinitionSettings. Id '{0}'", actionDefinitionId));
             return actionDefinitionSettings.BPDefinitionSettings;
         }
-
         private ActionDefinitionSettings GetActionDefinitionSettings(Guid actionDefinitionId)
         {
             var actionDefinition = GetActionDefinition(actionDefinitionId);
@@ -116,7 +127,6 @@ namespace Retail.BusinessEntity.Business
                 return actionDefinitiones.ToDictionary(kvp => kvp.ActionDefinitionId, kvp => kvp);
             });
         }
-
         #endregion
 
         #region Mappers

@@ -42,5 +42,18 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetActionDefinition(actionDefinitionId);
         }
+        [HttpGet]
+        [Route("GetActionBPDefinitionExtensionConfigs")]
+        public IEnumerable<ActionBPDefinitionConfig> GetActionBPDefinitionExtensionConfigs()
+        {
+            return _manager.GetActionBPDefinitionExtensionConfigs();
+        }
+        [HttpGet]
+        [Route("GetProvisionerDefinitionExtensionConfigs")]
+        public IEnumerable<ProvisionerDefinitionConfig> GetProvisionerDefinitionExtensionConfigs()
+        {
+            return _manager.GetProvisionerDefinitionExtensionConfigs();
+        }
+        
     }
 }

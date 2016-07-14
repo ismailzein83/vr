@@ -10,6 +10,12 @@
         var actionDefinitionId;
         var actionDefinitionEntity;
 
+        var serviceTypeSelectorAPI;
+        var serviceTypeSelectorReadyDeferred;
+
+        var directiveAPI;
+        var directiveReadyDeferred;
+
         loadParameters();
         defineScope();
         load();
@@ -25,8 +31,38 @@
         function defineScope() {
             $scope.scopeModel = {};
 
+            $scope.scopeModel.extensionConfigs = [];
+
+            $scope.scopeModel.selectedExtensionConfig;
+
+            $scope.scopeModel.onDirectiveReady = function (api) {
+                directiveAPI = api;
+               var directivePayload = undefined;
+                var setLoader = function (value) {
+                    $scope.scopeModel.isLoadingDirective = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
+            };
+
             $scope.scopeModel.entityTypes = UtilsService.getArrayEnum(Retail_BE_EntityTypeEnum);
 
+            $scope.scopeModel.onServiceTypeSelectorReady = function (api) {
+                serviceTypeSelectorAPI = api;
+                var setLoader = function (value) {
+                    $scope.scopeModel.isLoadingDirective = value;
+                };
+                var payload;
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, serviceTypeSelectorAPI, payload, setLoader, serviceTypeSelectorReadyDeferred);
+            }
+
+            $scope.scopeModel.showServiceTypeSelector = function()
+            {
+                if($scope.scopeModel.selectedEntityType != undefined && $scope.scopeModel.selectedEntityType.value == Retail_BE_EntityTypeEnum.AccountService.value)
+                {
+                    return true;
+                }
+                return false;
+            }
 
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateActionDefinition() : insertActionDefinition();
@@ -66,20 +102,39 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadServiceTypeSelector, loadActionBPDefinitionExtensionConfigs]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
         }
 
+        function loadServiceTypeSelector()
+        {
+            if (actionDefinitionEntity != undefined && actionDefinitionEntity.Settings != undefined && actionDefinitionEntity.Settings.EntityTypeId != undefined)
+            {
+                serviceTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+                var serviceTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                serviceTypeSelectorReadyDeferred.promise.then(function () {
+                    serviceTypeSelectorReadyDeferred = undefined;
+                    var serviceTypeSelectorPayload = {
+                            selectedIds: actionDefinitionEntity.Settings.EntityTypeId
+                        };
+                    VRUIUtilsService.callDirectiveLoad(serviceTypeSelectorAPI, serviceTypeSelectorPayload, serviceTypeSelectorLoadDeferred);
+                });
+
+                return serviceTypeSelectorLoadDeferred.promise;
+            }
+          
+        }
+
         function setTitle() {
             if (isEditMode) {
                 var actionDefinitionName = (actionDefinitionEntity != undefined) ? actionDefinitionEntity.Name : undefined;
-                $scope.title = UtilsService.buildTitleForUpdateEditor(actionDefinitionName, 'Account Type');
+                $scope.title = UtilsService.buildTitleForUpdateEditor(actionDefinitionName, 'Action Definition');
             }
             else {
-                $scope.title = UtilsService.buildTitleForAddEditor('Account Type');
+                $scope.title = UtilsService.buildTitleForAddEditor('Action Definition');
             }
         }
 
@@ -92,6 +147,20 @@
                 $scope.scopeModel.description = actionDefinitionEntity.Settings.Description;
                 $scope.scopeModel.selectedEntityType = UtilsService.getItemByVal($scope.scopeModel.entityTypes, actionDefinitionEntity.Settings.EntityType, "value");
             }
+        }
+
+        function loadActionBPDefinitionExtensionConfigs() {
+            return Retail_BE_ActionDefinitionAPIService.GetActionBPDefinitionExtensionConfigs().then(function (response) {
+                if (response != undefined) {
+                    for (var i = 0; i < response.length; i++) {
+                        $scope.scopeModel.extensionConfigs.push(response[i]);
+                    }
+                    if (actionDefinitionEntity != undefined && actionDefinitionEntity.Settings != undefined &&  actionDefinitionEntity.Settings.BPDefinitionSettings != undefined)
+                        $scope.scopeModel.selectedExtensionConfig = UtilsService.getItemByVal($scope.scopeModel.extensionConfigs, actionDefinitionEntity.Settings.BPDefinitionSettings.ConfigId, 'ExtensionConfigurationId');
+                    else if ($scope.scopeModel.extensionConfigs.length > 0)
+                        $scope.scopeModel.selectedExtensionConfig = $scope.scopeModel.extensionConfigs[0];
+                }
+            });
         }
 
         function insertActionDefinition() {
@@ -132,12 +201,17 @@
         }
 
         function buildActionDefinitionObjFromScope() {
+            var bPDefinitionSettings = directiveAPI.getData();
+            if (bPDefinitionSettings != undefined)
+                bPDefinitionSettings.ConfigId = $scope.scopeModel.selectedExtensionConfig.ExtensionConfigurationId;
             var obj = {
                 ActionDefinitionId: actionDefinitionId,
                 Name: $scope.scopeModel.name,
                 Settings: {
                     Description: $scope.scopeModel.description,
-                    EntityType: $scope.scopeModel.selectedEntityType.value
+                    EntityType: $scope.scopeModel.selectedEntityType.value,
+                    EntityTypeId: serviceTypeSelectorAPI != undefined ? serviceTypeSelectorAPI.getSelectedIds() : undefined,
+                    BPDefinitionSettings: bPDefinitionSettings
                 }
             };
             return obj;

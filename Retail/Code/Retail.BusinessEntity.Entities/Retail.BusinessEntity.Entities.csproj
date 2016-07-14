@@ -86,6 +86,7 @@
     <Compile Include="Account\AccountInfo.cs" />
     <Compile Include="Account\AccountQuery.cs" />
     <Compile Include="Account\AccountStatus.cs" />
+    <Compile Include="Action\ActionBPDefinitionConfig.cs" />
     <Compile Include="Action\ActionBP\ActionBPDefinitionSettings.cs" />
     <Compile Include="Action\ActionBP\ActionBPInputArgument.cs" />
     <Compile Include="Action\ActionBP\ActionBPSettings.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Action\ActionDefinitionDetail.cs" />
     <Compile Include="Action\ActionDefinitionQuery.cs" />
     <Compile Include="Action\ExecutedActionsData.cs" />
+    <Compile Include="Action\ProvisionerDefinitionConfig.cs" />
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
     <Compile Include="BusinessManagers\IActionDefinitionManager.cs" />
     <Compile Include="BusinessManagers\IBEManager.cs" />
