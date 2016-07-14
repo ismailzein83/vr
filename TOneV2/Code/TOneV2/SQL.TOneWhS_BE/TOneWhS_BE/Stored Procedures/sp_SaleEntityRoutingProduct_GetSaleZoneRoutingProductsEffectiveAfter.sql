@@ -3,13 +3,13 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [TOneWhS_BE].[sp_SaleEntityRoutingProduct_GetDefaultRoutingProductsEffectiveAfter]
+CREATE PROCEDURE [TOneWhS_BE].[sp_SaleEntityRoutingProduct_GetSaleZoneRoutingProductsEffectiveAfter]
 	@OwnerType int,
 	@OwnerId int,
 	@MinDate datetime
 AS
 BEGIN
-	select ID, OwnerType, OwnerID, RoutingProductID, BED, EED
+	select ID, OwnerType, OwnerID, ZoneID, RoutingProductID, BED, EED
 	from TOneWhS_BE.SaleEntityRoutingProduct
-	where OwnerType = @OwnerType and OwnerId = @OwnerId and ZoneID is null and (EED is null or EED > @MinDate)
+	where OwnerType = @OwnerType and OwnerId = @OwnerId and ZoneID is not null and (EED is null or EED > @MinDate)
 END

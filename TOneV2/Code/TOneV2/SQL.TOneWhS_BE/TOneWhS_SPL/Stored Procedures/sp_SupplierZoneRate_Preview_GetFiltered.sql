@@ -1,9 +1,16 @@
 ﻿CREATE PROCEDURE  [TOneWhS_SPL].[sp_SupplierZoneRate_Preview_GetFiltered]
-	@ProcessInstanceID INT,
-	@CountryID INT,
-	@OnlyModified bit
+	@ProcessInstanceID_IN INT,
+	@CountryID_IN INT,
+	@OnlyModified_IN bit
 AS
 BEGIN
+	DECLARE @ProcessInstanceId INT,
+	@CountryID INT,
+	@OnlyModified bit
+	
+	SELECT @ProcessInstanceId  = @ProcessInstanceId_IN,
+	@CountryID = @CountryID_IN,
+	@OnlyModified = @OnlyModified_IN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;

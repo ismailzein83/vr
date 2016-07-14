@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [TOneWhS_BE].[SaleRate] (
-    [ID]          BIGINT         IDENTITY (1, 1) NOT NULL,
+    [ID]          BIGINT         NOT NULL,
     [PriceListID] INT            NOT NULL,
     [ZoneID]      BIGINT         NOT NULL,
     [CurrencyID]  INT            NULL,
@@ -14,6 +14,8 @@
     CONSTRAINT [FK_SaleRate_SalePriceList] FOREIGN KEY ([PriceListID]) REFERENCES [TOneWhS_BE].[SalePriceList] ([ID]),
     CONSTRAINT [FK_SaleRate_SaleZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE].[SaleZone] ([ID])
 );
+
+
 
 
 

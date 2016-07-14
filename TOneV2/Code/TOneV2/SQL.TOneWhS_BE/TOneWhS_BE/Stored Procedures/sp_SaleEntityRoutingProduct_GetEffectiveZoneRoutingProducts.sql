@@ -9,7 +9,8 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SaleEntityRoutingProduct_GetEffectiveZoneRouti
 	@EffectiveOn DATETIME
 AS
 BEGIN
-	SELECT OwnerType,
+	SELECT ID,
+		OwnerType,
 		OwnerID,
 		ZoneID,
 		RoutingProductID,

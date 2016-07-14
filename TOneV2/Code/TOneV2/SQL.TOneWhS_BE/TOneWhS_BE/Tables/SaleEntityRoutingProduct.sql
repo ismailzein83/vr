@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [TOneWhS_BE].[SaleEntityRoutingProduct] (
-    [ID]               BIGINT     IDENTITY (1, 1) NOT NULL,
+    [ID]               BIGINT     NOT NULL,
     [OwnerType]        TINYINT    NOT NULL,
     [OwnerID]          INT        NOT NULL,
     [ZoneID]           BIGINT     NULL,
@@ -11,6 +11,8 @@
     CONSTRAINT [FK_SaleEntityRoutingProduct_RoutingProduct] FOREIGN KEY ([RoutingProductID]) REFERENCES [TOneWhS_BE].[RoutingProduct] ([ID]),
     CONSTRAINT [FK_SaleEntityRoutingProduct_SaleZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE].[SaleZone] ([ID])
 );
+
+
 
 
 

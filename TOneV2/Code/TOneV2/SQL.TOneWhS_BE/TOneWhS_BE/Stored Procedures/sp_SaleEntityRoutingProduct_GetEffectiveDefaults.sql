@@ -7,7 +7,8 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SaleEntityRoutingProduct_GetEffectiveDefaults]
 	@EffectiveOn DATETIME
 AS
 BEGIN
-	SELECT OwnerType,
+	SELECT ID,
+		OwnerType,
 		OwnerID,
 		RoutingProductID,
 		BED,

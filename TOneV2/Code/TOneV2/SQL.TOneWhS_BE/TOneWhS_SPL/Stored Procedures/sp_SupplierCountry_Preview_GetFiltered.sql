@@ -1,8 +1,13 @@
 ﻿CREATE PROCEDURE  [TOneWhS_SPL].[sp_SupplierCountry_Preview_GetFiltered]
-	@ProcessInstanceId INT,
-	@OnlyModified bit
+	@ProcessInstanceId_IN INT,
+	@OnlyModified_IN bit
 AS
 BEGIN
+	DECLARE @ProcessInstanceId INT,
+	@OnlyModified bit
+	
+	SELECT @ProcessInstanceId  = @ProcessInstanceId_IN,
+	@OnlyModified = @OnlyModified_IN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;

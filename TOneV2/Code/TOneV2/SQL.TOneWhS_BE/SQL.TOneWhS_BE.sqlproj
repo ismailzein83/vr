@@ -307,5 +307,22 @@
     <Build Include="dbo\Functions\ParseStringList.sql" />
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_SalePriceList_SyncWithTempData.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetDefaultRoutingProductsEffectiveAfter.sql" />
+    <Build Include="TOneWhS_SPL\Tables\SupplierPriceListTemplate.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_SaleZoneRoutingProduct_Preview.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_SaleZoneRoutingProduct_New.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_SaleZoneRoutingProduct_Changed.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_SaleRate_Preview.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_RatePlanPreview_Summary.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_DefaultRoutingProduct_New.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_DefaultRoutingProduct_Changed.sql" />
+    <Build Include="TOneWhS_BE\Tables\CP_SaleRate_Changed.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierPriceListTemplate_Update.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierPriceListTemplate_Insert.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierPriceListTemplate_GetAll.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_SaleZoneRoutingProduct_GetPreviews.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_SaleRate_GetPreviews.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_RatePlanPreviewSummary_Insert.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\RP_RatePlanPreviewSummary_Get.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetSaleZoneRoutingProductsEffectiveAfter.sql" />
   </ItemGroup>
 </Project>
