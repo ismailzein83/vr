@@ -49,7 +49,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 SupplierId = (int)reader["SupplierID"],
                 CurrencyId = (int)reader["CurrencyID"],
                 PriceListId = (int)reader["ID"],
-                FileId = (long?)reader["FileID"],
+                FileId = GetReaderValue<long?>(reader, "FileID"),
                 CreateTime = GetReaderValue<DateTime>(reader, "CreatedTime")
             };
             return supplierPriceList;
