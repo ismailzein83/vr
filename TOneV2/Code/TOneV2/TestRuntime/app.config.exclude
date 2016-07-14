@@ -23,11 +23,11 @@
 
   <vanriseRuntime>
     <runtimeServiceGroups>
-      <!--<runtimeServiceGroup name="group1" nbOfRuntimeInstances="2">
+      <runtimeServiceGroup name="group1" nbOfRuntimeInstances="2">
         <runtimeServices>
           <runtimeService name="Business Process Service" type="Vanrise.BusinessProcess.BusinessProcessService, Vanrise.BusinessProcess" interval="00:00:02"></runtimeService>
         </runtimeServices>
-      </runtimeServiceGroup>-->
+      </runtimeServiceGroup>
       <runtimeServiceGroup name="group2" nbOfRuntimeInstances="1">
         <runtimeServices>
           <runtimeService name="Scheduler Service" type="Vanrise.Runtime.SchedulerService, Vanrise.Runtime" interval="00:00:02"></runtimeService>
