@@ -140,7 +140,7 @@ namespace TOne.WhS.Routing.Data.SQL
         const string query_SupplierZoneDetailsTable = @"Create Table SupplierZoneDetail(
                                                         SupplierId int Not Null,
                                                         SupplierZoneId bigint Not Null,
-                                                        EffectiveRateValue [decimal](10, 7) Not Null
+                                                        EffectiveRateValue [decimal](20, 8) Not Null
                                                     )ON [PRIMARY]  
 
                                                     ";
@@ -151,7 +151,7 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [RoutingProductId] [int] NULL,
 	                                                    [RoutingProductSource] [tinyint] NULL,
 	                                                    [SellingProductId] [int] NULL,
-	                                                    [EffectiveRateValue] [decimal](10, 7) NULL,
+	                                                    [EffectiveRateValue] [decimal](20, 8) NULL,
 	                                                    [RateSource] [tinyint] NULL
                                                     ) ON [PRIMARY]
 
@@ -176,7 +176,7 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [CustomerId] [int] NOT NULL,
 	                                                    [Code] [varchar](20) NOT NULL,
 	                                                    [SaleZoneId] [bigint] NOT NULL,
-	                                                    [Rate] [decimal](10, 7) NULL,
+	                                                    [Rate] [decimal](20, 8) NULL,
 	                                                    [IsBlocked] [bit] NOT NULL,
 	                                                    [ExecutedRuleId] [int] NOT NULL,
 	                                                    [RouteOptions] [nvarchar](max) NULL,

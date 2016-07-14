@@ -12,6 +12,7 @@ namespace TOne.WhS.Routing.Data.SQL
     internal class MasterDatabaseDataManager : BaseTOneDataManager
     {
         public MasterDatabaseDataManager(string connectionString)
+            : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
         {
             SqlConnectionStringBuilder connStringBuilder = new SqlConnectionStringBuilder(connectionString);
             connStringBuilder.InitialCatalog = "Master";
