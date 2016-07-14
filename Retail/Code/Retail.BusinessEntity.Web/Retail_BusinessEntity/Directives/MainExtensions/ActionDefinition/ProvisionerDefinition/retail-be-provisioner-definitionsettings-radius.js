@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ProvisionerDefinitionsettingsTestDirective.$inject = ["UtilsService", 'VRUIUtilsService'];
+    ProvisionerDefinitionsettingsRadiusDirective.$inject = ["UtilsService", 'VRUIUtilsService'];
 
-    function ProvisionerDefinitionsettingsTestDirective(UtilsService, VRUIUtilsService) {
+    function ProvisionerDefinitionsettingsRadiusDirective(UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -12,15 +12,15 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var testProvisionerDefinitionSetting = new TestProvisionerDefinitionSetting($scope, ctrl, $attrs);
-                testProvisionerDefinitionSetting.initializeController();
+                var radiusProvisionerDefinitionSetting = new RadiusProvisionerDefinitionSetting($scope, ctrl, $attrs);
+                radiusProvisionerDefinitionSetting.initializeController();
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/ActionDefinition/ProvisionerDefinition/Templates/TestProvisionerDefinitionSettingsTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/ActionDefinition/ProvisionerDefinition/Templates/RadiusProvisionerDefinitionSettingsTemplate.html"
 
         };
-        function TestProvisionerDefinitionSetting($scope, ctrl, $attrs) {
+        function RadiusProvisionerDefinitionSetting($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var mainPayload;
             function initializeController() {
@@ -54,6 +54,6 @@
         }
     }
 
-    app.directive('retailBeProvisionerDefinitionsettingsTest', ProvisionerDefinitionsettingsTestDirective);
+    app.directive('retailBeProvisionerDefinitionsettingsRadius', ProvisionerDefinitionsettingsRadiusDirective);
 
 })(app);

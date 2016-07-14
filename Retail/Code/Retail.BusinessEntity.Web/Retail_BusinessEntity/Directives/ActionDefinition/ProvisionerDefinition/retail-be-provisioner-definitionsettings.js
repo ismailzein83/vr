@@ -117,10 +117,10 @@
         }
 
         function getTamplate(attrs) {
-            var label = "label='Provisioner Setting'";
+            var label = "label='Type'";
 
             if (attrs.hidelabel != undefined) {
-                label = "label='Provisioner Settings'";
+                label = "label='Types'";
             }
 
             return '<vr-row><vr-columns colnum="{{provisionerDefinitionCtrl.normalColNum * 2}}">'
