@@ -43,6 +43,26 @@ namespace Vanrise.Fzero.Bypass
             return Report;
         }
 
+
+        public static List<Report> LoadDaily(string PartofReportCode)
+        {
+            List<Report> Report = new List<Report>();
+            try
+            {
+                using (Entities context = new Entities())
+                {
+                    Report = context.Reports
+                       .Where(u => u.ReportID.Contains(PartofReportCode)).OrderByDescending(x => x.ID)
+                       .ToList();
+                }
+            }
+            catch (Exception err)
+            {
+                FileLogger.Write("Error in Vanrise.Fzero.Bypass.Report.Load(" + PartofReportCode + ")", err);
+            }
+            return Report;
+        }
+
         public static List<Report> GetAllReports()
         {
             List<Report> ReportsList = new List<Report>();
