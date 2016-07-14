@@ -30,8 +30,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             foreach (ImportedCode code in importedCodesList)
             {
                 //TODO: remove this and reroder rules
-                if (code.ZoneName == null)
-                    throw new Exception("Zone Name cannot be null");
+                if (string.IsNullOrWhiteSpace(code.ZoneName))
+                    throw new Exception("Zone Name cannot be empty");
                 if(!importedZonesByZoneName.TryGetValue(code.ZoneName, out importedZone))
                 {
                     importedZone = new ImportedZone();
