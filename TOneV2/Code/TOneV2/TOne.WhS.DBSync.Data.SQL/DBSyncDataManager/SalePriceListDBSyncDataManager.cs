@@ -19,7 +19,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             _UseTempTables = useTempTables;
         }
 
-        public void ApplySalePriceListsToTemp(List<SalePriceList> salePriceLists)
+        public void ApplySalePriceListsToTemp(List<SalePriceList> salePriceLists, long startingId)
         {
             DataTable dt = new DataTable();
             dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
@@ -27,6 +27,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("OwnerID", typeof(int));
             dt.Columns.Add("CurrencyID", typeof(int));
             dt.Columns.Add("SourceID", typeof(string));
+            dt.Columns.Add("ID", typeof(int));
             dt.Columns.Add("EffectiveOn", typeof(DateTime));
             dt.BeginLoadData();
             foreach (var item in salePriceLists)
@@ -37,6 +38,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 row[index++] = item.OwnerId;
                 row[index++] = item.CurrencyId;
                 row[index++] = item.SourceId;
+                row[index++] = startingId++;
                 row[index++] = item.EffectiveOn;
                 dt.Rows.Add(row);
             }

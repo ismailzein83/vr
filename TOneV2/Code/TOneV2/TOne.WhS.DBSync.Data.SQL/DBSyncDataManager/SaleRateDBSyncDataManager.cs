@@ -19,7 +19,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             _UseTempTables = useTempTables;
         }
 
-        public void ApplySaleRatesToTemp(List<SaleRate> saleRates)
+        public void ApplySaleRatesToTemp(List<SaleRate> saleRates, long startingId)
         {
             DataTable dt = new DataTable();
             dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
@@ -30,6 +30,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("OtherRates", typeof(string));
             dt.Columns.Add("BED", typeof(DateTime));
             dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "EED", DataType = typeof(DateTime) });
+            dt.Columns.Add("ID", typeof(int));
             dt.Columns.Add("SourceID", typeof(string));
            
             dt.BeginLoadData();
@@ -49,7 +50,8 @@ namespace TOne.WhS.DBSync.Data.SQL
                 if (item.EED == null)
                     row[index++] = DBNull.Value;
                 else
-                    row[index++] = item.EED; 
+                    row[index++] = item.EED;
+                row[index++] = startingId++;
                 row[index++] = item.SourceId;
 
                 dt.Rows.Add(row);

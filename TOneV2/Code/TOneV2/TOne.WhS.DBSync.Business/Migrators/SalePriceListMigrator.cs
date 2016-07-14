@@ -31,7 +31,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override void AddItems(List<SalePriceList> itemsToAdd)
         {
-            dbSyncDataManager.ApplySalePriceListsToTemp(itemsToAdd);
+            dbSyncDataManager.ApplySalePriceListsToTemp(itemsToAdd, 1);
             TotalRowsSuccess = itemsToAdd.Count;
         }
 
