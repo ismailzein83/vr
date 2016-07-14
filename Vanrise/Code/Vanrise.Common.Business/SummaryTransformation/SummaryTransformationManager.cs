@@ -18,7 +18,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
     {
         #region ctor/Local Variables
 
-        static ConcurrentDictionary<DateTime, Dictionary<string, SummaryItemInProcess<Q>>> s_existingSummaryBatches = new ConcurrentDictionary<DateTime, Dictionary<string, SummaryItemInProcess<Q>>>();
+        ConcurrentDictionary<DateTime, Dictionary<string, SummaryItemInProcess<Q>>> _existingSummaryBatches = new ConcurrentDictionary<DateTime, Dictionary<string, SummaryItemInProcess<Q>>>();
         ISummaryTransformationDataManager _dataManager = CommonDataManagerFactory.GetDataManager<ISummaryTransformationDataManager>();
 
         #endregion
@@ -65,7 +65,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
         public void UpdateNewBatches(DateTime batchStart, IEnumerable<R> newBatches)
         {
             Dictionary<string, SummaryItemInProcess<Q>> existingSummaryBatch;
-            if (!s_existingSummaryBatches.TryGetValue(batchStart, out existingSummaryBatch))
+            if (!_existingSummaryBatches.TryGetValue(batchStart, out existingSummaryBatch))
                 throw new Exception(String.Format("Summary Transformation should be locked before calling the UpdateNewBatches. Batch Start: '{0}'", batchStart));
 
             try
@@ -105,7 +105,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
                             itemsByKey.Add(itemKey, new SummaryItemInProcess<Q> { SummaryItem = itm });
                     }
                 }
-                s_existingSummaryBatches.TryAdd(batchStart, itemsByKey);
+                _existingSummaryBatches.TryAdd(batchStart, itemsByKey);
                 return true;
             }
             else
@@ -116,7 +116,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
         {
             _dataManager.UnLock(GetTypeId(), batchStart);
             Dictionary<string, SummaryItemInProcess<Q>> dummy;
-            s_existingSummaryBatches.TryRemove(batchStart, out dummy);
+            _existingSummaryBatches.TryRemove(batchStart, out dummy);
         }
         
         #endregion
