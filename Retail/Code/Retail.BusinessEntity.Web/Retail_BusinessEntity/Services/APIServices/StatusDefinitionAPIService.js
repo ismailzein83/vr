@@ -8,18 +8,35 @@
 
         var controllerName = "StatusDefinition";
 
-        function GetStatusDefinitionSettingsTemplateConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetStatusDefinitionSettingsTemplateConfigs"));
+        //function GetStatusDefinitionSettingsTemplateConfigs() {
+        //    return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetStatusDefinitionSettingsTemplateConfigs"));
+        //}
+
+        function GetFilteredStatusDefinitions(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetFilteredStatusDefinitions'), input);
         }
 
-        function GetFilteredStatusDefinition(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetFilteredStatusDefinition'), input);
+        function AddStatusDefinition(statusDefinitionItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddStatusDefinition'), statusDefinitionItem);
+        }
+
+        function UpdateStatusDefinition(statusDefinitionItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateStatusDefinition'), statusDefinitionItem);
+        }
+
+        function GetStatusDefinition(statusDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetStatusDefinition'), {
+                statusDefinitionId: statusDefinitionId
+            });
         }
 
 
         return ({
-            GetStatusDefinitionSettingsTemplateConfigs: GetStatusDefinitionSettingsTemplateConfigs,
-            GetFilteredStatusDefinition: GetFilteredStatusDefinition,
+            //GetStatusDefinitionSettingsTemplateConfigs: GetStatusDefinitionSettingsTemplateConfigs,
+            GetFilteredStatusDefinitions: GetFilteredStatusDefinitions,
+            AddStatusDefinition: AddStatusDefinition,
+            UpdateStatusDefinition: UpdateStatusDefinition,
+            GetStatusDefinition: GetStatusDefinition
         });
     }
 

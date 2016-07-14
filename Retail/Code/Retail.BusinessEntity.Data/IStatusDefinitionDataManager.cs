@@ -12,5 +12,9 @@ namespace Retail.BusinessEntity.Data
         List<StatusDefinition> GetStatusDefinition();
 
         bool AreStatusDefinitionUpdated(ref object updateHandle);
+
+        bool Insert(StatusDefinition statusDefinitionItem);
+
+        bool Update(StatusDefinition statusDefinitionItem);
     }
 }

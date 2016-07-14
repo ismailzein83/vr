@@ -2,14 +2,13 @@
 
     "use strict";
 
-    StatusDefinitionManagementController.$inject = ['$scope'];
+    StatusDefinitionManagementController.$inject = ['$scope', 'Retail_BE_StatusDefinitionService'];
 
-    function StatusDefinitionManagementController($scope) {
+    function StatusDefinitionManagementController($scope, Retail_BE_StatusDefinitionService) {
 
         var gridAPI;
 
         defineScope();
-        load();
 
         function defineScope() {
             $scope.scopeModel = {};
@@ -20,12 +19,25 @@
             };
 
             $scope.scopeModel.search = function () {
-                return gridAPI.load({});
+                var query = buildGridQuery();
+                return gridAPI.load(query);
+            };
+
+            $scope.scopeModel.add = function () {
+                var onStatusDefinitionAdded = function (addedStatusDefinition) {
+                    gridAPI.onStatusDefinitionAdded(addedStatusDefinition);
+                }
+                Retail_BE_StatusDefinitionService.addStatusDefinition(onStatusDefinitionAdded);
             };
         }
 
-        function load() {
 
+        function buildGridQuery() {
+            return {
+                Guid: null,
+                Name: $scope.scopeModel.name,
+                Settings: null
+            };
         }
     }
 

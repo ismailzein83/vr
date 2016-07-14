@@ -7,34 +7,34 @@
 
     function StatusDefinitionService(VRModalService) {
 
-        //function addSwitch(onSwitchAdded) {
-        //    var settings = {};
+        function addStatusDefinition(onStatusDefinitionAdded) {
+            var settings = {};
 
-        //    settings.onScopeReady = function (modalScope) {
-        //        modalScope.onSwitchAdded = onSwitchAdded
-        //    };
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onStatusDefinitionAdded = onStatusDefinitionAdded
+            };
 
-        //    VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Switch/SwitchEditor.html', null, settings);
-        //};
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Status/StatusDefinitionEditor.html', null, settings);
+        };
 
-        //function editSwitch(switchId, onSwitchUpdated) {
-        //    var modalSettings = {
-        //    };
+        function editStatusDefinition(statusDefinitionId, onStatusDefinitionUpdated) {
+            var settings = {};
 
-        //    var parameters = {
-        //        switchId: switchId,
-        //    };
+            var parameters = {
+                statusDefinitionId: statusDefinitionId,
+            };
 
-        //    modalSettings.onScopeReady = function (modalScope) {
-        //        modalScope.onSwitchUpdated = onSwitchUpdated;
-        //    };
-        //    VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Switch/SwitchEditor.html', parameters, modalSettings);
-        //}
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onStatusDefinitionUpdated = onStatusDefinitionUpdated;
+            };
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Status/StatusDefinitionEditor.html', parameters, settings);
+        }
 
-        //return {
-        //    addSwitch: addSwitch,
-        //    editSwitch: editSwitch
-        //};
+
+        return {
+            addStatusDefinition: addStatusDefinition,
+            editStatusDefinition: editStatusDefinition
+        };
     }
 
     appControllers.service('Retail_BE_StatusDefinitionService', StatusDefinitionService);

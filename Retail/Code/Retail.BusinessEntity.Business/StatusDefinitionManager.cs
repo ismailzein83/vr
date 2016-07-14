@@ -13,28 +13,81 @@ namespace Retail.BusinessEntity.Business
 {
     public class StatusDefinitionManager
     {
-        public StatusDefinition GetStatusDefinition(Guid statusDefinitionId)
-        {
-            throw new NotImplementedException();
-        }
 
-        public IDataRetrievalResult<StatusDefinitionDetail> GetFilteredStatusDefinition(DataRetrievalInput<StatusDefinitionQuery> input)
+        #region Public Methods
+
+        //public StatusDefinition GetStatusDefinition(Guid statusDefinitionId)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public IDataRetrievalResult<StatusDefinitionDetail> GetFilteredStatusDefinitions(DataRetrievalInput<StatusDefinitionQuery> input)
         {
             var allStatusDefinitions = GetCachedStatusDefinitions();
             Func<StatusDefinition, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allStatusDefinitions.ToBigResult(input, null, StatusDefinitionDetailMapper));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allStatusDefinitions.ToBigResult(input, filterExpression, StatusDefinitionDetailMapper));
         }
 
-
-        Dictionary<Guid, StatusDefinition> GetCachedStatusDefinitions()
+        public Vanrise.Entities.InsertOperationOutput<StatusDefinitionDetail> AddStatusDefinition(StatusDefinition statusDefinitionItem)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetStatusDefinition",
-               () =>
-               {
-                   IStatusDefinitionDataManager dataManager = BEDataManagerFactory.GetDataManager<IStatusDefinitionDataManager>();
-                   return dataManager.GetStatusDefinition().ToDictionary(x => x.StatusDefinitionId, x => x);
-               });
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<StatusDefinitionDetail>();
+
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+
+            IStatusDefinitionDataManager dataManager = BEDataManagerFactory.GetDataManager<IStatusDefinitionDataManager>();
+            //int switchId = -1;
+
+            statusDefinitionItem.StatusDefinitionId = Guid.NewGuid();
+
+            if (dataManager.Insert(statusDefinitionItem))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                //statusDefinitionItem.SwitchId = switchId;
+                insertOperationOutput.InsertedObject = StatusDefinitionDetailMapper(statusDefinitionItem);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
         }
+
+        public Vanrise.Entities.UpdateOperationOutput<StatusDefinitionDetail> UpdateStatusDefinition(StatusDefinition statusDefinitionItem)
+        {
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<StatusDefinitionDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            IStatusDefinitionDataManager dataManager = BEDataManagerFactory.GetDataManager<IStatusDefinitionDataManager>();
+
+            if (dataManager.Update(statusDefinitionItem))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = StatusDefinitionDetailMapper(this.GetStatusDefinition(statusDefinitionItem.StatusDefinitionId));
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
+        }
+
+        public StatusDefinition GetStatusDefinition(Guid statusDefinitionId)
+        {
+            Dictionary<Guid, StatusDefinition> cachedSwitches = this.GetCachedStatusDefinitions();
+            return cachedSwitches.GetRecord(statusDefinitionId);
+        }
+
+        #endregion
+
+
+        #region Private Classes
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
@@ -47,6 +100,26 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
+        #endregion
+
+
+        #region Private Methods
+
+        Dictionary<Guid, StatusDefinition> GetCachedStatusDefinitions()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetStatusDefinition",
+               () =>
+               {
+                   IStatusDefinitionDataManager dataManager = BEDataManagerFactory.GetDataManager<IStatusDefinitionDataManager>();
+                   return dataManager.GetStatusDefinition().ToDictionary(x => x.StatusDefinitionId, x => x);
+               });
+        }
+
+        #endregion
+
+
+        #region Mappers
+
         public StatusDefinitionDetail StatusDefinitionDetailMapper(StatusDefinition statusDefinition)
         {
             StatusDefinitionDetail satatusDefinitionDetail = new StatusDefinitionDetail()
@@ -55,5 +128,8 @@ namespace Retail.BusinessEntity.Business
             };
             return satatusDefinitionDetail;
         }
+
+        #endregion
+
     }
 }

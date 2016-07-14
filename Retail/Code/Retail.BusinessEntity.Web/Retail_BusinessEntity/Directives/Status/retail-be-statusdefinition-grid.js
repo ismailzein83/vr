@@ -33,12 +33,14 @@ app.directive('retailBeStatusdefinitionGrid', ['Retail_BE_StatusDefinitionAPISer
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return Retail_BE_StatusDefinitionAPIService.GetFilteredStatusDefinition(dataRetrievalInput).then(function (response) {
+                    return Retail_BE_StatusDefinitionAPIService.GetFilteredStatusDefinitions(dataRetrievalInput).then(function (response) {
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
                 };
+
+                defineMenuActions();
             }
 
             function defineAPI() {
@@ -48,8 +50,31 @@ app.directive('retailBeStatusdefinitionGrid', ['Retail_BE_StatusDefinitionAPISer
                     return gridAPI.retrieveData(query);
                 };
 
+                api.onStatusDefinitionAdded = function (addedStatusDefinition) {
+                    gridAPI.itemAdded(addedStatusDefinition);
+                }
+
+                api.onStatusDefinitionUpdated = function (updatedStatusDefinition) {
+                    gridAPI.itemUpdated(updatedStatusDefinition);
+                }
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function defineMenuActions() {
+                $scope.scopeModel.menuActions.push({
+                    name: 'Edit',
+                    clicked: editStatusDefinition,
+                });
+            }
+
+            function editStatusDefinition(statusDefinitionItem) {
+                var onStatusDefinitionUpdated = function (updatedStatusDefinition) {
+                    gridAPI.itemUpdated(updatedStatusDefinition);
+                };
+
+                Retail_BE_StatusDefinitionService.editStatusDefinition(statusDefinitionItem.Entity.StatusDefinitionId, onStatusDefinitionUpdated);
             }
         }
     }]);

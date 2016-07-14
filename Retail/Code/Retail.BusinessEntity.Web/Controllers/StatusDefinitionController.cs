@@ -17,10 +17,31 @@ namespace Retail.BusinessEntity.Web.Controllers
         StatusDefinitionManager _manager = new StatusDefinitionManager();
 
         [HttpPost]
-        [Route("GetFilteredStatusDefinition")]
-        public object GetFilteredStatusDefinition(Vanrise.Entities.DataRetrievalInput<StatusDefinitionQuery> input)
+        [Route("GetFilteredStatusDefinitions")]
+        public object GetFilteredStatusDefinitions(Vanrise.Entities.DataRetrievalInput<StatusDefinitionQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredStatusDefinition(input));
+            return GetWebResponse(input, _manager.GetFilteredStatusDefinitions(input));
+        }
+
+        [HttpPost]
+        [Route("AddStatusDefinition")]
+        public Vanrise.Entities.InsertOperationOutput<StatusDefinitionDetail> AddStatusDefinition(StatusDefinition statusDefinitionItem)
+        {
+            return _manager.AddStatusDefinition(statusDefinitionItem);
+        }
+
+        [HttpPost]
+        [Route("UpdateStatusDefinition")]
+        public Vanrise.Entities.UpdateOperationOutput<StatusDefinitionDetail> UpdateStatusDefinition(StatusDefinition statusDefinitionItem)
+        {
+            return _manager.UpdateStatusDefinition(statusDefinitionItem);
+        }
+
+        [HttpGet]
+        [Route("GetStatusDefinition")]
+        public StatusDefinition GetStatusDefinition(Guid statusDefinitionId)
+        {
+            return _manager.GetStatusDefinition(statusDefinitionId);
         }
     }
 }

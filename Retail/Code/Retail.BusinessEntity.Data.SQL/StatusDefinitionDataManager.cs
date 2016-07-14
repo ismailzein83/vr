@@ -30,6 +30,28 @@ namespace Retail.BusinessEntity.Data.SQL
         {
             return base.IsDataUpdated("Retail_BE.StatusDefinition", ref updateHandle);
         }
+
+        public bool Insert(StatusDefinition statusDefinitionItem)
+        {
+            //object statusDefinitionId;
+            //string serializedSettings = switchItem.Settings != null ? Vanrise.Common.Serializer.Serialize(switchItem.Settings) : null;
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_StatusDefinition_Insert", statusDefinitionItem.StatusDefinitionId, statusDefinitionItem.Name);
+
+            if (affectedRecords > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool Update(StatusDefinition statusDefinitionItem)
+        {
+            //string serializedSettings = switchItem.Settings != null ? Vanrise.Common.Serializer.Serialize(switchItem.Settings) : null;
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_StatusDefinition_Update", statusDefinitionItem.StatusDefinitionId, statusDefinitionItem.Name);
+            return (affectedRecords > 0);
+        }
+
         #endregion
 
         #region Mappers
