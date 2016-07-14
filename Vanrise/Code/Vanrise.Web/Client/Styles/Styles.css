@@ -2378,3 +2378,52 @@ vr-listitem div[class^="col"] {
 .jstree-default .jstree-themeicon-custom { 
   background-size: 18px 18px !important;
 }
+.vr-label-switcher-container{        
+    overflow: hidden;
+    padding: 0px;
+    padding-right: 10px;
+    color: #fff;
+}
+
+.vr-label-switcher-notselected{
+    background-color: #fff;
+    border-width: 1px 1px 0px 1px;
+    border-style: solid;
+    transform: skew(-35deg);
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    padding: 0px 2px;
+    font-size: 9px;
+    width: calc(100% - 10px);
+    min-height: 14px;
+    border-radius: 4px 4px 4px 0px;
+    border-color: #000;
+   z-index: 1;
+}
+.vr-label-switcher-selected{
+    width: calc(100% - 10px);
+    height: calc(100% - 9px );
+    padding: 0px 9px;
+    border: 1px solid;
+    font-size: 11px;
+    position: absolute;
+    top: 16px;
+    z-index: 1;
+    border-radius: 4px;
+    border-color: #000;
+}
+.shadow{
+    position: absolute;
+    border: 1px solid;
+    width: 9px;
+    left: calc(100% - 10px);
+    height: 16px;
+    top: 10px;
+    transform: skewY(-51deg);
+    border-top: 0px;
+    border-left: 0px;
+    background-color: white;
+    border-radius: 0px 0px 4px 0px;
+    border-color: #000;
+}
