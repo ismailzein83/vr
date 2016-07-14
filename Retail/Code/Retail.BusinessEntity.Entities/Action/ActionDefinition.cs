@@ -30,8 +30,6 @@ namespace Retail.BusinessEntity.Entities
         public List<ActionStatusDefinition> SupportedOnStatuses { get; set; }
 
         public ActionBPDefinitionSettings BPDefinitionSettings { get; set; }
-
-        public ActionProvisionerDefinitionSettings ProvisionerDefinitionSettings { get; set; }
     }
 
     public class ActionStatusDefinition

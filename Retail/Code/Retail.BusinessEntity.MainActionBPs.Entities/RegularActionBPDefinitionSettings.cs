@@ -8,10 +8,8 @@ using Vanrise.Integration.Entities;
 
 namespace Retail.BusinessEntity.MainActionBPs.Entities
 {
-    public class RegularActionBPSettings : ActionBPSettings
+    public class RegularActionBPDefinitionSettings : ActionBPDefinitionSettings
     {
-        public Guid NewStatusDefinitionId { get; set; }
-
-        public ActionProvisioner ActionProvisioner { get; set; }
+        public ActionProvisionerDefinitionSettings ProvisionerDefinitionSettings { get; set; }
     }
 }

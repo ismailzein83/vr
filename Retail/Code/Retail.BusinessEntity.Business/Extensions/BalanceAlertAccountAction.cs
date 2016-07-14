@@ -13,8 +13,6 @@ namespace Retail.BusinessEntity.Business.Extensions
     {
         public Guid ActionDefinitionId { get; set; }
 
-        public Vanrise.Integration.Entities.ActionProvisioner ActionProvisioner { get; set; }
-
         public ActionBPSettings ActionBPSettings { get; set; }
 
         public override void Execute(IVRActionContext context)
@@ -46,7 +44,6 @@ namespace Retail.BusinessEntity.Business.Extensions
             {
                 ActionDefinitionId = this.ActionDefinitionId,
                 EntityId = entityId,
-                ActionProvisioner = this.ActionProvisioner,
                 ActionBPSettings = this.ActionBPSettings
             };
             var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput { InputArguments = actionBPInput };

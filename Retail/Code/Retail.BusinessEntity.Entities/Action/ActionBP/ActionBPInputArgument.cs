@@ -13,8 +13,6 @@ namespace Retail.BusinessEntity.Entities
 
         public long EntityId { get; set; }
 
-        public ActionProvisioner ActionProvisioner { get; set; }
-
         public ActionBPSettings ActionBPSettings { get; set; }
 
         public override string ProcessName
