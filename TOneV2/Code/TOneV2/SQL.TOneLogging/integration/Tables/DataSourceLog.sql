@@ -1,4 +1,4 @@
-﻿CREATE TABLE [integration].[DataSourceLog] (
+CREATE TABLE [integration].[DataSourceLog] (
     [ID]              INT            IDENTITY (1, 1) NOT NULL,
     [DataSourceId]    INT            NOT NULL,
     [Severity]        INT            NOT NULL,
@@ -17,12 +17,19 @@
 
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_DataSourceLog_Severity]
     ON [integration].[DataSourceLog]([Severity] ASC);
 
 
 GO
-CREATE CLUSTERED INDEX [IX_DataSourceLog_DataSourceTime]
-    ON [integration].[DataSourceLog]([DataSourceId] ASC, [LogEntryTime] ASC);
+CREATE CLUSTERED INDEX [IX_DataSourceLog_Time]
+    ON [integration].[DataSourceLog]([LogEntryTime] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_DataSourceLog_DataSource]
+    ON [integration].[DataSourceLog]([DataSourceId] ASC);
 
