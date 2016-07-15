@@ -23,7 +23,8 @@ namespace Retail.Web
                 "~/Client/Modules/VR_Rules", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/WhS_BusinessEntity", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Retail_SMS", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/Retail_Data", "*.js", true));
+                "~/Client/Modules/Retail_Data", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/BusinessProcess", "*.js", true));
         }
     }
 }

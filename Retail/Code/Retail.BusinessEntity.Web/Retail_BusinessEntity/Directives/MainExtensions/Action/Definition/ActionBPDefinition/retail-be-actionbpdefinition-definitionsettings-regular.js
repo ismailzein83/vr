@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/ActionDefinition/ActionBPDefinition/Templates/RegularActionBPDefinitionSettingsTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/Action/Definition/ActionBPDefinition/Templates/RegularActionBPDefinitionSettingsTemplate.html"
 
         };
         function RegularActionbpdefinitionDefinitionsettings($scope, ctrl, $attrs) {
@@ -31,7 +31,6 @@
                 $scope.scopeModel = {};
                 
                 $scope.scopeModel.onProvisionerDefinitionSettingReady = function (api) {
-            
                     provisionerdefinitionSettingAPI = api;
                     provisionerdefinitionSettingReadyDeferred.resolve();
                 }

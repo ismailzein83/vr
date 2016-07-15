@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/ActionDefinition/ProvisionerDefinition/Templates/RadiusSQLProvisionerDefinitionSettingsTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/Action/Definition/ProvisionerDefinition/Templates/RadiusSQLProvisionerDefinitionSettingsTemplate.html"
 
         };
         function RadiusProvisionerDefinitionSetting($scope, ctrl, $attrs) {

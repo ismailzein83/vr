@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ActionRuntimeEditorController.$inject = ['$scope', 'Retail_BE_ActionDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'Retail_BE_AccountAPIService'];
+    ActionRuntimeEditorController.$inject = ['$scope', 'Retail_BE_ActionDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'Retail_BE_AccountAPIService','BusinessProcess_BPInstanceAPIService','BusinessProcess_BPInstanceService','WhS_BP_CreateProcessResultEnum'];
 
-    function ActionRuntimeEditorController($scope, Retail_BE_ActionDefinitionAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountAPIService) {
+    function ActionRuntimeEditorController($scope, Retail_BE_ActionDefinitionAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountAPIService, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum) {
 
         var actionDefinitionId;
         var actionDefinitionEntity;
@@ -44,8 +44,27 @@
             };
 
 
-            $scope.scopeModel.save = function () {
-               // return (isEditMode) ? updateActionDefinition() : insertActionDefinition();
+            $scope.scopeModel.start = function () {
+                console.log(actionDefinitionEntity);
+                var inputArguments = {
+                    $type: "Retail.BusinessEntity.Entities.ActionBPInputArgument, Retail.BusinessEntity.Entities",
+                    ActionDefinitionId: actionDefinitionEntity.ActionDefinitionId,
+                    EntityId: undefined,
+                    ActionBPSettings: directiveAPI.getData(),
+                };
+                var input = {
+                    InputArguments: inputArguments
+                };
+               return BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
+                    if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
+                        var context = {
+                            onClose: function () {
+                            }
+                        }
+                        BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context);
+                    }
+                });
+
             };
 
             $scope.scopeModel.close = function () {
@@ -110,7 +129,7 @@
                     directiveReadyDeferred = undefined;
                     var directivePayload = {
                         bpDefinitionSettings: actionDefinitionEntity.Settings.BPDefinitionSettings
-                    };
+                    }; 
                     VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                 });
                 return directiveLoadDeferred.promise;
