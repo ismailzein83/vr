@@ -22,6 +22,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
 
         var gridAPI;
         var drillDownManager;
+        var gridQery;
 
         function initializeController() {
             $scope.scopeModel = {};
@@ -69,9 +70,13 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                 return {
                     name: actionDefinition.Name,
                     clicked: function (dataItem) {
-                        return Retail_BE_ActionRuntimeService.openActionRuntime(dataItem.Entity.AccountId, actionDefinition.ActionDefinitionId);
+                        return Retail_BE_ActionRuntimeService.openActionRuntime(dataItem.Entity.AccountId, actionDefinition.ActionDefinitionId, reloadMethod);
                     }
                 };
+            }
+            function reloadMethod()
+            {
+                return gridAPI.retrieveData(gridQery);
             }
           
         }
@@ -80,6 +85,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             var api = {};
 
             api.load = function (query) {
+                gridQery = query;
                 return gridAPI.retrieveData(query);
             };
 

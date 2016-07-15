@@ -13,7 +13,7 @@ namespace Retail.BusinessEntity.Entities
         public string Name { get; set; }
 
         public int TypeId { get; set; }
-
+        public Guid StatusId { get; set; }
         public AccountSettings Settings { get; set; }
     }
 
@@ -33,9 +33,9 @@ namespace Retail.BusinessEntity.Entities
 
         public long? ParentAccountId { get; set; }
 
-        public int StatusId { get; set; }
-
         public ExecutedActionsData ExecutedActionsData { get; set; }
+
+       
     }
     
     public class AccountToEdit : BaseAccount

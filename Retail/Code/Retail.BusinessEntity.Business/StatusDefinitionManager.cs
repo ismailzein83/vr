@@ -21,6 +21,12 @@ namespace Retail.BusinessEntity.Business
         //    throw new NotImplementedException();
         //}
 
+        public string GetStatusDefinitionName(Guid statusDefinitionId)
+        {
+            StatusDefinition statusDefinition = this.GetStatusDefinition(statusDefinitionId);
+            return (statusDefinition != null) ? statusDefinition.Name : null;
+        }
+
         public IDataRetrievalResult<StatusDefinitionDetail> GetFilteredStatusDefinitions(DataRetrievalInput<StatusDefinitionQuery> input)
         {
             var allStatusDefinitions = GetCachedStatusDefinitions();
@@ -80,8 +86,8 @@ namespace Retail.BusinessEntity.Business
 
         public StatusDefinition GetStatusDefinition(Guid statusDefinitionId)
         {
-            Dictionary<Guid, StatusDefinition> cachedSwitches = this.GetCachedStatusDefinitions();
-            return cachedSwitches.GetRecord(statusDefinitionId);
+            Dictionary<Guid, StatusDefinition> cachedStatusDefinitions = this.GetCachedStatusDefinitions();
+            return cachedStatusDefinitions.GetRecord(statusDefinitionId);
         }
 
         #endregion

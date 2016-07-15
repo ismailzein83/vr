@@ -68,7 +68,8 @@ namespace Retail.BusinessEntity.Data.SQL
                 Name = reader["Name"] as string,
                 TypeId = (int)reader["TypeID"],
                 Settings = Vanrise.Common.Serializer.Deserialize<AccountSettings>(reader["Settings"] as string),
-                ParentAccountId = GetReaderValue<int?>(reader, "ParentID")
+                ParentAccountId = GetReaderValue<int?>(reader, "ParentID"),
+                StatusId = GetReaderValue<Guid>(reader, "StatusID"),
             };
         }
 

@@ -21,7 +21,6 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            throw new NotImplementedException();
         }
     }
 }

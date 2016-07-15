@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Activities;
 using Retail.BusinessEntity.Entities;
+using Retail.BusinessEntity.Business;
 
 namespace Retail.BusinessEntity.MainActionBPs.Activities
 {
@@ -24,7 +25,23 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
         
         protected override void Execute(CodeActivityContext context)
         {
-            throw new NotImplementedException();
+            var entityType = this.EntityType.Get(context);
+            switch(entityType)
+            {
+                case Retail.BusinessEntity.Entities.EntityType.Account:
+                    AccountManager accountManager = new AccountManager();
+                    var account = accountManager.GetAccount(this.EntityId.Get(context));
+                    AccountToEdit accountToEdit = new BusinessEntity.Entities.AccountToEdit
+                    {
+                        AccountId = account.AccountId,
+                        Name = account.Name,
+                        Settings = account.Settings,
+                        TypeId = account.TypeId,
+                        StatusId = this.StatusDefinitionId.Get(context)
+                    };
+                    accountManager.UpdateAccount(accountToEdit);
+                    break;
+            }
         }
     }
 }

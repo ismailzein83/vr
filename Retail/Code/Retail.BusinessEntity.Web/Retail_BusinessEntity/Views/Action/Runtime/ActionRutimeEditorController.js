@@ -15,6 +15,7 @@
         var directiveAPI;
         var directiveReadyDeferred;
 
+        var reloadMethod;
         loadParameters();
         defineScope();
         load();
@@ -24,6 +25,7 @@
             if (parameters != undefined) {
                 actionDefinitionId = parameters.actionDefinitionId;
                 accountId = parameters.accountId;
+                reloadMethod = parameters.reloadMethod;
             }
         }
 
@@ -45,11 +47,10 @@
 
 
             $scope.scopeModel.start = function () {
-                console.log(actionDefinitionEntity);
                 var inputArguments = {
                     $type: "Retail.BusinessEntity.Entities.ActionBPInputArgument, Retail.BusinessEntity.Entities",
                     ActionDefinitionId: actionDefinitionEntity.ActionDefinitionId,
-                    EntityId: undefined,
+                    EntityId: accountId,
                     ActionBPSettings: directiveAPI.getData(),
                 };
                 var input = {
@@ -59,8 +60,13 @@
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
                         var context = {
                             onClose: function () {
+                                if(reloadMethod !=undefined && typeof(reloadMethod) == 'function')
+                                {
+                                   return reloadMethod();
+                                }
                             }
                         }
+                        $scope.modalContext.closeModal();
                         BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context);
                     }
                 });
@@ -75,9 +81,8 @@
         function load() {
             $scope.scopeModel.isLoading = true;
 
-            UtilsService.waitMultipleAsyncOperations([loadActionBPDefinitionExtensionConfigs, getActionDefinition, getAccount]).then(function () {
+            UtilsService.waitMultipleAsyncOperations([getActionDefinition, getAccount]).then(function () {
                 loadAllControls().finally(function () {
-                    actionDefinitionEntity = undefined;
                 });
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -96,7 +101,7 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadDirective, loadActionBPDefinitionExtensionConfigs]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
