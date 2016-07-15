@@ -37,8 +37,8 @@ namespace Vanrise.Fzero.Services.DailySummaryReport
 
         protected override void OnStart(string[] args)
         {
-            //base.RequestAdditionalTime(15000); // 10 minutes timeout for startup
-            Debugger.Launch(); // launch and attach debugger
+            base.RequestAdditionalTime(15000); // 10 minutes timeout for startup
+            //Debugger.Launch(); // launch and attach debugger
 
             // Create a timer with a ten second interval.
             aTimer = new System.Timers.Timer(86400000);// 1 hours
