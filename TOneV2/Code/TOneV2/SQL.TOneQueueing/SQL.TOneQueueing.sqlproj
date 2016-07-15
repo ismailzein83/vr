@@ -110,7 +110,9 @@
     <Folder Include="queue\Views\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="queue\Tables\QueueItemHeader.sql" />
+    <Build Include="queue\Tables\QueueItemHeader.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
     <Build Include="queue\Tables\QueueItemIDGen.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueItemHeader_GetByID.sql">
       <AnsiNulls>Off</AnsiNulls>

@@ -8,6 +8,18 @@
     [EntryType]         INT            NOT NULL,
     [Message]           NVARCHAR (MAX) NULL,
     [EventTime]         DATETIME       NULL,
-    CONSTRAINT [PK_LogMessage] PRIMARY KEY CLUSTERED ([ID] ASC)
+    CONSTRAINT [IX_LogEntry_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_LogEntry_Time]
+    ON [logging].[LogEntry]([EventTime] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_LogEntry_EntryType]
+    ON [logging].[LogEntry]([EntryType] ASC);
 

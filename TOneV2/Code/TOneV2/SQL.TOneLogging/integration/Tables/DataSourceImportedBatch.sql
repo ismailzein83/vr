@@ -8,7 +8,7 @@
     [MapperMessage]    NVARCHAR (MAX)  NULL,
     [QueueItemIds]     VARCHAR (255)   NOT NULL,
     [LogEntryTime]     DATETIME        NOT NULL,
-    CONSTRAINT [PK_DataSourceImportedBatch] PRIMARY KEY CLUSTERED ([ID] ASC)
+    CONSTRAINT [IX_DataSourceImportedBatch_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
 
 
@@ -16,4 +16,11 @@
 
 
 
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_DataSourceImportedBatch_DataSourceTime]
+    ON [integration].[DataSourceImportedBatch]([DataSourceId] ASC, [LogEntryTime] ASC);
 

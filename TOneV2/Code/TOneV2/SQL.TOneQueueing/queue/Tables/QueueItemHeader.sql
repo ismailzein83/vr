@@ -16,7 +16,19 @@
 
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_QueueItemHeader_Status]
     ON [queue].[QueueItemHeader]([Status] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_QueueItemHeader_QueueID]
+    ON [queue].[QueueItemHeader]([QueueID] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_QueueItemHeader_CreatedTime]
+    ON [queue].[QueueItemHeader]([CreatedTime] ASC);
 

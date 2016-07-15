@@ -5,8 +5,7 @@
     [Message]         NVARCHAR (MAX) NULL,
     [ImportedBatchId] BIGINT         NULL,
     [LogEntryTime]    DATETIME       NOT NULL,
-    CONSTRAINT [PK_DataSourceLog] PRIMARY KEY CLUSTERED ([ID] ASC),
-    CONSTRAINT [FK_DataSourceLog_DataSourceImportedBatch] FOREIGN KEY ([ImportedBatchId]) REFERENCES [integration].[DataSourceImportedBatch] ([ID])
+    CONSTRAINT [IX_DataSourceLog_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
 
 
@@ -14,4 +13,16 @@
 
 
 
+
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_DataSourceLog_Severity]
+    ON [integration].[DataSourceLog]([Severity] ASC);
+
+
+GO
+CREATE CLUSTERED INDEX [IX_DataSourceLog_DataSourceTime]
+    ON [integration].[DataSourceLog]([DataSourceId] ASC, [LogEntryTime] ASC);
 

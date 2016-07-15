@@ -6,6 +6,18 @@
     [TargetType]        VARCHAR (50)   NOT NULL,
     [Severity]          INT            NOT NULL,
     [Message]           NVARCHAR (MAX) NULL,
-    CONSTRAINT [PK_ValidationMessage] PRIMARY KEY CLUSTERED ([ID] ASC)
+    CONSTRAINT [IX_BPValidationMessage_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_BPValidationMessage_Severity]
+    ON [bp].[BPValidationMessage]([Severity] ASC);
+
+
+GO
+CREATE CLUSTERED INDEX [IX_BPValidationMessage_ProcessInstance]
+    ON [bp].[BPValidationMessage]([ProcessInstanceID] ASC);
 

@@ -5,16 +5,22 @@
     [TrackingMessage]   NVARCHAR (MAX) NULL,
     [Severity]          INT            NULL,
     [EventTime]         DATETIME       NULL,
-    CONSTRAINT [PK_BPTracking] PRIMARY KEY CLUSTERED ([ID] ASC)
+    CONSTRAINT [IX_BPTracking_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
 
 
+
+
 GO
-CREATE NONCLUSTERED INDEX [IX_BPTracking_EventTime]
-    ON [bp].[BPTracking]([EventTime] ASC);
+
 
 
 GO
 CREATE NONCLUSTERED INDEX [IX_BPTracking_Severity]
     ON [bp].[BPTracking]([Severity] ASC);
+
+
+GO
+CREATE CLUSTERED INDEX [IX_BPTracking_ProcessInstanceEventTime]
+    ON [bp].[BPTracking]([ProcessInstanceID] ASC, [EventTime] ASC);
 
