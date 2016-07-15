@@ -11,6 +11,10 @@ namespace Retail.BusinessEntity.MainExtensions
     {
         public override void Execute(IActionProvisioningContext context)
         {
+            context.ExecutionOutput = new ActionProvisioningOutput
+            {
+                Result = ActionProvisioningResult.Succeeded
+            };
         }
     }
 }

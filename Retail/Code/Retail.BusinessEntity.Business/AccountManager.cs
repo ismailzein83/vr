@@ -98,6 +98,12 @@ namespace Retail.BusinessEntity.Business
             return insertOperationOutput;
         }
 
+        public bool UpdateStatus(long accountId, Guid statusId)
+        {
+            IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
+            return dataManager.UpdateStatus(accountId, statusId);
+        }
+
         public Vanrise.Entities.UpdateOperationOutput<AccountDetail> UpdateAccount(AccountToEdit account)
         {
             long? parentId;

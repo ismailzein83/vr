@@ -30,16 +30,7 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
             {
                 case Retail.BusinessEntity.Entities.EntityType.Account:
                     AccountManager accountManager = new AccountManager();
-                    var account = accountManager.GetAccount(this.EntityId.Get(context));
-                    AccountToEdit accountToEdit = new BusinessEntity.Entities.AccountToEdit
-                    {
-                        AccountId = account.AccountId,
-                        Name = account.Name,
-                        Settings = account.Settings,
-                        TypeId = account.TypeId,
-                        StatusId = this.StatusDefinitionId.Get(context)
-                    };
-                    accountManager.UpdateAccount(accountToEdit);
+                    var account = accountManager.UpdateStatus(this.EntityId.Get(context),this.StatusDefinitionId.Get(context));
                     break;
             }
         }

@@ -43,7 +43,11 @@ namespace Retail.BusinessEntity.Data.SQL
             insertedId = -1;
             return false;
         }
-
+        public bool UpdateStatus(long accountId, Guid statusId)
+        {
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_UpdateStatusID", accountId, statusId);
+            return (affectedRecords > 0);
+        }
         public bool Update(AccountToEdit account, long? parentId)
         {
             string serializedSettings = account.Settings != null ? Vanrise.Common.Serializer.Serialize(account.Settings) : null;

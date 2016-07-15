@@ -10,7 +10,7 @@ namespace Retail.BusinessEntity.Data
     public interface IAccountDataManager : IDataManager
     {
         IEnumerable<Account> GetAccounts();
-
+        bool UpdateStatus(long accountId, Guid statusId);
         bool Insert(Account account, out long insertedId);
 
         bool Update(AccountToEdit account, long? parentId);
