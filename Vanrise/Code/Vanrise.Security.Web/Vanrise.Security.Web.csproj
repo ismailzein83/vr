@@ -132,6 +132,9 @@
     <Content Include="Security\Directives\Group\Templates\GroupGrid.html" />
     <Content Include="Security\Directives\Group\vr-sec-group-grid.js" />
     <Content Include="Security\Directives\Group\vr-sec-group-selector.js" />
+    <Content Include="Security\Directives\RequiredPermission\Templates\RequiredPermissionTemplate.html" />
+    <Content Include="Security\Directives\RequiredPermission\vr-sec-permissionoptions-selector.js" />
+    <Content Include="Security\Directives\RequiredPermission\vr-sec-requiredpermission-grid.js" />
     <Content Include="Security\Directives\Tenant\Templates\TenantsGrid.html" />
     <Content Include="Security\Directives\Tenant\vr-sec-tenant-grid.js" />
     <Content Include="Security\Directives\Tenant\vr-sec-tenant-selector.js" />
@@ -168,6 +171,7 @@
     <Content Include="Security\Services\BusinessEntityDefinitionService.js" />
     <Content Include="Security\Services\BusinessEntityModuleService.js" />
     <Content Include="Security\Services\MenuService.js" />
+    <Content Include="Security\Services\RequiredPermissionService.js" />
     <Content Include="Security\Services\ModuleService.js" />
     <Content Include="Security\Services\OrgChartService.js" />
     <Content Include="Security\Services\PermissionService.js" />
@@ -205,6 +209,8 @@
     <Content Include="Security\Views\DynamicPages\DynamicPageEditorController.js" />
     <Content Include="Security\Views\DynamicPages\DynamicPageManagement.html" />
     <Content Include="Security\Views\DynamicPages\DynamicPageManagementController.js" />
+    <Content Include="Security\Views\RequiredPermission\EditRequiredPermission.html" />
+    <Content Include="Security\Views\RequiredPermission\EditRequiredPermissionController.js" />
     <Content Include="Security\Views\Tenant\TenantManagement.html" />
     <Content Include="Security\Views\Tenant\TenantManagementController.js" />
     <Content Include="Security\Views\Tenant\TenantEditor.html" />

@@ -21,6 +21,12 @@ namespace Vanrise.Security.Web.Controllers
         {
             return GetWebResponse(input, _manager.GetFilteredBusinessEntities(input));
         }
+        [HttpPost]
+        [Route("GetBusinessEntitiesByIds")]
+        public IEnumerable<BusinessEntityInfo> GetBusinessEntitiesByIds(List<int> entitiesIds)
+        {
+            return _manager.GetBusinessEntitiesByIds(entitiesIds);
+        }
         [HttpGet]
         [Route("GetBusinessEntity")]
         public BusinessEntity GetBusinessEntity(int entityId)

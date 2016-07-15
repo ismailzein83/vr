@@ -41,6 +41,13 @@ namespace Vanrise.Security.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, businessEntites.ToBigResult(input, filterExpression, BusinessEntityDetailMapper));
         }
 
+        public IEnumerable<BusinessEntityInfo> GetBusinessEntitiesByIds(List<int> entitiesIds)
+        {
+            var businessEntites = GetBusinessEntites();
+            return businessEntites.MapRecords(BusinessEntityInfoMapper, (prod) => (entitiesIds.Contains(prod.EntityId)));
+        }
+
+
         public BusinessEntity GetBusinessEntityById(int entityId)
         {
             var cachedEntities = GetCachedBusinessEntities();
@@ -160,6 +167,15 @@ namespace Vanrise.Security.Business
             return new BusinessEntityDetail
             {
                 Entity = businessEntity
+            };
+        }
+
+        BusinessEntityInfo BusinessEntityInfoMapper(BusinessEntity businessEntity)
+        {
+            return new BusinessEntityInfo
+            {
+                EntityId = businessEntity.EntityId,
+                Name = businessEntity.Name
             };
         }
         #endregion

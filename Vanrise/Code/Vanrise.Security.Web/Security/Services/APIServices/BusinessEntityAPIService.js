@@ -12,7 +12,8 @@
             UpdateBusinessEntity: UpdateBusinessEntity,
             AddBusinessEntity: AddBusinessEntity,
             HasUpdateBusinessEntityPermission: HasUpdateBusinessEntityPermission,
-            HasAddBusinessEntityPermission: HasAddBusinessEntityPermission
+            HasAddBusinessEntityPermission: HasAddBusinessEntityPermission,
+            GetBusinessEntitiesByIds: GetBusinessEntitiesByIds
         };
 
         function GetFilteredBusinessEntities(input) {
@@ -30,7 +31,9 @@
         function UpdateBusinessEntity(businessEntity) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'UpdateBusinessEntity'), businessEntity);
         }
-
+        function GetBusinessEntitiesByIds(entitiesIds) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetBusinessEntitiesByIds'), entitiesIds);
+        }
         function HasUpdateBusinessEntityPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['UpdateBusinessEntity']));
         }

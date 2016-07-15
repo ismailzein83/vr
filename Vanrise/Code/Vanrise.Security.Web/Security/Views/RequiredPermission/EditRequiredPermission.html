@@ -1,0 +1,29 @@
+﻿<div vr-modalcontent ng-controller="VR_Sec_EditRequiredPermissionController" vr-loader="isLoading" width="'40%'">
+    <vr-modalbody maxheight="'600px'">
+        <vr-form name="formEdit">
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-treeview on-ready="onTreeReady"
+                                 datachildrenfield="Children"
+                                 datatextfield="Name"
+
+                                 datavaluefieldmethod="buildTreeId"
+                                 selecteditem="currentNode"
+                                 onvaluechanged="onTreeValueChanged">
+                    </vr-treeview>
+                </vr-columns>
+                <vr-columns width="1/2row" >
+                    <vr-sec-permissionoptions-selector on-ready="onPermissionReady" ismultipleselection isrequired="true"></vr-sec-permissionoptions-selector>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="save" formname="formEdit"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

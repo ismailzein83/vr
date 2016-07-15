@@ -20,4 +20,12 @@ namespace Vanrise.Security.Entities
 
         public List<string> PermissionOptions { get; set; }
     }
+
+    public class BusinessEntityInfo
+    {
+        public int EntityId { get; set; }
+
+        public string Name { get; set; }
+
+    }
 }

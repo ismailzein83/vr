@@ -48,6 +48,14 @@
                                                                 label="Mapping Record Types"></vr-genericdata-datarecordtype-selector>
                     </vr-columns>
                 </vr-tab>
+
+                <vr-tab header="'Security'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-sec-requiredpermission-grid on-ready="scopeModel.onRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
             </vr-tabs>
 
 

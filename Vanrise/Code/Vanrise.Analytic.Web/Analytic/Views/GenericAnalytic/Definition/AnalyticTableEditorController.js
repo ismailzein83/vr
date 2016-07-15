@@ -12,6 +12,9 @@
         var dataRecordTypeSelectorAPI;
         var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var requiredPermissionAPI;
+        var requiredPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
         var connectionStringType;
         loadParameters();
         defineScope();
@@ -37,6 +40,10 @@
             {
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyDeferred.resolve();
+            }
+            $scope.scopeModel.onRequiredPermissionReady = function (api) {
+                requiredPermissionAPI = api;
+                requiredPermissionReadyDeferred.resolve();
             }
             $scope.scopeModel.connectionStringType = UtilsService.getArrayEnum(connectionStringType);
             $scope.scopeModel.selectedConnectionStringType = connectionStringType.ConnectionString;
@@ -84,7 +91,7 @@
             }
            
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadRequiredPermission]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -144,6 +151,23 @@
             return dataRecordTypeSelectorLoadDeferred.promise;
         }
 
+        function loadRequiredPermission() {
+            var requiredPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+
+            requiredPermissionReadyDeferred.promise.then(function () {
+                var payload;
+
+                if (tableEntity != undefined && tableEntity.Settings != undefined && tableEntity.Settings.RequiredPermission!= null) {
+                    payload = {
+                        data: tableEntity.Settings.RequiredPermission
+                    };
+                }
+
+                VRUIUtilsService.callDirectiveLoad(requiredPermissionAPI, payload, requiredPermissionLoadDeferred);
+            });
+
+            return requiredPermissionLoadDeferred.promise;
+        }
 
         function getTable() {
             return VR_Analytic_AnalyticTableAPIService.GetTableById(tableId).then(function (response) {
@@ -160,7 +184,8 @@
                     TimeColumnName: $scope.scopeModel.timeColumnName,
                     ConnectionStringName: $scope.scopeModel.showConnectionStringName? $scope.scopeModel.connectionStringName:undefined,
                     ConnectionString: $scope.scopeModel.showConnectionString ? $scope.scopeModel.connectionString : undefined,
-                    DataRecordTypeIds: dataRecordTypeSelectorAPI.getSelectedIds()
+                    DataRecordTypeIds: dataRecordTypeSelectorAPI.getSelectedIds(),
+                    RequiredPermission:requiredPermissionAPI.getData()
                 }
             }
             return table;
