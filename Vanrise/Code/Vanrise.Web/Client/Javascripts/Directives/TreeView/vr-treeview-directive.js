@@ -11,6 +11,7 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
            // datasource:'=',
             datachildrenfield: '@',
             datavaluefield: '@',
+            datavaluefieldmethod: '=',
             datatextfield: '@',
             selecteditem: '=',
             checkbox: '@',
@@ -41,11 +42,12 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
 
                 var treeItem = {
                     sourceItem: sourceItem,
-                    id: sourceItem[ctrl.datavaluefield],
                     text: sourceItem[ctrl.datatextfield],
                     state: {},
                     children: []
                 };
+                treeItem.id = getSourceItemId(sourceItem);
+                
                 if (treeItem.id == undefined)
                     treeItem.id = "generatedId_" + incrementalId++;
                 if (sourceItem.isOpened)
@@ -68,6 +70,12 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                 return treeItem;
             }
 
+            function getSourceItemId(sourceItem) {
+                if (ctrl.datavaluefieldmethod != undefined && typeof (ctrl.datavaluefieldmethod) == 'function')
+                    return ctrl.datavaluefieldmethod(sourceItem);
+                else
+                    return sourceItem[ctrl.datavaluefield];
+            }
            
 
             var api = {};
@@ -77,7 +85,7 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
             function setSelectedNode(menuList, nodeId) {
                 for (var i = 0; i < menuList.length; i++) {
                    
-                    if (menuList[i][ctrl.datavaluefield] == nodeId) {
+                    if (getSourceItemId(menuList[i]) == nodeId) {
                         menuList[i].isSelected = true;
                         menuList[i].isOpened = true;
                         return menuList[i];
