@@ -23,5 +23,11 @@ namespace Vanrise.Integration.Business
             get;
             set;
         }
+
+        public ActionProvisionerDefinitionSettings DefinitionSettings
+        {
+            get;
+            set;
+        }
     }
 }

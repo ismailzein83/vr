@@ -23,6 +23,9 @@ namespace Vanrise.Integration.BP.Activities
         public InArgument<dynamic> Entity { get; set; }
 
         [RequiredArgument]
+        public InArgument<ActionProvisionerDefinitionSettings> ActionProvisionerDefinition { get; set; }
+
+        [RequiredArgument]
         public InArgument<ActionProvisioner> ActionProvisioner { get; set; }
 
         [RequiredArgument]
@@ -35,6 +38,7 @@ namespace Vanrise.Integration.BP.Activities
                 throw new ArgumentNullException("actionProvisioner");
             var provisioninigContext = new ActionProvisioningContext
             {
+                DefinitionSettings = this.ActionProvisionerDefinition.Get(context),
                 Entity = this.Entity.Get(context)
             };
             actionProvisioner.Execute(provisioninigContext);

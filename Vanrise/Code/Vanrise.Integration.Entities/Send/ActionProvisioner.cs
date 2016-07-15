@@ -15,6 +15,8 @@ namespace Vanrise.Integration.Entities
 
     public interface IActionProvisioningContext
     {
+        ActionProvisionerDefinitionSettings DefinitionSettings { get; }
+
         dynamic Entity { get; }
 
         ActionProvisioningOutput ExecutionOutput { set; }
