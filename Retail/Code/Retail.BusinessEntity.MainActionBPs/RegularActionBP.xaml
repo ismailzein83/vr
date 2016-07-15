@@ -61,6 +61,7 @@
       <Variable x:TypeArguments="vie:ActionProvisioningOutput" Name="provisioningOutput" />
       <Variable x:TypeArguments="rbe:StatusDefinition" Name="newStatusDefinition" />
       <Variable x:TypeArguments="rbe:ActionDefinition" Name="actionDefinition" />
+      <Variable x:TypeArguments="rbme:RegularActionBPDefinitionSettings" Name="actionBPDefinitionSettings" />
     </Sequence.Variables>
     <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
       <Assign.To>
@@ -98,12 +99,29 @@
         </InArgument>
       </Assign.Value>
     </Assign>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_5">
+      <Assign.To>
+        <OutArgument x:TypeArguments="rbme:RegularActionBPDefinitionSettings">
+          <mca:CSharpReference x:TypeArguments="rbme:RegularActionBPDefinitionSettings">actionBPDefinitionSettings</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="rbme:RegularActionBPDefinitionSettings">
+          <mca:CSharpValue x:TypeArguments="rbme:RegularActionBPDefinitionSettings">new Retail.BusinessEntity.Business.ActionDefinitionManager().GetActionBPDefinitionSettings&lt;RegularActionBPDefinitionSettings&gt;(Input.ActionDefinitionId)</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
     <viba:ProvisionAction Entity="{x:Null}" sap2010:WorkflowViewState.IdRef="ProvisionAction_1">
       <viba:ProvisionAction.ActionProvisioner>
         <InArgument x:TypeArguments="vie:ActionProvisioner">
           <mca:CSharpValue x:TypeArguments="vie:ActionProvisioner">actionBPSettings.ActionProvisioner</mca:CSharpValue>
         </InArgument>
       </viba:ProvisionAction.ActionProvisioner>
+      <viba:ProvisionAction.ActionProvisionerDefinition>
+        <InArgument x:TypeArguments="vie:ActionProvisionerDefinitionSettings">
+          <mca:CSharpValue x:TypeArguments="vie:ActionProvisionerDefinitionSettings">actionBPDefinitionSettings.ProvisionerDefinitionSettings</mca:CSharpValue>
+        </InArgument>
+      </viba:ProvisionAction.ActionProvisionerDefinition>
       <viba:ProvisionAction.ProvisioningOutput>
         <OutArgument x:TypeArguments="vie:ActionProvisioningOutput">
           <mca:CSharpReference x:TypeArguments="vie:ActionProvisioningOutput">provisioningOutput</mca:CSharpReference>
@@ -163,13 +181,14 @@
         </Sequence>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>d0tDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5Lk1haW5BY3Rpb25CUHNcUmVndWxhckFjdGlvbkJQLnhhbWwZOgOnAQ4CAQFBBUwOAgFkTQVYDgIBV1kFZA4CAUplBXAcAgE9cQWlAQoCAQJJC0m7AQIBa0QLRHUCAWVVC1XPAQIBXlALUHACAVhhC2G/AQIBUVwLXG0CAUttC213AgFEaAtoeAIBPnQLdKYBAgEDeAmjARQCAQl8C4wBMQIBJ40BC6IBJQIBCokBEYkBcwIBNn8Rf1wCAS+EARGEAXkCASifARGfAXMCASCQARGQAXICARmVARGVAVwCARKaARGaAXkCAQs=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0tDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5Lk1haW5BY3Rpb25CUHNcUmVndWxhckFjdGlvbkJQLnhhbWwdOgO5AQ4CAQFCBU0OAwGIAU4FWQ4CAXlaBWUOAgFqZgVxDgIBW3IFggEcAgFFgwEFtwEKAgECSgtKuwEDAZABRQtFdQMBiQFWC1bPAQMBgQFRC1FwAgF6YgtivwECAXJdC11tAgFrbgtuhAICAWNpC2mJAQIBXHoLeqABAgFUfwt/dwIBTXULdXgCAUaGAQuGAaYBAgEDigEJtQEUAgEKjgELngExAgEsnwELtAElAgELmwERmwFzAgE9kQERkQFcAgE1lgERlgF5AgEtsQERsQFzAgEkogERogFyAgEcpwERpwFcAgEUrAERrAF5AgEM</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="464,62" />
       <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="464,62" />
       <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="464,62" />
+      <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="464,62" />
       <sap2010:ViewStateData Id="ProvisionAction_1" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="CreateStatusBillingTransaction_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="UpdateEntityStatus_1" sap:VirtualizedContainerService.HintSize="200,22" />
@@ -188,14 +207,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,850">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,952">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Retail.BusinessEntity.MainActionBPs.RegularActionBP_1" sap:VirtualizedContainerService.HintSize="526,930" />
+      <sap2010:ViewStateData Id="Retail.BusinessEntity.MainActionBPs.RegularActionBP_1" sap:VirtualizedContainerService.HintSize="526,1032" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

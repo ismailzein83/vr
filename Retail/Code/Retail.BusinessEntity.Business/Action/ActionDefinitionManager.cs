@@ -110,6 +110,16 @@ namespace Retail.BusinessEntity.Business
         #endregion
 
         #region Private Methods
+
+        public T GetActionBPDefinitionSettings<T>(Guid actionDefinitionId) where T : ActionBPDefinitionSettings
+        {
+            ActionBPDefinitionSettings bpDefinitionSettings = GetActionBPDefinitionSettings(actionDefinitionId);
+            T castedBPDefinitionSettings = bpDefinitionSettings as T;
+            if(castedBPDefinitionSettings == null)
+                throw new Exception(String.Format("bpDefinitionSettings should be of type '{0}'. it is of type '{1}'", typeof(T), bpDefinitionSettings.GetType()));
+            return castedBPDefinitionSettings;
+        }
+
         public ActionBPDefinitionSettings GetActionBPDefinitionSettings(Guid actionDefinitionId)
         {
             var actionDefinitionSettings = GetActionDefinitionSettings(actionDefinitionId);
