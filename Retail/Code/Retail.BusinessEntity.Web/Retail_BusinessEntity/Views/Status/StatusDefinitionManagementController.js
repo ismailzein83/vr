@@ -10,6 +10,7 @@
 
         defineScope();
 
+
         function defineScope() {
             $scope.scopeModel = {};
 
@@ -29,6 +30,11 @@
                 }
                 Retail_BE_StatusDefinitionService.addStatusDefinition(onStatusDefinitionAdded);
             };
+
+            $scope.scopeModel.statusDefinitionDirectiveReady = function (api) {
+                statusDefinitionAPI = api;
+                statusDefinitionSelectorReadyDeferred.resolve();
+            }
         }
 
         function buildGridQuery() {
@@ -41,5 +47,4 @@
     }
 
     appControllers.controller('Retail_BE_StatusDefinitionManagementController', StatusDefinitionManagementController);
-
 })(appControllers);
