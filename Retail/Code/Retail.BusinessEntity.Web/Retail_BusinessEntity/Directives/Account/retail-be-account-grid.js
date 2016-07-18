@@ -29,6 +29,10 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             $scope.scopeModel.accounts = [];
             $scope.scopeModel.menuActions = [];
 
+            $scope.scopeModel.getStatusColor = function(dataItem)
+            {
+                return dataItem.StatusColor;
+            }
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(buildDrillDownTabs(), gridAPI, $scope.scopeModel.menuActions, true);
@@ -70,15 +74,24 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                 return {
                     name: actionDefinition.Name,
                     clicked: function (dataItem) {
-                        return Retail_BE_ActionRuntimeService.openActionRuntime(dataItem.Entity.AccountId, actionDefinition.ActionDefinitionId, reloadMethod);
+                        return Retail_BE_ActionRuntimeService.openActionRuntime(dataItem.Entity.AccountId, actionDefinition.ActionDefinitionId,
+                            function()
+                            {
+                                return Retail_BE_AccountAPIService.GetAccountDetail(dataItem.Entity.AccountId).then(function (response) {
+                                    for (var i = 0; i < $scope.scopeModel.accounts.length; i++)
+                                    {
+                                        var account = $scope.scopeModel.accounts[i];
+                                        if(account.Entity.AccountId == response.Entity.AccountId)
+                                        {
+                                            drillDownManager.setDrillDownExtensionObject(response);
+                                            $scope.scopeModel.accounts[i] = response
+                                        }
+                                    }
+                                });
+                            });
                     }
                 };
             }
-            function reloadMethod()
-            {
-                return gridAPI.retrieveData(gridQery);
-            }
-          
         }
 
         function defineAPI() {

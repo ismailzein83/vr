@@ -15,5 +15,6 @@ namespace Retail.BusinessEntity.Entities
         public bool CanAddSubAccounts { get; set; }
         public IEnumerable<ActionDefinitionInfo>  ActionDefinitions { get; set; }
         public string  StatusDesciption { get; set; }
+        public string StatusColor  { get; set; }
     }
 }

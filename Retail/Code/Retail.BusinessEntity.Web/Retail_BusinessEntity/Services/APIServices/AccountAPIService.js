@@ -61,8 +61,15 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountsInfoByIds"), accountIds);
         }
 
+        function GetAccountDetail(accountId)
+        {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountDetail"), {
+                accountId: accountId
+            });
+        }
         return {
             GetFilteredAccounts: GetFilteredAccounts,
+            GetAccountDetail:GetAccountDetail,
             GetAccount: GetAccount,
             GetAccountName: GetAccountName,
             GetAccountEditorRuntime: GetAccountEditorRuntime,

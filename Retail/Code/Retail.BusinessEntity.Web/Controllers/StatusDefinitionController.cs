@@ -45,11 +45,11 @@ namespace Retail.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetStatusDefinitionInfo")]
-        public IEnumerable<StatusDefinitionInfo> GetStatusDefinitionInfo(string filter = null)
+        [Route("GetStatusDefinitionsInfo")]
+        public IEnumerable<StatusDefinitionInfo> GetStatusDefinitionsInfo(string filter = null)
         {
             StatusDefinitionFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<StatusDefinitionFilter>(filter) : null;
-            return _manager.GetStatusDefinitionInfo(deserializedFilter);
+            return _manager.GetStatusDefinitionsInfo(deserializedFilter);
         }
     }
 }

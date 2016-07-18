@@ -27,9 +27,19 @@
             var provisionerdefinitionSettingAPI;
             var provisionerdefinitionSettingReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var statusDefinitionSelectorAPI;
+            var statusDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+
             function initializeController() {
                 $scope.scopeModel = {};
                 
+                $scope.scopeModel.onStatusDefinitionSelectorReady = function(api)
+                {
+                    statusDefinitionSelectorAPI = api;
+                    statusDefinitionSelectorReadyDeferred.resolve();
+                }
+
                 $scope.scopeModel.onProvisionerDefinitionSettingReady = function (api) {
                     provisionerdefinitionSettingAPI = api;
                     provisionerdefinitionSettingReadyDeferred.resolve();
@@ -45,13 +55,26 @@
                     if (payload != undefined) {
                         mainPayload = payload;
                     }
+                    var promises = [];
+
                     var provisionerdefinitionSettingLoadDeferred = UtilsService.createPromiseDeferred();
 
                     provisionerdefinitionSettingReadyDeferred.promise.then(function () {
                         var definitionSettingPayload = payload != undefined && payload.bpDefinitionSettings != undefined ? { provisionerDefinitionSettings: payload.bpDefinitionSettings.ProvisionerDefinitionSettings } : undefined
                         VRUIUtilsService.callDirectiveLoad(provisionerdefinitionSettingAPI, definitionSettingPayload, provisionerdefinitionSettingLoadDeferred);
                     });
-                    return provisionerdefinitionSettingLoadDeferred.promise;
+                    promises.push(provisionerdefinitionSettingLoadDeferred.promise);
+
+                    var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    statusDefinitionSelectorReadyDeferred.promise.then(function () {
+                        var statusDefinitionSelectorPayload = {
+                            selectedIds:  payload != undefined && payload.bpDefinitionSettings != undefined ?payload.bpDefinitionSettings.NewStatusDefinitionId:undefined
+                        };
+                        VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
+                    });
+                    promises.push(statusDefinitionSelectorLoadDeferred.promise);
+                    return UtilsService.waitMultiplePromises(promises);
+
                 };
 
                 api.getData = getData;
@@ -63,7 +86,8 @@
                 function getData() {
                     var data = {
                         $type: "Retail.BusinessEntity.MainActionBPs.Entities.RegularActionBPDefinitionSettings, Retail.BusinessEntity.MainActionBPs.Entities",
-                        ProvisionerDefinitionSettings: provisionerdefinitionSettingAPI.getData()
+                        ProvisionerDefinitionSettings: provisionerdefinitionSettingAPI.getData(),
+                        NewStatusDefinitionId: statusDefinitionSelectorAPI.getSelectedIds()
                     }
                     return data;
                 }

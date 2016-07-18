@@ -57,6 +57,15 @@ namespace Retail.BusinessEntity.Web.Controllers
             return _manager.GetAccountEditorRuntime(accountTypeId, parentAccountId);
         }
 
+
+        [HttpGet]
+        [Route("GetAccountDetail")]
+        public AccountDetail GetAccountDetail(long accountId)
+        {
+            return _manager.GetAccountDetail(accountId);
+        }
+
+
         [HttpPost]
         [Route("AddAccount")]
         public Vanrise.Entities.InsertOperationOutput<AccountDetail> AddAccount(Account account)

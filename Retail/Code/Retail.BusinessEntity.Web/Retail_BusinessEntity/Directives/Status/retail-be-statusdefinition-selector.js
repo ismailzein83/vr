@@ -99,7 +99,7 @@ app.directive('retailBeStatusdefinitionSelector', ['Retail_BE_StatusDefinitionAP
             label = attrs.customlabel;
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
-               '<vr-select ' + multipleselection + ' datatextfield="Title" datavaluefield="StatusDefinitionId" isrequired="ctrl.isrequired" label="' + label +
+               '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="StatusDefinitionId" isrequired="ctrl.isrequired" label="' + label +
                    '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
                    '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
                '</vr-select>' +

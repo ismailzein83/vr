@@ -10,8 +10,6 @@ namespace Retail.BusinessEntity.MainActionBPs.Entities
 {
     public class RegularActionBPSettings : ActionBPSettings
     {
-        public Guid NewStatusDefinitionId { get; set; }
-
         public ActionProvisioner ActionProvisioner { get; set; }
     }
 }

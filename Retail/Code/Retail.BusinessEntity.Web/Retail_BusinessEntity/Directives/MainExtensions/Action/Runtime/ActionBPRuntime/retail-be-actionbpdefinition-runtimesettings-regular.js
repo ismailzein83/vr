@@ -97,7 +97,6 @@
                 function getData() {
                     var data = {
                         $type: "Retail.BusinessEntity.MainActionBPs.Entities.RegularActionBPSettings, Retail.BusinessEntity.MainActionBPs.Entities",
-                        NewStatusDefinitionId: "8a359658-75d4-47fb-8b3b-1f940c3faa58",
                         ActionProvisioner: provisionerRuntimeAPI.getData()
                     }
                     return data;

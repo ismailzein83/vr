@@ -75,18 +75,6 @@
         </InArgument>
       </Assign.Value>
     </Assign>
-    <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
-      <Assign.To>
-        <OutArgument x:TypeArguments="rbe:StatusDefinition">
-          <mca:CSharpReference x:TypeArguments="rbe:StatusDefinition">newStatusDefinition</mca:CSharpReference>
-        </OutArgument>
-      </Assign.To>
-      <Assign.Value>
-        <InArgument x:TypeArguments="rbe:StatusDefinition">
-          <mca:CSharpValue x:TypeArguments="rbe:StatusDefinition">(new Retail.BusinessEntity.Business.StatusDefinitionManager()).GetStatusDefinition(actionBPSettings.NewStatusDefinitionId)</mca:CSharpValue>
-        </InArgument>
-      </Assign.Value>
-    </Assign>
     <Assign sap2010:WorkflowViewState.IdRef="Assign_5">
       <Assign.To>
         <OutArgument x:TypeArguments="rbme:RegularActionBPDefinitionSettings">
@@ -96,6 +84,18 @@
       <Assign.Value>
         <InArgument x:TypeArguments="rbme:RegularActionBPDefinitionSettings">
           <mca:CSharpValue x:TypeArguments="rbme:RegularActionBPDefinitionSettings">new Retail.BusinessEntity.Business.ActionDefinitionManager().GetActionBPDefinitionSettings&lt;RegularActionBPDefinitionSettings&gt;(Input.ActionDefinitionId)</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
+      <Assign.To>
+        <OutArgument x:TypeArguments="rbe:StatusDefinition">
+          <mca:CSharpReference x:TypeArguments="rbe:StatusDefinition">newStatusDefinition</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="rbe:StatusDefinition">
+          <mca:CSharpValue x:TypeArguments="rbe:StatusDefinition">(new Retail.BusinessEntity.Business.StatusDefinitionManager()).GetStatusDefinition(actionBPDefinitionSettings.NewStatusDefinitionId)</mca:CSharpValue>
         </InArgument>
       </Assign.Value>
     </Assign>
@@ -149,7 +149,7 @@
             </rbma:CreateStatusBillingTransaction.EntityType>
             <rbma:CreateStatusBillingTransaction.StatusDefinitionId>
               <InArgument x:TypeArguments="s:Guid">
-                <mca:CSharpValue x:TypeArguments="s:Guid">actionBPSettings.NewStatusDefinitionId</mca:CSharpValue>
+                <mca:CSharpValue x:TypeArguments="s:Guid">actionBPDefinitionSettings.NewStatusDefinitionId</mca:CSharpValue>
               </InArgument>
             </rbma:CreateStatusBillingTransaction.StatusDefinitionId>
           </rbma:CreateStatusBillingTransaction>
@@ -171,20 +171,20 @@
             </rbma:UpdateEntityStatus.EntityType>
             <rbma:UpdateEntityStatus.StatusDefinitionId>
               <InArgument x:TypeArguments="s:Guid">
-                <mca:CSharpValue x:TypeArguments="s:Guid">actionBPSettings.NewStatusDefinitionId</mca:CSharpValue>
+                <mca:CSharpValue x:TypeArguments="s:Guid">actionBPDefinitionSettings.NewStatusDefinitionId</mca:CSharpValue>
               </InArgument>
             </rbma:UpdateEntityStatus.StatusDefinitionId>
           </rbma:UpdateEntityStatus>
         </Sequence>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>d0tDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5Lk1haW5BY3Rpb25CUHNcUmVndWxhckFjdGlvbkJQLnhhbWwdOgO2AQ4CAQFCBU0OAwGBAU4FWQ4CAXJaBWUOAgFjZgVxDgIBVHIFggEcAgE+gwEFtAEKAgECSgtKuwEDAYkBRQtFdQMBggFWC1bPAQIBelELUXACAXNiC2KEAgIBa10LXYkBAgFkbgtuvwECAVxpC2ltAgFVegt6oAECAU1/C393AgFGdQt1eAIBP4YBC4YBpgECAQOKAQmyARQCAQqLAQubATECASicAQuxASUCAQuYARGYAXMCATeOARGOAVwCATCTARGTAXkCASmuARGuAXMCASGfARGfAXICARqkARGkAVwCAROpARGpAXkCAQw=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0tDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5Lk1haW5BY3Rpb25CUHNcUmVndWxhckFjdGlvbkJQLnhhbWwdOgO2AQ4CAQFCBU0OAwGBAU4FWQ4CAXJaBWUOAgFjZgVxDgIBVHIFggEcAgE+gwEFtAEKAgECSgtKuwEDAYkBRQtFdQMBggFWC1aEAgIBelELUYkBAgFzYgti2QECAWtdC11wAgFkbgtuvwECAVxpC2ltAgFVegt6oAECAU1/C393AgFGdQt1eAIBP4YBC4YBpgECAQOKAQmyARQCAQqLAQubATECASicAQuxASUCAQuYARGYAX0CATeOARGOAVwCATCTARGTAXkCASmuARGuAX0CASGfARGfAXICARqkARGkAVwCAROpARGpAXkCAQw=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="464,62" />
-      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="464,62" />
       <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="464,62" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="464,62" />
       <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="464,62" />
       <sap2010:ViewStateData Id="ProvisionAction_1" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="CreateStatusBillingTransaction_1" sap:VirtualizedContainerService.HintSize="200,22" />

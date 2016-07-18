@@ -85,7 +85,7 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public IEnumerable<StatusDefinitionInfo> GetStatusDefinitionInfo(StatusDefinitionFilter filter)
+        public IEnumerable<StatusDefinitionInfo> GetStatusDefinitionsInfo(StatusDefinitionFilter filter)
         {
             Func<StatusDefinition, bool> filterExpression = null;
             return this.GetCachedStatusDefinitions().MapRecords(StatusDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);

@@ -16,6 +16,9 @@
         var directiveAPI;
         var directiveReadyDeferred;
 
+        var statusDefinitionSelectorAPI;
+        var statusDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -32,6 +35,12 @@
             $scope.scopeModel = {};
 
             $scope.scopeModel.extensionConfigs = [];
+
+            $scope.scopeModel.onStatusDefinitionSelectorReady = function(api)
+            {
+                statusDefinitionSelectorAPI = api;
+                statusDefinitionSelectorReadyDeferred.resolve();
+            }
 
             $scope.scopeModel.selectedExtensionConfig;
 
@@ -68,10 +77,6 @@
                 return (isEditMode) ? updateActionDefinition() : insertActionDefinition();
             };
 
-            $scope.scopeModel.hasSaveActionDefinitionPermission = function () {
-                return (isEditMode) ? Retail_BE_ActionDefinitionAPIService.HasUpdateActionDefinitionPermission() : Retail_BE_ActionDefinitionAPIService.HasAddActionDefinitionPermission();
-            };
-
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
@@ -102,7 +107,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadServiceTypeSelector, loadActionBPDefinitionExtensionConfigs, loadDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadServiceTypeSelector, loadActionBPDefinitionExtensionConfigs, loadDirective, loadStatusDefinitionSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -127,6 +132,20 @@
             }
           
         }
+
+        function loadStatusDefinitionSelector() {
+            if (actionDefinitionEntity != undefined && actionDefinitionEntity.Settings != undefined) {
+                var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                statusDefinitionSelectorReadyDeferred.promise.then(function () {
+                    var statusDefinitionSelectorPayload = {
+                        selectedIds: convertSupportedOnStatusesFromObj()
+                    };
+                    VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
+                });
+                return statusDefinitionSelectorLoadDeferred.promise;
+            }
+        }
+
 
         function setTitle() {
             if (isEditMode) {
@@ -216,10 +235,39 @@
             });
         }
 
+        function convertSupportedOnStatusesFromScope(selectedStatuses)
+        {
+            var supportedOnStatuses = [];
+            if(selectedStatuses != undefined)
+            {
+                for(var i=0;i< selectedStatuses.length;i++)
+                {
+                    var selectedStatus = selectedStatuses[i];
+                    supportedOnStatuses.push({
+                        StatusDefinitionId: selectedStatus
+                    });
+                }
+            }
+            return supportedOnStatuses;
+        }
+        function convertSupportedOnStatusesFromObj() {
+            var statusDefinitionIds = [];
+            if (actionDefinitionEntity != undefined && actionDefinitionEntity.Settings != undefined && actionDefinitionEntity.Settings.SupportedOnStatuses != undefined)
+            {
+                for (var i = 0; i < actionDefinitionEntity.Settings.SupportedOnStatuses.length; i++) {
+                    var supportedOnStatus = actionDefinitionEntity.Settings.SupportedOnStatuses[i];
+                    statusDefinitionIds.push(supportedOnStatus.StatusDefinitionId);
+                }
+            }
+            return statusDefinitionIds;
+        }
+
         function buildActionDefinitionObjFromScope() {
             var bPDefinitionSettings = directiveAPI.getData();
             if (bPDefinitionSettings != undefined)
                 bPDefinitionSettings.ConfigId = $scope.scopeModel.selectedExtensionConfig.ExtensionConfigurationId;
+
+            var supportedOnStatuses = convertSupportedOnStatusesFromScope( statusDefinitionSelectorAPI.getSelectedIds());
             var obj = {
                 ActionDefinitionId: actionDefinitionId,
                 Name: $scope.scopeModel.name,
@@ -227,7 +275,8 @@
                     Description: $scope.scopeModel.description,
                     EntityType: $scope.scopeModel.selectedEntityType.value,
                     EntityTypeId: serviceTypeSelectorAPI != undefined ? serviceTypeSelectorAPI.getSelectedIds() : undefined,
-                    BPDefinitionSettings: bPDefinitionSettings
+                    BPDefinitionSettings: bPDefinitionSettings,
+                    SupportedOnStatuses: supportedOnStatuses
                 }
             };
             return obj;

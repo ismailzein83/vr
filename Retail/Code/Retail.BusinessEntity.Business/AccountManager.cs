@@ -38,6 +38,11 @@ namespace Retail.BusinessEntity.Business
             Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts();
             return cachedAccounts.GetRecord(accountId);
         }
+        public AccountDetail GetAccountDetail(long accountId)
+        {
+            Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts();
+            return cachedAccounts.MapRecord(AccountDetailMapper, x => x.AccountId == accountId);
+        }
 
         public IEnumerable<AccountInfo> GetAccountsInfo(string nameFilter)
         {
@@ -101,7 +106,12 @@ namespace Retail.BusinessEntity.Business
         public bool UpdateStatus(long accountId, Guid statusId)
         {
             IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
-            return dataManager.UpdateStatus(accountId, statusId);
+            bool updateStatus = dataManager.UpdateStatus(accountId, statusId);
+            if(updateStatus)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            }
+            return updateStatus;
         }
 
         public Vanrise.Entities.UpdateOperationOutput<AccountDetail> UpdateAccount(AccountToEdit account)
@@ -376,6 +386,8 @@ namespace Retail.BusinessEntity.Business
 
             StatusDefinitionManager statusDefinitionManager = new Business.StatusDefinitionManager();
 
+            var statusDesciption =  statusDefinitionManager.GetStatusDefinitionName(account.StatusId);
+
             return new AccountDetail()
             {
                 Entity = account,
@@ -384,10 +396,21 @@ namespace Retail.BusinessEntity.Business
                 TotalSubAccountCount = GetSubAccountsCount(account.AccountId, accounts, true, accountsByParent),
                 CanAddSubAccounts = (accountTypeInfoEntities != null && accountTypeInfoEntities.Count() > 0),
                 ActionDefinitions = actionDefinitions,
-                StatusDesciption = statusDefinitionManager.GetStatusDefinitionName(account.StatusId)
+                StatusDesciption =statusDesciption,
+                StatusColor = GetStatusColor(statusDesciption)
             };
         }
-
+        private string GetStatusColor(string statusDesciption)
+        {
+            switch(statusDesciption)
+            {
+                case "Active": return "label label-success";
+                case "Suspended": return "label label-warning";
+                case "Terminated": return "label label-danger";
+                case "Blocked": return "label label-danger";
+                default: return "label label-primary";
+            }
+        }
         private AccountInfo AccountInfoMapper(Account account)
         {
             return new AccountInfo
