@@ -31,7 +31,6 @@
             };
         }
 
-
         function buildGridQuery() {
             return {
                 Guid: null,

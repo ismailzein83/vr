@@ -16,10 +16,11 @@ namespace Retail.BusinessEntity.Business
 
         #region Public Methods
 
-        //public StatusDefinition GetStatusDefinition(Guid statusDefinitionId)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public StatusDefinition GetStatusDefinition(Guid statusDefinitionId)
+        {
+            Dictionary<Guid, StatusDefinition> cachedStatusDefinitions = this.GetCachedStatusDefinitions();
+            return cachedStatusDefinitions.GetRecord(statusDefinitionId);
+        }
 
         public string GetStatusDefinitionName(Guid statusDefinitionId)
         {
@@ -82,12 +83,6 @@ namespace Retail.BusinessEntity.Business
             }
 
             return updateOperationOutput;
-        }
-
-        public StatusDefinition GetStatusDefinition(Guid statusDefinitionId)
-        {
-            Dictionary<Guid, StatusDefinition> cachedStatusDefinitions = this.GetCachedStatusDefinitions();
-            return cachedStatusDefinitions.GetRecord(statusDefinitionId);
         }
 
         #endregion

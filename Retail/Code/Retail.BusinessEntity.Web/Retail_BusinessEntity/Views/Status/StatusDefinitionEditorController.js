@@ -11,8 +11,6 @@
         var statusDefinitionId;
         var statusDefinitionEntity;
 
-        var settingsDirectiveAPI;
-        //var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -29,11 +27,6 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-
-            $scope.scopeModel.onSettingsDirectiveReady = function (api) {
-                settingsDirectiveAPI = api;
-                settingsDirectiveReadyDeferred.resolve();
-            };
 
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
@@ -69,44 +62,26 @@
             });
         }
         function loadAllControls() {
-            //return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSettingsDirective]).catch(function (error) {
-            //    VRNotificationService.notifyExceptionWithClose(error, $scope);
-            //}).finally(function () {
-            //    $scope.scopeModel.isLoading = false;
-            //});
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
         }
-        //function setTitle() {
-        //    if (isEditMode) {
-        //        var switchName = (switchEntity != undefined) ? switchEntity.Name : null;
-        //        $scope.title = UtilsService.buildTitleForUpdateEditor(switchName, 'Switch');
-        //    }
-        //    else {
-        //        $scope.title = UtilsService.buildTitleForAddEditor('Switch');
-        //    }
-        //}
-        //function loadStaticData() {
-        //    if (switchEntity == undefined)
-        //        return;
-        //    $scope.scopeModel.name = switchEntity.Name;
-
-        //    if (switchEntity.Settings == null)
-        //        return;
-        //    $scope.scopeModel.description = switchEntity.Settings.Description;
-        //    $scope.scopeModel.location = switchEntity.Settings.Location;
-        //}
-        //function loadSettingsDirective() {
-        //    var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-        //    settingsDirectiveReadyDeferred.promise.then(function () {
-        //        var settingsDirectivePayload;
-        //        if (switchEntity != undefined) {
-        //            settingsDirectivePayload = { settings: switchEntity.Settings };
-        //        }
-        //        VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
-        //    });
-
-        //    return settingsDirectiveLoadDeferred.promise;
-        //}
+        function setTitle() {
+            if (isEditMode) {
+                var statusDefinitionName = (statusDefinitionEntity != undefined) ? statusDefinitionEntity.Name : null;
+                $scope.title = UtilsService.buildTitleForUpdateEditor(statusDefinitionName, 'StatusDefinition');
+            }
+            else {
+                $scope.title = UtilsService.buildTitleForAddEditor('StatusDefinition');
+            }
+        }
+        function loadStaticData() {
+            if (statusDefinitionEntity == undefined)
+                return;
+            $scope.scopeModel.name = statusDefinitionEntity.Name;
+        }
 
         function insert() {
             $scope.scopeModel.isLoading = true;
