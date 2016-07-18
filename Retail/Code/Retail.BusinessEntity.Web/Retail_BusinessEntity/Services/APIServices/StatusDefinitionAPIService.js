@@ -43,7 +43,7 @@
             AddStatusDefinition: AddStatusDefinition,
             UpdateStatusDefinition: UpdateStatusDefinition,
             GetStatusDefinition: GetStatusDefinition,
-            GetAccountPartDefinitionsInfo: GetAccountPartDefinitionsInfo
+            GetStatusDefinitionsInfo: GetStatusDefinitionsInfo
         });
     }
 
