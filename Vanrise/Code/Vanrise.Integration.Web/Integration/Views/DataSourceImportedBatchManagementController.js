@@ -49,7 +49,7 @@ function DataSourceImportedBatchManagementController($scope, VR_Integration_Mapp
 
     function getGridQuery() {
         var query = {
-            DataSourceId: $scope.selectedDataSource.DataSourceId,
+            DataSourceId: dataSourceDirectiveAPI.getSelectedIds(),
             BatchName: ($scope.batchName != undefined && $scope.batchName != "") ? $scope.batchName : null,
             MappingResults: getMappedMappingResults(),
             From: $scope.selectedFromDateTime,
