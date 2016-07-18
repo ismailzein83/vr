@@ -34,8 +34,7 @@
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetStatusDefinitionsInfo"), {
                 filter: filter
             });
-        }
-
+        }       
 
         return ({
             //GetStatusDefinitionSettingsTemplateConfigs: GetStatusDefinitionSettingsTemplateConfigs,
@@ -43,7 +42,7 @@
             AddStatusDefinition: AddStatusDefinition,
             UpdateStatusDefinition: UpdateStatusDefinition,
             GetStatusDefinition: GetStatusDefinition,
-            GetStatusDefinitionsInfo: GetStatusDefinitionsInfo
+            GetStatusDefinitionsInfo: GetStatusDefinitionsInfo,
         });
     }
 

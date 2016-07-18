@@ -90,7 +90,6 @@ namespace Retail.BusinessEntity.Business
             Func<StatusDefinition, bool> filterExpression = null;
             return this.GetCachedStatusDefinitions().MapRecords(StatusDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
-
         #endregion
 
 
@@ -146,6 +145,5 @@ namespace Retail.BusinessEntity.Business
             return statusDefinitionInfo;
         }
         #endregion
-
     }
 }

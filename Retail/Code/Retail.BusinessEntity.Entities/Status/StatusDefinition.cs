@@ -13,10 +13,12 @@ namespace Retail.BusinessEntity.Entities
         public string Name { get; set; }
         
         public StatusDefinitionSettings Settings { get; set; }
+
+        public EntityType EntityType { get; set; }
     }
 
     public class StatusDefinitionSettings
     {
-        public EntityType EntityType { get; set; }
+       
     }
 }

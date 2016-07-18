@@ -2,13 +2,18 @@
 
     "use strict";
 
-    StatusDefinitionManagementController.$inject = ['$scope', 'Retail_BE_StatusDefinitionService'];
+    StatusDefinitionManagementController.$inject = ['$scope', 'Retail_BE_StatusDefinitionService', 'UtilsService', 'VRUIUtilsService'];
 
-    function StatusDefinitionManagementController($scope, Retail_BE_StatusDefinitionService) {
+    function StatusDefinitionManagementController($scope, Retail_BE_StatusDefinitionService, UtilsService, VRUIUtilsService) {
 
         var gridAPI;
 
+        var entityTypeAPI;
+        var entityTypeAPISelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+
         defineScope();
+        //loadEntityTypeSelector();
 
 
         function defineScope() {
@@ -35,13 +40,30 @@
                 statusDefinitionAPI = api;
                 statusDefinitionSelectorReadyDeferred.resolve();
             }
+
+            $scope.scopeModel.onEntityTypeSelectorReady =function (api) {
+                entityTypeAPI = api;
+                entityTypeAPISelectorReadyDeferred.resolve();
+            }
+        }
+
+        function loadEntityTypeSelector() {
+            var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            entityTypeAPISelectorReadyDeferred.promise.then(function () {
+                //var statusDefinitionSelectorPayload = {
+                //    selectedIds: convertSupportedOnStatusesFromObj()
+                //};
+                VRUIUtilsService.callDirectiveLoad(entityTypeAPI, null, statusDefinitionSelectorLoadDeferred);
+            });
+            return statusDefinitionSelectorLoadDeferred.promise;
         }
 
         function buildGridQuery() {
             return {
                 Guid: null,
                 Name: $scope.scopeModel.name,
-                Settings: null
+                Settings: null,
+                EntityType: null,
             };
         }
     }

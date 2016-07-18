@@ -34,8 +34,8 @@ namespace Retail.BusinessEntity.Data.SQL
         public bool Insert(StatusDefinition statusDefinitionItem)
         {
             //object statusDefinitionId;
-            //string serializedSettings = switchItem.Settings != null ? Vanrise.Common.Serializer.Serialize(switchItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Retail.sp_StatusDefinition_Insert", statusDefinitionItem.StatusDefinitionId, statusDefinitionItem.Name);
+            string serializedSettings = statusDefinitionItem.Settings != null ? Vanrise.Common.Serializer.Serialize(statusDefinitionItem.Settings) : null;
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_StatusDefinition_Insert", statusDefinitionItem.StatusDefinitionId, statusDefinitionItem.Name, serializedSettings, statusDefinitionItem.EntityType);
 
             if (affectedRecords > 0)
             {
@@ -47,8 +47,8 @@ namespace Retail.BusinessEntity.Data.SQL
 
         public bool Update(StatusDefinition statusDefinitionItem)
         {
-            //string serializedSettings = switchItem.Settings != null ? Vanrise.Common.Serializer.Serialize(switchItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Retail.sp_StatusDefinition_Update", statusDefinitionItem.StatusDefinitionId, statusDefinitionItem.Name);
+            string serializedSettings = statusDefinitionItem.Settings != null ? Vanrise.Common.Serializer.Serialize(statusDefinitionItem.Settings) : null;
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_StatusDefinition_Update", statusDefinitionItem.StatusDefinitionId, statusDefinitionItem.Name, serializedSettings, statusDefinitionItem.EntityType);
             return (affectedRecords > 0);
         }
 
@@ -61,8 +61,8 @@ namespace Retail.BusinessEntity.Data.SQL
             {
                 StatusDefinitionId = (Guid) reader["ID"],
                 Name = reader["Name"] as string,
-                Settings = null,
-                //Settings = Vanrise.Common.Serializer.Deserialize<ServiceTypeSettings>(reader["Settings"] as string),
+                Settings = reader["Settings"] as string != null ? Vanrise.Common.Serializer.Deserialize<StatusDefinitionSettings>(reader["Settings"] as string) :null,
+                EntityType = GetReaderValue<EntityType>(reader, "EntityType")
             }; 
             return statusDefinition;
         }
