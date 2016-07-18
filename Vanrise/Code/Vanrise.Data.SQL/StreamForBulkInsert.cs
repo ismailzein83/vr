@@ -29,6 +29,10 @@ namespace Vanrise.Data.SQL
         {
             this._streamWriter.WriteLine(format, args);
         }
+        public void WriteRecord(string value)
+        {
+            this._streamWriter.WriteLine(value);
+        }
 
         public void Close()
         {

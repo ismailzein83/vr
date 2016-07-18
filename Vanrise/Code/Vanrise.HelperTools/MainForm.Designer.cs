@@ -30,6 +30,7 @@
         {
             this.button1 = new System.Windows.Forms.Button();
             this.EncryptDecrypt = new System.Windows.Forms.Button();
+            this.bcpCommand = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -44,7 +45,7 @@
             // 
             // EncryptDecrypt
             // 
-            this.EncryptDecrypt.Location = new System.Drawing.Point(72, 120);
+            this.EncryptDecrypt.Location = new System.Drawing.Point(13, 62);
             this.EncryptDecrypt.Name = "EncryptDecrypt";
             this.EncryptDecrypt.Size = new System.Drawing.Size(140, 23);
             this.EncryptDecrypt.TabIndex = 1;
@@ -52,11 +53,22 @@
             this.EncryptDecrypt.UseVisualStyleBackColor = true;
             this.EncryptDecrypt.Click += new System.EventHandler(this.EncryptDecrypt_Click);
             // 
+            // bcpCommand
+            // 
+            this.bcpCommand.Location = new System.Drawing.Point(13, 113);
+            this.bcpCommand.Name = "bcpCommand";
+            this.bcpCommand.Size = new System.Drawing.Size(140, 23);
+            this.bcpCommand.TabIndex = 2;
+            this.bcpCommand.Text = "Trace BCP Command";
+            this.bcpCommand.UseVisualStyleBackColor = true;
+            this.bcpCommand.Click += new System.EventHandler(this.bcpCommand_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.bcpCommand);
             this.Controls.Add(this.EncryptDecrypt);
             this.Controls.Add(this.button1);
             this.Name = "MainForm";
@@ -69,6 +81,7 @@
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button EncryptDecrypt;
+        private System.Windows.Forms.Button bcpCommand;
     }
 }
 

@@ -33,5 +33,10 @@ namespace Vanrise.HelperTools
         {
             OpenForm(new EncryptDecryptForm());
         }
+
+        private void bcpCommand_Click(object sender, EventArgs e)
+        {
+            OpenForm(new TraceBCPCommand());
+        }
     }
 }
