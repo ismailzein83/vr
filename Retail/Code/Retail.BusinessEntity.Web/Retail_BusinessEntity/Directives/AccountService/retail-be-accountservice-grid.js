@@ -1,8 +1,8 @@
 ﻿"use strict";
 
 app.directive("retailBeAccountserviceGrid", ["UtilsService", "VRNotificationService", "Retail_BE_AccountServiceAPIService",
-    "Retail_BE_AccountServiceService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIService, Retail_BE_AccountServiceService, VRUIUtilsService) {
+    "Retail_BE_AccountServiceService", "VRUIUtilsService","Retail_BE_ActionRuntimeService",
+function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIService, Retail_BE_AccountServiceService, VRUIUtilsService, Retail_BE_ActionRuntimeService) {
 
     var directiveDefinitionObject = {
 
@@ -34,6 +34,10 @@ function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIServic
             $scope.scopeModel = {};
 
             $scope.scopeModel.accountServices = [];
+
+            $scope.scopeModel.getStatusColor = function (dataItem) {
+                return dataItem.StatusColor;
+            }
 
             defineMenuActions();
 
@@ -67,11 +71,43 @@ function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIServic
         }
 
         function defineMenuActions() {
-            $scope.scopeModel.gridMenuActions = [{
-                name: "Edit",
-                clicked: editAccountService,
-                haspermission: hasUpdateAccountServicePermission
-            }];
+
+            $scope.scopeModel.gridMenuActions = function (dataItem) {
+                var menuActions = [{
+                    name: "Edit",
+                    clicked: editAccountService,
+                    haspermission: hasUpdateAccountServicePermission
+                }];
+                if (dataItem.ActionDefinitions != undefined) {
+                    for (var i = 0; i < dataItem.ActionDefinitions.length; i++) {
+                        var actionDefinition = dataItem.ActionDefinitions[i];
+                        menuActions.push(defineActionDefinitionMenuAction(actionDefinition));
+                    }
+                }
+                return menuActions;
+            };
+
+
+
+
+            function defineActionDefinitionMenuAction(actionDefinition) {
+                return {
+                    name: actionDefinition.Name,
+                    clicked: function (dataItem) {
+                        return Retail_BE_ActionRuntimeService.openActionRuntime(dataItem.Entity.AccountServiceId, actionDefinition.ActionDefinitionId,
+                            function () {
+                                return Retail_BE_AccountServiceAPIService.GetAccountServiceDetail(dataItem.Entity.AccountServiceId).then(function (response) {
+                                    for (var i = 0; i < $scope.scopeModel.accountServices.length; i++) {
+                                        var account = $scope.scopeModel.accountServices[i];
+                                        if (account.Entity.AccountServiceId == response.Entity.AccountServiceId) {
+                                            $scope.scopeModel.accountServices[i] = response
+                                        }
+                                    }
+                                });
+                            });
+                    }
+                };
+            }
         }
 
         function hasUpdateAccountServicePermission() {

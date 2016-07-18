@@ -134,16 +134,14 @@
         }
 
         function loadStatusDefinitionSelector() {
-            if (actionDefinitionEntity != undefined && actionDefinitionEntity.Settings != undefined) {
-                var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                statusDefinitionSelectorReadyDeferred.promise.then(function () {
-                    var statusDefinitionSelectorPayload = {
-                        selectedIds: convertSupportedOnStatusesFromObj()
-                    };
-                    VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
-                });
-                return statusDefinitionSelectorLoadDeferred.promise;
-            }
+            var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            statusDefinitionSelectorReadyDeferred.promise.then(function () {
+                var statusDefinitionSelectorPayload = {
+                    selectedIds: convertSupportedOnStatusesFromObj()
+                };
+                VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
+            });
+            return statusDefinitionSelectorLoadDeferred.promise;
         }
 
 
@@ -161,10 +159,11 @@
             if (actionDefinitionEntity == undefined)
                 return;
             $scope.scopeModel.name = actionDefinitionEntity.Name;
+            $scope.scopeModel.selectedEntityType = UtilsService.getItemByVal($scope.scopeModel.entityTypes, actionDefinitionEntity.EntityType, "value");
             if (actionDefinitionEntity.Settings != undefined)
             {
                 $scope.scopeModel.description = actionDefinitionEntity.Settings.Description;
-                $scope.scopeModel.selectedEntityType = UtilsService.getItemByVal($scope.scopeModel.entityTypes, actionDefinitionEntity.Settings.EntityType, "value");
+                
             }
         }
 
@@ -271,9 +270,10 @@
             var obj = {
                 ActionDefinitionId: actionDefinitionId,
                 Name: $scope.scopeModel.name,
+                EntityType: $scope.scopeModel.selectedEntityType.value,
                 Settings: {
                     Description: $scope.scopeModel.description,
-                    EntityType: $scope.scopeModel.selectedEntityType.value,
+                    
                     EntityTypeId: serviceTypeSelectorAPI != undefined ? serviceTypeSelectorAPI.getSelectedIds() : undefined,
                     BPDefinitionSettings: bPDefinitionSettings,
                     SupportedOnStatuses: supportedOnStatuses

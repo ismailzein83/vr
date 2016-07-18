@@ -88,7 +88,7 @@ namespace Retail.BusinessEntity.Business
         public IEnumerable<ActionDefinitionInfo> GetActionDefinitionInfoByEntityType(EntityType entityType)
         {
             Dictionary<Guid, ActionDefinition> cachedActionDefinitiones = this.GetCachedActionDefinitions();
-            Func<ActionDefinition,bool> filterExpression= (item) =>  (item.Settings.EntityType == entityType);
+            Func<ActionDefinition,bool> filterExpression= (item) =>  (item.EntityType == entityType);
             return cachedActionDefinitiones.MapRecords(ActionDefinitionInfoMapper, filterExpression);
         }
 

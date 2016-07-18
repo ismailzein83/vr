@@ -29,7 +29,7 @@ namespace Retail.BusinessEntity.Data.SQL
             {
                 serializedSettings = Vanrise.Common.Serializer.Serialize(accountService.Settings);
             }
-            int recordsEffected = ExecuteNonQuerySP("Retail.sp_AccountService_Insert", out accountServiceId, accountService.AccountId, accountService.ServiceTypeId, accountService.ServiceChargingPolicyId, serializedSettings);
+            int recordsEffected = ExecuteNonQuerySP("Retail.sp_AccountService_Insert", out accountServiceId, accountService.AccountId, accountService.ServiceTypeId, accountService.ServiceChargingPolicyId, serializedSettings, accountService.StatusId);
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
                 insertedId = (long)accountServiceId;
@@ -44,7 +44,7 @@ namespace Retail.BusinessEntity.Data.SQL
             {
                 serializedSettings = Vanrise.Common.Serializer.Serialize(accountService.Settings);
             }
-            int recordsEffected = ExecuteNonQuerySP("Retail.sp_AccountService_Update", accountService.AccountServiceId, accountService.AccountId, accountService.ServiceTypeId, accountService.ServiceChargingPolicyId,serializedSettings);
+            int recordsEffected = ExecuteNonQuerySP("Retail.sp_AccountService_Update", accountService.AccountServiceId, accountService.AccountId, accountService.ServiceTypeId, accountService.ServiceChargingPolicyId,serializedSettings,accountService.StatusId);
             return (recordsEffected > 0);
         }
         public bool AreAccountServicesUpdated(ref object updateHandle)
@@ -70,7 +70,8 @@ namespace Retail.BusinessEntity.Data.SQL
                 AccountId = (long)reader["AccountID"],
                 ServiceTypeId = (int)reader["ServiceTypeId"],
                 ServiceChargingPolicyId = (int)reader["ServiceChargingPolicyId"],
-                Settings = Vanrise.Common.Serializer.Deserialize<AccountServiceSettings>(reader["Settings"] as string)
+                Settings = Vanrise.Common.Serializer.Deserialize<AccountServiceSettings>(reader["Settings"] as string),
+                StatusId = GetReaderValue<Guid>(reader, "StatusID")
             };
             return accountService;
         }

@@ -12,5 +12,8 @@ namespace Retail.BusinessEntity.Entities
         public string AccountName { get; set; }
         public string ServiceTypeTitle { get; set; }
         public string ServiceChargingPolicyName { get; set; }
+        public string StatusDesciption { get; set; }
+        public IEnumerable<ActionDefinitionInfo> ActionDefinitions { get; set; }
+        public string StatusColor { get; set; }
     }
 }

@@ -32,7 +32,11 @@
         function HasAddAccountServicePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['AddAccountService']));
         }
-
+        function GetAccountServiceDetail(accountServiceId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountServiceDetail"), {
+                accountServiceId: accountServiceId
+            });
+        }
         return ({
             GetFilteredAccountServices: GetFilteredAccountServices,
             GetAccountService: GetAccountService,
@@ -40,6 +44,7 @@
             UpdateAccountService: UpdateAccountService,
             HasUpdateAccountServicePermission: HasUpdateAccountServicePermission,
             HasAddAccountServicePermission: HasAddAccountServicePermission,
+            GetAccountServiceDetail: GetAccountServiceDetail
         });
     }
 

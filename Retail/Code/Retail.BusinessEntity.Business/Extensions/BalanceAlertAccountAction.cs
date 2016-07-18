@@ -26,7 +26,7 @@ namespace Retail.BusinessEntity.Business.Extensions
             var actionDefinition = GetActionDefinition();                       
 
             long entityId;
-            switch(actionDefinition.Settings.EntityType)
+            switch(actionDefinition.EntityType)
             {
                 case Entities.EntityType.Account: entityId = account.AccountId; break;
                 case Entities.EntityType.AccountService:
@@ -37,7 +37,7 @@ namespace Retail.BusinessEntity.Business.Extensions
                         return;
                     entityId = accountService.AccountServiceId;
                     break;
-                default: throw new NotSupportedException(string.Format("actionDefinition.Settings.EntityType '{0}'", actionDefinition.Settings.EntityType));
+                default: throw new NotSupportedException(string.Format("actionDefinition.Settings.EntityType '{0}'", actionDefinition.EntityType));
             }
 
             var actionBPInput = new ActionBPInputArgument

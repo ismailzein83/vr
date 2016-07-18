@@ -39,7 +39,14 @@ namespace Retail.BusinessEntity.Business
             else
                 return null;
         }
-       
+        public AccountServiceDetail GetAccountServiceDetail(long AccountServiceId)
+        {
+            var accountServices = GetCachedAccountServices();
+            if (accountServices != null)
+                return accountServices.MapRecord(AccountServiceDetailMapper, itm => itm.AccountServiceId == AccountServiceId);
+            else
+                return null;
+        }
         public InsertOperationOutput<AccountServiceDetail> AddAccountService(AccountService AccountService)
         {
             InsertOperationOutput<AccountServiceDetail> insertOperationOutput = new InsertOperationOutput<AccountServiceDetail>();
@@ -98,15 +105,38 @@ namespace Retail.BusinessEntity.Business
         #region  Mappers
         private AccountServiceDetail AccountServiceDetailMapper(AccountService accountService)
         {
-            AccountServiceDetail accountServiceDetail = new AccountServiceDetail();
             AccountManager accountManager = new AccountManager();
             ServiceTypeManager serviceTypeManager = new Business.ServiceTypeManager();
             ChargingPolicyManager chargingPolicyManager = new ChargingPolicyManager();
-            accountServiceDetail.Entity = accountService;
-            accountServiceDetail.AccountName = accountManager.GetAccountName(accountService.AccountId);
-            accountServiceDetail.ServiceChargingPolicyName = chargingPolicyManager.GetChargingPolicyName(accountService.ServiceChargingPolicyId);
-            accountServiceDetail.ServiceTypeTitle = serviceTypeManager.GetServiceTypeName(accountService.ServiceTypeId);
-            return accountServiceDetail;
+            StatusDefinitionManager statusDefinitionManager = new Business.StatusDefinitionManager();
+        
+            ActionDefinitionManager manager = new ActionDefinitionManager();
+            IEnumerable<ActionDefinitionInfo> actionDefinitions = manager.GetActionDefinitionInfoByEntityType(EntityType.AccountService);
+             var statusDesciption = statusDefinitionManager.GetStatusDefinitionName(accountService.StatusId);
+
+
+             return new AccountServiceDetail()
+            {
+                Entity = accountService,
+                AccountName = accountManager.GetAccountName(accountService.AccountId),
+                ServiceChargingPolicyName = chargingPolicyManager.GetChargingPolicyName(accountService.ServiceChargingPolicyId),
+                ServiceTypeTitle = serviceTypeManager.GetServiceTypeName(accountService.ServiceTypeId),
+                ActionDefinitions = actionDefinitions,
+                StatusDesciption =statusDesciption,
+                StatusColor = GetStatusColor(statusDesciption)
+            };
+        }
+
+        private string GetStatusColor(string statusDesciption)
+        {
+            switch (statusDesciption)
+            {
+                case "Active": return "label label-success";
+                case "Suspended": return "label label-warning";
+                case "Terminated": return "label label-danger";
+                case "Blocked": return "label label-danger";
+                default: return "label label-primary";
+            }
         }
         #endregion
 

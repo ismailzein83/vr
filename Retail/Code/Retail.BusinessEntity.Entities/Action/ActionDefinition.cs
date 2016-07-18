@@ -12,6 +12,7 @@ namespace Retail.BusinessEntity.Entities
         public Guid ActionDefinitionId { get; set; }
 
         public string Name { get; set; }
+        public EntityType EntityType { get; set; }
 
         public ActionDefinitionSettings Settings { get; set; }
     }
@@ -20,7 +21,6 @@ namespace Retail.BusinessEntity.Entities
     {
         public string Description { get; set; }
 
-        public EntityType EntityType { get; set; }
 
         /// <summary>
         /// = ServiceTypeId in case EntityType = EntityType.AccountService

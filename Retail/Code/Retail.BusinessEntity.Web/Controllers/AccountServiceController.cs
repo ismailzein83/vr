@@ -45,6 +45,12 @@ namespace Retail.BusinessEntity.Web.Controllers
             AccountServiceManager manager = new AccountServiceManager();
             return manager.UpdateAccountService(accountService);
         }
-      
+        [HttpGet]
+        [Route("GetAccountServiceDetail")]
+        public AccountServiceDetail GetAccountServiceDetail(long accountServiceId)
+        {
+            AccountServiceManager manager = new AccountServiceManager();
+            return manager.GetAccountServiceDetail(accountServiceId);
+        }
     }
 }
