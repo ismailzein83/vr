@@ -5,6 +5,7 @@ using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
+using Vanrise.Common;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
@@ -32,15 +33,6 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("BED", typeof(DateTime));
 
             dt.BeginLoadData();
-
-
-            DataTable customerSellingProductDT = new DataTable();
-            customerSellingProductDT.TableName = MigrationUtils.GetTableName(_Schema, "CustomerSellingProduct", _UseTempTables);
-            customerSellingProductDT.Columns.Add("CustomerID", typeof(int));
-            customerSellingProductDT.Columns.Add("SellingProductID", typeof(int));
-            customerSellingProductDT.Columns.Add("BED", typeof(DateTime));
-            
-            customerSellingProductDT.BeginLoadData();
             
             foreach (var item in customerZones)
             {
@@ -50,18 +42,36 @@ namespace TOne.WhS.DBSync.Data.SQL
                 row["Details"] = serializedSettings;
                 row["BED"] = (DateTime)item.StartEffectiveTime;
                 dt.Rows.Add(row);
-
-                DataRow customerSellingProductDR = customerSellingProductDT.NewRow();
-                customerSellingProductDR["CustomerID"] = item.CustomerId;
-                customerSellingProductDR["SellingProductID"] = _SellingProductId;
-                customerSellingProductDR["BED"] = (DateTime)item.StartEffectiveTime;
-                customerSellingProductDT.Rows.Add(customerSellingProductDR);
             }
             dt.EndLoadData();
-            customerSellingProductDT.EndLoadData();
             WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
+        }
+
+
+        public void ApplyCustomerSellingProductToTemp(List<CustomerZones> customerZones, List<CarrierAccount> carrierAccounts)
+        {
+            DataTable customerSellingProductDT = new DataTable();
+            customerSellingProductDT.TableName = MigrationUtils.GetTableName(_Schema, "CustomerSellingProduct", _UseTempTables);
+            customerSellingProductDT.Columns.Add("CustomerID", typeof(int));
+            customerSellingProductDT.Columns.Add("SellingProductID", typeof(int));
+            customerSellingProductDT.Columns.Add("BED", typeof(DateTime));
+
+            IEnumerable<CarrierAccount> customers = carrierAccounts.FindAllRecords(item => item.AccountType != CarrierAccountType.Supplier);
+            customerSellingProductDT.BeginLoadData();
+
+            foreach (var item in customers)
+            {
+                CustomerZones customerZone = customerZones.FindRecord(itm => itm.CustomerId == item.CarrierAccountId);
+                DataRow customerSellingProductDR = customerSellingProductDT.NewRow();
+                customerSellingProductDR["CustomerID"] = item.CarrierAccountId;
+                customerSellingProductDR["SellingProductID"] = _SellingProductId;
+                customerSellingProductDR["BED"] =customerZone != null ? (DateTime)customerZone.StartEffectiveTime : DateTime.Now.Date;
+                customerSellingProductDT.Rows.Add(customerSellingProductDR);
+            }
+            customerSellingProductDT.EndLoadData();
             WriteDataTableToDB(customerSellingProductDT, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
+
 
         public Dictionary<int, SourceCustomerZone> GetCustomerZones(bool useTempTables)
         {

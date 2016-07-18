@@ -72,6 +72,13 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     weekendRateTypeSelectorReadyPrmoiseDeferred.resolve();
                 }
 
+
+                $scope.validateOffPeakAndWeekendRate = function () {
+                    if (weekendRateTypeSelectorAPI != undefined && offPeakRateTypeSelectorAPI != undefined && weekendRateTypeSelectorAPI.getSelectedIds() == offPeakRateTypeSelectorAPI.getSelectedIds())
+                        return "offPeak rate must be different to weekend rate";
+                    return null;
+                }
+
                 $scope.onSellingNumberPlanSelectionChanged = function () {
                     var selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
                     if (selectedSellingNumberPlanId != undefined) {

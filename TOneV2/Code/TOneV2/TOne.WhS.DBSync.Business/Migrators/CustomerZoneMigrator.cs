@@ -13,11 +13,14 @@ namespace TOne.WhS.DBSync.Business
     public class CustomerZoneMigrator : Migrator<SourceCustomerZone, CustomerZones>
     {
         CustomerZoneDBSyncDataManager dbSyncDataManager;
+        Dictionary<string, CarrierAccount> allCarrierAccounts;
         bool _UseTempTables;
         public CustomerZoneMigrator(MigrationContext context)
             : base(context)
         {
             dbSyncDataManager = new CustomerZoneDBSyncDataManager(Context.UseTempTables, context.SellingProductId);
+            var dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
+            allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
             _UseTempTables = context.UseTempTables;
             TableName = dbSyncDataManager.GetTableName();
         }
@@ -30,6 +33,7 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<CustomerZones> itemsToAdd)
         {
             dbSyncDataManager.ApplyCustomerZoneToTemp(itemsToAdd);
+            dbSyncDataManager.ApplyCustomerSellingProductToTemp(itemsToAdd, allCarrierAccounts.Values.ToList());
             TotalRowsSuccess = itemsToAdd.Count;
 
         }

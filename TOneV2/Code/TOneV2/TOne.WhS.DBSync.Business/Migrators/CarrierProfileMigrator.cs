@@ -13,13 +13,14 @@ namespace TOne.WhS.DBSync.Business
     {
         CarrierProfileDBSyncDataManager dbSyncDataManager;
         SourceCarrierProfileDataManager dataManager;
-        VRFileManager vrFileManager = new VRFileManager();
+        FileDBSyncDataManager fileDataManager;
         Dictionary<string, Country> allCountries;
         public CarrierProfileMigrator(MigrationContext context)
             : base(context)
         {
             dbSyncDataManager = new CarrierProfileDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceCarrierProfileDataManager(Context.ConnectionString);
+            fileDataManager = new FileDBSyncDataManager(context.UseTempTables);
             TableName = dbSyncDataManager.GetTableName();
             var dbTableCountry = Context.DBTables[DBTableName.Country];
             allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
@@ -105,7 +106,7 @@ namespace TOne.WhS.DBSync.Business
 
                 };
 
-                settings.CompanyLogo = vrFileManager.AddFile(file);
+                settings.CompanyLogo = fileDataManager.ApplyFile(file);
             }
 
             settings.CountryId = countryId;

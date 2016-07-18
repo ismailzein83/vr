@@ -30,6 +30,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("OtherRates", typeof(string));
             dt.Columns.Add("BED", typeof(DateTime));
             dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "EED", DataType = typeof(DateTime) });
+            dt.Columns.Add("Change", typeof(Byte));
             dt.Columns.Add("ID", typeof(int));
             dt.Columns.Add("SourceID", typeof(string));
            
@@ -51,6 +52,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                     row[index++] = DBNull.Value;
                 else
                     row[index++] = item.EED;
+                row[index++] = item.RateChange;
                 row[index++] = startingId++;
                 row[index++] = item.SourceId;
 
@@ -62,7 +64,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, SaleRate> GetSaleRates(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID]  ,[ZoneID] ,[PriceListID],[Rate],[OtherRates],[BED], [EED], [SourceID] FROM "
+            return GetItemsText("SELECT [ID]  ,[ZoneID] ,[PriceListID],[Rate],[OtherRates],[BED], [EED],[Change], [SourceID] FROM "
                 + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SaleRateMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
@@ -77,6 +79,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 OtherRates = reader["OtherRates"] as string != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string) : null,
                 BED = (DateTime)reader["BED"],
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
+                RateChange = GetReaderValue<RateChangeType>(reader, "Change"),
                 SourceId = reader["SourceID"] as string,
             };
         }

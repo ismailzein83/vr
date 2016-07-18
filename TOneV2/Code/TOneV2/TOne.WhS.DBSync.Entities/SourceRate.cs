@@ -19,6 +19,7 @@ namespace TOne.WhS.DBSync.Entities
         public decimal? WeekendRate { get; set; }
         public DateTime? BeginEffectiveDate { get; set; }
         public DateTime? EndEffectiveDate { get; set; }
+        public Int16? Change { get; set; }
         public string CurrencyId { get; set; }
     }
 }

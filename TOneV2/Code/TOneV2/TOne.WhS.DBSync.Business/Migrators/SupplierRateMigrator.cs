@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
@@ -84,6 +85,7 @@ namespace TOne.WhS.DBSync.Business
                     PriceListId = supplierPriceList.PriceListId,
                     OtherRates = otherRates,
                     ZoneId = supplierZone.SupplierZoneId,
+                    RateChange = GetRateChangeType(sourceItem.Change.Value),
                     SourceId = sourceItem.SourceId
                 };
             else
@@ -95,6 +97,28 @@ namespace TOne.WhS.DBSync.Business
 
         public override void FillTableInfo(bool useTempTables)
         {
+
+        }
+
+        private RateChangeType GetRateChangeType(Int16 sourceRateChangeType)
+        {
+            RateChangeType result = RateChangeType.NotChanged;
+            switch (sourceRateChangeType)
+            {
+                case -1:
+                    result = RateChangeType.Decrease;
+                    break;
+                case 0:
+                    result = RateChangeType.NotChanged;
+                    break;
+                case 1:
+                    result = RateChangeType.Increase;
+                    break;
+                case 2:
+                    result = RateChangeType.New;
+                    break;
+            }
+            return result;
 
         }
 
