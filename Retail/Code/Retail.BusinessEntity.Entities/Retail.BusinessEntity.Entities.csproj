@@ -149,6 +149,7 @@
     <Compile Include="Status\StatusChargingSet.cs" />
     <Compile Include="Status\StatusDefinitionDetail.cs" />
     <Compile Include="Status\StatusDefinition.cs" />
+    <Compile Include="Status\StatusDefinitionFilter.cs" />
     <Compile Include="Status\StatusDefinitionInfo.cs" />
     <Compile Include="Status\StatusDefinitionQuery.cs" />
     <Compile Include="Switch\SwitchDetail.cs" />

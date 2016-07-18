@@ -304,6 +304,7 @@
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-ruledefinition-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Status\retail-be-statusdefinition-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Status\retail-be-statusdefinition-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Status\Templates\StatusDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Switch\Templates\SwitchGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\Templates\ServiceTypeGridTemplate.html" />

@@ -85,6 +85,12 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
 
+        public IEnumerable<StatusDefinitionInfo> GetStatusDefinitionInfo(StatusDefinitionFilter filter)
+        {
+            Func<StatusDefinition, bool> filterExpression = null;
+            return this.GetCachedStatusDefinitions().MapRecords(StatusDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
+        }
+
         #endregion
 
 
@@ -130,6 +136,15 @@ namespace Retail.BusinessEntity.Business
             return satatusDefinitionDetail;
         }
 
+        public StatusDefinitionInfo StatusDefinitionInfoMapper(StatusDefinition statusDefinition)
+        {
+            StatusDefinitionInfo statusDefinitionInfo = new StatusDefinitionInfo()
+            {
+                StatusDefinitionId = statusDefinition.StatusDefinitionId,
+                Name = statusDefinition.Name
+            };
+            return statusDefinitionInfo;
+        }
         #endregion
 
     }

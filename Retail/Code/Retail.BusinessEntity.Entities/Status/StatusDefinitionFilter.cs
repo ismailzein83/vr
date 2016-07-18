@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class StatusDefinitionInfo
+    public class StatusDefinitionFilter
     {
-        public Guid StatusDefinitionId { get; set; }
-
-        public string Name { get; set; }
     }
 }

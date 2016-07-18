@@ -43,5 +43,13 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetStatusDefinition(statusDefinitionId);
         }
+
+        [HttpGet]
+        [Route("GetStatusDefinitionInfo")]
+        public IEnumerable<StatusDefinitionInfo> GetStatusDefinitionInfo(string filter = null)
+        {
+            StatusDefinitionFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<StatusDefinitionFilter>(filter) : null;
+            return _manager.GetStatusDefinitionInfo(deserializedFilter);
+        }
     }
 }

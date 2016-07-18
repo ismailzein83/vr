@@ -74,7 +74,7 @@
                 $scope.title = UtilsService.buildTitleForUpdateEditor(statusDefinitionName, 'StatusDefinition');
             }
             else {
-                $scope.title = UtilsService.buildTitleForAddEditor('StatusDefinition');
+                $scope.title = UtilsService.buildTitleForAddEditor('Switch');
             }
         }
         function loadStaticData() {

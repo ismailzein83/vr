@@ -30,13 +30,20 @@
             });
         }
 
+        function GetStatusDefinitionsInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetStatusDefinitionsInfo"), {
+                filter: filter
+            });
+        }
+
 
         return ({
             //GetStatusDefinitionSettingsTemplateConfigs: GetStatusDefinitionSettingsTemplateConfigs,
             GetFilteredStatusDefinitions: GetFilteredStatusDefinitions,
             AddStatusDefinition: AddStatusDefinition,
             UpdateStatusDefinition: UpdateStatusDefinition,
-            GetStatusDefinition: GetStatusDefinition
+            GetStatusDefinition: GetStatusDefinition,
+            GetAccountPartDefinitionsInfo: GetAccountPartDefinitionsInfo
         });
     }
 
