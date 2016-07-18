@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="BigDataServiceDataManager.cs" />
     <Compile Include="CityDataManager.cs" />
+    <Compile Include="ColorDefinitionDataManager.cs" />
     <Compile Include="CountryDataManager.cs" />
     <Compile Include="CurrencyExchangeRateWithEEDDataManager.cs" />
     <Compile Include="SettingDataManager.cs" />
