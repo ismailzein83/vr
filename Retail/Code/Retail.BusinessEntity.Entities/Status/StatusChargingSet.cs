@@ -33,10 +33,10 @@ namespace Retail.BusinessEntity.Entities
     {
         public Guid StatusDefinitionId { get; set; }
 
-        public Decimal InitialPrice { get; set; }
+        public Decimal InitialCharge { get; set; }
 
         public RecurringPeriodSettings RecurringPeriodSettings { get; set; }
 
-        public Decimal RecurringPrice { get; set; }
+        public Decimal RecurringCharge { get; set; }
     }
 }

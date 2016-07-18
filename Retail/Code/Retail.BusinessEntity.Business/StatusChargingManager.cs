@@ -22,7 +22,7 @@ namespace Retail.BusinessEntity.Business
                 var statusCharge = chargingSet.Settings.StatusCharges.FirstOrDefault(itm => itm.StatusDefinitionId == statusDefinitionId);
                 if(statusCharge != null)
                 {
-                    initialCharge = statusCharge.InitialPrice;
+                    initialCharge = statusCharge.InitialCharge;
                     return true;
                 }
             }
