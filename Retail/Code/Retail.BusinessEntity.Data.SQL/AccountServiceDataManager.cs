@@ -44,7 +44,7 @@ namespace Retail.BusinessEntity.Data.SQL
             {
                 serializedSettings = Vanrise.Common.Serializer.Serialize(accountService.Settings);
             }
-            int recordsEffected = ExecuteNonQuerySP("Retail.sp_AccountService_Update", accountService.AccountServiceId, accountService.AccountId, accountService.ServiceTypeId, accountService.ServiceChargingPolicyId,serializedSettings,accountService.StatusId);
+            int recordsEffected = ExecuteNonQuerySP("Retail.sp_AccountService_Update", accountService.AccountServiceId, accountService.AccountId, accountService.ServiceTypeId, accountService.ServiceChargingPolicyId,serializedSettings);
             return (recordsEffected > 0);
         }
         public bool AreAccountServicesUpdated(ref object updateHandle)

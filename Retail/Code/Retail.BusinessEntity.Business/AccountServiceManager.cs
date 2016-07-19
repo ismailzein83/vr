@@ -89,10 +89,6 @@ namespace Retail.BusinessEntity.Business
         public UpdateOperationOutput<AccountServiceDetail> UpdateAccountService(AccountService accountService)
         {
             IAccountServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountServiceDataManager>();
-
-            var currentAccountService = GetAccountService(accountService.AccountServiceId);
-
-            accountService.StatusId = currentAccountService.StatusId;
             bool updateActionSucc = dataManager.Update(accountService);
             UpdateOperationOutput<AccountServiceDetail> updateOperationOutput = new UpdateOperationOutput<AccountServiceDetail>();
 
@@ -103,7 +99,7 @@ namespace Retail.BusinessEntity.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = AccountServiceDetailMapper(accountService);
+                updateOperationOutput.UpdatedObject = AccountServiceDetailMapper(this.GetAccountService(accountService.AccountServiceId));
             }
             else
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;

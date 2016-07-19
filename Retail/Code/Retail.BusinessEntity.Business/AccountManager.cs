@@ -128,9 +128,6 @@ namespace Retail.BusinessEntity.Business
             long? parentId;
             ValidateAccountToEdit(account, out parentId);
 
-            var currentAccount = GetAccount(account.AccountId);
-            account.StatusId = currentAccount.StatusId;
-
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;

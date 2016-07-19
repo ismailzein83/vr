@@ -13,7 +13,7 @@ namespace Retail.BusinessEntity.Entities
         public string Name { get; set; }
 
         public int TypeId { get; set; }
-        public Guid StatusId { get; set; }
+      
         public AccountSettings Settings { get; set; }
     }
 
@@ -30,7 +30,7 @@ namespace Retail.BusinessEntity.Entities
     public class Account : BaseAccount
     {
         public const string BUSINESSENTITY_DEFINITION_NAME = "Retail_BE_SubscriberAccount";
-
+        public Guid StatusId { get; set; }
         public long? ParentAccountId { get; set; }
 
         public ExecutedActionsData ExecutedActionsData { get; set; }
