@@ -20,19 +20,13 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            if (context.Target == null)
-                throw new ArgumentNullException("Target");
-
             ImportedZone zone = context.Target as ImportedZone;
-            if (zone.ImportedRates != null)
-                return !(zone.ImportedRates.Count() == 0);
-
-            return false;
+            return !(zone.ImportedRates.Count() == 0);
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has a missing rate",(target as ImportedZone).ZoneName);
+            return string.Format("Zone {0} has a missing rate", (target as ImportedZone).ZoneName);
         }
 
     }

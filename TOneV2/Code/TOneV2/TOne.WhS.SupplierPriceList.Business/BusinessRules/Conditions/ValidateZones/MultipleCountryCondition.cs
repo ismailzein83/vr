@@ -20,9 +20,6 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            if (context.Target == null)
-                throw new ArgumentNullException("Target");
-
             ImportedZone zone = context.Target as ImportedZone;
 
             bool result = true;

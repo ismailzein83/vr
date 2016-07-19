@@ -29,14 +29,10 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             foreach (ImportedCode code in importedCodesList)
             {
-                //TODO: remove this and reroder rules
-                if (string.IsNullOrWhiteSpace(code.ZoneName))
-                    throw new Exception("Zone Name cannot be empty");
+              
                 if(!importedZonesByZoneName.TryGetValue(code.ZoneName, out importedZone))
                 {
                     importedZone = new ImportedZone();
-                    importedZone.ImportedCodes = new List<ImportedCode>();
-                    importedZone.ImportedRates = new List<ImportedRate>();
                     importedZone.ZoneName = code.ZoneName;
                     importedZonesByZoneName.Add(code.ZoneName, importedZone);
                 }
@@ -48,7 +44,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             {
                 if (!importedZonesByZoneName.TryGetValue(rate.ZoneName, out importedZone))
                 {
-                    importedZone.ImportedRates = new List<ImportedRate>();
+                    //This case will happen if a zone only exists in imported rates list
+                    //adding it to the dictionary is for validation purpose (business rule)
+                    if (importedZone == null)
+                        importedZone = new ImportedZone();
+
                     importedZonesByZoneName.Add(rate.ZoneName, importedZone);
                 }
 

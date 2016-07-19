@@ -10,7 +10,7 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
-    public class SameCodeInSameZoneCondition : BusinessRuleCondition
+    public class ZoneHasNoCodesCondition : BusinessRuleCondition
     {
 
         public override bool ShouldValidate(IRuleTarget target)
@@ -20,23 +20,15 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            if (context.Target == null)
-                throw new ArgumentNullException("Target");
-
-            ImportedZone zone = context.Target as ImportedZone;
-
-            foreach (var importedCode in zone.ImportedCodes)
-            {
-                if (zone.ImportedCodes.Where(x => x.Code == importedCode.Code).Count() > 1)
-                    return false;
-            }
-
-            return true;
+            ImportedZone importedZone = context.Target as ImportedZone;
+            return !(importedZone.ImportedCodes.Count() == 0);
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has one or more same code",(target as ImportedZone).ZoneName);
+            ImportedZone importedZone = target as ImportedZone;
+            string zoneName = importedZone.ImportedRates.First().ZoneName;
+            return string.Format("Zone {0} has no codes", zoneName);
         }
 
     }

@@ -35,18 +35,13 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             int currencyId = this.CurrencyId.Get(context);
+            int supplierPriceListTemplateId = SupplierPriceListTemplateId.Get(context);
 
             DateTime startReading = DateTime.Now;
 
             SupplierPriceListTemplateManager supplierPriceListTemplateManager = new Business.SupplierPriceListTemplateManager();
 
-            SupplierPriceListTemplate supplierPriceListTemplate = supplierPriceListTemplateManager.GetSupplierPriceListTemplate(SupplierPriceListTemplateId.Get(context));
-
-            SupplierPriceListSettings settings = supplierPriceListTemplate.Draft;
-            if (settings == null)
-            {
-                settings = supplierPriceListTemplate.ConfigDetails;
-            }
+            SupplierPriceListSettings settings = supplierPriceListTemplateManager.GetSupplierPriceListTemplateSettings(supplierPriceListTemplateId, true);
 
             SupplierPriceListExecutionContext contextObj = new SupplierPriceListExecutionContext
             {

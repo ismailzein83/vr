@@ -10,33 +10,23 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
-    public class MissingBEDCondition : BusinessRuleCondition
+    public class MissingZonesCondition : BusinessRuleCondition
     {
 
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ImportedZone != null);
+            return (target as ImportedCode != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            if (context.Target == null)
-                throw new ArgumentNullException("Target");
-
-            ImportedZone zone = context.Target as ImportedZone;
-
-            foreach (var importedCode in zone.ImportedCodes)
-            {
-                if (importedCode.BED == DateTime.MinValue)
-                    return false;
-            }
-
-            return true;
+            ImportedCode code = context.Target as ImportedCode;
+            return !(string.IsNullOrEmpty(code.ZoneName));
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has a missing begin effective date",(target as ImportedZone).ZoneName);
+             return string.Format("Code {0} has a missing zone", (target as ImportedCode).Code);
         }
 
     }

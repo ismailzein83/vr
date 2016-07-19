@@ -7,25 +7,24 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.BusinessProcess.Entities;
-using Vanrise.Common.Business;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
-    public class SameCodeWithDifferentZonesCondition : BusinessRuleCondition
+    public class MissingBEDCondition : BusinessRuleCondition
     {
 
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ImportedCountry != null);
+            return (target as ImportedZone != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ImportedCountry country = context.Target as ImportedCountry;
+            ImportedZone zone = context.Target as ImportedZone;
 
-            foreach (var importedCode in country.ImportedCodes)
+            foreach (var importedCode in zone.ImportedCodes)
             {
-                if (country.ImportedCodes.Where(x => x.Code == importedCode.Code && x.ZoneName != importedCode.ZoneName).Count() > 0)
+                if (importedCode.BED == DateTime.MinValue)
                     return false;
             }
 
@@ -34,8 +33,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            CountryManager manager = new CountryManager();
-            return string.Format("Country {0} has same code in different zones", manager.GetCountryName((target as ImportedCountry).CountryId));
+            return string.Format("Zone {0} has a missing begin effective date",(target as ImportedZone).ZoneName);
         }
 
     }

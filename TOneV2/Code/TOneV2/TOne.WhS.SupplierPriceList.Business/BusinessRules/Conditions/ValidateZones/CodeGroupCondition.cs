@@ -18,9 +18,6 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            if (context.Target == null)
-                throw new ArgumentNullException("Target");
-
             ImportedCode code = context.Target as ImportedCode;
             return code.CodeGroup != null;
         }

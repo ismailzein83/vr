@@ -147,6 +147,7 @@
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:ZoneRatePreview))">new MemoryQueue&lt;IEnumerable&lt;TOne.WhS.SupplierPriceList.Entities.ZoneRatePreview&gt;&gt;()</mca:CSharpValue>
         </Variable.Default>
       </Variable>
+      <Variable x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)" Name="ImportedCodesRatesToValidate" />
     </Sequence.Variables>
     <twsba1:SetImportSPLContext sap2010:WorkflowViewState.IdRef="SetImportSPLContext_1" />
     <twsba1:LoadSupplierPriceListData sap2010:WorkflowViewState.IdRef="LoadSupplierPriceListData_1">
@@ -181,6 +182,25 @@
         </InArgument>
       </twsba1:LoadSupplierPriceListData.SupplierPriceListTemplateId>
     </twsba1:LoadSupplierPriceListData>
+    <vbw:CombineLists x:TypeArguments="vbe:IRuleTarget" sap2010:WorkflowViewState.IdRef="CombineLists`1_5">
+      <vbw:CombineLists.InputLists>
+        <InArgument x:TypeArguments="scg:List(sc:IEnumerable)">
+          <mca:CSharpValue x:TypeArguments="scg:List(sc:IEnumerable)">new List&lt;System.Collections.IEnumerable&gt;() { ImportedCodes, ImportedRates };</mca:CSharpValue>
+        </InArgument>
+      </vbw:CombineLists.InputLists>
+      <vbw:CombineLists.OutputList>
+        <OutArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedCodesRatesToValidate</mca:CSharpReference>
+        </OutArgument>
+      </vbw:CombineLists.OutputList>
+    </vbw:CombineLists>
+    <vbw:ExecuteRules BusinessRulesKey="ValidateCodesRates" sap2010:WorkflowViewState.IdRef="ExecuteRules_4">
+      <vbw:ExecuteRules.ImportedDataToValidate>
+        <InArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedCodesRatesToValidate</mca:CSharpValue>
+        </InArgument>
+      </vbw:ExecuteRules.ImportedDataToValidate>
+    </vbw:ExecuteRules>
     <twsba1:StructureDataByZones sap2010:WorkflowViewState.IdRef="StructureDataByZones_1">
       <twsba1:StructureDataByZones.ImportedCodes>
         <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedCode)">
@@ -210,7 +230,7 @@
         </OutArgument>
       </vbw:CombineLists.OutputList>
     </vbw:CombineLists>
-    <vbw:ExecuteRules BusinessRulesKey="ValidateCodesZones" sap2010:WorkflowViewState.IdRef="ExecuteRules_1">
+    <vbw:ExecuteRules BusinessRulesKey="ValidateZones" sap2010:WorkflowViewState.IdRef="ExecuteRules_1">
       <vbw:ExecuteRules.ImportedDataToValidate>
         <InArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
           <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedDataToValidate</mca:CSharpValue>
@@ -821,12 +841,14 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="SetImportSPLContext_1" sap:VirtualizedContainerService.HintSize="2662,22" />
       <sap2010:ViewStateData Id="LoadSupplierPriceListData_1" sap:VirtualizedContainerService.HintSize="2662,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_5" sap:VirtualizedContainerService.HintSize="2662,22" />
+      <sap2010:ViewStateData Id="ExecuteRules_4" sap:VirtualizedContainerService.HintSize="2662,22" />
       <sap2010:ViewStateData Id="StructureDataByZones_1" sap:VirtualizedContainerService.HintSize="2662,22" />
       <sap2010:ViewStateData Id="CombineLists`1_1" sap:VirtualizedContainerService.HintSize="2662,22" />
       <sap2010:ViewStateData Id="ExecuteRules_1" sap:VirtualizedContainerService.HintSize="2662,22" />
@@ -910,14 +932,14 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_7" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="2662,358" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2684,2874">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2684,2998">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="2724,2954">
+      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="2724,3078">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="ShouldExpandAll">True</x:Boolean>

@@ -77,14 +77,15 @@
   <ItemGroup>
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeEEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\RateIncreasedCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\NumericCodeCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\MissingCodesCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\MissingRatesCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\MissingBEDCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateCodesRates\MissingZonesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateZones\ZoneHasNoCodesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateZones\NumericCodeCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateZones\MissingCodesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateZones\MissingRatesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateZones\MissingBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountries\SameCodeWithDifferentZonesCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\SameZoneWithDifferentRatesCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\SameCodeInSameZoneCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\MissingZonesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateZones\SameZoneWithDifferentRatesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateZones\SameCodeInSameZoneCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ZoneEEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ZoneBEDCondition.cs" />
@@ -100,8 +101,8 @@
     <Compile Include="SupplierPriceListManager.cs" />
     <Compile Include="SupplierCountryPreviewManager.cs" />
     <Compile Include="SupplierZonePreviewManager.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\CodeGroupCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\MultipleCountryCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateZones\CodeGroupCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateZones\MultipleCountryCondition.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
