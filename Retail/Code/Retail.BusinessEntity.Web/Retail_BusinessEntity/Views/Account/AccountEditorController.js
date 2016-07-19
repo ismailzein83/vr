@@ -7,7 +7,7 @@
     function AccountEditorController($scope, Retail_BE_AccountAPIService, Retail_BE_AccountTypeAPIService, Retail_BE_AccountPartDefinitionAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService)
     {
         var isEditMode;
-
+        var statusId;
         var accountId;
         var accountEntity;
         var parentAccountId;
@@ -142,6 +142,7 @@
         {
             if (accountEntity == undefined)
                 return;
+            statusId = accountEntity.StatusId;
             $scope.scopeModel.name = accountEntity.Name;
         }
         function loadAccountTypeSelectorWithRuntime()
@@ -354,7 +355,8 @@
             var obj = {
                 AccountId: accountId,
                 Name: $scope.scopeModel.name,
-                TypeId: accountTypeSelectorAPI.getSelectedIds()
+                TypeId: accountTypeSelectorAPI.getSelectedIds(),
+                StatusId : statusId
             };
 
             obj.Settings = {};
@@ -362,7 +364,8 @@
 
             if (!isEditMode) {
                 obj.ParentAccountId = parentAccountId;
-            }
+                obj.StatusId = accountEditorRuntime.InitialStatusId;
+            } 
 
             return obj;
         }

@@ -8,6 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class AccountEditorRuntime
     {
+        public Guid InitialStatusId { get; set; }
         public List<AccountPartRuntime> Parts { get; set; }
     }
 

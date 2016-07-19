@@ -174,7 +174,19 @@ namespace Retail.BusinessEntity.Business
             var accountEditorRuntime = new AccountEditorRuntime();
 
             var accountPartDefinitionManager = new AccountPartDefinitionManager();
-            IEnumerable<AccountTypePartSettings> partSettingsList = this.GetAccountTypePartDefinitionSettingsList(accountTypeId);
+
+
+            var accountTypeManager = new AccountTypeManager();
+            AccountType accountType = accountTypeManager.GetAccountType(accountTypeId);
+            if (accountType == null)
+                throw new NullReferenceException("accountType");
+            if (accountType.Settings == null)
+                throw new NullReferenceException("accountType.Settings");
+            if (accountType.Settings.PartDefinitionSettings == null)
+                throw new NullReferenceException("accountType.Settings.PartDefinitionSettings");
+             IEnumerable<AccountTypePartSettings> partSettingsList = accountType.Settings.PartDefinitionSettings;
+
+             accountEditorRuntime.InitialStatusId = accountType.Settings.InitialStatusId; 
             var runtimeParts = new List<AccountPartRuntime>();
 
             foreach (AccountTypePartSettings partSettings in partSettingsList)
@@ -202,22 +214,24 @@ namespace Retail.BusinessEntity.Business
 
             if (runtimeParts.Count > 0)
                 accountEditorRuntime.Parts = runtimeParts;
+            AccountTypeManager manager = new AccountTypeManager();
+
 
             return accountEditorRuntime;
         }
 
-        private IEnumerable<AccountTypePartSettings> GetAccountTypePartDefinitionSettingsList(int accountTypeId)
-        {
-            var accountTypeManager = new AccountTypeManager();
-            AccountType accountType = accountTypeManager.GetAccountType(accountTypeId);
-            if (accountType == null)
-                throw new NullReferenceException("accountType");
-            if (accountType.Settings == null)
-                throw new NullReferenceException("accountType.Settings");
-            if (accountType.Settings.PartDefinitionSettings == null)
-                throw new NullReferenceException("accountType.Settings.PartDefinitionSettings");
-            return accountType.Settings.PartDefinitionSettings;
-        }
+        //private IEnumerable<AccountTypePartSettings> GetAccountTypePartDefinitionSettingsList(int accountTypeId)
+        //{
+        //    var accountTypeManager = new AccountTypeManager();
+        //    AccountType accountType = accountTypeManager.GetAccountType(accountTypeId);
+        //    if (accountType == null)
+        //        throw new NullReferenceException("accountType");
+        //    if (accountType.Settings == null)
+        //        throw new NullReferenceException("accountType.Settings");
+        //    if (accountType.Settings.PartDefinitionSettings == null)
+        //        throw new NullReferenceException("accountType.Settings.PartDefinitionSettings");
+        //    return accountType.Settings.PartDefinitionSettings;
+        //}
 
         private bool IsPartFoundOrInherited(long? accountId, int partDefinitionId)
         {

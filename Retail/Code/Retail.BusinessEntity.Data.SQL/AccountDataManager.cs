@@ -32,7 +32,7 @@ namespace Retail.BusinessEntity.Data.SQL
         {
             object accountId;
             string serializedSettings = account.Settings != null ? Vanrise.Common.Serializer.Serialize(account.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_Insert", out accountId, account.Name, account.TypeId, serializedSettings, account.ParentAccountId);
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_Insert", out accountId, account.Name, account.TypeId, serializedSettings, account.ParentAccountId, account.StatusId);
 
             if (affectedRecords > 0)
             {
@@ -51,7 +51,7 @@ namespace Retail.BusinessEntity.Data.SQL
         public bool Update(AccountToEdit account, long? parentId)
         {
             string serializedSettings = account.Settings != null ? Vanrise.Common.Serializer.Serialize(account.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_Update", account.AccountId, account.Name, account.TypeId, serializedSettings, parentId);
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_Update", account.AccountId, account.Name, account.TypeId, serializedSettings, parentId,account.StatusId);
             return (affectedRecords > 0);
         }
 

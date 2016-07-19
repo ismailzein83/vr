@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountTypeEditorController.$inject = ['$scope', 'Retail_BE_AccountTypeAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'Retail_BE_AccountPartAvailabilityOptionsEnum', 'Retail_BE_AccountPartRequiredOptionsEnum'];
+    AccountTypeEditorController.$inject = ['$scope', 'Retail_BE_AccountTypeAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'Retail_BE_AccountPartAvailabilityOptionsEnum', 'Retail_BE_AccountPartRequiredOptionsEnum','Retail_BE_EntityTypeEnum'];
 
-    function AccountTypeEditorController($scope, Retail_BE_AccountTypeAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountPartAvailabilityOptionsEnum, Retail_BE_AccountPartRequiredOptionsEnum) {
+    function AccountTypeEditorController($scope, Retail_BE_AccountTypeAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountPartAvailabilityOptionsEnum, Retail_BE_AccountPartRequiredOptionsEnum, Retail_BE_EntityTypeEnum) {
         var isEditMode;
 
         var accountTypeId;
@@ -16,6 +16,9 @@
 
         var partDefinitionSelectorAPI;
         var partDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var statusDefinitionSelectorAPI;
+        var statusDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -31,7 +34,10 @@
         function defineScope() {
             $scope.scopeModel = {};
 
-
+            $scope.scopeModel.onStatusDefinitionSelectorReady = function (api) {
+                statusDefinitionSelectorAPI = api;
+                statusDefinitionSelectorReadyDeferred.resolve();
+            }
             $scope.scopeModel.datasource = [];
 
             $scope.scopeModel.onSelectItem = function (dataItem) {
@@ -108,7 +114,7 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadAccountTypeSection, loadStaticData, loadPartDefinitionSection]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadAccountTypeSection, loadStaticData, loadPartDefinitionSection,loadStatusDefinitionSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -122,6 +128,18 @@
             else {
                 $scope.title = UtilsService.buildTitleForAddEditor('Account Type');
             }
+        }
+
+        function loadStatusDefinitionSelector() {
+                var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                statusDefinitionSelectorReadyDeferred.promise.then(function () {
+                    var statusDefinitionSelectorPayload = {
+                        filter: { EntityType: Retail_BE_EntityTypeEnum.Account.value },
+                        selectedIds: accountTypeEntity != undefined && accountTypeEntity.Settings != undefined? accountTypeEntity.Settings.InitialStatusId : undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
+                });
+                return statusDefinitionSelectorLoadDeferred.promise;
         }
 
         function loadStaticData() {
@@ -241,7 +259,8 @@
                 Settings: {
                     CanBeRootAccount: $scope.scopeModel.canBeRootAccount,
                     SupportedParentAccountTypeIds: accountTypeSelectorAPI.getSelectedIds(),
-                    PartDefinitionSettings: partDefinitionSettings
+                    PartDefinitionSettings: partDefinitionSettings,
+                    InitialStatusId:statusDefinitionSelectorAPI.getSelectedIds()
                 }
             };
             return obj;
