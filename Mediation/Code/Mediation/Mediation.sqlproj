@@ -84,6 +84,8 @@
     <Build Include="dbo\User Defined Types\BigintIDType.sql" />
     <Build Include="Security\Mediation_Generic.sql" />
     <Build Include="Security\VANRISE_development.sql" />
+    <Build Include="Mediation_Generic\Tables\CookedCDR.sql" />
+    <Build Include="Mediation_Generic\User Defined Types\CookedCDRType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Mediation.PostDeployment.sql" />
