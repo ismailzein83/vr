@@ -32,6 +32,10 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
                     AccountManager accountManager = new AccountManager();
                     var account = accountManager.UpdateStatus(this.EntityId.Get(context),this.StatusDefinitionId.Get(context));
                     break;
+                case Retail.BusinessEntity.Entities.EntityType.AccountService:
+                    AccountServiceManager accountServiceManager = new AccountServiceManager();
+                    var accountService = accountServiceManager.UpdateStatus(this.EntityId.Get(context), this.StatusDefinitionId.Get(context));
+                    break;
             }
         }
     }

@@ -13,6 +13,6 @@ namespace Retail.BusinessEntity.Data
         bool Update(AccountService accountService);
         bool AreAccountServicesUpdated(ref object updateHandle);
         List<AccountService> GetAccountServices();
-
+        bool UpdateStatus(long accountServiceId, Guid statusId);
     }
 }

@@ -382,7 +382,7 @@ namespace Retail.BusinessEntity.Business
             IEnumerable<AccountTypeInfo> accountTypeInfoEntities =
                 accountTypeManager.GetAccountTypesInfo(new AccountTypeFilter() { ParentAccountId = account.AccountId });
             ActionDefinitionManager manager = new ActionDefinitionManager();
-            IEnumerable<ActionDefinitionInfo> actionDefinitions = manager.GetActionDefinitionInfoByEntityType(EntityType.Account);
+            IEnumerable<ActionDefinitionInfo> actionDefinitions = manager.GetActionDefinitionInfoByEntityType(EntityType.Account,account.StatusId);
 
             StatusDefinitionManager statusDefinitionManager = new Business.StatusDefinitionManager();
 

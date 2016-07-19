@@ -1,6 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public enum EntityType { Account = 0, AccountService = 1 }
+    public enum EntityType {
+        [Description("Account")]
+        Account = 0,
+        [Description("Account Service")]
+        AccountService = 1 }
 }

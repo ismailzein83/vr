@@ -13,7 +13,7 @@ namespace Retail.BusinessEntity.Business
 {
     public class ActionDefinitionManager : IActionDefinitionManager
     {
-  
+
         #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<ActionDefinitionDetail> GetFilteredActionDefinitions(Vanrise.Entities.DataRetrievalInput<ActionDefinitionQuery> input)
         {
@@ -85,10 +85,19 @@ namespace Retail.BusinessEntity.Business
             return extensionConfiguration.GetExtensionConfigurations<ProvisionerDefinitionConfig>(ProvisionerDefinitionConfig.EXTENSION_TYPE);
         }
 
-        public IEnumerable<ActionDefinitionInfo> GetActionDefinitionInfoByEntityType(EntityType entityType)
+        public IEnumerable<ActionDefinitionInfo> GetActionDefinitionInfoByEntityType(EntityType entityType, Guid statusId)
         {
             Dictionary<Guid, ActionDefinition> cachedActionDefinitiones = this.GetCachedActionDefinitions();
-            Func<ActionDefinition,bool> filterExpression= (item) =>  (item.EntityType == entityType);
+            Func<ActionDefinition, bool> filterExpression = (item) =>
+            {
+                if (item.Settings.SupportedOnStatuses == null)
+                    throw new NullReferenceException("SupportedOnStatuses is null.");
+
+                if (item.EntityType == entityType && item.Settings.SupportedOnStatuses.Any(x => x.StatusDefinitionId == statusId))
+                    return true;
+
+                return false;
+            };
             return cachedActionDefinitiones.MapRecords(ActionDefinitionInfoMapper, filterExpression);
         }
 
@@ -115,7 +124,7 @@ namespace Retail.BusinessEntity.Business
         {
             ActionBPDefinitionSettings bpDefinitionSettings = GetActionBPDefinitionSettings(actionDefinitionId);
             T castedBPDefinitionSettings = bpDefinitionSettings as T;
-            if(castedBPDefinitionSettings == null)
+            if (castedBPDefinitionSettings == null)
                 throw new Exception(String.Format("bpDefinitionSettings should be of type '{0}'. it is of type '{1}'", typeof(T), bpDefinitionSettings.GetType()));
             return castedBPDefinitionSettings;
         }
@@ -153,6 +162,7 @@ namespace Retail.BusinessEntity.Business
             return new ActionDefinitionDetail()
             {
                 Entity = actionDefinition,
+                EntityTypeDescription = Utilities.GetEnumDescription<EntityType>(actionDefinition.EntityType)
             };
         }
         private ActionDefinitionInfo ActionDefinitionInfoMapper(ActionDefinition actionDefinition)

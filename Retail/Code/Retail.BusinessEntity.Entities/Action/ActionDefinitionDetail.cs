@@ -9,5 +9,6 @@ namespace Retail.BusinessEntity.Entities
     public class ActionDefinitionDetail
     {
         public ActionDefinition Entity { get; set; }
+        public string EntityTypeDescription { get; set; }
     }
 }

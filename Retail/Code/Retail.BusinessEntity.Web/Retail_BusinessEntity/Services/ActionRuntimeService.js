@@ -6,12 +6,12 @@
 
     function ActionRuntimeService(VRModalService) {
 
-        function openActionRuntime(accountId, actionDefinitionId, reloadMethod) {
+        function openActionRuntime(entityId, actionDefinitionId, reloadMethod) {
             var settings = {};
             settings.onScopeReady = function (modalScope) {
             };
             var parameters = {
-                accountId: accountId,
+                entityId: entityId,
                 actionDefinitionId: actionDefinitionId,
                 reloadMethod: reloadMethod
             };

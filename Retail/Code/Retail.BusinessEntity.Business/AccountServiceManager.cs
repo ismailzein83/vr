@@ -47,6 +47,16 @@ namespace Retail.BusinessEntity.Business
             else
                 return null;
         }
+        public bool UpdateStatus(long accountServiceId, Guid statusId)
+        {
+            IAccountServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountServiceDataManager>();
+            bool updateStatus = dataManager.UpdateStatus(accountServiceId, statusId);
+            if (updateStatus)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            }
+            return updateStatus;
+        }
         public InsertOperationOutput<AccountServiceDetail> AddAccountService(AccountService AccountService)
         {
             InsertOperationOutput<AccountServiceDetail> insertOperationOutput = new InsertOperationOutput<AccountServiceDetail>();
@@ -111,7 +121,7 @@ namespace Retail.BusinessEntity.Business
             StatusDefinitionManager statusDefinitionManager = new Business.StatusDefinitionManager();
         
             ActionDefinitionManager manager = new ActionDefinitionManager();
-            IEnumerable<ActionDefinitionInfo> actionDefinitions = manager.GetActionDefinitionInfoByEntityType(EntityType.AccountService);
+            IEnumerable<ActionDefinitionInfo> actionDefinitions = manager.GetActionDefinitionInfoByEntityType(EntityType.AccountService,accountService.StatusId);
              var statusDesciption = statusDefinitionManager.GetStatusDefinitionName(accountService.StatusId);
 
 

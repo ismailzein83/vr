@@ -55,6 +55,12 @@ namespace Retail.BusinessEntity.Data.SQL
         {
             return GetItemsSP("Retail.sp_AccountService_GetAll", AccountServiceMapper);
         }
+
+        public bool UpdateStatus(long accountServiceId, Guid statusId)
+        {
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_AccountService_UpdateStatusID", accountServiceId, statusId);
+            return (affectedRecords > 0);
+        }
         #endregion
 
         #region Private Methods

@@ -8,9 +8,7 @@
 
         var actionDefinitionId;
         var actionDefinitionEntity;
-
-        var accountEntity;
-        var accountId;
+        var entityId;
 
         var directiveAPI;
         var directiveReadyDeferred;
@@ -24,7 +22,7 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
                 actionDefinitionId = parameters.actionDefinitionId;
-                accountId = parameters.accountId;
+                entityId = parameters.entityId;
                 reloadMethod = parameters.reloadMethod;
             }
         }
@@ -45,12 +43,11 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
             };
 
-
             $scope.scopeModel.start = function () {
                 var inputArguments = {
                     $type: "Retail.BusinessEntity.Entities.ActionBPInputArgument, Retail.BusinessEntity.Entities",
                     ActionDefinitionId: actionDefinitionEntity.ActionDefinitionId,
-                    EntityId: accountId,
+                    EntityId: entityId,
                     ActionBPSettings: directiveAPI.getData(),
                 };
                 var input = {
@@ -81,7 +78,7 @@
         function load() {
             $scope.scopeModel.isLoading = true;
 
-            UtilsService.waitMultipleAsyncOperations([getActionDefinition, getAccount]).then(function () {
+            UtilsService.waitMultipleAsyncOperations([getActionDefinition]).then(function () {
                 loadAllControls().finally(function () {
                 });
             }).catch(function (error) {
@@ -95,11 +92,7 @@
                 actionDefinitionEntity = response;
             });
         }
-        function getAccount() {
-            return Retail_BE_AccountAPIService.GetAccount(accountId).then(function (response) {
-                accountEntity = response;
-            });
-        }
+
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadDirective, loadActionBPDefinitionExtensionConfigs]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -110,8 +103,7 @@
 
         function setTitle() {
             var actionDefinitionName = (actionDefinitionEntity != undefined) ? actionDefinitionEntity.Name : undefined;
-            var accountName = (accountEntity != undefined)? accountEntity.Name: undefined;
-            $scope.title = actionDefinitionName + " : " + accountName;
+            $scope.title = actionDefinitionName;
         }
 
         function loadActionBPDefinitionExtensionConfigs() {
@@ -141,8 +133,6 @@
             }
 
         }
-
-
 
     }
 
