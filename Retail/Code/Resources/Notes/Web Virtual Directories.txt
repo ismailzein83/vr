@@ -17,3 +17,4 @@ WhS_BusinessEntity		C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Web\WhS_Bu
 Retail_SMS				C:\TFS\Retail\Code\Retail.SMS.Web\Retail_SMS
 Retail_Data				C:\TFS\Retail\Code\Retail.Data.Web\Retail_Data
 BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
+VR_AccountBalance		C:\TFS\Vanrise\Code\Vanrise.AccountBalance.Web\VR_AccountBalance
