@@ -98,13 +98,7 @@ function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIServic
                             function () {
                                 $scope.scopeModel.isloadingGrid = true;
                                 return Retail_BE_AccountServiceAPIService.GetAccountServiceDetail(dataItem.Entity.AccountServiceId).then(function (response) {
-                                    for (var i = 0; i < $scope.scopeModel.accountServices.length; i++) {
-                                        var account = $scope.scopeModel.accountServices[i];
-                                        if (account.Entity.AccountServiceId == response.Entity.AccountServiceId) {
-                                            $scope.scopeModel.accountServices[i] = response;
-                                            break;
-                                        }
-                                    }
+                                    gridAPI.itemUpdated(response);
                                     $scope.scopeModel.isloadingGrid = false;
                                 });
                             });

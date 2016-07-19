@@ -79,16 +79,8 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                             {
                                 $scope.scopeModel.isloadingGrid = true;
                                 return Retail_BE_AccountAPIService.GetAccountDetail(dataItem.Entity.AccountId).then(function (response) {
-                                    for (var i = 0; i < $scope.scopeModel.accounts.length; i++)
-                                    {
-                                        var account = $scope.scopeModel.accounts[i];
-                                        if(account.Entity.AccountId == response.Entity.AccountId)
-                                        {
-                                            drillDownManager.setDrillDownExtensionObject(response);
-                                            $scope.scopeModel.accounts[i] = response;
-                                            break;
-                                        }
-                                    }
+                                    drillDownManager.setDrillDownExtensionObject(response);
+                                    gridAPI.itemUpdated(response);
                                     $scope.scopeModel.isloadingGrid = false;
                                 });
                             });
