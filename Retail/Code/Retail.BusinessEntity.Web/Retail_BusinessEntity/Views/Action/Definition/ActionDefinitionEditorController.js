@@ -15,9 +15,15 @@
 
         var directiveAPI;
         var directiveReadyDeferred;
+        var actionBPDefinitionSelectedDefferred;
 
         var statusDefinitionSelectorAPI;
         var statusDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var statusDefinitionSelectedDefferred;
+
+        var entityTypeAPI;
+        var entityTypeAPISelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
 
         loadParameters();
         defineScope();
@@ -36,6 +42,11 @@
 
             $scope.scopeModel.extensionConfigs = [];
 
+            $scope.scopeModel.onEntityTypeSelectorReady = function (api) {
+                entityTypeAPI = api;
+                entityTypeAPISelectorReadyDeferred.resolve();
+            }
+
             $scope.scopeModel.onStatusDefinitionSelectorReady = function(api)
             {
                 statusDefinitionSelectorAPI = api;
@@ -53,8 +64,6 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
             };
 
-            $scope.scopeModel.entityTypes = UtilsService.getArrayEnum(Retail_BE_EntityTypeEnum);
-
             $scope.scopeModel.onServiceTypeSelectorReady = function (api) {
                 serviceTypeSelectorAPI = api;
                 var setLoader = function (value) {
@@ -71,6 +80,29 @@
                     return true;
                 }
                 return false;
+            }
+
+            $scope.scopeModel.onEntityTypeSelectionChanged = function () {
+
+                var selectedEntityType = entityTypeAPI.getSelectedIds();
+                if (selectedEntityType != undefined)
+                {
+                    var setStatusDefinitionLoader = function (value) {
+                        $scope.scopeModel.isLoadingStatusDefinitionDirective = value;
+                    };
+                    var payload = { filter: { EntityType: selectedEntityType } }
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, statusDefinitionSelectorAPI, payload, setStatusDefinitionLoader, statusDefinitionSelectedDefferred);
+
+                    if (directiveAPI != undefined)
+                    {
+                        var setActionBPDefinitionLoader = function (value) {
+                            $scope.scopeModel.isLoadingActionBPDefinitionDirective = value;
+                        };
+                        var actionBPDefinitionPayload = { entityType: selectedEntityType }
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, actionBPDefinitionPayload, setActionBPDefinitionLoader, actionBPDefinitionSelectedDefferred);
+                    }
+                  
+                }
             }
 
             $scope.scopeModel.save = function () {
@@ -107,7 +139,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadServiceTypeSelector, loadActionBPDefinitionExtensionConfigs, loadDirective, loadStatusDefinitionSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadServiceTypeSelector, loadActionBPDefinitionExtensionConfigs, loadDirective, loadStatusDefinitionSelector, loadEntityTypeSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -134,16 +166,24 @@
         }
 
         function loadStatusDefinitionSelector() {
-            var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-            statusDefinitionSelectorReadyDeferred.promise.then(function () {
-                var statusDefinitionSelectorPayload = {
-                    selectedIds: convertSupportedOnStatusesFromObj()
-                };
-                VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
-            });
-            return statusDefinitionSelectorLoadDeferred.promise;
+            if (actionDefinitionEntity)
+            {
+                statusDefinitionSelectedDefferred = UtilsService.createPromiseDeferred();
+                var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                statusDefinitionSelectorReadyDeferred.promise.then(function () {
+                    statusDefinitionSelectorReadyDeferred = undefined;
+                    var statusDefinitionSelectorPayload = {
+                        filter:  { EntityType: actionDefinitionEntity.EntityType },
+                        selectedIds: convertSupportedOnStatusesFromObj()
+                    };
+                    VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
+                });
+                return statusDefinitionSelectorLoadDeferred.promise.then(function () {
+                    statusDefinitionSelectedDefferred = undefined;
+                });
+            }
+               
         }
-
 
         function setTitle() {
             if (isEditMode) {
@@ -155,11 +195,25 @@
             }
         }
 
+        function loadEntityTypeSelector() {
+            var entityTypeLoadDeferred = UtilsService.createPromiseDeferred();
+            entityTypeAPISelectorReadyDeferred.promise.then(function () {
+                var entityTypePayload;
+                if (isEditMode) {
+                    entityTypePayload = {
+                      
+                        selectedIds: actionDefinitionEntity.EntityType
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(entityTypeAPI, entityTypePayload, entityTypeLoadDeferred);
+            });
+            return entityTypeLoadDeferred.promise;
+        }
+
         function loadStaticData() {
             if (actionDefinitionEntity == undefined)
                 return;
             $scope.scopeModel.name = actionDefinitionEntity.Name;
-            $scope.scopeModel.selectedEntityType = UtilsService.getItemByVal($scope.scopeModel.entityTypes, actionDefinitionEntity.EntityType, "value");
             if (actionDefinitionEntity.Settings != undefined)
             {
                 $scope.scopeModel.description = actionDefinitionEntity.Settings.Description;
@@ -188,7 +242,8 @@
                 directiveReadyDeferred.promise.then(function () {
                     directiveReadyDeferred = undefined;
                     var directivePayload = {
-                        bpDefinitionSettings: actionDefinitionEntity.Settings.BPDefinitionSettings
+                        bpDefinitionSettings: actionDefinitionEntity.Settings.BPDefinitionSettings,
+                        entityType: entityTypeAPI.getSelectedIds()
                     };
                     VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                 });
@@ -249,6 +304,7 @@
             }
             return supportedOnStatuses;
         }
+
         function convertSupportedOnStatusesFromObj() {
             var statusDefinitionIds = [];
             if (actionDefinitionEntity != undefined && actionDefinitionEntity.Settings != undefined && actionDefinitionEntity.Settings.SupportedOnStatuses != undefined)
@@ -270,7 +326,7 @@
             var obj = {
                 ActionDefinitionId: actionDefinitionId,
                 Name: $scope.scopeModel.name,
-                EntityType: $scope.scopeModel.selectedEntityType.value,
+                EntityType: entityTypeAPI.getSelectedIds(),
                 Settings: {
                     Description: $scope.scopeModel.description,
                     

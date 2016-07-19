@@ -8,5 +8,6 @@ namespace Retail.BusinessEntity.Entities
 {
     public class StatusDefinitionFilter
     {
+        public EntityType? EntityType { get; set; }
     }
 }

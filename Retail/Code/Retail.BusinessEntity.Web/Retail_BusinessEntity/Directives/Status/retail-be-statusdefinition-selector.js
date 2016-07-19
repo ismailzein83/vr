@@ -54,7 +54,7 @@ app.directive('retailBeStatusdefinitionSelector', ['Retail_BE_StatusDefinitionAP
             var api = {};
 
             api.load = function (payload) {
-                selectorAPI.clearDataSource();
+              
 
                 var selectedIds;
                 var filter;
@@ -65,6 +65,7 @@ app.directive('retailBeStatusdefinitionSelector', ['Retail_BE_StatusDefinitionAP
                 }
 
                 return Retail_BE_StatusDefinitionAPIService.GetStatusDefinitionsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                    selectorAPI.clearDataSource();
                     if (response != null) {
                         for (var i = 0; i < response.length; i++) {
                             ctrl.datasource.push(response[i]);

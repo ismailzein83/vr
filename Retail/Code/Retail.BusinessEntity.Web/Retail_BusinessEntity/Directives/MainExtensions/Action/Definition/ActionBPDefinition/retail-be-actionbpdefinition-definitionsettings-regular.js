@@ -52,11 +52,25 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined) {
-                        mainPayload = payload;
-                    }
                     var promises = [];
 
+                    if (payload != undefined) {
+                        mainPayload = payload;
+                        if(payload.entityType !=undefined)
+                        {
+                            var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                            statusDefinitionSelectorReadyDeferred.promise.then(function () {
+                                var statusDefinitionSelectorPayload = {
+                                    selectedIds: payload != undefined && payload.bpDefinitionSettings != undefined ? payload.bpDefinitionSettings.NewStatusDefinitionId : undefined,
+                                    filter:  { EntityType: payload.entityType }
+                                };
+                                VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
+                            });
+                            promises.push(statusDefinitionSelectorLoadDeferred.promise);
+
+                        }
+                    }
+               
                     var provisionerdefinitionSettingLoadDeferred = UtilsService.createPromiseDeferred();
 
                     provisionerdefinitionSettingReadyDeferred.promise.then(function () {
@@ -64,15 +78,7 @@
                         VRUIUtilsService.callDirectiveLoad(provisionerdefinitionSettingAPI, definitionSettingPayload, provisionerdefinitionSettingLoadDeferred);
                     });
                     promises.push(provisionerdefinitionSettingLoadDeferred.promise);
-
-                    var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                    statusDefinitionSelectorReadyDeferred.promise.then(function () {
-                        var statusDefinitionSelectorPayload = {
-                            selectedIds:  payload != undefined && payload.bpDefinitionSettings != undefined ?payload.bpDefinitionSettings.NewStatusDefinitionId:undefined
-                        };
-                        VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
-                    });
-                    promises.push(statusDefinitionSelectorLoadDeferred.promise);
+                    
                     return UtilsService.waitMultiplePromises(promises);
 
                 };
