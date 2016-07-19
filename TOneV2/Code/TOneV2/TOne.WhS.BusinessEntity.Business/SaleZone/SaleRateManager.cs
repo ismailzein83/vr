@@ -117,7 +117,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public long ReserveIdRange(int numberOfIds)
         {
             long startingId;
-            IDManager.Instance.ReserveIDRange(this.GetType(), numberOfIds, out startingId);
+            IDManager.Instance.ReserveIDRange(GetSaleRateType(), numberOfIds, out startingId);
             return startingId;
         }
 

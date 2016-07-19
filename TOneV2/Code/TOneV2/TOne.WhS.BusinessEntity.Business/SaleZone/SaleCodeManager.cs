@@ -40,7 +40,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public long ReserveIDRange(int numberOfIDs)
         {
             long startingId;
-            IDManager.Instance.ReserveIDRange(this.GetType(), numberOfIDs, out startingId);
+            IDManager.Instance.ReserveIDRange(GetSaleCodeType(), numberOfIDs, out startingId);
             return startingId;
         }
         public List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn)
