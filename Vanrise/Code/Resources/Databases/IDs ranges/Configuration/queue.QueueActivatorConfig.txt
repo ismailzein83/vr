@@ -1,1 +1,2 @@
-﻿Generic			1 to 500
+﻿Generic			1	to 500
+Mediation		501 to 1000
