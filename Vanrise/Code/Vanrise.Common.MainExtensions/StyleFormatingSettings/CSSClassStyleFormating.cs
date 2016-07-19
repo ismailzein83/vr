@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.Common.Data.SQL
+namespace Vanrise.Common.MainExtensions.StyleFormatingSettings
 {
-    public class ColorDefinitionDataManager
+    public class CSSClassStyleFormating : Entities.StyleFormatingSettings
     {
     }
 }

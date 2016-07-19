@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Vanrise.Common.Web.Controllers
 {
-    public class ColorDefinitionController
+    public class StyleDefinitionController
     {
     }
 }

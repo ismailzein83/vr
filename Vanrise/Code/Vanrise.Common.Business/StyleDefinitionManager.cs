@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Common.Business
 {
-    public class ColorDefinitionManager
+    public class StyleDefinitionManager
     {
     }
 }

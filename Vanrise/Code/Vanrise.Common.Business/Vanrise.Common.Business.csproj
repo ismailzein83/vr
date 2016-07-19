@@ -65,7 +65,7 @@
     <Compile Include="BigData\BigDataWCFService.cs" />
     <Compile Include="BigData\IBigDataRequest.cs" />
     <Compile Include="CityManager.cs" />
-    <Compile Include="ColorDefinitionManager.cs" />
+    <Compile Include="StyleDefinitionManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Country\CountryManager.cs" />
     <Compile Include="Country\SourceCountrySynchronizer.cs" />
