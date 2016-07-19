@@ -38,11 +38,23 @@ namespace Vanrise.Common.Business
                 return value;
             else
             {
-                var fromExchangeRate = GetEffectiveExchangeRate(fromCurrencyId, effectiveOn);
+                CurrencyExchangeRate fromExchangeRate;
+                CurrencyExchangeRate toExchangeRate;
+
+                if (fromCurrencyId == new CurrencyManager().GetSystemCurrencyId())
+                    fromExchangeRate = new CurrencyExchangeRate() { Rate = 1 };
+                else
+                    fromExchangeRate = GetEffectiveExchangeRate(fromCurrencyId, effectiveOn);
+
                 if (fromExchangeRate == null)
                     throw new NullReferenceException(string.Format("fromExchangeRate: currency Id:{0}, Effective On: {1}", fromCurrencyId, effectiveOn.ToString()));
 
-                var toExchangeRate = GetEffectiveExchangeRate(toCurrencyId, effectiveOn);
+
+                if (toCurrencyId == new CurrencyManager().GetSystemCurrencyId())
+                    toExchangeRate = new CurrencyExchangeRate() { Rate = 1 };
+                else
+                    toExchangeRate = GetEffectiveExchangeRate(toCurrencyId, effectiveOn);
+
                 if (toExchangeRate == null)
                     throw new NullReferenceException(string.Format("toExchangeRate: currency Id:{0}, Effective On: {1}", toCurrencyId, effectiveOn.ToString()));
 
