@@ -17,7 +17,7 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(17001,'Mediation Definitions', 'Mediation Definitions', '#/view/Mediation_Generic/Views/MediationDefinition/MediationDefinitionManagement', 3, 'Mediation_Generic/MediationSettingDefinition/GetFilteredMediationSettingDefinitions', NULL, NULL, NULL, 0, 2)
+(17001,'Mediation Definitions', 'Mediation Definitions', '#/view/Mediation_Generic/Views/MediationDefinition/MediationDefinitionManagement', 3, 'Mediation_Generic/MediationSettingDefinition/GetFilteredMediationSettingDefinitions', NULL, NULL, NULL, 0, 200)
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
@@ -141,3 +141,24 @@ when not matched by target then
 	insert([ID],[Name],[Title],[Details])
 	values(s.[ID],s.[Name],s.[Title],s.[Details]);
 set identity_insert [genericdata].[DataTransformationDefinition] off;
+
+--[queue].[QueueActivatorConfig]--------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [queue].[QueueActivatorConfig] on;
+;with cte_data([ID],[Name],[Details])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(501,'Mediation Staging Records Queue Activator', '{ "QueueActivatorConfigId": "501" , "Name": " Mediation Staging Records Queue Activator" ,"Title" : " Mediation Staging Records Queue Activator", "Editor" :"mediation-generic-queueactivator-storestagingrecords"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Details]))
+merge   [queue].[QueueActivatorConfig] as t
+using     cte_data as s
+on     1=1 and t.[ID] = s.[ID]
+when matched then
+    update set
+    [Name] = s.[Name],[Details] = s.[Details]
+when not matched by target then
+    insert([ID],[Name],[Details])
+    values(s.[ID],s.[Name],s.[Details]);
+set identity_insert [queue].[QueueActivatorConfig] off;
