@@ -371,6 +371,7 @@
     <None Include="Analytic.PostDeployment.sql" />
     <None Include="CloudPortal.PostDeployment.sql" />
     <None Include="Retail.PostDeployment.sql" />
+    <None Include="Mediation.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
