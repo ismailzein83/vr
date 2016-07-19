@@ -37,7 +37,7 @@
 
                 </vr-tab>
 
-                <vr-tab header="'Parsed Record Type Identification '">
+                <vr-tab header="'Parsed Record Settings'">
                     <vr-row removeline>
 
                         <vr-columns width="1/4row" vr-loader="scopeModal.isLoadingParsedSessionID">
@@ -52,11 +52,8 @@
 
                         <vr-columns width="1/4row" vr-loader="scopeModal.isLoadingParsedTimeField">
 
-                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModal.onParsedDataRecordTimeFieldSelectorReady"
-                                                                          selectedvalues="scopeModal.selectedParsedDataRecordTypeTimeField"
-                                                                          isrequired="true"
-                                                                          label="Time Field"
-                                                                          hideremoveicon>
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModal.onParsedDataRecordTimeFieldSelectorReady" selectedvalues="scopeModal.selectedParsedDataRecordTypeTimeField" 
+                              label="Time Field" hideremoveicon>
                             </vr-genericdata-datarecordtypefields-selector>
                         </vr-columns>
 
@@ -93,7 +90,7 @@
                     </vr-row>
                 </vr-tab>
 
-                <vr-tab header="'Parsed to Cooked Transformation'">
+                <vr-tab header="'Parsed to Cooked'">
 
                     <vr-row>
 
@@ -135,7 +132,7 @@
 
                 </vr-tab>
 
-                <vr-tab header="'Cooked CDR Data Storage'">
+                <vr-tab header="'Output Data Storage'">
 
                     <vr-columns width="1/3row">
                         <vr-genericdata-datarecordstorage-selector on-ready="scopeModal.onDataRecordStorageSelectorReady" isrequired="true" selectedvalues="scopeModal.selectedDataRecordStorages">
@@ -143,8 +140,8 @@
                     </vr-columns>
                 </vr-tab>
 
-                <vr-tab ng-show="false" header="'Bad CDR Identification'">
-
+                <vr-tab ng-show="false" header="'Bad Record Settings'">
+                    <div><p>Under Construction</p></div>
                 </vr-tab>
 
             </vr-tabs>

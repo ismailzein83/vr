@@ -61,5 +61,31 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="Mediation_Generic\" />
+    <Folder Include="Mediation_Generic\Tables\" />
+    <Folder Include="Mediation_Generic\Stored Procedures\" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\User Defined Types\" />
+    <Folder Include="Mediation_Generic\User Defined Types\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Mediation_Generic\Tables\MediationRecord.sql" />
+    <Build Include="Mediation_Generic\Tables\MediationDefinition.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_DeleteBySessionIds.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_GetByStatus.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_GetByIds.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_GetAll.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationDefinition_Update.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationDefinition_Insert.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationDefinition_GetAll.sql" />
+    <Build Include="dbo\User Defined Types\StringIDType.sql" />
+    <Build Include="dbo\User Defined Types\IntIDType.sql" />
+    <Build Include="dbo\User Defined Types\BigintIDType.sql" />
+    <Build Include="Security\Mediation_Generic.sql" />
+    <Build Include="Security\VANRISE_development.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Mediation.PostDeployment.sql" />
   </ItemGroup>
 </Project>

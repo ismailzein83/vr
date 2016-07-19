@@ -3,12 +3,12 @@
 Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
 
  - Add the following virtual directories under Client > Modules folder:
-Common						C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
-Security					C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
+Common					C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
+Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
 BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
 Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
 Queueing				C:\TFS\BusinessProcess\Code\Vanrise.Queueing.Web\Queueing
 VR_Rules				C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules
 Integration				C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration
 VR_GenericData			C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
-Mediation_Generic			C:\TFS\Mediation\Code\Mediation.Generic.Web\Mediation_Generic
+Mediation_Generic		C:\TFS\Mediation\Code\Mediation.Generic.Web\Mediation_Generic
