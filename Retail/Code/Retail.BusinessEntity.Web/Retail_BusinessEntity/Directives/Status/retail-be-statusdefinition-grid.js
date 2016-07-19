@@ -14,7 +14,7 @@ app.directive('retailBeStatusdefinitionGrid', ['Retail_BE_StatusDefinitionAPISer
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Status/Templates/StatusDefinitionTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Status/Templates/StatusDefinitionGridTemplate.html'
         };
 
         function RetailBeStatusDefinitionGrid($scope, ctrl, $attrs) {

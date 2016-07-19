@@ -31,7 +31,8 @@ namespace Retail.BusinessEntity.Business
         public IDataRetrievalResult<StatusDefinitionDetail> GetFilteredStatusDefinitions(DataRetrievalInput<StatusDefinitionQuery> input)
         {
             var allStatusDefinitions = GetCachedStatusDefinitions();
-            Func<StatusDefinition, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            Func<StatusDefinition, bool> filterExpression = (x) => ((input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower())) &&
+                                                                    (input.Query.EntityTypes == null || input.Query.EntityTypes.Contains(x.EntityType)));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allStatusDefinitions.ToBigResult(input, filterExpression, StatusDefinitionDetailMapper));
         }
 
@@ -130,7 +131,8 @@ namespace Retail.BusinessEntity.Business
         {
             StatusDefinitionDetail satatusDefinitionDetail = new StatusDefinitionDetail()
             {
-                Entity = statusDefinition
+                Entity = statusDefinition,
+                EntityTypeDescription = Utilities.GetEnumDescription(statusDefinition.EntityType)
             };
             return satatusDefinitionDetail;
         }

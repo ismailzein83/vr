@@ -69,7 +69,6 @@ app.directive('retailBeEntitytypeSelector', ['Retail_BE_StatusDefinitionAPIServi
                     if (selectedIds != undefined) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
                     }
-
                 };
 
                 api.getSelectedIds = function () {

@@ -11,10 +11,13 @@
         var statusDefinitionId;
         var statusDefinitionEntity;
 
+        var entityTypeAPI;
+        var entityTypeAPISelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
         load();
+        //loadEntityTypeSelector();
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
@@ -25,6 +28,7 @@
 
             isEditMode = (statusDefinitionId != undefined);
         }
+
         function defineScope() {
             $scope.scopeModel = {};
 
@@ -39,7 +43,13 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
+
+            $scope.scopeModel.onEntityTypeSelectorReady = function (api) {
+                entityTypeAPI = api;
+                entityTypeAPISelectorReadyDeferred.resolve();
+            }
         }
+
         function load() {
             $scope.scopeModel.isLoading = true;
 
@@ -56,13 +66,16 @@
             }
         }
 
+
+
         function GetStatusDefinition() {
             return Retail_BE_StatusDefinitionAPIService.GetStatusDefinition(statusDefinitionId).then(function (response) {
                 statusDefinitionEntity = response;
             });
         }
+
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadEntityTypeSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -74,13 +87,26 @@
                 $scope.title = UtilsService.buildTitleForUpdateEditor(statusDefinitionName, 'StatusDefinition');
             }
             else {
-                $scope.title = UtilsService.buildTitleForAddEditor('Switch');
+                $scope.title = UtilsService.buildTitleForAddEditor('StatusDefinition');
             }
         }
         function loadStaticData() {
             if (statusDefinitionEntity == undefined)
                 return;
             $scope.scopeModel.name = statusDefinitionEntity.Name;
+        }
+        function loadEntityTypeSelector() {
+            var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            entityTypeAPISelectorReadyDeferred.promise.then(function () {
+                var statusDefinitionSelectorPayload = null;
+                if (isEditMode) {
+                    statusDefinitionSelectorPayload = {
+                        selectedIds: statusDefinitionEntity.EntityType
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(entityTypeAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
+            });
+            return statusDefinitionSelectorLoadDeferred.promise;
         }
 
         function insert() {
@@ -112,6 +138,7 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
+
         function buildSwitchObjFromScope() {
             //var settings = settingsDirectiveAPI.getData();
             //settings.Description = $scope.scopeModel.description;
@@ -121,6 +148,7 @@
                 StatusDefinitionId: statusDefinitionEntity != undefined ? statusDefinitionEntity.StatusDefinitionId : undefined,
                 Name: $scope.scopeModel.name,
                 //Settings: settings
+                EntityType: entityTypeAPI.getSelectedIds()
             };
         }
     }

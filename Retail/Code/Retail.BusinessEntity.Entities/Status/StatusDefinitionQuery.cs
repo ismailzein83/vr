@@ -9,5 +9,7 @@ namespace Retail.BusinessEntity.Entities
     public class StatusDefinitionQuery
     {
         public string Name { get; set; }
+
+        public List<EntityType> EntityTypes { get; set; }
     }
 }
