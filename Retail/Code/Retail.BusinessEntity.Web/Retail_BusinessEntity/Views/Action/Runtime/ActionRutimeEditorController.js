@@ -13,7 +13,7 @@
         var directiveAPI;
         var directiveReadyDeferred;
 
-        var reloadMethod;
+        var onActionExecuted;
         loadParameters();
         defineScope();
         load();
@@ -23,7 +23,7 @@
             if (parameters != undefined) {
                 actionDefinitionId = parameters.actionDefinitionId;
                 entityId = parameters.entityId;
-                reloadMethod = parameters.reloadMethod;
+                onActionExecuted = parameters.onActionExecuted;
             }
         }
 
@@ -57,9 +57,9 @@
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
                         var context = {
                             onClose: function () {
-                                if(reloadMethod !=undefined && typeof(reloadMethod) == 'function')
+                                if (onActionExecuted != undefined && typeof (onActionExecuted) == 'function')
                                 {
-                                   return reloadMethod();
+                                    return onActionExecuted();
                                 }
                             }
                         }

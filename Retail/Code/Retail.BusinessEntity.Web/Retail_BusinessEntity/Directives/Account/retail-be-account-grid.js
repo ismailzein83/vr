@@ -77,6 +77,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                         return Retail_BE_ActionRuntimeService.openActionRuntime(dataItem.Entity.AccountId, actionDefinition.ActionDefinitionId,
                             function()
                             {
+                                $scope.scopeModel.isloadingGrid = true;
                                 return Retail_BE_AccountAPIService.GetAccountDetail(dataItem.Entity.AccountId).then(function (response) {
                                     for (var i = 0; i < $scope.scopeModel.accounts.length; i++)
                                     {
@@ -84,9 +85,11 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                                         if(account.Entity.AccountId == response.Entity.AccountId)
                                         {
                                             drillDownManager.setDrillDownExtensionObject(response);
-                                            $scope.scopeModel.accounts[i] = response
+                                            $scope.scopeModel.accounts[i] = response;
+                                            break;
                                         }
                                     }
+                                    $scope.scopeModel.isloadingGrid = false;
                                 });
                             });
                     }

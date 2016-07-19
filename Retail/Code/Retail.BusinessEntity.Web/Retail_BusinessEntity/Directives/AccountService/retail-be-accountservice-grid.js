@@ -96,13 +96,16 @@ function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIServic
                     clicked: function (dataItem) {
                         return Retail_BE_ActionRuntimeService.openActionRuntime(dataItem.Entity.AccountServiceId, actionDefinition.ActionDefinitionId,
                             function () {
+                                $scope.scopeModel.isloadingGrid = true;
                                 return Retail_BE_AccountServiceAPIService.GetAccountServiceDetail(dataItem.Entity.AccountServiceId).then(function (response) {
                                     for (var i = 0; i < $scope.scopeModel.accountServices.length; i++) {
                                         var account = $scope.scopeModel.accountServices[i];
                                         if (account.Entity.AccountServiceId == response.Entity.AccountServiceId) {
-                                            $scope.scopeModel.accountServices[i] = response
+                                            $scope.scopeModel.accountServices[i] = response;
+                                            break;
                                         }
                                     }
+                                    $scope.scopeModel.isloadingGrid = false;
                                 });
                             });
                     }

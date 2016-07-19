@@ -1,12 +1,14 @@
-﻿<vr-datagrid datasource="scopeModel.accountServices"
-             dataretrievalfunction="scopeModel.dataRetrievalFunction"
-             pagingtype="'PagingOnScroll'"
-             on-ready="scopeModel.onGridReady"
-             menuactions="scopeModel.gridMenuActions"
-             idfield="Entity.AccountServiceId">
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.AccountServiceId'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Service Type'" field="'ServiceTypeTitle'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Status'" field="'StatusDesciption'" getcolor="scopeModel.getStatusColor"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Charging Policy'" field="'ServiceChargingPolicyName'"></vr-datagridcolumn>
+﻿<span vr-loader="scopeModel.isloadingGrid">
+    <vr-datagrid datasource="scopeModel.accountServices"
+                 dataretrievalfunction="scopeModel.dataRetrievalFunction"
+                 pagingtype="'PagingOnScroll'"
+                 on-ready="scopeModel.onGridReady"
+                 menuactions="scopeModel.gridMenuActions"
+                 idfield="Entity.AccountServiceId">
+        <vr-datagridcolumn headertext="'ID'" field="'Entity.AccountServiceId'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Service Type'" field="'ServiceTypeTitle'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Status'" field="'StatusDesciption'" getcolor="scopeModel.getStatusColor"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Charging Policy'" field="'ServiceChargingPolicyName'"></vr-datagridcolumn>
 
-</vr-datagrid>
+    </vr-datagrid>
+</span>
