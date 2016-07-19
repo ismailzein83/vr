@@ -220,6 +220,8 @@
     <Content Include="Common\Directives\RateType\vr-common-ratetype-selector.js" />
     <Content Include="Common\Directives\Settings\Templates\SettingsGridTemplate.html" />
     <Content Include="Common\Directives\Settings\vr-common-settings-grid.js" />
+    <Content Include="Common\Directives\Style\Templates\StyleDefinitionGridTemplate.html" />
+    <Content Include="Common\Directives\Style\vr-common-styledefinition-grid.js" />
     <Content Include="Common\ModuleInitialization.js" />
     <Content Include="Common\Services\APIServices\CityAPIService.js" />
     <Content Include="Common\Services\APIServices\SettingsAPIService.js" />
@@ -233,6 +235,7 @@
     <Content Include="Common\Services\APIServices\DataRecordFieldAPIService.js" />
     <Content Include="Common\Services\APIServices\DataRecordTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\RateTypeAPIService.js" />
+    <Content Include="Common\Services\APIServices\StyleDefinitionAPIService.js" />
     <Content Include="Common\Services\CityService.js" />
     <Content Include="Common\Services\CurrencyExchangeRateService.js" />
     <Content Include="Common\Services\ConnectionStringService.js" />
@@ -245,6 +248,7 @@
     <Content Include="Common\Services\LogEntryService.js" />
     <Content Include="Common\Services\MasterLogService.js" />
     <Content Include="Common\Services\RateTypeService.js" />
+    <Content Include="Common\Services\StyleDefinitionService.js" />
     <Content Include="Common\Views\City\CityEditor.html" />
     <Content Include="Common\Views\City\CityEditorController.js" />
     <Content Include="Common\Views\City\CityManagement.html" />
@@ -300,6 +304,10 @@
     <Content Include="Common\Views\Settings\SettingsEditor.html" />
     <Content Include="Common\Views\Settings\SettingsEditorController.js" />
     <Content Include="Common\Views\StartupPage.html" />
+    <Content Include="Common\Views\StyleDefinition\StyleDefinitionEditor.html" />
+    <Content Include="Common\Views\StyleDefinition\StyleDefinitionEditorController.js" />
+    <Content Include="Common\Views\StyleDefinition\StyleDefinitionManagement.html" />
+    <Content Include="Common\Views\StyleDefinition\StyleDefinitionManagementController.js" />
     <Content Include="Common\Views\Support.html" />
     <Content Include="Common\Views\Settings\SettingsManagement.html" />
     <Content Include="Common\Views\Settings\SettingsManagementController.js" />

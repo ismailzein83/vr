@@ -12,10 +12,12 @@ namespace Vanrise.Entities
         public string Name { get; set; }
         public StyleDefinitionSettings StyleDefinitionSettings { get; set; }
     }
+
     public class StyleDefinitionSettings
     {
         public StyleFormatingSettings StyleFormatingSettings { get; set; }
     }
+
     public abstract class StyleFormatingSettings
     {
         public int ConfigId { get; set; }

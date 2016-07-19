@@ -57,7 +57,7 @@
     </Compile>
     <Compile Include="City\CityInfoFilter.cs" />
     <Compile Include="City\CityQuery.cs" />
-    <Compile Include="Style\StyleDefinition.cs" />
+    <Compile Include="StyleDefinition\StyleDefinition.cs" />
     <Compile Include="Country\UploadCountryLog.cs" />
     <Compile Include="Country\CountryInfo.cs" />
     <Compile Include="Country\Country.cs" />
@@ -86,6 +86,8 @@
     <Compile Include="EntitySynchronization\ISourceItem.cs" />
     <Compile Include="EntitySynchronization\ISourceItemReader.cs" />
     <Compile Include="DataRetrieval\ExcelResult.cs" />
+    <Compile Include="StyleDefinition\StyleDefinitionDetail.cs" />
+    <Compile Include="StyleDefinition\StyleDefinitionQuery.cs" />
     <Compile Include="VRAction\VRAction.cs" />
     <Compile Include="VRExpression\VRExpression.cs" />
     <Compile Include="ExtensionConfiguration.cs" />
