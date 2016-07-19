@@ -17,7 +17,7 @@
         loadParameters();
         defineScope();
         load();
-        //loadEntityTypeSelector();
+
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
@@ -28,7 +28,6 @@
 
             isEditMode = (statusDefinitionId != undefined);
         }
-
         function defineScope() {
             $scope.scopeModel = {};
 
@@ -49,12 +48,11 @@
                 entityTypeAPISelectorReadyDeferred.resolve();
             }
         }
-
         function load() {
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
-                GetStatusDefinition().then(function () {
+                    GetStatusDefinition().then(function () {
                     loadAllControls();
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -62,10 +60,9 @@
                 });
             }
             else {
-                loadAllControls();
+                    loadAllControls();
             }
         }
-
 
 
         function GetStatusDefinition() {
@@ -111,7 +108,7 @@
 
         function insert() {
             $scope.scopeModel.isLoading = true;
-            return Retail_BE_StatusDefinitionAPIService.AddStatusDefinition(buildSwitchObjFromScope()).then(function (response) {
+            return Retail_BE_StatusDefinitionAPIService.AddStatusDefinition(buildStatusDefinitionObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('StatusDefinition', response, 'Name')) {
                     if ($scope.onStatusDefinitionAdded != undefined)
                         $scope.onStatusDefinitionAdded(response.InsertedObject);
@@ -125,7 +122,7 @@
         }
         function update() {
             $scope.scopeModel.isLoading = true;
-            return Retail_BE_StatusDefinitionAPIService.UpdateStatusDefinition(buildSwitchObjFromScope()).then(function (response) {
+            return Retail_BE_StatusDefinitionAPIService.UpdateStatusDefinition(buildStatusDefinitionObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated('StatusDefinition', response, 'Name')) {
                     if ($scope.onStatusDefinitionUpdated != undefined) {
                         $scope.onStatusDefinitionUpdated(response.UpdatedObject);
@@ -139,7 +136,7 @@
             });
         }
 
-        function buildSwitchObjFromScope() {
+        function buildStatusDefinitionObjFromScope() {
             //var settings = settingsDirectiveAPI.getData();
             //settings.Description = $scope.scopeModel.description;
             //settings.Location = $scope.scopeModel.location;

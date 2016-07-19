@@ -14,6 +14,7 @@
         defineScope();
         load();
 
+
         function defineScope() {
             $scope.scopeModel = {};
 
@@ -40,8 +41,7 @@
             }
         }
 
-        function load()
-        {
+        function load(){
             $scope.scopeModel.isloading = true;
             loadAllControls().finally(function () {
                 $scope.scopeModel.isloading = false;
