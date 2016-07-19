@@ -7,6 +7,7 @@ using Vanrise.Queueing;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Data;
+using TOne.WhS.Routing.Business;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -34,7 +35,9 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override void DoWork(GetRPCodeMatchesInput inputArgument, AsyncActivityHandle handle)
         {
             ICodeMatchesDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICodeMatchesDataManager>();
-            dataManager.DatabaseId = inputArgument.RoutingDatabaseId;
+            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
+            dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(inputArgument.RoutingDatabaseId);
+
             var codeMatches = dataManager.GetCodeMatches(inputArgument.FromZoneId, inputArgument.ToZoneId);
             long currentZoneId = 0;
             Dictionary<long, SupplierCodeMatchWithRate> currentSupplierCodeMatchesWithRate = null;

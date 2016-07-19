@@ -7,6 +7,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Data;
+using TOne.WhS.Routing.Business;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -39,7 +40,9 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             CustomerZoneDetailByZone customerZoneDetailsByZone = null;
             ICustomerZoneDetailsDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerZoneDetailsDataManager>();
-            dataManager.DatabaseId = inputArgument.RoutingDatabase;
+            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
+            dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(inputArgument.RoutingDatabase);
+
             IEnumerable<CustomerZoneDetail> customerZoneDetails = dataManager.GetFilteredCustomerZoneDetailsByZone(inputArgument.SaleCodes.Select(s => s.ZoneId).Distinct());
             if (customerZoneDetails != null)
             {

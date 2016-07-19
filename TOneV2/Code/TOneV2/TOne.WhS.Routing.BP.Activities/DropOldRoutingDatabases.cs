@@ -46,7 +46,7 @@ namespace TOne.WhS.Routing.BP.Activities
                     {
                         try
                         {
-                            dataManager.DropDatabase(db.ID);
+                            dataManager.DropDatabase(db);
                         }
                         catch (Exception ex)
                         {

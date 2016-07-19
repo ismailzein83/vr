@@ -26,8 +26,9 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             RoutingDatabaseInformation information = GetDatabaseInformation(this.Policies.Get(context), this.ProcessType.Get(context));
+            RoutingDatabaseSettings settings = BuildRoutingDatabaseSettings();
             IRoutingDatabaseDataManager routingDatabaseManager = RoutingDataManagerFactory.GetDataManager<IRoutingDatabaseDataManager>();
-            int databaseId = routingDatabaseManager.CreateDatabase(String.Format("{0}_{1}_{2:yyyyMMdd-HHmm}", this.Type.Get(context), this.ProcessType.Get(context), this.EffectiveTime.Get(context)), this.Type.Get(context), this.ProcessType.Get(context), this.EffectiveTime.Get(context), information);
+            int databaseId = routingDatabaseManager.CreateDatabase(String.Format("{0}_{1}_{2:yyyyMMdd-HHmm}", this.Type.Get(context), this.ProcessType.Get(context), this.EffectiveTime.Get(context)), this.Type.Get(context), this.ProcessType.Get(context), this.EffectiveTime.Get(context), information, settings);
             this.DatabaseId.Set(context, databaseId);
         }
 
@@ -51,6 +52,16 @@ namespace TOne.WhS.Routing.BP.Activities
                     break;
             }
             return information;
+        }
+
+        /// <summary>
+        /// For futur use
+        /// </summary>
+        /// <returns></returns>
+        private RoutingDatabaseSettings BuildRoutingDatabaseSettings()
+        {
+            RoutingDatabaseSettings settings = new RoutingDatabaseSettings() { };
+            return settings;
         }
     }
 }

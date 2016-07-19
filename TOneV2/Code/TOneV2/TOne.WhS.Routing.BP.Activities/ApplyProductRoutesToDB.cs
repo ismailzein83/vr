@@ -6,6 +6,7 @@ using System.Activities;
 using Vanrise.Queueing;
 using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Data;
+using TOne.WhS.Routing.Business;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -25,7 +26,8 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override void DoWork(ApplyProductRoutesToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             IRPRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
-            dataManager.DatabaseId = inputArgument.RoutingDatabaseId;
+            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
+            dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(inputArgument.RoutingDatabaseId);
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {

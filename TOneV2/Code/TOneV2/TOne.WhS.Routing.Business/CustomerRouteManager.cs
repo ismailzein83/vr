@@ -28,7 +28,8 @@ namespace TOne.WhS.Routing.Business
         public Vanrise.Entities.IDataRetrievalResult<CustomerRouteDetail> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<CustomerRouteQuery> input)
         {
             ICustomerRouteDataManager manager =  RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
-            manager.DatabaseId = input.Query.RoutingDatabaseId;
+            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
+            manager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(input.Query.RoutingDatabaseId);
 
             BigResult<CustomerRoute> customerRouteResult = manager.GetFilteredCustomerRoutes(input);
 

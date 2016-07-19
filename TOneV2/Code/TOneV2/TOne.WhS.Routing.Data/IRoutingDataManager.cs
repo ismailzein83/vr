@@ -9,8 +9,9 @@ namespace TOne.WhS.Routing.Data
 {
     public interface IRoutingDataManager : IDataManager
     {
-        int DatabaseId { get; set; }
-        RoutingDatabaseType RoutingDatabaseType { set; }
-        RoutingProcessType RoutingProcessType { set; }
+        //int DatabaseId { get; set; }
+        //RoutingDatabaseType RoutingDatabaseType { set; }
+        //RoutingProcessType RoutingProcessType { set; }
+        RoutingDatabase RoutingDatabase { get; set; }
     }
 }

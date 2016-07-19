@@ -7,6 +7,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Data;
+using TOne.WhS.Routing.Business;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -38,11 +39,11 @@ namespace TOne.WhS.Routing.BP.Activities
 
         protected override GetSupplierZoneDetailsOutput DoWorkWithResult(GetSupplierZoneDetailsInput inputArgument, AsyncActivityHandle handle)
         {
-
             SupplierZoneDetailByZone supplierZoneDetailsByZone = null;
 
             ISupplierZoneDetailsDataManager supplierZoneDetailsManager = RoutingDataManagerFactory.GetDataManager<ISupplierZoneDetailsDataManager>();
-            supplierZoneDetailsManager.DatabaseId = inputArgument.RoutingDatabaseId;
+            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
+            supplierZoneDetailsManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(inputArgument.RoutingDatabaseId);
 
             IEnumerable<SupplierZoneDetail> supplierZoneDetails = supplierZoneDetailsManager.GetFilteredSupplierZoneDetailsBySupplierZone(inputArgument.SupplierCodes.Select(c => c.ZoneId).Distinct());
 

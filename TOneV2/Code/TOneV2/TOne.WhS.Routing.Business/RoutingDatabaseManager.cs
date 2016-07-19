@@ -17,6 +17,12 @@ namespace TOne.WhS.Routing.Business
             return GetNotDeletedDatabases().MapRecords(RoutingDatabaseInfoMapper, x => x.ProcessType == filter.ProcessType).OrderBy(x => x.Title);
         }
 
+        public RoutingDatabase GetRoutingDatabase(int routingDatabaseId)
+        {
+            var items = GetNotDeletedDatabases();
+            return items.GetRecord(routingDatabaseId);
+        }
+
         public Dictionary<int, RoutingDatabase> GetNotDeletedDatabases()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRoutingDatabases",

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.Data.SQL;
 using TOne.WhS.Routing.Entities;
+using Vanrise.Data.SQL;
 
 namespace TOne.WhS.Routing.Data.SQL
 {
@@ -18,53 +19,25 @@ namespace TOne.WhS.Routing.Data.SQL
 
         }
 
+        public RoutingDatabase RoutingDatabase { get; set; }
+
+        string _databaseName;
+
+        RoutingProcessType _routingProcessType;
+
         int _databaseId;
-        RoutingDatabaseType? _routingDatabaseType;
 
-        RoutingProcessType? _routingProcessType;
-        /// <summary>
-        /// If Routing Database id is less than or equal 0, returns the next available Id according to type and date.
-        /// </summary>
-        public int DatabaseId
-        {
-            get
-            {
-                if (_databaseId <= 0)
-                {
-                    RoutingDatabaseDataManager routingDatabaseManager = new RoutingDatabaseDataManager();
-                    _databaseId = routingDatabaseManager.GetIDByType(_routingDatabaseType.Value, _routingProcessType.Value, DateTime.Now);
-                }
-                return _databaseId;
-            }
-            set
-            {
-                _databaseId = value;
-            }
-        }
-
-        public RoutingDatabaseType RoutingDatabaseType
-        {
-            set
-            {
-                _routingDatabaseType = value;
-            }
-        }
-
-        public RoutingProcessType RoutingProcessType
-        {
-            set
-            {
-                _routingProcessType = value;
-            }
-        }
         /// <summary>
         /// Create Routing Database.
         /// </summary>
-        internal void CreateDatabase()
+        internal string CreateDatabase(int databaseId, RoutingProcessType routingProcessType)
         {
+            _databaseId = databaseId;
+            _routingProcessType = routingProcessType;
+            _databaseName = GetDatabaseName();
             MasterDatabaseDataManager masterDataManager = new MasterDatabaseDataManager(GetConnectionString());
-            masterDataManager.CreateDatabase(GetDatabaseName(), ConfigurationManager.AppSettings["RoutingDBDataFileDirectory"], ConfigurationManager.AppSettings["RoutingDBLogFileDirectory"]);
-            switch (_routingProcessType.Value)
+            masterDataManager.CreateDatabase(_databaseName, ConfigurationManager.AppSettings["RoutingDBDataFileDirectory"], ConfigurationManager.AppSettings["RoutingDBLogFileDirectory"]);
+            switch (routingProcessType)
             {
                 case RoutingProcessType.RoutingProductRoute:
                     CreateProductRoutingDatabaseSchema();
@@ -73,6 +46,8 @@ namespace TOne.WhS.Routing.Data.SQL
                     CreateCustomerRoutingDatabaseSchema();
                     break;
             }
+            return _databaseName;
+
         }
         /// <summary>
         /// Drop Routing Database if database already exists.
@@ -80,7 +55,7 @@ namespace TOne.WhS.Routing.Data.SQL
         internal void DropDatabaseIfExists()
         {
             MasterDatabaseDataManager masterDataManager = new MasterDatabaseDataManager(GetConnectionString());
-            masterDataManager.DropDatabaseWithForceIfExists(GetDatabaseName());
+            masterDataManager.DropDatabaseWithForceIfExists(RoutingDatabase.Settings.DatabaseName);
         }
         /// <summary>
         ///  Get Routing connection string by type.
@@ -88,19 +63,15 @@ namespace TOne.WhS.Routing.Data.SQL
         /// <returns>Routing Connection String</returns>
         protected override string GetConnectionString()
         {
-            if (_databaseId <= 0)
+            //if (string.IsNullOrEmpty(_databaseName))
+            if (RoutingDatabase != null)
             {
-                if (!_routingDatabaseType.HasValue)
-                    throw new Exception("you need to set the DatabaseId or the RoutingDatabaseType property of the Data Manager before calling any operation on the Routing database");
-                if (!_routingProcessType.HasValue)
-                    throw new Exception("you need to set the DatabaseId or the RoutingProcessType property of the Data Manager before calling any operation on the Routing database");
-                RoutingDatabaseDataManager routingDatabaseManager = new RoutingDatabaseDataManager();
-                _databaseId = routingDatabaseManager.GetIDByType(_routingDatabaseType.Value, _routingProcessType.Value, DateTime.Now);
-
-                if (_databaseId <= 0)
-                    throw new Exception(String.Format("Routing Database {0} not found", _routingDatabaseType));
+                return base.GetConnectionString().Replace("#WorkflowType#", RoutingDatabase.ProcessType.ToString()).Replace("#DatabaseId#", RoutingDatabase.ID.ToString());
             }
-            return String.Format(base.GetConnectionString(), _databaseId);
+            else
+            {
+                return base.GetConnectionString().Replace("#WorkflowType#", _routingProcessType.ToString()).Replace("#DatabaseId#", _databaseId.ToString());
+            }
         }
         /// <summary>
         /// Get Name of Routing Database

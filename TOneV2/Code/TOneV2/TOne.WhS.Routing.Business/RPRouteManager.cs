@@ -29,7 +29,8 @@ namespace TOne.WhS.Routing.Business
         public Vanrise.Entities.IDataRetrievalResult<RPRouteDetail> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<RPRouteQuery> input)
         {
             IRPRouteDataManager manager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
-            manager.DatabaseId = input.Query.RoutingDatabaseId;
+            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
+            manager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(input.Query.RoutingDatabaseId);
 
             BigResult<RPRoute> rpRouteResult = manager.GetFilteredRPRoutes(input);
 
@@ -46,7 +47,8 @@ namespace TOne.WhS.Routing.Business
         public IEnumerable<RPRouteDetail> GetRPRoutes(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones)
         {
             IRPRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
-            dataManager.DatabaseId = routingDatabaseId;
+            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
+            dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(routingDatabaseId);
 
             IEnumerable<RPRoute> rpRoutes = dataManager.GetRPRoutes(rpZones);
             return rpRoutes.MapRecords(x => RPRouteDetailMapper(x, policyConfigId, numberOfOptions));
@@ -55,7 +57,8 @@ namespace TOne.WhS.Routing.Business
         public RPRouteOptionSupplierDetail GetRPRouteOptionSupplier(int routingDatabaseId, int routingProductId, long saleZoneId, int supplierId)
         {
             IRPRouteDataManager routeManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
-            routeManager.DatabaseId = routingDatabaseId;
+            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
+            routeManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(routingDatabaseId);
 
             Dictionary<int, RPRouteOptionSupplier> dicRouteOptionSuppliers = routeManager.GetRouteOptionSuppliers(routingProductId, saleZoneId);
 
@@ -75,7 +78,8 @@ namespace TOne.WhS.Routing.Business
         public Vanrise.Entities.IDataRetrievalResult<RPRouteOptionDetail> GetFilteredRPRouteOptions(Vanrise.Entities.DataRetrievalInput<RPRouteOptionQuery> input)
         {
             IRPRouteDataManager manager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
-            manager.DatabaseId = input.Query.RoutingDatabaseId;
+            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
+            manager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(input.Query.RoutingDatabaseId);
 
             Dictionary<int, IEnumerable<RPRouteOption>> allOptions = manager.GetRouteOptions(input.Query.RoutingProductId, input.Query.SaleZoneId);
             if (allOptions == null || !allOptions.ContainsKey(input.Query.PolicyOptionConfigId))
