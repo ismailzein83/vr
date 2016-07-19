@@ -63,6 +63,7 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
                 }
                 //context.EffectiveRate = Math.Ceiling(FractionUnit * context.Rate / 60);
                 context.EffectiveRate = 60 * context.Rate / FractionUnit;
+                context.EffectiveDurationInSeconds = accountedDuration + FirstPeriod;
             }
             else
             {
@@ -71,9 +72,9 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
                     totalAmount += Math.Ceiling((accountedDuration.Value * context.Rate) / 60);
                 }
                 context.EffectiveRate = context.Rate;
+                context.EffectiveDurationInSeconds = accountedDuration;
             }
-            context.EffectiveDurationInSeconds = accountedDuration;
-
+            
             if (totalAmount.HasValue)
                 totalAmount += convertedCallFee;
 
