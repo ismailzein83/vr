@@ -119,7 +119,9 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Common\Directives\Style\Templates\" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\StyleDefinitionController.cs" />
@@ -220,8 +222,8 @@
     <Content Include="Common\Directives\RateType\vr-common-ratetype-selector.js" />
     <Content Include="Common\Directives\Settings\Templates\SettingsGridTemplate.html" />
     <Content Include="Common\Directives\Settings\vr-common-settings-grid.js" />
-    <Content Include="Common\Directives\Style\Templates\StyleDefinitionGridTemplate.html" />
-    <Content Include="Common\Directives\Style\vr-common-styledefinition-grid.js" />
+    <Content Include="Common\Directives\StyleDefinition\Templates\StyleDefinitionGridTemplate.html" />
+    <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-grid.js" />
     <Content Include="Common\ModuleInitialization.js" />
     <Content Include="Common\Services\APIServices\CityAPIService.js" />
     <Content Include="Common\Services\APIServices\SettingsAPIService.js" />

@@ -14,7 +14,7 @@ app.directive('vrCommonStyledefinitionGrid', ['VRCommon_StyleDefinitionAPIServic
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Common/Directives/Style/Templates/StyleDefinitionGridTemplate.html'
+            templateUrl: '/Client/Modules/Common/Directives/StyleDefinition/Templates/StyleDefinitionGridTemplate.html'
         };
 
         function StyleDefinitionGrid($scope, ctrl, $attrs) {
