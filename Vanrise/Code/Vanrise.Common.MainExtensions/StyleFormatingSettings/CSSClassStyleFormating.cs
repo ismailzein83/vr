@@ -8,5 +8,6 @@ namespace Vanrise.Common.MainExtensions.StyleFormatingSettings
 {
     public class CSSClassStyleFormating : Entities.StyleFormatingSettings
     {
+        public string ClassName { get; set; }
     }
 }

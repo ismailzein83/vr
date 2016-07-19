@@ -18,6 +18,6 @@ namespace Vanrise.Entities
     }
     public abstract class StyleFormatingSettings
     {
-
+        public int ConfigId { get; set; }
     }
 }
