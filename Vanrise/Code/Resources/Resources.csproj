@@ -108,6 +108,9 @@
     <Content Include="Databases\IDs ranges\Configuration\bp.BPDefinition.txt" />
     <Content Include="Databases\IDs ranges\Configuration\bp.BPTaskType.txt" />
     <Content Include="Databases\IDs ranges\Configuration\common.TemplateConfig.txt" />
+    <Content Include="Databases\IDs ranges\Configuration\genericdata.DataRecordStorage.txt" />
+    <Content Include="Databases\IDs ranges\Configuration\genericdata.DataRecordType.txt" />
+    <Content Include="Databases\IDs ranges\Configuration\genericdata.DataStore.txt" />
     <Content Include="Databases\IDs ranges\Configuration\genericdata.DataTransformationDefinition.txt" />
     <Content Include="Databases\IDs ranges\Configuration\genericdata.DataTransformationStepConfig.txt" />
     <Content Include="Databases\IDs ranges\Configuration\genericdata.GenericRuleDefinition.txt" />
