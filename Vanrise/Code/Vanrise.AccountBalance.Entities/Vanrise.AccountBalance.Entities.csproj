@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BalanceAlertSettings.cs" />
+    <Compile Include="IAccountManager.cs" />
     <Compile Include="UsageBalanceUpdate.cs" />
     <Compile Include="BillingTransaction.cs" />
     <Compile Include="LiveBalance.cs" />
