@@ -60,10 +60,13 @@ namespace Retail.BusinessEntity.Business
                 ServiceVolumeEditor = serviceType.Settings.ServiceVolumeEditor,
                 ChargingPolicyDefinitionSettings = updatedServiceType.ChargingPolicyDefinitionSettings,
                 Description = updatedServiceType.Description,
-                IdentificationRuleDefinitionId = updatedServiceType.IdentificationRuleDefinitionId
+                IdentificationRuleDefinitionId = updatedServiceType.IdentificationRuleDefinitionId,
+                InitialStatusId = updatedServiceType.InitialStatusId
             };
             if (serviceType.Settings.ChargingPolicyDefinitionSettings !=null)
               serviceTypeSettings.ChargingPolicyDefinitionSettings.ChargingPolicyEditor = serviceType.Settings.ChargingPolicyDefinitionSettings.ChargingPolicyEditor;
+
+
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<ServiceTypeDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;

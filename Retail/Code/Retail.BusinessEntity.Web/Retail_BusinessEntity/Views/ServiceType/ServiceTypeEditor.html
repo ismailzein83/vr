@@ -18,7 +18,9 @@
                             <vr-genericdata-genericruledefinition-selector customlabel="Identification Rule" on-ready="scopeModel.onRuleDefinitionSelectorReady" isrequired="true"></vr-genericdata-genericruledefinition-selector>
                         </vr-columns>
                     </vr-row>
-                 
+                    <vr-row>
+                        <retail-be-statusdefinition-selector on-ready="scopeModel.onStatusDefinitionSelectorReady" normal-col-num="4" customlabel="Initial Status" isrequired="true"></retail-be-statusdefinition-selector>
+                    </vr-row>
                 </vr-tab>
                 <vr-tab header="'Charging Policy Definition'">
                     <vr-row>

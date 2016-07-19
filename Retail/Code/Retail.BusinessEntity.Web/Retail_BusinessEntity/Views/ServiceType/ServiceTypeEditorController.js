@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ServiceTypeEditorController.$inject = ['$scope', 'Retail_BE_ServiceTypeAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    ServiceTypeEditorController.$inject = ['$scope', 'Retail_BE_ServiceTypeAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService','Retail_BE_EntityTypeEnum'];
 
-    function ServiceTypeEditorController($scope, Retail_BE_ServiceTypeAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function ServiceTypeEditorController($scope, Retail_BE_ServiceTypeAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_EntityTypeEnum) {
         var isEditMode;
 
         var serviceTypeId;
@@ -15,6 +15,9 @@
 
         var ruleDefinitionSelectorAPI;
         var ruleDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var statusDefinitionSelectorAPI;
+        var statusDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -37,6 +40,11 @@
                 chargingPolicyAPI = api;
                 chargingPolicyReadyDeferred.resolve();
             }
+            $scope.scopeModel.onStatusDefinitionSelectorReady = function (api) {
+                statusDefinitionSelectorAPI = api;
+                statusDefinitionSelectorReadyDeferred.resolve();
+            }
+
             $scope.scopeModel.onRuleDefinitionSelectorReady = function(api)
             {
                 ruleDefinitionSelectorAPI = api;
@@ -77,14 +85,24 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadChargingPolicy, loadRuleDefinitionSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadChargingPolicy, loadRuleDefinitionSelector, loadStatusDefinitionSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
         }
 
-
+        function loadStatusDefinitionSelector() {
+            var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            statusDefinitionSelectorReadyDeferred.promise.then(function () {
+                var statusDefinitionSelectorPayload = {
+                    filter: { EntityType: Retail_BE_EntityTypeEnum.AccountService.value },
+                    selectedIds: serviceTypeEntity != undefined && serviceTypeEntity.Settings != undefined ? serviceTypeEntity.Settings.InitialStatusId : undefined
+                };
+                VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
+            });
+            return statusDefinitionSelectorLoadDeferred.promise;
+        }
         function loadChargingPolicy() {
             var chargingPolicyLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -162,7 +180,8 @@
                 Title: $scope.scopeModel.title,
                 Description: $scope.scopeModel.description,
                 IdentificationRuleDefinitionId:ruleDefinitionSelectorAPI.getSelectedIds(),
-                ChargingPolicyDefinitionSettings: chargingPolicyAPI.getData()
+                ChargingPolicyDefinitionSettings: chargingPolicyAPI.getData(),
+                InitialStatusId: statusDefinitionSelectorAPI.getSelectedIds()
             };
             return obj;
         }

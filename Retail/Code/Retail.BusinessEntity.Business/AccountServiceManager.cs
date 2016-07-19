@@ -57,30 +57,43 @@ namespace Retail.BusinessEntity.Business
             }
             return updateStatus;
         }
-        public InsertOperationOutput<AccountServiceDetail> AddAccountService(AccountService AccountService)
+        public InsertOperationOutput<AccountServiceDetail> AddAccountService(AccountService accountService)
         {
             InsertOperationOutput<AccountServiceDetail> insertOperationOutput = new InsertOperationOutput<AccountServiceDetail>();
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             long AccountServiceId = -1;
+
+            var serviceTypeManager = new ServiceTypeManager();
+            var serviceType = serviceTypeManager.GetServiceType(accountService.ServiceTypeId);
+            if (serviceType == null)
+                throw new NullReferenceException("ServiceType is null");
+            if (serviceType.Settings == null)
+                throw new NullReferenceException("ServiceType settings is null");
+
+            accountService.StatusId = serviceType.Settings.InitialStatusId;
+
             IAccountServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountServiceDataManager>();
-            bool insertActionSucc = dataManager.Insert(AccountService, out AccountServiceId);
+            bool insertActionSucc = dataManager.Insert(accountService, out AccountServiceId);
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                AccountService.AccountServiceId = AccountServiceId;
-                insertOperationOutput.InsertedObject = AccountServiceDetailMapper(AccountService);
+                accountService.AccountServiceId = AccountServiceId;
+                insertOperationOutput.InsertedObject = AccountServiceDetailMapper(accountService);
             }
             else
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
             return insertOperationOutput;
         }
-        public UpdateOperationOutput<AccountServiceDetail> UpdateAccountService(AccountService AccountService)
+        public UpdateOperationOutput<AccountServiceDetail> UpdateAccountService(AccountService accountService)
         {
             IAccountServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountServiceDataManager>();
 
-            bool updateActionSucc = dataManager.Update(AccountService);
+            var currentAccountService = GetAccountService(accountService.AccountServiceId);
+
+            accountService.StatusId = currentAccountService.StatusId;
+            bool updateActionSucc = dataManager.Update(accountService);
             UpdateOperationOutput<AccountServiceDetail> updateOperationOutput = new UpdateOperationOutput<AccountServiceDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -90,7 +103,7 @@ namespace Retail.BusinessEntity.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = AccountServiceDetailMapper(AccountService);
+                updateOperationOutput.UpdatedObject = AccountServiceDetailMapper(accountService);
             }
             else
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;

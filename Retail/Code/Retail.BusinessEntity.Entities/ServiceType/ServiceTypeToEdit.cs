@@ -9,9 +9,8 @@ namespace Retail.BusinessEntity.Entities
     public class ServiceTypeToEdit
     {
         public int ServiceTypeId { get; set; }
-
+        public Guid InitialStatusId { get; set; }
         public string Title { get; set; }
-
         public string Description { get; set; }
         public int IdentificationRuleDefinitionId { get; set; }
         public ChargingPolicyDefinitionSettings ChargingPolicyDefinitionSettings { get; set; }

@@ -80,6 +80,15 @@ namespace Retail.BusinessEntity.Business
         {
             ValidateAccountToAdd(account);
 
+            var accountTypeManager = new AccountTypeManager();
+            var accountType = accountTypeManager.GetAccountType(account.TypeId);
+            if (accountType == null)
+                throw new NullReferenceException("AccountType is null");
+            if (accountType.Settings == null)
+                throw new NullReferenceException("AccountType settings is null");
+           
+            account.StatusId = accountType.Settings.InitialStatusId;
+
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AccountDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
@@ -118,6 +127,9 @@ namespace Retail.BusinessEntity.Business
         {
             long? parentId;
             ValidateAccountToEdit(account, out parentId);
+
+            var currentAccount = GetAccount(account.AccountId);
+            account.StatusId = currentAccount.StatusId;
 
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountDetail>();
 
@@ -175,18 +187,8 @@ namespace Retail.BusinessEntity.Business
 
             var accountPartDefinitionManager = new AccountPartDefinitionManager();
 
+             IEnumerable<AccountTypePartSettings> partSettingsList = GetAccountTypePartDefinitionSettingsList(accountTypeId);
 
-            var accountTypeManager = new AccountTypeManager();
-            AccountType accountType = accountTypeManager.GetAccountType(accountTypeId);
-            if (accountType == null)
-                throw new NullReferenceException("accountType");
-            if (accountType.Settings == null)
-                throw new NullReferenceException("accountType.Settings");
-            if (accountType.Settings.PartDefinitionSettings == null)
-                throw new NullReferenceException("accountType.Settings.PartDefinitionSettings");
-             IEnumerable<AccountTypePartSettings> partSettingsList = accountType.Settings.PartDefinitionSettings;
-
-             accountEditorRuntime.InitialStatusId = accountType.Settings.InitialStatusId; 
             var runtimeParts = new List<AccountPartRuntime>();
 
             foreach (AccountTypePartSettings partSettings in partSettingsList)
@@ -220,18 +222,18 @@ namespace Retail.BusinessEntity.Business
             return accountEditorRuntime;
         }
 
-        //private IEnumerable<AccountTypePartSettings> GetAccountTypePartDefinitionSettingsList(int accountTypeId)
-        //{
-        //    var accountTypeManager = new AccountTypeManager();
-        //    AccountType accountType = accountTypeManager.GetAccountType(accountTypeId);
-        //    if (accountType == null)
-        //        throw new NullReferenceException("accountType");
-        //    if (accountType.Settings == null)
-        //        throw new NullReferenceException("accountType.Settings");
-        //    if (accountType.Settings.PartDefinitionSettings == null)
-        //        throw new NullReferenceException("accountType.Settings.PartDefinitionSettings");
-        //    return accountType.Settings.PartDefinitionSettings;
-        //}
+        private IEnumerable<AccountTypePartSettings> GetAccountTypePartDefinitionSettingsList(int accountTypeId)
+        {
+            var accountTypeManager = new AccountTypeManager();
+            AccountType accountType = accountTypeManager.GetAccountType(accountTypeId);
+            if (accountType == null)
+                throw new NullReferenceException("accountType");
+            if (accountType.Settings == null)
+                throw new NullReferenceException("accountType.Settings");
+            if (accountType.Settings.PartDefinitionSettings == null)
+                throw new NullReferenceException("accountType.Settings.PartDefinitionSettings");
+            return accountType.Settings.PartDefinitionSettings;
+        }
 
         private bool IsPartFoundOrInherited(long? accountId, int partDefinitionId)
         {
