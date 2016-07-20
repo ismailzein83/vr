@@ -262,5 +262,11 @@ namespace Retail.BusinessEntity.Business
         {
             throw new NotImplementedException();
         }
+
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
