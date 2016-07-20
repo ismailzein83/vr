@@ -25,7 +25,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Can not move code {0} without deleting it from existing zone", (target as CodeToAdd).Code);
+            return string.Format("Code {0} already exists", (target as CodeToAdd).Code);
         }
  
     }

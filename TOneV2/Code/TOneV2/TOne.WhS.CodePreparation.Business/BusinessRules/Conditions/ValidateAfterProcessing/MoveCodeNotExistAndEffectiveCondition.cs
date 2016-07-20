@@ -26,7 +26,8 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Can not move code {0} that does not exist or not effective", (target as CodeToMove).Code);
+            CodeToMove codeToMove = target as CodeToMove;
+            return string.Format("Code {0} does not exist in zone {1} and can not be moved", codeToMove.Code, codeToMove.OldZoneName);
         }
     }
 }
