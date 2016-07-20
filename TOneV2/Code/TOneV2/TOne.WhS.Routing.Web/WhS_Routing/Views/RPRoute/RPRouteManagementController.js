@@ -15,10 +15,8 @@
         var routingProductSelectorAPI;
         var routingProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var sellingNumberPlanDirectiveAPI;
-        var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
         var saleZoneSelectorAPI;
+        var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
@@ -41,30 +39,10 @@
                 routingProductReadyPromiseDeferred.resolve();
             }
 
-            $scope.onSellingNumberPlanDirectiveReady = function (api) {
-                sellingNumberPlanDirectiveAPI = api;
-                sellingNumberPlanReadyPromiseDeferred.resolve();
-            }
-
             $scope.onSaleZoneSelectorReady = function (api) {
                 saleZoneSelectorAPI = api;
+                saleZoneReadyPromiseDeferred.resolve();
             }
-
-            $scope.onSellingNumberPlanChanged = function (selectedItem) {
-                if (selectedItem) {
-                    $scope.showSaleZoneSelector = true;
-
-                    var payload = {
-                        sellingNumberPlanId: selectedItem.SellingNumberPlanId
-                    };
-
-                    var setLoader = function (value) { $scope.isLoadingSaleZoneSection = value };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneSelectorAPI, payload, setLoader);
-                }
-                else {
-                    $scope.showSaleZoneSelector = false;
-                }
-            };
 
             $scope.onRoutingDatabaseSelectorChange = function ()
             {
@@ -113,7 +91,7 @@
         function load() {
             $scope.isLoadingFilterData = true;
 
-            return UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadRoutingProductSelector, loadSellingNumberPlanSection]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadRoutingProductSelector, loadSaleZoneSection]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoadingFilterData = false;
@@ -140,17 +118,7 @@
             return loadRoutingProductPromiseDeferred.promise;
         }
 
-        function loadSellingNumberPlanSection() {
-            var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, undefined, loadSellingNumberPlanPromiseDeferred);
-            });
-
-            return loadSellingNumberPlanPromiseDeferred.promise;
-        }
-
-        function loadSaleZoneSelector() {
+        function loadSaleZoneSection() {
             var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
 
             saleZoneReadyPromiseDeferred.promise.then(function () {
