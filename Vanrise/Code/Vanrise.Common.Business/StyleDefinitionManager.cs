@@ -31,7 +31,7 @@ namespace Vanrise.Common.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allStyleDefinitions.ToBigResult(input, filterExpression, StyleDefinitionDetailMapper));
         }
 
-        public Vanrise.Entities.InsertOperationOutput<StyleDefinitionDetail> AddStyleDefinition(StyleDefinition StyleDefinitionItem)
+        public Vanrise.Entities.InsertOperationOutput<StyleDefinitionDetail> AddStyleDefinition(StyleDefinition styleDefinitionItem)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<StyleDefinitionDetail>();
 
@@ -40,13 +40,13 @@ namespace Vanrise.Common.Business
 
             IStyleDefinitionDataManager dataManager = CommonDataManagerFactory.GetDataManager<IStyleDefinitionDataManager>();
 
-            StyleDefinitionItem.StyleDefinitionId = Guid.NewGuid();
+            styleDefinitionItem.StyleDefinitionId = Guid.NewGuid();
 
-            if (dataManager.Insert(StyleDefinitionItem))
+            if (dataManager.Insert(styleDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = StyleDefinitionDetailMapper(StyleDefinitionItem);
+                insertOperationOutput.InsertedObject = StyleDefinitionDetailMapper(styleDefinitionItem);
             }
             else
             {
@@ -56,7 +56,7 @@ namespace Vanrise.Common.Business
             return insertOperationOutput;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<StyleDefinitionDetail> UpdateStyleDefinition(StyleDefinition StyleDefinitionItem)
+        public Vanrise.Entities.UpdateOperationOutput<StyleDefinitionDetail> UpdateStyleDefinition(StyleDefinition styleDefinitionItem)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<StyleDefinitionDetail>();
 
@@ -65,11 +65,11 @@ namespace Vanrise.Common.Business
 
             IStyleDefinitionDataManager dataManager = CommonDataManagerFactory.GetDataManager<IStyleDefinitionDataManager>();
 
-            if (dataManager.Update(StyleDefinitionItem))
+            if (dataManager.Update(styleDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = StyleDefinitionDetailMapper(this.GetStyleDefinition(StyleDefinitionItem.StyleDefinitionId));
+                updateOperationOutput.UpdatedObject = StyleDefinitionDetailMapper(this.GetStyleDefinition(styleDefinitionItem.StyleDefinitionId));
             }
             else
             {

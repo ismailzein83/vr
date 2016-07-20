@@ -54,10 +54,6 @@ app.directive('vrCommonStyledefinitionGrid', ['VRCommon_StyleDefinitionAPIServic
                     gridAPI.itemAdded(addedStyleDefinition);
                 }
 
-                api.onStyleDefinitionUpdated = function (updatedStyleDefinition) {
-                    gridAPI.itemUpdated(updatedStyleDefinition);
-                }
-
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

@@ -34,28 +34,8 @@
         }
 
         function load() {
-            $scope.scopeModel.isloading = true;
-            //loadAllControls().finally(function () {
-            //    $scope.scopeModel.isloading = false;
-            //}).catch(function (error) {
-            //    VRNotificationService.notifyExceptionWithClose(error, $scope);
-            //    $scope.scopeModel.isloading = false;
-            //})
-        }
 
-        function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadEntityTypeSelector]).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            });
         }
-
-        //function loadEntityTypeSelector() {
-        //    var styleDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-        //    entityTypeAPISelectorReadyDeferred.promise.then(function () {
-        //        VRUIUtilsService.callDirectiveLoad(entityTypeAPI, undefined, styleDefinitionSelectorLoadDeferred);
-        //    });
-        //    return styleDefinitionSelectorLoadDeferred.promise;
-        //}
 
         function buildGridQuery() {
             return {
