@@ -215,6 +215,8 @@
     <Content Include="Common\Directives\MainExtensions\GenericDataRecord\vr-common-datetime-selective.js" />
     <Content Include="Common\Directives\MainExtensions\GenericDataRecord\vr-common-choices-selective.js" />
     <Content Include="Common\Directives\MainExtensions\GenericDataRecord\vr-common-boolean-selective.js" />
+    <Content Include="Common\Directives\MainExtensions\StyleFormating\Templates\VRCommonStyleFormatingTemplate.html" />
+    <Content Include="Common\Directives\MainExtensions\StyleFormating\vr-common-styleformating-cssclass.js" />
     <Content Include="Common\Directives\RateType\Templates\RateTypeGridTemplate.html" />
     <Content Include="Common\Directives\RateType\vr-common-ratetype-grid.js" />
     <Content Include="Common\Directives\RateType\vr-common-ratetype-selector.js" />
@@ -222,6 +224,7 @@
     <Content Include="Common\Directives\Settings\vr-common-settings-grid.js" />
     <Content Include="Common\Directives\StyleDefinition\Templates\StyleDefinitionGridTemplate.html" />
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-grid.js" />
+    <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-settings.js" />
     <Content Include="Common\ModuleInitialization.js" />
     <Content Include="Common\Services\APIServices\CityAPIService.js" />
     <Content Include="Common\Services\APIServices\SettingsAPIService.js" />

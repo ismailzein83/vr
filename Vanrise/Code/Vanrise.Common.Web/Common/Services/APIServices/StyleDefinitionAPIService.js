@@ -8,10 +8,6 @@
 
         var controllerName = "StyleDefinition";
 
-        //function GetStyleDefinitionSettingsTemplateConfigs() {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetStyleDefinitionSettingsTemplateConfigs"));
-        //}
-
         function GetFilteredStyleDefinitions(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetFilteredStyleDefinitions'), input);
         }
@@ -22,12 +18,6 @@
             });
         }
 
-        //function GetStyleDefinitionsInfo(filter) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetStyleDefinitionsInfo"), {
-        //        filter: filter
-        //    });
-        //}
-
         function AddStyleDefinition(StyleDefinitionItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'AddStyleDefinition'), StyleDefinitionItem);
         }
@@ -36,13 +26,17 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'UpdateStyleDefinition'), StyleDefinitionItem);
         }
 
+        function GetStyleFormatingExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetStyleFormatingExtensionConfigs"));
+        }
+
+
         return ({
-            //GetStyleDefinitionSettingsTemplateConfigs: GetStyleDefinitionSettingsTemplateConfigs,
             GetFilteredStyleDefinitions: GetFilteredStyleDefinitions,
             GetStyleDefinition: GetStyleDefinition,
-            //GetStyleDefinitionsInfo: GetStyleDefinitionsInfo,
             AddStyleDefinition: AddStyleDefinition,
             UpdateStyleDefinition: UpdateStyleDefinition,
+            GetStyleFormatingExtensionConfigs: GetStyleFormatingExtensionConfigs
         });
     }
 

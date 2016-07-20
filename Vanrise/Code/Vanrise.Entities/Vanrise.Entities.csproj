@@ -88,6 +88,7 @@
     <Compile Include="DataRetrieval\ExcelResult.cs" />
     <Compile Include="StyleDefinition\StyleDefinitionDetail.cs" />
     <Compile Include="StyleDefinition\StyleDefinitionQuery.cs" />
+    <Compile Include="StyleDefinition\StyleFormatingConfig.cs" />
     <Compile Include="VRAction\VRAction.cs" />
     <Compile Include="VRExpression\VRExpression.cs" />
     <Compile Include="ExtensionConfiguration.cs" />

@@ -18,12 +18,6 @@ namespace Vanrise.Common.Business
             return cachedStyleDefinitions.GetRecord(StyleDefinitionId);
         }
 
-        public string GetStyleDefinitionName(Guid StyleDefinitionId)
-        {
-            StyleDefinition StyleDefinition = this.GetStyleDefinition(StyleDefinitionId);
-            return (StyleDefinition != null) ? StyleDefinition.Name : null;
-        }
-
         public IDataRetrievalResult<StyleDefinitionDetail> GetFilteredStyleDefinitions(DataRetrievalInput<StyleDefinitionQuery> input)
         {
             var allStyleDefinitions = GetCachedStyleDefinitions();
@@ -79,11 +73,11 @@ namespace Vanrise.Common.Business
             return updateOperationOutput;
         }
 
-        //public IEnumerable<StyleDefinitionInfo> GetStyleDefinitionsInfo(StyleDefinitionFilter filter)
-        //{
-        //    Func<StyleDefinition, bool> filterExpression = null;
-        //    return this.GetCachedStyleDefinitions().MapRecords(StyleDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
-        //}
+        public IEnumerable<StyleFormatingConfig> GetStyleFormatingExtensionConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<StyleFormatingConfig>(StyleFormatingConfig.EXTENSION_TYPE);
+        }
 
         #endregion
 

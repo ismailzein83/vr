@@ -11,8 +11,8 @@
         var styleDefinitionId;
         var styleDefinitionEntity;
 
-        //var entityTypeAPI;
-        //var entityTypeAPISelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var settingsDirectiveAPI;
+        var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -31,6 +31,11 @@
         function defineScope() {
             $scope.scopeModel = {};
 
+            $scope.scopeModel.onSettingsDirectiveReady = function (api) {
+                settingsDirectiveAPI = api;
+                settingsDirectiveReadyDeferred.resolve();
+            };
+
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
                     return update();
@@ -42,11 +47,6 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
-
-            //$scope.scopeModel.onEntityTypeSelectorReady = function (api) {
-            //    entityTypeAPI = api;
-            //    entityTypeAPISelectorReadyDeferred.resolve();
-            //}
         }
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -72,7 +72,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSettingsDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -91,6 +91,19 @@
             if (styleDefinitionEntity == undefined)
                 return;
             $scope.scopeModel.name = styleDefinitionEntity.Name;
+        }
+        function loadSettingsDirective() {
+            var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+            settingsDirectiveReadyDeferred.promise.then(function () {
+                var settingsDirectivePayload;
+                if (styleDefinitionEntity != undefined) {
+                    settingsDirectivePayload = { settings: styleDefinitionEntity.Settings };
+                }
+                VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
+            });
+
+            return settingsDirectiveLoadDeferred.promise;
         }
 
         function insert() {
