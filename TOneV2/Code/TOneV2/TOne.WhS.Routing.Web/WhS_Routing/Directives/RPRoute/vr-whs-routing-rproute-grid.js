@@ -30,6 +30,8 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
         var routingDatabaseId;
         var policies;
         var defaultPolicyId;
+
+        var selectedPolicyConfigId;
         function initializeController() {
             $scope.showGrid = false;
             $scope.rpRoutes = [];
@@ -49,6 +51,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
                         routingDatabaseId = query.RoutingDatabaseId;
                         policies = query.FilteredPolicies;
                         defaultPolicyId = query.DefaultPolicyId;
+                        selectedPolicyConfigId = query.PolicyConfigId;
                         return gridAPI.retrieveData(query);
                     }
 
@@ -133,7 +136,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
                     rpRouteDetail: rpRouteDetail,
                     routingDatabaseId: routingDatabaseId,
                     filteredPolicies: policies,
-                    defaultPolicyId: defaultPolicyId
+                    defaultPolicyId: selectedPolicyConfigId
                 };
 
                 return directiveAPI.load(payload);

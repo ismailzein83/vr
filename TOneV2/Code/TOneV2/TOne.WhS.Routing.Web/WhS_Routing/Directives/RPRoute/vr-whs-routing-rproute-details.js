@@ -49,7 +49,7 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                 };
 
                 $scope.onPolicySelectItem = function (selectedItem) {
-                    loadGrid();
+                    loadGrid(selectedItem.ExtensionConfigurationId);
                 };
 
                 $scope.onGridReady = function (api) {
@@ -91,7 +91,7 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                     loadPolicySelectorPromise.then(function () {
                         UtilsService.safeApply($scope);
 
-                        loadGrid().then(function () {
+                        loadGrid(defaultPolicyId).then(function () {
                             loadGridDeferred.resolve();
                         }).catch(function () {
                             loadGridDeferred.reject();
@@ -116,7 +116,7 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                             filter: {
                                 RoutingDatabaseId: routingDatabaseId
                             },
-                            selectDefaultPolicy: true
+                            selectedIds: defaultPolicyId
                         };
 
                         VRUIUtilsService.callDirectiveLoad(rpRoutePolicyAPI, policySelectorPayload, loadPolicySelectorDeferred);
@@ -128,13 +128,13 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                     ctrl.onReady(api);
             }
 
-            function loadGrid() {
+            function loadGrid(policyOptionConfigId) {
                 var query = null;
 
                 if (rpRouteDetail) {
                     query = {
                         RoutingDatabaseId: routingDatabaseId,
-                        PolicyOptionConfigId: $scope.selectedPolicy.ExtensionConfigurationId, // $scope.selectedPolicy is != undefined since the policy selector is loaded before the grid
+                        PolicyOptionConfigId: policyOptionConfigId, // $scope.selectedPolicy is != undefined since the policy selector is loaded before the grid
                         RoutingProductId: rpRouteDetail.RoutingProductId,
                         SaleZoneId: rpRouteDetail.SaleZoneId
                     };

@@ -41,8 +41,7 @@ app.directive('vrWhsRoutingRproutepolicySelector', ['WhS_Routing_RPRouteAPIServi
 
         };
 
-        function getTemplate(attrs)
-        {
+        function getTemplate(attrs) {
             var multipleselection = "";
             var label = "Policy";
             if (attrs.ismultipleselection != undefined) {
@@ -67,33 +66,31 @@ app.directive('vrWhsRoutingRproutepolicySelector', ['WhS_Routing_RPRouteAPIServi
 
             var selectorAPI;
 
-            function initializeController()
-            {
+            function initializeController() {
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
                 };
             }
-            
+
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload)
-                {
+                api.load = function (payload) {
                     selectorAPI.clearDataSource();
 
                     var filter;
                     var selectDefaultPolicy;
+                    var selectedIds;
 
                     if (payload != undefined) {
                         filter = payload.filter;
                         selectDefaultPolicy = payload.selectDefaultPolicy;
+                        selectedIds = payload.selectedIds;
                     }
 
-                    return WhS_Routing_RPRouteAPIService.GetPoliciesOptionTemplates(UtilsService.serializetoJson(filter)).then(function (response)
-                    {
-                        if (response != null)
-                        {
+                    return WhS_Routing_RPRouteAPIService.GetPoliciesOptionTemplates(UtilsService.serializetoJson(filter)).then(function (response) {
+                        if (response != null) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);
                             }
@@ -102,6 +99,10 @@ app.directive('vrWhsRoutingRproutepolicySelector', ['WhS_Routing_RPRouteAPIServi
                                 var defaultPolicy = UtilsService.getItemByVal(ctrl.datasource, true, 'IsDefault'); // The response is invalid if no default policy exists
                                 VRUIUtilsService.setSelectedValues(defaultPolicy.ExtensionConfigurationId, 'ExtensionConfigurationId', $attrs, ctrl);
                             }
+                            else if (selectedIds != undefined) {
+                                VRUIUtilsService.setSelectedValues(selectedIds, 'ExtensionConfigurationId', $attrs, ctrl);
+                            }
+
                         }
                     });
                 }
