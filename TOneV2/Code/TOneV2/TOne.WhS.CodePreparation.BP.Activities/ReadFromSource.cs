@@ -39,7 +39,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             MemoryStream memStreamRate = new MemoryStream(bytes);
 
             Workbook objExcel = new Workbook(memStreamRate);
-            Vanrise.Common.Utilities.ActivateAspose(); 
+            Vanrise.Common.Utilities.ActivateAspose();
             Worksheet worksheet = objExcel.Worksheets[0];
 
             int count = 1;
@@ -70,7 +70,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
 
             TimeSpan spent = DateTime.Now.Subtract(startReading);
-            context.WriteTrackingMessage(LogEntryType.Information, "Finished reading {0} records from the excel file. It took: {1}.", worksheet.Cells.Rows.Count, spent);
+            context.WriteTrackingMessage(LogEntryType.Information, "Finished reading {0} records from the excel file. It took: {1}.", worksheet.Cells.Rows.Count - 1, spent);
 
 
             MinimumDate.Set(context, minimumDate);

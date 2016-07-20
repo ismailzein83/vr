@@ -81,13 +81,13 @@
 
             $scope.loadEffectiveSaleZones = function (countryNode) {
                 var effectiveZonesPromiseDeffered = UtilsService.createPromiseDeferred();
-                WhS_CP_CodePrepAPIService.GetZoneItems(filter.sellingNumberPlanId, countryNode.nodeId).then(function (response) {
+                WhS_CP_CodePrepAPIService.GetZoneItems(filter.sellingNumberPlanId, countryNode.countryId).then(function (response) {
                     var effectiveZones = [];
                     angular.forEach(response, function (itm) {
                         effectiveZones.push(mapZoneToNode(itm));
                     });
 
-                    var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, countryNode.nodeId, 'nodeId');
+                    var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, countryNode.countryId, 'countryId');
                     var currentCountry = $scope.nodes[countryIndex];
                     currentCountry.effectiveZones = effectiveZones;
 
@@ -108,7 +108,7 @@
 
             $scope.newZoneClicked = function () {
                 var parameters = {
-                    CountryId: $scope.currentNode.nodeId,
+                    CountryId: $scope.currentNode.countryId,
                     CountryName: $scope.currentNode.nodeName,
                     SellingNumberPlanId: filter.sellingNumberPlanId
                 };
@@ -122,7 +122,7 @@
 
             $scope.newCodeClicked = function () {
                 var parameters = {
-                    ZoneId: $scope.currentNode.nodeId,
+                    ZoneId: $scope.currentNode.zoneId,
                     ZoneName: $scope.currentNode.nodeName,
                     SellingNumberPlanId: filter.sellingNumberPlanId,
                     CountryId: $scope.currentNode.countryId,
@@ -139,7 +139,7 @@
             $scope.moveCodesClicked = function () {
                 var codes = codesGridAPI.getSelectedCodes();
                 var parameters = {
-                    ZoneId: $scope.currentNode.nodeId,
+                    ZoneId: $scope.currentNode.zoneId,
                     ZoneName: $scope.currentNode.nodeName,
                     SellingNumberPlanId: filter.sellingNumberPlanId,
                     CountryId: $scope.currentNode.countryId,
@@ -173,7 +173,7 @@
 
             $scope.renameZoneClicked = function () {
                 var parameters = {
-                    ZoneId: $scope.currentNode.nodeId,
+                    ZoneId: $scope.currentNode.zoneId,
                     ZoneName: $scope.currentNode.nodeName,
                     SellingNumberPlanId: filter.sellingNumberPlanId,
                     CountryId: $scope.currentNode.countryId,
@@ -240,7 +240,7 @@
         function onZoneAdded(addedZones) {
             if (addedZones != undefined) {
                 hideShowStateAndClearSelection(true);
-                var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.nodeId, 'nodeId');
+                var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.countryId, 'countryId');
                 var countryNode = $scope.nodes[countryIndex];
                 for (var i = 0; i < addedZones.length; i++) {
                     var node = mapZoneToNode(addedZones[i]);
@@ -248,7 +248,7 @@
                     treeAPI.createNode(node);
                     countryNode.effectiveZones.push(node);
                 }
-                treeAPI.refreshTree($scope.nodes);
+                onSellingNumberPlanSelectorChanged();
 
             }
         }
@@ -278,8 +278,8 @@
             hideShowStateAndClearSelection(true);
 
             var zoneNode = getCurrentZoneNode();
-            var draftStatus = $scope.currentNode.nodeId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.value : WhS_CP_ZoneItemDraftStatusEnum.New.value;
-            var icon = $scope.currentNode.nodeId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.icon : WhS_CP_ZoneItemDraftStatusEnum.New.icon;
+            var draftStatus = $scope.currentNode.zoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.value : WhS_CP_ZoneItemDraftStatusEnum.New.value;
+            var icon = $scope.currentNode.zoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.icon : WhS_CP_ZoneItemDraftStatusEnum.New.icon;
 
             $scope.currentNode.nodeName = renamedZone.NewZoneName;
             $scope.currentNode.DraftStatus = draftStatus;
@@ -345,7 +345,7 @@
 
             var codes = codesGridAPI.getSelectedCodes();
             var parameters = {
-                ZoneId: $scope.currentNode.nodeId,
+                ZoneId: $scope.currentNode.zoneId,
                 ZoneName: $scope.currentNode.nodeName,
                 SellingNumberPlanId: filter.sellingNumberPlanId,
                 CountryId: $scope.currentNode.countryId,
@@ -366,7 +366,7 @@
                     var zoneInput = {
                         SellingNumberPlanId: filter.sellingNumberPlanId,
                         CountryId: $scope.currentNode.countryId,
-                        ZoneId: $scope.currentNode.nodeId,
+                        ZoneId: $scope.currentNode.zoneId,
                         ZoneName: $scope.currentNode.nodeName,
                     };
                     return WhS_CP_CodePrepAPIService.CloseZone(zoneInput)
@@ -459,7 +459,7 @@
         //#endRegion
 
         function getCurrentZoneNode() {
-            var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.countryId, 'nodeId');
+            var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.countryId, 'countryId');
             var countryNode = $scope.nodes[countryIndex];
 
             var zoneIndex = UtilsService.getItemIndexByVal(countryNode.effectiveZones, $scope.currentNode.nodeName, 'nodeName');
@@ -468,7 +468,7 @@
         }
 
         function GetCurrentCountryNodeZones() {
-            var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.countryId, 'nodeId');
+            var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.countryId, 'countryId');
             var countryNode = $scope.nodes[countryIndex];
             return countryNode.effectiveZones;
         }
@@ -484,7 +484,7 @@
 
         function mapZoneInfoFromNode(zoneItem) {
             return {
-                // SaleZoneId: zoneItem.nodeId,
+                // SaleZoneId: zoneItem.zoneId,
                 Name: zoneItem.nodeName
             };
         }
@@ -519,7 +519,7 @@
 
         function mapCountryToNode(country) {
             return {
-                nodeId: country.CountryId,
+                countryId: country.CountryId,
                 nodeName: country.Name,
                 effectiveZones: [],
                 hasRemoteChildren: true,
@@ -555,7 +555,7 @@
             }
 
             return {
-                nodeId: zoneInfo.ZoneId,
+                zoneId: zoneInfo.ZoneId,
                 nodeName: zoneInfo.Name,
                 hasRemoteChildren: false,
                 effectiveZones: [],
@@ -574,7 +574,7 @@
         function getCodesFilterObject() {
             return {
                 SellingNumberPlanId: filter.sellingNumberPlanId,
-                ZoneId: $scope.currentNode.nodeId,
+                ZoneId: $scope.currentNode.zoneId,
                 ZoneName: $scope.currentNode.nodeName,
                 ZoneItemStatus: $scope.currentNode.status,
                 CountryId: $scope.currentNode.countryId,
