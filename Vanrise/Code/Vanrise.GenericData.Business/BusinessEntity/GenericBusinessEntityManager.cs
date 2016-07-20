@@ -384,8 +384,6 @@ namespace Vanrise.GenericData.Business
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(context.EntityDefinitionId, ref lastCheckTime);
         }
-        #endregion
-
 
         public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
         {
@@ -396,6 +394,15 @@ namespace Vanrise.GenericData.Business
         {
             throw new NotImplementedException();
         }
+
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
     }
     public class GenericBusinessEntityFilter
     {

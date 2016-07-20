@@ -49,6 +49,26 @@ namespace Vanrise.GenericData.Business
         }
     }
 
+    public class BusinessEntityMapToInfoContext : BusinessEntityManagerContext, IBusinessEntityMapToInfoContext
+    {
+        public BusinessEntityMapToInfoContext(int businessEntityDefinitionId)
+            : base(businessEntityDefinitionId)
+        {
+        }
+        public BusinessEntityMapToInfoContext(BusinessEntityDefinition businessEntityDefinition)
+            : base(businessEntityDefinition)
+        {
+        }
+
+        public string InfoType { get; set; }
+
+        public dynamic Entity
+        {
+            get;
+            set;
+        }
+    }
+
     public class BusinessEntityGetParentEntityIdContext : BusinessEntityManagerContext, IBusinessEntityGetParentEntityIdContext
     {
         int _parentEntityDefinitionId;

@@ -24,6 +24,15 @@ namespace Vanrise.GenericData.Business
             return beManager.GetEntity(getByIdContext);
         }
 
+        public dynamic MapEntityToInfo(int businessEntityDefinitionId, string infoType, dynamic entity)
+        {
+            var beManager = GetBEManager(businessEntityDefinitionId);
+            var mapEntityToInfoContext = new BusinessEntityMapToInfoContext(businessEntityDefinitionId);
+            mapEntityToInfoContext.InfoType = infoType;
+            mapEntityToInfoContext.Entity = entity;
+            return beManager.MapEntityToInfo(mapEntityToInfoContext);
+        }
+
         public dynamic GetParentEntityId(int businessEntityDefinitionId, int parentBusinessEntityDefinitionId, dynamic entityId)
         {
             var beManager = GetBEManager(businessEntityDefinitionId);

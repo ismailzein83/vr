@@ -12,6 +12,8 @@ namespace Vanrise.GenericData.Entities
 
         dynamic GetEntity(IBusinessEntityGetByIdContext context);
 
+        dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context);
+
         List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context);
 
         bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime);

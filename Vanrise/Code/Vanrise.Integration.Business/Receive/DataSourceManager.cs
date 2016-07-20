@@ -268,5 +268,11 @@ namespace Vanrise.Integration.Business
         {
             throw new NotImplementedException();
         }
+
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

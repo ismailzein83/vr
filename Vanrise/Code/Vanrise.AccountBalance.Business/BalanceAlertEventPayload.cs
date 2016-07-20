@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.AccountBalance.Entities;
 using Vanrise.Entities;
 
 namespace Vanrise.AccountBalance.Business
@@ -15,12 +16,17 @@ namespace Vanrise.AccountBalance.Business
             this._threshold = threshold;
         }
 
+        dynamic _account;
         long _accountId;
         public dynamic Account
         {
             get
             {
-                throw new NotImplementedException();
+                if (_account == null)
+                {
+                    _account = new AccountManager().GetAccount(this._accountId);
+                }
+                return _account;
             }
         }
 

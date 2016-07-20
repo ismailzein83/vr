@@ -22,6 +22,17 @@ namespace Vanrise.GenericData.Entities
         BusinessEntityDefinition EntityDefinition { get; }
     }
 
+    public interface IBusinessEntityMapToInfoContext
+    {
+        string InfoType { get; }
+
+        dynamic Entity { get; }
+
+        int EntityDefinitionId { get; }
+
+        BusinessEntityDefinition EntityDefinition { get; }
+    }
+
     public interface IBusinessEntityGetAllContext
     {
         int EntityDefinitionId { get; }

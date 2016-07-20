@@ -11,7 +11,7 @@ namespace Vanrise.AccountBalance.Business
     {
         public void AddBillingTransaction(BillingTransaction billingTransaction)
         {
-
+            
         }
     }
 }
