@@ -41,7 +41,7 @@
             $scope.selectedQueueInstance = [];
             $scope.selectedQueueStatus = [];
 
-            $scope.createdTimeFrom = new Date();
+            $scope.createdTimeFrom = new Date(new Date().setHours(0, 0, 0, 0));
 
             $scope.ShowGrid = false;
             $scope.isDisabledQueueInstanceSelect = false;
