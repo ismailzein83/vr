@@ -47,6 +47,7 @@
     <Compile Include="BalanceAlertEventPayload.cs" />
     <Compile Include="BalanceAlertRuleManager.cs" />
     <Compile Include="ConfigurationManager.cs" />
+    <Compile Include="LiveBalanceManager.cs" />
     <Compile Include="UsageBalanceManager.cs" />
     <Compile Include="BillingTransactionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -135,6 +135,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BillingTransactionController.cs" />
+    <Compile Include="Controllers\LiveBalanceController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -152,13 +154,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="VR_AccountBalance\Directives\" />
-    <Folder Include="VR_AccountBalance\Services\" />
+    <Folder Include="VR_AccountBalance\Directives\LiveBalance\" />
     <Folder Include="VR_AccountBalance\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_AccountBalance\Constants\ModuleConfig.js" />
+    <Content Include="VR_AccountBalance\Directives\BillingTransaction\Templates\BillingTranactionGridTemplate.html" />
+    <Content Include="VR_AccountBalance\Directives\BillingTransaction\vr-billingtransaction-grid.js" />
+    <Content Include="VR_AccountBalance\Services\APIServices\BillingTransactionAPIService.js" />
+    <Content Include="VR_AccountBalance\Services\APIServices\LiveBalanceAPIService.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
