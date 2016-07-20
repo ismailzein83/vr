@@ -50,7 +50,7 @@ namespace TOne.LCR.Data.SQL
                         routeInfo.Code = reader["Code"] as string;
                         routeInfo.OurZoneID = Zones.Where(z => z.Key == (int)reader["OurZoneID"]).FirstOrDefault().Value;
                         routeInfo.OurServicesFlag = new FlaggedService() { FlaggedServiceID = input.FlaggedServiceID, ServiceColor = input.FlaggedServiceColor, Symbol = input.FlaggedServiceSymbol };
-                        routeInfo.OurActiveRate = (float)reader["OurActiveRate"];
+                        routeInfo.OurActiveRate = (float)Math.Round((float)reader["OurActiveRate"], 4);
                         routeInfo.State = (byte)reader["State"] == 0 ? RouteState.Blocked : RouteState.Enabled;
                         routeInfo.Updated = (DateTime)reader["Updated"];
                         routeInfo.IsBlockAffected = (bool)reader["IsBlockAffected"];
