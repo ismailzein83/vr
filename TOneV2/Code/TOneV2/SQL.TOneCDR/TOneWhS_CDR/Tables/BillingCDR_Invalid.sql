@@ -1,4 +1,4 @@
-CREATE TABLE [TOneWhS_CDR].[BillingCDR_Invalid] (
+﻿CREATE TABLE [TOneWhS_CDR].[BillingCDR_Invalid] (
     [ID]                          BIGINT          IDENTITY (1, 1) NOT NULL,
     [AttemptDateTime]             DATETIME        NULL,
     [AlertDateTime]               DATETIME        NULL,
@@ -27,8 +27,12 @@ CREATE TABLE [TOneWhS_CDR].[BillingCDR_Invalid] (
     [MasterPlanOriginatingZoneId] BIGINT          NULL,
     [PortIN]                      VARCHAR (42)    NULL,
     [PortOUT]                     VARCHAR (42)    NULL,
-    [SwitchId]                    INT             NULL
+    [SwitchId]                    INT             NULL,
+    [CostRateId]                  BIGINT          NULL,
+    [SaleRateId]                  BIGINT          NULL
 );
+
+
 
 
 

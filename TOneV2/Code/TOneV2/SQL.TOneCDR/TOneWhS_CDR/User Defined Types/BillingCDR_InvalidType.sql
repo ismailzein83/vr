@@ -26,7 +26,11 @@
     [ReleaseCode]                 VARCHAR (50)    NULL,
     [ReleaseSource]               VARCHAR (10)    NULL,
     [PortIN]                      VARCHAR (42)    NULL,
-    [PortOUT]                     VARCHAR (42)    NULL);
+    [PortOUT]                     VARCHAR (42)    NULL,
+    [CostRateId]                  BIGINT          NULL,
+    [SaleRateId]                  BIGINT          NULL);
+
+
 
 
 
