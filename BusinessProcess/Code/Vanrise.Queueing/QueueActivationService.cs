@@ -21,7 +21,7 @@ namespace Vanrise.Queueing
         Task _taskCheckNonEmptyQueues;
 
         protected override void Execute()
-        {            
+        {           
             if (_taskCheckNonEmptyQueues == null)
                 CreateTaskCheckNonEmptyQueues();
             if (_taskKeepDequeueing == null)
@@ -32,6 +32,7 @@ namespace Vanrise.Queueing
         {
             _taskCheckNonEmptyQueues = new Task(() =>
             {
+                GC.Collect();
                 try
                 {
                     IEnumerable<QueueInstance> allQueues = _queueInstanceManager.GetReadyQueueInstances();
