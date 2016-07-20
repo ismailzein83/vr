@@ -10,11 +10,14 @@
     [LockedByProcessID]  INT              NULL,
     [LastMessage]        NVARCHAR (MAX)   NULL,
     [RetryCount]         INT              NULL,
+    [EntityId]           VARCHAR (50)     NULL,
     [CreatedTime]        DATETIME         CONSTRAINT [DF_BPInstance_CreatedTime] DEFAULT (getdate()) NULL,
     [StatusUpdatedTime]  DATETIME         NULL,
     [timestamp]          ROWVERSION       NULL,
     CONSTRAINT [PK_BPInstance_1] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

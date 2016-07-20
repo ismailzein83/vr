@@ -2,7 +2,8 @@
 	@TimestampAfter timestamp,
 	@NbOfRows INT,
 	@DefinitionsId varchar(max),
-	@ParentId int
+	@ParentId int,
+	@EntityID varchar(50)
 AS
 BEGIN
 	DECLARE @BPDefinitionIDsTable TABLE (BPDefinitionId int)
@@ -21,13 +22,14 @@ IF (@TimestampAfter IS NULL)
       ,[LockedByProcessID]
       ,[LastMessage]
       ,[RetryCount]
+	   ,EntityID
       ,[CreatedTime]
       ,[StatusUpdatedTime]
       ,[InitiatorUserId]
 	  ,[timestamp]
             INTO #temp_table
             FROM [BP].[BPInstance] 
-            WHERE (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable))
+            WHERE (@EntityID is null or EntityID = @EntityID) and (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable))
             AND (@ParentId is null or ParentID = @ParentId) 
             ORDER BY ID DESC
             
@@ -48,13 +50,14 @@ IF (@TimestampAfter IS NULL)
       ,[LockedByProcessID]
       ,[LastMessage]
       ,[RetryCount]
+	  ,EntityID
       ,[CreatedTime]
       ,[StatusUpdatedTime]
       ,[InitiatorUserId]
 	  ,[timestamp]
             INTO #temp2_table
             FROM [BP].[BPInstance] 
-            WHERE (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable))  AND
+            WHERE (@EntityID is null or EntityID = @EntityID) and (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable))  AND
             ([timestamp] > @TimestampAfter) --ONLY Updated records
             AND (@ParentId is null or ParentID = @ParentId)
             ORDER BY [timestamp]

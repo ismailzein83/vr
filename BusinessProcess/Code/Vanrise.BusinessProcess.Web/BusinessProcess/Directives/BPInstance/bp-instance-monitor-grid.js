@@ -26,12 +26,13 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
 
     function BPInstanceGrid($scope, ctrl) {
 
-        var lastUpdateHandle, lessThanID, nbOfRows, definitionsId;
+        var lastUpdateHandle, lessThanID, nbOfRows, definitionsId, entityId;
         var input = {
             LastUpdateHandle: lastUpdateHandle,
             LessThanID: lessThanID,
             NbOfRows: nbOfRows,
-            DefinitionsId: definitionsId
+            DefinitionsId: definitionsId,
+            EntityId :entityId
         };
 
         var gridAPI;
@@ -61,6 +62,8 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                         input.NbOfRows = undefined;
                         input.DefinitionsId = query.DefinitionsId;
                         input.ParentId = query.BPInstanceID;
+                        input.EntityId = query.EntityId;
+
                         $scope.bpInstances.length = 0;
                         isGettingDataFirstTime = true;
                         minId = undefined;

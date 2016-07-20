@@ -139,7 +139,7 @@
           <rbma:CreateStatusBillingTransaction sap2010:WorkflowViewState.IdRef="CreateStatusBillingTransaction_1">
             <rbma:CreateStatusBillingTransaction.EntityId>
               <InArgument x:TypeArguments="x:Int64">
-                <mca:CSharpValue x:TypeArguments="x:Int64">Input.EntityId</mca:CSharpValue>
+                <mca:CSharpValue x:TypeArguments="x:Int64">Input.ActionEntityId</mca:CSharpValue>
               </InArgument>
             </rbma:CreateStatusBillingTransaction.EntityId>
             <rbma:CreateStatusBillingTransaction.EntityType>
@@ -161,7 +161,7 @@
             </rbma:UpdateEntityStatus.ActionProvisioningData>
             <rbma:UpdateEntityStatus.EntityId>
               <InArgument x:TypeArguments="x:Int64">
-                <mca:CSharpValue x:TypeArguments="x:Int64">Input.EntityId</mca:CSharpValue>
+                <mca:CSharpValue x:TypeArguments="x:Int64">Input.ActionEntityId</mca:CSharpValue>
               </InArgument>
             </rbma:UpdateEntityStatus.EntityId>
             <rbma:UpdateEntityStatus.EntityType>
@@ -178,7 +178,7 @@
         </Sequence>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>d0tDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5Lk1haW5BY3Rpb25CUHNcUmVndWxhckFjdGlvbkJQLnhhbWwdOgO2AQ4CAQFCBU0OAwGBAU4FWQ4CAXJaBWUOAgFjZgVxDgIBVHIFggEcAgE+gwEFtAEKAgECSgtKuwEDAYkBRQtFdQMBggFWC1aEAgIBelELUYkBAgFzYgti2QECAWtdC11wAgFkbgtuvwECAVxpC2ltAgFVegt6oAECAU1/C393AgFGdQt1eAIBP4YBC4YBpgECAQOKAQmyARQCAQqLAQubATECASicAQuxASUCAQuYARGYAX0CATeOARGOAVwCATCTARGTAXACASmuARGuAX0CASGfARGfAXICARqkARGkAVwCAROpARGpAXACAQw=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0tDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5Lk1haW5BY3Rpb25CUHNcUmVndWxhckFjdGlvbkJQLnhhbWwdOgO2AQ4CAQFCBU0OAwGBAU4FWQ4CAXJaBWUOAgFjZgVxDgIBVHIFggEcAgE+gwEFtAEKAgECSgtKuwEDAYkBRQtFdQMBggFWC1aEAgIBelELUYkBAgFzYgti2QECAWtdC11wAgFkbgtuvwECAVxpC2ltAgFVegt6oAECAU1/C393AgFGdQt1eAIBP4YBC4YBpgECAQOKAQmyARQCAQqLAQubATECASicAQuxASUCAQuYARGYAX0CATeOARGOAWICATCTARGTAXACASmuARGuAX0CASGfARGfAXICARqkARGkAWICAROpARGpAXACAQw=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

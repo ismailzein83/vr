@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountPackageService', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountIdentificationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'Retail_BE_AccountServiceAPIService','Retail_BE_AccountServiceService','Retail_BE_ActionRuntimeService',
-    function (Retail_BE_AccountAPIService, Retail_BE_AccountService, Retail_BE_AccountPackageService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountIdentificationService, UtilsService, VRUIUtilsService, VRNotificationService, Retail_BE_AccountServiceAPIService, Retail_BE_AccountServiceService, Retail_BE_ActionRuntimeService) {
+app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountPackageService', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountIdentificationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'Retail_BE_AccountServiceAPIService','Retail_BE_AccountServiceService','Retail_BE_ActionRuntimeService','Retail_BE_EntityTypeEnum','Retail_BE_ActionDefinitionService',
+    function (Retail_BE_AccountAPIService, Retail_BE_AccountService, Retail_BE_AccountPackageService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountIdentificationService, UtilsService, VRUIUtilsService, VRNotificationService, Retail_BE_AccountServiceAPIService, Retail_BE_AccountServiceService, Retail_BE_ActionRuntimeService, Retail_BE_EntityTypeEnum, Retail_BE_ActionDefinitionService) {
     return {
         restrict: 'E',
         scope: {
@@ -113,6 +113,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             drillDownTabs.push(buildAssignedPackagesTab());
             drillDownTabs.push(buildAssignedServicesTab());
             drillDownTabs.push(buildIdentificationRulesTab());
+            drillDownTabs.push(buildActionMonitorTab());
             function buildSubAccountsTab() {
                 var subAccountsTab = {};
 
@@ -238,6 +239,23 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                 return servicesTab;
             }
 
+            function buildActionMonitorTab()
+            {
+                var actionMonitorTab = {};
+
+                actionMonitorTab.title = 'Actions Monitor';
+                actionMonitorTab.directive = 'businessprocess-bp-instance-monitor-grid';
+
+                actionMonitorTab.loadDirective = function (actionMonitorGridAPI, account) {
+                    account.actionMonitorGridAPI = actionMonitorGridAPI;
+                    var actionMonitorGridPayload = {
+                        EntityId: Retail_BE_ActionDefinitionService.getEntityId(Retail_BE_EntityTypeEnum.Account.value, account.Entity.AccountId)
+                    };
+                    return account.actionMonitorGridAPI.loadGrid(actionMonitorGridPayload);
+                };
+                
+                return actionMonitorTab;
+            }
 
             return drillDownTabs;
         }
@@ -299,5 +317,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
         function hasAssignServicePermission() {
             return Retail_BE_AccountServiceAPIService.HasAddAccountServicePermission();
         }
+
+
     }
 }]);

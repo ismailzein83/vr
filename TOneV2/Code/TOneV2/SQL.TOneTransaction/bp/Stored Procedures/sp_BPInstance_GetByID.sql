@@ -16,6 +16,7 @@ BEGIN
       ,[LockedByProcessID]
       ,[LastMessage]
       ,[RetryCount]
+	   ,EntityID
       ,[CreatedTime]
       ,[StatusUpdatedTime]
       ,[InitiatorUserId]

@@ -8,7 +8,7 @@ namespace Vanrise.BusinessProcess.Entities
         public List<int> DefinitionsId { get; set; }
 
         public List<BPInstanceStatus> InstanceStatus { get; set; }
-
+        public string EntityId { get; set; }
         public DateTime? DateFrom { get; set; }
 
         public DateTime? DateTo { get; set; }

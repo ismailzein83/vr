@@ -9,5 +9,6 @@ namespace Retail.BusinessEntity.Entities
     public interface IActionDefinitionManager : IBEManager
     {
         ActionBPDefinitionSettings GetActionBPDefinitionSettings(Guid actionDefinitionId);
+        ActionDefinition GetActionDefinition(Guid actionDefinitionId);
     }
 }

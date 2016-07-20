@@ -19,6 +19,7 @@ namespace Vanrise.BusinessProcess.Entities
 
         public abstract string GetTitle();
 
+        public virtual string EntityId { get; set; }
         public virtual void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
         {
 

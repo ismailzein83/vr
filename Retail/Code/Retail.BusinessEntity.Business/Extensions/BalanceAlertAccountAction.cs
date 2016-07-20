@@ -43,7 +43,7 @@ namespace Retail.BusinessEntity.Business.Extensions
             var actionBPInput = new ActionBPInputArgument
             {
                 ActionDefinitionId = this.ActionDefinitionId,
-                EntityId = entityId,
+                ActionEntityId = entityId,
                 ActionBPSettings = this.ActionBPSettings
             };
             var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput { InputArguments = actionBPInput };

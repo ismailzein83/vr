@@ -23,13 +23,13 @@ namespace Vanrise.BusinessProcess.Business
             return bpInstanceDetails;
         }
 
-        public BPInstanceUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<int> definitionsId, int parentId)
+        public BPInstanceUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<int> definitionsId, int parentId, string entityId)
         {
             BPInstanceUpdateOutput bpInstanceUpdateOutput = new BPInstanceUpdateOutput();
 
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
 
-            List<BPInstance> bpInstances = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, definitionsId, parentId);
+            List<BPInstance> bpInstances = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, definitionsId, parentId, entityId);
             List<BPInstanceDetail> bpInstanceDetails = new List<BPInstanceDetail>();
             foreach (BPInstance bpInstance in bpInstances)
             {
@@ -70,7 +70,7 @@ namespace Vanrise.BusinessProcess.Business
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
             string processTitle = createProcessInput.InputArguments.GetTitle();
 
-            long processInstanceId = dataManager.InsertInstance(processTitle, createProcessInput.ParentProcessID, processDefinition.BPDefinitionID, createProcessInput.InputArguments, BPInstanceStatus.New, createProcessInput.InputArguments.UserId);
+            long processInstanceId = dataManager.InsertInstance(processTitle, createProcessInput.ParentProcessID, processDefinition.BPDefinitionID, createProcessInput.InputArguments, BPInstanceStatus.New, createProcessInput.InputArguments.UserId, createProcessInput.InputArguments.EntityId);
             IBPTrackingDataManager dataManagerTracking = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
             dataManagerTracking.Insert(new BPTrackingMessage
             {

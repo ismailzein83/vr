@@ -11,9 +11,23 @@ namespace Retail.BusinessEntity.Entities
     {
         public Guid ActionDefinitionId { get; set; }
 
-        public long EntityId { get; set; }
+        public long ActionEntityId { get; set; }
 
         public ActionBPSettings ActionBPSettings { get; set; }
+
+        public override string EntityId
+        {
+            get
+            {
+                var actionBPDefinition = BEManagerFactory.GetManager<IActionDefinitionManager>().GetActionDefinition(this.ActionDefinitionId);
+                if (actionBPDefinition == null)
+                    throw new NullReferenceException(String.Format("actionBPDefinition ActionDefinitionId '{0}'", this.ActionDefinitionId));
+                if (actionBPDefinition.Settings == null)
+                    throw new NullReferenceException(String.Format("actionBPDefinition.Settings ActionDefinitionId '{0}'", this.ActionDefinitionId));
+                return String.Format("Retail_BE_{0}_{1}", actionBPDefinition.EntityType, this.ActionEntityId);
+            }
+        }
+
 
         public override string ProcessName
         {

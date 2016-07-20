@@ -1,8 +1,8 @@
 ﻿"use strict";
 
 app.directive("retailBeAccountserviceGrid", ["UtilsService", "VRNotificationService", "Retail_BE_AccountServiceAPIService",
-    "Retail_BE_AccountServiceService", "VRUIUtilsService","Retail_BE_ActionRuntimeService",
-function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIService, Retail_BE_AccountServiceService, VRUIUtilsService, Retail_BE_ActionRuntimeService) {
+    "Retail_BE_AccountServiceService", "VRUIUtilsService","Retail_BE_ActionRuntimeService","Retail_BE_ActionDefinitionService","Retail_BE_EntityTypeEnum",
+function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIService, Retail_BE_AccountServiceService, VRUIUtilsService, Retail_BE_ActionRuntimeService, Retail_BE_ActionDefinitionService, Retail_BE_EntityTypeEnum) {
 
     var directiveDefinitionObject = {
 
@@ -29,7 +29,7 @@ function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIServic
 
         var gridAPI;
         this.initializeController = initializeController;
-
+        var drillDownManager;
         function initializeController() {
             $scope.scopeModel = {};
 
@@ -43,7 +43,7 @@ function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIServic
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
-
+                drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(buildDrillDownTabs(), gridAPI);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
@@ -53,14 +53,21 @@ function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIServic
                         return gridAPI.retrieveData(query);
                     }
                     directiveAPI.onAccountServiceAdded = function (accountServiceObject) {
+                        drillDownManager.setDrillDownExtensionObject(accountServiceObject);
                         gridAPI.itemAdded(accountServiceObject);
                     }
                     return directiveAPI;
                 }
             };
+
             $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return Retail_BE_AccountServiceAPIService.GetFilteredAccountServices(dataRetrievalInput)
                     .then(function (response) {
+                        if (response && response.Data) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                drillDownManager.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -68,6 +75,30 @@ function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIServic
                     });
             };
 
+        }
+
+        function buildDrillDownTabs()
+        {
+            var drillDownTabs = [];
+            drillDownTabs.push(buildActionMonitorTab());
+
+            function buildActionMonitorTab() {
+                var actionMonitorTab = {};
+
+                actionMonitorTab.title = 'Actions Monitor';
+                actionMonitorTab.directive = 'businessprocess-bp-instance-monitor-grid';
+
+                actionMonitorTab.loadDirective = function (actionMonitorGridAPI, accountService) {
+                    accountService.actionMonitorGridAPI = actionMonitorGridAPI;
+                    var actionMonitorGridPayload = {
+                        EntityId: Retail_BE_ActionDefinitionService.getEntityId(Retail_BE_EntityTypeEnum.AccountService.value, accountService.Entity.AccountServiceId)
+                    };
+                    return accountService.actionMonitorGridAPI.loadGrid(actionMonitorGridPayload);
+                };
+
+                return actionMonitorTab;
+            }
+            return drillDownTabs;
         }
 
         function defineMenuActions() {
@@ -98,6 +129,7 @@ function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIServic
                             function () {
                                 $scope.scopeModel.isloadingGrid = true;
                                 return Retail_BE_AccountServiceAPIService.GetAccountServiceDetail(dataItem.Entity.AccountServiceId).then(function (response) {
+                                    drillDownManager.setDrillDownExtensionObject(response);
                                     gridAPI.itemUpdated(response);
                                     $scope.scopeModel.isloadingGrid = false;
                                 });
@@ -113,6 +145,7 @@ function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIServic
 
         function editAccountService(accountServiceObj) {
             var onAccountServiceUpdated = function (accountServiceObject) {
+                drillDownManager.setDrillDownExtensionObject(accountServiceObject);
                 gridAPI.itemUpdated(accountServiceObject);
 
             }

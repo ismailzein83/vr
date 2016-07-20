@@ -47,7 +47,7 @@
                 var inputArguments = {
                     $type: "Retail.BusinessEntity.Entities.ActionBPInputArgument, Retail.BusinessEntity.Entities",
                     ActionDefinitionId: actionDefinitionEntity.ActionDefinitionId,
-                    EntityId: entityId,
+                    ActionEntityId: entityId,
                     ActionBPSettings: directiveAPI.getData(),
                 };
                 var input = {

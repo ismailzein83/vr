@@ -6,7 +6,7 @@ namespace Vanrise.BusinessProcess.Data
 {
     public interface IBPInstanceDataManager : IDataManager
     {
-        List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<int> definitionsId, int parentId);
+        List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<int> definitionsId, int parentId, string entityId);
         List<BPInstance> GetBeforeId(BPInstanceBeforeIdInput input);
         BigResult<BPInstanceDetail> GetFilteredBPInstances(DataRetrievalInput<BPInstanceQuery> input);
 
@@ -24,6 +24,6 @@ namespace Vanrise.BusinessProcess.Data
 
         BPInstance GetBPInstance(int bpInstanceId);
 
-        long InsertInstance(string processTitle, long? parentId, int definitionID, object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId);       
+        long InsertInstance(string processTitle, long? parentId, int definitionID, object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId,string entityId);       
     }
 }
