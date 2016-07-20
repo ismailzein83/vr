@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    class StyleFormatingConfig : ExtensionConfiguration
+    public class StyleFormatingConfig : ExtensionConfiguration
     {
         public const string EXTENSION_TYPE = "VRCommon_StyleFormating";
 
