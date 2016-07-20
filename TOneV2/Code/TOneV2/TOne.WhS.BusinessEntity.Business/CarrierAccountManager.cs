@@ -503,6 +503,8 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 CarrierAccountId = carrierAccount.CarrierAccountId,
                 Name = GetCarrierAccountName(_carrierProfileManager.GetCarrierProfileName(carrierAccount.CarrierProfileId), carrierAccount.NameSuffix),
+                AccountType = carrierAccount.AccountType,
+                SellingNumberPlanId = carrierAccount.SellingNumberPlanId
             };
         }
         
