@@ -234,5 +234,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 default: throw new NotImplementedException(String.Format("Business Entity Definition Name '{0}'", context.ParentEntityDefinition.Name));
             }
         }
+
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

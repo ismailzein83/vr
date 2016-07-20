@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.RouteSync.Entities
 {
+    public enum RouteRangeType { ByCustomer = 0, ByCodePrefix = 1, ByCustomerAndCode = 2, Random = 3}
+
     public abstract class RouteReader
     {
         public int ConfigId { get; set; }
@@ -17,16 +19,24 @@ namespace TOne.WhS.RouteSync.Entities
 
     public interface IRouteReaderGetReadRangesContext
     {
-        List<RouteReadRange> Ranges { set; }
+        RouteRangeType RangeType { set; }
+
+        List<RouteRangeInfo> Ranges { set; }
     }
 
-    public class RouteReadRange
+    public class RouteRangeInfo
     {
-        public object RangeInfo { get; set; }
+        public string CustomerId { get; set; }
+
+        public string CodePrefix { get; set; }
     }
 
     public interface IRouteReaderContext
     {
+        RouteRangeType? RouteRangeType { get; }
+
+        RouteRangeInfo RouteRangeInfo { get; }
+
         void OnRouteReceived(Route route, RouteReceivedAdditionInfo additionalInfo);
     }
 

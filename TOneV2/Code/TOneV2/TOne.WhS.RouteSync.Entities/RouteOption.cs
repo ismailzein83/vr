@@ -10,6 +10,6 @@ namespace TOne.WhS.RouteSync.Entities
     {
         public string SupplierId { get; set; }
 
-        public Decimal Percentage { get; set; }
+        public Decimal? Percentage { get; set; }
     }
 }

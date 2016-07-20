@@ -12,36 +12,50 @@ namespace TOne.WhS.RouteSync.Entities
 
         public abstract void Initialize(ISwitchRouteSynchronizerInitializeContext context);
 
-        public abstract void ConvertRoute(ISwitchRouteSynchronizerConvertRouteContext context);
+        public abstract void ConvertRoutes(ISwitchRouteSynchronizerConvertRoutesContext context);
 
-        public abstract void UpdateConvertedRoute(ISwitchRouteSynchronizerUpdateConvertedRouteContext context);
+        public abstract void UpdateConvertedRoutes(ISwitchRouteSynchronizerUpdateConvertedRoutesContext context);
 
         public abstract void Finalize(ISwitchRouteSynchronizerFinalizeContext context);
     }
 
+    public enum RouteSyncDeliveryMethod { Batches = 0, AllRoutes = 1 }
+
     public interface ISwitchRouteSynchronizerInitializeContext
     {
+        RouteRangeType? RouteRangeType { get; }
+
         Object InitializationData { set; }
-    }
 
-    public interface ISwitchRouteSynchronizerConvertRouteContext
+        RouteSyncDeliveryMethod SupportedDeliveryMethod { set; }
+    }
+    
+    public interface ISwitchRouteSynchronizerConvertRoutesContext
     {
+        RouteRangeType? RouteRangeType { get; }
+
+        RouteRangeInfo RouteRangeInfo { get; }
+
         Object InitializationData { get; }
 
-        Route Route { get; }
+        List<Route> Routes { get; }
 
-        Object ConvertedRoute { set; }
+        List<Object> ConvertedRoutes { set; }
     }
 
-    public interface ISwitchRouteSynchronizerUpdateConvertedRouteContext
+    public interface ISwitchRouteSynchronizerUpdateConvertedRoutesContext
     {
-        Object InitializationData { get; }
+        RouteRangeType? RouteRangeType { get; }
 
-        Object ConvertedRoute { get; }
+        RouteRangeInfo RouteRangeInfo { get; }
+
+        Object InitializationData { get; }
     }
 
     public interface ISwitchRouteSynchronizerFinalizeContext
     {
+        RouteRangeType? RouteRangeType { get; }
+
         Object InitializationData { get; }
     }
 }
