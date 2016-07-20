@@ -12,7 +12,8 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SupplierPriceList_SyncWithImportedData]
 AS
 BEGIN
 	SET NOCOUNT ON;
-	
+
+Begin Try
 	BEGIN TRAN
 
     Insert into Tonewhs_be.SupplierPriceList (ID, SupplierID, CurrencyID, FileID)
@@ -46,4 +47,21 @@ BEGIN
 	on sr.ID = srchanged.ID Where srchanged.ProcessInstanceID = @ProcessInstanceId
 	
 	COMMIT TRAN
+	End Try
+	
+	Begin Catch
+	If @@TranCount>0
+		RollBack Tran
+		
+		DECLARE @ErrorMessage NVARCHAR(4000);
+		DECLARE @ErrorSeverity INT;
+		DECLARE @ErrorState INT;
+		
+		SELECT 
+        @ErrorMessage = ERROR_MESSAGE(),
+        @ErrorSeverity = ERROR_SEVERITY(),
+        @ErrorState = ERROR_STATE();
+
+		RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+	End Catch 
 END

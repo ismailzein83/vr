@@ -324,5 +324,10 @@
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_RatePlanPreviewSummary_Insert.sql" />
     <Build Include="TOneWhS_Sales\Stored Procedures\RP_RatePlanPreviewSummary_Get.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetSaleZoneRoutingProductsEffectiveAfter.sql" />
+    <Build Include="TOneWhS_BE\Tables\Deal.sql" />
+    <Build Include="TOneWhS_Routing\Stored Procedures\sp_RoutingDatabase_UpdateSettings.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_Deal_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_Deal_Insert.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_Deal_GetAll.sql" />
   </ItemGroup>
 </Project>
