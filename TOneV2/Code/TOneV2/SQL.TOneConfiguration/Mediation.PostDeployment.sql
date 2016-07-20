@@ -61,7 +61,7 @@ set identity_insert [genericdata].[DataStore] on;
 ;with cte_data([ID],[Name],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(201,'Mediation Store', '{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConnectionString":"Data Source=192.168.110.185;Initial Catalog=Mediation_Dev;User ID=development; Password=dev!123","ConfigId":1}')
+(201,'Mediation Store', '{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConnectionStringName":"Mediation_GenericRecord_DBConnString","ConfigId":1}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Settings]))
 merge	[genericdata].[DataStore] as t
