@@ -34,14 +34,14 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    var styleFormating;
+                    var styleFormatingSettings;
 
                     if (payload != undefined) {
-                        styleFormating = payload.switchIntegration;
+                        styleFormatingSettings = payload.styleFormatingSettings;
                     }
 
-                    if (styleFormating != undefined) {
-                        $scope.scopeModel.connectionString = styleFormating.ClassName;
+                    if (styleFormatingSettings != undefined) {
+                        $scope.scopeModel.connectionString = styleFormatingSettings.ClassName;
                     }
                 };
 
@@ -53,8 +53,8 @@
 
                 function getData() {
                     var data = {
-                        $type: "Retail.BusinessEntity.MainExtensions.SwitchIntegrations.Radius,Retail.BusinessEntity.MainExtensions",
-                        ConnectionString: $scope.scopeModel.className
+                        $type: "Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions",
+                        ClassName: $scope.scopeModel.className
                     }
                     return data;
                 }
@@ -62,6 +62,6 @@
         }
     }
 
-    app.directive('vrCommonStyleFormatingCSSClass', StyleFormatingCSSClass);
+    app.directive('vrCommonStyleformatingCssclass', StyleFormatingCSSClass);
 
 })(app);

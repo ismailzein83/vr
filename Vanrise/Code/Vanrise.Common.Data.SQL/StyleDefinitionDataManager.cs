@@ -34,8 +34,8 @@ namespace Vanrise.Common.Data.SQL
         public bool Insert(StyleDefinition StyleDefinitionItem)
         {
             //object StyleDefinitionId;
-            //string serializedSettings = StyleDefinitionItem.Settings != null ? Vanrise.Common.Serializer.Serialize(StyleDefinitionItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("common.sp_StyleDefinition_Insert", StyleDefinitionItem.StyleDefinitionId, StyleDefinitionItem.Name);
+            string serializedSettings = StyleDefinitionItem.StyleDefinitionSettings != null ? Vanrise.Common.Serializer.Serialize(StyleDefinitionItem.StyleDefinitionSettings) : null;
+            int affectedRecords = ExecuteNonQuerySP("common.sp_StyleDefinition_Insert", StyleDefinitionItem.StyleDefinitionId, StyleDefinitionItem.Name, serializedSettings);
 
             if (affectedRecords > 0)
             {
@@ -47,8 +47,8 @@ namespace Vanrise.Common.Data.SQL
 
         public bool Update(StyleDefinition StyleDefinitionItem)
         {
-            //string serializedSettings = StyleDefinitionItem.Settings != null ? Vanrise.Common.Serializer.Serialize(StyleDefinitionItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("common.sp_StyleDefinition_Update", StyleDefinitionItem.StyleDefinitionId, StyleDefinitionItem.Name);
+            string serializedSettings = StyleDefinitionItem.StyleDefinitionSettings != null ? Vanrise.Common.Serializer.Serialize(StyleDefinitionItem.StyleDefinitionSettings) : null;
+            int affectedRecords = ExecuteNonQuerySP("common.sp_StyleDefinition_Update", StyleDefinitionItem.StyleDefinitionId, StyleDefinitionItem.Name, serializedSettings);
             return (affectedRecords > 0);
         }
 

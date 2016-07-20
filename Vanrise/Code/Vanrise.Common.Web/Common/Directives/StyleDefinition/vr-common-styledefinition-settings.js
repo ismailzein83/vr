@@ -81,9 +81,9 @@
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (settings != undefined && settings.StyleDefinitionIntegration != null) {
+                                if (settings != undefined && settings.StyleFormatingSettings != null) {
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, settings.StyleDefinitionIntegration.ConfigId, 'ExtensionConfigurationId');
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, settings.StyleFormatingSettings.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
@@ -95,7 +95,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { styleDefinitionIntegration: settings.StyleDefinitionIntegration };
+                            var directivePayload = { styleFormatingSettings: settings.StyleFormatingSettings };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -154,6 +154,6 @@
         }
     }
 
-    app.directive('vrCommonStyleDefinitionSettings', StyleDefinitionSettingsDirective);
+    app.directive('vrCommonStyledefinitionSettings', StyleDefinitionSettingsDirective);
 
 })(app);

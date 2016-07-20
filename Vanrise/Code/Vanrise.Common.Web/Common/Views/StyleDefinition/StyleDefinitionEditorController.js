@@ -98,7 +98,7 @@
             settingsDirectiveReadyDeferred.promise.then(function () {
                 var settingsDirectivePayload;
                 if (styleDefinitionEntity != undefined) {
-                    settingsDirectivePayload = { settings: styleDefinitionEntity.Settings };
+                    settingsDirectivePayload = { settings: styleDefinitionEntity.StyleDefinitionSettings };
                 }
                 VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
             });
@@ -137,13 +137,14 @@
         }
 
         function buildStyleDefinitionObjFromScope() {
-            //var settings = settingsDirectiveAPI.getData();
+            var settings = settingsDirectiveAPI.getData();
             //settings.Description = $scope.scopeModel.description;
             //settings.Location = $scope.scopeModel.location;
 
             return {
                 StyleDefinitionId: styleDefinitionEntity != undefined ? styleDefinitionEntity.StyleDefinitionId : undefined,
                 Name: $scope.scopeModel.name,
+                StyleDefinitionSettings: settings
             };
         }
     }
