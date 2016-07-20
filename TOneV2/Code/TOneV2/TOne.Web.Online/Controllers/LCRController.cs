@@ -30,6 +30,7 @@ namespace TOne.Web.Online.Controllers
         [HttpGet]
         public List<RouteModel> GetRoutes(bool showBlocks, bool? isBlock, int topValue, int from, int to, string customerId = null, string supplierId = null, string code = null, string zone = null)
         {
+            Vanrise.Common.LoggerFactory.GetLogger().WriteInformation("{0}- showBlocks = {1}-isBlock={2}-topValue={3}-from={4}to={5}customerId={6}-supplierId={7}-code={8}-zone={9}.", "GetRoutes", showBlocks, isBlock, topValue, from, to, customerId, supplierId, code, zone);
             List<RouteInfo> routeInfos = _routeManager.GetRoutes(showBlocks, isBlock, topValue, from, to, customerId, supplierId, code, zone);
             List<RouteModel> routeModels = new List<RouteModel>();
             routeModels = ModelMappers.RouteModelMapper.MapRouteModel(routeInfos);
@@ -39,6 +40,7 @@ namespace TOne.Web.Online.Controllers
         [HttpGet]
         public List<SaleZoneRateModel> GetCustomerLCR(string customerId, string zoneName)
         {
+            Vanrise.Common.LoggerFactory.GetLogger().WriteInformation("{0}-CustomerId={1}-zoneName={2}-.", "GetCustomerLCR", customerId, zoneName);
             ZoneRateManager manager = new ZoneRateManager();
             return SaleZoneRateModelMapper.MapSaleZoneRateModels(manager.GetCustomerSaleZones(customerId, zoneName));
         }

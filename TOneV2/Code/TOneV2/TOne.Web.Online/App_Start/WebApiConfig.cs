@@ -14,7 +14,7 @@ namespace TOne.Web.Online
         {
             AuthenticationHandler authenticationHandler = new AuthenticationHandler() { InnerHandler = new HttpControllerDispatcher(config) };
             // Web API configuration and services
-
+            config.Filters.Add(new ExceptionFilter());
             // Web API routes
             config.MapHttpAttributeRoutes();
 

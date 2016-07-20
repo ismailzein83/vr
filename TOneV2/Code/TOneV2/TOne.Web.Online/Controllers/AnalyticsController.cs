@@ -48,23 +48,28 @@ namespace TOne.Web.Online.Controllers
         [HttpPost]
         public bool UpdateRateServiceFlag([FromBody]string parameters)
         {
+            Vanrise.Common.LoggerFactory.GetLogger().WriteInformation("{0}-parameters={1}", "UpdateRateServiceFlag", parameters);
             return _analyticsManager.UpdateRateServiceFlag(parameters);
         }
         [HttpGet]
         public List<TOne.Analytics.Entities.CarrierSummaryView> GetCarrierSummary(TOne.BusinessEntity.Entities.CarrierType carrierType, DateTime fromDate, DateTime toDate, int from, int to, char groupByProfile = 'N', string customerID = null, string supplierID = null, int? topCount = null)
         {
+            Vanrise.Common.LoggerFactory.GetLogger().WriteInformation("{0}-carrierType={1}-fromDate={2}-toDate={3}-customerID={4}-supplierID={5}-topCount={6}-groupByProfile={7}-from={8}-to={9}", "GetCarrierSummary", carrierType.ToString(), fromDate, toDate, customerID, supplierID, topCount, groupByProfile, from, to);
+
             return _analyticsManager.GetCarrierSummary(carrierType.ToString(), fromDate, toDate, customerID, supplierID, topCount, groupByProfile, from, to);
         }
 
         [HttpGet]
         public List<TOne.Analytics.Entities.TopCarriersView> GetTopCustomers(DateTime fromDate, DateTime toDate, int topCount)
         {
+            Vanrise.Common.LoggerFactory.GetLogger().WriteInformation("{0}-fromDate={1}-toDate={2}-topCount={3}", "GetTopCustomers", fromDate, toDate, topCount);
             return _analyticsManager.GetTopCustomers(fromDate, toDate, topCount);
         }
 
         [HttpGet]
         public List<TOne.Analytics.Entities.TopCarriersView> GetTopSuppliers(DateTime fromDate, DateTime toDate, int topCount)
         {
+            Vanrise.Common.LoggerFactory.GetLogger().WriteInformation("{0}-fromDate={1}-toDate={2}-topCount={3}", "GetTopSuppliers", fromDate, toDate, topCount);
             return _analyticsManager.GetTopSuppliers(fromDate, toDate, topCount);
         }
 
@@ -73,19 +78,21 @@ namespace TOne.Web.Online.Controllers
         {
             //if (toDate.Subtract(fromDate).TotalDays > 14)
             //   throw new  HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Date Range must be 14 days or less"));
-
+            Vanrise.Common.LoggerFactory.GetLogger().WriteInformation("{0}-fromDate={1}-toDate={2}", "GetLastTwoWeeksProfit", fromDate, toDate);
             return _analyticsManager.GetLastWeeksProfit(fromDate, toDate);
         }
 
         [HttpGet]
         public TOne.Analytics.Entities.TrafficSummaryView GetSummary(DateTime fromDate, DateTime toDate)
         {
+            Vanrise.Common.LoggerFactory.GetLogger().WriteInformation("{0}-fromDate={1}-toDate={2}", "GetSummary", fromDate, toDate);
             return _analyticsManager.GetSummary(fromDate, toDate);
         }
 
         [HttpGet]
         public TOne.Analytics.Entities.TrafficSummaryView GetSummaryOneDay(DateTime day)
         {
+            Vanrise.Common.LoggerFactory.GetLogger().WriteInformation("{0}-day={1}.", "GetSummaryOneDay", day);
             return _analyticsManager.GetSummary(day, day.AddDays(1));
         }
     }
