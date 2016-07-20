@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE VR_AccountBalance.bp_CreateClosingPeriod 
+CREATE PROCEDURE [VR_AccountBalance].[bp_CreateClosingPeriod] 
 	@ClosingTime datetime,
 	@UsageTransactionTypeId int
 AS
@@ -20,6 +20,8 @@ BEGIN TRY
 		
 		SET @ClosingPeriodID = @@identity
 		
+		
+		--insert USAGE billing transactions
 		INSERT INTO [VR_AccountBalance].[BillingTransaction]
 				   ([AccountID]
 				   ,[TransactionTypeID]
@@ -36,6 +38,7 @@ BEGIN TRY
 			   ,1
 			   ,@ClosingPeriodID
 		FROM [VR_AccountBalance].[LiveBalance]
+		WHERE [UsageBalance] > 0
 		
 		INSERT INTO [VR_AccountBalance].[BalanceHistory]
 				   ([ClosingPeriodID]

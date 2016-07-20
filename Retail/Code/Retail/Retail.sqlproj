@@ -156,5 +156,14 @@
     <Build Include="Security\VR_AccountBalance.sql" />
     <Build Include="VR_AccountBalance\Tables\BalanceUsageQueue.sql" />
     <Build Include="VR_AccountBalance\User Defined Types\BalanceUpdate.sql" />
+    <Build Include="VR_AccountBalance\Tables\BillingTransactionType.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_ActionDefinition_Update.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_ActionDefinition_Insert.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_ActionDefinition_GetAll.sql" />
+    <Build Include="Retail\Stored Procedures\sp_StatusDefinition_Update.sql" />
+    <Build Include="Retail\Stored Procedures\sp_StatusDefinition_Insert.sql" />
+    <Build Include="Retail\Stored Procedures\sp_StatusDefinition_GetAll.sql" />
+    <Build Include="Retail\Stored Procedures\sp_AccountService_UpdateStatusID.sql" />
+    <Build Include="Retail\Stored Procedures\sp_Account_UpdateStatusID.sql" />
   </ItemGroup>
 </Project>

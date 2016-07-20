@@ -3,9 +3,12 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [Retail].[sp_Account_GetAll]
+create PROCEDURE [Retail].[sp_AccountService_UpdateStatusID]
+	@ID BIGINT,
+	@StatusID uniqueidentifier
 AS
 BEGIN
-	SELECT ID, Name, [TypeID], Settings, [StatusID] ,ParentID
-	FROM Retail.Account
+		UPDATE Retail.AccountService
+		SET StatusID = @StatusID
+		WHERE ID = @ID
 END

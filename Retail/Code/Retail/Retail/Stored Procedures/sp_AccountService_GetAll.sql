@@ -3,9 +3,9 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [Retail].[sp_AccountService_GetAll]
+CREATE PROCEDURE [Retail].[sp_AccountService_GetAll]
 AS
 BEGIN
-	SELECT ID, AccountId, ServiceTypeID,ServiceChargingPolicyID, Settings
+	SELECT ID, AccountId, ServiceTypeID,ServiceChargingPolicyID, Settings,StatusID
 	FROM Retail.AccountService
 END
