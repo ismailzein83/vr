@@ -10,5 +10,9 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public int CarrierAccountId { get; set; }
         public string Name { get; set; }
+
+        public CarrierAccountType AccountType { get; set; }
+
+        public int? SellingNumberPlanId { get; set; }   
     }
 }
