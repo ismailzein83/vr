@@ -100,22 +100,33 @@ namespace TOne.WhS.Routing.Business
             int defaultPolicyId;
             IEnumerable<int> selectedPolicyIds = this.GetRoutingDatabasePolicyIds(filter.RoutingDatabaseId, out defaultPolicyId);
             Func<RPRouteOptionPolicySetting, bool> filterExpression = (itm) => selectedPolicyIds.Contains(itm.ExtensionConfigurationId);
+
+            IEnumerable<RPRouteOptionPolicySetting> cachedFilteredConfigs = cachedConfigs.FindAllRecords(filterExpression);
             
-            IEnumerable<RPRouteOptionPolicySetting> filteredConfigs = cachedConfigs.FindAllRecords(filterExpression);
-            
-            if (filteredConfigs == null || filteredConfigs.Count() == 0)
-                throw new NullReferenceException("filteredConfigs");
+            if (cachedFilteredConfigs == null || cachedFilteredConfigs.Count() == 0)
+                throw new NullReferenceException("cachedFilteredConfigs");
+
+            List<RPRouteOptionPolicySetting> filteredConfigs = new List<RPRouteOptionPolicySetting>();
 
             // Set the default policy
             bool isDefaultPolicySet = false;
-            foreach (RPRouteOptionPolicySetting config in filteredConfigs)
+            foreach (RPRouteOptionPolicySetting config in cachedFilteredConfigs)
             {
-                if (config.ExtensionConfigurationId == defaultPolicyId)
+                RPRouteOptionPolicySetting item = new RPRouteOptionPolicySetting() { 
+                    BehaviorFQTN = config.BehaviorFQTN,
+                    Editor = config.Editor,
+                    ExtensionConfigurationId = config.ExtensionConfigurationId,
+                    IsDefault= config.IsDefault,
+                    Name = config.Name,
+                    Title = config.Title
+                };
+
+                if (item.ExtensionConfigurationId == defaultPolicyId)
                 {
-                    config.IsDefault = true;
+                    item.IsDefault = true;
                     isDefaultPolicySet = true;
-                    break;
                 }
+                filteredConfigs.Add(item);
             }
 
             if (!isDefaultPolicySet)
