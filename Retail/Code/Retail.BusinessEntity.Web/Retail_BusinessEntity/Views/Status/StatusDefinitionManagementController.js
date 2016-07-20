@@ -9,7 +9,7 @@
         var gridAPI;
 
         var entityTypeAPI;
-        var entityTypeAPISelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var entityTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
@@ -37,7 +37,7 @@
 
             $scope.scopeModel.onEntityTypeSelectorReady = function (api) {
                 entityTypeAPI = api;
-                entityTypeAPISelectorReadyDeferred.resolve();
+                entityTypeSelectorReadyDeferred.resolve();
             }
         }
 
@@ -59,7 +59,7 @@
 
         function loadEntityTypeSelector() {
             var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-            entityTypeAPISelectorReadyDeferred.promise.then(function () {
+            entityTypeSelectorReadyDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(entityTypeAPI, undefined, statusDefinitionSelectorLoadDeferred);
             });
             return statusDefinitionSelectorLoadDeferred.promise;

@@ -12,7 +12,7 @@
         var statusDefinitionEntity;
 
         var entityTypeAPI;
-        var entityTypeAPISelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var entityTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -45,7 +45,7 @@
 
             $scope.scopeModel.onEntityTypeSelectorReady = function (api) {
                 entityTypeAPI = api;
-                entityTypeAPISelectorReadyDeferred.resolve();
+                entityTypeSelectorReadyDeferred.resolve();
             }
         }
         function load() {
@@ -93,17 +93,17 @@
             $scope.scopeModel.name = statusDefinitionEntity.Name;
         }
         function loadEntityTypeSelector() {
-            var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-            entityTypeAPISelectorReadyDeferred.promise.then(function () {
-                var statusDefinitionSelectorPayload = null;
+            var entityTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            entityTypeSelectorReadyDeferred.promise.then(function () {
+                var entityTypeSelectorPayload = null;
                 if (isEditMode) {
-                    statusDefinitionSelectorPayload = {
+                    entityTypeSelectorPayload = {
                         selectedIds: statusDefinitionEntity.EntityType
                     };
                 }
-                VRUIUtilsService.callDirectiveLoad(entityTypeAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
+                VRUIUtilsService.callDirectiveLoad(entityTypeAPI, entityTypeSelectorPayload, entityTypeSelectorLoadDeferred);
             });
-            return statusDefinitionSelectorLoadDeferred.promise;
+            return entityTypeSelectorLoadDeferred.promise;
         }
 
         function insert() {
