@@ -114,6 +114,8 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             drillDownTabs.push(buildAssignedServicesTab());
             drillDownTabs.push(buildIdentificationRulesTab());
             drillDownTabs.push(buildActionMonitorTab());
+            drillDownTabs.push(buildBillingTransactionTab());
+
             function buildSubAccountsTab() {
                 var subAccountsTab = {};
 
@@ -255,6 +257,23 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                 };
                 
                 return actionMonitorTab;
+            }
+
+            function buildBillingTransactionTab() {
+                var billingTransactionTab = {};
+
+                billingTransactionTab.title = 'Billing Transactions';
+                billingTransactionTab.directive = 'vr-billingtransaction-grid';
+
+                billingTransactionTab.loadDirective = function (billingTransactionGridAPI, billingTransaction) {
+                    billingTransaction.billingTransactioGridAPI = billingTransactionGridAPI;
+                    var billingTransactionGridPayload = {
+                        AccountsIds: [billingTransaction.Entity.AccountId]
+                    };
+                    return billingTransaction.billingTransactioGridAPI.loadGrid(billingTransactionGridPayload);
+                };
+
+                return billingTransactionTab;
             }
 
             return drillDownTabs;
