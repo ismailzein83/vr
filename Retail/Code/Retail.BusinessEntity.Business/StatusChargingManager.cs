@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Retail.BusinessEntity.Data;
+using Retail.BusinessEntity.Entities.Status;
+using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -13,14 +17,20 @@ namespace Retail.BusinessEntity.Business
         {
             throw new NotImplementedException();
         }
-
+        public IDataRetrievalResult<StatusChargingSet> GetFilteredStatusChargingSet(DataRetrievalInput<StatusChargingSetQuery> input)
+        {
+            IStatusChargingSetDataManager dataManager = BEDataManagerFactory.GetDataManager<IStatusChargingSetDataManager>();
+            var chargingSets = dataManager.GetStatusChargingSets().ToDictionary(x => x.StatusChargingSetId, x => x);
+            Func<StatusChargingSet, bool> filterExpression = (x) => ((input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower())));
+            return DataRetrievalManager.Instance.ProcessResult(input, chargingSets.ToBigResult(input, filterExpression));
+        }
         public bool HasInitialCharging(EntityType entityType, long entityId, Guid statusDefinitionId, out Decimal initialCharge)
         {
             StatusChargingSet chargingSet = GetChargingSet(entityType, entityId);
-            if(chargingSet != null)
+            if (chargingSet != null)
             {
                 var statusCharge = chargingSet.Settings.StatusCharges.FirstOrDefault(itm => itm.StatusDefinitionId == statusDefinitionId);
-                if(statusCharge != null)
+                if (statusCharge != null)
                 {
                     initialCharge = statusCharge.InitialCharge;
                     return true;
@@ -32,7 +42,7 @@ namespace Retail.BusinessEntity.Business
 
         private StatusChargingSet GetChargingSet(EntityType entityType, long entityId)
         {
-            switch(entityType)
+            switch (entityType)
             {
                 case EntityType.Account: return GetAccountChargingSet(entityId);
                 case EntityType.AccountService: return GetServiceChargingSet(entityId);
