@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Vanrise.Entities;
+using Vanrise.Notification.Entities;
 
 namespace Vanrise.AccountBalance.Entities
 {

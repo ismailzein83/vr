@@ -87,8 +87,6 @@
     <Compile Include="SummaryTransformation\SummaryTransformationManager.cs" />
     <Compile Include="TemplateConfigManager.cs" />
     <Compile Include="TypeManager.cs" />
-    <Compile Include="VRAction\VRActionExpressionContext.cs" />
-    <Compile Include="VRAction\VRActionManager.cs" />
     <Compile Include="VRExpression\VRExpressionManager.cs" />
     <Compile Include="VRExpression\VRExpressionVariableValueContext.cs" />
     <Compile Include="VRFileManager.cs" />

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vanrise.Entities;
+using Vanrise.Notification.Entities;
 
-namespace Vanrise.Common.Business
+namespace Vanrise.Notification.Business
 {
     public class VRActionManager
     {
-        public void CreateAction(VRAction action)
+        public void CreateAction(CreateVRActionInput createActionInput)
         {
 
         }

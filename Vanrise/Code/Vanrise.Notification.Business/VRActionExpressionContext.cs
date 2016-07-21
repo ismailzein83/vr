@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
+using Vanrise.Notification.Entities;
 
-namespace Vanrise.Common.Business
+namespace Vanrise.Notification.Business
 {
     public class VRActionExpressionContext : IVRExpressionContext
     {

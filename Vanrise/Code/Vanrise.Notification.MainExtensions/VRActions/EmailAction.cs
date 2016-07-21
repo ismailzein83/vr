@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Notification.Business;
+using Vanrise.Notification.Entities;
 
-namespace Vanrise.Common.MainExtensions.VRActions
+namespace Vanrise.Notification.MainExtensions.VRActions
 {
     public class EmailAction : VRAction
     {
