@@ -158,6 +158,7 @@
     <Compile Include="Controllers\AccountTypeController.cs" />
     <Compile Include="Controllers\ActionDefinitionController.cs" />
     <Compile Include="Controllers\ChargingPolicyController.cs" />
+    <Compile Include="Controllers\StatusChargingSetController.cs" />
     <Compile Include="Controllers\StatusDefinitionController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
     <Compile Include="Controllers\ServiceTypeController.cs" />
@@ -304,8 +305,10 @@
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-ruledefinition-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\EntityType\retail-be-entitytype-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\retail-be-statuschargingset-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Status\retail-be-statusdefinition-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Status\retail-be-statusdefinition-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\Templates\StatusChargingSetGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Status\Templates\StatusDefinitionGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Switch\Templates\SwitchGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\Templates\ServiceTypeGridTemplate.html" />
@@ -332,7 +335,9 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\ActionDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ChargingPolicyAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ServiceTypeAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\StatusChargingSetAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\StatusDefinitionAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\StatusChargingSetService.js" />
     <Content Include="Retail_BusinessEntity\Services\StatusDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\SwitchAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ZoneAPIService.js" />
@@ -385,7 +390,9 @@
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\Status\StatusDefinitionEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Status\StatusDefinitionEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\StatusChargingSet\StatusChargingSetManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\Status\StatusDefinitionManagement.html" />
+    <Content Include="Retail_BusinessEntity\Views\StatusChargingSet\StatusChargingSetManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\Status\StatusDefinitionManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\Switch\SwitchEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Switch\SwitchEditorController.js" />
