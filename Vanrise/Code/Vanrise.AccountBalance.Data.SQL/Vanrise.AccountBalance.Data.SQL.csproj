@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BillingTransactionDataManager.cs" />
+    <Compile Include="BillingTransactionTypeDataManager.cs" />
     <Compile Include="LiveBalanceDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

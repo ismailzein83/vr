@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.AccountBalance.Entities
 {
-    public class BillingTransactionDetail
+    public class CurrentAccountBalance
     {
-        public BillingTransaction Entity { get; set; }
         public string CurrencyDescription { get; set; }
-        public AccountInfo AccountInfo { get; set; }
-        public string  TransactionTypeDescription { get; set; }
+        public decimal CurrentBalance { get; set; }
     }
 }

@@ -140,13 +140,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="VR_AccountBalance\Directives\LiveBalance\" />
     <Folder Include="VR_AccountBalance\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_AccountBalance\Constants\ModuleConfig.js" />
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\Templates\BillingTranactionGridTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\vr-billingtransaction-grid.js" />
+    <Content Include="VR_AccountBalance\Directives\LiveBalance\Templates\LiveBalanceTemplate.html" />
+    <Content Include="VR_AccountBalance\Directives\LiveBalance\vr-livebalance-currentaccountbalance.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\BillingTransactionAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\LiveBalanceAPIService.js" />
   </ItemGroup>

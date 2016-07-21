@@ -7,8 +7,9 @@ using Vanrise.AccountBalance.Entities;
 
 namespace Vanrise.AccountBalance.Data
 {
-    public interface ILiveBalanceDataManager:IDataManager
+    public interface IBillingTransactionTypeDataManager:IDataManager
     {
-        LiveBalance GetLiveBalance(long accountId);
+        IEnumerable<BillingTransactionType> GetBillingTransactionTypes();
+        bool AreBillingTransactionTypeUpdated(ref object updateHandle);
     }
 }

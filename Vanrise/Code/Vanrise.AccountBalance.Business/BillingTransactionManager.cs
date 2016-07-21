@@ -25,11 +25,13 @@ namespace Vanrise.AccountBalance.Business
 
         private BillingTransactionDetail BillingTransactionDetailMapper(BillingTransaction billingTransaction)
         {
-            AccountManager manager = new AccountManager();
-            var account = manager.GetAccount(billingTransaction.AccountId);
+            CurrencyManager currencyManager = new CurrencyManager();
+            BillingTransactionTypeManager billingTransactionTypeManager = new BillingTransactionTypeManager();
             return new BillingTransactionDetail
             {
                 Entity = billingTransaction,
+                CurrencyDescription = currencyManager.GetCurrencyName(billingTransaction.CurrencyId),
+                TransactionTypeDescription = billingTransactionTypeManager.GetBillingTransactionTypeName(billingTransaction.TransactionTypeId)
             };
         }
 

@@ -13,7 +13,7 @@ namespace Vanrise.AccountBalance.Data.SQL
     {
         #region ctor/Local Variables
         public BillingTransactionDataManager()
-            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+            : base(GetConnectionStringName("VR_AccountBalance_TransactionDBConnStringKey", "VR_AccountBalance_TransactionDBConnString"))
         {
         }
         #endregion
@@ -25,7 +25,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             if (query.AccountsIds != null && query.AccountsIds.Count() > 0)
                 accountsIds = string.Join<long>(",", query.AccountsIds);
 
-            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetFiltered", BillingTransactionMapper, accountsIds);
+            return GetItemsSP("[VR_AccountBalance].[sp_BillingTransaction_GetFiltered]", BillingTransactionMapper, accountsIds);
         }
         #endregion
 
@@ -34,7 +34,6 @@ namespace Vanrise.AccountBalance.Data.SQL
 
         private BillingTransaction BillingTransactionMapper(IDataReader reader)
         {
-            BillingTransaction billingTransaction = new BillingTransaction();
             return new BillingTransaction
             {
                 AccountBillingTransactionId=(long)reader["ID"],
