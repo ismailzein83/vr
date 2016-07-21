@@ -56,7 +56,9 @@
                     return null;
             }
             else if (fromDate instanceof Object && toDate instanceof Object) {
-                if (fromDate.Hour > toDate.Hour || (fromDate.Hour == toDate.Hour && fromDate.Minute > toDate.Minute))
+                if (toDate.Hour == 0 && toDate.Minute == 0)
+                    return null;
+                else if (fromDate.Hour > toDate.Hour || (fromDate.Hour == toDate.Hour && fromDate.Minute > toDate.Minute))
                     return errorMessage;
                 else
                     return null;

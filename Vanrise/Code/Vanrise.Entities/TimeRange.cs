@@ -18,7 +18,7 @@ namespace Vanrise.Entities
             TimeSpan to = new TimeSpan(0, this.ToTime.Hour, this.ToTime.Minute, this.ToTime.Second, this.ToTime.MilliSecond);
             TimeSpan timeSpan = time.TimeOfDay;
 
-            return timeSpan >= from && timeSpan <= to;
+            return timeSpan >= from && (timeSpan <= to || to == new TimeSpan(0, 0, 0));
         }
     }
 }
