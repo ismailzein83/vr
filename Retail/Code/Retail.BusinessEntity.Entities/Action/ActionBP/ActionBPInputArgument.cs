@@ -42,7 +42,8 @@ namespace Retail.BusinessEntity.Entities
 
         public override string GetTitle()
         {
-            return String.Format("Action Business Process");
+            var actionBPDefinition = BEManagerFactory.GetManager<IActionDefinitionManager>().GetActionDefinition(this.ActionDefinitionId);
+            return String.Format("{0} {1}", actionBPDefinition.Name, Vanrise.Common.Utilities.GetEnumDescription<EntityType>(actionBPDefinition.EntityType));
         }
     }
 }
