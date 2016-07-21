@@ -1,0 +1,56 @@
+﻿<div vr-modalcontent ng-controller="WhS_BE_DealSellingEditorController" vr-loader="scopeModel.isLoading" width="'55%'">
+    <vr-modalbody>
+        <vr-form name="formEditor">
+            <vr-row>
+                <vr-columns width="1/4row">
+                    <vr-textbox label="Name" value="scopeModel.name" isrequired="true"></vr-textbox>
+                </vr-columns>
+                <span vr-loader="isLoadingSaleZonesSelector">
+                    <vr-whs-be-salezone-selector normal-col-num="3" ismultipleselection on-ready="onSaleZoneDirectiveReady" />
+                </span>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="1/4row">
+                    <vr-textbox label="Volume" value="scopeModel.volume" type="number" isrequired="true"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/4row">
+                    <vr-textbox label="Rate" value="scopeModel.rate" type="number" isrequired="true"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/4row">
+                    <vr-textbox label="Max Buying Rate" value="scopeModel.maxBuyingRate" type="number" isrequired="true"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/4row">
+                    <vr-textbox label="Substitute Rate" value="scopeModel.substituteRate" type="number" isrequired="true"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/4row">
+                    <vr-textbox label="Extra Volume Rate" value="scopeModel.extraVolumeRate" type="number" isrequired="true"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-section title="Quality">
+                        <vr-row>
+                            <vr-columns width="1/6row">
+                                <vr-textbox label="ASR" value="scopeModel.asr" type="number" isrequired="true"></vr-textbox>
+                            </vr-columns>
+                            <vr-columns width="1/6row">
+                                <vr-textbox label="NER" value="scopeModel.ner" type="number" isrequired="true"></vr-textbox>
+                            </vr-columns>
+                            <vr-columns width="1/6row">
+                                <vr-textbox label="ACD" value="scopeModel.acd" type="number" isrequired="true"></vr-textbox>
+                            </vr-columns>
+                        </vr-row>
+                </vr-section>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formEditor" data-onclick="scopeModel.save" haspermission="scopeModel.hasSavePermission"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

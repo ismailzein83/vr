@@ -109,6 +109,8 @@
     <Compile Include="CodeGroup\UploadCodeGroupLog.cs" />
     <Compile Include="Deals\Deal.cs" />
     <Compile Include="Deals\DealBuyingPart.cs" />
+    <Compile Include="Deals\DealDetail.cs" />
+    <Compile Include="Deals\DealQuery.cs" />
     <Compile Include="Deals\DealSellingPart.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="IBusinessEntity.cs" />

@@ -1,0 +1,12 @@
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.dataSource"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             menuactions="scopeModel.menuActions"
+             pagingtype="'PagingOnScroll'"
+             idfield="Entity.DealId">
+    <vr-datagridcolumn headertext="'Carrier Account Name'" field="'CarrierAccountName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Description'" field="'Entity.Settings.Description'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Begin Date'" field="'Entity.Settings.BeginDate'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'End Date'" field="'Entity.Settings.EndDate'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Grace Period'" field="'Entity.Settings.GracePeriod'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>
