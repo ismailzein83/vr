@@ -19,6 +19,6 @@ namespace Retail.BusinessEntity.Entities
 
     public class StatusDefinitionSettings
     {
-       
+        public Guid StyleDefinitionId { get; set; }
     }
-}
+} 

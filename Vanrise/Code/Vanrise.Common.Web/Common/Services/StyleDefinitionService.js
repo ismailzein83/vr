@@ -1,7 +1,7 @@
 ﻿
 (function (appControllers) {
 
-    'use stict';
+    "use strict";
 
     StyleDefinitionService.$inject = ['VRModalService'];
 
@@ -13,7 +13,6 @@
             settings.onScopeReady = function (modalScope) {
                 modalScope.onStyleDefinitionAdded = onStyleDefinitionAdded
             };
-
             VRModalService.showModal('/Client/Modules/Common/Views/StyleDefinition/StyleDefinitionEditor.html', null, settings);
         };
 
