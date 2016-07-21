@@ -196,10 +196,14 @@
     <Content Include="WhS_Routing\Directives\ProcessInput\vr-whs-routing-buildrouteprocess.js" />
     <Content Include="WhS_Routing\Directives\ProcessInput\vr-whs-routing-rpbuildproduct.js" />
     <Content Include="WhS_Routing\Directives\ProcessInput\vr-whs-routing-buildbycodeprefix.js" />
-    <Content Include="WhS_Routing\Directives\RouteConfiguration\Templates\RouteConfigurationTemplate.html" />
-    <Content Include="WhS_Routing\Directives\RouteConfiguration\vr-whs-routing-route-configuration-editor.js" />
+    <Content Include="WhS_Routing\Directives\RouteTechnicalSettings\Templates\RouteTechnicalSettingsTemplate.html" />
+    <Content Include="WhS_Routing\Directives\RouteTechnicalSettings\vr-whs-routing-route-technical-settings-editor.js" />
     <Content Include="WhS_Routing\Directives\RouteOptionRule\Templates\RouteOptionRuleGridTemplate.html" />
     <Content Include="WhS_Routing\Directives\RouteOptionRule\vr-whs-be-routeoptionrule-grid.js" />
+    <Content Include="WhS_Routing\Directives\RoutingDatabase\Templates\RouteDatabaseConfigurationTemplate.html" />
+    <Content Include="WhS_Routing\Directives\RouteSettings\Templates\RouteSettingsTemplate.html" />
+    <Content Include="WhS_Routing\Directives\RoutingDatabase\vr-whs-routing-route-database-configuration.js" />
+    <Content Include="WhS_Routing\Directives\RouteSettings\vr-whs-routing-route-settings-editor.js" />
     <Content Include="WhS_Routing\Directives\RPRoute\Templates\RPRouteDetailTemplate.html" />
     <Content Include="WhS_Routing\Directives\RPRoute\Templates\RPRouteGridTemplate.html" />
     <Content Include="WhS_Routing\Directives\RPRoute\Templates\ZoneRouteOptionsTemplate.html" />
@@ -248,7 +252,9 @@
     <Content Include="WhS_Routing\Views\RPRoute\RPRouteOptionSupplier.html" />
     <Content Include="WhS_Routing\Views\RPRoute\RPRouteOptionSupplierController.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="WhS_Routing\Directives\RouteConfiguration\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

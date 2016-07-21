@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsRoutingRouteConfigurationEditor', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrWhsRoutingRouteTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -18,7 +18,7 @@ app.directive('vrWhsRoutingRouteConfigurationEditor', ['UtilsService', 'VRUIUtil
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/WhS_Routing/Directives/RouteConfiguration/Templates/RouteConfigurationTemplate.html"
+            templateUrl: "/Client/Modules/WhS_Routing/Directives/RouteTechnicalSettings/Templates/RouteTechnicalSettingsTemplate.html"
         };
 
         function settingEditorCtor(ctrl, $scope, $attrs) {
@@ -52,8 +52,8 @@ app.directive('vrWhsRoutingRouteConfigurationEditor', ['UtilsService', 'VRUIUtil
 
 
                     if (payload != undefined && payload.data != undefined) {
-                        customerTransformationPayload = { selectedIds: payload.data.CustomerTransformationId };
-                        supplierTransformationPayload = { selectedIds: payload.data.SupplierTransformationId };
+                        customerTransformationPayload = { selectedIds: payload.data.RouteRuleDataTransformation.CustomerTransformationId };
+                        supplierTransformationPayload = { selectedIds: payload.data.RouteRuleDataTransformation.SupplierTransformationId };
                     }
 
                     var customerTransformationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -78,9 +78,11 @@ app.directive('vrWhsRoutingRouteConfigurationEditor', ['UtilsService', 'VRUIUtil
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Routing.Entities.RouteConfigurationSettingData, TOne.WhS.Routing.Entities",
-                        CustomerTransformationId: customerTransformationSelectorAPI.getSelectedIds(),
-                        SupplierTransformationId: supplierTransformationSelectorAPI.getSelectedIds()
+                        $type: "TOne.WhS.Routing.Entities.RouteTechnicalSettingData, TOne.WhS.Routing.Entities",
+                        RouteRuleDataTransformation: {
+                            CustomerTransformationId: customerTransformationSelectorAPI.getSelectedIds(),
+                            SupplierTransformationId: supplierTransformationSelectorAPI.getSelectedIds()
+                        }
                     };
                 }
 

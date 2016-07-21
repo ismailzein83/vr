@@ -28,7 +28,7 @@ namespace TOne.WhS.Routing.Business
             DateTime effectiveDate = effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now;
 
             SettingManager settingManager = new SettingManager();
-            RouteConfigurationSettingData data = settingManager.GetSetting<RouteConfigurationSettingData>(Constants.RouteConfiguration);
+            RouteTechnicalSettingData data = settingManager.GetSetting<RouteTechnicalSettingData>(Constants.RouteTechnicalSettings);
 
             DataTransformer dataTransformer = new DataTransformer();
 
@@ -50,7 +50,7 @@ namespace TOne.WhS.Routing.Business
                     {
                         int currencyId = customerZoneRate.Rate.CurrencyId.HasValue ? customerZoneRate.Rate.CurrencyId.Value : customerZoneRate.PriceList.CurrencyId;
 
-                        var output = dataTransformer.ExecuteDataTransformation(data.CustomerTransformationId, (context) =>
+                        var output = dataTransformer.ExecuteDataTransformation(data.RouteRuleDataTransformation.CustomerTransformationId, (context) =>
                         {
                             context.SetRecordValue("CustomerId", customerInfo.CustomerId);
                             context.SetRecordValue("SaleZoneId", customerZone.SaleZoneId);
@@ -96,7 +96,7 @@ namespace TOne.WhS.Routing.Business
             if (supplierRates != null)
             {
                 SettingManager settingManager = new SettingManager();
-                RouteConfigurationSettingData data = settingManager.GetSetting<RouteConfigurationSettingData>(Constants.RouteConfiguration);
+                RouteTechnicalSettingData data = settingManager.GetSetting<RouteTechnicalSettingData>(Constants.RouteTechnicalSettings);
 
                 DataTransformer dataTransformer = new DataTransformer();
 
@@ -109,7 +109,7 @@ namespace TOne.WhS.Routing.Business
                     var priceList = supplierPriceListManager.GetPriceList(supplierRate.PriceListId);
                     int currencyId = supplierRate.CurrencyId.HasValue ? supplierRate.CurrencyId.Value : priceList.CurrencyId;
 
-                    var output = dataTransformer.ExecuteDataTransformation(data.SupplierTransformationId, (context) =>
+                    var output = dataTransformer.ExecuteDataTransformation(data.RouteRuleDataTransformation.SupplierTransformationId, (context) =>
                     {
                         context.SetRecordValue("SupplierId", priceList.SupplierId);
                         context.SetRecordValue("SupplierZoneId", supplierRate.ZoneId);
