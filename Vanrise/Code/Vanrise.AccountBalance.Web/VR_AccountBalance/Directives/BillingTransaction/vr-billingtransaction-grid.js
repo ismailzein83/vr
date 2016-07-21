@@ -49,7 +49,10 @@ app.directive('vrBillingtransactionGrid', ['VR_AccountBalance_BillingTransaction
                 api.loadGrid = function (query) {
                     return gridAPI.retrieveData(query);
                 };
-
+                api.onBillingTransactionAdded = function (billingTransaction)
+                {
+                   return gridAPI.itemAdded(billingTransaction);
+                }
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

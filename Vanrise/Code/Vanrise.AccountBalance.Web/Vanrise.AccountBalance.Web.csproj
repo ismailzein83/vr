@@ -139,9 +139,7 @@
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="VR_AccountBalance\Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="VR_AccountBalance\Constants\ModuleConfig.js" />
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\Templates\BillingTranactionGridTemplate.html" />
@@ -150,6 +148,9 @@
     <Content Include="VR_AccountBalance\Directives\LiveBalance\vr-livebalance-currentaccountbalance.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\BillingTransactionAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\LiveBalanceAPIService.js" />
+    <Content Include="VR_AccountBalance\Services\BillingTransactionService.js" />
+    <Content Include="VR_AccountBalance\Views\BillingTransaction\BillingTransactionEditor.html" />
+    <Content Include="VR_AccountBalance\Views\BillingTransaction\BillingTransactionEditorController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

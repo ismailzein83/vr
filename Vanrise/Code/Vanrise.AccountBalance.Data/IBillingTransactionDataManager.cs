@@ -10,5 +10,6 @@ namespace Vanrise.AccountBalance.Data
     public interface IBillingTransactionDataManager:IDataManager
     {
         IEnumerable<BillingTransaction> GetFilteredBillingTransactions(BillingTransactionQuery query);
+        bool Insert(BillingTransaction billingTransaction, out long billingTransactionId);
     }
 }

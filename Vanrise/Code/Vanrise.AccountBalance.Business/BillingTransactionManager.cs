@@ -11,17 +11,39 @@ namespace Vanrise.AccountBalance.Business
 {
     public class BillingTransactionManager
     {
-        public void AddBillingTransaction(BillingTransaction billingTransaction)
-        {
-            
-        }
 
         public Vanrise.Entities.IDataRetrievalResult<BillingTransactionDetail> GetFilteredBillingTransactions(Vanrise.Entities.DataRetrievalInput<BillingTransactionQuery> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new BillingTransactionRequestHandler());
         }
 
+        public Vanrise.Entities.InsertOperationOutput<BillingTransactionDetail> AddBillingTransaction(BillingTransaction billingTransaction)
+        {
+            
+            billingTransaction.TransactionTypeId = Guid.Parse("f178d94d-d622-4ebf-a1ba-2a4af1067d6b");
+            billingTransaction.TransactionTime = DateTime.Now;
+        
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<BillingTransactionDetail>();
 
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+
+            IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
+            long billingTransactionId = -1;
+
+            if (dataManager.Insert(billingTransaction, out billingTransactionId))
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                billingTransaction.AccountBillingTransactionId = billingTransactionId;
+                insertOperationOutput.InsertedObject = BillingTransactionDetailMapper(billingTransaction);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
+        }
 
         private BillingTransactionDetail BillingTransactionDetailMapper(BillingTransaction billingTransaction)
         {
@@ -34,7 +56,6 @@ namespace Vanrise.AccountBalance.Business
                 TransactionTypeDescription = billingTransactionTypeManager.GetBillingTransactionTypeName(billingTransaction.TransactionTypeId)
             };
         }
-
 
         #region Private Classes
         private class BillingTransactionRequestHandler : BigDataRequestHandler<BillingTransactionQuery, BillingTransaction, BillingTransactionDetail>
@@ -53,5 +74,6 @@ namespace Vanrise.AccountBalance.Business
         }
 
         #endregion
+
     }
 } 

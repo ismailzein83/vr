@@ -11,8 +11,13 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, "GetFilteredBillingTransactions"), input);
         }
 
+
+        function AddBillingTransaction(billingTransaction) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, 'AddBillingTransaction'), billingTransaction);
+        }
         return {
-            GetFilteredBillingTransactions: GetFilteredBillingTransactions
+            GetFilteredBillingTransactions: GetFilteredBillingTransactions,
+            AddBillingTransaction: AddBillingTransaction
         };
     }
 

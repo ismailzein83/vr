@@ -49,5 +49,19 @@ namespace Vanrise.AccountBalance.Data.SQL
 
         #endregion
 
+        public bool Insert(BillingTransaction billingTransaction, out long billingTransactionId)
+        {
+            object billingTransactionID;
+            int affectedRecords = ExecuteNonQuerySP("[VR_AccountBalance].sp_BillingTransaction_Insert", out billingTransactionID, billingTransaction.AccountId, billingTransaction.Amount, billingTransaction.CurrencyId, billingTransaction.TransactionTypeId, billingTransaction.TransactionTime, billingTransaction.Notes);
+
+            if (affectedRecords > 0)
+            {
+                billingTransactionId = (int)billingTransactionID;
+                return true;
+            }
+
+            billingTransactionId = -1;
+            return false;
+        }
     }
 }

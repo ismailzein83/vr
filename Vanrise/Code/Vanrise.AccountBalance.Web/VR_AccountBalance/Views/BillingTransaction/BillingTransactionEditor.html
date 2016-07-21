@@ -1,0 +1,29 @@
+﻿<div vr-modalcontent ng-controller="VR_AccountBalance_BillingTransactionController" width="'40%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formBillingTransactionEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row removeline>
+                        <vr-columns width="1/2row">
+                            <vr-textbox label="Amount" value="scopeModel.amount" isrequired="true" type="number"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="true"> </vr-common-currency-selector>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-textarea label="Notes" value="scopeModel.notes"> </vr-textarea>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formBillingTransactionEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

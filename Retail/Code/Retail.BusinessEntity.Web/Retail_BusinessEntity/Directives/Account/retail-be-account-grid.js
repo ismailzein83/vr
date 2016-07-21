@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountPackageService', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountIdentificationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'Retail_BE_AccountServiceAPIService','Retail_BE_AccountServiceService','Retail_BE_ActionRuntimeService','Retail_BE_EntityTypeEnum','Retail_BE_ActionDefinitionService',
-    function (Retail_BE_AccountAPIService, Retail_BE_AccountService, Retail_BE_AccountPackageService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountIdentificationService, UtilsService, VRUIUtilsService, VRNotificationService, Retail_BE_AccountServiceAPIService, Retail_BE_AccountServiceService, Retail_BE_ActionRuntimeService, Retail_BE_EntityTypeEnum, Retail_BE_ActionDefinitionService) {
+app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountPackageService', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountIdentificationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'Retail_BE_AccountServiceAPIService','Retail_BE_AccountServiceService','Retail_BE_ActionRuntimeService','Retail_BE_EntityTypeEnum','Retail_BE_ActionDefinitionService','VR_AccountBalance_BillingTransactionService',
+    function (Retail_BE_AccountAPIService, Retail_BE_AccountService, Retail_BE_AccountPackageService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountIdentificationService, UtilsService, VRUIUtilsService, VRNotificationService, Retail_BE_AccountServiceAPIService, Retail_BE_AccountServiceService, Retail_BE_ActionRuntimeService, Retail_BE_EntityTypeEnum, Retail_BE_ActionDefinitionService, VR_AccountBalance_BillingTransactionService) {
     return {
         restrict: 'E',
         scope: {
@@ -290,6 +290,18 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                     return account.billingTransactioGridAPI.loadGrid(billingTransactionGridPayload);
                 };
 
+                billingTransactionTab.parentMenuActions = [{
+                    name: 'Add Payment',
+                    clicked: function (account) {
+                        if (billingTransactionTab.setTabSelected != undefined)
+                            billingTransactionTab.setTabSelected(account);
+
+                        var onPaymentAdded = function (billingTransaction) {
+                            account.billingTransactioGridAPI.onBillingTransactionAdded(billingTransaction);
+                        };
+                        VR_AccountBalance_BillingTransactionService.addBillingTransaction(account.Entity.AccountId, onPaymentAdded);
+                    }
+                }];
                 return billingTransactionTab;
             }
 

@@ -19,5 +19,13 @@ namespace Vanrise.AccountBalance.Web.Controllers
             BillingTransactionManager manager = new BillingTransactionManager();
             return GetWebResponse(input, manager.GetFilteredBillingTransactions(input));
         }
+
+        [HttpPost]
+        [Route("AddBillingTransaction")]
+        public Vanrise.Entities.InsertOperationOutput<BillingTransactionDetail> AddBillingTransaction(BillingTransaction billingTransaction)
+        {
+            BillingTransactionManager manager = new BillingTransactionManager();
+            return manager.AddBillingTransaction(billingTransaction);
+         }
     }
 }
