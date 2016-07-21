@@ -62,7 +62,10 @@
             var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             accountTypeSelectorReadyDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, undefined, accountTypeSelectorLoadDeferred);
+                var payload = {
+                    filter: { RootAccountTypeOnly: true }
+                }
+                VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, payload, accountTypeSelectorLoadDeferred);
             });
 
             return accountTypeSelectorLoadDeferred.promise;

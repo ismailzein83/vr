@@ -9,5 +9,6 @@ namespace Retail.BusinessEntity.Entities
     public class AccountTypeFilter
     {
         public long? ParentAccountId { get; set; }
+        public bool RootAccountTypeOnly { get; set; }
     }
 }

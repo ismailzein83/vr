@@ -40,28 +40,29 @@ namespace Retail.BusinessEntity.Business
         public IEnumerable<AccountTypeInfo> GetAccountTypesInfo(AccountTypeFilter filter)
         {
             Func<AccountType, bool> filterExpression = null;
-
             if (filter != null)
             {
-                if (filter.ParentAccountId.HasValue)
-                {
-                    var accountManager = new AccountManager();
-                    Account parentAccount = accountManager.GetAccount(filter.ParentAccountId.Value);
-                    if (parentAccount == null)
-                        throw new NullReferenceException("parentAccount");
 
-                    filterExpression = (accountType) =>
-                    (
-                        accountType.Settings != null &&
-                        accountType.Settings.SupportedParentAccountTypeIds != null &&
-                        accountType.Settings.SupportedParentAccountTypeIds.Contains(parentAccount.TypeId)
-                    );
-                }
-                else
-                {
-                    filterExpression = (accountType) =>
-                        (accountType.Settings != null && accountType.Settings.CanBeRootAccount == true);
-                }
+                filterExpression = (accountType) =>
+                    {
+                        if (filter.ParentAccountId.HasValue)
+                        {
+                            var accountManager = new AccountManager();
+                            Account parentAccount = accountManager.GetAccount(filter.ParentAccountId.Value);
+                            if (parentAccount == null)
+                                throw new NullReferenceException("parentAccount");
+                            if (accountType.Settings == null || accountType.Settings.SupportedParentAccountTypeIds == null || !accountType.Settings.SupportedParentAccountTypeIds.Contains(parentAccount.TypeId))
+                                return false;
+                        }
+                        else if(accountType.Settings == null || !accountType.Settings.CanBeRootAccount)
+                        {
+                            return false;
+                        }
+                        if(filter.RootAccountTypeOnly && (accountType.Settings == null || !accountType.Settings.CanBeRootAccount))
+                            return false;
+                      return  true;
+                    };
+                
             }
 
             return this.GetCachedAccountTypes().MapRecords(AccountTypeInfoMapper, filterExpression).OrderBy(x => x.Title);
