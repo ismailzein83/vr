@@ -48,7 +48,7 @@ app.directive('vrCommonRatetypeSelector', ['VRCommon_RateTypeAPIService', 'VRCom
     function getTemplate(attrs) {
         var label;
         if (attrs.hidelabel == undefined)
-            label = "RateType";
+            label = "Rate Type";
         var disabled = "";
         if (attrs.customlabel != undefined)
             label = attrs.customlabel;
