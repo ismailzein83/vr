@@ -28,6 +28,10 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime? EndDate { get; set; }
 
         public int GracePeriod { get; set; }
+        public Decimal SellingAmount { get; set; }
+        public Decimal SellingDuration { get; set; }
+        public Decimal BuyingAmount { get; set; }
+        public Decimal BuyingDuration { get; set; }   
 
         public DealContractType ContractType { get; set; }
 

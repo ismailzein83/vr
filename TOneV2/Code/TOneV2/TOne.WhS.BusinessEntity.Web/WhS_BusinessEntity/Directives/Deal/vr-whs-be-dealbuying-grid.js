@@ -61,12 +61,18 @@ app.directive("vrWhsBeDealbuyingGrid", ["UtilsService", "VRNotificationService",
                 };
 
                 api.getData = function () {
-                    var sellingParts;
+                    var buyingObj =
+                  {
+                      buyingParts: [],
+                      buyingAmount: 0,
+                      buyingDuration: 0
+                  }
+
                     if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
-                        sellingParts = [];
+                        buyingObj.buyingParts = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            sellingParts.push({
+                            buyingObj.buyingParts.push({
                                 Name: currentItem.Name,
                                 Volume: currentItem.Volume,
                                 Rate: currentItem.Rate,
@@ -78,10 +84,12 @@ app.directive("vrWhsBeDealbuyingGrid", ["UtilsService", "VRNotificationService",
                                 NER: currentItem.NER,
                                 ACD: currentItem.ACD
                             });
+                            buyingObj.buyingAmount = buyingObj.buyingAmount + (currentItem.Volume * currentItem.Rate);
+                            buyingObj.buyingDuration = Number(buyingObj.buyingDuration) + Number(currentItem.Volume);
                         }
 
                     }
-                    return sellingParts;
+                    return buyingObj;
                 }
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')

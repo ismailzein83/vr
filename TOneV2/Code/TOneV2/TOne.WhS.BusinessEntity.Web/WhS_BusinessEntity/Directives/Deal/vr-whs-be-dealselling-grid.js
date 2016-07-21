@@ -60,12 +60,18 @@ app.directive("vrWhsBeDealsellingGrid", ["UtilsService", "VRNotificationService"
                 };
 
                 api.getData = function () {
-                    var sellingParts;
+                    var sellingObj = 
+                    {
+                        sellingParts: [],
+                        sellingAmount: 0,
+                        sellingDuration: 0
+                    }
+
                     if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
-                        sellingParts = [];
+                        sellingObj.sellingParts = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            sellingParts.push({
+                            sellingObj.sellingParts.push({
                                 Name: currentItem.Name,
                                 Volume: currentItem.Volume,
                                 Rate: currentItem.Rate,
@@ -77,10 +83,12 @@ app.directive("vrWhsBeDealsellingGrid", ["UtilsService", "VRNotificationService"
                                 NER: currentItem.NER,
                                 ACD: currentItem.ACD
                             });
+                            sellingObj.sellingAmount = sellingObj.sellingAmount + (currentItem.Volume * currentItem.Rate);
+                            sellingObj.sellingDuration = Number(sellingObj.sellingDuration) + Number(currentItem.Volume);
                         }
 
                     }
-                    return sellingParts;
+                    return sellingObj;
                 }
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
@@ -111,7 +119,6 @@ app.directive("vrWhsBeDealsellingGrid", ["UtilsService", "VRNotificationService"
                 var sellingNumberPlanId = mainPayload != undefined ? mainPayload.sellingNumberPlanId : undefined;
 
                 WhS_BE_DealSellingService.editDealSelling(dealSellingObj, sellingNumberPlanId, onDealSellingUpdated);
-
             }
 
             function deleteDealSelling(dealSellingObj) {

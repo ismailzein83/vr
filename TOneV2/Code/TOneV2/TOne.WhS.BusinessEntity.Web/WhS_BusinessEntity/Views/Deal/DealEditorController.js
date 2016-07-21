@@ -277,8 +277,12 @@
                     GracePeriod: $scope.scopeModel.gracePeriod,
                     ContractType: $scope.scopeModel.selectedContractType.value,
                     AgreementType: $scope.scopeModel.selectedAgreementType.value,
-                    SellingParts: dealSellingAPI.getData(),
-                    BuyingParts: dealBuyingAPI.getData()
+                    SellingParts: dealSellingAPI.getData().sellingParts,
+                    BuyingParts: dealBuyingAPI.getData().buyingParts,
+                    SellingAmount: dealSellingAPI.getData().sellingAmount,
+                    SellingDuration: dealSellingAPI.getData().sellingDuration,
+                    BuyingAmount: dealBuyingAPI.getData().buyingAmount,
+                    BuyingDuration: dealBuyingAPI.getData().buyingDuration
                 }
             };
             return obj;
