@@ -53,8 +53,13 @@ app.directive("vrWhsBeDealbuyingGrid", ["UtilsService", "VRNotificationService",
                 api.load = function (payload) {
                     mainPayload = payload;
 
-                    if (payload.BuyingParts != undefined && payload.BuyingParts != null)
+                    if (payload.BuyingParts != undefined && payload.BuyingParts != null) {
                         ctrl.datasource = payload.BuyingParts;
+                        for (var i = 0; i < ctrl.datasource.length; i++) {
+                            ctrl.datasource[i].Amount = ctrl.datasource[i].Volume * ctrl.datasource[i].Rate;
+                        }
+                    }
+                        
                     else
                         ctrl.datasource.length = 0;
 
