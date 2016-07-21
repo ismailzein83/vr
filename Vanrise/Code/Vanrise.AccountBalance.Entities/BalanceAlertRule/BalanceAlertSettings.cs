@@ -8,7 +8,7 @@ namespace Vanrise.AccountBalance.Entities
 {
     public class BalanceAlertSettings
     {
-        public List<BalanceAlertThresholdAction> ThresholdAction { get; set; }
+        public List<BalanceAlertThresholdAction> ThresholdActions { get; set; }
     }
 
     public class BalanceAlertThresholdAction

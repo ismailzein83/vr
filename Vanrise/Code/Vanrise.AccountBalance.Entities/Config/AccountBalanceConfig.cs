@@ -8,7 +8,7 @@ namespace Vanrise.AccountBalance.Entities
 {
     public class AccountBalanceConfig
     {
-        public int BusinessEntityDefinitionId { get; set; }
+        public int AccountBusinessEntityDefinitionId { get; set; }
 
         public string AccountSelector { get; set; }
 
