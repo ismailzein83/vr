@@ -2,14 +2,14 @@
              pagingtype="'PagingOnScroll'"
              on-ready="scopeModel.onGridReady"
              menuactions="scopeModel.menuActions"
-             datasource="scopeModel.billingTransactions">
+             datasource="scopeModel.billingTransactions" defaultsortbyfieldname="'Entity.TransactionTime'" defaultsortdirection="'DESC'">
     <vr-datagridcolumn headertext="'ID'" field="'Entity.AccountBillingTransactionId'"></vr-datagridcolumn>
 
     <vr-datagridcolumn headertext="'Transaction Type'" field="'TransactionTypeDescription'"></vr-datagridcolumn>
-    
+
 
     <vr-datagridcolumn headertext="'Amount'" field="'Entity.Amount'" type="'Number'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Currency'" field="'CurrencyDescription'" ></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Currency'" field="'CurrencyDescription'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Transaction Time'" field="'Entity.TransactionTime'" type="'Datetime'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Notes'" field="'Entity.Notes'"></vr-datagridcolumn>
 </vr-datagrid>
