@@ -47,6 +47,7 @@
     <Compile Include="BalanceAlertRule\BalanceAlertRule.cs" />
     <Compile Include="BalanceAlertRule\BalanceAlertSettings.cs" />
     <Compile Include="BillingTransaction\BillingTransactionDetail.cs" />
+    <Compile Include="BillingTransaction\BillingTransactionQuery.cs" />
     <Compile Include="Config\AccountBalanceConfig.cs" />
     <Compile Include="LiveBalance\LiveBalanceDetail.cs" />
     <Compile Include="Config\BalanceAlertConfig.cs" />

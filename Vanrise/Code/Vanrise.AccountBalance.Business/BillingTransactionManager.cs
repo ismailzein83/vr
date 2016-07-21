@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.AccountBalance.Data;
 using Vanrise.AccountBalance.Entities;
+using Vanrise.Common.Business;
 
 namespace Vanrise.AccountBalance.Business
 {
@@ -13,5 +15,41 @@ namespace Vanrise.AccountBalance.Business
         {
             
         }
+
+        public Vanrise.Entities.IDataRetrievalResult<BillingTransactionDetail> GetFilteredBillingTransactions(Vanrise.Entities.DataRetrievalInput<BillingTransactionQuery> input)
+        {
+            return BigDataManager.Instance.RetrieveData(input, new BillingTransactionRequestHandler());
+        }
+
+
+
+        private BillingTransactionDetail BillingTransactionDetailMapper(BillingTransaction billingTransaction)
+        {
+            AccountManager manager = new AccountManager();
+            var account = manager.GetAccount(billingTransaction.AccountId);
+            return new BillingTransactionDetail
+            {
+                Entity = billingTransaction,
+            };
+        }
+
+
+        #region Private Classes
+        private class BillingTransactionRequestHandler : BigDataRequestHandler<BillingTransactionQuery, BillingTransaction, BillingTransactionDetail>
+        {
+            public override BillingTransactionDetail EntityDetailMapper(BillingTransaction entity)
+            {
+                BillingTransactionManager manager = new BillingTransactionManager();
+                return manager.BillingTransactionDetailMapper(entity);
+            }
+
+            public override IEnumerable<BillingTransaction> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<BillingTransactionQuery> input)
+            {
+                IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
+                return dataManager.GetFilteredBillingTransactions(input.Query);
+            }
+        }
+
+        #endregion
     }
-}
+} 

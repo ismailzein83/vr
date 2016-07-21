@@ -1,1 +1,8 @@
-﻿
+﻿<vr-datagrid dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions"
+             datasource="scopeModel.billingTransactions">
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.ID'"></vr-datagridcolumn>
+
+</vr-datagrid>
