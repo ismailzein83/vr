@@ -23,7 +23,6 @@
         function CSSClassStyleFormating($scope, ctrl, $attrs) {
 
             this.initializeController = initializeController;
-            var mainPayload;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -47,16 +46,16 @@
 
                 api.getData = getData;
 
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-                    ctrl.onReady(api);
-                }
-
                 function getData() {
                     var data = {
                         $type: "Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions",
                         ClassName: $scope.scopeModel.className
                     }
                     return data;
+                }
+
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
+                    ctrl.onReady(api);
                 }
             }
         }

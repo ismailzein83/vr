@@ -126,12 +126,6 @@
         }
 
         function getTamplate(attrs) {
-            var withemptyline = 'withemptyline';
-            var label = "label='Type'";
-            if (attrs.hidelabel != undefined) {
-                label = "";
-                withemptyline = '';
-            }
 
             var template =
                 '<vr-row>'
@@ -141,7 +135,6 @@
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
-                            + label
                             + ' isrequired="true"'
                             + 'hideremoveicon>'
                         + '</vr-select>'

@@ -20,6 +20,7 @@ namespace Vanrise.Common.Data.SQL
 
         #endregion
 
+
         #region Public Methods
         public List<StyleDefinition> GetStyleDefinition()
         {
@@ -53,7 +54,9 @@ namespace Vanrise.Common.Data.SQL
 
         #endregion
 
+
         #region Mappers
+
         StyleDefinition StyleDefinitionMapper(IDataReader reader)
         {
             StyleDefinition StyleDefinition = new StyleDefinition
@@ -64,6 +67,7 @@ namespace Vanrise.Common.Data.SQL
             }; 
             return StyleDefinition;
         }
+
         #endregion
     }
 }

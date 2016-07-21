@@ -137,14 +137,12 @@
         }
 
         function buildStyleDefinitionObjFromScope() {
-            var settings = settingsDirectiveAPI.getData();
-            //settings.Description = $scope.scopeModel.description;
-            //settings.Location = $scope.scopeModel.location;
+            var styleDefinitionSettings = settingsDirectiveAPI.getData();
 
             return {
                 StyleDefinitionId: styleDefinitionEntity != undefined ? styleDefinitionEntity.StyleDefinitionId : undefined,
                 Name: $scope.scopeModel.name,
-                StyleDefinitionSettings: settings
+                StyleDefinitionSettings: styleDefinitionSettings
             };
         }
     }

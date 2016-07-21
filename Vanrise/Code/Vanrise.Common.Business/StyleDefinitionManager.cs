@@ -124,16 +124,6 @@ namespace Vanrise.Common.Business
             return styleDefinitionDetail;
         }
 
-        //public StyleDefinitionInfo StyleDefinitionInfoMapper(StyleDefinition StyleDefinition)
-        //{
-        //    StyleDefinitionInfo StyleDefinitionInfo = new StyleDefinitionInfo()
-        //    {
-        //        StyleDefinitionId = StyleDefinition.StyleDefinitionId,
-        //        Name = StyleDefinition.Name
-        //    };
-        //    return StyleDefinitionInfo;
-        //}
-
         #endregion
     }
 }
