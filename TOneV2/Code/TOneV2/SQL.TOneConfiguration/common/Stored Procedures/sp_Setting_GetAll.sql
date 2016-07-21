@@ -2,6 +2,6 @@
 AS
 BEGIN
 
-	SELECT  ID, Name ,[Type],[Category], Settings, [Data]
+	SELECT  ID, Name ,[Type],[Category], Settings, [Data], [IsTechnical]
 	FROM	[common].Setting  WITH(NOLOCK) 
 END

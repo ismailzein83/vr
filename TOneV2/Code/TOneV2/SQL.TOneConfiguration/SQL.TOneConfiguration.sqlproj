@@ -352,6 +352,10 @@
     <Build Include="common\Stored Procedures\sp_File_Insert_Temp.sql" />
     <Build Include="common\Stored Procedures\sp_IDManager_Update.sql" />
     <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
+    <Build Include="common\Tables\StyleDefinition.sql" />
+    <Build Include="common\Stored Procedures\sp_StyleDefinition_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_StyleDefinition_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_StyleDefinition_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
