@@ -9,7 +9,7 @@ using Vanrise.Data.SQL;
 
 namespace Retail.BusinessEntity.Data.SQL
 {
-    class StatusDefinitionDataManager: BaseSQLDataManager, IStatusDefinitionDataManager
+    public class StatusDefinitionDataManager: BaseSQLDataManager, IStatusDefinitionDataManager
     {
         #region ctor/Local Variables
         public StatusDefinitionDataManager()

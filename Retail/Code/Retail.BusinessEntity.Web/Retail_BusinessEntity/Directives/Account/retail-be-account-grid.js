@@ -114,6 +114,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             drillDownTabs.push(buildAssignedServicesTab());
             drillDownTabs.push(buildIdentificationRulesTab());
             drillDownTabs.push(buildActionMonitorTab());
+            drillDownTabs.push(buildBalanceTab());
             drillDownTabs.push(buildBillingTransactionTab());
 
             function buildSubAccountsTab() {
@@ -245,7 +246,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             {
                 var actionMonitorTab = {};
 
-                actionMonitorTab.title = 'Actions Monitor';
+                actionMonitorTab.title = 'Actions';
                 actionMonitorTab.directive = 'businessprocess-bp-instance-monitor-grid';
 
                 actionMonitorTab.loadDirective = function (actionMonitorGridAPI, account) {
@@ -259,18 +260,34 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                 return actionMonitorTab;
             }
 
+            function buildBalanceTab() {
+                var balanceTab = {};
+
+                balanceTab.title = 'Balance';
+                balanceTab.directive = 'vr-livebalance-currentaccountbalance';
+
+                balanceTab.loadDirective = function (balanceAPI, account) {
+                    account.balanceAPI = balanceAPI;
+                    var balancePayload = {
+                        accountId: [account.Entity.AccountId]
+                    };
+                    return account.balanceAPI.load(balancePayload);
+                };
+                return balanceTab;
+            }
+
             function buildBillingTransactionTab() {
                 var billingTransactionTab = {};
 
                 billingTransactionTab.title = 'Billing Transactions';
                 billingTransactionTab.directive = 'vr-billingtransaction-grid';
 
-                billingTransactionTab.loadDirective = function (billingTransactionGridAPI, billingTransaction) {
-                    billingTransaction.billingTransactioGridAPI = billingTransactionGridAPI;
+                billingTransactionTab.loadDirective = function (billingTransactionGridAPI, account) {
+                    account.billingTransactioGridAPI = billingTransactionGridAPI;
                     var billingTransactionGridPayload = {
-                        AccountsIds: [billingTransaction.Entity.AccountId]
+                        AccountsIds: [account.Entity.AccountId]
                     };
-                    return billingTransaction.billingTransactioGridAPI.loadGrid(billingTransactionGridPayload);
+                    return account.billingTransactioGridAPI.loadGrid(billingTransactionGridPayload);
                 };
 
                 return billingTransactionTab;
