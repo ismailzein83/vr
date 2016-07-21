@@ -1289,20 +1289,21 @@ set identity_insert [genericdata].[BELookupRuleDefinition] off;
 --common.setting---------------------------------------101 to 200----------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-set identity_insert [common].[setting] on;
-;with cte_data([Id],[Name],[Type],[Category],[Settings],[Data])
+set identity_insert [common].[Setting] on;
+;with cte_data([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(101,'Routing Configuration','WhS_Routing_RouteConfiguration','Routing','{"Editor":"vr-whs-routing-route-configuration-editor"}','{"$type":"TOne.WhS.Routing.Entities.RouteConfigurationSettingData, TOne.WhS.Routing.Entities","CustomerTransformationId":40,"SupplierTransformationId":39}')
+(101,'Routing Technical Settings','WhS_Routing_RouteTechnicalSettings','Wholesale Routing','{"Editor":"vr-whs-routing-route-technical-settings-editor"}','{"$type":"TOne.WhS.Routing.Entities.RouteTechnicalSettingData, TOne.WhS.Routing.Entities","RouteRuleDataTransformation":{"$type":"TOne.WhS.Routing.Entities.RouteRuleDataTransformation, TOne.WhS.Routing.Entities","CustomerTransformationId":40,"SupplierTransformationId":39}}',1),
+(102,'Routing Settings','WhS_Routing_RouteSettings','Wholesale Routing','{"Editor":"vr-whs-routing-route-settings-editor"}','{"$type":"TOne.WhS.Routing.Entities.RouteSettingsData, TOne.WhS.Routing.Entities","RouteDatabasesToKeep":{"$type":"TOne.WhS.Routing.Entities.RouteDatabasesToKeep, TOne.WhS.Routing.Entities","CustomerRouteConfiguration":{"$type":"TOne.WhS.Routing.Entities.RouteDatabaseConfiguration, TOne.WhS.Routing.Entities","SpecificDBToKeep":3,"CurrentDBToKeep":3,"FuturDBToKeep":1},"ProductRouteConfiguration":{"$type":"TOne.WhS.Routing.Entities.RouteDatabaseConfiguration, TOne.WhS.Routing.Entities","SpecificDBToKeep":3,"CurrentDBToKeep":3,"FuturDBToKeep":1}}}',0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Type],[Category],[Settings],[Data]))
-merge	[common].[setting] as t
+)c([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
+merge	[common].[Setting] as t
 using	cte_data as s
 on		1=1 and t.[Id] = s.[Id]
 when matched then
 	update set
-	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data]
+	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
 when not matched by target then
-	insert([Id],[Name],[Type],[Category],[Settings],[Data])
-	values(s.[Id],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data]);
-set identity_insert [common].[setting] off;
+	insert([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+	values(s.[Id],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
+set identity_insert [common].[Setting] off;
