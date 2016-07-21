@@ -85,7 +85,7 @@ function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIServic
             function buildActionMonitorTab() {
                 var actionMonitorTab = {};
 
-                actionMonitorTab.title = 'Actions Monitor';
+                actionMonitorTab.title = 'Actions';
                 actionMonitorTab.directive = 'businessprocess-bp-instance-monitor-grid';
 
                 actionMonitorTab.loadDirective = function (actionMonitorGridAPI, accountService) {
