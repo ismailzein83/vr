@@ -19,8 +19,21 @@ namespace Vanrise.Common.Business
             var allSettings = GetCachedSettings();
 
             Func<Setting, bool> filterExpression = (itemObject) =>
-                 (string.IsNullOrEmpty(input.Query.Name) || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
-                 && (string.IsNullOrEmpty(input.Query.Category) || string.Compare(itemObject.Category, input.Query.Category, true) == 0);
+            {
+                if (itemObject.IsTechnical)
+                    return false;
+
+                if (input.Query == null)
+                    return true;
+
+                if (!string.IsNullOrEmpty(input.Query.Name) && !itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+
+                if (!string.IsNullOrEmpty(input.Query.Category) && string.Compare(itemObject.Category, input.Query.Category, true) != 0)
+                    return false;
+
+                return true;
+            };
 
             return DataRetrievalManager.Instance.ProcessResult(input, allSettings.ToBigResult(input, filterExpression, SettingDetailMapper));
         }

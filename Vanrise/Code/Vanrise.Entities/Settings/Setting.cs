@@ -13,6 +13,8 @@
         public SettingConfiguration Settings { get; set; }
 
         public object Data { get; set; }
+
+        public bool IsTechnical { get; set; }
     }
 
     public class SettingConfiguration

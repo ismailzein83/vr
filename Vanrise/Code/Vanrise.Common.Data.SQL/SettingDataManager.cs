@@ -44,7 +44,8 @@ namespace Vanrise.Common.Data.SQL
                 Type = reader["Type"] as string,
                 Category = reader["Category"] as string,
                 Settings = !string.IsNullOrEmpty(settings) ? Vanrise.Common.Serializer.Deserialize<SettingConfiguration>(settings) : null,
-                Data = !string.IsNullOrEmpty(data) ? Vanrise.Common.Serializer.Deserialize(data) : null
+                Data = !string.IsNullOrEmpty(data) ? Vanrise.Common.Serializer.Deserialize(data) : null,
+                IsTechnical = reader["IsTechnical"] != DBNull.Value ? Convert.ToBoolean(reader["IsTechnical"]) : false
             };
         }
         #endregion
