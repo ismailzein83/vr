@@ -35,7 +35,7 @@
         function defineScope() {
             
             $scope.scopeModel = {};
-
+            $scope.scopeModel.gracePeriod = 7;
             $scope.scopeModel.contractTypes = UtilsService.getArrayEnum(WhS_BE_DealContractTypeEnum);
             $scope.scopeModel.agreementTypes = UtilsService.getArrayEnum(WhS_BE_DealAgreementTypeEnum);
 
@@ -46,12 +46,6 @@
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
                 var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
                 if (carrierAccountInfo != undefined && carrierAccountInfo.SellingNumberPlanId) {
-
-                    //VRNotificationService.showConfirmation().then(function (response) {
-                    //    if (response) {
-
-                    //    }
-                    //});
 
                     var setLoader = function (value) { $scope.isLoadingSelector = value };
                     var payload = {
@@ -148,8 +142,6 @@
                             }
                             if (dealEntity != undefined && dealEntity.Settings != undefined)
                                 directivePayload.SellingParts = dealEntity.Settings.SellingParts;
-                            console.log("qwe");
-                            console.log(directivePayload);
                             VRUIUtilsService.callDirectiveLoad(dealSellingAPI, directivePayload, loadDealSellingPromiseDeferred);
                         });
                 }

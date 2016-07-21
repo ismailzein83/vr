@@ -53,16 +53,10 @@ app.directive("vrWhsBeDealsellingGrid", ["UtilsService", "VRNotificationService"
                 api.load = function (payload) {
                     mainPayload = payload;
                     
-
-
                     if (payload.SellingParts != undefined && payload.SellingParts != null)
                         ctrl.datasource = payload.SellingParts;
                     else
                         ctrl.datasource.length = 0;
-
-                    console.log("1");
-                    console.log(payload);
-
                 };
 
                 api.getData = function () {

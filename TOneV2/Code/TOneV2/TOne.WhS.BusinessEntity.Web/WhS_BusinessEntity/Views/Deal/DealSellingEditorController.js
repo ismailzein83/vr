@@ -24,8 +24,7 @@
                 sellingNumberPlanId = parameters.sellingNumberPlanId;
                 dealSellingEntity = parameters.dealSelling;
             }
-                
-
+            
             isEditMode = (dealSellingEntity != undefined);
         }
 
@@ -71,8 +70,6 @@
 
         function loadSaleZoneSection() {
             var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
-
-            console.log(sellingNumberPlanId);
 
             saleZoneReadyPromiseDeferred.promise.then(function () {
                 
@@ -137,7 +134,8 @@
                 ExtraVolumeRate: $scope.scopeModel.extraVolumeRate,
                 ASR: $scope.scopeModel.asr,
                 NER: $scope.scopeModel.ner,
-                ACD: $scope.scopeModel.acd
+                ACD: $scope.scopeModel.acd,
+                Amount: $scope.scopeModel.volume * $scope.scopeModel.rate
             };
             return obj;
         }
