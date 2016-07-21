@@ -79,9 +79,9 @@ app.directive("vrWhsBeDealsellingGrid", ["UtilsService", "VRNotificationService"
                                 SubstituteRate: currentItem.SubstituteRate,
                                 ExtraVolumeRate: currentItem.ExtraVolumeRate,
                                 SaleZoneIds: currentItem.SaleZoneIds,
-                                ASR: currentItem.asr,
-                                NER: currentItem.ner,
-                                ACD: currentItem.acd
+                                ASR: currentItem.ASR,
+                                NER: currentItem.NER,
+                                ACD: currentItem.ACD
                             });
                         }
 
