@@ -18,3 +18,4 @@ Retail_SMS				C:\TFS\Retail\Code\Retail.SMS.Web\Retail_SMS
 Retail_Data				C:\TFS\Retail\Code\Retail.Data.Web\Retail_Data
 BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
 VR_AccountBalance		C:\TFS\Vanrise\Code\Vanrise.AccountBalance.Web\VR_AccountBalance
+VR_Notification			C:\TFS\Vanrise\Code\Vanrise.Notification.Web\VR_Notification

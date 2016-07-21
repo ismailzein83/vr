@@ -346,6 +346,24 @@
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Notification.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Web">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Queueing">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
     </Reference>

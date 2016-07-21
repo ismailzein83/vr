@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.AccountBalance.Business;
-using Vanrise.Entities;
+using Vanrise.Notification.Entities;
 
 namespace Retail.BusinessEntity.Business.Extensions
 {
