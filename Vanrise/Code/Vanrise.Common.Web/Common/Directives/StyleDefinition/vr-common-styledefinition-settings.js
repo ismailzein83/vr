@@ -61,13 +61,13 @@
                     selectorAPI.clearDataSource();
 
                     var promises = [];
-                    var settings;
+                    var styleDefinitionSettings;
 
                     if (payload != undefined) {
-                        settings = payload.settings;
+                        styleDefinitionSettings = payload.styleDefinitionSettings;
                     }
 
-                    if (settings != undefined) {
+                    if (styleDefinitionSettings != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
@@ -81,9 +81,9 @@
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (settings != undefined && settings.StyleFormatingSettings != null) {
+                                if (styleDefinitionSettings != undefined && styleDefinitionSettings.StyleFormatingSettings != null) {
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, settings.StyleFormatingSettings.ConfigId, 'ExtensionConfigurationId');
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, styleDefinitionSettings.StyleFormatingSettings.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
@@ -95,7 +95,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { styleFormatingSettings: settings.StyleFormatingSettings };
+                            var directivePayload = { styleFormatingSettings: styleDefinitionSettings.StyleFormatingSettings };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -115,7 +115,7 @@
                         }
                     }
                     return {
-                        StyleDefinitionIntegration: data
+                        StyleFormatingSettings: data
                     };
                 };
 

@@ -98,7 +98,7 @@
             settingsDirectiveReadyDeferred.promise.then(function () {
                 var settingsDirectivePayload;
                 if (styleDefinitionEntity != undefined) {
-                    settingsDirectivePayload = { settings: styleDefinitionEntity.StyleDefinitionSettings };
+                    settingsDirectivePayload = { styleDefinitionSettings: styleDefinitionEntity.StyleDefinitionSettings };
                 }
                 VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
             });

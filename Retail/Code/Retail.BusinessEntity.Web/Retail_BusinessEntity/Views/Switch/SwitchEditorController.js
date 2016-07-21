@@ -69,6 +69,7 @@
                 switchEntity = response;
             });
         }
+
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSettingsDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);

@@ -41,7 +41,7 @@
                     }
 
                     if (styleFormatingSettings != undefined) {
-                        $scope.scopeModel.connectionString = styleFormatingSettings.ClassName;
+                        $scope.scopeModel.className = styleFormatingSettings.ClassName;
                     }
                 };
 

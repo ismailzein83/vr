@@ -33,7 +33,6 @@ namespace Vanrise.Common.Data.SQL
 
         public bool Insert(StyleDefinition StyleDefinitionItem)
         {
-            //object StyleDefinitionId;
             string serializedSettings = StyleDefinitionItem.StyleDefinitionSettings != null ? Vanrise.Common.Serializer.Serialize(StyleDefinitionItem.StyleDefinitionSettings) : null;
             int affectedRecords = ExecuteNonQuerySP("common.sp_StyleDefinition_Insert", StyleDefinitionItem.StyleDefinitionId, StyleDefinitionItem.Name, serializedSettings);
 
