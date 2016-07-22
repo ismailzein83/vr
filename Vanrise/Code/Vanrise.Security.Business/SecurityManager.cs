@@ -324,7 +324,24 @@ namespace Vanrise.Security.Business
 
         private string RequiredPermissionsToString(RequiredPermissionSettings requirePermissions)
         {
-            throw new NotImplementedException();
+            if (requirePermissions == null ||  requirePermissions.Entries.Count == 0 )
+                return null;
+            string rp = "";
+            foreach (var p in requirePermissions.Entries)
+            {
+                BusinessEntity be = new BusinessEntityManager().GetBusinessEntityById(p.EntityId);
+                string beName = be.Name;
+                rp +=  String.Format("{0}:,", beName);
+                foreach (string s in p.PermissionOptions)
+                {
+                    rp += String.Format("{0},", s);
+                }
+                rp.Remove(rp.Length - 1, 1);
+
+                rp += String.Format(" &");
+
+            }
+            return rp.Remove(rp.Length - 1, 1);
         }
 
         #endregion

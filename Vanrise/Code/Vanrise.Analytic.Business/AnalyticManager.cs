@@ -11,6 +11,7 @@ using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.MainExtensions.DataRecordFields;
+using Vanrise.Security.Business;
 
 namespace Vanrise.Analytic.Business
 {
@@ -18,6 +19,14 @@ namespace Vanrise.Analytic.Business
     {
         public Vanrise.Entities.IDataRetrievalResult<AnalyticRecord> GetFilteredRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
+            AnalyticTableManager manager = new AnalyticTableManager();
+            AnalyticTable table = manager.GetAnalyticTableById(input.Query.TableId);
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            SecurityManager secManager = new SecurityManager();
+            if (!secManager.IsAllowed(table.Settings.RequiredPermission, userId))
+            {
+                throw new UnauthorizedAccessException();
+            }
             if (input.Query.FromTime == input.Query.ToTime)
                 return null;
             IAnalyticDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticDataManager>();
