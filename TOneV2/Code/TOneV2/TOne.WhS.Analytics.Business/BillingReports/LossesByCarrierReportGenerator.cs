@@ -57,6 +57,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             if (result != null)
                 foreach (var analyticRecord in result.Data)
                 {
+                    
                     LossesByCarrier lossesByCarrier = new LossesByCarrier();
 
                     var supplierValue = analyticRecord.DimensionValues[0];
@@ -93,13 +94,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     lossesByCarrier.Duration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
                     lossesByCarrier.DurationFormatted = lossesByCarrier.Duration == 0 ? "" :
                         ReportHelpers.FormatNumberDigitRate(lossesByCarrier.Duration);
-
+              
                     lossesByCarrier.Margin =
                         ReportHelpers.FormatNumber(lossesByCarrier.SaleNet - lossesByCarrier.CostNet);
                     
                     lossesByCarrier.Percentage =
                         ReportHelpers.FormatNumberPercentage(1 - lossesByCarrier.CostNet/lossesByCarrier.SaleNet);
-
+                    if ((lossesByCarrier.SaleNet - lossesByCarrier.CostNet)/lossesByCarrier.SaleNet*100 < parameters.Margin)
                     listLossesByCarrier.Add(lossesByCarrier);
                 }
 
@@ -118,7 +119,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
             list.Add("DigitRate", new RdlcParameter { Value = "4", IsVisible = true });
-
+            
             list.Add("PageBreak", new RdlcParameter { Value = parameters.PageBreak.ToString(), IsVisible = true });
 
             return list;
