@@ -14,6 +14,9 @@
         var entityTypeAPI;
         var entityTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var styleDefinitionAPI;
+        var styleDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -47,6 +50,11 @@
                 entityTypeAPI = api;
                 entityTypeSelectorReadyDeferred.resolve();
             }
+
+            $scope.scopeModel.onStyleDefinitionSelectorReady = function (api) {
+                styleDefinitionAPI = api;
+                styleDefinitionSelectorReadyDeferred.resolve();
+            }
         }
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -72,7 +80,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadEntityTypeSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadEntityTypeSelector, loadStyleDefinitionSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -104,6 +112,19 @@
                 VRUIUtilsService.callDirectiveLoad(entityTypeAPI, entityTypeSelectorPayload, entityTypeSelectorLoadDeferred);
             });
             return entityTypeSelectorLoadDeferred.promise;
+        }
+        function loadStyleDefinitionSelector() {
+            var styleDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            styleDefinitionSelectorReadyDeferred.promise.then(function () {
+                var styleDefinitionSelectorPayload = null;
+                if (isEditMode) {
+                    styleDefinitionSelectorPayload = {
+                        selectedIds: statusDefinitionEntity.Settings.StyleDefinitionId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(styleDefinitionAPI, styleDefinitionSelectorPayload, styleDefinitionSelectorLoadDeferred);
+            });
+            return styleDefinitionSelectorLoadDeferred.promise;
         }
 
         function insert() {
@@ -137,14 +158,15 @@
         }
 
         function buildStatusDefinitionObjFromScope() {
-            //var settings = settingsDirectiveAPI.getData();
-            //settings.Description = $scope.scopeModel.description;
-            //settings.Location = $scope.scopeModel.location;
+
+            var settings = {
+                StyleDefinitionId: styleDefinitionAPI.getSelectedIds()
+            }
 
             return {
                 StatusDefinitionId: statusDefinitionEntity != undefined ? statusDefinitionEntity.StatusDefinitionId : undefined,
                 Name: $scope.scopeModel.name,
-                //Settings: settings
+                Settings: settings,
                 EntityType: entityTypeAPI.getSelectedIds()
             };
         }

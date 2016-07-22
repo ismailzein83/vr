@@ -8,9 +8,6 @@
 
         var controllerName = "StatusDefinition";
 
-        //function GetStatusDefinitionSettingsTemplateConfigs() {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetStatusDefinitionSettingsTemplateConfigs"));
-        //}
 
         function GetFilteredStatusDefinitions(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetFilteredStatusDefinitions'), input);
@@ -36,8 +33,7 @@
             });
         }       
 
-        return ({
-            //GetStatusDefinitionSettingsTemplateConfigs: GetStatusDefinitionSettingsTemplateConfigs,
+        return ({ 
             GetFilteredStatusDefinitions: GetFilteredStatusDefinitions,
             AddStatusDefinition: AddStatusDefinition,
             UpdateStatusDefinition: UpdateStatusDefinition,

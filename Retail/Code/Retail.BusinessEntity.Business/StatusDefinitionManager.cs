@@ -44,7 +44,6 @@ namespace Retail.BusinessEntity.Business
             insertOperationOutput.InsertedObject = null;
 
             IStatusDefinitionDataManager dataManager = BEDataManagerFactory.GetDataManager<IStatusDefinitionDataManager>();
-            //int switchId = -1;
 
             statusDefinitionItem.StatusDefinitionId = Guid.NewGuid();
 
@@ -52,7 +51,6 @@ namespace Retail.BusinessEntity.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                //statusDefinitionItem.SwitchId = switchId;
                 insertOperationOutput.InsertedObject = StatusDefinitionDetailMapper(statusDefinitionItem);
             }
             else

@@ -223,6 +223,7 @@
     <Content Include="Common\Directives\Settings\Templates\SettingsGridTemplate.html" />
     <Content Include="Common\Directives\Settings\vr-common-settings-grid.js" />
     <Content Include="Common\Directives\StyleDefinition\Templates\StyleDefinitionGridTemplate.html" />
+    <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-selector.js" />
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-grid.js" />
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-settings.js" />
     <Content Include="Common\ModuleInitialization.js" />

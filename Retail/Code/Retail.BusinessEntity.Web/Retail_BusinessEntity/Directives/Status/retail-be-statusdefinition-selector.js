@@ -55,7 +55,6 @@ app.directive('retailBeStatusdefinitionSelector', ['Retail_BE_StatusDefinitionAP
 
             api.load = function (payload) {
               
-
                 var selectedIds;
                 var filter;
 

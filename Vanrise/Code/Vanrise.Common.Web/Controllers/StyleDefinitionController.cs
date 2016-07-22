@@ -50,5 +50,13 @@ namespace Vanrise.Common.Web.Controllers
             return _manager.GetStyleFormatingExtensionConfigs();
         }
 
+        [HttpGet]
+        [Route("GetStyleDefinitionsInfo")]
+        public IEnumerable<StyleDefinitionInfo> GetStyleDefinitionsInfo(string filter = null)
+        {
+            StyleDefinitionFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<StyleDefinitionFilter>(filter) : null;
+            return _manager.GetStyleDefinitionsInfo(deserializedFilter);
+        }
+
     }
 }

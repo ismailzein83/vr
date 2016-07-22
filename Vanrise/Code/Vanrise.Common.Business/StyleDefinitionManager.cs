@@ -79,6 +79,21 @@ namespace Vanrise.Common.Business
             return templateConfigManager.GetExtensionConfigurations<StyleFormatingConfig>(StyleFormatingConfig.EXTENSION_TYPE);
         }
 
+        public IEnumerable<StyleDefinitionInfo> GetStyleDefinitionsInfo(StyleDefinitionFilter filter)
+        {
+            Func<StyleDefinition, bool> filterExpression = null;
+            if (filter != null)
+            {
+                //filterExpression = (item) =>
+                //{
+                //    if (filter.EntityType == null || item.EntityType == filter.EntityType)
+                //        return true;
+                //    return false;
+                //};
+            }
+            return this.GetCachedStyleDefinitions().MapRecords(StyleDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
+        }
+
         #endregion
 
 
@@ -122,6 +137,16 @@ namespace Vanrise.Common.Business
                 Entity = StyleDefinition
             };
             return styleDefinitionDetail;
+        }
+
+        public StyleDefinitionInfo StyleDefinitionInfoMapper(StyleDefinition styleDefinition)
+        {
+            StyleDefinitionInfo styleDefinitionInfo = new StyleDefinitionInfo()
+            {
+                StyleDefinitionId = styleDefinition.StyleDefinitionId,
+                Name = styleDefinition.Name
+            };
+            return styleDefinitionInfo;
         }
 
         #endregion

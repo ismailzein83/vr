@@ -54,7 +54,9 @@ namespace Retail.BusinessEntity.Data.SQL
 
         #endregion
 
+
         #region Mappers
+
         StatusDefinition StatusDefinitionMapper(IDataReader reader)
         {
             StatusDefinition statusDefinition = new StatusDefinition
@@ -66,6 +68,7 @@ namespace Retail.BusinessEntity.Data.SQL
             }; 
             return statusDefinition;
         }
+
         #endregion
     }
 }
