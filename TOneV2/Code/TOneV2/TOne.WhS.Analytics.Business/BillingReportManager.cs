@@ -49,13 +49,11 @@ namespace TOne.WhS.Analytics.Business
 
             if (isSale)
             {
-                analyticQuery.Query.DimensionFields.Add("CostZone");
-                analyticQuery.Query.DimensionFields.Add("Supplier");
+                analyticQuery.Query.MeasureFields.Add("CostNet");
             }
             else
             {
-                analyticQuery.Query.DimensionFields.Add("SaleZone");
-                analyticQuery.Query.DimensionFields.Add("Customer");
+                analyticQuery.Query.MeasureFields.Add("SaleNet");
             }
 
 
