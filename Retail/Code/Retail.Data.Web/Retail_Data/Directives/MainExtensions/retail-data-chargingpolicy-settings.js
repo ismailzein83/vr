@@ -24,6 +24,11 @@ app.directive('retailDataChargingpolicySettings', [function () {
         function initializeController() {
             $scope.scopeModel = {};
 
+            $scope.scopeModel.routerType = [];
+            $scope.scopeModel.routerType[0] = { value: 0, text: "Cisco" };
+            $scope.scopeModel.routerType[1] = { value: 1, text: "Mikrotic" };
+            $scope.scopeModel.selectedRouterType;
+
             $scope.scopeModel.onPartsDirectiveReady = function (api) {
                 partsDirectiveAPI = api;
                 defineAPI();
@@ -50,6 +55,11 @@ app.directive('retailDataChargingpolicySettings', [function () {
                         $scope.scopeModel.uploadSpeedInKbps = payload.settings.UploadSpeedInKbps;
                         $scope.scopeModel.downloadQuotaInMB = payload.settings.DownloadQuotaInMB;
                         $scope.scopeModel.uploadQuotaInMB = payload.settings.UploadQuotaInMB;
+
+                        if (payload.settings.RouterTypeId != undefined)
+                            $scope.scopeModel.selectedRouterType = { value: payload.settings.RouterTypeId, text: $scope.scopeModel.routerType[payload.settings.RouterTypeId].text }
+                        
+                        //UtilsService.getItemByVal($scope.scopeModel.routerType, payload.settings.RouterTypeId, 'value');
                     }
                 }
 
@@ -65,6 +75,7 @@ app.directive('retailDataChargingpolicySettings', [function () {
                 return {
                     $type: 'Retail.Data.Entities.DataChargingPolicySettings, Retail.Data.Entities',
                     Parts: partsDirectiveAPI.getData(),
+                    RouterTypeId: $scope.scopeModel.selectedRouterType.value,
                     DownloadSpeedInKbps: $scope.scopeModel.downloadSpeedInKbps,
                     UploadSpeedInKbps: $scope.scopeModel.uploadSpeedInKbps,
                     DownloadQuotaInMB: $scope.scopeModel.downloadQuotaInMB,
