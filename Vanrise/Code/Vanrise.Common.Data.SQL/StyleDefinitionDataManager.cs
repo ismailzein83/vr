@@ -60,13 +60,13 @@ namespace Vanrise.Common.Data.SQL
 
         StyleDefinition StyleDefinitionMapper(IDataReader reader)
         {
-            StyleDefinition StyleDefinition = new StyleDefinition
+            StyleDefinition styleDefinition = new StyleDefinition
             {
                 StyleDefinitionId = (Guid) reader["ID"],
                 Name = reader["Name"] as string,
                 StyleDefinitionSettings = Vanrise.Common.Serializer.Deserialize<StyleDefinitionSettings>(reader["Settings"] as string) 
-            }; 
-            return StyleDefinition;
+            };
+            return styleDefinition;
         }
 
         #endregion

@@ -123,6 +123,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_Data\Constant\ModuleConfig.js" />
+    <Content Include="Retail_Data\Directives\MainExtensions\retail-data-chargingpolicydefinition.js" />
+    <Content Include="Retail_Data\Directives\MainExtensions\retail-data-chargingpolicy-settings.js" />
+    <Content Include="Retail_Data\Directives\MainExtensions\Templates\DataChargingPolicyDefinitionTemplate.html" />
+    <Content Include="Retail_Data\Directives\MainExtensions\Templates\DataChargingPolicySettingsTemplate.html" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
@@ -132,7 +136,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="Retail_Data\Directives\" />
     <Folder Include="Retail_Data\Services\APIServices\" />
     <Folder Include="Retail_Data\Views\" />
   </ItemGroup>
