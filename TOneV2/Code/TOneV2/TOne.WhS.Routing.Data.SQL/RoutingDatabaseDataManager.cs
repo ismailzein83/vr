@@ -46,8 +46,6 @@ namespace TOne.WhS.Routing.Data.SQL
                 throw new Exception(String.Format("Could not add Routing Database '{0}' to database table", name));
         }
 
-
-
         /// <summary>
         /// Update Routing Ready Status to true.
         /// </summary>
@@ -78,29 +76,10 @@ namespace TOne.WhS.Routing.Data.SQL
             routingDataManager.DropDatabaseIfExists();
             ExecuteNonQuerySP("[TOneWhS_Routing].[sp_RoutingDatabase_Delete]", routingDatabase.ID);
         }
-        /// <summary>
-        /// Get Routing Database Id by type and date.
-        /// </summary>
-        /// <param name="type">Routing database Type.</param>
-        /// <param name="effectiveBefore">Effective Date</param>
-        /// <returns>Routing Database Id</returns>
-        public int GetIDByType(RoutingDatabaseType type, RoutingProcessType processType, DateTime effectiveBefore)
-        {
-            object id = ExecuteScalarSP("TOneWhS_Routing.sp_RoutingDatabase_GetReadyDBIDByType", (byte)type, (byte)processType, effectiveBefore);
-            if (id != null)
-                return (int)id;
-            else
-                return 0;
-        }
 
         public bool AreRoutingDatabasesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_Routing.RoutingDatabase", ref updateHandle);
-        }
-
-        public List<RoutingDatabase> GetNotDeletedDatabases(RoutingProcessType processType)
-        {
-            return GetItemsSP("[TOneWhS_Routing].[sp_RoutingDatabase_GetNotDeletedByType]", RoutingDatabaseMapper, (byte)processType);
         }
 
         RoutingDatabase RoutingDatabaseMapper(IDataReader reader)

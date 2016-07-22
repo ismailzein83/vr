@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Activities;
 using TOne.WhS.Routing.Data;
+using TOne.WhS.Routing.Business;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -15,8 +16,8 @@ namespace TOne.WhS.Routing.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            IRoutingDatabaseDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRoutingDatabaseDataManager>();
-            dataManager.SetReady(this.RoutingDatabaseId.Get(context));
+            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
+            routingDatabaseManager.SetReady(this.RoutingDatabaseId.Get(context));
         }
     }
 }

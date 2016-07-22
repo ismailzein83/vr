@@ -1,52 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Activities;
-using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
-using System.Configuration;
-using TOne.Business;
-using Vanrise.Common;
 using Vanrise.BusinessProcess;
 using Vanrise.Entities;
+using TOne.WhS.Routing.Business;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
-
     public sealed class DropOldRoutingDatabases : CodeActivity
     {
-        static TimeSpan s_DropOldDatabasesInterval;
-
-        static DropOldRoutingDatabases()
-        {
-            if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["DropOldRoutingDatabasesInterval"], out s_DropOldDatabasesInterval))
-                s_DropOldDatabasesInterval = TimeSpan.FromHours(2);
-        }
-
         [RequiredArgument]
         public InArgument<RoutingProcessType> ProcessType { get; set; }
 
+        [RequiredArgument]
+        public InArgument<RoutingDatabaseType> DatabaseType { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
-            IRoutingDatabaseDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRoutingDatabaseDataManager>();
-            List<RoutingDatabase> routingdatabases = dataManager.GetNotDeletedDatabases(ProcessType.Get(context));
-            var orderedDatabases = routingdatabases.OrderByDescending(itm => itm.EffectiveTime);
-            List<int> excludedDatabaseIds = new List<int>();
+            RoutingProcessType processType = context.GetValue<RoutingProcessType>(ProcessType);
+            RoutingDatabaseType databaseType = context.GetValue<RoutingDatabaseType>(DatabaseType);
 
-            AddedExcludedDatabaseIds(excludedDatabaseIds, orderedDatabases, RoutingDatabaseType.Current);
-            AddedExcludedDatabaseIds(excludedDatabaseIds, orderedDatabases, RoutingDatabaseType.Future);
+            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
+            IEnumerable<RoutingDatabase> routingdatabases = routingDatabaseManager.GetRoutingDatabases(processType, databaseType);
 
             if (routingdatabases != null)
             {
-                TimeSpan dropOldDatabasesInterval = ConfigParameterManager.Current.GetDropOldRoutingDatabasesInterval();
+                var orderedDatabases = routingdatabases.OrderByDescending(itm => itm.CreatedTime);
+                List<int> excludedDatabaseIds = GetExculdedDatabases(orderedDatabases, processType, databaseType);
+
                 foreach (var db in routingdatabases)
                 {
-                    if (!excludedDatabaseIds.Contains(db.ID) && (DateTime.Now - db.EffectiveTime) > s_DropOldDatabasesInterval)
+                    if (!excludedDatabaseIds.Contains(db.ID))
                     {
                         try
                         {
-                            dataManager.DropDatabase(db);
+                            routingDatabaseManager.DropDatabase(db);
                         }
                         catch (Exception ex)
                         {
@@ -57,19 +48,50 @@ namespace TOne.WhS.Routing.BP.Activities
             }
         }
 
-        void AddedExcludedDatabaseIds(List<int> excludedDatabaseIds, IEnumerable<RoutingDatabase> orderedDatabases, RoutingDatabaseType type)
+        List<int> GetExculdedDatabases(IEnumerable<RoutingDatabase> orderedDatabases, RoutingProcessType processType, RoutingDatabaseType databaseType)
         {
-            int addedItem = 0;
+            SettingManager settingManager = new SettingManager();
+            RouteSettingsData settings = settingManager.GetSetting<RouteSettingsData>(Routing.Business.Constants.RouteSettings);
+
+            if (settings.RouteDatabasesToKeep == null)
+                throw new NullReferenceException("settings.RouteDatabasesToKeep");
+
+            RouteDatabaseConfiguration routeDatabaseConfiguration;
+            switch (processType)
+            {
+                case RoutingProcessType.CustomerRoute: routeDatabaseConfiguration = settings.RouteDatabasesToKeep.CustomerRouteConfiguration; break;
+                case RoutingProcessType.RoutingProductRoute: routeDatabaseConfiguration = settings.RouteDatabasesToKeep.ProductRouteConfiguration; break;
+                default: throw new Exception(string.Format("Unsupported RoutingProcessType: {0}", processType));
+            }
+
+            if (routeDatabaseConfiguration == null)
+                throw new NullReferenceException("routeDatabaseConfiguration");
+
+            int databaseCount;
+            switch (databaseType)
+            {
+                case RoutingDatabaseType.Current: databaseCount = routeDatabaseConfiguration.CurrentDBToKeep; break;
+                case RoutingDatabaseType.Future: databaseCount = routeDatabaseConfiguration.FuturDBToKeep; break;
+                case RoutingDatabaseType.SpecificDate: databaseCount = routeDatabaseConfiguration.SpecificDBToKeep; break;
+                default: throw new Exception(string.Format("Unsupported RoutingDatabaseType: {0}", databaseType));
+            }
+
+
+            int excludedItem = 0;
+            List<int> excludedDatabaseIds = new List<int>();
+
             foreach (var db in orderedDatabases)
             {
-                if (db.Type == type && db.IsReady)
+                if (excludedItem == databaseCount)
+                    break;
+
+                if (db.IsReady)
                 {
                     excludedDatabaseIds.Add(db.ID);
-                    addedItem++;
-                    if (addedItem == 2)
-                        return;
+                    excludedItem++;
                 }
             }
+            return excludedDatabaseIds;
         }
     }
 }

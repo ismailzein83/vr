@@ -14,16 +14,16 @@ namespace TestRuntime.Tasks
         public void Execute()
         {
             var runtimeServices = new List<RuntimeService>();
-            //BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
-            //runtimeServices.Add(bpService);
+            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bpService);
 
-            QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
-            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
-            Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            //QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
+            //SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
+            //Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
 
-            runtimeServices.Add(queueActivationService);
-            runtimeServices.Add(schedulerService);
-            runtimeServices.Add(dsRuntimeService);
+            //runtimeServices.Add(queueActivationService);
+            //runtimeServices.Add(schedulerService);
+            //runtimeServices.Add(dsRuntimeService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();

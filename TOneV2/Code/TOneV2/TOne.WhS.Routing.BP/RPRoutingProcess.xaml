@@ -16,7 +16,7 @@
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
  xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
- xmlns:vc="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
+ xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
  xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
@@ -58,6 +58,7 @@
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Caching</AssemblyReference>
       <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
@@ -85,13 +86,6 @@
       </Variable>
       <Variable x:TypeArguments="x:Int32" Name="subProcessByPrefixCompleted" />
     </Sequence.Variables>
-    <twrba1:DropOldRoutingDatabases sap2010:WorkflowViewState.IdRef="DropOldRoutingDatabases_1">
-      <twrba1:DropOldRoutingDatabases.ProcessType>
-        <InArgument x:TypeArguments="twre:RoutingProcessType">
-          <mca:CSharpValue x:TypeArguments="twre:RoutingProcessType">Input.RoutingProcessType</mca:CSharpValue>
-        </InArgument>
-      </twrba1:DropOldRoutingDatabases.ProcessType>
-    </twrba1:DropOldRoutingDatabases>
     <twrba1:CreateRoutingDatabase sap2010:WorkflowViewState.IdRef="CreateRoutingDatabase_2">
       <twrba1:CreateRoutingDatabase.DatabaseId>
         <OutArgument x:TypeArguments="x:Int32">
@@ -121,8 +115,8 @@
     </twrba1:CreateRoutingDatabase>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_3" Message="Database is ready.">
       <vbw:WriteTrackingMessage.Severity>
-        <InArgument x:TypeArguments="s:Nullable(vc:LogEntryType)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
@@ -191,8 +185,8 @@
     </local:GenerateSupplierZoneDetails>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4" Message="Prepared supplier zone details. Ready to start building code matches.">
       <vbw:WriteTrackingMessage.Severity>
-        <InArgument x:TypeArguments="s:Nullable(vc:LogEntryType)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
@@ -264,8 +258,8 @@
                     </InArgument>
                   </vbw:WriteTrackingMessage.Message>
                   <vbw:WriteTrackingMessage.Severity>
-                    <InArgument x:TypeArguments="s:Nullable(vc:LogEntryType)">
-                      <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+                    <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+                      <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
                     </InArgument>
                   </vbw:WriteTrackingMessage.Severity>
                 </vbw:WriteTrackingMessage>
@@ -311,8 +305,8 @@
     </vbw:SplitListIntoGroups>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5" Message="Finished building code matches. Ready to start building routes.">
       <vbw:WriteTrackingMessage.Severity>
-        <InArgument x:TypeArguments="s:Nullable(vc:LogEntryType)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
@@ -388,8 +382,8 @@
                     </InArgument>
                   </vbw:WriteTrackingMessage.Message>
                   <vbw:WriteTrackingMessage.Severity>
-                    <InArgument x:TypeArguments="s:Nullable(vc:LogEntryType)">
-                      <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+                    <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+                      <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
                     </InArgument>
                   </vbw:WriteTrackingMessage.Severity>
                 </vbw:WriteTrackingMessage>
@@ -401,8 +395,8 @@
     </ParallelForEach>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_6" Message="Finished building all product routes">
       <vbw:WriteTrackingMessage.Severity>
-        <InArgument x:TypeArguments="s:Nullable(vc:LogEntryType)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
@@ -413,11 +407,22 @@
         </InArgument>
       </twrba1:SetRoutingDatabaseReady.RoutingDatabaseId>
     </twrba1:SetRoutingDatabaseReady>
-    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sUUkDoQMOAgEBUwtTrQECAQJYBV4mAwGIBF8FeSQDAdUDegWAASADAckDgQEFnwEQAwGUA6ABBb8BKQMB6wLAAQXGASADAd8CxwEFlQIXAwHsAZYCBaYCJQMBzQGnAgW3Ah8DAa4BuAIFvgIgAwGiAb8CBZEDFwIBI5IDBZgDIAIBF5kDBZ8DJgIBDFsLW3ADAYkEcQtxcAMB/gNnC2doAwH0A2ILYmEDAeoDdgt2cgMB4ANsC2yOAQMB1gN9C32DAQMBywN6YHp0AwHKA4IBB4gBJwMBvgOJAQeeASQDAZUDowELowFoAwGKA60BC60BWQMBgAOyAQuyAXYDAfYCqAELqAFYAwHsAsMBC8MBgwEDAeECwAFgwAGnAQMB4ALKAQvKAWYDAdUC0QEJkwIUAwHtAZ4CC54CWAMB4gGZAguZAmgDAdgBowILowJlAwHOAaoCC6oCWwMBwwGvAguvAnIDAbkBtAILtAJdAwGvAbsCC7sCgwEDAaQBuAJguAKhAQMBowHCAgvCAngDAZgByQIJjwMUAgEklQMLlQODAQIBGZIDYJIDhgECARicAwucA1kCAQ2FAQ2FAYABAwG/A5EBDZEBcAMBtAOWAQ2WAWoDAaoDjAENjAFgAwGgA5sBDZsBWgMBlgPVAQvmARwDAbsC5wELkgIQAwHuAc4CC98CHAIBfOACC44DEAIBJdgBEd4BIAMByQLjARHjAYQBAwG9AtUBfNUBggEDAbwC6gER6gGRAQMB7wHuAQ/0ASMDAa4C9wEPkAIaAwH7AdECEdcCIAMBiwHcAhHcAosBAgF+zgJ8zgKCAQIBfeMCEeMCmQECASbnAg/tAiMCAW7wAg+MAxoCATPxARXxAckBAwGvAvgBEYMCGgMBlQKEAhGPAiwDAfwB6gIV6gKAAgIBb/QCEf8CGgIBUYADEYsDLAIBNIACF4ACcwMBogL7ARf7AXcDAZYCjAIXjAKPAQMBiQKHAheHAuoBAwH9AfwCF/wCdwIBYPcCF/cCewIBUogDF4gDjwECAUODAxeDA5cCAgE1</sads:DebugSymbol.Symbol>
+    <twrba1:DropOldRoutingDatabases sap2010:WorkflowViewState.IdRef="DropOldRoutingDatabases_1">
+      <twrba1:DropOldRoutingDatabases.DatabaseType>
+        <InArgument x:TypeArguments="twre:RoutingDatabaseType">
+          <mca:CSharpValue x:TypeArguments="twre:RoutingDatabaseType">Input.RoutingDatabaseType</mca:CSharpValue>
+        </InArgument>
+      </twrba1:DropOldRoutingDatabases.DatabaseType>
+      <twrba1:DropOldRoutingDatabases.ProcessType>
+        <InArgument x:TypeArguments="twre:RoutingProcessType">
+          <mca:CSharpValue x:TypeArguments="twre:RoutingProcessType">Input.RoutingProcessType</mca:CSharpValue>
+        </InArgument>
+      </twrba1:DropOldRoutingDatabases.ProcessType>
+    </twrba1:DropOldRoutingDatabases>
+    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sUkoDpwMOAgEBVAtUrQECAQJZBXMkAwHqA3QFeiADAd4DewWZARADAakDmgEFuQEpAwGAA7oBBcABIAMB9ALBAQWPAhcDAYECkAIFoAIlAwHiAaECBbECHwMBwwGyAgW4AiADAbcBuQIFiwMXAgE4jAMFkgMgAgEskwMFmQMmAgEhmgMFpQMmAgEMawtrcAMBkwRhC2FoAwGJBFwLXGEDAf8DcAtwcgMB9QNmC2aOAQMB6wN3C3eFAQMB4AN0YHR0AwHfA3wHggEnAwHTA4MBB5gBJAMBqgOdAQudAWgDAZ8DpwELpwFZAwGVA6wBC6wBdgMBiwOiAQuiAVgDAYEDvQELvQGFAQMB9gK6AWC6AacBAwH1AsQBC8QBZgMB6gLLAQmNAhQDAYICmAILmAJYAwH3AZMCC5MCaAMB7QGdAgudAmUDAeMBpAILpAJbAwHYAakCC6kCcgMBzgGuAguuAl0DAcQBtQILtQKFAQMBuQGyAmCyAqEBAwG4AbwCC7wCeAMBrQHDAgmJAxQCATmPAwuPA4UBAgEujANgjAOGAQIBLZYDC5YDWQIBIp0DC50DcgIBF6IDC6IDcAIBDX8Nf4ABAwHUA4sBDYsBcAMByQOQAQ2QAWoDAb8DhgENhgFgAwG1A5UBDZUBWgMBqwPPAQvgARwDAdAC4QELjAIQAwGDAsgCC9kCHAMBkQHaAguIAxACATrSARHYASADAd4C3QER3QGEAQMB0gLPAXzPAYIBAwHRAuQBEeQBkQEDAYQC6AEP7gEjAwHDAvEBD4oCGgMBkALLAhHRAiADAaAB1gIR1gKLAQMBkwHIAnzIAoIBAwGSAd0CEd0CmQECATvhAg/nAiMDAYMB6gIPhgMaAgFI6wEV6wHJAQMBxALyARH9ARoDAaoC/gERiQIsAwGRAuQCFeQCgAIDAYQB7gIR+QIaAgFm+gIRhQMsAgFJ+gEX+gFzAwG3AvUBF/UBdwMBqwKGAheGApEBAwGeAoECF4EC6gEDAZIC9gIX9gJ3AgF18QIX8QJ7AgFnggMXggORAQIBWP0CF/0ClwICAUo=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="DropOldRoutingDatabases_1" sap:VirtualizedContainerService.HintSize="554,22" />
       <sap2010:ViewStateData Id="CreateRoutingDatabase_2" sap:VirtualizedContainerService.HintSize="554,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="554,22" />
       <sap2010:ViewStateData Id="GetActiveSupplierInfos_1" sap:VirtualizedContainerService.HintSize="200,40" />
@@ -505,6 +510,7 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_6" sap:VirtualizedContainerService.HintSize="554,22" />
       <sap2010:ViewStateData Id="SetRoutingDatabaseReady_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="DropOldRoutingDatabases_1" sap:VirtualizedContainerService.HintSize="554,22" />
       <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,2378">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
