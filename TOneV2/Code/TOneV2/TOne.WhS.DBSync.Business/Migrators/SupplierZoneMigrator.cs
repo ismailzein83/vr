@@ -14,7 +14,7 @@ namespace TOne.WhS.DBSync.Business
         SupplierZoneDBSyncDataManager dbSyncDataManager;
         SourceZoneDataManager dataManager;
         Dictionary<string, CarrierAccount> allCarrierAccounts;
-        Dictionary<string, Country> allCountries;
+        Dictionary<string, CodeGroup> allCodeGroups;
 
         public SupplierZoneMigrator(MigrationContext context)
             : base(context)
@@ -23,9 +23,9 @@ namespace TOne.WhS.DBSync.Business
             dataManager = new SourceZoneDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
             var dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
-            var dbTableCountry = Context.DBTables[DBTableName.Country];
+            var dbTableCodeGroup = Context.DBTables[DBTableName.CodeGroup];
             allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
-            allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
+            allCodeGroups = (Dictionary<string, CodeGroup>)dbTableCodeGroup.Records;
         }
 
         public override void Migrate(MigrationInfoContext context)
@@ -53,16 +53,16 @@ namespace TOne.WhS.DBSync.Business
             if (allCarrierAccounts != null)
                 allCarrierAccounts.TryGetValue(sourceItem.SupplierId, out carrierAccount);
 
-            Country country = null;
-            if (allCountries != null)
-                allCountries.TryGetValue(sourceItem.CodeGroup, out country);
+            CodeGroup codeGroup = null;
+            if (allCodeGroups != null)
+                allCodeGroups.TryGetValue(sourceItem.CodeGroup, out codeGroup);
 
-            if (country != null && carrierAccount != null)
+            if (codeGroup != null && carrierAccount != null)
                 return new SupplierZone
                 {
                     SupplierId = carrierAccount.CarrierAccountId,
                     BED = sourceItem.BED,
-                    CountryId = country.CountryId,
+                    CountryId = codeGroup.CountryId,
                     EED = sourceItem.EED,
                     Name = sourceItem.Name,
                     SourceId = sourceItem.SourceId

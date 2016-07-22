@@ -13,7 +13,7 @@ namespace TOne.WhS.DBSync.Business
     {
         SaleZoneDBSyncDataManager dbSyncDataManager;
         SourceZoneDataManager dataManager;
-        Dictionary<string, Country> allCountries;
+        Dictionary<string, CodeGroup> allCodeGroups;
 
         public SaleZoneMigrator(MigrationContext context)
             : base(context)
@@ -21,8 +21,8 @@ namespace TOne.WhS.DBSync.Business
             dbSyncDataManager = new SaleZoneDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceZoneDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
-            var dbTableCountry = Context.DBTables[DBTableName.Country];
-            allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
+            var dbTableCodeGroup = Context.DBTables[DBTableName.CodeGroup];
+            allCodeGroups = (Dictionary<string, CodeGroup>)dbTableCodeGroup.Records;
         }
 
         public override void Migrate(MigrationInfoContext context)
@@ -46,15 +46,15 @@ namespace TOne.WhS.DBSync.Business
 
         public override SaleZone BuildItemFromSource(SourceZone sourceItem)
         {
-            Country country = null;
-            if (allCountries != null)
-                allCountries.TryGetValue(sourceItem.CodeGroup, out country);
-            if (country != null)
+            CodeGroup codeGroup = null;
+            if (allCodeGroups != null)
+                allCodeGroups.TryGetValue(sourceItem.CodeGroup, out codeGroup);
+            if (codeGroup != null)
                 return new SaleZone
                     {
                         SellingNumberPlanId = Context.DefaultSellingNumberPlanId,
                         BED = sourceItem.BED,
-                        CountryId = country.CountryId,
+                        CountryId = codeGroup.CountryId,
                         EED = sourceItem.EED,
                         Name = sourceItem.Name,
                         SourceId = sourceItem.SourceId

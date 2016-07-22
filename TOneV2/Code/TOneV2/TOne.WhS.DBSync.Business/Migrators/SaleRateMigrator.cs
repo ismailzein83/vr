@@ -15,6 +15,8 @@ namespace TOne.WhS.DBSync.Business
         Dictionary<string, SaleZone> allSaleZones;
         Dictionary<string, Currency> allCurrencies;
         Dictionary<string, SalePriceList> allSalePriceLists;
+        int _offPeakRateTypeId;
+        int _weekendRateTypeId;
 
         public SaleRateMigrator(MigrationContext context)
             : base(context)
@@ -28,6 +30,8 @@ namespace TOne.WhS.DBSync.Business
             allSaleZones = (Dictionary<string, SaleZone>)dbTableSaleZone.Records;
             allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
             allSalePriceLists = (Dictionary<string, SalePriceList>)dbTableSalePriceList.Records;
+            _offPeakRateTypeId = context.OffPeakRateTypeId;
+            _weekendRateTypeId = context.WeekendRateTypeId;
         }
 
         public override void Migrate(MigrationInfoContext context)
@@ -67,10 +71,10 @@ namespace TOne.WhS.DBSync.Business
 
             Dictionary<int, decimal> otherRates = new Dictionary<int, decimal>();
             if (sourceItem.OffPeakRate.HasValue)
-                otherRates.Add((int)RateTypeEnum.OffPeak, sourceItem.OffPeakRate.Value);
+                otherRates.Add(_offPeakRateTypeId, sourceItem.OffPeakRate.Value);
 
             if (sourceItem.WeekendRate.HasValue)
-                otherRates.Add((int)RateTypeEnum.Weekend, sourceItem.WeekendRate.Value);
+                otherRates.Add(_weekendRateTypeId, sourceItem.WeekendRate.Value);
 
             if (salePriceList != null && currency != null && saleZone != null && sourceItem.BeginEffectiveDate.HasValue && sourceItem.Rate.HasValue)
                 return new SaleRate
