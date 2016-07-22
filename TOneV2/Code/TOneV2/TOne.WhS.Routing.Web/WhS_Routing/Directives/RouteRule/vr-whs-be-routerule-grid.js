@@ -79,12 +79,12 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
                 name: "Edit",
                 clicked: editRouteRule,
                 haspermission: hasUpdateRulePermission
-            },
-            {
-                name: "Delete",
-                clicked: deleteRouteRule,
-                haspermission: hasDeleteRulePermission
-            }
+            }//,
+            //{
+            //    name: "Delete",
+            //    clicked: deleteRouteRule,
+            //    haspermission: hasDeleteRulePermission
+            //}
             ];
         }
 
