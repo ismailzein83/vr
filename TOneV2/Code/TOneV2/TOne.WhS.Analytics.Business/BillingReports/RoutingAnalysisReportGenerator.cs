@@ -82,6 +82,11 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             List<RoutingAnalysisFormatted> listRoutingAnalysisFormatteds = new List<RoutingAnalysisFormatted>();
 
             Dictionary<string, RoutingAnalysisFormatted> routingAnalysisFormatteds = new Dictionary<string, RoutingAnalysisFormatted>();
+
+            decimal TotalDuration = 0;
+            double TotalSale = 0;
+            double TotalCost = 0;
+            double TotalProfit = 0;
             var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
             if (result != null)
                 foreach (var analyticRecord in result.Data)
@@ -128,7 +133,19 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     if (!routingAnalysisFormatteds.ContainsKey(routingAnalysis.SaleZone + routingAnalysis.Supplier))
                         routingAnalysisFormatteds[routingAnalysis.SaleZone + routingAnalysis.Supplier] = routingAnalysis;
                     listRoutingAnalysisFormatteds.Add(routingAnalysis);
+
+                    TotalDuration += routingAnalysis.Duration != null ? routingAnalysis.Duration : 0;
+                    TotalCost += routingAnalysis.CostNet != null ? (double)routingAnalysis.CostNet : 0;
+                    TotalSale += routingAnalysis.SaleNet != null ? (double)routingAnalysis.SaleNet : 0;
+                    TotalProfit += (double)((double)routingAnalysis.SaleNet - (double)routingAnalysis.CostNet);
                 }
+
+            parameters.TotalDuration =TotalDuration;
+            parameters.TotalSale = TotalSale;
+            parameters.TotalCost = TotalSale;
+            parameters.TotalProfit = TotalProfit;
+
+
             result = analyticManager.GetFilteredRecords(trafficDataRetrievalInput) as AnalyticSummaryBigResult<AnalyticRecord>;
             if (result != null)
                 foreach (var analyticRecord in result.Data)
@@ -174,10 +191,10 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 {"Currency", new RdlcParameter {Value = parameters.CurrencyDescription, IsVisible = true}},
                 {"LogoPath", new RdlcParameter {Value = "logo", IsVisible = true}},
                 {"DigitRate", new RdlcParameter {Value = "2", IsVisible = true}},
-                {"TotalDuration", new RdlcParameter {Value = parameters.TotalDuration.ToString(), IsVisible = true}},
-                {"TotalSale", new RdlcParameter {Value = parameters.TotalSale.ToString(), IsVisible = true}},
-                {"TotalCost", new RdlcParameter {Value = parameters.TotalCost.ToString(), IsVisible = true}},
-                {"TotalProfit", new RdlcParameter {Value = parameters.TotalProfit.ToString(), IsVisible = true}},
+                {"TotalDuration", new RdlcParameter {Value =  ReportHelpers.FormatNumber(parameters.TotalDuration), IsVisible = true}},
+                {"TotalSale", new RdlcParameter {Value =  ReportHelpers.FormatNumber(parameters.TotalSale), IsVisible = true}},
+                {"TotalCost", new RdlcParameter {Value = ReportHelpers.FormatNumber(parameters.TotalCost), IsVisible = true}},
+                {"TotalProfit", new RdlcParameter {Value =  ReportHelpers.FormatNumber(parameters.TotalProfit), IsVisible = true}},
                 {"PageBreak", new RdlcParameter {Value = parameters.PageBreak.ToString(), IsVisible = true}}
             };
 
