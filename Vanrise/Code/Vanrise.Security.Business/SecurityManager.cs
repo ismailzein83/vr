@@ -100,6 +100,13 @@ namespace Vanrise.Security.Business
             }
         }
 
+
+        public bool IsAllowed(RequiredPermissionSettings requiredPermissions, int userId)
+        {
+            string requiredPermissionString = RequiredPermissionsToString(requiredPermissions);
+            return IsAllowed(requiredPermissionString, userId);
+        }
+
         public bool IsAllowed(string requiredPermissions, int userId)
         {
             if (requiredPermissions == null)
@@ -313,6 +320,11 @@ namespace Vanrise.Security.Business
             }
 
             return result;
+        }
+
+        private string RequiredPermissionsToString(RequiredPermissionSettings requirePermissions)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

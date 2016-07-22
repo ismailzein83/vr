@@ -58,6 +58,12 @@ namespace Vanrise.Security.Business
                 return false;
             }
         }
+        
+        public bool IsAllowed(RequiredPermissionSettings requiredPermissions)
+        {
+            SecurityManager manager = new SecurityManager();
+            return manager.IsAllowed(requiredPermissions, GetLoggedInUserId());
+        }
 
         public bool IsAllowed(string requiredPermissions)
         {
