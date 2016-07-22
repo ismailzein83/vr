@@ -14,6 +14,7 @@
         var codesGridAPI;
         var countries = [];
         var filter;
+        var incrementalId = 0;
 
         //#endregion
 
@@ -33,7 +34,7 @@
             $scope.selectedSellingNumberPlan;
             $scope.currentNode;
 
-            
+
             hideShowSaleCodes(false);
 
             $scope.selectedCodes = [];
@@ -187,11 +188,9 @@
 
             }
 
-
-            $scope.refreshCountries = function () {
-
-            }
-
+            $scope.buildTreeId = function (item) {
+                return buildTreeId(item);
+            };
         }
 
 
@@ -248,7 +247,7 @@
                     treeAPI.createNode(node);
                     countryNode.effectiveZones.push(node);
                 }
-                onSellingNumberPlanSelectorChanged();
+                treeAPI.refreshTree($scope.nodes);
 
             }
         }
@@ -393,6 +392,15 @@
             $scope.selectedCodes.length = 0;
         }
 
+        function buildTreeId(item) {
+            if (item.type == "Country")
+                return "Country_" + item.countryId;
+            else if (item.zoneId != undefined)
+                return "Zone_" + item.zoneId;
+            else
+                return "Zone_" + incrementalId++;
+        }
+
         //#region "Hide Show"
 
         function setZoneStateVisibility(draftStatus, status) {
@@ -429,14 +437,14 @@
         }
 
         function hideShowEnd(draftStatus, status) {
-            if (status != null)
+            if(status != null)
                 $scope.showEnd = false;
             else
                 $scope.showEnd = draftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value && draftStatus != WhS_CP_ZoneItemDraftStatusEnum.New.value && draftStatus != WhS_CP_ZoneItemDraftStatusEnum.Renamed.value;
         }
 
         function hideShowAddCode(draftStatus, status) {
-            if (status != null)
+            if(status != null)
                 $scope.showAddNewCode = status != WhS_CP_ZoneItemStatusEnum.PendingClosed.value;
             else
                 $scope.showAddNewCode = draftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value;
@@ -491,7 +499,7 @@
 
         function getCountries() {
             countries.length = 0;
-            return VRCommon_CountryAPIService.GetCountriesInfo().then(function (response) {
+            return VRCommon_CountryAPIService.GetCountriesInfo().then(function(response) {
                 angular.forEach(response, function (itm) {
                     countries.push(itm);
                 });
@@ -500,7 +508,7 @@
 
         function checkState() {
             countries.length = 0;
-            return WhS_CP_CodePrepAPIService.CheckCodePreparationState(filter.sellingNumberPlanId).then(function (response) {
+            return WhS_CP_CodePrepAPIService.CheckCodePreparationState(filter.sellingNumberPlanId).then(function(response) {
                 $scope.hasState = response;
             });
         }
@@ -540,7 +548,7 @@
                     case WhS_CP_ZoneItemDraftStatusEnum.Renamed.value:
                         icon = WhS_CP_ZoneItemDraftStatusEnum.Renamed.icon;
                         break;
-                }
+                    }
             }
 
             if (zoneInfo.Status != null) {
@@ -551,7 +559,7 @@
                     case WhS_CP_ZoneItemStatusEnum.PendingEffective.value:
                         icon = WhS_CP_ZoneItemStatusEnum.PendingEffective.icon;
                         break;
-                }
+                    }
             }
 
             return {

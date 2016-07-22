@@ -60,8 +60,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(saleCode.Code);
                     if (!CodeIsExcludedFromRenamedZoneAction(saleCode, changes))
                     {
-                        if(Vanrise.Common.ExtensionMethods.VRLessThan(saleCode.EED,minimumDate))
-                            continue;
+                        //if(Vanrise.Common.ExtensionMethods.VRLessThan(saleCode.EED,minimumDate))
+                        //    continue;
 
                         codesToMove.Add(new CodeToMove
                         {
