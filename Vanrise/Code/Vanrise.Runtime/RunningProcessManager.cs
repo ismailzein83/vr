@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -66,8 +67,11 @@ namespace Vanrise.Runtime
                 _currentProcess.LastHeartBeatTime = heartBeatTime;
             }
 
+            if (s_FreezedTransactionLocks.Count > 0 || s_queueFreezedTransactionLocks.Count > 0)
+                SaveFreezedTransactionLocks();
+
             //delete timed out processes
-            if ((DateTime.Now - s_lastCleanTime).TotalMinutes > 10)
+            if ((DateTime.Now - s_lastCleanTime).TotalMinutes > 2)
             {
                 _dataManager.DeleteTimedOutProcesses(new TimeSpan(0, 2, 0));
                 s_lastCleanTime = DateTime.Now;
@@ -75,6 +79,18 @@ namespace Vanrise.Runtime
 
             lock (s_lockObj)
                 s_isRunning = false;
+        }
+
+        static List<Guid> s_FreezedTransactionLocks = new List<Guid>();
+        private static void SaveFreezedTransactionLocks()
+        {
+            Guid lockItemId;
+            while(s_queueFreezedTransactionLocks.TryDequeue(out lockItemId))
+            {
+                s_FreezedTransactionLocks.Add(lockItemId);
+            }
+            RuntimeDataManagerFactory.GetDataManager<IFreezedTransactionLockDataManager>().SaveFreezedLockTransaction(s_FreezedTransactionLocks);
+            s_FreezedTransactionLocks.Clear();
         }
 
         static object s_lockObj = new object();
@@ -144,6 +160,12 @@ namespace Vanrise.Runtime
         RunningProcessInfo IRunningProcessManager.CurrentProcess
         {
             get { return RunningProcessManager.CurrentProcess; }
+        }
+
+        static ConcurrentQueue<Guid> s_queueFreezedTransactionLocks = new ConcurrentQueue<Guid>();
+        internal void SetTransactionLockFreezed(TransactionLockItem transactionLockItem)
+        {
+            s_queueFreezedTransactionLocks.Enqueue(transactionLockItem.LockItemUniqueId);
         }
     }
 }

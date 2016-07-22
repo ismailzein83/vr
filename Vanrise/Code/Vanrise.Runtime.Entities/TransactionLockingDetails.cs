@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Vanrise.Runtime.Entities
+{
+    public class TransactionLockingDetails
+    {
+        public Dictionary<string, Dictionary<Guid, TransactionLockItem>> LockedTransactions { get; set; }
+    }
+}
