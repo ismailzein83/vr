@@ -106,6 +106,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 routingProduct.RoutingProductId = routingProductId;
                 insertOperationOutput.InsertedObject = routingProduct;
             }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
 
             return insertOperationOutput;
         }
@@ -127,6 +131,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = this.GetRoutingProduct(routingProduct.RoutingProductId);
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             }
 
             return updateOperationOutput;

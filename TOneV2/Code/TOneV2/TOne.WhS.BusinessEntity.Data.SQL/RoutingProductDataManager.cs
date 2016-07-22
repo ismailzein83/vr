@@ -12,7 +12,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class RoutingProductDataManager : BaseSQLDataManager, IRoutingProductDataManager
     {
-  
+
         #region ctor/Local Variables
         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
         static RoutingProductDataManager()
@@ -51,12 +51,16 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public bool Insert(Entities.RoutingProduct routingProduct, out int insertedId)
         {
             object routingProductId;
+            insertedId = 0;
 
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_RoutingProduct_Insert", out routingProductId, routingProduct.Name, routingProduct.SellingNumberPlanId,
                 Vanrise.Common.Serializer.Serialize(routingProduct.Settings));
-
-            insertedId = (int)routingProductId;
-            return (recordsEffected > 0);
+            if (recordsEffected > 0)
+            {
+                insertedId = (int)routingProductId;
+                return true;
+            }
+            return false;
         }
         public bool Update(Entities.RoutingProductToEdit routingProduct)
         {

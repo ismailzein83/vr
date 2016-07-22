@@ -224,7 +224,7 @@
             $scope.scopeModal.isLoading = true;
             return WhS_BE_RoutingProductAPIService.AddRoutingProduct(buildRoutingProductObjFromScope())
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Routing Product", response)) {
+                if (VRNotificationService.notifyOnItemAdded("Routing Product", response, "Name")) {
                     if ($scope.onRoutingProductAdded != undefined)
                         $scope.onRoutingProductAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -240,7 +240,7 @@
             $scope.scopeModal.isLoading = true;
             return WhS_BE_RoutingProductAPIService.UpdateRoutingProduct(buildRoutingProductObjFromScope())
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Routing Product", response)) {
+                if (VRNotificationService.notifyOnItemUpdated("Routing Product", response, "Name")) {
                     if ($scope.onRoutingProductUpdated != undefined)
                         $scope.onRoutingProductUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
