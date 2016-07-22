@@ -220,7 +220,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
         var timeRangeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
         timeRangeReadyPromiseDeferred.promise.then(function () {
             var payload = {
-                period: PeriodEnum.Today.value
+                period: PeriodEnum.LastMonth.value
 
             }
             VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, payload, timeRangeLoadPromiseDeferred);
