@@ -55,5 +55,14 @@ namespace Retail.BusinessEntity.Web.Controllers
             return _manager.GetProvisionerDefinitionExtensionConfigs();
         }
         
+         [HttpGet]
+         [Route("GetActionDefinitionsInfo")]
+        public IEnumerable<ActionDefinitionInfo> GetActionDefinitionsInfo(string filter = null)
+        {
+            ActionDefinitionInfoFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<ActionDefinitionInfoFilter>(filter) : null;
+            return _manager.GetActionDefinitionsInfo(deserializedFilter);
+        }
+
+        
     }
 }

@@ -101,6 +101,15 @@ namespace Retail.BusinessEntity.Business
             return cachedActionDefinitiones.MapRecords(ActionDefinitionInfoMapper, filterExpression);
         }
 
+        public IEnumerable<ActionDefinitionInfo> GetActionDefinitionsInfo(ActionDefinitionInfoFilter filter)
+        {
+            Func<ActionDefinition, bool> filterExpression = null;
+            if (filter != null)
+            {
+            }
+            return this.GetCachedActionDefinitions().MapRecords(ActionDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
+        }
+
         #endregion
 
         #region Private Classes

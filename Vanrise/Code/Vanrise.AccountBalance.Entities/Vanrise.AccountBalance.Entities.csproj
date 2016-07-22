@@ -46,6 +46,7 @@
     <Compile Include="Account\AccountInfo.cs" />
     <Compile Include="BalanceAlertRule\BalanceAlertRule.cs" />
     <Compile Include="BalanceAlertRule\BalanceAlertSettings.cs" />
+    <Compile Include="BalanceAlertRule\BalanceAlertThresholdConfig.cs" />
     <Compile Include="BillingTransactionType\BillingTransactionType.cs" />
     <Compile Include="BillingTransaction\BillingTransactionDetail.cs" />
     <Compile Include="BillingTransaction\BillingTransactionQuery.cs" />

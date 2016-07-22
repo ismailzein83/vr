@@ -1,0 +1,16 @@
+﻿<div vr-modalcontent ng-controller="VR_AccountBalance_ThresholdActionEditorController" width="'50%'" vr-loader="isLoading">
+    <vr-modalbody>
+        <vr-form name="formVRActionManagementEditor">
+            <vr-accountbalance-balancealertthreshold on-ready="scopeModel.onBalanceAlertThresholdDirectiveReady" normal-col-num="4"></vr-accountbalance-balancealertthreshold>
+            <vr-notification-vraction-management on-ready="scopeModel.onVRActionManagementDirectiveReady"></vr-notification-vraction-management>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formVRActionManagementEditor" data-onclick="scopeModel.saveThreshold"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

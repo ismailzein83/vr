@@ -24,6 +24,14 @@
         function UpdateActionDefinition(actionDefinition) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateActionDefinition'), actionDefinition);
         }
+        function GetActionDefinitionsInfo(filter)
+        {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetActionDefinitionsInfo'),
+            {
+                filter: filter
+            });
+
+        }
 
         function GetActionBPDefinitionExtensionConfigs()
         {
@@ -38,7 +46,8 @@
             AddActionDefinition: AddActionDefinition,
             UpdateActionDefinition: UpdateActionDefinition,
             GetActionBPDefinitionExtensionConfigs: GetActionBPDefinitionExtensionConfigs,
-            GetProvisionerDefinitionExtensionConfigs: GetProvisionerDefinitionExtensionConfigs
+            GetProvisionerDefinitionExtensionConfigs: GetProvisionerDefinitionExtensionConfigs,
+            GetActionDefinitionsInfo: GetActionDefinitionsInfo
         });
     }
 

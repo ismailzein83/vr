@@ -213,6 +213,7 @@
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountPartsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ActionDefinition\ProvisionerDefinition\retail-be-provisioner-definitionsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\ActionDefinition\retail-be-actiondefinition-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\ActionDefinition\retail-be-actiondefinition-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\ActionDefinition\Templates\ActionDefinitionGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\retail-be-chargingpolicy-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\retail-be-chargingpolicy-parts.js" />
@@ -253,6 +254,8 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ActionBPRuntime\Templates\RegularActionBPSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ProvisionerRuntime\retail-be-provisioner-runtimesettings-radiussql.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ProvisionerRuntime\Templates\RadiusSQLProvisionerRuntimeSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\BalanceAlertAccount\retail-be-action-balancealertaccount.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\BalanceAlertAccount\Templates\BalanceAlertAccountActionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\retail-be-chargingpolicypart-durationtariff-single-runtimeeditor.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\retail-be-chargingpolicypart-ratevalue-single-runtimeeditor.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\Templates\SingleDurationTariffChargingPolicyPartTemplate.html" />
