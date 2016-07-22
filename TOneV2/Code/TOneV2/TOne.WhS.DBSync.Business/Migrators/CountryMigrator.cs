@@ -30,7 +30,17 @@ namespace TOne.WhS.DBSync.Business
 
         public override void AddItems(List<Country> itemsToAdd)
         {
-            dbSyncDataManager.ApplyCountriesToTemp(itemsToAdd, 1);
+            List<Country> countries = new List<Country>();
+            List<string> countriesNames = new List<string>();
+            foreach (Country country in itemsToAdd)
+            {
+                if (!countriesNames.Contains(ConvertCountryNameToSourceId(country.Name)))
+                {
+                    countriesNames.Add(ConvertCountryNameToSourceId(country.Name));
+                    countries.Add(country);
+                }
+            }
+            dbSyncDataManager.ApplyCountriesToTemp(countries, 1);
             TotalRowsSuccess = itemsToAdd.Count;
         }
 
@@ -44,7 +54,7 @@ namespace TOne.WhS.DBSync.Business
             return new Country
             {
                 Name = sourceItem.Name,
-                SourceId = sourceItem.SourceId
+                SourceId = ConvertCountryNameToSourceId(sourceItem.Name)
             };
         }
 
@@ -53,6 +63,11 @@ namespace TOne.WhS.DBSync.Business
             DBTable dbTableCountry = Context.DBTables[DBTableName.Country];
             if (dbTableCountry != null)
                 dbTableCountry.Records = dbSyncDataManager.GetCountries(useTempTables);
+        }
+
+        public static string ConvertCountryNameToSourceId(string countryName)
+        {
+            return countryName.ToLower().Trim();
         }
     }
 }

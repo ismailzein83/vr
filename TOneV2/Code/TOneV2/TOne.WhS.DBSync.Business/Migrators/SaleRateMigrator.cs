@@ -72,7 +72,7 @@ namespace TOne.WhS.DBSync.Business
             if (sourceItem.WeekendRate.HasValue)
                 otherRates.Add((int)RateTypeEnum.Weekend, sourceItem.WeekendRate.Value);
 
-            if (salePriceList != null && currency != null && sourceItem.BeginEffectiveDate.HasValue && sourceItem.Rate.HasValue)
+            if (salePriceList != null && currency != null && saleZone != null && sourceItem.BeginEffectiveDate.HasValue && sourceItem.Rate.HasValue)
                 return new SaleRate
                 {
                     BED = sourceItem.BeginEffectiveDate.Value,

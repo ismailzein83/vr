@@ -43,7 +43,7 @@ namespace TOne.WhS.DBSync.Business
 
             Country country = null;
             if (allCountries != null)
-                allCountries.TryGetValue(sourceItem.SourceId, out country);
+                allCountries.TryGetValue(CountryMigrator.ConvertCountryNameToSourceId(sourceItem.Name), out country);
             if (country != null)
                 return new CodeGroup
                             {
