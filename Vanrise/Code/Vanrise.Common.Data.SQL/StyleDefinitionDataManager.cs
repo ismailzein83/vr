@@ -33,10 +33,10 @@ namespace Vanrise.Common.Data.SQL
             return base.IsDataUpdated("common.StyleDefinition", ref updateHandle);
         }
 
-        public bool Insert(StyleDefinition StyleDefinitionItem)
+        public bool Insert(StyleDefinition styleDefinitionItem)
         {
-            string serializedSettings = StyleDefinitionItem.StyleDefinitionSettings != null ? Vanrise.Common.Serializer.Serialize(StyleDefinitionItem.StyleDefinitionSettings) : null;
-            int affectedRecords = ExecuteNonQuerySP("common.sp_StyleDefinition_Insert", StyleDefinitionItem.StyleDefinitionId, StyleDefinitionItem.Name, serializedSettings);
+            string serializedSettings = styleDefinitionItem.StyleDefinitionSettings != null ? Vanrise.Common.Serializer.Serialize(styleDefinitionItem.StyleDefinitionSettings) : null;
+            int affectedRecords = ExecuteNonQuerySP("common.sp_StyleDefinition_Insert", styleDefinitionItem.StyleDefinitionId, styleDefinitionItem.Name, serializedSettings);
 
             if (affectedRecords > 0)
             {
@@ -46,10 +46,10 @@ namespace Vanrise.Common.Data.SQL
             return false;
         }
 
-        public bool Update(StyleDefinition StyleDefinitionItem)
+        public bool Update(StyleDefinition styleDefinitionItem)
         {
-            string serializedSettings = StyleDefinitionItem.StyleDefinitionSettings != null ? Vanrise.Common.Serializer.Serialize(StyleDefinitionItem.StyleDefinitionSettings) : null;
-            int affectedRecords = ExecuteNonQuerySP("common.sp_StyleDefinition_Update", StyleDefinitionItem.StyleDefinitionId, StyleDefinitionItem.Name, serializedSettings);
+            string serializedSettings = styleDefinitionItem.StyleDefinitionSettings != null ? Vanrise.Common.Serializer.Serialize(styleDefinitionItem.StyleDefinitionSettings) : null;
+            int affectedRecords = ExecuteNonQuerySP("common.sp_StyleDefinition_Update", styleDefinitionItem.StyleDefinitionId, styleDefinitionItem.Name, serializedSettings);
             return (affectedRecords > 0);
         }
 
@@ -64,7 +64,7 @@ namespace Vanrise.Common.Data.SQL
             {
                 StyleDefinitionId = (Guid) reader["ID"],
                 Name = reader["Name"] as string,
-                StyleDefinitionSettings = reader["Settings"] as string != null ? Vanrise.Common.Serializer.Deserialize<StyleDefinitionSettings>(reader["Settings"] as string) :null
+                StyleDefinitionSettings = Vanrise.Common.Serializer.Deserialize<StyleDefinitionSettings>(reader["Settings"] as string) 
             }; 
             return StyleDefinition;
         }

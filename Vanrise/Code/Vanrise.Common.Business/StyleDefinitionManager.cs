@@ -12,10 +12,10 @@ namespace Vanrise.Common.Business
     {
         #region Public Methods
 
-        public StyleDefinition GetStyleDefinition(Guid StyleDefinitionId)
+        public StyleDefinition GetStyleDefinition(Guid styleDefinitionId)
         {
             Dictionary<Guid, StyleDefinition> cachedStyleDefinitions = this.GetCachedStyleDefinitions();
-            return cachedStyleDefinitions.GetRecord(StyleDefinitionId);
+            return cachedStyleDefinitions.GetRecord(styleDefinitionId);
         }
 
         public IDataRetrievalResult<StyleDefinitionDetail> GetFilteredStyleDefinitions(DataRetrievalInput<StyleDefinitionQuery> input)
@@ -82,15 +82,7 @@ namespace Vanrise.Common.Business
         public IEnumerable<StyleDefinitionInfo> GetStyleDefinitionsInfo(StyleDefinitionFilter filter)
         {
             Func<StyleDefinition, bool> filterExpression = null;
-            if (filter != null)
-            {
-                //filterExpression = (item) =>
-                //{
-                //    if (filter.EntityType == null || item.EntityType == filter.EntityType)
-                //        return true;
-                //    return false;
-                //};
-            }
+
             return this.GetCachedStyleDefinitions().MapRecords(StyleDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
@@ -117,7 +109,7 @@ namespace Vanrise.Common.Business
 
         Dictionary<Guid, StyleDefinition> GetCachedStyleDefinitions()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetStyleDefinition",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetStyleDefinitions",
                () =>
                {
                    IStyleDefinitionDataManager dataManager = CommonDataManagerFactory.GetDataManager<IStyleDefinitionDataManager>();
@@ -130,11 +122,11 @@ namespace Vanrise.Common.Business
 
         #region Mappers
 
-        public StyleDefinitionDetail StyleDefinitionDetailMapper(StyleDefinition StyleDefinition)
+        public StyleDefinitionDetail StyleDefinitionDetailMapper(StyleDefinition styleDefinition)
         {
             StyleDefinitionDetail styleDefinitionDetail = new StyleDefinitionDetail()
             {
-                Entity = StyleDefinition
+                Entity = styleDefinition
             };
             return styleDefinitionDetail;
         }
