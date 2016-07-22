@@ -23,10 +23,11 @@ namespace TestRuntime
     {
         public void Execute()
         {
+           
             //string inIP = null;
             //while (true)
             //{
-                
+
             //    Uri url;
             //    System.Net.IPAddress ip;
             //    if (Uri.TryCreate(String.Format("http://{0}", inIP), UriKind.Absolute, out url) && System.Net.IPAddress.TryParse(url.Host, out ip))
@@ -61,12 +62,14 @@ namespace TestRuntime
 
             //Vanrise.Queueing.PersistentQueueFactory.Default.CreateQueueIfNotExists<TOne.CDR.Entities.CDRBatch>(0, "testCDRQueue");
             //var queue = Vanrise.Queueing.PersistentQueueFactory.Default.GetQueue("testCDRQueue");
-            
+
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
             SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
 
+
             Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
             Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             var runtimeServices = new List<RuntimeService>();
             runtimeServices.Add(queueActivationService);
@@ -76,10 +79,16 @@ namespace TestRuntime
             runtimeServices.Add(schedulerService);
             runtimeServices.Add(dsRuntimeService);
             //runtimeServices.Add(bigDataService);
+            runtimeServices.Add(transactionLockRuntimeService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
-
+            Console.ReadKey();
+            Parallel.For(0, 10, (i) =>
+                {
+                    Lock(String.Format("Transaction {0}", i % 3), 2);
+                });
+            Lock("transaction X");
             //var storeCDRRawsStage = new QueueStageExecutionActivity { StageName = "Store CDR Raws", QueueName = "CDRRaw", QueueTypeFQTN = typeof(CDRBatch).AssemblyQualifiedName , QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(StoreCDRRawsActivator).AssemblyQualifiedName} };
             //var processRawCDRsStage = new QueueStageExecutionActivity { StageName = "Process Raw CDRs", QueueName = "CDRRawForBilling", QueueTypeFQTN = typeof(CDRBatch).AssemblyQualifiedName, QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(ProcessRawCDRsActivator).AssemblyQualifiedName } };
             //QueueExecutionFlowTree queueFlowTree = new QueueExecutionFlowTree
@@ -154,8 +163,8 @@ namespace TestRuntime
             //    Console.ReadKey();
             //    queuesByStages["Store CDR Raws"].Queue.EnqueueObject(cdrBatch);
             //}
-            
-            
+
+
 
             ////QueueGroupType queueGroupType = new QueueGroupType() { ChildItems = new Dictionary<string, QueueGroupTypeItem>() };
             ////var cdrRaw = new QueueGroupTypeItem(typeof(CDRBatch).AssemblyQualifiedName);
@@ -238,6 +247,21 @@ namespace TestRuntime
             //});
         }
 
+        private static void Lock(string transactionName, int maxConcurrency = 1)
+        {
+            Vanrise.Runtime.TransactionLocker locker = new TransactionLocker();
+            bool isLocked = locker.TryLock(transactionName, maxConcurrency, () =>
+            {
+                Console.WriteLine("Transaction '{0}' Locked", transactionName);
+                Console.ReadKey();
+            });
+            if (isLocked)
+                Console.WriteLine("Transaction '{0}' unlocked", transactionName);
+            else
+                Console.WriteLine("Cannot lock Transaction '{0}'", transactionName);
+            Console.ReadKey();
+        }
+
         private void TestCacheCleaner()
         {
             int itemsAdded = 0;
@@ -266,7 +290,7 @@ namespace TestRuntime
         private List<string> GenerateBigList(int count)
         {
             List<string> lst = new List<string>();
-            for(int i=0;i < count;i++)
+            for (int i = 0; i < count; i++)
             {
                 lst.Add(String.Format("Item Nb : {0}", i));
             }
@@ -340,7 +364,8 @@ namespace TestRuntime
 
     public class SaleZoneDataManager : Vanrise.Data.SQL.BaseSQLDataManager
     {
-        public SaleZoneDataManager() : base("TOneV2DBConnString")
+        public SaleZoneDataManager()
+            : base("TOneV2DBConnString")
         {
 
         }
