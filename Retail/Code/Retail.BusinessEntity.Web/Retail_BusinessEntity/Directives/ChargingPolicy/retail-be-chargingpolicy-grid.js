@@ -68,7 +68,6 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
             };
 
             api.onChargingPolicyAdded = function (addedChargingPolicy) {
-                setDrillDownTabs(addedChargingPolicy);
                 gridAPI.itemAdded(addedChargingPolicy);
             };
 
@@ -93,7 +92,6 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
         function editChargingPolicy(chargingPolicy)
         {
             var onChargingPolicyUpdated = function (updatedChargingPolicy) {
-                setDrillDownTabs(updatedChargingPolicy);
                 gridAPI.itemUpdated(updatedChargingPolicy);
             };
 
