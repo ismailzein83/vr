@@ -63,10 +63,11 @@ namespace TOne.WhS.Routing.Data.SQL
         /// <returns>Routing Connection String</returns>
         protected override string GetConnectionString()
         {
-            //if (string.IsNullOrEmpty(_databaseName))
             if (RoutingDatabase != null)
             {
-                return base.GetConnectionString().Replace("#WorkflowType#", RoutingDatabase.ProcessType.ToString()).Replace("#DatabaseId#", RoutingDatabase.ID.ToString());
+                SqlConnectionStringBuilder connectionBuilder = new SqlConnectionStringBuilder(base.GetConnectionString());
+                connectionBuilder.InitialCatalog = RoutingDatabase.Settings.DatabaseName;
+                return connectionBuilder.ToString();
             }
             else
             {
