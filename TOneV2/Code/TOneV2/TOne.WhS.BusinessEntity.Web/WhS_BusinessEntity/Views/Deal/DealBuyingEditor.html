@@ -3,7 +3,7 @@
         <vr-form name="formEditor">
             <vr-row>
                 <span vr-loader="isLoadingSaleZonesSelector">
-                    <vr-whs-be-supplierzone-selector normal-col-num="4" ismultipleselection on-ready="onSupplierZoneDirectiveReady" />
+                    <vr-whs-be-supplierzone-selector normal-col-num="4" ismultipleselection isrequired="true" on-ready="onSupplierZoneDirectiveReady" />
                 </span>
                 <vr-columns width="1/3row">
                     <vr-textbox label="Volume" value="scopeModel.volume" type="number" isrequired="true"></vr-textbox>

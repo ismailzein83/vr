@@ -48,7 +48,8 @@
             var bed = new Date(entity.Settings.BeginDate);
             var eed = new Date(entity.Settings.EndDate);
 
-            entity.Settings.Effective = today >= bed && today <= eed;
+            entity.Settings.Effective = (today >= bed && today <= eed) == true ? "Yes" : "No";
+            entity.Settings.Active = entity.Settings.Active == true ? "Yes" : "No";
         }
         return {
             addDeal: addDeal,

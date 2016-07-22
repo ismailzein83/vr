@@ -75,7 +75,8 @@
             supplierZoneReadyPromiseDeferred.promise.then(function () {
 
                 var payload = {
-                    supplierId: supplierId
+                    supplierId: supplierId,
+                    selectedIds: dealBuyingEntity != undefined ? dealBuyingEntity.SupplierZoneIds : undefined
                 };
 
                 VRUIUtilsService.callDirectiveLoad(supplierZoneDirectiveAPI, payload, loadSaleZonePromiseDeferred);
