@@ -36,12 +36,20 @@ app.directive('retailDataChargingpolicySettings', [function () {
             api.load = function (payload) {
                 var partDefinitions;
                 var parts;
+                var downloadSpeedInKbps;
+                var uploadSpeedInKbps;
+                var downloadQuotaInMB;
+                var uploadQuotaInMB;
 
                 if (payload != undefined) {
                     partDefinitions = payload.definitionSettings.PartDefinitions;
 
                     if (payload.settings != undefined) {
                         parts = payload.settings.Parts;
+                        $scope.scopeModel.downloadSpeedInKbps = payload.settings.DownloadSpeedInKbps;
+                        $scope.scopeModel.uploadSpeedInKbps = payload.settings.UploadSpeedInKbps;
+                        $scope.scopeModel.downloadQuotaInMB = payload.settings.DownloadQuotaInMB;
+                        $scope.scopeModel.uploadQuotaInMB = payload.settings.UploadQuotaInMB;
                     }
                 }
 
@@ -56,7 +64,11 @@ app.directive('retailDataChargingpolicySettings', [function () {
             api.getData = function () {
                 return {
                     $type: 'Retail.Data.Entities.DataChargingPolicySettings, Retail.Data.Entities',
-                    Parts: partsDirectiveAPI.getData()
+                    Parts: partsDirectiveAPI.getData(),
+                    DownloadSpeedInKbps: $scope.scopeModel.downloadSpeedInKbps,
+                    UploadSpeedInKbps: $scope.scopeModel.uploadSpeedInKbps,
+                    DownloadQuotaInMB: $scope.scopeModel.downloadQuotaInMB,
+                    UploadQuotaInMB: $scope.scopeModel.uploadQuotaInMB,
                 };
             };
 
