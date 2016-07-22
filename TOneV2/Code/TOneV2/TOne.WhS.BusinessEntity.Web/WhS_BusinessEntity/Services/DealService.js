@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DealService.$inject = ['VRModalService', 'VRNotificationService'];
+    DealService.$inject = ['VRModalService', 'VRNotificationService', 'WhS_BE_DealContractTypeEnum', 'WhS_BE_DealAgreementTypeEnum', 'UtilsService'];
 
-    function DealService(VRModalService, VRNotificationService) {
+    function DealService(VRModalService, VRNotificationService, WhS_BE_DealContractTypeEnum, WhS_BE_DealAgreementTypeEnum, UtilsService) {
         var editorUrl = '/Client/Modules/WhS_BusinessEntity/Views/Deal/DealEditor.html';
 
         function addDeal(onDealAdded) {
@@ -31,9 +31,29 @@
             VRModalService.showModal(editorUrl, parameters, settings);
         }
 
+        function addNeedsFields(entity) {
+            if (entity.Settings.EndDate != null) {
+                var myDate = new Date(entity.Settings.EndDate);
+                entity.Settings.GraceDate = new Date(myDate.setDate(myDate.getDate() + entity.Settings.GracePeriod));
+                    } else {
+                entity.Settings.GraceDate = null;
+                    }
+
+            entity.Settings.AgreementType =
+                        UtilsService.getEnum(WhS_BE_DealAgreementTypeEnum, 'value', entity.Settings.AgreementType).description;
+
+            entity.Settings.ContractType =
+                        UtilsService.getEnum(WhS_BE_DealContractTypeEnum, 'value', entity.Settings.ContractType).description;
+            var today = new Date();
+            var bed = new Date(entity.Settings.BeginDate);
+            var eed = new Date(entity.Settings.EndDate);
+
+            entity.Settings.Effective = today >= bed && today <= eed;
+        }
         return {
             addDeal: addDeal,
-            editDeal: editDeal
+            editDeal: editDeal,
+            addNeedsFields: addNeedsFields
         };
     }
 

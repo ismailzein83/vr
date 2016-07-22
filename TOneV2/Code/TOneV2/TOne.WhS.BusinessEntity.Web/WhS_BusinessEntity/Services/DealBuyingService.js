@@ -19,10 +19,10 @@
             VRModalService.showModal(editorUrl, parameters, settings);
         }
 
-        function editDealBuying(dealBuying, sellingNumberPlanId, onDealBuyingUpdated) {
+        function editDealBuying(dealBuying, supplierId, onDealBuyingUpdated) {
             var parameters = {
                 dealBuying: dealBuying,
-                sellingNumberPlanId: sellingNumberPlanId
+                supplierId: supplierId
             };
 
             var settings = {};

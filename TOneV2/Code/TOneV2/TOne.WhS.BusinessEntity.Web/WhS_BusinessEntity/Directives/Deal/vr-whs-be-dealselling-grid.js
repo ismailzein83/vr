@@ -73,7 +73,7 @@ app.directive("vrWhsBeDealsellingGrid", ["UtilsService", "VRNotificationService"
                         sellingDuration: 0
                     }
 
-                    if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
+                    if (ctrl.datasource != undefined) {
                         sellingObj.sellingParts = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];

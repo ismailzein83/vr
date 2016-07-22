@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DealEditorController.$inject = ['$scope', 'WhS_BE_DealAPIService', 'WhS_BE_DealSellingService', 'WhS_BE_DealBuyingService', 'WhS_BE_DealContractTypeEnum', 'WhS_BE_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    DealEditorController.$inject = ['$scope', 'WhS_BE_DealAPIService', 'WhS_BE_DealSellingService', 'WhS_BE_DealBuyingService', 'WhS_BE_DealContractTypeEnum', 'WhS_BE_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_BE_DealService'];
 
-    function DealEditorController($scope, WhS_BE_DealAPIService, WhS_BE_DealSellingService, WhS_BE_DealBuyingService, WhS_BE_DealContractTypeEnum, WhS_BE_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function DealEditorController($scope, WhS_BE_DealAPIService, WhS_BE_DealSellingService, WhS_BE_DealBuyingService, WhS_BE_DealContractTypeEnum, WhS_BE_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_DealService) {
         var isEditMode;
 
         var dealId;
@@ -221,6 +221,7 @@
             $scope.scopeModel.endDate = dealEntity.Settings.EndDate;
             $scope.scopeModel.sellingParts = dealEntity.Settings.SellingParts;
             $scope.scopeModel.buyingParts = dealEntity.Settings.BuyingParts;
+            $scope.scopeModel.active = dealEntity.Settings.Active;
         }
 
         function loadCarrierAccountSelector() {
@@ -239,6 +240,8 @@
         function insertDeal() {
             $scope.scopeModel.isLoading = true;
             return WhS_BE_DealAPIService.AddDeal(buildDealObjFromScope()).then(function (response) {
+                WhS_BE_DealService.addNeedsFields(response.InsertedObject.Entity);
+
                 if (VRNotificationService.notifyOnItemAdded('Deal', response, 'Description')) {
                     if ($scope.onDealAdded != undefined)
                         $scope.onDealAdded(response.InsertedObject);
@@ -254,6 +257,10 @@
         function updateDeal() {
             $scope.scopeModel.isLoading = true;
             return WhS_BE_DealAPIService.UpdateDeal(buildDealObjFromScope()).then(function (response) {
+
+
+                WhS_BE_DealService.addNeedsFields(response.UpdatedObject.Entity);
+
                 if (VRNotificationService.notifyOnItemUpdated('Deal', response, 'Description')) {
                     if ($scope.onDealUpdated != undefined)
                         $scope.onDealUpdated(response.UpdatedObject);
@@ -282,7 +289,8 @@
                     SellingAmount: dealSellingAPI.getData().sellingAmount,
                     SellingDuration: dealSellingAPI.getData().sellingDuration,
                     BuyingAmount: dealBuyingAPI.getData().buyingAmount,
-                    BuyingDuration: dealBuyingAPI.getData().buyingDuration
+                    BuyingDuration: dealBuyingAPI.getData().buyingDuration,
+                    Active: $scope.scopeModel.active
                 }
             };
             return obj;

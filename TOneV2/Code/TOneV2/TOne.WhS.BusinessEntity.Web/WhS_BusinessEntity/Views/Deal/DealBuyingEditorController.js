@@ -87,7 +87,7 @@
         function setTitle() {
             if (isEditMode) {
                 if (dealBuyingEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(dealBuyingEntity.Description, 'Buying Part');
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(dealBuyingEntity.Name, 'Buying Part');
             }
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Buying Part');

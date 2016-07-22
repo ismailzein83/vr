@@ -37,6 +37,13 @@
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return WhS_BE_DealAPIService.GetFilteredDeals(dataRetrievalInput).then(function (response) {
+                        
+                        if (response != undefined && response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                WhS_BE_DealService.addNeedsFields(response.Data[i].Entity);
+                            }
+                        }
+
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);

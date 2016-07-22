@@ -31,7 +31,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public Decimal SellingAmount { get; set; }
         public Decimal SellingDuration { get; set; }
         public Decimal BuyingAmount { get; set; }
-        public Decimal BuyingDuration { get; set; }   
+        public Decimal BuyingDuration { get; set; }
+        public bool Active { get; set; }
 
         public DealContractType ContractType { get; set; }
 

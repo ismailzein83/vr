@@ -28,14 +28,13 @@
                             </vr-select>
                         </vr-columns>
 
-    
                     </vr-row>
                     <vr-row>
                         <vr-columns width="1/3row">
                             <vr-datetimepicker label="Begin Date" type="date" value="scopeModel.beginDate" isrequired="true"></vr-datetimepicker>
                         </vr-columns>
                         <vr-columns width="1/3row">
-                            <vr-datetimepicker label="End Date" type="date" value="scopeModel.endDate"></vr-datetimepicker>
+                            <vr-datetimepicker label="End Date" type="date" value="scopeModel.endDate" isrequired="true"></vr-datetimepicker>
                         </vr-columns>
                         <vr-columns width="1/3row">
                             <vr-textbox label="Grace Period" value="scopeModel.gracePeriod" type="number" isrequired="true"></vr-textbox>
@@ -44,6 +43,9 @@
                     <vr-row>
                         <vr-columns width="2/3row">
                             <vr-textbox label="Description" value="scopeModel.description" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-switch value="scopeModel.active" label="Active">  </vr-switch>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
