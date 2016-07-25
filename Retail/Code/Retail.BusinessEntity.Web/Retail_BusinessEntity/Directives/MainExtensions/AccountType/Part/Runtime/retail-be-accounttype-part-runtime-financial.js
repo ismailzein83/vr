@@ -1,6 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeAccounttypePartRuntimeFinancial', ["Retail_BE_PaymentMethodEnum", "UtilsService", "VRUIUtilsService", function (Retail_BE_PaymentMethodEnum, UtilsService, VRUIUtilsService) {
+app.directive('retailBeAccounttypePartRuntimeFinancial', ["Retail_BE_PaymentMethodEnum", "Retail_BE_AccountTypePartRuntimeFinancialEnum", "UtilsService", "VRUIUtilsService",
+    function (Retail_BE_PaymentMethodEnum, Retail_BE_AccountTypePartRuntimeFinancialEnum, UtilsService, VRUIUtilsService) {
     return {
         restrict: 'E',
         scope: {
@@ -28,6 +29,7 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["Retail_BE_PaymentMeth
         function initializeController() {
             $scope.scopeModel = {};
             $scope.scopeModel.paymentMethods = UtilsService.getArrayEnum(Retail_BE_PaymentMethodEnum);
+            $scope.scopeModel.billingCycles = UtilsService.getArrayEnum(Retail_BE_AccountTypePartRuntimeFinancialEnum);
         
             $scope.scopeModel.onCurrencyDirectiveReady = function (api) {
                 currencySelectorAPI = api;
@@ -70,6 +72,7 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["Retail_BE_PaymentMeth
 
                         promises.push(loadPaymentMethodPromiseDeferred.promise);
                         $scope.scopeModel.selectedPaymentMethod = UtilsService.getItemByVal($scope.scopeModel.paymentMethods, payload.partSettings.PaymentMethod, "value");
+                        $scope.scopeModel.selectedBillingCycle = UtilsService.getItemByVal($scope.scopeModel.billingCycles, payload.partSettings.BillingCycleId, "value");
 
                     }
                     $scope.scopeModel.bankDetails = payload.partSettings.BankDetails;
@@ -99,6 +102,7 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["Retail_BE_PaymentMeth
                     BankDetails: $scope.scopeModel.bankDetails,
                     PostpaidSettings: $scope.scopeModel.selectedPaymentMethod.value == Retail_BE_PaymentMethodEnum.Postpaid.value ? paymentMethodDirectiveAPI.getData() : undefined,
                     PrepaidSettings: $scope.scopeModel.selectedPaymentMethod.value == Retail_BE_PaymentMethodEnum.Prepaid.value ? paymentMethodDirectiveAPI.getData() : undefined,
+                    BillingCycleId: $scope.scopeModel.selectedBillingCycle.value
                 };
             };
 
@@ -107,3 +111,4 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["Retail_BE_PaymentMeth
         }
     }
 }]);
+

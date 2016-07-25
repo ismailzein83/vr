@@ -24,6 +24,8 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
         public int CreditClassId { get; set; }
 
         public int StatusChargingSetId { get; set; }
+
+        public int BillingCycleId { get; set; }
     }
 
     public enum PaymentMethod { Prepaid = 0, Postpaid = 1 }
