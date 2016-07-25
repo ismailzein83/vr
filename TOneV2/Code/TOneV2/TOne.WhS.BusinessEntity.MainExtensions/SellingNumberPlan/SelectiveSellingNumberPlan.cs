@@ -24,7 +24,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SellingNumberPlan
         public override string GetDescription(ISaleZoneGroupContext context)
         {
             SellingNumberPlanManager manager = new SellingNumberPlanManager();
-            return string.Format("Selling Number Plans: {0}", manager.GetDescription(SellingNumberPlanIds));
+            return string.Format("Sale Zones of following Number Plans: {0}", manager.GetDescription(SellingNumberPlanIds));
         }
     }
 
