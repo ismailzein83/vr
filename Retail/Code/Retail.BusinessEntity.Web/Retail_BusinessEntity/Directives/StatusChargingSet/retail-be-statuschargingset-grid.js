@@ -15,12 +15,12 @@ app.directive('retailBeStatusdefinitionGrid', ['Retail_BE_StatusChargingSetAPISe
                     return gridAPI.retrieveData(query);
                 };
 
-                api.onStatusDefinitionAdded = function (addedStatusDefinition) {
-                    gridAPI.itemAdded(addedStatusDefinition);
+                api.onStatusChargingSetAdded = function (addedStatusChargingSet) {
+                    gridAPI.itemAdded(addedStatusChargingSet);
                 }
 
-                api.onStatusDefinitionUpdated = function (updatedStatusDefinition) {
-                    gridAPI.itemUpdated(updatedStatusDefinition);
+                api.onStatusChargingSetUpdated = function (updatedStatusChargingSet) {
+                    gridAPI.itemUpdated(updatedStatusChargingSet);
                 }
 
                 if (ctrl.onReady != null)
@@ -37,13 +37,6 @@ app.directive('retailBeStatusdefinitionGrid', ['Retail_BE_StatusChargingSetAPISe
                     defineAPI();
                 };
 
-                $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return retailBeStatusChargingSetApiService.GetFilteredStatusChargingSet(dataRetrievalInput).then(function (response) {
-                        onResponseReady(response);
-                    }).catch(function (error) {
-                        vrNotificationService.notifyExceptionWithClose(error, $scope);
-                    });
-                };
 
                 // defineMenuActions();
             } //function defineMenuActions() {
