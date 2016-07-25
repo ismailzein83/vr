@@ -401,6 +401,9 @@ namespace Retail.BusinessEntity.Business
 
             var statusDesciption =  statusDefinitionManager.GetStatusDefinitionName(account.StatusId);
 
+            var accountServices = new AccountServiceManager();
+            var accountPackages = new AccountPackageManager();
+
             return new AccountDetail()
             {
                 Entity = account,
@@ -410,7 +413,9 @@ namespace Retail.BusinessEntity.Business
                 CanAddSubAccounts = (accountTypeInfoEntities != null && accountTypeInfoEntities.Count() > 0),
                 ActionDefinitions = actionDefinitions,
                 StatusDesciption =statusDesciption,
-                StatusColor = GetStatusColor(statusDesciption)
+                StatusColor = GetStatusColor(statusDesciption),
+                NumberOfServices = accountServices.GetAccountServicesCount(account.AccountId),
+                NumberOfPackages = accountPackages.GetAccountPackagesCount(account.AccountId)
             };
         }
         private string GetStatusColor(string statusDesciption)

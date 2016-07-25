@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Entities;
+
 namespace Retail.BusinessEntity.Business
 {
     public class AccountServiceManager
@@ -15,7 +16,9 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
 
+
         #region Public Methods
+
         public Vanrise.Entities.IDataRetrievalResult<AccountServiceDetail> GetFilteredAccountServices(Vanrise.Entities.DataRetrievalInput<AccountServiceQuery> input)
         {
             var allAccountServices = GetCachedAccountServices();
@@ -25,12 +28,12 @@ namespace Retail.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allAccountServices.ToBigResult(input, filterExpression, AccountServiceDetailMapper));
         }
+
         public AccountService GetAccountService(long AccountServiceId)
         {
             var AccountServices = GetCachedAccountServices();
             return AccountServices.GetRecord(AccountServiceId);
         }
-
         public AccountService GetAccountService(long accountId, int serviceTypeId)
         {
             var accountServices = GetCachedAccountServices();
@@ -47,6 +50,15 @@ namespace Retail.BusinessEntity.Business
             else
                 return null;
         }
+        public int GetAccountServicesCount(long accountId)
+        {
+            Dictionary<long , AccountService> accountServicesCount = GetCachedAccountServices();
+            if (accountServicesCount != null)
+                return accountServicesCount.Where(x => x.Value.AccountId == accountId).Count();
+            else
+                return -1;
+        }
+
         public bool UpdateStatus(long accountServiceId, Guid statusId)
         {
             IAccountServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountServiceDataManager>();
@@ -108,7 +120,9 @@ namespace Retail.BusinessEntity.Business
       
         #endregion
 
+
         #region Private Members
+
         private Dictionary<long, AccountService> GetCachedAccountServices()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountServices",
@@ -119,9 +133,12 @@ namespace Retail.BusinessEntity.Business
                    return AccountServices.ToDictionary(cn => cn.AccountServiceId, cn => cn);
                });
         }
+
         #endregion
 
+
         #region  Mappers
+
         private AccountServiceDetail AccountServiceDetailMapper(AccountService accountService)
         {
             AccountManager accountManager = new AccountManager();
@@ -145,7 +162,6 @@ namespace Retail.BusinessEntity.Business
                 StatusColor = GetStatusColor(statusDesciption)
             };
         }
-
         private string GetStatusColor(string statusDesciption)
         {
             switch (statusDesciption)
@@ -157,7 +173,9 @@ namespace Retail.BusinessEntity.Business
                 default: return "label label-primary";
             }
         }
+
         #endregion
+
 
         #region Private Classes
 

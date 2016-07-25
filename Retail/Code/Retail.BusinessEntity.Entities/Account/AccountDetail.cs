@@ -16,5 +16,9 @@ namespace Retail.BusinessEntity.Entities
         public IEnumerable<ActionDefinitionInfo>  ActionDefinitions { get; set; }
         public string  StatusDesciption { get; set; }
         public string StatusColor  { get; set; }
+        public int NumberOfServices { get; set; }
+        public int NumberOfPackages { get; set; }
+        
     }
 }
+        

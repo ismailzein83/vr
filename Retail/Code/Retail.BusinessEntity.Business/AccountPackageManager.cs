@@ -34,6 +34,14 @@ namespace Retail.BusinessEntity.Business
             Dictionary<int, AccountPackage> cachedAccountPackages = this.GetCachedAccountPackages();
             return cachedAccountPackages.GetRecord(accountPackageId);
         }
+        public int GetAccountPackagesCount(long accountId)
+        {
+            Dictionary<int, AccountPackage> accountPackagesCount = GetCachedAccountPackages();
+            if (accountPackagesCount != null)
+                return accountPackagesCount.Where(x => x.Value.AccountId == accountId).Count();
+            else
+                return -1;
+        }
 
         public IEnumerable<int> GetPackageIdsAssignedToAccount(int accountId)
         {
