@@ -72,7 +72,7 @@ namespace TOne.WhS.Routing.BP.Activities
             {
                 case RoutingDatabaseType.Current: databaseCount = routeDatabaseConfiguration.CurrentDBToKeep; break;
                 case RoutingDatabaseType.Future: databaseCount = routeDatabaseConfiguration.FuturDBToKeep; break;
-                case RoutingDatabaseType.SpecificDate: databaseCount = routeDatabaseConfiguration.SpecificDBToKeep; break;
+                //case RoutingDatabaseType.SpecificDate: databaseCount = routeDatabaseConfiguration.SpecificDBToKeep; break;
                 default: throw new Exception(string.Format("Unsupported RoutingDatabaseType: {0}", databaseType));
             }
 

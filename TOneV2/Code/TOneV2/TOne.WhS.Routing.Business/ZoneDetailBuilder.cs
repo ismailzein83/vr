@@ -7,6 +7,7 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.GenericData.Transformation;
 
 namespace TOne.WhS.Routing.Business
@@ -29,6 +30,7 @@ namespace TOne.WhS.Routing.Business
 
             SettingManager settingManager = new SettingManager();
             RouteTechnicalSettingData data = settingManager.GetSetting<RouteTechnicalSettingData>(Constants.RouteTechnicalSettings);
+            CurrencySettingData systemCurrency = settingManager.GetSetting<CurrencySettingData>(Vanrise.Common.Business.Constants.BaseCurrencySettingType);
 
             DataTransformer dataTransformer = new DataTransformer();
 
@@ -62,7 +64,7 @@ namespace TOne.WhS.Routing.Business
 
                         decimal rateValue = output.GetRecordValue("EffectiveRate");
 
-                        rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, effectiveDate), 8);
+                        rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrency.CurrencyId, effectiveDate), 8);
                         var customerZoneRoutingProduct = customerZoneRoutingProductLocator.GetCustomerZoneRoutingProduct(customerInfo.CustomerId, customerSellingProduct.SellingProductId, customerZone.SaleZoneId);
 
                         CustomerZoneDetail customerZoneDetail = new CustomerZoneDetail
@@ -97,6 +99,7 @@ namespace TOne.WhS.Routing.Business
             {
                 SettingManager settingManager = new SettingManager();
                 RouteTechnicalSettingData data = settingManager.GetSetting<RouteTechnicalSettingData>(Constants.RouteTechnicalSettings);
+                CurrencySettingData systemCurrency = settingManager.GetSetting<CurrencySettingData>(Vanrise.Common.Business.Constants.BaseCurrencySettingType);
 
                 DataTransformer dataTransformer = new DataTransformer();
 
@@ -120,7 +123,7 @@ namespace TOne.WhS.Routing.Business
                     });
 
                     decimal rateValue = output.GetRecordValue("EffectiveRate");
-                    rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, effectiveDate), 8);
+                    rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrency.CurrencyId, effectiveDate), 8);
 
                     SupplierZoneDetail supplierZoneDetail = new SupplierZoneDetail
                     {

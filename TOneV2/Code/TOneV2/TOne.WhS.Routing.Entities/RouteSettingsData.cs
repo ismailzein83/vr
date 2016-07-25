@@ -21,7 +21,7 @@ namespace TOne.WhS.Routing.Entities
 
     public class RouteDatabaseConfiguration
     {
-        public int SpecificDBToKeep { get; set; }
+        //public int SpecificDBToKeep { get; set; }
 
         public int CurrentDBToKeep { get; set; }
 

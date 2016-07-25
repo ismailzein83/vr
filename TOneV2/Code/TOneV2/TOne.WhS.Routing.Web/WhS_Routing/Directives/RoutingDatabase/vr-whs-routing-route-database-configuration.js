@@ -36,7 +36,7 @@ function () {
             api.getData = function () {
                 var obj = {
                     $type: "TOne.WhS.Routing.Entities.RouteDatabaseConfiguration, TOne.WhS.Routing.Entities",
-                    SpecificDBToKeep: ctrl.specific,
+                    //SpecificDBToKeep: ctrl.specific,
                     CurrentDBToKeep: ctrl.current,
                     FuturDBToKeep: ctrl.futur
                 }
@@ -44,7 +44,7 @@ function () {
             }
             api.load = function (payload) {
                 if (payload != undefined) {
-                    ctrl.specific = payload.SpecificDBToKeep;
+                    //ctrl.specific = payload.SpecificDBToKeep;
                     ctrl.current = payload.CurrentDBToKeep,
                     ctrl.futur = payload.FuturDBToKeep
                 }
