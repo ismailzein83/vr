@@ -25,7 +25,7 @@
                 Email: $scope.email,
                 Password: $scope.password
             };
-            authenticate(credentialsObject);
+            return authenticate(credentialsObject);
         }
 
         function onValidationNeeded(userObj) {
