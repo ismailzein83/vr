@@ -57,7 +57,12 @@
             $scope.scopeModal = {}
             $scope.scopeModal.onSaleZoneGroupSettingsDirectiveReady = function (api) {
                 saleZoneGroupSettingsAPI = api;
-                saleZoneGroupSettingsReadyPromiseDeferred.resolve();
+                var saleZoneGroupPayload = {
+                    sellingNumberPlanId: sellingNumberPlanId != undefined ? sellingNumberPlanId : undefined,
+                    saleZoneFilterSettings: { RoutingProductId: routingProductId },
+                };
+                var setLoader = function (value) { $scope.scopeModal.isLoadingSellingNumberPlan = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneGroupSettingsAPI, saleZoneGroupPayload, setLoader, saleZoneGroupSettingsReadyPromiseDeferred);
             }
 
             $scope.scopeModal.onCodeCriteriaGroupSettingsDirectiveReady = function (api) {
@@ -126,9 +131,11 @@
                 if ($scope.scopeModal.selectedRouteRuleCriteriaType == WhS_Routing_RouteRuleCriteriaTypeEnum.SaleZone) {
                     $scope.scopeModal.showSaleZoneSection = $scope.scopeModal.showCustomerSection = $scope.scopeModal.showExcludedCodeSection = true;
                     $scope.scopeModal.showIncludedCodeSection = false;
+                  
                 }
                 else {
                     $scope.scopeModal.showIncludedCodeSection = $scope.scopeModal.showCustomerSection = $scope.scopeModal.showExcludedCodeSection = true;
+                    $scope.scopeModal.selectedCodeCriteriaGroupTemplate = undefined;
                     $scope.scopeModal.showSaleZoneSection = false;
                 }
             }
@@ -235,14 +242,19 @@
                 return;
 
             $scope.scopeModal.routeRuleCriteriaTypes = UtilsService.getArrayEnum(WhS_Routing_RouteRuleCriteriaTypeEnum);
-
-            if (routeRuleEntity != undefined && routeRuleEntity.Criteria.CodeCriteriaGroupSettings != null)
+            if (routeRuleEntity != undefined && routeRuleEntity.Criteria.CodeCriteriaGroupSettings != undefined)
                 $scope.scopeModal.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.Code.value);
             else
                 $scope.scopeModal.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.SaleZone.value);
         }
 
         function loadSaleZoneGroupSection() {
+         
+            if (routeRuleEntity == undefined || routeRuleEntity.Criteria == undefined || routeRuleEntity.Criteria.SaleZoneGroupSettings == undefined)
+            {
+                saleZoneGroupSettingsReadyPromiseDeferred = undefined;
+                return;
+            }
             var promises = [];
 
             if (saleZoneGroupSettingsReadyPromiseDeferred == undefined)
@@ -261,7 +273,6 @@
                     saleZoneGroupPayload.sellingNumberPlanId = sellingNumberPlanId != undefined ? sellingNumberPlanId : routeRuleEntity.Criteria.SaleZoneGroupSettings != undefined ? routeRuleEntity.Criteria.SaleZoneGroupSettings.SellingNumberPlanId : undefined;
                     saleZoneGroupPayload.saleZoneGroupSettings = routeRuleEntity.Criteria.SaleZoneGroupSettings
                 }
-
                 saleZoneGroupSettingsReadyPromiseDeferred = undefined;
                 VRUIUtilsService.callDirectiveLoad(saleZoneGroupSettingsAPI, saleZoneGroupPayload, saleZoneGroupSettingsLoadPromiseDeferred);
             });
@@ -382,9 +393,9 @@
                 Criteria: {
                     RoutingProductId: routingProductId,
                     ExcludedCodes: $scope.scopeModal.excludedCodes,
-                    SaleZoneGroupSettings: saleZoneGroupSettingsAPI.getData(),//VRUIUtilsService.getSettingsFromDirective($scope, saleZoneGroupSettingsAPI, 'selectedSaleZoneGroupTemplate'),
+                    SaleZoneGroupSettings:$scope.scopeModal.showSaleZoneSection? saleZoneGroupSettingsAPI.getData():undefined,//VRUIUtilsService.getSettingsFromDirective($scope, saleZoneGroupSettingsAPI, 'selectedSaleZoneGroupTemplate'),
                     CustomerGroupSettings: customerGroupSettingsAPI.getData(),
-                    CodeCriteriaGroupSettings: VRUIUtilsService.getSettingsFromDirective($scope.scopeModal, codeCriteriaGroupSettingsAPI, 'selectedCodeCriteriaGroupTemplate')
+                    CodeCriteriaGroupSettings: $scope.scopeModal.showIncludedCodeSection? VRUIUtilsService.getSettingsFromDirective($scope.scopeModal, codeCriteriaGroupSettingsAPI, 'selectedCodeCriteriaGroupTemplate'):undefined
                 },
                 Settings: VRUIUtilsService.getSettingsFromDirective($scope.scopeModal, routeRuleSettingsAPI, 'selectedrouteRuleSettingsTemplate'),
                 BeginEffectiveTime: $scope.scopeModal.beginEffectiveDate,
