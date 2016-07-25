@@ -7,9 +7,9 @@
                                selectedvalues="selectedSuppliersWithZonesStettingsTemplate">
                     </vr-select>
                 </vr-columns>
-                <vr-columns width="3/4row" vr-loader="isLoadingDirective">
-                    <vr-directivewrapper directive="selectedSuppliersWithZonesStettingsTemplate.Editor" on-ready="onDirectiveReady"></vr-directivewrapper>
-                </vr-columns>
+                <span vr-loader="isLoadingDirective">
+                    <vr-directivewrapper directive="selectedSuppliersWithZonesStettingsTemplate.Editor" on-ready="onDirectiveReady" normal-col-num="8"></vr-directivewrapper>
+                </span>
             </vr-row>
         </vr-section>
     </vr-columns>

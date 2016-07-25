@@ -4,7 +4,7 @@
                    selectedvalues="selectedCustomerGroupTemplate">
         </vr-select>
     </vr-columns>
-    <vr-columns width="3/4row" ng-show="selectedCustomerGroupTemplate" vr-loader="isLoadingCustomerGroupDirective">
-        <vr-directivewrapper directive="selectedCustomerGroupTemplate.Editor" on-ready="onCustomerGroupDirectiveReady"></vr-directivewrapper>
-    </vr-columns>
+    <span ng-show="selectedCustomerGroupTemplate" vr-loader="isLoadingCustomerGroupDirective">
+        <vr-directivewrapper directive="selectedCustomerGroupTemplate.Editor" on-ready="onCustomerGroupDirectiveReady" normal-col-num="8"></vr-directivewrapper>
+    </span>
 </vr-row>

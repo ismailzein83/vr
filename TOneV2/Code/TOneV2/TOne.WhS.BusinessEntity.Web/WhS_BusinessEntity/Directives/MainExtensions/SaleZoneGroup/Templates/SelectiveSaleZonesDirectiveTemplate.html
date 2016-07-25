@@ -1,9 +1,10 @@
-﻿<vr-row removeline>
-    <vr-columns colnum="4" ng-show="showSellingNumberPlan">
-        <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" selectedvalues="selectedSellingNumberPlan" onselectitem="onSellingNumberPlanSelectItem" isrequired="showSellingNumberPlan" />
-    </vr-columns>
-    <vr-columns colnum="4" vr-loader="isLoadingSaleZonesSelector" ng-show="selectedSellingNumberPlan!=undefined || !showSellingNumberPlan">
-        <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady" isrequired="true" />
-    </vr-columns>
-</vr-row>
+﻿<!--<vr-row removeline haschildcolumns>-->
+    <span ng-show="showSellingNumberPlan">
+        <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" selectedvalues="selectedSellingNumberPlan" onselectitem="onSellingNumberPlanSelectItem"
+                                              isrequired="showSellingNumberPlan" normal-col-num="4" />
+    </span>
+    <span vr-loader="isLoadingSaleZonesSelector" ng-show="selectedSellingNumberPlan!=undefined || !showSellingNumberPlan">
+        <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady" isrequired="true" normal-col-num="4" />/>
+    </span>
+<!--</vr-row>-->
     
