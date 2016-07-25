@@ -392,6 +392,8 @@
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeManagementController.js" />
+    <Content Include="Retail_BusinessEntity\Views\StatusChargingSet\StatusChargingSetEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\StatusChargingSet\StatusChargingSetEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Status\StatusDefinitionEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Status\StatusDefinitionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\StatusChargingSet\StatusChargingSetManagement.html" />

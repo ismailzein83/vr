@@ -2,21 +2,21 @@
 (function (appControllers) {
 
     "use strict";
-    StatusDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Retail_BE_ModuleConfig'];
+    StatusChargingSetAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Retail_BE_ModuleConfig'];
 
-    function StatusDefinitionAPIService(baseApiService, utilsService, retailBeModuleConfig) {
+    function StatusChargingSetAPIService(baseApiService, utilsService, retailBeModuleConfig) {
 
         var controllerName = "StatusChargingSet";
 
-        function GetFilteredStatusChargingSet(input) {
-            return baseApiService.post(utilsService.getServiceURL(retailBeModuleConfig.moduleName, controllerName, 'GetFilteredStatusChargingSet'), input);
+        function AddStatusChargingSet(statusChargingSetItem) {
+            return baseApiService.post(utilsService.getServiceURL(retailBeModuleConfig.moduleName, controllerName, 'AddStatusChargingSet'), statusChargingSetItem);
         }
 
         return ({
-            GetFilteredStatusChargingSet: GetFilteredStatusChargingSet
+            AddStatusChargingSet: AddStatusChargingSet
         });
     }
 
-    appControllers.service('Retail_BE_StatusChargingSetAPIService ', StatusDefinitionAPIService);
+    appControllers.service('Retail_BE_StatusChargingSetAPIService ', StatusChargingSetAPIService);
 
 })(appControllers);
