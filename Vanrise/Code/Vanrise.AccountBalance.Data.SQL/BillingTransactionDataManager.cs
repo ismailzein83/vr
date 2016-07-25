@@ -42,8 +42,8 @@ namespace Vanrise.AccountBalance.Data.SQL
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyId"),
                 Notes = reader["Notes"] as string,
                 TransactionTime = GetReaderValue<DateTime>(reader, "TransactionTime"),
-                TransactionTypeId = GetReaderValue<Guid>(reader, "TransactionTypeID")
-
+                TransactionTypeId = GetReaderValue<Guid>(reader, "TransactionTypeID"),
+                Reference = reader["Reference"] as string
             };
         }
 
