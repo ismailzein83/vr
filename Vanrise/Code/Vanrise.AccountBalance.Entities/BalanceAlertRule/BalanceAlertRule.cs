@@ -13,7 +13,14 @@ namespace Vanrise.AccountBalance.Entities
 
         public override string GetSettingsDescription(IGenericRuleSettingsDescriptionContext context)
         {
-            throw new NotImplementedException();
+            if (Settings != null && Settings.ThresholdActions != null)
+            {
+                List<string> actionDescriptions = new List<string>();
+                foreach (var action in Settings.ThresholdActions)
+                    actionDescriptions.Add(action.Threshold.ConfigId.ToString());
+                return String.Join("; ", actionDescriptions);
+            }
+            return null;
         }
 
         public override bool AreSettingsMatched(object ruleDefinitionSettings, object settingsFilterValue)

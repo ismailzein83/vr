@@ -15,7 +15,7 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new VRAction($scope, ctrl, $attrs);
+                var ctor = new ThresholdEntity($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -25,7 +25,7 @@
             }
         };
 
-        function VRAction($scope, ctrl, $attrs) {
+        function ThresholdEntity($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
@@ -61,13 +61,13 @@
                     selectorAPI.clearDataSource();
 
                     var promises = [];
-                    var vrAction;
+                    var thresholdEntity;
 
                     if (payload != undefined) {
-                        vrAction = payload.vrAction;
+                        thresholdEntity = payload.thresholdEntity;
                     }
 
-                    if (vrAction != undefined) {
+                    if (thresholdEntity != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
@@ -81,9 +81,9 @@
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (vrAction != undefined) {
+                                if (thresholdEntity != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, vrAction.ConfigId, 'ExtensionConfigurationId');
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, thresholdEntity.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
@@ -95,7 +95,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { vrAction: vrAction };
+                            var directivePayload = thresholdEntity;
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 

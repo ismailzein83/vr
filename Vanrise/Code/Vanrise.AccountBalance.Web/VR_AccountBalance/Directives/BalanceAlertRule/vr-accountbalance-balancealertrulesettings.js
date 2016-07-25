@@ -39,7 +39,7 @@ function (UtilsService, VR_AccountBalance_BalanceAlertService) {
             ctrl.addThresholdAction = function () {
                 var onBalanceAlertThresholdAdded = function (balanceAlertThreshold)
                 {
-                    ctrl.datasource.push({ Entity: onBalanceAlertThresholdAdded });
+                    ctrl.datasource.push({ Entity: balanceAlertThreshold });
                 }
                 VR_AccountBalance_BalanceAlertService.addBalanceAlertThreshold(onBalanceAlertThresholdAdded);
             };
@@ -50,24 +50,61 @@ function (UtilsService, VR_AccountBalance_BalanceAlertService) {
             };
 
             defineAPI();
-
+            defineMenuActions();
         }
 
         function defineAPI() {
             var api = {};
 
             api.getData = function () {
+                var data = [];
+                if(ctrl.datasource.length >0)
+                {
+                    for(var i=0;i<ctrl.datasource.length;i++)
+                    {
+                        data.push(ctrl.datasource[i].Entity);
+                    }
+                }
+                var result = {
+                   ThresholdActions: data
+                }
+                return result;
             }
           
             api.load = function (payload) {
-               
+                if(payload !=undefined && payload.settings !=undefined)
+                {
+                    if(payload.settings.ThresholdActions !=undefined)
+                    {
+                        for(var i=0;i<payload.settings.ThresholdActions.length;i++)
+                        {
+                            ctrl.datasource.push({ Entity: payload.settings.ThresholdActions[i] });
+                        }
+                    }
+                }
             }
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
 
+        function defineMenuActions() {
+
+            $scope.gridMenuActions = [{
+                name: "Edit",
+                clicked: editThresholdAction,
+            }];
+        }
+
+        function editThresholdAction(dataItem) {
+            var onThresholdActionUpdated = function (thresholdActionObj) {
+                ctrl.datasource[ctrl.datasource.indexOf(dataItem)] = { Entity: thresholdActionObj };
+            }
+            VR_AccountBalance_BalanceAlertService.editBalanceAlertThreshold(dataItem.Entity, onThresholdActionUpdated);
+        }
+
         this.initializeController = initializeController;
     }
+
     return directiveDefinitionObject;
 }]);

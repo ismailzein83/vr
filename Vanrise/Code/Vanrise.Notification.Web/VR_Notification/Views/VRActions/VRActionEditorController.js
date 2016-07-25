@@ -21,7 +21,7 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {
-                actionEntity = parameters.actionEntity;
+                actionEntity = parameters.vrActionEntity;
             }
 
             isEditMode = (actionEntity != undefined);
@@ -82,7 +82,7 @@
             var actionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             actionReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload;
+                    var directivePayload = actionEntity != undefined ? { vrActionEntity: actionEntity } : undefined;
                     VRUIUtilsService.callDirectiveLoad(actionDirectiveApi, directivePayload, actionLoadPromiseDeferred);
                 });
             return actionLoadPromiseDeferred.promise;

@@ -51,7 +51,7 @@ function (UtilsService, VR_Notification_VRActionService) {
             };
 
             defineAPI();
-
+            defineMenuActions();
         }
 
         function defineAPI() {
@@ -72,11 +72,32 @@ function (UtilsService, VR_Notification_VRActionService) {
             }
 
             api.load = function (payload) {
-
+                ctrl.datasource.length = 0;
+                if(payload != undefined && payload.actions !=undefined)
+                {
+                    for(var i=0;i<payload.actions.length;i++)
+                    {
+                        ctrl.datasource.push({ Entity: payload.actions[i]});
+                    }
+                }
             }
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
+        }
+
+        function defineMenuActions() {
+
+            $scope.gridMenuActions = [{
+                name: "Edit",
+                clicked: editAction,
+            }];
+        }
+        function editAction(dataItem) {
+            var onVRActionUpdated = function (vrActionObj) {
+                ctrl.datasource[ctrl.datasource.indexOf(dataItem)] = { Entity: vrActionObj };
+            }
+            VR_Notification_VRActionService.editVRAction(dataItem.Entity, onVRActionUpdated);
         }
 
         this.initializeController = initializeController;

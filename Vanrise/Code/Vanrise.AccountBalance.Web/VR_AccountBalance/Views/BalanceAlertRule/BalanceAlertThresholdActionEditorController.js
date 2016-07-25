@@ -20,7 +20,8 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
-                thresholdEntity = parameters.thresholdEntity;
+                thresholdEntity = parameters.thresholdActionEntity;
+                isEditMode = (thresholdEntity != undefined);
             }
         }
 
@@ -65,7 +66,7 @@
         }
 
         function setTitle() {
-            $scope.title = UtilsService.buildTitleForAddEditor('Payment');
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor('Threshold') : UtilsService.buildTitleForAddEditor('Threshold');
         }
 
         function loadStaticData() {
@@ -75,7 +76,7 @@
         function loadVRActionManagement() {
             var vRActionManagementLoadDeferred = UtilsService.createPromiseDeferred();
             vRActionManagementReadyDeferred.promise.then(function () {
-                var vrActionPayload;
+                var vrActionPayload = thresholdEntity != undefined ? { actions: thresholdEntity.Actions } : undefined;
                 VRUIUtilsService.callDirectiveLoad(vRActionManagementAPI, vrActionPayload, vRActionManagementLoadDeferred);
             });
             return vRActionManagementLoadDeferred.promises;
@@ -84,7 +85,7 @@
         function loadBalanceAlertThresholdDirective() {
             var balanceAlertThresholdLoadDeferred = UtilsService.createPromiseDeferred();
             balanceAlertThresholdReadyDeferred.promise.then(function () {
-                var balanceAlertThresholdPayload;
+                var balanceAlertThresholdPayload = thresholdEntity != undefined ? { thresholdEntity: thresholdEntity.Threshold } : undefined
                 VRUIUtilsService.callDirectiveLoad(balanceAlertThresholdAPI, balanceAlertThresholdPayload, balanceAlertThresholdLoadDeferred);
             });
             return balanceAlertThresholdLoadDeferred.promises;
@@ -96,14 +97,18 @@
                 $scope.onBalanceAlertThresholdAdded(balanceAlertThresholdObj);
             $scope.modalContext.closeModal();
         }
+
         function update() {
             if ($scope.onBalanceAlertThresholdUpdated != undefined) {
                 $scope.onBalanceAlertThresholdUpdated(buildBalanceAlertThresholdObjFromScope());
             }
             $scope.modalContext.closeModal();
         }
+
         function buildBalanceAlertThresholdObjFromScope() {
             var obj = {
+                Threshold: balanceAlertThresholdAPI.getData(),
+                Actions: vRActionManagementAPI.getData()
             };
             return obj;
         }

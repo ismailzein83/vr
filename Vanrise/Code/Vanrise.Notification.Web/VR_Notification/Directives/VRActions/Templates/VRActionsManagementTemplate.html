@@ -6,9 +6,9 @@
 <vr-row>
     <vr-columns width="fullrow" vr-loader="ctrl.isLoadingDirective">
         <vr-validator validate="ctrl.isValid()">
-            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true"
+            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions"
                          on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeVRAction" hidegridmenu>
-                <vr-datagridcolumn headertext="'Filter Type'" field="'name'" widthfactor="5"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Action Definition'" field="'Entity.ActionDefinitionId'" widthfactor="5"></vr-datagridcolumn>
             </vr-datagrid>
         </vr-validator>
     </vr-columns>

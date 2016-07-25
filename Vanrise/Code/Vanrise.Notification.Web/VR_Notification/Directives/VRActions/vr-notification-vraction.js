@@ -61,13 +61,13 @@
                     selectorAPI.clearDataSource();
 
                     var promises = [];
-                    var vrAction;
+                    var vrActionEntity;
 
                     if (payload != undefined) {
-                        vrAction = payload.vrAction;
+                        vrActionEntity = payload.vrActionEntity;
                     }
 
-                    if (vrAction != undefined) {
+                    if (vrActionEntity != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
@@ -81,9 +81,9 @@
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (vrAction != undefined) {
+                                if (vrActionEntity != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, vrAction.ConfigId, 'ExtensionConfigurationId');
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, vrActionEntity.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
@@ -95,7 +95,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { vrAction: vrAction };
+                            var directivePayload = { vrActionEntity: vrActionEntity };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 

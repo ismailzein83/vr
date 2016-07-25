@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsService','Retail_BE_ActionDefinitionAPIService',
+    function (UtilsService, VRUIUtilsService, Retail_BE_ActionDefinitionAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -35,14 +35,58 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
 
             var actionDefinitionAPI;
             var actionDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var actionDefinitionRuntimeAPI;
+            var actionDefinitionRuntimeReadyDeferred;
+
+            var actionDefinitionEntity;
+            var vrActionEntity;
+
             function initializeController() {
                 $scope.scopeModel = {};
 
-                $scope.scopeModel.onActionDefinitionSelectorReady = function(api)
+                $scope.scopeModel.extensionConfigs = [];
+
+                $scope.scopeModel.onActionDefinitionSelectorReady = function (api)
                 {
                     actionDefinitionAPI = api;
                     actionDefinitionSelectorReadyDeferred.resolve();
                 }
+
+                $scope.scopeModel.onActionDeinitionSelectionChanged = function()
+                {
+                    var selectedActionDefinitionId = actionDefinitionAPI.getSelectedIds();
+                    if(selectedActionDefinitionId != undefined)
+                    {
+                        getActionDefinitionById(selectedActionDefinitionId).then(function ()
+                        {
+
+                           
+
+                            if(actionDefinitionRuntimeAPI != undefined)
+                            {
+                                var directivePayload = { bpDefinitionSettings: actionDefinitionEntity.Settings.BPDefinitionSettings };
+                                var setLoader = function (value) {
+                                    $scope.scopeModel.isLoadingDirective = value;
+                                };
+                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, actionDefinitionRuntimeAPI, directivePayload, setLoader, actionDefinitionRuntimeReadyDeferred);
+                            }
+
+                          
+                        })
+                    }
+
+                }
+
+                $scope.scopeModel.onActionDefinitionRuntimeReady = function(api)
+                {
+                    actionDefinitionRuntimeAPI = api;
+                    var directivePayload = { bpDefinitionSettings: actionDefinitionEntity.Settings.BPDefinitionSettings };
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isLoadingDirective = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, actionDefinitionRuntimeAPI, directivePayload, setLoader, actionDefinitionRuntimeReadyDeferred);
+                }
+
                 defineAPI();
             }
 
@@ -51,32 +95,97 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
 
                 api.load = function (payload) {
                     if (payload != undefined) {
-
+                        vrActionEntity = payload.vrActionEntity;
                     }
-
+                    var promises = [];
                     var actionDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     actionDefinitionSelectorReadyDeferred.promise.then(function () {
                         var actionDefinitionSelectorPayload = undefined;
-                        if (payload) {
+                        if (vrActionEntity) {
                             actionDefinitionSelectorPayload = {
-                                selectedIds:  payload.ActionDefinitionId
+                                selectedIds: vrActionEntity.ActionDefinitionId
                             };
                         }
                         VRUIUtilsService.callDirectiveLoad(actionDefinitionAPI, actionDefinitionSelectorPayload, actionDefinitionSelectorLoadDeferred);
                     });
-                    return actionDefinitionSelectorLoadDeferred.promise;
+                    promises.push(actionDefinitionSelectorLoadDeferred.promise);
+
+                    var loadActionBPDefinitionExtensionConfigsPromise = loadActionBPDefinitionExtensionConfigs();
+                    promises.push(loadActionBPDefinitionExtensionConfigsPromise);
+
+                    if (vrActionEntity)
+                    {
+                        var promiseDiffered = UtilsService.createPromiseDeferred();
+                        promises.push(promiseDiffered.promise);
+                        loadActionBPDefinitionExtensionConfigsPromise.then(function () {
+                            if (actionDefinitionEntity != undefined && actionDefinitionEntity.Settings != undefined && actionDefinitionEntity.Settings.BPDefinitionSettings != undefined) {
+                                loadDirective().then(function () {
+                                    promiseDiffered.resolve();
+                                }).catch(function (error) {
+                                    promiseDiffered.reject(error);
+                                });
+                            }else
+                            {
+                                promiseDiffered.resolve();
+                            }
+                        });
+                    }
+                    return UtilsService.waitMultiplePromises(promises);
+
                 }
 
                 api.getData = function () {
+                    var actionBPSettings = actionDefinitionRuntimeAPI.getData();
+                    if(actionBPSettings !=undefined)
+                        actionBPSettings.ConfigId =  $scope.scopeModel.selectedExtensionConfig.ExtensionConfigurationId;
+
                     return {
-                        $type: "Retail.BusinessEntity.Business.Extensions.BalanceAlertThresholds.FixedBalanceAlertThreshold, Retail.BusinessEntity.Business",
-                        ActionDefinitionId:actionDefinitionAPI.getSelectedIds()
+                        $type: "Retail.BusinessEntity.Business.Extensions.BalanceAlertAccountAction, Retail.BusinessEntity.Business",
+                        ActionDefinitionId: actionDefinitionAPI.getSelectedIds(),
+                        ActionBPSettings : actionBPSettings
                     };
                 }
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
+
+            function getActionDefinitionById(actionDefinitionId)
+            {
+               return Retail_BE_ActionDefinitionAPIService.GetActionDefinition(actionDefinitionId).then(function (response)
+                {
+                   actionDefinitionEntity = response;
+
+                   if (actionDefinitionEntity != undefined && actionDefinitionEntity.Settings != undefined && actionDefinitionEntity.Settings.BPDefinitionSettings != undefined)
+                       $scope.scopeModel.selectedExtensionConfig = UtilsService.getItemByVal($scope.scopeModel.extensionConfigs, actionDefinitionEntity.Settings.BPDefinitionSettings.ConfigId, 'ExtensionConfigurationId');
+                })
+            }
+
+            function loadActionBPDefinitionExtensionConfigs() {
+                return Retail_BE_ActionDefinitionAPIService.GetActionBPDefinitionExtensionConfigs().then(function (response) {
+                    if (response != undefined) {
+                        for (var i = 0; i < response.length; i++) {
+                            $scope.scopeModel.extensionConfigs.push(response[i]);
+                        }
+                       
+                    }
+                });
+            }
+
+            function loadDirective() {
+                
+                var actionDefinitionRuntimeLoadDeferred = UtilsService.createPromiseDeferred();
+                actionDefinitionRuntimeReadyDeferred = UtilsService.createPromiseDeferred();
+                actionDefinitionRuntimeReadyDeferred.promise.then(function () {
+                    actionDefinitionRuntimeReadyDeferred = undefined;
+                    var directivePayload = {
+                        bpDefinitionSettings: actionDefinitionEntity.Settings.BPDefinitionSettings
+                    };
+                    VRUIUtilsService.callDirectiveLoad(actionDefinitionRuntimeAPI, directivePayload, actionDefinitionRuntimeLoadDeferred);
+                });
+                return actionDefinitionRuntimeLoadDeferred.promise;
+            }
+
 
             this.initializeController = initializeController;
         }
