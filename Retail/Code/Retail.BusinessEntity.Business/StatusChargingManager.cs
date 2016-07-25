@@ -17,6 +17,18 @@ namespace Retail.BusinessEntity.Business
         {
             throw new NotImplementedException();
         }
+        public InsertOperationOutput<StatusChargingSet> AddStatusChargingSet(StatusChargingSet statusChargingSetItem)
+        {
+            var insertOperationOutput = new InsertOperationOutput<StatusChargingSet>
+            {
+                Result = InsertOperationResult.Failed,
+                InsertedObject = null
+            };
+
+            IStatusChargingSetDataManager dataManager = BEDataManagerFactory.GetDataManager<IStatusChargingSetDataManager>();
+            insertOperationOutput.Result = dataManager.Insert(statusChargingSetItem) ? InsertOperationResult.Succeeded : InsertOperationResult.SameExists;
+            return insertOperationOutput;
+        }
         public IDataRetrievalResult<StatusChargingSet> GetFilteredStatusChargingSet(DataRetrievalInput<StatusChargingSetQuery> input)
         {
             IStatusChargingSetDataManager dataManager = BEDataManagerFactory.GetDataManager<IStatusChargingSetDataManager>();

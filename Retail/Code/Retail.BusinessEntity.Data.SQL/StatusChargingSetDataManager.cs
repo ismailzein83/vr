@@ -17,6 +17,12 @@ namespace Retail.BusinessEntity.Data.SQL
         {
             return GetItemsSP("Retail.sp_StatusChargingSet_GetAll", StatusChargingSetsnMapper);
         }
+        public bool Insert(StatusChargingSet statusChargingSetItem)
+        {
+            string serializedSettings = statusChargingSetItem.Settings != null ? Serializer.Serialize(statusChargingSetItem.Settings) : null;
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_StatusChargingSet_Insert", statusChargingSetItem.Name, serializedSettings);
+            return affectedRecords > 0;
+        }
         #endregion
 
         #region Mappers
