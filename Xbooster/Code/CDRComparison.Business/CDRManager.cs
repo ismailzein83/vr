@@ -23,5 +23,11 @@ namespace CDRComparison.Business
             dataManager.TableNameKey = input.Query.TableKey;
             return DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredCDRs(input));
         }
+        public decimal GetDurationOfCDRs(string tableKey, bool? isPartner = null)
+        {
+            var dataManager = CDRComparisonDataManagerFactory.GetDataManager<ICDRDataManager>();
+            dataManager.TableNameKey = tableKey;
+            return dataManager.GetDurationOfCDRs(isPartner);
+        }
     }
 }

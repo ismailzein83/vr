@@ -29,8 +29,8 @@
             $scope.scopeModal.timeMargin = 0;
             $scope.scopeModal.durationMargin = 0;
             $scope.scopeModal.durations = UtilsService.getArrayEnum(CDRComparison_TimeUnitEnum);
-            $scope.scopeModal.selectedTimeMarginTimeUnit = CDRComparison_TimeUnitEnum.Milliseconds;
-            $scope.scopeModal.selectedDurationMarginTimeUnit = CDRComparison_TimeUnitEnum.Milliseconds;
+            $scope.scopeModal.selectedTimeMarginTimeUnit = CDRComparison_TimeUnitEnum.Seconds;
+            $scope.scopeModal.selectedDurationMarginTimeUnit = CDRComparison_TimeUnitEnum.Seconds;
             $scope.scopeModal.timeOffset = '00:00:00';
             $scope.scopeModal.compareCGPN = false;
             $scope.scopeModal.openHelper = function()

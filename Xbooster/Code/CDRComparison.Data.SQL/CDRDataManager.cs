@@ -9,7 +9,7 @@ using Vanrise.Data.SQL;
 
 namespace CDRComparison.Data.SQL
 {
-    public class CDRDataManager : BaseCDRDataManager , ICDRDataManager
+    public class CDRDataManager : BaseCDRDataManager, ICDRDataManager
     {
         #region Constructors / Fields
 
@@ -23,7 +23,7 @@ namespace CDRComparison.Data.SQL
             "AttemptTime",
             "Duration"
         };
-        
+
         #endregion
 
         #region Public Methods
@@ -56,7 +56,7 @@ namespace CDRComparison.Data.SQL
                 }
             }, null);
         }
- 
+
         public void CreateCDRTempTable()
         {
             StringBuilder query = new StringBuilder();
@@ -150,7 +150,19 @@ namespace CDRComparison.Data.SQL
         }
 
         #endregion
-        
+
+        public decimal GetDurationOfCDRs(bool? isPartner)
+        {
+            var queryBuilder = new StringBuilder(String.Format("SELECT SUM(Duration) FROM {0}", this.TableName));
+            if (isPartner.HasValue)
+            {
+                string isPartnerCDRValue = (isPartner.Value) ? "1" : "0";
+                queryBuilder.Append(String.Format(" WHERE IsPartnerCDR = {0}", isPartnerCDRValue));
+            }
+            object duration = ExecuteScalarText(queryBuilder.ToString(), null);
+            return (duration != DBNull.Value) ? (decimal)duration : 0;
+        }
+
         #endregion
 
         #region Private Methods
@@ -198,7 +210,7 @@ namespace CDRComparison.Data.SQL
             }
             createTempTableQueryBuilder.Replace("#TEMPTABLE#", tempTableName);
             createTempTableQueryBuilder.Replace("#ISPARTNERCDRS#", (input.Query.IsPartnerCDRs ? "1" : "0"));
-            createTempTableQueryBuilder.Replace("#ADDITIONALQUERY#",cdpnQuery );
+            createTempTableQueryBuilder.Replace("#ADDITIONALQUERY#", cdpnQuery);
             createTempTableQueryBuilder.Replace("#TABLENAME#", this.TableName);
             ExecuteNonQueryText(createTempTableQueryBuilder.ToString(), null);
         }
@@ -216,6 +228,5 @@ namespace CDRComparison.Data.SQL
             };
         }
         #endregion
-      
     }
 }

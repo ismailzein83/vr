@@ -18,7 +18,29 @@ namespace CDRComparison.Business
         {
             IPartialMatchCDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<IPartialMatchCDRDataManager>();
             dataManager.TableNameKey = input.Query.TableKey;
-            return DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredPartialMatchCDRs(input));
+
+            var partialMatchCDRBigResult = new PartialMatchCDRBigResult();
+            BigResult<PartialMatchCDR> bigResult = dataManager.GetFilteredPartialMatchCDRs(input);
+
+            partialMatchCDRBigResult.ResultKey = bigResult.ResultKey;
+            partialMatchCDRBigResult.Data = bigResult.Data;
+            partialMatchCDRBigResult.TotalCount = bigResult.TotalCount;
+
+            partialMatchCDRBigResult.Summary = new PartialMatchCDR();
+            partialMatchCDRBigResult.Summary.SystemDurationInSec = 0;
+            partialMatchCDRBigResult.Summary.PartnerDurationInSec = 0;
+            partialMatchCDRBigResult.Summary.DurationDifferenceInSec = 0;
+
+            foreach (PartialMatchCDR cdr in bigResult.Data)
+            {
+                cdr.DurationDifferenceInSec = Math.Abs(cdr.SystemDurationInSec - cdr.PartnerDurationInSec);
+
+                partialMatchCDRBigResult.Summary.SystemDurationInSec += cdr.SystemDurationInSec;
+                partialMatchCDRBigResult.Summary.PartnerDurationInSec += cdr.PartnerDurationInSec;
+                partialMatchCDRBigResult.Summary.DurationDifferenceInSec += cdr.DurationDifferenceInSec;
+            }
+
+            return DataRetrievalManager.Instance.ProcessResult(input, partialMatchCDRBigResult);
         }
 
         public int GetPartialMatchCDRsCount(string tableKey)
@@ -26,6 +48,20 @@ namespace CDRComparison.Business
             IPartialMatchCDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<IPartialMatchCDRDataManager>();
             dataManager.TableNameKey = tableKey;
             return dataManager.GetPartialMatchCDRsCount();
+        }
+
+        public decimal GetDurationOfPartialMatchCDRs(string tableKey, bool isPartner)
+        {
+            var dataManager = CDRComparisonDataManagerFactory.GetDataManager<IPartialMatchCDRDataManager>();
+            dataManager.TableNameKey = tableKey;
+            return dataManager.GetDurationOfPartialMatchCDRs(isPartner);
+        }
+
+        public decimal GetTotalDurationDifferenceOfPartialMatchCDRs(string tableKey)
+        {
+            var dataManager = CDRComparisonDataManagerFactory.GetDataManager<IPartialMatchCDRDataManager>();
+            dataManager.TableNameKey = tableKey;
+            return dataManager.GetTotalDurationDifferenceOfPartialMatchCDRs(tableKey);
         }
 
         #endregion

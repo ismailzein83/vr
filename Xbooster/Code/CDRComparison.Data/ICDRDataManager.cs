@@ -16,5 +16,6 @@ namespace CDRComparison.Data
         void DeleteCDRTable();
         Vanrise.Entities.BigResult<CDR> GetFilteredCDRs(Vanrise.Entities.DataRetrievalInput<CDRQuery> input);
         int GetCDRsCount(bool? isPartner);
+        decimal GetDurationOfCDRs(bool? isPartner);
     }
 }

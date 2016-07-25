@@ -124,7 +124,7 @@
 
         function loadSummaryData() {
             return CDRComparison_CDRComparisonAPIService.GetCDRComparisonSummary(tableKey).then(function (response) {
-                if (response)
+                if (response != null)
                 {
                     $scope.scopeModal.systemCDRsCount = response.SystemCDRsCount;
                     $scope.scopeModal.partnerCDRsCount = response.PartnerCDRsCount;
@@ -132,8 +132,17 @@
                     $scope.scopeModal.partnerMissingCDRsCount = response.PartnerMissingCDRsCount;
                     $scope.scopeModal.partialMatchCDRsCount = response.PartialMatchCDRsCount;
                     $scope.scopeModal.disputeCDRsCount = response.DisputeCDRsCount;
+
+                    $scope.scopeModal.durationOfSystemCDRs = response.DurationOfSystemCDRs;
+                    $scope.scopeModal.durationOfPartnerCDRs = response.DurationOfPartnerCDRs;
+                    $scope.scopeModal.durationOfSystemMissingCDRs = response.DurationOfSystemMissingCDRs;
+                    $scope.scopeModal.durationOfPartnerMissingCDRs = response.DurationOfPartnerMissingCDRs;
+                    $scope.scopeModal.durationOfSystemPartialMatchCDRs = response.DurationOfSystemPartialMatchCDRs;
+                    $scope.scopeModal.durationOfPartnerPartialMatchCDRs = response.DurationOfPartnerPartialMatchCDRs;
+                    $scope.scopeModal.totalDurationDifferenceOfPartialMatchCDRs = response.TotalDurationDifferenceOfPartialMatchCDRs;
+                    $scope.scopeModal.durationOfSystemDisputeCDRs = response.DurationOfSystemDisputeCDRs;
+                    $scope.scopeModal.durationOfPartnerDisputeCDRs = response.DurationOfPartnerDisputeCDRs;
                 }
-                
             });
         }
         function setTitle() {

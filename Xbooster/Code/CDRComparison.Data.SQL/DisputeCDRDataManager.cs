@@ -136,6 +136,13 @@ namespace CDRComparison.Data.SQL
         
         #endregion
 
+        public decimal GetDurationOfDisputeCDRs(bool isPartner)
+        {
+            string durationColumnName = (isPartner) ? "PartnerDurationInSec" : "SystemDurationInSec";
+            object duration = ExecuteScalarText(String.Format("SELECT SUM({0}) FROM {1}", durationColumnName, this.TableName), null);
+            return (duration != DBNull.Value) ? (decimal)duration : 0;
+        }
+
         #endregion
 
         #region Private Methods

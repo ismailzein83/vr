@@ -35,7 +35,7 @@ namespace CDRComparison.Data.SQL
 
         public void DeletePartialMatchTable()
         {
-             StringBuilder query = new StringBuilder();
+            StringBuilder query = new StringBuilder();
             query.Append
             (
                 @"DROP TABLE #TEMPTABLE#"
@@ -52,10 +52,10 @@ namespace CDRComparison.Data.SQL
             };
             return RetrieveData(input, createTempTableAction, PartialMatchCDRMapper);
         }
-  
+
         public void CreatePartialMatchCDRTempTable()
         {
-          
+
             StringBuilder query = new StringBuilder();
             query.Append
             (
@@ -86,7 +86,7 @@ namespace CDRComparison.Data.SQL
         }
         public int GetPartialMatchCDRsCount()
         {
-            object count = ExecuteScalarText(string.Format("SELECT COUNT(*) FROM {0}",this.TableName), null);
+            object count = ExecuteScalarText(string.Format("SELECT COUNT(*) FROM {0}", this.TableName), null);
             return (int)count;
         }
 
@@ -137,8 +137,21 @@ namespace CDRComparison.Data.SQL
                 record.PartnerDurationInSec
             );
         }
-        
+
         #endregion
+
+        public decimal GetDurationOfPartialMatchCDRs(bool isPartner)
+        {
+            string durationColumnName = (isPartner) ? "PartnerDurationInSec" : "SystemDurationInSec";
+            object duration = ExecuteScalarText(String.Format("SELECT SUM({0}) FROM {1}", durationColumnName, this.TableName), null);
+            return (duration != DBNull.Value) ? (decimal)duration : 0;
+        }
+
+        public decimal GetTotalDurationDifferenceOfPartialMatchCDRs(string tableKey)
+        {
+            object durationDifference = ExecuteScalarText(String.Format("SELECT SUM(ABS(SystemDurationInSec - PartnerDurationInSec)) FROM {0}", this.TableName), null);
+            return (durationDifference != DBNull.Value) ? (decimal)durationDifference : 0;
+        }
 
         #endregion
 
@@ -188,7 +201,7 @@ namespace CDRComparison.Data.SQL
                 PartnerDurationInSec = GetReaderValue<decimal>(reader, "PartnerDurationInSec")
             };
         }
-        
+
         #endregion
     }
 }

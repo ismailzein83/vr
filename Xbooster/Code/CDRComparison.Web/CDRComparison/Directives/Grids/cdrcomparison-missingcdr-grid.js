@@ -36,6 +36,10 @@
 
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return CDRComparison_MissingCDRAPIService.GetFilteredMissingCDRs(dataRetrievalInput).then(function (response) {
+                        if (response != null) {
+                            if (response.Summary != null)
+                                gridAPI.setSummary(response.Summary);
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);

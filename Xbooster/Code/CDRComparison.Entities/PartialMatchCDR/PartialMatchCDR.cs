@@ -18,7 +18,8 @@ namespace CDRComparison.Entities
         public string PartnerCGPN { get; set; }
         public DateTime? SystemTime { get; set; }
         public DateTime? PartnerTime { get; set; }
-        public Decimal? SystemDurationInSec { get; set; }
-        public Decimal? PartnerDurationInSec { get; set; }
+        public Decimal SystemDurationInSec { get; set; }
+        public Decimal PartnerDurationInSec { get; set; }
+        public decimal DurationDifferenceInSec { get; set; }
     }
 }

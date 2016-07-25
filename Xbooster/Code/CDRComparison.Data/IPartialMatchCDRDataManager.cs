@@ -15,5 +15,7 @@ namespace CDRComparison.Data
         Vanrise.Entities.BigResult<PartialMatchCDR> GetFilteredPartialMatchCDRs(Vanrise.Entities.DataRetrievalInput<PartialMatchCDRQuery> input);
         void DeletePartialMatchTable();
         int GetPartialMatchCDRsCount();
+        decimal GetDurationOfPartialMatchCDRs(bool isPartner);
+        decimal GetTotalDurationDifferenceOfPartialMatchCDRs(string tableKey);
     }
 }

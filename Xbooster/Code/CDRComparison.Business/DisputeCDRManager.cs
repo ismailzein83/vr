@@ -28,6 +28,13 @@ namespace CDRComparison.Business
             return dataManager.GetDisputeCDRsCount();
         }
 
+        public decimal GetDurationOfDisputeCDRs(string tableKey, bool isPartner)
+        {
+            var dataManager = CDRComparisonDataManagerFactory.GetDataManager<IDisputeCDRDataManager>();
+            dataManager.TableNameKey = tableKey;
+            return dataManager.GetDurationOfDisputeCDRs(isPartner);
+        }
+
         #endregion
     }
 }

@@ -10,7 +10,7 @@ using Vanrise.Data.SQL;
 
 namespace CDRComparison.Data.SQL
 {
-    public class MissingCDRDataManager :BaseCDRDataManager , IMissingCDRDataManager 
+    public class MissingCDRDataManager : BaseCDRDataManager, IMissingCDRDataManager
     {
         #region Constructors / Fields
 
@@ -24,7 +24,7 @@ namespace CDRComparison.Data.SQL
             "DurationInSec",
             "IsPartnerCDR"
         };
-        
+
         #endregion
 
         #region Public Methods
@@ -75,7 +75,7 @@ namespace CDRComparison.Data.SQL
 
         public int GetMissingCDRsCount(bool isPartnerCDRs)
         {
-            object count = ExecuteScalarText(string.Format("SELECT COUNT(*) FROM {0} WHERE IsPartnerCDR ={1}", this.TableName, isPartnerCDRs?"1":"0"), null);
+            object count = ExecuteScalarText(string.Format("SELECT COUNT(*) FROM {0} WHERE IsPartnerCDR ={1}", this.TableName, isPartnerCDRs ? "1" : "0"), null);
             return (int)count;
         }
         public void CreateMissingCDRTempTable()
@@ -94,6 +94,20 @@ namespace CDRComparison.Data.SQL
             );
             query.Replace("#TEMPTABLE#", this.TableName);
             ExecuteNonQueryText(query.ToString(), null);
+        }
+
+        public decimal GetDurationOfMissingCDRs(bool? isPartner)
+        {
+            var queryBuilder = new StringBuilder(String.Format("SELECT SUM(DurationInSec) FROM {0}", this.TableName));
+            
+            if (isPartner.HasValue)
+            {
+                string isPartnerCDRValue = isPartner.Value ? "1" : "0";
+                queryBuilder.Append(String.Format(" WHERE IsPartnerCDR = {0}", isPartnerCDRValue));
+            }
+
+            object duration = ExecuteScalarText(queryBuilder.ToString(), null);
+            return (duration != DBNull.Value) ? (decimal)duration : 0;
         }
 
         #region Bulk Insert Methods
@@ -138,7 +152,7 @@ namespace CDRComparison.Data.SQL
                 record.IsPartnerCDR ? "1" : "0"
             );
         }
-        
+
         #endregion
 
         #endregion
@@ -179,7 +193,7 @@ namespace CDRComparison.Data.SQL
                 IsPartnerCDR = GetReaderValue<bool>(reader, "IsPartnerCDR")
             };
         }
-        
+
         #endregion
 
         protected override string TableNamePrefix
