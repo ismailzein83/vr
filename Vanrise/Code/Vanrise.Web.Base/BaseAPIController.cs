@@ -58,5 +58,11 @@ namespace Vanrise.Web.Base
             return response;
         }
       
+        protected HttpResponseMessage GetUnauthorizedResponse()
+        {
+            HttpResponseMessage msg = new HttpResponseMessage(System.Net.HttpStatusCode.Forbidden);
+            msg.Content = new System.Net.Http.StringContent("you are not authorized to perform this request");
+            return msg;
+        }
     }
 }
