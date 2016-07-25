@@ -645,7 +645,6 @@
 
                             var processTrackingContext = {
                                 onClose: function () {
-                                    VRNotificationService.showSuccess("Price list saved");
                                     loadRatePlan();
                                 }
                             };
