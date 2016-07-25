@@ -103,15 +103,16 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     rateLossFromatted.SaleZone = customerZoneValue.Name;
 
 
-                var customerValue = analyticRecord.DimensionValues[2];
+                var supplierValue = analyticRecord.DimensionValues[2];
+                if (supplierValue != null)
+                    rateLossFromatted.Supplier = supplierValue.Name;
+
+                var customerValue = analyticRecord.DimensionValues[3];
                 if (customerValue != null)
                     rateLossFromatted.Customer = customerValue.Name;
 
 
 
-                var supplierValue = analyticRecord.DimensionValues[3];
-                if (supplierValue != null)
-                    rateLossFromatted.Supplier = supplierValue.Name;
 
 
                 MeasureValue saleRate;
