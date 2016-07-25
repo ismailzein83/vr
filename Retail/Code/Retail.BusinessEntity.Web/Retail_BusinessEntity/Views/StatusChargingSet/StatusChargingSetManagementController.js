@@ -2,9 +2,9 @@
 
     "use strict";
 
-    StatusDefinitionManagementController.$inject = ['$scope', 'Retail_BE_StatusChargingSetService', 'UtilsService', 'VRUIUtilsService'];
+    StatusChargingSetManagementController.$inject = ['$scope', 'Retail_BE_StatusChargingSetService', 'UtilsService', 'VRUIUtilsService'];
 
-    function StatusDefinitionManagementController($scope, retailBeStatusChargingSetsService, utilsService, vruiUtilsService) {
+    function StatusChargingSetManagementController($scope, retailBeStatusChargingSetService, utilsService, vruiUtilsService) {
 
         var gridAPI;
 
@@ -23,10 +23,15 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-
             $scope.scopeModel.search = function () {
                 var query = buildGridQuery();
                 return gridAPI.load(query);
+            };
+            $scope.scopeModel.add = function () {
+                var onStatusChargingSetAdded = function (addedStatusChargingSet) {
+                    gridAPI.onStatusChargingSetAdded(addedStatusChargingSet);
+                }
+                retailBeStatusChargingSetService.addStatusChargingSet(onStatusChargingSetAdded);
             };
 
             $scope.scopeModel.onGridReady = function (api) {
@@ -65,5 +70,5 @@
         }
     }
 
-    appControllers.controller('Retail_BE_StatusChargingSetManagementController', StatusDefinitionManagementController);
+    appControllers.controller('Retail_BE_StatusChargingSetManagementController', StatusChargingSetManagementController);
 })(appControllers);
