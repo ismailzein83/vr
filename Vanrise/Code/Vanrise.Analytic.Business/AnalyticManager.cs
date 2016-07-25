@@ -19,24 +19,7 @@ namespace Vanrise.Analytic.Business
     {
         public Vanrise.Entities.IDataRetrievalResult<AnalyticRecord> GetFilteredRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
-            AnalyticTableManager manager = new AnalyticTableManager();
-            AnalyticTable table = manager.GetAnalyticTableById(input.Query.TableId);
-
-            int userId = SecurityContext.Current.GetLoggedInUserId();
-            SecurityManager secManager = new SecurityManager();
-            if (!secManager.IsAllowed(table.Settings.RequiredPermission, userId))
-            {
-                throw new UnauthorizedAccessException();
-            }
-            var measures = new AnalyticItemConfigManager().GetMeasures(input.Query.TableId);
-            foreach (string m in input.Query.MeasureFields)
-            {
-                var measure = measures.GetRecord(m);
-                if (!secManager.IsAllowed(measure.Config.RequiredPermission, userId))
-                {
-                    throw new UnauthorizedAccessException();
-                }
-            }
+            CheckAnalyticRequiredPermission(input);
             if (input.Query.FromTime == input.Query.ToTime)
                 return null;
             IAnalyticDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticDataManager>();
@@ -51,7 +34,6 @@ namespace Vanrise.Analytic.Business
            
             return BigDataManager.Instance.RetrieveData(input, new AnalyticRecordRequestHandler(dataManager));
         }
-
         public RecordFilterGroup BuildRecordSearchFilterGroup(RecordSearchFilterGroupInput input)
         {
             int dataRecordTypeId = GetDataRecordTypeForReportBySourceName(input.ReportId, input.SourceName);
@@ -636,6 +618,27 @@ namespace Vanrise.Analytic.Business
             }
         }
 
+        private void CheckAnalyticRequiredPermission(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
+        {
+            AnalyticTableManager manager = new AnalyticTableManager();
+            AnalyticTable table = manager.GetAnalyticTableById(input.Query.TableId);
+
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            SecurityManager secManager = new SecurityManager();
+            if (table.Settings.RequiredPermission!=null && !secManager.IsAllowed(table.Settings.RequiredPermission, userId))
+            {
+                throw new UnauthorizedAccessException();
+            }
+            var measures = new AnalyticItemConfigManager().GetMeasures(input.Query.TableId);
+            foreach (string m in input.Query.MeasureFields)
+            {
+                var measure = measures.GetRecord(m);
+                if (measure.Config.RequiredPermission!=null && !secManager.IsAllowed(measure.Config.RequiredPermission, userId))
+                {
+                    throw new UnauthorizedAccessException();
+                }
+            }
+        }
         #endregion
     }
 }
