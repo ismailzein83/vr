@@ -18,8 +18,7 @@ namespace Vanrise.AccountBalance.Business
         }
 
         public Vanrise.Entities.InsertOperationOutput<BillingTransactionDetail> AddBillingTransaction(BillingTransaction billingTransaction)
-        {
-            
+        {         
             billingTransaction.TransactionTypeId = Guid.Parse("f178d94d-d622-4ebf-a1ba-2a4af1067d6b");
             billingTransaction.TransactionTime = DateTime.Now;
         

@@ -22,5 +22,7 @@ namespace Vanrise.AccountBalance.Entities
         public DateTime TransactionTime { get; set; }
 
         public string Notes { get; set; }
+
+        public string Reference { get; set; }
     }
 }

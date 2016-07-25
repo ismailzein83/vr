@@ -3,13 +3,12 @@
              on-ready="scopeModel.onGridReady"
              menuactions="scopeModel.menuActions"
              datasource="scopeModel.billingTransactions" defaultsortbyfieldname="'Entity.TransactionTime'" defaultsortdirection="'DESC'">
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.AccountBillingTransactionId'"></vr-datagridcolumn>
 
-    <vr-datagridcolumn headertext="'Transaction Type'" field="'TransactionTypeDescription'"></vr-datagridcolumn>
-
-
-    <vr-datagridcolumn headertext="'Amount'" field="'Entity.Amount'" type="'Number'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Currency'" field="'CurrencyDescription'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Transaction Time'" field="'Entity.TransactionTime'" type="'Datetime'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Notes'" field="'Entity.Notes'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.AccountBillingTransactionId'" widthfactor="1"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Transaction Type'" field="'TransactionTypeDescription'" widthfactor="1"></vr-datagridcolumn>    
+    <vr-datagridcolumn headertext="'Amount'" field="'Entity.Amount'" type="'Number'" widthfactor="1"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Currency'" field="'CurrencyDescription'" widthfactor="1"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Transaction Time'" field="'Entity.TransactionTime'" type="'Datetime'" widthfactor="1"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Reference'" field="'Entity.Reference'" widthfactor="3"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Notes'" field="'Entity.Notes'" widthfactor="2"></vr-datagridcolumn>
 </vr-datagrid>

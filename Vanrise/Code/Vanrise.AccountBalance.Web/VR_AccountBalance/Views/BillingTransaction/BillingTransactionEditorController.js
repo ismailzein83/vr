@@ -14,13 +14,13 @@
         defineScope();
         load();
 
+
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
                 accountId = parameters.accountId;
             }
         }
-
         function defineScope() {
             $scope.scopeModel = {};
 
@@ -37,7 +37,6 @@
                 $scope.modalContext.closeModal()
             };
         }
-
         function load() {
             $scope.scopeModel.isLoading = true;
             loadAllControls();
@@ -50,15 +49,12 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
-
         function setTitle() {
            $scope.title = UtilsService.buildTitleForAddEditor('Payment');
         }
-
         function loadStaticData() {
            
         }
-
         function loadCurrencySelector() {
             var currencyLoadDeferred = UtilsService.createPromiseDeferred();
             currencySelectorReadyDeferred.promise.then(function () {
@@ -91,7 +87,8 @@
                 AccountId: accountId,
                 Amount: $scope.scopeModel.amount,
                 CurrencyId: currencySelectorAPI.getSelectedIds(),
-                Notes: $scope.scopeModel.notes
+                Notes: $scope.scopeModel.notes,
+                Reference: $scope.scopeModel.reference
             };
             return obj;
         }

@@ -14,7 +14,7 @@ namespace Vanrise.AccountBalance.Web.Controllers
     {
         [HttpPost]
         [Route("GetFilteredBillingTransactions")]
-            public object GetFilteredBillingTransactions(Vanrise.Entities.DataRetrievalInput<BillingTransactionQuery> input)
+        public object GetFilteredBillingTransactions(Vanrise.Entities.DataRetrievalInput<BillingTransactionQuery> input)
         {
             BillingTransactionManager manager = new BillingTransactionManager();
             return GetWebResponse(input, manager.GetFilteredBillingTransactions(input));
@@ -26,6 +26,6 @@ namespace Vanrise.AccountBalance.Web.Controllers
         {
             BillingTransactionManager manager = new BillingTransactionManager();
             return manager.AddBillingTransaction(billingTransaction);
-         }
+        }
     }
 }
