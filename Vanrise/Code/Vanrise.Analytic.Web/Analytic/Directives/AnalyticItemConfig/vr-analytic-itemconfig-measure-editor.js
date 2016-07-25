@@ -41,6 +41,10 @@
             var dependentDimensionSelectorAPI;
             var dependentDimensionReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var requiredPermissionAPI;
+            var requiredPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+
             var fieldTypeAPI;
             var fieldTypeReadyDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
@@ -58,7 +62,10 @@
                     dependentDimensionSelectorAPI = api;
                     dependentDimensionReadyDeferred.resolve();
                 }
-
+                $scope.scopeModel.onRequiredPermissionReady = function (api) {
+                    requiredPermissionAPI = api;
+                    requiredPermissionReadyDeferred.resolve();
+                }
                 $scope.scopeModel.onFieldTypeReady = function (api) {
                     fieldTypeAPI = api;
                     fieldTypeReadyDeferred.resolve();
@@ -123,8 +130,21 @@
                             VRUIUtilsService.callDirectiveLoad(fieldTypeAPI, payloadFieldTypeDirective, loadFieldTypePromiseDeferred);
                         });
                         promises.push(loadFieldTypePromiseDeferred.promise);
-                        return UtilsService.waitMultiplePromises(promises);
 
+                        var requiredPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        requiredPermissionReadyDeferred.promise.then(function () {
+                            var payload;
+
+                            if (configEntity != undefined && configEntity.RequiredPermission != null) {
+                                payload = {
+                                    data: configEntity.RequiredPermission
+                                };
+                            }
+
+                            VRUIUtilsService.callDirectiveLoad(requiredPermissionAPI, payload, requiredPermissionLoadDeferred);
+                        });
+                        promises.push(requiredPermissionLoadDeferred.promise);
 
                         return UtilsService.waitMultiplePromises(promises);
                     }
@@ -145,6 +165,7 @@
                         DependentAggregateNames: dependentAggregateNames,
                         DependentDimensions: dependentDimensions,
                         FieldType: fieldType,
+                        RequiredPermission: requiredPermissionAPI.getData()
                     };
                     return dimension;
                 }

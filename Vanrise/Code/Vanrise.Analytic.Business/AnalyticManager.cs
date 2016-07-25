@@ -21,11 +21,21 @@ namespace Vanrise.Analytic.Business
         {
             AnalyticTableManager manager = new AnalyticTableManager();
             AnalyticTable table = manager.GetAnalyticTableById(input.Query.TableId);
+
             int userId = SecurityContext.Current.GetLoggedInUserId();
             SecurityManager secManager = new SecurityManager();
             if (!secManager.IsAllowed(table.Settings.RequiredPermission, userId))
             {
                 throw new UnauthorizedAccessException();
+            }
+            var measures = new AnalyticItemConfigManager().GetMeasures(input.Query.TableId);
+            foreach (string m in input.Query.MeasureFields)
+            {
+                var measure = measures.GetRecord(m);
+                if (!secManager.IsAllowed(measure.Config.RequiredPermission, userId))
+                {
+                    throw new UnauthorizedAccessException();
+                }
             }
             if (input.Query.FromTime == input.Query.ToTime)
                 return null;
