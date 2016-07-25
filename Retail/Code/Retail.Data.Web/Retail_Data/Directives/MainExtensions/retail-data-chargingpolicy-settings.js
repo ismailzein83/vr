@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailDataChargingpolicySettings', [function () {
+app.directive('retailDataChargingpolicySettings', ['UtilsService', function (UtilsService) {
     return {
         restrict: 'E',
         scope: {
@@ -24,9 +24,9 @@ app.directive('retailDataChargingpolicySettings', [function () {
         function initializeController() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.routerType = [];
-            $scope.scopeModel.routerType[0] = { value: 0, text: "Cisco" };
-            $scope.scopeModel.routerType[1] = { value: 1, text: "Mikrotic" };
+            $scope.scopeModel.routerTypes = [];
+            $scope.scopeModel.routerTypes[0] = { value: 0, text: "Cisco" };
+            $scope.scopeModel.routerTypes[1] = { value: 1, text: "Mikrotic" };
             $scope.scopeModel.selectedRouterType;
 
             $scope.scopeModel.onPartsDirectiveReady = function (api) {
@@ -57,9 +57,9 @@ app.directive('retailDataChargingpolicySettings', [function () {
                         $scope.scopeModel.uploadQuotaInMB = payload.settings.UploadQuotaInMB;
 
                         if (payload.settings.RouterTypeId != undefined)
-                            $scope.scopeModel.selectedRouterType = { value: payload.settings.RouterTypeId, text: $scope.scopeModel.routerType[payload.settings.RouterTypeId].text }
+                            $scope.scopeModel.selectedRouterType = UtilsService.getItemByVal($scope.scopeModel.routerTypes, payload.settings.RouterTypeId, 'value');
                         
-                        //UtilsService.getItemByVal($scope.scopeModel.routerType, payload.settings.RouterTypeId, 'value');
+                        
                     }
                 }
 
