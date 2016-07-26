@@ -143,6 +143,8 @@
     <Content Include="Reprocess\Directives\ReprocessDefinition\Templates\ReprocessDefinitionGridTemplate.html" />
     <Content Include="Reprocess\Services\APIServices\ReprocessDefinitionAPIService.js" />
     <Content Include="Reprocess\Services\ReprocessDefinitionService.js" />
+    <Content Include="Reprocess\Views\ReprocessDefinition\ReprocessDefinitionEditor.html" />
+    <Content Include="Reprocess\Views\ReprocessDefinition\ReprocessDefinitionEditorController.js" />
     <Content Include="Reprocess\Views\ReprocessDefinition\ReprocessDefinitionManagement.html" />
     <Content Include="Reprocess\Views\ReprocessDefinition\ReprocessDefinitionManagementController.js" />
   </ItemGroup>

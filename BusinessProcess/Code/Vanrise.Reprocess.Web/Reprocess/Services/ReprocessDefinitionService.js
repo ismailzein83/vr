@@ -13,20 +13,20 @@
             settings.onScopeReady = function (modalScope) {
                 modalScope.onReprocessDefinitionAdded = onReprocessDefinitionAdded
             };
-            VRModalService.showModal('/Client/Modules/Common/Views/ReprocessDefinition/ReprocessDefinitionEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/Reprocess/Views/ReprocessDefinition/ReprocessDefinitionEditor.html', null, settings);
         };
 
-        function editReprocessDefinition(styleDefinitionId, onReprocessDefinitionUpdated) {
+        function editReprocessDefinition(reprocessDefinitionId, onReprocessDefinitionUpdated) {
             var settings = {};
 
             var parameters = {
-                styleDefinitionId: styleDefinitionId,
+                reprocessDefinitionId: reprocessDefinitionId,
             };
 
             settings.onScopeReady = function (modalScope) {
                 modalScope.onReprocessDefinitionUpdated = onReprocessDefinitionUpdated;
             };
-            VRModalService.showModal('/Client/Modules/Common/Views/ReprocessDefinition/ReprocessDefinitionEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/Reprocess/Views/ReprocessDefinition/ReprocessDefinitionEditor.html', parameters, settings);
         }
 
 

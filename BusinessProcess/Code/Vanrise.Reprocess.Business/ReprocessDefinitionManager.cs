@@ -34,15 +34,15 @@ namespace Vanrise.Reprocess.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
+            int reprocessDefintionId = -1;
 
             IReprocessDefinitionDataManager dataManager = ReprocessDataManagerFactory.GetDataManager<IReprocessDefinitionDataManager>();
 
-            //reprocessDefinitionItem.ReprocessDefinitionId = Guid.NewGuid();
-
-            if (dataManager.Insert(reprocessDefinitionItem))
+            if (dataManager.Insert(reprocessDefinitionItem, out reprocessDefintionId))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                reprocessDefinitionItem.ReprocessDefinitionId = reprocessDefintionId;
                 insertOperationOutput.InsertedObject = ReprocessDefinitionDetailMapper(reprocessDefinitionItem);
             }
             else

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Vanrise.Data.SQL;
 using Vanrise.Reprocess.Entities;
 using Vanrise.Reprocess.Data;
+using Vanrise.Common;
 
 namespace Vanrise.Reprocess.Data.SQL
 {
@@ -26,31 +27,31 @@ namespace Vanrise.Reprocess.Data.SQL
 
         public List<ReprocessDefinition> GetReprocessDefinition()
         {
-            return GetItemsSP("common.sp_ReprocessDefinition_GetAll", ReprocessDefinitionMapper);
+            return GetItemsSP("reprocess.sp_ReprocessDefinition_GetAll", ReprocessDefinitionMapper);
         }
 
         public bool AreReprocessDefinitionUpdated(ref object updateHandle)
         {
-            return base.IsDataUpdated("common.ReprocessDefinition", ref updateHandle);
+            return base.IsDataUpdated("reprocess.ReprocessDefinition", ref updateHandle);
         }
 
-        public bool Insert(ReprocessDefinition ReprocessDefinitionItem)
+        public bool Insert(ReprocessDefinition ReprocessDefinitionItem, out int insertedId)
         {
-            //string serializedSettings = ReprocessDefinitionItem.ReprocessDefinitionSettings != null ? Vanrise.Common.Serializer.Serialize(ReprocessDefinitionItem.ReprocessDefinitionSettings) : null;
-            int affectedRecords = ExecuteNonQuerySP("common.sp_ReprocessDefinition_Insert", ReprocessDefinitionItem.ReprocessDefinitionId, ReprocessDefinitionItem.Name, null);
+            object reprocessDefinitionID;
+            string serializedSettings = ReprocessDefinitionItem.Settings != null ? Vanrise.Common.Serializer.Serialize(ReprocessDefinitionItem.Settings) : null;
 
-            if (affectedRecords > 0)
-            {
-                return true;
-            }
+            int affectedRecords = ExecuteNonQuerySP("reprocess.sp_ReprocessDefinition_Insert", out reprocessDefinitionID, ReprocessDefinitionItem.Name, serializedSettings);
 
-            return false;
+            insertedId = (affectedRecords > 0) ? (int)reprocessDefinitionID : -1;
+            return (affectedRecords > 0);
         }
+
 
         public bool Update(ReprocessDefinition ReprocessDefinitionItem)
         {
-            //string serializedSettings = ReprocessDefinitionItem.ReprocessDefinitionSettings != null ? Vanrise.Common.Serializer.Serialize(ReprocessDefinitionItem.ReprocessDefinitionSettings) : null;
-            int affectedRecords = ExecuteNonQuerySP("common.sp_ReprocessDefinition_Update", ReprocessDefinitionItem.ReprocessDefinitionId, ReprocessDefinitionItem.Name, null);
+            string serializedSettings = ReprocessDefinitionItem.Settings != null ? Vanrise.Common.Serializer.Serialize(ReprocessDefinitionItem.Settings) : null;
+
+            int affectedRecords = ExecuteNonQuerySP("reprocess.sp_ReprocessDefinition_Update", ReprocessDefinitionItem.ReprocessDefinitionId, ReprocessDefinitionItem.Name, serializedSettings);
             return (affectedRecords > 0);
         }
 
@@ -65,7 +66,7 @@ namespace Vanrise.Reprocess.Data.SQL
             {
                 ReprocessDefinitionId = (int)reader["ID"],
                 Name = reader["Name"] as string,
-                //ReprocessDefinitionSettings = Vanrise.Common.Serializer.Deserialize<ReprocessDefinitionSettings>(reader["Settings"] as string)
+                Settings = Vanrise.Common.Serializer.Deserialize<ReprocessDefinitionSettings>(reader["Settings"] as string)
             };
             return ReprocessDefinition;
         }

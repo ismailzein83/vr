@@ -13,18 +13,18 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Reprocess_ModuleConfig.moduleName, controllerName, 'GetFilteredReprocessDefinitions'), input);
         }
 
-        function GetReprocessDefinition(ReprocessDefinitionId) {
+        function GetReprocessDefinition(reprocessDefinitionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(Reprocess_ModuleConfig.moduleName, controllerName, 'GetReprocessDefinition'), {
-                ReprocessDefinitionId: ReprocessDefinitionId
+                ReprocessDefinitionId: reprocessDefinitionId
             });
         }
 
-        function AddReprocessDefinition(ReprocessDefinitionItem) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Reprocess_ModuleConfig.moduleName, controllerName, 'AddReprocessDefinition'), ReprocessDefinitionItem);
+        function AddReprocessDefinition(reprocessDefinitionItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Reprocess_ModuleConfig.moduleName, controllerName, 'AddReprocessDefinition'), reprocessDefinitionItem);
         }
 
-        function UpdateReprocessDefinition(ReprocessDefinitionItem) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Reprocess_ModuleConfig.moduleName, controllerName, 'UpdateReprocessDefinition'), ReprocessDefinitionItem);
+        function UpdateReprocessDefinition(reprocessDefinitionItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Reprocess_ModuleConfig.moduleName, controllerName, 'UpdateReprocessDefinition'), reprocessDefinitionItem);
         }
 
 
