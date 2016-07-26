@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
@@ -14,6 +15,6 @@ namespace Retail.BusinessEntity.Entities
         public string ServiceChargingPolicyName { get; set; }
         public string StatusDesciption { get; set; }
         public IEnumerable<ActionDefinitionInfo> ActionDefinitions { get; set; }
-        public string StatusColor { get; set; }
+        public StyleFormatingSettings Style { get; set; }
     }
 }

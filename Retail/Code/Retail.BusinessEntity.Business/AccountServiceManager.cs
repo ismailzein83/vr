@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Business
@@ -147,7 +148,7 @@ namespace Retail.BusinessEntity.Business
             StatusDefinitionManager statusDefinitionManager = new Business.StatusDefinitionManager();
         
             ActionDefinitionManager manager = new ActionDefinitionManager();
-            IEnumerable<ActionDefinitionInfo> actionDefinitions = manager.GetActionDefinitionInfoByEntityType(EntityType.AccountService,accountService.StatusId);
+            IEnumerable<ActionDefinitionInfo> actionDefinitions = manager.GetActionDefinitionInfoByEntityType(EntityType.AccountService, accountService.StatusId, accountService.ServiceTypeId);
              var statusDesciption = statusDefinitionManager.GetStatusDefinitionName(accountService.StatusId);
 
 
@@ -159,8 +160,16 @@ namespace Retail.BusinessEntity.Business
                 ServiceTypeTitle = serviceTypeManager.GetServiceTypeName(accountService.ServiceTypeId),
                 ActionDefinitions = actionDefinitions,
                 StatusDesciption =statusDesciption,
-                StatusColor = GetStatusColor(statusDesciption)
+                Style = GetStatuStyle(accountService.StatusId),
             };
+        }
+        private StyleFormatingSettings GetStatuStyle(Guid statusID)
+        {
+            StatusDefinitionManager statusDefinitionManager = new StatusDefinitionManager();
+            StyleDefinitionManager styleDefinitionManager = new StyleDefinitionManager();
+            var status = statusDefinitionManager.GetStatusDefinition(statusID);
+            var style = styleDefinitionManager.GetStyleDefinition(status.Settings.StyleDefinitionId);
+            return style.StyleDefinitionSettings.StyleFormatingSettings;
         }
         private string GetStatusColor(string statusDesciption)
         {

@@ -31,7 +31,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
 
             $scope.scopeModel.getStatusColor = function(dataItem)
             {
-                return dataItem.StatusColor;
+                return dataItem.Style;
             }
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;

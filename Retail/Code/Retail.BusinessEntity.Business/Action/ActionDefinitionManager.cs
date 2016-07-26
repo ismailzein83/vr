@@ -85,7 +85,7 @@ namespace Retail.BusinessEntity.Business
             return extensionConfiguration.GetExtensionConfigurations<ProvisionerDefinitionConfig>(ProvisionerDefinitionConfig.EXTENSION_TYPE);
         }
 
-        public IEnumerable<ActionDefinitionInfo> GetActionDefinitionInfoByEntityType(EntityType entityType, Guid statusId)
+        public IEnumerable<ActionDefinitionInfo> GetActionDefinitionInfoByEntityType(EntityType entityType, Guid statusId,int? serviceTypeId = null)
         {
             Dictionary<Guid, ActionDefinition> cachedActionDefinitiones = this.GetCachedActionDefinitions();
             Func<ActionDefinition, bool> filterExpression = (item) =>
@@ -93,9 +93,8 @@ namespace Retail.BusinessEntity.Business
                 if (item.Settings.SupportedOnStatuses == null)
                     throw new NullReferenceException("SupportedOnStatuses is null.");
 
-                if (item.EntityType == entityType && item.Settings.SupportedOnStatuses.Any(x => x.StatusDefinitionId == statusId))
+                if (item.EntityType == entityType && (item.Settings.EntityTypeId == null || item.Settings.EntityTypeId == serviceTypeId) && item.Settings.SupportedOnStatuses.Any(x => x.StatusDefinitionId == statusId))
                     return true;
-
                 return false;
             };
             return cachedActionDefinitiones.MapRecords(ActionDefinitionInfoMapper, filterExpression);

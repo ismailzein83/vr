@@ -36,7 +36,7 @@ function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIServic
             $scope.scopeModel.accountServices = [];
 
             $scope.scopeModel.getStatusColor = function (dataItem) {
-                return dataItem.StatusColor;
+                return dataItem.Style;
             }
 
             defineMenuActions();

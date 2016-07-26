@@ -487,7 +487,21 @@
 
             ctrl.getCellClass = function (dataItem, colDef) {
                 if (colDef.getcolor != undefined)
-                    return colDef.getcolor(dataItem, colDef);
+                {
+                    var color = colDef.getcolor(dataItem, colDef);
+                    if (typeof color === 'string' || color instanceof String)
+                    {
+                        return color;
+                    }
+                    else if (typeof color === 'object' || color instanceof Object)
+                    {
+                        switch(color.UniqueName)
+                        {
+                            case "VR_AccountBalance_StyleFormating_CSSClass": return color.ClassName;
+                        }
+                    }
+                }
+                     
                 if (colDef.cellClass == undefined)
                     return 'span-summary';
             };

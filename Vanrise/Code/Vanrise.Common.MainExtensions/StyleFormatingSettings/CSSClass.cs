@@ -9,5 +9,6 @@ namespace Vanrise.Common.MainExtensions.StyleFormatingSettings
     public class CSSClass : Entities.StyleFormatingSettings
     {
         public string ClassName { get; set; }
+        public override string UniqueName { get { return "VR_AccountBalance_StyleFormating_CSSClass"; } }
     }
 }

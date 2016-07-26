@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
@@ -413,21 +414,18 @@ namespace Retail.BusinessEntity.Business
                 CanAddSubAccounts = (accountTypeInfoEntities != null && accountTypeInfoEntities.Count() > 0),
                 ActionDefinitions = actionDefinitions,
                 StatusDesciption =statusDesciption,
-                StatusColor = GetStatusColor(statusDesciption),
+                Style = GetStatuStyle(account.StatusId),
                 NumberOfServices = accountServices.GetAccountServicesCount(account.AccountId),
                 NumberOfPackages = accountPackages.GetAccountPackagesCount(account.AccountId)
             };
         }
-        private string GetStatusColor(string statusDesciption)
+        private StyleFormatingSettings GetStatuStyle(Guid statusID)
         {
-            switch(statusDesciption)
-            {
-                case "Active": return "label label-success";
-                case "Suspended": return "label label-warning";
-                case "Terminated": return "label label-danger";
-                case "Blocked": return "label label-danger";
-                default: return "label label-primary";
-            }
+            StatusDefinitionManager statusDefinitionManager = new StatusDefinitionManager();
+            StyleDefinitionManager styleDefinitionManager = new StyleDefinitionManager();
+            var status = statusDefinitionManager.GetStatusDefinition(statusID);
+            var style = styleDefinitionManager.GetStyleDefinition(status.Settings.StyleDefinitionId);
+            return style.StyleDefinitionSettings.StyleFormatingSettings;
         }
         private AccountInfo AccountInfoMapper(Account account)
         {
