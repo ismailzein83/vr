@@ -173,6 +173,8 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\RouteRuleFilterDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\vr-whs-routing-routerulesettings-filter-rate.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\vr-whs-routing-routerulesettings-filter.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\Templates\ExcludedOptionDirective.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\vr-whs-routing-routerulesettings-excluded.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\Templates\RouteRuleOrderDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byquality.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order.js" />

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Caching;
@@ -14,12 +12,25 @@ namespace TOne.WhS.Routing.Business
     {
         public IEnumerable<RoutingDatabaseInfo> GetRoutingDatabaseInfo(RoutingDatabaseInfoFilter filter)
         {
-            return GetNotDeletedDatabases().MapRecords(RoutingDatabaseInfoMapper, x => x.ProcessType == filter.ProcessType).OrderBy(x => x.Title);
+            //return GetNotDeletedDatabases().MapRecords(RoutingDatabaseInfoMapper, x => x.ProcessType == filter.ProcessType).OrderBy(x => x.Title);
+
+            List<RoutingDatabaseInfo> routingDatabases = new List<RoutingDatabaseInfo>();
+            foreach (RoutingDatabaseType routingDatabaseType in Enum.GetValues(typeof(RoutingDatabaseType)))
+            {
+                IEnumerable<RoutingDatabase> databases = GetRoutingDatabases(filter.ProcessType, routingDatabaseType);
+                if (databases != null && databases.Count() > 0)
+                {
+                    var item = RoutingDatabaseInfoMapper(databases.OrderByDescending(itm => itm.CreatedTime).First());
+                    item.Title = routingDatabaseType.ToString();
+                    routingDatabases.Add(item);
+                }
+            }
+            return routingDatabases;
         }
 
-        public IEnumerable<RoutingDatabase> GetRoutingDatabases(RoutingProcessType RoutingProcessType, RoutingDatabaseType RoutingDatabaseType)
+        public IEnumerable<RoutingDatabase> GetRoutingDatabases(RoutingProcessType routingProcessType, RoutingDatabaseType routingDatabaseType)
         {
-            Func<RoutingDatabase, bool> filterExpression = (itm) => (itm.ProcessType == RoutingProcessType && itm.Type == RoutingDatabaseType);
+            Func<RoutingDatabase, bool> filterExpression = (itm) => (itm.ProcessType == routingProcessType && itm.Type == routingDatabaseType);
             return GetNotDeletedDatabases().FindAllRecords(filterExpression);
         }
 
