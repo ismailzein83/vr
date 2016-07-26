@@ -57,6 +57,10 @@
     </Compile>
     <Compile Include="City\CityInfoFilter.cs" />
     <Compile Include="City\CityQuery.cs" />
+    <Compile Include="DateTimeType.cs" />
+    <Compile Include="EmailTemplate\VRMailMessage.cs" />
+    <Compile Include="EmailTemplate\VRMailMessageTemplate.cs" />
+    <Compile Include="EmailTemplate\VRMailMessageType.cs" />
     <Compile Include="StyleDefinition\StyleDefinition.cs" />
     <Compile Include="Country\UploadCountryLog.cs" />
     <Compile Include="Country\CountryInfo.cs" />

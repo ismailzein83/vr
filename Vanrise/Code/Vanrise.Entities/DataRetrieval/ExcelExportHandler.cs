@@ -42,8 +42,14 @@ namespace Vanrise.Entities
         public List<ExportExcelHeaderCell> Cells { get; set; }
     }
 
+    public enum ExcelCellType { DateTime }
+
     public class ExportExcelHeaderCell
     {
         public string Title { get; set; }
+
+        public ExcelCellType? CellType { get; set; }
+
+        public DateTimeType? DateTimeType { get; set; }
     }
 }

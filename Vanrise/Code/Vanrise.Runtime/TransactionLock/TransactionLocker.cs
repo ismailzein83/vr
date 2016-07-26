@@ -12,6 +12,25 @@ namespace Vanrise.Runtime
 {
     public class TransactionLocker
     {
+        #region Singleton
+
+        static TransactionLocker s_Instance = new TransactionLocker();
+
+        public static TransactionLocker Instance
+        {
+            get
+            {
+                return s_Instance;
+            }
+        }
+
+        private TransactionLocker()
+        {
+
+        }
+
+        #endregion
+
         #region static
 
         static TimeSpan s_retrieveServiceURLInterval;

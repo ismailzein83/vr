@@ -197,8 +197,20 @@ namespace Vanrise.Common
             }
             return s_exposedConnectionStringNames.Contains(connectionStringName);
         }
-    }
 
+        
+        public static string GetDateTimeFormat(Vanrise.Entities.DateTimeType dateTimeType)
+        {
+            switch(dateTimeType)
+            {
+                case Vanrise.Entities.DateTimeType.LongDateTime: return "yyyy-MM-dd HH:mm:ss";
+                case Vanrise.Entities.DateTimeType.DateTime: return "yyyy-MM-dd HH:mm";
+                case Vanrise.Entities.DateTimeType.Date: return "yyyy-MM-dd";
+                default: throw new NotSupportedException(String.Format("dateTimeType '{0}'", dateTimeType));
+            }
+        }
+    }
+   
     public interface IPropValueReader
     {
         Object GetPropertyValue(dynamic target);

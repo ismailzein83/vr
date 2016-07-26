@@ -169,7 +169,13 @@ namespace Vanrise.Common
                 colIndex = 0;
                 foreach(var cell in excelRow.Cells)
                 {
-                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue(cell.Value);
+                    var excelCell = RateWorkSheet.Cells[rowIndex, colIndex];
+                    if (colIndex >= excelSheet.Header.Cells.Count)
+                        throw new Exception(String.Format("Cell Index '{0}' in row '{1}' is greater than header cell count '{2}'", colIndex, rowIndex, excelSheet.Header.Cells.Count));
+                    var headerCell = excelSheet.Header.Cells[colIndex];
+                    if (headerCell.CellType.HasValue)
+                        SetExcelCellFormat(excelCell, headerCell);                        
+                    excelCell.PutValue(cell.Value);
                     colIndex++;
                 }
 
@@ -182,6 +188,19 @@ namespace Vanrise.Common
 
             excelResult.ExcelFileStream = memoryStream;
             return excelResult;
+        }
+
+        private void SetExcelCellFormat(Cell excelCell, ExportExcelHeaderCell headerCell)
+        {
+            var cellStyle = excelCell.GetDisplayStyle();
+            switch(headerCell.CellType.Value)
+            {
+                case ExcelCellType.DateTime: 
+                    if (!headerCell.DateTimeType.HasValue)
+                        throw new NullReferenceException("headerCell.DateTimeType");
+                    cellStyle.Custom = Utilities.GetDateTimeFormat(headerCell.DateTimeType.Value);
+                    break;
+            }
         }
 
         private ExportExcelSheet ConvertResultToDefaultExcelFormat<T>(BigResult<T> result)
