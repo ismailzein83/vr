@@ -57,6 +57,9 @@ function RPBuildProductRoutesProcessController($scope, WhS_Routing_RPRouteAPISer
 
         $scope.saleZoneRangeOptions = WhS_Routing_SaleZoneRangeOptions;
         $scope.selectedSaleZoneRange = WhS_Routing_SaleZoneRangeOptions[0];
+
+        if (!$scope.isFuture)
+            $scope.effectiveOn = new Date();
     }
 
     function loadSupplierPolicies() {

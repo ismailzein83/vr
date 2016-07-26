@@ -64,7 +64,8 @@ app.directive("vrWhsRoutingBuildrouteprocess", ['UtilsService', 'WhS_Routing_Rou
             };
 
             api.load = function (payload) {
-               
+                if (!$scope.isFuture)
+                    $scope.effectiveOn = new Date();
             }
 
             if (ctrl.onReady != null)

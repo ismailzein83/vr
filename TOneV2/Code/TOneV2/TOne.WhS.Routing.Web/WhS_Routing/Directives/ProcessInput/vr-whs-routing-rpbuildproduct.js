@@ -104,6 +104,9 @@ app.directive("vrWhsRoutingRpbuildproduct", [ 'WhS_Routing_RPRouteAPIService', '
                 $scope.saleZoneRangeOptions = WhS_Routing_SaleZoneRangeOptions;
                 $scope.selectedSaleZoneRange = WhS_Routing_SaleZoneRangeOptions[0];
 
+                if (!$scope.isFuture)
+                    $scope.effectiveOn = new Date();
+
                 var getPoliciesPromise = WhS_Routing_RPRouteAPIService.GetPoliciesOptionTemplates();
                 promises.push(getPoliciesPromise);
 
