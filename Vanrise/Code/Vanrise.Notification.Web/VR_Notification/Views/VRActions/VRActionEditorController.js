@@ -65,7 +65,7 @@
 
         function setTitle() {
             if (isEditMode) {
-                var actionName = (actionEntity != undefined) ? actionEntity.Name : null;
+                var actionName = (actionEntity != undefined) ? actionEntity.ActionName : null;
                 $scope.title = UtilsService.buildTitleForUpdateEditor(actionName, 'Action');
             }
             else {

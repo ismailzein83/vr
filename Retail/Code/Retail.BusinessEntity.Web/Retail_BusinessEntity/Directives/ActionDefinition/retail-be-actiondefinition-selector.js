@@ -57,6 +57,7 @@ app.directive('retailBeActiondefinitionSelector', ['Retail_BE_ActionDefinitionAP
                 var filter;
 
                 if (payload != undefined) {
+
                     selectedIds = payload.selectedIds;
                     filter = payload.filter;
                 }
@@ -64,7 +65,12 @@ app.directive('retailBeActiondefinitionSelector', ['Retail_BE_ActionDefinitionAP
                 return Retail_BE_ActionDefinitionAPIService.GetActionDefinitionsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                     if (response != null) {
                         for (var i = 0; i < response.length; i++) {
-                            ctrl.datasource.push(response[i]);
+                            var item = response[i];
+                            if (payload != undefined && payload.showFullName)
+                                item.nameValue = item.FullName;
+                            else
+                                item.nameValue = item.Name;
+                            ctrl.datasource.push(item);
                         }
                         if (selectedIds != undefined) {
                             VRUIUtilsService.setSelectedValues(selectedIds, 'ActionDefinitionId', attrs, ctrl);
@@ -92,7 +98,7 @@ app.directive('retailBeActiondefinitionSelector', ['Retail_BE_ActionDefinitionAP
             multipleselection = "ismultipleselection";
         }
 
-        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="ChargingPolicyId" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon"></vr-select></vr-columns>';
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + ' datatextfield="nameValue" datavaluefield="ChargingPolicyId" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon"></vr-select></vr-columns>';
     }
 
 }]);

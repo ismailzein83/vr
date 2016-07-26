@@ -176,10 +176,23 @@ namespace Retail.BusinessEntity.Business
         }
         private ActionDefinitionInfo ActionDefinitionInfoMapper(ActionDefinition actionDefinition)
         {
+            string fullName = null;
+            switch(actionDefinition.EntityType)
+            {
+                case EntityType.Account:
+                    fullName = string.Format("{0} {1}", actionDefinition.Name, Utilities.GetEnumDescription(actionDefinition.EntityType));
+                    break;
+                case EntityType.AccountService:
+                 ServiceTypeManager manager = new ServiceTypeManager();
+                    var serviceEntity = manager.GetServiceType(actionDefinition.Settings.EntityTypeId.Value);
+                    fullName= string.Format("{0} {1}", actionDefinition.Name, serviceEntity.Name);
+                    break;
+            }
             return new ActionDefinitionInfo()
             {
                 ActionDefinitionId = actionDefinition.ActionDefinitionId,
-                Name = actionDefinition.Name
+                Name = actionDefinition.Name,
+                FullName = fullName
             };
         }
         #endregion

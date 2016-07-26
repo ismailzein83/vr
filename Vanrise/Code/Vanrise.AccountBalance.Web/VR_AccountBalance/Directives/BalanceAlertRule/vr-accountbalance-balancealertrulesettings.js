@@ -39,6 +39,7 @@ function (UtilsService, VR_AccountBalance_BalanceAlertService) {
             ctrl.addThresholdAction = function () {
                 var onBalanceAlertThresholdAdded = function (balanceAlertThreshold)
                 {
+                    balanceAlertThreshold.ActionNames = getActionNames(balanceAlertThreshold.Actions)
                     ctrl.datasource.push({ Entity: balanceAlertThreshold });
                 }
                 VR_AccountBalance_BalanceAlertService.addBalanceAlertThreshold(onBalanceAlertThresholdAdded);
@@ -78,7 +79,12 @@ function (UtilsService, VR_AccountBalance_BalanceAlertService) {
                     {
                         for(var i=0;i<payload.settings.ThresholdActions.length;i++)
                         {
-                            ctrl.datasource.push({ Entity: payload.settings.ThresholdActions[i] });
+                            var thresholdAction = payload.settings.ThresholdActions[i];
+                            if (thresholdAction.Actions != undefined && thresholdAction.Actions.length > 0)
+                            {
+                                thresholdAction.ActionNames = getActionNames(thresholdAction.Actions);
+                            }
+                            ctrl.datasource.push({ Entity: thresholdAction });
                         }
                     }
                 }
@@ -86,6 +92,21 @@ function (UtilsService, VR_AccountBalance_BalanceAlertService) {
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
+        }
+
+        function getActionNames(actions)
+        {
+            var actionNames;
+            for (var i = 0; i < actions.length; i++) {
+                var action = actions[i];
+                if (actionNames == undefined)
+                    actionNames = "";
+                else
+                    actionNames += ", ";
+                actionNames += action.ActionName;
+
+            }
+            return actionNames;
         }
 
         function defineMenuActions() {
@@ -98,6 +119,7 @@ function (UtilsService, VR_AccountBalance_BalanceAlertService) {
 
         function editThresholdAction(dataItem) {
             var onThresholdActionUpdated = function (thresholdActionObj) {
+                thresholdActionObj.ActionNames = getActionNames(thresholdActionObj.Actions)
                 ctrl.datasource[ctrl.datasource.indexOf(dataItem)] = { Entity: thresholdActionObj };
             }
             VR_AccountBalance_BalanceAlertService.editBalanceAlertThreshold(dataItem.Entity, onThresholdActionUpdated);

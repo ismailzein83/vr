@@ -16,8 +16,13 @@ namespace Vanrise.AccountBalance.Entities
             if (Settings != null && Settings.ThresholdActions != null)
             {
                 List<string> actionDescriptions = new List<string>();
-                foreach (var action in Settings.ThresholdActions)
-                    actionDescriptions.Add(action.Threshold.ConfigId.ToString());
+                foreach (var thresholdAction in Settings.ThresholdActions)
+                {
+                    foreach(var action in thresholdAction.Actions)
+                    {
+                        actionDescriptions.Add(action.ActionName);
+                    }
+                }
                 return String.Join("; ", actionDescriptions);
             }
             return null;

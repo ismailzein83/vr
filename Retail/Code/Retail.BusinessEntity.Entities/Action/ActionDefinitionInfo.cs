@@ -10,5 +10,6 @@ namespace Retail.BusinessEntity.Entities
     {
         public Guid ActionDefinitionId { get; set; }
         public string Name { get; set; }
+        public string FullName { get; set; }
     }
 }

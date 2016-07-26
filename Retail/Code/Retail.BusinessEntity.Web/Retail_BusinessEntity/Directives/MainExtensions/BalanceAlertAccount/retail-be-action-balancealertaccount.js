@@ -100,11 +100,11 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
                     var promises = [];
                     var actionDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     actionDefinitionSelectorReadyDeferred.promise.then(function () {
-                        var actionDefinitionSelectorPayload = undefined;
+                        var actionDefinitionSelectorPayload = {
+                            showFullName: true,
+                        };
                         if (vrActionEntity) {
-                            actionDefinitionSelectorPayload = {
-                                selectedIds: vrActionEntity.ActionDefinitionId
-                            };
+                            actionDefinitionSelectorPayload.selectedIds = vrActionEntity.ActionDefinitionId;
                         }
                         VRUIUtilsService.callDirectiveLoad(actionDefinitionAPI, actionDefinitionSelectorPayload, actionDefinitionSelectorLoadDeferred);
                     });
@@ -142,7 +142,8 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
                     return {
                         $type: "Retail.BusinessEntity.Business.Extensions.BalanceAlertAccountAction, Retail.BusinessEntity.Business",
                         ActionDefinitionId: actionDefinitionAPI.getSelectedIds(),
-                        ActionBPSettings : actionBPSettings
+                        ActionBPSettings: actionBPSettings,
+                        ActionName: $scope.scopeModel.selectedActionDefinition.nameValue
                     };
                 }
 

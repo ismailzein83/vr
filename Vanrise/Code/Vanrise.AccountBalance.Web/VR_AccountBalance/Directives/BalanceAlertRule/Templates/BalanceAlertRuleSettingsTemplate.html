@@ -8,7 +8,9 @@
         <vr-validator validate="ctrl.isValid()">
             <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions"
                          on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeThresholdAction" hidegridmenu>
-                <vr-datagridcolumn headertext="'Number Of Actions'" field="'Entity.Actions.length'" widthfactor="5"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Actions'" field="'Entity.ActionNames'" widthfactor="5"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Threshold'" field="'Entity.Threshold.Threshold'" widthfactor="5"></vr-datagridcolumn>
+
             </vr-datagrid>
         </vr-validator>
     </vr-columns>
