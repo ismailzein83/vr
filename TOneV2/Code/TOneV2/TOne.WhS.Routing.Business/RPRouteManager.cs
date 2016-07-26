@@ -146,7 +146,8 @@ namespace TOne.WhS.Routing.Business
                 RoutingProductName = _routingProductManager.GetRoutingProductName(rpRoute.RoutingProductId),
                 SaleZoneName = _saleZoneManager.GetSaleZoneName(rpRoute.SaleZoneId),
                 IsBlocked = rpRoute.IsBlocked,
-                RouteOptionsDetails = this.GetRouteOptionDetails(rpRoute.RPOptionsByPolicy, policyConfigId, numberOfOptions)
+                RouteOptionsDetails = this.GetRouteOptionDetails(rpRoute.RPOptionsByPolicy, policyConfigId, numberOfOptions),
+                ExecutedRuleId = rpRoute.ExecutedRuleId
             };
         }
 

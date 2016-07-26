@@ -122,7 +122,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
         }
 
         function openRouteRuleEditor(dataItem) {
-            WhS_Routing_RouteRuleService.editRouteRule(dataItem.Entity.ExecutedRuleId);
+            WhS_Routing_RouteRuleService.editRouteRule(dataItem.ExecutedRuleId);
         }
 
         function initDrillDownDefinitions() {
