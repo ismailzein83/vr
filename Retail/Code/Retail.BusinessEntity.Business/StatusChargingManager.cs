@@ -29,12 +29,12 @@ namespace Retail.BusinessEntity.Business
             insertOperationOutput.Result = dataManager.Insert(statusChargingSetItem) ? InsertOperationResult.Succeeded : InsertOperationResult.SameExists;
             return insertOperationOutput;
         }
-        public IDataRetrievalResult<StatusChargingSet> GetFilteredStatusChargingSet(DataRetrievalInput<StatusChargingSetQuery> input)
+        public IDataRetrievalResult<StatusChargingSetDetail> GetFilteredStatusChargingSet(DataRetrievalInput<StatusChargingSetQuery> input)
         {
             IStatusChargingSetDataManager dataManager = BEDataManagerFactory.GetDataManager<IStatusChargingSetDataManager>();
             var chargingSets = dataManager.GetStatusChargingSets().ToDictionary(x => x.StatusChargingSetId, x => x);
             Func<StatusChargingSet, bool> filterExpression = (x) => ((input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower())));
-            return DataRetrievalManager.Instance.ProcessResult(input, chargingSets.ToBigResult(input, filterExpression));
+            return DataRetrievalManager.Instance.ProcessResult(input, chargingSets.ToBigResult(input, filterExpression, StatusChargingSetDetailMapper));
         }
         public bool HasInitialCharging(EntityType entityType, long entityId, Guid statusDefinitionId, out Decimal initialCharge)
         {
@@ -85,5 +85,17 @@ namespace Retail.BusinessEntity.Business
             else
                 return null;
         }
+        #region Mappers
+
+        public StatusChargingSetDetail StatusChargingSetDetailMapper(StatusChargingSet statusChargingSet)
+        {
+            StatusChargingSetDetail statusChargingSetDetail = new StatusChargingSetDetail()
+            {
+                Entity = statusChargingSet,
+                Description = ""
+            };
+            return statusChargingSetDetail;
+        }
+        #endregion
     }
 }
