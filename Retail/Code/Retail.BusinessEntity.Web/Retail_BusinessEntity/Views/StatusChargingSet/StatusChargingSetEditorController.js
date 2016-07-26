@@ -1,7 +1,7 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    StatusChargingSetEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'Retail_BE_StatusChargingSetAPIService '];
+    StatusChargingSetEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'Retail_BE_StatusChargingSetAPIService'];
 
     function StatusChargingSetEditorController($scope, utilsService, vrNotificationService, vrNavigationService, vruiUtilsService, retailBeStatusChargingSetApiService) {
         var isEditMode;
