@@ -67,6 +67,7 @@
     <Compile Include="CustomerPricelistsDataManager.cs" />
     <Compile Include="CustomerTariffDataManger.cs" />
     <Compile Include="LookUpDataManager.cs" />
+    <Compile Include="Mobile\MobileConfigurationDataManager.cs" />
     <Compile Include="PriceListDataManager.cs" />
     <Compile Include="CarrierProfileDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

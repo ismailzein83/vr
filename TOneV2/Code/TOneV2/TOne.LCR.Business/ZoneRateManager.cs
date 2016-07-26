@@ -45,9 +45,12 @@ namespace TOne.LCR.Business
             Dictionary<int, PriceList> salePriceLists = new Dictionary<int, PriceList>();
             Dictionary<string, Currency> currencies = _currencyManager.GetCurrenciesDictionary();
             Currency mainCurrency = currencies.Values.Where(c => c.IsMainCurrency.Equals("Y")).First();
+            FlaggedServiceManager flaggedServiceManager = new FlaggedServiceManager();
 
             foreach (var customerSaleZone in customerSaleZones)
             {
+                FlaggedServiceInput input = new FlaggedServiceInput() { FlaggedServiceID = customerSaleZone.Value.ServiceFlag };
+                flaggedServiceManager.AssignFlaggedServiceInfo(input);
                 PriceList customerPriceList;
                 if (!salePriceLists.TryGetValue(customerSaleZone.Value.PriceListId, out customerPriceList))
                 {
@@ -63,7 +66,7 @@ namespace TOne.LCR.Business
                     EffectiveCodes = _codeManager.GetCodes(customerSaleZone.Value.ZoneId, DateTime.Now).Select(c => c.Value).ToList(),
                     PriceListId = customerSaleZone.Value.PriceListId,
                     Rate = (decimal)_currencyManager.GetExchangeFactor(mainCurrency, customerCurrency) * customerSaleZone.Value.Rate,
-                    OurServicesFlag = _flaggedServiceManager.GetServiceFlag(customerSaleZone.Value.ServiceFlag),
+                    OurServicesFlag = new FlaggedService() { ServiceColor = input.FlaggedServiceColor, FlaggedServiceID = input.FlaggedServiceID, Symbol = input.FlaggedServiceSymbol },
                     ZoneId = customerSaleZone.Value.ZoneId,
                     ZoneName = customerSaleZone.Value.ZoneName,
                     CodeGroup = saleZone != null ? saleZone.CodeGroupId : "999999",
@@ -114,6 +117,7 @@ namespace TOne.LCR.Business
 
         private IEnumerable<SupplierZoneRate> GetSupplierZoneRate(IGrouping<string, SupplierLCR> suppliersLCR, Currency mainCurrency, Dictionary<string, Currency> currencies)
         {
+            FlaggedServiceManager flaggedServiceManager = new FlaggedServiceManager();
             Dictionary<int, PriceList> priceLists = new Dictionary<int, PriceList>();
             List<SupplierZoneRate> supplierZoneRates = new List<SupplierZoneRate>();
             foreach (var supplierLCR in suppliersLCR)
@@ -125,13 +129,14 @@ namespace TOne.LCR.Business
                     supplierPriceList = _priceListManager.GetPriceListById(priceListId);
                     priceLists.Add(priceListId, supplierPriceList);
                 }
-
+                FlaggedServiceInput input = new FlaggedServiceInput() { FlaggedServiceID = supplierLCR.ServiceFlag };
+                flaggedServiceManager.AssignFlaggedServiceInfo(input);
                 SupplierZoneRate supplierZoneRate = new SupplierZoneRate()
                 {
                     IsCodeGroup = supplierLCR.IsCodeGroup,
                     PriceListId = supplierLCR.PriceListId,
                     Rate = supplierLCR.Rate,
-                    SupplierServicesFlag = _flaggedServiceManager.GetServiceFlag(supplierLCR.ServiceFlag),
+                    SupplierServicesFlag = new FlaggedService() { ServiceColor = input.FlaggedServiceColor, FlaggedServiceID = input.FlaggedServiceID, Symbol = input.FlaggedServiceSymbol },
                     SupplierId = supplierLCR.SupplierId,
                     SupplierName = _businessEntityInfoManager.GetCarrirAccountName(supplierLCR.SupplierId),
                     ZoneId = supplierLCR.ZoneId,

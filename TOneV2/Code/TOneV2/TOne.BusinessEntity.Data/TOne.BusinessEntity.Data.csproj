@@ -83,6 +83,7 @@
     <Compile Include="ITariffDataManager.cs" />
     <Compile Include="IToDConsiderationDataManager.cs" />
     <Compile Include="IZoneDataManager.cs" />
+    <Compile Include="Mobile\IMobileConfigurationDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

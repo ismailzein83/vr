@@ -73,6 +73,7 @@
     <Compile Include="CustomerCommissionManager.cs" />
     <Compile Include="CustomerPricelistsManager.cs" />
     <Compile Include="CustomerTariffManager.cs" />
+    <Compile Include="Mobile\MobileConfigurationManager.cs" />
     <Compile Include="RateAnalysisManager.cs" />
     <Compile Include="CustomerTODManager.cs" />
     <Compile Include="SaleRateManager.cs" />

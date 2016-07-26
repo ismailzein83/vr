@@ -199,7 +199,7 @@ namespace TOne.LCR.Data.SQL
                 ZoneName = reader["OurZoneName"] as string,
                 SuppliersLcr = new List<SupplierLCR>(),
                 PriceListId = (int)reader["OurPriceListId"],
-                RateId = (Int64)reader["RateId"]
+                RateId = (Int64)reader["OurRateId"]
             };
         }
         SupplierLCR SupplierLCRMapper(IDataReader reader)
@@ -252,7 +252,8 @@ namespace TOne.LCR.Data.SQL
 		                                            zr.ZoneID, 
 		                                            z.Name, 
 		                                            zr.PricelistID, 
-		                                            zm.IsCodeGroup
+		                                            zm.IsCodeGroup,
+                                                    czr.RateID OurRateId
                                             FROM	ZoneMatch zm WITH (NOLOCK) 
                                             JOIN	filteredZones fz on zm.OurZoneID = fz.ZoneID 
                                             JOIN	SupplierZoneRate zr WITH (NOLOCK) ON zm.SupplierZoneID = zr.ZoneID

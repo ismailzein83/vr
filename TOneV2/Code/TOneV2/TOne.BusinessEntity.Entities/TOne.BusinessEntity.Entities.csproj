@@ -68,6 +68,7 @@
     <Compile Include="ExchangeRate.cs" />
     <Compile Include="CustomerRateByZone.cs" />
     <Compile Include="FlaggedServiceInput.cs" />
+    <Compile Include="Mobile\MobileConfiguration.cs" />
     <Compile Include="SaleZoneMarketPrice.cs" />
     <Compile Include="SupplierCommission.cs" />
     <Compile Include="SupplierCommissionQuery.cs" />

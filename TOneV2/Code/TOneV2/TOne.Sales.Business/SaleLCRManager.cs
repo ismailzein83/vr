@@ -135,7 +135,7 @@ namespace TOne.Sales.Business
 
         public void SendMail(MemoryStream stream, string subject, List<Rate> newRates, CarrierProfile carrierProfile)
         {
-            List<string> to = carrierProfile.BillingEmail.Split(new char[] { ',', ';' }).ToList();
+            List<string> to = carrierProfile.PricingEmail.Split(new char[] { ',', ';' }).ToList();
             stream.Seek(0, SeekOrigin.Begin);
             Attachment attacment = new Attachment(stream, "Price List.xls");
 
@@ -177,7 +177,7 @@ namespace TOne.Sales.Business
                     Port = port,
                     UseDefaultCredentials = false,
                     Credentials = new NetworkCredential(uid, pwd),
-                    EnableSsl = false
+                    EnableSsl = mailSettings.Smtp.Network.EnableSsl
                 };
 
 
