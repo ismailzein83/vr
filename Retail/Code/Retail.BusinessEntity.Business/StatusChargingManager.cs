@@ -52,6 +52,38 @@ namespace Retail.BusinessEntity.Business
             return false;
         }
 
+        public List<EntityStatusChargeInfo> GetStatusChargeInfos(EntityType entityType, string entityTypeId)
+        {
+            if (entityType == EntityType.Account)
+                return new List<EntityStatusChargeInfo>    
+                {
+                    new EntityStatusChargeInfo
+                    {
+                        StatusDefinitionId = new Guid("DDB6A5B8-B9E5-4050-BEE8-0F030E801B8B"),
+                        StatusName = "Active",
+                        HasInitialCharge = true,
+                        HasRecurringCharge = true
+                    },
+                    new EntityStatusChargeInfo
+                    {
+                        StatusDefinitionId = new Guid("007869D9-6DC2-4F56-88A4-18C8C442E49E"),
+                        StatusName = "Suspended",
+                        HasRecurringCharge = true
+                    }
+            };
+            else
+                return new List<EntityStatusChargeInfo>         
+                {
+                    new EntityStatusChargeInfo
+                    {
+                        StatusDefinitionId = new Guid("DCF62E68-80F4-45D6-8099-5A64523F7EC9"),
+                        StatusName = "Active",
+                        HasInitialCharge = true,
+                        HasRecurringCharge = true
+                    }
+                };
+        }
+
         private StatusChargingSet GetChargingSet(EntityType entityType, long entityId)
         {
             switch (entityType)
@@ -85,6 +117,7 @@ namespace Retail.BusinessEntity.Business
             else
                 return null;
         }
+
         #region Mappers
 
         public StatusChargingSetDetail StatusChargingSetDetailMapper(StatusChargingSet statusChargingSet)
