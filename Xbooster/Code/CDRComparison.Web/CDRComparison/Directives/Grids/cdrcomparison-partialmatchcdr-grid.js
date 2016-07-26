@@ -36,13 +36,11 @@
 
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return CDRComparison_PartialMatchCDRAPIService.GetFilteredPartialMatchCDRs(dataRetrievalInput).then(function (response) {
-
-                        if (response != null) {
-                            if (response.Summary != null) {
+                        if (response != null && response.Data != null) {
+                            if (response.Data.length > 0 && response.Summary != null) {
                                 gridAPI.setSummary(response.Summary);
                             }
                         }
-
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);

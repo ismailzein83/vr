@@ -29,7 +29,12 @@ namespace CDRComparison.Business
             missingCDRBigResult.Summary = new MissingCDR();
             missingCDRBigResult.Summary.DurationInSec = bigResult.Data.Sum(x => x.DurationInSec);
 
-            return DataRetrievalManager.Instance.ProcessResult(input, missingCDRBigResult);
+            var resultProcessingHandler = new ResultProcessingHandler<MissingCDR>()
+            {
+                ExportExcelHandler = new MissingCDRExcelExportHandler()
+            };
+
+            return DataRetrievalManager.Instance.ProcessResult(input, missingCDRBigResult, resultProcessingHandler);
         }
 
         public int GetMissingCDRsCount(string tableKey, bool isPartnerCDRs)
@@ -46,6 +51,41 @@ namespace CDRComparison.Business
             return dataManager.GetDurationOfMissingCDRs(isPartner);
         }
 
+        #endregion
+
+        #region Private Classes
+
+        private class MissingCDRExcelExportHandler : ExcelExportHandler<MissingCDR>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<MissingCDR> context)
+            {
+                if (context.BigResult == null || context.BigResult.Data == null)
+                    return;
+
+                var sheet = new ExportExcelSheet();
+                sheet.SheetName = "Missing CDRs";
+
+                sheet.Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "CDPN" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "CGPN" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Time" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Duration (SEC)" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                foreach (var record in context.BigResult.Data)
+                {
+                    var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                    row.Cells.Add(new ExportExcelCell() { Value = record.CDPN });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.CGPN });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.Time });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.DurationInSec });
+                    sheet.Rows.Add(row);
+                }
+
+                context.MainSheet = sheet;
+            }
+        }
+        
         #endregion
     }
 }

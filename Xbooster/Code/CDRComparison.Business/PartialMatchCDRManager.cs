@@ -33,14 +33,21 @@ namespace CDRComparison.Business
 
             foreach (PartialMatchCDR cdr in bigResult.Data)
             {
-                cdr.DurationDifferenceInSec = Math.Abs(cdr.SystemDurationInSec - cdr.PartnerDurationInSec);
+                decimal durationDifference = cdr.PartnerDurationInSec - cdr.SystemDurationInSec;
+                cdr.DurationDifferenceInSec = Math.Abs(durationDifference);
+                cdr.DurationDifferencePercentageOfPartner = (durationDifference * 100) / cdr.SystemDurationInSec;
 
                 partialMatchCDRBigResult.Summary.SystemDurationInSec += cdr.SystemDurationInSec;
                 partialMatchCDRBigResult.Summary.PartnerDurationInSec += cdr.PartnerDurationInSec;
                 partialMatchCDRBigResult.Summary.DurationDifferenceInSec += cdr.DurationDifferenceInSec;
             }
 
-            return DataRetrievalManager.Instance.ProcessResult(input, partialMatchCDRBigResult);
+            var resultProcessingHandler = new ResultProcessingHandler<PartialMatchCDR>()
+            {
+                ExportExcelHandler = new PartialMatchCDRExportExcelHandler()
+            };
+
+            return DataRetrievalManager.Instance.ProcessResult(input, partialMatchCDRBigResult, resultProcessingHandler);
         }
 
         public int GetPartialMatchCDRsCount(string tableKey)
@@ -64,6 +71,53 @@ namespace CDRComparison.Business
             return dataManager.GetTotalDurationDifferenceOfPartialMatchCDRs(tableKey);
         }
 
+        #endregion
+
+        #region Private Classes
+
+        private class PartialMatchCDRExportExcelHandler : ExcelExportHandler<PartialMatchCDR>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<PartialMatchCDR> context)
+            {
+                if (context.BigResult == null || context.BigResult.Data == null)
+                    return;
+
+                var sheet = new ExportExcelSheet();
+                sheet.SheetName = "Partial Match CDRs";
+
+                sheet.Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "System CDPN" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "System CGPN" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "System Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "System Duration (SEC)" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Partner CDPN" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Partner CGPN" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Partner Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Partner Duration (SEC)" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Duration Difference (SEC)" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Duration Difference % Of Partner" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                foreach (var record in context.BigResult.Data)
+                {
+                    var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                    row.Cells.Add(new ExportExcelCell() { Value = record.SystemCDPN });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.SystemCGPN });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.SystemTime });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.SystemDurationInSec });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.PartnerCDPN });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.PartnerCGPN });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.PartnerTime});
+                    row.Cells.Add(new ExportExcelCell() { Value = record.PartnerDurationInSec });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.DurationDifferenceInSec});
+                    row.Cells.Add(new ExportExcelCell() { Value = record.DurationDifferencePercentageOfPartner });
+                    sheet.Rows.Add(row);
+                }
+
+                context.MainSheet = sheet;
+            }
+        }
+        
         #endregion
     }
 }
