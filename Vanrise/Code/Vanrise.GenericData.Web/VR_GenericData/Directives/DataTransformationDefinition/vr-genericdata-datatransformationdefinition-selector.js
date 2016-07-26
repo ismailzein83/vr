@@ -61,7 +61,7 @@ app.directive('vrGenericdataDatatransformationdefinitionSelector', ['VR_GenericD
             }
 
             if (attrs.customlabel != undefined)
-                label = attrs.customlabel;
+                label = attrs.customlabel.replace(/'/g, "");
 
             var hideremoveicon;
             if (attrs.hideremoveicon != undefined)
