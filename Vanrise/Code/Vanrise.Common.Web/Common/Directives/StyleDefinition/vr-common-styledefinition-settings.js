@@ -129,20 +129,21 @@
 
             var template =
                 '<vr-row>'
-                    + '<vr-columns colnum="{{ctrl.normalColNum}}">'
+                    + ' <vr-columns width="1/2row">'
                         + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                             + ' datasource="scopeModel.templateConfigs"'
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
                             + ' isrequired="true"'
-                            + 'hideremoveicon>'
+                            + ' label="Style Formating"'
+                            + ' hideremoveicon>'
                         + '</vr-select>'
                     + ' </vr-columns>'
-                + '</vr-row>'
-                + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
-                        + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate">'
-                + '</vr-directivewrapper>'
+                + ' </vr-row>'
+                    + ' <vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
+                            + ' on-ready="scopeModel.onDirectiveReady" isrequired="ctrl.isrequired" normal-col-num="{{ctrl.normalColNum}}" customvalidate="ctrl.customvalidate">'
+                    + ' </vr-directivewrapper>'
             return template;
         }
     }
