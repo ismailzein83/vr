@@ -108,6 +108,7 @@
     <Compile Include="CodeGroup\CodeGroupQuery.cs" />
     <Compile Include="CodeGroup\UploadCodeGroupLog.cs" />
     <Compile Include="Deals\Deal.cs" />
+    <Compile Include="Deals\DealAnalysis.cs" />
     <Compile Include="Deals\DealBuyingPart.cs" />
     <Compile Include="Deals\DealDetail.cs" />
     <Compile Include="Deals\DealQuery.cs" />
