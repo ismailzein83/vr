@@ -69,15 +69,28 @@ namespace Vanrise.GenericData.Business
                 return true;
             if (filterGroup.Filters == null)
                 throw new NullReferenceException("filterGroup.Filters");
-            foreach(var filter in filterGroup.Filters)
+            if (filterGroup.Filters.Count == 0)
+                return true;
+            if(filterGroup.LogicalOperator == RecordQueryLogicalOperator.And)
             {
-                bool isMatch = IsFilterMatch(filter, context);
-                if (isMatch && filterGroup.LogicalOperator == RecordQueryLogicalOperator.Or)
-                    return true;
-                if (!isMatch && filterGroup.LogicalOperator == RecordQueryLogicalOperator.And)
-                    return false;
+                foreach (var filter in filterGroup.Filters)
+                {
+                    bool isMatch = IsFilterMatch(filter, context);
+                    if (!isMatch)
+                        return false;
+                }
+                return true;
             }
-            return true;
+            else//OR
+            {
+                foreach (var filter in filterGroup.Filters)
+                {
+                    bool isMatch = IsFilterMatch(filter, context);
+                    if (isMatch)
+                        return true;
+                }
+                return false;
+            }
         }
 
         private bool IsFilterMatch(RecordFilter filter, IRecordFilterGenericFieldMatchContext context)
