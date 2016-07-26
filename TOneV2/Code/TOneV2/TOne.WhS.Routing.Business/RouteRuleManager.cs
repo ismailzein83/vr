@@ -28,9 +28,9 @@ namespace TOne.WhS.Routing.Business
             IEnumerable<RouteRule> result = cachedRules.FindAllRecords(filterExpression);
             return result == null || result.Count() == 0 ? true : false;
         }
-        public RouteRule GetMatchRule(RouteRuleTarget target)
+        public RouteRule GetMatchRule(RouteRuleTarget target, int? routingProductId)
         {
-            var ruleTrees = GetRuleTreesByPriority();
+            var ruleTrees = GetRuleTreesByPriority(routingProductId);
             if (ruleTrees != null)
             {
                 foreach (var ruleTree in ruleTrees)
@@ -43,9 +43,9 @@ namespace TOne.WhS.Routing.Business
             return null;
         }
 
-        Vanrise.Rules.RuleTree[] GetRuleTreesByPriority()
+        Vanrise.Rules.RuleTree[] GetRuleTreesByPriority(int? routingProductId)
         {
-            return GetCachedOrCreate("GetRuleTreesByPriority",
+            return GetCachedOrCreate(string.Format("GetRuleTreesByPriority_{0}", routingProductId.HasValue ? routingProductId.Value : 0),
                 () =>
                 {
                     List<Vanrise.Rules.RuleTree> ruleTrees = new List<Vanrise.Rules.RuleTree>();
@@ -64,7 +64,8 @@ namespace TOne.WhS.Routing.Business
                             currentPriority = priority;
                             currentRules = new List<Vanrise.Rules.BaseRule>();
                         }
-                        var ruleTypeRules = GetFilteredRules(itm => itm.Settings.ConfigId == ruleType.TemplateConfigID);
+                        var ruleTypeRules = GetFilteredRules(itm => itm.Settings.ConfigId == ruleType.TemplateConfigID
+                                                         && (!routingProductId.HasValue || (itm.Criteria.RoutingProductId.HasValue && routingProductId.Value == itm.Criteria.RoutingProductId.Value)));
                         if (ruleTypeRules != null)
                             currentRules.AddRange(ruleTypeRules);
                     }
