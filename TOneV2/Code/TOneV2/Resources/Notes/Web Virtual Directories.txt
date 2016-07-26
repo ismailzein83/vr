@@ -30,3 +30,4 @@
 	VR_GenericData			C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
 	Analytic				C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic
 	ExcelConversion			C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion
+	Reprocess				C:\TFS\BusinessProcess\Code\Vanrise.Reprocess.Web\Reprocess
