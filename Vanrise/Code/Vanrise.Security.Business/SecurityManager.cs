@@ -331,14 +331,13 @@ namespace Vanrise.Security.Business
             {
                 BusinessEntity be = new BusinessEntityManager().GetBusinessEntityById(p.EntityId);
                 string beName = be.Name;
-                rp +=  String.Format("{0}:,", beName);
+                rp +=  String.Format("{0}: ", beName);
                 foreach (string s in p.PermissionOptions)
                 {
-                    rp += String.Format("{0},", s);
+                    rp += String.Format("{0}, ", s);
                 }
-                rp.Remove(rp.Length - 1, 1);
-
-                rp += String.Format(" &");
+                rp =  rp.Remove(rp.Length - 2,2);
+                rp += String.Format("&");
 
             }
             return rp.Remove(rp.Length - 1, 1);
