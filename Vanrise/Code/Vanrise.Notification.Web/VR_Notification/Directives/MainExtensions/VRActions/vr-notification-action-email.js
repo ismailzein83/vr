@@ -51,6 +51,7 @@ app.directive('vrNotificationActionEmail', ['UtilsService', 'VRUIUtilsService', 
 
                     return {
                         $type: "Vanrise.Notification.MainExtensions.VRActions.EmailAction, Vanrise.Notification.MainExtensions",
+                        ActionName:"Email"
                     };
                 }
 

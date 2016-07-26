@@ -140,6 +140,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_Notification\Constants\ModuleConfig.js" />
+    <Content Include="VR_Notification\Directives\MainExtensions\VRActions\Templates\EmailActionTemplate.html" />
+    <Content Include="VR_Notification\Directives\MainExtensions\VRActions\vr-notification-action-email.js" />
     <Content Include="VR_Notification\Directives\VRActions\Templates\VRActionsManagementTemplate.html" />
     <Content Include="VR_Notification\Directives\VRActions\vr-notification-vraction-management.js" />
     <Content Include="VR_Notification\Directives\VRActions\vr-notification-vraction.js" />
