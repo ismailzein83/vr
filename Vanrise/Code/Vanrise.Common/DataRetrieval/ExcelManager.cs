@@ -199,6 +199,7 @@ namespace Vanrise.Common
                     if (!headerCell.DateTimeType.HasValue)
                         throw new NullReferenceException("headerCell.DateTimeType");
                     cellStyle.Custom = Utilities.GetDateTimeFormat(headerCell.DateTimeType.Value);
+                    excelCell.SetStyle(cellStyle);
                     break;
             }
         }
