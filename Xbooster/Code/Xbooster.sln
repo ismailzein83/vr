@@ -59,9 +59,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XBooster.PriceListConversio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XBooster.PriceListConversion.Data.SQL", "XBooster.PriceListConversion.Data.SQL\XBooster.PriceListConversion.Data.SQL.csproj", "{F9FA35E9-E1C8-4BFF-8254-29E300B735C2}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "XBooster_CDRComparisonOutput", "XBooster_CDRComparisonOutput\XBooster_CDRComparisonOutput.sqlproj", "{3A7E3115-EBA6-4922-B840-CBF96232892C}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 22
+		SccNumberOfProjects = 23
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -149,6 +151,10 @@ Global
 		SccProjectTopLevelParentUniqueName21 = Xbooster.sln
 		SccProjectName21 = XBooster.PriceListConversion.Data.SQL
 		SccLocalPath21 = XBooster.PriceListConversion.Data.SQL
+		SccProjectUniqueName22 = XBooster_CDRComparisonOutput\\XBooster_CDRComparisonOutput.sqlproj
+		SccProjectTopLevelParentUniqueName22 = Xbooster.sln
+		SccProjectName22 = XBooster_CDRComparisonOutput
+		SccLocalPath22 = XBooster_CDRComparisonOutput
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -241,6 +247,12 @@ Global
 		{F9FA35E9-E1C8-4BFF-8254-29E300B735C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9FA35E9-E1C8-4BFF-8254-29E300B735C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9FA35E9-E1C8-4BFF-8254-29E300B735C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A7E3115-EBA6-4922-B840-CBF96232892C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A7E3115-EBA6-4922-B840-CBF96232892C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A7E3115-EBA6-4922-B840-CBF96232892C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{3A7E3115-EBA6-4922-B840-CBF96232892C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A7E3115-EBA6-4922-B840-CBF96232892C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A7E3115-EBA6-4922-B840-CBF96232892C}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -269,5 +281,6 @@ Global
 		{A3A11123-52B6-44BA-B1F1-E0C9DDC15F1C} = {0C8E241E-47F0-426F-A565-3648C3AA0AC1}
 		{1B43E436-59D6-4EE0-A8FF-D3FD5727A6C4} = {0C8E241E-47F0-426F-A565-3648C3AA0AC1}
 		{F9FA35E9-E1C8-4BFF-8254-29E300B735C2} = {0C8E241E-47F0-426F-A565-3648C3AA0AC1}
+		{3A7E3115-EBA6-4922-B840-CBF96232892C} = {69EAF8AE-C9C5-4F37-8FDD-B053CC4C978B}
 	EndGlobalSection
 EndGlobal
