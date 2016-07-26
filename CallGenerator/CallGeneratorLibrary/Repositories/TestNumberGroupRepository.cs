@@ -15,7 +15,7 @@ namespace CallGeneratorLibrary.Repositories
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    LstOperators = context.TestNumberGroups.Where(x => x.IsDeleted == null).ToList<TestNumberGroup>();
+                    LstOperators = context.TestNumberGroups.Where(x => (x.IsDeleted == null || x.IsDeleted == false)).ToList<TestNumberGroup>();
                 }
             }
             catch (System.Exception ex)
@@ -73,20 +73,20 @@ namespace CallGeneratorLibrary.Repositories
             return success;
         }
 
-        private static bool Update(TestNumberGroup GenCall)
+        private static bool Update(TestNumberGroup testNumberGroup)
         {
             bool success = false;
-            TestNumberGroup look = new TestNumberGroup();
+            TestNumberGroup testNumberGroupObj = new TestNumberGroup();
 
             try
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    look = context.TestNumberGroups.Single(l => l.Id == GenCall.Id);
+                    testNumberGroupObj = context.TestNumberGroups.Single(l => l.Id == testNumberGroup.Id);
 
-                    look.Name = GenCall.Name;
-                    look.Code = GenCall.Code;
-
+                    testNumberGroupObj.Name = testNumberGroup.Name;
+                    testNumberGroupObj.Code = testNumberGroup.Code;
+                    testNumberGroupObj.IsDeleted = testNumberGroup.IsDeleted;
                     context.SubmitChanges();
                     success = true;
                 }
@@ -106,10 +106,9 @@ namespace CallGeneratorLibrary.Repositories
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    TestNumberGroup GenCall = context.TestNumberGroups.Where(u => u.Id == Id).Single<TestNumberGroup>();
-                    context.TestNumberGroups.DeleteOnSubmit(GenCall);
-                    context.SubmitChanges();
-                    success = true;
+                    TestNumberGroup testNumberGroup = context.TestNumberGroups.Where(u => u.Id == Id).Single<TestNumberGroup>();
+                    testNumberGroup.IsDeleted = true;
+                    return Update(testNumberGroup);
                 }
             }
             catch (System.Exception ex)

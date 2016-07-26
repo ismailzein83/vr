@@ -165,6 +165,7 @@
       <Column Name="RatioOfCalls" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
       <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="IsEnabled" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="bit" CanBeNull="true" />
       <Association Name="Schedule_ScheduleLog" Member="ScheduleLogs" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleLog" />
       <Association Name="Schedule_ScheduleGroup" Member="ScheduleGroups" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleGroup" />
       <Association Name="Schedule_GeneratedCall" Member="GeneratedCalls" ThisKey="Id" OtherKey="ScheduleId" Type="GeneratedCall" />

@@ -86,7 +86,7 @@ namespace CallGeneratorLibrary.Repositories
                     options.LoadWith<Schedule>(c => c.SipAccount);
                     context.LoadOptions = options;
 
-                    LstSchedules = context.Schedules.Where(l => l.MonthDay == null).ToList<Schedule>();
+                    LstSchedules = context.Schedules.Where(l => (l.IsDeleted == null || l.IsDeleted == false)).ToList<Schedule>();
                 }
             }
             catch (System.Exception ex)
@@ -128,7 +128,7 @@ namespace CallGeneratorLibrary.Repositories
                     //context.ScheduleOperators.DeleteAllOnSubmit(LstOperators);
 
                     Schedule schedule = context.Schedules.Where(u => u.Id == Id).Single<Schedule>();
-                    schedule.MonthDay = 1;
+                    schedule.IsDeleted = true;
                     schedule.IsEnabled = false;
                     return Update(schedule);
                     //context.Schedules.DeleteOnSubmit(schedule);
@@ -226,6 +226,7 @@ namespace CallGeneratorLibrary.Repositories
                     look.TotalNumbers = schedule.TotalNumbers;
                     look.RatioOfCalls = schedule.RatioOfCalls;
                     look.IsEnabled = schedule.IsEnabled;
+                    look.IsDeleted = schedule.IsDeleted;
                     context.SubmitChanges();
                     success = true;
                 }
