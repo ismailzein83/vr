@@ -1,9 +1,8 @@
-﻿<vr-datagrid datasource="scopeModel.statusChargingSets"
+﻿<vr-datagrid datasource="scopeModel.statusChargingSet"
              dataretrievalfunction="scopeModel.dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              on-ready="scopeModel.onGridReady"
-             menuactions="scopeModel.menuActions"
-             idfield="Entity.StatusDefinitionId">
-    <vr-datagridcolumn headertext="'Id'" field="'Entity.StatusDefinitionId'"></vr-datagridcolumn>
+             idfield="Entity.StatusChargingSetId">
+    <vr-datagridcolumn headertext="'Id'" field="'Entity.StatusChargingSetId'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
 </vr-datagrid>
