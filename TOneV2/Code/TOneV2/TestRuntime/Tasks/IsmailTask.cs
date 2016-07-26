@@ -249,7 +249,7 @@ namespace TestRuntime
 
         private static void Lock(string transactionName, int maxConcurrency = 1)
         {
-            Vanrise.Runtime.TransactionLocker locker = new TransactionLocker();
+            Vanrise.Runtime.TransactionLocker locker = TransactionLocker.Instance;
             bool isLocked = locker.TryLock(transactionName, maxConcurrency, () =>
             {
                 Console.WriteLine("Transaction '{0}' Locked", transactionName);
