@@ -63,7 +63,13 @@
         }
         function buildTreeId(item)
         {
-            return (item.EntType == VR_Sec_EntityTypeEnum.ENTITY.value ? "Entity_" : "Module_") + item.EntityId;
+            var id = "Module_" + item.EntityId;
+            item.isLeaf = false;
+            if (item.EntType == VR_Sec_EntityTypeEnum.ENTITY.value) {
+                item.isLeaf = true;
+                id = "Entity_" + item.EntityId;
+            }
+            return id;
         }
         function load() {
             $scope.title = "Required Permission";
