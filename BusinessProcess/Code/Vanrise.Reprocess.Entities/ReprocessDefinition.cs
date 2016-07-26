@@ -12,6 +12,17 @@ namespace Vanrise.Reprocess.Entities
 
         public string Name { get; set; }
 
+        public ReprocessDefinitionSettings Settings { get; set; }
+
+        public int SourceRecordStorageId { get; set; }
+
+        public int ExecutionFlowDefinitionId { get; set; }
+
+        public List<string> InitiationStageNames { get; set; }
+    }
+
+    public class ReprocessDefinitionSettings
+    {
         public int SourceRecordStorageId { get; set; }
 
         public int ExecutionFlowDefinitionId { get; set; }
