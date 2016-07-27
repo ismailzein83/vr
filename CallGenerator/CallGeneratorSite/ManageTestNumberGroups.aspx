@@ -45,7 +45,7 @@
     <!-- END PAGE HEADER-->
     <!-- BEGIN PAGE CONTENT-->
 
-    <div class="row-fluid" id="addDiv" style="display: none">
+    <div class="row-fluid" id="addDiv">
 
         <div class="span12">
             <!-- BEGIN SAMPLE TABLE PORTLET-->
@@ -83,6 +83,7 @@
 
     <div class="row-fluid">
         <div class="span12">
+            <div class="row-fluid" id="divMessage" >
             <div id="divError" runat="server" visible="false" class="alert alert-error">
                 <button class="close" data-dismiss="alert"></button>
                 <strong>Error!</strong>
@@ -92,6 +93,8 @@
                 <button class="close" data-dismiss="alert"></button>
                 <strong>Success!</strong><asp:Label ID="lblSuccess" runat="server"></asp:Label>
             </div>
+            </div>
+
             <!-- BEGIN EXAMPLE TABLE PORTLET-->
             <div class="portlet box blue">
                 <div class="portlet-title">
@@ -195,7 +198,7 @@
 
 
         var initTable1 = function () {
-
+            $("#addDiv").hide();
             /* Formatting function for row details */
             function fnFormatDetails(oTable, nTr) {
                 var aData = oTable.fnGetData(nTr);
@@ -284,6 +287,7 @@
         var cancel = function () {
             emptyFields();
             $("#addDiv").hide();
+            $("#divMessage").hide();
             $('#addBtn').removeAttr('disabled');
             $('#myTable > tbody > tr').remove();
             arrayRow = [];

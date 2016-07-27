@@ -88,35 +88,45 @@ public partial class ManageTestNumberGroups : BasePage
 
         TestNumberGroup newTestNumberGroup = new TestNumberGroup();
 
-        NewActionLog action = new NewActionLog();
-        action.ObjectId = Current.User.Id;
-        action.ObjectType = "TestNumberGroup";
-
-        if (String.IsNullOrEmpty(HdnId.Value))
+        newTestNumberGroup = TestNumberGroupRepository.Load(txtName.Text);
+        if (newTestNumberGroup != null)
         {
-            action.ActionType = (int)Enums.ActionType.Add;
+            SetError("same group name");
         }
         else
         {
-            int id = 0;
-            if (Int32.TryParse(HdnId.Value, out id))
+            NewActionLog action = new NewActionLog();
+            action.ObjectId = Current.User.Id;
+            action.ObjectType = "TestNumberGroup";
+
+            if (String.IsNullOrEmpty(HdnId.Value))
             {
-                newTestNumberGroup = TestNumberGroupRepository.Load(id);
-                if (newTestNumberGroup == null) return;
-                action.ActionType = (int)Enums.ActionType.Modify;
+                action.ActionType = (int)Enums.ActionType.Add;
             }
             else
             {
-                return;
+                int id = 0;
+                if (Int32.TryParse(HdnId.Value, out id))
+                {
+                    newTestNumberGroup = TestNumberGroupRepository.Load(id);
+                    if (newTestNumberGroup == null) return;
+                    action.ActionType = (int)Enums.ActionType.Modify;
+                }
+                else
+                {
+                    return;
+                }
             }
+
+            newTestNumberGroup.Name = txtName.Text;
+
+            TestNumberGroupRepository.Save(newTestNumberGroup);
+
+            AuditRepository.Save(action);
+
+            GetData();
         }
 
-        newTestNumberGroup.Name = txtName.Text;
 
-        TestNumberGroupRepository.Save(newTestNumberGroup);
-
-        AuditRepository.Save(action);
-        
-        GetData();
     }
 }

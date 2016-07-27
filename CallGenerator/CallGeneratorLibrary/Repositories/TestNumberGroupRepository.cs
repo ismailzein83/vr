@@ -43,6 +43,24 @@ namespace CallGeneratorLibrary.Repositories
 
             return log;
         }
+        public static TestNumberGroup Load(string Name)
+        {
+            TestNumberGroup log = new TestNumberGroup();
+
+            try
+            {
+                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+                {
+                    log = context.TestNumberGroups.Where(l => l.Name == Name).FirstOrDefault<TestNumberGroup>();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Logger.LogException(ex);
+            }
+
+            return log;
+        }
 
         public static bool Save(TestNumberGroup GenCall)
         {
