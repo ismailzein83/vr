@@ -10,7 +10,7 @@ namespace Vanrise.Common.Data
 {
     public interface IStyleDefinitionDataManager : IDataManager
     {
-        List<StyleDefinition> GetStyleDefinition();
+        List<StyleDefinition> GetStyleDefinitions();
 
         bool AreStyleDefinitionUpdated(ref object updateHandle);
 

@@ -23,7 +23,7 @@ namespace Vanrise.Common.Data.SQL
 
         #region Public Methods
 
-        public List<StyleDefinition> GetStyleDefinition()
+        public List<StyleDefinition> GetStyleDefinitions()
         {
             return GetItemsSP("common.sp_StyleDefinition_GetAll", StyleDefinitionMapper);
         }

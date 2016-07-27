@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Common;
-using Retail.BusinessEntity.Data;
 using Retail.BusinessEntity.Entities;
+using Retail.BusinessEntity.Data;
 
 
 namespace Retail.BusinessEntity.Business
@@ -15,17 +15,17 @@ namespace Retail.BusinessEntity.Business
     {
         #region Public Methods
 
-        public IDataRetrievalResult<CreditClassDetail> GetFilteredCreditClasss(DataRetrievalInput<CreditClassQuery> input)
+        public IDataRetrievalResult<CreditClassDetail> GetFilteredCreditClasses(DataRetrievalInput<CreditClassQuery> input)
         {
-            var allCreditClasss = this.GetCachedCreditClasss();
+            var allCreditClass = this.GetCachedCreditClass();
             Func<CreditClass, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCreditClasss.ToBigResult(input, filterExpression, CreditClassDetailMapper));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCreditClass.ToBigResult(input, filterExpression, CreditClassDetailMapper));
         }
 
         public CreditClass GetCreditClass(int creditClassId)
         {
-            Dictionary<int, CreditClass> cachedCreditClasss = this.GetCachedCreditClasss();
-            return cachedCreditClasss.GetRecord(creditClassId);
+            Dictionary<int, CreditClass> cachedCreditClass = this.GetCachedCreditClass();
+            return cachedCreditClass.GetRecord(creditClassId);
         }
 
         public Vanrise.Entities.InsertOperationOutput<CreditClassDetail> AddCreditClass(CreditClass creditClassItem)
@@ -34,15 +34,15 @@ namespace Retail.BusinessEntity.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int reprocessDefintionId = -1;
+            int creditClassId = -1;
 
             ICreditClassDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICreditClassDataManager>();
 
-            if (_dataManager.Insert(creditClassItem, out reprocessDefintionId))
+            if (_dataManager.Insert(creditClassItem, out creditClassId))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                creditClassItem.CreditClassId = reprocessDefintionId;
+                creditClassItem.CreditClassId = creditClassId;
                 insertOperationOutput.InsertedObject = CreditClassDetailMapper(creditClassItem);
             }
             else
@@ -76,6 +76,13 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
 
+        public IEnumerable<CreditClassInfo> GetCreditClassesInfo(CreditClassFilter filter)
+        {
+            Func<CreditClass, bool> filterExpression = null;
+
+            return this.GetCachedCreditClass().MapRecords(CreditClassInfoMapper, filterExpression).OrderBy(x => x.Name);
+        }
+
         #endregion
 
 
@@ -97,12 +104,12 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        Dictionary<int, CreditClass> GetCachedCreditClasss()
+        Dictionary<int, CreditClass> GetCachedCreditClass()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCreditClasss",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCreditClass",
                () =>
                {
-                   ICreditClassDataManager dataManager = ReprocessDataManagerFactory.GetDataManager<ICreditClassDataManager>();
+                   ICreditClassDataManager dataManager = BEDataManagerFactory.GetDataManager<ICreditClassDataManager>();
                    return dataManager.GetCreditClass().ToDictionary(x => x.CreditClassId, x => x);
                });
         }
@@ -119,6 +126,16 @@ namespace Retail.BusinessEntity.Business
                 Entity = creditClass
             };
             return creditClassDetail;
+        }
+
+        public CreditClassInfo CreditClassInfoMapper(CreditClass creditClass)
+        {
+            CreditClassInfo creditClassInfo = new CreditClassInfo()
+            {
+                CreditClassId = creditClass.CreditClassId,
+                Name = creditClass.Name
+           };
+            return creditClassInfo;
         }
 
         #endregion

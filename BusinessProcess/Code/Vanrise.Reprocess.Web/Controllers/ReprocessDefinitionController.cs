@@ -33,16 +33,16 @@ namespace Vanrise.Reprocess.Web.Controllers
 
         [HttpPost]
         [Route("AddReprocessDefinition")]
-        public Vanrise.Entities.InsertOperationOutput<ReprocessDefinitionDetail> AddReprocessDefinition(ReprocessDefinition ReprocessDefinitionItem)
+        public Vanrise.Entities.InsertOperationOutput<ReprocessDefinitionDetail> AddReprocessDefinition(ReprocessDefinition reprocessDefinitionItem)
         {
-            return _manager.AddReprocessDefinition(ReprocessDefinitionItem);
+            return _manager.AddReprocessDefinition(reprocessDefinitionItem);
         }
 
         [HttpPost]
         [Route("UpdateReprocessDefinition")]
-        public Vanrise.Entities.UpdateOperationOutput<ReprocessDefinitionDetail> UpdateReprocessDefinition(ReprocessDefinition ReprocessDefinitionItem)
+        public Vanrise.Entities.UpdateOperationOutput<ReprocessDefinitionDetail> UpdateReprocessDefinition(ReprocessDefinition reprocessDefinitionItem)
         {
-            return _manager.UpdateReprocessDefinition(ReprocessDefinitionItem);
+            return _manager.UpdateReprocessDefinition(reprocessDefinitionItem);
         }
     }
 }

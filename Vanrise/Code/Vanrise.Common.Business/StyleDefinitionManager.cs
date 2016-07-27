@@ -113,7 +113,7 @@ namespace Vanrise.Common.Business
                () =>
                {
                    IStyleDefinitionDataManager dataManager = CommonDataManagerFactory.GetDataManager<IStyleDefinitionDataManager>();
-                   return dataManager.GetStyleDefinition().ToDictionary(x => x.StyleDefinitionId, x => x);
+                   return dataManager.GetStyleDefinitions().ToDictionary(x => x.StyleDefinitionId, x => x);
                });
         }
 
