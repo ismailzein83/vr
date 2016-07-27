@@ -81,12 +81,12 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
                 name: "Edit",
                 clicked: editRouteOptionRule,
                 haspermission: hasUpdateRulePermission
-            },
-            {
-                name: "Delete",
-                clicked: deleteRouteOptionRule,
-                haspermission: hasDeleteRulePermission
-            }
+            }//,
+            //{
+            //    name: "Delete",
+            //    clicked: deleteRouteOptionRule,
+            //    haspermission: hasDeleteRulePermission
+            //}
             ];
         }
 
@@ -94,9 +94,9 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
             return WhS_Routing_RouteOptionRuleAPIService.HasUpdateRulePermission();
         }
 
-        function hasDeleteRulePermission() {
-            return WhS_Routing_RouteOptionRuleAPIService.HasDeleteRulePermission();
-        }
+        //function hasDeleteRulePermission() {
+        //    return WhS_Routing_RouteOptionRuleAPIService.HasDeleteRulePermission();
+        //}
 
 
         function editRouteOptionRule(routeOptionRule) {
@@ -106,14 +106,14 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
             WhS_Routing_RouteOptionRuleService.editRouteOptionRule(routeOptionRule.Entity.RuleId, onRouteOptionRuleUpdated);
         }
 
-        function deleteRouteOptionRule(routeOptionRule) {
+        //function deleteRouteOptionRule(routeOptionRule) {
 
-            var onRouteOptionRuleDeleted = function (deletedItem) {
-                gridAPI.itemDeleted(deletedItem);
-            }
+        //    var onRouteOptionRuleDeleted = function (deletedItem) {
+        //        gridAPI.itemDeleted(deletedItem);
+        //    }
 
-            WhS_Routing_RouteOptionRuleService.deleteRouteOptionRule($scope, routeOptionRule, onRouteOptionRuleDeleted);
-        }
+        //    WhS_Routing_RouteOptionRuleService.deleteRouteOptionRule($scope, routeOptionRule, onRouteOptionRuleDeleted);
+        //}
 
         this.initializeController = initializeController;
     }
