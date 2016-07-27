@@ -39,7 +39,8 @@ function ($compile) {
                     CallFee: ctrl.callFee,
                     FirstPeriod: ctrl.firstPeriod,
                     FirstPeriodRate: ctrl.firstPeriodRate,
-                    FractionUnit: ctrl.fractionUnit
+                    FractionUnit: ctrl.fractionUnit,
+                    PricingUnit: ctrl.pricingUnit
                 }
                 return obj;
             }
@@ -48,7 +49,8 @@ function ($compile) {
                     ctrl.callFee = payload.CallFee;
                     ctrl.firstPeriod = payload.FirstPeriod,
                     ctrl.firstPeriodRate = payload.FirstPeriodRate,
-                    ctrl.fractionUnit = payload.FractionUnit
+                    ctrl.fractionUnit = payload.FractionUnit,
+                    ctrl.pricingUnit = payload.PricingUnit
                 }
             }
 

@@ -17,6 +17,8 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
 
         public int FractionUnit { get; set; }
 
+        public int PricingUnit { get; set; }
+
         protected override void Execute(IPricingRuleTariffContext context)
         {
             CurrencyExchangeRateManager currencyExchangeManager = new CurrencyExchangeRateManager();
@@ -55,14 +57,17 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
                 FractionUnit = (byte)FractionUnit;
                 if (accountedDuration.HasValue)
                 {
+                    if (PricingUnit <= 0)
+                        throw new ArgumentException(string.Format("Invalid PricingUnit: {0}", PricingUnit));
+
                     accountedDuration = Math.Ceiling(accountedDuration.Value / FractionUnit) * FractionUnit;
                     if (totalAmount.HasValue)
-                        totalAmount += Math.Ceiling(accountedDuration.Value / FractionUnit) * context.Rate;// 60
+                        totalAmount += Math.Ceiling(accountedDuration.Value / PricingUnit) * context.Rate;// 60
 
-                    extraChargeValue = Math.Ceiling(accountedDuration.Value / FractionUnit) * context.ExtraChargeRate;
+                    extraChargeValue = Math.Ceiling(accountedDuration.Value / PricingUnit) * context.ExtraChargeRate;
                 }
                 //context.EffectiveRate = Math.Ceiling(FractionUnit * context.Rate / 60);
-                context.EffectiveRate = 60 * context.Rate / FractionUnit;
+                context.EffectiveRate = 60 * context.Rate / PricingUnit;
                 context.EffectiveDurationInSeconds = accountedDuration + FirstPeriod;
             }
             else
