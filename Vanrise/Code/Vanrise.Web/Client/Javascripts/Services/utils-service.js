@@ -728,6 +728,13 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         }
        
     }
+
+    function getDateFromDateTime(dateTime) {
+        var date = new Date(dateTime);
+        date.setHours(0, 0, 0, 0);
+        return date;
+    }
+
     return ({
         replaceAll: replaceAll,
         waitMultipleAsyncOperations: waitMultipleAsyncOperations,
@@ -774,7 +781,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         trimRight: trimRight,
         trimLeft: trimLeft,
         trim: trim,
-        getUploadedFileName: getUploadedFileName
+        getUploadedFileName: getUploadedFileName,
+        getDateFromDateTime: getDateFromDateTime
     });
 
 }]);
