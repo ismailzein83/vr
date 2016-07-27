@@ -62,9 +62,9 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
 
                     accountedDuration = Math.Ceiling(accountedDuration.Value / FractionUnit) * FractionUnit;
                     if (totalAmount.HasValue)
-                        totalAmount += Math.Ceiling(accountedDuration.Value / PricingUnit) * context.Rate;// 60
+                        totalAmount += accountedDuration.Value / PricingUnit * context.Rate;// 60
 
-                    extraChargeValue = Math.Ceiling(accountedDuration.Value / PricingUnit) * context.ExtraChargeRate;
+                    extraChargeValue = accountedDuration.Value / PricingUnit * context.ExtraChargeRate;
                 }
                 //context.EffectiveRate = Math.Ceiling(FractionUnit * context.Rate / 60);
                 context.EffectiveRate = 60 * context.Rate / PricingUnit;
@@ -79,12 +79,12 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
                 context.EffectiveRate = context.Rate;
                 context.EffectiveDurationInSeconds = accountedDuration;
             }
-            
+
             if (totalAmount.HasValue)
                 totalAmount += convertedCallFee;
 
-            context.TotalAmount = totalAmount;
-            context.ExtraChargeValue = extraChargeValue;
+            context.TotalAmount = totalAmount.HasValue ? decimal.Round(totalAmount.Value, 8) : totalAmount;
+            context.ExtraChargeValue = decimal.Round(extraChargeValue, 8);
         }
 
         public override string GetDescription()
