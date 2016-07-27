@@ -8,6 +8,15 @@ namespace Vanrise.Queueing.Entities
 {
     public abstract class QueueActivator : IDisposable
     {
+
+        public virtual int? NbOfMaxConcurrentActivators
+        {
+            get
+            {
+                return null;
+            }
+        }
+
         public int ConfigId { get; set; }
 
         /// <summary>

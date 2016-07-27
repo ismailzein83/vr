@@ -104,33 +104,51 @@ namespace Vanrise.Queueing
                     return TryDequeueFromSummaryBatchQueue(queue, summaryBatchQueueActivator);
                 else
                 {
-                   
-                        if (queue.TryDequeueObject((itemToProcess) =>
+                    int? nbOfMaxConcurrentQueueActivators = GetNbOfMaxConcurrentQueueActivators(queue.QueueSettings.Activator);
+
+                    Func<bool> dequeueAction = () =>
                         {
-                            QueueActivatorExecutionContext context = new QueueActivatorExecutionContext(itemToProcess, queueInstance);
-                            queueInstance.Settings.Activator.ProcessItem(context);
-                           
-                                if (context.OutputItems != null && context.OutputItems.Count > 0)
+                            if (queue.TryDequeueObject((itemToProcess) =>
                                 {
-                                    if (queueInstance.ExecutionFlowId != null)
+                                    QueueActivatorExecutionContext context = new QueueActivatorExecutionContext(itemToProcess, queueInstance);
+                                    queueInstance.Settings.Activator.ProcessItem(context);
+
+                                    if (context.OutputItems != null && context.OutputItems.Count > 0)
                                     {
-                                        QueueExecutionFlowManager executionFlowManager = new QueueExecutionFlowManager();
-                                        var queuesByStages = executionFlowManager.GetQueuesByStages(queueInstance.ExecutionFlowId.Value);
-                                        foreach (var outputItem in context.OutputItems)
+                                        if (queueInstance.ExecutionFlowId != null)
                                         {
-                                            outputItem.Item.ExecutionFlowTriggerItemId = itemToProcess.ExecutionFlowTriggerItemId;
-                                            var outputQueue = queuesByStages[outputItem.StageName].Queue;
-                                            outputQueue.EnqueueObject(outputItem.Item);
+                                            QueueExecutionFlowManager executionFlowManager = new QueueExecutionFlowManager();
+                                            var queuesByStages = executionFlowManager.GetQueuesByStages(queueInstance.ExecutionFlowId.Value);
+                                            foreach (var outputItem in context.OutputItems)
+                                            {
+                                                outputItem.Item.ExecutionFlowTriggerItemId = itemToProcess.ExecutionFlowTriggerItemId;
+                                                var outputQueue = queuesByStages[outputItem.StageName].Queue;
+                                                outputQueue.EnqueueObject(outputItem.Item);
+                                            }
                                         }
+                                        else
+                                            throw new NullReferenceException(String.Format("queueInstance.ExecutionFlowId. Queue Instance ID {0}", queueInstance.QueueInstanceId));
                                     }
-                                    else
-                                        throw new NullReferenceException(String.Format("queueInstance.ExecutionFlowId. Queue Instance ID {0}", queueInstance.QueueInstanceId));
+                                }))
+                            {
+                                return true;
                             }
-                        }))
-                        {
-                            return true;
-                        }
-                    
+                            else
+                                return false;
+
+                        };
+                    bool hasItem = false;
+                    if(nbOfMaxConcurrentQueueActivators.HasValue)
+                    {
+                        Vanrise.Runtime.TransactionLocker.Instance.TryLock(String.Format("QueueActivatorDequeue_Queue_{0}", queueInstance.QueueInstanceId), 
+                            nbOfMaxConcurrentQueueActivators.Value
+                            , () => hasItem = dequeueAction());
+                    }
+                    else
+                    {
+                        hasItem = dequeueAction();
+                    }
+                    return hasItem;
                 }
             }
             catch (Exception ex)
@@ -138,6 +156,22 @@ namespace Vanrise.Queueing
                 LoggerFactory.GetExceptionLogger().WriteException(ex);
             }
             return false;
+        }
+
+        //ConcurrentDictionary<int, int?> _maxConcurrenctQueueActivators = new ConcurrentDictionary<int, int?>();
+        private int? GetNbOfMaxConcurrentQueueActivators(QueueActivator queueActivator)
+        {
+            return queueActivator.NbOfMaxConcurrentActivators;
+            //int? nbOfMaxActivators;
+            //if(!_maxConcurrenctQueueActivators.TryGetValue(queueActivator.ConfigId, out nbOfMaxActivators))
+            //{
+            //    int nbOfMaxActivators_Local;
+            //    if (int.TryParse(ConfigurationManager.AppSettings[String.Format("Queue_NbOfMaxConcurrentActivators_{0}", queueActivator.ConfigId)], out nbOfMaxActivators_Local))
+            //        nbOfMaxActivators = nbOfMaxActivators_Local;
+            //    else
+            //        nbOfMaxActivators = null;
+            //} 
+            //return nbOfMaxActivators;
         }
 
         private bool TryDequeueFromSummaryBatchQueue(IPersistentQueue batchPersistentQueue, ISummaryBatchQueueActivator summaryBatchQueueActivator)
