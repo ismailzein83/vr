@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,20 @@ namespace Vanrise.GenericData.QueueActivators
 {
     public class StoreBatchQueueActivator : Vanrise.Queueing.Entities.QueueActivator, Vanrise.Reprocess.Entities.IReprocessStageActivator
     {
+        static int s_nbOfMaxConcurrentActivators;
+        static StoreBatchQueueActivator()
+        {
+            if (!int.TryParse(ConfigurationManager.AppSettings["Queue_NbOfMaxConcurrentActivators_StoreBatch"], out s_nbOfMaxConcurrentActivators))
+                s_nbOfMaxConcurrentActivators = 5;
+        }
+
+        public override int? NbOfMaxConcurrentActivators
+        {
+            get
+            {
+                return s_nbOfMaxConcurrentActivators;
+            }
+        }
         public int DataRecordStorageId { get; set; }
 
         DataRecordStorageManager _dataRecordStorageManager = new DataRecordStorageManager();
