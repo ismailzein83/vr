@@ -31,6 +31,7 @@
       <runtimeServiceGroup name="group2" nbOfRuntimeInstances="1">
         <runtimeServices>
           <runtimeService name="Scheduler Service" type="Vanrise.Runtime.SchedulerService, Vanrise.Runtime" interval="00:00:02"></runtimeService>
+          <runtimeService name="Transaction Lock Service" type="Vanrise.Runtime.TransactionLockRuntimeService, Vanrise.Runtime" interval="00:00:02"></runtimeService>
         </runtimeServices>
       </runtimeServiceGroup>
       <runtimeServiceGroup name="group3" nbOfRuntimeInstances="5">
