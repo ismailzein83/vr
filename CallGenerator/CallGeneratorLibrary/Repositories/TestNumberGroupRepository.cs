@@ -51,7 +51,7 @@ namespace CallGeneratorLibrary.Repositories
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    log = context.TestNumberGroups.Where(l => l.Name == Name).FirstOrDefault<TestNumberGroup>();
+                    log = context.TestNumberGroups.Where(l => (l.Name == Name &&l.IsDeleted != true)).FirstOrDefault<TestNumberGroup>();
                 }
             }
             catch (System.Exception ex)
