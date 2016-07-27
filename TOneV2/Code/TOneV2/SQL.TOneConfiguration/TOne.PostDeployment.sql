@@ -293,12 +293,14 @@ as (select * from (values
 
 (3302,'WhS_Analytics_Variation','Variation',1204,0,'["View"]'),
 (3313,'WhS_Analytics_BillingReport','Billing Report',1204,0,'["View"]'),
+(3314,'Generic_Billing_Reports','Generic Billing Reports',1204,0,'["View"]'),
 
 (3303,'WhS_BE_SwitchConnectivity','Switch Connectivity',2,0,'["View", "Add", "Edit"]'),
 
 (3304,'WhS_Analytics_RepeatedNumber','Repeated Number',1205,0,'["View"]'),
 (3305,'WhS_Analytics_BlockedAttempts','BlockedAttempts',1205,0,'["View"]'),
 (3622,'WhS_Analytics_ReleaseCode','Release Code',1205,0,'["View"]'),
+(3624,'Generic_Traffic_Reports','Generic Traffic Reports',1205,0,'["View"]'),
 
 (3306,'WhS_BE_CarrierAccount','Carrier Account',201,0,'["View", "Add", "Edit", "Delete"]'),
 (3307,'WhS_BE_CarrierProfile','Carrier Profile',201,0,'["View"]'),
