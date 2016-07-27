@@ -10,7 +10,7 @@ namespace Retail.BusinessEntity.Data
 {
     public interface ICreditClassDataManager: IDataManager
     {
-        List<CreditClass> GetCreditClass();
+        List<CreditClass> GetCreditClasses();
 
         bool AreCreditClassUpdated(ref object updateHandle);
 

@@ -225,6 +225,7 @@
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\Templates\ChargingPolicyPartsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ChargingPolicy\Templates\ChargingPolicySettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\CreditClass\retail-be-creditclass-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\CreditClass\retail-be-creditclass-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\CreditClass\Templates\CreditClassGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-companyprofile.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-generic.js" />

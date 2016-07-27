@@ -10,7 +10,7 @@
 
 
         function GetFilteredCreditClass(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetFilteredCreditClass'), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetFilteredCreditClasses'), input);
         }
 
         function GetCreditClass(creditClassId) {
@@ -27,18 +27,18 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateCreditClass'), statusDefinitionItem);
         }
 
-        //function GetCreditClasssInfo(filter) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetCreditClasssInfo"), {
-        //        filter: filter
-        //    });
-        //}
+        function GetCreditClassesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetCreditClassesInfo"), {
+                filter: filter
+            });
+        }
 
         return ({
             GetFilteredCreditClasss: GetFilteredCreditClass,
             GetCreditClass: GetCreditClass,
             AddCreditClass: AddCreditClass,
             UpdateCreditClass: UpdateCreditClass,
-            //GetCreditClasssInfo: GetCreditClasssInfo,
+            GetCreditClassesInfo: GetCreditClassesInfo,
         });
     }
 

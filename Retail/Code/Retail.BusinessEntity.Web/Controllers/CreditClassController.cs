@@ -17,10 +17,10 @@ namespace Retail.BusinessEntity.Web.Controllers
         CreditClassManager _manager = new CreditClassManager();
 
         [HttpPost]
-        [Route("GetFilteredCreditClass")]
-        public object GetFilteredCreditClass(Vanrise.Entities.DataRetrievalInput<CreditClassQuery> input)
+        [Route("GetFilteredCreditClasses")]
+        public object GetFilteredCreditClasses(Vanrise.Entities.DataRetrievalInput<CreditClassQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredCreditClass(input));
+            return GetWebResponse(input, _manager.GetFilteredCreditClasses(input));
         }
 
         [HttpGet]
@@ -46,7 +46,7 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetCreditClassesInfo")]
-        public IEnumerable<CreditClassInfo> GetStyleDefinitionsInfo(string filter = null)
+        public IEnumerable<CreditClassInfo> GetCreditClassesInfo(string filter = null)
         {
             CreditClassFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<CreditClassFilter>(filter) : null;
             return _manager.GetCreditClassesInfo(deserializedFilter);

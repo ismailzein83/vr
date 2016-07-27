@@ -17,14 +17,14 @@ namespace Retail.BusinessEntity.Business
 
         public IDataRetrievalResult<CreditClassDetail> GetFilteredCreditClasses(DataRetrievalInput<CreditClassQuery> input)
         {
-            var allCreditClass = this.GetCachedCreditClass();
+            var allCreditClass = this.GetCachedCreditClasses();
             Func<CreditClass, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCreditClass.ToBigResult(input, filterExpression, CreditClassDetailMapper));
         }
 
         public CreditClass GetCreditClass(int creditClassId)
         {
-            Dictionary<int, CreditClass> cachedCreditClass = this.GetCachedCreditClass();
+            Dictionary<int, CreditClass> cachedCreditClass = this.GetCachedCreditClasses();
             return cachedCreditClass.GetRecord(creditClassId);
         }
 
@@ -80,7 +80,7 @@ namespace Retail.BusinessEntity.Business
         {
             Func<CreditClass, bool> filterExpression = null;
 
-            return this.GetCachedCreditClass().MapRecords(CreditClassInfoMapper, filterExpression).OrderBy(x => x.Name);
+            return this.GetCachedCreditClasses().MapRecords(CreditClassInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
         #endregion
@@ -104,13 +104,13 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        Dictionary<int, CreditClass> GetCachedCreditClass()
+        Dictionary<int, CreditClass> GetCachedCreditClasses()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCreditClass",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCreditClasses",
                () =>
                {
                    ICreditClassDataManager dataManager = BEDataManagerFactory.GetDataManager<ICreditClassDataManager>();
-                   return dataManager.GetCreditClass().ToDictionary(x => x.CreditClassId, x => x);
+                   return dataManager.GetCreditClasses().ToDictionary(x => x.CreditClassId, x => x);
                });
         }
 

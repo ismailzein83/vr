@@ -63,7 +63,7 @@ app.directive('retailBeCreditclassSelector', ['Retail_BE_CreditClassAPIService',
                         filter = payload.filter;
                     }
 
-                    return Retail_BE_CreditClassAPIService.GetCreditClasssInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return Retail_BE_CreditClassAPIService.GetCreditClassesInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                         selectorAPI.clearDataSource();
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {

@@ -25,7 +25,7 @@ namespace Retail.BusinessEntity.Data.SQL
 
         #region Public Methods
 
-        public List<CreditClass> GetCreditClass()
+        public List<CreditClass> GetCreditClasses()
         {
             return GetItemsSP("[Retail_BE].[sp_CreditClass_GetAll]", CreditClassMapper);
         }
