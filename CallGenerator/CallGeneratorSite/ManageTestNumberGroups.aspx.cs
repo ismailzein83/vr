@@ -95,6 +95,7 @@ public partial class ManageTestNumberGroups : BasePage
         }
         else
         {
+            newTestNumberGroup = new TestNumberGroup();
             NewActionLog action = new NewActionLog();
             action.ObjectId = Current.User.Id;
             action.ObjectType = "TestNumberGroup";
