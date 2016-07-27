@@ -122,7 +122,7 @@ namespace TOne.WhS.Routing.Business
             if (routeRule.Criteria.CodeCriteriaGroupSettings != null)
             {
                 IRuleCodeCriteria ruleCode = routeRule as IRuleCodeCriteria;
-                if (ruleCode.CodeCriterias != null && ruleCode.CodeCriterias.Any(x => x.Code == code))
+                if (ruleCode.CodeCriterias != null && ruleCode.CodeCriterias.Any(x => x.Code.StartsWith(code)))
                     return true;
             }
 
