@@ -25,6 +25,6 @@ namespace TOne.WhS.Routing.Entities
 
         public int CurrentDBToKeep { get; set; }
 
-        public int FuturDBToKeep { get; set; }
+        public int FutureDBToKeep { get; set; }
     }
 }

@@ -38,7 +38,7 @@ function () {
                     $type: "TOne.WhS.Routing.Entities.RouteDatabaseConfiguration, TOne.WhS.Routing.Entities",
                     //SpecificDBToKeep: ctrl.specific,
                     CurrentDBToKeep: ctrl.current,
-                    FuturDBToKeep: ctrl.futur
+                    FutureDBToKeep: ctrl.future
                 }
                 return obj;
             }
@@ -46,7 +46,7 @@ function () {
                 if (payload != undefined) {
                     //ctrl.specific = payload.SpecificDBToKeep;
                     ctrl.current = payload.CurrentDBToKeep,
-                    ctrl.futur = payload.FuturDBToKeep
+                    ctrl.future = payload.FutureDBToKeep
                 }
             }
 
