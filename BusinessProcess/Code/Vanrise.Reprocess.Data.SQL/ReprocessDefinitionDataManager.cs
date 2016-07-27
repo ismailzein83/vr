@@ -72,6 +72,7 @@ namespace Vanrise.Reprocess.Data.SQL
         }
 
         #endregion
+
     }
 
 }

@@ -121,6 +121,8 @@
     <Compile Include="ChargingPolicy\ChargingPolicy.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicySettings.cs" />
     <Compile Include="CreditClass\CreditClass.cs" />
+    <Compile Include="CreditClass\CreditClassDetail.cs" />
+    <Compile Include="CreditClass\CreditClassQuery.cs" />
     <Compile Include="CreditClass\CreditControlSettings.cs" />
     <Compile Include="EntityType.cs" />
     <Compile Include="Package\PackageItems\PackageItem.cs" />
