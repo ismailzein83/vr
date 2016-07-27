@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,12 +10,19 @@ namespace Vanrise.Queueing.Entities
 {
     public abstract class QueueActivator : IDisposable
     {
-
-        public virtual int? NbOfMaxConcurrentActivators
+        static ConcurrentDictionary<int, int> s_nbOfMaxConcurrentActivators = new ConcurrentDictionary<int, int>();
+        public virtual int NbOfMaxConcurrentActivators
         {
             get
             {
-                return null;
+                int nbOfConcurrentActivators;
+                if(!s_nbOfMaxConcurrentActivators.TryGetValue(this.ConfigId, out nbOfConcurrentActivators))
+                {
+                    if (!int.TryParse(ConfigurationManager.AppSettings[String.Format("Queue_NbOfMaxConcurrentActivators_{0}", this.ConfigId)], out nbOfConcurrentActivators))
+                        nbOfConcurrentActivators = 5;
+                    s_nbOfMaxConcurrentActivators.TryAdd(this.ConfigId, nbOfConcurrentActivators);
+                }
+                return nbOfConcurrentActivators;
             }
         }
 

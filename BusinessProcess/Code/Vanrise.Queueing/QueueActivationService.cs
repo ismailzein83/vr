@@ -19,13 +19,31 @@ namespace Vanrise.Queueing
         ConcurrentDictionary<string, object> _nonEmptyQueueNames = new ConcurrentDictionary<string, object>(); 
         Task _taskKeepDequeueing;
         Task _taskCheckNonEmptyQueues;
+        static int s_consecutiveItemsToProcess;
+        static QueueActivationService()
+        {
+            if (!int.TryParse(ConfigurationManager.AppSettings["Queue_ConsecutiveItemsToProcess"], out s_consecutiveItemsToProcess))
+                s_consecutiveItemsToProcess = 30;
+        }
 
         protected override void Execute()
-        {           
-            if (_taskCheckNonEmptyQueues == null)
-                CreateTaskCheckNonEmptyQueues();
-            if (_taskKeepDequeueing == null)
-                CreateTaskKeepDequeueing();
+        {
+            IEnumerable<QueueInstance> allQueues = _queueInstanceManager.GetReadyQueueInstances();
+            foreach (var queueInstance in allQueues)
+            {
+                if (queueInstance.Settings.Activator == null)
+                    continue;
+                Vanrise.Runtime.TransactionLocker.Instance.TryLock(String.Format("QueueActivatorDequeue_Queue_{0}", queueInstance.QueueInstanceId),
+                   queueInstance.Settings.Activator.NbOfMaxConcurrentActivators,
+                             () =>
+                             {
+                                 int processedItems = 0;
+                                 while (processedItems < s_consecutiveItemsToProcess && TryDequeueOneItem(queueInstance))
+                                 {
+                                     processedItems++;
+                                 }
+                             });
+            }
         }
 
         private void CreateTaskCheckNonEmptyQueues()
@@ -100,11 +118,11 @@ namespace Vanrise.Queueing
                 if (queue.QueueSettings.Activator == null)
                     return false;
                 ISummaryBatchQueueActivator summaryBatchQueueActivator = queue.QueueSettings.Activator as ISummaryBatchQueueActivator;
-                if(summaryBatchQueueActivator != null)                    
+                if (summaryBatchQueueActivator != null)
                     return TryDequeueFromSummaryBatchQueue(queue, summaryBatchQueueActivator);
                 else
                 {
-                    int? nbOfMaxConcurrentQueueActivators = GetNbOfMaxConcurrentQueueActivators(queue.QueueSettings.Activator);
+                    //int? nbOfMaxConcurrentQueueActivators = GetNbOfMaxConcurrentQueueActivators(queue.QueueSettings.Activator);
 
                     Func<bool> dequeueAction = () =>
                         {
@@ -138,16 +156,16 @@ namespace Vanrise.Queueing
 
                         };
                     bool hasItem = false;
-                    if(nbOfMaxConcurrentQueueActivators.HasValue)
-                    {
-                        Vanrise.Runtime.TransactionLocker.Instance.TryLock(String.Format("QueueActivatorDequeue_Queue_{0}", queueInstance.QueueInstanceId), 
-                            nbOfMaxConcurrentQueueActivators.Value
-                            , () => hasItem = dequeueAction());
-                    }
-                    else
-                    {
-                        hasItem = dequeueAction();
-                    }
+                    //if(nbOfMaxConcurrentQueueActivators.HasValue)
+                    //{
+                    //    Vanrise.Runtime.TransactionLocker.Instance.TryLock(String.Format("QueueActivatorDequeue_Queue_{0}", queueInstance.QueueInstanceId), 
+                    //        nbOfMaxConcurrentQueueActivators.Value
+                    //        , () => hasItem = dequeueAction());
+                    //}
+                    //else
+                    //{
+                    hasItem = dequeueAction();
+                    //}
                     return hasItem;
                 }
             }
