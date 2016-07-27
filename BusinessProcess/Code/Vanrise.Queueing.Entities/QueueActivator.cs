@@ -10,17 +10,18 @@ namespace Vanrise.Queueing.Entities
 {
     public abstract class QueueActivator : IDisposable
     {
-        static ConcurrentDictionary<int, int> s_nbOfMaxConcurrentActivators = new ConcurrentDictionary<int, int>();
+        static ConcurrentDictionary<string, int> s_nbOfMaxConcurrentActivators = new ConcurrentDictionary<string, int>();
         public virtual int NbOfMaxConcurrentActivators
         {
             get
             {
                 int nbOfConcurrentActivators;
-                if(!s_nbOfMaxConcurrentActivators.TryGetValue(this.ConfigId, out nbOfConcurrentActivators))
+                string activatorName = this.GetType().Name;
+                if (!s_nbOfMaxConcurrentActivators.TryGetValue(activatorName, out nbOfConcurrentActivators))
                 {
-                    if (!int.TryParse(ConfigurationManager.AppSettings[String.Format("Queue_NbOfMaxConcurrentActivators_{0}", this.ConfigId)], out nbOfConcurrentActivators))
+                    if (!int.TryParse(ConfigurationManager.AppSettings[String.Format("Queue_NbOfMaxConcurrentActivators_{0}", activatorName)], out nbOfConcurrentActivators))
                         nbOfConcurrentActivators = 5;
-                    s_nbOfMaxConcurrentActivators.TryAdd(this.ConfigId, nbOfConcurrentActivators);
+                    s_nbOfMaxConcurrentActivators.TryAdd(activatorName, nbOfConcurrentActivators);
                 }
                 return nbOfConcurrentActivators;
             }
