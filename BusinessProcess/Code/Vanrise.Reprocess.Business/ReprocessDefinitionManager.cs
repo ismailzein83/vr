@@ -76,6 +76,24 @@ namespace Vanrise.Reprocess.Business
             return updateOperationOutput;
         }
 
+        public IEnumerable<ReprocessDefinitionInfo> GetReprocessDefinitionsInfo(ReprocessDefinitionInfoFilter filter)
+        {
+            var allReprocessDefinitions = this.GetCachedReprocessDefinitions();
+
+            if (filter != null)
+            {
+                Func<ReprocessDefinition, bool> filterExpression = (x) =>
+                {
+                    return true;
+                };
+                return allReprocessDefinitions.FindAllRecords(filterExpression).MapRecords(ReprocessDefinitionMapper);
+            }
+            else
+            {
+                return allReprocessDefinitions.MapRecords(ReprocessDefinitionMapper);
+            }
+        }
+
         #endregion
 
 
@@ -112,7 +130,7 @@ namespace Vanrise.Reprocess.Business
 
         #region Mappers
 
-        public ReprocessDefinitionDetail ReprocessDefinitionDetailMapper(ReprocessDefinition reprocessDefinition)
+        private ReprocessDefinitionDetail ReprocessDefinitionDetailMapper(ReprocessDefinition reprocessDefinition)
         {
             ReprocessDefinitionDetail reprocessDefinitionDetail = new ReprocessDefinitionDetail()
             {
@@ -121,6 +139,20 @@ namespace Vanrise.Reprocess.Business
             return reprocessDefinitionDetail;
         }
 
+
+        private ReprocessDefinitionInfo ReprocessDefinitionMapper(ReprocessDefinition reprocessDefinition)
+        {
+            if (reprocessDefinition == null)
+                return null;
+
+            return new ReprocessDefinitionInfo()
+            {
+                ReprocessDefinitionId = reprocessDefinition.ReprocessDefinitionId,
+                Name = reprocessDefinition.Name
+            };
+        }
         #endregion
+
+
     }
 }

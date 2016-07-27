@@ -52,6 +52,10 @@
       <Project>{eb3cf5aa-ec32-4723-81e5-c4a0c0525d05}</Project>
       <Name>Vanrise.BusinessProcess.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Reprocess.Entities\Vanrise.Reprocess.Entities.csproj">
+      <Project>{c0f57639-9df9-45fb-a97f-0d97cd8794d0}</Project>
+      <Name>Vanrise.Reprocess.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

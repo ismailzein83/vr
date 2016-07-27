@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Reprocess.Entities;
 
 namespace Vanrise.Reprocess.BP.Arguments
 {
@@ -14,9 +15,11 @@ namespace Vanrise.Reprocess.BP.Arguments
 
         public DateTime ToTime { get; set; }
 
+        public ChunkTime ChunkTime { get; set; }
+
         public override string GetTitle()
         {
-            throw new NotImplementedException();
+            return String.Format("Reprocess from {0} to {1}", FromTime, ToTime);
         }
     }
 }

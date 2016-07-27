@@ -105,6 +105,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
@@ -138,9 +142,13 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Reprocess\Constants\ReprocessChunkTimeEnum.js" />
     <Content Include="Reprocess\Constants\ModuleConfig.js" />
+    <Content Include="Reprocess\Directives\ReprocessDefinition\reprocess-reprocessdefinition-selector.js" />
     <Content Include="Reprocess\Directives\ReprocessDefinition\reprocess-reprocessdefinition-grid.js" />
     <Content Include="Reprocess\Directives\ReprocessDefinition\Templates\ReprocessDefinitionGridTemplate.html" />
+    <Content Include="Reprocess\Directives\ReprocessInput\reprocess-reprocessprocess.js" />
+    <Content Include="Reprocess\Directives\ReprocessInput\Templates\ReprocessProcessTemplate.html" />
     <Content Include="Reprocess\Services\APIServices\ReprocessDefinitionAPIService.js" />
     <Content Include="Reprocess\Services\ReprocessDefinitionService.js" />
     <Content Include="Reprocess\Views\ReprocessDefinition\ReprocessDefinitionEditor.html" />

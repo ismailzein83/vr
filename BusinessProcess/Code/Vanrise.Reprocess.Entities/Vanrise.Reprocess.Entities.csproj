@@ -49,6 +49,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReprocessDefinition\ReprocessDefinition.cs" />
     <Compile Include="ReprocessDefinition\ReprocessDefinitionDetail.cs" />
+    <Compile Include="ReprocessDefinition\ReprocessDefinitionInfo.cs" />
+    <Compile Include="ReprocessDefinition\ReprocessDefinitionInfoFilter.cs" />
     <Compile Include="ReprocessDefinition\ReprocessDefinitionQuery.cs" />
   </ItemGroup>
   <ItemGroup>

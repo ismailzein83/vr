@@ -19,6 +19,12 @@
             });
         }
 
+        function GetReprocessDefinitionsInfo(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Reprocess_ModuleConfig.moduleName, controllerName, "GetReprocessDefinitionsInfo"), {
+                serializedFilter: serializedFilter
+            });
+        }
+
         function AddReprocessDefinition(reprocessDefinitionItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(Reprocess_ModuleConfig.moduleName, controllerName, 'AddReprocessDefinition'), reprocessDefinitionItem);
         }
@@ -33,6 +39,7 @@
             GetReprocessDefinition: GetReprocessDefinition,
             AddReprocessDefinition: AddReprocessDefinition,
             UpdateReprocessDefinition: UpdateReprocessDefinition,
+            GetReprocessDefinitionsInfo: GetReprocessDefinitionsInfo
         });
     }
 

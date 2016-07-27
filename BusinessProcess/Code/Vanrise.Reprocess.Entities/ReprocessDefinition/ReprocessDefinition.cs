@@ -6,6 +6,18 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Reprocess.Entities
 {
+    public enum ChunkTime
+    {
+        FiveMinutes = 5,
+        TenMinutes = 10,
+        FifteenMinutes = 15,
+        ThirtyMinutes = 30,
+        OneHour = 60,
+        TwoHours = 120,
+        ThreeHours = 180,
+        SixHours = 360
+    }
+
     public class ReprocessDefinition
     {
         public int ReprocessDefinitionId { get; set; }

@@ -44,5 +44,13 @@ namespace Vanrise.Reprocess.Web.Controllers
         {
             return _manager.UpdateReprocessDefinition(reprocessDefinitionItem);
         }
+
+        [HttpGet]
+        [Route("GetReprocessDefinitionsInfo")]
+        public IEnumerable<ReprocessDefinitionInfo> GetReprocessDefinitionsInfo(string serializedFilter)
+        {
+            ReprocessDefinitionInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<ReprocessDefinitionInfoFilter>(serializedFilter) : null;
+            return _manager.GetReprocessDefinitionsInfo(filter);
+        }
     }
 }
