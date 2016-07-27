@@ -13,7 +13,9 @@ namespace TOne.WhS.DBSync.Business
         SaleCodeDBSyncDataManager dbSyncDataManager;
         SourceCodeDataManager dataManager;
         Dictionary<string, SaleZone> allSaleZones;
-        Dictionary<string, CodeGroup> allCodeGroups;
+        MigrationContext _context;
+      
+        
         public SaleCodeMigrator(MigrationContext context)
             : base(context)
         {
@@ -21,9 +23,8 @@ namespace TOne.WhS.DBSync.Business
             dataManager = new SourceCodeDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
             var dbTableSaleZone = Context.DBTables[DBTableName.SaleZone];
-            var dbTableCodeGroup = Context.DBTables[DBTableName.CodeGroup];
             allSaleZones = (Dictionary<string, SaleZone>)dbTableSaleZone.Records;
-            allCodeGroups = (Dictionary<string, CodeGroup>)dbTableCodeGroup.Records;
+           _context = context;
         }
 
         public override void Migrate(MigrationInfoContext context)
@@ -50,11 +51,9 @@ namespace TOne.WhS.DBSync.Business
             SaleZone saleZone = null;
             if (allSaleZones != null)
                 allSaleZones.TryGetValue(sourceItem.ZoneId.ToString(), out saleZone);
-
-            CodeGroup codeGroup = null;
-            if (allCodeGroups != null)
-                allCodeGroups.TryGetValue(sourceItem.CodeGroup, out codeGroup);
-
+            CodeGroupMigrator codeGroupMigrator = new CodeGroupMigrator(_context);
+            CodeGroup codeGroup = codeGroupMigrator.GetMatchCodeGroup(sourceItem.Code);
+           
             if (codeGroup != null & saleZone != null)
                 return new SaleCode
                     {
@@ -77,5 +76,7 @@ namespace TOne.WhS.DBSync.Business
         {
 
         }
+
+       
     }
 }
