@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,18 @@ namespace Vanrise.AccountBalance.Data.SQL
                 accountsIds = string.Join<long>(",", query.AccountsIds);
 
             return GetItemsSP("[VR_AccountBalance].[sp_BillingTransaction_GetFiltered]", BillingTransactionMapper, accountsIds);
+        }
+
+        public void GetBillingTransactionsByBalanceUpdated(Action<BillingTransaction> onBillingTransactionReady)
+        {
+            ExecuteReaderSP("[VR_AccountBalance].[sp_BillingTransaction_GetBalanceNotUpdated]",
+                (reader) =>
+                {
+                    while (reader.Read())
+                    {
+                        onBillingTransactionReady(BillingTransactionMapper(reader));
+                    }
+                });
         }
         #endregion
 

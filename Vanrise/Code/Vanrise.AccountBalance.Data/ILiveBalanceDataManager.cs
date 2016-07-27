@@ -10,5 +10,7 @@ namespace Vanrise.AccountBalance.Data
     public interface ILiveBalanceDataManager:IDataManager
     {
         LiveBalance GetLiveBalance(long accountId);
+
+        bool UpdateBalance(long accountId, List<long> billingTransactionIds, decimal amount);
     }
 }

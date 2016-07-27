@@ -24,6 +24,13 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return GetItemSP("[VR_AccountBalance].[sp_LiveBalance_GetById]", LiveBalanceMapper, accountId);
         }
+        public bool UpdateBalance(long accountId, List<long> billingTransactionIds, decimal amount)
+        {
+            string billingTransactionIDs = null;
+            if (billingTransactionIds != null && billingTransactionIds.Count() > 0)
+                billingTransactionIDs = string.Join<long>(",", billingTransactionIds);
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_UpdateBalance]",accountId, billingTransactionIDs,amount) > 0);
+        }
         #endregion
 
         #region Mappers

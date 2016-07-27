@@ -91,6 +91,36 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.AccountBalance.BP">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.BP.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.BP.Activities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.BP.Activities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.BP.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.BP.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.Web">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>

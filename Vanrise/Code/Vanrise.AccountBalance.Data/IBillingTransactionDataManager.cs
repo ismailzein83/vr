@@ -11,5 +11,6 @@ namespace Vanrise.AccountBalance.Data
     {
         IEnumerable<BillingTransaction> GetFilteredBillingTransactions(BillingTransactionQuery query);
         bool Insert(BillingTransaction billingTransaction, out long billingTransactionId);
+        void GetBillingTransactionsByBalanceUpdated(Action<BillingTransaction> onBillingTransactionReady);
     }
 }

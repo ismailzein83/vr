@@ -156,6 +156,15 @@
     <Reference Include="TOne.WhS.BusinessEntity.Web">
       <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.AccountBalance.BP">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.BP.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.BP.Activities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.BP.Activities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.BP.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.BP.Arguments.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.AccountBalance.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Business.dll</HintPath>

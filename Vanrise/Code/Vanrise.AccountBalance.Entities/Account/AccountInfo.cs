@@ -8,7 +8,10 @@ namespace Vanrise.AccountBalance.Entities
 {
     public class AccountInfo
     {
+        public const string BEInfoType = "VRAccountBalance_AccountInfo";
         public string Name { get; set; }
+
+        public int CurrencyId { get; set; }
 
         public string StatusDescription { get; set; }
     }

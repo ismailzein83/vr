@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.AccountBalance.BP.AccountBalanceUpdateProcess" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="Vanrise.AccountBalance.BP.AccountBalanceUpdateProcess_1"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.AccountBalance.BP.AccountBalanceUpdateProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
@@ -8,8 +8,17 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
- xmlns:vaba="clr-namespace:Vanrise.AccountBalance.BP.Activities;assembly=Vanrise.AccountBalance.BP.Activities"
+ xmlns:vaba="clr-namespace:Vanrise.AccountBalance.BP.Arguments;assembly=Vanrise.AccountBalance.BP.Arguments"
+ xmlns:vaba1="clr-namespace:Vanrise.AccountBalance.BP.Activities;assembly=Vanrise.AccountBalance.BP.Activities"
+ xmlns:vae="clr-namespace:Vanrise.AccountBalance.Entities;assembly=Vanrise.AccountBalance.Entities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(vaba:AccountBalanceUpdateProcessInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Vanrise.AccountBalance.BP.AccountBalanceUpdateProcess_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System</x:String>
@@ -17,6 +26,9 @@
       <x:String>System.Data</x:String>
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+      <x:String>Vanrise.AccountBalance.BP.Arguments</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -33,6 +45,12 @@
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>Vanrise.AccountBalance.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.AccountBalance.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.AccountBalance.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.AccountBalance.BP</AssemblyReference>
     </sco:Collection>
@@ -40,21 +58,83 @@
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="s:DateTime" Name="nextClosingDate" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadBillingTransactionsStatus" />
+      <Variable x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue)" Name="OutputQueuePendingUsageUpdates" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="LoadingPendingUsageUpdateStatus" />
     </Sequence.Variables>
-    <vaba:GetNextBalanceClosingDate sap2010:WorkflowViewState.IdRef="GetNextBalanceClosingDate_1">
-      <vaba:GetNextBalanceClosingDate.NextClosingDate>
+    <vaba1:GetNextBalanceClosingDate sap2010:WorkflowViewState.IdRef="GetNextBalanceClosingDate_1">
+      <vaba1:GetNextBalanceClosingDate.NextClosingDate>
         <OutArgument x:TypeArguments="s:DateTime">
           <mca:CSharpReference x:TypeArguments="s:DateTime">nextClosingDate</mca:CSharpReference>
         </OutArgument>
-      </vaba:GetNextBalanceClosingDate.NextClosingDate>
-    </vaba:GetNextBalanceClosingDate>
+      </vaba1:GetNextBalanceClosingDate.NextClosingDate>
+    </vaba1:GetNextBalanceClosingDate>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadBillingTransactionsStatus</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">new AsyncActivityStatus();</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_2">
-      <vaba:LoadNewBillingTransactions sap2010:WorkflowViewState.IdRef="LoadNewBillingTransactions_1" />
-      <vaba:ProcessNewBillingTransactions sap2010:WorkflowViewState.IdRef="ProcessNewBillingTransactions_1" />
+      <Parallel.Variables>
+        <Variable x:TypeArguments="vq:BaseQueue(vae:BillingTransactionBatch)" Name="OutputQueueNewBillingTransactions" />
+      </Parallel.Variables>
+      <vaba1:LoadNewBillingTransactions sap2010:WorkflowViewState.IdRef="LoadNewBillingTransactions_1">
+        <vaba1:LoadNewBillingTransactions.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vae:BillingTransactionBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:BillingTransactionBatch)">OutputQueueNewBillingTransactions</mca:CSharpReference>
+          </InOutArgument>
+        </vaba1:LoadNewBillingTransactions.OutputQueue>
+        <vaba1:LoadNewBillingTransactions.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadBillingTransactionsStatus</mca:CSharpReference>
+          </OutArgument>
+        </vaba1:LoadNewBillingTransactions.Status>
+      </vaba1:LoadNewBillingTransactions>
+      <vaba1:ProcessNewBillingTransactions Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessNewBillingTransactions_1">
+        <vaba1:ProcessNewBillingTransactions.InputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vae:BillingTransactionBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:BillingTransactionBatch)">OutputQueueNewBillingTransactions</mca:CSharpReference>
+          </InOutArgument>
+        </vaba1:ProcessNewBillingTransactions.InputQueue>
+        <vaba1:ProcessNewBillingTransactions.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadBillingTransactionsStatus</mca:CSharpValue>
+          </InArgument>
+        </vaba1:ProcessNewBillingTransactions.PreviousActivityStatus>
+      </vaba1:ProcessNewBillingTransactions>
     </Parallel>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_3">
-      <vaba:LoadPendingUsageUpdates sap2010:WorkflowViewState.IdRef="LoadPendingUsageUpdates_1" />
-      <vaba:ProcessPendingUsageUpdates sap2010:WorkflowViewState.IdRef="ProcessPendingUsageUpdates_1" />
+      <vaba1:LoadPendingUsageUpdates sap2010:WorkflowViewState.IdRef="LoadPendingUsageUpdates_1">
+        <vaba1:LoadPendingUsageUpdates.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue)">OutputQueuePendingUsageUpdates</mca:CSharpReference>
+          </InOutArgument>
+        </vaba1:LoadPendingUsageUpdates.OutputQueue>
+        <vaba1:LoadPendingUsageUpdates.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">LoadingPendingUsageUpdateStatus</mca:CSharpReference>
+          </OutArgument>
+        </vaba1:LoadPendingUsageUpdates.Status>
+      </vaba1:LoadPendingUsageUpdates>
+      <vaba1:ProcessPendingUsageUpdates Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessPendingUsageUpdates_1">
+        <vaba1:ProcessPendingUsageUpdates.InputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue)">OutputQueuePendingUsageUpdates</mca:CSharpReference>
+          </InOutArgument>
+        </vaba1:ProcessPendingUsageUpdates.InputQueue>
+        <vaba1:ProcessPendingUsageUpdates.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">LoadingPendingUsageUpdateStatus</mca:CSharpValue>
+          </InArgument>
+        </vaba1:ProcessPendingUsageUpdates.PreviousActivityStatus>
+      </vaba1:ProcessPendingUsageUpdates>
     </Parallel>
     <If sap2010:WorkflowViewState.IdRef="If_1">
       <If.Condition>
@@ -64,15 +144,16 @@
       </If.Condition>
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
-          <vaba:CreateBalanceClosingPeriod sap2010:WorkflowViewState.IdRef="CreateBalanceClosingPeriod_1" />
+          <vaba1:CreateBalanceClosingPeriod sap2010:WorkflowViewState.IdRef="CreateBalanceClosingPeriod_1" />
         </Sequence>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>d05DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQWNjb3VudEJhbGFuY2UuQlBcQWNjb3VudEJhbGFuY2VVcGRhdGVQcm9jZXNzLnhhbWwNKANIDgIBASwFMiYCAQ0zBTYQAgEKNwU6EAIBBzsFRgoCAQIvCy9iAgEONAc0aQIBDDUHNW8CAQs4BzhjAgEJOQc5aQIBCD4LPmsCAQNCCUQUAgEFQwtDbQIBBg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d05DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQWNjb3VudEJhbGFuY2UuQlBcQWNjb3VudEJhbGFuY2VVcGRhdGVQcm9jZXNzLnhhbWwYOgOYAQ4CAQFBBUcnAgFSSAVTDgIBRVQFcBACASZxBYoBEAIBC4sBBZYBCgIBAkQLRGICAVNQC1BxAgFMSwtLfAIBRlgHYyoCATZkB28tAgEncgd9JwIBGX4HiQEqAgEMjgELjgFrAgEDkgEJlAEUAgEJYA1gfgIBPlsNW5UBAgE3bA1sdgIBL2cNZ5UBAgEoeg16gAECASB1DXWMAQIBGoYBDYYBeAIBE4EBDYEBjAECAQ2TAQuTAW4CAQo=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="GetNextBalanceClosingDate_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="554,62" />
       <sap2010:ViewStateData Id="LoadNewBillingTransactions_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ProcessNewBillingTransactions_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="554,86" />
@@ -89,14 +170,14 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="554,296" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,734">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,836">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.AccountBalance.BP.AccountBalanceUpdateProcess_1" sap:VirtualizedContainerService.HintSize="616,814" />
+      <sap2010:ViewStateData Id="Vanrise.AccountBalance.BP.AccountBalanceUpdateProcess_1" sap:VirtualizedContainerService.HintSize="616,916" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

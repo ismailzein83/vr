@@ -47,19 +47,26 @@
     <Compile Include="BalanceAlertRule\BalanceAlertRule.cs" />
     <Compile Include="BalanceAlertRule\BalanceAlertSettings.cs" />
     <Compile Include="BalanceAlertRule\BalanceAlertThresholdConfig.cs" />
+    <Compile Include="BalanceUsageQueue\BalanceUsageDetail.cs" />
+    <Compile Include="BalanceUsageQueue\BalanceUsageQueue.cs" />
     <Compile Include="BillingTransactionType\BillingTransactionType.cs" />
+    <Compile Include="BillingTransaction\BillingTransactionBatch.cs" />
     <Compile Include="BillingTransaction\BillingTransactionDetail.cs" />
     <Compile Include="BillingTransaction\BillingTransactionQuery.cs" />
     <Compile Include="Config\AccountBalanceConfig.cs" />
     <Compile Include="LiveBalance\CurrentAccountBalance.cs" />
     <Compile Include="LiveBalance\LiveBalanceDetail.cs" />
     <Compile Include="Config\BalanceAlertConfig.cs" />
-    <Compile Include="UsageBalanceUpdate.cs" />
+    <Compile Include="BalanceUsageQueue\UsageBalanceUpdate.cs" />
     <Compile Include="BillingTransaction\BillingTransaction.cs" />
     <Compile Include="LiveBalance\LiveBalance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
+      <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
+      <Name>Vanrise.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>

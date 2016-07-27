@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.AccountBalance.Data;
 using Vanrise.AccountBalance.Entities;
 
 namespace Vanrise.AccountBalance.Business
 {
     public class UsageBalanceManager
     {
-        public void UpdateUsageBalance(List<UsageBalanceUpdate> usages)
+        public void UpdateUsageBalance(BalanceUsageDetail balanceUsageDetail)
         {
-            throw new NotImplementedException();
+            IBalanceUsageQueueDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBalanceUsageQueueDataManager>();
+            dataManager.UpdateUsageBalance(balanceUsageDetail);
         }
     }
 }

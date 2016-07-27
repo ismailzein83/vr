@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.AccountBalance.Entities
 {
-    public class UsageBalanceUpdate
+    public class BalanceUsageQueue
     {
-        public long AccountId { get; set; }
-
-        public Decimal Value { get; set; }
+        public long BalanceUsageQueueId { get; set; }
+        public BalanceUsageDetail UsageDetails { get; set; }
     }
 }
