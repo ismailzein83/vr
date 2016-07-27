@@ -65,11 +65,11 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     var zoneValue = analyticRecord.DimensionValues[3];
                     if (zoneValue != null)
                         customerFormatted.Destination = zoneValue.Name;
-                    var saleRateValue = analyticRecord.DimensionValues[5];
+                    var saleRateValue = analyticRecord.DimensionValues[6];
                     if (saleRateValue != null)
                         customerFormatted.SaleRate = ReportHelpers.FormatNumberDigitRate(Convert.ToDecimal(saleRateValue.Value ?? 0.0));
 
-                    var costRateValue = analyticRecord.DimensionValues[6];
+                    var costRateValue = analyticRecord.DimensionValues[5];
                     if (costRateValue != null)
                         customerFormatted.CostRate = ReportHelpers.FormatNumberDigitRate(Convert.ToDecimal(costRateValue.Value ?? 0.0));
 

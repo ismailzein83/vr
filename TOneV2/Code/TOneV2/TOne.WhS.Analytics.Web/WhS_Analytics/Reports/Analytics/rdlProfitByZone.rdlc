@@ -241,7 +241,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Dur Net</Value>
+                              <Value>Net Duration</Value>
                               <Style>
                                 <FontWeight>SemiBold</FontWeight>
                                 <Color>DarkRed</Color>
@@ -262,6 +262,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -982,7 +983,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Duration Net</Value>
+                              <Value>Net Duration</Value>
                               <Style>
                                 <FontWeight>SemiBold</FontWeight>
                                 <Color>DarkRed</Color>

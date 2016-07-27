@@ -15,7 +15,7 @@
               <Width>1in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1in</Width>
+              <Width>1.14583in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1in</Width>
@@ -137,7 +137,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Dur Net</Value>
+                              <Value>Net Duration</Value>
                               <Style>
                                 <FontSize>12pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2056,7 +2056,13 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox53</rd:DefaultName>
+                      <Visibility>
+                        <Hidden>=IIF(Parameters!IsService.Value = "false", True, False)</Hidden>
+                      </Visibility>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2274,14 +2280,14 @@
         </TablixRowHierarchy>
         <DataSetName>ZoneSummaries</DataSetName>
         <Height>1.75in</Height>
-        <Width>10.24999in</Width>
+        <Width>10.39582in</Width>
         <Style />
       </Tablix>
     </ReportItems>
     <Height>1.75in</Height>
     <Style />
   </Body>
-  <Width>10.24999in</Width>
+  <Width>10.39582in</Width>
   <Page>
     <PageHeader>
       <Height>2.25in</Height>

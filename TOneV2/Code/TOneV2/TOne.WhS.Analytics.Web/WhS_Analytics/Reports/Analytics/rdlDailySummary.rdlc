@@ -138,7 +138,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Duration Net</Value>
+                              <Value>Net Duration</Value>
                               <Style>
                                 <FontWeight>SemiBold</FontWeight>
                                 <Color>DarkRed</Color>
@@ -709,7 +709,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Duration Net</Value>
+                              <Value>Net Duration</Value>
                               <Style>
                                 <FontWeight>SemiBold</FontWeight>
                                 <Color>DarkRed</Color>

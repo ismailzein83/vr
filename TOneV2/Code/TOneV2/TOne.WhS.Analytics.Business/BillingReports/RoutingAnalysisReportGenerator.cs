@@ -134,13 +134,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         routingAnalysisFormatteds[routingAnalysis.SaleZone + routingAnalysis.Supplier] = routingAnalysis;
                     listRoutingAnalysisFormatteds.Add(routingAnalysis);
 
-                    TotalDuration += routingAnalysis.Duration != null ? routingAnalysis.Duration : 0;
-                    TotalCost += routingAnalysis.CostNet != null ? (double)routingAnalysis.CostNet : 0;
-                    TotalSale += routingAnalysis.SaleNet != null ? (double)routingAnalysis.SaleNet : 0;
-                    TotalProfit += (double)((double)routingAnalysis.SaleNet - (double)routingAnalysis.CostNet);
+                    TotalDuration += routingAnalysis.Duration;
+                    TotalCost += routingAnalysis.CostNet;
+                    TotalSale += routingAnalysis.SaleNet;
+                    TotalProfit += routingAnalysis.SaleNet - routingAnalysis.CostNet;
                 }
 
-            parameters.TotalDuration =TotalDuration;
+            parameters.TotalDuration = TotalDuration;
             parameters.TotalSale = TotalSale;
             parameters.TotalCost = TotalSale;
             parameters.TotalProfit = TotalProfit;

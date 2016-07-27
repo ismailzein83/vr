@@ -18,7 +18,7 @@
               <Width>0.99669in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.99669in</Width>
+              <Width>1.33002in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.99669in</Width>
@@ -196,7 +196,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Dur Net</Value>
+                              <Value>Net Duration</Value>
                               <Style>
                                 <FontSize>12pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1268,7 +1268,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Dur Net</Value>
+                              <Value>Net Duration</Value>
                               <Style>
                                 <FontSize>12pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -3007,14 +3007,14 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
         <DataSetName>ZoneSummaryDetailed</DataSetName>
         <Left>0.01389in</Left>
         <Height>1.5in</Height>
-        <Width>17.1217in</Width>
+        <Width>17.45503in</Width>
         <Style />
       </Tablix>
     </ReportItems>
     <Height>1.5in</Height>
     <Style />
   </Body>
-  <Width>17.13559in</Width>
+  <Width>17.46892in</Width>
   <Page>
     <PageHeader>
       <Height>2.25in</Height>

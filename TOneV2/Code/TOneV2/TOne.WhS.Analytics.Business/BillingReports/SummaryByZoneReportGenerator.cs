@@ -131,7 +131,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         analyticRecord.MeasureValues.TryGetValue("CostRate", out rate);
                     else
                         analyticRecord.MeasureValues.TryGetValue("SaleRate", out rate);
-                    summaryByZone.Rate = (rate == null) ? 0.0 : Convert.ToInt32(rate.Value ?? 0.0);
+                    summaryByZone.Rate = (rate == null) ? (decimal)0.0 : Convert.ToDecimal(rate.Value ?? 0.0);
                     summaryByZone.RateFormatted = ReportHelpers.FormatNumberDigitRate(summaryByZone.Rate);
 
                     MeasureValue durationInMinutes;
@@ -155,7 +155,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         analyticRecord.MeasureValues.TryGetValue("CostExtraCharges", out extraChargeValue);
                     else
                         analyticRecord.MeasureValues.TryGetValue("SaleExtraCharges", out extraChargeValue);
-                    summaryByZone.ExtraChargeValue = (extraChargeValue == null) ? 0.0 : Convert.ToDouble(extraChargeValue.Value ?? 0.0);
+                    summaryByZone.ExtraChargeValue = (extraChargeValue == null) ? (decimal)0.0 : Convert.ToDecimal(extraChargeValue.Value ?? 0.0);
                     summaryByZone.CommissionValueFormatted = ReportHelpers.FormatNumber(summaryByZone.ExtraChargeValue);
 
                     listSummaryByZone.Add(summaryByZone);
@@ -182,7 +182,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
             list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.ToString(), IsVisible = true });
-            list.Add("Title", new RdlcParameter { Value = String.Format("Summary By Zone ({0})", parameters.IsCost ? "Purchase" : "Sale"), IsVisible = true });
+            list.Add("Title", new RdlcParameter { Value = String.Format("Summary By Zone -{0}", parameters.IsCost ? "Purchase" : "Sale"), IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
             list.Add("Customer", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.CustomersId, "Customers"), IsVisible = true });

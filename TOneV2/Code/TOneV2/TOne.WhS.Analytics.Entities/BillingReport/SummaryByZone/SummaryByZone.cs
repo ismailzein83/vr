@@ -14,7 +14,7 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
 
         public int Calls { get; set; }
 
-        public double? Rate { get; set; }
+        public decimal? Rate { get; set; }
         public string RateFormatted { get; set; }
         public decimal? DurationNet { get; set; }
         public string DurationNetFormatted { get; set; }
@@ -25,11 +25,11 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         public double? Net { get; set; }
         public string NetFormatted { get; set; }
 
-        public double? CommissionValue { get; set; }
+        public decimal? CommissionValue { get; set; }
 
         public string CommissionValueFormatted { get; set; }
 
-        public double? ExtraChargeValue { get; set; }
+        public decimal? ExtraChargeValue { get; set; }
 
                 
         /// <summary>
