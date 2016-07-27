@@ -66,7 +66,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public string Name { get; set; }
 
-        public List<long> SaleZoneIds { get; set; }
+        public List<long> SupplierZoneIds { get; set; }
 
         public int CommitedVolume { get; set; }
 

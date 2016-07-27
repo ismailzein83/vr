@@ -726,7 +726,12 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
                 return splitedFileName[0];
             }
         }
-       
+
+    }
+
+    function round(value, precision) {
+        var multiplier = Math.pow(10, precision || 0);
+        return Math.round(value * multiplier) / multiplier;
     }
 
     function getDateFromDateTime(dateTime) {
@@ -782,7 +787,9 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         trimLeft: trimLeft,
         trim: trim,
         getUploadedFileName: getUploadedFileName,
-        getDateFromDateTime: getDateFromDateTime
+        getDateFromDateTime: getDateFromDateTime,
+        round: round
+        
     });
 
 }]);
