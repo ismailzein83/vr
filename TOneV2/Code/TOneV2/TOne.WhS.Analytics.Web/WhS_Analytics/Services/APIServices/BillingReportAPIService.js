@@ -12,7 +12,7 @@
             ExportCarrierProfile: ExportCarrierProfile
         };
 
-        function ExportCarrierProfile(fromDate, toDate, topDestination, customerId, currencyId, currencyName) {
+        function ExportCarrierProfile(fromDate, toDate, topDestination, customerId, currencyId, currencySymbol, currencyName) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Analytics_ModuleConfig.moduleName, controllerName, 'ExportCarrierProfile'),
                 {
                     FromDate: fromDate,
@@ -20,6 +20,7 @@
                     TopDestination: topDestination,
                     CustomerId: customerId,
                     CurrencyID: currencyId,
+                    CurrencySymbol: currencySymbol,
                     CurrencyName: currencyName
                 },
                 {

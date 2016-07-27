@@ -56,27 +56,6 @@ namespace TOne.WhS.Analytics.Business
                 analyticQuery.Query.MeasureFields.Add("SaleNet");
             }
 
-
-            //if (!String.IsNullOrEmpty(parameters.CustomersId))
-            //{
-            //    DimensionFilter dimensionFilter = new DimensionFilter()
-            //    {
-            //        Dimension = "Customer",
-            //        FilterValues = parameters.CustomersId.Split(',').ToList().Cast<object>().ToList()
-            //    };
-            //    analyticQuery.Query.Filters.Add(dimensionFilter);
-            //}
-
-            //if (!String.IsNullOrEmpty(parameters.SuppliersId))
-            //{
-            //    DimensionFilter dimensionFilter = new DimensionFilter()
-            //    {
-            //        Dimension = "Supplier",
-            //        FilterValues = parameters.SuppliersId.Split(',').ToList().Cast<object>().ToList()
-            //    };
-            //    analyticQuery.Query.Filters.Add(dimensionFilter);
-            //}
-
             List<BusinessCaseStatus> listBusinessCaseStatus = new List<BusinessCaseStatus>();
 
             var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
@@ -96,6 +75,11 @@ namespace TOne.WhS.Analytics.Business
                     else
                         analyticRecord.MeasureValues.TryGetValue("SaleNet", out net);
                     businessCaseStatus.Amount = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
+
+
+                    MeasureValue saleDuration;
+                    analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
+                    businessCaseStatus.Durations = Convert.ToDecimal(saleDuration.Value ?? 0.0);
 
                     listBusinessCaseStatus.Add(businessCaseStatus);
                 }
@@ -134,7 +118,7 @@ namespace TOne.WhS.Analytics.Business
             style.Font.Color = Color.FromArgb(255, 0, 0);
             style.Font.Size = 14;
             style.Font.IsBold = true;
-            string currency = String.Format("Currency: [{0}] {1}", businessCaseStatusQuery.currencyId, businessCaseStatusQuery.currencyName);
+            string currency = String.Format("Currency: [{0}] {1}", businessCaseStatusQuery.currencySymbol, businessCaseStatusQuery.currencyName);
             string chartTitle = "Monthly Traffic " + _carrierAccountManager.GetCarrierAccountName(businessCaseStatusQuery.customerId) + " As Customer " + currency;
             CreateWorkSheetDurationAmount(wbk, "Monthly Traffic as Customer", listBusinessCaseStatusDurationAmountSale, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, chartTitle, style, currency);
             CreateWorkSheet(wbk, "Traf Top Dest Amt  Cus", listBusinessCaseStatusSaleAmount, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Amount Customer", style);

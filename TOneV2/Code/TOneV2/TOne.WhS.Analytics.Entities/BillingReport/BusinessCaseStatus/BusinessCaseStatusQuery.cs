@@ -16,6 +16,7 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         public  int customerId { get; set; }
         public int topDestination { get; set; }
         public int currencyId { get; set; }
+        public string currencySymbol { get; set; }
         public string currencyName { get; set; }
     }
 }
