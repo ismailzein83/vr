@@ -15,3 +15,4 @@ BI				1301 to 1400
 XBooster		1401 to 1500
 Analytic		1501 to 1600
 Retail			1601 to 1700
+Deals			1701 to 1800
