@@ -22,6 +22,16 @@ namespace Vanrise.Queueing
             return executionFlowDefinitions.MapRecords(QueueExecutionFlowDefinitionInfoMapper, null);
         }
 
+        public IEnumerable<QueueExecutionFlowStageInfo> GetExecutionFlowStagesInfo(int executionFlowDefinitionId, QueueExecutionFlowStageFilter filter)
+        {
+            var executionFlowDefinition = GetExecutionFlowDefinition(executionFlowDefinitionId);
+            if (executionFlowDefinition == null)
+                throw new NullReferenceException(string.Format("executionFlowDefinition '{0}'", executionFlowDefinitionId));
+            if (executionFlowDefinition.Stages == null)
+                throw new NullReferenceException(string.Format("executionFlowDefinition.Stages '{0}'", executionFlowDefinitionId));
+            return executionFlowDefinition.Stages.MapRecords(QueueExecutionFlowDefinitionInfoMapper, null);
+        }
+
 
         public string GetExecutionFlowDefinitionTitle(int definitionID)
         {
@@ -180,6 +190,15 @@ namespace Vanrise.Queueing
             queueExecutionFlowDefinitionInfo.ID = queueExecutionFlowDefinition.ID;
             queueExecutionFlowDefinitionInfo.Title = queueExecutionFlowDefinition.Title;
             return queueExecutionFlowDefinitionInfo;
+
+        }
+
+        private QueueExecutionFlowStageInfo QueueExecutionFlowDefinitionInfoMapper(QueueExecutionFlowStage queueExecutionFlowStage)
+        {
+            return new QueueExecutionFlowStageInfo
+            {
+                StageName = queueExecutionFlowStage.StageName
+            };
 
         }
 
