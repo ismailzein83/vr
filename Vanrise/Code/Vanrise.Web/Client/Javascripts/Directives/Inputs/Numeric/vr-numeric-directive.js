@@ -48,7 +48,9 @@
                                 if (arr.length === 0) return;
                                 if (negativeArray.length > 2)
                                     ctrl.value = oldValue;
-                                if (arr.indexOf(".") > -1)
+                                if (negativeArray.length > 1 && ctrl.minValue != undefined && ctrl.minValue >=0 )
+                                    ctrl.value = oldValue;
+                                if (arr.indexOf(".") > -1 )
                                     ctrl.value = oldValue;
                                 if (arr.length === 0) return;
                                 if (arr.length === 1 && (arr[0] == '-')) return;
