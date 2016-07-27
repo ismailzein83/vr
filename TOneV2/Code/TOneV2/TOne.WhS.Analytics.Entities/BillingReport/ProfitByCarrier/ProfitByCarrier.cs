@@ -13,6 +13,7 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         public string FormattedCustomerProfit { get; set; }
         public double SupplierProfit { get; set; }
         public string FormattedSupplierProfit { get; set; }
+        public double TotalBase { get; set; }
         public string Total { get; set; }
     }
 }

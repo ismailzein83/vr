@@ -111,7 +111,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     profitByCarrier.CustomerProfit = Convert.ToDouble(profit.Value ?? 0.0);
                     profitByCarrier.FormattedCustomerProfit = ReportHelpers.FormatNumber(profitByCarrier.CustomerProfit);
 
-                    profitByCarrier.Total = profitByCarrier.FormattedCustomerProfit;
+                    profitByCarrier.TotalBase = profitByCarrier.CustomerProfit;
+                    profitByCarrier.Total = ReportHelpers.FormatNumber(profitByCarrier.TotalBase);
+
                     if (!dictionaryprofitByCustomer.ContainsKey(profitByCarrier.Customer))
                         dictionaryprofitByCustomer[profitByCarrier.Customer] = profitByCarrier;
                 }
@@ -134,12 +136,14 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         var profitBycust = dictionaryprofitByCustomer[profitByCarrier.Customer];
                         profitBycust.SupplierProfit = profitByCarrier.SupplierProfit;
                         profitBycust.FormattedSupplierProfit = profitByCarrier.FormattedSupplierProfit;
-                        profitByCarrier.Total += profitByCarrier.FormattedSupplierProfit;
+                        profitBycust.TotalBase += profitByCarrier.SupplierProfit;
+                        profitBycust.Total = ReportHelpers.FormatNumber(profitBycust.TotalBase);
                     }
                     else
                     {
                         dictionaryprofitByCustomer[profitByCarrier.Customer] = profitByCarrier;
-                        profitByCarrier.Total = profitByCarrier.FormattedSupplierProfit;
+                        profitByCarrier.TotalBase = profitByCarrier.SupplierProfit;
+                        profitByCarrier.Total = ReportHelpers.FormatNumber(profitByCarrier.TotalBase);
                     }
                 }
 

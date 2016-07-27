@@ -30,6 +30,7 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         public string SaleExtraChargeValueFormatted { get; set; }
         public double? Profit { get; set; }
         public string ProfitFormatted { get; set; }
+        public double PercentageProfit { get; set; }
         public string ProfitPercentageFormatted { get; set; }
         public decimal? AvgMin { get; set; }
         public string AvgMinFormatted { get; set; }

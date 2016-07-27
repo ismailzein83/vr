@@ -16,11 +16,18 @@
       </ConnectionProperties>
       <rd:DataSourceID>4cb20e5d-40af-47a8-a9a5-a90f7b1235bb</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="TOneWhSAnalyticsEntitiesBillingReport1">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>891a80ba-0ebf-4f5b-b715-fa507b74f654</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="CarrierSummary">
       <Query>
-        <DataSourceName>TOneWhSAnalyticsEntitiesBillingReport</DataSourceName>
+        <DataSourceName>TOneWhSAnalyticsEntitiesBillingReport1</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
@@ -112,6 +119,10 @@
           <DataField>ProfitFormatted</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="PercentageProfit">
+          <DataField>PercentageProfit</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
+        </Field>
         <Field Name="ProfitPercentageFormatted">
           <DataField>ProfitPercentageFormatted</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -127,9 +138,9 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>TOne.WhS.Analytics.Entities.BillingReport</rd:DataSetName>
-        <rd:TableName>CarrierProfitSummaryFormatted</rd:TableName>
+        <rd:TableName>ProfitByCustomerFormatted</rd:TableName>
         <rd:ObjectDataSourceSelectMethod>GetCarrierProfitSummaryRDLCSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>TOne.WhS.Analytics.Entities.BillingReport.CarrierProfitSummaryFormatted, TOne.WhS.Analytics.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:ObjectDataSourceType>TOne.WhS.Analytics.Entities.BillingReport.ProfitByCustomerFormatted, TOne.WhS.Analytics.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
@@ -1284,14 +1295,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox51">
+                        <Textbox Name="textbox51">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=FormatPercent(Sum(Fields!PercentageProfit.Value), 2)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1303,7 +1314,8 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox51</rd:DefaultName>
+                          <rd:DefaultName>textbox34</rd:DefaultName>
+                          <ZIndex>9</ZIndex>
                           <Style>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -1954,7 +1966,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>% Profit</Value>
                                   <Style>
                                     <FontSize>12pt</FontSize>
                                     <FontWeight>SemiBold</FontWeight>
@@ -2301,14 +2313,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox76">
+                        <Textbox Name="textbox72">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=FormatPercent(Sum(Fields!PercentageProfit.Value), 2)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -2320,7 +2332,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox76</rd:DefaultName>
+                          <ZIndex>33</ZIndex>
                           <Style>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -2328,6 +2340,7 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>

@@ -18,8 +18,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 Query = new AnalyticQuery
                 {
-                    DimensionFields = new List<string> { "Customer", "Supplier"},
-                    MeasureFields = new List<string> { "SaleDuration", "SaleNet", "CostDuration", "CostNet", "CostExtraCharges", "SaleExtraCharges", "Profit" },
+                    DimensionFields = new List<string> { "Customer", "Supplier" },
+                    MeasureFields = new List<string> { "SaleDuration", "SaleNet", "CostDuration", "CostNet", "CostExtraCharges", "SaleExtraCharges", "Profit", "PercentageProfit" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
@@ -64,7 +64,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     var supplierValue = analyticRecord.DimensionValues[1];
                     if (supplierValue != null)
                         carrierSummary.Supplier = supplierValue.Name;
-                                        
+
                     MeasureValue saleDuration;
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
                     carrierSummary.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
@@ -102,6 +102,11 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     carrierSummary.SaleExtraChargeValue = Convert.ToDouble(saleChargesValue.Value ?? 0.0);
                     carrierSummary.SaleExtraChargeValueFormatted = ReportHelpers.FormatNumber(carrierSummary.SaleExtraChargeValue);
 
+                    MeasureValue percentageProfit;
+                    analyticRecord.MeasureValues.TryGetValue("PercentageProfit", out percentageProfit);
+                    carrierSummary.PercentageProfit = Convert.ToDouble(percentageProfit.Value ?? 0.0);
+                    carrierSummary.ProfitPercentageFormatted = ReportHelpers.FormatNumberPercentage(carrierSummary.PercentageProfit);
+
 
 
                     //MeasureValue costCommissionValue;
@@ -119,7 +124,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     carrierSummary.AvgMinFormatted = (carrierSummary.SaleDuration.Value != 0 && carrierSummary.SaleDuration.Value != 0) ? ReportHelpers.FormatNumber((decimal)carrierSummary.SaleNet / carrierSummary.SaleDuration - (decimal)carrierSummary.CostNet / carrierSummary.SaleDuration) : "0.00";
 
-                    carrierSummary.ProfitPercentageFormatted = carrierSummary.SaleNet == 0 ? "" : (carrierSummary.SaleNet.HasValue) ? ReportHelpers.FormatNumberPercentage(carrierSummary.Profit / carrierSummary.SaleNet) : "-100%";
+                    //carrierSummary.ProfitPercentageFormatted = carrierSummary.SaleNet == 0 ? "" : (carrierSummary.SaleNet.HasValue) ? ReportHelpers.FormatNumberPercentage(carrierSummary.Profit / carrierSummary.SaleNet) : "-100%";
 
 
                     listCarrierSummaryDetailed.Add(carrierSummary);

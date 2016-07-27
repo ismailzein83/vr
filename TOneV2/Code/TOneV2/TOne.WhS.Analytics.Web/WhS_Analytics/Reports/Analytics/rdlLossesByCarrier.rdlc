@@ -992,7 +992,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Sum(Fields!SaleNet.Value - Fields!CostNet.Value), 2)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1023,7 +1023,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Sum(Fields!SaleNet.Value - Fields!CostNet.Value), 2)</Value>
+                                  <Value />
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>

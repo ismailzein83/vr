@@ -42,6 +42,7 @@ namespace TOne.WhS.Analytics.Web.Reports.Analytics
                     bool isExchange = (Request.QueryString["isExchange"] != null) ? (Request.QueryString["isExchange"] == "true") : false;
 
                     bool pageBreak = (Request.QueryString["pageBreak"] != null) ? (Request.QueryString["pageBreak"] == "true") : false;
+                    bool groupByProfile = (Request.QueryString["groupByProfile"] != null) ? (Request.QueryString["groupByProfile"] == "true") : false;
 
                     int margin = (Request.QueryString["margin"] != null) ? Convert.ToInt32(Request.QueryString["margin"]) : 10;
                     int top = (Request.QueryString["top"] != null) ? Convert.ToInt32(Request.QueryString["top"]) : 10;
@@ -72,6 +73,7 @@ namespace TOne.WhS.Analytics.Web.Reports.Analytics
                     parameters.Top = top;
                     parameters.CurrencyDescription = String.Format("[{0}] {1}", currency.Symbol, currency.Name);
                     parameters.PageBreak = pageBreak;
+                    parameters.GroupByProfile = groupByProfile;
 
                     IReportGenerator r = rdlc.GetReportGenerator();
 
@@ -91,7 +93,7 @@ namespace TOne.WhS.Analytics.Web.Reports.Analytics
             }
             else
                 throw new Exception("you are not authorized to perform this request");
-    
+
         }
         protected override void Render(HtmlTextWriter writer)
         {
