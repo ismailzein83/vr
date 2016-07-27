@@ -21,7 +21,9 @@ function AnalyticreportManagementController($scope, UtilsService, VRNotification
             };
             VR_Analytic_AnalyticreportService.addAnalyticreport(onAnalyticreportAdded);
         }
-
+        $scope.hasAddAnalyticReportPermission = function () {
+            return VR_Analytic_AnalyticReportAPIService.HasAddAnalyticReportPermission();
+        }
         $scope.searchClicked = function () {
             return mainGridAPI.loadGrid(getFilterObject());
         }

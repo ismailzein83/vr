@@ -66,9 +66,13 @@ app.directive("vrAnalyticAnalyticreportGrid", ['VRNotificationService', 'VRModal
             $scope.gridMenuActions = [{
                 name: "Edit",
                 clicked: editAnalyticReport,
+                haspermission:hasEditAnalyticReportPermission
             }];
         }
+        function hasEditAnalyticReportPermission() {
+            return VR_Analytic_AnalyticReportAPIService.HasEditAnalyticReportPermission();
 
+        }
         function editAnalyticReport(dataItem) {
             var onEditAnalyticReport = function (analyticReportObj) {
                 gridAPI.itemUpdated(analyticReportObj);

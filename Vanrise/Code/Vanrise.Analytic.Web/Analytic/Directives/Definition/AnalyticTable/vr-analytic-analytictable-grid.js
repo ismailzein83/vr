@@ -75,9 +75,15 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalS
             $scope.gridMenuActions = [{
                 name: "Edit",
                 clicked: editTable,
+                haspermission: hasEditAnalyticTablePermission
+            
+            
+
             }];
         }
-
+        function hasEditAnalyticTablePermission() {
+            return VR_Analytic_AnalyticTableAPIService.HasEditAnalyticTablePermission();
+        }
         function editTable(dataItem) {
             var onEditTable = function (tableObj) {
                 gridDrillDownTabs.setDrillDownExtensionObject(tableObj);

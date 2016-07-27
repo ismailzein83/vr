@@ -1,7 +1,7 @@
 ﻿'use strict'
-AnalyticTableManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VRModalService','VR_Analytic_AnalyticTableService'];
+AnalyticTableManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VRModalService', 'VR_Analytic_AnalyticTableService', 'VR_Analytic_AnalyticTableAPIService'];
 
-function AnalyticTableManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, VRModalService, VR_Analytic_AnalyticTableService) {
+function AnalyticTableManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, VRModalService, VR_Analytic_AnalyticTableService, VR_Analytic_AnalyticTableAPIService) {
     var mainGridAPI;
     defineScope();
     load();
@@ -12,6 +12,9 @@ function AnalyticTableManagementController($scope, UtilsService, VRNotificationS
             var filter = {};
             api.loadGrid(filter);
         };
+        $scope.hasAddAnalyticTablePermission = function () {
+            return VR_Analytic_AnalyticTableAPIService.HasAddAnalyticTablePermission();
+        }
         $scope.addTable = function()
         {
             var onAnalyticTableAdded = function (tableObj) {

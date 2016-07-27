@@ -26,9 +26,18 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'AddAnalyticReport'), analyticReport);
         }
 
+        function HasAddAnalyticReportPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Analytic_ModuleConfig.moduleName, controllerName, ['AddAnalyticReport']));
+        }
+
         function UpdateAnalyticReport(analyticReport) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'UpdateAnalyticReport'), analyticReport);
         }
+
+        function HasEditAnalyticReportPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Analytic_ModuleConfig.moduleName, controllerName, ['UpdateAnalyticReport']));
+        }
+
         function GetAnalyticReportConfigTypes() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetAnalyticReportConfigTypes'));
         }
@@ -37,7 +46,9 @@
             GetFilteredAnalyticReports: GetFilteredAnalyticReports,
             GetAnalyticReportById: GetAnalyticReportById,
             UpdateAnalyticReport: UpdateAnalyticReport,
+            HasEditAnalyticReportPermission:HasEditAnalyticReportPermission,
             AddAnalyticReport: AddAnalyticReport,
+            HasAddAnalyticReportPermission:HasAddAnalyticReportPermission,
             GetAnalyticReportConfigTypes: GetAnalyticReportConfigTypes,
         });
     }
