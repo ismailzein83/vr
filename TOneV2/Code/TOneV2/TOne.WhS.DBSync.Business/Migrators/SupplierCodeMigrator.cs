@@ -14,6 +14,7 @@ namespace TOne.WhS.DBSync.Business
         SourceCodeDataManager dataManager;
         Dictionary<string, SupplierZone> allSupplierZones;
         MigrationContext _context;
+        TOne.WhS.BusinessEntity.Business.CodeIterator<CodeGroup> _codeGroupIterator;
 
         public SupplierCodeMigrator(MigrationContext context)
             : base(context)
@@ -23,6 +24,8 @@ namespace TOne.WhS.DBSync.Business
             TableName = dbSyncDataManager.GetTableName();
             var dbTableSupplierZone = Context.DBTables[DBTableName.SupplierZone];
             allSupplierZones = (Dictionary<string, SupplierZone>)dbTableSupplierZone.Records;
+            var codeGroups = (Dictionary<string, CodeGroup>)context.DBTables[DBTableName.CodeGroup].Records;
+            _codeGroupIterator = new CodeIterator<CodeGroup>(codeGroups.Values);
             _context = context;
         }
 
