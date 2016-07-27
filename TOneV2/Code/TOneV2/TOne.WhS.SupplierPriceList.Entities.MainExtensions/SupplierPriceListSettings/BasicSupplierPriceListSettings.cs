@@ -80,7 +80,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                 priceListCodes.Add(new PriceListCode
                                 {
                                     ZoneName = zone,
-                                    Code = null,
+                                    Code = codeGroup != null? codeGroup:null,
                                     EffectiveDate = result
                                 });
                                 continue;
