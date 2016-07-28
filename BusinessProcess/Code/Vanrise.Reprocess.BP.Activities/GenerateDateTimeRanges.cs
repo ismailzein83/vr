@@ -24,16 +24,18 @@ namespace Vanrise.Reprocess.BP.Activities
             DateTime from = this.From.Get(context);
             DateTime to = this.To.Get(context);
             ChunkTime chunkTime = this.ChunkTime.Get(context);
-
+            
+            int intervalInMinutes = (int)chunkTime;
             List<DateTimeRange> dateTimeRanges = new List<DateTimeRange>();
 
             DateTime endDate = from;
+            DateTime startDate = endDate;
 
             while (endDate != to)
             {
-                DateTime startDate = endDate;
+                startDate = endDate;
 
-                DateTime tempToDate = endDate.AddMinutes((int)chunkTime);
+                DateTime tempToDate = endDate.AddMinutes(intervalInMinutes);
                 
                 if (tempToDate > to)
                     endDate = to;
