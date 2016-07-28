@@ -296,6 +296,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Tasks\CustomParser.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
