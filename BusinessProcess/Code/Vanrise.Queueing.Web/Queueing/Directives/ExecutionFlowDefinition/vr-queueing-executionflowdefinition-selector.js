@@ -14,8 +14,8 @@ app.directive('vrQueueingExecutionflowdefinitionSelector', ['VR_Queueing_Executi
                 isrequired: "=",
                 onselectitem: "=",
                 ondeselectitem: "=",
-                isdisabled: "=",
-                customlabel: "@"
+                customlabel: "@",
+                hideremoveicon: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -65,10 +65,11 @@ app.directive('vrQueueingExecutionflowdefinitionSelector', ['VR_Queueing_Executi
             var addCliked = '';
             if (attrs.showaddbutton != undefined)
                 addCliked = 'onaddclicked="addNewExecutionFlow"';
+            var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Title" datavaluefield="ID" isrequired="ctrl.isrequired"'
-                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Execution Flow Definition" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + '<vr-select ' + multipleselection + ' ' + hideremoveicon + '  datatextfield="Title" datavaluefield="ID" isrequired="ctrl.isrequired"'
+                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Execution Flow Definition" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>'
         }
 

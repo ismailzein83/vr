@@ -54,30 +54,34 @@ app.directive('vrQueueingExecutionflowStageSelector', ['VR_Queueing_ExecutionFlo
 
                 api.load = function (payload) {
 
+                    selectorAPI.clearDataSource();
                     var selectedIds;
                     var filter;
 
+                    var executionFlowDefinitionId;
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
+                        executionFlowDefinitionId = payload.executionFlowDefinitionId;
                     }
 
-                    return VR_Queueing_ExecutionFlowDefinitionAPIService.GetExecutionFlowDefinition(-100).then(function (response) {
-                        selectorAPI.clearDataSource();
-                        if (response != null) {
-                            for (var i = 0; i < response.Stages.length; i++) {
-                                ctrl.datasource.push(response.Stages[i]);
-                            }
+                    if (executionFlowDefinitionId != undefined && executionFlowDefinitionId != 0) {
+                        return VR_Queueing_ExecutionFlowDefinitionAPIService.GetExecutionFlowStagesInfo(executionFlowDefinitionId, UtilsService.serializetoJson(filter)).then(function (response) {
+                            if (response != null) {
+                                for (var i = 0; i < response.length; i++) {
+                                    ctrl.datasource.push(response[i]);
+                                }
 
-                            if (selectedIds != undefined) {
-                                VRUIUtilsService.setSelectedValues(selectedIds, 'ExecutionFlowId', attrs, ctrl);
+                                if (selectedIds != undefined) {
+                                    VRUIUtilsService.setSelectedValues(selectedIds, 'StageName', attrs, ctrl);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 };
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('ExecutionFlowId', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('StageName', attrs, ctrl);
                 };
 
 
@@ -98,10 +102,12 @@ app.directive('vrQueueingExecutionflowStageSelector', ['VR_Queueing_ExecutionFlo
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
+            var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
+
             return '<div>' +
-                   '<vr-select ' + multipleselection + ' datatextfield="StageName" datavaluefield="ID" isrequired="ctrl.isrequired" label="' + label +
+                   '<vr-select ' + multipleselection + ' ' + hideremoveicon + ' datatextfield="StageName" datavaluefield="StageName" isrequired="ctrl.isrequired" label="' + label +
                        '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
-                       '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
+                       '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" customvalidate="ctrl.customvalidate">' +
                    '</vr-select>' +
                    '</div>'
         }

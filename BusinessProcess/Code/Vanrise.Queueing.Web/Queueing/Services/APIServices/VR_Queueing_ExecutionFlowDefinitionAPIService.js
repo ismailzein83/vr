@@ -7,7 +7,8 @@
     function ExecutionFlowDefinitionAPIService(BaseAPIService, UtilsService, SecurityService, VR_Queueing_ModuleConfig) {
         return ({
             GetFilteredExecutionFlowDefinitions: GetFilteredExecutionFlowDefinitions,
-            GetExecutionFlowDefinition: GetExecutionFlowDefinition,           
+            GetExecutionFlowDefinition: GetExecutionFlowDefinition,
+            GetExecutionFlowStagesInfo :GetExecutionFlowStagesInfo ,
             AddExecutionFlowDefinition: AddExecutionFlowDefinition,
             HasAddExecutionFlowDefinition:HasAddExecutionFlowDefinition,
             UpdateExecutionFlowDefinition: UpdateExecutionFlowDefinition,
@@ -22,6 +23,12 @@
         function GetExecutionFlowDefinition(executionFlowDefinitionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'ExecutionFlowDefinition', 'GetExecutionFlowDefinition'), {
                 executionFlowDefinitionId: executionFlowDefinitionId
+            });
+        }
+        function GetExecutionFlowStagesInfo(executionFlowDefinitionId, filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'ExecutionFlowDefinition', 'GetExecutionFlowStagesInfo'), {
+                executionFlowDefinitionId: executionFlowDefinitionId,
+                filter: filter
             });
         }
         function AddExecutionFlowDefinition(executionFlowDefinitionObject) {

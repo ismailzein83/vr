@@ -14,8 +14,12 @@
         var dataRecordStorageAPI;
         var dataRecordStorageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var ondataRecordStorageSelectionChangedDeferred;
+
         var executionFlowDefinitionAPI;
         var executionFlowDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var onExecutionFlowDefinitionSelectionChangedDeferred;
 
         var executionFlowStageAPI;
         var executionFlowStageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -42,9 +46,24 @@
                 dataRecordStorageSelectorReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onDataRecordStorageSelectionChanged = function () {
+                var selectedRecordStorageId = dataRecordStorageAPI.getSelectedIds();
+                if (selectedRecordStorageId != undefined) {
+                    tryLoadFlowStagesOrResolvePromise(ondataRecordStorageSelectionChangedDeferred);
+                }
+            };
+
             $scope.scopeModel.onExecutionFlowDefinitionSelectorReady = function (api) {
                 executionFlowDefinitionAPI = api;
                 executionFlowDefinitionSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onExecutionFlowDefinitionSelectionChanged = function () {
+                var selectedExecutionFlowDefinitionId = executionFlowDefinitionAPI.getSelectedIds();
+                if (selectedExecutionFlowDefinitionId != undefined)
+                {
+                    tryLoadFlowStagesOrResolvePromise(onExecutionFlowDefinitionSelectionChangedDeferred);
+                }
             };
 
             $scope.scopeModel.onExecutionFlowStageSelectorReady = function (api) {
@@ -64,6 +83,35 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
+
+            function tryLoadFlowStagesOrResolvePromise(promiseDeferred) {
+                if (promiseDeferred != undefined)
+                    promiseDeferred.resolve();
+                else
+                {
+                    setTimeout(function () {
+                        UtilsService.safeApply($scope, function () {
+                            if (executionFlowDefinitionAPI == undefined || dataRecordStorageAPI == undefined)
+                                return;
+                            var selectedExecutionFlowDefinitionId = executionFlowDefinitionAPI.getSelectedIds();
+                            var selectedRecordStorage = $scope.scopeModel.selectedRecordStorage;
+                            if (selectedExecutionFlowDefinitionId == undefined || selectedRecordStorage == undefined)
+                                return;
+                            var payload = {
+                                executionFlowDefinitionId: selectedExecutionFlowDefinitionId,
+                                filter: {
+                                    Filters: [buildStageRecordTypeFilter()]
+                                }
+                            }
+                            var setExecutionFlowStagesLoader = function (value) {
+                                $scope.scopeModel.isLoadingExecutionFlowStages = value;
+                            };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, executionFlowStageAPI, payload, setExecutionFlowStagesLoader, promiseDeferred);
+                        });                        
+                    });
+                   
+                }
+            }
         }
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -79,6 +127,14 @@
             else {
                 loadAllControls();
             }
+        }
+
+        function buildStageRecordTypeFilter()
+        {
+            return {
+                '$type': 'Vanrise.GenericData.QueueActivators.RecordTypeStageFilter, Vanrise.GenericData.QueueActivators',
+                RecordTypeId: $scope.scopeModel.selectedRecordStorage.DataRecordTypeId
+            };
         }
 
 
@@ -136,16 +192,34 @@
             return executionFlowDefinitionSelectorLoadDeferred.promise;
         }
         function loadExecutionFlowStageSelector() {
+            if (reprocessDefinitionEntity == undefined || reprocessDefinitionEntity.Settings.ExecutionFlowDefinitionId == undefined)
+                return;
+
             var executionFlowStageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-            executionFlowStageSelectorReadyDeferred.promise.then(function () {
-                var executionFlowStageSelectorPayload;
-                if (isEditMode) {
-                    executionFlowStageSelectorPayload = {
-                        selectedIds: reprocessDefinitionEntity.Settings.ExecutionFlowDefinitionId
-                    };
-                }
-                VRUIUtilsService.callDirectiveLoad(executionFlowStageAPI, executionFlowStageSelectorPayload, executionFlowStageSelectorLoadDeferred);
-            });
+
+            if (onExecutionFlowDefinitionSelectionChangedDeferred == undefined)
+                onExecutionFlowDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+            if (ondataRecordStorageSelectionChangedDeferred == undefined)
+                ondataRecordStorageSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+
+            UtilsService.waitMultiplePromises([executionFlowStageSelectorReadyDeferred.promise, onExecutionFlowDefinitionSelectionChangedDeferred.promise, ondataRecordStorageSelectionChangedDeferred.promise])
+                .then(function () {
+                    setTimeout(function () {
+                        UtilsService.safeApply($scope, function () {
+                            onExecutionFlowDefinitionSelectionChangedDeferred = undefined;
+                            ondataRecordStorageSelectionChangedDeferred = undefined;
+                            var executionFlowStageSelectorPayload;
+                            executionFlowStageSelectorPayload = {
+                                executionFlowDefinitionId: reprocessDefinitionEntity.Settings.ExecutionFlowDefinitionId,
+                                filter: { Filters: [buildStageRecordTypeFilter()] },
+                                selectedIds: reprocessDefinitionEntity.Settings.InitiationStageNames
+                            };
+                            VRUIUtilsService.callDirectiveLoad(executionFlowStageAPI, executionFlowStageSelectorPayload, executionFlowStageSelectorLoadDeferred);
+                        });
+                    });
+                   
+                });
+
             return executionFlowStageSelectorLoadDeferred.promise;
         }
 
@@ -183,7 +257,8 @@
 
             var settings = {
                 SourceRecordStorageId: dataRecordStorageAPI.getSelectedIds(),
-                ExecutionFlowDefinitionId: executionFlowAPI.getSelectedIds()
+                ExecutionFlowDefinitionId: executionFlowDefinitionAPI.getSelectedIds(),
+                InitiationStageNames: executionFlowStageAPI.getSelectedIds()
             }
 
             return {

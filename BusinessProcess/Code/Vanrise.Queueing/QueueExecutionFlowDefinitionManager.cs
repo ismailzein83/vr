@@ -29,7 +29,19 @@ namespace Vanrise.Queueing
                 throw new NullReferenceException(string.Format("executionFlowDefinition '{0}'", executionFlowDefinitionId));
             if (executionFlowDefinition.Stages == null)
                 throw new NullReferenceException(string.Format("executionFlowDefinition.Stages '{0}'", executionFlowDefinitionId));
-            return executionFlowDefinition.Stages.MapRecords(QueueExecutionFlowDefinitionInfoMapper, null);
+
+            Func<QueueExecutionFlowStage, bool> filterExpression = (stage) =>
+                {
+                    if(filter != null && filter.Filters != null)
+                    {
+                        QueueExecutionFlowStageFilterContext filterContext = new QueueExecutionFlowStageFilterContext { Stage = stage };
+                        if (filter.Filters.Any(itm => !itm.IsMatch(filterContext)))
+                            return false;
+                    }
+                    return true;
+                };
+
+            return executionFlowDefinition.Stages.MapRecords(QueueExecutionFlowDefinitionInfoMapper, filterExpression);
         }
 
 

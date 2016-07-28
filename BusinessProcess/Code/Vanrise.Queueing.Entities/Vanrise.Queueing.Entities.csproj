@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="CustomQueueActivator.cs" />
     <Compile Include="IPersistentQueue.cs" />
+    <Compile Include="IQueueExecutionFlowStageFilter.cs" />
     <Compile Include="ISummaryBatchQueueActivator.cs" />
     <Compile Include="ItemExecutionFlowInfo.cs" />
     <Compile Include="ItemToEnqueue.cs" />

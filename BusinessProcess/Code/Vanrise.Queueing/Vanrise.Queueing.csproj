@@ -72,6 +72,7 @@
     <Compile Include="QueueActivatorExecutionContext.cs" />
     <Compile Include="QueueExecutionFlowDefinitionManager.cs" />
     <Compile Include="QueueActivatorConfigManager.cs" />
+    <Compile Include="QueueExecutionFlowStageFilterContext.cs" />
     <Compile Include="QueueInstanceManager.cs" />
     <Compile Include="QueueItemHeaderManager.cs" />
     <Compile Include="QueueStageManager.cs" />
