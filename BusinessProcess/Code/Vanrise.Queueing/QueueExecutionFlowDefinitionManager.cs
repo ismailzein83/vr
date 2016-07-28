@@ -31,15 +31,15 @@ namespace Vanrise.Queueing
                 throw new NullReferenceException(string.Format("executionFlowDefinition.Stages '{0}'", executionFlowDefinitionId));
 
             Func<QueueExecutionFlowStage, bool> filterExpression = (stage) =>
+            {
+                if(filter != null && filter.Filters != null)
                 {
-                    if(filter != null && filter.Filters != null)
-                    {
-                        QueueExecutionFlowStageFilterContext filterContext = new QueueExecutionFlowStageFilterContext { Stage = stage };
-                        if (filter.Filters.Any(itm => !itm.IsMatch(filterContext)))
-                            return false;
-                    }
-                    return true;
-                };
+                    QueueExecutionFlowStageFilterContext filterContext = new QueueExecutionFlowStageFilterContext { Stage = stage };
+                    if (filter.Filters.Any(itm => !itm.IsMatch(filterContext)))
+                        return false;
+                }
+                return true;
+            };
 
             return executionFlowDefinition.Stages.MapRecords(QueueExecutionFlowDefinitionInfoMapper, filterExpression);
         }

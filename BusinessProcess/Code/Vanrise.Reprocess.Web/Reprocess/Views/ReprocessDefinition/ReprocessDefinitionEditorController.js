@@ -13,12 +13,10 @@
 
         var dataRecordStorageAPI;
         var dataRecordStorageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
         var ondataRecordStorageSelectionChangedDeferred;
 
         var executionFlowDefinitionAPI;
         var executionFlowDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
         var onExecutionFlowDefinitionSelectionChangedDeferred;
 
         var executionFlowStageAPI;
@@ -71,7 +69,6 @@
                 executionFlowStageSelectorReadyDeferred.resolve();
             };
             
-
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
                     return update();
@@ -91,10 +88,9 @@
                 {
                     setTimeout(function () {
                         UtilsService.safeApply($scope, function () {
-                            if (executionFlowDefinitionAPI == undefined || dataRecordStorageAPI == undefined)
-                                return;
-                            var selectedExecutionFlowDefinitionId = executionFlowDefinitionAPI.getSelectedIds();
+
                             var selectedRecordStorage = $scope.scopeModel.selectedRecordStorage;
+                            var selectedExecutionFlowDefinitionId = executionFlowDefinitionAPI.getSelectedIds();
                             if (selectedExecutionFlowDefinitionId == undefined || selectedRecordStorage == undefined)
                                 return;
                             var payload = {
@@ -108,9 +104,8 @@
                             };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, executionFlowStageAPI, payload, setExecutionFlowStagesLoader, promiseDeferred);
                         });                        
-                    });
-                   
-                }
+                    });      
+                 } 
             }
         }
         function load() {
@@ -127,14 +122,6 @@
             else {
                 loadAllControls();
             }
-        }
-
-        function buildStageRecordTypeFilter()
-        {
-            return {
-                '$type': 'Vanrise.GenericData.QueueActivators.RecordTypeStageFilter, Vanrise.GenericData.QueueActivators',
-                RecordTypeId: $scope.scopeModel.selectedRecordStorage.DataRecordTypeId
-            };
         }
 
 
@@ -253,6 +240,13 @@
             });
         }
 
+
+        function buildStageRecordTypeFilter() {
+            return {
+                '$type': 'Vanrise.GenericData.QueueActivators.RecordTypeStageFilter, Vanrise.GenericData.QueueActivators',
+                RecordTypeId: $scope.scopeModel.selectedRecordStorage.DataRecordTypeId
+            };
+        }
         function buildReprocessDefinitionObjFromScope() {
 
             var settings = {
