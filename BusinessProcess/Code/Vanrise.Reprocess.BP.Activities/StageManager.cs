@@ -19,9 +19,12 @@ namespace Vanrise.Reprocess.BP.Activities
             if (reprocessDefinition == null)
                 throw new ArgumentNullException("reprocessDefinition");
 
-            var stages = new QueueExecutionFlowDefinitionManager().GetFlowStages(reprocessDefinition.ExecutionFlowDefinitionId);
+            if (reprocessDefinition.Settings == null)
+                throw new ArgumentNullException("reprocessDefinition.Settings");
+
+            var stages = new QueueExecutionFlowDefinitionManager().GetFlowStages(reprocessDefinition.Settings.ExecutionFlowDefinitionId);
             if (stages == null)
-                throw new NullReferenceException(String.Format("stages '{0}'", reprocessDefinition.ExecutionFlowDefinitionId));
+                throw new NullReferenceException(String.Format("stages '{0}'", reprocessDefinition.Settings.ExecutionFlowDefinitionId));
             foreach (var stage in stages.Values)
             {
                 var reprocessActivator = stage.QueueActivator as IReprocessStageActivator;
@@ -54,9 +57,10 @@ namespace Vanrise.Reprocess.BP.Activities
                     }
                 }
             }
-            if (reprocessDefinition.InitiationStageNames == null)
-                throw new NullReferenceException(String.Format("reprocessDefinition.SourceStageNames. ReprocessDefinitionId '{0}'", reprocessDefinition.ReprocessDefinitionId));
-            _initiationStageNames = reprocessDefinition.InitiationStageNames;
+            if (reprocessDefinition.Settings.InitiationStageNames == null)
+                throw new NullReferenceException(String.Format("reprocessDefinition.Settings.InitiationStageNames. ReprocessDefinitionId '{0}'", reprocessDefinition.ReprocessDefinitionId));
+
+            _initiationStageNames = reprocessDefinition.Settings.InitiationStageNames;
         }
 
         private void FillSubscribedStageNames(List<string> subscribedStageNames, string sourceStageName, string mainStageName, IEnumerable<QueueExecutionFlowStage> stages)

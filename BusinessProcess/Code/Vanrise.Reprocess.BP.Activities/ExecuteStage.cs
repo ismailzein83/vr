@@ -9,8 +9,9 @@ using Vanrise.Reprocess.Entities;
 namespace Vanrise.Reprocess.BP.Activities
 {
     public class ExecuteStageInput
-    { public StageManager StageManager { get; set; }
-                
+    {
+        public StageManager StageManager { get; set; }
+
         public ReprocessStage Stage { get; set; }
     }
 
@@ -28,7 +29,11 @@ namespace Vanrise.Reprocess.BP.Activities
 
         protected override ExecuteStageInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            throw new NotImplementedException();
+            return new ExecuteStageInput()
+            {
+                Stage = this.Stage.Get(context),
+                StageManager = this.StageManager.Get(context)
+            };
         }
 
         protected override ExecuteStageOutput DoWorkWithResult(ExecuteStageInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
@@ -50,7 +55,7 @@ namespace Vanrise.Reprocess.BP.Activities
         private class ReprocessStageActivatorExecutionContext : IReprocessStageActivatorExecutionContext
         {
             Queueing.BaseQueue<IReprocessBatch> _inputQueue;
-            Action <Action> _doWhilePreviousRunningAction;
+            Action<Action> _doWhilePreviousRunningAction;
             Action<AsyncActivityStatus, Action> _doWhilePreviousRunningAction2;
             Func<bool> _shouldStopFunc;
 
@@ -82,8 +87,5 @@ namespace Vanrise.Reprocess.BP.Activities
                 return _shouldStopFunc();
             }
         }
-
     }
-
-    
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Activities;
 using Vanrise.Reprocess.Entities;
+using Vanrise.Reprocess.Business;
 
 namespace Vanrise.Reprocess.BP.Activities
 {
@@ -16,7 +17,10 @@ namespace Vanrise.Reprocess.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            throw new NotImplementedException();
+            ReprocessDefinitionManager manager = new ReprocessDefinitionManager();
+            ReprocessDefinition reprocessDefintion = manager.GetReprocessDefinition(this.ReprocessDefinitionId.Get(context));
+
+            this.ReprocessDefinition.Set(context, reprocessDefintion);
         }
     }
 }

@@ -1,12 +1,18 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Reprocess.BP.ReProcessingProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
+ xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
  xmlns:vrba="clr-namespace:Vanrise.Reprocess.BP.Arguments;assembly=Vanrise.Reprocess.BP.Arguments"
+ xmlns:vrba1="clr-namespace:Vanrise.Reprocess.BP.Activities;assembly=Vanrise.Reprocess.BP.Activities"
+ xmlns:vre="clr-namespace:Vanrise.Reprocess.Entities;assembly=Vanrise.Reprocess.Entities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(vrba:ReProcessingProcessInput)" />
@@ -26,27 +32,117 @@
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
-      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
-      <AssemblyReference>Vanrise.Reprocess.BP</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.Reprocess.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.Reprocess.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Reprocess.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1" sads:DebugSymbol.Symbol="d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sAScDJ28CAQE=" />
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="scg:List(vre:DateTimeRange)" Name="DateTimeRanges" />
+    </Sequence.Variables>
+    <vrba1:GenerateDateTimeRanges sap2010:WorkflowViewState.IdRef="GenerateDateTimeRanges_1">
+      <vrba1:GenerateDateTimeRanges.ChunkTime>
+        <InArgument x:TypeArguments="vre:ChunkTime">
+          <mca:CSharpValue x:TypeArguments="vre:ChunkTime">Input.ChunkTime</mca:CSharpValue>
+        </InArgument>
+      </vrba1:GenerateDateTimeRanges.ChunkTime>
+      <vrba1:GenerateDateTimeRanges.DateTimeRanges>
+        <OutArgument x:TypeArguments="scg:List(vre:DateTimeRange)">
+          <mca:CSharpReference x:TypeArguments="scg:List(vre:DateTimeRange)">DateTimeRanges</mca:CSharpReference>
+        </OutArgument>
+      </vrba1:GenerateDateTimeRanges.DateTimeRanges>
+      <vrba1:GenerateDateTimeRanges.From>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromTime</mca:CSharpValue>
+        </InArgument>
+      </vrba1:GenerateDateTimeRanges.From>
+      <vrba1:GenerateDateTimeRanges.To>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToTime</mca:CSharpValue>
+        </InArgument>
+      </vrba1:GenerateDateTimeRanges.To>
+    </vrba1:GenerateDateTimeRanges>
+    <ParallelForEach x:TypeArguments="vre:DateTimeRange" DisplayName="ParallelForEach&lt;DateTimeRange&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_1">
+      <ParallelForEach.Values>
+        <InArgument x:TypeArguments="scg:IEnumerable(vre:DateTimeRange)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vre:DateTimeRange)">DateTimeRanges</mca:CSharpValue>
+        </InArgument>
+      </ParallelForEach.Values>
+      <ActivityAction x:TypeArguments="vre:DateTimeRange">
+        <ActivityAction.Argument>
+          <DelegateInArgument x:TypeArguments="vre:DateTimeRange" Name="item" />
+        </ActivityAction.Argument>
+        <Sequence>
+          <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1">
+            <vbw:WriteTrackingMessage.Message>
+              <InArgument x:TypeArguments="x:String">
+                <mca:CSharpValue x:TypeArguments="x:String">string.Format("Starting Range From {0}, To {1}",item.From,item.To)</mca:CSharpValue>
+              </InArgument>
+            </vbw:WriteTrackingMessage.Message>
+            <vbw:WriteTrackingMessage.Severity>
+              <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+                <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+              </InArgument>
+            </vbw:WriteTrackingMessage.Severity>
+          </vbw:WriteTrackingMessage>
+          <vbw:WriteTrackingMessage>
+            <vbw:WriteTrackingMessage.Message>
+              <InArgument x:TypeArguments="x:String">
+                <mca:CSharpValue x:TypeArguments="x:String">string.Format("Finishing Range From {0}, To {1}",item.From,item.To)</mca:CSharpValue>
+              </InArgument>
+            </vbw:WriteTrackingMessage.Message>
+            <vbw:WriteTrackingMessage.Severity>
+              <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+                <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+              </InArgument>
+            </vbw:WriteTrackingMessage.Severity>
+            <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_2</sap2010:WorkflowViewState.IdRef>
+          </vbw:WriteTrackingMessage>
+          <sap2010:WorkflowViewState.IdRef>Sequence_2</sap2010:WorkflowViewState.IdRef>
+        </Sequence>
+      </ActivityAction>
+    </ParallelForEach>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sDzkDfA4CAQE9BVIkAgEZUwV6FwIBAk8LT1cCASNAC0BdAgEgSgtKWQIBHUULRXICARpWC1ZxAgEWXQl4FAIBA14LaSYCAQ1qC3YmAgEEZhFmiwECARJhEWGRAQIBDnIRcosBAgEJbRFtkgECAQU=</sads:DebugSymbol.Symbol>
+  </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="200,99">
+      <sap2010:ViewStateData Id="GenerateDateTimeRanges_1" sap:VirtualizedContainerService.HintSize="287,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,208">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Reprocess.BP.ReProcessingProcess_1" sap:VirtualizedContainerService.HintSize="240,179" />
+      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="287,358" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="309,544">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Vanrise.Reprocess.BP.ReProcessingProcess_1" sap:VirtualizedContainerService.HintSize="349,624" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

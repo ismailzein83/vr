@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="EvaluateStagesStatus.cs" />
     <Compile Include="ExecuteStage.cs" />
+    <Compile Include="GenerateDateTimeRanges.cs" />
     <Compile Include="GetReprocessDefinition.cs" />
     <Compile Include="LoadDataToReprocess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,6 +73,10 @@
     <ProjectReference Include="..\Vanrise.Queueing\Vanrise.Queueing.csproj">
       <Project>{28eb3790-0e19-43ab-8ecb-6137eb0e588a}</Project>
       <Name>Vanrise.Queueing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Reprocess.Business\Vanrise.Reprocess.Business.csproj">
+      <Project>{092e16c8-378f-4cab-bd79-471d011c4ea6}</Project>
+      <Name>Vanrise.Reprocess.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Reprocess.Entities\Vanrise.Reprocess.Entities.csproj">
       <Project>{c0f57639-9df9-45fb-a97f-0d97cd8794d0}</Project>

@@ -49,7 +49,14 @@ namespace Vanrise.Reprocess.BP.Activities
 
         protected override LoadDataToReprocessInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            throw new NotImplementedException();
+            return new LoadDataToReprocessInput
+            {
+                RecordStorageId = this.RecordStorageId.Get(context),
+                FromTime = this.FromTime.Get(context),
+                ToTime = this.ToTime.Get(context),
+                StageManager = this.StageManager.Get(context),
+                OutputStageNames = this.OutputStageNames.Get(context)
+            };
         }
 
         protected override LoadDataToReprocessOutput DoWorkWithResult(LoadDataToReprocessInput inputArgument, AsyncActivityHandle handle)

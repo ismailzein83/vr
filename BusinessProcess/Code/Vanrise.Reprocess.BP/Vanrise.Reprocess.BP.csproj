@@ -47,6 +47,10 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -67,6 +71,10 @@
     <ProjectReference Include="..\Vanrise.BusinessProcess.Entities\Vanrise.BusinessProcess.Entities.csproj">
       <Project>{eb3cf5aa-ec32-4723-81e5-c4a0c0525d05}</Project>
       <Name>Vanrise.BusinessProcess.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.BusinessProcess.WFActivities\Vanrise.BusinessProcess.WFActivities.csproj">
+      <Project>{5C28C004-F7BE-4F09-832F-CE8594B3231F}</Project>
+      <Name>Vanrise.BusinessProcess.WFActivities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.BusinessProcess\Vanrise.BusinessProcess.csproj">
       <Project>{a5ee3349-b642-4cc7-b575-7c338821d63d}</Project>

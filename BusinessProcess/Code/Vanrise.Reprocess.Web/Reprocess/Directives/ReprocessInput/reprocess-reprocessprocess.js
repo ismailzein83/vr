@@ -53,8 +53,8 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
                             $type: "Vanrise.Reprocess.BP.Arguments.ReProcessingProcessInput, Vanrise.Reprocess.BP.Arguments",
                             ReprocessDefinitionId: reprocessDefinitionSelectorAPI.getSelectedIds(),
                             FromTime: $scope.fromDate,
-                            ToTime: $scope.toDate,
-                            ChunkTime: $scope.selectedChunkTime
+                            ToTime: new Date($scope.toDate.setDate($scope.toDate.getDate() + 1)) ,
+                            ChunkTime: $scope.selectedChunkTime.value
                         }
                     };
                 };

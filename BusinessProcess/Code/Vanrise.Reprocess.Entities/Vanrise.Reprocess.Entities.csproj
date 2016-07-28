@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DateTimeRange.cs" />
     <Compile Include="GenericDataRecordBatch.cs" />
     <Compile Include="IReprocessBatch.cs" />
     <Compile Include="IReprocessStageActivator.cs" />
