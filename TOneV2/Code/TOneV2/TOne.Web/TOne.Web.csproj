@@ -518,6 +518,7 @@
     <Content Include="images\menu-icons\billing.png" />
     <Content Include="images\menu-icons\busines intel.png" />
     <Content Include="images\menu-icons\Business Entities.png" />
+    <Content Include="images\menu-icons\Deals Module.png" />
     <Content Include="images\menu-icons\Management.png" />
     <Content Include="images\menu-icons\NOC.png" />
     <Content Include="images\menu-icons\other.png" />
