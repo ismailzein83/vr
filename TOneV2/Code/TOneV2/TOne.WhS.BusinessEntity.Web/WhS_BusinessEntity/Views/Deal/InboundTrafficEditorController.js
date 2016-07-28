@@ -8,11 +8,12 @@
         var isEditMode;
 
         var inboundEntity;
-        var supplierId;
+        var sellingNumberPlanId;
 
-        var supplierZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        
+        var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var supplierZoneDirectiveAPI;
+        var saleZoneDirectiveAPI;
 
         loadParameters();
         defineScope();
@@ -21,7 +22,7 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
-                supplierId = parameters.supplierId;
+                sellingNumberPlanId = parameters.sellingNumberPlanId;
                 inboundEntity = parameters.inbound;
             }
 
@@ -42,9 +43,9 @@
             };
 
 
-            $scope.onSupplierZoneDirectiveReady = function (api) {
-                supplierZoneDirectiveAPI = api;
-                supplierZoneReadyPromiseDeferred.resolve();
+            $scope.onSaleZoneDirectiveReady = function (api) {
+                saleZoneDirectiveAPI = api;
+                saleZoneReadyPromiseDeferred.resolve();
             }
         }
 
@@ -72,17 +73,18 @@
         function loadSaleZoneSection() {
             var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
 
-            supplierZoneReadyPromiseDeferred.promise.then(function () {
+            saleZoneReadyPromiseDeferred.promise.then(function () {
 
                 var payload = {
-                    supplierId: supplierId,
-                    selectedIds: inboundEntity != undefined ? inboundEntity.SupplierZoneIds : undefined
+                    sellingNumberPlanId: sellingNumberPlanId,
+                    selectedIds: inboundEntity != undefined ? inboundEntity.SaleZoneIds : undefined
                 };
 
-                VRUIUtilsService.callDirectiveLoad(supplierZoneDirectiveAPI, payload, loadSaleZonePromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, payload, loadSaleZonePromiseDeferred);
             });
             return loadSaleZonePromiseDeferred.promise;
         }
+
 
 
         function setTitle() {
@@ -122,7 +124,7 @@
         function buildInboundObjFromScope() {
             var obj = {
                 Name: $scope.scopeModel.name,
-                SupplierZoneIds: supplierZoneDirectiveAPI.getSelectedIds(),
+                SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds(),
                 CommitedVolume: $scope.scopeModel.volume,
                 Rate: $scope.scopeModel.rate,
                 CurrentCost: $scope.scopeModel.cost,
@@ -134,3 +136,5 @@
     appControllers.controller('WhS_BE_InboundEditorController', WhS_BE_InboundEditorController);
 
 })(appControllers);
+
+var app = angular.module('myApp');

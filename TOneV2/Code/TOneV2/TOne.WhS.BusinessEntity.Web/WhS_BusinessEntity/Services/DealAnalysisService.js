@@ -32,10 +32,10 @@
             VRModalService.showModal(editorUrl, parameters, settings);
         }
 
-        function addOutbound(onOutboundAdded, sellingNumberPlanId) {
+        function addOutbound(onOutboundAdded, supplierId) {
             var settings = {};
             var parameters = {
-                sellingNumberPlanId: sellingNumberPlanId
+                supplierId: supplierId
             };
 
             settings.onScopeReady = function (modalScope) {
@@ -44,10 +44,10 @@
             VRModalService.showModal(outboundUrl, parameters, settings);
         }
 
-        function editOutbound(outbound, sellingNumberPlanId, onOutboundUpdated) {
+        function editOutbound(outbound, supplierId, onOutboundUpdated) {
             var parameters = {
-                outbound: outbound,
-                sellingNumberPlanId: sellingNumberPlanId
+                outbound: outbound,                
+                supplierId: supplierId
             };
 
             var settings = {};
@@ -58,10 +58,10 @@
 
             VRModalService.showModal(outboundUrl, parameters, settings);
         }
-        function addInbound(onInboundAdded, supplierId) {
+        function addInbound(onInboundAdded, sellingNumberPlanId) {
             var settings = {};
-            var parameters = {
-                supplierId: supplierId
+            var parameters = {                
+                sellingNumberPlanId: sellingNumberPlanId
             };
 
             settings.onScopeReady = function (modalScope) {
@@ -70,10 +70,10 @@
             VRModalService.showModal(inboundUrl, parameters, settings);
         }
 
-        function editInbound(inbound, supplierId, onInboundUpdated) {
+        function editInbound(inbound, sellingNumberPlanId, onInboundUpdated) {
             var parameters = {
                 inbound: inbound,
-                supplierId: supplierId
+                sellingNumberPlanId: sellingNumberPlanId
             };
 
             var settings = {};

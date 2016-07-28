@@ -88,7 +88,7 @@
                             <vr-label>Total Commitment Cost </vr-label>
                         </vr-columns>
                         <vr-columns width="normal">
-                            <vr-lable isvalue>{{scopeModel.TotalCommitmentCost}} </vr-lable>
+                            <vr-lable isvalue>${{scopeModel.TotalCommitmentCost | number}} </vr-lable>
                         </vr-columns>
                     </vr-row>
                     <vr-row removeline>
@@ -96,7 +96,7 @@
                             <vr-label>Total Commitment Revenue</vr-label>
                         </vr-columns>
                         <vr-columns width="normal">
-                            <vr-lable isvalue>{{scopeModel.TotalCommitmentRevenue}} </vr-lable>
+                            <vr-lable isvalue>${{scopeModel.TotalCommitmentRevenue | number}} </vr-lable>
                         </vr-columns>
                     </vr-row>
                     <vr-row removeline>
@@ -104,7 +104,7 @@
                             <vr-label>Total Savings (Per Deal)</vr-label>
                         </vr-columns>
                         <vr-columns width="normal">
-                            <vr-lable isvalue>{{scopeModel.TotalSaving}} </vr-lable>
+                            <vr-lable isvalue>${{scopeModel.TotalSaving | number}} </vr-lable>
                         </vr-columns>
                     </vr-row>
                     <vr-row removeline>
@@ -112,7 +112,7 @@
                             <vr-label>Total Customer Profit (Per Deal)</vr-label>
                         </vr-columns>
                         <vr-columns width="normal">
-                            <vr-lable isvalue>{{scopeModel.TotalCustomerProfit}} </vr-lable>
+                            <vr-lable isvalue>${{scopeModel.TotalCustomerProfit | number}} </vr-lable>
                         </vr-columns>
                     </vr-row>
                     <vr-row removeline>
@@ -120,7 +120,7 @@
                             <vr-label>Total Profit (Per Month)</vr-label>
                         </vr-columns>
                         <vr-columns width="normal">
-                            <vr-lable isvalue>{{scopeModel.TotalProfitMonth}} </vr-lable>
+                            <vr-lable isvalue>${{scopeModel.TotalProfitMonth | number}} </vr-lable>
                         </vr-columns>
                     </vr-row>
                     <vr-row removeline>
@@ -128,7 +128,7 @@
                             <vr-label>Total Profit (Per Day)</vr-label>
                         </vr-columns>
                         <vr-columns width="normal">
-                            <vr-lable isvalue>{{scopeModel.TotalProfitDay}} </vr-lable>
+                            <vr-lable isvalue>${{scopeModel.TotalProfitDay | number}} </vr-lable>
                         </vr-columns>
                     </vr-row>
                     <vr-row removeline>
@@ -136,7 +136,7 @@
                             <vr-label>Total Commitment Profit</vr-label>
                         </vr-columns>
                         <vr-columns width="normal">
-                            <vr-lable isvalue>{{scopeModel.TotalCommitmentProfit}} </vr-lable>
+                            <vr-lable isvalue>${{scopeModel.TotalCommitmentProfit |  number}} </vr-lable>
                         </vr-columns>
                     </vr-row>
                     <vr-row removeline>
@@ -144,7 +144,7 @@
                             <vr-label>Margins</vr-label>
                         </vr-columns>
                         <vr-columns width="normal">
-                            <vr-lable isvalue>{{scopeModel.Margins}} %</vr-lable>
+                            <vr-lable isvalue>{{scopeModel.Margins * 100| number :2 }}%</vr-lable>
                         </vr-columns>
                     </vr-row>
                     <vr-row removeline>
@@ -152,7 +152,7 @@
                             <vr-label>Exposure</vr-label>
                         </vr-columns>
                         <vr-columns width="normal">
-                            <vr-lable isvalue>{{scopeModel.Exposure}}</vr-lable>
+                            <vr-lable isvalue>${{scopeModel.Exposure | number}}</vr-lable>
                         </vr-columns>
                     </vr-row>
                 </vr-section>

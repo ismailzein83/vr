@@ -8,11 +8,11 @@
         var isEditMode;
 
         var outboundEntity;
-        var sellingNumberPlanId;
+        var supplierId;
 
-        var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var supplierZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var saleZoneDirectiveAPI;
+        var supplierZoneDirectiveAPI;
 
         loadParameters();
         defineScope();
@@ -21,7 +21,7 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                sellingNumberPlanId = parameters.sellingNumberPlanId;
+                supplierId = parameters.supplierId;
                 outboundEntity = parameters.outbound;
             }
 
@@ -41,9 +41,9 @@
             };
 
 
-            $scope.onSaleZoneDirectiveReady = function (api) {
-                saleZoneDirectiveAPI = api;
-                saleZoneReadyPromiseDeferred.resolve();
+            $scope.onSupplierZoneDirectiveReady = function (api) {
+                supplierZoneDirectiveAPI = api;
+                supplierZoneReadyPromiseDeferred.resolve();
             }
         }
 
@@ -59,8 +59,9 @@
             }
         }
 
+   
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSaleZoneSection]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSupplierZoneSection]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -68,21 +69,20 @@
         }
 
 
-        function loadSaleZoneSection() {
-            var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
+        function loadSupplierZoneSection() {
+            var loadSupplierZonePromiseDeferred = UtilsService.createPromiseDeferred();
 
-            saleZoneReadyPromiseDeferred.promise.then(function () {
+            supplierZoneReadyPromiseDeferred.promise.then(function () {
 
                 var payload = {
-                    sellingNumberPlanId: sellingNumberPlanId,
-                    selectedIds: outboundEntity != undefined ? outboundEntity.SaleZoneIds : undefined
+                    supplierId: supplierId,
+                    selectedIds: outboundEntity != undefined ? outboundEntity.SupplierZoneIds : undefined
                 };
 
-                VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, payload, loadSaleZonePromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(supplierZoneDirectiveAPI, payload, loadSupplierZonePromiseDeferred);
             });
-            return loadSaleZonePromiseDeferred.promise;
+            return loadSupplierZonePromiseDeferred.promise;
         }
-
 
         function setTitle() {
             if (isEditMode) {
@@ -121,7 +121,7 @@
         function buildOutboundObjFromScope() {
             var obj = {
                 Name: $scope.scopeModel.name,
-                SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds(),
+                SupplierZoneIds: supplierZoneDirectiveAPI.getSelectedIds(),
                 CommitedVolume: $scope.scopeModel.volume,
                 Rate: $scope.scopeModel.rate,
                 CurrentCost: $scope.scopeModel.cost,

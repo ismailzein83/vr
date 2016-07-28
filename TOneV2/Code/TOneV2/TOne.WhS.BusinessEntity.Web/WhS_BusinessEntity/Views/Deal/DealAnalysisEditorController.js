@@ -67,11 +67,11 @@
             };
 
             $scope.scopeModel.addOutboundTraffic = function () {
-                var sellingNumberPlanId = carrierAccountSelectorAPI.getSelectedValues() != undefined ? carrierAccountSelectorAPI.getSelectedValues().SellingNumberPlanId : undefined;
+                var supplierId = carrierAccountSelectorAPI.getSelectedValues() != undefined ? carrierAccountSelectorAPI.getSelectedValues().CarrierAccountId : undefined;
                 var onOutboundAdded = function (addedOutbound) {
                     var obj = {
                         Name: addedOutbound.Name,
-                        SaleZoneIds:addedOutbound.SaleZoneIds,
+                        SupplierZoneIds: addedOutbound.SupplierZoneIds,
                         CommitedVolume: addedOutbound.CommitedVolume,
                         DailyVolume: (addedOutbound.CommitedVolume/1.5)/30,
                         Rate: addedOutbound.Rate,
@@ -83,15 +83,16 @@
                     $scope.scopeModel.outboundTraffics.push(obj);
                     evalTotalResultAnalysis();
                 };
-                WhS_BE_DealAnalysisService.addOutbound(onOutboundAdded, sellingNumberPlanId);
+                WhS_BE_DealAnalysisService.addOutbound(onOutboundAdded, supplierId);
             };
 
             $scope.scopeModel.addInboundTraffic = function () {
-                var supplierId = carrierAccountSelectorAPI.getSelectedValues() != undefined ? carrierAccountSelectorAPI.getSelectedValues().CarrierAccountId : undefined;
+                var sellingNumberPlanId = carrierAccountSelectorAPI.getSelectedValues() != undefined ? carrierAccountSelectorAPI.getSelectedValues().SellingNumberPlanId : undefined;
+                   
                 var onInboundAdded = function (addedInbound) {
                     var obj = {
                         Name: addedInbound.Name,
-                        SupplierZoneIds: addedInbound.SupplierZoneIds,
+                        SaleZoneIds: addedInbound.SaleZoneIds,
                         CommitedVolume: addedInbound.CommitedVolume,
                         DailyVolume: (addedInbound.CommitedVolume / 1.5) / 30,
                         Rate: addedInbound.Rate,
@@ -103,7 +104,7 @@
                     $scope.scopeModel.inboundTraffics.push(obj);
                     evalTotalResultAnalysis();
                 };
-                WhS_BE_DealAnalysisService.addInbound(onInboundAdded, supplierId);
+                WhS_BE_DealAnalysisService.addInbound(onInboundAdded, sellingNumberPlanId);
             };
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
                 var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
@@ -122,9 +123,6 @@
                     }
                     if (dealEntity != undefined && dealEntity.Settings != undefined)
                         payloadBuying.BuyingParts = dealEntity.Settings.BuyingParts;
-
-                   // VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dealSellingAPI, payload, setLoader);
-                   // VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dealBuyingAPI, payloadBuying, setLoader);
                 }
             }
             $scope.scopeModel.save = function () {
@@ -141,15 +139,7 @@
                 $scope.modalContext.closeModal();
             };
 
-            //$scope.scopeModel.onDealSellingDirectiveReady = function (api) {
-            //    dealSellingAPI = api;
-            //    dealSellingReadyPromiseDeferred.resolve();
-            //}
-            
-            //$scope.scopeModel.onDealBuyingDirectiveReady = function (api) {
-            //    dealBuyingAPI = api;
-            //    dealBuyingReadyPromiseDeferred.resolve();
-            //}
+        
 
         }
 
@@ -397,7 +387,7 @@
 
             $scope.scopeModel.TotalProfitDay = UtilsService.round ($scope.scopeModel.TotalProfitMonth /  30 , 2) ;
 
-            $scope.scopeModel.Margins = UtilsService.round ( ($scope.scopeModel.TotalCommitmentProfit /  $scope.scopeModel.TotalCommitmentRevenue) * 100 ,2 );
+            $scope.scopeModel.Margins = UtilsService.round ( ($scope.scopeModel.TotalCommitmentProfit /  $scope.scopeModel.TotalCommitmentRevenue),2 );
 
             $scope.scopeModel.Exposure = UtilsService.round ( totalCommitmentRevenue -  totalCommitmentCost , 2);
 
