@@ -13,6 +13,8 @@
         var carrierAccountSelectorAPI;
         var carrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var outBoundGridApi;
+        var inBoundGridApi;
         loadParameters();
         defineScope();
         load();
@@ -30,7 +32,7 @@
             
             $scope.scopeModel = {};
 
-            $scope.scopeModel.DurationInMonths = 0;
+            $scope.scopeModel.DealPeriod = 0;
             $scope.scopeModel.TotalCommitmentCost = 0;
             $scope.scopeModel.TotalCommitmentRevenue = 0;
             $scope.scopeModel.TotalSaving = 0;
@@ -51,13 +53,19 @@
                 carrierAccountSelectorReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.EvalDurationInMonths = function (api) {
+            $scope.scopeModel.onOutboundGridReady = function (api) {
+                outBoundGridApi = api;
+            };
+            $scope.scopeModel.onInboundGridReady = function (api) {
+                inBoundGridApi = api;
+            };
+            $scope.scopeModel.EvalDealPeriod = function (api) {
                 if ($scope.scopeModel.fromDate != undefined && $scope.scopeModel.toDate != undefined) {
-                    var days = ($scope.scopeModel.toDate - $scope.scopeModel.fromDate) / (1000 * 60 * 60 * 24) / 30;
-                    $scope.scopeModel.DurationInMonths = UtilsService.round(days, 1)
+                    var days = ($scope.scopeModel.toDate - $scope.scopeModel.fromDate) / (1000 * 60 * 60 * 24) ;
+                    $scope.scopeModel.DealPeriod = UtilsService.round(days,1)
                 }
                 else
-                    $scope.scopeModel.DurationInMonths = 0;
+                    $scope.scopeModel.DealPeriod = 0;
 
                 evalTotalResultAnalysis();
             };
@@ -69,7 +77,7 @@
                         Name: addedOutbound.Name,
                         SupplierZoneIds: addedOutbound.SupplierZoneIds,
                         CommitedVolume: addedOutbound.CommitedVolume,
-                        DailyVolume: (addedOutbound.CommitedVolume / $scope.scopeModel.DurationInMonths ) / 30,
+                        DailyVolume: (addedOutbound.CommitedVolume / $scope.scopeModel.DealPeriod ),
                         Rate: addedOutbound.Rate,
                         CurrentCost:addedOutbound.CurrentCost,
                         CostSavingFromRate: addedOutbound.CurrentCost - addedOutbound.Rate,
@@ -90,7 +98,7 @@
                         Name: addedInbound.Name,
                         SaleZoneIds: addedInbound.SaleZoneIds,
                         CommitedVolume: addedInbound.CommitedVolume,
-                        DailyVolume: (addedInbound.CommitedVolume / $scope.scopeModel.DurationInMonths) / 30,
+                        DailyVolume: (addedInbound.CommitedVolume / $scope.scopeModel.DealPeriod) ,
                         Rate: addedInbound.Rate,
                         CurrentCost: addedInbound.CurrentCost,
                         ProfitFromRate: addedInbound.Rate - addedInbound.CurrentCost,
@@ -366,6 +374,12 @@
             var totalCommitmentCost = 0;
             var totalSaving = 0;
 
+            var totalOutVolumes = 0;
+            var totalOutVolumesDay = 0
+
+            var totalInVolumes = 0;
+            var totalInVolumesDay = 0
+
             var totalCommitmentRevenue = 0;
             var totalCustomerProfit = 0;
 
@@ -380,30 +394,45 @@
                 for (var i = 0 ; i < $scope.scopeModel.outboundTraffics.length ; i++) {
                     totalCommitmentCost += $scope.scopeModel.outboundTraffics[i].RevenuePerDeal;
                     totalSaving += $scope.scopeModel.outboundTraffics[i].TotalDealSaving;
+                    totalOutVolumes += parseFloat( $scope.scopeModel.outboundTraffics[i].CommitedVolume );
+                    totalOutVolumesDay += $scope.scopeModel.outboundTraffics[i].DailyVolume ;
                 }
                    
             }
             $scope.scopeModel.TotalCommitmentCost = UtilsService.round(totalCommitmentCost,2);
-            $scope.scopeModel.TotalSaving = UtilsService.round(totalSaving,2);
+            $scope.scopeModel.TotalSaving = UtilsService.round(totalSaving, 2);
+            outBoundGridApi.setSummary({
+                TotalOutVolumes: totalOutVolumes,
+                TotalOutVolumesDay:totalOutVolumesDay,
+                TotalSaving: totalSaving,
+                TotalCommitmentCost: totalCommitmentCost
+            });
 
             if ($scope.scopeModel.inboundTraffics.length > 0) {
                 for (var i = 0 ; i < $scope.scopeModel.inboundTraffics.length ; i++) {
                     totalCustomerProfit += $scope.scopeModel.inboundTraffics[i].DealProfit;
                     totalCommitmentRevenue += $scope.scopeModel.inboundTraffics[i].Revenue;
+                    totalInVolumes += parseFloat($scope.scopeModel.inboundTraffics[i].CommitedVolume);
+                    totalInVolumesDay += $scope.scopeModel.inboundTraffics[i].DailyVolume;
                 }
             }
-
+            inBoundGridApi.setSummary({
+                TotalInVolumes: totalInVolumes,
+                TotalInVolumesDay: totalInVolumesDay,
+                TotalCommitmentRevenue: totalCommitmentRevenue,
+                TotalCustomerProfit: totalCustomerProfit
+            });
             $scope.scopeModel.TotalCustomerProfit = UtilsService.round(totalCustomerProfit,2);
 
             $scope.scopeModel.TotalCommitmentRevenue = UtilsService.round(totalCommitmentRevenue,2) ;
 
             $scope.scopeModel.TotalCommitmentProfit = UtilsService.round(totalSaving + totalCustomerProfit,2);
 
-            $scope.scopeModel.TotalProfitMonth = UtilsService.round ( ( $scope.scopeModel.DurationInMonths > 0 ? $scope.scopeModel.TotalCommitmentProfit/  $scope.scopeModel.DurationInMonths : 0) ,2) ;
+            $scope.scopeModel.TotalProfitMonth = UtilsService.round ( ( $scope.scopeModel.DealPeriod > 0 ? $scope.scopeModel.TotalCommitmentProfit/  $scope.scopeModel.DealPeriod : 0) ,2) ;
 
             $scope.scopeModel.TotalProfitDay = UtilsService.round ($scope.scopeModel.TotalProfitMonth /  30 , 2) ;
 
-            $scope.scopeModel.Margins = UtilsService.round ( ($scope.scopeModel.TotalCommitmentProfit /  $scope.scopeModel.TotalCommitmentRevenue),2 );
+            $scope.scopeModel.Margins = UtilsService.round ( ($scope.scopeModel.TotalCommitmentProfit /  $scope.scopeModel.TotalCommitmentRevenue) );
 
             $scope.scopeModel.Exposure = UtilsService.round ( totalCommitmentRevenue -  totalCommitmentCost , 2);
 
@@ -417,7 +446,7 @@
                     Name: updatedOutbound.Name,
                     SupplierZoneIds: updatedOutbound.SupplierZoneIds,
                     CommitedVolume: updatedOutbound.CommitedVolume,
-                    DailyVolume: (updatedOutbound.CommitedVolume / $scope.scopeModel.DurationInMonths) / 30,
+                    DailyVolume: (updatedOutbound.CommitedVolume / $scope.scopeModel.DealPeriod) ,
                     Rate: updatedOutbound.Rate,
                     CurrentCost: updatedOutbound.CurrentCost,
                     CostSavingFromRate: updatedOutbound.CurrentCost - updatedOutbound.Rate,
@@ -439,7 +468,7 @@
                     Name: updatedInbound.Name,
                     SaleZoneIds: updatedInbound.SaleZoneIds,
                     CommitedVolume: updatedInbound.CommitedVolume,
-                    DailyVolume: (updatedInbound.CommitedVolume / $scope.scopeModel.DurationInMonths) / 30,
+                    DailyVolume: (updatedInbound.CommitedVolume / $scope.scopeModel.DealPeriod) ,
                     Rate: updatedInbound.Rate,
                     CurrentCost: updatedInbound.CurrentCost,
                     ProfitFromRate: updatedInbound.Rate - updatedInbound.CurrentCost,

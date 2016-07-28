@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string Name { get; set; }
     }
 
-    public enum DealAnalysisType {  ByCostRate = 1, BySaleRate = 2}
+    public enum DealAnalysisType {  SavingBased = 1, ProfitBased = 2}
     public class DealAnalysisSettings
     {
         public int CarrierAccountId { get; set; }

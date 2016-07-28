@@ -21,10 +21,10 @@
                             </vr-select>
                         </vr-columns>
                         <vr-columns width="1/3row">
-                            <vr-datetimepicker label="From Date" type="date" value="scopeModel.fromDate" onvaluechanged="scopeModel.EvalDurationInMonths" isrequired="true"></vr-datetimepicker>
+                            <vr-datetimepicker label="From Date" type="date" value="scopeModel.fromDate" onvaluechanged="scopeModel.EvalDealPeriod" isrequired="true"></vr-datetimepicker>
                         </vr-columns>
                         <vr-columns width="1/3row">
-                            <vr-datetimepicker label="To Date" type="date" value="scopeModel.toDate" onvaluechanged="scopeModel.EvalDurationInMonths" isrequired="true"></vr-datetimepicker>
+                            <vr-datetimepicker label="To Date" type="date" value="scopeModel.toDate" onvaluechanged="scopeModel.EvalDealPeriod" isrequired="true"></vr-datetimepicker>
                         </vr-columns>
 
                     </vr-row>
@@ -37,16 +37,16 @@
                             <vr-button type="Add" data-onclick="scopeModel.addOutboundTraffic" standalone></vr-button>
 
                             <vr-datagrid datasource="scopeModel.outboundTraffics" norowhighlightonclick="true" menuactions="scopeModel.gridMenuActionsOutbound" maxheight="300px"
-                                         ondeleterow="scopeModel.removeOutboundTraffic" hidegridmenu>
-                                <vr-datagridcolumn headertext="'Name'" field="'Name'" disablesorting></vr-datagridcolumn>
+                                         ondeleterow="scopeModel.removeOutboundTraffic" hidegridmenu on-ready="scopeModel.onOutboundGridReady">
+                                <vr-datagridcolumn headertext="'Destination/Group'" field="'Name'" disablesorting></vr-datagridcolumn>
                                 <!--<vr-datagridcolumn headertext="'Sale Zones'" field="'Sale Zones'"  disablesorting></vr-datagridcolumn>-->
-                                <vr-datagridcolumn headertext="'Commited Volumes'" field="'CommitedVolume'" type="'Number'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'DailyVolume'" field="'DailyVolume'" type="'Number'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Rate'" field="'Rate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Duration'" field="'CommitedVolume'" summaryfield="'TotalOutVolumes'" type="'Number'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Duration per Day'" field="'DailyVolume'" type="'Number'" summaryfield="'TotalOutVolumesDay'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Deal Rate'" field="'Rate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
                                 <vr-datagridcolumn headertext="'Current Cost'" field="'CurrentCost'" type="'Number'" disablesorting numberprecision="'LongPrecision'"></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Cost Saving From Rate'" field="'CostSavingFromRate'" type="'Number'" disablesorting numberprecision="'LongPrecision'"></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Total Deal Saving'" field="'TotalDealSaving'" type="'Number'" disablesorting numberprecision="'LongPrecision'"></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Revenue Per Deal'" field="'RevenuePerDeal'" type="'Number'" disablesorting numberprecision="'LongPrecision'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Margin per Minute'" field="'CostSavingFromRate'"  type="'Number'" disablesorting numberprecision="'LongPrecision'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Margin per Period'" field="'TotalDealSaving'" type="'Number'" summaryfield="'TotalSaving'" disablesorting numberprecision="'LongPrecision'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Revenue'" field="'RevenuePerDeal'" type="'Number'" summaryfield="'TotalCommitmentCost'" disablesorting numberprecision="'LongPrecision'"></vr-datagridcolumn>
                             </vr-datagrid>
                         </vr-columns>
                     </vr-row>
@@ -57,16 +57,16 @@
                             <vr-button type="Add" data-onclick="scopeModel.addInboundTraffic" standalone></vr-button>
 
                             <vr-datagrid datasource="scopeModel.inboundTraffics" norowhighlightonclick="true" menuactions="scopeModel.gridMenuActionsInbound" maxheight="300px"
-                                         ondeleterow="scopeModel.removeInboundTraffic" hidegridmenu>
-                                <vr-datagridcolumn headertext="'Name'" field="'Name'" disablesorting></vr-datagridcolumn>
+                                         ondeleterow="scopeModel.removeInboundTraffic" hidegridmenu on-ready="scopeModel.onInboundGridReady">
+                                <vr-datagridcolumn headertext="'Destination/Group'" field="'Name'" disablesorting></vr-datagridcolumn>
                                 <!--<vr-datagridcolumn headertext="'Sale Zones'" field="'Sale Zones'"  disablesorting></vr-datagridcolumn>-->
-                                <vr-datagridcolumn headertext="'Commited Volumes'" field="'CommitedVolume'" type="'Number'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Daily Volume'" field="'DailyVolume'" type="'Number'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Rate'" field="'Rate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Current Cost'" field="'CurrentCost'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Profit From Rate'" field="'ProfitFromRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Deal Profit'" field="'DealProfit'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Revenue'" field="'Revenue'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Duration'" field="'CommitedVolume'" summaryfield="'TotalInVolumes'" type="'Number'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Duration per Day'" field="'DailyVolume'" summaryfield="'TotalInVolumesDay'" type="'Number'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Deal Rate'" field="'Rate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Current Sale'" field="'CurrentCost'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Margin per Minute'" field="'ProfitFromRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Margin per Period'" field="'DealProfit'" type="'Number'" summaryfield="'totalCustomerProfit'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Revenue'" field="'Revenue'" type="'Number'" numberprecision="'LongPrecision'" summaryfield="'TotalCommitmentRevenue'" disablesorting ></vr-datagridcolumn>
                             </vr-datagrid>
                         </vr-columns>
                     </vr-row>
@@ -76,16 +76,16 @@
                 <vr-section title="Analysis Result">
                     <vr-row removeline>
                         <vr-columns width="1/4row" >
-                            <vr-label>Total Duration Deal (Months) </vr-label>
+                            <vr-label>Deal Period (Days) </vr-label>
                         </vr-columns>
                         <vr-columns width="normal">
-                            <vr-lable isvalue>{{scopeModel.DurationInMonths}} </vr-lable>
+                            <vr-lable isvalue>{{scopeModel.DealPeriod}} </vr-lable>
                         </vr-columns>
 
                     </vr-row>
                     <vr-row removeline>
                         <vr-columns width="1/4row">
-                            <vr-label>Total Commitment Cost </vr-label>
+                            <vr-label>Total Revenue Cost </vr-label>
                         </vr-columns>
                         <vr-columns width="normal">
                             <vr-lable isvalue>${{scopeModel.TotalCommitmentCost | number}} </vr-lable>
@@ -93,29 +93,29 @@
                     </vr-row>
                     <vr-row removeline>
                         <vr-columns width="1/4row">
-                            <vr-label>Total Commitment Revenue</vr-label>
+                            <vr-label>Total Revenue Sale</vr-label>
                         </vr-columns>
                         <vr-columns width="normal">
                             <vr-lable isvalue>${{scopeModel.TotalCommitmentRevenue | number}} </vr-lable>
                         </vr-columns>
                     </vr-row>
                     <vr-row removeline>
-                        <vr-columns width="1/4row" >
-                            <vr-label>Total Savings (Per Deal)</vr-label>
-                        </vr-columns>
-                        <vr-columns width="normal">
-                            <vr-lable isvalue>${{scopeModel.TotalSaving | number}} </vr-lable>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row removeline>
                         <vr-columns width="1/4row">
-                            <vr-label>Total Customer Profit (Per Deal)</vr-label>
+                            <vr-label>Total Margin per Period (Sale)</vr-label>
                         </vr-columns>
                         <vr-columns width="normal">
                             <vr-lable isvalue>${{scopeModel.TotalCustomerProfit | number}} </vr-lable>
                         </vr-columns>
                     </vr-row>
                     <vr-row removeline>
+                        <vr-columns width="1/4row">
+                            <vr-label>Total Margin per Period (Cost)</vr-label>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-lable isvalue>${{scopeModel.TotalSaving | number}} </vr-lable>
+                        </vr-columns>
+                    </vr-row>
+                    <!--<vr-row removeline>
                         <vr-columns width="1/4row">
                             <vr-label>Total Profit (Per Month)</vr-label>
                         </vr-columns>
@@ -130,10 +130,10 @@
                         <vr-columns width="normal">
                             <vr-lable isvalue>${{scopeModel.TotalProfitDay | number}} </vr-lable>
                         </vr-columns>
-                    </vr-row>
+                    </vr-row>-->
                     <vr-row removeline>
                         <vr-columns width="1/4row">
-                            <vr-label>Total Commitment Profit</vr-label>
+                            <vr-label>Total Margin per Period</vr-label>
                         </vr-columns>
                         <vr-columns width="normal">
                             <vr-lable isvalue>${{scopeModel.TotalCommitmentProfit |  number}} </vr-lable>
@@ -144,12 +144,12 @@
                             <vr-label>Margins</vr-label>
                         </vr-columns>
                         <vr-columns width="normal">
-                            <vr-lable isvalue>{{scopeModel.Margins * 100| number :2 }}%</vr-lable>
+                            <vr-lable isvalue>{{scopeModel.Margins * 100 | number:2  }}%</vr-lable>
                         </vr-columns>
                     </vr-row>
                     <vr-row removeline>
                         <vr-columns width="1/4row">
-                            <vr-label>Exposure</vr-label>
+                            <vr-label>Netting</vr-label>
                         </vr-columns>
                         <vr-columns width="normal">
                             <vr-lable isvalue>${{scopeModel.Exposure | number}}</vr-lable>
