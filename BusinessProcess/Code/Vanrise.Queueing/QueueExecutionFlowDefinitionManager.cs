@@ -165,6 +165,7 @@ namespace Vanrise.Queueing
 
         #endregion
 
+
         #region Private Classes
 
         internal class CacheManager : Vanrise.Caching.BaseCacheManager

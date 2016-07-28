@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Queueing.Entities
 {
-  public  class QueueExecutionFlowInfo
-    {
+   public  class QueueExecutionFlowInfo
+   {
       public int ExecutionFlowId { get; set; }
 
       public string Name { get; set; }

@@ -24,20 +24,16 @@ namespace Vanrise.Queueing.Web.Controllers
         [Route("GetExecutionFlowDefinitions")]
         public IEnumerable<QueueExecutionFlowDefinitionInfo> GetExecutionFlowDefinitionsInfo(string filter = null)
         {
-
             QueueExecutionFlowDefinitionFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<QueueExecutionFlowDefinitionFilter>(filter) : null;
             return _manager.GetExecutionFlowDefinitionsInfo(deserializedFilter);
-
         }
 
         [HttpGet]
         [Route("GetExecutionFlowStagesInfo")]
         public IEnumerable<QueueExecutionFlowStageInfo> GetExecutionFlowStagesInfo(int executionFlowDefinitionId, string filter = null)
         {
-
             QueueExecutionFlowStageFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<QueueExecutionFlowStageFilter>(filter) : null;
             return _manager.GetExecutionFlowStagesInfo(executionFlowDefinitionId, deserializedFilter);
-
         }
 
 

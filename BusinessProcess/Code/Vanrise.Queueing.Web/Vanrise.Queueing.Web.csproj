@@ -110,6 +110,7 @@
     <Content Include="Queueing\Directives\ExecutionFlowDefinition\vr-queueing-executionflowdefinition-selector.js" />
     <Content Include="Queueing\Directives\ExecutionFlowStage\Templates\ExecutionFlowStageManagement.html" />
     <Content Include="Queueing\Directives\ExecutionFlowStage\vr-queueing-executionflow-stage-management.js" />
+    <Content Include="Queueing\Directives\ExecutionFlowStage\vr-queueing-executionflow-stage-selector.js" />
     <Content Include="Queueing\Directives\QueueActivator\Templates\QueueActivatorCustomActivatorTemplate.html" />
     <Content Include="Queueing\Directives\QueueActivator\Templates\QueueActivatorTypeSelectorTemplate.html" />
     <Content Include="Queueing\Directives\QueueActivator\vr-queueing-queueactivator-customactivator.js" />

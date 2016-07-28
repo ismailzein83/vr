@@ -14,8 +14,11 @@
         var dataRecordStorageAPI;
         var dataRecordStorageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var executionFlowAPI;
-        var executionFlowSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var executionFlowDefinitionAPI;
+        var executionFlowDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var executionFlowStageAPI;
+        var executionFlowStageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -39,10 +42,16 @@
                 dataRecordStorageSelectorReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onExecutionFlowSelectorReady = function (api) {
-                executionFlowAPI = api;
-                executionFlowSelectorReadyDeferred.resolve();
+            $scope.scopeModel.onExecutionFlowDefinitionSelectorReady = function (api) {
+                executionFlowDefinitionAPI = api;
+                executionFlowDefinitionSelectorReadyDeferred.resolve();
             };
+
+            $scope.scopeModel.onExecutionFlowStageSelectorReady = function (api) {
+                executionFlowStageAPI = api;
+                executionFlowStageSelectorReadyDeferred.resolve();
+            };
+            
 
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
@@ -80,7 +89,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordStorageSelector, loadExecutionFlowSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordStorageSelector, loadExecutionFlowDefinitionSelector, loadExecutionFlowStageSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -113,18 +122,31 @@
             });
             return dataRecordStorageSelectorLoadDeferred.promise;
         }
-        function loadExecutionFlowSelector() {
-            var executionFlowSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-            executionFlowSelectorReadyDeferred.promise.then(function () {
-                var executionFlowSelectorPayload;
+        function loadExecutionFlowDefinitionSelector() {
+            var executionFlowDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            executionFlowDefinitionSelectorReadyDeferred.promise.then(function () {
+                var executionFlowDefinitionSelectorPayload;
                 if (isEditMode) {
-                    executionFlowSelectorPayload = {
+                    executionFlowDefinitionSelectorPayload = {
                         selectedIds: reprocessDefinitionEntity.Settings.ExecutionFlowDefinitionId
                     };
                 }
-                VRUIUtilsService.callDirectiveLoad(executionFlowAPI, executionFlowSelectorPayload, executionFlowSelectorLoadDeferred);
+                VRUIUtilsService.callDirectiveLoad(executionFlowDefinitionAPI, executionFlowDefinitionSelectorPayload, executionFlowDefinitionSelectorLoadDeferred);
             });
-            return executionFlowSelectorLoadDeferred.promise;
+            return executionFlowDefinitionSelectorLoadDeferred.promise;
+        }
+        function loadExecutionFlowStageSelector() {
+            var executionFlowStageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            executionFlowStageSelectorReadyDeferred.promise.then(function () {
+                var executionFlowStageSelectorPayload;
+                if (isEditMode) {
+                    executionFlowStageSelectorPayload = {
+                        selectedIds: reprocessDefinitionEntity.Settings.ExecutionFlowDefinitionId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(executionFlowStageAPI, executionFlowStageSelectorPayload, executionFlowStageSelectorLoadDeferred);
+            });
+            return executionFlowStageSelectorLoadDeferred.promise;
         }
 
         function insert() {

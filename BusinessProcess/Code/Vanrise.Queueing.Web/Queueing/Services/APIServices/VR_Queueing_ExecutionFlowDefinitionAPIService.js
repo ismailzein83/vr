@@ -19,9 +19,10 @@
         function GetFilteredExecutionFlowDefinitions(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'ExecutionFlowDefinition', 'GetFilteredExecutionFlowDefinitions'), input);
         }
-
         function GetExecutionFlowDefinition(executionFlowDefinitionId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'ExecutionFlowDefinition', 'GetExecutionFlowDefinition'), { executionFlowDefinitionId: executionFlowDefinitionId });
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'ExecutionFlowDefinition', 'GetExecutionFlowDefinition'), {
+                executionFlowDefinitionId: executionFlowDefinitionId
+            });
         }
         function AddExecutionFlowDefinition(executionFlowDefinitionObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'ExecutionFlowDefinition', 'AddExecutionFlowDefinition'), executionFlowDefinitionObject);
@@ -40,7 +41,6 @@
                 filter: filter
             });
         }
-
         function GetQueueActivatorsConfig() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'ExecutionFlowDefinition', 'GetQueueActivatorsConfig'));
         }

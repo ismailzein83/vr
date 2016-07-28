@@ -24,11 +24,6 @@ app.directive('retailDataChargingpolicySettings', ['UtilsService', function (Uti
         function initializeController() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.routerTypes = [];
-            $scope.scopeModel.routerTypes[0] = { value: 0, text: "Cisco" };
-            $scope.scopeModel.routerTypes[1] = { value: 1, text: "Mikrotic" };
-            $scope.scopeModel.selectedRouterType;
-
             $scope.scopeModel.onPartsDirectiveReady = function (api) {
                 partsDirectiveAPI = api;
                 defineAPI();
@@ -54,12 +49,7 @@ app.directive('retailDataChargingpolicySettings', ['UtilsService', function (Uti
                         $scope.scopeModel.downloadSpeedInKbps = payload.settings.DownloadSpeedInKbps;
                         $scope.scopeModel.uploadSpeedInKbps = payload.settings.UploadSpeedInKbps;
                         $scope.scopeModel.downloadQuotaInMB = payload.settings.DownloadQuotaInMB;
-                        $scope.scopeModel.uploadQuotaInMB = payload.settings.UploadQuotaInMB;
-
-                        if (payload.settings.RouterTypeId != undefined)
-                            $scope.scopeModel.selectedRouterType = UtilsService.getItemByVal($scope.scopeModel.routerTypes, payload.settings.RouterTypeId, 'value');
-                        
-                        
+                        $scope.scopeModel.uploadQuotaInMB = payload.settings.UploadQuotaInMB;                    
                     }
                 }
 
@@ -75,7 +65,6 @@ app.directive('retailDataChargingpolicySettings', ['UtilsService', function (Uti
                 return {
                     $type: 'Retail.Data.Entities.DataChargingPolicySettings, Retail.Data.Entities',
                     Parts: partsDirectiveAPI.getData(),
-                    RouterTypeId: $scope.scopeModel.selectedRouterType.value,
                     DownloadSpeedInKbps: $scope.scopeModel.downloadSpeedInKbps,
                     UploadSpeedInKbps: $scope.scopeModel.uploadSpeedInKbps,
                     DownloadQuotaInMB: $scope.scopeModel.downloadQuotaInMB,

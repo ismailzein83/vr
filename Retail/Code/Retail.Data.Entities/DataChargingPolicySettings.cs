@@ -9,8 +9,6 @@ namespace Retail.Data.Entities
 {
     public class DataChargingPolicySettings : ChargingPolicySettings
     {
-        public int RouterTypeId { get; set; }
-
         public int DownloadSpeedInKbps { get; set; }
 
         public int UploadSpeedInKbps { get; set; }
