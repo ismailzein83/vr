@@ -20,6 +20,7 @@ namespace Vanrise.Queueing.Entities
                 if (!s_nbOfMaxConcurrentActivators.TryGetValue(activatorName, out nbOfConcurrentActivators))
                 {
                     if (!int.TryParse(ConfigurationManager.AppSettings[String.Format("Queue_NbOfMaxConcurrentActivators_{0}", activatorName)], out nbOfConcurrentActivators))
+                        if (!int.TryParse(ConfigurationManager.AppSettings["Queue_NbOfMaxConcurrentActivators_Default"], out nbOfConcurrentActivators))
                         nbOfConcurrentActivators = 5;
                     s_nbOfMaxConcurrentActivators.TryAdd(activatorName, nbOfConcurrentActivators);
                 }

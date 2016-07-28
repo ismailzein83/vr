@@ -23,7 +23,7 @@ namespace Vanrise.Queueing
         static QueueActivationService()
         {
             if (!int.TryParse(ConfigurationManager.AppSettings["Queue_ConsecutiveItemsToProcess"], out s_consecutiveItemsToProcess))
-                s_consecutiveItemsToProcess = 20;
+                s_consecutiveItemsToProcess = 5;
         }
 
         Task _taskProcessing;
