@@ -143,6 +143,7 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\DealProgressController.cs" />
     <Compile Include="Controllers\DealController.cs" />
     <Compile Include="Controllers\SalePricelistController.cs" />
     <Compile Include="Controllers\AccountManagerController.cs" />
@@ -342,6 +343,7 @@
     <Content Include="WhS_BusinessEntity\Images\ReOpen.png" />
     <Content Include="WhS_BusinessEntity\Images\Zone.png" />
     <Content Include="WhS_BusinessEntity\ModuleInitialization.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\DealProgressAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\DealAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\DealAnalysisService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierPriceListAPIService.js" />
@@ -409,6 +411,8 @@
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupUploadEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupUploadEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\Deal\DealProgressManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\Deal\DealProgressManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\Deal\InboundTrafficEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\Deal\InboundTrafficEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\Deal\OutboundTrafficEditor.html" />
