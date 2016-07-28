@@ -8,6 +8,8 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
  xmlns:vrba="clr-namespace:Vanrise.Reprocess.BP.Arguments;assembly=Vanrise.Reprocess.BP.Arguments"
@@ -28,6 +30,7 @@
       <x:String>System.Text</x:String>
       <x:String>Vanrise.Reprocess.BP</x:String>
       <x:String>Vanrise.Reprocess.BP.Arguments</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -43,14 +46,14 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
-      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
-      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
@@ -90,7 +93,10 @@
         <ActivityAction.Argument>
           <DelegateInArgument x:TypeArguments="vre:DateTimeRange" Name="item" />
         </ActivityAction.Argument>
-        <Sequence>
+        <Sequence DisplayName="Sequence_RunSubReprocess" sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="subProcessEventPayload" />
+          </Sequence.Variables>
           <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1">
             <vbw:WriteTrackingMessage.Message>
               <InArgument x:TypeArguments="x:String">
@@ -103,7 +109,26 @@
               </InArgument>
             </vbw:WriteTrackingMessage.Severity>
           </vbw:WriteTrackingMessage>
-          <vbw:WriteTrackingMessage>
+          <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
+            <vbw:RunProcess.Input>
+              <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
+                <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new ReProcessingSubProcessInput()
+            {
+                FromTime = item.From,
+                ToTime = item.To,
+                ReprocessDefinitionId = Input.ReprocessDefinitionId,
+                UserId = Input.UserId,
+                EntityId = Input.EntityId
+            }</mca:CSharpValue>
+              </InArgument>
+            </vbw:RunProcess.Input>
+            <vbw:RunProcess.ProcessCompletedEventPayload>
+              <OutArgument x:TypeArguments="vb:ProcessCompletedEventPayload">
+                <mca:CSharpReference x:TypeArguments="vb:ProcessCompletedEventPayload">subProcessEventPayload</mca:CSharpReference>
+              </OutArgument>
+            </vbw:RunProcess.ProcessCompletedEventPayload>
+          </vbw:RunProcess>
+          <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2">
             <vbw:WriteTrackingMessage.Message>
               <InArgument x:TypeArguments="x:String">
                 <mca:CSharpValue x:TypeArguments="x:String">string.Format("Finishing Range From {0}, To {1}",item.From,item.To)</mca:CSharpValue>
@@ -114,35 +139,34 @@
                 <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
               </InArgument>
             </vbw:WriteTrackingMessage.Severity>
-            <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_2</sap2010:WorkflowViewState.IdRef>
           </vbw:WriteTrackingMessage>
-          <sap2010:WorkflowViewState.IdRef>Sequence_2</sap2010:WorkflowViewState.IdRef>
         </Sequence>
       </ActivityAction>
     </ParallelForEach>
-    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sDzkDfA4CAQE9BVIkAgEZUwV6FwIBAk8LT1cCASNAC0BdAgEgSgtKWQIBHUULRXICARpWC1ZxAgEWXQl4FAIBA14LaSYCAQ1qC3YmAgEEZhFmiwECARJhEWGRAQIBDnIRcosBAgEJbRFtkgECAQU=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sEzwDkwEOAgEBQAVVJAIBKVYFkQEXAgECUgtSVwIBM0MLQ10CATBNC01ZAgEtSAtIcgIBKlkLWXECASZgCY8BFAIBA2QLbyYCARtwC4IBHAIBD4MBC44BJgIBBGwRbIsBAgEhZxFnkQECARxzEXogAgEWfxF/hAECARFwfHCCAQIBEIsBEYsBiwECAQqGARGGAZIBAgEF</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="GenerateDateTimeRanges_1" sap:VirtualizedContainerService.HintSize="287,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,208">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,270">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="287,358" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="309,544">
+      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="287,420" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="309,606">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Reprocess.BP.ReProcessingProcess_1" sap:VirtualizedContainerService.HintSize="349,624" />
+      <sap2010:ViewStateData Id="Vanrise.Reprocess.BP.ReProcessingProcess_1" sap:VirtualizedContainerService.HintSize="349,686" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
