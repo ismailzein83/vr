@@ -141,35 +141,22 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             if (zoneToProcess.CodesToMove.Count() > 0 && zoneToProcess.ExistingZones.Count() == 0)
             {
-                bool isZoneRenamed = true;
                 string originalZoneName = zoneToProcess.CodesToMove.First().OldZoneName;
                 if (zoneToProcess.CodesToMove.All(itm => itm.OldZoneName == originalZoneName))
                 {
-                    Dictionary<string, List<ExistingCode>> matchedCodes;
-                    if (existingCodesByZoneNames.TryGetValue(originalZoneName, out matchedCodes))
+                    List<ExistingZone> matchedRenamedExistingZones;
+                    if (closedExistingZones != null && closedExistingZones.TryGetValue(originalZoneName, out matchedRenamedExistingZones))
                     {
-                        foreach (KeyValuePair<string, List<ExistingCode>> matchedCode in matchedCodes)
-                        {
-                            if (!matchedCode.Value.Any(item => item.ChangedCode != null))
-                            {
-                                isZoneRenamed = false;
-                                continue;
-                            }
-                        }
-
-                        if (isZoneRenamed)
-                        {
-                            zoneToProcess.RecentZoneName = originalZoneName;
-                            return ZoneChangeType.Renamed;
-                        }
+                        zoneToProcess.RecentZoneName = originalZoneName;
+                        return ZoneChangeType.Renamed;
                     }
-
+                        
                 }
             }
 
             List<ExistingZone> matchedExistingZones;
             if (closedExistingZones != null && closedExistingZones.TryGetValue(zoneToProcess.ZoneName, out matchedExistingZones))
-                return ZoneChangeType.Deleted;
+                 return zoneToProcess.EED > DateTime.Now.Date ? ZoneChangeType.PendingClosed : ZoneChangeType.Deleted; 
 
             if (zoneToProcess.AddedZones.Count() > 0 && zoneToProcess.ExistingZones.Count() == 0)
                 return zoneToProcess.BED > DateTime.Now.Date ? ZoneChangeType.PendingEffective : ZoneChangeType.New;

@@ -63,7 +63,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     if (zonesPreview.FindRecord(item => item.RecentZoneName != null && item.RecentZoneName.Equals(notImportedZone.Name, StringComparison.InvariantCultureIgnoreCase)) != null)
                         continue;
 
-                    //If a zone is deleted, do not show it as not changed
+                    //If a zone is deleted by moving all its codes, do not show it as not changed
                     List<ExistingZone> matchedClosedZones;
                     if (closedExistingZones.TryGetValue(notImportedZone.ZoneEntity.Name, out matchedClosedZones))
                         continue;
@@ -84,6 +84,11 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             {
                 foreach (KeyValuePair<string, List<ExistingZone>> closedExistingZone in closedExistingZones)
                 {
+                    //If a zone is renamed, do not show it in preview screen as an not imported zone
+                    if (zonesPreview.FindRecord(item => item.RecentZoneName != null && item.RecentZoneName.Equals(closedExistingZone.Key, StringComparison.InvariantCultureIgnoreCase)) != null)
+                        continue;
+
+                    //If a zone is deleted by deleting its codes, do not show it as not changed
                     if (!zonesToProcess.Any(item => item.ZoneName.Equals(closedExistingZone.Key, StringComparison.InvariantCultureIgnoreCase)))
                     {
                         DateTime? ClosedZoneEED =  Vanrise.Common.ExtensionMethods.VRMaximumDate(closedExistingZone.Value.Select(item => item.EED));
