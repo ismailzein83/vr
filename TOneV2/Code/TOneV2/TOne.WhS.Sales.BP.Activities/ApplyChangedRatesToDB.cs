@@ -10,25 +10,52 @@ using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class ApplyChangedRatesToDB : CodeActivity
+    public class ApplyChangedRatesToDBInput
     {
-        #region Arguments
+        public IEnumerable<ChangedRate> ChangedRates { get; set; }
+    }
+
+    public class ApplyChangedRatesToDBOutput
+    {
+
+    }
+
+    public class ApplyChangedRatesToDB : BaseAsyncActivity<ApplyChangedRatesToDBInput, ApplyChangedRatesToDBOutput>
+    {
+        #region Input Arguments
 
         [RequiredArgument]
         public InArgument<IEnumerable<ChangedRate>> ChangedRates { get; set; }
 
         #endregion
 
-        protected override void Execute(CodeActivityContext context)
+        protected override ApplyChangedRatesToDBInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            IEnumerable<ChangedRate> changedRates = this.ChangedRates.Get(context);
-
-            if (changedRates != null && changedRates.Count() > 0)
+            return new ApplyChangedRatesToDBInput()
             {
-                IChangedSaleRateDataManager dataManager = SalesDataManagerFactory.GetDataManager<IChangedSaleRateDataManager>();
-                dataManager.ProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
-                dataManager.ApplyChangedRatesToDB(changedRates);
-            }
+                ChangedRates = this.ChangedRates.Get(context)
+            };
+        }
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            base.OnBeforeExecute(context, handle);
+        }
+
+        protected override ApplyChangedRatesToDBOutput DoWorkWithResult(ApplyChangedRatesToDBInput inputArgument, AsyncActivityHandle handle)
+        {
+            IEnumerable<ChangedRate> changedRates = inputArgument.ChangedRates;
+
+            IChangedSaleRateDataManager dataManager = SalesDataManagerFactory.GetDataManager<IChangedSaleRateDataManager>();
+            dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
+            dataManager.ApplyChangedRatesToDB(changedRates);
+
+            return new ApplyChangedRatesToDBOutput() { };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, ApplyChangedRatesToDBOutput result)
+        {
+
         }
     }
 }

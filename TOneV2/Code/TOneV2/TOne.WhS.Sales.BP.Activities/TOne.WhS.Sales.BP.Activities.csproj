@@ -69,16 +69,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplyDefaultRoutingProductPreviewToDB.cs" />
     <Compile Include="ApplyRatePlanPreviewSummaryToDB.cs" />
     <Compile Include="ApplyRatePreviewsToDB.cs" />
     <Compile Include="ApplySaleZoneRoutingProductPreviewsToDB.cs" />
+    <Compile Include="PrepareDefaultRoutingProductPreview.cs" />
     <Compile Include="PrepareRatePlanPreviewSummary.cs" />
     <Compile Include="PrepareRatePreviews.cs" />
     <Compile Include="PrepareSaleZoneRoutingProductPreviews.cs" />
     <Compile Include="ReserveSalePriceListId.cs" />
     <Compile Include="ApplyChangedDefaultRoutingProductsToDB.cs" />
     <Compile Include="ApplyChangedRatesToDB.cs" />
-    <Compile Include="ApplyChangedZoneRoutingProductsToDB.cs" />
+    <Compile Include="ApplyChangedSaleZoneRoutingProductsToDB.cs" />
     <Compile Include="ApplyNewDefaultRoutingProductToDB.cs" />
     <Compile Include="ApplyNewRatesToDB.cs" />
     <Compile Include="ApplyNewSaleZoneRoutingProductsToDB.cs" />

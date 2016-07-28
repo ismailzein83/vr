@@ -10,7 +10,17 @@ using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class ApplyChangedDefaultRoutingProductsToDB : CodeActivity
+    public class ApplyChangedDefaultRoutingProductsToDBInput
+    {
+        public IEnumerable<ChangedDefaultRoutingProduct> ChangedDefaultRoutingProducts { get; set; }
+    }
+
+    public class ApplyChangedDefaultRoutingProductsToDBOutput
+    {
+
+    }
+
+    public class ApplyChangedDefaultRoutingProductsToDB : BaseAsyncActivity<ApplyChangedDefaultRoutingProductsToDBInput, ApplyChangedDefaultRoutingProductsToDBOutput>
     {
         #region Input Arguments
 
@@ -19,16 +29,33 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #endregion
 
-        protected override void Execute(CodeActivityContext context)
+        protected override ApplyChangedDefaultRoutingProductsToDBInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            IEnumerable<ChangedDefaultRoutingProduct> changedDefaultRoutingProducts = ChangedDefaultRoutingProducts.Get(context);
-
-            if (changedDefaultRoutingProducts != null && changedDefaultRoutingProducts.Count() > 0)
+            return new ApplyChangedDefaultRoutingProductsToDBInput()
             {
-                var dataManager = SalesDataManagerFactory.GetDataManager<IChangedDefaultRoutingProductDataManager>();
-                dataManager.ProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
-                dataManager.ApplyChangedDefaultRoutingProductsToDB(changedDefaultRoutingProducts);
-            }
+                ChangedDefaultRoutingProducts = this.ChangedDefaultRoutingProducts.Get(context)
+            };
+        }
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            base.OnBeforeExecute(context, handle);
+        }
+
+        protected override ApplyChangedDefaultRoutingProductsToDBOutput DoWorkWithResult(ApplyChangedDefaultRoutingProductsToDBInput inputArgument, AsyncActivityHandle handle)
+        {
+            IEnumerable<ChangedDefaultRoutingProduct> changedDefaultRoutingProducts = inputArgument.ChangedDefaultRoutingProducts;
+
+            var dataManager = SalesDataManagerFactory.GetDataManager<IChangedDefaultRoutingProductDataManager>();
+            dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
+            dataManager.ApplyChangedDefaultRoutingProductsToDB(changedDefaultRoutingProducts);
+
+            return new ApplyChangedDefaultRoutingProductsToDBOutput() { };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, ApplyChangedDefaultRoutingProductsToDBOutput result)
+        {
+
         }
     }
 }

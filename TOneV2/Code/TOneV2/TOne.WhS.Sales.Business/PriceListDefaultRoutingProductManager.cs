@@ -17,7 +17,10 @@ namespace TOne.WhS.Sales.Business
                 ProcessDefaultRoutingProductToAdd(context.DefaultRoutingProductToAdd, context.ExistingDefaultRoutingProducts);
             else if (context.DefaultRoutingProductToClose != null)
                 ProcessDefaultRoutingProductToClose(context.DefaultRoutingProductToClose, context.ExistingDefaultRoutingProducts);
-            SetNewAndChangedDefaultRoutingProducts(context);
+
+            if (context.DefaultRoutingProductToAdd != null)
+                context.NewDefaultRoutingProduct = context.DefaultRoutingProductToAdd.NewDefaultRoutingProduct;
+            context.ChangedDefaultRoutingProducts = context.ExistingDefaultRoutingProducts.Where(x => x.ChangedDefaultRoutingProduct != null).Select(x => x.ChangedDefaultRoutingProduct);
         }
 
         private void ProcessDefaultRoutingProductToAdd(DefaultRoutingProductToAdd defaultRoutingProductToAdd, IEnumerable<ExistingDefaultRoutingProduct> existingDefaultRoutingProducts)
@@ -32,14 +35,14 @@ namespace TOne.WhS.Sales.Business
                     DateTime existingDefaultRoutingProductEED = Utilities.Max(existingDefaultRoutingProduct.BED, defaultRoutingProductToAdd.BED);
                     existingDefaultRoutingProduct.ChangedDefaultRoutingProduct = new ChangedDefaultRoutingProduct()
                     {
-                        SaleEntityRoutingProductId = existingDefaultRoutingProduct.DefaultRoutingProductEntity.RoutingProductId,
+                        SaleEntityRoutingProductId = existingDefaultRoutingProduct.DefaultRoutingProductEntity.SaleEntityRoutingProductId,
                         EED = existingDefaultRoutingProductEED
                     };
                     defaultRoutingProductToAdd.ChangedExistingDefaultRoutingProducts.Add(existingDefaultRoutingProduct);
                 }
             }
         }
-        
+
         private void ProcessDefaultRoutingProductToClose(DefaultRoutingProductToClose defaultRoutingProductToClose, IEnumerable<ExistingDefaultRoutingProduct> existingDefaultRoutingProducts)
         {
             if (existingDefaultRoutingProducts == null)
@@ -56,23 +59,6 @@ namespace TOne.WhS.Sales.Business
                     };
                     defaultRoutingProductToClose.ChangedExistingDefaultRoutingProducts.Add(existingDefaultRoutingProduct);
                 }
-            }
-        }
-        
-        private void SetNewAndChangedDefaultRoutingProducts(IProcessDefaultRoutingProductContext context)
-        {
-            if (context.DefaultRoutingProductToAdd != null)
-            {
-                context.NewDefaultRoutingProduct = context.DefaultRoutingProductToAdd.NewDefaultRoutingProduct;
-            }
-
-            if (context.ExistingDefaultRoutingProducts != null)
-            {
-                IEnumerable<ExistingDefaultRoutingProduct> filteredExistingDefaultRoutingProducts =
-                    context.ExistingDefaultRoutingProducts.Where(x => x.ChangedDefaultRoutingProduct != null);
-
-                if (filteredExistingDefaultRoutingProducts != null)
-                    context.ChangedDefaultRoutingProducts = filteredExistingDefaultRoutingProducts.Select(x => x.ChangedDefaultRoutingProduct);
             }
         }
     }

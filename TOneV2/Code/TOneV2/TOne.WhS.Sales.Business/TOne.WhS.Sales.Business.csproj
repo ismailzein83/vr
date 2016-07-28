@@ -73,6 +73,7 @@
     <Compile Include="Changes\StateManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CostCalculationMethodContext.cs" />
+    <Compile Include="DefaultRoutingProductPreviewManager.cs" />
     <Compile Include="PriceListRateManager.cs" />
     <Compile Include="PriceListRateManager2.cs" />
     <Compile Include="PriceListDefaultRoutingProductManager.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="RatePlanZoneManager.cs" />
     <Compile Include="Changes\SaveChangesManager.cs" />
     <Compile Include="RatePreviewManager.cs" />
+    <Compile Include="SaleEntityRoutingProductManager.cs" />
     <Compile Include="SaleZoneRoutingProductPreviewManager.cs" />
     <Compile Include="SellingRuleManager.cs" />
     <Compile Include="SellingRules\FixedRule.cs" />

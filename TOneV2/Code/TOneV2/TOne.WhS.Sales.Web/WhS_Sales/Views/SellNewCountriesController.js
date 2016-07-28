@@ -7,7 +7,7 @@
     function SellNewCountriesController($scope, WhS_BE_CustomerZoneAPIService, UtilsService, VRNavigationService, VRNotificationService) {
 
         var customerId;
-        var countryGridAPI;
+        var countryGridReadyDeferred = UtilsService.createPromiseDeferred();
         var selectedSaleZones;
 
         var allCountriesSelected = false;
@@ -23,8 +23,8 @@
                 customerId = parameters.CustomerId;
             }
         }
-
         function defineScope() {
+            $scope.scopeModel = {};
             $scope.title = "Sell New Countries";
             $scope.showInfo = false;
 
@@ -32,26 +32,7 @@
             $scope.disableSaveButton = true;
 
             $scope.onCountryGridReady = function (api) {
-                countryGridAPI = api;
-
-                $scope.isLoading = true;
-                
-                WhS_BE_CustomerZoneAPIService.GetCountriesToSell(customerId).then(function (response) {
-                    if (response) {
-                        if (response.length && response.length > 0) {
-                            for (var i = 0; i < response.length; i++) {
-                                $scope.countries.push(response[i]);
-                            }
-                        }
-                        else {
-                            $scope.showInfo = true;
-                        }
-                    }
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                }).finally(function () {
-                    $scope.isLoading = false;
-                });
+                countryGridReadyDeferred.resolve();
             };
 
             $scope.onCountryCheckChanged = function () {
@@ -88,9 +69,33 @@
                 $scope.modalContext.closeModal();
             };
         }
-
         function load() {
+            $scope.scopeModel.isLoading = true;
+            loadAllControls();
+        }
 
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadCountryGrid]).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+        }
+        function loadCountryGrid() {
+            var countries;
+
+            function getCountries() {
+                return WhS_BE_CustomerZoneAPIService.GetCountriesToSell(customerId).then(function (response) {
+                    countries = response;
+                });
+            }
+
+            return UtilsService.waitMultiplePromises([countryGridReadyDeferred.promise, getCountries()]).then(function () {
+                if (countries != undefined) {
+                    for (var i = 0; i < countries.length; i++)
+                        $scope.countries.push(countries[i]);
+                }
+            });
         }
 
         function buildCutomerZonesObjFromScope() {
@@ -100,7 +105,6 @@
                 StartEffectiveTime: new Date()
             };
         }
-
         function getSelectedCountries() {
             if ($scope.countries.length == 0)
                 return null;

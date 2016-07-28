@@ -57,6 +57,7 @@
     <Compile Include="IChangedDefaultRoutingProductDataManager.cs" />
     <Compile Include="IChangedSaleRateDataManager.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IDefaultRoutingProductPreviewDataManager.cs" />
     <Compile Include="INewDefaultRoutingProductDataManager.cs" />
     <Compile Include="INewSaleRateDataManager.cs" />
     <Compile Include="INewSaleZoneRoutingProductDataManager.cs" />

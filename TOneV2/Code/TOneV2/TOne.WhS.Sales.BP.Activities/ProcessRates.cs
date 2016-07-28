@@ -6,12 +6,31 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
+using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class ProcessRates : CodeActivity
+    public class ProcessRatesInput
     {
-        #region Arguments
+        public IEnumerable<RateToChange> RatesToChange { get; set; }
+
+        public IEnumerable<RateToClose> RatesToClose { get; set; }
+
+        public IEnumerable<ExistingZone> ExistingZones { get; set; }
+
+        public IEnumerable<ExistingRate> ExistingRates { get; set; }
+    }
+
+    public class ProcessRatesOutput
+    {
+        public IEnumerable<NewRate> NewRates { get; set; }
+
+        public IEnumerable<ChangedRate> ChangedRates { get; set; }
+    }
+
+    public class ProcessRates : BaseAsyncActivity<ProcessRatesInput, ProcessRatesOutput>
+    {
+        #region Input Arguments
 
         [RequiredArgument]
         public InArgument<IEnumerable<RateToChange>> RatesToChange { get; set; }
@@ -25,6 +44,10 @@ namespace TOne.WhS.Sales.BP.Activities
         [RequiredArgument]
         public InArgument<IEnumerable<ExistingRate>> ExistingRates { get; set; }
 
+        #endregion
+
+        #region Output Arguments
+
         [RequiredArgument]
         public OutArgument<IEnumerable<NewRate>> NewRates { get; set; }
 
@@ -33,12 +56,34 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #endregion
 
-        protected override void Execute(CodeActivityContext context)
+        protected override ProcessRatesInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            IEnumerable<RateToChange> ratesToChange = this.RatesToChange.Get(context);
-            IEnumerable<RateToClose> ratesToClose = this.RatesToClose.Get(context);
-            IEnumerable<ExistingZone> existingZones = this.ExistingZones.Get(context);
-            IEnumerable<ExistingRate> existingRates = this.ExistingRates.Get(context);
+            return new ProcessRatesInput()
+            {
+                RatesToChange = this.RatesToChange.Get(context),
+                RatesToClose = this.RatesToClose.Get(context),
+                ExistingZones = this.ExistingZones.Get(context),
+                ExistingRates = this.ExistingRates.Get(context)
+            };
+        }
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.NewRates.Get(context) == null)
+                this.NewRates.Set(context, new List<NewRate>());
+
+            if (this.ChangedRates.Get(context) == null)
+                this.ChangedRates.Set(context, new List<ChangedRate>());
+
+            base.OnBeforeExecute(context, handle);
+        }
+
+        protected override ProcessRatesOutput DoWorkWithResult(ProcessRatesInput inputArgument, AsyncActivityHandle handle)
+        {
+            IEnumerable<RateToChange> ratesToChange = inputArgument.RatesToChange;
+            IEnumerable<RateToClose> ratesToClose = inputArgument.RatesToClose;
+            IEnumerable<ExistingZone> existingZones = inputArgument.ExistingZones;
+            IEnumerable<ExistingRate> existingRates = inputArgument.ExistingRates;
 
             var priceListRateManager = new PriceListRateManager2();
 
@@ -49,14 +94,20 @@ namespace TOne.WhS.Sales.BP.Activities
                 ExistingZones = existingZones,
                 ExistingRates = existingRates
             };
-            
+
             priceListRateManager.ProcessCountryRates(processRatesContext);
 
-            IEnumerable<NewRate> newRates = (processRatesContext.NewRates != null && processRatesContext.NewRates.Count() > 0) ? processRatesContext.NewRates : null;
-            IEnumerable<ChangedRate> changedRates = (processRatesContext.ChangedRates != null && processRatesContext.ChangedRates.Count() > 0) ? processRatesContext.ChangedRates : null;
+            return new ProcessRatesOutput()
+            {
+                NewRates = processRatesContext.NewRates,
+                ChangedRates = processRatesContext.ChangedRates
+            };
+        }
 
-            this.NewRates.Set(context, newRates);
-            this.ChangedRates.Set(context, changedRates);
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, ProcessRatesOutput result)
+        {
+            this.NewRates.Set(context, result.NewRates);
+            this.ChangedRates.Set(context, result.ChangedRates);
         }
     }
 }

@@ -10,25 +10,55 @@ using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class ApplyRatePreviewsToDB : CodeActivity
+    public class ApplyRatePreviewsToDBInput
+    {
+        public IEnumerable<RatePreview> RatePreviews { get; set; }
+    }
+
+    public class ApplyRatePreviewsToDBOutput
+    {
+
+    }
+
+    public class ApplyRatePreviewsToDB : BaseAsyncActivity<ApplyRatePreviewsToDBInput, ApplyRatePreviewsToDBOutput>
     {
         #region Input Arguments
-        
+
         [RequiredArgument]
         public InArgument<IEnumerable<RatePreview>> RatePreviews { get; set; }
 
         #endregion
 
-        protected override void Execute(CodeActivityContext context)
+        protected override ApplyRatePreviewsToDBInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            IEnumerable<RatePreview> ratePreviews = RatePreviews.Get(context);
+            return new ApplyRatePreviewsToDBInput()
+            {
+                RatePreviews = this.RatePreviews.Get(context)
+            };
+        }
 
-            if (ratePreviews == null)
-                return;
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            base.OnBeforeExecute(context, handle);
+        }
 
-            var dataManager = SalesDataManagerFactory.GetDataManager<IRatePreviewDataManager>();
-            dataManager.ProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
-            dataManager.ApplyRatePreviewsToDB(ratePreviews);
+        protected override ApplyRatePreviewsToDBOutput DoWorkWithResult(ApplyRatePreviewsToDBInput inputArgument, AsyncActivityHandle handle)
+        {
+            IEnumerable<RatePreview> ratePreviews = inputArgument.RatePreviews;
+
+            if (ratePreviews != null)
+            {
+                var dataManager = SalesDataManagerFactory.GetDataManager<IRatePreviewDataManager>();
+                dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
+                dataManager.ApplyRatePreviewsToDB(ratePreviews);
+            }
+
+            return new ApplyRatePreviewsToDBOutput() { };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, ApplyRatePreviewsToDBOutput result)
+        {
+
         }
     }
 }

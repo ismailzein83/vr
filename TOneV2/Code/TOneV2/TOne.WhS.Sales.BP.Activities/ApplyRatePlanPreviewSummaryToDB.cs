@@ -10,7 +10,17 @@ using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class ApplyRatePlanPreviewSummaryToDB : CodeActivity
+    public class ApplyRatePlanPreviewSummaryToDBInput
+    {
+        public RatePlanPreviewSummary RatePlanPreviewSummary { get; set; }
+    }
+
+    public class ApplyRatePlanPreviewSummaryToDBOutput
+    {
+
+    }
+
+    public class ApplyRatePlanPreviewSummaryToDB : BaseAsyncActivity<ApplyRatePlanPreviewSummaryToDBInput, ApplyRatePlanPreviewSummaryToDBOutput>
     {
         #region Input Arguments
 
@@ -19,16 +29,36 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #endregion
 
-        protected override void Execute(CodeActivityContext context)
+        protected override ApplyRatePlanPreviewSummaryToDBInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            RatePlanPreviewSummary summary = RatePlanPreviewSummary.Get(context);
+            return new ApplyRatePlanPreviewSummaryToDBInput()
+            {
+                RatePlanPreviewSummary = this.RatePlanPreviewSummary.Get(context)
+            };
+        }
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            base.OnBeforeExecute(context, handle);
+        }
+
+        protected override ApplyRatePlanPreviewSummaryToDBOutput DoWorkWithResult(ApplyRatePlanPreviewSummaryToDBInput inputArgument, AsyncActivityHandle handle)
+        {
+            RatePlanPreviewSummary summary = inputArgument.RatePlanPreviewSummary;
 
             if (summary == null)
                 throw new NullReferenceException("summary");
 
             var dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanPreviewSummaryDataManager>();
-            dataManager.ProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
+            dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
             dataManager.ApplyRatePlanPreviewSummaryToDB(summary);
+
+            return new ApplyRatePlanPreviewSummaryToDBOutput() { };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, ApplyRatePlanPreviewSummaryToDBOutput result)
+        {
+
         }
     }
 }

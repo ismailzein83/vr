@@ -55,11 +55,11 @@ namespace TOne.WhS.Sales.BP.Activities
             int currencyId = this.CurrencyId.Get(context);
             DateTime effectiveDate = this.EffectiveDate.Get(context);
 
-            DefaultRoutingProductToAdd defaultRoutingProductToAdd = null;
-            DefaultRoutingProductToClose defaultRoutingProductToClose = null;
-
             var ratesToChange = new List<RateToChange>();
             var ratesToClose = new List<RateToClose>();
+
+            DefaultRoutingProductToAdd defaultRoutingProductToAdd = null;
+            DefaultRoutingProductToClose defaultRoutingProductToClose = null;
 
             var saleZoneRoutingProductsToAdd = new List<SaleZoneRoutingProductToAdd>();
             var saleZoneRoutingProductsToClose = new List<SaleZoneRoutingProductToClose>();
@@ -72,14 +72,14 @@ namespace TOne.WhS.Sales.BP.Activities
                 SetZoneActions(ref ratesToChange, ref ratesToClose, ref saleZoneRoutingProductsToAdd, ref saleZoneRoutingProductsToClose, changes.ZoneChanges, currencyId, ref minDate);
             }
 
+            RatesToChange.Set(context, ratesToChange);
+            RatesToClose.Set(context, ratesToClose);
+
             DefaultRoutingProductToAdd.Set(context, defaultRoutingProductToAdd);
             DefaultRoutingProductToClose.Set(context, defaultRoutingProductToClose);
 
-            RatesToChange.Set(context, (ratesToChange.Count > 0) ? ratesToChange : null);
-            RatesToClose.Set(context, (ratesToClose.Count > 0) ? ratesToClose : null);
-
-            SaleZoneRoutingProductsToAdd.Set(context, (saleZoneRoutingProductsToAdd.Count > 0) ? saleZoneRoutingProductsToAdd : null);
-            SaleZoneRoutingProductsToClose.Set(context, (saleZoneRoutingProductsToClose.Count > 0) ? saleZoneRoutingProductsToClose : null);
+            SaleZoneRoutingProductsToAdd.Set(context, saleZoneRoutingProductsToAdd);
+            SaleZoneRoutingProductsToClose.Set(context, saleZoneRoutingProductsToClose);
 
             MinimumDate.Set(context, minDate);
         }

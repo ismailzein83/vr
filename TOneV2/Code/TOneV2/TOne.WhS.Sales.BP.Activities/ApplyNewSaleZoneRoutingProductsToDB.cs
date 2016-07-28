@@ -10,26 +10,52 @@ using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class ApplyNewSaleZoneRoutingProductsToDB : CodeActivity
+    public class ApplyNewSaleZoneRoutingProductsToDBInput
+    {
+        public IEnumerable<NewSaleZoneRoutingProduct> NewSaleZoneRoutingProducts { get; set; }
+    }
+
+    public class ApplyNewSaleZoneRoutingProductsToDBOutput
+    {
+
+    }
+
+    public class ApplyNewSaleZoneRoutingProductsToDB : BaseAsyncActivity<ApplyNewSaleZoneRoutingProductsToDBInput, ApplyNewSaleZoneRoutingProductsToDBOutput>
     {
         #region Input Arguments
-        
+
         [RequiredArgument]
         public InArgument<IEnumerable<NewSaleZoneRoutingProduct>> NewSaleZoneRoutingProducts { get; set; }
-        
+
         #endregion
 
-        protected override void Execute(CodeActivityContext context)
+        protected override ApplyNewSaleZoneRoutingProductsToDBInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            IEnumerable<NewSaleZoneRoutingProduct> newSaleZoneRoutingProducts = NewSaleZoneRoutingProducts.Get(context);
+            return new ApplyNewSaleZoneRoutingProductsToDBInput()
+            {
+                NewSaleZoneRoutingProducts = this.NewSaleZoneRoutingProducts.Get(context)
+            };
+        }
 
-            if (newSaleZoneRoutingProducts == null)
-                return;
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            base.OnBeforeExecute(context, handle);
+        }
+
+        protected override ApplyNewSaleZoneRoutingProductsToDBOutput DoWorkWithResult(ApplyNewSaleZoneRoutingProductsToDBInput inputArgument, AsyncActivityHandle handle)
+        {
+            IEnumerable<NewSaleZoneRoutingProduct> newSaleZoneRoutingProducts = inputArgument.NewSaleZoneRoutingProducts;
 
             var dataManager = SalesDataManagerFactory.GetDataManager<INewSaleZoneRoutingProductDataManager>();
-            dataManager.ProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
-
+            dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
             dataManager.ApplyNewSaleZoneRoutingProductsToDB(newSaleZoneRoutingProducts);
+
+            return new ApplyNewSaleZoneRoutingProductsToDBOutput() { };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, ApplyNewSaleZoneRoutingProductsToDBOutput result)
+        {
+
         }
     }
 }

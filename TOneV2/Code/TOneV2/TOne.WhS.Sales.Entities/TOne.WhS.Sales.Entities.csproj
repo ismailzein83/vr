@@ -71,6 +71,7 @@
     <Compile Include="RateManagement\Actions\RoutingProduct\DefaultRoutingProductToClose.cs" />
     <Compile Include="RateManagement\Actions\RoutingProduct\SaleZoneRoutingProductToAdd.cs" />
     <Compile Include="RateManagement\Actions\RoutingProduct\SaleZoneRoutingProductToClose.cs" />
+    <Compile Include="RateManagement\Preview\DefaultRoutingProductPreview.cs" />
     <Compile Include="RateManagement\Preview\RatePlanPreviewQuery.cs" />
     <Compile Include="RateManagement\Preview\RatePlanPreviewSummary.cs" />
     <Compile Include="RateManagement\Preview\RatePreview.cs" />

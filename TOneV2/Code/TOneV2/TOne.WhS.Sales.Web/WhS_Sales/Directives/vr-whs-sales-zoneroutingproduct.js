@@ -109,7 +109,7 @@ function (UtilsService, VRUIUtilsService) {
                 zoneItemChanges.NewRoutingProduct = {
                     ZoneId: zoneItemChanges.ZoneId,
                     ZoneRoutingProductId: selectedId,
-                    BED: new Date(),
+                    BED: UtilsService.getDateFromDateTime(new Date()),
                     EED: null
                 };
             }
@@ -120,7 +120,7 @@ function (UtilsService, VRUIUtilsService) {
             zoneItemChanges.RoutingProductChange = (selectedId && selectedId == -1) ? {
                 ZoneId: zoneItem.ZoneId,
                 ZoneRoutingProductId: zoneItem.CurrentRoutingProductId,
-                EED: new Date()
+                EED: UtilsService.getDateFromDateTime(new Date())
             } : null;
         }
     }

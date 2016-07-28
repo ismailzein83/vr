@@ -321,18 +321,7 @@ namespace TOne.WhS.Sales.Business
             return ratePlanDataManager.SyncTempDataWithDB(processInstanceId, salePriceListId, ownerType, ownerId, currencyId, effectiveOn);
         }
 
-        public long ReserveSaleEntityRoutingProductIdRange(int numberOfIds)
-        {
-            long startingId;
-            IDManager.Instance.ReserveIDRange(this.GetType(), numberOfIds, out startingId);
-            return startingId;
-        }
-
-        #endregion
-
-        #region Common Private Methods
-
-        int? GetSellingNumberPlanId(SalePriceListOwnerType ownerType, int ownerId)
+        public int? GetSellingNumberPlanId(SalePriceListOwnerType ownerType, int ownerId)
         {
             if (ownerType == SalePriceListOwnerType.SellingProduct)
             {
@@ -345,8 +334,12 @@ namespace TOne.WhS.Sales.Business
                 return carrierAccountManager.GetSellingNumberPlanId(ownerId, CarrierAccountType.Customer);
             }
         }
+        
+        #endregion
 
-        int? GetSellingProductId(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, bool isEffectiveInFuture)
+        #region Common Private Methods
+
+        private int? GetSellingProductId(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, bool isEffectiveInFuture)
         {
             if (ownerType == SalePriceListOwnerType.Customer)
             {

@@ -10,25 +10,55 @@ using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class ApplySaleZoneRoutingProductPreviewsToDB : CodeActivity
+    public class ApplySaleZoneRoutingProductPreviewsToDBInput
+    {
+        public IEnumerable<SaleZoneRoutingProductPreview> SaleZoneRoutingProductPreviews { get; set; }
+    }
+
+    public class ApplySaleZoneRoutingProductPreviewsToDBOutput
+    {
+
+    }
+
+    public class ApplySaleZoneRoutingProductPreviewsToDB : BaseAsyncActivity<ApplySaleZoneRoutingProductPreviewsToDBInput, ApplySaleZoneRoutingProductPreviewsToDBOutput>
     {
         #region Input Arguments
-        
+
         [RequiredArgument]
         public InArgument<IEnumerable<SaleZoneRoutingProductPreview>> SaleZoneRoutingProductPreviews { get; set; }
 
         #endregion
 
-        protected override void Execute(CodeActivityContext context)
+        protected override ApplySaleZoneRoutingProductPreviewsToDBInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            IEnumerable<SaleZoneRoutingProductPreview> saleZoneRoutingProductPreviews = SaleZoneRoutingProductPreviews.Get(context);
+            return new ApplySaleZoneRoutingProductPreviewsToDBInput()
+            {
+                SaleZoneRoutingProductPreviews = this.SaleZoneRoutingProductPreviews.Get(context)
+            };
+        }
 
-            if (saleZoneRoutingProductPreviews == null)
-                return;
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            base.OnBeforeExecute(context, handle);
+        }
 
-            var dataManager = SalesDataManagerFactory.GetDataManager<ISaleZoneRoutingProductPreviewDataManager>();
-            dataManager.ProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
-            dataManager.ApplySaleZoneRoutingProductPreviewsToDB(saleZoneRoutingProductPreviews);
+        protected override ApplySaleZoneRoutingProductPreviewsToDBOutput DoWorkWithResult(ApplySaleZoneRoutingProductPreviewsToDBInput inputArgument, AsyncActivityHandle handle)
+        {
+            IEnumerable<SaleZoneRoutingProductPreview> saleZoneRoutingProductPreviews = inputArgument.SaleZoneRoutingProductPreviews;
+
+            if (saleZoneRoutingProductPreviews != null)
+            {
+                var dataManager = SalesDataManagerFactory.GetDataManager<ISaleZoneRoutingProductPreviewDataManager>();
+                dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
+                dataManager.ApplySaleZoneRoutingProductPreviewsToDB(saleZoneRoutingProductPreviews);
+            }
+
+            return new ApplySaleZoneRoutingProductPreviewsToDBOutput() { };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, ApplySaleZoneRoutingProductPreviewsToDBOutput result)
+        {
+
         }
     }
 }

@@ -11,31 +11,34 @@ namespace TOne.WhS.Sales.BP.Activities
 {
     public class PrepareExistingDefaultRoutingProducts : CodeActivity
     {
-        #region Arguments
+        #region Input Arguments
 
         [RequiredArgument]
         public InArgument<IEnumerable<DefaultRoutingProduct>> ExistingSaleEntityDefaultRoutingProducts { get; set; }
 
-        [RequiredArgument]
-        public OutArgument <IEnumerable<ExistingDefaultRoutingProduct>> ExistingDefaultRoutingProducts { get; set; }
+        #endregion
 
+        #region Output Arguments
+
+        [RequiredArgument]
+        public OutArgument<IEnumerable<ExistingDefaultRoutingProduct>> ExistingDefaultRoutingProducts { get; set; }
+        
         #endregion
 
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<DefaultRoutingProduct> existingSaleEntities = ExistingSaleEntityDefaultRoutingProducts.Get(context);
-
-            if (existingSaleEntities == null || existingSaleEntities.Count() == 0)
-                return;
-
             var existingEntities = new List<ExistingDefaultRoutingProduct>();
 
-            foreach (DefaultRoutingProduct existingSaleEntity in existingSaleEntities)
+            if (existingSaleEntities != null)
             {
-                existingEntities.Add(new ExistingDefaultRoutingProduct()
+                foreach (DefaultRoutingProduct existingSaleEntity in existingSaleEntities)
                 {
-                    DefaultRoutingProductEntity = existingSaleEntity
-                });
+                    existingEntities.Add(new ExistingDefaultRoutingProduct()
+                    {
+                        DefaultRoutingProductEntity = existingSaleEntity
+                    });
+                }    
             }
 
             ExistingDefaultRoutingProducts.Set(context, existingEntities);

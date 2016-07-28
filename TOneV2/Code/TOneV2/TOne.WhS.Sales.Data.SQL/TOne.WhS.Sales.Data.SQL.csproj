@@ -60,6 +60,7 @@
     <Compile Include="ChangedDefaultRoutingProductDataManager.cs" />
     <Compile Include="ChangedSaleRateDataManager.cs" />
     <Compile Include="ChangedSaleZoneRoutingProductDataManager.cs" />
+    <Compile Include="DefaultRoutingProductPreviewDataManager.cs" />
     <Compile Include="NewDefaultRoutingProductDataManager.cs" />
     <Compile Include="NewSaleRateDataManager.cs" />
     <Compile Include="NewSaleZoneRoutingProductDataManager.cs" />

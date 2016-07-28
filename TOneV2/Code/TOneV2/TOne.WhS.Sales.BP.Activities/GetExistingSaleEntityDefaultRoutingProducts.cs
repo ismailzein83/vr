@@ -4,15 +4,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
+using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class GetExistingSaleEntityDefaultRoutingProducts : CodeActivity
+    public class GetExistingSaleEntityDefaultRoutingProductsInput
     {
-        #region Arguments
+        public SalePriceListOwnerType OwnerType { get; set; }
+
+        public int OwnerId { get; set; }
+
+        public DateTime MinimumDate { get; set; }
+    }
+
+    public class GetExistingSaleEntityDefaultRoutingProductsOutput
+    {
+        public IEnumerable<DefaultRoutingProduct> ExistingSaleEntityDefaultRoutingProducts { get; set; }
+    }
+
+    public class GetExistingSaleEntityDefaultRoutingProducts : BaseAsyncActivity<GetExistingSaleEntityDefaultRoutingProductsInput, GetExistingSaleEntityDefaultRoutingProductsOutput>
+    {
+        #region Input Arguments
 
         [RequiredArgument]
         public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
@@ -23,23 +39,50 @@ namespace TOne.WhS.Sales.BP.Activities
         [RequiredArgument]
         public InArgument<DateTime> MinimumDate { get; set; }
 
-        [RequiredArgument]
-        public OutArgument<IEnumerable<DefaultRoutingProduct>> ExistingSaleEntityDefaultRoutingProducts { get; set; }
-
         #endregion
 
-        protected override void Execute(CodeActivityContext context)
+        #region Output Arguments
+
+        [RequiredArgument]
+        public OutArgument<IEnumerable<DefaultRoutingProduct>> ExistingSaleEntityDefaultRoutingProducts { get; set; }
+        
+        #endregion
+
+        protected override GetExistingSaleEntityDefaultRoutingProductsInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            SalePriceListOwnerType ownerType = OwnerType.Get(context);
-            int ownerId = OwnerId.Get(context);
-            DateTime minimumDate = MinimumDate.Get(context);
+            return new GetExistingSaleEntityDefaultRoutingProductsInput()
+            {
+                OwnerType = this.OwnerType.Get(context),
+                OwnerId = this.OwnerId.Get(context),
+                MinimumDate = this.MinimumDate.Get(context)
+            };
+        }
 
-            DateTime tempDate = minimumDate.AddDays(-15);
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.ExistingSaleEntityDefaultRoutingProducts.Get(context) == null)
+                this.ExistingSaleEntityDefaultRoutingProducts.Set(context, new List<DefaultRoutingProduct>());
+            base.OnBeforeExecute(context, handle);
+        }
 
-            var dataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
-            IEnumerable<DefaultRoutingProduct> defaultRoutingProducts = dataManager.GetDefaultRoutingProductsEffectiveAfter(ownerType, ownerId, tempDate);
+        protected override GetExistingSaleEntityDefaultRoutingProductsOutput DoWorkWithResult(GetExistingSaleEntityDefaultRoutingProductsInput inputArgument, AsyncActivityHandle handle)
+        {
+            SalePriceListOwnerType ownerType = inputArgument.OwnerType;
+            int ownerId = inputArgument.OwnerId;
+            DateTime minimumDate = inputArgument.MinimumDate;
 
-            ExistingSaleEntityDefaultRoutingProducts.Set(context, (defaultRoutingProducts != null && defaultRoutingProducts.Count() > 0) ? defaultRoutingProducts : null);
+            var saleEntityRoutingProductManager = new SaleEntityRoutingProductManager();
+            IEnumerable<DefaultRoutingProduct> defaultRoutingProducts = saleEntityRoutingProductManager.GetDefaultRoutingProductsEffectiveAfter(ownerType, ownerId, minimumDate);
+
+            return new GetExistingSaleEntityDefaultRoutingProductsOutput
+            {
+                ExistingSaleEntityDefaultRoutingProducts = defaultRoutingProducts
+            };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, GetExistingSaleEntityDefaultRoutingProductsOutput result)
+        {
+            this.ExistingSaleEntityDefaultRoutingProducts.Set(context, result.ExistingSaleEntityDefaultRoutingProducts);
         }
     }
 }

@@ -14,6 +14,8 @@ namespace TOne.WhS.Sales.Data.SQL
     {
         #region Fields / Properties
 
+        readonly string[] columns = { "ZoneName", "ProcessInstanceID", "CurrentSaleZoneRoutingProductName", "IsCurrentSaleZoneRoutingProductInherited", "NewSaleZoneRoutingProductName", "EffectiveOn" };
+
         private long _processInstanceId;
 
         public long ProcessInstanceId
@@ -68,9 +70,9 @@ namespace TOne.WhS.Sales.Data.SQL
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
 
-            int? isCurrentSaleZoneRoutingProductInherited = null;
+            string isCurrentSaleZoneRoutingProductInherited = null;
             if (record.IsCurrentSaleZoneRoutingProductInherited.HasValue)
-                isCurrentSaleZoneRoutingProductInherited = (record.IsCurrentSaleZoneRoutingProductInherited.Value) ? 1 : 0;
+                isCurrentSaleZoneRoutingProductInherited = (record.IsCurrentSaleZoneRoutingProductInherited.Value) ? "1" : "0";
 
             streamForBulkInsert.WriteRecord
             (
@@ -95,6 +97,7 @@ namespace TOne.WhS.Sales.Data.SQL
                 TabLock = false,
                 KeepIdentity = false,
                 FieldSeparator = '^',
+                ColumnNames = columns
             };
         }
 

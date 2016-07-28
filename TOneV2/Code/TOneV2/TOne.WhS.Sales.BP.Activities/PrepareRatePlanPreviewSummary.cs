@@ -6,10 +6,31 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.Sales.Entities;
+using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class PrepareRatePlanPreviewSummary : CodeActivity
+    public class PrepareRatePlanPreviewSummaryInput
+    {
+        public IEnumerable<RateToChange> RatesToChange { get; set; }
+
+        public IEnumerable<RateToClose> RatesToClose { get; set; }
+
+        public DefaultRoutingProductToAdd DefaultRoutingProductToAdd { get; set; }
+
+        public DefaultRoutingProductToClose DefaultRoutingProductToClose { get; set; }
+
+        public IEnumerable<SaleZoneRoutingProductToAdd> SaleZoneRoutingProductsToAdd { get; set; }
+
+        public IEnumerable<SaleZoneRoutingProductToClose> SaleZoneRoutingProductsToClose { get; set; }
+    }
+
+    public class PrepareRatePlanPreviewSummaryOutput
+    {
+        public RatePlanPreviewSummary RatePlanPreviewSummary { get; set; }
+    }
+
+    public class PrepareRatePlanPreviewSummary : BaseAsyncActivity<PrepareRatePlanPreviewSummaryInput, PrepareRatePlanPreviewSummaryOutput>
     {
         #region Input Arguments
 
@@ -40,16 +61,36 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #endregion
 
-        protected override void Execute(CodeActivityContext context)
+        protected override PrepareRatePlanPreviewSummaryInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            IEnumerable<RateToChange> ratesToChange = RatesToChange.Get(context);
-            IEnumerable<RateToClose> ratesToClose = RatesToClose.Get(context);
+            return new PrepareRatePlanPreviewSummaryInput()
+            {
+                RatesToChange = this.RatesToChange.Get(context),
+                RatesToClose = this.RatesToClose.Get(context),
+                DefaultRoutingProductToAdd = this.DefaultRoutingProductToAdd.Get(context),
+                DefaultRoutingProductToClose = this.DefaultRoutingProductToClose.Get(context),
+                SaleZoneRoutingProductsToAdd = this.SaleZoneRoutingProductsToAdd.Get(context),
+                SaleZoneRoutingProductsToClose = this.SaleZoneRoutingProductsToClose.Get(context)
+            };
+        }
 
-            DefaultRoutingProductToAdd defaultRoutingProductToAdd = DefaultRoutingProductToAdd.Get(context);
-            DefaultRoutingProductToClose defaultRoutingProductToClose = DefaultRoutingProductToClose.Get(context);
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.RatePlanPreviewSummary.Get(context) == null)
+                this.RatePlanPreviewSummary.Set(context, new RatePlanPreviewSummary());
+            base.OnBeforeExecute(context, handle);
+        }
 
-            IEnumerable<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd = SaleZoneRoutingProductsToAdd.Get(context);
-            IEnumerable<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose = SaleZoneRoutingProductsToClose.Get(context);
+        protected override PrepareRatePlanPreviewSummaryOutput DoWorkWithResult(PrepareRatePlanPreviewSummaryInput inputArgument, AsyncActivityHandle handle)
+        {
+            IEnumerable<RateToChange> ratesToChange = inputArgument.RatesToChange;
+            IEnumerable<RateToClose> ratesToClose = inputArgument.RatesToClose;
+
+            DefaultRoutingProductToAdd defaultRoutingProductToAdd = inputArgument.DefaultRoutingProductToAdd;
+            DefaultRoutingProductToClose defaultRoutingProductToClose = inputArgument.DefaultRoutingProductToClose;
+
+            IEnumerable<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd = inputArgument.SaleZoneRoutingProductsToAdd;
+            IEnumerable<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose = inputArgument.SaleZoneRoutingProductsToClose;
 
             var summary = new RatePlanPreviewSummary();
 
@@ -57,7 +98,15 @@ namespace TOne.WhS.Sales.BP.Activities
             SetDefaultRoutingProductProperties(summary, defaultRoutingProductToAdd, defaultRoutingProductToClose);
             SetZoneRoutingProductProperties(summary, saleZoneRoutingProductsToAdd, saleZoneRoutingProductsToClose);
 
-            RatePlanPreviewSummary.Set(context, summary);
+            return new PrepareRatePlanPreviewSummaryOutput()
+            {
+                RatePlanPreviewSummary = summary
+            };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, PrepareRatePlanPreviewSummaryOutput result)
+        {
+            this.RatePlanPreviewSummary.Set(context, result.RatePlanPreviewSummary);
         }
 
         #region Private Methods

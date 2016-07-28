@@ -10,25 +10,55 @@ using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class ApplyNewDefaultRoutingProductToDB : CodeActivity
+    public class ApplyNewDefaultRoutingProductToDBInput
+    {
+        public NewDefaultRoutingProduct NewDefaultRoutingProduct { get; set; }
+    }
+
+    public class ApplyNewDefaultRoutingProductToDBOutput
+    {
+
+    }
+
+    public class ApplyNewDefaultRoutingProductToDB : BaseAsyncActivity<ApplyNewDefaultRoutingProductToDBInput, ApplyNewDefaultRoutingProductToDBOutput>
     {
         #region Input Arguments
-        
+
         [RequiredArgument]
         public InArgument<NewDefaultRoutingProduct> NewDefaultRoutingProduct { get; set; }
-        
+
         #endregion
 
-        protected override void Execute(CodeActivityContext context)
+        protected override ApplyNewDefaultRoutingProductToDBInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            NewDefaultRoutingProduct newDefaultRoutingProduct = NewDefaultRoutingProduct.Get(context);
+            return new ApplyNewDefaultRoutingProductToDBInput()
+            {
+                NewDefaultRoutingProduct = this.NewDefaultRoutingProduct.Get(context)
+            };
+        }
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            base.OnBeforeExecute(context, handle);
+        }
+
+        protected override ApplyNewDefaultRoutingProductToDBOutput DoWorkWithResult(ApplyNewDefaultRoutingProductToDBInput inputArgument, AsyncActivityHandle handle)
+        {
+            NewDefaultRoutingProduct newDefaultRoutingProduct = inputArgument.NewDefaultRoutingProduct;
 
             if (newDefaultRoutingProduct != null)
             {
                 var dataManager = SalesDataManagerFactory.GetDataManager<INewDefaultRoutingProductDataManager>();
-                dataManager.ProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
-                dataManager.ApplyNewDefaultRoutingProductsToDB(new List<NewDefaultRoutingProduct>() { newDefaultRoutingProduct });
+                dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
+                dataManager.Insert(newDefaultRoutingProduct);
             }
+
+            return new ApplyNewDefaultRoutingProductToDBOutput() { };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, ApplyNewDefaultRoutingProductToDBOutput result)
+        {
+
         }
     }
 }

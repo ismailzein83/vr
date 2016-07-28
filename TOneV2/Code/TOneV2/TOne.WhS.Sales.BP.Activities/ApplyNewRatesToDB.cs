@@ -10,25 +10,52 @@ using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class ApplyNewRatesToDB : CodeActivity
+    public class ApplyNewRatesToDBInput
     {
-        #region Arguments
+        public IEnumerable<NewRate> NewRates { get; set; }
+    }
+
+    public class ApplyNewRatesToDBOutput
+    {
+
+    }
+
+    public class ApplyNewRatesToDB : BaseAsyncActivity<ApplyNewRatesToDBInput, ApplyNewRatesToDBOutput>
+    {
+        #region Input Arguments
 
         [RequiredArgument]
         public InArgument<IEnumerable<NewRate>> NewRates { get; set; }
 
         #endregion
 
-        protected override void Execute(CodeActivityContext context)
+        protected override ApplyNewRatesToDBInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            IEnumerable<NewRate> newRates = this.NewRates.Get(context);
-
-            if (newRates != null && newRates.Count() > 0)
+            return new ApplyNewRatesToDBInput()
             {
-                INewSaleRateDataManager dataManager = SalesDataManagerFactory.GetDataManager<INewSaleRateDataManager>();
-                dataManager.ProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
-                dataManager.ApplyNewRatesToDB(newRates);
-            }
+                NewRates = this.NewRates.Get(context)
+            };
+        }
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            base.OnBeforeExecute(context, handle);
+        }
+
+        protected override ApplyNewRatesToDBOutput DoWorkWithResult(ApplyNewRatesToDBInput inputArgument, AsyncActivityHandle handle)
+        {
+            IEnumerable<NewRate> newRates = inputArgument.NewRates;
+
+            INewSaleRateDataManager dataManager = SalesDataManagerFactory.GetDataManager<INewSaleRateDataManager>();
+            dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
+            dataManager.ApplyNewRatesToDB(newRates);
+
+            return new ApplyNewRatesToDBOutput() { };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, ApplyNewRatesToDBOutput result)
+        {
+
         }
     }
 }

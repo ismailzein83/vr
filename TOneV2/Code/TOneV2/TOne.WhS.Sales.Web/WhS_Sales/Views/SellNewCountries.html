@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="WhS_Sales_SellNewCountriesController" vr-loader="isLoading">
+﻿<div vr-modalcontent ng-controller="WhS_Sales_SellNewCountriesController" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formSellNewCountries">
             <vr-row>
@@ -8,18 +8,11 @@
                                  idfield="CountryId"
                                  maxheight="500px"
                                  hidegridmenu>
-
                         <vr-datagridcolumn headertext="'Select'" field="'CountryId'" widthfactor="3" disablesorting>
                             <vr-check value="dataItem.isSelected" onvaluechanged="viewScope.onCountryCheckChanged"></vr-check>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'" disablesorting></vr-datagridcolumn>
-
                     </vr-datagrid>
-                </vr-columns>
-            </vr-row>
-            <vr-row ng-show="showInfo">
-                <vr-columns width="fullrow">
-                    <vr-label isvalue>All countries have been sold to this customer</vr-label>
                 </vr-columns>
             </vr-row>
         </vr-form>

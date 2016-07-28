@@ -4,12 +4,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class GetExistingSaleEntityZoneRoutingProducts : CodeActivity
+    public class GetExistingSaleEntityZoneRoutingProductsInput
+    {
+        public SalePriceListOwnerType OwnerType { get; set; }
+
+        public int OwnerId { get; set; }
+
+        public DateTime MinimumDate { get; set; }
+    }
+
+    public class GetExistingSaleEntityZoneRoutingProductsOutput
+    {
+        public IEnumerable<SaleZoneRoutingProduct> ExistingSaleEntityZoneRoutingProducts { get; set; }
+    }
+
+    public class GetExistingSaleEntityZoneRoutingProducts : BaseAsyncActivity<GetExistingSaleEntityZoneRoutingProductsInput, GetExistingSaleEntityZoneRoutingProductsOutput>
     {
         #region Input Arguments
         
@@ -31,16 +47,41 @@ namespace TOne.WhS.Sales.BP.Activities
         
         #endregion
 
-        protected override void Execute(CodeActivityContext context)
+        protected override GetExistingSaleEntityZoneRoutingProductsInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            SalePriceListOwnerType ownerType = OwnerType.Get(context);
-            int ownerId = OwnerId.Get(context);
-            DateTime minimumDate = MinimumDate.Get(context);
+            return new GetExistingSaleEntityZoneRoutingProductsInput()
+            {
+                OwnerType = this.OwnerType.Get(context),
+                OwnerId = this.OwnerId.Get(context),
+                MinimumDate = this.MinimumDate.Get(context)
+            };
+        }
 
-            var dataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
-            IEnumerable<SaleZoneRoutingProduct> saleZoneRoutingProducts = dataManager.GetSaleZoneRoutingProductsEffectiveAfter(ownerType, ownerId, minimumDate);
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.ExistingSaleEntityZoneRoutingProducts.Get(context) == null)
+                this.ExistingSaleEntityZoneRoutingProducts.Set(context, new List<SaleZoneRoutingProduct>());
+            base.OnBeforeExecute(context, handle);
+        }
 
-            ExistingSaleEntityZoneRoutingProducts.Set(context, (saleZoneRoutingProducts != null && saleZoneRoutingProducts.Count() > 0) ? saleZoneRoutingProducts : null);
+        protected override GetExistingSaleEntityZoneRoutingProductsOutput DoWorkWithResult(GetExistingSaleEntityZoneRoutingProductsInput inputArgument, AsyncActivityHandle handle)
+        {
+            SalePriceListOwnerType ownerType = inputArgument.OwnerType;
+            int ownerId = inputArgument.OwnerId;
+            DateTime minimumDate = inputArgument.MinimumDate;
+
+            var saleEntityRoutingProductManager = new SaleEntityRoutingProductManager();
+            IEnumerable<SaleZoneRoutingProduct> saleZoneRoutingProducts = saleEntityRoutingProductManager.GetSaleZoneRoutingProductsEffectiveAfter(ownerType, ownerId, minimumDate);
+
+            return new GetExistingSaleEntityZoneRoutingProductsOutput()
+            {
+                ExistingSaleEntityZoneRoutingProducts = saleZoneRoutingProducts
+            };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, GetExistingSaleEntityZoneRoutingProductsOutput result)
+        {
+            this.ExistingSaleEntityZoneRoutingProducts.Set(context, result.ExistingSaleEntityZoneRoutingProducts);
         }
     }
 }

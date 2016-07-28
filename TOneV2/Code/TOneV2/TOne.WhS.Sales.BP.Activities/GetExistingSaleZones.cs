@@ -6,12 +6,28 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Business;
+using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class GetExistingSaleZones : CodeActivity
+    public class GetExistingSaleZonesInput
     {
-        #region Arguments
+        public SalePriceListOwnerType OwnerType { get; set; }
+
+        public int OwnerId { get; set; }
+
+        public DateTime MinimumDate { get; set; }
+    }
+
+    public class GetExistingSaleZonesOutput
+    {
+        public IEnumerable<SaleZone> ExistingSaleZones { get; set; }
+    }
+
+    public class GetExistingSaleZones : BaseAsyncActivity<GetExistingSaleZonesInput, GetExistingSaleZonesOutput>
+    {
+        #region Input Arguments
 
         [RequiredArgument]
         public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
@@ -22,43 +38,62 @@ namespace TOne.WhS.Sales.BP.Activities
         [RequiredArgument]
         public InArgument<DateTime> MinimumDate { get; set; }
 
+        #endregion
+
+        #region Output Arguments
+
         [RequiredArgument]
         public OutArgument<IEnumerable<SaleZone>> ExistingSaleZones { get; set; }
         
         #endregion
 
-        protected override void Execute(CodeActivityContext context)
+        protected override GetExistingSaleZonesInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            SalePriceListOwnerType ownerType = this.OwnerType.Get(context);
-            int ownerId = this.OwnerId.Get(context);
-            DateTime minimumDate = this.MinimumDate.Get(context);
+            return new GetExistingSaleZonesInput()
+            {
+                OwnerType = this.OwnerType.Get(context),
+                OwnerId = this.OwnerId.Get(context),
+                MinimumDate = this.MinimumDate.Get(context)
+            };
+        }
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.ExistingSaleZones.Get(context) == null)
+                this.ExistingSaleZones.Set(context, new List<SaleZone>());
+            base.OnBeforeExecute(context, handle);
+        }
+
+        protected override GetExistingSaleZonesOutput DoWorkWithResult(GetExistingSaleZonesInput inputArgument, AsyncActivityHandle handle)
+        {
+            SalePriceListOwnerType ownerType = inputArgument.OwnerType;
+            int ownerId = inputArgument.OwnerId;
+            DateTime minimumDate = inputArgument.MinimumDate;
 
             var saleZoneManager = new SaleZoneManager();
-            int sellingNumberPlanId = this.GetSellingNumberPlanId(ownerType, ownerId);
+            int sellingNumberPlanId = GetSellingNumberPlanId(ownerType, ownerId);
             IEnumerable<SaleZone> saleZones = saleZoneManager.GetSaleZonesEffectiveAfter(sellingNumberPlanId, minimumDate);
 
             if (saleZones == null || saleZones.Count() == 0)
                 throw new NullReferenceException("saleZones");
 
-            this.ExistingSaleZones.Set(context, saleZones);
+            return new GetExistingSaleZonesOutput()
+            {
+                ExistingSaleZones = saleZones
+            };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, GetExistingSaleZonesOutput result)
+        {
+            this.ExistingSaleZones.Set(context, result.ExistingSaleZones);
         }
 
         #region Private Methods
 
         private int GetSellingNumberPlanId(SalePriceListOwnerType ownerType, int ownerId)
         {
-            int? sellingNumberPlanId = null;
-
-            if (ownerType == SalePriceListOwnerType.SellingProduct)
-            {
-                var sellingProductManager = new SellingProductManager();
-                sellingNumberPlanId = sellingProductManager.GetSellingNumberPlanId(ownerId);
-            }
-            else if (ownerType == SalePriceListOwnerType.Customer)
-            {
-                var carrierAccountManager = new CarrierAccountManager();
-                sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(ownerId, CarrierAccountType.Customer);
-            }
+            var ratePlanManager = new RatePlanManager();
+            int? sellingNumberPlanId = ratePlanManager.GetSellingNumberPlanId(ownerType, ownerId);
 
             if (!sellingNumberPlanId.HasValue)
                 throw new NullReferenceException("sellingNumberPlanId");

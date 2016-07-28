@@ -6,12 +6,27 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class GetExistingSaleRates : CodeActivity
+    public class GetExistingSaleRatesInput
     {
-        #region Arguments
+        public SalePriceListOwnerType OwnerType { get; set; }
+
+        public int OwnerId { get; set; }
+
+        public DateTime MinimumDate { get; set; }
+    }
+
+    public class GetExistingSaleRatesOutput
+    {
+        public IEnumerable<SaleRate> ExistingSaleRates { get; set; }
+    }
+
+    public class GetExistingSaleRates : BaseAsyncActivity<GetExistingSaleRatesInput, GetExistingSaleRatesOutput>
+    {
+        #region Input Arguments
 
         [RequiredArgument]
         public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
@@ -22,21 +37,50 @@ namespace TOne.WhS.Sales.BP.Activities
         [RequiredArgument]
         public InArgument<DateTime> MinimumDate { get; set; }
 
-        [RequiredArgument]
-        public OutArgument<IEnumerable<SaleRate>> ExistingSaleRates { get; set; }
-
         #endregion
 
-        protected override void Execute(CodeActivityContext context)
+        #region Output Arguments
+
+        [RequiredArgument]
+        public OutArgument<IEnumerable<SaleRate>> ExistingSaleRates { get; set; }
+        
+        #endregion
+
+        protected override GetExistingSaleRatesInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            SalePriceListOwnerType ownerType = this.OwnerType.Get(context);
-            int ownerId = this.OwnerId.Get(context);
-            DateTime minimumDate = this.MinimumDate.Get(context);
+            return new GetExistingSaleRatesInput()
+            {
+                OwnerType = this.OwnerType.Get(context),
+                OwnerId = this.OwnerId.Get(context),
+                MinimumDate = this.MinimumDate.Get(context)
+            };
+        }
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.ExistingSaleRates.Get(context) == null)
+                this.ExistingSaleRates.Set(context, new List<SaleRate>());
+            base.OnBeforeExecute(context, handle);
+        }
+
+        protected override GetExistingSaleRatesOutput DoWorkWithResult(GetExistingSaleRatesInput inputArgument, AsyncActivityHandle handle)
+        {
+            SalePriceListOwnerType ownerType = inputArgument.OwnerType;
+            int ownerId = inputArgument.OwnerId;
+            DateTime minimumDate = inputArgument.MinimumDate;
 
             var saleRateManager = new SaleRateManager();
             IEnumerable<SaleRate> saleRates = saleRateManager.GetSaleRatesEffectiveAfter(ownerType, ownerId, minimumDate);
 
-            this.ExistingSaleRates.Set(context, (saleRates.Count() > 0) ? saleRates : null);
+            return new GetExistingSaleRatesOutput()
+            {
+                ExistingSaleRates = saleRates
+            };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, GetExistingSaleRatesOutput result)
+        {
+            this.ExistingSaleRates.Set(context, result.ExistingSaleRates);
         }
     }
 }

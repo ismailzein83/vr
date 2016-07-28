@@ -6,14 +6,34 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
+using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class PrepareSaleZoneRoutingProductPreviews : CodeActivity
+    public class PrepareSaleZoneRoutingProductPreviewsInput
+    {
+        public IEnumerable<SaleZoneRoutingProductToAdd> SaleZoneRoutingProductsToAdd { get; set; }
+
+        public IEnumerable<SaleZoneRoutingProductToClose> SaleZoneRoutingProductsToClose { get; set; }
+
+        public SalePriceListOwnerType OwnerType { get; set; }
+
+        public int OwnerId { get; set; }
+
+        public DateTime MinimumDate { get; set; }
+    }
+
+    public class PrepareSaleZoneRoutingProductPreviewsOutput
+    {
+        public IEnumerable<SaleZoneRoutingProductPreview> SaleZoneRoutingProductPreviews { get; set; }
+    }
+
+    public class PrepareSaleZoneRoutingProductPreviews : BaseAsyncActivity<PrepareSaleZoneRoutingProductPreviewsInput, PrepareSaleZoneRoutingProductPreviewsOutput>
     {
         #region Input Arguments
-        
+
         [RequiredArgument]
         public InArgument<IEnumerable<SaleZoneRoutingProductToAdd>> SaleZoneRoutingProductsToAdd { get; set; }
 
@@ -28,66 +48,82 @@ namespace TOne.WhS.Sales.BP.Activities
 
         [RequiredArgument]
         public InArgument<DateTime> MinimumDate { get; set; }
-        
+
         #endregion
 
         #region Output Arguments
 
         [RequiredArgument]
         public OutArgument<IEnumerable<SaleZoneRoutingProductPreview>> SaleZoneRoutingProductPreviews { get; set; }
-        
+
         #endregion
 
-        protected override void Execute(CodeActivityContext context)
+        protected override PrepareSaleZoneRoutingProductPreviewsInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            IEnumerable<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd = SaleZoneRoutingProductsToAdd.Get(context);
-            IEnumerable<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose = SaleZoneRoutingProductsToClose.Get(context);
-            
-            SalePriceListOwnerType ownerType = OwnerType.Get(context);
-            int ownerId = OwnerId.Get(context);
-            DateTime minimumDate = MinimumDate.Get(context);
+            return new PrepareSaleZoneRoutingProductPreviewsInput()
+            {
+                SaleZoneRoutingProductsToAdd = this.SaleZoneRoutingProductsToAdd.Get(context),
+                SaleZoneRoutingProductsToClose = this.SaleZoneRoutingProductsToClose.Get(context),
+                OwnerType = this.OwnerType.Get(context),
+                OwnerId = this.OwnerId.Get(context),
+                MinimumDate = this.MinimumDate.Get(context)
+            };
+        }
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.SaleZoneRoutingProductPreviews.Get(context) == null)
+                this.SaleZoneRoutingProductPreviews.Set(context, new List<SaleZoneRoutingProductPreview>());
+            base.OnBeforeExecute(context, handle);
+        }
+
+        protected override PrepareSaleZoneRoutingProductPreviewsOutput DoWorkWithResult(PrepareSaleZoneRoutingProductPreviewsInput inputArgument, AsyncActivityHandle handle)
+        {
+            IEnumerable<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd = inputArgument.SaleZoneRoutingProductsToAdd;
+            IEnumerable<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose = inputArgument.SaleZoneRoutingProductsToClose;
+
+            SalePriceListOwnerType ownerType = inputArgument.OwnerType;
+            int ownerId = inputArgument.OwnerId;
+            DateTime minimumDate = inputArgument.MinimumDate;
 
             var saleZoneRoutingProductPreviews = new List<SaleZoneRoutingProductPreview>();
             var routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(minimumDate));
             var routingProductManager = new RoutingProductManager();
 
-            if (saleZoneRoutingProductsToAdd != null)
+            foreach (SaleZoneRoutingProductToAdd saleZoneRoutingProductToAdd in saleZoneRoutingProductsToAdd)
             {
-                foreach (SaleZoneRoutingProductToAdd saleZoneRoutingProductToAdd in saleZoneRoutingProductsToAdd)
+                var saleZoneRoutingProductPreview = new SaleZoneRoutingProductPreview()
                 {
-                    var saleZoneRoutingProductPreview = new SaleZoneRoutingProductPreview()
-                    {
-                        ZoneName = saleZoneRoutingProductToAdd.ZoneName,
-                        NewSaleZoneRoutingProductName = routingProductManager.GetRoutingProductName(saleZoneRoutingProductToAdd.ZoneRoutingProductId),
-                        EffectiveOn = saleZoneRoutingProductToAdd.BED
-                    };
+                    ZoneName = saleZoneRoutingProductToAdd.ZoneName,
+                    NewSaleZoneRoutingProductName = routingProductManager.GetRoutingProductName(saleZoneRoutingProductToAdd.ZoneRoutingProductId),
+                    EffectiveOn = saleZoneRoutingProductToAdd.BED
+                };
 
-                    SaleEntityZoneRoutingProduct currentSaleZoneRoutingProduct = null;
+                SaleEntityZoneRoutingProduct currentSaleZoneRoutingProduct = null;
 
-                    if (ownerType == SalePriceListOwnerType.SellingProduct)
+                if (ownerType == SalePriceListOwnerType.SellingProduct)
+                {
+                    currentSaleZoneRoutingProduct = routingProductLocator.GetSellingProductZoneRoutingProduct(ownerId, saleZoneRoutingProductToAdd.ZoneId);
+
+                    if (currentSaleZoneRoutingProduct != null)
                     {
-                        currentSaleZoneRoutingProduct = routingProductLocator.GetSellingProductZoneRoutingProduct(ownerId, saleZoneRoutingProductToAdd.ZoneId);
-                        
-                        if (currentSaleZoneRoutingProduct != null)
-                        {
-                            saleZoneRoutingProductPreview.CurrentSaleZoneRoutingProductName = routingProductManager.GetRoutingProductName(currentSaleZoneRoutingProduct.RoutingProductId);
-                            saleZoneRoutingProductPreview.IsCurrentSaleZoneRoutingProductInherited = (currentSaleZoneRoutingProduct.Source != SaleEntityZoneRoutingProductSource.ProductZone);
-                        }
+                        saleZoneRoutingProductPreview.CurrentSaleZoneRoutingProductName = routingProductManager.GetRoutingProductName(currentSaleZoneRoutingProduct.RoutingProductId);
+                        saleZoneRoutingProductPreview.IsCurrentSaleZoneRoutingProductInherited = (currentSaleZoneRoutingProduct.Source != SaleEntityZoneRoutingProductSource.ProductZone);
                     }
-                    else
-                    {
-                        int sellingProductId = GetSellingProductId(ownerId, saleZoneRoutingProductToAdd.BED, false);
-                        currentSaleZoneRoutingProduct = routingProductLocator.GetCustomerZoneRoutingProduct(ownerId, sellingProductId, saleZoneRoutingProductToAdd.ZoneId);
-
-                        if (currentSaleZoneRoutingProduct != null)
-                        {
-                            saleZoneRoutingProductPreview.CurrentSaleZoneRoutingProductName = routingProductManager.GetRoutingProductName(currentSaleZoneRoutingProduct.RoutingProductId);
-                            saleZoneRoutingProductPreview.IsCurrentSaleZoneRoutingProductInherited = (currentSaleZoneRoutingProduct.Source != SaleEntityZoneRoutingProductSource.CustomerZone);
-                        }
-                    }
-
-                    saleZoneRoutingProductPreviews.Add(saleZoneRoutingProductPreview);
                 }
+                else
+                {
+                    int sellingProductId = GetSellingProductId(ownerId, saleZoneRoutingProductToAdd.BED, false);
+                    currentSaleZoneRoutingProduct = routingProductLocator.GetCustomerZoneRoutingProduct(ownerId, sellingProductId, saleZoneRoutingProductToAdd.ZoneId);
+
+                    if (currentSaleZoneRoutingProduct != null)
+                    {
+                        saleZoneRoutingProductPreview.CurrentSaleZoneRoutingProductName = routingProductManager.GetRoutingProductName(currentSaleZoneRoutingProduct.RoutingProductId);
+                        saleZoneRoutingProductPreview.IsCurrentSaleZoneRoutingProductInherited = (currentSaleZoneRoutingProduct.Source != SaleEntityZoneRoutingProductSource.CustomerZone);
+                    }
+                }
+
+                saleZoneRoutingProductPreviews.Add(saleZoneRoutingProductPreview);
             }
 
             if (saleZoneRoutingProductsToClose != null)
@@ -116,7 +152,7 @@ namespace TOne.WhS.Sales.BP.Activities
                         throw new NullReferenceException("currentSaleZoneRoutingProduct");
 
                     saleZoneRoutingProductPreview.CurrentSaleZoneRoutingProductName = routingProductManager.GetRoutingProductName(currentSaleZoneRoutingProduct.RoutingProductId);
-                    
+
                     saleZoneRoutingProductPreview.IsCurrentSaleZoneRoutingProductInherited =
                         (ownerType == SalePriceListOwnerType.SellingProduct && currentSaleZoneRoutingProduct.Source != SaleEntityZoneRoutingProductSource.ProductZone) ||
                         (ownerType == SalePriceListOwnerType.Customer && currentSaleZoneRoutingProduct.Source != SaleEntityZoneRoutingProductSource.CustomerZone);
@@ -125,7 +161,15 @@ namespace TOne.WhS.Sales.BP.Activities
                 }
             }
 
-            SaleZoneRoutingProductPreviews.Set(context, (saleZoneRoutingProductPreviews.Count > 0) ? saleZoneRoutingProductPreviews : null);
+            return new PrepareSaleZoneRoutingProductPreviewsOutput()
+            {
+                SaleZoneRoutingProductPreviews = saleZoneRoutingProductPreviews
+            };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, PrepareSaleZoneRoutingProductPreviewsOutput result)
+        {
+            this.SaleZoneRoutingProductPreviews.Set(context, result.SaleZoneRoutingProductPreviews);
         }
 
         #region Private Methods
@@ -138,7 +182,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 throw new NullReferenceException("sellingProductId");
             return sellingProductId.Value;
         }
-        
+
         #endregion
     }
 }

@@ -393,9 +393,9 @@
                     loadGridDeferred.resolve();
 
                     if (ownerTypeValue == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value)
-                        VRNotificationService.showInformation('No zones are related to this selling product');
+                        VRNotificationService.showInformation('No zones are assigned to this selling product');
                     else
-                        VRNotificationService.showInformation("No countries were sold to this customer");
+                        VRNotificationService.showInformation("Customer, or selling product, is not associated with zones");
                 }
             });
 
@@ -564,9 +564,6 @@
 
         function defineSaveButtonMenuActions() {
             $scope.saveButtonMenuActions = [{
-                name: "Price List",
-                clicked: onSavePriceListClick
-            }, {
                 name: "Draft",
                 clicked: function () {
                     return saveChanges(false).then(function () {
@@ -574,49 +571,17 @@
                     });
                 }
             }, {
-                name: "Via Workflow",
-                clicked: saveViaWorkflow
+                name: "Pricelist",
+                clicked: savePricelist
             }];
 
-            function onSavePriceListClick() {
-                var promises = [];
-
-                var ownerTypeValue = ownerTypeSelectorAPI.getSelectedIds();
-
-                var saveChangesPromise = saveChanges(false);
-                promises.push(saveChangesPromise);
-
-                saveChangesPromise.then(function () {
-                    WhS_Sales_RatePlanService.viewChanges(ownerTypeValue, getOwnerId(), onRatePlanChangesClose);
-                });
-
-                var savePriceListDeferred = UtilsService.createPromiseDeferred();
-                promises.push(savePriceListDeferred.promise);
-
-                return UtilsService.waitMultiplePromises(promises).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                });
-
-                function onRatePlanChangesClose(saveClicked) {
-                    if (saveClicked) {
-                        savePriceList().then(function () {
-                            savePriceListDeferred.resolve();
-                            VRNotificationService.showSuccess("Price list saved");
-                            loadRatePlan();
-                        }).catch(function (error) { savePriceListDeferred.reject(); });
-                    }
-                    else savePriceListDeferred.resolve(saveClicked);
-                }
-
-                function savePriceList() {
-                    return WhS_Sales_RatePlanAPIService.SavePriceList(ownerTypeValue, getOwnerId());
-                }
-            }
-
-            function saveViaWorkflow()
+            function savePricelist()
             {
                 var promises = [];
                 var systemCurrencyId;
+
+                var saveChangesPromise = saveChanges(false);
+                promises.push(saveChangesPromise);
 
                 var getSystemCurrencyIdPromise = getSystemCurrencyId();
                 promises.push(getSystemCurrencyIdPromise);
@@ -624,8 +589,7 @@
                 var createProcessDeferred = UtilsService.createPromiseDeferred();
                 promises.push(createProcessDeferred.promise);
 
-                getSystemCurrencyIdPromise.then(function ()
-                {
+                UtilsService.waitMultiplePromises([saveChangesPromise, getSystemCurrencyIdPromise]).then(function () {
                     var inputArguments = {
                         $type: 'TOne.WhS.Sales.BP.Arguments.RatePlanInput, TOne.WhS.Sales.BP.Arguments',
                         OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
@@ -638,8 +602,7 @@
                         InputArguments: inputArguments
                     };
 
-                    BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response)
-                    {
+                    BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
                         createProcessDeferred.resolve();
                         if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
 
@@ -655,7 +618,7 @@
                         createProcessDeferred.reject(error);
                     });
                 });
-
+                
                 function getSystemCurrencyId() {
                     return VRCommon_CurrencyAPIService.GetSystemCurrencyId().then(function (response) {
                         systemCurrencyId = response;

@@ -15,6 +15,8 @@ namespace TOne.WhS.Sales.Data.SQL
     {
         #region Fields / Properties
 
+        readonly string[] columns = { "ZoneName", "ProcessInstanceID", "CurrentRate", "IsCurrentRateInherited", "NewRate", "ChangeType", "EffectiveOn", "EffectiveUntil" };
+
         private long _processInstanceId;
 
         public long ProcessInstanceId
@@ -69,13 +71,9 @@ namespace TOne.WhS.Sales.Data.SQL
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
 
-            int? changeType = null;
-            if (record.ChangeType.HasValue)
-                changeType = Convert.ToInt32(record.ChangeType.Value);
-            
-            int? isCurrentRateInherited = null;
+            string isCurrentRateInherited = null;
             if (record.IsCurrentRateInherited.HasValue)
-                isCurrentRateInherited = (record.IsCurrentRateInherited.Value) ? 1 : 0;
+                isCurrentRateInherited = (record.IsCurrentRateInherited.Value) ? "1" : "0";
 
             streamForBulkInsert.WriteRecord
             (
@@ -85,7 +83,7 @@ namespace TOne.WhS.Sales.Data.SQL
                 record.CurrentRate,
                 isCurrentRateInherited,
                 record.NewRate,
-                changeType,
+                Convert.ToInt32(record.ChangeType),
                 record.EffectiveOn,
                 record.EffectiveUntil
             );
@@ -102,6 +100,7 @@ namespace TOne.WhS.Sales.Data.SQL
                 TabLock = false,
                 KeepIdentity = false,
                 FieldSeparator = '^',
+                ColumnNames = columns
             };
         }
 
@@ -117,21 +116,10 @@ namespace TOne.WhS.Sales.Data.SQL
                 CurrentRate = GetReaderValue<decimal?>(reader, "CurrentRate"),
                 IsCurrentRateInherited = GetReaderValue<bool?>(reader, "IsCurrentRateInherited"),
                 NewRate = GetReaderValue<decimal?>(reader, "NewRate"),
-                ChangeType = GetRateChangeType(reader["ChangeType"]), // Is this a good practice?
+                ChangeType = (RateChangeType)reader["ChangeType"], //GetRateChangeType(reader["ChangeType"]), // Is this a good practice?
                 EffectiveOn = (DateTime)reader["EffectiveOn"],
                 EffectiveUntil = GetReaderValue<DateTime?>(reader, "EffectiveUntil")
             };
-        }
-
-        private RateChangeType? GetRateChangeType(object changeTypeAsObject)
-        {
-            RateChangeType? changeType = null;
-            if (changeTypeAsObject != DBNull.Value)
-            {
-                int changeTypeAsInt = Convert.ToInt32(changeTypeAsObject);
-                changeType = (RateChangeType)changeTypeAsInt;
-            }
-            return changeType;
         }
 
         #endregion

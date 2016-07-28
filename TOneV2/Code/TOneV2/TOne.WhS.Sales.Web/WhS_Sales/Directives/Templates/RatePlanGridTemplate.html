@@ -23,7 +23,7 @@
                 <span vr-disabled="true">
                     <vr-datetimepicker type="date" value="dataItem.CurrentRateBED" ng-hide="dataItem.showNewRateBED" customvalidate="dataItem.validateRateChangeDates()"></vr-datetimepicker>
                 </span>
-                <vr-datetimepicker type="date" value="dataItem.NewRateBED" ng-show="dataItem.showNewRateBED" customvalidate="dataItem.validateNewRateDates()"></vr-datetimepicker>
+                <vr-datetimepicker type="date" value="dataItem.NewRateBED" ng-show="dataItem.showNewRateBED" customvalidate="dataItem.validateNewRateDates()" isrequired="dataItem.showNewRateBED"></vr-datetimepicker>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'End Effective Date'" disablesorting>
                 <span vr-disabled="!dataItem.IsCurrentRateEditable">

@@ -39,6 +39,12 @@
                 saleZoneRoutingProductGridReadyDeferred.resolve();
             };
 
+            //$scope.scopeModel.validateDefaultRoutingProduct = function () {
+            //    if ($scope.scopeModel.currentDefaultRoutingProductName == null && $scope.scopeModel.newDefaultRoutingProductName == null)
+            //        return 'Rate plan does not have a default routing product';
+            //    return null;
+            //};
+
             $scope.scopeModel.save = function () {
                 return executeTask(true);
             };
@@ -65,7 +71,7 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadSummary, loadRatePreviewGrid, loadSaleZoneRoutingProductPreviewGrid]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadSummary, loadDefaultRoutingProductPreview, loadRatePreviewGrid, loadSaleZoneRoutingProductPreviewGrid]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -87,6 +93,18 @@
 
                     $scope.scopeModel.numberOfNewSaleZoneRoutingProducts = response.NumberOfNewSaleZoneRoutingProducts;
                     $scope.scopeModel.numberOfClosedSaleZoneRoutingProducts = response.NumberOfClosedSaleZoneRoutingProducts;
+                }
+            });
+        }
+        function loadDefaultRoutingProductPreview() {
+            var input = { ProcessInstanceId: processInstanceId };
+            return WhS_Sales_RatePlanPreviewAPIService.GetDefaultRoutingProductPreview(input).then(function (response) {
+                if (response != null) {
+                    $scope.scopeModel.currentDefaultRoutingProductName = response.CurrentDefaultRoutingProductName;
+                    if (response.IsCurrentDefaultRoutingProductInherited === true)
+                        $scope.scopeModel.currentDefaultRoutingProductName += ' (Inherited)';
+                    $scope.scopeModel.newDefaultRoutingProductName = response.NewDefaultRoutingProductName;
+                    $scope.scopeModel.effectiveOn = new Date(response.EffectiveOn).toDateString();
                 }
             });
         }

@@ -13,5 +13,7 @@ namespace TOne.WhS.Sales.Data
         long ProcessInstanceId { set; }
 
         void ApplyNewDefaultRoutingProductsToDB(IEnumerable<NewDefaultRoutingProduct> newDefaultRoutingProducts);
+
+        bool Insert(NewDefaultRoutingProduct newDefaultRoutingProduct);
     }
 }

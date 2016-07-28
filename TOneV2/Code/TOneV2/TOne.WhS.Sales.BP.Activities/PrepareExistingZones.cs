@@ -12,16 +12,20 @@ namespace TOne.WhS.Sales.BP.Activities
 {
     public class PrepareExistingZones : CodeActivity
     {
-        #region Arguments
+        #region Input Arguments
 
         [RequiredArgument]
         public InArgument<IEnumerable<SaleZone>> ExistingSaleZones { get; set; }
 
+        #endregion
+
+        #region Output Arguments
+
         [RequiredArgument]
         public OutArgument<IEnumerable<ExistingZone>> ExistingZones { get; set; }
 
-        //[RequiredArgument]
-        //public OutArgument<ExistingZonesByName> ExistingZonesByName { get; set; }
+        [RequiredArgument]
+        public OutArgument<Dictionary<long, ExistingZone>> ExistingZonesById { get; set; }
 
         #endregion
 
@@ -29,7 +33,6 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             IEnumerable<SaleZone> saleZones = this.ExistingSaleZones.Get(context);
             var existingZones = new List<ExistingZone>();
-            //var existingZonesByNameDictionary = new ExistingZonesByName();
 
             foreach (SaleZone saleZone in saleZones)
             {
@@ -39,16 +42,10 @@ namespace TOne.WhS.Sales.BP.Activities
                 });
             }
 
-            //IEnumerable<string> distinctSaleZoneNames = saleZones.MapRecords((saleZone) => saleZone.Name).Distinct();
+            Dictionary<long, ExistingZone> existingZonesById = existingZones.ToDictionary<ExistingZone, long>(x => x.ZoneId);
 
-            //foreach (string saleZoneName in distinctSaleZoneNames)
-            //{
-            //    List<ExistingZone> existingZonesByNameList = existingZones.FindAllRecords((existingZone) => existingZone.Name == saleZoneName).ToList();
-            //    existingZonesByNameDictionary.Add(saleZoneName, existingZonesByNameList);
-            //}
-
-            this.ExistingZones.Set(context, existingZones);
-            //this.ExistingZonesByName.Set(context, existingZonesByNameDictionary);
+            ExistingZones.Set(context, existingZones);
+            ExistingZonesById.Set(context, existingZonesById);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="WhS_Sales_RatePlanPreviewController" width="'50%'" vr-loader="isLoading">
+﻿<div vr-modalcontent ng-controller="WhS_Sales_RatePlanPreviewController" width="'65%'" vr-loader="isLoading">
     <vr-modalbody>
         <vr-form name="formRatePlanPreview">
             <vr-tabs>
@@ -43,28 +43,46 @@
                         <vr-columns width="1/2row">
                             <vr-section title="Default Changes">
                                 <vr-section title="Routing Product Changes" level="2">
-
                                     <vr-validation-group validationcontext="DefaultGroup">
-                                        <vr-validator validate="validateDefaultItem()">
-
+                                        <vr-validator validate="scopeModel.validateDefaultRoutingProduct()">
                                             <vr-row>
-                                                <vr-columns width="fullrow" ng-show="scopeModel.nameOfNewDefaultRoutingProduct">
+                                                <vr-columns width="fullrow" ng-show="scopeModel.newDefaultRoutingProductName">
                                                     <vr-label>New: </vr-label>
-                                                    <vr-label isvalue>{{scopeModel.nameOfNewDefaultRoutingProduct}}</vr-label>
+                                                    <vr-label isvalue>{{scopeModel.newDefaultRoutingProductName}}</vr-label>
                                                 </vr-columns>
-                                                <vr-columns width="fullrow" ng-show="defaultItem.changedToRoutingProductName">
-                                                    <vr-label>Change: (Default) </vr-label>
-                                                    <vr-label isvalue>{{defaultItem.routingProductChangeEED}}</vr-label>
+                                                <vr-columns width="fullrow" ng-show="scopeModel.newDefaultRoutingProductName == null && scopeModel.effectiveOn != null">
+                                                    <vr-label>Change (Default): </vr-label>
+                                                    <vr-label isvalue>{{scopeModel.effectiveOn}}</vr-label>
                                                 </vr-columns>
-                                                <vr-columns width="fullrow" ng-hide="defaultItem">
+                                                <vr-columns width="fullrow" ng-show="scopeModel.effectiveOn == null">
                                                     <vr-label isvalue>No changes</vr-label>
                                                 </vr-columns>
                                             </vr-row>
-
                                         </vr-validator>
                                     </vr-validation-group>
-
                                 </vr-section>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Default Routing Product Changes'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-section title="Routing Product Changes">
+                                <vr-row>
+                                    <vr-columns width="1/3row" ng-show="scopeModel.currentDefaultRoutingProductName != null">
+                                        <vr-label>Current:</vr-label>
+                                        <vr-label isvalue>{{scopeModel.currentDefaultRoutingProductName}}</vr-label>
+                                    </vr-columns>
+                                    <vr-columns width="1/3row" ng-show="scopeModel.newDefaultRoutingProductName != null">
+                                        <vr-label>New:</vr-label>
+                                        <vr-label isvalue>{{scopeModel.newDefaultRoutingProductName}}</vr-label>
+                                    </vr-columns>
+                                    <vr-columns width="1/3row" ng-show="scopeModel.effectiveOn != null">
+                                        <vr-label>Effective On:</vr-label>
+                                        <vr-label isvalue>{{scopeModel.effectiveOn}}</vr-label>
+                                    </vr-columns>
+                                </vr-row>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
@@ -89,7 +107,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formRatePlanPreview" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Save" formname="formRatePlanPreview" data-onclick="scopeModel.save" validationcontext="DefaultGroup"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>

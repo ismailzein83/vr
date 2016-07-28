@@ -42,10 +42,7 @@ namespace TOne.WhS.Sales.BP.Activities
             var ratePlanManager = new RatePlanManager();
             
             long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
-            bool wasSyncSuccessful = ratePlanManager.SyncTempDataWithDB(processInstanceId, reservedSalePriceListId, ownerType, ownerId, currencyId, effectiveOn);
-            
-            if (!wasSyncSuccessful)
-                throw new Exception("Failed to sync the temp data with the database");
+            ratePlanManager.SyncTempDataWithDB(processInstanceId, reservedSalePriceListId, ownerType, ownerId, currencyId, effectiveOn);
         }
     }
 }

@@ -11,28 +11,48 @@ namespace TOne.WhS.Sales.Business
 {
     public class PriceListSaleZoneRoutingProductManager
     {
-        public void ProcessSaleZoneRoutingProducts(IProcessSaleZoneRoutingProductsContext context)
+        public void ProcessZoneRoutingProducts(IProcessSaleZoneRoutingProductsContext context)
         {
-            ExistingSaleZoneRoutingProductsByZoneName existingSaleZoneRoutingProductsByZoneName = StructureExistingSaleZoneRoutingProductsByZoneName(context.ExistingSaleZoneRoutingProducts);
-            ExistingZonesByName existingZonesByName = StructureExistingZonesByName(context.ExistingZones);
+            Process(context.SaleZoneRoutingProductsToAdd, context.SaleZoneRoutingProductsToClose, context.ExistingSaleZoneRoutingProducts, context.ExistingZones);
+            context.NewSaleZoneRoutingProducts = context.SaleZoneRoutingProductsToAdd.SelectMany(x => x.NewSaleZoneRoutingProducts);
+            context.ChangedSaleZoneRoutingProducts = context.ExistingSaleZoneRoutingProducts.Where(x => x.ChangedSaleZoneRoutingProduct != null).Select(x => x.ChangedSaleZoneRoutingProduct);
+        }
+        public void Process(IEnumerable<SaleZoneRoutingProductToAdd> routingProductsToAdd, IEnumerable<SaleZoneRoutingProductToClose> routingProductsToClose, IEnumerable<ExistingSaleZoneRoutingProduct> existingRoutingProducts, IEnumerable<ExistingZone> existingZones)
+        {
+            ExistingSaleZoneRoutingProductsByZoneName existingRoutingProductsByZoneName = StructureExistingRoutingProductsByZoneName(existingRoutingProducts);
+            ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
 
-            ProcessSaleZoneRoutingProductsToAdd(context.SaleZoneRoutingProductsToAdd, existingSaleZoneRoutingProductsByZoneName, existingZonesByName);
-            ProcessSaleZoneRoutingProductsToClose(context.SaleZoneRoutingProductsToClose, existingSaleZoneRoutingProductsByZoneName);
+            foreach (SaleZoneRoutingProductToAdd routingProductToAdd in routingProductsToAdd)
+            {
+                List<ExistingSaleZoneRoutingProduct> matchedExistingRoutingProducts;
+                if (existingRoutingProductsByZoneName.TryGetValue(routingProductToAdd.ZoneName, out matchedExistingRoutingProducts))
+                {
+                    CloseOverlappedExistingRoutingProducts(routingProductToAdd, matchedExistingRoutingProducts);
+                }
+                ProcessRoutingProductToAdd(routingProductToAdd, existingZonesByName);
+            }
 
-            SetNewAndChangedSaleZoneRoutingProducts(context);
+            foreach (SaleZoneRoutingProductToClose routingProductToClose in routingProductsToClose)
+            {
+                List<ExistingSaleZoneRoutingProduct> matchedExistingRoutingProduct;
+                if (existingRoutingProductsByZoneName.TryGetValue(routingProductToClose.ZoneName, out matchedExistingRoutingProduct))
+                {
+                    CloseExistingRoutingProducts(routingProductToClose, matchedExistingRoutingProduct);
+                }
+            }
         }
 
-        private ExistingSaleZoneRoutingProductsByZoneName StructureExistingSaleZoneRoutingProductsByZoneName(IEnumerable<ExistingSaleZoneRoutingProduct> existingSaleZoneRoutingProducts)
+        private ExistingSaleZoneRoutingProductsByZoneName StructureExistingRoutingProductsByZoneName(IEnumerable<ExistingSaleZoneRoutingProduct> existingRoutingProducts)
         {
             var routingProductsByZoneName = new ExistingSaleZoneRoutingProductsByZoneName();
 
-            if (existingSaleZoneRoutingProducts == null)
+            if (existingRoutingProducts == null)
                 return routingProductsByZoneName;
 
             List<ExistingSaleZoneRoutingProduct> routingProductList = null;
             var saleZoneManager = new SaleZoneManager();
 
-            foreach (ExistingSaleZoneRoutingProduct routingProduct in existingSaleZoneRoutingProducts)
+            foreach (ExistingSaleZoneRoutingProduct routingProduct in existingRoutingProducts)
             {
                 string zoneName = saleZoneManager.GetSaleZoneName(routingProduct.SaleZoneRoutingProductEntity.SaleZoneId);
 
@@ -47,7 +67,6 @@ namespace TOne.WhS.Sales.Business
 
             return routingProductsByZoneName;
         }
-
         private ExistingZonesByName StructureExistingZonesByName(IEnumerable<ExistingZone> existingZones)
         {
             ExistingZonesByName existingZonesByName = new ExistingZonesByName();
@@ -67,62 +86,40 @@ namespace TOne.WhS.Sales.Business
             return existingZonesByName;
         }
 
-        #region Process Sale Zone Routing Products To Add
-
-        private void ProcessSaleZoneRoutingProductsToAdd(IEnumerable<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd, ExistingSaleZoneRoutingProductsByZoneName existingSaleZoneRoutingProductsByZoneName, ExistingZonesByName existingZonesByName)
+        private void CloseOverlappedExistingRoutingProducts(SaleZoneRoutingProductToAdd routingProductToAdd, IEnumerable<ExistingSaleZoneRoutingProduct> matchedExistingRoutingProducts)
         {
-            if (saleZoneRoutingProductsToAdd == null)
-                return;
-
-            foreach (SaleZoneRoutingProductToAdd saleZoneRoutingProductToAdd in saleZoneRoutingProductsToAdd)
+            foreach (ExistingSaleZoneRoutingProduct existingRoutingProduct in matchedExistingRoutingProducts)
             {
-                SyncSaleZoneRoutingProductToAddWithExistingSaleZoneRoutingProducts(saleZoneRoutingProductToAdd, existingSaleZoneRoutingProductsByZoneName);
-                SyncSaleZoneRoutingProductToAddWithExistingZones(saleZoneRoutingProductToAdd, existingZonesByName);
-            }
-        }
-
-        private void SyncSaleZoneRoutingProductToAddWithExistingSaleZoneRoutingProducts(SaleZoneRoutingProductToAdd saleZoneRoutingProductToAdd, ExistingSaleZoneRoutingProductsByZoneName existingSaleZoneRoutingProductsByZoneName)
-        {
-            List<ExistingSaleZoneRoutingProduct> matchedExistingSaleZoneRoutingProducts;
-            existingSaleZoneRoutingProductsByZoneName.TryGetValue(saleZoneRoutingProductToAdd.ZoneName, out matchedExistingSaleZoneRoutingProducts);
-
-            if (matchedExistingSaleZoneRoutingProducts == null)
-                return;
-
-            foreach (ExistingSaleZoneRoutingProduct existingSaleZoneRoutingProduct in matchedExistingSaleZoneRoutingProducts)
-            {
-                if (existingSaleZoneRoutingProduct.IsOverlapedWith(saleZoneRoutingProductToAdd))
+                if (existingRoutingProduct.IsOverlapedWith(routingProductToAdd))
                 {
-                    DateTime changedSaleZoneRoutingProductEED = Utilities.Max(existingSaleZoneRoutingProduct.BED, saleZoneRoutingProductToAdd.BED);
-                    existingSaleZoneRoutingProduct.ChangedSaleZoneRoutingProduct = new ChangedSaleZoneRoutingProduct()
+                    DateTime changedSaleZoneRoutingProductEED = Utilities.Max(existingRoutingProduct.BED, routingProductToAdd.BED);
+                    existingRoutingProduct.ChangedSaleZoneRoutingProduct = new ChangedSaleZoneRoutingProduct()
                     {
-                        SaleEntityRoutingProductId = existingSaleZoneRoutingProduct.SaleZoneRoutingProductEntity.SaleEntityRoutingProductId,
+                        SaleEntityRoutingProductId = existingRoutingProduct.SaleZoneRoutingProductEntity.SaleEntityRoutingProductId,
                         EED = changedSaleZoneRoutingProductEED
                     };
-                    saleZoneRoutingProductToAdd.ChangedExistingSaleZoneRoutingProducts.Add(existingSaleZoneRoutingProduct);
+                    routingProductToAdd.ChangedExistingSaleZoneRoutingProducts.Add(existingRoutingProduct);
                 }
             }
         }
-
-        private void SyncSaleZoneRoutingProductToAddWithExistingZones(SaleZoneRoutingProductToAdd saleZoneRoutingProductToAdd, ExistingZonesByName existingZonesByName)
+        private void ProcessRoutingProductToAdd(SaleZoneRoutingProductToAdd routingProductToAdd, ExistingZonesByName existingZonesByName)
         {
             List<ExistingZone> matchedExistingZones;
-            existingZonesByName.TryGetValue(saleZoneRoutingProductToAdd.ZoneName, out matchedExistingZones);
+            existingZonesByName.TryGetValue(routingProductToAdd.ZoneName, out matchedExistingZones);
 
-            DateTime newSaleZoneRoutingProductBED = saleZoneRoutingProductToAdd.BED;
+            DateTime newSaleZoneRoutingProductBED = routingProductToAdd.BED;
             bool shouldAddNewSaleZoneRoutingProducts = true;
 
             foreach (var existingZone in matchedExistingZones.OrderBy(x => x.BED))
             {
-                if (existingZone.EED.VRGreaterThan(existingZone.BED) && existingZone.EED.VRGreaterThan(newSaleZoneRoutingProductBED) && saleZoneRoutingProductToAdd.EED.VRGreaterThan(existingZone.BED))
+                if (existingZone.EED.VRGreaterThan(existingZone.BED) && existingZone.EED.VRGreaterThan(newSaleZoneRoutingProductBED) && routingProductToAdd.EED.VRGreaterThan(existingZone.BED))
                 {
-                    AddNewSaleZoneRoutingProduct(saleZoneRoutingProductToAdd, ref newSaleZoneRoutingProductBED, existingZone, out shouldAddNewSaleZoneRoutingProducts);
+                    AddNewSaleZoneRoutingProduct(routingProductToAdd, ref newSaleZoneRoutingProductBED, existingZone, out shouldAddNewSaleZoneRoutingProducts);
                     if (!shouldAddNewSaleZoneRoutingProducts)
                         break;
                 }
             }
         }
-
         private void AddNewSaleZoneRoutingProduct(SaleZoneRoutingProductToAdd saleZoneRoutingProductToAdd, ref DateTime newSaleZoneRoutingProductBED, ExistingZone existingZone, out bool shouldAddNewSaleZoneRoutingProducts)
         {
             shouldAddNewSaleZoneRoutingProducts = false;
@@ -146,58 +143,19 @@ namespace TOne.WhS.Sales.Business
             saleZoneRoutingProductToAdd.NewSaleZoneRoutingProducts.Add(newSaleZoneRoutingProduct);
         }
 
-        #endregion
-
-        #region Process Sale Zone Routing Products To Close
-
-        private void ProcessSaleZoneRoutingProductsToClose(IEnumerable<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose, ExistingSaleZoneRoutingProductsByZoneName existingSaleZoneRoutingProductsByZoneName)
+        private void CloseExistingRoutingProducts(SaleZoneRoutingProductToClose routingProductToClose, IEnumerable<ExistingSaleZoneRoutingProduct> matchedExistingRoutingProducts)
         {
-            if (saleZoneRoutingProductsToClose == null)
-                return;
-
-            foreach (SaleZoneRoutingProductToClose saleZoneRoutingProductToClose in saleZoneRoutingProductsToClose)
+            foreach (ExistingSaleZoneRoutingProduct existingRoutingProduct in matchedExistingRoutingProducts)
             {
-                SyncSaleZoneRoutingProductToCloseWithExistingSaleZoneRoutingProducts(saleZoneRoutingProductToClose, existingSaleZoneRoutingProductsByZoneName);
-            }
-        }
-
-        private void SyncSaleZoneRoutingProductToCloseWithExistingSaleZoneRoutingProducts(SaleZoneRoutingProductToClose saleZoneRoutingProductToClose, ExistingSaleZoneRoutingProductsByZoneName existingSaleZoneRoutingProductsByZoneName)
-        {
-            List<ExistingSaleZoneRoutingProduct> matchedExistingSaleZoneRoutingProducts;
-            existingSaleZoneRoutingProductsByZoneName.TryGetValue(saleZoneRoutingProductToClose.ZoneName, out matchedExistingSaleZoneRoutingProducts);
-
-            if (matchedExistingSaleZoneRoutingProducts == null)
-                return;
-
-            foreach (ExistingSaleZoneRoutingProduct existingSaleZoneRoutingProduct in matchedExistingSaleZoneRoutingProducts)
-            {
-                if (existingSaleZoneRoutingProduct.EED.VRGreaterThan(saleZoneRoutingProductToClose.CloseEffectiveDate))
+                if (existingRoutingProduct.EED.VRGreaterThan(routingProductToClose.CloseEffectiveDate))
                 {
-                    existingSaleZoneRoutingProduct.ChangedSaleZoneRoutingProduct = new ChangedSaleZoneRoutingProduct()
+                    existingRoutingProduct.ChangedSaleZoneRoutingProduct = new ChangedSaleZoneRoutingProduct()
                     {
-                        SaleEntityRoutingProductId = existingSaleZoneRoutingProduct.SaleZoneRoutingProductEntity.SaleEntityRoutingProductId,
-                        EED = Utilities.Max(existingSaleZoneRoutingProduct.BED, saleZoneRoutingProductToClose.CloseEffectiveDate)
+                        SaleEntityRoutingProductId = existingRoutingProduct.SaleZoneRoutingProductEntity.SaleEntityRoutingProductId,
+                        EED = Utilities.Max(existingRoutingProduct.BED, routingProductToClose.CloseEffectiveDate)
                     };
-                    saleZoneRoutingProductToClose.ChangedExistingSaleZoneRoutingProducts.Add(existingSaleZoneRoutingProduct);
+                    routingProductToClose.ChangedExistingSaleZoneRoutingProducts.Add(existingRoutingProduct);
                 }
-            }
-        }
-
-        #endregion
-
-        private void SetNewAndChangedSaleZoneRoutingProducts(IProcessSaleZoneRoutingProductsContext context)
-        {
-            if (context.SaleZoneRoutingProductsToAdd != null)
-            {
-                context.NewSaleZoneRoutingProducts = context.SaleZoneRoutingProductsToAdd.SelectMany(x => x.NewSaleZoneRoutingProducts);
-            }
-
-            if (context.ExistingSaleZoneRoutingProducts != null)
-            {
-                IEnumerable<ExistingSaleZoneRoutingProduct> filteredEntities = context.ExistingSaleZoneRoutingProducts.Where(x => x.ChangedSaleZoneRoutingProduct != null);
-
-                if (filteredEntities != null)
-                    context.ChangedSaleZoneRoutingProducts = filteredEntities.Select(x => x.ChangedSaleZoneRoutingProduct);
             }
         }
     }

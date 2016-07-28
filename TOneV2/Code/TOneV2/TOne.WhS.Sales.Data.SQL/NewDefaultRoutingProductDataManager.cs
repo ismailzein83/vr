@@ -13,6 +13,8 @@ namespace TOne.WhS.Sales.Data.SQL
     {
         #region Fields / Properties
 
+        readonly string[] columns = { "ID", "ProcessInstanceID", "RoutingProductID", "BED", "EED" };
+
         private long _processInstanceId;
 
         public long ProcessInstanceId
@@ -44,6 +46,13 @@ namespace TOne.WhS.Sales.Data.SQL
 
             object bulkInsertInfo = bulkApplyDataManager.FinishDBApplyStream(streamForDBApply);
             this.InsertBulkToTable(bulkInsertInfo as StreamBulkInsertInfo);
+        }
+
+        public bool Insert(NewDefaultRoutingProduct newDefaultRoutingProduct)
+        {
+            int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_NewDefaultRoutingProduct_Insert", newDefaultRoutingProduct.SaleEntityRoutingProductId, _processInstanceId, newDefaultRoutingProduct.RoutingProductId, newDefaultRoutingProduct.BED, newDefaultRoutingProduct.EED);
+
+            return affectedRows > 0;
         }
 
         #endregion
@@ -80,6 +89,7 @@ namespace TOne.WhS.Sales.Data.SQL
                 TabLock = false,
                 KeepIdentity = false,
                 FieldSeparator = '^',
+                ColumnNames = columns
             };
         }
 

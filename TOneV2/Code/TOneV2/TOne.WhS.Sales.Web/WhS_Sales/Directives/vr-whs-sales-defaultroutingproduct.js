@@ -96,7 +96,7 @@ function (WhS_BE_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService) {
                     if (selectedId && selectedId != -1) {
                         defaultChanges.NewDefaultRoutingProduct = {
                             DefaultRoutingProductId: selectedId,
-                            BED: new Date(),
+                            BED: UtilsService.getDateFromDateTime(new Date()),
                             EED: null
                         };
                     }
@@ -107,7 +107,7 @@ function (WhS_BE_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService) {
 
                     defaultChanges.DefaultRoutingProductChange = (selectedId && selectedId == -1) ? {
                         DefaultRoutingProductId: defaultItem.CurrentRoutingProductId,
-                        EED: new Date()
+                        EED: UtilsService.getDateFromDateTime(new Date())
                     } : null;
                 }
             };

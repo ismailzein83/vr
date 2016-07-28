@@ -17,7 +17,7 @@ namespace TOne.WhS.Sales.Entities
 
         public decimal? NewRate { get; set; }
 
-        public RateChangeType? ChangeType { get; set; }
+        public RateChangeType ChangeType { get; set; }
 
         public DateTime EffectiveOn { get; set; }
 

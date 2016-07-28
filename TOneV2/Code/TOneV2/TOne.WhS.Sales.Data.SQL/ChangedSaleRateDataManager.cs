@@ -13,6 +13,8 @@ namespace TOne.WhS.Sales.Data.SQL
     {
         #region Fields / Properties
 
+        readonly string[] columns = { "ID", "ProcessInstanceID", "EED" };
+
         private long _processInstanceId;
 
         long IChangedSaleRateDataManager.ProcessInstanceId
@@ -81,6 +83,7 @@ namespace TOne.WhS.Sales.Data.SQL
                 TabLock = false,
                 KeepIdentity = false,
                 FieldSeparator = '^',
+                ColumnNames = columns
             };
         }
 

@@ -30,8 +30,7 @@ namespace TOne.WhS.Sales.Business
                     Entity = entity
                 };
 
-                if (entity.ChangeType.HasValue)
-                    entityDetail.ChangeTypeDescription = Utilities.GetEnumAttribute<RateChangeType, DescriptionAttribute>(entity.ChangeType.Value).Description;
+                entityDetail.ChangeTypeDescription = Utilities.GetEnumAttribute<RateChangeType, DescriptionAttribute>(entity.ChangeType).Description;
                 
                 return entityDetail;
             }

@@ -36,5 +36,13 @@ namespace TOne.WhS.Sales.Web.Controllers
             var manager = new SaleZoneRoutingProductPreviewManager();
             return GetWebResponse(input, manager.GetFilteredSaleZoneRoutingProductPreviews(input));
         }
+
+        [HttpPost]
+        [Route("GetDefaultRoutingProductPreview")]
+        public DefaultRoutingProductPreview GetDefaultRoutingProductPreview(RatePlanPreviewQuery query)
+        {
+            var manager = new DefaultRoutingProductPreviewManager();
+            return manager.GetDefaultRoutingProductPreview(query);
+        }
     }
 }

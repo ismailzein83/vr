@@ -28,18 +28,17 @@ namespace TOne.WhS.Sales.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<SaleZoneRoutingProduct> existingSaleEntityZoneRoutingProducts = ExistingSaleEntityZoneRoutingProducts.Get(context);
-
-            if (existingSaleEntityZoneRoutingProducts == null || existingSaleEntityZoneRoutingProducts.Count() == 0)
-                return;
-
             var existingSaleZoneRoutingProducts = new List<ExistingSaleZoneRoutingProduct>();
 
-            foreach (SaleZoneRoutingProduct saleEntityZoneRoutingProduct in existingSaleEntityZoneRoutingProducts)
+            if (existingSaleEntityZoneRoutingProducts != null)
             {
-                existingSaleZoneRoutingProducts.Add(new ExistingSaleZoneRoutingProduct()
+                foreach (SaleZoneRoutingProduct saleEntityZoneRoutingProduct in existingSaleEntityZoneRoutingProducts)
                 {
-                    SaleZoneRoutingProductEntity = saleEntityZoneRoutingProduct
-                });
+                    existingSaleZoneRoutingProducts.Add(new ExistingSaleZoneRoutingProduct()
+                    {
+                        SaleZoneRoutingProductEntity = saleEntityZoneRoutingProduct
+                    });
+                }
             }
 
             ExistingSaleZoneRoutingProducts.Set(context, existingSaleZoneRoutingProducts);
