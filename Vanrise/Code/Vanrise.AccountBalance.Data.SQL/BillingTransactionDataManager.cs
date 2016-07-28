@@ -28,7 +28,13 @@ namespace Vanrise.AccountBalance.Data.SQL
 
             return GetItemsSP("[VR_AccountBalance].[sp_BillingTransaction_GetFiltered]", BillingTransactionMapper, accountsIds);
         }
-
+        public bool UpdateBillingTransactions(List<long> billingTransactionIds)
+        {
+            string billingTransactionIDs = null;
+            if (billingTransactionIds != null && billingTransactionIds.Count() > 0)
+                billingTransactionIDs = string.Join<long>(",", billingTransactionIds);
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_Update]",  billingTransactionIDs) > 0);
+        }
         public void GetBillingTransactionsByBalanceUpdated(Action<BillingTransaction> onBillingTransactionReady)
         {
             ExecuteReaderSP("[VR_AccountBalance].[sp_BillingTransaction_GetBalanceNotUpdated]",

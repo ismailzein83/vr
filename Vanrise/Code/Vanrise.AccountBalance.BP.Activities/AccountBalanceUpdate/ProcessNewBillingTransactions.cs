@@ -7,6 +7,8 @@ using Vanrise.AccountBalance.Entities;
 using Vanrise.Queueing;
 using Vanrise.BusinessProcess;
 using Vanrise.AccountBalance.Data;
+using Vanrise.Common.Business;
+using Vanrise.AccountBalance.Business;
 
 namespace Vanrise.AccountBalance.BP.Activities
 {
@@ -15,6 +17,7 @@ namespace Vanrise.AccountBalance.BP.Activities
     public class ProcessNewBillingTransactionsInput
     {
         public BaseQueue<BillingTransactionBatch> InputQueue { get; set; }
+        public AcountBalanceUpdateHandler AcountBalanceUpdateHandler { get; set; }
     }
 
     #endregion
@@ -26,7 +29,9 @@ namespace Vanrise.AccountBalance.BP.Activities
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<BillingTransactionBatch>> InputQueue { get; set; }
-    
+       
+        [RequiredArgument]
+        public InArgument<AcountBalanceUpdateHandler> AcountBalanceUpdateHandler { get; set; }
         #endregion
 
         protected override void DoWork(ProcessNewBillingTransactionsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
@@ -41,7 +46,7 @@ namespace Vanrise.AccountBalance.BP.Activities
                         {
                             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Started Processing New Billing Transactions for accountID {0}", billingTransactionBatch.BillingTransactions.FirstOrDefault().AccountId);
 
-                            ProcessBillingTransactions(billingTransactionBatch.BillingTransactions);
+                            ProcessBillingTransactions(billingTransactionBatch.BillingTransactions,inputArgument.AcountBalanceUpdateHandler);
                             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finish Processing New Billing Transactions for accountID {0}", billingTransactionBatch.BillingTransactions.FirstOrDefault().AccountId);
                         });
                 } while (!ShouldStop(handle) && hasItems);
@@ -53,22 +58,12 @@ namespace Vanrise.AccountBalance.BP.Activities
             return new ProcessNewBillingTransactionsInput()
             {
                 InputQueue = this.InputQueue.Get(context),
+                AcountBalanceUpdateHandler = this.AcountBalanceUpdateHandler.Get(context),
             };
         }
-
-        private void ProcessBillingTransactions(List<BillingTransaction> billingTransactions)
+        private void ProcessBillingTransactions(List<BillingTransaction> billingTransactions, AcountBalanceUpdateHandler acountBalanceUpdateHandler)
         {
-            decimal amount = 0;
-            long accountId = -1;
-            List<long> billingTransactionIds = new List<long>();
-            foreach(var billingTransaction in billingTransactions)
-            {
-                billingTransactionIds.Add(billingTransaction.AccountBillingTransactionId);
-                accountId = billingTransaction.AccountId;
-                amount += billingTransaction.Amount;
-            }
-            ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
-            dataManager.UpdateBalance(accountId, billingTransactionIds, amount);
+            acountBalanceUpdateHandler.AddAndUpdateLiveBalanceFromBillingTransction(billingTransactions);
         }
     }
 }

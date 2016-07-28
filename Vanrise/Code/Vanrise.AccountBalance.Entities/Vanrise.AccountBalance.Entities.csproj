@@ -60,6 +60,7 @@
     <Compile Include="BalanceUsageQueue\UsageBalanceUpdate.cs" />
     <Compile Include="BillingTransaction\BillingTransaction.cs" />
     <Compile Include="LiveBalance\LiveBalance.cs" />
+    <Compile Include="LiveBalance\LiveBalanceAccountInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

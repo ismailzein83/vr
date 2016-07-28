@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,9 @@ namespace Vanrise.AccountBalance.Data.SQL
             : base(GetConnectionStringName("VR_AccountBalance_TransactionDBConnStringKey", "VR_AccountBalance_TransactionDBConnString"))
         {
         }
+
+       
+
         #endregion
 
         #region Public Methods
@@ -39,6 +43,10 @@ namespace Vanrise.AccountBalance.Data.SQL
                 binaryArray = Common.ProtoBufSerializer.Serialize(balanceUsageDetail);
             }
             return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BalanceUsageQueue_Update]", binaryArray) > 0);
+        }
+        public bool DeleteBalanceUsageQueue(long balanceUsageQueueId)
+        {
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BalanceUsageQueue_Delete]", balanceUsageQueueId) > 0);
         }
         #endregion
       

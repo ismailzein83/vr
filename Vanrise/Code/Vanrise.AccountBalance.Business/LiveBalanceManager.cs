@@ -11,6 +11,12 @@ namespace Vanrise.AccountBalance.Business
 {
     public class LiveBalanceManager
     {
+        public IEnumerable<LiveBalanceAccountInfo> GetLiveBalanceAccountsInfo()
+        {
+
+            ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
+            return dataManager.GetLiveBalanceAccountsInfo();
+        }
         public LiveBalance GetLiveBalance(long accountId)
         {
             ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();

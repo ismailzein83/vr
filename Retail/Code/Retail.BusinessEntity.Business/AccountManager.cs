@@ -512,7 +512,40 @@ namespace Retail.BusinessEntity.Business
 
         public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
-            throw new NotImplementedException();
+            switch(context.InfoType)
+            {
+                case Vanrise.AccountBalance.Entities.AccountInfo.BEInfoType:
+                    {
+                        var account = context.Entity as Account;
+                        StatusDefinitionManager statusDefinitionManager = new Business.StatusDefinitionManager();
+                        var statusDesciption =  statusDefinitionManager.GetStatusDefinitionName(account.StatusId);
+                        Vanrise.AccountBalance.Entities.AccountInfo accountInfo = new Vanrise.AccountBalance.Entities.AccountInfo
+                        {
+                            Name = account.Name,
+                            StatusDescription = statusDesciption,
+                        };
+                        var currency = GetCurrencyId(account.Settings.Parts.Values);
+                        if(currency.HasValue)
+                        {
+                            accountInfo.CurrencyId = currency.Value;
+                        }
+                        return accountInfo;
+                    }
+                default: return null;
+            }
+        }
+
+        private int? GetCurrencyId(IEnumerable<AccountPart> parts)
+        {
+            foreach(AccountPart part in parts)
+            {
+                var actionpart = part as IAccountPayment;
+                if(actionpart != null)
+                {
+                    return actionpart.CurrencyId;
+                }
+            }
+            return null;
         }
     }
 }

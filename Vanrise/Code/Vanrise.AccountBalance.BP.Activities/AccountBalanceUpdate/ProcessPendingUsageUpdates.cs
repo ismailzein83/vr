@@ -6,6 +6,9 @@ using System.Activities;
 using Vanrise.BusinessProcess;
 using Vanrise.Queueing;
 using Vanrise.AccountBalance.Entities;
+using Vanrise.AccountBalance.Data;
+using Vanrise.Common.Business;
+using Vanrise.AccountBalance.Business;
 
 namespace Vanrise.AccountBalance.BP.Activities
 {
@@ -14,6 +17,7 @@ namespace Vanrise.AccountBalance.BP.Activities
     public class ProcessPendingUsageUpdatesInput
     {
         public BaseQueue<BalanceUsageQueue> InputQueue { get; set; }
+        public AcountBalanceUpdateHandler AcountBalanceUpdateHandler { get; set; }
     }
 
     #endregion
@@ -23,7 +27,8 @@ namespace Vanrise.AccountBalance.BP.Activities
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<BalanceUsageQueue>> InputQueue { get; set; }
-
+        [RequiredArgument]
+        public InArgument<AcountBalanceUpdateHandler> AcountBalanceUpdateHandler { get; set; }
         #endregion
         protected override void DoWork(ProcessPendingUsageUpdatesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
@@ -37,7 +42,7 @@ namespace Vanrise.AccountBalance.BP.Activities
                         {
                             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Started Processing Pending Usage Queue {0}", balanceUsageQueue.BalanceUsageQueueId);
 
-                            ProcessPendingUsageUpdatesMethod(balanceUsageQueue);
+                            ProcessPendingUsageUpdatesMethod(balanceUsageQueue, inputArgument.AcountBalanceUpdateHandler);
                             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finish Processing Pending Usage Queue {0}", balanceUsageQueue.BalanceUsageQueueId);
                         });
                 } while (!ShouldStop(handle) && hasItems);
@@ -50,18 +55,15 @@ namespace Vanrise.AccountBalance.BP.Activities
             return new ProcessPendingUsageUpdatesInput()
             {
                 InputQueue = this.InputQueue.Get(context),
+                AcountBalanceUpdateHandler = this.AcountBalanceUpdateHandler.Get(context),
             };
         }
-
-
-        private void ProcessPendingUsageUpdatesMethod(BalanceUsageQueue balanceUsageQueue)
+        private void ProcessPendingUsageUpdatesMethod(BalanceUsageQueue balanceUsageQueue, AcountBalanceUpdateHandler acountBalanceUpdateHandler)
         {
             if(balanceUsageQueue.UsageDetails != null && balanceUsageQueue.UsageDetails.UsageBalanceUpdates != null)
             {
-                var groupedResult = balanceUsageQueue.UsageDetails.UsageBalanceUpdates.GroupBy(elt => elt.AccountId).Select(group => new { AccountId = group.Key, Value = group.Sum(elt => elt.Value) });
-                
-
-               
+                var groupedResult = balanceUsageQueue.UsageDetails.UsageBalanceUpdates.GroupBy(elt => elt.AccountId).Select(group => new UsageBalanceUpdate { AccountId = group.Key, Value = group.Sum(elt => elt.Value) ,CurrencyId = group.Max(x=>x.CurrencyId) ,EffectiveOn  = group.Min(x=>x.EffectiveOn)});
+                acountBalanceUpdateHandler.AddAndUpdateLiveBalanceFromBalanceUsageQueue(balanceUsageQueue.BalanceUsageQueueId, groupedResult);
             }
         }
     }

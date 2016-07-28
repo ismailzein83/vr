@@ -79,6 +79,10 @@
       <Project>{ed541c78-4f5a-414d-83b4-7f8be4fb9211}</Project>
       <Name>Vanrise.AccountBalance.BP.Arguments</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.AccountBalance.Business\Vanrise.AccountBalance.Business.csproj">
+      <Project>{6e2ff40b-84c5-4c36-b346-6202d0e70a92}</Project>
+      <Name>Vanrise.AccountBalance.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.AccountBalance.Entities\Vanrise.AccountBalance.Entities.csproj">
       <Project>{5111e97a-c9ab-4bef-8f75-32cc46526074}</Project>
       <Name>Vanrise.AccountBalance.Entities</Name>
