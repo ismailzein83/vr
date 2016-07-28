@@ -8,8 +8,17 @@ namespace Vanrise.Entities
 {
     public class VRMailMessageTemplate
     {
+        public Guid VRMailMessageTemplateId { get; set; }
+
+        public string Name { get; set; }
+
         public Guid VRMailMessageTypeId { get; set; }
 
+        public VRMailMessageTemplateSettings Settings { get; set; }
+    }
+
+    public class VRMailMessageTemplateSettings
+    {
         public List<VRObjectPropertyVariable> Variables { get; set; }
 
         public VRExpression To { get; set; }

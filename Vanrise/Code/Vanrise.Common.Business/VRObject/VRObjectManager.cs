@@ -9,7 +9,7 @@ namespace Vanrise.Common.Business
 {
     public class VRObjectManager
     {
-        public Dictionary<string, dynamic> EvaluateVariables(List<VRObjectPropertyVariable> Variables, Dictionary<string, dynamic> objects, Dictionary<string, VRObjectVariable> objectVariables)
+        public Dictionary<string, dynamic> EvaluateVariables(List<VRObjectPropertyVariable> Variables, Dictionary<string, dynamic> objects, VRObjectVariableCollection objectVariables)
         {
             Dictionary<string, dynamic> variableValues = new Dictionary<string, dynamic>();
             foreach (var variable in Variables)
@@ -30,7 +30,7 @@ namespace Vanrise.Common.Business
             return variableValues;
         }
 
-        private void GetObjectAndType(VRObjectPropertyVariable variable, Dictionary<string, dynamic> objects, Dictionary<string, VRObjectVariable> objectVariables, out dynamic obj, out VRObjectType objectType)
+        private void GetObjectAndType(VRObjectPropertyVariable variable, Dictionary<string, dynamic> objects, VRObjectVariableCollection objectVariables, out dynamic obj, out VRObjectType objectType)
         {
             if (!objects.TryGetValue(variable.ObjectName, out obj))
                 throw new NullReferenceException(String.Format("Obj. ObjectName '{0}', VariableName '{1}'", variable.ObjectName, variable.VariableName));

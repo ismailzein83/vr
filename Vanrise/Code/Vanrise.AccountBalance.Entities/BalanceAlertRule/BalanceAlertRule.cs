@@ -9,6 +9,8 @@ namespace Vanrise.AccountBalance.Entities
 {
     public class BalanceAlertRule : GenericRule
     {
+        public const string VRACTION_EXTENSION_TYPE = "VR_AccountBalance_VRAction";
+
         public BalanceAlertSettings Settings { get; set; }
 
         public override string GetSettingsDescription(IGenericRuleSettingsDescriptionContext context)

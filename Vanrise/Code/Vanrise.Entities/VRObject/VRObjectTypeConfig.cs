@@ -8,7 +8,7 @@ namespace Vanrise.Entities
 {
     public class VRObjectTypeConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "VR_ObjectType";
+        public const string EXTENSION_TYPE = "VR_Common_ObjectType";
 
         public string Editor { get; set; }
     }

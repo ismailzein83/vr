@@ -17,7 +17,7 @@ namespace Vanrise.Entities
 
     public class VRMailMessageTypeSettings
     {
-        public Dictionary<string, VRObjectVariable> Objects { get; set; }
+        public VRObjectVariableCollection Objects { get; set; }
 
         public bool SupportMultipleTemplates { get; set; }
     }

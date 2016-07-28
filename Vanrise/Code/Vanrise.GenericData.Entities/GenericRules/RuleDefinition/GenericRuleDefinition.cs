@@ -15,7 +15,7 @@ namespace Vanrise.GenericData.Entities
 
         public GenericRuleDefinitionCriteria CriteriaDefinition { get; set; }
 
-        public Dictionary<string, VRObjectVariable> Objects { get; set; }
+        public VRObjectVariableCollection Objects { get; set; }
 
         public GenericRuleDefinitionSettings SettingsDefinition { get; set; }
     }

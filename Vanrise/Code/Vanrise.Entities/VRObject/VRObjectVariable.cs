@@ -12,4 +12,9 @@ namespace Vanrise.Entities
 
         public VRObjectType ObjectType { get; set; }
     }
+
+    public class VRObjectVariableCollection : Dictionary<string, VRObjectVariable>
+    {
+
+    }
 }

@@ -20,18 +20,20 @@ namespace Vanrise.Common.Business
             VRMailMessageTemplate mailMessageTemplate = new VRMailMessageTemplateManager().GetMailMessageTemplate(mailMessageTemplateId);
             if (mailMessageTemplate == null)
                 throw new NullReferenceException(String.Format("mailMessageTemplate '{0}'", mailMessageTemplateId));
+            if (mailMessageTemplate.Settings == null)
+                throw new NullReferenceException(String.Format("mailMessageTemplate.Settings '{0}'", mailMessageTemplateId));
             return mailMessageTemplate;
         }
 
         private void SendMail(VRMailMessageTemplate mailMessageTemplate, Dictionary<string, dynamic> objects)
         {
             var mailMessageType = GetMailMessageType(mailMessageTemplate.VRMailMessageTypeId);
-            Dictionary<string, dynamic> variableValuesObj = new VRObjectManager().EvaluateVariables(mailMessageTemplate.Variables, objects, mailMessageType.Settings.Objects);
+            Dictionary<string, dynamic> variableValuesObj = new VRObjectManager().EvaluateVariables(mailMessageTemplate.Settings.Variables, objects, mailMessageType.Settings.Objects);
             var mailContext = new VRMailContext { Variables = variableValuesObj };
-            string to = EvaluateExpression(mailMessageTemplate.To, mailContext);
-            string cc = EvaluateExpression(mailMessageTemplate.CC, mailContext);
-            string subject = EvaluateExpression(mailMessageTemplate.Subject, mailContext);
-            string body = EvaluateExpression(mailMessageTemplate.Body, mailContext);
+            string to = EvaluateExpression(mailMessageTemplate.Settings.To, mailContext);
+            string cc = EvaluateExpression(mailMessageTemplate.Settings.CC, mailContext);
+            string subject = EvaluateExpression(mailMessageTemplate.Settings.Subject, mailContext);
+            string body = EvaluateExpression(mailMessageTemplate.Settings.Body, mailContext);
         }
 
         private static string EvaluateExpression(VRExpression expression, VRMailContext mailContext)
