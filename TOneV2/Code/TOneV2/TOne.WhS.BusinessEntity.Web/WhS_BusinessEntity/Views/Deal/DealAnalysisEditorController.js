@@ -13,12 +13,6 @@
         var carrierAccountSelectorAPI;
         var carrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        //var dealSellingAPI;
-        //var dealSellingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        //var dealBuyingAPI;
-        //var dealBuyingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
         loadParameters();
         defineScope();
         load();
@@ -60,10 +54,12 @@
             $scope.scopeModel.EvalDurationInMonths = function (api) {
                 if ($scope.scopeModel.fromDate != undefined && $scope.scopeModel.toDate != undefined) {
                     var days = ($scope.scopeModel.toDate - $scope.scopeModel.fromDate) / (1000 * 60 * 60 * 24) / 30;
-                    $scope.scopeModel.DurationInMonths = UtilsService.round(days,1)
+                    $scope.scopeModel.DurationInMonths = UtilsService.round(days, 1)
                 }
-                else 
-                    $scope.scopeModel.DurationInMonths = 0
+                else
+                    $scope.scopeModel.DurationInMonths = 0;
+
+                evalTotalResultAnalysis();
             };
 
             $scope.scopeModel.addOutboundTraffic = function () {
@@ -73,7 +69,7 @@
                         Name: addedOutbound.Name,
                         SupplierZoneIds: addedOutbound.SupplierZoneIds,
                         CommitedVolume: addedOutbound.CommitedVolume,
-                        DailyVolume: (addedOutbound.CommitedVolume/1.5)/30,
+                        DailyVolume: (addedOutbound.CommitedVolume / $scope.scopeModel.DurationInMonths ) / 30,
                         Rate: addedOutbound.Rate,
                         CurrentCost:addedOutbound.CurrentCost,
                         CostSavingFromRate: addedOutbound.CurrentCost - addedOutbound.Rate,
@@ -94,7 +90,7 @@
                         Name: addedInbound.Name,
                         SaleZoneIds: addedInbound.SaleZoneIds,
                         CommitedVolume: addedInbound.CommitedVolume,
-                        DailyVolume: (addedInbound.CommitedVolume / 1.5) / 30,
+                        DailyVolume: (addedInbound.CommitedVolume / $scope.scopeModel.DurationInMonths) / 30,
                         Rate: addedInbound.Rate,
                         CurrentCost: addedInbound.CurrentCost,
                         ProfitFromRate: addedInbound.Rate - addedInbound.CurrentCost,
@@ -106,6 +102,17 @@
                 };
                 WhS_BE_DealAnalysisService.addInbound(onInboundAdded, sellingNumberPlanId);
             };
+
+            $scope.scopeModel.removeOutboundTraffic = function (obj) {
+                $scope.scopeModel.outboundTraffics.splice($scope.scopeModel.outboundTraffics.indexOf(obj), 1);
+                evalTotalResultAnalysis();
+            }
+
+            $scope.scopeModel.removeInboundTraffic = function (obj) {
+                $scope.scopeModel.inboundTraffics.splice($scope.scopeModel.inboundTraffics.indexOf(obj), 1);
+                evalTotalResultAnalysis();
+            }
+
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
                 var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
                 if (carrierAccountInfo != undefined && carrierAccountInfo.SellingNumberPlanId) {
@@ -129,17 +136,25 @@
                 return (isEditMode) ? updateDeal() : insertDeal();
             };
 
-            $scope.scopeModel.hasSavePermission = function () {
-                return (isEditMode) ?
-                    WhS_BE_DealAPIService.HasEditDealPermission() :
-                    WhS_BE_DealAPIService.HasAddDealPermission();
-            };
-
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
 
-        
+            
+
+            $scope.scopeModel.gridMenuActionsOutbound = [
+                {
+                    name: "Edit",
+                    clicked: editOutbound
+                }
+             ]
+            $scope.scopeModel.gridMenuActionsInbound = [
+              {
+                  name: "Edit",
+                  clicked: editInbound
+              }
+            ]
+
 
         }
 
@@ -346,6 +361,7 @@
             };
             return obj;
         }
+
         function evalTotalResultAnalysis() {
             var totalCommitmentCost = 0;
             var totalSaving = 0;
@@ -392,6 +408,49 @@
             $scope.scopeModel.Exposure = UtilsService.round ( totalCommitmentRevenue -  totalCommitmentCost , 2);
 
 
+        }
+
+        function editOutbound(item) {
+            var supplierId = carrierAccountSelectorAPI.getSelectedValues() != undefined ? carrierAccountSelectorAPI.getSelectedValues().CarrierAccountId : undefined;
+            var onOutboundUpdated = function (updatedOutbound) {
+                var obj = {
+                    Name: updatedOutbound.Name,
+                    SupplierZoneIds: updatedOutbound.SupplierZoneIds,
+                    CommitedVolume: updatedOutbound.CommitedVolume,
+                    DailyVolume: (updatedOutbound.CommitedVolume / $scope.scopeModel.DurationInMonths) / 30,
+                    Rate: updatedOutbound.Rate,
+                    CurrentCost: updatedOutbound.CurrentCost,
+                    CostSavingFromRate: updatedOutbound.CurrentCost - updatedOutbound.Rate,
+                    TotalDealSaving: (updatedOutbound.CurrentCost - updatedOutbound.Rate) * updatedOutbound.CommitedVolume,
+                    RevenuePerDeal: updatedOutbound.CommitedVolume * updatedOutbound.Rate
+                }
+                $scope.scopeModel.outboundTraffics[$scope.scopeModel.outboundTraffics.indexOf(item)] = obj;
+                evalTotalResultAnalysis();
+            };
+            WhS_BE_DealAnalysisService.editOutbound(item, supplierId, onOutboundUpdated);
+        }
+
+        function editInbound(item) {
+
+            var sellingNumberPlanId = carrierAccountSelectorAPI.getSelectedValues() != undefined ? carrierAccountSelectorAPI.getSelectedValues().SellingNumberPlanId : undefined;
+
+            var onInboundUpdated = function (updatedInbound) {
+                var obj = {
+                    Name: updatedInbound.Name,
+                    SaleZoneIds: updatedInbound.SaleZoneIds,
+                    CommitedVolume: updatedInbound.CommitedVolume,
+                    DailyVolume: (updatedInbound.CommitedVolume / $scope.scopeModel.DurationInMonths) / 30,
+                    Rate: updatedInbound.Rate,
+                    CurrentCost: updatedInbound.CurrentCost,
+                    ProfitFromRate: updatedInbound.Rate - updatedInbound.CurrentCost,
+                    DealProfit: (updatedInbound.Rate - updatedInbound.CurrentCost) * updatedInbound.CommitedVolume,
+                    Revenue: updatedInbound.CommitedVolume * updatedInbound.Rate
+                }
+                $scope.scopeModel.inboundTraffics[$scope.scopeModel.inboundTraffics.indexOf(item)] = obj;
+
+                evalTotalResultAnalysis();
+            };
+            WhS_BE_DealAnalysisService.editInbound(item,sellingNumberPlanId, onInboundUpdated );
         }
 
     }

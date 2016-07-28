@@ -115,7 +115,7 @@
         }
 
         function updateInbound() {
-            var inboundObject = buildinboundObjFromScope();
+            var inboundObject = buildInboundObjFromScope();
             if ($scope.onInboundUpdated != undefined)
                 $scope.onInboundUpdated(inboundObject);
             $scope.modalContext.closeModal();
@@ -127,7 +127,7 @@
                 SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds(),
                 CommitedVolume: $scope.scopeModel.volume,
                 Rate: $scope.scopeModel.rate,
-                CurrentCost: $scope.scopeModel.cost,
+                CurrentCost: $scope.scopeModel.cost
             };
             return obj;
         }
@@ -136,5 +136,3 @@
     appControllers.controller('WhS_BE_InboundEditorController', WhS_BE_InboundEditorController);
 
 })(appControllers);
-
-var app = angular.module('myApp');

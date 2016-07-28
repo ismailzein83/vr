@@ -36,7 +36,7 @@
 
                             <vr-button type="Add" data-onclick="scopeModel.addOutboundTraffic" standalone></vr-button>
 
-                            <vr-datagrid datasource="scopeModel.outboundTraffics" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                            <vr-datagrid datasource="scopeModel.outboundTraffics" norowhighlightonclick="true" menuactions="scopeModel.gridMenuActionsOutbound" maxheight="300px"
                                          ondeleterow="scopeModel.removeOutboundTraffic" hidegridmenu>
                                 <vr-datagridcolumn headertext="'Name'" field="'Name'" disablesorting></vr-datagridcolumn>
                                 <!--<vr-datagridcolumn headertext="'Sale Zones'" field="'Sale Zones'"  disablesorting></vr-datagridcolumn>-->
@@ -56,7 +56,7 @@
                         <vr-columns width="fullrow">
                             <vr-button type="Add" data-onclick="scopeModel.addInboundTraffic" standalone></vr-button>
 
-                            <vr-datagrid datasource="scopeModel.inboundTraffics" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                            <vr-datagrid datasource="scopeModel.inboundTraffics" norowhighlightonclick="true" menuactions="scopeModel.gridMenuActionsInbound" maxheight="300px"
                                          ondeleterow="scopeModel.removeInboundTraffic" hidegridmenu>
                                 <vr-datagridcolumn headertext="'Name'" field="'Name'" disablesorting></vr-datagridcolumn>
                                 <!--<vr-datagridcolumn headertext="'Sale Zones'" field="'Sale Zones'"  disablesorting></vr-datagridcolumn>-->
