@@ -22,7 +22,7 @@ namespace Vanrise.Notification.MainExtensions.VRActions
 
         public VRExpression Body { get; set; }
 
-        public override void Execute(IVRActionContext context)
+        public override void Execute(IVRActionExecutionContext context)
         {
             //var expressionManager = new Vanrise.Common.Business.VRExpressionManager();
             //VRActionExpressionContext expressionContext = new VRActionExpressionContext(context);

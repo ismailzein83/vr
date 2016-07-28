@@ -11,7 +11,18 @@ namespace Vanrise.AccountBalance.Business
     {
         public int GetAccountBEDefinitionId()
         {
-            return -2001;
+            AccountBalanceConfig config = GetAccountBalanceConfig();
+            if (config == null)
+                throw new NullReferenceException("config");
+            return config.AccountBusinessEntityDefinitionId;
+        }
+
+        private AccountBalanceConfig GetAccountBalanceConfig()
+        {
+            return new AccountBalanceConfig
+            {
+                AccountBusinessEntityDefinitionId = -2001
+            };
         }
 
         public int GetBalanceAlertRuleDefinitionId()

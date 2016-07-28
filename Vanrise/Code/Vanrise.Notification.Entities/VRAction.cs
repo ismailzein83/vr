@@ -10,15 +10,27 @@ namespace Vanrise.Notification.Entities
     {
         public int ConfigId { get; set; }
         public string ActionName { get; set; }
-        public abstract void Execute(IVRActionContext context);
+        public abstract void Execute(IVRActionExecutionContext context);
+
+        public virtual bool IsStillValid(IVRActionValidityContext context)
+        {
+            return false;
+        }
     }
 
-    public interface IVRActionContext
+    public interface IVRActionExecutionContext
     {
         IVRActionEventPayload EventPayload { get; }
 
         int NumberOfExecutions { get; }
 
         DateTime? NextExecutionTime { set; }
+    }
+
+    public interface IVRActionValidityContext
+    {
+        int NumberOfExecutions { get; }
+
+        DateTime LastExecutionTime { get; }
     }
 }

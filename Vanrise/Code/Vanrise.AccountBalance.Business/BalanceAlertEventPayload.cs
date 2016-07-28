@@ -10,33 +10,8 @@ namespace Vanrise.AccountBalance.Business
 {
     public class BalanceAlertEventPayload : IVRActionEventPayload
     {
-        public BalanceAlertEventPayload(long accountId, Decimal threshold)
-        {
-            this._accountId = accountId;
-            this._threshold = threshold;
-        }
+        public long AccountId { get; set; }
 
-        dynamic _account;
-        long _accountId;
-        public dynamic Account
-        {
-            get
-            {
-                if (_account == null)
-                {
-                    _account = new AccountManager().GetAccount(this._accountId);
-                }
-                return _account;
-            }
-        }
-
-        Decimal _threshold;
-        public Decimal Threshold
-        {
-            get
-            {
-                return _threshold;
-            }
-        }
+        public Decimal Threshod { get; set; }
     }
 }

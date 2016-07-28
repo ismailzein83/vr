@@ -11,7 +11,5 @@ namespace Vanrise.Notification.Entities
         public VRAction Action { get; set; }
 
         public IVRActionEventPayload EventPayload { get; set; }
-
-        public VRActionValidity ActionValidity { get; set; }
     }
 }
