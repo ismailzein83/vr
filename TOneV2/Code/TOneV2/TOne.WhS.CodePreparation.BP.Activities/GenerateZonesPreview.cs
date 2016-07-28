@@ -88,10 +88,10 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     if (zonesPreview.FindRecord(item => item.RecentZoneName != null && item.RecentZoneName.Equals(closedExistingZone.Key, StringComparison.InvariantCultureIgnoreCase)) != null)
                         continue;
 
-                    //If a zone is deleted by deleting its codes, do not show it as not changed
+                    //avoid adding deleted zones from zonesToProcess to the list of deleted zones
                     if (!zonesToProcess.Any(item => item.ZoneName.Equals(closedExistingZone.Key, StringComparison.InvariantCultureIgnoreCase)))
                     {
-                        DateTime? ClosedZoneEED =  Vanrise.Common.ExtensionMethods.VRMaximumDate(closedExistingZone.Value.Select(item => item.EED));
+                        DateTime? ClosedZoneEED = closedExistingZone.Value.Select(item => item.EED).VRMaximumDate();
                         zonesPreview.Add(new ZonePreview()
                         {
                             CountryId = closedExistingZone.Value.First().CountryId,
