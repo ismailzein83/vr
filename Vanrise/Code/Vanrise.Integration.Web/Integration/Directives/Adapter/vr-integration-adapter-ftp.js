@@ -31,15 +31,14 @@ function (UtilsService) {
 
         function initializeController() {
             $scope.actionsAfterImport = [{ value: 0, name: 'Rename' }, { value: 1, name: 'Delete' }, { value: 2, name: 'Move' }];
+
             defineAPI();
         }
 
         function defineAPI() {
 
-
-          
             var api = {};
-                        
+
             api.getData = function () {
 
                 var extension;
@@ -49,10 +48,10 @@ function (UtilsService) {
                 else
                     extension = "." + $scope.extension;
 
-
                 return {
                     $type: "Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument, Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments",
                     Extension: extension,
+                    Mask: $scope.mask == undefined ? "" : $scope.mask,
                     Directory: $scope.directory,
                     ServerIP: $scope.serverIP,
                     UserName: $scope.userName,
@@ -74,6 +73,7 @@ function (UtilsService) {
 
                     if (argumentData != null) {
                         $scope.extension = argumentData.Extension;
+                        $scope.mask = argumentData.Mask;
                         $scope.directory = argumentData.Directory;
                         $scope.serverIP = argumentData.ServerIP;
                         $scope.userName = argumentData.UserName;

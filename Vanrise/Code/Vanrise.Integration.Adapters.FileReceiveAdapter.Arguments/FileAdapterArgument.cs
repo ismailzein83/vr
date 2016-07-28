@@ -10,7 +10,7 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments
     public class FileAdapterArgument : BaseAdapterArgument
     {
         public string Extension { get; set; }
-
+        public string Mask { get; set; }
         public string Directory { get; set; }
 
         public string DirectorytoMoveFile { get; set; }

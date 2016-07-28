@@ -18,19 +18,14 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments
 
         #region Properties
         public string Extension { get; set; }
-
+        public string Mask { get; set; }
         public string Directory { get; set; }
-
         public string ServerIP { get; set; }
-
         public string UserName { get; set; }
-
         public string Password { get; set; }
-
         public string DirectorytoMoveFile { get; set; }
-
         public int ActionAfterImport { get; set; }
 
-        # endregion 
+        # endregion
     }
 }

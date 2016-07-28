@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments;
 using Vanrise.Integration.Entities;
@@ -53,18 +54,18 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
                 if (System.IO.Directory.Exists(fileAdapterArgument.Directory))
                 {
 
-                    file.MoveTo(Path.Combine(fileAdapterArgument.DirectorytoMoveFile, string.Format(@"{0}_{1}.processed", file.Name.ToLower().Replace(fileAdapterArgument.Extension.ToLower(), ""), Guid.NewGuid())));
+                    file.MoveTo(Path.Combine(fileAdapterArgument.DirectorytoMoveFile, string.Format(@"{0}.processed", file.Name)));
                 }
             }
         }
 
         #endregion
-        
+
         public override void ImportData(IAdapterImportDataContext context)
         {
             FileAdapterArgument fileAdapterArgument = context.AdapterArgument as FileAdapterArgument;
-
-
+            string mask = string.IsNullOrEmpty(fileAdapterArgument.Mask) ? "" : fileAdapterArgument.Mask;
+            Regex regEx = new Regex(mask);
             base.LogVerbose("Checking the following directory {0}", fileAdapterArgument.Directory);
 
             if (System.IO.Directory.Exists(fileAdapterArgument.Directory))
@@ -77,8 +78,11 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
                     base.LogInformation("{0} files are ready to be imported", Files.Length);
                     foreach (FileInfo file in Files)
                     {
-                        CreateStreamReader(fileAdapterArgument, context.OnDataReceived, file);
-                        AfterImport(fileAdapterArgument, file);
+                        if (regEx.IsMatch(file.Name))
+                        {
+                            CreateStreamReader(fileAdapterArgument, context.OnDataReceived, file);
+                            AfterImport(fileAdapterArgument, file);
+                        }
                     }
                 }
                 catch (Exception ex)

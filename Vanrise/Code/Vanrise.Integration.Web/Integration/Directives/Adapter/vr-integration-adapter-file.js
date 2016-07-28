@@ -53,6 +53,7 @@ function (UtilsService) {
                 return {
                     $type: "Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments.FileAdapterArgument, Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments",
                     Extension: extension,
+                    Mask: $scope.mask == undefined ? "" : $scope.mask,
                     Directory: $scope.directory,
                     DirectorytoMoveFile: $scope.directorytoMoveFile,
                     ActionAfterImport: $scope.selectedAction.value
@@ -71,6 +72,7 @@ function (UtilsService) {
 
                     if (argumentData != null) {
                         $scope.extension = argumentData.Extension;
+                        $scope.mask = argumentData.Mask;
                         $scope.directory = argumentData.Directory;
                         $scope.directorytoMoveFile = argumentData.DirectorytoMoveFile;
                         $scope.selectedAction = UtilsService.getItemByVal($scope.actionsAfterImport, argumentData.ActionAfterImport, "value");

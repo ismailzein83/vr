@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments;
 using Vanrise.Integration.Entities;
+using System.Text.RegularExpressions;
 
 namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
 {
@@ -60,7 +61,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                 if (!ftp.DirectoryExists(ftpAdapterArgument.DirectorytoMoveFile))
                     ftp.CreateDirectory(ftpAdapterArgument.DirectorytoMoveFile);
 
-                ftp.Rename(filePath, ftpAdapterArgument.DirectorytoMoveFile + "/" + string.Format(@"{0}_{1}.processed", fileObj.Name.Replace(ftpAdapterArgument.Extension.ToLower(), ""), Guid.NewGuid()));
+                ftp.Rename(filePath, ftpAdapterArgument.DirectorytoMoveFile + "/" + string.Format(@"{0}.processed", fileObj.Name));
             }
         }
         #endregion
@@ -69,6 +70,8 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
         {
             FTPAdapterArgument ftpAdapterArgument = context.AdapterArgument as FTPAdapterArgument;
             var ftp = new Rebex.Net.Ftp();
+            string mask = string.IsNullOrEmpty(ftpAdapterArgument.Mask) ? "" : ftpAdapterArgument.Mask;
+            Regex regEx = new Regex(mask);
 
             base.LogVerbose("Establishing FTP Connection");
 
@@ -84,18 +87,14 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                 }
 
                 ftp.ChangeDirectory(ftpAdapterArgument.Directory);
-                FtpList currentItems = ftp.GetList();
+                FtpList currentItems = ftp.GetList(string.Format("*{0}", ftpAdapterArgument.Extension));
 
-
-
-
-                var upperFtpAdapterArgumentExtension = ftpAdapterArgument.Extension.ToUpper();
                 base.LogInformation("{0} files are ready to be imported", currentItems.Count);
                 if (currentItems.Count > 0)
                 {
                     foreach (var fileObj in currentItems)
                     {
-                        if (!fileObj.IsDirectory && fileObj.Name.ToUpper().Contains(upperFtpAdapterArgumentExtension))
+                        if (!fileObj.IsDirectory && regEx.IsMatch(fileObj.Name))
                         {
                             String filePath = ftpAdapterArgument.Directory + "/" + fileObj.Name;
                             CreateStreamReader(context.OnDataReceived, ftp, fileObj, filePath);
