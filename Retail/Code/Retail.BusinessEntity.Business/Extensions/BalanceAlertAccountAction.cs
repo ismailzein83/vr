@@ -15,11 +15,12 @@ namespace Retail.BusinessEntity.Business.Extensions
 
         public ActionBPSettings ActionBPSettings { get; set; }
 
-        public override void Execute(IVRActionContext context)
+        public override void Execute(IVRActionExecutionContext context)
         {
             BalanceAlertEventPayload balanceAlertEventPayload = context.EventPayload as BalanceAlertEventPayload;
-            ValidatePayload(balanceAlertEventPayload);
-            Account account = balanceAlertEventPayload.Account as Account;
+            if (balanceAlertEventPayload == null)
+                throw new NullReferenceException("balanceAlertEventPayload");
+            Account account = new AccountManager().GetAccount(balanceAlertEventPayload.AccountId);
             if(account == null)
                 throw new NullReferenceException("account");
 
@@ -49,14 +50,6 @@ namespace Retail.BusinessEntity.Business.Extensions
             var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput { InputArguments = actionBPInput };
             Vanrise.BusinessProcess.Business.BPInstanceManager bpInstanceManager = new Vanrise.BusinessProcess.Business.BPInstanceManager();
             var output = bpInstanceManager.CreateNewProcess(createProcessInput);            
-        }
-
-        private static void ValidatePayload(BalanceAlertEventPayload balanceAlertEventPayload)
-        {
-            if (balanceAlertEventPayload == null)
-                throw new NullReferenceException("balanceAlertEventPayload");
-            if (balanceAlertEventPayload.Account == null)
-                throw new NullReferenceException("balanceAlertEventPayload.Account");
         }
 
         private ActionDefinition GetActionDefinition()
