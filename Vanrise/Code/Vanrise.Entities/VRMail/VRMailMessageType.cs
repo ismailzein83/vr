@@ -12,6 +12,13 @@ namespace Vanrise.Entities
 
         public string Name { get; set; }
 
-        public List<int> BusinessEntityDefinitionIds { get; set; }
+        public VRMailMessageTypeSettings Settings { get; set; }
+    }
+
+    public class VRMailMessageTypeSettings
+    {
+        public Dictionary<string, VRObjectVariable> Objects { get; set; }
+
+        public bool SupportMultipleTemplates { get; set; }
     }
 }

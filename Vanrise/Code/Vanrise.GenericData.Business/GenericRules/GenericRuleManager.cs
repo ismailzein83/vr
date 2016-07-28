@@ -8,6 +8,7 @@ using Vanrise.Rules;
 using Vanrise.Common;
 using Vanrise.Entities;
 using System.Globalization;
+using Vanrise.Common.Business;
 
 namespace Vanrise.GenericData.Business
 {
@@ -36,6 +37,9 @@ namespace Vanrise.GenericData.Business
 
         public T GetMatchRule(int ruleDefinitionId, GenericRuleTarget target)
         {
+            if (target == null)
+                throw new ArgumentNullException("target");
+            FillTargetEvaluatedCriterias(target, ruleDefinitionId);
             var ruleTree = GetRuleTree(ruleDefinitionId);
             return ruleTree.GetMatchRule(target) as T;
         }
@@ -193,6 +197,84 @@ namespace Vanrise.GenericData.Business
             }
             behavior.FieldName = ruleDefinitionCriteriaField.FieldName;
             return behavior as BaseRuleStructureBehavior;
+        }
+                
+        private void FillTargetEvaluatedCriterias(GenericRuleTarget target, int ruleDefinitionId)
+        {
+            if (target.TargetFieldValues == null)
+                target.TargetFieldValues = new Dictionary<string, object>();
+            List<CriteriaEvaluationInfo> ruleCriteriaEvaluationInfos = GetCachedCriteriaEvaluationInfos(ruleDefinitionId);
+            if(ruleCriteriaEvaluationInfos != null)
+            {
+                foreach(var criteriaEvaluationInfo in ruleCriteriaEvaluationInfos)
+                {
+                    if (target.TargetFieldValues.ContainsKey(criteriaEvaluationInfo.CriteriaName))
+                        continue;
+                    dynamic obj;
+                    if (!target.Objects.TryGetValue(criteriaEvaluationInfo.ObjectName, out obj))
+                        throw new NullReferenceException(String.Format("obj. ObjectName '{0}'", criteriaEvaluationInfo.ObjectName));
+                    var propertyEvaluatorContext = new VRObjectPropertyEvaluatorContext
+                    {
+                        Object = obj,
+                        ObjectType = criteriaEvaluationInfo.ObjectType
+                    };
+                    target.TargetFieldValues.Add(criteriaEvaluationInfo.CriteriaName, criteriaEvaluationInfo.PropertyEvaluator.GetPropertyValue(propertyEvaluatorContext));
+                }
+            }
+        }
+
+        private List<CriteriaEvaluationInfo> GetCachedCriteriaEvaluationInfos(int ruleDefinitionId)
+        {
+            string cacheName = String.Format("GetCachedCriteriaEvaluationInfos_{0}", ruleDefinitionId);
+            return GetCachedOrCreate(cacheName, () =>
+                {
+                    List<CriteriaEvaluationInfo> ruleCriteriaEvaluationInfos = new List<CriteriaEvaluationInfo>();
+                    var ruleDefinition = GetRuleDefinition(ruleDefinitionId);
+                    if(ruleDefinition.CriteriaDefinition != null && ruleDefinition.CriteriaDefinition.Fields != null)
+                    {
+                        foreach(var criteriaField in ruleDefinition.CriteriaDefinition.Fields)
+                        {
+                            if(criteriaField.ValueObjectName != null || criteriaField.ValueEvaluator != null)
+                            {
+                                if (criteriaField.ValueObjectName == null)
+                                    throw new NullReferenceException("criteriaField.ValueObjectName");
+                                if (criteriaField.ValueEvaluator == null)
+                                    throw new NullReferenceException("criteriaField.ValueEvaluator");
+                                if (ruleDefinition.Objects == null)
+                                    throw new NullReferenceException("ruleDefinition.Objects");
+                                VRObjectVariable objectVariable;
+                                if (!ruleDefinition.Objects.TryGetValue(criteriaField.ValueObjectName, out objectVariable))
+                                    throw new NullReferenceException(String.Format("objectVariable '{0}'", criteriaField.ValueObjectName));
+                                if(objectVariable.ObjectType == null)
+                                    throw new NullReferenceException(String.Format("objectVariable.ObjectType '{0}'", criteriaField.ValueObjectName));
+                                ruleCriteriaEvaluationInfos.Add(new CriteriaEvaluationInfo
+                                    {
+                                        CriteriaName = criteriaField.FieldName,
+                                        ObjectName = criteriaField.ValueObjectName,
+                                        ObjectType = objectVariable.ObjectType,
+                                        PropertyEvaluator = criteriaField.ValueEvaluator
+                                    });
+                            }
+                        }
+                    }
+                    return ruleCriteriaEvaluationInfos;
+                });
+        }
+
+
+        #endregion
+
+        #region Private Classes
+
+        private class CriteriaEvaluationInfo
+        {
+            public string CriteriaName { get; set; }
+
+            public string ObjectName { get; set; }
+
+            public VRObjectType ObjectType { get; set; }
+
+            public VRObjectPropertyEvaluator PropertyEvaluator { get; set; }
         }
 
         #endregion

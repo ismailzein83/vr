@@ -58,9 +58,9 @@
     <Compile Include="City\CityInfoFilter.cs" />
     <Compile Include="City\CityQuery.cs" />
     <Compile Include="DateTimeType.cs" />
-    <Compile Include="EmailTemplate\VRMailMessage.cs" />
-    <Compile Include="EmailTemplate\VRMailMessageTemplate.cs" />
-    <Compile Include="EmailTemplate\VRMailMessageType.cs" />
+    <Compile Include="VRMail\VRMailMessage.cs" />
+    <Compile Include="VRMail\VRMailMessageTemplate.cs" />
+    <Compile Include="VRMail\VRMailMessageType.cs" />
     <Compile Include="StyleDefinition\StyleDefinition.cs" />
     <Compile Include="Country\UploadCountryLog.cs" />
     <Compile Include="Country\CountryInfo.cs" />
@@ -95,7 +95,7 @@
     <Compile Include="StyleDefinition\StyleDefinitionInfo.cs" />
     <Compile Include="StyleDefinition\StyleDefinitionQuery.cs" />
     <Compile Include="StyleDefinition\StyleFormatingConfig.cs" />
-    <Compile Include="VRExpression\VRExpression.cs" />
+    <Compile Include="VRObject\VRExpression.cs" />
     <Compile Include="ExtensionConfiguration.cs" />
     <Compile Include="File\FileUploadResult.cs" />
     <Compile Include="File\VRFileQuery.cs" />
@@ -141,6 +141,12 @@
     <Compile Include="TimeRange.cs" />
     <Compile Include="UpdateOperationResult.cs" />
     <Compile Include="File\VRFile.cs" />
+    <Compile Include="VRObject\VRObjectPropertyVariable.cs" />
+    <Compile Include="VRObject\VRObjectPropertyEvaluator.cs" />
+    <Compile Include="VRObject\VRObjectPropertyEvaluatorConfig.cs" />
+    <Compile Include="VRObject\VRObjectType.cs" />
+    <Compile Include="VRObject\VRObjectTypeConfig.cs" />
+    <Compile Include="VRObject\VRObjectVariable.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

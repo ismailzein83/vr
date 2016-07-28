@@ -10,7 +10,7 @@ namespace Vanrise.Entities
     {
         public Guid VRMailMessageTypeId { get; set; }
 
-        public List<VRExpressionVariable> Variables { get; set; }
+        public List<VRObjectPropertyVariable> Variables { get; set; }
 
         public VRExpression To { get; set; }
 

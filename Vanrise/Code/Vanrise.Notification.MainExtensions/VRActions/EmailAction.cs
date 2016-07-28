@@ -12,7 +12,7 @@ namespace Vanrise.Notification.MainExtensions.VRActions
 {
     public class EmailAction : VRAction
     {
-        public List<VRExpressionVariable> Variables { get; set; }
+        public List<VRObjectPropertyVariable> Variables { get; set; }
 
         public VRExpression To { get; set; }
 
@@ -24,14 +24,14 @@ namespace Vanrise.Notification.MainExtensions.VRActions
 
         public override void Execute(IVRActionContext context)
         {
-            var expressionManager = new Vanrise.Common.Business.VRExpressionManager();
-            VRActionExpressionContext expressionContext = new VRActionExpressionContext(context);
-            string to = expressionManager.EvaluateExpression(this.To, this.Variables, expressionContext);
-            string cc = expressionManager.EvaluateExpression(this.CC, this.Variables, expressionContext);
-            string subject = expressionManager.EvaluateExpression(this.Subject, this.Variables, expressionContext);
-            string body = expressionManager.EvaluateExpression(this.Body, this.Variables, expressionContext);
-            EmailTemplateManager emailManager = new EmailTemplateManager();
-            emailManager.SendEmail(to, body, subject);
+            //var expressionManager = new Vanrise.Common.Business.VRExpressionManager();
+            //VRActionExpressionContext expressionContext = new VRActionExpressionContext(context);
+            //string to = expressionManager.EvaluateExpression(this.To, this.Variables, expressionContext);
+            //string cc = expressionManager.EvaluateExpression(this.CC, this.Variables, expressionContext);
+            //string subject = expressionManager.EvaluateExpression(this.Subject, this.Variables, expressionContext);
+            //string body = expressionManager.EvaluateExpression(this.Body, this.Variables, expressionContext);
+            //EmailTemplateManager emailManager = new EmailTemplateManager();
+            //emailManager.SendEmail(to, body, subject);
         }
     }
 }

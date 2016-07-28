@@ -49,7 +49,6 @@
     <Compile Include="BELookupRules\RuleStructureBehaviors\BELookupRuleStructureBehaviorByKey.cs" />
     <Compile Include="BELookupRules\RuleStructureBehaviors\BELookupRuletructureBehaviorByPrefix.cs" />
     <Compile Include="BELookupRules\RuleStructureBehaviors\IBELookupRuleStructureBehavior.cs" />
-    <Compile Include="BusinessEntity\BEPropertyEvaluatorContext.cs" />
     <Compile Include="BusinessEntity\BusinessEntityManager.cs" />
     <Compile Include="BusinessEntity\BusinessEntityManagerContext.cs" />
     <Compile Include="BusinessEntity\Definition\BusinessEntityDefinitionManager.cs" />

@@ -14,7 +14,7 @@ namespace Vanrise.AccountBalance.Business
            throw new NotImplementedException();
         }
 
-        public BalanceAlertConfig GetBalanceAlertConfig()
+        public int GetBalanceAlertRuleDefinitionId()
         {
             throw new NotImplementedException();
         }

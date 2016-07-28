@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.GenericData.Entities
+namespace Vanrise.Entities
 {
-    public abstract class BEPropertyEvaluator
+    public abstract class VRObjectType
     {
         public int ConfigId { get; set; }
 
-        public abstract dynamic GetPropertyValue(IBEPropertyEvaluatorContext context);
+        public abstract string PropertyEvaluatorExtensionType { get; }
     }
 }

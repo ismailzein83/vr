@@ -41,6 +41,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="RazorEngine, Version=3.8.2.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RazorEngine.3.8.2\lib\net45\RazorEngine.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -65,7 +69,9 @@
     <Compile Include="BigData\BigDataWCFService.cs" />
     <Compile Include="BigData\IBigDataRequest.cs" />
     <Compile Include="CityManager.cs" />
-    <Compile Include="EmailTemplate\VRMailManager.cs" />
+    <Compile Include="VRMail\VRMailManager.cs" />
+    <Compile Include="VRMail\VRMailMessageTemplateManager.cs" />
+    <Compile Include="VRMail\VRMailMessageTypeManager.cs" />
     <Compile Include="StyleDefinitionManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Country\CountryManager.cs" />
@@ -88,8 +94,8 @@
     <Compile Include="SummaryTransformation\SummaryTransformationManager.cs" />
     <Compile Include="TemplateConfigManager.cs" />
     <Compile Include="TypeManager.cs" />
-    <Compile Include="VRExpression\VRExpressionManager.cs" />
-    <Compile Include="VRExpression\VRExpressionVariableValueContext.cs" />
+    <Compile Include="VRObject\VRObjectManager.cs" />
+    <Compile Include="VRObject\VRObjectPropertyEvaluatorContext.cs" />
     <Compile Include="VRFileManager.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Entities
 {
@@ -21,5 +22,9 @@ namespace Vanrise.GenericData.Entities
         public int Priority { get; set; }
 
         public bool ShowInBasicSearch { get; set; }
+
+        public string ValueObjectName { get; set; }
+
+        public VRObjectPropertyEvaluator ValueEvaluator { get; set; }
     }
 }

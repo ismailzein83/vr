@@ -60,9 +60,6 @@
     <Compile Include="BusinessEntities\BusinessEntityDescriptionContext.cs" />
     <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinition.cs" />
     <Compile Include="BusinessEntities\BusinessEntityMatchContext.cs" />
-    <Compile Include="BusinessEntities\PropertyEvaluator\BEPropertyEvaluator.cs" />
-    <Compile Include="BusinessEntities\PropertyEvaluator\BEPropertyEvaluatorConfig.cs" />
-    <Compile Include="BusinessEntities\PropertyEvaluator\IBEPropertyEvaluatorContext.cs" />
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
     <Compile Include="BusinessManagers\IDataRecordTypeManager.cs" />
