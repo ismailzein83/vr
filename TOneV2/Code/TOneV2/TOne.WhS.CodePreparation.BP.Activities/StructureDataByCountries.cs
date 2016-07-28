@@ -52,6 +52,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     {                        
                         countryToProcess = new CountryToProcess();
                         countryToProcess.CountryId = countryId;
+                        countryToProcess.ZonesToProcess = new List<ZoneToProcess>();
                         countryToProcess.CodesToAdd = new List<CodeToAdd>();
                         countryToProcess.CodesToMove = new List<CodeToMove>();
                         countryToProcess.CodesToClose = new List<CodeToClose>();
@@ -66,6 +67,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
                     foreach (CodeToClose code in zone.CodesToClose)
                         countryToProcess.CodesToClose.Add(code);
+
+                    countryToProcess.ZonesToProcess.Add(zone);
 
             }
 

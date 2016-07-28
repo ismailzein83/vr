@@ -23,14 +23,13 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         public IEnumerable<ExistingCode> ExistingCodes { get; set; }
 
-
         public Dictionary<long, ExistingZone> ExistingZonesByZoneId { get; set; }
+
 
     }
     public class ProcessCountryCodesOutput
     {
         public IEnumerable<AddedZone> NewZones { get; set; }
-
 
         public IEnumerable<ChangedZone> ChangedZones { get; set; }
 
@@ -38,8 +37,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         public IEnumerable<AddedCode> NewCodes { get; set; }
 
-
         public IEnumerable<ChangedCode> ChangedCodes { get; set; }
+
+        public Dictionary<string, List<ExistingZone>> ClosedExistingZones { get; set; }
     }
 
     public sealed class ProcessCountryCodes : BaseAsyncActivity<ProcessCountryCodesInput, ProcessCountryCodesOutput>
@@ -71,6 +71,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         [RequiredArgument]
         public InOutArgument<IEnumerable<ChangedCode>> ChangedCodes { get; set; }
+       
+        [RequiredArgument]
+        public OutArgument<Dictionary<string, List<ExistingZone>>> ClosedExistingZones { get; set; }
 
 
         protected override ProcessCountryCodesInput GetInputArgument(AsyncCodeActivityContext context)
@@ -84,20 +87,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 ExistingZonesByZoneId = this.ExistingZonesByZoneId.Get(context)
             };
         }
-
-        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
-        {
-            if (this.NewZones.Get(context) == null)
-                this.NewZones.Set(context, new List<AddedZone>());
-            if (this.ChangedZones.Get(context) == null)
-                this.ChangedZones.Set(context, new List<ChangedZone>());
-            if (this.NewCodes.Get(context) == null)
-                this.NewCodes.Set(context, new List<AddedCode>());
-            if (this.ChangedCodes.Get(context) == null)
-                this.ChangedCodes.Set(context, new List<ChangedCode>());
-            base.OnBeforeExecute(context, handle);
-        }
-
         protected override ProcessCountryCodesOutput DoWorkWithResult(ProcessCountryCodesInput inputArgument, AsyncActivityHandle handle)
         {
             Dictionary<long, ExistingZone> existingZonesByZoneId = inputArgument.ExistingZonesByZoneId;
@@ -124,7 +113,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 ChangedZones = processCountryCodesContext.ChangedZones,
                 NewAndExistingZones= processCountryCodesContext.NewAndExistingZones,
                 NewCodes = processCountryCodesContext.NewCodes,
-                ChangedCodes = processCountryCodesContext.ChangedCodes
+                ChangedCodes = processCountryCodesContext.ChangedCodes,
+                ClosedExistingZones = processCountryCodesContext.ClosedExistingZones
             };
         }
 
@@ -135,6 +125,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             this.ChangedZones.Set(context, result.ChangedZones);
             this.NewCodes.Set(context, result.NewCodes);
             this.ChangedCodes.Set(context, result.ChangedCodes);
+            this.ClosedExistingZones.Set(context, result.ClosedExistingZones);
         }
     }
 }

@@ -30,6 +30,13 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
 
         public List<ExistingZone> ExistingZones { get; set; }
 
+        public string RecentZoneName { get; set; }
+
+        public DateTime BED { get; set; }
+
+        public DateTime? EED { get; set; }
+        public ZoneChangeType ChangeType { get; set; }
+
         public object Key
         {
             get { return this.ZoneName; }

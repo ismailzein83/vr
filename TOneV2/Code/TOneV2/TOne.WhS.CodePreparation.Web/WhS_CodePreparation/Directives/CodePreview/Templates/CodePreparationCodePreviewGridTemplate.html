@@ -1,0 +1,25 @@
+﻿<vr-datagrid datasource="changedCodes"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="[]">
+
+    <vr-datagridcolumn headertext="'Code'" field="'Entity.Code'" type="'Text'"></vr-datagridcolumn>
+
+    <vr-datagridcolumn headertext="'Code Change Type'">
+        <vr-icon iconurl="dataItem.codeStatusIconUrl" tooltip="dataItem.codeStatusIconTooltip" inline></vr-icon>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Begin Effective Date'" field="'Entity.BED'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'End Effective Date'" field="'Entity.EED'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Moved From'" type="'Text'">
+        <span ng-show="dataItem.showMovedFrom">
+            {{dataItem.Entity.RecentZoneName}}
+        </span>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Moved To'" type="'Text'">
+        <span ng-show="dataItem.showMovedTo">
+            {{dataItem.Entity.ZoneName}}
+        </span>
+    </vr-datagridcolumn>
+
+</vr-datagrid>

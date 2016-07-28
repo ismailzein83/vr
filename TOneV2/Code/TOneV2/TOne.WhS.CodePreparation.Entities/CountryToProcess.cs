@@ -17,6 +17,8 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
 
         public List<CodeToClose> CodesToClose { get; set; }
 
+        public List<ZoneToProcess> ZonesToProcess { get; set; }
+
         public object Key
         {
             get { return this.CountryId; }

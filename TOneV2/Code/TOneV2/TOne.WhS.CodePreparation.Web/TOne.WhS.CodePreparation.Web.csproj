@@ -153,19 +153,33 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CodePreparationPreviewController.cs" />
     <Compile Include="Controllers\CodePreparationController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WhS_CodePreparation\Constant\CodeChangeTypeEnum.js" />
+    <Content Include="WhS_CodePreparation\Constant\PreviewChangeTypeEnum.js" />
+    <Content Include="WhS_CodePreparation\Constant\PreviewGroupedBy.js" />
     <Content Include="WhS_CodePreparation\Constant\ValidationOutput.js" />
+    <Content Include="WhS_CodePreparation\Constant\ZoneChangeTypeEnum.js" />
     <Content Include="WhS_CodePreparation\Constant\ZoneItemStatusEnum.js" />
     <Content Include="WhS_CodePreparation\Constant\ZoneItemDraftStatusEnum.js" />
     <Content Include="WhS_CodePreparation\Constant\CodeItemStatusEnum.js" />
     <Content Include="WhS_CodePreparation\Constant\CodeItemDraftStatusEnum.js" />
     <Content Include="WhS_CodePreparation\Constant\ModuleConfig.js" />
     <Content Include="WhS_CodePreparation\Constant\NewCPOutputResultEnum.js" />
+    <Content Include="WhS_CodePreparation\Directives\ChangesPreview\vr-cp-groupedby-selector.js" />
+    <Content Include="WhS_CodePreparation\Directives\ChangesPreview\vr-cp-viewchangetype-selector.js" />
     <Content Include="WhS_CodePreparation\Directives\CodePreparation\Templates\CodePreparationSaleCodesGridTemplate.html" />
     <Content Include="WhS_CodePreparation\Directives\CodePreparation\vr-whs-codepreparation-codesgrid.js" />
+    <Content Include="WhS_CodePreparation\Directives\CodePreview\Templates\CodePreparationCodePreviewGridTemplate.html" />
+    <Content Include="WhS_CodePreparation\Directives\CodePreview\vr-cp-codepreview-grid.js" />
+    <Content Include="WhS_CodePreparation\Directives\CountryPreview\Templates\CodePreparationCountryPreviewGridTemplate.html" />
+    <Content Include="WhS_CodePreparation\Directives\CountryPreview\vr-cp-countrypreview-grid.js" />
+    <Content Include="WhS_CodePreparation\Directives\ZonePreview\Templates\CodePreparationZonePreviewGridTemplate.html" />
+    <Content Include="WhS_CodePreparation\Directives\ZonePreview\vr-cp-zonepreview-grid.js" />
+    <Content Include="WhS_CodePreparation\Services\APIServices\CodePreparationPreviewAPIService.js" />
     <Content Include="WhS_CodePreparation\Services\CodePreparationService.js" />
     <Content Include="WhS_CodePreparation\Services\APIServices\CodePreparationAPIService.js" />
     <Content Include="WhS_CodePreparation\Views\CodePreparation.html" />
@@ -186,6 +200,8 @@
     <Content Include="WhS_CodePreparation\Views\Dialogs\NewZoneDialog.html" />
     <Content Include="WhS_CodePreparation\Views\Dialogs\NewCodeDialogController.js" />
     <Content Include="WhS_CodePreparation\Views\Dialogs\NewZoneDialogController.js" />
+    <Content Include="WhS_CodePreparation\Views\CodePreparationPreview.html" />
+    <Content Include="WhS_CodePreparation\Views\CodePreparationPreviewController.js" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

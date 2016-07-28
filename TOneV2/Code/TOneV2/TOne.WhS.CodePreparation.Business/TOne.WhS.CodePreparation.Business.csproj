@@ -97,6 +97,9 @@
     <Compile Include="ProcessCountryCodesContext.cs" />
     <Compile Include="ProcessCountryRatesContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CountryPreviewManager.cs" />
+    <Compile Include="CodePreviewManager.cs" />
+    <Compile Include="ZonePreviewManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">

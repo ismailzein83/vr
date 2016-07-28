@@ -26,8 +26,9 @@ namespace TOne.WhS.CodePreparation.Business
         public IEnumerable<ChangedCode> ChangedCodes{ get; set; }
 
         public IEnumerable<AddedZone> NewZones{ get; set; }
-
-
+        
         public IEnumerable<ChangedZone> ChangedZones{ get; set; }
+
+        public Dictionary<string,List<ExistingZone>> ClosedExistingZones { get; set; }
     }
 }

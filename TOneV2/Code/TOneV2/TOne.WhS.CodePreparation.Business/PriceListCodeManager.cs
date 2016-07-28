@@ -14,20 +14,21 @@ namespace TOne.WhS.CodePreparation.Business
         public void ProcessCountryCodes(IProcessCountryCodesContext context)
         {
             ZonesByName newAndExistingZones = new ZonesByName();
+            Dictionary<string, List<ExistingZone>> closedExistingZones;
 
             context.NewAndExistingZones = newAndExistingZones;
 
-            ProcessCountryCodes(context.CodesToAdd, context.CodesToMove, context.CodesToClose, context.ExistingCodes, newAndExistingZones, context.ExistingZones);
+            ProcessCountryCodes(context.CodesToAdd, context.CodesToMove, context.CodesToClose, context.ExistingCodes, newAndExistingZones, context.ExistingZones, out closedExistingZones);
 
+            context.ClosedExistingZones = closedExistingZones;
             context.NewCodes = context.CodesToAdd.SelectMany(itm => itm.AddedCodes).Union(context.CodesToMove.SelectMany(itm => itm.AddedCodes));
-
             context.NewZones = newAndExistingZones.GetNewZones();
             context.ChangedZones = context.ExistingZones.Where(itm => itm.ChangedZone != null).Select(itm => itm.ChangedZone);
             context.ChangedCodes = context.ExistingCodes.Where(itm => itm.ChangedCode != null).Select(itm => itm.ChangedCode);
 
         }
 
-        private void ProcessCountryCodes(IEnumerable<CodeToAdd> codesToAdd, IEnumerable<CodeToMove> codesToMove, IEnumerable<CodeToClose> codesToClose, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones)
+        private void ProcessCountryCodes(IEnumerable<CodeToAdd> codesToAdd, IEnumerable<CodeToMove> codesToMove, IEnumerable<CodeToClose> codesToClose, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones, out Dictionary<string, List<ExistingZone>> closedExistingZones)
         {
             ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
             ExistingCodesByCodeValue existingCodesByCodeValue = StructureExistingCodesByCodeValue(existingCodes);
@@ -67,13 +68,13 @@ namespace TOne.WhS.CodePreparation.Business
                 }
             }
 
-            CloseZonesWithNoCodes(existingZones);
-
+            CloseZonesWithNoCodes(existingZones, out closedExistingZones);
 
         }
 
-        private void CloseZonesWithNoCodes(IEnumerable<ExistingZone> existingZones)
+        private void CloseZonesWithNoCodes(IEnumerable<ExistingZone> existingZones, out Dictionary<string, List<ExistingZone>> closedExistingZones)
         {
+            closedExistingZones = new Dictionary<string, List<ExistingZone>>();
             foreach (var existingZone in existingZones)
             {
                 DateTime? maxCodeEED = DateTime.MinValue;
@@ -123,6 +124,16 @@ namespace TOne.WhS.CodePreparation.Business
                             ZoneId = existingZone.ZoneId,
                             EED = maxCodeEED.Value
                         };
+
+                        List<ExistingZone> matchedExistingZones;
+                        if (closedExistingZones.TryGetValue(existingZone.ZoneEntity.Name, out matchedExistingZones))
+                            matchedExistingZones.Add(existingZone);
+                        else
+                        {
+                            matchedExistingZones = new List<ExistingZone>();
+                            matchedExistingZones.Add(existingZone);
+                            closedExistingZones.Add(existingZone.ZoneEntity.Name, matchedExistingZones);
+                        }
 
                     }
                 }

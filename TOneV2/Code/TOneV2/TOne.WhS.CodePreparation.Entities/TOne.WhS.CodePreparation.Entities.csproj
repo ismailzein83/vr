@@ -65,6 +65,10 @@
     <Compile Include="NewData\CodeToAdd.cs" />
     <Compile Include="NewData\CodeToClose.cs" />
     <Compile Include="NewData\CodeToMove.cs" />
+    <Compile Include="PreviewData\CodePreview.cs" />
+    <Compile Include="PreviewData\CountryPreview.cs" />
+    <Compile Include="PreviewData\SPLPreviewQuery.cs" />
+    <Compile Include="PreviewData\ZonePreview.cs" />
     <Compile Include="SaleCode\CloseCodesOutput.cs" />
     <Compile Include="SaleCode\CloseCodesInput.cs" />
     <Compile Include="CountryToProcess.cs" />
