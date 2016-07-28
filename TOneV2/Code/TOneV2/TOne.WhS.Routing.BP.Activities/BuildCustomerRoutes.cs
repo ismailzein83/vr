@@ -18,6 +18,10 @@ namespace TOne.WhS.Routing.BP.Activities
         public BaseQueue<CodeMatches> InputQueue { get; set; }
 
         public BaseQueue<CustomerRoutesBatch> OutputQueue { get; set; }
+
+        public DateTime? EffectiveDate { get; set; }
+
+        public bool IsFuture { get; set; }
     }
 
     public class BuildCustomerRoutesContext : IBuildCustomerRoutesContext
@@ -34,12 +38,14 @@ namespace TOne.WhS.Routing.BP.Activities
 
         public bool EntitiesEffectiveInFuture { get; set; }
 
-        public BuildCustomerRoutesContext(CodeMatches codeMatches, CustomerZoneDetailByZone customerZoneDetails)
+        public BuildCustomerRoutesContext(CodeMatches codeMatches, CustomerZoneDetailByZone customerZoneDetails, DateTime? effectiveDate, bool isFuture)
         {
             this.SaleCodeMatches = codeMatches.SaleCodeMatches;
             this.SupplierCodeMatches = codeMatches.SupplierCodeMatches;
             this.SupplierCodeMatchesBySupplier = codeMatches.SupplierCodeMatchesBySupplier;
             this.CustomerZoneDetails = customerZoneDetails;
+            this.EntitiesEffectiveOn = effectiveDate;
+            this.EntitiesEffectiveInFuture = isFuture;
         }
     }
 
@@ -51,6 +57,12 @@ namespace TOne.WhS.Routing.BP.Activities
 
         [RequiredArgument]
         public InArgument<BaseQueue<CodeMatches>> InputQueue { get; set; }
+
+        [RequiredArgument]
+        public InArgument<DateTime?> EffectiveDate { get; set; }
+
+        [RequiredArgument]
+        public InArgument<bool> IsFuture { get; set; }
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<CustomerRoutesBatch>> OutputQueue { get; set; }
@@ -66,7 +78,7 @@ namespace TOne.WhS.Routing.BP.Activities
                 {
                     hasItem = inputArgument.InputQueue.TryDequeue((preparedCodeMatch) =>
                     {
-                        BuildCustomerRoutesContext customerRoutesContext = new BuildCustomerRoutesContext(preparedCodeMatch, inputArgument.CustomerZoneDetails);
+                        BuildCustomerRoutesContext customerRoutesContext = new BuildCustomerRoutesContext(preparedCodeMatch, inputArgument.CustomerZoneDetails, inputArgument.EffectiveDate, inputArgument.IsFuture);
 
                         IEnumerable<SellingProductRoute> sellingProductRoute;
                         RouteBuilder builder = new RouteBuilder();
@@ -92,7 +104,9 @@ namespace TOne.WhS.Routing.BP.Activities
             {
                 CustomerZoneDetails = this.CustomerZoneDetails.Get(context),
                 InputQueue = this.InputQueue.Get(context),
-                OutputQueue = this.OutputQueue.Get(context)
+                OutputQueue = this.OutputQueue.Get(context),
+                EffectiveDate = this.EffectiveDate.Get(context),
+                IsFuture = this.IsFuture.Get(context)
             };
         }
 

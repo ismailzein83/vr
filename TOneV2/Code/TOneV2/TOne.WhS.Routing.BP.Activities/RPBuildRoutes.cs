@@ -14,19 +14,26 @@ namespace TOne.WhS.Routing.BP.Activities
     public class RPBuildRoutesInput
     {
         public IEnumerable<SupplierZoneToRPOptionPolicy> SupplierZoneRPOptionPolicies { get; set; }
+
         public BaseQueue<RPCodeMatchesByZone> InputQueue { get; set; }
 
         public BaseQueue<RPRouteBatch> OutputQueue { get; set; }
+
+        public DateTime? EffectiveDate { get; set; }
+
+        public bool IsFuture { get; set; }
     }
 
     public class BuildRoutingProductRoutesContext : IBuildRoutingProductRoutesContext
     {
-        public BuildRoutingProductRoutesContext(RPCodeMatchesByZone codeMatch, IEnumerable<int> routingProductIds, IEnumerable<SupplierZoneToRPOptionPolicy> policies)
+        public BuildRoutingProductRoutesContext(RPCodeMatchesByZone codeMatch, IEnumerable<int> routingProductIds, IEnumerable<SupplierZoneToRPOptionPolicy> policies, DateTime? effectiveDate, bool isFuture)
         {
             RoutingProductIds = routingProductIds;
             this.SupplierCodeMatches = codeMatch.SupplierCodeMatches.ToList();
             this.SupplierCodeMatchesBySupplier = codeMatch.SupplierCodeMatchesBySupplier;
             this.SupplierZoneToRPOptionPolicies = policies;
+            this.EntitiesEffectiveOn = effectiveDate;
+            this.EntitiesEffectiveInFuture = isFuture;
         }
         public IEnumerable<int> RoutingProductIds { get; set; }
         public List<SupplierCodeMatchWithRate> SupplierCodeMatches { get; set; }
@@ -40,8 +47,16 @@ namespace TOne.WhS.Routing.BP.Activities
     {
         [RequiredArgument]
         public InArgument<IEnumerable<SupplierZoneToRPOptionPolicy>> SupplierZoneRPOptionPolicies { get; set; }
+
         [RequiredArgument]
         public InArgument<BaseQueue<RPCodeMatchesByZone>> InputQueue { get; set; }
+
+        [RequiredArgument]
+        public InArgument<DateTime?> EffectiveDate { get; set; }
+
+        [RequiredArgument]
+        public InArgument<bool> IsFuture { get; set; }
+
         [RequiredArgument]
         public InOutArgument<BaseQueue<RPRouteBatch>> OutputQueue { get; set; }
 
@@ -59,7 +74,7 @@ namespace TOne.WhS.Routing.BP.Activities
                     hasItem = inputArgument.InputQueue.TryDequeue((preparedRPCodeMatch) =>
                     {
                         IEnumerable<int> routingProductIds = routingProductManager.GetRoutingProductIdsBySaleZoneId(preparedRPCodeMatch.SaleZoneId);
-                        BuildRoutingProductRoutesContext routingProductContext = new BuildRoutingProductRoutesContext(preparedRPCodeMatch, routingProductIds, inputArgument.SupplierZoneRPOptionPolicies);
+                        BuildRoutingProductRoutesContext routingProductContext = new BuildRoutingProductRoutesContext(preparedRPCodeMatch, routingProductIds, inputArgument.SupplierZoneRPOptionPolicies, inputArgument.EffectiveDate, inputArgument.IsFuture);
                         RouteBuilder builder = new RouteBuilder();
                         IEnumerable<RPRoute> productRoutes = builder.BuildRoutes(routingProductContext, preparedRPCodeMatch.SaleZoneId);
 
@@ -79,7 +94,9 @@ namespace TOne.WhS.Routing.BP.Activities
             {
                 InputQueue = this.InputQueue.Get(context),
                 SupplierZoneRPOptionPolicies = this.SupplierZoneRPOptionPolicies.Get(context),
-                OutputQueue = this.OutputQueue.Get(context)
+                OutputQueue = this.OutputQueue.Get(context),
+                EffectiveDate = this.EffectiveDate.Get(context),
+                IsFuture = this.IsFuture.Get(context)
             };
         }
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)

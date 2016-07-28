@@ -13,6 +13,8 @@ namespace TOne.WhS.Routing.BP.Arguments
         public long ToZoneId { get; set; }
         public int RoutingDatabaseId { get; set; }
         public List<SupplierZoneToRPOptionPolicy> SupplierOptionPolicies { get; set; }
+        public DateTime? EffetiveDate { get; set; }
+        public bool IsFuture { get; set; }
         public override string GetTitle()
         {
             return "Routing Product Build Process Input";

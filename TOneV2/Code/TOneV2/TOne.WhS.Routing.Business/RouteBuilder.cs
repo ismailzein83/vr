@@ -48,7 +48,8 @@ namespace TOne.WhS.Routing.Business
                                 SaleZoneId = saleCodeMatch.SaleZoneId,
                                 RoutingProductId = customerZoneDetail.RoutingProductId,
                                 SaleRate = customerZoneDetail.EffectiveRateValue,
-                                EffectiveOn = context.EntitiesEffectiveOn
+                                EffectiveOn = context.EntitiesEffectiveOn,
+                                IsEffectiveInFuture = context.EntitiesEffectiveInFuture
                             };
                             var routeRule = routeRuleManager.GetMatchRule(routeRuleTarget, null);
 
