@@ -190,7 +190,8 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'Administration','Administration',null,'/images/menu-icons/Administration.png',1,0),
 (2,'Security',null,1,null,2,0),
-(3,'System',null,1,null,1,0)
+(3,'System',null,1,null,1,0),
+(-100,'System Configuration','System Configuration',null,'/images/menu-icons/Administration.png',0,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t

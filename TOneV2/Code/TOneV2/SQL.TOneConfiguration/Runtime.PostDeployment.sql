@@ -20,7 +20,7 @@ set identity_insert [sec].[View] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (5001,'Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement',3,'VR_Runtime/SchedulerTask/GetFilteredTasks',null,null,null,0,20),
-(5002,'My Scheduler Service','Scheduler Service','#/viewwithparams/Runtime/Views/SchedulerTaskManagement/{"myTasks":"1"}',1,'VR_Runtime/SchedulerTask/GetFilteredMyTasks',null,null,null,0,11)
+(5002,'My Scheduler Service','Scheduler Service','#/viewwithparams/Runtime/Views/SchedulerTaskManagement/{"myTasks":"1"}',1,'VR_Runtime/SchedulerTask/GetFilteredMyTasks',null,null,null,0,50)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t

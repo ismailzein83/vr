@@ -79,13 +79,13 @@ as (select * from (values
 (1209,'Purchase Rules',null				,1207,null,1,0),
 (1210,'Routing',null					,null,'/images/menu-icons/Routing.png',10,0),
 (1211,'Routing Rules',null				,1210,null,1,0),
-(1212,'CDR Process',null				,null,'/images/menu-icons/plug.png',60,0),
+(1212,'CDR Process',null				,1,'/images/menu-icons/plug.png',35,0),
 (1213,'CDR Process Rules'				,null,1212,null,1,0),
 (1214,'Traffic Analysis',null			,null,'/images/menu-icons/NOC.png',70,1),
 (1215,'Billing',null					,null,'/images/menu-icons/billing.png',80,0),
 (1216,'Reports',null					,1215,null,1,0),
 (1217,'Prepaid-Postpaid',null			,null,'/images/menu-icons/post paid - pre paid.png',90,0),
-(1218,'Plugins',null					,null,'/images/menu-icons/plug.png',100,0)
+(1218,'Plugins',null					,null,'/images/menu-icons/plug.png',110,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
