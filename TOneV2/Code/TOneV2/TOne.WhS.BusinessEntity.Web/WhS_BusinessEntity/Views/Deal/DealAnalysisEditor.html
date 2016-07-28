@@ -30,6 +30,27 @@
                     </vr-row>
 
                 </vr-tab>
+                <vr-tab header="'Inbound Traffic'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-button type="Add" data-onclick="scopeModel.addInboundTraffic" standalone></vr-button>
+
+                            <vr-datagrid datasource="scopeModel.inboundTraffics" norowhighlightonclick="true" menuactions="scopeModel.gridMenuActionsInbound" maxheight="300px"
+                                         ondeleterow="scopeModel.removeInboundTraffic" hidegridmenu on-ready="scopeModel.onInboundGridReady">
+                                <vr-datagridcolumn headertext="'Destination/Group'" field="'Name'" disablesorting></vr-datagridcolumn>
+                                <!--<vr-datagridcolumn headertext="'Sale Zones'" field="'Sale Zones'"  disablesorting></vr-datagridcolumn>-->
+                                <vr-datagridcolumn headertext="'Duration'" field="'CommitedVolume'" summaryfield="'TotalInVolumes'" type="'Number'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Duration per Day'" field="'DailyVolume'" summaryfield="'TotalInVolumesDay'" type="'Number'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Deal Rate'" field="'Rate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Current Sale'" field="'CurrentCost'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Margin per Minute'" field="'ProfitFromRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Margin per Period'" field="'DealProfit'" type="'Number'" summaryfield="'totalCustomerProfit'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Revenue'" field="'Revenue'" type="'Number'" numberprecision="'LongPrecision'" summaryfield="'TotalCommitmentRevenue'" disablesorting></vr-datagridcolumn>
+                            </vr-datagrid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+
                 <vr-tab header="'Outbound Traffic'">
                     <vr-row>
                         <vr-columns width="fullrow">
@@ -51,26 +72,7 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Inbound Traffic'">
-                    <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-button type="Add" data-onclick="scopeModel.addInboundTraffic" standalone></vr-button>
-
-                            <vr-datagrid datasource="scopeModel.inboundTraffics" norowhighlightonclick="true" menuactions="scopeModel.gridMenuActionsInbound" maxheight="300px"
-                                         ondeleterow="scopeModel.removeInboundTraffic" hidegridmenu on-ready="scopeModel.onInboundGridReady">
-                                <vr-datagridcolumn headertext="'Destination/Group'" field="'Name'" disablesorting></vr-datagridcolumn>
-                                <!--<vr-datagridcolumn headertext="'Sale Zones'" field="'Sale Zones'"  disablesorting></vr-datagridcolumn>-->
-                                <vr-datagridcolumn headertext="'Duration'" field="'CommitedVolume'" summaryfield="'TotalInVolumes'" type="'Number'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Duration per Day'" field="'DailyVolume'" summaryfield="'TotalInVolumesDay'" type="'Number'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Deal Rate'" field="'Rate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Current Sale'" field="'CurrentCost'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Margin per Minute'" field="'ProfitFromRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Margin per Period'" field="'DealProfit'" type="'Number'" summaryfield="'totalCustomerProfit'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Revenue'" field="'Revenue'" type="'Number'" numberprecision="'LongPrecision'" summaryfield="'TotalCommitmentRevenue'" disablesorting ></vr-datagridcolumn>
-                            </vr-datagrid>
-                        </vr-columns>
-                    </vr-row>
-                </vr-tab>
+               
             </vr-tabs>
             <div style="padding:0px 10px">
                 <vr-section title="Analysis Result">
