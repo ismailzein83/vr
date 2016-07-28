@@ -67,9 +67,13 @@ namespace Vanrise.AccountBalance.Business
             var accountsToInsert = usageBalanceUpdates.Where(x => !AccountsInfo.ContainsKey(x.AccountId)).Distinct();
             foreach(var accountToInsert in accountsToInsert)
             {
-                if (AddLiveBalance(accountToInsert.AccountId, accountToInsert.CurrencyId))
+                AccountManager manager = new AccountManager();
+                var account = manager.GetAccountInfo(accountToInsert.AccountId);
+                var accountInfo = new LiveBalanceAccountInfo { AccountId = accountToInsert.AccountId, CurrencyId = account.CurrencyId };
+
+                if (AddLiveBalance(accountToInsert.AccountId, account.CurrencyId))
                 {
-                   AccountsInfo.Add(accountToInsert.AccountId, new LiveBalanceAccountInfo { AccountId = accountToInsert.AccountId, CurrencyId = accountToInsert.CurrencyId });
+                    AccountsInfo.Add(accountToInsert.AccountId, accountInfo);
                 }
                 else
                 {
