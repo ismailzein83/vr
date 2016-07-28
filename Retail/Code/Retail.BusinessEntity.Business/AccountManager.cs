@@ -528,6 +528,9 @@ namespace Retail.BusinessEntity.Business
                         if(currency.HasValue)
                         {
                             accountInfo.CurrencyId = currency.Value;
+                        }else
+                        {
+                            throw new Exception(string.Format("Account {0} does not have currency", accountInfo.Name));
                         }
                         return accountInfo;
                     }
@@ -539,10 +542,10 @@ namespace Retail.BusinessEntity.Business
         {
             foreach(AccountPart part in parts)
             {
-                var actionpart = part as IAccountPayment;
-                if(actionpart != null)
+                var actionpartSetting = part.Settings as IAccountPayment;
+                if (actionpartSetting != null)
                 {
-                    return actionpart.CurrencyId;
+                    return actionpartSetting.CurrencyId;
                 }
             }
             return null;

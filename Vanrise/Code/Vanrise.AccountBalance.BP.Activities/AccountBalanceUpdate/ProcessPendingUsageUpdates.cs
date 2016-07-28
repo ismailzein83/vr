@@ -62,8 +62,8 @@ namespace Vanrise.AccountBalance.BP.Activities
         {
             if(balanceUsageQueue.UsageDetails != null && balanceUsageQueue.UsageDetails.UsageBalanceUpdates != null)
             {
-                var groupedResult = balanceUsageQueue.UsageDetails.UsageBalanceUpdates.GroupBy(elt => elt.AccountId).Select(group => new UsageBalanceUpdate { AccountId = group.Key, Value = group.Sum(elt => elt.Value) ,CurrencyId = group.Max(x=>x.CurrencyId) ,EffectiveOn  = group.Min(x=>x.EffectiveOn)});
-                acountBalanceUpdateHandler.AddAndUpdateLiveBalanceFromBalanceUsageQueue(balanceUsageQueue.BalanceUsageQueueId, groupedResult);
+                
+                acountBalanceUpdateHandler.AddAndUpdateLiveBalanceFromBalanceUsageQueue(balanceUsageQueue.BalanceUsageQueueId, balanceUsageQueue.UsageDetails.UsageBalanceUpdates);
             }
         }
     }

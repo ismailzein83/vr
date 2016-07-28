@@ -40,7 +40,6 @@ namespace Vanrise.AccountBalance.BP.Activities
                 {
                     var billingTransactionBatch = new BillingTransactionBatch() { BillingTransactions = list };
                     totalCount = list.Count();
-                    handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} New Billing Transactions of AccountID {1} loaded.", totalCount, accountId);
                     inputArgument.OutputQueue.Enqueue(billingTransactionBatch);
                     list = new List<BillingTransaction>();
                     accountId = billingTransaction.AccountId;
@@ -53,9 +52,10 @@ namespace Vanrise.AccountBalance.BP.Activities
             {
                 var billingTransactionBatch = new BillingTransactionBatch() { BillingTransactions = list };
                 totalCount = list.Count();
-                handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} New Billing Transactions of AccountID {1} loaded.", totalCount, accountId);
+
                 inputArgument.OutputQueue.Enqueue(billingTransactionBatch);
             }
+            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finish Loading New Billing Transactions.");
         }
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {

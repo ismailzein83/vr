@@ -35,28 +35,29 @@ namespace Retail.Runtime.Tasks
                 AccountId = 171,
                 CurrencyId = 1,
                 Value = 1000,
-                EffectiveOn = DateTime.Now
+                EffectiveOn = DateTime.MinValue
             };
             UsageBalanceUpdate usageBalanceUpdate2 = new UsageBalanceUpdate
             {
-                AccountId = 60,
+                AccountId = 171,
                 CurrencyId = 1,
                 Value = 20,
-                EffectiveOn = DateTime.Now
+                EffectiveOn = DateTime.MinValue
             };
             UsageBalanceUpdate usageBalanceUpdate3 = new UsageBalanceUpdate
             {
-                AccountId = 60,
+                AccountId = 171,
                 CurrencyId = 1,
                 Value = 1000,
-                EffectiveOn = DateTime.Now
+                EffectiveOn = DateTime.MinValue
+
             };
             UsageBalanceUpdate usageBalanceUpdate4 = new UsageBalanceUpdate
             {
                 AccountId = 171,
                 CurrencyId = 1,
                 Value = 1000,
-                EffectiveOn = DateTime.Now
+                EffectiveOn = DateTime.MinValue
             };
 
             BalanceUsageDetail BalanceUsageDetail = new BalanceUsageDetail

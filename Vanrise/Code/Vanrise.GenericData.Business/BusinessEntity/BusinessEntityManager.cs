@@ -22,7 +22,7 @@ namespace Vanrise.GenericData.Business
             return GetEntity(businessEntityDefinitionId, entityId, beManager);
         }
 
-        public dynamic MapEntityToInfo(int businessEntityDefinitionId, string infoType, dynamic entity)
+        private dynamic MapEntityToInfo(int businessEntityDefinitionId, string infoType, dynamic entity)
         {
             var beManager = GetBEManager(businessEntityDefinitionId);
             return MapEntityToInfo(businessEntityDefinitionId, infoType, entity, beManager);
