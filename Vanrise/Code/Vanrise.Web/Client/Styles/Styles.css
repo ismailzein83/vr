@@ -24,7 +24,7 @@
 }
 .vr-module-name{
     position: relative;
-    top: 0px;
+    top: 4px;
     display: inline-block;
     max-width: 180px;
     overflow: hidden;
