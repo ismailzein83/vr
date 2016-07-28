@@ -122,16 +122,6 @@ function (WhS_CP_CodePreparationPreviewAPIService, WhS_CP_ZoneChangeTypeEnum, VR
                     dataItem.ZoneStatusIconUrl = WhS_CP_ZoneChangeTypeEnum.Renamed.icon;
                     dataItem.ZoneStatusIconTooltip = WhS_CP_ZoneChangeTypeEnum.Renamed.label;
                     break;
-
-                case WhS_CP_ZoneChangeTypeEnum.PendingEffective.value:
-                    dataItem.ZoneStatusIconUrl = WhS_CP_ZoneChangeTypeEnum.PendingEffective.icon;
-                    dataItem.ZoneStatusIconTooltip = WhS_CP_ZoneChangeTypeEnum.PendingEffective.label;
-                    break;
-
-                case WhS_CP_ZoneChangeTypeEnum.PendingClosed.value:
-                    dataItem.ZoneStatusIconUrl = WhS_CP_ZoneChangeTypeEnum.PendingClosed.icon;
-                    dataItem.ZoneStatusIconTooltip = WhS_CP_ZoneChangeTypeEnum.PendingClosed.label;
-                    break;
             }
         }
 

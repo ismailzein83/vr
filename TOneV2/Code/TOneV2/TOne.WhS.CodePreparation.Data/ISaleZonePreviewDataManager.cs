@@ -13,8 +13,8 @@ namespace TOne.WhS.CodePreparation.Data
     {
         long ProcessInstanceId { set; }
 
-        void ApplyPreviewZonesToDB(object preparedZones); 
-        
-        IEnumerable<ZonePreviewDetail> GetFilteredZonePreview(SPLPreviewQuery query);
+        void ApplyPreviewZonesToDB(object preparedZones);
+
+        IEnumerable<ZonePreview> GetFilteredZonePreview(SPLPreviewQuery query);
     }
 }

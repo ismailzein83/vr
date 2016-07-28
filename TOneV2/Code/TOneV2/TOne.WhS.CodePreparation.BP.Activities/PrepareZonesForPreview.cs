@@ -101,7 +101,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 zoneToProcess.BED = GetZoneBED(zoneToProcess);
                 zoneToProcess.EED = zoneToProcess.ExistingZones.Count() > 0 ? zoneToProcess.ExistingZones.Select(x => x.EED).VRMinimumDate() : null;
 
-                zoneToProcess.ChangeType = GetZoneChangeType(zoneToProcess, existingZones, zonesToProcessNamesHashSet, existingCodesByZoneNames, closedExistingZones);
+                zoneToProcess.ChangeType = GetZoneChangeType(zoneToProcess, closedExistingZones);
 
 
             }
@@ -135,10 +135,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             return minDates.VRMinimumDate().Value;
         }
 
-        private ZoneChangeType GetZoneChangeType(ZoneToProcess zoneToProcess, IEnumerable<ExistingZone> existingZones, HashSet<string> zonesToProcessNamesHashSet, Dictionary<string, Dictionary<string, List<ExistingCode>>> existingCodesByZoneNames, Dictionary<string, List<ExistingZone>> closedExistingZones)
+        private ZoneChangeType GetZoneChangeType(ZoneToProcess zoneToProcess, Dictionary<string, List<ExistingZone>> closedExistingZones)
         {
-
-
             if (zoneToProcess.CodesToMove.Count() > 0 && zoneToProcess.ExistingZones.Count() == 0)
             {
                 string originalZoneName = zoneToProcess.CodesToMove.First().OldZoneName;
@@ -150,16 +148,15 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                         zoneToProcess.RecentZoneName = originalZoneName;
                         return ZoneChangeType.Renamed;
                     }
-                        
                 }
             }
 
             List<ExistingZone> matchedExistingZones;
             if (closedExistingZones != null && closedExistingZones.TryGetValue(zoneToProcess.ZoneName, out matchedExistingZones))
-                 return zoneToProcess.EED > DateTime.Now.Date ? ZoneChangeType.PendingClosed : ZoneChangeType.Deleted; 
+                 return ZoneChangeType.Deleted; 
 
             if (zoneToProcess.AddedZones.Count() > 0 && zoneToProcess.ExistingZones.Count() == 0)
-                return zoneToProcess.BED > DateTime.Now.Date ? ZoneChangeType.PendingEffective : ZoneChangeType.New;
+                return ZoneChangeType.New;
 
             return ZoneChangeType.NotChanged;
         }

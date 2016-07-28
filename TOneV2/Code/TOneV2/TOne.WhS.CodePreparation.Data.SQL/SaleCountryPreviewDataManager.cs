@@ -24,7 +24,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         long _processInstanceID;
 
         public SaleCountryPreviewDataManager()
-            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_SPL_DBConnString"))
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
@@ -44,8 +44,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
                 RenamedZones = (int)reader["RenamedZones"],
                 NewCodes = (int)reader["NewCodes"],
                 MovedCodes = (int)reader["MovedCodes"],
-                DeletedCodes = (int)reader["DeletedCodes"],
-
+                DeletedCodes = (int)reader["DeletedCodes"]
             };
             return countryPreview;
         }

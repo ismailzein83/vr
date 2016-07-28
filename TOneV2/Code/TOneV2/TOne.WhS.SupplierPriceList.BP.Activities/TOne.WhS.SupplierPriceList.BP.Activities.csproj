@@ -95,7 +95,6 @@
     <Compile Include="ApplyNewRatesToDB.cs" />
     <Compile Include="ApplyNewZonesToDB.cs" />
     <Compile Include="GenerateZonesRatesPreview.cs" />
-    <Compile Include="GetDataFromPriceList.cs" />
     <Compile Include="GetExistingCodes.cs" />
     <Compile Include="GetExistingRates.cs" />
     <Compile Include="GetExistingZones.cs" />

@@ -47,7 +47,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     codePreviewList.Add(new CodePreview()
                     {
                         Code = item.Code,
-                        ChangeType = item.BED > DateTime.Now.Date ? CodeChangeType.PendingEffective : CodeChangeType.New,
+                        ChangeType = CodeChangeType.New,
                         ZoneName = item.ZoneName,
                         BED = item.BED,
                         EED = item.EED
@@ -78,7 +78,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     codePreviewList.Add(new CodePreview()
                     {
                         Code = item.Code,
-                        ChangeType = item.CloseEffectiveDate > DateTime.Now.Date ? CodeChangeType.PendingClosed : CodeChangeType.Deleted,
+                        ChangeType = CodeChangeType.Deleted,
                         ZoneName = item.ZoneName,
                         BED = GetClosedCodeBED(item),
                         EED = item.CloseEffectiveDate

@@ -95,16 +95,6 @@ function (WhS_CP_CodePreparationPreviewAPIService, WhS_CP_CodeChangeTypeEnum, VR
                         dataItem.codeStatusIconTooltip = WhS_CP_CodeChangeTypeEnum.Moved.label + " from " + dataItem.Entity.RecentZoneName;
                         }
                     break;
-
-                case WhS_CP_CodeChangeTypeEnum.PendingEffective.value:
-                    dataItem.codeStatusIconUrl = WhS_CP_CodeChangeTypeEnum.PendingEffective.icon;
-                    dataItem.codeStatusIconTooltip = WhS_CP_CodeChangeTypeEnum.PendingEffective.label;
-                    break;
-
-                case WhS_CP_CodeChangeTypeEnum.PendingClosed.value:
-                    dataItem.codeStatusIconUrl = WhS_CP_CodeChangeTypeEnum.PendingClosed.icon;
-                    dataItem.codeStatusIconTooltip = WhS_CP_CodeChangeTypeEnum.PendingClosed.label;
-                    break;
             }
             
             if (zoneName == dataItem.Entity.ZoneName)

@@ -207,8 +207,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_SupplierPriceList\Constant\ModuleConfig.js" />
-    <Content Include="WhS_SupplierPriceList\Views\SupplierPriceList1.html" />
-    <Content Include="WhS_SupplierPriceList\Views\SupplierPriceList1Controller.js" />
     <Content Include="WhS_SupplierPriceList\Views\SupplierPriceListPreview.html" />
     <Content Include="WhS_SupplierPriceList\Views\SupplierPriceListPreviewController.js" />
     <Content Include="WhS_SupplierPriceList\Views\SupplierPriceList.html" />

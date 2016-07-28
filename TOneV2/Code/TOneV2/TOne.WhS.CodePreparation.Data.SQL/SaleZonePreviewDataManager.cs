@@ -26,7 +26,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         long _processInstanceID;
 
         public SaleZonePreviewDataManager()
-            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_SPL_DBConnString"))
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
@@ -38,7 +38,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         }
 
 
-       public IEnumerable<ZonePreviewDetail> GetFilteredZonePreview(SPLPreviewQuery query)
+        public IEnumerable<ZonePreview> GetFilteredZonePreview(SPLPreviewQuery query)
         {
             return GetItemsSP("[TOneWhS_CP].[sp_SaleZone_Preview_GetFiltered]", ZonePreviewMapper, query.ProcessInstanceId, query.CountryId, query.OnlyModified);
         }
@@ -77,9 +77,9 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             };
         }
 
-        private ZonePreviewDetail ZonePreviewMapper(IDataReader reader)
+        private ZonePreview ZonePreviewMapper(IDataReader reader)
         {
-            ZonePreviewDetail zoneRatePreviewDetail = new ZonePreviewDetail
+            ZonePreview zonePreview = new ZonePreview
             {
                 ZoneName = reader["ZoneName"] as string,
                 RecentZoneName = reader["RecentZoneName"] as string,
@@ -92,7 +92,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
                 CodesMovedTo = (int)reader["CodesMovedTo"]
 
             };
-            return zoneRatePreviewDetail;
+            return zonePreview;
         }
 
 

@@ -101,7 +101,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                 CurrentRate = GetReaderValue<decimal?>(reader, "CurrentRate"),
                 CurrentRateBED = GetReaderValue<DateTime?>(reader, "CurrentRateBED"),
                 CurrentRateEED = GetReaderValue<DateTime?>(reader, "CurrentRateEED"),
-                ImportedRate = GetReaderValue<decimal>(reader, "ImportedRate"),
+                ImportedRate = GetReaderValue<decimal?>(reader, "ImportedRate"),
                 ImportedRateBED = GetReaderValue<DateTime?>(reader, "ImportedRateBED"),
                 ChangeTypeRate = (RateChangeType)GetReaderValue<int>(reader, "RateChangeType"),
                 NewCodes = (int)reader["NewCodes"],

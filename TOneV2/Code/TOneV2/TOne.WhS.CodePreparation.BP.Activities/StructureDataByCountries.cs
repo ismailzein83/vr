@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.CodePreparation.Entities.Processing;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
@@ -14,10 +17,14 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<IEnumerable<ZoneToProcess>> ZonesToProcess { get; set; }
 
         [RequiredArgument]
+        public InArgument<IEnumerable<SaleZone>> ExistingZoneEntities { get; set; }
+
+        [RequiredArgument]
         public OutArgument<IEnumerable<CountryToProcess>> CountriesToProcess { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<ZoneToProcess> zonesToProcess = this.ZonesToProcess.Get(context);
+            IEnumerable<SaleZone> existingZoneEntities = this.ExistingZoneEntities.Get(context);
 
             Dictionary<int, CountryToProcess> countriesToProcessByCountryId = new Dictionary<int, CountryToProcess>();
             CountryToProcess countryToProcess;
@@ -70,6 +77,23 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
                     countryToProcess.ZonesToProcess.Add(zone);
 
+            }
+
+            CountryManager manager = new CountryManager();
+            IEnumerable<Country> countries = manager.GetAllCountries();
+
+            foreach (Country country in countries)
+            {
+                if (!countriesToProcessByCountryId.TryGetValue(country.CountryId, out countryToProcess) && existingZoneEntities.Any(x => x.CountryId == country.CountryId))
+                {
+                    countryToProcess = new CountryToProcess();
+                    countryToProcess.CountryId = country.CountryId;
+                    countryToProcess.ZonesToProcess = new List<ZoneToProcess>();
+                    countryToProcess.CodesToAdd = new List<CodeToAdd>();
+                    countryToProcess.CodesToMove = new List<CodeToMove>();
+                    countryToProcess.CodesToClose = new List<CodeToClose>();
+                    countriesToProcessByCountryId.Add(country.CountryId, countryToProcess);
+                }
             }
 
             this.CountriesToProcess.Set(context, countriesToProcessByCountryId.Values);

@@ -25,7 +25,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         long _processInstanceID;
 
         public SaleCodePreviewDataManager()
-            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_SPL_DBConnString"))
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }

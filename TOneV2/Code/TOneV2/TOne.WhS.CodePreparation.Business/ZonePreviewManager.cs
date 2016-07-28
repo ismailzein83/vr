@@ -15,7 +15,7 @@ namespace TOne.WhS.CodePreparation.Business
     public class ZonePreviewManager
     {
 
-        public Vanrise.Entities.IDataRetrievalResult<ZonePreviewDetail> GetFilteredZonePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<ZonePreview> GetFilteredZonePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new ZonePreviewRequestHandler());
         }
@@ -23,15 +23,15 @@ namespace TOne.WhS.CodePreparation.Business
 
         #region Private Classes
 
-        private class ZonePreviewRequestHandler : BigDataRequestHandler<SPLPreviewQuery, ZonePreviewDetail, ZonePreviewDetail>
+        private class ZonePreviewRequestHandler : BigDataRequestHandler<SPLPreviewQuery, ZonePreview, ZonePreview>
         {
-            public override ZonePreviewDetail EntityDetailMapper(ZonePreviewDetail entity)
+            public override ZonePreview EntityDetailMapper(ZonePreview entity)
             {
                 ZonePreviewManager manager = new ZonePreviewManager();
                 return manager.ZonePreviewDetailMapper(entity);
             }
 
-            public override IEnumerable<ZonePreviewDetail> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
+            public override IEnumerable<ZonePreview> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
             {
                 ISaleZonePreviewDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ISaleZonePreviewDataManager>();
                 return dataManager.GetFilteredZonePreview(input.Query);
@@ -43,9 +43,9 @@ namespace TOne.WhS.CodePreparation.Business
 
         #region Private Mappers
 
-        private ZonePreviewDetail ZonePreviewDetailMapper(ZonePreviewDetail zonePreviewDetail)
+        private ZonePreview ZonePreviewDetailMapper(ZonePreview zonePreview)
         {
-            return zonePreviewDetail;
+            return zonePreview;
         }
 
         #endregion

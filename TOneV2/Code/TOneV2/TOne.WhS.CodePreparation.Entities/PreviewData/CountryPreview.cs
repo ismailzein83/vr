@@ -10,18 +10,13 @@ namespace TOne.WhS.CodePreparation.Entities
     public class CountryPreview
     {
         public int CountryId { get; set; }
-
         public int NewZones { get; set; }
-
         public int DeletedZones { get; set; }
-
         public int RenamedZones { get; set; }
-
         public int NewCodes { get; set; }
-
         public int MovedCodes { get; set; }
-
         public int DeletedCodes { get; set; }
+
     }
 
 

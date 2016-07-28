@@ -38,27 +38,13 @@ namespace TOne.WhS.CodePreparation.Entities
         public ZoneChangeType ChangeTypeZone { get; set; }
         public DateTime ZoneBED { get; set; }
         public DateTime? ZoneEED { get; set; }
-
-    }
-
-
-    public class ZonePreviewDetail
-    {
-        public string ZoneName { get; set; }
-        public string RecentZoneName { get; set; }
-        public ZoneChangeType ChangeTypeZone { get; set; }
-        public DateTime ZoneBED { get; set; }
-        public DateTime? ZoneEED { get; set; }
-
         public int NewCodes { get; set; }
-
         public int DeletedCodes { get; set; }
-
         public int CodesMovedTo { get; set; }
-
         public int CodesMovedFrom { get; set; }
-
+        public int PendingEffectiveCodes { get; set; }
+        public int PendingClosedCodes { get; set; }
 
     }
-  
+
 }

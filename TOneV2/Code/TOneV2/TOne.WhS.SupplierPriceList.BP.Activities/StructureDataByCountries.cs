@@ -8,6 +8,7 @@ using TOne.WhS.SupplierPriceList.Entities;
 using Vanrise.Common.Business;
 using TOne.WhS.BusinessEntity.Business;
 using Vanrise.Entities;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -18,11 +19,15 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<IEnumerable<ImportedZone>> ImportedZones { get; set; }
 
         [RequiredArgument]
+        public InArgument<IEnumerable<SupplierZone>> ExistingZoneEntities { get; set; }
+
+        [RequiredArgument]
         public OutArgument<IEnumerable<ImportedCountry>> ImportedCountries { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<ImportedZone> importedZonesList = this.ImportedZones.Get(context);
+            IEnumerable<SupplierZone> existingZoneList = this.ExistingZoneEntities.Get(context);
 
             Dictionary<int, ImportedCountry> importedCountriesByCountryId = new Dictionary<int, ImportedCountry>();
             ImportedCountry importedCountry;
@@ -56,21 +61,21 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             }
 
-            //CountryManager manager = new CountryManager();
-            //IEnumerable<Country> countries = manager.GetAllCountries();
+            CountryManager manager = new CountryManager();
+            IEnumerable<Country> countries = manager.GetAllCountries();
 
-            //foreach (Country country in countries)
-            //{
-            //    if (!importedCountriesByCountryId.TryGetValue(country.CountryId, out importedCountry))
-            //    {
-            //        importedCountry = new ImportedCountry();
-            //        importedCountry.CountryId = country.CountryId;
-            //        importedCountry.ImportedZones = new List<ImportedZone>();
-            //        importedCountry.ImportedCodes = new List<ImportedCode>();
-            //        importedCountry.ImportedRates = new List<ImportedRate>();
-            //        importedCountriesByCountryId.Add(country.CountryId, importedCountry);
-            //    }
-            //}
+            foreach (Country country in countries)
+            {
+                if (!importedCountriesByCountryId.TryGetValue(country.CountryId, out importedCountry) && existingZoneList.Any(x => x.CountryId == country.CountryId))
+                {
+                    importedCountry = new ImportedCountry();
+                    importedCountry.CountryId = country.CountryId;
+                    importedCountry.ImportedZones = new List<ImportedZone>();
+                    importedCountry.ImportedCodes = new List<ImportedCode>();
+                    importedCountry.ImportedRates = new List<ImportedRate>();
+                    importedCountriesByCountryId.Add(country.CountryId, importedCountry);
+                }
+            }
 
             this.ImportedCountries.Set(context, importedCountriesByCountryId.Values);
         }

@@ -96,7 +96,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                         {
                             CountryId = closedExistingZone.Value.First().CountryId,
                             ZoneName = closedExistingZone.Key,
-                            ChangeTypeZone = ClosedZoneEED > DateTime.Today.Date ? ZoneChangeType.PendingClosed : ZoneChangeType.Deleted,
+                            ChangeTypeZone = ZoneChangeType.Deleted,
                             ZoneBED = closedExistingZone.Value.Min(item => item.BED),
                             ZoneEED = ClosedZoneEED
                         });
