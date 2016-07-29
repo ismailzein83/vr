@@ -34,7 +34,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups
 
         public override string GetDescription(ISaleZoneGroupContext context)
         {           
-            var validZoneIds = context != null ? context.GetGroupZoneIds(this) : this.ZoneIds;
+            var validZoneIds = this.ZoneIds;
             if (validZoneIds != null)
             {
                 SaleZoneManager manager = new SaleZoneManager();
