@@ -292,41 +292,41 @@ as (select * from (values
 (3301,'WhS_BE_SupplierPricelist','Supplier PriceList',1201,0,'["View"]'),
 
 (3302,'WhS_Analytics_Variation','Variation',1204,0,'["View"]'),
-(3313,'WhS_Analytics_BillingReport','Billing Report',1204,0,'["View"]'),
-(3353,'Generic_Billing_Reports','Generic Billing Reports',1204,0,'["View"]'),
+(3303,'WhS_Analytics_BillingReport','Billing Report',1204,0,'["View"]'),
+(3304,'Generic_Billing_Reports','Generic Billing Reports',1204,0,'["View"]'),
 
-(3303,'WhS_BE_SwitchConnectivity','Switch Connectivity',2,0,'["View", "Add", "Edit"]'),
+(3305,'WhS_BE_SwitchConnectivity','Switch Connectivity',2,0,'["View", "Add", "Edit"]'),
 
-(3304,'WhS_Analytics_RepeatedNumber','Repeated Number',1205,0,'["View"]'),
-(3305,'WhS_Analytics_BlockedAttempts','BlockedAttempts',1205,0,'["View"]'),
-(3351,'WhS_Analytics_ReleaseCode','Release Code',1205,0,'["View"]'),
-(3352,'Generic_Traffic_Reports','Generic Traffic Reports',1205,0,'["View"]'),
+(3306,'WhS_Analytics_RepeatedNumber','Repeated Number',1205,0,'["View"]'),
+(3307,'WhS_Analytics_BlockedAttempts','BlockedAttempts',1205,0,'["View"]'),
+(3308,'WhS_Analytics_ReleaseCode','Release Code',1205,0,'["View"]'),
+(3309,'Generic_Traffic_Reports','Generic Traffic Reports',1205,0,'["View"]'),
 
-(3306,'WhS_BE_CarrierAccount','Carrier Account',201,0,'["View", "Add", "Edit", "Delete"]'),
-(3307,'WhS_BE_CarrierProfile','Carrier Profile',201,0,'["View"]'),
-(3308,'WhS_BE_CodeGroup','Code Group',201,0,'["View"]'),
-(3309,'WhS_BE_Switch','Switches',201,0,'["View", "Add", "Edit", "Delete"]'),
-(3310,'WhS_Sales_SaleCode','Sale Codes',201,0,'["View"]'),
-(3311,'WhS_Sales_SaleRate','Sale Rate',201,0,'["View"]'),
-(3312,'WhS_BE_SaleZone','Sale Zone',201,0,'["View"]'),
-
-
-(3316,'WhS_BE_SupplierCode','Supplier Code',1201,0,'["View"]'),
-(3317,'WhS_BE_SupplierRate','Supplier Rate',1201,0,'["View"]'),
-(3318,'WhS_BE_SupplierZone','Supplier Zone',1201,0,'["View"]'),
-
-(3319,'Whs_BE_RoutingProduct','Routing Product',1203,0,'["View","Add","Edit","Delete"]'),
-(3320,'Whs_BE_ZoneServiceConfig','Zone Service Configuration',201,0,'["View","Add","Edit"]'),
-
-(3321,'WhS_Sales_SellingRules','Selling Rules',1206,0,'["View","Add","Edit","Delete"]'),
-
-(3323,'WhS_Sales_SalePriceList','Sale Price List',1206,0,'["View"]'),
+(3320,'WhS_BE_CarrierAccount','Carrier Account',201,0,'["View", "Add", "Edit", "Delete"]'),
+(3321,'WhS_BE_CarrierProfile','Carrier Profile',201,0,'["View"]'),
+(3322,'WhS_BE_CodeGroup','Code Group',201,0,'["View"]'),
+(3323,'WhS_BE_Switch','Switches',201,0,'["View", "Add", "Edit", "Delete"]'),
+(3324,'WhS_Sales_SaleCode','Sale Codes',201,0,'["View"]'),
+(3325,'WhS_Sales_SaleRate','Sale Rate',201,0,'["View"]'),
+(3326,'WhS_BE_SaleZone','Sale Zone',201,0,'["View"]'),
 
 
-(3353,'WhS_BE_CustomerSellingProduct','Customer Selling Product',1206,0,'["View"]'),
-(3354,'WhS_BE_SellingProduct','Selling Product',1206,0,'["View"]'),
-(3355,'WhS_BE_SellingNumberPlan','Selling Number Plan',1206,0,'["View"]'),
-(3356,'WhS_Sales_NumberingPlan','Numbering Plan',1206,0,'["View"]'),
+(3340,'WhS_BE_SupplierCode','Supplier Code',1201,0,'["View"]'),
+(3341,'WhS_BE_SupplierRate','Supplier Rate',1201,0,'["View"]'),
+(3342,'WhS_BE_SupplierZone','Supplier Zone',1201,0,'["View"]'),
+
+(3343,'Whs_BE_RoutingProduct','Routing Product',1203,0,'["View","Add","Edit","Delete"]'),
+(3344,'Whs_BE_ZoneServiceConfig','Zone Service Configuration',201,0,'["View","Add","Edit"]'),
+
+(3345,'WhS_Sales_SellingRules','Selling Rules',1206,0,'["View","Add","Edit","Delete"]'),
+
+(3350,'WhS_Sales_SalePriceList','Sale Price List',1206,0,'["View"]'),
+
+
+(3351,'WhS_BE_CustomerSellingProduct','Customer Selling Product',1206,0,'["View"]'),
+(3352,'WhS_BE_SellingProduct','Selling Product',1206,0,'["View"]'),
+(3353,'WhS_BE_SellingNumberPlan','Selling Number Plan',1206,0,'["View"]'),
+(3354,'WhS_Sales_NumberingPlan','Numbering Plan',1206,0,'["View"]'),
 
 (3400,'VR_AccountManager','VR_AccountManager',1202,0,'["View", "AssignCarriers", "UpdateLinkedOrgChart","GetAssignedCarrierDetails","GetLinkedOrgChartId"]'),
 
