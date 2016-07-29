@@ -21,14 +21,14 @@
                                        selectedvalues="scopeModal.selectedRouteOptionRuleCriteriaType" onselectionchanged="scopeModal.onRouteOptionRuleCriteriaTypeSelectionChanged" hideremoveicon />
                         </vr-columns>
                     </vr-row>
-                    <vr-row ng-show="scopeModal.showSaleZoneSection">
+                    <vr-row ng-if="scopeModal.showSaleZoneSection">
                         <vr-columns width="fullrow">
                             <vr-section title="Sale Zone">
                                 <vr-whs-be-salezonegroup on-ready="scopeModal.onSaleZoneGroupSettingsDirectiveReady"></vr-whs-be-salezonegroup>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
-                    <vr-row ng-show="scopeModal.showIncludedCodeSection">
+                    <vr-row ng-if="scopeModal.showIncludedCodeSection">
                         <vr-columns width="fullrow">
                             <vr-section title="Included Codes">
                                 <vr-columns width="1/4row">

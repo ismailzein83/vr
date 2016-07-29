@@ -67,7 +67,12 @@
 
             $scope.scopeModal.onSaleZoneGroupSettingsDirectiveReady = function (api) {
                 saleZoneGroupSettingsAPI = api;
-                saleZoneGroupSettingsReadyPromiseDeferred.resolve();
+                var saleZoneGroupPayload = {
+                    sellingNumberPlanId: sellingNumberPlanId != undefined ? sellingNumberPlanId : undefined,
+                    saleZoneFilterSettings: { RoutingProductId: routingProductId },
+                };
+                var setLoader = function (value) { $scope.scopeModal.isLoadingSellingNumberPlan = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneGroupSettingsAPI, saleZoneGroupPayload, setLoader, saleZoneGroupSettingsReadyPromiseDeferred);
             }
 
             $scope.scopeModal.onCodeCriteriaGroupSettingsDirectiveReady = function (api) {
@@ -139,6 +144,7 @@
                 }
                 else {
                     $scope.scopeModal.showIncludedCodeSection = $scope.scopeModal.showCustomerSection = $scope.scopeModal.showExcludedCodeSection = true;
+                    $scope.scopeModal.selectedCodeCriteriaGroupTemplate = undefined;
                     $scope.scopeModal.showSaleZoneSection = false;
                 }
             }
@@ -158,7 +164,7 @@
             $scope.scopeModal.isLoading = true;
 
             if (isEditMode) {
-                $scope.title = "Edit Route Option OptionRule";
+                $scope.title = "Edit Route Option Rule";
                 getRouteOptionRule().then(function () {
                     loadAllControls()
                         .finally(function () {
@@ -214,13 +220,18 @@
 
             $scope.scopeModal.routeOptionRuleCriteriaTypes = UtilsService.getArrayEnum(WhS_Routing_RouteRuleCriteriaTypeEnum);
 
-            if (routeOptionRuleEntity != undefined && routeOptionRuleEntity.Criteria.CodeCriteriaGroupSettings != null)
+            if (routeOptionRuleEntity != undefined && routeOptionRuleEntity.Criteria.CodeCriteriaGroupSettings != undefined)
                 $scope.scopeModal.selectedRouteOptionRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.Code.value);
             else
                 $scope.scopeModal.selectedRouteOptionRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.SaleZone.value);
         }
 
         function loadSaleZoneGroupSection() {
+            if (routeOptionRuleEntity == undefined || routeOptionRuleEntity.Criteria == undefined || routeOptionRuleEntity.Criteria.SaleZoneGroupSettings == undefined) {
+                saleZoneGroupSettingsReadyPromiseDeferred = undefined;
+                return;
+            }
+
             var promises = [];
 
             if (saleZoneGroupSettingsReadyPromiseDeferred == undefined)
@@ -388,9 +399,9 @@
                 Criteria: {
                     RoutingProductId: routingProductId,
                     ExcludedCodes: $scope.scopeModal.excludedCodes,
-                    SaleZoneGroupSettings: saleZoneGroupSettingsAPI.getData(),
+                    SaleZoneGroupSettings: $scope.scopeModal.showSaleZoneSection? saleZoneGroupSettingsAPI.getData():undefined,//VRUIUtilsService.getSettingsFromDirective($scope, saleZoneGroupSettingsAPI, 'selectedSaleZoneGroupTemplate'),
                     CustomerGroupSettings: customerGroupSettingsAPI.getData(),
-                    CodeCriteriaGroupSettings: VRUIUtilsService.getSettingsFromDirective($scope.scopeModal, codeCriteriaGroupSettingsAPI, 'selectedCodeCriteriaGroupTemplate'),
+                    CodeCriteriaGroupSettings: $scope.scopeModal.showIncludedCodeSection? VRUIUtilsService.getSettingsFromDirective($scope.scopeModal, codeCriteriaGroupSettingsAPI, 'selectedCodeCriteriaGroupTemplate'):undefined,
                     SuppliersWithZonesGroupSettings: suppliersWithZonesGroupSettingsAPI.getData()
                 },
                 Settings: VRUIUtilsService.getSettingsFromDirective($scope.scopeModal, routeOptionRuleSettingsAPI, 'selectedrouteOptionRuleSettingsTemplate'),
