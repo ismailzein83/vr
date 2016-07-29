@@ -7,7 +7,9 @@ using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
+    [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "Switch")]
+
     public class WhSBE_SwitchController : BaseAPIController
     {
         [HttpPost]

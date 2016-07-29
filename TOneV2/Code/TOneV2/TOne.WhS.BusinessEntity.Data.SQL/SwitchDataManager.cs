@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SwitchDataManager : BaseSQLDataManager, ISwitchDataManager
     {
-      
+
         #region ctor/Local Variables
         public SwitchDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
@@ -27,7 +28,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public bool Insert(Switch whsSwitch, out int insertedId)
         {
             object switchId;
-            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_Switch_Insert]", out switchId, whsSwitch.Name);
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_Switch_Insert]", out switchId, whsSwitch.Name, Serializer.Serialize(whsSwitch.Settings));
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
                 insertedId = (int)switchId;
@@ -37,7 +38,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
         public bool Update(SwitchToEdit whsSwitch)
         {
-            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_Switch_Update]", whsSwitch.SwitchId, whsSwitch.Name);
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_Switch_Update]", whsSwitch.SwitchId, whsSwitch.Name, Serializer.Serialize(whsSwitch.Settings));
             return (recordsEffected > 0);
         }
         public bool AreSwitchesUpdated(ref object updateHandle)
@@ -60,11 +61,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             Switch whsSwitch = new Switch()
             {
                 SwitchId = (int)reader["ID"],
-                Name = reader["Name"] as string
+                Name = reader["Name"] as string,
+                Settings = Serializer.Deserialize<SwitchSettings>(reader["Settings"] as string)
             };
             return whsSwitch;
         }
         #endregion
-      
+
     }
 }

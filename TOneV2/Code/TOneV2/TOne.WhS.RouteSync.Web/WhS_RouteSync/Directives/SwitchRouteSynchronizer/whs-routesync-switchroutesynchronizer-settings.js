@@ -93,7 +93,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = undefined;
+                            var directivePayload = { switchSynchronizerSettings: switchSynchronizerSettings };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 

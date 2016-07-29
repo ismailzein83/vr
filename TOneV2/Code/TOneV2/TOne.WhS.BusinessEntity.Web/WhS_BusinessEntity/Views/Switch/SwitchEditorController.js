@@ -10,6 +10,9 @@
         var switchId;
         var switchEntity;
 
+        var switchSyncSettingsDirectiveAPI;
+        var switchSyncSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -25,7 +28,7 @@
         }
 
         function defineScope() {
-
+            $scope.scopeModel = {};
             $scope.hasSaveSwitchPermission = function () {
                 if (isEditMode)
                     return WhS_BE_SwitchAPIService.HasUpdateSwitchPermission();
@@ -42,6 +45,11 @@
                 }
             };
 
+            $scope.onSwitchSyncSettingsDirectiveReady = function (api) {
+                switchSyncSettingsDirectiveAPI = api;
+                switchSyncSettingsDirectiveReadyDeferred.resolve();
+            };
+
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
@@ -54,22 +62,53 @@
             if (isEditMode) {
                 $scope.title = "Edit Switch";
                 getSwitch().then(function () {
-                    $scope.isLoading = false;
+                    loadAllControls();
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.isLoading = false;
                 });
             }
             else {
-                $scope.title = "New Switch";
-                $scope.isLoading = false;
+                loadAllControls();
             }
+        }
+
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadSwitchSyncSettingsDirective]).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
+            });
+        }
+
+        function setTitle() {
+            if (isEditMode) {
+                var switchName = (switchEntity != undefined) ? switchEntity.Name : null;
+                $scope.title = UtilsService.buildTitleForUpdateEditor(switchName, 'SwitchName');
+            }
+            else {
+                $scope.title = UtilsService.buildTitleForAddEditor('SwitchName');
+            }
+        }
+
+        function loadSwitchSyncSettingsDirective() {
+            var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+            switchSyncSettingsDirectiveReadyDeferred.promise.then(function () {
+                var settingsDirectivePayload;
+                if (switchEntity != undefined && switchEntity.Settings != undefined) {
+                    settingsDirectivePayload = { switchSynchronizerSettings: switchEntity.Settings.RouteSynchronizer };
+                }
+                VRUIUtilsService.callDirectiveLoad(switchSyncSettingsDirectiveAPI, settingsDirectivePayload, switchSyncSettingsDirectiveReadyDeferred);
+            });
+
+            return switchSyncSettingsDirectiveReadyDeferred.promise;
         }
 
         function getSwitch() {
             return WhS_BE_SwitchAPIService.GetSwitch(switchId).then(function (whsSwitch) {
                 switchEntity = whsSwitch;
-                $scope.name = switchEntity.Name;
+                $scope.scopeModel.switchName = switchEntity.Name;
             });
         }
 
@@ -108,10 +147,18 @@
         function buildSwitchObjFromScope() {
             var obj = {
                 SwitchId: (switchId != null) ? switchId : 0,
-                Name: $scope.name
+                Name: $scope.scopeModel.switchName,
+                Settings: {
+                    $type: "TOne.WhS.BusinessEntity.Entities.SwitchSettings, TOne.WhS.BusinessEntity.Entities",
+                    RouteSynchronizer: switchSyncSettingsDirectiveAPI.getData().SwitchRouteSynchronizer
+                }
             };
             return obj;
         }
+
+        //function getSwitchSettings() {
+        //    return
+        //}
     }
 
     appControllers.controller("WhS_BE_SwitchEditorController", switchEditorController);
