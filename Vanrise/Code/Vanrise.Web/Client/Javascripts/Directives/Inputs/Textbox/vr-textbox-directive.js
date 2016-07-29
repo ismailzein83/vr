@@ -54,6 +54,15 @@
                 ctrl.validate = function () {                    
                     return VRValidationService.validate(ctrl.value, $scope, $attrs, validationOptions);
                 };
+
+                $scope.ctrl.onBlurDirective = function (e) {
+                    if ($attrs.onblurtextbox != undefined) {
+                        var onblurtextboxMethod = $scope.$parent.$eval($attrs.onblurtextbox);
+                        if (onblurtextboxMethod != undefined && onblurtextboxMethod != null && typeof (onblurtextboxMethod) == 'function') {
+                            onblurtextboxMethod();
+                        }
+                    }
+                }
             },
             compile: function (element, attrs) {
 
@@ -194,7 +203,7 @@
                 }
                 var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
                             + '<vr-validator validate="ctrl.validate()" >'
-                            + '<input  tabindex="{{ctrl.tabindex}}" ng-readonly="ctrl.readOnly" id="mainInput" placeholder="{{ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" size="10" class="form-control ' + keypressclass + ' " data-autoclose="1" type="' + type + '" >'
+                            + '<input  tabindex="{{ctrl.tabindex}}" ng-readonly="ctrl.readOnly" id="mainInput" placeholder="{{ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" size="10" class="form-control ' + keypressclass + ' " data-autoclose="1" type="' + type + '" ng-blur="ctrl.onBlurDirective($event)">'
                             + '</vr-validator>'
                             + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" html="true" style="color:#337AB7"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
                         + '</div>';
