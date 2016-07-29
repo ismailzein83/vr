@@ -35,7 +35,8 @@ namespace TOne.Web
                 "~/Client/Modules/VR_GenericData", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Analytic", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/ExcelConversion", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/Reprocess", "*.js", true));
+                "~/Client/Modules/Reprocess", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/WhS_RouteSync", "*.js", true));
         }
     }
 }

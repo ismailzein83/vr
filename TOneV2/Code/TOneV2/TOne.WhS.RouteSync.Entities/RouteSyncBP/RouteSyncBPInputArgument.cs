@@ -10,8 +10,6 @@ namespace TOne.WhS.RouteSync.Entities
     {
         public int RouteSyncDefinitionId { get; set; }
 
-        public RouteSyncBPSettings Settings { get; set; }
-
         public override string ProcessName
         {
             get

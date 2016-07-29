@@ -19,6 +19,6 @@ namespace TOne.WhS.RouteSync.Entities
     {
         public RouteReader RouteReader { get; set; }
 
-        public List<SwitchRouteSynchronizer> Synchronizers { get; set; }
+        public List<string> SwitchIds { get; set; }
     }
 }

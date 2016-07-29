@@ -50,6 +50,8 @@ namespace TOne.WhS.RouteSync.Entities
         RouteRangeInfo RouteRangeInfo { get; }
 
         Object InitializationData { get; }
+        
+        List<Object> ConvertedRoutes { get; }
     }
 
     public interface ISwitchRouteSynchronizerFinalizeContext

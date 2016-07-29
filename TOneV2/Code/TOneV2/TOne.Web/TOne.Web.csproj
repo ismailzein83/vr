@@ -726,6 +726,22 @@
       <Project>{66a454c0-d24c-4378-942f-4b7bc0f1e05a}</Project>
       <Name>TOne.WhS.DBSync.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.BP.Arguments\TOne.WhS.RouteSync.BP.Arguments.csproj">
+      <Project>{c5c38b71-3244-4bc0-bdbf-31b7a5e71c74}</Project>
+      <Name>TOne.WhS.RouteSync.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Business\TOne.WhS.RouteSync.Business.csproj">
+      <Project>{31466bbd-3579-4033-b991-12d044564a32}</Project>
+      <Name>TOne.WhS.RouteSync.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
+      <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
+      <Name>TOne.WhS.RouteSync.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Web\TOne.WhS.RouteSync.Web.csproj">
+      <Project>{edaf7cee-84dd-45e0-9eb5-137e753f7ee3}</Project>
+      <Name>TOne.WhS.RouteSync.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Routing.BP.Arguments\TOne.WhS.Routing.BP.Arguments.csproj">
       <Project>{7b185135-b5a8-4416-8b8a-66a261d7dd31}</Project>
       <Name>TOne.WhS.Routing.BP.Arguments</Name>

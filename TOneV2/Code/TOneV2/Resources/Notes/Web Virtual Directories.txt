@@ -31,3 +31,4 @@
 	Analytic				C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic
 	ExcelConversion			C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion
 	Reprocess				C:\TFS\BusinessProcess\Code\Vanrise.Reprocess.Web\Reprocess
+	WhS_RouteSync			C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.RouteSync.Web\WhS_RouteSync

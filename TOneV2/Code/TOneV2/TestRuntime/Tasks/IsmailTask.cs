@@ -72,14 +72,14 @@ namespace TestRuntime
             TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
             Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             var runtimeServices = new List<RuntimeService>();
+            runtimeServices.Add(transactionLockRuntimeService);
             runtimeServices.Add(queueActivationService);
 
-            runtimeServices.Add(bpService);
+            //runtimeServices.Add(bpService);
 
-            runtimeServices.Add(schedulerService);
-            runtimeServices.Add(dsRuntimeService);
+            //runtimeServices.Add(schedulerService);
+            //runtimeServices.Add(dsRuntimeService);
             //runtimeServices.Add(bigDataService);
-            runtimeServices.Add(transactionLockRuntimeService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();

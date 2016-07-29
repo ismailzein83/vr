@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.WhS.RouteSync.Entities
+namespace TOne.WhS.RouteSync.TelesRadius
 {
-    public abstract class RouteSyncBPSettings
+    public class Class1
     {
     }
 }
