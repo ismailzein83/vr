@@ -91,6 +91,11 @@ namespace Vanrise.Common.Business
             return allSettings.Values;
         }
 
+        public T GetCachedOrCreate<T>(string cacheName, Func<T> createObject)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, createObject);
+        }
+
         private Dictionary<int, Setting> GetCachedSettings()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSettings",
@@ -122,6 +127,7 @@ namespace Vanrise.Common.Business
                 Entity = setting
             };
         }
+
         #region Private Members
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
