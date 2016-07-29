@@ -49,8 +49,9 @@ namespace TOne.WhS.Sales.Business
                 zoneItem.CurrentRateBED = rate.Rate.BED;
                 zoneItem.CurrentRateEED = rate.Rate.EED;
                 zoneItem.IsCurrentRateEditable = (rate.Source == _ownerType);
+                zoneItem.CurrentOtherRates = rate.Rate.OtherRates;
             }
-            
+
             SetZoneRateChanges(zoneItem);
         }
 
@@ -64,6 +65,7 @@ namespace TOne.WhS.Sales.Business
                 zoneItem.NewRate = newRate.NormalRate;
                 zoneItem.NewRateBED = newRate.BED;
                 zoneItem.NewRateEED = newRate.EED;
+                zoneItem.NewOtherRates = newRate.OtherRates;
             }
             else if (rateChange != null)
                 zoneItem.RateChangeEED = rateChange.EED;

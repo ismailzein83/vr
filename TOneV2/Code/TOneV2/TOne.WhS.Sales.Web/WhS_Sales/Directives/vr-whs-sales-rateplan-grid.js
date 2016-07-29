@@ -165,16 +165,16 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 function addRateTypesToZoneItem(zoneItem) {
 
                     for (var i = 0; i < rateTypes.length; i++) {
-                        zoneItem.currentOtherRates[rateTypes[i].Name] = 0;
+                        zoneItem.CurrentOtherRates[rateTypes[i].Name] = 0;
                     }
                 }
 
                 function extendZoneItem(zoneItem) {
                     zoneItem.IsDirty = false;
-                    if (zoneItem.currentOtherRates == undefined)
-                        zoneItem.currentOtherRates = [];
-                    if (zoneItem.newOtherRates == undefined)
-                        zoneItem.newOtherRates = [];
+                    if (zoneItem.CurrentOtherRates == undefined)
+                        zoneItem.CurrentOtherRates = {};
+                    if (zoneItem.NewOtherRates == undefined)
+                        zoneItem.NewOtherRates = {};
                     addRateTypesToZoneItem(zoneItem);
                     zoneItem.currentRateEED = zoneItem.CurrentRateEED; // Maintains the original value of zoneItem.CurrentRateEED in case the user deletes the new rate
                     setRouteOptionProperties(zoneItem);
@@ -226,7 +226,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         zoneItem.IsDirty = true;
                     };
                     zoneItem.OnOtherRateChanges = function (zoneItem, dataItem) {
-                        zoneItem.newOtherRates[dataItem.RateTypeId] = dataItem.NewRate;
+                        zoneItem.NewOtherRates[dataItem.RateTypeId] = dataItem.NewRate;
                         console.log(dataItem);
                         zoneItem.IsDirty = true;
                     }
@@ -359,20 +359,26 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     zoneChanges.NewRate = null;
 
                     if (zoneItem.NewRate) {
-                        zoneChanges.OtherRates = getOtherRates(zoneItem);
                         zoneChanges.NewRate = {
                             ZoneId: zoneItem.ZoneId,
                             NormalRate: zoneItem.NewRate,
                             BED: zoneItem.NewRateBED,
-                            EED: zoneItem.NewRateEED
+                            EED: zoneItem.NewRateEED,
+                            OtherRates: getOtherRates(zoneItem)
+                        };
+                    }
+
+                    else if (zoneItem.CurrentRate != null) {
+                        zoneChanges.NewRate = {
+                            ZoneId: zoneItem.ZoneId,
+                            OtherRates: getOtherRates(zoneItem)
                         };
                     }
                 }
 
-                function getOtherRates(zoneItem)
-                {
+                function getOtherRates(zoneItem) {
                     //TODO: get changed rates with current rates
-                    return zoneItem.newOtherRates;
+                    return zoneItem.NewOtherRates;
                 }
                 function setDraftRateToClose(zoneChanges, zoneItem) {
                     zoneChanges.RateChange = null;
