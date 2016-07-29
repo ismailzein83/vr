@@ -82,7 +82,7 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
 
                     var routeRuleGridPayload = {
                         loadedFromRoutingProduct: true,
-                        query: { RoutingProductId: routingProductDataItem.RoutingProductId }
+                        query: { RoutingProductId: routingProductDataItem.Entity.RoutingProductId }
                     };
 
                     return routingProductDataItem.routeRuleGridAPI.loadGrid(routeRuleGridPayload);
@@ -123,7 +123,7 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
                 dataItem.routeRuleGridAPI.onRouteRuleAdded(addedItem);
             };
 
-            WhS_Routing_RouteRuleService.addRouteRule(onRouteRuleAdded, dataItem.RoutingProductId, dataItem.SellingNumberPlanId);
+            WhS_Routing_RouteRuleService.addRouteRule(onRouteRuleAdded, dataItem.Entity.RoutingProductId, dataItem.Entity.SellingNumberPlanId);
         }
 
         function editRoutingProduct(routingProduct) {
@@ -132,17 +132,17 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
                 gridAPI.itemUpdated(updatedItem);
             };
 
-            WhS_BE_RoutingProductService.editRoutingProduct(routingProduct, onRoutingProductUpdated);
+            WhS_BE_RoutingProductService.editRoutingProduct(routingProduct.Entity.RoutingProductId, onRoutingProductUpdated);
         }
 
-        function deleteRoutingProduct(routingProduct) {
+        //function deleteRoutingProduct(routingProduct) {
 
-            var onRoutingProductDeleted = function (deletedItem) {
-                gridAPI.itemDeleted(deletedItem);
-            }
+        //    var onRoutingProductDeleted = function (deletedItem) {
+        //        gridAPI.itemDeleted(deletedItem);
+        //    }
 
-            WhS_BE_RoutingProductService.deleteRoutingProduct($scope, routingProduct, onRoutingProductDeleted);
-        }
+        //    WhS_BE_RoutingProductService.deleteRoutingProduct($scope, routingProduct, onRoutingProductDeleted);
+        //}
 
         this.initializeController = initializeController;
     }

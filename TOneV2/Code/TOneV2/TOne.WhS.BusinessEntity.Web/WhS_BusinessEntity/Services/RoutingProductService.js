@@ -21,12 +21,12 @@
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductEditor.html', null, settings);
         };
 
-        function editRoutingProduct(routingProductObj, onRoutingProductUpdated) {
+        function editRoutingProduct(routingProductId, onRoutingProductUpdated) {
             var modalSettings = {
             };
 
             var parameters = {
-                routingProductId: routingProductObj.RoutingProductId
+                routingProductId: routingProductId
             };
 
             modalSettings.onScopeReady = function (modalScope) {

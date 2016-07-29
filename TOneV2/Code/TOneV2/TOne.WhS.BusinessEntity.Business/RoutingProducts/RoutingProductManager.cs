@@ -14,7 +14,7 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         #region Public Methods
 
-        public Vanrise.Entities.IDataRetrievalResult<RoutingProduct> GetFilteredRoutingProducts(Vanrise.Entities.DataRetrievalInput<RoutingProductQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<RoutingProductDetail> GetFilteredRoutingProducts(Vanrise.Entities.DataRetrievalInput<RoutingProductQuery> input)
         {
             var allRoutingProducts = GetAllRoutingProducts();
 
@@ -23,7 +23,7 @@ namespace TOne.WhS.BusinessEntity.Business
                  &&
                  (input.Query.SellingNumberPlanIds == null || input.Query.SellingNumberPlanIds.Contains(prod.SellingNumberPlanId));
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRoutingProducts.ToBigResult(input, filterExpression));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRoutingProducts.ToBigResult(input, filterExpression, RoutingProductDetailMapper));
         }
 
         public IEnumerable<RoutingProductInfo> GetRoutingProductsInfoBySellingNumberPlan(int sellingNumberPlanId)
@@ -85,11 +85,11 @@ namespace TOne.WhS.BusinessEntity.Business
             return routingProducts.MapRecords(RoutingProductInfoMapper, filterPredicate).OrderBy(x => x.Name);
         }
 
-        public TOne.Entities.InsertOperationOutput<RoutingProduct> AddRoutingProduct(RoutingProduct routingProduct)
+        public TOne.Entities.InsertOperationOutput<RoutingProductDetail> AddRoutingProduct(RoutingProduct routingProduct)
         {
             ValidateRoutingProductToAdd(routingProduct);
 
-            TOne.Entities.InsertOperationOutput<RoutingProduct> insertOperationOutput = new TOne.Entities.InsertOperationOutput<RoutingProduct>();
+            TOne.Entities.InsertOperationOutput<RoutingProductDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<RoutingProductDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -104,7 +104,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 routingProduct.RoutingProductId = routingProductId;
-                insertOperationOutput.InsertedObject = routingProduct;
+                insertOperationOutput.InsertedObject = RoutingProductDetailMapper(routingProduct);
             }
             else
             {
@@ -114,14 +114,14 @@ namespace TOne.WhS.BusinessEntity.Business
             return insertOperationOutput;
         }
 
-        public TOne.Entities.UpdateOperationOutput<RoutingProduct> UpdateRoutingProduct(RoutingProductToEdit routingProduct)
+        public TOne.Entities.UpdateOperationOutput<RoutingProductDetail> UpdateRoutingProduct(RoutingProductToEdit routingProduct)
         {
             ValidateRoutingProductToEdit(routingProduct);
 
             IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
 
             bool updateActionSucc = dataManager.Update(routingProduct);
-            var updateOperationOutput = new TOne.Entities.UpdateOperationOutput<RoutingProduct>();
+            var updateOperationOutput = new TOne.Entities.UpdateOperationOutput<RoutingProductDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
@@ -130,7 +130,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = this.GetRoutingProduct(routingProduct.RoutingProductId);
+                updateOperationOutput.UpdatedObject = RoutingProductDetailMapper(this.GetRoutingProduct(routingProduct.RoutingProductId));
             }
             else
             {
@@ -340,6 +340,21 @@ namespace TOne.WhS.BusinessEntity.Business
             };
         }
 
+        private RoutingProductDetail RoutingProductDetailMapper(RoutingProduct routingProduct)
+        {
+            if (routingProduct == null)
+                return null;
+
+            SellingNumberPlanManager sellingNumberPlanManager = new SellingNumberPlanManager();
+            SellingNumberPlan sellingNumberPlan = sellingNumberPlanManager.GetSellingNumberPlan(routingProduct.SellingNumberPlanId);
+
+            return new RoutingProductDetail()
+            {
+                Entity = routingProduct,
+                SellingNumberPlan = sellingNumberPlan != null ? sellingNumberPlan.Name : null
+            };
+        }
+        
         #endregion
 
         #region Private Classes
