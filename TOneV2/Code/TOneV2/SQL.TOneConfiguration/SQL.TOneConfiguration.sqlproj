@@ -98,6 +98,9 @@
     <Folder Include="cloud\Tables\" />
     <Folder Include="cloud\Stored Procedures\" />
     <Folder Include="dbo\Tables\" />
+    <Folder Include="reprocess\" />
+    <Folder Include="reprocess\Tables\" />
+    <Folder Include="reprocess\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -356,6 +359,11 @@
     <Build Include="common\Stored Procedures\sp_StyleDefinition_Update.sql" />
     <Build Include="common\Stored Procedures\sp_StyleDefinition_Insert.sql" />
     <Build Include="common\Stored Procedures\sp_StyleDefinition_GetAll.sql" />
+    <Build Include="reprocess\Tables\ReprocessDefinition.sql" />
+    <Build Include="reprocess\Stored Procedures\sp_ReprocessDefinition_Update.sql" />
+    <Build Include="reprocess\Stored Procedures\sp_ReprocessDefinition_Insert.sql" />
+    <Build Include="reprocess\Stored Procedures\sp_ReprocessDefinition_GetAll.sql" />
+    <Build Include="Security\reprocess.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
