@@ -41,6 +41,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
@@ -85,6 +88,7 @@
     <Compile Include="RateManagement\RoutingProduct\Zone\ChangedSaleZoneRoutingProduct.cs" />
     <Compile Include="RateManagement\RoutingProduct\Zone\ExistingSaleZoneRoutingProduct.cs" />
     <Compile Include="RateManagement\RoutingProduct\Zone\IProcessZoneRoutingProductsContext.cs" />
+    <Compile Include="RateManagement\Zone\DataByZone.cs" />
     <Compile Include="RatePlanning\Draft\RoutingProduct\Default\DraftChangedDefaultRoutingProduct.cs" />
     <Compile Include="RatePlanning\Draft\RoutingProduct\Default\DraftNewDefaultRoutingProduct.cs" />
     <Compile Include="RateManagement\RoutingProduct\Default\ExistingDefaultRoutingProduct.cs" />
