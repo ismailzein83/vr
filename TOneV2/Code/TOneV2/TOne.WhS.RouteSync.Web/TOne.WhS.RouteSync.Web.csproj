@@ -109,6 +109,16 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Web.Base">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Web.Base.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -125,15 +135,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\SwitchRouteSynchronizerController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_RouteSync\Constant\ModuleConfig.js" />
+    <Content Include="WhS_RouteSync\Directives\SwitchRouteSynchronizer\Templates\SwitchRouteSynchronizerTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\SwitchRouteSynchronizer\whs-routesync-switchroutesynchronizer-settings.js" />
+    <Content Include="WhS_RouteSync\Services\APIServices\SwitchRouteSynchronizerAPIService.js" />
+    <Content Include="WhS_RouteSync\Services\SwitchRouteSynchronizerService.js" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="WhS_RouteSync\Directives\" />
-    <Folder Include="WhS_RouteSync\Services\APIServices\" />
+    <Folder Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\Templates\" />
     <Folder Include="WhS_RouteSync\Views\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Business\TOne.WhS.RouteSync.Business.csproj">
+      <Project>{31466bbd-3579-4033-b991-12d044564a32}</Project>
+      <Name>TOne.WhS.RouteSync.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
+      <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
+      <Name>TOne.WhS.RouteSync.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
