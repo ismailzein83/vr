@@ -72,8 +72,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessRules\RateBEDLessThanZoneBEDCondition.cs" />
-    <Compile Include="BusinessRules\RateEEDGreaterThanZoneEEDCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\RateBEDLessThanZoneBEDCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\RateEEDGreaterThanZoneEEDCondition.cs" />
     <Compile Include="Changes\GetChangesManager.cs" />
     <Compile Include="Changes\StateManager.cs" />
     <Compile Include="Constants.cs" />

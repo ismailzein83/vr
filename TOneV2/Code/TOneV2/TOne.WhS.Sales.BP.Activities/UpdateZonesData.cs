@@ -28,7 +28,7 @@ namespace TOne.WhS.Sales.BP.Activities
             {
                 List<ExistingZone> existingZones = existingZonesByZoneName[item.ZoneName];
                 item.BED = existingZones.OrderBy(x => x.BED).Min(x => x.BED);
-                item.EED = existingZones.Select(x => x.EED).VRMinimumDate();
+                item.EED = existingZones.Select(x => x.EED).VRMaximumDate();
             }
         }
 
