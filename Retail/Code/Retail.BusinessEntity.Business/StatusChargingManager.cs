@@ -13,7 +13,7 @@ namespace Retail.BusinessEntity.Business
 {
     public class StatusChargingManager
     {
-        private StatusChargingSet GetChargingSet(int chargingSetId)
+        public StatusChargingSet GetChargingSet(int chargingSetId)
         {
             throw new NotImplementedException();
         }
