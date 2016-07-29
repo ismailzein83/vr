@@ -10,9 +10,11 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_RoutingProduct_Insert]
 	@Id int out
 AS
 BEGIN
-
-	Insert into TOneWhS_BE.RoutingProduct ([Name], [SellingNumberPlanID], [Settings])
-	Values(@Name, @SellingNumberPlanID, @Settings)
+IF NOT EXISTS(SELECT 1 FROM TOneWhS_BE.RoutingProduct WHERE [Name] = @Name)
+	BEGIN
+		Insert into TOneWhS_BE.RoutingProduct ([Name], [SellingNumberPlanID], [Settings])
+		Values(@Name, @SellingNumberPlanID, @Settings)
 	
-	Set @Id = @@IDENTITY
+		Set @Id = @@IDENTITY
+	END
 END

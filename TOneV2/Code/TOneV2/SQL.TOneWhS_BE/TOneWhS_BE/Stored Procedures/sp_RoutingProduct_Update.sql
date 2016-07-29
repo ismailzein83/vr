@@ -9,9 +9,11 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_RoutingProduct_Update]
 	@Settings nvarchar(MAX)
 AS
 BEGIN
-
-	Update TOneWhS_BE.RoutingProduct
-	Set Name = @Name,
-		Settings = @Settings
-	Where ID = @ID
+IF NOT EXISTS(SELECT 1 FROM TOneWhS_BE.RoutingProduct WHERE [Name] = @Name and ID != @ID)
+	BEGIN
+		Update TOneWhS_BE.RoutingProduct Set Name = @Name, Settings = @Settings
+		Where ID = @ID
+		
+		Set @Id = @@IDENTITY
+	END
 END

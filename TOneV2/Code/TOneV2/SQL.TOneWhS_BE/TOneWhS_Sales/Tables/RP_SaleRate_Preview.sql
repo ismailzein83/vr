@@ -4,8 +4,10 @@
     [CurrentRate]            DECIMAL (9, 5) NULL,
     [IsCurrentRateInherited] BIT            NULL,
     [NewRate]                DECIMAL (9, 5) NULL,
-    [ChangeType]             INT            NULL,
+    [ChangeType]             INT            NOT NULL,
     [EffectiveOn]            DATETIME       NOT NULL,
     [EffectiveUntil]         DATETIME       NULL
 );
+
+
 

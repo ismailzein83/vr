@@ -90,6 +90,7 @@
     <Folder Include="TOneWhS_Billing\Stored Procedures\" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_BE\Tables\CarrierAccount.sql" />
@@ -329,5 +330,16 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_Deal_Update.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_Deal_Insert.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_Deal_GetAll.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_DefaultRoutingProduct_Preview.sql" />
+    <Build Include="TOneWhs_CP\Tables\SaleZone_Preview.sql" />
+    <Build Include="TOneWhs_CP\Tables\SaleCode_Preview.sql" />
+    <Build Include="dbo\Tables\DealProgress.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_NewDefaultRoutingProduct_Insert.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_DefaultRoutingProductPreview_Insert.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_DefaultRoutingProductPreview_Get.sql" />
+    <Build Include="TOneWhs_CP\Stored Procedures\sp_SaleZone_Preview_GetFiltered.sql" />
+    <Build Include="TOneWhs_CP\Stored Procedures\sp_SaleCountry_Preview_GetFiltered.sql" />
+    <Build Include="TOneWhs_CP\Stored Procedures\sp_SaleCode_Preview_GetFiltered.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_DealProgress_GetAll.sql" />
   </ItemGroup>
 </Project>

@@ -29,7 +29,8 @@ BEGIN
 			join   TOneWhS_BE.SalePriceList sp on sr.PriceListID = sp.ID
 			join  TOneWhS_BE.SaleZone sz on  sr.ZoneID = sz.ID          
             WHERE 
-                (@EffectiveOn is null or sr.BED < = @EffectiveOn)
+            (sr.EED is null or sr.BED <> sr.EED) -- Don't select deleted rates
+            and (@EffectiveOn is null or sr.BED < = @EffectiveOn)
             and (@EffectiveOn is null or sr.EED is null or sr.EED  > @EffectiveOn)
             and (@SellingNumberPlanID is null or @SellingNumberPlanID = sz.SellingNumberPlanID)
             and (@ZonesIDs  is null or sr.ZoneID in (select ZoneID from @ZonesIDsTable))
