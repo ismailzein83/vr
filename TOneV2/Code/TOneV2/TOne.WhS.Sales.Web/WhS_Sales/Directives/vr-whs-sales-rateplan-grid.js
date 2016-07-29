@@ -187,7 +187,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         zoneItem.showNewRateEED = true;
                     }
 
-                    zoneItem.onNewRateChanged = function (zoneItem) {
+                    zoneItem.setNewRateBED = function () {
                         zoneItem.IsDirty = true;
 
                         if (zoneItem.NewRate) {
@@ -209,6 +209,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             zoneItem.AreNewDatesSet = false;
                         }
                     };
+
+                    //zoneItem.onNewRateChanged = function (zoneItem) {
+                        
+                    //};
 
                     zoneItem.validateNewRate = function (zoneItem) {
                         if (zoneItem.CurrentRate) {
