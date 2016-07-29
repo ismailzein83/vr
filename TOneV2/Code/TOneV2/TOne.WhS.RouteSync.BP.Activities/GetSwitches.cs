@@ -19,10 +19,8 @@ namespace TOne.WhS.RouteSync.BP.Activities
         
         protected override void Execute(CodeActivityContext context)
         {
-            var switchInfoGetter = new ConfigurationManager().GetSwitchInfoGetter();
-            if (switchInfoGetter == null)
-                throw new NullReferenceException("switchInfoGetter");
-            List<SwitchInfo> switches = this.SwitchIds.Get(context).Select(switchId => switchInfoGetter.GetSwitchInfo(new SwitchInfoGetterContext { SwitchId = switchId })).ToList();
+            List<SwitchInfo> switches = new SwitchManager().GetSwitches(this.SwitchIds.Get(context));
+            this.Switches.Set(context, switches);
         }
     }
 }

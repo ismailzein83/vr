@@ -20,5 +20,9 @@ namespace TOne.WhS.RouteSync.BP.Arguments
         public RouteRangeType RangeType { get; set; }
 
         public RouteRangeInfo RangeInfo { get; set; }
+
+        public Dictionary<string, SwitchRouteSyncInitializationData> SwitchesInitializationData { get; set; }
+
+        public Guid? SwitchesInitializationDataId { get; set; }
     }
 }

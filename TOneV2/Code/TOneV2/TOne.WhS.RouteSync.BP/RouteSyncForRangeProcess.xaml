@@ -1,28 +1,110 @@
-﻿<Activity x:Class="TOne.WhS.RouteSync.BP.RouteSyncForRangeProcess" 
-          xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" 
-          mc:Ignorable="sap2010"
-          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-          sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#"
-          xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
-          xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"   
-          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"> 
-    <TextExpression.NamespacesForImplementation>
-        <sco:Collection x:TypeArguments="x:String">
-            <x:String>System</x:String>
-            <x:String>System.Collections.Generic</x:String>
-            <x:String>System.Data</x:String>
-            <x:String>System.Linq</x:String>
-            <x:String>System.Text</x:String>
-        </sco:Collection>
-    </TextExpression.NamespacesForImplementation>
-    <TextExpression.ReferencesForImplementation>
-        <sco:Collection x:TypeArguments="AssemblyReference">
-            <AssemblyReference>mscorlib</AssemblyReference>
-            <AssemblyReference>System</AssemblyReference>
-            <AssemblyReference>System.Core</AssemblyReference>
-            <AssemblyReference>System.Data</AssemblyReference>
-            <AssemblyReference>System.ServiceModel</AssemblyReference>
-            <AssemblyReference>System.Xml</AssemblyReference>
-        </sco:Collection>
-    </TextExpression.ReferencesForImplementation>
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.RouteSync.BP.RouteSyncForRangeProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:twrba="clr-namespace:TOne.WhS.RouteSync.BP.Arguments;assembly=TOne.WhS.RouteSync.BP.Arguments"
+ xmlns:twrba1="clr-namespace:TOne.WhS.RouteSync.BP.Activities;assembly=TOne.WhS.RouteSync.BP.Activities"
+ xmlns:twre="clr-namespace:TOne.WhS.RouteSync.Entities;assembly=TOne.WhS.RouteSync.Entities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(twrba:RouteSyncForRangeProcessInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.WhS.RouteSync.BP.RouteSyncForRangeProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>TOne.WhS.RouteSync.BP</x:String>
+      <x:String>TOne.WhS.RouteSync.BP.Arguments</x:String>
+      <x:String>TOne.WhS.RouteSync.Entities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="scg:List(twrba1:SwitchInProcess)" Name="switchesInProcess" />
+      <Variable x:TypeArguments="twre:RouteSyncDefinition" Name="routeSyncDefinition" />
+    </Sequence.Variables>
+    <twrba1:GetRouteSyncDefinition sap2010:WorkflowViewState.IdRef="GetRouteSyncDefinition_1">
+      <twrba1:GetRouteSyncDefinition.RouteSyncDefinition>
+        <OutArgument x:TypeArguments="twre:RouteSyncDefinition">
+          <mca:CSharpReference x:TypeArguments="twre:RouteSyncDefinition">routeSyncDefinition</mca:CSharpReference>
+        </OutArgument>
+      </twrba1:GetRouteSyncDefinition.RouteSyncDefinition>
+      <twrba1:GetRouteSyncDefinition.RouteSyncDefinitionId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.RouteSyncDefinitionId</mca:CSharpValue>
+        </InArgument>
+      </twrba1:GetRouteSyncDefinition.RouteSyncDefinitionId>
+    </twrba1:GetRouteSyncDefinition>
+    <twrba1:LoadSwitchesInProcess sap2010:WorkflowViewState.IdRef="LoadSwitchesInProcess_1">
+      <twrba1:LoadSwitchesInProcess.SwitchIds>
+        <InArgument x:TypeArguments="scg:List(x:String)">
+          <mca:CSharpValue x:TypeArguments="scg:List(x:String)">routeSyncDefinition.Settings.SwitchIds</mca:CSharpValue>
+        </InArgument>
+      </twrba1:LoadSwitchesInProcess.SwitchIds>
+      <twrba1:LoadSwitchesInProcess.SwitchesInProcess>
+        <OutArgument x:TypeArguments="scg:List(twrba1:SwitchInProcess)">
+          <mca:CSharpReference x:TypeArguments="scg:List(twrba1:SwitchInProcess)">switchesInProcess</mca:CSharpReference>
+        </OutArgument>
+      </twrba1:LoadSwitchesInProcess.SwitchesInProcess>
+      <twrba1:LoadSwitchesInProcess.SwitchesInitializationData>
+        <InArgument x:TypeArguments="scg:Dictionary(x:String, twre:SwitchRouteSyncInitializationData)">
+          <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, twre:SwitchRouteSyncInitializationData)">Input.SwitchesInitializationData</mca:CSharpValue>
+        </InArgument>
+      </twrba1:LoadSwitchesInProcess.SwitchesInitializationData>
+      <twrba1:LoadSwitchesInProcess.SwitchesInitializationDataId>
+        <InArgument x:TypeArguments="s:Nullable(s:Guid)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(s:Guid)">Input.SwitchesInitializationDataId</mca:CSharpValue>
+        </InArgument>
+      </twrba1:LoadSwitchesInProcess.SwitchesInitializationDataId>
+    </twrba1:LoadSwitchesInProcess>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRlU3luYy5CUFxSb3V0ZVN5bmNGb3JSYW5nZVByb2Nlc3MueGFtbAk3A18OAgEBPAVHJQIBE0gFXSQCAQI/Cz90AgEYRAtEYwIBFFULVaEBAgEPUAtQegIBC0sLS3kCAQdaC1p1AgED</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="GetRouteSyncDefinition_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="LoadSwitchesInProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="222,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.RouteSync.BP.RouteSyncForRangeProcess_1" sap:VirtualizedContainerService.HintSize="262,288" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

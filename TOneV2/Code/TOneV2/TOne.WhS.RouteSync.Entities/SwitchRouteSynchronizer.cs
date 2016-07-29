@@ -21,13 +21,16 @@ namespace TOne.WhS.RouteSync.Entities
 
     public enum RouteSyncDeliveryMethod { Batches = 0, AllRoutes = 1 }
 
+    public abstract class SwitchRouteSyncInitializationData
+    {
+        public abstract RouteSyncDeliveryMethod SupportedDeliveryMethod { get; }
+    }
+
     public interface ISwitchRouteSynchronizerInitializeContext
     {
         RouteRangeType? RouteRangeType { get; }
 
-        Object InitializationData { set; }
-
-        RouteSyncDeliveryMethod SupportedDeliveryMethod { set; }
+        SwitchRouteSyncInitializationData InitializationData { set; }
     }
     
     public interface ISwitchRouteSynchronizerConvertRoutesContext
@@ -36,7 +39,7 @@ namespace TOne.WhS.RouteSync.Entities
 
         RouteRangeInfo RouteRangeInfo { get; }
 
-        Object InitializationData { get; }
+        SwitchRouteSyncInitializationData InitializationData { get; }
 
         List<Route> Routes { get; }
 
@@ -49,7 +52,7 @@ namespace TOne.WhS.RouteSync.Entities
 
         RouteRangeInfo RouteRangeInfo { get; }
 
-        Object InitializationData { get; }
+        SwitchRouteSyncInitializationData InitializationData { get; }
         
         List<Object> ConvertedRoutes { get; }
     }
@@ -58,6 +61,6 @@ namespace TOne.WhS.RouteSync.Entities
     {
         RouteRangeType? RouteRangeType { get; }
 
-        Object InitializationData { get; }
+        SwitchRouteSyncInitializationData InitializationData { get; }
     }
 }

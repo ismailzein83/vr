@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.RouteSync.Entities;
+using Vanrise.Queueing;
 
 namespace TOne.WhS.RouteSync.BP.Activities
 {
@@ -11,8 +12,8 @@ namespace TOne.WhS.RouteSync.BP.Activities
     {
         public SwitchInfo Switch { get; set; }
 
-        public Object InitializationData { get; set; }
+        public SwitchRouteSyncInitializationData InitializationData { get; set; }
 
-        public RouteSyncDeliveryMethod SupportedDeliveryMethod { get; set; }
+        public BaseQueue<RouteBatch> RouteQueue { get; set; }
     }
 }

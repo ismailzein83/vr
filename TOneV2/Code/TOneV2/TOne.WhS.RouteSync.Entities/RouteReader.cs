@@ -37,11 +37,11 @@ namespace TOne.WhS.RouteSync.Entities
 
         RouteRangeInfo RouteRangeInfo { get; }
 
-        void OnRouteReceived(Route route, RouteReceivedAdditionInfo additionalInfo);
+        void OnRouteReceived(Route route, RouteReceivedContext context);
     }
 
-    public class RouteReceivedAdditionInfo
+    public class RouteReceivedContext
     {
-
+        public bool IsLastRoute { get; set; }
     }
 }

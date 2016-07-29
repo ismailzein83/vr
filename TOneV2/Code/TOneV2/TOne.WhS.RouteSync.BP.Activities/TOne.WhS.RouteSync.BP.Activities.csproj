@@ -47,13 +47,22 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Vanrise.BusinessProcess">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FinalizeSwitchRouteSync.cs" />
     <Compile Include="GetRouteReadRanges.cs" />
     <Compile Include="GetRouteSyncDefinition.cs" />
     <Compile Include="GetSwitches.cs" />
     <Compile Include="InitializeSwitchRouteSync.cs" />
+    <Compile Include="LoadSwitchesInProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadRoutes.cs" />
     <Compile Include="SwitchInProcess.cs" />
   </ItemGroup>
   <ItemGroup>

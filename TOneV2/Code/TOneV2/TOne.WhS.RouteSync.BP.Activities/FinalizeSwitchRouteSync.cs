@@ -8,7 +8,7 @@ using TOne.WhS.RouteSync.Entities;
 namespace TOne.WhS.RouteSync.BP.Activities
 {
 
-    public sealed class InitializeSwitchRouteSync : CodeActivity
+    public sealed class FinalizeSwitchRouteSync : CodeActivity
     {
         [RequiredArgument]
         public InArgument<SwitchInfo> Switch { get; set; }
@@ -17,18 +17,17 @@ namespace TOne.WhS.RouteSync.BP.Activities
         public InArgument<RouteRangeType?> RouteRangeType { get; set; }
 
         [RequiredArgument]
-        public OutArgument<SwitchRouteSyncInitializationData> InitializationData { get; set; }
-        
+        public InArgument<SwitchRouteSyncInitializationData> InitializationData { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
-            var switchRouteSynchronizerInitializeContext = new SwitchRouteSynchronizerInitializeContext { RouteRangeType = this.RouteRangeType.Get(context) };
-            this.Switch.Get(context).RouteSynchronizer.Initialize(switchRouteSynchronizerInitializeContext);
-            this.InitializationData.Set(context, switchRouteSynchronizerInitializeContext.InitializationData);
+            var switchRouteSynchronizerFinalizeContext = new SwitchRouteSynchronizerFinalizeContext { RouteRangeType = this.RouteRangeType.Get(context), InitializationData = this.InitializationData.Get(context) };
+            this.Switch.Get(context).RouteSynchronizer.Finalize(switchRouteSynchronizerFinalizeContext);
         }
 
         #region Private Classes
 
-        private class SwitchRouteSynchronizerInitializeContext : ISwitchRouteSynchronizerInitializeContext
+        private class SwitchRouteSynchronizerFinalizeContext : ISwitchRouteSynchronizerFinalizeContext
         {
             public RouteRangeType? RouteRangeType
             {
