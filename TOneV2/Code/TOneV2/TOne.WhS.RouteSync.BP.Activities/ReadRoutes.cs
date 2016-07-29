@@ -56,31 +56,42 @@ namespace TOne.WhS.RouteSync.BP.Activities
         protected override ReadRoutesOutput DoWorkWithResult(ReadRoutesInput inputArgument, AsyncActivityHandle handle)
         {
             int deliverRoutesBatchSize = 1000;
-            Action<Route, RouteReceivedContext> onRouteReceived = BuildOnRouteReceivedAction(deliverRoutesBatchSize, inputArgument.SwitchesInProcess);
+            List<SwitchRouteDelivery> switchesRouteDelivery = BuildSwitchesRouteDelivery(inputArgument.SwitchesInProcess);
+            Action<Route, RouteReceivedContext> onRouteReceived = BuildOnRouteReceivedAction(deliverRoutesBatchSize, switchesRouteDelivery);
             RouteReaderContext routeReaderContext = new RouteReaderContext(onRouteReceived);
             routeReaderContext.RouteRangeInfo = inputArgument.RangeInfo;
             routeReaderContext.RouteRangeType = inputArgument.RangeType;
             inputArgument.RouteReader.ReadRoutes(routeReaderContext);
+
+            foreach (var switchRouteDelivery in switchesRouteDelivery)
+            {
+                if (switchRouteDelivery.PendingRoutes.Count > 0)
+                {
+                    switchRouteDelivery.SwitchInProcess.RouteQueue.Enqueue(new RouteBatch { Routes = switchRouteDelivery.PendingRoutes });
+                }
+            }
+
             return new ReadRoutesOutput { };
         }
 
-        private Action<Route, RouteReceivedContext> BuildOnRouteReceivedAction(int deliverRoutesBatchSize, List<SwitchInProcess> switchesInProcess)
+        private List<SwitchRouteDelivery> BuildSwitchesRouteDelivery(List<SwitchInProcess> switchesInProcess)
         {
-            List<SwitchRouteDelivery> switchesRouteDelivery = switchesInProcess.Select(sw => new SwitchRouteDelivery
+            return switchesInProcess.Select(sw => new SwitchRouteDelivery
             {
                 SwitchInProcess = sw,
                 PendingRoutes = new List<Route>(),
                 DeliverRoutesInBatches = (sw.InitializationData == null || sw.InitializationData.SupportedDeliveryMethod == RouteSyncDeliveryMethod.Batches)
             }).ToList();
+        }
 
+        private Action<Route, RouteReceivedContext> BuildOnRouteReceivedAction(int deliverRoutesBatchSize, List<SwitchRouteDelivery> switchesRouteDelivery)
+        {
             Action<Route, RouteReceivedContext> onRouteReceived = (route, routeReceivedContext) =>
             {
                 foreach (var switchRouteDelivery in switchesRouteDelivery)
                 {
                     switchRouteDelivery.PendingRoutes.Add(route);
-                    int pendingRoutesCount = switchRouteDelivery.PendingRoutes.Count;
-                    if ((switchRouteDelivery.DeliverRoutesInBatches && pendingRoutesCount >= deliverRoutesBatchSize)
-                        || routeReceivedContext.IsLastRoute)
+                    if ((switchRouteDelivery.DeliverRoutesInBatches && switchRouteDelivery.PendingRoutes.Count >= deliverRoutesBatchSize))
                     {
                         switchRouteDelivery.SwitchInProcess.RouteQueue.Enqueue(new RouteBatch { Routes = switchRouteDelivery.PendingRoutes });
                         switchRouteDelivery.PendingRoutes = new List<Route>();

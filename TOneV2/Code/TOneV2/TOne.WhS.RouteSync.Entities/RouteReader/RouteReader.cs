@@ -42,6 +42,5 @@ namespace TOne.WhS.RouteSync.Entities
 
     public class RouteReceivedContext
     {
-        public bool IsLastRoute { get; set; }
     }
 }

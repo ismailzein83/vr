@@ -59,11 +59,13 @@
     <Compile Include="RouteEntities\ConvertedRoute.cs" />
     <Compile Include="RouteEntities\ConvertedRouteBatch.cs" />
     <Compile Include="RouteEntities\RouteBatch.cs" />
+    <Compile Include="RouteReader\RouteReaderConfig.cs" />
+    <Compile Include="RouteSyncTechnicalSettings.cs" />
     <Compile Include="Switch\SwitchInfoGetter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteEntities\Route.cs" />
     <Compile Include="RouteEntities\RouteOption.cs" />
-    <Compile Include="RouteReader.cs" />
+    <Compile Include="RouteReader\RouteReader.cs" />
     <Compile Include="RouteSyncBP\RouteSyncBPConfig.cs" />
     <Compile Include="RouteSyncBP\RouteSyncBPDefinitionSettings.cs" />
     <Compile Include="RouteSyncBP\RouteSyncBPInputArgument.cs" />

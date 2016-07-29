@@ -13,5 +13,7 @@ namespace TOne.WhS.Routing.Data
         void ApplyCustomerRouteForDB(object preparedCustomerRoute);
 
         Vanrise.Entities.BigResult<Entities.CustomerRoute> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<Entities.CustomerRouteQuery> input);
+
+        void LoadRoutes(int? customerId, string codePrefix, Action<CustomerRoute> onRouteLoaded);
     }
 }

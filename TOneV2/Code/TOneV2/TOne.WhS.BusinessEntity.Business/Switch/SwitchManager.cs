@@ -32,6 +32,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return switchs.GetRecord(switchId);
         }
 
+        public List<Switch> GetAllSwitches()
+        {
+            var cachedSwitches = GetCachedSwitches();
+            return cachedSwitches != null ? cachedSwitches.Values.ToList() : null;
+        }
+
         public IEnumerable<SwitchInfo> GetSwitchesInfo()
         {
             return GetCachedSwitches().MapRecords(SwitchInfoMapper).OrderBy(x => x.Name);

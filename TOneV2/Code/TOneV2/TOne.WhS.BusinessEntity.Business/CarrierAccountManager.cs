@@ -277,7 +277,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public List<CarrierAccount> GetAllSuppliers()
         {
-            throw new NotImplementedException();
+            return GetAllCarriers().FindAllRecords(ca => IsSupplier(ca.AccountType)).ToList();
+        }
+
+        public List<CarrierAccount> GetAllCustomers()
+        {
+            return GetAllCarriers().FindAllRecords(ca => IsCustomer(ca.AccountType)).ToList();
         }
 
         public List<CarrierAccount> GetSuppliers(IEnumerable<int> suppliersIds)

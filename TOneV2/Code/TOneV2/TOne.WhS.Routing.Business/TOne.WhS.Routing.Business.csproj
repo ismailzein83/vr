@@ -79,6 +79,7 @@
     <Compile Include="CodeMatchBuilder.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CustomerRouteManager.cs" />
+    <Compile Include="Extensions\RouteSyncReader.cs" />
     <Compile Include="RouteRules\Filters\RateOptionFilter.cs" />
     <Compile Include="RouteRules\OptionSettingsGroups\ExcludedOptions.cs" />
     <Compile Include="TrafficStatsQualityMeasure\TrafficStatsQualityMeasureManager.cs" />
@@ -121,6 +122,10 @@
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
+      <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
+      <Name>TOne.WhS.RouteSync.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Routing.Data\TOne.WhS.Routing.Data.csproj">
       <Project>{ad5a00af-b674-4f57-a5c1-85f78a351928}</Project>

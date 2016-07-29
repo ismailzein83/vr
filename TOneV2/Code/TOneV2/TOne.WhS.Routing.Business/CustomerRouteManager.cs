@@ -96,5 +96,17 @@ namespace TOne.WhS.Routing.Business
 
             return routeOptions;
         }
+
+        internal void LoadRoutesFromCurrentDB(int? customerId, string codePrefix, Action<CustomerRoute> onRouteLoaded)
+        {
+            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
+            var routingDatabases = routingDatabaseManager.GetRoutingDatabases(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
+            if(routingDatabases != null && routingDatabases.Count() > 0)
+            {
+                ICustomerRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
+                dataManager.RoutingDatabase = routingDatabases.OrderByDescending(itm => itm.CreatedTime).First();
+                dataManager.LoadRoutes(customerId, codePrefix, onRouteLoaded);
+            }
+        }
     }
 }

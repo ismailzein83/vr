@@ -69,6 +69,38 @@ namespace TOne.WhS.Routing.Data.SQL
             return RetrieveData(input, createTempTableAction, CustomerRouteMapper);
         }
 
+
+        public void LoadRoutes(int? customerId, string codePrefix, Action<CustomerRoute> onRouteLoaded)
+        {
+            StringBuilder queryBuilder = new StringBuilder(query_LoadCustomerRoutes);
+            List<string> filters = new List<string>();
+            if (customerId.HasValue)
+                filters.Add("[CustomerID] = @CustomerID");
+            if(!String.IsNullOrEmpty(codePrefix))
+                filters.Add(String.Format("[Code] like '{0}%'", codePrefix));
+            if(filters.Count > 0)
+            {
+                queryBuilder.Replace("#FILTER#", String.Format("WHERE {0}", String.Join(" AND ", filters)));
+            }
+            else
+            {
+                queryBuilder.Replace("#FILTER#", "");
+            }
+            ExecuteReaderText(queryBuilder.ToString(),
+                (reader) =>
+                {
+                    while(reader.Read())
+                    {
+                        onRouteLoaded(CustomerRouteMapper(reader));
+                    }
+                },
+                (cmd) =>
+                {
+                    if (customerId.HasValue)
+                        cmd.Parameters.Add(new SqlParameter("@CustomerID", customerId.Value));
+                });
+        }
+
         private CustomerRoute CustomerRouteMapper(IDataReader reader)
         {
             return new CustomerRoute()
@@ -99,6 +131,18 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                 #CUSTOMERIDS#
                                                             END");
 
+        const string query_LoadCustomerRoutes = @"SELECT [CustomerID]
+                                                                ,[Code]
+                                                                ,[SaleZoneID]
+                                                                ,[Rate]
+                                                                ,[IsBlocked]
+                                                                ,[ExecutedRuleId]
+                                                                ,[RouteOptions]
+                                                  FROM [dbo].[CustomerRoute] with(nolock)
+                                                    #FILTER#";
+
         #endregion
+
+
     }
 }
