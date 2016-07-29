@@ -19,7 +19,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class DealProgressDetail
     {
         public DealProgress Entity { get; set; }
-        public float Completation { get; set; }
+        public float Completion { get; set; }
         public float BelowAbove { get; set; }
     }
 

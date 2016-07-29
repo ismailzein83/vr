@@ -13,6 +13,13 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DealSettings Settings { get; set; }
     }
 
+    public class DealInfo
+    {
+        public int DealId { get; set; }
+
+        public string Description { get; set; }
+    }
+
     public enum DealContractType { BalancedAmount = 0, BalancedDuration = 1, UnBalanced = 2 }
 
     public enum DealAgreementType { Gentlemen = 0, Commitment = 1 }

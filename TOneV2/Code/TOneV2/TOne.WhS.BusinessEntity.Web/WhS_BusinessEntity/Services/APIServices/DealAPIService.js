@@ -16,6 +16,7 @@
                 dealId: dealId
             });
         }
+
         function GetDealsInfo() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetDealsInfo'));
         }

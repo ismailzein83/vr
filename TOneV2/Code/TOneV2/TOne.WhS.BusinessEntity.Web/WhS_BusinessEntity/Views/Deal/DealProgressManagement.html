@@ -2,7 +2,10 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
             <vr-row removeline>
+                <vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountSelectorReady" normal-col-num="2" ismultipleselection="true" isrequired="true"></vr-whs-be-carrieraccount-selector>
+                <vr-whs-be-deal-selector on-ready="onDealSelectorReady" normal-col-num="2" ismultipleselection="true" isrequired="true"></vr-whs-be-deal-selector>
                 <vr-timerange on-ready="onTimeRangeDirectiveReady" type="date" width="normal" period="selectedPeriod" from="fromDate" to="toDate" isrequired="true"></vr-timerange>
+
             </vr-row>
         </div>
         <vr-row removeline>
@@ -12,15 +15,10 @@
                 </div>
             </vr-actionbar>
         </vr-row>
-        <vr-row>
+        <vr-row ng-show="showData">
             <vr-columns width="1/2row">
                 <vr-section title="Selling">
-                    <vr-chart on-ready="onSellingGridReady"
-                              datasource="dataSourceSelling"
-                              dataretrievalfunction="dataRetrievalFunction"
-                              pagingtype="'PagingOnScroll'"
-                              idfield="Entity.DealProgressId">
-                    </vr-chart>
+                    <vr-chart on-ready="onSellingChartReady"></vr-chart>
                     <vr-datagrid on-ready="onSellingGridReady"
                                  datasource="dataSourceSelling"
                                  dataretrievalfunction="dataRetrievalFunction"
@@ -31,20 +29,15 @@
                         <vr-datagridcolumn headertext="'Reached Duration'" field="'Entity.ReachedDuration'" type="'Number'"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Estimated Amount'" field="'Entity.EstimatedAmount'" type="'Number'"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Reached Amount'" field="'Entity.ReachedAmount'" type="'Reached'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'%Completation'" field="'Completation'" type="'Reached'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Below/Above'" field="'BelowAbove'" type="'Reached'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'% Completion'" field="'Completion'" type="'Reached'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Below / Above'" field="'BelowAbove'" type="'Reached'"></vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-section>
 
             </vr-columns>
             <vr-columns width="1/2row">
                 <vr-section title="Buying">
-                    <vr-chart on-ready="onSellingGridReady"
-                              datasource="dataSourceSelling"
-                              dataretrievalfunction="dataRetrievalFunction"
-                              pagingtype="'PagingOnScroll'"
-                              idfield="Entity.DealProgressId">
-                    </vr-chart>
+                    <vr-chart on-ready="onBuyingChartReady"></vr-chart>
                     <vr-datagrid on-ready="onBuyingGridReady"
                                  datasource="dataSourceBuying"
                                  dataretrievalfunction="dataRetrievalFunction"
@@ -56,8 +49,8 @@
                         <vr-datagridcolumn headertext="'Reached Duration'" field="'Entity.ReachedDuration'" type="'Number'"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Estimated Amount'" field="'Entity.EstimatedAmount'" type="'Number'"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Reached Amount'" field="'Entity.ReachedAmount'" type="'Reached'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'%Completation'" field="'Completation'" type="'Reached'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Below/Above'" field="'BelowAbove'" type="'Reached'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'% Completion'" field="'Completion'" type="'Reached'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Below / Above'" field="'BelowAbove'" type="'Reached'"></vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-section>
             </vr-columns>

@@ -227,6 +227,7 @@
     <Content Include="WhS_BusinessEntity\Directives\Deal\Templates\DealBuyingGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Deal\Templates\DealGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Deal\Templates\DealSellingGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Deal\vr-whs-be-deal-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\Deal\vr-whs-be-dealbuying-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Deal\vr-whs-be-dealselling-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Deal\vr-whs-be-deal-grid.js" />

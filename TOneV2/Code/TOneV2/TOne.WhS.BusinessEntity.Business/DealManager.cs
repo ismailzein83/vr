@@ -33,6 +33,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, DealDetailMapper));
         }
 
+        public IEnumerable<DealInfo> GetDealsInfo()
+        {
+            return GetCachedDeals().MapRecords(DealInfoMapper);
+
+        }
+
         public Deal GetDeal(int dealId)
         {
             Dictionary<int, Deal> cachedEntities = this.GetCachedDeals();
@@ -131,6 +137,15 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 Entity = deal,
                 CarrierAccountName = _carrierAccountManager.GetCarrierAccountName(deal.Settings.CarrierAccountId)
+            };
+        }
+
+        DealInfo DealInfoMapper(Deal deal)
+        {
+            return new DealInfo()
+            {
+                DealId = deal.DealId,
+                Description = deal.Settings.Description
             };
         }
         #endregion

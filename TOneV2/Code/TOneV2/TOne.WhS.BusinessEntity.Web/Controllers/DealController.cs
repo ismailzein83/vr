@@ -23,6 +23,12 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetDealsInfo")]
+        public IEnumerable<DealInfo> GetDealsInfo()
+        {
+            return _manager.GetDealsInfo();
+        }
+        [HttpGet]
         [Route("GetDeal")]
         public Deal GetDeal(int dealId)
         {
