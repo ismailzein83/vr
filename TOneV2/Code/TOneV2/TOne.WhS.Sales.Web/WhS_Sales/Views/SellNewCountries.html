@@ -1,18 +1,20 @@
-﻿<div vr-modalcontent ng-controller="WhS_Sales_SellNewCountriesController" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="WhS_Sales_SellNewCountriesController" vr-loader="isLoading">
     <vr-modalbody>
         <vr-form name="formSellNewCountries">
             <vr-row>
-                <vr-columns width="fullrow">
-                    <vr-datagrid on-ready="onCountryGridReady"
-                                 datasource="countries"
-                                 idfield="CountryId"
-                                 maxheight="500px"
-                                 hidegridmenu>
-                        <vr-datagridcolumn headertext="'Select'" field="'CountryId'" widthfactor="3" disablesorting>
-                            <vr-check value="dataItem.isSelected" onvaluechanged="viewScope.onCountryCheckChanged"></vr-check>
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'" disablesorting></vr-datagridcolumn>
-                    </vr-datagrid>
+                <vr-columns width="fullrow" validationcontext="CountryGroup">
+                    <vr-validator validate="validateSelection()">
+                        <vr-datagrid on-ready="onCountryGridReady"
+                                     datasource="countries"
+                                     idfield="CountryId"
+                                     maxheight="500px"
+                                     hidegridmenu>
+                            <vr-datagridcolumn headertext="'Select'" field="'CountryId'" widthfactor="3" disablesorting>
+                                <vr-check value="dataItem.isSelected"></vr-check>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'" disablesorting></vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-validator>
                 </vr-columns>
             </vr-row>
         </vr-form>
@@ -20,10 +22,8 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="SelectAll" formname="formSellNewCountries" data-onclick="selectAllCountries" ng-hide="showInfo"></vr-button>
-                <span vr-disabled="disableSaveButton">
-                    <vr-button type="Save" formname="formSellNewCountries" data-onclick="sellNewCountries"></vr-button>
-                </span>
+                <vr-button type="SelectAll" data-onclick="selectAllCountries"></vr-button>
+                <vr-button type="Save" formname="formSellNewCountries" data-onclick="sellNewCountries" validationcontext="CountryGroup"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>

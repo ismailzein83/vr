@@ -24,26 +24,16 @@
             }
         }
         function defineScope() {
-            $scope.scopeModel = {};
             $scope.title = "Sell New Countries";
-            $scope.showInfo = false;
 
             $scope.countries = [];
-            $scope.disableSaveButton = true;
-
+            
             $scope.onCountryGridReady = function (api) {
                 countryGridReadyDeferred.resolve();
             };
 
-            $scope.onCountryCheckChanged = function () {
-                var country = UtilsService.getItemByVal($scope.countries, true, "isSelected");
-                $scope.disableSaveButton = (country == undefined); // disable the add button if no country is selected
-            };
-
             $scope.selectAllCountries = function () {
                 allCountriesSelected = !allCountriesSelected;
-                $scope.disableSaveButton = !allCountriesSelected;
-
                 for (var i = 0; i < $scope.countries.length; i++) {
                     $scope.countries[i].isSelected = allCountriesSelected;
                 }
@@ -65,12 +55,19 @@
                 });
             };
 
+            $scope.validateSelection = function () {
+                var country = UtilsService.getItemByVal($scope.countries, true, "isSelected");
+                if (country != undefined)
+                    return null;
+                return 'No countries selected';
+            };
+
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
         }
         function load() {
-            $scope.scopeModel.isLoading = true;
+            $scope.isLoading = true;
             loadAllControls();
         }
 
@@ -78,7 +75,7 @@
             return UtilsService.waitMultipleAsyncOperations([loadCountryGrid]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
-                $scope.scopeModel.isLoading = false;
+                $scope.isLoading = false;
             });
         }
         function loadCountryGrid() {

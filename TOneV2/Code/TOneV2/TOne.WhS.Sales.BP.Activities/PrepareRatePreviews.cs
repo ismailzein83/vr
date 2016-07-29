@@ -102,25 +102,27 @@ namespace TOne.WhS.Sales.BP.Activities
 
                 // Set the properties of the current rate
 
-                if (rateToChange.RecentExistingRate != null)
+                if (ownerType == SalePriceListOwnerType.SellingProduct)
                 {
-                    ratePreview.CurrentRate = rateToChange.RecentExistingRate.RateEntity.NormalRate;
-                    ratePreview.IsCurrentRateInherited = false;
+                    SaleEntityZoneRate currentRate = rateLocator.GetSellingProductZoneRate(ownerId, rateToChange.ZoneId);
+                    if (currentRate != null)
+                    {
+                        ratePreview.CurrentRate = currentRate.Rate.NormalRate;
+                        ratePreview.IsCurrentRateInherited = false;
+                    }
                 }
-                else if (ownerType == SalePriceListOwnerType.Customer) // Check if an inherited rate exists
+                else if (ownerType == SalePriceListOwnerType.Customer)
                 {
                     int? sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(ownerId, rateToChange.BED, false);
                     if (!sellingProductId.HasValue)
                         throw new NullReferenceException("sellingProductId");
 
-                    SaleEntityZoneRate rate = rateLocator.GetCustomerZoneRate(ownerId, sellingProductId.Value, rateToChange.ZoneId);
-                    if (rate != null)
+                    SaleEntityZoneRate currentRate = rateLocator.GetCustomerZoneRate(ownerId, sellingProductId.Value, rateToChange.ZoneId);
+                    if (currentRate != null)
                     {
-                        ratePreview.CurrentRate = rate.Rate.NormalRate;
-                        ratePreview.IsCurrentRateInherited = true;
+                        ratePreview.CurrentRate = currentRate.Rate.NormalRate;
+                        ratePreview.IsCurrentRateInherited = (currentRate.Source != SalePriceListOwnerType.Customer);
                     }
-                    else
-                        ratePreview.IsCurrentRateInherited = false;
                 }
 
                 ratePreviews.Add(ratePreview);

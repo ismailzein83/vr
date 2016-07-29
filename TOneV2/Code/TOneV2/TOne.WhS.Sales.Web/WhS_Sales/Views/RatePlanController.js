@@ -393,9 +393,9 @@
                     loadGridDeferred.resolve();
 
                     if (ownerTypeValue == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value)
-                        VRNotificationService.showInformation('No zones are assigned to this selling product');
+                        VRNotificationService.showInformation('No effective zones exist for this selling product');
                     else
-                        VRNotificationService.showInformation("Customer, or selling product, is not associated with zones");
+                        VRNotificationService.showInformation("No countries are sold to this customer or no effective zones exist for its assigned selling product");
                 }
             });
 
