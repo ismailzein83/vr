@@ -95,7 +95,7 @@ namespace Vanrise.GenericData.QueueActivators
             throw new NotImplementedException();
         }
 
-        List<string> Reprocess.Entities.IReprocessStageActivator.GetOutputStages()
+        List<string> Reprocess.Entities.IReprocessStageActivator.GetOutputStages(List<string> stageNames)
         {
             return null;
         }

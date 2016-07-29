@@ -333,6 +333,63 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         }
 
+        public void GetDataRecords(DateTime from, DateTime to, Action<dynamic> onItemReady)
+        {
+            var recortTypeManager = new DataRecordTypeManager();
+            var recordRuntimeType = recortTypeManager.GetDataRecordRuntimeType(_dataRecordStorage.DataRecordTypeId);
+            if (recordRuntimeType == null)
+                throw new NullReferenceException(String.Format("recordRuntimeType '{0}'", _dataRecordStorage.DataRecordTypeId));
+
+            string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
+            string tableName = GetTableName();
+
+            Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
+
+
+            string query = string.Format(@"select  * from {0} WITH (NOLOCK)
+                                           where ({1} >= @FromTime) 
+                                           and ({1} < @ToTime)", tableName, dateTimeColumn);
+            ExecuteReaderText(query, (reader) =>
+            {
+                while (reader.Read())
+                {
+                    dynamic item = Activator.CreateInstance(recordRuntimeType) as dynamic;
+                    this.DynamicManager.FillDataRecordFromReader(item, reader);
+                    onItemReady(item);
+                }
+            }, (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@FromTime", from));
+                cmd.Parameters.Add(new SqlParameter("@ToTime", to));
+                foreach (var prm in parameterValues)
+                {
+                    cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
+                }
+            });
+        }
+
+        public void DeleteRecords(DateTime from, DateTime to)
+        {
+            string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
+            string tableName = GetTableName();
+            Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
+
+            string query = string.Format(@"delete from {0}
+                                           where ({1} >= @FromTime) 
+                                           and ({1} < @ToTime)", tableName, dateTimeColumn);
+
+
+            ExecuteNonQueryText(query, (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@FromTime", from));
+                cmd.Parameters.Add(new SqlParameter("@ToTime", to));
+                foreach (var prm in parameterValues)
+                {
+                    cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
+                }
+            });
+        }
+
         private string BuildQuery(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, string recordFilter)
         {
             string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);

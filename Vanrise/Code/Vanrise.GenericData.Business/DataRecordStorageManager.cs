@@ -35,7 +35,7 @@ namespace Vanrise.GenericData.Business
                 throw new NullReferenceException("input.Query.Columns");
 
             input.Query.Columns = new HashSet<string>(input.Query.Columns).ToList();
-          
+
             var recordTypeManager = new DataRecordTypeManager();
             DataRecordType recordType = recordTypeManager.GetDataRecordType(dataRecordStorage.DataRecordTypeId);
             if (recordType == null)
@@ -43,7 +43,7 @@ namespace Vanrise.GenericData.Business
             if (recordType.Fields == null)
                 throw new NullReferenceException(String.Format("recordType.Fields ID '{0}'", dataRecordStorage.DataRecordTypeId));
 
-            if(input.Query.FilterGroup !=null)
+            if (input.Query.FilterGroup != null)
             {
                 var filterGroup = ConvertFilterGroup(input.Query.FilterGroup, recordType);
                 input.Query.FilterGroup = filterGroup;
@@ -90,7 +90,7 @@ namespace Vanrise.GenericData.Business
                 {
                     if (record.Formula != null)
                     {
-                        DataRecordFieldFormulaConvertFilterContext context = new DataRecordFieldFormulaConvertFilterContext(recordType.DataRecordTypeId,recordFilter.FieldName);
+                        DataRecordFieldFormulaConvertFilterContext context = new DataRecordFieldFormulaConvertFilterContext(recordType.DataRecordTypeId, recordFilter.FieldName);
                         context.InitialFilter = recordFilter;
                         var recordFilterObj = record.Formula.ConvertFilter(context);
                         recordFilterGroup.Filters.Add(recordFilterObj);
@@ -103,7 +103,7 @@ namespace Vanrise.GenericData.Business
 
                 }
 
-              
+
             }
         }
 
@@ -200,6 +200,22 @@ namespace Vanrise.GenericData.Business
             return updateOperationOutput;
         }
 
+        public void GetDataRecords(int dataRecordStorageId, DateTime from, DateTime to, Action<dynamic> onItemReady)
+        {
+            DataRecordStorageManager manager = new DataRecordStorageManager();
+            var dataRecordStorage = manager.GetDataRecordStorage(dataRecordStorageId);
+            if (dataRecordStorage == null)
+                throw new NullReferenceException(String.Format("dataRecordStorage Id '{0}'", dataRecordStorageId));
+            if (dataRecordStorage.Settings == null)
+                throw new NullReferenceException(String.Format("dataRecordStorage.Settings Id '{0}'", dataRecordStorageId));
+
+
+            var dataManager = manager.GetStorageDataManager(dataRecordStorage);
+            if (dataManager == null)
+                throw new NullReferenceException(String.Format("dataManager. ID '{0}'", dataRecordStorageId));
+
+             dataManager.GetDataRecords(from, to, onItemReady);
+        }
         #endregion
 
         #region Private Methods

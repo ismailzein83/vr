@@ -57,8 +57,14 @@ namespace Vanrise.GenericData.QueueActivators
             Queueing.MemoryQueue<Object> queuePreparedBatchesForDBApply = new Queueing.MemoryQueue<object>();
             AsyncActivityStatus prepareBatchForDBApplyStatus = new AsyncActivityStatus();
             StartPrepareBatchForDBApplyTask(context, recordStorageDataManager, queuePreparedBatchesForDBApply, prepareBatchForDBApplyStatus);
-
+            
+            DeleteFromDB(context, recordStorageDataManager);
             ApplyBatchesToDB(context, recordStorageDataManager, queuePreparedBatchesForDBApply, prepareBatchForDBApplyStatus);
+        }
+
+        private void DeleteFromDB(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, IDataRecordDataManager recordStorageDataManager)
+        {
+            recordStorageDataManager.DeleteRecords(context.From, context.To);
         }
 
         private static void StartPrepareBatchForDBApplyTask(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, IDataRecordDataManager recordStorageDataManager, Queueing.MemoryQueue<Object> queuePreparedBatchesForDBApply, AsyncActivityStatus prepareBatchForDBApplyStatus)
@@ -106,7 +112,7 @@ namespace Vanrise.GenericData.QueueActivators
                        {
                            hasItem = queuePreparedBatchesForDBApply.TryDequeue((preparedBatchForDBApply) =>
                            {
-                               recordStorageDataManager.ApplyStreamToDB(prepareBatchForDBApplyStatus);
+                               recordStorageDataManager.ApplyStreamToDB(preparedBatchForDBApply);
                            });
                        } while (!context.ShouldStop() && hasItem);
                    });
@@ -117,7 +123,7 @@ namespace Vanrise.GenericData.QueueActivators
             
         }
 
-        List<string> Reprocess.Entities.IReprocessStageActivator.GetOutputStages()
+        List<string> Reprocess.Entities.IReprocessStageActivator.GetOutputStages(List<string> stageNames)
         {
             return null;
         }

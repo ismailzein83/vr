@@ -9,7 +9,7 @@ using Vanrise.GenericData.Transformation;
 
 namespace Vanrise.GenericData.QueueActivators
 {
-    public class TransformBatchQueueActivator : Vanrise.Queueing.Entities.QueueActivator
+    public class TransformBatchQueueActivator : Vanrise.Queueing.Entities.QueueActivator, Vanrise.Reprocess.Entities.IReprocessStageActivator
     {
         DataTransformer _dataTransformer = new DataTransformer();
 
@@ -21,7 +21,7 @@ namespace Vanrise.GenericData.QueueActivators
 
         public override void ProcessItem(Queueing.Entities.PersistentQueueItem item, Queueing.Entities.ItemsToEnqueue outputItems)
         {
-            
+
         }
 
         public override void ProcessItem(Queueing.Entities.IQueueActivatorExecutionContext context)
@@ -30,7 +30,7 @@ namespace Vanrise.GenericData.QueueActivators
             var queueItemType = context.CurrentStage.QueueItemType as DataRecordBatchQueueItemType;
             if (queueItemType == null)
                 throw new Exception("current stage QueueItemType is not of type DataRecordBatchQueueItemType");
-            var recordTypeId = queueItemType.DataRecordTypeId;            
+            var recordTypeId = queueItemType.DataRecordTypeId;
             var batchRecords = dataRecordBatch.GetBatchRecords(recordTypeId);
 
             var transformationOutput = _dataTransformer.ExecuteDataTransformation(this.DataTransformationDefinitionId,
@@ -61,6 +61,69 @@ namespace Vanrise.GenericData.QueueActivators
         public override void OnDisposed()
         {
 
+        }
+
+        public void ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
+        {
+            context.DoWhilePreviousRunning(() =>
+            {
+                bool hasItem = false;
+                List<string> validStages = GetOutputStages(context.StageNames);
+                do
+                {
+                    hasItem = context.InputQueue.TryDequeue((reprocessBatch) =>
+                    {
+                        Reprocess.Entities.GenericDataRecordBatch genericDataRecordBatch = reprocessBatch as Reprocess.Entities.GenericDataRecordBatch;
+                        if (genericDataRecordBatch == null)
+                            throw new Exception(String.Format("reprocessBatch should be of type 'Reprocess.Entities.GenericDataRecordBatch'. and not of type '{0}'", reprocessBatch.GetType()));
+
+                        var transformationOutput = _dataTransformer.ExecuteDataTransformation(this.DataTransformationDefinitionId,
+                        (transformationContext) =>
+                        {
+                            transformationContext.SetRecordValue(this.SourceRecordName, genericDataRecordBatch.Records);
+                        });
+
+                        if (this.NextStagesRecords != null)
+                        {
+                            foreach (var nextStageRecord in this.NextStagesRecords)
+                            {
+                                var transformedList = transformationOutput.GetRecordValue(nextStageRecord.RecordName);
+                                Reprocess.Entities.GenericDataRecordBatch item = new Reprocess.Entities.GenericDataRecordBatch() { Records = transformedList };
+                                foreach (var stageName in nextStageRecord.NextStages)
+                                {
+                                    if (validStages != null && validStages.Contains(stageName))
+                                        context.EnqueueBatch(stageName, item);
+                                }
+                            }
+                        }
+                    });
+                } while (!context.ShouldStop() && hasItem);
+            });
+        }
+
+        public void FinalizeStage(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
+        {
+
+        }
+
+        public List<string> GetOutputStages(List<string> stageNames)
+        {
+            if (NextStagesRecords == null)
+                return null;
+
+            if (stageNames == null)
+                return null;
+
+            IEnumerable<string> stages = NextStagesRecords.SelectMany(itm => itm.NextStages).Distinct();
+            Func<string, bool> filterExpression = (itemObject) => stageNames.Contains(itemObject);
+
+            IEnumerable<string> filteredStages = stages.FindAllRecords(filterExpression);
+            return filteredStages != null ? filteredStages.ToList() : null;
+        }
+
+        public Queueing.BaseQueue<Reprocess.Entities.IReprocessBatch> GetQueue()
+        {
+            return new Queueing.MemoryQueue<Reprocess.Entities.IReprocessBatch>();
         }
     }
 

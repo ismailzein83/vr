@@ -11,6 +11,10 @@ namespace Vanrise.GenericData.Entities
         void ApplyStreamToDB(object stream);
 
         List<DataRecord> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input);
+
+        void GetDataRecords(DateTime from, DateTime to, Action<dynamic> onItemReady);
+
+        void DeleteRecords(DateTime from, DateTime to);
     }
 
     public interface ISummaryRecordDataManager
