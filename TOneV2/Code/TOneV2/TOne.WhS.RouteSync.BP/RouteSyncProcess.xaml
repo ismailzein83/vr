@@ -168,6 +168,21 @@
       </If.Condition>
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="s:Guid" Name="switchesInitializationDataId" />
+          </Sequence.Variables>
+          <twrba1:SaveSwitchesInitializationData sap2010:WorkflowViewState.IdRef="SaveSwitchesInitializationData_1">
+            <twrba1:SaveSwitchesInitializationData.SwitchesInitializationData>
+              <InArgument x:TypeArguments="scg:Dictionary(x:String, twre:SwitchRouteSyncInitializationData)">
+                <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, twre:SwitchRouteSyncInitializationData)">switchesInProcess.ToDictionary(itm =&gt; itm.Switch.SwitchId, itm =&gt; itm.InitializationData)</mca:CSharpValue>
+              </InArgument>
+            </twrba1:SaveSwitchesInitializationData.SwitchesInitializationData>
+            <twrba1:SaveSwitchesInitializationData.SwitchesInitializationDataId>
+              <OutArgument x:TypeArguments="s:Guid">
+                <mca:CSharpReference x:TypeArguments="s:Guid">switchesInitializationDataId</mca:CSharpReference>
+              </OutArgument>
+            </twrba1:SaveSwitchesInitializationData.SwitchesInitializationDataId>
+          </twrba1:SaveSwitchesInitializationData>
           <ParallelForEach x:TypeArguments="twre:RouteRangeInfo" DisplayName="ParallelForEach&lt;RouteRangeInfo&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_2">
             <ParallelForEach.Values>
               <InArgument x:TypeArguments="scg:IEnumerable(twre:RouteRangeInfo)">
@@ -186,7 +201,8 @@
             {
                 RouteSyncDefinitionId = Input.RouteSyncDefinitionId,
                 RangeInfo = routeRange,
-                RangeType = routeReadRangeType.Value
+                RangeType = routeReadRangeType.Value,
+                SwitchesInitializationDataId = switchesInitializationDataId
             }</mca:CSharpValue>
                     </InArgument>
                   </vbw:RunProcess.Input>
@@ -243,7 +259,7 @@
         </Sequence>
       </ActivityAction>
     </ParallelForEach>
-    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRlU3luYy5CUFxSb3V0ZVN5bmNQcm9jZXNzLnhhbWwrOgP3AQ4CAQFCBU0lAwG5AU4FWRoDAaoBWgVqIQMBlAFrBaIBFwIBSaMBBdYBCgIBJNcBBfUBFwIBAkULRXQDAcEBSgtKYwMBugFWC1ZqAwGyAVELUXkDAasBYgtidQMBowFnC2d5AwGcAV0LXXoDAZUBbgtuaQMBjQF1CaABFAIBSqYBC6YBZQIBJaoBCcUBFAIBNcgBCdQBFAIBLNoBC9oBeQIBHeEBCfMBFAIBA3kLhAEUAgF6hQELlQEuAgFelgELnwEdAgFLqwELxAEdAgE2yQEL0wEsAgEt4gEL8gEsAgEEgQERgQGdAQMBhAF8EXx0AgF7iAERiAGXAQIBcZIBEZIBYAIBaI0BEY0BeAIBX50BD50BfQIBVZkBEZkBbAIBTK4BEa4BegIBQrUBD8IBGgIBN8wBEdABIAIBLuUBEeUBjwECARXvARHvAWwCAQ3qARHqAXgCAQW2ARHBASICATi5ARe+ASACATq2AaoBtgGwAQIBOQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRlU3luYy5CUFxSb3V0ZVN5bmNQcm9jZXNzLnhhbWwuOgOHAg4CAQFCBU0lAwHMAU4FWRoDAb0BWgVqIQMBpwFrBaIBFwIBXKMBBeYBCgIBJOcBBYUCFwIBAkULRXQDAdQBSgtKYwMBzQFWC1ZqAwHFAVELUXkDAb4BYgtidQMBtgFnC2d5AwGvAV0LXXoDAagBbgtuaQMBoAF1CaABFAIBXaYBC6YBZQIBJaoBCdUBFAIBNdgBCeQBFAIBLOoBC+oBeQIBHfEBCYMCFAIBA3kLhAEUAwGNAYUBC5UBLgIBcZYBC58BHQIBXq4BC7kBMwIBS7oBC9QBHQIBNtkBC+MBLAIBLfIBC4ICLAIBBIEBEYEBnQEDAZcBfBF8dAMBjgGIARGIAZcBAwGEAZIBEZIBYAIBe40BEY0BeAIBcp0BD50BfQIBaJkBEZkBbAIBX7EBEbEB5gECAVS2ARG2AXECAUy9ARG9AXoCAUPEAQ/SARoCATfcARHgASACAS71ARH1AY8BAgEV/wER/wFsAgEN+gER+gF4AgEFxQER0QEiAgE4yAEXzgEgAgE6xQGqAcUBsAECATk=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -261,6 +277,7 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="556,460" />
+      <sap2010:ViewStateData Id="SaveSwitchesInitializationData_1" sap:VirtualizedContainerService.HintSize="287,22" />
       <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,146">
         <sap:WorkflowViewStateService.ViewState>
@@ -270,7 +287,7 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="287,296" />
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="309,420">
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="309,482">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -285,7 +302,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="556,570" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="556,632" />
       <sap2010:ViewStateData Id="FinalizeSwitchRouteSync_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="222,146">
         <sap:WorkflowViewStateService.ViewState>
@@ -295,14 +312,14 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ParallelForEach`1_3" sap:VirtualizedContainerService.HintSize="556,296" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="578,1716">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="578,1778">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.RouteSync.BP.RouteSyncProcess_1" sap:VirtualizedContainerService.HintSize="618,1796" />
+      <sap2010:ViewStateData Id="TOne.WhS.RouteSync.BP.RouteSyncProcess_1" sap:VirtualizedContainerService.HintSize="618,1858" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

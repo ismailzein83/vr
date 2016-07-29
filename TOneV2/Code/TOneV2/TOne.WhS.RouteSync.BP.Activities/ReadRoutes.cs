@@ -56,29 +56,38 @@ namespace TOne.WhS.RouteSync.BP.Activities
         protected override ReadRoutesOutput DoWorkWithResult(ReadRoutesInput inputArgument, AsyncActivityHandle handle)
         {
             int deliverRoutesBatchSize = 1000;
-            List<SwitchRouteDelivery> switchesRouteDelivery = inputArgument.SwitchesInProcess.Select(sw => new SwitchRouteDelivery
-            {
-                SwitchInProcess = sw,
-                PendingRoutes = new List<Route>(),
-                 DeliverRoutesInBatches = (sw.InitializationData == null || sw.InitializationData.SupportedDeliveryMethod == RouteSyncDeliveryMethod.Batches)
-            }).ToList();
-            Action<Route, RouteReceivedContext> onRouteReceived = (route, routeReceivedContext) =>
-                {
-                    foreach (var switchRouteDelivery in switchesRouteDelivery)
-                    {
-                        switchRouteDelivery.PendingRoutes.Add(route);
-                        if (routeReceivedContext.IsLastRoute || (switchRouteDelivery.PendingRoutes.Count >= deliverRoutesBatchSize && switchRouteDelivery.DeliverRoutesInBatches))
-                        {
-                            switchRouteDelivery.SwitchInProcess.RouteQueue.Enqueue(new RouteBatch { Routes = switchRouteDelivery.PendingRoutes });
-                            switchRouteDelivery.PendingRoutes = new List<Route>();
-                        }
-                    }
-                };
+            Action<Route, RouteReceivedContext> onRouteReceived = BuildOnRouteReceivedAction(deliverRoutesBatchSize, inputArgument.SwitchesInProcess);
             RouteReaderContext routeReaderContext = new RouteReaderContext(onRouteReceived);
             routeReaderContext.RouteRangeInfo = inputArgument.RangeInfo;
             routeReaderContext.RouteRangeType = inputArgument.RangeType;
             inputArgument.RouteReader.ReadRoutes(routeReaderContext);
             return new ReadRoutesOutput { };
+        }
+
+        private Action<Route, RouteReceivedContext> BuildOnRouteReceivedAction(int deliverRoutesBatchSize, List<SwitchInProcess> switchesInProcess)
+        {
+            List<SwitchRouteDelivery> switchesRouteDelivery = switchesInProcess.Select(sw => new SwitchRouteDelivery
+            {
+                SwitchInProcess = sw,
+                PendingRoutes = new List<Route>(),
+                DeliverRoutesInBatches = (sw.InitializationData == null || sw.InitializationData.SupportedDeliveryMethod == RouteSyncDeliveryMethod.Batches)
+            }).ToList();
+
+            Action<Route, RouteReceivedContext> onRouteReceived = (route, routeReceivedContext) =>
+            {
+                foreach (var switchRouteDelivery in switchesRouteDelivery)
+                {
+                    switchRouteDelivery.PendingRoutes.Add(route);
+                    int pendingRoutesCount = switchRouteDelivery.PendingRoutes.Count;
+                    if ((switchRouteDelivery.DeliverRoutesInBatches && pendingRoutesCount >= deliverRoutesBatchSize)
+                        || routeReceivedContext.IsLastRoute)
+                    {
+                        switchRouteDelivery.SwitchInProcess.RouteQueue.Enqueue(new RouteBatch { Routes = switchRouteDelivery.PendingRoutes });
+                        switchRouteDelivery.PendingRoutes = new List<Route>();
+                    }
+                }
+            };
+            return onRouteReceived;
         }
 
         protected override ReadRoutesInput GetInputArgument(AsyncCodeActivityContext context)

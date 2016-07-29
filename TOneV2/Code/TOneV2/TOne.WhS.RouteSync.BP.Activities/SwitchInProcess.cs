@@ -15,5 +15,7 @@ namespace TOne.WhS.RouteSync.BP.Activities
         public SwitchRouteSyncInitializationData InitializationData { get; set; }
 
         public BaseQueue<RouteBatch> RouteQueue { get; set; }
+
+        public BaseQueue<ConvertedRouteBatch> ConvertedRouteQueue { get; set; }
     }
 }

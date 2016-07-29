@@ -56,19 +56,21 @@
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBEManager.cs" />
     <Compile Include="BusinessManagers\IRouteSyncDefinitionManager.cs" />
-    <Compile Include="RouteBatch.cs" />
-    <Compile Include="SwitchInfoGetter.cs" />
+    <Compile Include="RouteEntities\ConvertedRoute.cs" />
+    <Compile Include="RouteEntities\ConvertedRouteBatch.cs" />
+    <Compile Include="RouteEntities\RouteBatch.cs" />
+    <Compile Include="Switch\SwitchInfoGetter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Route.cs" />
-    <Compile Include="RouteOption.cs" />
+    <Compile Include="RouteEntities\Route.cs" />
+    <Compile Include="RouteEntities\RouteOption.cs" />
     <Compile Include="RouteReader.cs" />
     <Compile Include="RouteSyncBP\RouteSyncBPConfig.cs" />
     <Compile Include="RouteSyncBP\RouteSyncBPDefinitionSettings.cs" />
     <Compile Include="RouteSyncBP\RouteSyncBPInputArgument.cs" />
     <Compile Include="RouteSyncDefinition.cs" />
-    <Compile Include="SwitchInfo.cs" />
-    <Compile Include="SwitchRouteSynchronizer.cs" />
-    <Compile Include="SwitchRouteSynchronizerConfig.cs" />
+    <Compile Include="Switch\SwitchInfo.cs" />
+    <Compile Include="Switch\SwitchRouteSynchronizer.cs" />
+    <Compile Include="Switch\SwitchRouteSynchronizerConfig.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

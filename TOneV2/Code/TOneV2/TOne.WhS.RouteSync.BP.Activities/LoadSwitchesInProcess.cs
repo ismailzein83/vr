@@ -50,7 +50,7 @@ namespace TOne.WhS.RouteSync.BP.Activities
             this.SwitchesInProcess.Set(context, switchesInProcess);
         }
 
-        private Dictionary<string, SwitchRouteSyncInitializationData> LoadSwitchesInitialiationData(Guid guid)
+        private Dictionary<string, SwitchRouteSyncInitializationData> LoadSwitchesInitialiationData(Guid switchesInitializationDataId)
         {
             throw new NotImplementedException();
         }

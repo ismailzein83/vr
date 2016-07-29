@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConvertSwitchRouteSyncRoutes.cs" />
     <Compile Include="FinalizeSwitchRouteSync.cs" />
     <Compile Include="GetRouteReadRanges.cs" />
     <Compile Include="GetRouteSyncDefinition.cs" />
@@ -63,7 +64,9 @@
     <Compile Include="LoadSwitchesInProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadRoutes.cs" />
+    <Compile Include="SaveSwitchesInitializationData.cs" />
     <Compile Include="SwitchInProcess.cs" />
+    <Compile Include="UpdateSwitchRouteSyncRoutes.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Business\TOne.WhS.RouteSync.Business.csproj">
