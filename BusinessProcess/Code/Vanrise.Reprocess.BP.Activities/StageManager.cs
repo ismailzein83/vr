@@ -22,11 +22,19 @@ namespace Vanrise.Reprocess.BP.Activities
             if (reprocessDefinition.Settings == null)
                 throw new ArgumentNullException("reprocessDefinition.Settings");
 
+            if (reprocessDefinition.Settings.StageNames == null)
+                throw new NullReferenceException(String.Format("reprocessDefinition.Settings.StageNames. ReprocessDefinitionId '{0}'", reprocessDefinition.ReprocessDefinitionId));
+
             var stages = new QueueExecutionFlowDefinitionManager().GetFlowStages(reprocessDefinition.Settings.ExecutionFlowDefinitionId);
             if (stages == null)
                 throw new NullReferenceException(String.Format("stages '{0}'", reprocessDefinition.Settings.ExecutionFlowDefinitionId));
+
+
             foreach (var stage in stages.Values)
             {
+                if (!reprocessDefinition.Settings.StageNames.Contains(stage.StageName))
+                    continue;
+
                 var reprocessActivator = stage.QueueActivator as IReprocessStageActivator;
                 if (reprocessActivator != null)
                 {
@@ -34,24 +42,25 @@ namespace Vanrise.Reprocess.BP.Activities
                     {
                         StageName = stage.StageName,
                         Activator = reprocessActivator,
-                        PreviousStageNames = new List<string>(), 
+                        PreviousStageNames = new List<string>(),
                         StageQueue = reprocessActivator.GetQueue(),
                         Status = new AsyncActivityStatus(),
                         PreviousStatus = new AsyncActivityStatus(),
                         SubscribedStageNames = new List<string>()
                     };
                     if (stage.SourceStages != null)
-                        reprocessStage.PreviousStageNames.AddRange(stage.SourceStages);
+                        reprocessStage.PreviousStageNames.AddRange(stage.SourceStages.FindAll(itm => reprocessDefinition.Settings.StageNames.Contains(itm)));
                     FillSubscribedStageNames(reprocessStage.SubscribedStageNames, stage.StageName, stage.StageName, stages.Values);
                     _reprocessingStagesByName.Add(stage.StageName, reprocessStage);
                 }
             }
-            foreach(var reprocessStage in _reprocessingStagesByName.Values)
+
+            foreach (var reprocessStage in _reprocessingStagesByName.Values)
             {
-                var outputStages = reprocessStage.Activator.GetOutputStages();
-                if(outputStages != null)
+                var outputStages = reprocessStage.Activator.GetOutputStages(reprocessDefinition.Settings.StageNames);
+                if (outputStages != null)
                 {
-                    foreach(var outputStageName in outputStages)
+                    foreach (var outputStageName in outputStages)
                     {
                         GetStage(outputStageName).PreviousStageNames.Add(reprocessStage.StageName);
                     }
@@ -65,11 +74,11 @@ namespace Vanrise.Reprocess.BP.Activities
 
         private void FillSubscribedStageNames(List<string> subscribedStageNames, string sourceStageName, string mainStageName, IEnumerable<QueueExecutionFlowStage> stages)
         {
-            foreach(var stage in stages)
+            foreach (var stage in stages)
             {
-                if(stage.StageName != mainStageName && !subscribedStageNames.Contains(stage.StageName))
+                if (stage.StageName != mainStageName && !subscribedStageNames.Contains(stage.StageName))
                 {
-                    if(stage.SourceStages != null && stage.SourceStages.Contains(sourceStageName))
+                    if (stage.SourceStages != null && stage.SourceStages.Contains(sourceStageName))
                     {
                         subscribedStageNames.Add(stage.StageName);
                         FillSubscribedStageNames(subscribedStageNames, stage.StageName, mainStageName, stages);
@@ -88,9 +97,9 @@ namespace Vanrise.Reprocess.BP.Activities
         {
             var stage = GetStage(stageName);
             stage.StageQueue.Enqueue(batch);
-            if(stage.SubscribedStageNames != null)
+            if (stage.SubscribedStageNames != null)
             {
-                foreach(var subscribedStageName in stage.SubscribedStageNames)
+                foreach (var subscribedStageName in stage.SubscribedStageNames)
                 {
                     GetStage(subscribedStageName).StageQueue.Enqueue(batch);
                 }
@@ -112,7 +121,7 @@ namespace Vanrise.Reprocess.BP.Activities
 
         internal void EvaluateStagesStatus(AsyncActivityStatus loadDataToReprocessStatus)
         {
-            foreach(var stage in GetReprocessingStages())
+            foreach (var stage in GetReprocessingStages())
             {
                 if (stage.PreviousStatus.IsComplete)
                     continue;

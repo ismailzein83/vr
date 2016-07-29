@@ -12,7 +12,7 @@ namespace Vanrise.Reprocess.Entities
     {
         BaseQueue<IReprocessBatch> GetQueue();
 
-        List<string> GetOutputStages();
+        List<string> GetOutputStages(List<string> stageNames);
 
         void ExecuteStage(IReprocessStageActivatorExecutionContext context);
 
@@ -28,6 +28,14 @@ namespace Vanrise.Reprocess.Entities
         void DoWhilePreviousRunning(AsyncActivityStatus previousActivityStatus, Action actionToDo);
 
         bool ShouldStop();
+
+        void EnqueueBatch(string stageName, IReprocessBatch batch);
+
+        DateTime From { get; }
+
+        DateTime To { get; }
+
+        List<string> StageNames { get; }
     }
 
     public interface IReprocessStageActivatorFinalizingContext

@@ -24,8 +24,9 @@ namespace Vanrise.Reprocess.BP.Activities
             DateTime from = this.From.Get(context);
             DateTime to = this.To.Get(context);
             ChunkTime chunkTime = this.ChunkTime.Get(context);
-            
-            int intervalInMinutes = (int)chunkTime;
+
+            var chunkTimeAttribute = Vanrise.Common.Utilities.GetEnumAttribute<ChunkTime, ChunkTimeAttribute>(chunkTime);
+            int intervalInMinutes = chunkTimeAttribute.Value;
             List<DateTimeRange> dateTimeRanges = new List<DateTimeRange>();
 
             DateTime endDate = from;

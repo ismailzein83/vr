@@ -6,6 +6,8 @@ using System.Activities;
 using Vanrise.BusinessProcess;
 using Vanrise.Reprocess.Entities;
 using Vanrise.Queueing;
+using Vanrise.GenericData.Business;
+using System.Reflection;
 
 namespace Vanrise.Reprocess.BP.Activities
 {
@@ -26,6 +28,7 @@ namespace Vanrise.Reprocess.BP.Activities
 
     public class LoadDataToReprocessOutput
     {
+        public int EventCount { get; set; }
     }
 
     #endregion
@@ -47,6 +50,9 @@ namespace Vanrise.Reprocess.BP.Activities
         [RequiredArgument]
         public InArgument<List<string>> OutputStageNames { get; set; }
 
+        [RequiredArgument]
+        public OutArgument<int> EventCount { get; set; }
+
         protected override LoadDataToReprocessInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new LoadDataToReprocessInput
@@ -61,16 +67,45 @@ namespace Vanrise.Reprocess.BP.Activities
 
         protected override LoadDataToReprocessOutput DoWorkWithResult(LoadDataToReprocessInput inputArgument, AsyncActivityHandle handle)
         {
-            if (inputArgument.OutputStageNames ==  null || inputArgument.OutputStageNames.Count == 0)
+            LoadDataToReprocessOutput output = new LoadDataToReprocessOutput() { EventCount = 0 };
+            object obj = new object();
+            if (inputArgument.OutputStageNames == null || inputArgument.OutputStageNames.Count == 0)
                 throw new Exception("No output stages!");
+
+            DataRecordStorageManager manager = new DataRecordStorageManager();
+            GenericDataRecordBatch batch = new GenericDataRecordBatch() { Records = new List<dynamic>() };
+
+            manager.GetDataRecords(inputArgument.RecordStorageId, inputArgument.FromTime, inputArgument.ToTime, ((itm) =>
+            {
+                //lock (obj)
+                //{
+                    output.EventCount++;
+
+                    batch.Records.Add(itm);
+                    if (batch.Records.Count == 10000)
+                    {
+                        foreach (string stageName in inputArgument.OutputStageNames)
+                        {
+                            inputArgument.StageManager.EnqueueBatch(stageName, batch);
+                        }
+                        batch = new GenericDataRecordBatch() { Records = new List<dynamic>() };
+                    }
+                //}
+            }));
             
-           
-            throw new NotImplementedException();
+            if (batch.Records.Count > 0)
+            {
+                foreach (string stageName in inputArgument.OutputStageNames)
+                {
+                    inputArgument.StageManager.EnqueueBatch(stageName, batch);
+                }
+            }
+            return output;
         }
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, LoadDataToReprocessOutput result)
         {
-            throw new NotImplementedException();
+            this.EventCount.Set(context, result.EventCount);
         }
     }
 }

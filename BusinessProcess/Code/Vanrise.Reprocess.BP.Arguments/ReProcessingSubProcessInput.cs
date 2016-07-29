@@ -16,7 +16,7 @@ namespace Vanrise.Reprocess.BP.Arguments
 
         public override string GetTitle()
         {
-            throw new NotImplementedException();
+            return String.Format("Reprocess Subprocess from {0} to {1}", FromTime, ToTime);
         }
     }
 }
