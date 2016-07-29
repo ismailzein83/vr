@@ -20,20 +20,45 @@ namespace TOne.WhS.DBSync.Business
         public virtual void Migrate(MigrationInfoContext context)
         {
             Context.WriteInformation("Migrating table '" + TableName + "' started");
-            var sourceItems = GetSourceItems();
-            if (sourceItems != null)
+            if (IsLoadItemsApproach)
             {
                 List<Q> itemsToAdd = new List<Q>();
-                foreach (var sourceItem in sourceItems)
+                Action<T> onSourceItemLoaded = (sourceItem) =>
                 {
                     var item = BuildItemFromSource(sourceItem);
                     if (item != null)
                         itemsToAdd.Add(item);
+                    if (itemsToAdd.Count >= 1000)
+                    {
+                        AddItems(itemsToAdd);
+                        itemsToAdd = new List<Q>();
+                    }
+                };
+
+                LoadSourceItems(onSourceItemLoaded);
+                if (itemsToAdd.Count > 0)
+                {
+                    AddItems(itemsToAdd);
                 }
-                AddItems(itemsToAdd);
-                if (context.GeneratedIdsInfoContext != null)
-                    context.GeneratedIdsInfoContext.LastTakenId = TotalRowsSuccess;
             }
+            else
+            {
+                var sourceItems = GetSourceItems();
+                if (sourceItems != null)
+                {
+                    List<Q> itemsToAdd = new List<Q>();
+                    foreach (var sourceItem in sourceItems)
+                    {
+                        var item = BuildItemFromSource(sourceItem);
+                        if (item != null)
+                            itemsToAdd.Add(item);
+                    }
+                    AddItems(itemsToAdd);
+                }
+            }
+
+            if (context.GeneratedIdsInfoContext != null)
+                context.GeneratedIdsInfoContext.LastTakenId = TotalRowsSuccess;
             if(TotalRowsFailed > 0)
                 Context.WriteWarning(string.Format("Migrating table '" + TableName + "' : {0} rows failed", TotalRowsFailed));
             Context.WriteInformation(string.Format("Migrating table '" + TableName + "' ended: {0} rows ", TotalRowsSuccess));
@@ -42,6 +67,19 @@ namespace TOne.WhS.DBSync.Business
         public abstract void FillTableInfo(bool useTempTables);
 
         public abstract void AddItems(List<Q> itemsToAdd);
+
+        public virtual void LoadSourceItems(Action<T> onItemLoaded)
+        {
+
+        }
+
+        public virtual bool IsLoadItemsApproach
+        {
+            get
+            {
+                return false;
+            }
+        }
 
         public abstract IEnumerable<T> GetSourceItems();
 
