@@ -181,14 +181,11 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                     zoneItem.IsCurrentRateEditable = (zoneItem.IsCurrentRateEditable == null) ? false : zoneItem.IsCurrentRateEditable;
 
-                    zoneItem.CurrentRateBED = zoneItem.CurrentRateBED;
-                    zoneItem.NewRateBED = zoneItem.NewRateBED;
-
-                    zoneItem.CurrentRateEED = zoneItem.CurrentRateEED;
-                    zoneItem.NewRateEED = zoneItem.NewRateEED;
-
-                    zoneItem.showNewRateBED = zoneItem.NewRate;
-                    zoneItem.showNewRateEED = zoneItem.NewRate;
+                    if (zoneItem.NewRate != null) {
+                        zoneItem.IsDirty = true;
+                        zoneItem.showNewRateBED = true;
+                        zoneItem.showNewRateEED = true;
+                    }
 
                     zoneItem.onNewRateChanged = function (zoneItem) {
                         zoneItem.IsDirty = true;
@@ -367,13 +364,15 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             OtherRates: getOtherRates(zoneItem)
                         };
                     }
-
-                    else if (zoneItem.CurrentRate != null) {
-                        zoneChanges.NewRate = {
-                            ZoneId: zoneItem.ZoneId,
-                            OtherRates: getOtherRates(zoneItem)
-                        };
-                    }
+                    //else if (zoneItem.CurrentRate != null) {
+                    //    var otherRates = getOtherRates(zoneItem);
+                    //    if (otherRates != null) {
+                    //        zoneChanges.NewRate = {
+                    //            ZoneId: zoneItem.ZoneId,
+                    //            OtherRates: otherRates
+                    //        };
+                    //    }
+                    //}
                 }
 
                 function getOtherRates(zoneItem) {
