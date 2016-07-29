@@ -79,7 +79,9 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return new DealProgressDetail()
             {
-                Entity = dealProgress
+                Entity = dealProgress,
+                Completion = (dealProgress.EstimatedDuration>0)?dealProgress.ReachedDuration /dealProgress.EstimatedDuration * 100 : 0 ,
+                Indication = dealProgress.ReachedDuration > dealProgress.EstimatedDuration
             };
         }
         #endregion

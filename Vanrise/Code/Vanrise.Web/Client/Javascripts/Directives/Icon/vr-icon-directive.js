@@ -11,7 +11,9 @@ app.directive('vrIcon', [function ($compile) {
         'Disabled':{value: "Client/Images/onebit_33.png",isimage:true} ,
         '1': {value: "Client/Images/true.png",isimage:true},
         '0':{value: "Client/Images/onebit_33.png",isimage:true},
-        'music': { value: "glyphicon-music", isimage: false }
+        'music': { value: "glyphicon-music", isimage: false },
+        'above': { value: "glyphicon-arrow-up arrow-above", isimage: false },//#37c737
+        'below': { value: "glyphicon-arrow-down arrow-below", isimage: false },//#ff1111
     }
    
     var directiveDefinitionObject = {

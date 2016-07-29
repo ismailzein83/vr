@@ -19,8 +19,8 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class DealProgressDetail
     {
         public DealProgress Entity { get; set; }
-        public float Completion { get; set; }
-        public float BelowAbove { get; set; }
+        public decimal Completion { get; set; }
+        public bool Indication { get; set; }
     }
 
     public class DealProgressQuery

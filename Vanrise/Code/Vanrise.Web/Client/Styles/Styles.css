@@ -652,7 +652,12 @@ vr-modalcontent .action-bar {
 .highlight-btn .glyphicon {
     color: #EF4355 !important;
 }
-
+.glyphicon-arrow-up.arrow-above{
+    color:#37c737;
+}
+.glyphicon-arrow-down.arrow-below{
+   color:#ff1111;
+}
 .style-col {
     background-color: #FFF;
     border-radius: 4px;
