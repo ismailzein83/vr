@@ -5,7 +5,7 @@
 -- =============================================
 CREATE PROCEDURE [VR_AccountBalance].[bp_CreateClosingPeriod] 
 	@ClosingTime datetime,
-	@UsageTransactionTypeId int
+	@UsageTransactionTypeId uniqueidentifier
 AS
 BEGIN
 DECLARE @ClosingPeriodID bigint
