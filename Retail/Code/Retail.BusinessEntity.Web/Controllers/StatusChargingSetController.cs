@@ -28,5 +28,18 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.AddStatusChargingSet(statusChargingSetItem);
         }
+        [HttpGet]
+        [Route("GetStatusChargingSet")]
+        public StatusChargingSet GetStatusChargingSet(int statusChargingSetId)
+        {
+            return _manager.GetChargingSet(statusChargingSetId);
+        }
+        [HttpPost]
+        [Route("UpdateStatusChargingSet")]
+        public UpdateOperationOutput<StatusChargingSetDetail> UpdateStatusChargingSet(StatusChargingSet statusChargingSet)
+        {
+            return _manager.UpdateStatusChargingSet(statusChargingSet);
+        }
+
     }
 }
