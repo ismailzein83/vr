@@ -17,7 +17,7 @@ namespace Vanrise.AccountBalance.BP.Activities
     public class ProcessNewBillingTransactionsInput
     {
         public BaseQueue<BillingTransactionBatch> InputQueue { get; set; }
-        public AcountBalanceUpdateHandler AcountBalanceUpdateHandler { get; set; }
+        public AccountBalanceUpdateHandler AcountBalanceUpdateHandler { get; set; }
     }
 
     #endregion
@@ -31,11 +31,12 @@ namespace Vanrise.AccountBalance.BP.Activities
         public InOutArgument<BaseQueue<BillingTransactionBatch>> InputQueue { get; set; }
        
         [RequiredArgument]
-        public InArgument<AcountBalanceUpdateHandler> AcountBalanceUpdateHandler { get; set; }
+        public InArgument<AccountBalanceUpdateHandler> AcountBalanceUpdateHandler { get; set; }
         #endregion
 
         protected override void DoWork(ProcessNewBillingTransactionsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            var counter = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItems = false;
@@ -44,14 +45,12 @@ namespace Vanrise.AccountBalance.BP.Activities
                     hasItems = inputArgument.InputQueue.TryDequeue(
                         (billingTransactionBatch) =>
                         {
-                            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Started Processing New Billing Transactions for accountID {0}", billingTransactionBatch.BillingTransactions.FirstOrDefault().AccountId);
-
+                            counter++;
                             ProcessBillingTransactions(billingTransactionBatch.BillingTransactions,inputArgument.AcountBalanceUpdateHandler);
-                            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finish Processing New Billing Transactions for accountID {0}", billingTransactionBatch.BillingTransactions.FirstOrDefault().AccountId);
                         });
                 } while (!ShouldStop(handle) && hasItems);
             });
-
+            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} New Billing Transactions Processed", counter);
         }
         protected override ProcessNewBillingTransactionsInput GetInputArgument2(AsyncCodeActivityContext context)
         {
@@ -61,7 +60,7 @@ namespace Vanrise.AccountBalance.BP.Activities
                 AcountBalanceUpdateHandler = this.AcountBalanceUpdateHandler.Get(context),
             };
         }
-        private void ProcessBillingTransactions(List<BillingTransaction> billingTransactions, AcountBalanceUpdateHandler acountBalanceUpdateHandler)
+        private void ProcessBillingTransactions(List<BillingTransaction> billingTransactions, AccountBalanceUpdateHandler acountBalanceUpdateHandler)
         {
             acountBalanceUpdateHandler.AddAndUpdateLiveBalanceFromBillingTransction(billingTransactions);
         }

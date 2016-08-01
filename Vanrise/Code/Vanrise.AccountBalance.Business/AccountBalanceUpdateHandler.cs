@@ -9,16 +9,26 @@ using Vanrise.Common.Business;
 
 namespace Vanrise.AccountBalance.Business
 {
-    public class AcountBalanceUpdateHandler
+    public class AccountBalanceUpdateHandler
     {
         Dictionary<long, LiveBalanceAccountInfo> AccountsInfo;
         CurrencyExchangeRateManager currencyExchangeRateManager;
         AccountManager manager;
         ILiveBalanceDataManager dataManager;
         bool LoadingError;
+        static AccountBalanceUpdateHandler s_Current;
+        public static AccountBalanceUpdateHandler Current
+        {
+            get
+            {
+                if (s_Current == null)
+                    s_Current = new AccountBalanceUpdateHandler();
+                return s_Current;
+            }
+        }
 
         #region ctor
-        public AcountBalanceUpdateHandler()
+        private AccountBalanceUpdateHandler()
         {
             currencyExchangeRateManager = new CurrencyExchangeRateManager();
             dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
@@ -59,14 +69,7 @@ namespace Vanrise.AccountBalance.Business
         }
         public bool AddLiveBalance(long accountId, int currencyId)
         {
-            LiveBalance liveBalance = new LiveBalance
-            {
-                AccountId = accountId,
-                CurrencyId = currencyId,
-                CurrentBalance = 0,
-                UsageBalance = 0,
-            };
-            return dataManager.Insert(liveBalance);
+            return dataManager.AddLiveBalance(accountId,0, currencyId,0,0);
         }
         #endregion
 

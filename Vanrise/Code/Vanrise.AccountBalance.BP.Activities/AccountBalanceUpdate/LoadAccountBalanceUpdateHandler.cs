@@ -10,18 +10,17 @@ using Vanrise.AccountBalance.Business;
 
 namespace Vanrise.AccountBalance.BP.Activities
 {
-    public class AccountBalanceUpdateHelper : CodeActivity
+    public class LoadAccountBalanceUpdateHandler : CodeActivity
     {
         #region Arguments
 
         [RequiredArgument]
-        public OutArgument<AcountBalanceUpdateHandler> AcountBalanceUpdateHandler { get; set; }
+        public OutArgument<AccountBalanceUpdateHandler> Handler { get; set; }
 
         #endregion
         protected override void Execute(CodeActivityContext context)
         {
-            AcountBalanceUpdateHandler handler = new AcountBalanceUpdateHandler();
-            AcountBalanceUpdateHandler.Set(context,handler);
+            Handler.Set(context, AccountBalanceUpdateHandler.Current);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             string billingTransactionIDs = null;
             if (billingTransactionIds != null && billingTransactionIds.Count() > 0)
                 billingTransactionIDs = string.Join<long>(",", billingTransactionIds);
-            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_UpdateBalanceStatus]", billingTransactionIDs) > 0);
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_SetBalanceUpdated]", billingTransactionIDs) > 0);
         }
         public void GetBillingTransactionsByBalanceUpdated(Action<BillingTransaction> onBillingTransactionReady)
         {

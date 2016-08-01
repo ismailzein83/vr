@@ -59,7 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountBalanceUpdate\AccountBalanceUpdateHelper.cs" />
+    <Compile Include="AccountBalanceUpdate\LoadAccountBalanceUpdateHandler.cs" />
     <Compile Include="CalculateNextAlertThresholds.cs" />
     <Compile Include="CreateAlertActions.cs" />
     <Compile Include="CreateBalanceClosingPeriod.cs" />

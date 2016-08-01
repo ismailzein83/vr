@@ -13,6 +13,6 @@ namespace Vanrise.AccountBalance.Data
         bool UpdateLiveBalanceFromBillingTransaction(long accountId, List<long> billingTransactionIds, decimal amount);
         bool UpdateLiveBalanceFromBalanceUsageQueue(IEnumerable<UsageBalanceUpdate> groupedResult, long balanceUsageQueueId);
         IEnumerable<LiveBalanceAccountInfo> GetLiveBalanceAccountsInfo();
-        bool Insert(LiveBalance liveBalance);
+        bool AddLiveBalance(long accountId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance);
     }
 }

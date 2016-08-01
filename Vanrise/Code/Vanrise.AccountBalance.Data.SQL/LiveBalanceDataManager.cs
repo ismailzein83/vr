@@ -81,9 +81,9 @@ namespace Vanrise.AccountBalance.Data.SQL
             return GetItemsSP("[VR_AccountBalance].[sp_LiveBalance_GetAccountsInfo]", LiveBalanceAccountInfoMapper);
         }
 
-        public bool Insert(LiveBalance liveBalance)
+        public bool AddLiveBalance(long accountId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance)
         {
-            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_Insert]", liveBalance.AccountId, liveBalance.InitialBalance,liveBalance.CurrencyId, liveBalance.UsageBalance, liveBalance.CurrentBalance) > 0);
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_Insert]", accountId, initialBalance, currencyId, usageBalance, currentBalance) > 0);
         }
 
         #endregion
