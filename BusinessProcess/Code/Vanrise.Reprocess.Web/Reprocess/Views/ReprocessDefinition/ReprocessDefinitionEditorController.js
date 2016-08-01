@@ -13,7 +13,7 @@
 
         var dataRecordStorageAPI;
         var dataRecordStorageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-        var ondataRecordStorageSelectionChangedDeferred;
+        var onDataRecordStorageSelectionChangedDeferred;
 
         var executionFlowDefinitionAPI;
         var executionFlowDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -47,7 +47,7 @@
             $scope.scopeModel.onDataRecordStorageSelectionChanged = function () {
                 var selectedRecordStorageId = dataRecordStorageAPI.getSelectedIds();
                 if (selectedRecordStorageId != undefined) {
-                    tryLoadFlowStagesOrResolvePromise(ondataRecordStorageSelectionChangedDeferred);
+                    tryLoadFlowStagesOrResolvePromise(onDataRecordStorageSelectionChangedDeferred);
                 }
             };
 
@@ -186,15 +186,15 @@
 
             if (onExecutionFlowDefinitionSelectionChangedDeferred == undefined)
                 onExecutionFlowDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
-            if (ondataRecordStorageSelectionChangedDeferred == undefined)
-                ondataRecordStorageSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+            if (onDataRecordStorageSelectionChangedDeferred == undefined)
+                onDataRecordStorageSelectionChangedDeferred = UtilsService.createPromiseDeferred();
 
-            UtilsService.waitMultiplePromises([executionFlowStageSelectorReadyDeferred.promise, onExecutionFlowDefinitionSelectionChangedDeferred.promise, ondataRecordStorageSelectionChangedDeferred.promise])
+            UtilsService.waitMultiplePromises([executionFlowStageSelectorReadyDeferred.promise, onExecutionFlowDefinitionSelectionChangedDeferred.promise, onDataRecordStorageSelectionChangedDeferred.promise])
                 .then(function () {
                     setTimeout(function () {
                         UtilsService.safeApply($scope, function () {
                             onExecutionFlowDefinitionSelectionChangedDeferred = undefined;
-                            ondataRecordStorageSelectionChangedDeferred = undefined;
+                            onDataRecordStorageSelectionChangedDeferred = undefined;
                             var executionFlowStageSelectorPayload;
                             executionFlowStageSelectorPayload = {
                                 executionFlowDefinitionId: reprocessDefinitionEntity.Settings.ExecutionFlowDefinitionId,
