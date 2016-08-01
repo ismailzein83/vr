@@ -35,7 +35,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var allCarrierAccounts = GetCachedCarrierAccounts();
 
             Func<CarrierAccount, bool> filterExpression = (item) =>
-                (input.Query.Name == null || (allCarrierProfiles.Where(y => y.CarrierProfileId == item.CarrierProfileId).Select(y => y.Name).First().ToLower() + " (" + item.NameSuffix.ToLower() + ")").Contains(input.Query.Name.ToLower()))
+                (input.Query.Name == null || IsMatchByName(input.Query.Name, item))
                 &&
                 (input.Query.CarrierProfilesIds == null || input.Query.CarrierProfilesIds.Contains(item.CarrierProfileId))
                 &&
@@ -438,6 +438,21 @@ namespace TOne.WhS.BusinessEntity.Business
         public static bool IsSupplier(CarrierAccountType carrierAccountType)
         {
             return carrierAccountType == CarrierAccountType.Supplier || carrierAccountType == CarrierAccountType.Exchange;
+        }
+
+        private bool IsMatchByName(string accountName, CarrierAccount carrierAccount)
+        {
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            CarrierProfile itemProfile = carrierProfileManager.GetCarrierProfile(carrierAccount.CarrierProfileId);
+
+            if (itemProfile == null)
+                throw new DataIntegrityValidationException(string.Format("Carrier Account with Id {0} is not linked to any profile", carrierAccount.CarrierAccountId));
+
+            string carrierAccountName = GetCarrierAccountName(itemProfile.Name, carrierAccount.NameSuffix);
+            if (carrierAccountName.ToLower().Contains(accountName.ToLower()))
+                return true;
+
+            return false;
         }
 
         private IEnumerable<CarrierAccount> GetCarrierAccountsByType(bool getCustomers, bool getSuppliers, SupplierFilterSettings supplierFilterSettings, CustomerFilterSettings customerFilterSettings)
