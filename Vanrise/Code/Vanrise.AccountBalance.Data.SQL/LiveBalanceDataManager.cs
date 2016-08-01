@@ -39,7 +39,7 @@ namespace Vanrise.AccountBalance.Data.SQL
                 ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_UpdateFromBillingTransaction]", accountId, amount);
 
                 BillingTransactionDataManager dataManager = new BillingTransactionDataManager();
-                dataManager.UpdateBillingTransactions(billingTransactionIds);
+                dataManager.UpdateBillingTransactionBalanceStatus(billingTransactionIds);
                 scope.Complete();
             } 
             return true;

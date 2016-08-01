@@ -29,7 +29,6 @@ namespace Vanrise.AccountBalance.BP.Activities
           
             IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
             long accountId = -1;
-            long totalCount = 0;
             var list = new List<BillingTransaction>();
             dataManager.GetBillingTransactionsByBalanceUpdated( (billingTransaction) =>
             {
@@ -39,20 +38,16 @@ namespace Vanrise.AccountBalance.BP.Activities
                 if (billingTransaction.AccountId != accountId)
                 {
                     var billingTransactionBatch = new BillingTransactionBatch() { BillingTransactions = list };
-                    totalCount = list.Count();
                     inputArgument.OutputQueue.Enqueue(billingTransactionBatch);
                     list = new List<BillingTransaction>();
                     accountId = billingTransaction.AccountId;
                 }
-
                 list.Add(billingTransaction);
             });
          
             if(list.Count>0)
             {
                 var billingTransactionBatch = new BillingTransactionBatch() { BillingTransactions = list };
-                totalCount = list.Count();
-
                 inputArgument.OutputQueue.Enqueue(billingTransactionBatch);
             }
             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finish Loading New Billing Transactions.");
