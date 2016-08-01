@@ -129,9 +129,11 @@
             $scope.scopeModel.endEffectiveDate = switchConnectivityEntity.EED;
 
             // Load trunks
-            for (var i = 0; i < switchConnectivityEntity.Settings.Trunks.length; i++) {
-                var item = switchConnectivityEntity.Settings.Trunks[i];
-                $scope.scopeModel.trunks.push(item);
+            if (switchConnectivityEntity.Settings != null && switchConnectivityEntity.Settings.Trunks != null) {
+                for (var i = 0; i < switchConnectivityEntity.Settings.Trunks.length; i++) {
+                    var item = switchConnectivityEntity.Settings.Trunks[i];
+                    $scope.scopeModel.trunks.push(item);
+                }
             }
         }
 
