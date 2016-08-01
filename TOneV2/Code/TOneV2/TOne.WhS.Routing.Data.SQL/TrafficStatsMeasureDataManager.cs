@@ -9,19 +9,19 @@ namespace TOne.WhS.Routing.Data.SQL
     public class TrafficStatsMeasureDataManager : BaseSQLDataManager, ITrafficStatsMeasureDataManager
     {
         public TrafficStatsMeasureDataManager()
-            : base(GetConnectionStringName("TOneWhS_TS_DBConnStringKey", "TOneWhS_TS_DBConnString"))
+            : base(GetConnectionStringName("TOneWhS_Analytics_DBConnStringKey", "TOneAnalyticsDBConnString"))
         {
 
         }
         #region public methods
         public List<SupplierZoneTrafficStatsMeasure> GetQualityMeasurementsGroupBySupplierZone(TimeSpan timeSpan)
         {
-            return GetItemsSP("[TOneWhS_Analytic].[sp_TrafficStatsMeasure_GroupBySupplierZone]", SupplierZoneTrafficStatsMeasureMapper, timeSpan.TotalSeconds);
+            return GetItemsSP("[TOneWhS_Analytics].[sp_TrafficStatsMeasure_GroupBySupplierZone]", SupplierZoneTrafficStatsMeasureMapper, timeSpan.TotalSeconds);
         }
 
         public List<SaleZoneSupplierTrafficStatsMeasure> GetQualityMeasurementsGroupBySaleZoneSupplier(TimeSpan timeSpan)
         {
-            return GetItemsSP("[TOneWhS_Analytic].[sp_TrafficStatsMeasure_GroupBySaleZone_Supplier]", SaleZoneSupplierTrafficStatsMeasureMapper, timeSpan.TotalSeconds);
+            return GetItemsSP("[TOneWhS_Analytics].[sp_TrafficStatsMeasure_GroupBySaleZone_Supplier]", SaleZoneSupplierTrafficStatsMeasureMapper, timeSpan.TotalSeconds);
         }
         #endregion
 

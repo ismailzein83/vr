@@ -229,6 +229,7 @@
     <add key="Queue_NbOfMaxConcurrentActivators_Default" value="10"/>
     <add key="Queue_NbOfMaxConcurrentActivators_UpdateSummaryQueueActivator" value="30" />
     <add key="Queue_ConsecutiveItemsToProcess" value="5"/>
+    <add key="TOneWhS_Analytics_DBConnStringKey" value="TOneAnalyticsDBConnString"/>
   </appSettings>
   <system.codedom>
     <compilers>
