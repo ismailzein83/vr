@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
@@ -26,6 +27,9 @@ namespace TOne.WhS.DBSync.Business
 
         public override void Migrate(MigrationInfoContext context)
         {
+            SalePriceListManager manager = new SalePriceListManager();
+            context.GeneratedIdsInfoContext = new GeneratedIdsInfoContext();
+            context.GeneratedIdsInfoContext.TypeId = manager.GetSalePriceListTypeId();
             base.Migrate(context);
         }
 
