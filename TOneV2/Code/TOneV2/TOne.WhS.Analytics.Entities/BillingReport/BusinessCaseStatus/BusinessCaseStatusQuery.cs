@@ -10,9 +10,7 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
     {
 
         public DateTime fromDate { get; set; }
-   
-
-        public DateTime toDate { get; set; }
+        public DateTime? toDate { get; set; }
         public  int customerId { get; set; }
         public int topDestination { get; set; }
         public int currencyId { get; set; }

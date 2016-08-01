@@ -67,27 +67,27 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         customerFormatted.Destination = zoneValue.Name;
                     var saleRateValue = analyticRecord.DimensionValues[6];
                     if (saleRateValue != null)
-                        customerFormatted.SaleRate = ReportHelpers.FormatNumberDigitRate(Convert.ToDecimal(saleRateValue.Value ?? 0.0));
+                        customerFormatted.SaleRate = ReportHelpers.FormatLongNumberDigitRate(Convert.ToDecimal(saleRateValue.Value ?? 0.0));
 
                     var costRateValue = analyticRecord.DimensionValues[5];
                     if (costRateValue != null)
-                        customerFormatted.CostRate = ReportHelpers.FormatNumberDigitRate(Convert.ToDecimal(costRateValue.Value ?? 0.0));
+                        customerFormatted.CostRate = ReportHelpers.FormatLongNumberDigitRate(Convert.ToDecimal(costRateValue.Value ?? 0.0));
 
                     MeasureValue saleDuration;
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
                     decimal saleDurationValue = Convert.ToDecimal(saleDuration.Value ?? 0.0);
-                    customerFormatted.SaleDuration = ReportHelpers.FormatNumber(saleDurationValue);
+                    customerFormatted.SaleDuration = ReportHelpers.FormatNormalNumberDigitRate(saleDurationValue);
 
 
                     MeasureValue costDuration;
                     analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
                     decimal costDurationValue = Convert.ToDecimal(costDuration.Value ?? 0.0);
-                    customerFormatted.CostDuration = ReportHelpers.FormatNumber(costDurationValue);
+                    customerFormatted.CostDuration = ReportHelpers.FormatNormalNumberDigitRate(costDurationValue);
 
                     MeasureValue profit;
                     analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
                     customerFormatted.Profit = Convert.ToDouble(profit.Value ?? 0.0);
-                    customerFormatted.ProfitFormatted = ReportHelpers.FormatNumber(customerFormatted.Profit);
+                    customerFormatted.ProfitFormatted = ReportHelpers.FormatNormalNumberDigitRate(customerFormatted.Profit);
 
                     MeasureValue costNet;
                     analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);

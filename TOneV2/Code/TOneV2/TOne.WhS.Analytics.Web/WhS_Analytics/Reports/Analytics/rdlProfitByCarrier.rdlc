@@ -1320,7 +1320,7 @@
     </ReportParameter>
     <ReportParameter Name="ToDate">
       <DataType>DateTime</DataType>
-      <AllowBlank>true</AllowBlank>
+      <Nullable>true</Nullable>
       <Prompt>ToDate</Prompt>
     </ReportParameter>
     <ReportParameter Name="DigitRate">

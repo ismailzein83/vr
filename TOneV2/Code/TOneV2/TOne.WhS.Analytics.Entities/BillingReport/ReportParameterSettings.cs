@@ -50,5 +50,6 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         public bool CustomerIdNotOptional { get; set; }
 
         public bool RequiresSingleCustomer { get; set; }
+
     }
 }

@@ -136,7 +136,7 @@ namespace TOne.WhS.Analytics.Business
             return excelResult;
         }
 
-        private void CreateWorkSheetDurationAmount(Workbook workbook, string workSheetName, List<BusinessCaseStatus> listBusinessCaseStatus, DateTime fromDate, DateTime toDate, int topDestination, string chartTitle, Style style, string currency)
+        private void CreateWorkSheetDurationAmount(Workbook workbook, string workSheetName, List<BusinessCaseStatus> listBusinessCaseStatus, DateTime fromDate, DateTime? toDate, int topDestination, string chartTitle, Style style, string currency)
         {
             Worksheet worksheet = workbook.Worksheets.Add(workSheetName);
             int lstCarrierProfileCount = listBusinessCaseStatus.Count();
@@ -189,13 +189,13 @@ namespace TOne.WhS.Analytics.Business
             }
         }
 
-        private void CreateWorkSheet(Workbook workbook, string workSheetName, List<BusinessCaseStatus> listBusinessCaseStatus, DateTime fromDate, DateTime toDate, int topDestination, string chartTitle, Style style)
+        private void CreateWorkSheet(Workbook workbook, string workSheetName, List<BusinessCaseStatus> listBusinessCaseStatus, DateTime fromDate, DateTime? toDate, int topDestination, string chartTitle, Style style)
         {
             Worksheet worksheet = workbook.Worksheets.Add(workSheetName);
             int lstCarrierProfileCount = listBusinessCaseStatus.Count;
             if (lstCarrierProfileCount > 0)
             {
-                TimeSpan span = toDate.Subtract(fromDate);
+                TimeSpan span = (toDate.HasValue) ? ((DateTime)toDate).Subtract(fromDate) : DateTime.Now.Subtract(fromDate);
                 int numberOfMonths = (int)(span.TotalDays / 30);
 
                 int headerIndex = 2;

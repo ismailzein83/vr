@@ -9,6 +9,6 @@ namespace TOne.WhS.Analytics.Data
 {
     public interface IBillingReportDataManager : IDataManager
     {
-       List<BusinessCaseStatus> GetBusinessCaseStatus(DateTime fromDate, DateTime toDate, int carrierAccountId, int topDestination, bool isSale, bool isAmount, int currencyId);
+       List<BusinessCaseStatus> GetBusinessCaseStatus(DateTime fromDate, DateTime? toDate, int carrierAccountId, int topDestination, bool isSale, bool isAmount, int currencyId);
     }
 }

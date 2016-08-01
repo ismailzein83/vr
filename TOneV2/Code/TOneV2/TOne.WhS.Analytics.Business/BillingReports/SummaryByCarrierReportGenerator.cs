@@ -91,12 +91,12 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 MeasureValue duration;
                 analyticRecord.MeasureValues.TryGetValue(parameters.IsCost ? "CostDuration" : "SaleDuration", out duration);
                 carrierSummary.Duration = Convert.ToDecimal(duration.Value ?? 0.0);
-                carrierSummary.DurationFormatted = ReportHelpers.FormatNumber(carrierSummary.Duration);
+                carrierSummary.DurationFormatted = ReportHelpers.FormatNormalNumberDigitRate(carrierSummary.Duration);
 
                 MeasureValue net;
                 analyticRecord.MeasureValues.TryGetValue(parameters.IsCost ? "CostNet" : "SaleNet", out net);
                 carrierSummary.Net = Convert.ToDouble(net.Value ?? 0.0);
-                carrierSummary.NetFormatted = ReportHelpers.FormatNumber(carrierSummary.Net);
+                carrierSummary.NetFormatted = ReportHelpers.FormatNormalNumberDigitRate(carrierSummary.Net);
 
                 
         
@@ -113,7 +113,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         {
             Dictionary<string, RdlcParameter> list = new Dictionary<string, RdlcParameter>();
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
-            list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.ToString(), IsVisible = true });
+            list.Add("ToDate", new RdlcParameter { Value =  parameters.ToTime.HasValue ? parameters.ToTime.ToString() :null, IsVisible = true });
             list.Add("Title", new RdlcParameter { Value = string.Format("{0} Summary", parameters.IsCost ? "Suppliers" : "Customers"), IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });

@@ -611,14 +611,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Profit">
+                    <Textbox Name="ProfitFormatted">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Profit.Value</Value>
+                              <Value>=Fields!ProfitFormatted.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -629,7 +629,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Profit</rd:DefaultName>
+                      <rd:DefaultName>ProfitFormatted</rd:DefaultName>
                       <ZIndex>1</ZIndex>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
@@ -740,7 +740,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Totals Duration</Value>
+                              <Value xml:space="preserve"> </Value>
                               <Style>
                                 <FontSize>12pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -917,16 +917,25 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
-                              <Style />
+                              <Value>Profit</Value>
+                              <Style>
+                                <FontSize>12pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                                <Color>DarkRed</Color>
+                              </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>textbox32</rd:DefaultName>
                       <ZIndex>11</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1030,8 +1039,12 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
-                              <Style />
+                              <Value>Totals</Value>
+                              <Style>
+                                <FontSize>12pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                                <Color>DarkRed</Color>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
@@ -1195,23 +1208,30 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="textbox39">
+                    <Textbox Name="Textbox24">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
-                              <Style />
+                              <Value>=FormatNumber(Sum(Fields!Profit.Value),Parameters!DigitRate.Value)</Value>
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>textbox39</rd:DefaultName>
-                      <ZIndex>21</ZIndex>
+                      <rd:DefaultName>Textbox24</rd:DefaultName>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1295,7 +1315,7 @@
         </TablixRowHierarchy>
         <DataSetName>CustomerRouting</DataSetName>
         <Height>1in</Height>
-        <Width>10.44792in</Width>
+        <Width>10.44791in</Width>
         <Style />
       </Tablix>
     </ReportItems>
@@ -1738,11 +1758,18 @@
       </ConnectionProperties>
       <rd:DataSourceID>186eacfb-4acf-4f5d-ac45-90869fb48d1c</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="TOneWhSAnalyticsEntitiesBillingReportRoutingByCustomer">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>55652b63-fc39-4653-a561-b33047fb72a1</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="CustomerRouting">
       <Query>
-        <DataSourceName>TOneAnalyticsBusiness</DataSourceName>
+        <DataSourceName>TOneWhSAnalyticsEntitiesBillingReportRoutingByCustomer</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
@@ -1754,10 +1781,6 @@
           <DataField>Destination</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="SaleDuration">
-          <DataField>SaleDuration</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
         <Field Name="SaleRate">
           <DataField>SaleRate</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -1766,29 +1789,44 @@
           <DataField>Supplier</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="CostDuration">
-          <DataField>CostDuration</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
         <Field Name="CostRate">
           <DataField>CostRate</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Profit">
           <DataField>Profit</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="SaleNet">
+          <DataField>SaleNet</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="CostNet">
+          <DataField>CostNet</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="ProfitFormatted">
+          <DataField>ProfitFormatted</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="ProfitPerc">
           <DataField>ProfitPerc</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="CostDuration">
+          <DataField>CostDuration</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SaleDuration">
+          <DataField>SaleDuration</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
-        <rd:DataSetName>TOne.Analytics.Business</rd:DataSetName>
-        <rd:TableName>BillingStatisticManager</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetCustomerRouting</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceSelectMethodSignature>System.Collections.Generic.List`1[TOne.Analytics.Entities.CustomerRoutingFormatted] GetCustomerRouting(System.DateTime, System.DateTime, System.String, System.String, System.Nullable`1[System.Int32], System.Nullable`1[System.Int32])</rd:ObjectDataSourceSelectMethodSignature>
-        <rd:ObjectDataSourceType>TOne.Analytics.Business.BillingStatisticManager, TOne.Analytics.Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:DataSetName>TOne.WhS.Analytics.Entities.BillingReport.RoutingByCustomer</rd:DataSetName>
+        <rd:TableName>RoutingByCustomerFormatted</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetRoutingByCustomerRDLCSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Analytics.Entities.BillingReport.RoutingByCustomer.RoutingByCustomerFormatted, TOne.WhS.Analytics.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>

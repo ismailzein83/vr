@@ -15,7 +15,6 @@ namespace TOne.WhS.Analytics.Entities.BillingReport.RoutingByCustomer
         public string SaleRate { get; set; }
 
         public string Supplier { get; set; }
-
         public string CostRate { get; set; }
         public double? Profit { get; set; }
         public double? SaleNet { get; set; }
@@ -24,5 +23,21 @@ namespace TOne.WhS.Analytics.Entities.BillingReport.RoutingByCustomer
         public string ProfitPerc { get; set; }
         public string CostDuration { get; set; }
         public string SaleDuration { get; set; }
+
+         /// <summary>
+        /// DO NOT REMOVE
+        /// the purpose of this method is to set the schema in the RDLC file
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        public RoutingByCustomerFormatted() { }
+        public IEnumerable<RoutingByCustomerFormatted> GetRoutingByCustomerRDLCSchema()
+        {
+            return null;
+        }
+
+
+
+
     }
 }

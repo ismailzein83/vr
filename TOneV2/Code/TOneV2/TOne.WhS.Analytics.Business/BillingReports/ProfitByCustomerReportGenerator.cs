@@ -142,7 +142,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
 
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
-            list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.ToString(), IsVisible = true });
+            list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.HasValue ? parameters.ToTime.ToString() : null, IsVisible = true });
             list.Add("Title", new RdlcParameter { Value = "Profit by Customer", IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });

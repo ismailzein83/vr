@@ -25,13 +25,15 @@ namespace TOne.WhS.Analytics.Data.SQL
         
         #endregion
 
-        public List<Entities.BillingReport.BusinessCaseStatus> GetBusinessCaseStatus(DateTime fromDate, DateTime toDate, int carrierAccountId, int topDestination, bool isSale, bool isAmount, int currencyId)
+        public List<Entities.BillingReport.BusinessCaseStatus> GetBusinessCaseStatus(DateTime fromDate, DateTime? toDate, int carrierAccountId, int topDestination, bool isSale, bool isAmount, int currencyId)
         {
             string DurationField = "BS.SaleDurationInSeconds ";
             string amountField = isSale ? "BS.SaleNet / ISNULL(ERS.Rate, 1) " : "BS.CostNet / ISNULL(ERC.Rate, 1) ";
             string amountDuration = isAmount ? amountField : DurationField;
             string carrierId = isSale ? "BS.CustomerId" : "BS.SupplierId";
-
+            DateTime _toTodate = DateTime.Now;
+            if (toDate.HasValue)
+                _toTodate = (DateTime)toDate;
 
             string query = String.Format(@"{2}
                 SELECT TOP (@TopDestination)  BS.SaleZoneId AS ZoneId ,Year(BS.BatchStart) AS YearDuration, 
@@ -53,7 +55,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             {
                 cmd.Parameters.Add(new SqlParameter("@TopDestination", topDestination));
                 cmd.Parameters.Add(new SqlParameter("@FromDate", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day)));
-                cmd.Parameters.Add(new SqlParameter("@ToDate", new DateTime(toDate.Year, toDate.Month, toDate.Day)));
+                cmd.Parameters.Add(new SqlParameter("@ToDate", new DateTime(_toTodate.Year, _toTodate.Month, _toTodate.Day)));
                 cmd.Parameters.Add(new SqlParameter("@CustomerId", carrierAccountId));
             });
         }

@@ -108,8 +108,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 DateTime date = listDailySummary.Select(r => DateTime.Parse(r.Day.ToString())).Max();
                 int startDay = parameters.FromTime.Day;
 
-
-                int endDay = parameters.ToTime.Day;
+                int endDay = 0;
+                if(parameters.ToTime.HasValue)
+                 endDay = parameters.ToTime.Value.Day ;
 
                 int maxDays = (endDay - startDay) + 1;
                 int year = date.Date.Year;

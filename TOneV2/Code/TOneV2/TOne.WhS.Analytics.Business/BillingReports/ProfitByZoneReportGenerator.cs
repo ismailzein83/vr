@@ -140,7 +140,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             Dictionary<string, RdlcParameter> list = new Dictionary<string, RdlcParameter>();
             list.Add("GroupByCustomer", new RdlcParameter() { Value = parameters.GroupByCustomer.ToString(), IsVisible = false });
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
-            list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.ToString(), IsVisible = true });
+            list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.HasValue ? parameters.ToTime.ToString():null, IsVisible = true });
             list.Add("Title", new RdlcParameter { Value = "Profit By Zone", IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
