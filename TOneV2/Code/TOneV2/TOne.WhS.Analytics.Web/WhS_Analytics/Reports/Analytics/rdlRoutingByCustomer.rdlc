@@ -1513,7 +1513,7 @@
           <Top>1.23958in</Top>
           <Left>1.03262in</Left>
           <Height>0.375in</Height>
-          <Width>2.75in</Width>
+          <Width>3.61667in</Width>
           <ZIndex>6</ZIndex>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>
@@ -1541,7 +1541,7 @@
           <Top>1.61458in</Top>
           <Left>1.03262in</Left>
           <Height>0.375in</Height>
-          <Width>2.75in</Width>
+          <Width>3.61667in</Width>
           <ZIndex>7</ZIndex>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>
@@ -1848,7 +1848,7 @@
     </ReportParameter>
     <ReportParameter Name="ToDate">
       <DataType>DateTime</DataType>
-      <AllowBlank>true</AllowBlank>
+      <Nullable>true</Nullable>
       <Prompt>ToDate</Prompt>
     </ReportParameter>
     <ReportParameter Name="LogoPath">
