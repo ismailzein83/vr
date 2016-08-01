@@ -45,9 +45,8 @@
                 WhS_BE_CustomerZoneAPIService.AddCustomerZones(customerZonesObj).then(function (response) {
                     if (VRNotificationService.notifyOnItemAdded("Countries", response)) {
                         if ($scope.onCountriesSold != undefined) {
-                            $scope.onCountriesSold(response);
+                            $scope.onCountriesSold(response.InsertedObject);
                         }
-
                         $scope.modalContext.closeModal();
                     }
                 }).catch(function (error) {
