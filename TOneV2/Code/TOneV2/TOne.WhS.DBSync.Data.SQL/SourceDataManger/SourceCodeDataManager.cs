@@ -31,6 +31,19 @@ namespace TOne.WhS.DBSync.Data.SQL
             };
         }
 
+
+        public void LoadSourceItems(bool isSaleCode, Action<SourceCode> itemToAdd)
+        {
+            ExecuteReaderText(query_getSourceCodes + (isSaleCode ? "where Zone.SupplierID = 'SYS'" : "where Zone.SupplierID <> 'SYS'"), (reader) =>
+                {
+                    while (reader.Read())
+                    {
+                        itemToAdd(SourceCodeMapper(reader));
+                    }
+                }, null);
+        }
+
+
         const string query_getSourceCodes = @"SELECT Code.ID ID, Code.Code Code, Code.ZoneID ZoneID, 
                                                      Code.BeginEffectiveDate BeginEffectiveDate, Code.EndEffectiveDate EndEffectiveDate, Zone.CodeGroup CodeGroup
                                                      FROM Code WITH (NOLOCK) INNER JOIN Zone WITH (NOLOCK)  ON Code.ZoneID = Zone.ZoneID ";

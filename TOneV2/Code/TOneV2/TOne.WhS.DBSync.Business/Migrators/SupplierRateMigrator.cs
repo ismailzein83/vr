@@ -45,8 +45,8 @@ namespace TOne.WhS.DBSync.Business
 
         public override void AddItems(List<SupplierRate> itemsToAdd)
         {
-            dbSyncDataManager.ApplySupplierRatesToTemp(itemsToAdd, 1);
-            TotalRowsSuccess = itemsToAdd.Count;
+            dbSyncDataManager.ApplySupplierRatesToTemp(itemsToAdd, TotalRowsSuccess + 1);
+            TotalRowsSuccess = TotalRowsSuccess + itemsToAdd.Count;
         }
 
         public override IEnumerable<SourceRate> GetSourceItems()
@@ -98,6 +98,19 @@ namespace TOne.WhS.DBSync.Business
         public override void FillTableInfo(bool useTempTables)
         {
 
+        }
+
+        public override void LoadSourceItems(Action<SourceRate> onItemLoaded)
+        {
+            dataManager.LoadSourceItems(false, onItemLoaded);
+        }
+
+        public override bool IsLoadItemsApproach
+        {
+            get
+            {
+                return true;
+            }
         }
 
         private RateChangeType GetRateChangeType(Int16 sourceRateChangeType)

@@ -18,6 +18,18 @@ namespace TOne.WhS.DBSync.Data.SQL
             return GetItemsText(query_getSourceRates + (isSaleRate ? "where Zone.SupplierID = 'SYS'" : "where Zone.SupplierID <> 'SYS'"), SourceRateMapper, null);
         }
 
+
+        public void LoadSourceItems(bool isSaleRate, Action<SourceRate> itemToAdd)
+        {
+            ExecuteReaderText(query_getSourceRates + (isSaleRate ? "where Zone.SupplierID = 'SYS'" : "where Zone.SupplierID <> 'SYS'"), (reader) =>
+            {
+                while (reader.Read())
+                {
+                    itemToAdd(SourceRateMapper(reader));
+                }
+            }, null);
+        }
+
         private SourceRate SourceRateMapper(IDataReader arg)
         {
             return new SourceRate()

@@ -18,6 +18,17 @@ namespace TOne.WhS.DBSync.Data.SQL
             return GetItemsText(isSalePriceList ? query_getSaleSourcePriceLists : query_getSupplierSourcePriceLists, SourcePriceListMapper, null);
         }
 
+        public void LoadSourceItems(bool isSalePriceList, Action<SourcePriceList> itemToAdd)
+        {
+            ExecuteReaderText(query_getSupplierSourcePriceLists, (reader) =>
+                    {
+                        while (reader.Read())
+                        {
+                            itemToAdd(SourcePriceListMapper(reader));
+                        }
+                    }, null);
+        }
+
         private SourcePriceList SourcePriceListMapper(IDataReader arg)
         {
             return new SourcePriceList()
@@ -31,6 +42,8 @@ namespace TOne.WhS.DBSync.Data.SQL
                 SourceFileName = arg["SourceFileName"] as string,
             };
         }
+
+
 
         const string query_getSaleSourcePriceLists = @"SELECT  PriceListID ,  SupplierID, CustomerID,  Description, CurrencyID,  BeginEffectiveDate ,  EndEffectiveDate,
                                                                NULL SourceFileBytes, NULL SourceFileName FROM PriceList WITH (NOLOCK) where SupplierID = 'SYS' ";

@@ -41,14 +41,15 @@ namespace TOne.WhS.DBSync.Business
 
         public override void AddItems(List<SupplierPriceList> itemsToAdd)
         {
-            dbSyncDataManager.ApplySupplierPriceListsToTemp(itemsToAdd, 1);
-            TotalRowsSuccess = itemsToAdd.Count;
+            dbSyncDataManager.ApplySupplierPriceListsToTemp(itemsToAdd, TotalRowsSuccess+ 1);
+            TotalRowsSuccess  = TotalRowsSuccess + itemsToAdd.Count;
         }
 
         public override IEnumerable<SourcePriceList> GetSourceItems()
         {
             return dataManager.GetSourcePriceLists(false);
         }
+
 
         public override SupplierPriceList BuildItemFromSource(SourcePriceList sourceItem)
         {
@@ -100,6 +101,19 @@ namespace TOne.WhS.DBSync.Business
             DBTable dbTableSupplierPriceList = Context.DBTables[DBTableName.SupplierPriceList];
             if (dbTableSupplierPriceList != null)
                 dbTableSupplierPriceList.Records = dbSyncDataManager.GetSupplierPriceLists(useTempTables);
+        }
+
+        public override void LoadSourceItems(Action<SourcePriceList> onItemLoaded)
+        {
+            dataManager.LoadSourceItems(false, onItemLoaded);
+        }
+
+        public override bool IsLoadItemsApproach
+        {
+            get
+            {
+                return true;
+            }
         }
     }
 }

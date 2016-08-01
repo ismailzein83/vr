@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
@@ -38,8 +39,8 @@ namespace TOne.WhS.DBSync.Business
 
         public override void AddItems(List<SaleCode> itemsToAdd)
         {
-            dbSyncDataManager.ApplySaleCodesToTemp(itemsToAdd, 1);
-            TotalRowsSuccess = itemsToAdd.Count;
+            dbSyncDataManager.ApplySaleCodesToTemp(itemsToAdd, TotalRowsSuccess + 1);
+            TotalRowsSuccess = TotalRowsSuccess + itemsToAdd.Count;
         }
 
         public override IEnumerable<SourceCode> GetSourceItems()
@@ -78,6 +79,18 @@ namespace TOne.WhS.DBSync.Business
 
         }
 
+        public override void LoadSourceItems(Action<SourceCode> onItemLoaded)
+        {
+            dataManager.LoadSourceItems(true, onItemLoaded);
+        }
+
+        public override bool IsLoadItemsApproach
+        {
+            get
+            {
+                return true;
+            }
+        }
        
     }
 }
