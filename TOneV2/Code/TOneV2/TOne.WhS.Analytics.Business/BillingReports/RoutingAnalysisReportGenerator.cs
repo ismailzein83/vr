@@ -27,7 +27,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     ToTime = parameters.ToTime,
                     CurrencyId = parameters.CurrencyId,
                     ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>()
+                    Filters = new List<DimensionFilter>(),
+                    TopRecords = parameters.Top
                 },
                 SortByColumnName = "DimensionValues[0].Name"
             };
@@ -58,15 +59,15 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 Query = new AnalyticQuery
                 {
                     DimensionFields = new List<string> { "SaleZone", "Supplier" },
-                    MeasureFields = new List<string> { "ASR", "ACD", "DurationInMinutes" },
+                    MeasureFields = new List<string> { "DurationInMinutes", "ASR", "ACD" },
                     TableId = 4,
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
                     CurrencyId = parameters.CurrencyId,
                     ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>()
-                },
-                SortByColumnName = "DimensionValues[0].Name"
+                    Filters = new List<DimensionFilter>(),
+                    OrderType = AnalyticQueryOrderType.ByAllMeasures
+                }
             };
             if (!String.IsNullOrEmpty(parameters.ZonesId))
             {
@@ -87,7 +88,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             double TotalSale = 0;
             double TotalCost = 0;
             double TotalProfit = 0;
+            DateTime start = DateTime.Now;
             var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
+            TimeSpan spent = DateTime.Now.Subtract(start);
             if (result != null)
                 foreach (var analyticRecord in result.Data)
                 {
@@ -123,12 +126,19 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     routingAnalysis.Profit = Convert.ToDouble(profit.Value ?? 0.0);
                     routingAnalysis.ProfitFormatted = ReportHelpers.FormatNumber(routingAnalysis.Profit);
 
-                    routingAnalysis.AVGCostFormatted = (routingAnalysis.Duration == 0 || routingAnalysis.CostNet == 0)
+                    routingAnalysis.AVGCost = (routingAnalysis.Duration == 0 || routingAnalysis.CostNet == 0)
+                        ? 0
+                        : (routingAnalysis.SaleNet / (double)routingAnalysis.Duration);
+                    routingAnalysis.AVGCostFormatted = routingAnalysis.AVGCost == 0
                         ? "0"
-                        : ReportHelpers.FormatNumberDigitRate((routingAnalysis.CostNet / (double)routingAnalysis.Duration));
-                    routingAnalysis.AVGSaleFormatted = (routingAnalysis.Duration == 0 || routingAnalysis.SaleNet == 0)
+                        : ReportHelpers.FormatNumberDigitRate(routingAnalysis.AVGCost);
+
+                    routingAnalysis.AVGSale = (routingAnalysis.Duration == 0 || routingAnalysis.SaleNet == 0)
+                        ? 0
+                        : (routingAnalysis.SaleNet / (double)routingAnalysis.Duration);
+                    routingAnalysis.AVGSaleFormatted = routingAnalysis.AVGSale == 0
                         ? "0"
-                        : ReportHelpers.FormatNumberDigitRate((routingAnalysis.SaleNet / (double)routingAnalysis.Duration));
+                        : ReportHelpers.FormatNumberDigitRate(routingAnalysis.AVGSale);
 
                     if (!routingAnalysisFormatteds.ContainsKey(routingAnalysis.SaleZone + routingAnalysis.Supplier))
                         routingAnalysisFormatteds[routingAnalysis.SaleZone + routingAnalysis.Supplier] = routingAnalysis;
@@ -145,8 +155,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             parameters.TotalCost = TotalSale;
             parameters.TotalProfit = TotalProfit;
 
-
+            start = DateTime.Now;
             result = analyticManager.GetFilteredRecords(trafficDataRetrievalInput) as AnalyticSummaryBigResult<AnalyticRecord>;
+            spent = DateTime.Now.Subtract(start);
             if (result != null)
                 foreach (var analyticRecord in result.Data)
                 {
@@ -173,11 +184,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         routingAnalysis.ACDFormatted = ReportHelpers.FormatNumber(routingAnalysis.ACD);
                     }
                 }
+
             Dictionary<string, System.Collections.IEnumerable> dataSources =
                 new Dictionary<string, System.Collections.IEnumerable>
                 {
                     {"RoutingAnalysis", listRoutingAnalysisFormatteds}
                 };
+
             return dataSources;
         }
 
@@ -186,9 +199,10 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             Dictionary<string, RdlcParameter> list = new Dictionary<string, RdlcParameter>
             {
                 {"FromDate", new RdlcParameter {Value = parameters.FromTime.ToString(), IsVisible = true}},
-                {"ToDate", new RdlcParameter {Value = parameters.ToTime.ToString(), IsVisible = true}},
+                {"ToDate", new RdlcParameter {Value =(parameters.ToTime.HasValue)?parameters.ToTime.ToString():null, IsVisible = true}},
                 {"Title", new RdlcParameter {Value = "Routing Analysis Report", IsVisible = true}},
                 {"Currency", new RdlcParameter {Value = parameters.CurrencyDescription, IsVisible = true}},
+                {"Customer", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.CustomersId, "Customers"), IsVisible = true }},
                 {"LogoPath", new RdlcParameter {Value = "logo", IsVisible = true}},
                 {"DigitRate", new RdlcParameter {Value = "2", IsVisible = true}},
                 {"TotalDuration", new RdlcParameter {Value =  ReportHelpers.FormatNumber(parameters.TotalDuration), IsVisible = true}},
@@ -197,10 +211,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 {"TotalProfit", new RdlcParameter {Value =  ReportHelpers.FormatNumber(parameters.TotalProfit), IsVisible = true}},
                 {"PageBreak", new RdlcParameter {Value = parameters.PageBreak.ToString(), IsVisible = true}}
             };
-
-
-
-
             return list;
         }
     }
