@@ -297,6 +297,8 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\SummaryBatchTimeIntervalRange\Templates\SummaryBatchStartIdentificationSelector.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\SummaryBatchTimeIntervalRange\vr-genericdata-summarytransformation-timeinterval-selector.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\SummaryBatchTimeIntervalRange\vr-genericdata-summarytransformation-summarybatchstartidentification-selector.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\VROjectType\Templates\VRDaraRecordObjectTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\VROjectType\vr_genericdata_datarecordobjecttype_propertyevaluator.js" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorStoreBatchTemplate.html" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorGenerateSummaryTemplate.html" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorUpdateSummaryTemplate.html" />
@@ -405,6 +407,7 @@
     <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldChoiceAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldTypeConfigAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\DataRecordObjectTypeConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordStorageLogAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordStorageAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataStoreAPIService.js" />

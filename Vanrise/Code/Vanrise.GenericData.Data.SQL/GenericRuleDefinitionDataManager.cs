@@ -58,7 +58,8 @@ namespace Vanrise.GenericData.Data.SQL
                 GenericRuleDefinitionId = (int)reader["ID"],
                 Name = (string)reader["Name"],
                 CriteriaDefinition = details.CriteriaDefinition,
-                SettingsDefinition = details.SettingsDefinition
+                SettingsDefinition = details.SettingsDefinition,
+                Objects = details.Objects
             };
         }
 

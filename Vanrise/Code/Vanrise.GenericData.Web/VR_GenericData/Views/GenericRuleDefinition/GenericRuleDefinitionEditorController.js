@@ -7,10 +7,17 @@
     function GenericRuleDefinitionEditorController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VR_Sec_MenuAPIService, VR_Sec_ViewAPIService, InsertOperationResultEnum, VR_Sec_ViewTypeEnum, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var isEditMode;
+
         var viewTypeName = "VR_GenericData_GenericRule";
+        var viewEntity;
+
         var menuItems;
+
         var treeAPI;
         var treeReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var objectDirectiveAPI;
+        var objectDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         var criteriaDirectiveAPI;
         var criteriaDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -19,14 +26,14 @@
         var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         var genericRuleDefinitionId;
-        var settingsTypeName;
         var genericRuleDefinitionEntity;
+        var settingsTypeName;
 
-        var viewEntity;
 
         loadParameters();
         defineScope();
         load();
+
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
@@ -45,6 +52,11 @@
                 treeAPI = api;
                 treeReadyDeferred.resolve();
             };
+
+            $scope.scopeModel.onObjectDirectiveReady = function (api) {
+                objectDirectiveAPI = api;
+                objectDirectiveReadyDeferred.resolve();
+            };
             $scope.scopeModel.onCriteriaDirectiveReady = function (api) {
                 criteriaDirectiveAPI = api;
                 criteriaDirectiveReadyDeferred.resolve();
@@ -60,6 +72,10 @@
                 else
                     return insert();
             };
+            $scope.scopeModel.close = function () {
+                $scope.modalContext.closeModal();
+            };
+
             $scope.hasSaveGenericRuleDefinition = function () {
                 if (isEditMode) {
                     return VR_GenericData_GenericRuleDefinitionAPIService.HasUpdateGenericRuleDefinition();
@@ -68,14 +84,10 @@
                     return VR_GenericData_GenericRuleDefinitionAPIService.HasAddGenericRuleDefinition();
                 }
             }
-            $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal();
-            };
             $scope.scopeModel.validateMenuLocation = function () {
                 return ($scope.scopeModel.selectedMenuItem != undefined) ? null : 'No menu location selected';
             };
         }
-
         function load() {
             $scope.isLoading = true;
 
@@ -93,6 +105,7 @@
                 loadAllControls();
             }
         }
+
         function getEntities() {
             return UtilsService.waitMultipleAsyncOperations([getGenericRuleDefinition, getGenericRuleDefinitionView]);
 
@@ -108,7 +121,7 @@
             }
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTree, loadCriteriaDirective, loadSettingsDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTree, loadCriteriaDirective, loadSettingsDirective, loadObjectDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -152,6 +165,23 @@
                         }
                     });
                 }
+            }
+            function loadObjectDirective() {
+                var objectDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                objectDirectiveReadyDeferred.promise.then(function () {
+                    var objectDirectivePayload;
+
+                    if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.Objects != null) {
+                        objectDirectivePayload = {
+                            Objects : genericRuleDefinitionEntity.Objects
+                        };
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(objectDirectiveAPI, objectDirectivePayload, objectDirectiveLoadDeferred);
+                });
+
+                return objectDirectiveLoadDeferred.promise;
             }
             function loadCriteriaDirective() {
                 var criteriaDirectiveLoadDeferred = UtilsService.createPromiseDeferred();

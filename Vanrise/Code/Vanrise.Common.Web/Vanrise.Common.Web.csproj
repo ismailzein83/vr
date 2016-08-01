@@ -134,6 +134,7 @@
     <Compile Include="Controllers\DataRecordFieldController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\RateTypeController.cs" />
+    <Compile Include="Controllers\VRObjectTypeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +227,9 @@
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-selector.js" />
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-grid.js" />
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-settings.js" />
+    <Content Include="Common\Directives\VRObjectVariable\Templates\VRObjectVariableManagementTemplate.html" />
+    <Content Include="Common\Directives\VRObjectVariable\vr-common-objecttype-selective.js" />
+    <Content Include="Common\Directives\VRObjectVariable\vr-common-objectvariable-management.js" />
     <Content Include="Common\ModuleInitialization.js" />
     <Content Include="Common\Services\APIServices\CityAPIService.js" />
     <Content Include="Common\Services\APIServices\SettingsAPIService.js" />
@@ -240,6 +244,7 @@
     <Content Include="Common\Services\APIServices\DataRecordTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\RateTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\StyleDefinitionAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRObjectTypeAPIService.js" />
     <Content Include="Common\Services\CityService.js" />
     <Content Include="Common\Services\CurrencyExchangeRateService.js" />
     <Content Include="Common\Services\ConnectionStringService.js" />
@@ -253,6 +258,7 @@
     <Content Include="Common\Services\MasterLogService.js" />
     <Content Include="Common\Services\RateTypeService.js" />
     <Content Include="Common\Services\StyleDefinitionService.js" />
+    <Content Include="Common\Services\VRObjectVariableService.js" />
     <Content Include="Common\Views\City\CityEditor.html" />
     <Content Include="Common\Views\City\CityEditorController.js" />
     <Content Include="Common\Views\City\CityManagement.html" />
@@ -315,6 +321,8 @@
     <Content Include="Common\Views\Support.html" />
     <Content Include="Common\Views\Settings\SettingsManagement.html" />
     <Content Include="Common\Views\Settings\SettingsManagementController.js" />
+    <Content Include="Common\Directives\VRObjectVariable\Templates\VRObjectVariableEditor.html" />
+    <Content Include="Common\Directives\VRObjectVariable\VRObjectVariableEditorController.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Common\Template\Country Add sample.xls" />
