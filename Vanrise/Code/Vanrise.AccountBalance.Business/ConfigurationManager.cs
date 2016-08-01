@@ -29,5 +29,13 @@ namespace Vanrise.AccountBalance.Business
         {
             throw new NotImplementedException();
         }
+
+        public Guid GetUsageTransactionTypeId()
+        {
+            AccountBalanceConfig config = GetAccountBalanceConfig();
+            if (config == null)
+                throw new NullReferenceException("config");
+            return config.UsageTransactionTypeId; 
+        }
     }
 }

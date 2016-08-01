@@ -44,9 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BalanceHistoryDataManager.cs" />
     <Compile Include="BalanceUsageQueueDataManager.cs" />
     <Compile Include="BillingTransactionDataManager.cs" />
     <Compile Include="BillingTransactionTypeDataManager.cs" />
+    <Compile Include="ClosingPeriodDataManager.cs" />
     <Compile Include="LiveBalanceDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

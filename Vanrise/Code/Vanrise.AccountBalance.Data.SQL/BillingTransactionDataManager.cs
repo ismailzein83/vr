@@ -46,6 +46,16 @@ namespace Vanrise.AccountBalance.Data.SQL
                     }
                 });
         }
+
+        public bool InsertBillingTransactionFromLiveBalance(DateTime closingTime,Guid usageTransactionTypeId,long closingPeriodID)
+        {
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_InsertFromLiveBalance]", closingTime, usageTransactionTypeId, closingPeriodID) > 0);
+        }
+        public bool UpdateBillingTransactionClosingPeriod(long closingPeriodID)
+        {
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_UpdateClosingPeriodId]", closingPeriodID) > 0);
+
+        }
         #endregion
 
 

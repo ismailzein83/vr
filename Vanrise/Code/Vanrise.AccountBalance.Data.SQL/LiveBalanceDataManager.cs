@@ -86,6 +86,11 @@ namespace Vanrise.AccountBalance.Data.SQL
             return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_Insert]", accountId, initialBalance, currencyId, usageBalance, currentBalance) > 0);
         }
 
+        public bool UpdateLiveBalanceBalance()
+        {
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_UpdateBalance]") > 0);
+        }
+
         #endregion
 
         #region Mappers

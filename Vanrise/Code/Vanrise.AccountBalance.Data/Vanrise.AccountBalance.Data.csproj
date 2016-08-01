@@ -44,9 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountBalanceDataManagerFactory.cs" />
+    <Compile Include="IBalanceHistoryDataManager.cs" />
     <Compile Include="IBalanceUsageQueueDataManager.cs" />
     <Compile Include="IBillingTransactionDataManager.cs" />
     <Compile Include="IBillingTransactionTypeDataManager.cs" />
+    <Compile Include="IClosingPeriodDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="ILiveBalanceDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

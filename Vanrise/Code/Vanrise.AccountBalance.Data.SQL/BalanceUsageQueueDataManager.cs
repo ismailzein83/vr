@@ -34,7 +34,6 @@ namespace Vanrise.AccountBalance.Data.SQL
                     }
                 });
         }
-
         public bool UpdateUsageBalance(BalanceUsageDetail balanceUsageDetail)
         {
             byte[] binaryArray = null;

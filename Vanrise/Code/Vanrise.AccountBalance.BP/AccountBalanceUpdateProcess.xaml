@@ -154,11 +154,17 @@
       </If.Condition>
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
-          <vaba1:CreateBalanceClosingPeriod sap2010:WorkflowViewState.IdRef="CreateBalanceClosingPeriod_1" />
+          <vaba1:CreateBalanceClosingPeriod sap2010:WorkflowViewState.IdRef="CreateBalanceClosingPeriod_1">
+            <vaba1:CreateBalanceClosingPeriod.BalanceClosingPeriod>
+              <InArgument x:TypeArguments="s:DateTime">
+                <mca:CSharpValue x:TypeArguments="s:DateTime">nextClosingDate</mca:CSharpValue>
+              </InArgument>
+            </vaba1:CreateBalanceClosingPeriod.BalanceClosingPeriod>
+          </vaba1:CreateBalanceClosingPeriod>
         </Sequence>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>d05DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQWNjb3VudEJhbGFuY2UuQlBcQWNjb3VudEJhbGFuY2VVcGRhdGVQcm9jZXNzLnhhbWwZPgOiAQ4CAQFGBUwnAgFlTQVTLQIBXVQFdRACATJ2BZQBEAIBDJUBBaABCgIBAkkLSWICAWZQC1CDAQIBXlgHYyoCAUxkB3QtAgEzdweCAScCASODAQeTASoCAQ2YAQuYAWsCAQOcAQmeARQCAQpgDWB+AgFVWw1blQECAU1xDXF2AgFEbA1slQECATxnDWd9AgE0fw1/gAECASt6DXqMAQIBJJABDZABeAIBHIsBDYsBjAECARWGAQ2GAX0CAQ6dAQudAW4CAQs=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d05DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQWNjb3VudEJhbGFuY2UuQlBcQWNjb3VudEJhbGFuY2VVcGRhdGVQcm9jZXNzLnhhbWwaPgOoAQ4CAQFGBUwnAgFsTQVTLQIBZFQFdRACATl2BZQBEAIBE5UBBaYBCgIBAkkLSWICAW1QC1CDAQIBZVgHYyoCAVNkB3QtAgE6dweCAScCASqDAQeTASoCARSYAQuYAWsCAQOcAQmkARQCAQpgDWB+AgFcWw1blQECAVRxDXF2AgFLbA1slQECAUNnDWd9AgE7fw1/gAECATJ6DXqMAQIBK5ABDZABeAIBI4sBDYsBjAECARyGAQ2GAX0CARWdAQujAS4CAQugARGgAWACAQw=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
