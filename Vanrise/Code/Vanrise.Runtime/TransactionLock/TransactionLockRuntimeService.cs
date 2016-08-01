@@ -62,7 +62,7 @@ namespace Vanrise.Runtime
                 _lastLockingDetailsUpdateTime = DateTime.Now;
                 var lockingDetails = new TransactionLockingDetails
                 {
-                    LockedTransactions = s_transactionLockHander.LockedTransactions
+                    LockedTransactions = CopyLockedTransactions()
                 };
                 try
                 {
@@ -83,6 +83,21 @@ namespace Vanrise.Runtime
                     throw;
                 }
             }
+        }
+
+        private Dictionary<string, Dictionary<Guid, TransactionLockItem>> CopyLockedTransactions()
+        {
+            Dictionary<string, Dictionary<Guid, TransactionLockItem>> copiedTransactions = new Dictionary<string, Dictionary<Guid, TransactionLockItem>>();
+            foreach (var entry in s_transactionLockHander.LockedTransactions)
+            {
+                Dictionary<Guid, TransactionLockItem> copiedEntry = new Dictionary<Guid, TransactionLockItem>();
+                foreach(var lockItemEntry in entry.Value)
+                {
+                    copiedEntry.Add(lockItemEntry.Key, lockItemEntry.Value);
+                }
+                copiedTransactions.Add(entry.Key, copiedEntry);
+            }
+            return copiedTransactions;
         }
 
         private void CheckUnAvailableLockingThreads()
