@@ -5,6 +5,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 	SELECT	s.ID,
-			s.Name
+			s.Name,
+			s.Settings
 	FROM	[TOneWhS_BE].Switch  as s WITH(NOLOCK) 
 END

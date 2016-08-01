@@ -1,12 +1,13 @@
 ﻿CREATE PROCEDURE [TOneWhS_BE].[sp_Switch_Update]
 	@ID int,
-	@Name nvarchar(255)
+	@Name nvarchar(255),
+	@Settings nvarchar(255)
 AS
 BEGIN
 IF NOT EXISTS(select 1 from TOneWhS_BE.Switch where Name = @Name and Id!=@ID) 
 BEGIN
 	Update TOneWhS_BE.Switch
-	Set Name = @Name
+	Set Name = @Name, Settings = @Settings
 	Where ID = @ID
 END
 END

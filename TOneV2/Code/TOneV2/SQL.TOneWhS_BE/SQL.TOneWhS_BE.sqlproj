@@ -341,5 +341,6 @@
     <Build Include="TOneWhs_CP\Stored Procedures\sp_SaleCountry_Preview_GetFiltered.sql" />
     <Build Include="TOneWhs_CP\Stored Procedures\sp_SaleCode_Preview_GetFiltered.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_DealProgress_GetAll.sql" />
+    <Build Include="Security\TOneWhS_RouteSync.sql" />
   </ItemGroup>
 </Project>
