@@ -13,7 +13,7 @@ BEGIN
       ,Sum([DeliveredAttempts]) as TotalDeliveredAttempts
       ,Sum([SuccessfulAttempts]) as TotalSuccesfulAttempts
 
-  FROM [TOneV2_Dev].[TOneWhS_Analytic].[TrafficStats]
+  FROM [TOneWhS_Analytic].[TrafficStats]
     where DATEDIFF(ss, FirstCDRAttempt, GETDATE()) < @TimeSpan
 group by [SupplierZoneID]
      

@@ -1,9 +1,4 @@
-﻿-- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE PROCEDURE [TOneWhS_Analytic].[sp_TrafficStatsMeasure_GroupBySaleZone_Supplier]
+﻿CREATE PROCEDURE [TOneWhS_Analytic].[sp_TrafficStatsMeasure_GroupBySaleZone_Supplier]
 @TimeSpan int
 AS
 BEGIN
@@ -13,7 +8,7 @@ BEGIN
       ,Sum([DeliveredAttempts]) as TotalDeliveredAttempts
       ,Sum([SuccessfulAttempts]) as TotalSuccesfulAttempts
 
-  FROM [TOneV2_Dev].[TOneWhS_Analytic].[TrafficStats]
+  FROM [TOneWhS_Analytic].[TrafficStats]
   where DATEDIFF(ss, FirstCDRAttempt, GETDATE()) < @TimeSpan
 group by [SupplierID], [SaleZoneId]
      

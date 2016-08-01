@@ -91,6 +91,8 @@
     <Folder Include="dbo\" />
     <Folder Include="dbo\Functions\" />
     <Folder Include="dbo\Tables\" />
+    <Folder Include="TOneWhS_RouteSync\" />
+    <Folder Include="TOneWhS_RouteSync\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_BE\Tables\CarrierAccount.sql" />
@@ -342,5 +344,6 @@
     <Build Include="TOneWhs_CP\Stored Procedures\sp_SaleCode_Preview_GetFiltered.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_DealProgress_GetAll.sql" />
     <Build Include="Security\TOneWhS_RouteSync.sql" />
+    <Build Include="TOneWhS_RouteSync\Tables\RouteSyncDefinition.sql" />
   </ItemGroup>
 </Project>
