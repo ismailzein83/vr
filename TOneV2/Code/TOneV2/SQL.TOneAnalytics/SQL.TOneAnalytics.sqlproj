@@ -71,6 +71,7 @@
     <Folder Include="dbo\" />
     <Folder Include="dbo\Functions\" />
     <Folder Include="dbo\Tables\" />
+    <Folder Include="TOneWhS_Analytics\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_Analytics\Tables\TrafficStats15Min.sql" />
@@ -86,5 +87,7 @@
     <Build Include="dbo\Functions\ZeroToMax.sql" />
     <Build Include="TOneWhS_Analytics\User Defined Types\VariationReportTimePeriodType.sql" />
     <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
+    <Build Include="TOneWhS_Analytics\Stored Procedures\sp_TrafficStatsMeasure_GroupBySupplierZone.sql" />
+    <Build Include="TOneWhS_Analytics\Stored Procedures\sp_TrafficStatsMeasure_GroupBySaleZone_Supplier.sql" />
   </ItemGroup>
 </Project>
