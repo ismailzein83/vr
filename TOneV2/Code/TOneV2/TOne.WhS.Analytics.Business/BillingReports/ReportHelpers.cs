@@ -9,6 +9,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 {
     public static class ReportHelpers
     {
+        private static int _longprecision = 5;
+        private static int _normalprecision = 2;
         public static string GetCarrierName(string id, string carrierAs)
         {
             string name = "multiple " + carrierAs;
@@ -35,6 +37,26 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             }
             return name;
         }
+
+        public static string FormatNormalNumberDigitRate(Decimal? number)
+        {
+            return String.Format("{0:#0." + "".PadLeft(_normalprecision, '0') + "}", number);
+        }
+        public static string FormatNormalNumberDigitRate(Double? number)
+        {
+            return String.Format("{0:#0." + "".PadLeft(_normalprecision, '0') + "}", number);
+        }
+
+
+        public static string FormatLongNumberDigitRate(Decimal? number)
+        {
+            return String.Format("{0:#0." + "".PadLeft(_longprecision, '0') + "}", number);
+        }
+        public static string FormatLongNumberDigitRate(Double? number)
+        {
+            return String.Format("{0:#0." + "".PadLeft(_longprecision, '0') + "}", number);
+        }
+
 
         public static string FormatNumberDigitRate(Decimal? number)
         {
