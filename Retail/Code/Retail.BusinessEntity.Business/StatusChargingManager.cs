@@ -15,7 +15,30 @@ namespace Retail.BusinessEntity.Business
     {
         public StatusChargingSet GetChargingSet(int chargingSetId)
         {
-            throw new NotImplementedException();
+            Dictionary<int, StatusChargingSet> cachedStatusChargingSets = GetCachedStatusChargingSets();
+            return cachedStatusChargingSets.GetRecord(chargingSetId);
+        }
+
+        public UpdateOperationOutput<StatusChargingSetDetail> UpdateStatusChargingSet(StatusChargingSet statusChargingSet)
+        {
+            var updateOperationOutput = new UpdateOperationOutput<StatusChargingSetDetail>
+            {
+                Result = UpdateOperationResult.Failed,
+                UpdatedObject = null
+            };
+            IStatusChargingSetDataManager dataManager = BEDataManagerFactory.GetDataManager<IStatusChargingSetDataManager>();
+
+            if (dataManager.Update(statusChargingSet))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = StatusChargingSetDetailMapper(GetChargingSet(statusChargingSet.StatusChargingSetId));
+            }
+            else
+            {
+                updateOperationOutput.Result = UpdateOperationResult.SameExists;
+            }
+            return updateOperationOutput;
         }
         public InsertOperationOutput<StatusChargingSet> AddStatusChargingSet(StatusChargingSet statusChargingSetItem)
         {
@@ -33,7 +56,7 @@ namespace Retail.BusinessEntity.Business
         {
             IStatusChargingSetDataManager dataManager = BEDataManagerFactory.GetDataManager<IStatusChargingSetDataManager>();
             var chargingSets = dataManager.GetStatusChargingSets().ToDictionary(x => x.StatusChargingSetId, x => x);
-            Func<StatusChargingSet, bool> filterExpression = (x) => ((input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower())));
+            Func<StatusChargingSet, bool> filterExpression = x => ((input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower())));
             return DataRetrievalManager.Instance.ProcessResult(input, chargingSets.ToBigResult(input, filterExpression, StatusChargingSetDetailMapper));
         }
         public bool HasInitialCharging(EntityType entityType, long entityId, Guid statusDefinitionId, out Decimal initialCharge)
@@ -84,6 +107,33 @@ namespace Retail.BusinessEntity.Business
                 };
         }
 
+        #region Private Classes
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IStatusDefinitionDataManager _dataManager = BEDataManagerFactory.GetDataManager<IStatusDefinitionDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreStatusDefinitionUpdated(ref _updateHandle);
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        Dictionary<int, StatusChargingSet> GetCachedStatusChargingSets()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedStatusChargingSets",
+               () =>
+               {
+                   IStatusChargingSetDataManager dataManager = BEDataManagerFactory.GetDataManager<IStatusChargingSetDataManager>();
+                   return dataManager.GetStatusChargingSets().ToDictionary(x => x.StatusChargingSetId, x => x);
+               });
+        }
+
         private StatusChargingSet GetChargingSet(EntityType entityType, long entityId)
         {
             switch (entityType)
@@ -117,6 +167,8 @@ namespace Retail.BusinessEntity.Business
             else
                 return null;
         }
+
+        #endregion
 
         #region Mappers
 
