@@ -15,8 +15,21 @@
             };
             vrModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/StatusChargingSet/StatusChargingSetEditor.html', null, settings);
         };
+        function editStatusChargingSet(statusChargingSetId, onStatusChargingSetUpdated) {
+            var settings = {};
+
+            var parameters = {
+                statusChargingSetId: statusChargingSetId
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onStatusChargingSetUpdated = onStatusChargingSetUpdated;
+            };
+            vrModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/StatusChargingSet/StatusChargingSetEditor.html', parameters, settings);
+        }
         return {
-            addStatusChargingSet: addStatusChargingSet
+            addStatusChargingSet: addStatusChargingSet,
+            editStatusChargingSet: editStatusChargingSet
         };
     }
 
