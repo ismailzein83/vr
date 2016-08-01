@@ -40,10 +40,8 @@ namespace Vanrise.AccountBalance.BP.Activities
                     hasItems = inputArgument.InputQueue.TryDequeue(
                         (balanceUsageQueue) =>
                         {
-                            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Started Processing Pending Usage Queue {0}", balanceUsageQueue.BalanceUsageQueueId);
-
+                            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Processing Pending Usage Queue {0}", balanceUsageQueue.BalanceUsageQueueId);
                             ProcessPendingUsageUpdatesMethod(balanceUsageQueue, inputArgument.AcountBalanceUpdateHandler);
-                            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finish Processing Pending Usage Queue {0}", balanceUsageQueue.BalanceUsageQueueId);
                         });
                 } while (!ShouldStop(handle) && hasItems);
             });
