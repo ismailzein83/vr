@@ -98,7 +98,7 @@
 
                     WhS_Sales_RatePlanAPIService.ValidateCustomer(selectedId, new Date()).then(function (isCustomerValid) {
                         if (!isCustomerValid) {
-                            VRNotificationService.showInformation($scope.selectedCustomer.Name + " is not related to a selling product");
+                            VRNotificationService.showInformation($scope.selectedCustomer.Name + " is not assigned to a selling product");
                             $scope.selectedCustomer = undefined;
                         }
                     }).catch(function (error) {
