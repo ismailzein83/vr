@@ -1,9 +1,10 @@
 ﻿'use strict';
 
-app.directive('retailBeStatuschargingsetGrid', ['Retail_BE_StatusChargingSetAPIService', 'VRNotificationService',
-    function (retailBeStatusChargingSetApiService, vrNotificationService) {
+app.directive('retailBeStatuschargingsetGrid', ['Retail_BE_StatusChargingSetAPIService', 'VRNotificationService', 'Retail_BE_StatusChargingSetService',
+    function (retailBeStatusChargingSetApiService, vrNotificationService, retailBeStatusChargingSetService) {
 
         function retailBeStatusChargingSetGrid($scope, ctrl, $attrs) {
+            var gridAPI;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.statusChargingSet = [];
@@ -20,11 +21,10 @@ app.directive('retailBeStatuschargingsetGrid', ['Retail_BE_StatusChargingSetAPIS
                         vrNotificationService.notifyExceptionWithClose(error, $scope);
                     });
                 };
+                defineMenuActions();
             }
 
             this.initializeController = initializeController;
-
-            var gridAPI;
 
             function defineAPI() {
                 var api = {};
@@ -43,6 +43,19 @@ app.directive('retailBeStatuschargingsetGrid', ['Retail_BE_StatusChargingSetAPIS
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function editStatusChargingSet(statusChargingSetItem) {
+                var onStatusChargingSetUpdated = function (updatedStatusCharginSet) {
+                    gridAPI.itemUpdated(updatedStatusCharginSet);
+                };
+                retailBeStatusChargingSetService.editStatusChargingSet(statusChargingSetItem.Entity.StatusChargingSetId, onStatusChargingSetUpdated);
+            }
+            function defineMenuActions() {
+                $scope.scopeModel.menuActions.push({
+                    name: 'Edit',
+                    clicked: editStatusChargingSet
+                });
             }
         }
 
