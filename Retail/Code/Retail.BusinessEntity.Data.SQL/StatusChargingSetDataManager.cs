@@ -23,6 +23,13 @@ namespace Retail.BusinessEntity.Data.SQL
             int affectedRecords = ExecuteNonQuerySP("Retail.sp_StatusChargingSet_Insert", statusChargingSetItem.Name, serializedSettings);
             return affectedRecords > 0;
         }
+        public bool Update(StatusChargingSet statusChargingSet)
+        {
+            string serializedSettings = statusChargingSet.Settings != null ? Serializer.Serialize(statusChargingSet.Settings) : null;
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_StatusChargingSet_Update",
+                statusChargingSet.StatusChargingSetId, statusChargingSet.Name, serializedSettings);
+            return (affectedRecords > 0);
+        }
         #endregion
 
         #region Mappers
