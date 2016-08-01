@@ -32,6 +32,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             listMeasures.Add("CostDuration");
             listMeasures.Add("SaleNet");
             listMeasures.Add("CostNet");
+            listMeasures.Add("PercentageLoss");
 
 
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
@@ -151,10 +152,11 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     rateLossFromatted.CostNet = Convert.ToDouble(costNet.Value ?? 0.0);
                     rateLossFromatted.CostNetFormatted = ReportHelpers.FormatNumber(rateLossFromatted.CostNet);
 
-
-                    rateLossFromatted.LossFormatted = ReportHelpers.FormatNumber(rateLossFromatted.CostNet - rateLossFromatted.SaleNet);
-                    rateLossFromatted.LossPerFormatted = ReportHelpers.FormatNumber(((rateLossFromatted.CostNet - rateLossFromatted.SaleNet) * 100) / rateLossFromatted.CostNet);
-
+                    MeasureValue percentageLoss;
+                    analyticRecord.MeasureValues.TryGetValue("PercentageLoss", out percentageLoss);
+                    rateLossFromatted.Loss = Convert.ToDouble(percentageLoss.Value ?? 0.0);
+                    rateLossFromatted.LossFormatted = ReportHelpers.FormatNumber(rateLossFromatted.Loss);
+                    rateLossFromatted.LossPerFormatted = ReportHelpers.FormatNumberPercentage(rateLossFromatted.Loss);
 
                     listRateLossFromatted.Add(rateLossFromatted);
                 }
