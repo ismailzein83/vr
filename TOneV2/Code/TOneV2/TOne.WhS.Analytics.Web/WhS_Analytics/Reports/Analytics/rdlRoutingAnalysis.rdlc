@@ -9,11 +9,18 @@
       </ConnectionProperties>
       <rd:DataSourceID>4a4c7293-b3b0-4330-ab54-48fff29a678b</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="TOneWhSAnalyticsEntitiesBillingReportRoutingAnalysis">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>66554c93-df0d-48fd-a417-ed89e95a291e</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="RoutingAnalysis">
       <Query>
-        <DataSourceName>TOneAnalyticsBusiness</DataSourceName>
+        <DataSourceName>TOneWhSAnalyticsEntitiesBillingReportRoutingAnalysis</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
@@ -99,11 +106,10 @@
         </Field>
       </Fields>
       <rd:DataSetInfo>
-        <rd:DataSetName>TOne.Analytics.Business</rd:DataSetName>
-        <rd:TableName>BillingStatisticManager</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetRoutingAnalysis</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceSelectMethodSignature>System.Collections.Generic.List`1[TOne.Analytics.Entities.RoutingAnalysisFormatted] GetRoutingAnalysis(System.DateTime, System.DateTime, System.String, System.String, System.Nullable`1[System.Int32], System.Nullable`1[System.Int32], System.Nullable`1[System.Int32])</rd:ObjectDataSourceSelectMethodSignature>
-        <rd:ObjectDataSourceType>TOne.Analytics.Business.BillingStatisticManager, TOne.Analytics.Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:DataSetName>TOne.WhS.Analytics.Entities.BillingReport.RoutingAnalysis</rd:DataSetName>
+        <rd:TableName>RoutingAnalysisFormatted</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetRoutingAnalysisFormattedRDLCSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Analytics.Entities.BillingReport.RoutingAnalysis.RoutingAnalysisFormatted, TOne.WhS.Analytics.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
