@@ -2,9 +2,9 @@
 
     "use strict";
 
-    StatusChargingSetManagementController.$inject = ['$scope', 'Retail_BE_StatusChargingSetService', 'UtilsService', 'VRUIUtilsService'];
+    StatusChargingSetManagementController.$inject = ['$scope', 'Retail_BE_StatusChargingSetService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function StatusChargingSetManagementController($scope, retailBeStatusChargingSetService, utilsService, vruiUtilsService) {
+    function StatusChargingSetManagementController($scope, retailBeStatusChargingSetService, utilsService, vruiUtilsService, vrNotificationService) {
 
         var gridAPI;
 
@@ -16,8 +16,8 @@
 
         function buildGridQuery() {
             return {
-                Name: $scope.scopeModel.name,
-                EntityTypes: entityTypeAPI.getSelectedIds()
+                Name: $scope.scopeModel.name//,
+                //EntityTypes: entityTypeAPI.getSelectedIds()
             };
         }
 
@@ -55,7 +55,7 @@
 
         function loadAllControls() {
             return utilsService.waitMultipleAsyncOperations([loadEntityTypeSelector]).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                vrNotificationService.notifyExceptionWithClose(error, $scope);
             });
         }
 
@@ -64,7 +64,7 @@
             loadAllControls().finally(function () {
                 $scope.scopeModel.isloading = false;
             }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                vrNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.scopeModel.isloading = false;
             });
         }
