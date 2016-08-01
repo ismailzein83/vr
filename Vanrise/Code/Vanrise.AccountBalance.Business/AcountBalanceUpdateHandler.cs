@@ -99,7 +99,7 @@ namespace Vanrise.AccountBalance.Business
             {
                 LiveBalanceAccountInfo accountInfo = null;
                 AccountsInfo.TryGetValue(itm.AccountId, out accountInfo);
-                itm.Value = currencyExchangeRateManager.ConvertValueToCurrency(itm.Value, itm.CurrencyId, accountInfo.CurrencyId, itm.EffectiveOn);
+                itm.Value = itm.CurrencyId != accountInfo.CurrencyId ? currencyExchangeRateManager.ConvertValueToCurrency(itm.Value, itm.CurrencyId, accountInfo.CurrencyId, itm.EffectiveOn) : itm.Value;
             }
             var groupedResult = usageBalanceUpdates.GroupBy(elt => elt.AccountId).Select(group => new UsageBalanceUpdate { AccountId = group.Key, Value = group.Sum(elt => elt.Value)});
             return dataManager.UpdateLiveBalanceFromBalanceUsageQueue(groupedResult, balanceUsageQueueId);
@@ -116,7 +116,7 @@ namespace Vanrise.AccountBalance.Business
             {
                 billingTransactionIds.Add(billingTransaction.AccountBillingTransactionId);
                 accountId = billingTransaction.AccountId;
-                amount += ConvertValueToCurrency(billingTransaction.Amount, billingTransaction.CurrencyId, accountInfo.CurrencyId, billingTransaction.TransactionTime);
+                amount += billingTransaction.CurrencyId != accountInfo.CurrencyId ? ConvertValueToCurrency(billingTransaction.Amount, billingTransaction.CurrencyId, accountInfo.CurrencyId, billingTransaction.TransactionTime) : billingTransaction.Amount;
             }
             return dataManager.UpdateLiveBalanceFromBillingTransaction(accountId, billingTransactionIds, amount);
         }
