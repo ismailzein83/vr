@@ -7,5 +7,6 @@ namespace Retail.BusinessEntity.Data
     {
         List<StatusChargingSet> GetStatusChargingSets();
         bool Insert(StatusChargingSet statusDefinitionItem);
+        bool Update(StatusChargingSet statusChargingSet);
     }
 }
