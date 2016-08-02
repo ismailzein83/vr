@@ -19,13 +19,13 @@
             <vr-datagridcolumn headertext="'New Rate'" disablesorting>
                 <vr-textbox type="number" tonextinput value="dataItem.NewRate" minvalue="0" customvalidate="dataItem.validateNewRate(dataItem)" onblurtextbox="dataItem.setNewRateBED"></vr-textbox>
             </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Begin Effective Date'" disablesorting>
+            <vr-datagridcolumn headertext="'BED'" disablesorting>
                 <span vr-disabled="true">
                     <vr-datetimepicker type="date" value="dataItem.CurrentRateBED" ng-hide="dataItem.showNewRateBED" customvalidate="dataItem.validateRateChangeDates()"></vr-datetimepicker>
                 </span>
                 <vr-datetimepicker type="date" value="dataItem.NewRateBED" ng-show="dataItem.showNewRateBED" customvalidate="dataItem.validateNewRateDates()" isrequired="dataItem.showNewRateBED"></vr-datetimepicker>
             </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'End Effective Date'" disablesorting>
+            <vr-datagridcolumn headertext="'EED'" disablesorting>
                 <span vr-disabled="!dataItem.IsCurrentRateEditable">
                     <vr-datetimepicker type="date" value="dataItem.CurrentRateEED" onvaluechanged="dataItem.onCurrentRateEEDChanged(dataItem)" ng-hide="dataItem.showNewRateEED" customvalidate="dataItem.validateRateChangeDates()"></vr-datetimepicker>
                 </span>
