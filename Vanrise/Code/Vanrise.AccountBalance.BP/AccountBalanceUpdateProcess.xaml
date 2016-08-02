@@ -63,9 +63,9 @@
     <Sequence.Variables>
       <Variable x:TypeArguments="s:DateTime" Name="nextClosingDate" />
       <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadBillingTransactionsStatus" />
-      <Variable x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue)" Name="OutputQueuePendingUsageUpdates" />
-      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="LoadingPendingUsageUpdateStatus" />
-      <Variable x:TypeArguments="vab:AccountBalanceUpdateHandler" Name="AccountBalanceUpdateHandler" />
+      <Variable x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue)" Name="outputQueuePendingUsageUpdates" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadingPendingUsageUpdateStatus" />
+      <Variable x:TypeArguments="vab:AccountBalanceUpdateHandler" Name="accountBalanceUpdateHandler" />
     </Sequence.Variables>
     <vaba1:GetNextBalanceClosingDate sap2010:WorkflowViewState.IdRef="GetNextBalanceClosingDate_1">
       <vaba1:GetNextBalanceClosingDate.NextClosingDate>
@@ -77,18 +77,18 @@
     <vaba1:LoadAccountBalanceUpdateHandler sap2010:WorkflowViewState.IdRef="LoadAccountBalanceUpdateHandler_1">
       <vaba1:LoadAccountBalanceUpdateHandler.Handler>
         <OutArgument x:TypeArguments="vab:AccountBalanceUpdateHandler">
-          <mca:CSharpReference x:TypeArguments="vab:AccountBalanceUpdateHandler">AccountBalanceUpdateHandler</mca:CSharpReference>
+          <mca:CSharpReference x:TypeArguments="vab:AccountBalanceUpdateHandler">accountBalanceUpdateHandler</mca:CSharpReference>
         </OutArgument>
       </vaba1:LoadAccountBalanceUpdateHandler.Handler>
     </vaba1:LoadAccountBalanceUpdateHandler>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_2">
       <Parallel.Variables>
-        <Variable x:TypeArguments="vq:BaseQueue(vae:BillingTransactionBatch)" Name="OutputQueueNewBillingTransactions" />
+        <Variable x:TypeArguments="vq:BaseQueue(vae:BillingTransactionBatch)" Name="outputQueueNewBillingTransactions" />
       </Parallel.Variables>
       <vaba1:LoadNewBillingTransactions sap2010:WorkflowViewState.IdRef="LoadNewBillingTransactions_1">
         <vaba1:LoadNewBillingTransactions.OutputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(vae:BillingTransactionBatch)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:BillingTransactionBatch)">OutputQueueNewBillingTransactions</mca:CSharpReference>
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:BillingTransactionBatch)">outputQueueNewBillingTransactions</mca:CSharpReference>
           </InOutArgument>
         </vaba1:LoadNewBillingTransactions.OutputQueue>
         <vaba1:LoadNewBillingTransactions.Status>
@@ -100,12 +100,12 @@
       <vaba1:ProcessNewBillingTransactions Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessNewBillingTransactions_1">
         <vaba1:ProcessNewBillingTransactions.AcountBalanceUpdateHandler>
           <InArgument x:TypeArguments="vab:AccountBalanceUpdateHandler">
-            <mca:CSharpValue x:TypeArguments="vab:AccountBalanceUpdateHandler">AccountBalanceUpdateHandler</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="vab:AccountBalanceUpdateHandler">accountBalanceUpdateHandler</mca:CSharpValue>
           </InArgument>
         </vaba1:ProcessNewBillingTransactions.AcountBalanceUpdateHandler>
         <vaba1:ProcessNewBillingTransactions.InputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(vae:BillingTransactionBatch)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:BillingTransactionBatch)">OutputQueueNewBillingTransactions</mca:CSharpReference>
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:BillingTransactionBatch)">outputQueueNewBillingTransactions</mca:CSharpReference>
           </InOutArgument>
         </vaba1:ProcessNewBillingTransactions.InputQueue>
         <vaba1:ProcessNewBillingTransactions.PreviousActivityStatus>
@@ -119,29 +119,29 @@
       <vaba1:LoadPendingUsageUpdates sap2010:WorkflowViewState.IdRef="LoadPendingUsageUpdates_1">
         <vaba1:LoadPendingUsageUpdates.OutputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue)">OutputQueuePendingUsageUpdates</mca:CSharpReference>
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue)">outputQueuePendingUsageUpdates</mca:CSharpReference>
           </InOutArgument>
         </vaba1:LoadPendingUsageUpdates.OutputQueue>
         <vaba1:LoadPendingUsageUpdates.Status>
           <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">LoadingPendingUsageUpdateStatus</mca:CSharpReference>
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadingPendingUsageUpdateStatus</mca:CSharpReference>
           </OutArgument>
         </vaba1:LoadPendingUsageUpdates.Status>
       </vaba1:LoadPendingUsageUpdates>
       <vaba1:ProcessPendingUsageUpdates Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessPendingUsageUpdates_1">
         <vaba1:ProcessPendingUsageUpdates.AcountBalanceUpdateHandler>
           <InArgument x:TypeArguments="vab:AccountBalanceUpdateHandler">
-            <mca:CSharpValue x:TypeArguments="vab:AccountBalanceUpdateHandler">AccountBalanceUpdateHandler</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="vab:AccountBalanceUpdateHandler">accountBalanceUpdateHandler</mca:CSharpValue>
           </InArgument>
         </vaba1:ProcessPendingUsageUpdates.AcountBalanceUpdateHandler>
         <vaba1:ProcessPendingUsageUpdates.InputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue)">OutputQueuePendingUsageUpdates</mca:CSharpReference>
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue)">outputQueuePendingUsageUpdates</mca:CSharpReference>
           </InOutArgument>
         </vaba1:ProcessPendingUsageUpdates.InputQueue>
         <vaba1:ProcessPendingUsageUpdates.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">LoadingPendingUsageUpdateStatus</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadingPendingUsageUpdateStatus</mca:CSharpValue>
           </InArgument>
         </vaba1:ProcessPendingUsageUpdates.PreviousActivityStatus>
       </vaba1:ProcessPendingUsageUpdates>
