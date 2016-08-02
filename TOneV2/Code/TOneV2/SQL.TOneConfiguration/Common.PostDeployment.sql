@@ -201,3 +201,26 @@ when not matched by target then
 	insert([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 	values(s.[Id],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
 set identity_insert [common].[Setting] off;
+
+--[common].[RateType]--------------------------- -1 to -100 ----------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [common].[RateType] on;
+;with cte_data([ID],[Name])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(-3,'Weekend'),
+(-2,'Off Peak'),
+(-1,'Holiday')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name]))
+merge	[common].[RateType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name]
+when not matched by target then
+	insert([ID],[Name])
+	values(s.[ID],s.[Name]);
+set identity_insert [common].[RateType] off
