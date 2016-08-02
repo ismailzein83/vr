@@ -6,12 +6,17 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.BusinessEntity.Data;
 using TOne.BusinessEntity.Entities;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.RouteSync.Entities;
+using TOne.WhS.RouteSync.TelesRadius;
 using TOne.WhS.Routing.Business;
+using TOne.WhS.Routing.Business.Extensions;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Business;
 //using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
 
@@ -22,25 +27,26 @@ namespace TestRuntime
         public void Execute()
         {
 
-            //IServiceDataManager datamanager = BEDataManagerFactory.GetDataManager<IServiceDataManager>();
-
-
-            //string result = datamanager.GetServicesDisplayList(15);
-            //return;
-
             System.Diagnostics.Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
             Console.WriteLine("Hello from Rabih!");
 
-            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
-            QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
-
             var runtimeServices = new List<RuntimeService>();
-            runtimeServices.Add(queueActivationService);
+            //BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(bpService);
 
-            runtimeServices.Add(bpService);
+            QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
+            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
+            Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
+            runtimeServices.Add(transactionLockRuntimeService);
+            runtimeServices.Add(queueActivationService);
+            runtimeServices.Add(schedulerService);
+            runtimeServices.Add(dsRuntimeService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
+
+            RunRouteSync();
             //RunCompleteRouteBuild();
             //RunCompleteProductRouteBuild();
             //RunPartialRouteBuild();
@@ -88,6 +94,19 @@ namespace TestRuntime
             {
                 InputArguments = new TOne.LCRProcess.Arguments.DifferentialRoutingProcessInput()
 
+            });
+        }
+
+        private static void RunRouteSync()
+        {
+            BPInstanceManager bpClient = new BPInstanceManager();
+            bpClient.CreateNewProcess(new CreateProcessInput
+            {
+                InputArguments = new TOne.WhS.RouteSync.BP.Arguments.RouteSyncProcessInput()
+                {
+                    RouteSyncDefinitionId = 1,
+                    UserId = 1
+                }
             });
         }
     }
