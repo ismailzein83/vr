@@ -11,5 +11,7 @@ namespace Vanrise.Entities
         public const string EXTENSION_TYPE = "VR_Common_ObjectType";
 
         public string Editor { get; set; }
+
+        public string PropertyEvaluatorExtensionType { get; set; }
     }
 }

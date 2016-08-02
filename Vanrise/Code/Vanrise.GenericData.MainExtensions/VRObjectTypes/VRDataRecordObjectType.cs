@@ -9,11 +9,6 @@ namespace Vanrise.GenericData.MainExtensions.VRObjectTypes
 {
     public class VRDataRecordObjectType : VRObjectType
     {
-        public override string PropertyEvaluatorExtensionType
-        {
-            get { return "VR_GenericData_DataRecordObjectType_PropertyEvaluator"; }
-        }
-
         public int RecordTypeId { get; set; }
     }
 }
