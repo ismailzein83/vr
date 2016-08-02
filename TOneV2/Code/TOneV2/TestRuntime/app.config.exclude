@@ -225,7 +225,7 @@
     <add key="Currency" value="USD"/>
     <add key="ExposedConnectionStringNames" value="TOneCDRDBConnString,TOneAnalyticsDBConnString"/>
     <add key="VanriseCache_CleanMemoryThreshold" value="999999999999999"/>
-    <add key="BCPCommandName" value="v_bcp"/>
+    <add key="BCPCommandName" value="bcp"/>
     <add key="Queue_NbOfMaxConcurrentActivators_Default" value="10"/>
     <add key="Queue_NbOfMaxConcurrentActivators_UpdateSummaryQueueActivator" value="30" />
     <add key="Queue_ConsecutiveItemsToProcess" value="5"/>

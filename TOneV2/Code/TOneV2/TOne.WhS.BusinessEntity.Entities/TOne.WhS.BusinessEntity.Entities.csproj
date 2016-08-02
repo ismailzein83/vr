@@ -125,6 +125,7 @@
     <Compile Include="PricingRules\RuleTypes\RateType\PurchasePricingRuleRateTypeTarget.cs" />
     <Compile Include="PricingRules\RuleTypes\RateType\SalePricingRuleRateTypeTarget.cs" />
     <Compile Include="RateType\RateType.cs" />
+    <Compile Include="RateType\RateTypeConfiguration.cs" />
     <Compile Include="RateType\RateTypeDetail.cs" />
     <Compile Include="RateType\RateTypeInfo.cs" />
     <Compile Include="RateType\RateTypeQuery.cs" />
@@ -209,6 +210,7 @@
     <Compile Include="Carriers\Supplier\SupplierGroupSettings.cs" />
     <Compile Include="SaleZone\SaleZonesToSellQuery.cs" />
     <Compile Include="SaleZone\SaleZoneService.cs" />
+    <Compile Include="Settings\BusinessEntityTechnicalSettingsData.cs" />
     <Compile Include="SupplierCode\SupplierCodeQuery.cs" />
     <Compile Include="SupplierCode\SupplierCodeDetail.cs" />
     <Compile Include="SupplierRate\SupplierRateDetail.cs" />

@@ -313,6 +313,8 @@
     <Content Include="WhS_BusinessEntity\Directives\SellingProduct\vr-whs-be-sellingproduct-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\vr-whs-be-salezonegroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SupplierGroup\vr-whs-be-suppliergroup-selective.js" />
+    <Content Include="WhS_BusinessEntity\Directives\TechnicalSetting\Templates\BETechnicalSettingsTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\TechnicalSetting\vr-whs-be-technical-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierCode\Templates\SupplierCodeGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierCode\vr-whs-be-suppliercode-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierPricelist\Templates\SupplierPricelistGridTemplate.html" />

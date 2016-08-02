@@ -1,0 +1,15 @@
+﻿<vr-columns width="fullrow">
+    <vr-tabs>
+        <vr-tab header="'Rate Type'">
+            <vr-columns width="1/3row">
+                <vr-common-ratetype-selector on-ready="onOffPeakRateTypeSelectorReady" isrequired customlabel="'Off Peak'"></vr-common-ratetype-selector>
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-common-ratetype-selector on-ready="onWeekendRateTypeSelectorReady" isrequired customlabel="'Weekend'"></vr-common-ratetype-selector>
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-common-ratetype-selector on-ready="onHolidayRateTypeSelectorReady" isrequired customlabel="'Holiday'"></vr-common-ratetype-selector>
+            </vr-columns>
+        </vr-tab>
+    </vr-tabs>
+</vr-columns>
