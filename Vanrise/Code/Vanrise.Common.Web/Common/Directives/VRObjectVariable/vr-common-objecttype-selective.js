@@ -11,7 +11,8 @@
                 onReady: "=",
                 normalColNum: '@',
                 label: '@',
-                customvalidate: '='
+                customvalidate: '=',
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -37,7 +38,7 @@
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
-                $scope.scopeModel.selectedTemplateConfig;
+                $scope.scopeModel.selectedTemplateConfig = {};
 
                 $scope.scopeModel.onSelectorReady = function (api) {
                     selectorAPI = api;
@@ -66,13 +67,14 @@
                         objectType = payload;
                     }
 
+                    var getObjectTypeTemplateConfigsPromise = getObjectTypeSelectiveTemplateConfigs();
+                    promises.push(getObjectTypeTemplateConfigsPromise);
+
                     if (objectType != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
 
-                    var getObjectTypeTemplateConfigsPromise = getObjectTypeSelectiveTemplateConfigs();
-                    promises.push(getObjectTypeTemplateConfigsPromise);
 
                     function getObjectTypeSelectiveTemplateConfigs() {
                         return VRCommon_VEObjectTypeAPIService.GetObjectTypeExtensionConfigs().then(function (response) {
@@ -89,12 +91,11 @@
                     }
                     function loadDirective() {
                         directiveReadyDeferred = UtilsService.createPromiseDeferred();
-
                         var directiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { objectType: objectType };
+                            var directivePayload = objectType;
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -106,16 +107,16 @@
 
                 api.getData = function () {
                     var data;
+
                     if ($scope.scopeModel.selectedTemplateConfig != undefined && directiveAPI != undefined) {
 
                         data = directiveAPI.getData();
+
                         if (data != undefined) {
                             data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
                         }
                     }
-                    return {
-                        StyleFormatingSettings: data
-                    };
+                    return data;
                 };
 
                 if (ctrl.onReady != null) {
@@ -127,22 +128,20 @@
         function getTamplate(attrs) {
 
             var template =
-                  ' <vr-columns width="1/2row">'
-                        + ' <vr-select on-ready="scopeModel.onSelectorReady"'
+                  '<vr-columns width="1/2row">'
+                        + '<vr-select on-ready="scopeModel.onSelectorReady"'
                             + ' datasource="scopeModel.templateConfigs"'
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
-                            + ' isrequired="true"'
+                            + ' isrequired="ctrl.isrequired"'
                             + ' label="Object Type"'
                             + ' hideremoveicon>'
                         + '</vr-select>'
-                + ' </vr-columns>'
-                + ' <vr-span>'
-                    + ' <vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
-                            + ' on-ready="scopeModel.onDirectiveReady" isrequired="ctrl.isrequired" normal-col-num="{{ctrl.normalColNum}}" customvalidate="ctrl.customvalidate">'
-                    + ' </vr-directivewrapper>'
-                + ' </vr-span>'
+                + '</vr-columns>'
+                        + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
+                                + ' on-ready="scopeModel.onDirectiveReady" isrequired="true" normal-col-num="{{ctrl.normalColNum}}" customvalidate="ctrl.customvalidate">'
+                        + '</vr-directivewrapper>'
             return template;
         }
     }

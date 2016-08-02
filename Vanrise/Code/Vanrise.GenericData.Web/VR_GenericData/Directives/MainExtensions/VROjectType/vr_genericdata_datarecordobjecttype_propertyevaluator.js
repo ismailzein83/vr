@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VRDataRecordObjectType.$inject = ["UtilsService", 'VRUIUtilsService'];
+    VRDataRecordObjectType.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
 
-    function VRDataRecordObjectType(UtilsService, VRUIUtilsService) {
+    function VRDataRecordObjectType(UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
@@ -21,38 +21,50 @@
 
         };
         function DataRecordObjectType($scope, ctrl, $attrs) {
-
             this.initializeController = initializeController;
+
+            var selectorAPI;
 
             function initializeController() {
                 $scope.scopeModel = {};
-                defineAPI();
+                $scope.scopeModel.isLoading = true;
+
+                $scope.scopeModel.onDataRecordObjectTypeSelectorReady = function (api) {
+                    selectorAPI = api;
+                    defineAPI();
+                }  
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    var recordTypeId;
+                    var selectorPayload;
 
                     if (payload != undefined) {
-                        recordTypeId = payload.recordTypeId;
+                        selectorPayload = { selectedIds: payload.RecordTypeId };
                     }
 
-                    if (recordTypeId != undefined) {
-                        $scope.scopeModel.recordTypeId = recordTypeId;
-                    }
+                    var dataRecordObjectTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, dataRecordObjectTypeSelectorLoadDeferred);
+
+                    dataRecordObjectTypeSelectorLoadDeferred.promise.catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    }).finally(function () {
+                        $scope.scopeModel.isLoading = false;
+                    });
                 };
 
                 api.getData = function() {
                     var data = {
                         $type: "Vanrise.GenericData.MainExtensions.VRObjectTypes.VRDataRecordObjectType, Vanrise.GenericData.MainExtensions",
-                        ClassName: $scope.scopeModel.recordTypeId
+                        RecordTypeId: selectorAPI.getSelectedIds()
                     }
                     return data;
                 }
 
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
+                if (ctrl.onReady != undefined && typeof(ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
             }

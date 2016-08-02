@@ -2,15 +2,13 @@
 
     'use strict';
 
-    VRObjectVariableEditorController.$inject = ['$scope', 'VR_GenericData_MappingRuleStructureBehaviorTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    VRObjectVariableEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function VRObjectVariableEditorController($scope, VR_GenericData_MappingRuleStructureBehaviorTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function VRObjectVariableEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
         var isEditMode;
 
-        var criteriaFieldName;
         var objectVariableEntity;
-        //var criteriaFields; // criteriaFields are passed for validation
 
         var objectTypeSelectiveAPI;
         var objectTypeSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -24,11 +22,10 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
-                objectVariable = parameters.objectVariable;
-                //vrObjectVariableCollection = UtilsService.cloneObject(parameters.VRObjectVariableCollection, true);
+                objectVariableEntity = parameters.objectVariable;
             }
 
-            isEditMode = (objectVariable != undefined);
+            isEditMode = (objectVariableEntity != undefined);
         }
         function defineScope() {
 
@@ -47,17 +44,6 @@
             };
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal();
-            };
-
-            $scope.validateCriteriaField = function () {
-                var fieldName = ($scope.fieldName != undefined) ? $scope.fieldName.toUpperCase() : null;
-
-                if (isEditMode && (fieldName == criteriaFieldName))
-                    return null;
-                else if (UtilsService.getItemIndexByVal(criteriaFields, fieldName, 'FieldName') > -1) {
-                    return 'Another criteria field with the same name already exists';
-                }
-                return null;
             };
         }
         function load() {
@@ -136,7 +122,6 @@
 
         function buildObjectVariableFromScope() {
             return {
-                $type: "Vanrise.Entities.VRObject.VRObjectVariable, Vanrise.Entities",
                 ObjectName: $scope.scopeModal.objectName,
                 ObjectType: objectTypeSelectiveAPI.getData(),
             };

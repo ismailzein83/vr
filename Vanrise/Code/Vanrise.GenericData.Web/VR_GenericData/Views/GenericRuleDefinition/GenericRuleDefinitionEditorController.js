@@ -173,8 +173,15 @@
                     var objectDirectivePayload;
 
                     if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.Objects != null) {
+
+                        var objects = [];
+                        for (var key in genericRuleDefinitionEntity.Objects) {
+                            if (key != "$type")
+                                objects.push(genericRuleDefinitionEntity.Objects[key]);
+                        }
+
                         objectDirectivePayload = {
-                            Objects : genericRuleDefinitionEntity.Objects
+                            Objects: objects
                         };
                     }
 
@@ -306,7 +313,8 @@
                 GenericRuleDefinitionId: genericRuleDefinitionId,
                 Name: $scope.scopeModel.name,
                 CriteriaDefinition: criteriaDirectiveAPI.getData(),
-                SettingsDefinition: settingsDirectiveAPI.getData()
+                SettingsDefinition: settingsDirectiveAPI.getData(),
+                Objects: objectDirectiveAPI.getData()
             };
         }
         function buildViewObjectFromScope(genericRuleDefinitionId) {

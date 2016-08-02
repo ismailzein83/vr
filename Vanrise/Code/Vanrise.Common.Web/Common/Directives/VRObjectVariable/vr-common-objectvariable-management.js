@@ -50,14 +50,14 @@
                     };
                     VRCommon_ObjectVariableService.addVRObjectVariable(onObjectVariableAdded);
                 };
-                //ctrl.validateCriteriaFields = function () {
-                //    if (ctrl.criteriaFields.length == 0) {
-                //        return 'No fields added';
-                //    }
-                //    return null;
-                //};
+                ctrl.validateCriteriaFields = function () {
+                    if (ctrl.objectVariables.length == 0) {
+                        return 'No fields added';
+                    }
+                    return null;
+                };
 
-                //defineMenuActions();
+                defineMenuActions();
             }
 
             function defineAPI() {
@@ -72,14 +72,12 @@
                         
                     if (payload != undefined) {
                         for (var i = 0; i < payload.Objects.length; i++) {
-                            //var objectVariable = payload.VRObjectVariableCollection[i];
+                            var objectVariable = payload.Objects[i];
                             //extendCriteriaFieldObject(criteriaField);
-                            ctrl.objectVariables.push(payload.Objects[i]);
+                            ctrl.objectVariables.push(objectVariable);
                         }
                         //loadPriorityDataItemsFromPayload();
                     }
-
-                    ctrl.objectVariables.push({ ObjectName: 'ObjectName', ObjectType: 'ObjectType' });
 
                     //});
 
@@ -106,33 +104,26 @@
                 };
 
                 api.getData = function () {
-                    var data = null;
+                    var data;
+                    var dataItem
 
-                    if (ctrl.criteriaFields.length > 0) {
-                        var fields = [];
-                        for (var i = 0; i < ctrl.criteriaFields.length; i++) {
-                            fields.push(getMappedCriteriaField(ctrl.criteriaFields[i]));
+                    if (ctrl.objectVariables.length > 0) {
+                        data = {};
+
+                        for (var i = 0; i < ctrl.objectVariables.length; i++) {
+                            dataItem = ctrl.objectVariables[i];
+                            data[dataItem.ObjectName] = getMappedObjectVariable(dataItem);
                         }
-                        data = {
-                            Fields: fields
+                    }
+
+                    function getMappedObjectVariable(dataItem) {
+                        return {
+                            ObjectName: dataItem.ObjectName,
+                            ObjectType: dataItem.ObjectType
                         };
                     }
 
                     return data;
-
-                    function getMappedCriteriaField(dataItem) {
-                        var index = UtilsService.getItemIndexByVal(ctrl.priorities, dataItem.FieldName, 'FieldName');
-                        var priority = index + 1;
-
-                        return {
-                            FieldName: dataItem.FieldName,
-                            Title: dataItem.Title,
-                            FieldType: dataItem.FieldType,
-                            RuleStructureBehaviorType: dataItem.RuleStructureBehaviorType,
-                            Priority: priority,
-                            ShowInBasicSearch: dataItem.ShowInBasicSearch
-                        };
-                    }
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -155,7 +146,7 @@
                     var index = UtilsService.getItemIndexByVal(ctrl.objectVariables, object.ObjectName, 'ObjectName');
                     ctrl.objectVariables[index] = updatedObjectVariable;
                 };
-                VRCommon_ObjectVariableService.editVRObjectVariable(ctrl.objectVariables[index], onObjectVariableUpdated);
+                VRCommon_ObjectVariableService.editVRObjectVariable(object, onObjectVariableUpdated);
             }
             function deleteObjectVariable(criteriaField) {
                 VRNotificationService.showConfirmation().then(function (confirmed) {

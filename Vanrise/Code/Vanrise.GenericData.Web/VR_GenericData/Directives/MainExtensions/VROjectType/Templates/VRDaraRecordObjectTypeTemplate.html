@@ -1,5 +1,5 @@
-﻿<vr-row>
-    <vr-columns width="1/2row">
-        <vr-textbox label="Data Record Object Type" type="text" value="scopeModel.recordTypeId" isrequired></vr-textbox>
-    </vr-columns>
-</vr-row>
+﻿
+
+<vr-columns width="1/2row" vr-loader="scopeModel.isLoading">
+    <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordObjectTypeSelectorReady" isrequired="true" hideremoveicon> </vr-genericdata-datarecordtype-selector>
+</vr-columns>
