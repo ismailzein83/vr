@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/VRObjectType/Templates/RetailAccountObjectTypeTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/VRObjectTypes/Templates/RetailAccountObjectTypeTemplate.html"
 
         };
         function RetailAccountObjectType($scope, ctrl, $attrs) {
