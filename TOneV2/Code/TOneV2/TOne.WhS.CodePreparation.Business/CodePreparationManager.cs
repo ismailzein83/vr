@@ -38,5 +38,11 @@ namespace TOne.WhS.CodePreparation.Business
             ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
             return dataManager.UpdateCodePreparationStatus(sellingNumberPlanId, CodePreparationStatus.Canceled);
         }
+
+        public CPSettingsData GetCPSettings()
+        {
+            SettingManager settingManager = new SettingManager();
+            return settingManager.GetSetting<CPSettingsData>(Constants.CPSettigns);
+        }
     }
 }

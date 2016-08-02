@@ -80,9 +80,9 @@
 
         function loadEffectiveDate() {
 
-            return WhS_CP_CodePrepAPIService.GetEffectiveDateOffset(sellingNumberPlanId).then(function (offset) {
+            return WhS_CP_CodePrepAPIService.GetCPSettings().then(function (response) {
                 var effectiveDate = new Date();
-                effectiveDate.setDate(effectiveDate.getDate() + offset);
+                effectiveDate.setDate(effectiveDate.getDate() + response.EffectiveDateOffset);
                 $scope.effectiveDate = effectiveDate;
             })
         }

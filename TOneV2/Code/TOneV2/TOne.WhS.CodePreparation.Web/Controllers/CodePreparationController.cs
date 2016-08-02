@@ -111,11 +111,12 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
         }
         
         [HttpGet]
-        [Route("GetEffectiveDateOffset")]
-        public int GetEffectiveDateOffset(int sellingNumberPlanId) {
-            return 7;
+        [Route("GetCPSettings")]
+        public CPSettingsData GetCPSettings()
+        {
+            CodePreparationManager manager = new CodePreparationManager();
+            return manager.GetCPSettings();
         }
-
 
     }
 }
