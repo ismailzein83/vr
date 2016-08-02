@@ -51,7 +51,7 @@ app.directive('vrCommonRatetypeSelector', ['VRCommon_RateTypeAPIService', 'VRCom
             label = "Rate Type";
         var disabled = "";
         if (attrs.customlabel != undefined)
-            label = attrs.customlabel;
+            label = attrs.customlabel.replace(/'/g, "");
         if (attrs.isdisabled)
             disabled = "vr-disabled='true'"
 
