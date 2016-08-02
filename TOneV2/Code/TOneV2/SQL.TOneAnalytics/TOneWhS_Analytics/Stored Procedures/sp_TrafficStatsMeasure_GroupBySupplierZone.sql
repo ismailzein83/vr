@@ -7,6 +7,10 @@ CREATE PROCEDURE [TOneWhS_Analytics].[sp_TrafficStatsMeasure_GroupBySupplierZone
 @TimeSpan int
 AS
 BEGIN
+
+	DECLARE @FromTime datetime
+	SET @FromTime = DateAdd(ss, -@TimeSpan, getdate())
+
 	SELECT [SupplierZoneID]
       ,Sum([Attempts]) as TotalNumberOfAttempts
       ,Sum([DurationInSeconds]) as TotalDurationInSeconds
@@ -14,7 +18,8 @@ BEGIN
       ,Sum([SuccessfulAttempts]) as TotalSuccesfulAttempts
 
   FROM [TOneWhS_Analytics].[TrafficStats15Min] with (nolock)
-    where DATEDIFF(ss, BatchStart, GETDATE()) < @TimeSpan
+    where	BatchStart > @FromTime AND BatchStart<getdate() 
+			and SupplierZoneId is not null
 group by [SupplierZoneID]
      
 END
