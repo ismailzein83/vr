@@ -43,7 +43,7 @@ as (select * from (values
 (18003,'Bilateral Agreement','Bilateral Agreement','#/view/WhS_BusinessEntity/Views/Deal/DealManagement',1701,'WhS_BE/Deal/GetFilteredDeals',null,null,null,0,3),
 (18004,'Volume Commitment','Volume Commitment','#/view/WhS_BusinessEntity/Views/Deal/DealManagement',1701,'WhS_BE/Deal/GetFilteredDeals',null,null,null,0,4),
 
-(18005,'Progress Reprot','Progress Reprot','#/view/WhS_BusinessEntity/Views/Deal/DealManagement',1701,'WhS_BE/Deal/GetFilteredDeals',null,null,null,0,5),
+(18005,'Progress Reprot','Progress Reprot','#/view/WhS_BusinessEntity/Views/Deal/DealProgressManagement',1701,'WhS_BE/Deal/GetFilteredDeals',null,null,null,0,5),
 (18006,'Over All Progress Report','Over All Progress Report','#/view/WhS_BusinessEntity/Views/Deal/DealManagement',1701,'WhS_BE/Deal/GetFilteredDeals',null,null,null,0,6),
 
 (18007,'Alerts Management','Alerts Management','#/view/WhS_BusinessEntity/Views/Deal/DealManagement',1701,'WhS_BE/Deal/GetFilteredDeals',null,null,null,0,7),
