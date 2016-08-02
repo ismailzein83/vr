@@ -62,8 +62,14 @@ namespace TOne.WhS.DBSync.Business
                 Currency currency = allCurrencies.Values.FindRecord(item => item.Symbol.Equals(_mainCurrencySymbol, System.StringComparison.InvariantCultureIgnoreCase));
                 if (currency != null)
                 {
-                    var systemCurrencySetting = settingManager.GetSettingByType("VR_Common_BaseCurrency");
-                    (systemCurrencySetting.Data as CurrencySettingData).CurrencyId = currency.CurrencyId;
+                    Setting systemCurrencySetting = settingManager.GetSettingByType("VR_Common_BaseCurrency");
+                    CurrencySettingData currencySettingData = (CurrencySettingData)systemCurrencySetting.Data;
+                    if (currencySettingData == null)
+                        currencySettingData = new CurrencySettingData();
+
+                    currencySettingData.CurrencyId = currency.CurrencyId;
+                    
+                    systemCurrencySetting.Data = currencySettingData;
                     settingManager.UpdateSetting(systemCurrencySetting);
                 }
             }
