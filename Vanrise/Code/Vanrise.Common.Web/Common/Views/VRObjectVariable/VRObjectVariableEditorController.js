@@ -48,27 +48,7 @@
         }
         function load() {
             $scope.isLoading = true;
-
-            //if (isEditMode) {
-            //    setObjectVariableEntityFromParameters().then(function () {
-            //        loadAllControls().finally(function () {
-            //            genericRuleDefinitionEntity = undefined;
-            //        });
-            //    });
-            //}
-            //else {
-            //    loadAllControls();
-            //}
-
             loadAllControls();
-        }
-
-        function setObjectVariableEntityFromParameters() {
-            objectVariableEntity = UtilsService.getItemByVal(vrObjectVariableCollection, objectName, 'ObjectName');
-
-            var deferred = UtilsService.createPromiseDeferred();
-            deferred.resolve();
-            return deferred.promise;
         }
 
         function loadAllControls() {
@@ -80,7 +60,7 @@
 
             function setTitle() {
                 $scope.title = (isEditMode) ?
-                    UtilsService.buildTitleForUpdateEditor((objectVariableEntity != undefined) ? objectVariableEntity.FieldName : null, 'Object Variable') :
+                    UtilsService.buildTitleForUpdateEditor((objectVariableEntity != undefined) ? objectVariableEntity.ObjectName : null, 'Object Variable') :
                     UtilsService.buildTitleForAddEditor('Object Variable');
             }
             function loadStaticData() {
@@ -95,7 +75,7 @@
                 objectTypeSelectiveReadyDeferred.promise.then(function () {
                     var payload;
                     if (objectVariableEntity != undefined) {
-                        payload = objectVariableEntity.ObjectType;
+                        payload = { objectType: objectVariableEntity.ObjectType };
                     }
 
                     VRUIUtilsService.callDirectiveLoad(objectTypeSelectiveAPI, payload, objectTypeSelectiveLoadDeferred);

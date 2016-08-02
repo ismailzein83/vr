@@ -9,17 +9,13 @@
         function addVRObjectVariable(onObjectVariableAdded) {
 
             var modalParameters;
-            //var modalParameters = {
-            //    GenericRuleDefinitionCriteriaFields: genericRuleDefinitionCriteriaFields
-            //};
 
             var modalSettings = {};
-
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onObjectVariableAdded = onObjectVariableAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/Common/Directives/VRObjectVariable/templates/VRObjectVariableEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Common/Views/VRObjectVariable/VRObjectVariableEditor.html', modalParameters, modalSettings);
         }
 
         function editVRObjectVariable(objectVariable, onGenericRuleDefinitionCriteriaFieldUpdated) {
@@ -33,7 +29,7 @@
                 modalScope.onObjectVariableUpdated = onGenericRuleDefinitionCriteriaFieldUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/Common/Directives/VRObjectVariable/templates/VRObjectVariableEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Common/Views/VRObjectVariable/VRObjectVariableEditor.html', modalParameters, modalSettings);
         }
 
 

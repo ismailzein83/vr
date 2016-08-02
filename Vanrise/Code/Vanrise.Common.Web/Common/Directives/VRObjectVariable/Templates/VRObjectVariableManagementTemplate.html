@@ -6,17 +6,14 @@
     </vr-row>
     <vr-row>
         <vr-columns width="fullrow">
-            <vr-validator validate="ctrl.validateCriteriaFields()">
                 <vr-datagrid on-ready="ctrl.onGridReady"
                              datasource="ctrl.objectVariables"
                              menuactions="ctrl.menuActions"
-                             enabledraggablerow="true"
                              isrequired="true"
                              hidegridmenu>
                     <vr-datagridcolumn headertext="'Object Name'" type="'Text'" field="'ObjectName'" widthfactor="5" disablesorting></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Object Type'" type="'Text'" field="'ObjectType'" widthfactor="5" disablesorting></vr-datagridcolumn>
                 </vr-datagrid>
-            </vr-validator>
         </vr-columns>
     </vr-row>
 </div>

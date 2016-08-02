@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VRObjectVariableManagementDirective.$inject = ['VRCommon_ObjectVariableService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_GenericData_MappingRuleStructureBehaviorTypeEnum', 'UtilsService', 'VRNotificationService'];
+    VRObjectVariableManagementDirective.$inject = ['VRCommon_ObjectVariableService', 'UtilsService', 'VRNotificationService'];
 
-    function VRObjectVariableManagementDirective(VRCommon_ObjectVariableService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_GenericData_MappingRuleStructureBehaviorTypeEnum, UtilsService, VRNotificationService) {
+    function VRObjectVariableManagementDirective(VRCommon_ObjectVariableService, UtilsService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -31,11 +31,9 @@
             this.initializeController = initializeController;
 
             var gridAPI;
-            var dataRecordFieldTypeConfigs;
 
             function initializeController() {
                 ctrl.objectVariables = [];
-                //ctrl.priorities = [];
 
                 ctrl.onGridReady = function (api) {
                     gridAPI = api;
@@ -50,12 +48,6 @@
                     };
                     VRCommon_ObjectVariableService.addVRObjectVariable(onObjectVariableAdded);
                 };
-                ctrl.validateCriteriaFields = function () {
-                    if (ctrl.objectVariables.length == 0) {
-                        return 'No fields added';
-                    }
-                    return null;
-                };
 
                 defineMenuActions();
             }
@@ -64,43 +56,14 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    //return loadDataRecordFieldTypeConfigs().then(function () {
 
-                    //api.load = function (query) {
-                    //    return gridAPI.retrieveData(query);
-                    //};
-                        
-                    if (payload != undefined) {
-                        for (var i = 0; i < payload.Objects.length; i++) {
-                            var objectVariable = payload.Objects[i];
-                            //extendCriteriaFieldObject(criteriaField);
+                    var objectVariable;
+                    if (payload != undefined && payload.objects != undefined) {
+                        for (var i = 0; i < payload.objects.length; i++) {
+                            objectVariable = payload.objects[i];
                             ctrl.objectVariables.push(objectVariable);
                         }
-                        //loadPriorityDataItemsFromPayload();
                     }
-
-                    //});
-
-                    //function loadDataRecordFieldTypeConfigs() {
-                    //    return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
-                    //        if (response != null) {
-                    //            dataRecordFieldTypeConfigs = [];
-                    //            for (var i = 0; i < response.length; i++) {
-                    //                dataRecordFieldTypeConfigs.push(response[i]);
-                    //            }
-                    //        }
-                    //    });
-                    //}
-
-                    //function loadPriorityDataItemsFromPayload() {
-                    //    var clonedCriteriaFields = UtilsService.cloneObject(ctrl.criteriaFields, true);
-                    //    clonedCriteriaFields.sort(function (first, second) {
-                    //        return first.Priority - second.Priority;
-                    //    });
-                    //    for (var j = 0; j < clonedCriteriaFields.length; j++) {
-                    //        addPriorityDataItem(clonedCriteriaFields[j]);
-                    //    }
-                    //}
                 };
 
                 api.getData = function () {
@@ -140,37 +103,26 @@
                 }];
             }
 
-            function editObjectVariable(object) {
+            function editObjectVariable(objectVariable) {
                 var onObjectVariableUpdated = function (updatedObjectVariable) {
                     //extendCriteriaFieldObject(updatedCriteriaField);
-                    var index = UtilsService.getItemIndexByVal(ctrl.objectVariables, object.ObjectName, 'ObjectName');
+                    var index = UtilsService.getItemIndexByVal(ctrl.objectVariables, objectVariable.ObjectName, 'ObjectName');
                     ctrl.objectVariables[index] = updatedObjectVariable;
                 };
-                VRCommon_ObjectVariableService.editVRObjectVariable(object, onObjectVariableUpdated);
+                VRCommon_ObjectVariableService.editVRObjectVariable(objectVariable, onObjectVariableUpdated);
             }
-            function deleteObjectVariable(criteriaField) {
+            function deleteObjectVariable(objectVariable) {
                 VRNotificationService.showConfirmation().then(function (confirmed) {
                     if (confirmed) {
-                        var index = UtilsService.getItemIndexByVal(ctrl.criteriaFields, criteriaField.FieldName, 'FieldName');
-                        ctrl.criteriaFields.splice(index, 1);
-                        deletePriorityDataItem(criteriaField);
+                        var index = UtilsService.getItemIndexByVal(ctrl.objectVariables, objectVariable.ObjectName, 'ObjectName');
+                        ctrl.objectVariables.splice(index, 1);
                     }
                 });
             }
-            function extendCriteriaFieldObject(criteriaField) {
-                var behaviorTypeObject = UtilsService.getEnum(VR_GenericData_MappingRuleStructureBehaviorTypeEnum, 'value', criteriaField.RuleStructureBehaviorType);
-                if (behaviorTypeObject != undefined) {
-                    criteriaField.RuleStructureBehaviorTypeDescription = behaviorTypeObject.description;
-                }
-
-                var fieldTypeConfigObject = UtilsService.getItemByVal(dataRecordFieldTypeConfigs, criteriaField.FieldType.ConfigId, 'DataRecordFieldTypeConfigId');
-                if (fieldTypeConfigObject != null) {
-                    criteriaField.FieldTypeDescription = fieldTypeConfigObject.Name;
-                }
-            }
-
         }
+
     }
+    
 
     app.directive('vrCommonObjectvariableManagement', VRObjectVariableManagementDirective);
 

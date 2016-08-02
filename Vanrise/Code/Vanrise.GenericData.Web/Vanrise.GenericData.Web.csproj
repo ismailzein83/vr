@@ -297,8 +297,8 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\SummaryBatchTimeIntervalRange\Templates\SummaryBatchStartIdentificationSelector.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\SummaryBatchTimeIntervalRange\vr-genericdata-summarytransformation-timeinterval-selector.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\SummaryBatchTimeIntervalRange\vr-genericdata-summarytransformation-summarybatchstartidentification-selector.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\VROjectType\Templates\VRDaraRecordObjectTypeTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\VROjectType\vr_genericdata_datarecordobjecttype_propertyevaluator.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectType\Templates\VRDaraRecordObjectTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectType\vr_genericdata_datarecordobjecttype.js" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorStoreBatchTemplate.html" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorGenerateSummaryTemplate.html" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorUpdateSummaryTemplate.html" />
@@ -506,7 +506,9 @@
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagement.html" />
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagementController.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="VR_GenericData\Directives\MainExtensions\VROjectType\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="VR_GenericData\Views\SummaryTransformationDefinition\SummaryGroupingColumnsEditor.html" />

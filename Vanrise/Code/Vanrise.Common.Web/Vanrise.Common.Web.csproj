@@ -227,6 +227,7 @@
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-selector.js" />
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-grid.js" />
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-settings.js" />
+    <Content Include="Common\Directives\VRObjectVariable\Templates\VRObjectTypeSelectiveTemplate.html" />
     <Content Include="Common\Directives\VRObjectVariable\Templates\VRObjectVariableManagementTemplate.html" />
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objecttype-selective.js" />
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objectvariable-management.js" />
@@ -321,8 +322,8 @@
     <Content Include="Common\Views\Support.html" />
     <Content Include="Common\Views\Settings\SettingsManagement.html" />
     <Content Include="Common\Views\Settings\SettingsManagementController.js" />
-    <Content Include="Common\Directives\VRObjectVariable\Templates\VRObjectVariableEditor.html" />
-    <Content Include="Common\Directives\VRObjectVariable\VRObjectVariableEditorController.js" />
+    <Content Include="Common\Views\VRObjectVariable\VRObjectVariableEditor.html" />
+    <Content Include="Common\Views\VRObjectVariable\VRObjectVariableEditorController.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Common\Template\Country Add sample.xls" />

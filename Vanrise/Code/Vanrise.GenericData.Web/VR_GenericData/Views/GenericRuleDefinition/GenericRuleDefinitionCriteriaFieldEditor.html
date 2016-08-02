@@ -1,31 +1,38 @@
 ﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericRuleDefinitionCriteriaFieldEditorController" width="'45%'" vr-loader="isLoading">
     <vr-modalbody>
         <vr-form name="formGenericRuleDefinitionCriteriaFieldEditor">
-            <vr-row>
-                <vr-columns width="1/3row">
-                    <vr-validator validate="validateCriteriaField()">
-                        <vr-textbox type="text" label="Name" value="fieldName" isrequired></vr-textbox>
-                    </vr-validator>
-                </vr-columns>
-                <vr-columns width="1/3row">
-                    <vr-textbox type="text" label="Title" value="fieldTitle" isrequired></vr-textbox>
-                </vr-columns>
-            </vr-row>
+            <vr-tabs>
+                <vr-tab header="Definition">
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-validator validate="validateCriteriaField()">
+                                <vr-textbox type="text" label="Name" value="fieldName" isrequired></vr-textbox>
+                            </vr-validator>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-textbox type="text" label="Title" value="fieldTitle" isrequired></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
 
-            <vr-row>
-                <vr-columns width="1/3row">
-                    <vr-select label="Behavior Type" datasource="behaviorTypes" selectedvalues="selectedBehaviorType" datavaluefield="value"
-                               datatextfield="description" isrequired hideremoveicon>
-                    </vr-select>
-                </vr-columns>
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-select label="Behavior Type" datasource="behaviorTypes" selectedvalues="selectedBehaviorType" datavaluefield="value"
+                                       datatextfield="description" isrequired hideremoveicon>
+                            </vr-select>
+                        </vr-columns>
 
-                <vr-columns width="1/3row">
-                    <vr-switch value="showInBasicSearch" label="Show In Basic Search"></vr-switch>
-                </vr-columns>
-            </vr-row>
-            <vr-row>
-                <vr-genericdata-fieldtype-selective on-ready="onDataRecordFieldTypeSelectiveReady"></vr-genericdata-fieldtype-selective>
-            </vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-switch value="showInBasicSearch" label="Show In Basic Search"></vr-switch>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-genericdata-fieldtype-selective on-ready="onDataRecordFieldTypeSelectiveReady"></vr-genericdata-fieldtype-selective>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="Evaluated Value">
+
+                </vr-tab>
+            </vr-tabs>
         </vr-form>
     </vr-modalbody>
     <div>

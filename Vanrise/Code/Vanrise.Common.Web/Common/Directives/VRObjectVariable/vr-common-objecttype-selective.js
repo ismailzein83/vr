@@ -21,9 +21,7 @@
             },
             controllerAs: "ctrl",
             bindToController: true,
-            template: function (element, attrs) {
-                return getTamplate(attrs);
-            }
+            templateUrl: '/Client/Modules/Common/Directives/VRObjectVariable/Templates/VRObjectTypeSelectiveTemplate.html'
         };
 
         function ObjectTypeSelective($scope, ctrl, $attrs) {
@@ -63,8 +61,8 @@
                     var promises = [];
                     var objectType;
 
-                    if (payload != undefined) {
-                        objectType = payload;
+                    if (payload != undefined && payload.objectType != undefined) {
+                        objectType = payload.objectType;
                     }
 
                     var getObjectTypeTemplateConfigsPromise = getObjectTypeSelectiveTemplateConfigs();
@@ -82,7 +80,7 @@
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (objectType != undefined) {
+                                if (objectType != undefined && objectType.ConfigId != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
                                         UtilsService.getItemByVal($scope.scopeModel.templateConfigs, objectType.ConfigId, 'ExtensionConfigurationId');
                                 }
@@ -95,7 +93,10 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = objectType;
+                            var directivePayload;
+                            if (objectType != undefined && objectType.RecordTypeId != undefined) {
+                               directivePayload = { recordTypeId: objectType.RecordTypeId }
+                            }
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -123,26 +124,6 @@
                     ctrl.onReady(api);
                 }
             }
-        }
-
-        function getTamplate(attrs) {
-
-            var template =
-                  '<vr-columns width="1/2row">'
-                        + '<vr-select on-ready="scopeModel.onSelectorReady"'
-                            + ' datasource="scopeModel.templateConfigs"'
-                            + ' selectedvalues="scopeModel.selectedTemplateConfig"'
-                            + ' datavaluefield="ExtensionConfigurationId"'
-                            + ' datatextfield="Title"'
-                            + ' isrequired="ctrl.isrequired"'
-                            + ' label="Object Type"'
-                            + ' hideremoveicon>'
-                        + '</vr-select>'
-                + '</vr-columns>'
-                        + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
-                                + ' on-ready="scopeModel.onDirectiveReady" isrequired="true" normal-col-num="{{ctrl.normalColNum}}" customvalidate="ctrl.customvalidate">'
-                        + '</vr-directivewrapper>'
-            return template;
         }
     }
 
