@@ -12,6 +12,7 @@ using Vanrise.AccountBalance.Business;
 
 namespace Vanrise.AccountBalance.BP.Activities
 {
+  
     #region Argument Classes
 
     public class ProcessPendingUsageUpdatesInput
@@ -21,15 +22,19 @@ namespace Vanrise.AccountBalance.BP.Activities
     }
 
     #endregion
+    
     public sealed class ProcessPendingUsageUpdates : DependentAsyncActivity<ProcessPendingUsageUpdatesInput>
     {
+  
         #region Arguments
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<BalanceUsageQueue>> InputQueue { get; set; }
         [RequiredArgument]
         public InArgument<AccountBalanceUpdateHandler> AcountBalanceUpdateHandler { get; set; }
+      
         #endregion
+      
         protected override void DoWork(ProcessPendingUsageUpdatesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             var counter = 0;
@@ -49,7 +54,6 @@ namespace Vanrise.AccountBalance.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Pending Usage Queues Processed", counter);
 
         }
-
         protected override ProcessPendingUsageUpdatesInput GetInputArgument2(AsyncCodeActivityContext context)
         {
             return new ProcessPendingUsageUpdatesInput()
@@ -62,7 +66,6 @@ namespace Vanrise.AccountBalance.BP.Activities
         {
             if(balanceUsageQueue.UsageDetails != null && balanceUsageQueue.UsageDetails.UsageBalanceUpdates != null)
             {
-                
                 acountBalanceUpdateHandler.AddAndUpdateLiveBalanceFromBalanceUsageQueue(balanceUsageQueue.BalanceUsageQueueId, balanceUsageQueue.UsageDetails.UsageBalanceUpdates);
             }
         }

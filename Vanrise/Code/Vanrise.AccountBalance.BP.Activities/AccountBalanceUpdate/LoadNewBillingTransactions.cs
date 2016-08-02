@@ -21,8 +21,13 @@ namespace Vanrise.AccountBalance.BP.Activities
 
     public sealed class LoadNewBillingTransactions : BaseAsyncActivity<LoadNewBillingTransactionsInput>
     {
+        
+        #region Arguments
+       
         [RequiredArgument]
         public InOutArgument<BaseQueue<BillingTransactionBatch>> OutputQueue { get; set; }
+        #endregion
+
         protected override void DoWork(LoadNewBillingTransactionsInput inputArgument, AsyncActivityHandle handle)
         {
             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Started Loading New Billing Transactions ...");

@@ -32,6 +32,7 @@ namespace Vanrise.AccountBalance.BP.Activities
        
         [RequiredArgument]
         public InArgument<AccountBalanceUpdateHandler> AcountBalanceUpdateHandler { get; set; }
+      
         #endregion
 
         protected override void DoWork(ProcessNewBillingTransactionsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
