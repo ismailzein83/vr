@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/VROjectType/Templates/VRDaraRecordObjectTypeTemplate.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/VRObjectType/Templates/VRDaraRecordObjectTypeTemplate.html"
 
         };
         function DataRecordObjectType($scope, ctrl, $attrs) {
