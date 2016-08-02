@@ -3264,8 +3264,8 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1.64931in</Top>
-          <Left>1.04944in</Left>
+          <Top>1.25in</Top>
+          <Left>1.08417in</Left>
           <Height>0.32292in</Height>
           <Width>2.23958in</Width>
           <ZIndex>12</ZIndex>
@@ -3295,8 +3295,8 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1.25in</Top>
-          <Left>1.0425in</Left>
+          <Top>1.64236in</Top>
+          <Left>1.05639in</Left>
           <Height>0.375in</Height>
           <Width>2.1694in</Width>
           <ZIndex>13</ZIndex>
@@ -3499,7 +3499,7 @@
     </ReportParameter>
     <ReportParameter Name="ToDate">
       <DataType>DateTime</DataType>
-      <AllowBlank>true</AllowBlank>
+      <Nullable>true</Nullable>
       <Prompt>ToDate</Prompt>
     </ReportParameter>
     <ReportParameter Name="ServicesPerCustomer">
