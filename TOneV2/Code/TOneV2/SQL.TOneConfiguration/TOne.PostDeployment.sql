@@ -79,8 +79,7 @@ as (select * from (values
 (1209,'Purchase Rules',null				,1207,null,1,0),
 (1210,'Routing',null					,null,'/images/menu-icons/Routing.png',10,0),
 (1211,'Routing Rules',null				,1210,null,1,0),
-(1212,'CDR Process',null				,1,'/images/menu-icons/plug.png',35,0),
-(1213,'CDR Process Rules'				,null,1212,null,1,0),
+(1212,'CDR Process',null				,1,null,35,0),
 (1214,'Traffic Analysis',null			,null,'/images/menu-icons/NOC.png',70,1),
 (1215,'Billing',null					,null,'/images/menu-icons/billing.png',80,0),
 (1216,'Reports',null					,1215,null,1,0),
@@ -143,8 +142,8 @@ as (select * from (values
 (12029,'Route Rules','Route Rules','#/view/WhS_Routing/Views/RouteRule/RouteRuleManagement',1211,'WhS_Routing/RouteRule/GetFilteredRouteRules',null,null,null,0,2),
 (12030,'Route Options Rules','Route Options Rules','#/view/WhS_Routing/Views/RouteOptionRule/RouteOptionRuleManagement',1211,'WhS_Routing/RouteOptionRule/GetFilteredRouteOptionRules',null,null,null,0,2),
 
-(12031,'Mapping Rules','Mapping Rules',null,1213,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":176}',101,1),
-(12032,'Normalization Rules','Normalization Rules',null,1213,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":186}',101,2),
+(12031,'Mapping Rules','Mapping Rules',null,1212,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":176}',101,1),
+(12032,'Normalization Rules','Normalization Rules',null,1212,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":186}',101,2),
 
 (12040,'Variation','Variation','#/view/WhS_Analytics/Views/VariationReport/VariationReport',1216,'WhS_Analytics/VariationReport/GetFilteredVariationReportRecords',null,null,null,0,1),
 (12041,'Billing Report','Billing Report','#/view/WhS_Analytics/Views/BillingReport/BillingReport',1215,'WhS_Analytics/ReportDefinition/GetAllRDLCReportDefinition',null,null,null,0,4),
