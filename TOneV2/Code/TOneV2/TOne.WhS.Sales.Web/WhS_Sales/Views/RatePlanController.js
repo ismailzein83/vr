@@ -40,6 +40,7 @@
 
         var settings;
         var pricingSettings;
+        var ratePlanSettingsData;
 
         defineScope();
         load();
@@ -313,7 +314,7 @@
             function loadAllControls() {
                 $scope.isLoadingFilterSection = true;
 
-                UtilsService.waitMultipleAsyncOperations([loadOwnerFilterSection, loadRouteOptionsFilterSection]).catch(function (error) {
+                UtilsService.waitMultipleAsyncOperations([loadOwnerFilterSection, loadRouteOptionsFilterSection, loadRatePlanSettingsData]).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 }).finally(function () {
                     $scope.isLoadingFilterSection = false;
@@ -467,11 +468,18 @@
                     NumberOfOptions: $scope.numberOfOptions,
                     CostCalculationMethods: settings ? settings.costCalculationMethods : null,
                     CostCalculationMethodConfigId: pricingSettings ? pricingSettings.selectedCostColumn.ConfigId : null,
-                    RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null
+                    RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null,
+                    Settings: ratePlanSettingsData
                 };
             }
 
             return gridLoadDeferred.promise;
+        }
+
+        function loadRatePlanSettingsData() {
+            return WhS_Sales_RatePlanAPIService.GetRatePlanSettingsData().then(function (response) {
+                ratePlanSettingsData = response;
+            });
         }
 
         function onDefaultItemChange() {

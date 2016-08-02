@@ -177,6 +177,8 @@
     <Content Include="WhS_Sales\Directives\RateType\vr-whs-sales-rate-type-grid.js" />
     <Content Include="WhS_Sales\Directives\SellingRules\Templates\SellingRulesGridTemplate.html" />
     <Content Include="WhS_Sales\Directives\SellingRules\vr-whs-sales-sellingrules-grid.js" />
+    <Content Include="WhS_Sales\Directives\Settings\Templates\RatePlanSettingsEditorTemplate.html" />
+    <Content Include="WhS_Sales\Directives\Settings\vr-whs-sales-rateplan-settings-editor.js" />
     <Content Include="WhS_Sales\Directives\Templates\DefaultRoutingProductTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\Templates\PercentageCostCalculationTemplate.html" />
     <Content Include="WhS_Sales\Directives\Templates\RatePlanGridTemplate.html" />

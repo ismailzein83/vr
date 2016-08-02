@@ -25,6 +25,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             var gridDrillDownTabs;
             var rateTypes = [];
 
+            var increasedRateDayOffset = 0;
+            var decreasedRateDayOffset = 0;
+
             function initializeController() {
                 $scope.zoneItems = [];
                 $scope.costCalculationMethods = [];
@@ -89,18 +92,28 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 api.load = function (query) {
                     gridQuery = query;
 
-                    if (query && query.CostCalculationMethods) {
-                        $scope.costCalculationMethods = [];
-
-                        for (var i = 0; i < query.CostCalculationMethods.length; i++)
-                            $scope.costCalculationMethods.push(query.CostCalculationMethods[i]);
+                    if (query != undefined) {
+                        if (query.CostCalculationMethods != null) {
+                            $scope.costCalculationMethods = [];
+                            for (var i = 0; i < query.CostCalculationMethods.length; i++)
+                                $scope.costCalculationMethods.push(query.CostCalculationMethods[i]);
+                        }
+                        $scope.rateCalculationMethod = query.RateCalculationMethod;
+                        setDayOffsets(query.Settings);
                     }
-
-                    $scope.rateCalculationMethod = query.RateCalculationMethod;
 
                     gridAPI.clearDataAndContinuePaging();
                     return loadZoneItems();
                 };
+
+                function setDayOffsets(settings) {
+                    if (settings == undefined)
+                        return;
+                    if (settings.IncreasedRateDayOffset != undefined)
+                        increasedRateDayOffset = Number(settings.IncreasedRateDayOffset);
+                    if (settings.DecreasedRateDayOffset != undefined)
+                        decreasedRateDayOffset = Number(settings.DecreasedRateDayOffset);
+                }
 
                 api.getZoneChanges = function () {
                     var zoneChanges = [];
@@ -196,18 +209,20 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             zoneItem.showNewRateEED = true;
                             zoneItem.CurrentRateEED = zoneItem.currentRateEED;
 
-                            if (!zoneItem.AreNewDatesSet) {
-                                zoneItem.NewRateBED = (zoneItem.CurrentRate == null || Number(zoneItem.NewRate) > zoneItem.CurrentRate) ? new Date(new Date().setDate(new Date().getDate() + 7)) : new Date();
-                                zoneItem.NewRateEED = null;
-                                zoneItem.AreNewDatesSet = true;
-                            }
+                            var date = new Date();
+
+                            zoneItem.NewRateBED = (zoneItem.CurrentRate == null || Number(zoneItem.NewRate) > zoneItem.CurrentRate) ?
+                                getNowPlusDays(increasedRateDayOffset) : getNowPlusDays(decreasedRateDayOffset);
                         }
                         else {
                             zoneItem.NewRateBED = null;
                             zoneItem.NewRateEED = null;
                             zoneItem.showNewRateBED = false;
                             zoneItem.showNewRateEED = false;
-                            zoneItem.AreNewDatesSet = false;
+                        }
+
+                        function getNowPlusDays(days) {
+                            return new Date(new Date().setDate(new Date().getDate() + days));
                         }
                     };
 

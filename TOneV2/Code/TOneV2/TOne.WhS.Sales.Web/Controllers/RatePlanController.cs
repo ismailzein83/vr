@@ -127,5 +127,12 @@ namespace TOne.WhS.Sales.Web.Controllers
         {
             return _manager.DeleteDraft(ownerType, ownerId);
         }
+
+        [HttpGet]
+        [Route("GetRatePlanSettingsData")]
+        public RatePlanSettingsData GetRatePlanSettingsData()
+        {
+            return _manager.GetRatePlanSettingsData();
+        }
     }
 }

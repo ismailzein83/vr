@@ -13,5 +13,7 @@ namespace TOne.WhS.Sales.Business
         public const string RateCalculationMethod = "WhS_Sales_RateCalculationMethod";
 
         public const string SellingRuleSettingsConfigType = "WhS_Sales_SellingRuleSettingsType";
+        
+        public const string RatePlanSettingsType = "WhS_Sales_RatePlan_Settings";
     }
 }

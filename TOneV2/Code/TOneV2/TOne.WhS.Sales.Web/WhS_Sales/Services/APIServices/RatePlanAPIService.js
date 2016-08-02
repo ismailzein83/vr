@@ -89,6 +89,10 @@
             });
         }
 
+        function GetRatePlanSettingsData() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetRatePlanSettingsData"));
+        }
+
         return ({
             ValidateCustomer: ValidateCustomer,
             GetZoneLetters: GetZoneLetters,
@@ -104,7 +108,8 @@
             SaveChanges: SaveChanges,
             ApplyCalculatedRates: ApplyCalculatedRates,
             CheckIfDraftExists: CheckIfDraftExists,
-            DeleteDraft: DeleteDraft
+            DeleteDraft: DeleteDraft,
+            GetRatePlanSettingsData: GetRatePlanSettingsData
         });
 
     }

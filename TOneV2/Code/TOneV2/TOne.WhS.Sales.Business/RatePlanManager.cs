@@ -334,7 +334,21 @@ namespace TOne.WhS.Sales.Business
                 return carrierAccountManager.GetSellingNumberPlanId(ownerId, CarrierAccountType.Customer);
             }
         }
-        
+
+        public RatePlanSettingsData GetRatePlanSettingsData()
+        {
+            var settingManager = new SettingManager();
+            Setting setting = settingManager.GetSettingByType(Constants.RatePlanSettingsType);
+            if (setting == null)
+                throw new NullReferenceException("setting");
+            if (setting.Data == null)
+                throw new NullReferenceException("setting.Data");
+            var ratePlanSettings = setting.Data as RatePlanSettingsData;
+            if (ratePlanSettings == null)
+                throw new NullReferenceException("ratePlanSettings");
+            return ratePlanSettings;
+        }
+
         #endregion
 
         #region Common Private Methods

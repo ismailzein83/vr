@@ -122,6 +122,7 @@
     <Compile Include="SellingRules\SellingRuleDetail.cs" />
     <Compile Include="SellingRules\SellingRuleQuery.cs" />
     <Compile Include="SellingRules\SellingRuleSettings.cs" />
+    <Compile Include="Setting\RatePlanSettingData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
