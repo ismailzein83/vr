@@ -45,7 +45,7 @@ namespace Vanrise.AccountBalance.BP.Activities
                     hasItems = inputArgument.InputQueue.TryDequeue(
                         (billingTransactionBatch) =>
                         {
-                            counter++;
+                            counter += billingTransactionBatch.BillingTransactions.Count();
                             ProcessBillingTransactions(billingTransactionBatch.BillingTransactions,inputArgument.AcountBalanceUpdateHandler);
                         });
                 } while (!ShouldStop(handle) && hasItems);
