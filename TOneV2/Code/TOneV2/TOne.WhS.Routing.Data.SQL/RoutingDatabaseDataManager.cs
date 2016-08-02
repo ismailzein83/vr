@@ -73,8 +73,8 @@ namespace TOne.WhS.Routing.Data.SQL
         {
             RoutingDataManager routingDataManager = new RoutingDataManager();
             routingDataManager.RoutingDatabase = routingDatabase;
-            routingDataManager.DropDatabaseIfExists();
             ExecuteNonQuerySP("[TOneWhS_Routing].[sp_RoutingDatabase_Delete]", routingDatabase.ID);
+            routingDataManager.DropDatabaseIfExists();
         }
 
         public bool AreRoutingDatabasesUpdated(ref object updateHandle)

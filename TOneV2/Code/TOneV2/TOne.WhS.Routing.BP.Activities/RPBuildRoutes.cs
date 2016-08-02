@@ -8,6 +8,7 @@ using Vanrise.Queueing;
 using TOne.WhS.Routing.Entities;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.Routing.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -67,7 +68,6 @@ namespace TOne.WhS.Routing.BP.Activities
             RPRouteBatch productRoutesBatch = new RPRouteBatch();
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
-
                 bool hasItem = false;
                 do
                 {
@@ -83,9 +83,8 @@ namespace TOne.WhS.Routing.BP.Activities
                         productRoutesBatch = new RPRouteBatch();
                     });
                 } while (!ShouldStop(handle) && hasItem);
-
-
             });
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Building RP Routes is done", null);
         }
 
         protected override RPBuildRoutesInput GetInputArgument2(AsyncCodeActivityContext context)

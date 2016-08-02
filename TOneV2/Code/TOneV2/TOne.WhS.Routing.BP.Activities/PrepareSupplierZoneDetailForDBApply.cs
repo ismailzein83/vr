@@ -8,6 +8,7 @@ using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Entities;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Data;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -29,6 +30,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             ISupplierZoneDetailsDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ISupplierZoneDetailsDataManager>();
             PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, SupplierZoneDetailsBatch => SupplierZoneDetailsBatch.SupplierZoneDetails);
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Preparing Supplier Zone Detail For DB Apply is done", null);
         }
 
         protected override PrepareSupplierZoneDetailForDBApplyInput GetInputArgument2(AsyncCodeActivityContext context)

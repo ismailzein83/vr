@@ -8,6 +8,7 @@ using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -76,6 +77,7 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override void OnWorkComplete(AsyncCodeActivityContext context, GetSupplierZoneDetailsOutput result)
         {
             this.SupplierZoneDetails.Set(context, result.SupplierZoneDetails);
+            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Getting Supplier Zone Details is done", null);
         }
     }
 }

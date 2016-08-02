@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Activities;
 using Vanrise.BusinessProcess;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using TOne.WhS.Routing.Business;
 using Vanrise.Queueing;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -91,6 +89,8 @@ namespace TOne.WhS.Routing.BP.Activities
                 inputArgument.OutputQueue_1.Enqueue(codeMatchesBatch);
                 inputArgument.OutputQueue_2.Enqueue(codeMatchesBatch);
             }
+
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Building Code Matches is done", null);
         }
 
         protected override BuildCodeMatchesInput GetInputArgument(AsyncCodeActivityContext context)

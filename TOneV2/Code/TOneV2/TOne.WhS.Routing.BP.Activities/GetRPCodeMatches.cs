@@ -8,6 +8,7 @@ using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -76,6 +77,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
                 inputArgument.OutputQueue.Enqueue(codeMatchByZone);
             }
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Getting RP Code Matches is done", null);
         }
 
         private SupplierCodeMatchesWithRateBySupplier GetSupplierCodeMatchesBySupplier(IEnumerable<SupplierCodeMatchWithRate> supplierCodeMatchesWithRate)

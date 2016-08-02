@@ -6,6 +6,7 @@ using System.Activities;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.BusinessProcess;
 using TOne.WhS.BusinessEntity.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -76,6 +77,7 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override void OnWorkComplete(AsyncCodeActivityContext context, GetSupplierCodesOutput result)
         {
             this.SupplierCodes.Set(context, result.SupplierCodes);
+            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Getting Supplier Codes is done", null);
         }
     }
 }

@@ -7,6 +7,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.Queueing;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -45,6 +46,7 @@ namespace TOne.WhS.Routing.BP.Activities
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Applying Code Matches To DB is done", null);
         }
 
         protected override ApplyCodeMatchesToDBInput GetInputArgument2(AsyncCodeActivityContext context)

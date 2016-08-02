@@ -7,6 +7,7 @@ using Vanrise.Queueing;
 using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -45,6 +46,7 @@ namespace TOne.WhS.Routing.BP.Activities
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Applying Codes To Code Sale Zone Table is done", null);
         }
 
         protected override ApplyCodesToCodeSaleZoneTableInput GetInputArgument2(AsyncCodeActivityContext context)

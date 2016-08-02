@@ -8,6 +8,7 @@ using TOne.WhS.Routing.Entities;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -55,6 +56,7 @@ namespace TOne.WhS.Routing.BP.Activities
                 customerZoneDetailBatch = new CustomerZoneDetailBatch();
                 customerZoneDetailBatch.CustomerZoneDetails = new List<CustomerZoneDetail>();
             }
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Generating Customer Zone Details is done", null);
         }
 
         protected override GenerateCustomerZoneDetailsInput GetInputArgument(AsyncCodeActivityContext context)

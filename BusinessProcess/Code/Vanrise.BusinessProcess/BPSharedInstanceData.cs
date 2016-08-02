@@ -44,7 +44,7 @@ namespace Vanrise.BusinessProcess
         {
             BPTrackingMessage trackingMessage = new BPTrackingMessage
             {
-                TrackingMessage = String.Format(messageFormat, args),
+                TrackingMessage = args != null ? String.Format(messageFormat, args) : messageFormat,
                 EventTime = DateTime.Now,
                 ProcessInstanceId = this.InstanceInfo.ProcessInstanceID,
                 ParentProcessId = this.InstanceInfo.ParentProcessID,

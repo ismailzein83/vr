@@ -21,7 +21,7 @@ namespace TOne.WhS.Routing.BP.Arguments
 
         public override string GetTitle()
         {
-            return "Build Routes By Code Prefix";
+            return string.Format("Build Routes By Code Prefix: {0}", CodePrefix);
         }
     }
 }

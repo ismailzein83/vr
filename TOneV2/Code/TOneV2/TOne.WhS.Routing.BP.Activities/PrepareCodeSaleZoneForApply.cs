@@ -7,6 +7,7 @@ using Vanrise.Queueing;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Data;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -32,6 +33,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             ICodeSaleZoneDataManager CodeSaleZoneDataManager = RoutingDataManagerFactory.GetDataManager<ICodeSaleZoneDataManager>();
             PrepareDataForDBApply(previousActivityStatus, handle, CodeSaleZoneDataManager, inputArgument.InputQueue, inputArgument.OutputQueue, GetCodeSaleZoneList);
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Preparing Code Sale Zone For Apply is done", null);
         }
 
         protected override PrepareCodeSaleZoneForApplyInput GetInputArgument2(AsyncCodeActivityContext context)

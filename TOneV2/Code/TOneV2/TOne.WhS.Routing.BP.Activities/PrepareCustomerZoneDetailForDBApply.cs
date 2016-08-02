@@ -7,6 +7,7 @@ using TOne.WhS.Routing.Entities;
 using Vanrise.Queueing;
 using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Data;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -26,6 +27,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             ICustomerZoneDetailsDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerZoneDetailsDataManager>();
             PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, CustomerZoneDetailsBatch => CustomerZoneDetailsBatch.CustomerZoneDetails);
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Preparing Customer Zone Detail For DB Apply is done", null);
         }
 
         protected override PrepareCustomerZoneDetailForDBApplyInput GetInputArgument2(AsyncCodeActivityContext context)

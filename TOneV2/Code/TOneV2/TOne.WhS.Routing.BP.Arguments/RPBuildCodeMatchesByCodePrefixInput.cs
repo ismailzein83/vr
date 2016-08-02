@@ -11,6 +11,7 @@ namespace TOne.WhS.Routing.BP.Arguments
         public int RoutingDatabaseId { get; set; }
 
         public string CodePrefix { get; set; }
+
         public int CodePrefixLength { get; set; }
 
         public DateTime? EffectiveOn { get; set; }
@@ -19,7 +20,7 @@ namespace TOne.WhS.Routing.BP.Arguments
 
         public override string GetTitle()
         {
-            return "RP Build Code Matches By Code Prefix";
+            return string.Format("RP Build Code Matches By Code Prefix: {0}", CodePrefix);
         }
     }
 }

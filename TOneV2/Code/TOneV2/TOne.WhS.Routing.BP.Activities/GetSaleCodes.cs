@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
 using Vanrise.BusinessProcess;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.BusinessEntity.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -72,6 +71,7 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override void OnWorkComplete(AsyncCodeActivityContext context, GetSaleCodesOutput result)
         {
             this.SaleCodes.Set(context, result.SaleCodes);
+            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Getting Sale Codes is done", null);
         }
     }
 }

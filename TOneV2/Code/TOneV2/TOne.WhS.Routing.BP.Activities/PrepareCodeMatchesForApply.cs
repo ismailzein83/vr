@@ -7,6 +7,7 @@ using Vanrise.Queueing;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Data;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -31,6 +32,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             ICodeMatchesDataManager codeMatchesDataManager = RoutingDataManagerFactory.GetDataManager<ICodeMatchesDataManager>();
             PrepareDataForDBApply(previousActivityStatus, handle, codeMatchesDataManager, inputArgument.InputQueue, inputArgument.OutputQueue, CodeMatchesBatch => CodeMatchesBatch.CodeMatches);
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Preparing Code Matches For Apply is done", null);
         }
 
         protected override PrepareCodeMatchesForApplyInput GetInputArgument2(AsyncCodeActivityContext context)

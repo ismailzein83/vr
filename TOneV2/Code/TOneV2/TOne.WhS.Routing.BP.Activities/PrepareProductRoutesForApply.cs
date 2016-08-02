@@ -7,6 +7,7 @@ using Vanrise.Queueing;
 using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Entities;
 using TOne.WhS.Routing.Data;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -31,6 +32,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             IRPRouteDataManager productRoutesDataManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
             PrepareDataForDBApply(previousActivityStatus, handle, productRoutesDataManager, inputArgument.InputQueue, inputArgument.OutputQueue, ProductRoutesBatch => ProductRoutesBatch.RPRoutes);
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Preparing Product Routes For Apply is done", null);
         }
 
         protected override PrepareProductRoutesForApplyInput GetInputArgument2(AsyncCodeActivityContext context)

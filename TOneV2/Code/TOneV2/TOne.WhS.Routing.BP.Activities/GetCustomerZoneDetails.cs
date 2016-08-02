@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Activities;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -77,6 +76,7 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override void OnWorkComplete(AsyncCodeActivityContext context, GetCustomerZoneDetailsOutput result)
         {
             this.CustomerZoneDetails.Set(context, result.CustomerZoneDetails);
+            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Getting Customer Zone Details is done", null);
         }
     }
 }

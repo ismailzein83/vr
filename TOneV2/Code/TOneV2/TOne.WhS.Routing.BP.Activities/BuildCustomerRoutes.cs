@@ -7,6 +7,7 @@ using TOne.WhS.Routing.Entities;
 using Vanrise.Queueing;
 using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -96,6 +97,7 @@ namespace TOne.WhS.Routing.BP.Activities
             {
                 inputArgument.OutputQueue.Enqueue(customerRoutesBatch);
             }
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Building Customer Routes is done", null);
         }
 
         protected override BuildCustomerRoutesInput GetInputArgument2(AsyncCodeActivityContext context)

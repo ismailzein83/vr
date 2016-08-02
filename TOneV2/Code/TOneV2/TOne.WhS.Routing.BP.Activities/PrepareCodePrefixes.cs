@@ -61,6 +61,7 @@ namespace TOne.WhS.Routing.BP.Activities
             }
 
             this.DistinctCodePrefixes.Set(context, prefixesHashSet);
+            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Preparing Code Prefixes is done", null);
         }
     }
 }
