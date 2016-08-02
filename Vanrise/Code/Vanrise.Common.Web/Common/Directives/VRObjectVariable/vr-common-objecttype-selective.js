@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ObjectTypeSelectiveSelective.$inject = ['VRCommon_VEObjectTypeAPIService', 'UtilsService', 'VRUIUtilsService'];
+    ObjectTypeSelectiveSelective.$inject = ['VRCommon_VRObjectTypeAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function ObjectTypeSelectiveSelective(VRCommon_VEObjectTypeAPIService, UtilsService, VRUIUtilsService) {
+    function ObjectTypeSelectiveSelective(VRCommon_VRObjectTypeAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -65,8 +65,8 @@
                         objectType = payload.objectType;
                     }
 
-                    var getObjectTypeTemplateConfigsPromise = getObjectTypeSelectiveTemplateConfigs();
-                    promises.push(getObjectTypeTemplateConfigsPromise);
+                    var getObjectTypeExtensionConfigsPromise = getObjectTypeExtensionConfigs();
+                    promises.push(getObjectTypeExtensionConfigsPromise);
 
                     if (objectType != undefined) {
                         var loadDirectivePromise = loadDirective();
@@ -74,8 +74,8 @@
                     }
 
 
-                    function getObjectTypeSelectiveTemplateConfigs() {
-                        return VRCommon_VEObjectTypeAPIService.GetObjectTypeExtensionConfigs().then(function (response) {
+                    function getObjectTypeExtensionConfigs() {
+                        return VRCommon_VRObjectTypeAPIService.GetObjectTypeExtensionConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);

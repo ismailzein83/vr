@@ -6,9 +6,11 @@
 
     function VRObjectVariableService(VRModalService) {
 
-        function addVRObjectVariable(onObjectVariableAdded) {
+        function addVRObjectVariable(objectVariables ,onObjectVariableAdded) {
 
-            var modalParameters;
+            var modalParameters = {
+                objectVariables: objectVariables
+            };
 
             var modalSettings = {};
             modalSettings.onScopeReady = function (modalScope) {
@@ -18,9 +20,10 @@
             VRModalService.showModal('/Client/Modules/Common/Views/VRObjectVariable/VRObjectVariableEditor.html', modalParameters, modalSettings);
         }
 
-        function editVRObjectVariable(objectVariable, onGenericRuleDefinitionCriteriaFieldUpdated) {
+        function editVRObjectVariable(objectVariable, objectVariables, onGenericRuleDefinitionCriteriaFieldUpdated) {
             var modalParameters = {
                 objectVariable: objectVariable,
+                objectVariables: objectVariables
             };
 
             var modalSettings = {};

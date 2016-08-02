@@ -228,7 +228,7 @@
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-grid.js" />
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-settings.js" />
     <Content Include="Common\Directives\VRObjectProperty\Templates\VRObjectPropertySelectiveTemplate.html" />
-    <Content Include="Common\Directives\VRObjectProperty\vr-common-objectproperty-selective.js" />
+    <Content Include="Common\Directives\VRObjectProperty\vr-common-objectproperty-selector.js" />
     <Content Include="Common\Directives\VRObjectVariable\Templates\VRObjectTypeSelectiveTemplate.html" />
     <Content Include="Common\Directives\VRObjectVariable\Templates\VRObjectVariableManagementTemplate.html" />
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objecttype-selective.js" />

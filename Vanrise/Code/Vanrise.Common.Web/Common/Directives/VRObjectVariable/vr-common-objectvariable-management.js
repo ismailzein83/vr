@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VRObjectVariableManagementDirective.$inject = ['VRCommon_ObjectVariableService', 'UtilsService', 'VRNotificationService'];
+    VRObjectVariableManagementDirective.$inject = ['VRCommon_ObjectVariableService', 'VRCommon_VRObjectTypeAPIService', 'UtilsService', 'VRNotificationService'];
 
-    function VRObjectVariableManagementDirective(VRCommon_ObjectVariableService, UtilsService, VRNotificationService) {
+    function VRObjectVariableManagementDirective(VRCommon_ObjectVariableService, VRCommon_VRObjectTypeAPIService, UtilsService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -31,6 +31,7 @@
             this.initializeController = initializeController;
 
             var gridAPI;
+            var objectTypeConfigs;
 
             function initializeController() {
                 ctrl.objectVariables = [];
@@ -41,12 +42,11 @@
                 };
 
                 ctrl.addObjectVariable = function () {
-                    var onObjectVariableAdded = function (addedCriteriaField) {
-                        //extendCriteriaFieldObject(addedCriteriaField);
-                        ctrl.objectVariables.push(addedCriteriaField);
-                        //addPriorityDataItem(addedCriteriaField);
+                    var onObjectVariableAdded = function (addedObjectVariable) {
+                        extendObjectVariableObject(addedObjectVariable);
+                        ctrl.objectVariables.push(addedObjectVariable);
                     };
-                    VRCommon_ObjectVariableService.addVRObjectVariable(onObjectVariableAdded);
+                    VRCommon_ObjectVariableService.addVRObjectVariable(ctrl.objectVariables, onObjectVariableAdded);
                 };
 
                 defineMenuActions();
@@ -56,14 +56,28 @@
                 var api = {};
 
                 api.load = function (payload) {
-
-                    var objectVariable;
-                    if (payload != undefined && payload.objects != undefined) {
-                        for (var i = 0; i < payload.objects.length; i++) {
-                            objectVariable = payload.objects[i];
-                            ctrl.objectVariables.push(objectVariable);
+                    return loadObjectTypeConfigs().then(function () {
+                        var objectVariable;
+                        if (payload != undefined && payload.objects != undefined) {
+                            for (var i = 0; i < payload.objects.length; i++) {
+                                objectVariable = payload.objects[i];
+                                extendObjectVariableObject(objectVariable);
+                                ctrl.objectVariables.push(objectVariable);
+                            }
                         }
+                    });
+
+                    function loadObjectTypeConfigs() {
+                        return VRCommon_VRObjectTypeAPIService.GetObjectTypeExtensionConfigs().then(function (response) {
+                            if (response != null) {
+                                objectTypeConfigs = [];
+                                for (var i = 0; i < response.length; i++) {
+                                    objectTypeConfigs.push(response[i]);
+                                }
+                            }
+                        });
                     }
+                    
                 };
 
                 api.getData = function () {
@@ -105,11 +119,10 @@
 
             function editObjectVariable(objectVariable) {
                 var onObjectVariableUpdated = function (updatedObjectVariable) {
-                    //extendCriteriaFieldObject(updatedCriteriaField);
                     var index = UtilsService.getItemIndexByVal(ctrl.objectVariables, objectVariable.ObjectName, 'ObjectName');
                     ctrl.objectVariables[index] = updatedObjectVariable;
                 };
-                VRCommon_ObjectVariableService.editVRObjectVariable(objectVariable, onObjectVariableUpdated);
+                VRCommon_ObjectVariableService.editVRObjectVariable(objectVariable, ctrl.objectVariables, onObjectVariableUpdated);
             }
             function deleteObjectVariable(objectVariable) {
                 VRNotificationService.showConfirmation().then(function (confirmed) {
@@ -118,6 +131,12 @@
                         ctrl.objectVariables.splice(index, 1);
                     }
                 });
+            }
+            function extendObjectVariableObject(objectVariable) {
+                var dataRecordTypeConfigObject = UtilsService.getItemByVal(objectTypeConfigs, objectVariable.ObjectType.ConfigId, 'ExtensionConfigurationId');
+                if (dataRecordTypeConfigObject != null) {
+                    objectVariable.DataRecordType = dataRecordTypeConfigObject.Title;
+                }
             }
         }
 

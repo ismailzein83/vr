@@ -27,7 +27,6 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.isLoading = true;
 
                 $scope.scopeModel.onDataRecordObjectTypeSelectorReady = function (api) {
                     selectorAPI = api;
@@ -49,7 +48,7 @@
 
                     VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, dataRecordObjectTypeSelectorLoadDeferred);
 
-                    dataRecordObjectTypeSelectorLoadDeferred.promise.catch(function (error) {
+                    return dataRecordObjectTypeSelectorLoadDeferred.promise.catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     }).finally(function () {
                         $scope.scopeModel.isLoading = false;

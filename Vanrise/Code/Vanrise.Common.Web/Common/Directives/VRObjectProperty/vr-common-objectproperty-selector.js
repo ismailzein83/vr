@@ -127,6 +127,6 @@
         }
     }
 
-    app.directive('vrCommonObjecttypeSelective', ObjectPropertySelectiveSelective);
+    app.directive('vrCommonObjecttypeSelector', ObjectPropertySelectiveSelective);
 
 })(app);
