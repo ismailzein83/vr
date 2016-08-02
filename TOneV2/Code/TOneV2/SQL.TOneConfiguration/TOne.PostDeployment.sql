@@ -1301,8 +1301,13 @@ set identity_insert [common].[Setting] on;
 ;with cte_data([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(101,'Routing Technical Settings','WhS_Routing_RouteTechnicalSettings','Wholesale Routing','{"Editor":"vr-whs-routing-route-technical-settings-editor"}','{"$type":"TOne.WhS.Routing.Entities.RouteTechnicalSettingData, TOne.WhS.Routing.Entities","RouteRuleDataTransformation":{"$type":"TOne.WhS.Routing.Entities.RouteRuleDataTransformation, TOne.WhS.Routing.Entities","CustomerTransformationId":40,"SupplierTransformationId":39}}',1),
-(102,'Routing Settings','WhS_Routing_RouteSettings','Wholesale Routing','{"Editor":"vr-whs-routing-route-settings-editor"}','{"$type":"TOne.WhS.Routing.Entities.RouteSettingsData, TOne.WhS.Routing.Entities","RouteDatabasesToKeep":{"$type":"TOne.WhS.Routing.Entities.RouteDatabasesToKeep, TOne.WhS.Routing.Entities","CustomerRouteConfiguration":{"$type":"TOne.WhS.Routing.Entities.RouteDatabaseConfiguration, TOne.WhS.Routing.Entities","CurrentDBToKeep":3,"FutureDBToKeep":1},"ProductRouteConfiguration":{"$type":"TOne.WhS.Routing.Entities.RouteDatabaseConfiguration, TOne.WhS.Routing.Entities","CurrentDBToKeep":3,"FutureDBToKeep":1}}}',0)
+(101,'Routing Technical','WhS_Routing_RouteTechnicalSettings','Wholesale Routing','{"Editor":"vr-whs-routing-route-technical-settings-editor"}','{"$type":"TOne.WhS.Routing.Entities.RouteTechnicalSettingData, TOne.WhS.Routing.Entities","RouteRuleDataTransformation":{"$type":"TOne.WhS.Routing.Entities.RouteRuleDataTransformation, TOne.WhS.Routing.Entities","CustomerTransformationId":40,"SupplierTransformationId":39}}',1),
+(102,'Routing','WhS_Routing_RouteSettings','Wholesale Routing','{"Editor":"vr-whs-routing-route-settings-editor"}','{"$type":"TOne.WhS.Routing.Entities.RouteSettingsData, TOne.WhS.Routing.Entities","RouteDatabasesToKeep":{"$type":"TOne.WhS.Routing.Entities.RouteDatabasesToKeep, TOne.WhS.Routing.Entities","CustomerRouteConfiguration":{"$type":"TOne.WhS.Routing.Entities.RouteDatabaseConfiguration, TOne.WhS.Routing.Entities","CurrentDBToKeep":3,"FutureDBToKeep":1},"ProductRouteConfiguration":{"$type":"TOne.WhS.Routing.Entities.RouteDatabaseConfiguration, TOne.WhS.Routing.Entities","CurrentDBToKeep":3,"FutureDBToKeep":1}}}',0),
+
+(104,'Route Sync','WhS_RouteSync_Settings','Route Sync','','{"$type":"TOne.WhS.BusinessEntity.Business.RouteSyncSwitchGetter, TOne.WhS.BusinessEntity.Business"}',1),
+(106,'Numbering Plan','WhS.CodePreparation','Business Entity','{"Editor":"vr-cp-settings-editor"}','{"$type":"TOne.WhS.CodePreparation.Entities.CPSettingsData, TOne.WhS.CodePreparation.Entities","EffectiveDateOffset":7}',0)
+
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
 merge	[common].[Setting] as t
