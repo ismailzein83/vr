@@ -41,8 +41,8 @@
                 api.load = function (payload) {
                     var selectorPayload;
 
-                    if (payload != undefined) {
-                        selectorPayload = { selectedIds: payload.RecordTypeId };
+                    if (payload != undefined && payload.recordTypeId != undefined) {
+                        selectorPayload = { selectedIds: payload.recordTypeId };
                     }
 
                     var dataRecordObjectTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -71,6 +71,6 @@
         }
     }
 
-    app.directive('vrGenericdataDatarecordobjecttypePropertyevaluator', VRDataRecordObjectType);
+    app.directive('vrGenericdataDatarecordobjecttype', VRDataRecordObjectType);
 
 })(app);

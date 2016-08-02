@@ -171,7 +171,6 @@
 
                 objectDirectiveReadyDeferred.promise.then(function () {
                     var objectDirectivePayload;
-
                     if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.Objects != null) {
 
                         var objects = [];
@@ -181,7 +180,7 @@
                         }
 
                         objectDirectivePayload = {
-                            Objects: objects
+                            objects: objects
                         };
                     }
 
