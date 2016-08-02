@@ -62,9 +62,9 @@
     <Compile Include="AccountBalanceUpdate\LoadAccountBalanceUpdateHandler.cs" />
     <Compile Include="CalculateNextAlertThresholds.cs" />
     <Compile Include="CreateAlertActions.cs" />
-    <Compile Include="CreateBalanceClosingPeriod.cs" />
+    <Compile Include="AccountBalanceUpdate\CreateBalanceClosingPeriod.cs" />
     <Compile Include="GetAlertRulesIfUpdated.cs" />
-    <Compile Include="GetNextBalanceClosingDate.cs" />
+    <Compile Include="AccountBalanceUpdate\GetNextBalanceClosingDate.cs" />
     <Compile Include="LoadAccountBalances.cs" />
     <Compile Include="LoadBalancesToAlert.cs" />
     <Compile Include="AccountBalanceUpdate\LoadNewBillingTransactions.cs" />

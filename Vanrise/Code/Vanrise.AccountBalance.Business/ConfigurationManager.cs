@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.AccountBalance.Entities;
+using Vanrise.Common.Business;
 
 namespace Vanrise.AccountBalance.Business
 {
@@ -19,10 +20,8 @@ namespace Vanrise.AccountBalance.Business
 
         private AccountBalanceConfig GetAccountBalanceConfig()
         {
-            return new AccountBalanceConfig
-            {
-                AccountBusinessEntityDefinitionId = -2001
-            };
+            var settingManager = new SettingManager();
+            return settingManager.GetSetting<AccountBalanceConfig>(AccountBalanceConfig.AccountBalanceConfigType);
         }
 
         public int GetBalanceAlertRuleDefinitionId()
@@ -37,5 +36,13 @@ namespace Vanrise.AccountBalance.Business
                 throw new NullReferenceException("config");
             return config.UsageTransactionTypeId; 
         }
+        public BalancePeriodSettings GetBalancePeriod()
+        {
+            AccountBalanceConfig config = GetAccountBalanceConfig();
+            if (config == null)
+                throw new NullReferenceException("config");
+            return config.BalancePeriod; 
+        }
+
     }
 }

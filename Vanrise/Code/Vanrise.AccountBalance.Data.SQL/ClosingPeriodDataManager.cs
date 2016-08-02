@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using Vanrise.AccountBalance.Entities;
 using Vanrise.Data.SQL;
 
 namespace Vanrise.AccountBalance.Data.SQL
@@ -16,6 +18,12 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
         }
         #endregion
+
+        #region Public Methods
+        public BalanceClosingPeriod GetLastClosingPeriod()
+        {
+            return GetItemSP("[VR_AccountBalance].[sp_BalanceClosingPeriod_GetLastClosingPeriod]", BalanceClosingPeriodMapper);
+        }
         public void CreateClosingPeriod(DateTime balanceClosingPeriod,Guid usageTransactionTypeId)
         {
              var options = new TransactionOptions
@@ -39,12 +47,29 @@ namespace Vanrise.AccountBalance.Data.SQL
                  scope.Complete();
              }
         }
-        public bool Insert(DateTime balanceClosingPeriod,out long insertedId)
+        #endregion
+
+        #region Private Methods
+        private bool Insert(DateTime balanceClosingPeriod, out long insertedId)
         {
             object closingPeriodID;
-             int recordesEffected   = ExecuteNonQuerySP("[VR_AccountBalance].[sp_BalanceClosingPeriod_Insert]", out closingPeriodID, balanceClosingPeriod);
-              insertedId = (recordesEffected > 0) ? (long)closingPeriodID : -1;
-             return (recordesEffected > 0);
+            int recordesEffected = ExecuteNonQuerySP("[VR_AccountBalance].[sp_BalanceClosingPeriod_Insert]", out closingPeriodID, balanceClosingPeriod);
+            insertedId = (recordesEffected > 0) ? (long)closingPeriodID : -1;
+            return (recordesEffected > 0);
         }
+
+        #endregion
+
+        #region Mappers
+        private BalanceClosingPeriod BalanceClosingPeriodMapper(IDataReader reader)
+        {
+            return new BalanceClosingPeriod
+            {
+                BalanceClosingPeriodId = (long)reader["ID"],
+                ClosingTime = GetReaderValue<DateTime>(reader, "ClosingTime"),
+            };
+        }
+        #endregion
+
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.AccountBalance.Business;
 using Vanrise.AccountBalance.Entities;
+using Vanrise.AccountBalance.MainExtensions.BalancePeriod;
 using Vanrise.BusinessProcess;
 using Vanrise.Runtime;
 using Vanrise.Runtime;
@@ -25,6 +26,21 @@ namespace Retail.Runtime.Tasks
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
+
+
+            //AccountBalanceConfig AccountBalanceConfig = new Vanrise.AccountBalance.Entities.AccountBalanceConfig
+            //{
+            //    AccountBusinessEntityDefinitionId = -2001,
+            //    UsageTransactionTypeId = Guid.Parse("007869D9-6DC2-4F56-88A4-18C8C442E49E"),
+            //    BalancePeriod = new MonthlyBalancePeriodSettings
+            //    {
+            //        ConfigId = 1,
+            //        DayOfMonth = 1
+            //    },
+
+            //};
+            //var serialized = Vanrise.Common.Serializer.Serialize(AccountBalanceConfig);
+
 
 
             UsageBalanceManager manager = new UsageBalanceManager();
