@@ -66,6 +66,8 @@ namespace TOne.WhS.Routing.Business
                                     customerRoutes.Add(route);
                                 }
                             }
+                            else
+                                throw new NullReferenceException(string.Format("Missing Default Route Rule. Route Code: {0}. Customer Id: {1}. Sale Zone Id: {2}. Effective On:{3}.", routeCode, customerZoneDetail.CustomerId, saleCodeMatch.SaleZoneId, context.EntitiesEffectiveInFuture ? "Future" : context.EntitiesEffectiveOn.Value.ToString()));
                         }
                     }
                 }
@@ -96,6 +98,8 @@ namespace TOne.WhS.Routing.Business
                         RPRoute route = ExecuteRule(routingProductId, saleZoneId, context, routeRuleTarget, routeRule);
                         routes.Add(route);
                     }
+                    else
+                        throw new NullReferenceException(string.Format("Missing Default Route Rule. Routing Product Id: {0}. Sale Zone Id: {1}. Effective On: {2}.", routingProductId, saleZoneId, context.EntitiesEffectiveInFuture ? "Future" : context.EntitiesEffectiveOn.Value.ToString()));
                 }
             }
 
