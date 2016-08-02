@@ -88,11 +88,6 @@
                 EffectiveOn: $scope.effectiveOn,
                 ZoneIds: supplierZoneDirectiveAPI.getSelectedIds()
             };
-
-            console.log('filter')
-            console.log(filter)
-
-
         }
 
     }
