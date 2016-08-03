@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RetailAccountFinancial.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
+    RetailAccountFinancial.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService','Retail_BE_FinancialRetailAccountEnum'];
 
-    function RetailAccountFinancial(UtilsService, VRUIUtilsService, VRNotificationService) {
+    function RetailAccountFinancial(UtilsService, VRUIUtilsService, VRNotificationService, Retail_BE_FinancialRetailAccountEnum) {
         return {
             restrict: "E",
             scope: {
@@ -25,6 +25,9 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.financialRetailAccount = UtilsService.getArrayEnum(Retail_BE_FinancialRetailAccountEnum);
+
                 defineAPI();
             }
 
@@ -32,11 +35,16 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    if(payload !=undefined)
+                    {
+                        $scope.scopeModel.selectedFinancialRetailAccount = UtilsService.getItemByVal($scope.scopeModel.financialRetailAccount, payload.FinancialAccount, "value");
+                    }
                 };
 
                 api.getData = function () {
                     var data = {
                         $type: "Retail.BusinessEntity.MainExtensions.VRObjectTypes.FinancialRetailAccountPropertyEvaluator, Retail.BusinessEntity.MainExtensions",
+                        FinancialAccount: $scope.scopeModel.selectedFinancialRetailAccount.value
                     }
                     return data;
                 }

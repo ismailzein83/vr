@@ -189,6 +189,7 @@
     <Content Include="Retail_BusinessEntity\Constant\ChargeTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ConnectionTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\EntityTypeEnum.js" />
+    <Content Include="Retail_BusinessEntity\Constant\FinancialRetailAccountEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ModuleConfig.js" />
     <Content Include="Retail_BusinessEntity\Constant\NetworkTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\PaymentMethodEnum.js" />
