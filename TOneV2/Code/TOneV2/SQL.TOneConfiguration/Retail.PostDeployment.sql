@@ -32,7 +32,7 @@ as (select * from (values
 (2019,'Company Profile','Company Profile','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-be-accounttype-part-definition-companyprofile", "RuntimeEditor":"retail-be-accounttype-part-runtime-companyprofile"}','2016-06-20 16:40:53.030'),
 (2020,'RadiusSQL','Radius SQL','Retail_BE_ProvisionerDefinition','{"DefinitionEditor":"retail-be-provisioner-definitionsettings-radiussql", "RuntimeEditor":"retail-be-provisioner-runtimesettings-radiussql"}','2016-07-14 14:24:55.840'),
 (2021,'Regular','Regular','Retail_BE_ActionBPDefinition','{"DefinitionEditor":"retail-be-actionbpdefinition-definitionsettings-regular", "RuntimeEditor":"retail-be-actionbpdefinition-runtimesettings-regular"}','2016-07-14 14:25:52.233'),
-(2022,'CSSClass','CSS Class','VRCommon_StyleFormating','{"Editor":"vr-common-styleformating-cssclass"}','2016-07-20 14:50:05.030'),
+(2022,'VR_Common_VRObjectType_RetailAccount','Retail Account','VR_Common_ObjectType','{"Editor":"retail_be_retailaccountobjecttype", "PropertyEvaluatorExtensionType": "Retail_BE_RetailAccountObjectType_PropertyEvaluator"}','2016-07-20 14:50:05.030'),
 (2023,'ChargingPolicyData','Data','Retail_BE_ChargingPolicyDefinition','{"Editor":"retail-data-chargingpolicydefinition"}','2016-06-10 16:56:38.573')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings],[CreatedTime]))
