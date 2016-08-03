@@ -77,6 +77,9 @@
                       <rd:DefaultName>textbox1</rd:DefaultName>
                       <ZIndex>22</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -684,7 +687,6 @@
               <SortExpressions>
                 <SortExpression>
                   <Value>=Fields!Carrier.Value</Value>
-                  <Direction>Descending</Direction>
                 </SortExpression>
               </SortExpressions>
               <TablixMembers>
@@ -705,6 +707,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>CarrierSummary</DataSetName>
+        <SortExpressions>
+          <SortExpression>
+            <Value>=Fields!Carrier.Value</Value>
+          </SortExpression>
+        </SortExpressions>
         <Top>0.125in</Top>
         <Height>1in</Height>
         <Width>7.6975in</Width>

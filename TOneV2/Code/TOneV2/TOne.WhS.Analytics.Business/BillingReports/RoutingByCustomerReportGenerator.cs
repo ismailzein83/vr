@@ -115,7 +115,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 {"ToDate", new RdlcParameter {Value =  parameters.ToTime.HasValue ? parameters.ToTime.ToString() : null, IsVisible = true}},
                 {"Customer", new RdlcParameter {Value = ReportHelpers.GetCarrierName(parameters.CustomersId,"Customers"), IsVisible = true}},
                 {"Supplier", new RdlcParameter {Value = ReportHelpers.GetCarrierName(parameters.SuppliersId,"Suppliers"), IsVisible = true}},
-                {"Title", new RdlcParameter {Value = "Routing by Customer Report", IsVisible = true}},
+                {"Title", new RdlcParameter {Value = "Routing by Customer", IsVisible = true}},
                 {"Currency", new RdlcParameter {Value = parameters.CurrencyDescription, IsVisible = true}},
                 {"LogoPath", new RdlcParameter {Value = "logo", IsVisible = true}},
                 {"DigitRate", new RdlcParameter {Value = "2", IsVisible = true}}

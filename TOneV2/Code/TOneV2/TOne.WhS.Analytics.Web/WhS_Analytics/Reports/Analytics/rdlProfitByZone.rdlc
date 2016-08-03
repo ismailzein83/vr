@@ -1708,7 +1708,7 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1.375in</Top>
+          <Top>1.59722in</Top>
           <Left>0.03547in</Left>
           <Height>0.375in</Height>
           <Width>1in</Width>
@@ -1736,7 +1736,7 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1.375in</Top>
+          <Top>1.59722in</Top>
           <Left>1.03547in</Left>
           <Height>0.375in</Height>
           <Width>2.62499in</Width>
@@ -1898,14 +1898,11 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1in</Top>
+          <Top>0.79861in</Top>
           <Left>0.03547in</Left>
           <Height>0.375in</Height>
           <Width>1in</Width>
           <ZIndex>10</ZIndex>
-          <Visibility>
-            <Hidden>=IIF(Parameters!GroupByCustomer.Value = "true"  , True, False)</Hidden>
-          </Visibility>
           <DataElementOutput>NoOutput</DataElementOutput>
           <Style>
             <Border>
@@ -1933,14 +1930,75 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1in</Top>
+          <Top>0.79861in</Top>
           <Left>1.03547in</Left>
           <Height>0.375in</Height>
-          <Width>2.62499in</Width>
+          <Width>3.84166in</Width>
           <ZIndex>11</ZIndex>
-          <Visibility>
-            <Hidden>=IIF(Parameters!GroupByCustomer.Value = "true"  , True, False)</Hidden>
-          </Visibility>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Textbox Name="textbox52">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>Supplier:</Value>
+                  <Style>
+                    <FontSize>14pt</FontSize>
+                    <Color>DarkRed</Color>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style />
+            </Paragraph>
+          </Paragraphs>
+          <Top>1.20138in</Top>
+          <Left>0.03547in</Left>
+          <Height>0.375in</Height>
+          <Width>1in</Width>
+          <ZIndex>12</ZIndex>
+          <DataElementOutput>NoOutput</DataElementOutput>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Textbox Name="textbox49">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>=Parameters!Supplier.Value</Value>
+                  <Style>
+                    <FontSize>14pt</FontSize>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style />
+            </Paragraph>
+          </Paragraphs>
+          <Top>1.20138in</Top>
+          <Left>1.03547in</Left>
+          <Height>0.375in</Height>
+          <Width>3.84166in</Width>
+          <ZIndex>13</ZIndex>
           <Style>
             <Border>
               <Style>None</Style>

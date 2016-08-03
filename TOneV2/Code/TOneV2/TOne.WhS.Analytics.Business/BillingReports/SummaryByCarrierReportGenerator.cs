@@ -105,7 +105,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             }
 
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
-            dataSources.Add("CarrierSummary", listCarrierSummary);
+            dataSources.Add("CarrierSummary", listCarrierSummary.OrderBy(x => x.Carrier));
             return dataSources;
         }
 
@@ -114,7 +114,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             Dictionary<string, RdlcParameter> list = new Dictionary<string, RdlcParameter>();
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
             list.Add("ToDate", new RdlcParameter { Value =  parameters.ToTime.HasValue ? parameters.ToTime.ToString() :null, IsVisible = true });
-            list.Add("Title", new RdlcParameter { Value = string.Format("{0} Summary", parameters.IsCost ? "Suppliers" : "Customers"), IsVisible = true });
+            list.Add("Title", new RdlcParameter { Value = "Summary By Carrier", IsVisible = true });
             list.Add("Customer", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.CustomersId, "Customers"), IsVisible = true });
             list.Add("Supplier", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.SuppliersId, "Suppliers"), IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });

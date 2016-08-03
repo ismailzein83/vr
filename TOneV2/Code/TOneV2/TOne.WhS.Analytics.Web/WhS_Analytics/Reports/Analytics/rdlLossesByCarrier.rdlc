@@ -1222,6 +1222,7 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -1831,7 +1832,7 @@
     </ReportParameter>
     <ReportParameter Name="ToDate">
       <DataType>DateTime</DataType>
-      <AllowBlank>true</AllowBlank>
+      <Nullable>true</Nullable>
       <Prompt>ToDate</Prompt>
     </ReportParameter>
     <ReportParameter Name="Currency">

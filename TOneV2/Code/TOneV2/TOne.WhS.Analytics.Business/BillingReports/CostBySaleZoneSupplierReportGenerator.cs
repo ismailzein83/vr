@@ -76,12 +76,12 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     analyticRecord.MeasureValues.TryGetValue("AverageCost", out averageCost);
                     costBySaleZoneSupplier.HighestRate = Convert.ToDouble(averageCost.Value ?? 0.0);
                     costBySaleZoneSupplier.HighestRateFormatted = costBySaleZoneSupplier.HighestRate == 0 ? "" : (costBySaleZoneSupplier.HighestRate.HasValue) ?
-                        ReportHelpers.FormatNumber(costBySaleZoneSupplier.HighestRate) : "0.00";
+                        ReportHelpers.FormatLongNumberDigitRate(costBySaleZoneSupplier.HighestRate) : "0.00";
 
                     MeasureValue costDuration;
                     analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
                     costBySaleZoneSupplier.AvgDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
-                    costBySaleZoneSupplier.AvgDurationFormatted = ReportHelpers.FormatNumberDigitRate(costBySaleZoneSupplier.AvgDuration);
+                    costBySaleZoneSupplier.AvgDurationFormatted = ReportHelpers.FormatNormalNumberDigitRate(costBySaleZoneSupplier.AvgDuration);
 
                     listCostBySaleZoneSupplier.Add(costBySaleZoneSupplier);
                 }

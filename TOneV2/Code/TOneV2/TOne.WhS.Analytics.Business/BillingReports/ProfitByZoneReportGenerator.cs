@@ -86,30 +86,30 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     profitByZone.SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
                     profitByZone.SaleNetFormated = profitByZone.SaleNet == 0 ? "" : (profitByZone.SaleNet.HasValue) ?
-                        ReportHelpers.FormatNumber(profitByZone.SaleNet) : "0.00";
+                        ReportHelpers.FormatNormalNumberDigitRate(profitByZone.SaleNet) : "0.00";
 
                     MeasureValue costNet;
                     analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
                     profitByZone.CostNet = Convert.ToDouble(costNet == null ? 0.0 : costNet.Value ?? 0.0);
                     profitByZone.CostNetFormated = (profitByZone.CostNet.HasValue)
-                        ? ReportHelpers.FormatNumber(profitByZone.CostNet)
+                        ? ReportHelpers.FormatNormalNumberDigitRate(profitByZone.CostNet)
                         : "0.00";
 
                     MeasureValue saleDuration;
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
                     profitByZone.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
                     profitByZone.SaleDurationFormated = profitByZone.SaleNet == 0 ? "" : (profitByZone.SaleDuration.HasValue) ?
-                        ReportHelpers.FormatNumber(profitByZone.SaleDuration) : "0.00";
+                        ReportHelpers.FormatNormalNumberDigitRate(profitByZone.SaleDuration) : "0.00";
 
                     MeasureValue costDuration;
                     analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
                     profitByZone.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
-                    profitByZone.CostDurationFormated = ReportHelpers.FormatNumberDigitRate(profitByZone.CostDuration);
+                    profitByZone.CostDurationFormated = ReportHelpers.FormatNormalNumberDigitRate(profitByZone.CostDuration);
 
                     MeasureValue durationInMinutes;
                     analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationInMinutes);
                     profitByZone.DurationNet = Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
-                    profitByZone.DurationNetFormated = ReportHelpers.FormatNumber(profitByZone.DurationNet);
+                    profitByZone.DurationNetFormated = ReportHelpers.FormatNormalNumberDigitRate(profitByZone.DurationNet);
 
                     MeasureValue calls;
                     analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
@@ -117,7 +117,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     profitByZone.Profit = profitByZone.SaleNet == 0
                         ? ""
-                        : ReportHelpers.FormatNumber((!profitByZone.SaleNet.HasValue) ? 0 : profitByZone.SaleNet - profitByZone.CostNet);
+                        : ReportHelpers.FormatNormalNumberDigitRate((!profitByZone.SaleNet.HasValue) ? 0 : profitByZone.SaleNet - profitByZone.CostNet);
                     profitByZone.ProfitSum = (!profitByZone.SaleNet.HasValue || profitByZone.SaleNet == 0)
                         ? 0
                         : profitByZone.SaleNet - profitByZone.CostNet;
