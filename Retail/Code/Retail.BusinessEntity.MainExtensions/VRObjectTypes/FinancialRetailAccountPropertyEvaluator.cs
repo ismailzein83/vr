@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Retail.BusinessEntity.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,13 +18,25 @@ namespace Retail.BusinessEntity.MainExtensions.VRObjectTypes
             RetailAccountObjectType retailAccountObjectType = context.ObjectType as RetailAccountObjectType;
             if (retailAccountObjectType == null)
                 throw new NullReferenceException("retailAccountObjectType");
-            string fieldName = null;
-            switch (this.FinancialField)
+            var account = context.Object as Account;
+            if (account == null)
+                throw new NullReferenceException("account");
+
+            foreach (var part in account.Settings.Parts.Values)
             {
-                case FinancialField.CreditClass: fieldName = FinancialField.CreditClass.ToString(); break;
-                case FinancialField.CurrencyID: fieldName = FinancialField.CurrencyID.ToString(); break;
+                var actionpartSetting = part.Settings as IAccountPayment;
+                if (actionpartSetting != null)
+                {
+                    switch (this.FinancialField)
+                    {
+                        case FinancialField.CreditClass:
+                            return actionpartSetting.CreditClassId;
+                        case FinancialField.CurrencyID:
+                            return actionpartSetting.CurrencyId;
+                    }
+                }
             }
-            return context.Object[fieldName];
+            return null;
         }
     }
 }

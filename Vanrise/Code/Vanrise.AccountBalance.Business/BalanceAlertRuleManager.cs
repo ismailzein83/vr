@@ -14,17 +14,23 @@ namespace Vanrise.AccountBalance.Business
         public BalanceAlertRule GetMatchRule(dynamic account)
         {
             var configurationManager = new ConfigurationManager();
-            var accountBEDefinitionId = configurationManager.GetAccountBEDefinitionId();
             GenericRuleTarget ruleTarget = BuildRuleTarget(account);
             return base.GetMatchRule(configurationManager.GetBalanceAlertRuleDefinitionId(), ruleTarget);
         }
-
+        public BalanceAlertRule GetMatchRule(long accountId)
+        {
+            var configurationManager = new ConfigurationManager();
+            var accountManager = new AccountManager();
+            var account = accountManager.GetAccount(accountId);
+            GenericRuleTarget ruleTarget = BuildRuleTarget(account);
+            return base.GetMatchRule(configurationManager.GetBalanceAlertRuleDefinitionId(), ruleTarget);
+        }
         private GenericRuleTarget BuildRuleTarget(dynamic account)
         {
             GenericRuleTarget ruleTarget = new GenericRuleTarget
             {
                 EffectiveOn = DateTime.Now,
-                Objects = { { "Account", account } }
+                Objects = new Dictionary<string,dynamic> { { "Account", account } }
             };
             return ruleTarget;
         }

@@ -50,6 +50,7 @@
     <Compile Include="BalanceAlertRuleManager.cs" />
     <Compile Include="BillingTransactionTypeManager.cs" />
     <Compile Include="ConfigurationManager.cs" />
+    <Compile Include="Context\BalanceAlertThresholdContext.cs" />
     <Compile Include="Context\BalancePeriodContext.cs" />
     <Compile Include="LiveBalanceManager.cs" />
     <Compile Include="UsageBalanceManager.cs" />

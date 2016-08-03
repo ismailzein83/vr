@@ -26,7 +26,10 @@ namespace Vanrise.AccountBalance.Business
 
         public int GetBalanceAlertRuleDefinitionId()
         {
-            throw new NotImplementedException();
+            AccountBalanceConfig config = GetAccountBalanceConfig();
+            if (config == null)
+                throw new NullReferenceException("config");
+            return config.BalanceAlertRuleDefinitionId; 
         }
 
         public Guid GetUsageTransactionTypeId()

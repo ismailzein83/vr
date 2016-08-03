@@ -75,20 +75,58 @@ namespace Vanrise.AccountBalance.Data.SQL
             }
             return true;
         }
-
         public  IEnumerable<LiveBalanceAccountInfo> GetLiveBalanceAccountsInfo()
         {
             return GetItemsSP("[VR_AccountBalance].[sp_LiveBalance_GetAccountsInfo]", LiveBalanceAccountInfoMapper);
         }
-
+        public void GetLiveBalanceAccounts(Action<LiveBalance> onLiveBalanceReady)
+        {
+            ExecuteReaderSP("[VR_AccountBalance].[sp_LiveBalance_GetAll]",
+               (reader) =>
+               {
+                   while (reader.Read())
+                   {
+                       onLiveBalanceReady(LiveBalanceMapper(reader));
+                   }
+               });
+        }
         public bool AddLiveBalance(long accountId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance)
         {
             return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_Insert]", accountId, initialBalance, currencyId, usageBalance, currentBalance) > 0);
         }
-
         public bool UpdateLiveBalanceBalance()
         {
             return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_UpdateBalance]") > 0);
+        }
+
+        public bool UpdateLiveBalanceThreshold(List<BalanceAccountThreshold> balanceAccountsThresholds)
+        {
+            var options = new TransactionOptions
+            {
+                IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
+            };
+
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
+            {
+                DataTable liveBalanceThresholdToUpdate = GetLiveBalanceThresholdTable();
+                foreach (var item in balanceAccountsThresholds)
+                {
+                    DataRow dr = liveBalanceThresholdToUpdate.NewRow();
+                    FillLiveBalanceThresholdRow(dr, item);
+                    liveBalanceThresholdToUpdate.Rows.Add(dr);
+                }
+                liveBalanceThresholdToUpdate.EndLoadData();
+                if (liveBalanceThresholdToUpdate.Rows.Count > 0)
+                    ExecuteNonQuerySPCmd("[VR_AccountBalance].[sp_LiveBalance_UpdateBalanceThreshold]",
+                           (cmd) =>
+                           {
+                               var dtPrm = new System.Data.SqlClient.SqlParameter("@LiveBalanceThresholdTable", SqlDbType.Structured);
+                               dtPrm.Value = liveBalanceThresholdToUpdate;
+                               cmd.Parameters.Add(dtPrm);
+                           });
+                scope.Complete();
+            }
+            return true;
         }
 
         #endregion
@@ -109,7 +147,6 @@ namespace Vanrise.AccountBalance.Data.SQL
                 NextAlertThreshold = GetReaderValue<Decimal>(reader, "NextAlertThreshold"),
             };
         }
-
         private LiveBalanceAccountInfo LiveBalanceAccountInfoMapper(IDataReader reader)
         {
             return new LiveBalanceAccountInfo
@@ -135,9 +172,23 @@ namespace Vanrise.AccountBalance.Data.SQL
             return dt;
         }
 
+        private void FillLiveBalanceThresholdRow(DataRow dr, BalanceAccountThreshold balanceAccountThreshold)
+        {
+            dr["AccountID"] = balanceAccountThreshold.AccountId;
+            dr["Threshold"] = balanceAccountThreshold.Threshold;
+            dr["ThresholdActionIndex"] = balanceAccountThreshold.ThresholdActionIndex;
+            dr["AlertRuleId"] = balanceAccountThreshold.AlertRuleId;
+        }
+        private DataTable GetLiveBalanceThresholdTable()
+        {
+            DataTable dt = new DataTable(LiveBalance_TABLENAME);
+            dt.Columns.Add("AccountID", typeof(long));
+            dt.Columns.Add("Threshold", typeof(decimal));
+            dt.Columns.Add("ThresholdActionIndex", typeof(int));
+            dt.Columns.Add("AlertRuleId", typeof(int));
+            return dt;
+        }
         #endregion
 
-
-      
     }
 }

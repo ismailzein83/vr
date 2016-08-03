@@ -7,11 +7,12 @@ using Vanrise.Entities;
 using Vanrise.Common;
 using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.Data;
+using Vanrise.GenericData.Entities;
 
 
 namespace Retail.BusinessEntity.Business
 {
-    public class CreditClassManager
+    public class CreditClassManager : IBusinessEntityManager
     {
         #region Public Methods
 
@@ -83,6 +84,12 @@ namespace Retail.BusinessEntity.Business
             return this.GetCachedCreditClasses().MapRecords(CreditClassInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
+        public string GetCreditClassName(int creditClassId)
+        {
+            CreditClass creditClass = this.GetCreditClass(creditClassId);
+            return (creditClass != null) ? creditClass.Name : null;
+        }
+
         #endregion
 
 
@@ -139,5 +146,48 @@ namespace Retail.BusinessEntity.Business
         }
 
         #endregion
+
+        #region IBusinessEntityManager
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            var cachedCreditClasses = GetCachedCreditClasses();
+            if (cachedCreditClasses != null)
+                return cachedCreditClasses.Values.Select(itm => itm as dynamic).ToList();
+            else
+                return null;
+        }
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetCreditClass(context.EntityId);
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetCreditClassName(Convert.ToInt32(context.EntityId));
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
+
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+             throw new NotImplementedException();
+        }
+
+        #endregion
+
     }
 }

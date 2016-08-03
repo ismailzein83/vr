@@ -56,6 +56,8 @@
     <Compile Include="BillingTransaction\BillingTransactionQuery.cs" />
     <Compile Include="Config\AccountBalanceConfig.cs" />
     <Compile Include="BalancePeriod\BalancePeriodSettings.cs" />
+    <Compile Include="LiveBalance\AccountBalanceBatch.cs" />
+    <Compile Include="LiveBalance\BalanceAccountThreshold.cs" />
     <Compile Include="LiveBalance\CurrentAccountBalance.cs" />
     <Compile Include="LiveBalance\LiveBalanceDetail.cs" />
     <Compile Include="Config\BalanceAlertConfig.cs" />

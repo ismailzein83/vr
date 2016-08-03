@@ -260,6 +260,22 @@
     <Reference Include="Vanrise.Integration.Web">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Notification.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Queueing">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
     </Reference>
@@ -280,6 +296,21 @@
     </Reference>
     <Reference Include="Vanrise.Reprocess.Entities">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Runtime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
