@@ -92,10 +92,12 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     MeasureValue costNet;
                     analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
                     customerFormatted.CostNet = Convert.ToDouble(costNet.Value ?? 0.0);
+                    customerFormatted.CostNetFormatted = ReportHelpers.FormatNormalNumberDigitRate(customerFormatted.CostNet);
 
                     MeasureValue saleNet;
                     analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
                     customerFormatted.SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
+                    customerFormatted.SaleNetFormatted = ReportHelpers.FormatNormalNumberDigitRate(customerFormatted.SaleNet);
 
                     customerFormatted.ProfitPerc = customerFormatted.SaleNet == 0 ? "" : (customerFormatted.SaleNet != 0) ? ReportHelpers.FormatNumberPercentage(((1 - customerFormatted.CostNet / customerFormatted.SaleNet))) : "-100%";
 
