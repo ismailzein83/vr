@@ -385,6 +385,8 @@
     <None Include="Retail.PostDeployment.sql" />
     <None Include="Mediation.PostDeployment.sql" />
     <None Include="Deals.PostDeployment.sql" />
+    <None Include="VR_Notification.PostDeployment.sql" />
+    <None Include="VR_AccountBalance.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />

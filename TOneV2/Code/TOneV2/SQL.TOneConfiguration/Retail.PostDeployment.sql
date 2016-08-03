@@ -12,20 +12,30 @@ Post-Deployment Script Template
 --[common].[ExtensionConfiguration]--------------------2001	to 3000---------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
+;with cte_data([ID],[Name],[Title],[ConfigType],[Settings],[CreatedTime])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(2001,'RateValue','Rate Value','Retail_BE_ChargingPolicyPartType','{"PartTypeExtensionName":"Retail_BE_ChargingPolicyPart_RateValue"}'),
-(2003,'DurationTariff','Duration Tariff','Retail_BE_ChargingPolicyPartType','{"PartTypeExtensionName":"Retail_BE_ChargingPolicyPart_DurationTariff"}'),
-(2004,'SingleRateValue','Single Rate Value','Retail_BE_ChargingPolicyPart_RateValue','{"DefinitionEditor":"retail-be-chargingpolicypart-ratevalues-single","RuntimeEditor":"retail-be-chargingpolicypart-ratevalue-single-runtimeeditor"}'),
-(2008,'SingleDurationTariff','Single Duration Tariff','Retail_BE_ChargingPolicyPart_DurationTariff','{"DefinitionEditor":"retail-be-chargingpolicypart-durationtarrifs-single","RuntimeEditor":"retail-be-chargingpolicypart-durationtariff-single-runtimeeditor"}'),
-(2010,'ChargingPolicyVoice','Voice','Retail_BE_ChargingPolicyDefinition','{"Editor":"retail-voice-chargingpolicydefinition"}'),
-(2011,'Radius','Radius','Retail_BE_SwitchIntegration','{"Editor":"retail-be-switchintegrations-radius"}'),
-(2012,'WebService','Web Service','Retail_BE_SwitchIntegration','{"Editor":"retail-be-switchintegrations-webservice"}'),
-(2013,'ChargingPolicyItem','Charging Policy','Retail_BE_ServicePackageItem','{"Editor":"retail-be-package-packageitem-chargingpolicy"}'),
-(2014,'VolumeItem','Volume','Retail_BE_ServicePackageItem','{"Editor":"retail-be-package-packageitem-volume"}')
+(2002,'Retail_BE_RetailAccount_Financial','Financial','Retail_BE_RetailAccountObjectType_PropertyEvaluator','{"Editor":"retail_be_retailaccountobjecttype_financial"}','2016-08-02 17:36:16.847'),
+(2001,'RateValue','Rate Value','Retail_BE_ChargingPolicyPartType','{"PartTypeExtensionName":"Retail_BE_ChargingPolicyPart_RateValue"}','2016-06-10 14:40:39.067'),
+(2003,'DurationTariff','Duration Tariff','Retail_BE_ChargingPolicyPartType','{"PartTypeExtensionName":"Retail_BE_ChargingPolicyPart_DurationTariff"}','2016-06-10 14:40:39.067'),
+(2004,'SingleRateValue','Single Rate Value','Retail_BE_ChargingPolicyPart_RateValue','{"DefinitionEditor":"retail-be-chargingpolicypart-ratevalues-single","RuntimeEditor":"retail-be-chargingpolicypart-ratevalue-single-runtimeeditor"}','2016-06-10 14:52:36.013'),
+(2008,'SingleDurationTariff','Single Duration Tariff','Retail_BE_ChargingPolicyPart_DurationTariff','{"DefinitionEditor":"retail-be-chargingpolicypart-durationtarrifs-single","RuntimeEditor":"retail-be-chargingpolicypart-durationtariff-single-runtimeeditor"}','2016-06-10 14:54:09.673'),
+(2010,'ChargingPolicyVoice','Voice','Retail_BE_ChargingPolicyDefinition','{"Editor":"retail-voice-chargingpolicydefinition"}','2016-06-10 16:56:38.573'),
+(2011,'Radius','Radius','Retail_BE_SwitchIntegration','{"Editor":"retail-be-switchintegrations-radius"}','2016-06-16 10:32:52.190'),
+(2012,'WebService','Web Service','Retail_BE_SwitchIntegration','{"Editor":"retail-be-switchintegrations-webservice"}','2016-06-16 10:32:52.190'),
+(2013,'ChargingPolicyItem','Charging Policy','Retail_BE_ServicePackageItem','{"Editor":"retail-be-package-packageitem-chargingpolicy"}','2016-06-16 12:16:42.837'),
+(2014,'VolumeItem','Volume','Retail_BE_ServicePackageItem','{"Editor":"retail-be-package-packageitem-volume"}','2016-06-16 12:17:01.750'),
+(2015,'Activation','Activation','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-be-accounttype-part-definition-activation", "RuntimeEditor":"retail-be-accounttype-part-runtime-activation"}','2016-06-20 16:40:53.030'),
+(2016,'Financial','Financial','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-be-accounttype-part-definition-financial", "RuntimeEditor":"retail-be-accounttype-part-runtime-financial"}','2016-06-20 16:40:53.030'),
+(2017,'Generic','Generic','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-be-accounttype-part-definition-generic", "RuntimeEditor":"retail-be-accounttype-part-runtime-generic"}','2016-06-20 16:40:53.030'),
+(2018,'Residential Profile','Residential Profile','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-be-accounttype-part-definition-residentialprofile" , "RuntimeEditor":"retail-be-accounttype-part-runtime-residentialprofile"}','2016-06-20 16:40:53.030'),
+(2019,'Company Profile','Company Profile','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-be-accounttype-part-definition-companyprofile", "RuntimeEditor":"retail-be-accounttype-part-runtime-companyprofile"}','2016-06-20 16:40:53.030'),
+(2020,'RadiusSQL','Radius SQL','Retail_BE_ProvisionerDefinition','{"DefinitionEditor":"retail-be-provisioner-definitionsettings-radiussql", "RuntimeEditor":"retail-be-provisioner-runtimesettings-radiussql"}','2016-07-14 14:24:55.840'),
+(2021,'Regular','Regular','Retail_BE_ActionBPDefinition','{"DefinitionEditor":"retail-be-actionbpdefinition-definitionsettings-regular", "RuntimeEditor":"retail-be-actionbpdefinition-runtimesettings-regular"}','2016-07-14 14:25:52.233'),
+(2022,'CSSClass','CSS Class','VRCommon_StyleFormating','{"Editor":"vr-common-styleformating-cssclass"}','2016-07-20 14:50:05.030'),
+(2023,'ChargingPolicyData','Data','Retail_BE_ChargingPolicyDefinition','{"Editor":"retail-data-chargingpolicydefinition"}','2016-06-10 16:56:38.573')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[ConfigType],[Settings]))
+)c([ID],[Name],[Title],[ConfigType],[Settings],[CreatedTime]))
 merge	[common].[ExtensionConfiguration] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
