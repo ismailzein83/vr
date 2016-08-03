@@ -39,9 +39,16 @@
             };
 
             $scope.scopeModal.validateObjectVariables = function () {
+
+                if (objectVariableEntity != undefined && $scope.scopeModal.objectName == objectVariableEntity.ObjectName)
+                    return null;
+
                 for (var i = 0; i < objectVariables.length; i++)
-                    if ($scope.scopeModal.objectName == objectVariables[i].ObjectName) {
-                    return 'Same Objet Name Exists';
+                {
+                    var object = objectVariables[i];
+                    if ($scope.scopeModal.objectName.toLowerCase() == object.ObjectName.toLowerCase()) {
+                        return 'Same Objet Name Exists';
+                    }
                 }
                 return null;
             };
