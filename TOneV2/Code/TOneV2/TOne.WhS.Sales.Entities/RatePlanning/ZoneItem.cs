@@ -11,6 +11,8 @@ namespace TOne.WhS.Sales.Entities
     {
         public long ZoneId { get; set; }
         public string ZoneName { get; set; }
+        public DateTime ZoneBED { get; set; }
+        public DateTime? ZoneEED { get; set; }
 
         #region Rate Properties
 

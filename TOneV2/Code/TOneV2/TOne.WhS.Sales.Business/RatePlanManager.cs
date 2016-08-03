@@ -174,7 +174,9 @@ namespace TOne.WhS.Sales.Business
                     ZoneItem zoneItem = new ZoneItem()
                     {
                         ZoneId = zone.SaleZoneId,
-                        ZoneName = zone.Name
+                        ZoneName = zone.Name,
+                        ZoneBED = zone.BED,
+                        ZoneEED = zone.EED
                     };
 
                     rateSetter.SetZoneRate(zoneItem);

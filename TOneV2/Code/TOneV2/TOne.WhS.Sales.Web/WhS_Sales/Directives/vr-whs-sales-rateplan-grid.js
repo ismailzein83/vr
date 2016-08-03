@@ -184,12 +184,16 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 }
 
                 function extendZoneItem(zoneItem) {
+
                     zoneItem.IsDirty = false;
+
                     if (zoneItem.CurrentOtherRates == undefined)
                         zoneItem.CurrentOtherRates = {};
                     if (zoneItem.NewOtherRates == undefined)
                         zoneItem.NewOtherRates = {};
+
                     addRateTypesToZoneItem(zoneItem);
+
                     zoneItem.currentRateEED = zoneItem.CurrentRateEED; // Maintains the original value of zoneItem.CurrentRateEED in case the user deletes the new rate
                     setRouteOptionProperties(zoneItem);
 
@@ -226,10 +230,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         }
                     };
 
-                    //zoneItem.onNewRateChanged = function (zoneItem) {
-                        
-                    //};
-
                     zoneItem.validateNewRate = function (zoneItem) {
                         if (zoneItem.CurrentRate) {
                             if (Number(zoneItem.CurrentRate) === Number(zoneItem.NewRate)) {
@@ -244,7 +244,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     };
                     zoneItem.OnOtherRateChanges = function (zoneItem, dataItem) {
                         zoneItem.NewOtherRates[dataItem.RateTypeId] = dataItem.NewRate;
-                        console.log(dataItem);
                         zoneItem.IsDirty = true;
                     }
 
@@ -329,13 +328,59 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     };
 
                     zoneItem.validateRateChangeDates = function () {
-                        return VRValidationService.validateTimeRange(zoneItem.CurrentRateBED, zoneItem.CurrentRateEED);
+                        var errorMessage = validateTimeRange(zoneItem.CurrentRateBED, zoneItem.CurrentRateEED);
+                        if (errorMessage != null)
+                            return errorMessage;
+
+                        if (zoneItem.ZoneEED != null && compareDates(zoneItem.CurrentRateEED, zoneItem.ZoneEED) == 1)
+                            return 'EED of current rate > EED of zone';
+
+                        return null;
                     };
 
                     zoneItem.validateNewRateDates = function () {
-                        return VRValidationService.validateTimeRange(zoneItem.NewRateBED, zoneItem.NewRateEED);
+                        var errorMessage = validateTimeRange(zoneItem.NewRateBED, zoneItem.NewRateEED);
+                        if (errorMessage != null)
+                            return errorMessage;
+
+                        if (compareDates(zoneItem.NewRateBED, zoneItem.ZoneBED) == 2)
+                            return 'BED of new rate < BED of zone';
+                        if (zoneItem.ZoneEED != null && compareDates(zoneItem.NewRateEED, zoneItem.ZoneEED) == 1)
+                            return 'EED of new rate > EED of zone';
+
+                        return null;
                     };
 
+                    function validateTimeRange(date1, date2) {
+                        return VRValidationService.validateTimeRange(date1, date2);
+                    }
+                    function compareDates(date1, date2) {
+                        var d1 = new Date(date1);
+                        var d2 = new Date(date2);
+
+                        var year1 = d1.getYear();
+                        var year2 = d2.getYear();
+                        if (year1 > year2)
+                            return 1;
+                        if (year2 > year1)
+                            return 2;
+
+                        var month1 = d1.getMonth();
+                        var month2 = d2.getMonth();
+                        if (month1 > month2)
+                            return 1;
+                        if (month2 > month1)
+                            return 2;
+
+                        var day1 = d1.getDay();
+                        var day2 = d2.getDay();
+                        if (day1 > day2)
+                            return 1;
+                        if (day2 > day1)
+                            return 2;
+
+                        return 0;
+                    }
                     function setRouteOptionProperties(zoneItem) {
                         zoneItem.RouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
 
