@@ -85,7 +85,7 @@ namespace TOne.WhS.Sales.BP.Activities
             IEnumerable<ExistingZone> existingZones = inputArgument.ExistingZones;
             IEnumerable<ExistingRate> existingRates = inputArgument.ExistingRates;
 
-            var priceListRateManager = new PriceListRateManager2();
+            var priceListRateManager = new PriceListRateManager();
 
             var processRatesContext = new ProcessRatesContext()
             {

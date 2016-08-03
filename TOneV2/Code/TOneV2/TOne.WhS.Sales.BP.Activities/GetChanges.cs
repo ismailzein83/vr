@@ -30,8 +30,8 @@ namespace TOne.WhS.Sales.BP.Activities
             SalePriceListOwnerType ownerType = this.OwnerType.Get(context);
             int ownerId = this.OwnerId.Get(context);
 
-            var ratePlanManager = new RatePlanManager();
-            Changes changes = ratePlanManager.GetChanges(ownerType, ownerId);
+            var ratePlanDraftManager = new RatePlanDraftManager();
+            Changes changes = ratePlanDraftManager.GetDraft(ownerType, ownerId);
 
             this.Changes.Set(context, changes);
         }

@@ -45,28 +45,6 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetRateCalculationMethodTemplates"));
         }
 
-        function GetChangesSummary(ownerType, ownerId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetChangesSummary"), {
-                ownerType: ownerType,
-                ownerId: ownerId
-            });
-        }
-
-        function GetFilteredZoneRateChanges(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFilteredZoneRateChanges"), input);
-        }
-
-        function GetFilteredZoneRoutingProductChanges(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFilteredZoneRoutingProductChanges"), input);
-        }
-
-        function SavePriceList(ownerType, ownerId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "SavePriceList"), {
-                ownerType: ownerType,
-                ownerId: ownerId
-            });
-        }
-
         function SaveChanges(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "SaveChanges"), input);
         }
@@ -101,10 +79,6 @@
             GetZoneItem: GetZoneItem,
             GetCostCalculationMethodTemplates: GetCostCalculationMethodTemplates,
             GetRateCalculationMethodTemplates: GetRateCalculationMethodTemplates,
-            GetChangesSummary: GetChangesSummary,
-            GetFilteredZoneRateChanges: GetFilteredZoneRateChanges,
-            GetFilteredZoneRoutingProductChanges: GetFilteredZoneRoutingProductChanges,
-            SavePriceList: SavePriceList,
             SaveChanges: SaveChanges,
             ApplyCalculatedRates: ApplyCalculatedRates,
             CheckIfDraftExists: CheckIfDraftExists,

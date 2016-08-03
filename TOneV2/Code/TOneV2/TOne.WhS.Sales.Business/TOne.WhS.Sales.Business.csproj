@@ -74,12 +74,10 @@
   <ItemGroup>
     <Compile Include="BusinessRules\Conditions\RateBEDLessThanZoneBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\RateEEDGreaterThanZoneEEDCondition.cs" />
-    <Compile Include="Changes\GetChangesManager.cs" />
-    <Compile Include="Changes\StateManager.cs" />
+    <Compile Include="RatePlanDraftManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CostCalculationMethodContext.cs" />
-    <Compile Include="DefaultRoutingProductPreviewManager.cs" />
-    <Compile Include="PriceListRateManager.cs" />
+    <Compile Include="Preview\DefaultRoutingProductPreviewManager.cs" />
     <Compile Include="PriceListRateManager2.cs" />
     <Compile Include="PriceListDefaultRoutingProductManager.cs" />
     <Compile Include="PriceListSaleZoneRoutingProductManager.cs" />
@@ -88,13 +86,14 @@
     <Compile Include="ProcessSaleZoneRoutingProductsContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateCalculationMethodContext.cs" />
+    <Compile Include="RatePlanExtensionConfigManager.cs" />
     <Compile Include="RatePlanManager.cs" />
-    <Compile Include="RatePlanPreviewSummaryManager.cs" />
+    <Compile Include="Preview\RatePlanPreviewSummaryManager.cs" />
+    <Compile Include="RatePlanPricingManager.cs" />
     <Compile Include="RatePlanZoneManager.cs" />
-    <Compile Include="Changes\SaveChangesManager.cs" />
-    <Compile Include="RatePreviewManager.cs" />
+    <Compile Include="Preview\RatePreviewManager.cs" />
     <Compile Include="SaleEntityRoutingProductManager.cs" />
-    <Compile Include="SaleZoneRoutingProductPreviewManager.cs" />
+    <Compile Include="Preview\SaleZoneRoutingProductPreviewManager.cs" />
     <Compile Include="SellingRuleManager.cs" />
     <Compile Include="SellingRules\FixedRule.cs" />
     <Compile Include="SellingRules\MarginRule.cs" />
@@ -128,7 +127,9 @@
       <Name>TOne.WhS.Sales.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Changes\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

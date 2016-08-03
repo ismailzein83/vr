@@ -62,70 +62,48 @@ namespace TOne.WhS.Sales.Web.Controllers
         [Route("GetCostCalculationMethodTemplates")]
         public IEnumerable<CostCalculationMethodSetting> GetCostCalculationMethodTemplates()
         {
-            return _manager.GetCostCalculationMethodTemplates();
+            var manager = new RatePlanExtensionConfigManager();
+            return manager.GetCostCalculationMethodTemplates();
         }
 
         [HttpGet]
         [Route("GetRateCalculationMethodTemplates")]
         public IEnumerable<RateCalculationMethodSetting> GetRateCalculationMethodTemplates()
         {
-            return _manager.GetRateCalculationMethodTemplates();
-        }
-
-        [HttpGet]
-        [Route("GetChangesSummary")]
-        public ChangesSummary GetChangesSummary(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            return _manager.GetChangesSummary(ownerType, ownerId);
-        }
-
-        [HttpPost]
-        [Route("GetFilteredZoneRateChanges")]
-        public object GetFilteredZoneRateChanges(Vanrise.Entities.DataRetrievalInput<ZoneRateChangesQuery> input)
-        {
-            return GetWebResponse(input, _manager.GetFilteredZoneRateChanges(input));
-        }
-        
-        [HttpPost]
-        [Route("GetFilteredZoneRoutingProductChanges")]
-        public object GetFilteredZoneRoutingProductChanges(Vanrise.Entities.DataRetrievalInput<ZoneRoutingProductChangesQuery> input)
-        {
-            return GetWebResponse(input, _manager.GetFilteredZoneRoutingProductChanges(input));
-        }
-
-        [HttpGet]
-        [Route("SavePriceList")]
-        public void SavePriceList(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            _manager.SavePriceList(ownerType, ownerId);
+            var manager = new RatePlanExtensionConfigManager();
+            return manager.GetRateCalculationMethodTemplates();
         }
 
         [HttpPost]
         [Route("SaveChanges")]
         public void SaveChanges(SaveChangesInput input)
         {
-            _manager.SaveChanges(input);
+            var manager = new RatePlanDraftManager();
+            manager.SaveDraft(input.OwnerType, input.OwnerId, input.NewChanges);
         }
 
         [HttpPost]
         [Route("ApplyCalculatedRates")]
         public void ApplyCalculatedRates(ApplyCalculatedRatesInput input)
         {
-            _manager.ApplyCalculatedRates(input);
+            var ratePlanPricingManager = new RatePlanPricingManager();
+            ratePlanPricingManager.ApplyCalculatedRates(input);
         }
 
         [HttpGet]
         [Route("CheckIfDraftExists")]
         public bool CheckIfDraftExists(SalePriceListOwnerType ownerType, int ownerId)
         {
-            return _manager.CheckIfDraftExists(ownerType, ownerId);
+            var manager = new RatePlanDraftManager();
+            return manager.DoesDraftExist(ownerType, ownerId);
         }
 
         [HttpGet]
         [Route("DeleteDraft")]
         public bool DeleteDraft(SalePriceListOwnerType ownerType, int ownerId)
         {
-            return _manager.DeleteDraft(ownerType, ownerId);
+            var manager = new RatePlanDraftManager();
+            return manager.DeleteDraft(ownerType, ownerId);
         }
 
         [HttpGet]

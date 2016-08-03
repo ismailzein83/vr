@@ -9,7 +9,7 @@ using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Business
 {
-    public class PriceListRateManager2
+    public class PriceListRateManager
     {
         #region Public Methods
 

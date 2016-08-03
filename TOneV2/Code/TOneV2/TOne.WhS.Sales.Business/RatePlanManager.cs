@@ -228,95 +228,6 @@ namespace TOne.WhS.Sales.Business
 
         #endregion
 
-        public IEnumerable<CostCalculationMethodSetting> GetCostCalculationMethodTemplates()
-        {
-            var extensionConfigManager = new ExtensionConfigurationManager();
-            return extensionConfigManager.GetExtensionConfigurations<CostCalculationMethodSetting>(Constants.CostCalculationMethod).OrderBy(x => x.Title);
-        }
-
-        public IEnumerable<RateCalculationMethodSetting> GetRateCalculationMethodTemplates()
-        {
-            var extensionConfigManager = new ExtensionConfigurationManager();
-            return extensionConfigManager.GetExtensionConfigurations<RateCalculationMethodSetting>(Constants.RateCalculationMethod).OrderBy(x => x.Title);
-        }
-
-        public ChangesSummary GetChangesSummary(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            int? sellingProductId = GetSellingProductId(ownerType, ownerId, DateTime.Now, false);
-            GetChangesManager changesManager = new GetChangesManager(ownerType, ownerId, sellingProductId, DateTime.Now);
-            return changesManager.GetChangesSummary();
-        }
-
-        public Vanrise.Entities.IDataRetrievalResult<ZoneRateChangesDetail> GetFilteredZoneRateChanges(Vanrise.Entities.DataRetrievalInput<ZoneRateChangesQuery> input)
-        {
-            int? sellingProductId = GetSellingProductId(input.Query.OwnerType, input.Query.OwnerId, DateTime.Now, false);
-            GetChangesManager changesManager = new GetChangesManager(input.Query.OwnerType, input.Query.OwnerId, sellingProductId, DateTime.Now);
-            IEnumerable<ZoneRateChangesDetail> zoneRateChanges = changesManager.GetFilteredZoneRateChanges();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, zoneRateChanges.ToBigResult(input, null));
-        }
-
-        public Vanrise.Entities.IDataRetrievalResult<ZoneRoutingProductChangesDetail> GetFilteredZoneRoutingProductChanges(Vanrise.Entities.DataRetrievalInput<ZoneRoutingProductChangesQuery> input)
-        {
-            int? sellingProductId = GetSellingProductId(input.Query.OwnerType, input.Query.OwnerId, DateTime.Now, false);
-            GetChangesManager changesManager = new GetChangesManager(input.Query.OwnerType, input.Query.OwnerId, sellingProductId, DateTime.Now);
-            IEnumerable<ZoneRoutingProductChangesDetail> zoneRoutingProductChanges = changesManager.GetFilteredZoneRoutingProductChanges();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, zoneRoutingProductChanges.ToBigResult(input, null));
-        }
-
-        public void SavePriceList(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            SaveChangesManager changesManager = new SaveChangesManager(ownerType, ownerId);
-            changesManager.SavePriceList();
-        }
-
-        public void SaveChanges(SaveChangesInput input)
-        {
-            SaveChangesManager changesManager = new SaveChangesManager(input.OwnerType, input.OwnerId);
-            changesManager.SaveChanges(input.NewChanges);
-        }
-
-        public void ApplyCalculatedRates(ApplyCalculatedRatesInput input)
-        {
-            SaveChangesManager saveChangesManager = new SaveChangesManager(input.OwnerType, input.OwnerId);
-
-            int? sellingNumberPlanId = GetSellingNumberPlanId(input.OwnerType, input.OwnerId);
-            int? sellingProductId = GetSellingProductId(input.OwnerType, input.OwnerId, input.EffectiveOn, false);
-
-            saveChangesManager.ApplyCalculatedRates((int)sellingNumberPlanId, (int)sellingProductId, input.EffectiveOn, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, input.CostCalculationMethods, input.SelectedCostCalculationMethodConfigId, input.RateCalculationMethod);
-        }
-
-        public bool CheckIfDraftExists(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            Changes changes = _dataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
-
-            if (changes == null)
-                return false;
-
-            if (changes.ZoneChanges != null)
-                return true;
-
-            if (changes.DefaultChanges != null)
-            {
-                if (changes.DefaultChanges.NewDefaultRoutingProduct != null || changes.DefaultChanges.DefaultRoutingProductChange != null)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public bool DeleteDraft(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            return _dataManager.CancelRatePlanChanges(ownerType, ownerId);
-        }
-
-        public Changes GetChanges(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            var stateManager = new StateManager();
-            return stateManager.GetChanges(ownerType, ownerId);
-        }
-
         public bool SyncTempDataWithDB(long processInstanceId, int? salePriceListId, SalePriceListOwnerType ownerType, int ownerId, int currencyId, DateTime effectiveOn)
         {
             var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
@@ -351,11 +262,7 @@ namespace TOne.WhS.Sales.Business
             return ratePlanSettings;
         }
 
-        #endregion
-
-        #region Common Private Methods
-
-        private int? GetSellingProductId(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, bool isEffectiveInFuture)
+        public int? GetSellingProductId(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, bool isEffectiveInFuture)
         {
             if (ownerType == SalePriceListOwnerType.Customer)
             {
