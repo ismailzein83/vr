@@ -14,8 +14,14 @@ namespace Vanrise.Runtime
     {
         public RuntimeHost(List<RuntimeService> services)
         {
-            _services = services; 
-            _timer = new Timer(1000);
+            _services = services;
+            TimeSpan timerInterval = TimeSpan.FromSeconds(1);
+            if (services != null && services.Count > 0)
+            {
+                if (services.Min(itm => itm.Interval) < timerInterval)
+                    timerInterval = services.Min(itm => itm.Interval);
+            }
+            _timer = new Timer(timerInterval.TotalMilliseconds);
             _timer.Elapsed += timer_Elapsed;
             try
             {
