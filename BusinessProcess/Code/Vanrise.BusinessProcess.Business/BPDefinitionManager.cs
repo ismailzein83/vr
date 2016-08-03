@@ -25,7 +25,15 @@ namespace Vanrise.BusinessProcess.Business
             var allBPDefinitions = GetCachedBPDefinitions();
 
             Func<BPDefinition, bool> filterExpression = (prod) =>
-                 (input.Query.Title == null || prod.Title.ToLower().Contains(input.Query.Title.ToLower()));
+            {
+                if (prod.Configuration.IsSubProcess)
+                    return false;
+
+                if (!string.IsNullOrEmpty(input.Query.Title) && !prod.Title.ToLower().Contains(input.Query.Title.ToLower()))
+                    return false;
+
+                return true;
+            };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allBPDefinitions.ToBigResult(input, filterExpression, BPDefinitionDetailMapper));
         }
