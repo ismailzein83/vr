@@ -915,31 +915,33 @@ set identity_insert [genericdata].[GenericRuleDefinition] off;
 --[common].[ExtensionConfiguration]-----------------1001	to 2000---------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-;with cte_data([ID],[Title],[ConfigType],[Settings])
+;with cte_data([ID],[Name],[Title],[ConfigType],[Settings],[CreatedTime])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1001,'Specific Suppliers Zones','WhS_BE_SupplierZoneGroup','{"Editor":"vr-whs-be-supplierzonegroup-selective","RuntimeEditor":""}'),
-(1002,'Highest Rate','WhS_Routing_SupplierZoneToRPOptionType','{"Editor":"vr-whs-routing-policy-rate-highest","BehaviorFQTN":"TOne.WhS.Routing.Business.SupplierZoneToRPOptionHighestRatePolicy, TOne.WhS.Routing.Business"}'),
-(1003,'Lowest Rate','WhS_Routing_SupplierZoneToRPOptionType','{"Editor":"vr-whs-routing-policy-rate-lowest","BehaviorFQTN":"TOne.WhS.Routing.Business.SupplierZoneToRPOptionLowestRatePolicy, TOne.WhS.Routing.Business"}'),
-(1004,'Average Rate','WhS_Routing_SupplierZoneToRPOptionType','{"Editor":"vr-whs-routing-policy-rate-average","BehaviorFQTN":"TOne.WhS.Routing.Business.SupplierZoneToRPOptionAverageRatePolicy, TOne.WhS.Routing.Business"}'),
-(1005,'Average','WhS_Sales_CostCalculationMethod','{"Editor":"vr-whs-sales-avgcostcalculation"}'),
-(1006,'Custom Percentage','WhS_Sales_CostCalculationMethod','{"Editor":"vr-whs-sales-percentagecostcalculation"}'),
-(1007,'Route Percentage','WhS_Sales_CostCalculationMethod','{"Editor":"vr-whs-sales-routepercentagecostcalculation"}'),
-(1008,'Fixed','WhS_Sales_RateCalculationMethod','{"Editor":"vr-whs-sales-fixedratecalculation"}'),
-(1009,'Margin','WhS_Sales_RateCalculationMethod','{"Editor":"vr-whs-sales-marginratecalculation"}'),
-(1010,'Margin Percentage','WhS_Sales_RateCalculationMethod','{"Editor":"vr-whs-sales-marginpercentageratecalculation"}'),
-(1011,'Basic','WhS_SupPL_SupplierPriceListConfiguration','{"Editor":"whs-suppl-supplierpricelistconfiguration-basic"}')
+(1001,'WhS_BE_SupplierZoneGroup_Specific','Specific Suppliers Zones','WhS_BE_SupplierZoneGroup','{"Editor":"vr-whs-be-supplierzonegroup-selective","RuntimeEditor":""}','2016-06-06 11:08:44.103'),
+(1002,'WhS_Routing_SupplierZoneToRPOptionType_HighestRate','Highest Rate','WhS_Routing_SupplierZoneToRPOptionType','{"Editor":"vr-whs-routing-policy-rate-highest","BehaviorFQTN":"TOne.WhS.Routing.Business.SupplierZoneToRPOptionHighestRatePolicy, TOne.WhS.Routing.Business"}','2016-06-06 11:08:44.103'),
+(1003,'WhS_Routing_SupplierZoneToRPOptionType_LowestRate','Lowest Rate','WhS_Routing_SupplierZoneToRPOptionType','{"Editor":"vr-whs-routing-policy-rate-lowest","BehaviorFQTN":"TOne.WhS.Routing.Business.SupplierZoneToRPOptionLowestRatePolicy, TOne.WhS.Routing.Business"}','2016-06-06 11:08:44.103'),
+(1004,'WhS_Routing_SupplierZoneToRPOptionType_AverageRate','Average Rate','WhS_Routing_SupplierZoneToRPOptionType','{"Editor":"vr-whs-routing-policy-rate-average","BehaviorFQTN":"TOne.WhS.Routing.Business.SupplierZoneToRPOptionAverageRatePolicy, TOne.WhS.Routing.Business"}','2016-06-06 11:08:44.103'),
+(1005,'WhS_Sales_CostCalculationMethod_Avarage','Average','WhS_Sales_CostCalculationMethod','{"Editor":"vr-whs-sales-avgcostcalculation"}','2016-06-06 11:08:44.103'),
+(1006,'WhS_Sales_CostCalculationMethod_CustomPercentage','Custom Percentage','WhS_Sales_CostCalculationMethod','{"Editor":"vr-whs-sales-percentagecostcalculation"}','2016-06-06 11:08:44.103'),
+(1007,'WhS_Sales_CostCalculationMethod_RoutePercentage','Route Percentage','WhS_Sales_CostCalculationMethod','{"Editor":"vr-whs-sales-routepercentagecostcalculation"}','2016-06-06 11:08:44.103'),
+(1008,'WhS_Sales_CostCalculationMethod_Fixed','Fixed','WhS_Sales_RateCalculationMethod','{"Editor":"vr-whs-sales-fixedratecalculation"}','2016-06-06 11:08:44.103'),
+(1009,'WhS_Sales_CostCalculationMethod_Margin','Margin','WhS_Sales_RateCalculationMethod','{"Editor":"vr-whs-sales-marginratecalculation"}','2016-06-06 11:08:44.103'),
+(1010,'WhS_Sales_CostCalculationMethod_MarginPercentage','Margin Percentage','WhS_Sales_RateCalculationMethod','{"Editor":"vr-whs-sales-marginpercentageratecalculation"}','2016-06-06 11:08:44.103'),
+(1011,'VR_Analytic_Report_ItemAction_OpenRecordSearch','Open Record Search','Analytic_ItemActionTemplates','{"Editor":"vr-analytic-analyticitemaction-openrecordsearch"}','2016-06-08 12:51:42.007'),
+(1013,'WhS_SupPL_SupplierPriceListConfiguration_Basic','Basic','WhS_SupPL_SupplierPriceListConfiguration','{"Editor":"whs-suppl-supplierpricelistconfiguration-basic"}','2016-07-08 15:49:29.080'),
+(1014,'WhS_RouteSync_SwitchRouteSynchronizer_TelesRadius','Teles Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer','{"Editor":"whs-routesync-telesradius-swsync"}','2016-07-29 16:17:12.240')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Title],[ConfigType],[Settings]))
+)c([ID],[Name],[Title],[ConfigType],[Settings],[CreatedTime]))
 merge	[common].[ExtensionConfiguration] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]
+	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]
 when not matched by target then
-	insert([ID],[Title],[ConfigType],[Settings])
-	values(s.[ID],s.[Title],s.[ConfigType],s.[Settings]);
+	insert([ID],[Name],[Title],[ConfigType],[Settings])
+	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
 
 --[genericdata].[BusinessEntityDefinition]----------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
