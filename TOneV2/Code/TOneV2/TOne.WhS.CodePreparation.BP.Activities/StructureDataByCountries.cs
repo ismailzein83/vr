@@ -79,23 +79,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             }
 
-            CountryManager manager = new CountryManager();
-            IEnumerable<Country> countries = manager.GetAllCountries();
-
-            foreach (Country country in countries)
-            {
-                if (!countriesToProcessByCountryId.TryGetValue(country.CountryId, out countryToProcess) && existingZoneEntities.Any(x => x.CountryId == country.CountryId))
-                {
-                    countryToProcess = new CountryToProcess();
-                    countryToProcess.CountryId = country.CountryId;
-                    countryToProcess.ZonesToProcess = new List<ZoneToProcess>();
-                    countryToProcess.CodesToAdd = new List<CodeToAdd>();
-                    countryToProcess.CodesToMove = new List<CodeToMove>();
-                    countryToProcess.CodesToClose = new List<CodeToClose>();
-                    countriesToProcessByCountryId.Add(country.CountryId, countryToProcess);
-                }
-            }
-
             this.CountriesToProcess.Set(context, countriesToProcessByCountryId.Values);
         }
     }

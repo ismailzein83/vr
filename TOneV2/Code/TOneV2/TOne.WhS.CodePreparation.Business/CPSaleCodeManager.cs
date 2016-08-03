@@ -261,7 +261,7 @@ namespace TOne.WhS.CodePreparation.Business
 
                 if (codeGroup == null || codeGroup.CountryId != countryId)
                 {
-                    codeItem.Message = string.Format("Code should be added under Country {0}.", country.Name);
+                    codeItem.Message = string.Format("Code doesn't belong to {0} code group.", country.Name);
                     codeOutput.CodeItems.Add(codeItem);
                 }
                 else if ((!allCodeItems.Any(item => item.Code == newCode.Code) && !newCodes.Any(item => item.Code == newCode.Code)))

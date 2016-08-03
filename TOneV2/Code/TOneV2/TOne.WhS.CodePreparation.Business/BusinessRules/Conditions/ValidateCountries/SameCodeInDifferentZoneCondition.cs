@@ -31,6 +31,15 @@ namespace TOne.WhS.CodePreparation.Business
                 }
             }
 
+            if (country.CodesToMove != null)
+            {
+                foreach (CodeToMove codeToMove in country.CodesToMove)
+                {
+                    if (country.CodesToMove.FindRecord(x => x.Code == codeToMove.Code && !x.ZoneName.Equals(codeToMove.ZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
+                        return false;
+                }
+            }
+
             if (country.CodesToClose != null)
             {
                 foreach (CodeToClose codeToClose in country.CodesToClose)
