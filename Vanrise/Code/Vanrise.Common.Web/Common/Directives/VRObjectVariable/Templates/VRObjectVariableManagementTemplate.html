@@ -1,19 +1,20 @@
 ﻿<div>
     <vr-row removeline>
         <vr-columns width="fullrow" simplecol>
-            <vr-button type="Add" data-onclick="ctrl.addObjectVariable" standalone></vr-button>
+            <vr-button type="Add" data-onclick="ctrl.onAddObjectVariable" standalone></vr-button>
         </vr-columns>
     </vr-row>
     <vr-row>
         <vr-columns width="fullrow">
-                <vr-datagrid on-ready="ctrl.onGridReady"
-                             datasource="ctrl.objectVariables"
-                             menuactions="ctrl.menuActions"
-                             isrequired="true"
-                             hidegridmenu>
-                    <vr-datagridcolumn headertext="'Object Name'" type="'Text'" field="'ObjectName'" widthfactor="5" disablesorting></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Object Type'" type="'Text'" field="'DataRecordType'" widthfactor="5" disablesorting></vr-datagridcolumn>
-                </vr-datagrid>
+            <vr-datagrid on-ready="ctrl.onGridReady"
+                         datasource="ctrl.objectVariables"
+                         menuactions="ctrl.menuActions"
+                         ondeleterow="ctrl.onRemoveObjectVariable"
+                         isrequired="true"
+                         hidegridmenu>
+                <vr-datagridcolumn headertext="'Object Name'" type="'Text'" field="'ObjectName'" widthfactor="5" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Object Type'" type="'Text'" field="'DataRecordType'" widthfactor="5" disablesorting></vr-datagridcolumn>
+            </vr-datagrid>
         </vr-columns>
     </vr-row>
 </div>

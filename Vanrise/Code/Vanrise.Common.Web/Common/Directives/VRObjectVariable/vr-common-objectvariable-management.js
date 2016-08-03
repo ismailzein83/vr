@@ -41,13 +41,22 @@
                     defineAPI();
                 };
 
-                ctrl.addObjectVariable = function () {
+                ctrl.onAddObjectVariable = function () {
                     var onObjectVariableAdded = function (addedObjectVariable) {
                         extendObjectVariableObject(addedObjectVariable);
                         ctrl.objectVariables.push(addedObjectVariable);
                     };
                     VRCommon_ObjectVariableService.addVRObjectVariable(ctrl.objectVariables, onObjectVariableAdded);
                 };
+
+                ctrl.onRemoveObjectVariable = function (objectVariable) {
+                    VRNotificationService.showConfirmation().then(function (confirmed) {
+                        if (confirmed) {
+                            var index = UtilsService.getItemIndexByVal(ctrl.objectVariables, objectVariable.ObjectName, 'ObjectName');
+                            ctrl.objectVariables.splice(index, 1);
+                        }
+                    });
+                }
 
                 defineMenuActions();
             }
@@ -111,26 +120,16 @@
                 ctrl.menuActions = [{
                     name: 'Edit',
                     clicked: editObjectVariable
-                }, {
-                    name: 'Delete',
-                    clicked: deleteObjectVariable
                 }];
             }
 
             function editObjectVariable(objectVariable) {
                 var onObjectVariableUpdated = function (updatedObjectVariable) {
                     var index = UtilsService.getItemIndexByVal(ctrl.objectVariables, objectVariable.ObjectName, 'ObjectName');
+                    extendObjectVariableObject(updatedObjectVariable);
                     ctrl.objectVariables[index] = updatedObjectVariable;
                 };
                 VRCommon_ObjectVariableService.editVRObjectVariable(objectVariable, ctrl.objectVariables, onObjectVariableUpdated);
-            }
-            function deleteObjectVariable(objectVariable) {
-                VRNotificationService.showConfirmation().then(function (confirmed) {
-                    if (confirmed) {
-                        var index = UtilsService.getItemIndexByVal(ctrl.objectVariables, objectVariable.ObjectName, 'ObjectName');
-                        ctrl.objectVariables.splice(index, 1);
-                    }
-                });
             }
             function extendObjectVariableObject(objectVariable) {
                 var dataRecordTypeConfigObject = UtilsService.getItemByVal(objectTypeConfigs, objectVariable.ObjectType.ConfigId, 'ExtensionConfigurationId');

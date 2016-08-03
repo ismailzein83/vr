@@ -44,7 +44,8 @@
                         ctrl.onReady(getDirectiveAPI());
                     }
                 };
-                ctrl.addCriteriaField = function () {
+
+                ctrl.onAddCriteriaField = function () {
                     var onCriteriaFieldAdded = function (addedCriteriaField) {
                         extendCriteriaFieldObject(addedCriteriaField);
                         ctrl.criteriaFields.push(addedCriteriaField);
@@ -52,7 +53,17 @@
                     };
                     VR_GenericData_GenericRuleDefinitionCriteriaFieldService.addGenericRuleDefinitionCriteriaField(ctrl.criteriaFields, onCriteriaFieldAdded);
                 };
-                ctrl.validateCriteriaFields = function () {
+                ctrl.onDeleteCriteriaField = function (criteriaField) { 
+                    VRNotificationService.showConfirmation().then(function (confirmed) {
+                        if (confirmed) {
+                            var index = UtilsService.getItemIndexByVal(ctrl.criteriaFields, criteriaField.FieldName, 'FieldName');
+                            ctrl.criteriaFields.splice(index, 1);
+                            deletePriorityDataItem(criteriaField);
+                        }
+                    });
+                }
+
+                ctrl.onValidateCriteriaFields = function () {
                     if (ctrl.criteriaFields.length == 0) {
                         return 'No fields added';
                     }
@@ -135,9 +146,6 @@
                 ctrl.menuActions = [{
                     name: 'Edit',
                     clicked: editCriteriaField
-                }, {
-                    name: 'Delete',
-                    clicked: deleteCriteriaField
                 }];
             }
 
@@ -149,15 +157,7 @@
                 };
                 VR_GenericData_GenericRuleDefinitionCriteriaFieldService.editGenericRuleDefinitionCriteriaField(criteriaField.FieldName, ctrl.criteriaFields, onCriteriaFieldUpdated);
             }
-            function deleteCriteriaField(criteriaField) {
-                VRNotificationService.showConfirmation().then(function (confirmed) {
-                    if (confirmed) {
-                        var index = UtilsService.getItemIndexByVal(ctrl.criteriaFields, criteriaField.FieldName, 'FieldName');
-                        ctrl.criteriaFields.splice(index, 1);
-                        deletePriorityDataItem(criteriaField);
-                    }
-                });
-            }
+
             function extendCriteriaFieldObject(criteriaField) {
                 var behaviorTypeObject = UtilsService.getEnum(VR_GenericData_MappingRuleStructureBehaviorTypeEnum, 'value', criteriaField.RuleStructureBehaviorType);
                 if (behaviorTypeObject != undefined) {
