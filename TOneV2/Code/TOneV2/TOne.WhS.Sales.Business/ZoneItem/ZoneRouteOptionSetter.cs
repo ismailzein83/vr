@@ -7,6 +7,7 @@ using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.Sales.Business
 {
@@ -85,7 +86,8 @@ namespace TOne.WhS.Sales.Business
                     RateCalculationMethodContext context = new RateCalculationMethodContext() { Cost = zoneItem.Costs[index] };
 
                     _rateCalculationMethod.CalculateRate(context);
-                    zoneItem.CalculatedRate = context.Rate;
+                    if (context.Rate.HasValue)
+                        zoneItem.CalculatedRate = Decimal.Round(context.Rate.Value, GenericParameterManager.Current.GetLongPrecision());
                 }
             }
         }
