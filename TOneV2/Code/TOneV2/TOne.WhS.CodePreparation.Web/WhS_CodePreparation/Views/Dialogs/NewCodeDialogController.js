@@ -45,7 +45,7 @@
             $scope.disabledCode = true;
 
             $scope.onCodeValueChange = function (value) {
-                $scope.disabledCode = (value == undefined) || UtilsService.getItemIndexByVal($scope.codes, value, "code") != -1;
+                $scope.disabledCode = value == undefined && $scope.codeValue.length - 1 < 1; 
             }
 
             $scope.addCodeValue = function () {

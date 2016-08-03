@@ -58,7 +58,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                        _processInstanceID,
                        record.Zone.ZoneId,
                        record.CurrencyId,
-                       record.NormalRate,
+                       decimal.Round(record.NormalRate, 8),
                        record.OtherRates,
                        record.BED,
                        record.EED);

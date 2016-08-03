@@ -48,7 +48,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         ZoneBED = importedZone.BED,
                         ZoneEED = importedZone.EED,
                         CurrentRate = GetCurrentRate(importedZone),
-                        ImportedRate = importedRateFirst.NormalRate,
+                        ImportedRate = decimal.Round(importedRateFirst.NormalRate, 8),
                         ImportedRateBED = importedRateFirst.BED,
                         CurrentRateBED = GetCurrentRateBED(importedZone),
                         CurrentRateEED = GetCurrentRateEED(importedZone),

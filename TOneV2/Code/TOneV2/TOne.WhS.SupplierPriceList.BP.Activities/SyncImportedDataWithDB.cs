@@ -22,17 +22,21 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public InArgument<long> FileId { get; set; }
 
+        [RequiredArgument]
+        public InArgument<DateTime> EffectiveOn { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
             int priceListId = this.PriceListId.Get(context);
             int supplierId = this.SupplierId.Get(context);
             int currencyId = this.CurrencyId.Get(context);
             long fileId = this.FileId.Get(context);
+            DateTime effectiveOn = this.EffectiveOn.Get(context);
 
             long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
 
             TOne.WhS.SupplierPriceList.Business.SupplierPriceListManager manager = new Business.SupplierPriceListManager();
-            manager.AddPriceListAndSyncImportedDataWithDB(priceListId, processInstanceId, supplierId, currencyId, fileId);
+            manager.AddPriceListAndSyncImportedDataWithDB(priceListId, processInstanceId, supplierId, currencyId, fileId, effectiveOn);
         }
     }
 }

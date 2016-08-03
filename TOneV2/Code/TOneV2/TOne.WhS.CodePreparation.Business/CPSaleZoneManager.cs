@@ -85,13 +85,26 @@ namespace TOne.WhS.CodePreparation.Business
                 NewZoneName = input.NewZoneName
             };
 
-           List<ZoneItem> allZoneItems = ValidateRenamedZone(input.SellingNumberPlanId);
+            List<ZoneItem> allZoneItems = ValidateRenamedZone(input.SellingNumberPlanId);
 
-           if (allZoneItems.FindRecord(x => x.Name.Equals(input.NewZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
+            if (allZoneItems.FindRecord(x => x.Name.Equals(input.NewZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
             {
                 output.Result = ValidationOutput.ValidationError;
                 output.Zone = renamedZone;
-                output.Message = string.Format("Zone {0} already exists!", input.NewZoneName);
+                output.Message = string.Format("Zone {0} already exists", input.NewZoneName);
+                return output;
+            }
+
+            SaleCodeManager saleCodeManager = new SaleCodeManager();
+            List<SaleCode> saleCodes = saleCodeManager.GetSaleCodesEffectiveByZoneID(input.ZoneId.Value, DateTime.Now);
+            output = ValidateZoneToRename(saleCodes.MapRecords(CodeItemMapper), input.OldZoneName);
+
+
+            if (output.Result == ValidationOutput.ValidationError)
+            {
+                output.Result = ValidationOutput.ValidationError;
+                output.Zone = renamedZone;
+                output.Message = string.Format("Zone {0} can not be renamed, it contains a pending codes", input.OldZoneName);
                 return output;
             }
 
@@ -109,7 +122,7 @@ namespace TOne.WhS.CodePreparation.Business
                 UpdateZoneInNewZones(changes.NewZones, input);
 
 
-            UpdateCodesChangesPerRenamedZone(changes.NewCodes,changes.DeletedCodes, input);
+            UpdateCodesChangesPerRenamedZone(changes.NewCodes, changes.DeletedCodes, input);
 
 
             bool renameActionSucc = false;
@@ -131,26 +144,26 @@ namespace TOne.WhS.CodePreparation.Business
 
             Changes existingChanges = GetChanges(input.SellingNumberPlanId);
             List<ZoneItem> allZoneItems = ValidateRenamedZone(input.SellingNumberPlanId);
-           
+
             NewZoneOutput output = new NewZoneOutput();
-            
+
             foreach (NewZone newZone in input.NewZones)
             {
 
                 if (allZoneItems.FindRecord(x => x.Name.Equals(newZone.Name, StringComparison.InvariantCultureIgnoreCase)) != null)
-                     output.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId, Message = string.Format("Zone {0} already exists.", newZone.Name) });
-                 else
-                     output.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId });
+                    output.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId, Message = string.Format("Zone {0} already exists.", newZone.Name) });
+                else
+                    output.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId });
             }
 
-            if(output.ZoneItems.Any(x=>x.Message != null))
+            if (output.ZoneItems.Any(x => x.Message != null))
             {
                 output.Result = ValidationOutput.ValidationError;
                 output.Message = string.Format("Process Warning.");
                 return output;
             }
 
-            
+
 
             existingChanges.NewZones.AddRange(input.NewZones);
 
@@ -171,6 +184,28 @@ namespace TOne.WhS.CodePreparation.Business
         #endregion
 
         #region Private Methods
+
+        RenamedZoneOutput ValidateZoneToRename(IEnumerable<CodeItem> codeItems, string zoneName)
+        {
+            RenamedZoneOutput zoneOutput = new RenamedZoneOutput();
+            zoneOutput.Result = ValidationOutput.ValidationError;
+            foreach (CodeItem codeItem in codeItems)
+            {
+                if (codeItem.EED.HasValue)
+                {
+                    zoneOutput.Message = string.Format("Can not close {0} zone because it contains a pending closed code", zoneName);
+                    return zoneOutput;
+                }
+                else if (codeItem.BED > DateTime.Now)
+                {
+                    zoneOutput.Message = string.Format("Can not close {0} zone because it contains a pending effective code", zoneName);
+                    return zoneOutput;
+                }
+            }
+
+            zoneOutput.Result = ValidationOutput.Success;
+            return zoneOutput;
+        }
 
         CloseZoneOutput ValidateClosedZone(IEnumerable<CodeItem> codeItems, DeletedZone deletedZone, List<NewCode> newAddedCodes)
         {
@@ -208,7 +243,7 @@ namespace TOne.WhS.CodePreparation.Business
         {
             SaleZoneManager saleZoneManager = new SaleZoneManager();
 
-            IEnumerable<SaleZone> existingZones = saleZoneManager.GetSaleZonesEffectiveAfter(sellingNumberPlanId,DateTime.Now);
+            IEnumerable<SaleZone> existingZones = saleZoneManager.GetSaleZonesEffectiveAfter(sellingNumberPlanId, DateTime.Now);
             Changes changes = GetChanges(sellingNumberPlanId);
 
             List<ZoneItem> allZoneItems = new List<ZoneItem>();
@@ -230,7 +265,7 @@ namespace TOne.WhS.CodePreparation.Business
 
             return allZoneItems;
         }
-       
+
         void UpdateAllZoneItemsPerChanges(List<ZoneItem> allZoneItems, List<RenamedZone> renamedZones, List<DeletedZone> deletedZones)
         {
             if (renamedZones.Any())
@@ -269,7 +304,7 @@ namespace TOne.WhS.CodePreparation.Business
             existingRenamedZone.NewZoneName = zoneToRename.NewZoneName;
         }
 
-        void UpdateCodesChangesPerRenamedZone(IEnumerable<NewCode> newCodes,IEnumerable<DeletedCode> deletedCodes, RenamedZoneInput zoneToRename)
+        void UpdateCodesChangesPerRenamedZone(IEnumerable<NewCode> newCodes, IEnumerable<DeletedCode> deletedCodes, RenamedZoneInput zoneToRename)
         {
             foreach (NewCode code in newCodes)
             {

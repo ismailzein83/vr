@@ -69,7 +69,7 @@ namespace TOne.WhS.Sales.Data.SQL
                 record.RateId,
                 _processInstanceId,
                 record.Zone.ZoneId,
-                record.NormalRate,
+                decimal.Round(record.NormalRate),
                 record.OtherRates,
                 record.CurrencyId,
                 record.BED,
