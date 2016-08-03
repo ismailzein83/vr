@@ -152,7 +152,7 @@ set identity_insert [bp].[BPDefinition] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (-1,'Vanrise.Reprocess.BP.Arguments.ReProcessingProcessInput','Reprocess Process','Vanrise.Reprocess.BP.ReProcessingProcess, Vanrise.Reprocess.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false,"ManualExecEditor":"reprocess-reprocessprocess","HasBusinessRules":false,"HasChildProcesses":true}'),
-(-2,'Vanrise.Reprocess.BP.Arguments.ReProcessingSubProcessInput','Reprocess Process By Range','Vanrise.Reprocess.BP.ReProcessingSubProcess, Vanrise.Reprocess.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false}')
+(-2,'Vanrise.Reprocess.BP.Arguments.ReProcessingSubProcessInput','Reprocess Process By Range','Vanrise.Reprocess.BP.ReProcessingSubProcess, Vanrise.Reprocess.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false,"IsSubProcess":true}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[FQTN],[Config]))
 merge	[bp].[BPDefinition] as t
