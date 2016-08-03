@@ -78,7 +78,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="CostCalculationMethodContext.cs" />
     <Compile Include="Preview\DefaultRoutingProductPreviewManager.cs" />
-    <Compile Include="PriceListRateManager2.cs" />
+    <Compile Include="PriceListRateManager.cs" />
     <Compile Include="PriceListDefaultRoutingProductManager.cs" />
     <Compile Include="PriceListSaleZoneRoutingProductManager.cs" />
     <Compile Include="ProcessDefaultRoutingProductContext.cs" />
@@ -127,9 +127,7 @@
       <Name>TOne.WhS.Sales.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Changes\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
