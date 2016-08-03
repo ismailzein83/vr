@@ -220,6 +220,15 @@
     <Build Include="runtime\Stored Procedures\sp_FreezedTransactionLock_Insert.sql" />
     <Build Include="runtime\Stored Procedures\sp_FreezedTransactionLock_GetAll.sql" />
     <Build Include="runtime\Stored Procedures\sp_FreezedTransactionLock_DeleteBeforeId.sql" />
+    <Build Include="queue\Tables\SummaryBatchActivator.sql" />
+    <Build Include="queue\Tables\QueueActivatorInstance.sql" />
+    <Build Include="queue\Stored Procedures\sp_SummaryBatchActivator_Insert.sql" />
+    <Build Include="queue\Stored Procedures\sp_SummaryBatchActivator_GetByActivator.sql" />
+    <Build Include="queue\Stored Procedures\sp_SummaryBatchActivator_GetAll.sql" />
+    <Build Include="queue\Stored Procedures\sp_SummaryBatchActivator_Delete.sql" />
+    <Build Include="queue\Stored Procedures\sp_QueueActivatorInstance_Insert.sql" />
+    <Build Include="queue\Stored Procedures\sp_QueueActivatorInstance_GetAll.sql" />
+    <Build Include="queue\Stored Procedures\sp_QueueActivatorInstance_Delete.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />

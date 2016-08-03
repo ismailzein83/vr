@@ -34,14 +34,22 @@
           <runtimeService name="Transaction Lock Service" type="Vanrise.Runtime.TransactionLockRuntimeService, Vanrise.Runtime" interval="00:00:02"></runtimeService>
         </runtimeServices>
       </runtimeServiceGroup>
-      <runtimeServiceGroup name="group3" nbOfRuntimeInstances="10">
+      <runtimeServiceGroup name="group3" nbOfRuntimeInstances="1">
         <runtimeServices>
-          <runtimeService name="Queue Activation Service 1" type="Vanrise.Queueing.QueueActivationService, Vanrise.Queueing" interval="00:00:02"></runtimeService>
-          <runtimeService name="Queue Activation Service 2" type="Vanrise.Queueing.QueueActivationService, Vanrise.Queueing" interval="00:00:02"></runtimeService>
-          <runtimeService name="Queue Activation Service 3" type="Vanrise.Queueing.QueueActivationService, Vanrise.Queueing" interval="00:00:02"></runtimeService>
+          <runtimeService name="Queue Regulator Service" type="Vanrise.Queueing.QueueRegulatorRuntimeService, Vanrise.Queueing" interval="00:00:01"></runtimeService>
         </runtimeServices>
       </runtimeServiceGroup>
-      <runtimeServiceGroup name="group4" nbOfRuntimeInstances="3">
+      <runtimeServiceGroup name="group4" nbOfRuntimeInstances="20">
+        <runtimeServices>
+          <runtimeService name="Queue Activation Service" type="Vanrise.Queueing.QueueActivationRuntimeService, Vanrise.Queueing" interval="00:00:00.100"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
+      <runtimeServiceGroup name="group5" nbOfRuntimeInstances="10">
+        <runtimeServices>
+          <runtimeService name="Summary Queue Activation Service" type="Vanrise.Queueing.SummaryQueueActivationRuntimeService, Vanrise.Queueing" interval="00:00:00.100"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
+      <runtimeServiceGroup name="group6" nbOfRuntimeInstances="3">
         <runtimeServices>
           <runtimeService name="Data Source Runtime Service" type="Vanrise.Integration.Business.DataSourceRuntimeService, Vanrise.Integration.Business" interval="00:00:02"></runtimeService>
         </runtimeServices>

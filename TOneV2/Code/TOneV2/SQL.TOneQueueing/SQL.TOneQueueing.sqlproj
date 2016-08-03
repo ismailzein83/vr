@@ -160,6 +160,22 @@
     </Build>
     <Build Include="queue\Stored Procedures\sp_QueueItemHeader_UpdateStatuses.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueItemHeader_UpdateMultiple.sql" />
+    <Build Include="queue\Tables\SummaryQueueItem.sql">
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
+    <Build Include="queue\Tables\QueueItem.sql">
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
+    <Build Include="queue\Stored Procedures\sp_QueueItem_UpdateActivatorInstance.sql">
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
+    <Build Include="queue\Stored Procedures\sp_QueueItem_GetInfo.sql">
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
