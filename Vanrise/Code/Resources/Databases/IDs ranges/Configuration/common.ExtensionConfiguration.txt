@@ -1,3 +1,4 @@
 ﻿Analytic		1		to 1000
 TOne			1001	to 2000
 Retail			2001	to 3000
+common			3001	to 4000
