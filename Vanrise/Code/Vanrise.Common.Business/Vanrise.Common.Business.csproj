@@ -69,6 +69,7 @@
     <Compile Include="BigData\BigDataWCFService.cs" />
     <Compile Include="BigData\IBigDataRequest.cs" />
     <Compile Include="CityManager.cs" />
+    <Compile Include="GenericParameterManager.cs" />
     <Compile Include="VRMail\VRMailManager.cs" />
     <Compile Include="VRMail\VRMailMessageTemplateManager.cs" />
     <Compile Include="VRMail\VRMailMessageTypeManager.cs" />
