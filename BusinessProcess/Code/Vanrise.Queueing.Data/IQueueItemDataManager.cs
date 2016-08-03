@@ -35,8 +35,6 @@ namespace Vanrise.Queueing.Data
 
         Vanrise.Entities.BigResult<QueueItemHeader> GetQueueItemsHeader(Vanrise.Entities.DataRetrievalInput<List<long>> input);       
 
-        List<DateTime> GetAvailableBatchStarts(int queueId);
-
         IEnumerable<QueueItem> DequeueSummaryBatches(int queueId, DateTime batchStart, int nbOfBatches);
 
         void DeleteItems(int queueId, IEnumerable<long> itemsIds);
@@ -46,5 +44,13 @@ namespace Vanrise.Queueing.Data
         void UpdateHeaders(IEnumerable<long> itemsIds, QueueItemStatus status, int retryCount, string errorMessage);
 
         void SetItemsSuspended(int queueId, IEnumerable<long> itemsIds);
+
+        QueueItem DequeueItem(int _queueId, Guid activatorInstanceId);
+
+        List<PendingQueueItemInfo> GetPendingQueueItems();
+
+        void SetQueueItemsActivatorInstances(List<PendingQueueItemInfo> pendingQueueItemsToUpdate);
+
+        List<SummaryBatch> GetSummaryBatches();
     }
 }

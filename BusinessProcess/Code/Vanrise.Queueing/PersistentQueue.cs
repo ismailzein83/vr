@@ -103,18 +103,26 @@ namespace Vanrise.Queueing
             if (processItem == null)
                 throw new ArgumentNullException("processItem");
 
-            return TryDequeuePrivate(processItem);
+            return TryDequeuePrivate(processItem, null);
         }
 
         #endregion
 
         #region Private Methods
 
-        private bool TryDequeuePrivate(Action<T> processItem)
+        private bool TryDequeuePrivate(Action<T> processItem, IPersistentQueueDequeueContext context)
         {
-            int currentProcessId = RunningProcessManager.CurrentProcess.ProcessId;
-            IEnumerable<int> runningProcessesIds = _runningProcessManager.GetCachedRunningProcesses().Select(itm => itm.ProcessId);
-            QueueItem queueItem = _dataManagerQueueItem.DequeueItem(_queueId, currentProcessId, runningProcessesIds, _queueSettings.MaximumConcurrentReaders);
+            QueueItem queueItem = null;
+            if (context != null && context.ActivatorInstanceId.HasValue)
+            {
+                queueItem = _dataManagerQueueItem.DequeueItem(_queueId, context.ActivatorInstanceId.Value);
+            }
+            else
+            {
+                int currentProcessId = RunningProcessManager.CurrentProcess.ProcessId;
+                IEnumerable<int> runningProcessesIds = _runningProcessManager.GetCachedRunningProcesses().Select(itm => itm.ProcessId);
+                queueItem = _dataManagerQueueItem.DequeueItem(_queueId, currentProcessId, runningProcessesIds, _queueSettings.MaximumConcurrentReaders);
+            }
             if (queueItem != null)
             {
                 _dataManagerQueueItem.UpdateHeaderStatus(queueItem.ItemId, QueueItemStatus.Processing);
@@ -164,17 +172,14 @@ namespace Vanrise.Queueing
         }
 
 
-        public bool TryDequeueObject(Action<PersistentQueueItem> processItem)
+        public bool TryDequeueObject(Action<PersistentQueueItem> processItem, IPersistentQueueDequeueContext context)
         {
-            return this.TryDequeue(processItem);
+            if (processItem == null)
+                throw new ArgumentNullException("processItem");
+            return this.TryDequeuePrivate(processItem, context);
         }
 
         #endregion
-
-        public List<DateTime> GetAvailableBatchStarts()
-        {
-            return _dataManagerQueueItem.GetAvailableBatchStarts(_queueId);
-        }
 
         public bool TryDequeueSummaryBatches(DateTime batchStart, Action<IEnumerable<PersistentQueueItem>> processBatches)
         {

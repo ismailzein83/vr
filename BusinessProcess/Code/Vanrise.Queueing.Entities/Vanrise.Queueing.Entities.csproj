@@ -57,10 +57,12 @@
     <Compile Include="ISummaryBatchQueueActivator.cs" />
     <Compile Include="ItemExecutionFlowInfo.cs" />
     <Compile Include="ItemToEnqueue.cs" />
+    <Compile Include="PendingQueueItemInfo.cs" />
     <Compile Include="PersistentQueueItem.cs" />
     <Compile Include="QueueActivator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueActivatorConfig.cs" />
+    <Compile Include="QueueActivatorInstance.cs" />
     <Compile Include="QueueExecutionFlow.cs" />
     <Compile Include="QueueExecutionFlowDefinition.cs" />
     <Compile Include="QueueExecutionFlowDefinitionFilter.cs" />
@@ -93,6 +95,8 @@
     <Compile Include="QueueStageNameInfo.cs" />
     <Compile Include="QueueSubscription.cs" />
     <Compile Include="StageQueue.cs" />
+    <Compile Include="SummaryBatch.cs" />
+    <Compile Include="SummaryBatchActivator.cs" />
     <Compile Include="TestActivator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

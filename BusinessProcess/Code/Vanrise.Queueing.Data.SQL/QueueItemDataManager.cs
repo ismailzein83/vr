@@ -45,7 +45,6 @@ namespace Vanrise.Queueing.Data.SQL
 
         public void CreateQueue(int queueId)
         {
-            ExecuteNonQueryText(String.Format(query_CreateQueueTable, queueId), null);
         }
 
         public long GenerateItemID()
@@ -104,17 +103,21 @@ namespace Vanrise.Queueing.Data.SQL
                     });
         }
 
-        private QueueItem QueueItemMapper(IDataReader reader)
+        public QueueItem DequeueItem(int queueId, Guid activatorInstanceId)
         {
-            return new QueueItem
-                 {
-                     ItemId = (long)reader["ID"],
-                     ExecutionFlowTriggerItemId = (long)reader["ExecutionFlowTriggerItemID"],
-                     BatchStart = GetReaderValue<DateTime>(reader, "BatchStart"),
-                     Content = (byte[])reader["Content"]
-                 };
+            string query = @"SELECT TOP 1 ID, Content, ExecutionFlowTriggerItemID, NULL as BatchStart
+                            FROM queue.QueueItem WITH(NOLOCK)
+                            WHERE QueueID = @QueueID AND ActivatorID = @ActivatorID AND ISNULL([IsSuspended], 0) = 0
+                            ORDER BY ID";
+            return GetItemText(query,
+                QueueItemMapper,
+                (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@QueueID", queueId));
+                    cmd.Parameters.Add(new SqlParameter("@ActivatorID", activatorInstanceId));
+                });
         }
-     
+        
         public void DeleteItem(int queueId, long itemId)
         {
             ExecuteNonQueryText(String.Format(query_DeleteFromQueue, queueId),
@@ -202,10 +205,10 @@ namespace Vanrise.Queueing.Data.SQL
         #region Private Methods
         void ExecuteEnqueueItemQuery(string query, DateTime? batchStart, byte[] item, long executionFlowTriggerItemID, string description, QueueItemStatus queueItemStatus)
         {
-            query = String.Format(@" BEGIN TRANSACTION 
+            query = String.Format(@" --BEGIN TRANSACTION 
                                      {0}
-                                     COMMIT;",
-                                            query);
+                                     --COMMIT;",
+                                             !batchStart.HasValue ? query.Replace("#QUEUEITEMTABLE#", "QueueItem") : query.Replace("#QUEUEITEMTABLE#", "SummaryQueueItem"));
 
             ExecuteNonQueryText(query,
                (cmd) =>
@@ -253,30 +256,38 @@ namespace Vanrise.Queueing.Data.SQL
             };
         }
 
-       
+        private QueueItem QueueItemMapper(IDataReader reader)
+        {
+            return new QueueItem
+            {
+                ItemId = (long)reader["ID"],
+                ExecutionFlowTriggerItemId = (long)reader["ExecutionFlowTriggerItemID"],
+                BatchStart = GetReaderValue<DateTime>(reader, "BatchStart"),
+                Content = (byte[])reader["Content"]
+            };
+        }
+
+        private PendingQueueItemInfo PendingQueueItemInfoMapper(IDataReader reader)
+        {
+            return new PendingQueueItemInfo
+            {
+                QueueItemId = (long)reader["ID"],
+                QueueId = (int)reader["QueueID"],
+                ActivatorInstanceId = GetReaderValue<Guid?>(reader, "ActivatorID")
+            };
+        }
+
         #endregion
 
         #region Queries
 
-        const string query_CreateQueueTable = @"CREATE TABLE [queue].[QueueItem_{0}](
-									                                                [ID] [bigint] NOT NULL,
-                                                                                    [BatchStart] [datetime] NULL,
-									                                                [Content] [varbinary](max) NOT NULL,
-                                                                                    [ExecutionFlowTriggerItemID] [bigint] NOT NULL,
-									                                                [LockedByProcessID] [int] NULL,
-                                                                                    [IsSuspended] [bit]
-									                                                 CONSTRAINT [PK_QueueItem_{0}] PRIMARY KEY CLUSTERED 
-									                                                (
-										                                                [ID] ASC
-									                                                ));";
-
         static string s_query_EnqueueItemAndHeaderTemplate;
 
         const string query_EnqueueItemTemplate = @" 
-                                                     INSERT INTO queue.QueueItem_{0}
-                                                           ([ID], [BatchStart], [Content], [ExecutionFlowTriggerItemID])
+                                                     INSERT INTO queue.#QUEUEITEMTABLE#
+                                                           ([ID], QueueID, [BatchStart], [Content], [ExecutionFlowTriggerItemID])
                                                      VALUES
-                                                           ({1}, @BatchStart, @Content, @ExecutionFlowTriggerItemID)
+                                                           ({1}, {0}, @BatchStart, @Content, @ExecutionFlowTriggerItemID)
                                                          ";
 
         const string query_EnqueueItemHeaderTemplate = @" INSERT INTO [queue].[QueueItemHeader]
@@ -299,19 +310,23 @@ namespace Vanrise.Queueing.Data.SQL
                                                                    ,GETDATE())";
 
 
-        const string query_UnlockItem = @"UPDATE queue.QueueItem_{0} SET LockedByProcessID = NULL, [IsSuspended] = @IsSuspended WHERE [ID] = @ItemID";
+
+
+        const string query_UnlockItem = @"UPDATE queue.QueueItem SET LockedByProcessID = NULL, [IsSuspended] = @IsSuspended WHERE [ID] = @ItemID";
 
         const string query_Dequeue = @"                                         
                                         DECLARE @ID bigint, @IsLocked bit
                                         
-                                        SELECT TOP 1 @ID = ID FROM [queue].[QueueItem_{0}] WITH(NOLOCK)
-			                                      WHERE (LockedByProcessID IS NULL OR LockedByProcessID NOT IN (#RUNNINGPROCESSIDS#)) 
+                                        SELECT TOP 1 @ID = ID FROM [queue].[QueueItem] WITH(NOLOCK)
+			                                      WHERE QueueID = {0} 
+                                                        AND 
+                                                        (LockedByProcessID IS NULL OR LockedByProcessID NOT IN (#RUNNINGPROCESSIDS#)) 
                                                         AND 
                                                         ISNULL([IsSuspended], 0) = 0 
 			                                      ORDER BY ID                                       
                                         IF @ID IS NOT NULL
                                         BEGIN
-                                            UPDATE [queue].[QueueItem_{0}]
+                                            UPDATE [queue].[QueueItem]
                                             SET LockedByProcessID = @ProcessID,
                                                 @IsLocked = 1
                                             WHERE 
@@ -339,27 +354,18 @@ namespace Vanrise.Queueing.Data.SQL
                                                             END
                                                             ";
 
-        const string query_DeleteFromQueue = "DELETE queue.QueueItem_{0} WHERE ID = @ID";
+        const string query_DeleteFromQueue = "DELETE queue.QueueItem WHERE ID = @ID";
 
-        const string query_DeleteItemsFromQueue = "DELETE queue.QueueItem_{0} WHERE ID IN ({1})";
+        const string query_DeleteItemsFromQueue = "DELETE queue.SummaryQueueItem WHERE ID IN ({1})";
 
-        const string query_SetItemsSuspended = @"UPDATE queue.QueueItem_{0} SET [IsSuspended] = 1 WHERE ID IN ({1})";
-
-        const string query_GetAvailableBatchStarts = @"SELECT DISTINCT [BatchStart] FROM queue.QueueItem_{0} WHERE ISNULL([IsSuspended], 0) = 0";
+        const string query_SetItemsSuspended = @"UPDATE queue.SummaryQueueItem SET [IsSuspended] = 1 WHERE ID IN ({1})";
 
         const string query_GetSummaryBatchesByBatchStart = @"SELECT TOP(@NbOfRows) ID, Content, ExecutionFlowTriggerItemID, BatchStart
-                                                            FROM queue.QueueItem_{0} 
-                                                            WHERE [BatchStart] = @BatchStart AND ISNULL([IsSuspended], 0) = 0
+                                                            FROM queue.SummaryQueueItem 
+                                                            WHERE QueueID = {0} AND [BatchStart] = @BatchStart AND ISNULL([IsSuspended], 0) = 0
                                                             ORDER BY ID "; 
 
         #endregion
-
-
-        public List<DateTime> GetAvailableBatchStarts(int queueId)
-        {
-           return GetItemsText(String.Format(query_GetAvailableBatchStarts, queueId),
-                (reader) => (DateTime)reader["BatchStart"], null);
-        }
 
         public IEnumerable<QueueItem> DequeueSummaryBatches(int queueId, DateTime batchStart, int nbOfBatches)
         {
@@ -388,6 +394,38 @@ namespace Vanrise.Queueing.Data.SQL
         public void SetItemsSuspended(int queueId, IEnumerable<long> itemsIds)
         {
             ExecuteNonQueryText(string.Format(query_SetItemsSuspended, queueId, String.Join(",", itemsIds)), null);
+        }
+
+        public List<PendingQueueItemInfo> GetPendingQueueItems()
+        {
+            return GetItemsSP("[queue].[sp_QueueItem_GetInfo]", PendingQueueItemInfoMapper);
+        }
+
+        public void SetQueueItemsActivatorInstances(List<PendingQueueItemInfo> pendingQueueItemsToUpdate)
+        {
+            foreach(var pendingQueueItemInfo in pendingQueueItemsToUpdate)
+            {
+                if (!pendingQueueItemInfo.ActivatorInstanceId.HasValue)
+                    throw new NullReferenceException(String.Format("pendingQueueItemInfo.ActivatorInstanceId. Item ID '{0}'", pendingQueueItemInfo.QueueItemId));
+                ExecuteNonQuerySP("[queue].[sp_QueueItem_UpdateActivatorInstance]", pendingQueueItemInfo.QueueItemId, pendingQueueItemInfo.ActivatorInstanceId.Value);
+            }
+        }
+
+        public List<SummaryBatch> GetSummaryBatches()
+        {
+            string query = @"SELECT DISTINCT QueueID, BatchStart
+	                        FROM [queue].[SummaryQueueItem] with(nolock)
+	                        WHERE IsNULL(IsSuspended, 0) = 0";
+            return GetItemsText(query,
+                (reader) =>
+                {
+                    return new SummaryBatch
+                    {
+                        QueueId = (int)reader["QueueID"],
+                        BatchStart = (DateTime)reader["BatchStart"]
+                    };
+                },
+                null);
         }
     }
 }

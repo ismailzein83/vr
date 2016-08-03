@@ -58,20 +58,26 @@ namespace Vanrise.Queueing
 
         public IPersistentQueue GetQueue(string queueName)
         {
-            string cacheName = String.Format("PersistentQueueFactory_GetQueue_{0}", queueName);
+            string cacheName = String.Format("PersistentQueueFactory_GetQueueByName_{0}", queueName);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceManager.CacheManager>().GetOrCreateObject(cacheName,
                 () =>
                 {
                     QueueInstance queueInstance = _queueManager.GetQueueInstance(queueName);
-                    if (queueInstance == null || queueInstance.Status != QueueInstanceStatus.ReadyToUse)
-                        return null;
-
-                    Type queueItemType = Type.GetType(queueInstance.ItemFQTN);
-                    Type[] typeArgs = { queueItemType };
-                    var queueType = typeof(PersistentQueue<>).MakeGenericType(typeArgs);
-                    return Activator.CreateInstance(queueType, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { queueInstance.QueueInstanceId, queueInstance.Settings }, null) as IPersistentQueue;
+                    return BuildPersistentQueue(queueInstance);
                 });
            
+        }
+
+        public IPersistentQueue GetQueue(int queueInstanceId)
+        {
+            string cacheName = String.Format("PersistentQueueFactory_GetQueueById_{0}", queueInstanceId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceManager.CacheManager>().GetOrCreateObject(cacheName,
+                () =>
+                {
+                    QueueInstance queueInstance = _queueManager.GetQueueInstanceById(queueInstanceId);
+                    return BuildPersistentQueue(queueInstance);
+                });
+
         }
 
         public bool QueueExists(string queueName)
@@ -175,6 +181,16 @@ namespace Vanrise.Queueing
             {
                 return Serializer.Serialize(queueSettings1) == Serializer.Serialize(queueSettings2);
             }
+        }
+
+        private IPersistentQueue BuildPersistentQueue(QueueInstance queueInstance)
+        {
+            if (queueInstance == null || queueInstance.Status != QueueInstanceStatus.ReadyToUse)
+                return null;
+            Type queueItemType = Type.GetType(queueInstance.ItemFQTN);
+            Type[] typeArgs = { queueItemType };
+            var queueType = typeof(PersistentQueue<>).MakeGenericType(typeArgs);
+            return Activator.CreateInstance(queueType, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { queueInstance.QueueInstanceId, queueInstance.Settings }, null) as IPersistentQueue;
         }
     }
 }
