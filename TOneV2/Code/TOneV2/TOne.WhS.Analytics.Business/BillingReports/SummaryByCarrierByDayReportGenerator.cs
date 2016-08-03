@@ -102,18 +102,18 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 MeasureValue durationNet;
                 analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
                 carrierSummary.DurationNet = Convert.ToDecimal(durationNet.Value ?? 0.0);
-                carrierSummary.DurationNetFormatted = ReportHelpers.FormatNormalNumberDigitRate(carrierSummary.DurationNet);
+                carrierSummary.DurationNetFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.DurationNet);
 
 
                 MeasureValue duration;
                 analyticRecord.MeasureValues.TryGetValue(parameters.IsCost ? "CostDuration" : "SaleDuration", out duration);
                 carrierSummary.Duration = Convert.ToDecimal(duration.Value ?? 0.0);
-                carrierSummary.DurationFormatted = ReportHelpers.FormatNormalNumberDigitRate(carrierSummary.Duration);
+                carrierSummary.DurationFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.Duration);
 
                 MeasureValue net;
                 analyticRecord.MeasureValues.TryGetValue(parameters.IsCost ? "CostNet" : "SaleNet", out net);
                 carrierSummary.Net = Convert.ToDouble(net.Value ?? 0.0);
-                carrierSummary.NetFormatted = ReportHelpers.FormatNormalNumberDigitRate(carrierSummary.Net);
+                carrierSummary.NetFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.Net);
 
                 
         
@@ -136,7 +136,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             list.Add("Title", new RdlcParameter { Value = "Summary By Carrier - Grouped by Day", IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
-            list.Add("DigitRate", new RdlcParameter { Value = "4", IsVisible = true });
+            list.Add("DigitRate", new RdlcParameter { Value = ReportHelpers.GetLongNumberDigit(), IsVisible = true });
+            list.Add("Digit", new RdlcParameter { Value = ReportHelpers.GetNormalNumberDigit(), IsVisible = true });
 
             list.Add("PageBreak", new RdlcParameter { Value = parameters.PageBreak.ToString(), IsVisible = true });
 

@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Business;
 using TOne.WhS.BusinessEntity.Business;
 
 namespace TOne.WhS.Analytics.Business.BillingReports
 {
     public static class ReportHelpers
     {
-        private static int _longprecision = 5;
-        private static int _normalprecision = 2;
+        private static int _longprecision = GenericParameterManager.Current.GetLongPrecision();
+        private static int _normalprecision = GenericParameterManager.Current.GetNormalPrecision();
         public static string GetCarrierName(string id, string carrierAs)
         {
             string name = "multiple " + carrierAs;
@@ -37,22 +38,30 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             }
             return name;
         }
-
-        public static string FormatNormalNumberDigitRate(Decimal? number)
+        public static string GetNormalNumberDigit()
+        {
+            return _normalprecision.ToString();
+        }
+        public static string GetLongNumberDigit()
+        {
+            return _longprecision.ToString();
+        }
+        
+        public static string FormatNormalNumberDigit(Decimal? number)
         {
             return String.Format("{0:#0." + "".PadLeft(_normalprecision, '0') + "}", number);
         }
-        public static string FormatNormalNumberDigitRate(Double? number)
+        public static string FormatNormalNumberDigit(Double? number)
         {
             return String.Format("{0:#0." + "".PadLeft(_normalprecision, '0') + "}", number);
         }
 
 
-        public static string FormatLongNumberDigitRate(Decimal? number)
+        public static string FormatLongNumberDigit(Decimal? number)
         {
             return String.Format("{0:#0." + "".PadLeft(_longprecision, '0') + "}", number);
         }
-        public static string FormatLongNumberDigitRate(Double? number)
+        public static string FormatLongNumberDigit(Double? number)
         {
             return String.Format("{0:#0." + "".PadLeft(_longprecision, '0') + "}", number);
         }

@@ -67,37 +67,37 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         customerFormatted.Destination = zoneValue.Name;
                     var saleRateValue = analyticRecord.DimensionValues[6];
                     if (saleRateValue != null)
-                        customerFormatted.SaleRate = ReportHelpers.FormatLongNumberDigitRate(Convert.ToDecimal(saleRateValue.Value ?? 0.0));
+                        customerFormatted.SaleRate = ReportHelpers.FormatLongNumberDigit(Convert.ToDecimal(saleRateValue.Value ?? 0.0));
 
                     var costRateValue = analyticRecord.DimensionValues[5];
                     if (costRateValue != null)
-                        customerFormatted.CostRate = ReportHelpers.FormatLongNumberDigitRate(Convert.ToDecimal(costRateValue.Value ?? 0.0));
+                        customerFormatted.CostRate = ReportHelpers.FormatLongNumberDigit(Convert.ToDecimal(costRateValue.Value ?? 0.0));
 
                     MeasureValue saleDuration;
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
                     decimal saleDurationValue = Convert.ToDecimal(saleDuration.Value ?? 0.0);
-                    customerFormatted.SaleDuration = ReportHelpers.FormatNormalNumberDigitRate(saleDurationValue);
+                    customerFormatted.SaleDuration = ReportHelpers.FormatNormalNumberDigit(saleDurationValue);
 
 
                     MeasureValue costDuration;
                     analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
                     decimal costDurationValue = Convert.ToDecimal(costDuration.Value ?? 0.0);
-                    customerFormatted.CostDuration = ReportHelpers.FormatNormalNumberDigitRate(costDurationValue);
+                    customerFormatted.CostDuration = ReportHelpers.FormatNormalNumberDigit(costDurationValue);
 
                     MeasureValue profit;
                     analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
                     customerFormatted.Profit = Convert.ToDouble(profit.Value ?? 0.0);
-                    customerFormatted.ProfitFormatted = ReportHelpers.FormatNormalNumberDigitRate(customerFormatted.Profit);
+                    customerFormatted.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit(customerFormatted.Profit);
 
                     MeasureValue costNet;
                     analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
                     customerFormatted.CostNet = Convert.ToDouble(costNet.Value ?? 0.0);
-                    customerFormatted.CostNetFormatted = ReportHelpers.FormatNormalNumberDigitRate(customerFormatted.CostNet);
+                    customerFormatted.CostNetFormatted = ReportHelpers.FormatNormalNumberDigit(customerFormatted.CostNet);
 
                     MeasureValue saleNet;
                     analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
                     customerFormatted.SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
-                    customerFormatted.SaleNetFormatted = ReportHelpers.FormatNormalNumberDigitRate(customerFormatted.SaleNet);
+                    customerFormatted.SaleNetFormatted = ReportHelpers.FormatNormalNumberDigit(customerFormatted.SaleNet);
 
                     customerFormatted.ProfitPerc = customerFormatted.SaleNet == 0 ? "" : (customerFormatted.SaleNet != 0) ? ReportHelpers.FormatNumberPercentage(((1 - customerFormatted.CostNet / customerFormatted.SaleNet))) : "-100%";
 
@@ -120,7 +120,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 {"Title", new RdlcParameter {Value = "Routing by Customer", IsVisible = true}},
                 {"Currency", new RdlcParameter {Value = parameters.CurrencyDescription, IsVisible = true}},
                 {"LogoPath", new RdlcParameter {Value = "logo", IsVisible = true}},
-                {"DigitRate", new RdlcParameter {Value = "2", IsVisible = true}}
+                {"Digit", new RdlcParameter {Value = ReportHelpers.GetNormalNumberDigit(), IsVisible = true}}
             };
 
             return list;

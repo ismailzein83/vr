@@ -119,43 +119,43 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     MeasureValue saleRate;
                     analyticRecord.MeasureValues.TryGetValue("SaleRate", out saleRate);
                     rateLossFromatted.SaleRate = Convert.ToDouble(saleRate.Value ?? 0.0);
-                    rateLossFromatted.SaleRateFormatted = ReportHelpers.FormatLongNumberDigitRate(rateLossFromatted.SaleRate);
+                    rateLossFromatted.SaleRateFormatted = ReportHelpers.FormatLongNumberDigit(rateLossFromatted.SaleRate);
 
 
                     MeasureValue costRate;
                     analyticRecord.MeasureValues.TryGetValue("CostRate", out costRate);
                     rateLossFromatted.CostRate = Convert.ToDouble(costRate.Value ?? 0.0);
-                    rateLossFromatted.CostRateFormatted = ReportHelpers.FormatLongNumberDigitRate(rateLossFromatted.CostRate);
+                    rateLossFromatted.CostRateFormatted = ReportHelpers.FormatLongNumberDigit(rateLossFromatted.CostRate);
 
 
                     MeasureValue saleDuration;
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
                     rateLossFromatted.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
-                    rateLossFromatted.SaleDurationFormatted = ReportHelpers.FormatNormalNumberDigitRate(rateLossFromatted.SaleDuration);
+                    rateLossFromatted.SaleDurationFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.SaleDuration);
 
 
                     MeasureValue costDuration;
                     analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
                     rateLossFromatted.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
-                    rateLossFromatted.CostDurationFormatted = ReportHelpers.FormatNormalNumberDigitRate(rateLossFromatted.CostDuration);
+                    rateLossFromatted.CostDurationFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.CostDuration);
 
 
 
                     MeasureValue saleNet;
                     analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
                     rateLossFromatted.SaleNet = Convert.ToDouble(saleNet.Value ?? 0.0);
-                    rateLossFromatted.SaleNetFormatted = ReportHelpers.FormatNormalNumberDigitRate(rateLossFromatted.SaleNet);
+                    rateLossFromatted.SaleNetFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.SaleNet);
 
 
                     MeasureValue costNet;
                     analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
                     rateLossFromatted.CostNet = Convert.ToDouble(costNet.Value ?? 0.0);
-                    rateLossFromatted.CostNetFormatted = ReportHelpers.FormatNormalNumberDigitRate(rateLossFromatted.CostNet);
+                    rateLossFromatted.CostNetFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.CostNet);
 
                     MeasureValue percentageLoss;
                     analyticRecord.MeasureValues.TryGetValue("PercentageLoss", out percentageLoss);
                     rateLossFromatted.Loss = Convert.ToDouble(percentageLoss.Value ?? 0.0);
-                    rateLossFromatted.LossFormatted = ReportHelpers.FormatNormalNumberDigitRate(rateLossFromatted.Loss);
+                    rateLossFromatted.LossFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.Loss);
                     rateLossFromatted.LossPerFormatted = ReportHelpers.FormatNumberPercentage(rateLossFromatted.Loss);
 
                     listRateLossFromatted.Add(rateLossFromatted);
@@ -198,7 +198,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 {"Title", new RdlcParameter {Value = "Losses by Zones", IsVisible = true}},
                 {"Currency", new RdlcParameter {Value = parameters.CurrencyDescription, IsVisible = true}},
                 {"LogoPath", new RdlcParameter {Value = "logo", IsVisible = true}},
-                {"DigitRate", new RdlcParameter {Value = "2", IsVisible = true}}
+                {"DigitRate", new RdlcParameter {Value = ReportHelpers.GetLongNumberDigit(), IsVisible = true}},
+                {"Digit", new RdlcParameter {Value = ReportHelpers.GetNormalNumberDigit(), IsVisible = true}}
             };
 
 

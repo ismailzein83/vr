@@ -107,38 +107,38 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     MeasureValue saleDuration;
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
                     routingAnalysis.Duration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
-                    routingAnalysis.DurationFormatted = ReportHelpers.FormatNormalNumberDigitRate(routingAnalysis.Duration);
+                    routingAnalysis.DurationFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.Duration);
 
                     MeasureValue saleNet;
                     analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
                     routingAnalysis.SaleNet = Convert.ToDouble(saleNet.Value ?? 0.0);
-                    routingAnalysis.SaleNetFormatted = ReportHelpers.FormatNormalNumberDigitRate(routingAnalysis.SaleNet);
+                    routingAnalysis.SaleNetFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.SaleNet);
 
 
                     MeasureValue costNet;
                     analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
                     routingAnalysis.CostNet = Convert.ToDouble(costNet.Value ?? 0.0);
-                    routingAnalysis.CostNetFormatted = ReportHelpers.FormatNormalNumberDigitRate(routingAnalysis.CostNet);
+                    routingAnalysis.CostNetFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.CostNet);
 
 
                     MeasureValue profit;
                     analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
                     routingAnalysis.Profit = Convert.ToDouble(profit.Value ?? 0.0);
-                    routingAnalysis.ProfitFormatted = ReportHelpers.FormatNormalNumberDigitRate(routingAnalysis.Profit);
+                    routingAnalysis.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.Profit);
 
                     routingAnalysis.AVGCost = (routingAnalysis.Duration == 0 || routingAnalysis.CostNet == 0)
                         ? 0
                         : (routingAnalysis.SaleNet / (double)routingAnalysis.Duration);
                     routingAnalysis.AVGCostFormatted = routingAnalysis.AVGCost == 0
                         ? "0"
-                        : ReportHelpers.FormatNormalNumberDigitRate(routingAnalysis.AVGCost);
+                        : ReportHelpers.FormatNormalNumberDigit(routingAnalysis.AVGCost);
 
                     routingAnalysis.AVGSale = (routingAnalysis.Duration == 0 || routingAnalysis.SaleNet == 0)
                         ? 0
                         : (routingAnalysis.SaleNet / (double)routingAnalysis.Duration);
                     routingAnalysis.AVGSaleFormatted = routingAnalysis.AVGSale == 0
                         ? "0"
-                        : ReportHelpers.FormatNormalNumberDigitRate(routingAnalysis.AVGSale);
+                        : ReportHelpers.FormatNormalNumberDigit(routingAnalysis.AVGSale);
 
                     if (!routingAnalysisFormatteds.ContainsKey(routingAnalysis.SaleZone + routingAnalysis.Supplier))
                         routingAnalysisFormatteds[routingAnalysis.SaleZone + routingAnalysis.Supplier] = routingAnalysis;
@@ -176,12 +176,12 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         MeasureValue asrMeasure;
                         analyticRecord.MeasureValues.TryGetValue("ASR", out asrMeasure);
                         routingAnalysis.ASR = Convert.ToDecimal(asrMeasure.Value ?? 0.0);
-                        routingAnalysis.ASRFormatted = ReportHelpers.FormatNormalNumberDigitRate(routingAnalysis.ASR);
+                        routingAnalysis.ASRFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.ASR);
 
                         MeasureValue acdMeasure;
                         analyticRecord.MeasureValues.TryGetValue("ACD", out acdMeasure);
                         routingAnalysis.ACD = Convert.ToDecimal(acdMeasure.Value ?? 0.0);
-                        routingAnalysis.ACDFormatted = ReportHelpers.FormatNormalNumberDigitRate(routingAnalysis.ACD);
+                        routingAnalysis.ACDFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.ACD);
                     }
                 }
 
@@ -206,11 +206,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 {"Supplier", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.SuppliersId, "Suppliers"), IsVisible = true }},
 
                 {"LogoPath", new RdlcParameter {Value = "logo", IsVisible = true}},
-                {"DigitRate", new RdlcParameter {Value = "2", IsVisible = true}},
-                {"TotalDuration", new RdlcParameter {Value =  ReportHelpers.FormatNumber(parameters.TotalDuration), IsVisible = true}},
-                {"TotalSale", new RdlcParameter {Value =  ReportHelpers.FormatNumber(parameters.TotalSale), IsVisible = true}},
-                {"TotalCost", new RdlcParameter {Value = ReportHelpers.FormatNumber(parameters.TotalCost), IsVisible = true}},
-                {"TotalProfit", new RdlcParameter {Value =  ReportHelpers.FormatNumber(parameters.TotalProfit), IsVisible = true}},
+                {"DigitRate", new RdlcParameter {Value = ReportHelpers.GetLongNumberDigit(), IsVisible = true}},
+                {"Digit", new RdlcParameter {Value = ReportHelpers.GetNormalNumberDigit(), IsVisible = true}},
+
+                {"TotalDuration", new RdlcParameter {Value =  ReportHelpers.FormatNormalNumberDigit(parameters.TotalDuration), IsVisible = true}},
+                {"TotalSale", new RdlcParameter {Value =  ReportHelpers.FormatNormalNumberDigit(parameters.TotalSale), IsVisible = true}},
+                {"TotalCost", new RdlcParameter {Value = ReportHelpers.FormatNormalNumberDigit(parameters.TotalCost), IsVisible = true}},
+                {"TotalProfit", new RdlcParameter {Value =  ReportHelpers.FormatNormalNumberDigit(parameters.TotalProfit), IsVisible = true}},
                 {"PageBreak", new RdlcParameter {Value = parameters.PageBreak.ToString(), IsVisible = true}}
             };
             return list;

@@ -67,13 +67,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     MeasureValue saleNet;    
                     analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
                     dailySummary.SaleNet = (saleNet == null) ? 0 : Convert.ToDouble(saleNet.Value ?? 0.0);
-                    dailySummary.SaleNetFormatted = ReportHelpers.FormatNumber(dailySummary.SaleNet);
+                    dailySummary.SaleNetFormatted = ReportHelpers.FormatNormalNumberDigit(dailySummary.SaleNet);
 
 
                     MeasureValue costNet;    
                     analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
                     dailySummary.CostNet = (costNet == null) ? 0 : Convert.ToDouble(costNet.Value ?? 0.0);
-                    dailySummary.CostNetFormatted = ReportHelpers.FormatNumber(dailySummary.CostNet);
+                    dailySummary.CostNetFormatted = ReportHelpers.FormatNormalNumberDigit(dailySummary.CostNet);
 
                     listDailySummary.Add(dailySummary);
                 }

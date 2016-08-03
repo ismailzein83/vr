@@ -91,12 +91,12 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 MeasureValue duration;
                 analyticRecord.MeasureValues.TryGetValue(parameters.IsCost ? "CostDuration" : "SaleDuration", out duration);
                 carrierSummary.Duration = Convert.ToDecimal(duration.Value ?? 0.0);
-                carrierSummary.DurationFormatted = ReportHelpers.FormatNormalNumberDigitRate(carrierSummary.Duration);
+                carrierSummary.DurationFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.Duration);
 
                 MeasureValue net;
                 analyticRecord.MeasureValues.TryGetValue(parameters.IsCost ? "CostNet" : "SaleNet", out net);
                 carrierSummary.Net = Convert.ToDouble(net.Value ?? 0.0);
-                carrierSummary.NetFormatted = ReportHelpers.FormatNormalNumberDigitRate(carrierSummary.Net);
+                carrierSummary.NetFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.Net);
 
                 
         
@@ -119,7 +119,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             list.Add("Supplier", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.SuppliersId, "Suppliers"), IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
-            list.Add("DigitRate", new RdlcParameter { Value = "2", IsVisible = true });
+            list.Add("DigitRate", new RdlcParameter { Value = ReportHelpers.GetLongNumberDigit(), IsVisible = true });
+            list.Add("Digit", new RdlcParameter { Value = ReportHelpers.GetNormalNumberDigit(), IsVisible = true });
 
             return list;
         }

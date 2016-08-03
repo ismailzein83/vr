@@ -73,12 +73,12 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     analyticRecord.MeasureValues.TryGetValue("AverageCost", out averageCost);
                     costBySaleZone.AvgCost = Convert.ToDouble(averageCost.Value ?? 0.0);
                     costBySaleZone.AvgCostFormatted = costBySaleZone.AvgCost == 0 ? "" : (costBySaleZone.AvgCost.HasValue) ?
-                        ReportHelpers.FormatLongNumberDigitRate(costBySaleZone.AvgCost) : "0.00000";
+                        ReportHelpers.FormatLongNumberDigit(costBySaleZone.AvgCost) : "0.00000";
 
                     MeasureValue costDuration;
                     analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
                     costBySaleZone.AvgDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
-                    costBySaleZone.AvgDurationFormatted = ReportHelpers.FormatNormalNumberDigitRate(costBySaleZone.AvgDuration);
+                    costBySaleZone.AvgDurationFormatted = ReportHelpers.FormatNormalNumberDigit(costBySaleZone.AvgDuration);
 
                     listCostBySaleZone.Add(costBySaleZone);
                 }
@@ -94,7 +94,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.HasValue ?parameters.ToTime.ToString():null, IsVisible = true });
             list.Add("Title", new RdlcParameter { Value = "Cost By Sale Zone", IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
-            list.Add("DigitRate", new RdlcParameter { Value = "2", IsVisible = true });
+            list.Add("DigitRate", new RdlcParameter { Value = ReportHelpers.GetNormalNumberDigit(), IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
 
             return list;

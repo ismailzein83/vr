@@ -78,13 +78,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     if (costRateValue != null)
                     {
                         carrierSummary.CostRate = Convert.ToDouble(costRateValue.Value ?? 0.0);
-                        carrierSummary.CostRateFormatted = ReportHelpers.FormatLongNumberDigitRate(carrierSummary.CostRate);
+                        carrierSummary.CostRateFormatted = ReportHelpers.FormatLongNumberDigit(carrierSummary.CostRate);
                     }
                     var saleRateValue = analyticRecord.DimensionValues[5];
                     if (saleRateValue != null)
                     {
                         carrierSummary.SaleRate = Convert.ToDouble(saleRateValue.Value ?? 0.0);
-                        carrierSummary.SaleRateFormatted = ReportHelpers.FormatLongNumberDigitRate(carrierSummary.SaleRate);
+                        carrierSummary.SaleRateFormatted = ReportHelpers.FormatLongNumberDigit(carrierSummary.SaleRate);
                     }
                     var saleRateChange = analyticRecord.DimensionValues[7];
                     if (saleRateChange != null)
@@ -112,28 +112,28 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     MeasureValue saleDuration;
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
                     carrierSummary.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
-                    carrierSummary.SaleDurationFormatted = ReportHelpers.FormatNormalNumberDigitRate(carrierSummary.SaleDuration);
+                    carrierSummary.SaleDurationFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.SaleDuration);
 
                     MeasureValue costDuration;
                     analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
                     carrierSummary.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
-                    carrierSummary.CostDurationFormatted = ReportHelpers.FormatNormalNumberDigitRate(carrierSummary.CostDuration);
+                    carrierSummary.CostDurationFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.CostDuration);
 
                     MeasureValue costNet;
                     analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
                     carrierSummary.CostAmount = Convert.ToDouble(costNet.Value ?? 0.0);
-                    carrierSummary.CostAmountFormatted = ReportHelpers.FormatNormalNumberDigitRate(carrierSummary.CostAmount);
+                    carrierSummary.CostAmountFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.CostAmount);
 
                     MeasureValue saleNet;
                     analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
 
                     carrierSummary.SaleAmount = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
-                    carrierSummary.SaleAmountFormatted = ReportHelpers.FormatNormalNumberDigitRate(carrierSummary.SaleAmount);
+                    carrierSummary.SaleAmountFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.SaleAmount);
 
                     MeasureValue profit;
                     analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
                     carrierSummary.Profit = Convert.ToDouble(profit.Value ?? 0.0);
-                    carrierSummary.ProfitFormatted = ReportHelpers.FormatNormalNumberDigitRate(carrierSummary.Profit);
+                    carrierSummary.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.Profit);
 
                     carrierSummary.ProfitPercentage = carrierSummary.SaleAmount == 0 ? "" : (carrierSummary.SaleAmount != 0) ? ReportHelpers.FormatNumberPercentage(((1 - carrierSummary.CostAmount / carrierSummary.SaleAmount))) : "-100%";
 
@@ -158,7 +158,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 {"Title", new RdlcParameter {Value = "Detailed Billing by Carrier", IsVisible = true}},
                 {"Currency", new RdlcParameter {Value = parameters.CurrencyDescription, IsVisible = true}},
                 {"LogoPath", new RdlcParameter {Value = "logo", IsVisible = true}},
-                {"DigitRate", new RdlcParameter {Value = "2", IsVisible = true}}
+                {"DigitRate", new RdlcParameter {Value = ReportHelpers.GetLongNumberDigit(), IsVisible = true}},
+                {"Digit", new RdlcParameter {Value = ReportHelpers.GetNormalNumberDigit(), IsVisible = true}}
+
             };
 
             return list;

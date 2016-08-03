@@ -109,10 +109,10 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     MeasureValue profit;
                     analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
                     profitByCarrier.CustomerProfit = Convert.ToDouble(profit.Value ?? 0.0);
-                    profitByCarrier.FormattedCustomerProfit = ReportHelpers.FormatNormalNumberDigitRate(profitByCarrier.CustomerProfit);
+                    profitByCarrier.FormattedCustomerProfit = ReportHelpers.FormatNormalNumberDigit(profitByCarrier.CustomerProfit);
 
                     profitByCarrier.TotalBase = profitByCarrier.CustomerProfit;
-                    profitByCarrier.Total = ReportHelpers.FormatNormalNumberDigitRate(profitByCarrier.TotalBase);
+                    profitByCarrier.Total = ReportHelpers.FormatNormalNumberDigit(profitByCarrier.TotalBase);
 
                     if (!dictionaryprofitByCustomer.ContainsKey(profitByCarrier.Customer))
                         dictionaryprofitByCustomer[profitByCarrier.Customer] = profitByCarrier;
@@ -130,20 +130,20 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     MeasureValue profit;
                     analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
                     profitByCarrier.SupplierProfit = Convert.ToDouble(profit.Value ?? 0.0);
-                    profitByCarrier.FormattedSupplierProfit = ReportHelpers.FormatNormalNumberDigitRate(profitByCarrier.SupplierProfit);
+                    profitByCarrier.FormattedSupplierProfit = ReportHelpers.FormatNormalNumberDigit(profitByCarrier.SupplierProfit);
                     if (dictionaryprofitByCustomer.ContainsKey(profitByCarrier.Customer))
                     {
                         var profitBycust = dictionaryprofitByCustomer[profitByCarrier.Customer];
                         profitBycust.SupplierProfit = profitByCarrier.SupplierProfit;
                         profitBycust.FormattedSupplierProfit = profitByCarrier.FormattedSupplierProfit;
                         profitBycust.TotalBase += profitByCarrier.SupplierProfit;
-                        profitBycust.Total = ReportHelpers.FormatNormalNumberDigitRate(profitBycust.TotalBase);
+                        profitBycust.Total = ReportHelpers.FormatNormalNumberDigit(profitBycust.TotalBase);
                     }
                     else
                     {
                         dictionaryprofitByCustomer[profitByCarrier.Customer] = profitByCarrier;
                         profitByCarrier.TotalBase = profitByCarrier.SupplierProfit;
-                        profitByCarrier.Total = ReportHelpers.FormatNormalNumberDigitRate(profitByCarrier.TotalBase);
+                        profitByCarrier.Total = ReportHelpers.FormatNormalNumberDigit(profitByCarrier.TotalBase);
                     }
                 }
 
@@ -166,7 +166,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 {"Title", new RdlcParameter {Value =parameters.GroupByProfile ? "Carrier Profile Profit": "Profit by Carrier", IsVisible = true}},
                 {"Currency", new RdlcParameter {Value = parameters.CurrencyDescription, IsVisible = true}},
                 {"LogoPath", new RdlcParameter {Value = "logo", IsVisible = true}},
-                {"DigitRate", new RdlcParameter {Value = "2", IsVisible = true}}
+                {"DigitRate", new RdlcParameter {Value = ReportHelpers.GetLongNumberDigit(), IsVisible = true}},
+                {"Digit", new RdlcParameter {Value = ReportHelpers.GetNormalNumberDigit(), IsVisible = true}}
+
             };
 
             return list;

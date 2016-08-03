@@ -1257,7 +1257,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(CDec(Fields!SaleDuration.Value)),Parameters!DigitRate.Value)</Value>
+                              <Value>=FormatNumber(Sum(CDec(Fields!SaleDuration.Value)),Parameters!Digit.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1369,7 +1369,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(CDec(Fields!CostDuration.Value)),Parameters!DigitRate.Value)</Value>
+                              <Value>=FormatNumber(Sum(CDec(Fields!CostDuration.Value)),Parameters!Digit.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1454,7 +1454,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!Profit.Value),Parameters!DigitRate.Value)</Value>
+                              <Value>=FormatNumber(Sum(Fields!Profit.Value),Parameters!Digit.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1477,6 +1477,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2126,9 +2127,8 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>Supplier</Prompt>
     </ReportParameter>
-    <ReportParameter Name="DigitRate">
+    <ReportParameter Name="Digit">
       <DataType>Integer</DataType>
-      <AllowBlank>true</AllowBlank>
       <Prompt>DigitRate</Prompt>
     </ReportParameter>
   </ReportParameters>

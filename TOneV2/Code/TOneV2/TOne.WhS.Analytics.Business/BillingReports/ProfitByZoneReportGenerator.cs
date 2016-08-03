@@ -86,30 +86,30 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     profitByZone.SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
                     profitByZone.SaleNetFormated = profitByZone.SaleNet == 0 ? "" : (profitByZone.SaleNet.HasValue) ?
-                        ReportHelpers.FormatNormalNumberDigitRate(profitByZone.SaleNet) : "0.00";
+                        ReportHelpers.FormatNormalNumberDigit(profitByZone.SaleNet) : "0.00";
 
                     MeasureValue costNet;
                     analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
                     profitByZone.CostNet = Convert.ToDouble(costNet == null ? 0.0 : costNet.Value ?? 0.0);
                     profitByZone.CostNetFormated = (profitByZone.CostNet.HasValue)
-                        ? ReportHelpers.FormatNormalNumberDigitRate(profitByZone.CostNet)
+                        ? ReportHelpers.FormatNormalNumberDigit(profitByZone.CostNet)
                         : "0.00";
 
                     MeasureValue saleDuration;
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
                     profitByZone.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
                     profitByZone.SaleDurationFormated = profitByZone.SaleNet == 0 ? "" : (profitByZone.SaleDuration.HasValue) ?
-                        ReportHelpers.FormatNormalNumberDigitRate(profitByZone.SaleDuration) : "0.00";
+                        ReportHelpers.FormatNormalNumberDigit(profitByZone.SaleDuration) : "0.00";
 
                     MeasureValue costDuration;
                     analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
                     profitByZone.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
-                    profitByZone.CostDurationFormated = ReportHelpers.FormatNormalNumberDigitRate(profitByZone.CostDuration);
+                    profitByZone.CostDurationFormated = ReportHelpers.FormatNormalNumberDigit(profitByZone.CostDuration);
 
                     MeasureValue durationInMinutes;
                     analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationInMinutes);
                     profitByZone.DurationNet = Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
-                    profitByZone.DurationNetFormated = ReportHelpers.FormatNormalNumberDigitRate(profitByZone.DurationNet);
+                    profitByZone.DurationNetFormated = ReportHelpers.FormatNormalNumberDigit(profitByZone.DurationNet);
 
                     MeasureValue calls;
                     analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
@@ -117,7 +117,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     profitByZone.Profit = profitByZone.SaleNet == 0
                         ? ""
-                        : ReportHelpers.FormatNormalNumberDigitRate((!profitByZone.SaleNet.HasValue) ? 0 : profitByZone.SaleNet - profitByZone.CostNet);
+                        : ReportHelpers.FormatNormalNumberDigit((!profitByZone.SaleNet.HasValue) ? 0 : profitByZone.SaleNet - profitByZone.CostNet);
                     profitByZone.ProfitSum = (!profitByZone.SaleNet.HasValue || profitByZone.SaleNet == 0)
                         ? 0
                         : profitByZone.SaleNet - profitByZone.CostNet;
@@ -146,7 +146,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
             list.Add("Customer", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.CustomersId, "Customers"), IsVisible = true });
             list.Add("Supplier", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.SuppliersId, "Suppliers"), IsVisible = true });
-            list.Add("DigitRate", new RdlcParameter { Value = "4", IsVisible = true });
+            list.Add("DigitRate", new RdlcParameter { Value = ReportHelpers.GetLongNumberDigit(), IsVisible = true });
+            list.Add("Digit", new RdlcParameter { Value = ReportHelpers.GetNormalNumberDigit(), IsVisible = true });
 
             return list;
         }

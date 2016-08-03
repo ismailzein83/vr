@@ -1019,7 +1019,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=FormatNumber(Sum(Fields!Duration.Value),2)</Value>
+                                  <Value>=FormatNumber(Sum(Fields!Duration.Value),Parameters!Digit.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1050,7 +1050,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=FormatNumber(Sum(Fields!CostNet.Value),Parameters!DigitRate.Value)</Value>
+                                  <Value>=FormatNumber(Sum(Fields!CostNet.Value),Parameters!Digit.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1081,7 +1081,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=FormatNumber(Sum(Fields!SaleNet.Value),Parameters!DigitRate.Value)</Value>
+                                  <Value>=FormatNumber(Sum(Fields!SaleNet.Value),Parameters!Digit.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1095,6 +1095,9 @@
                           </Paragraphs>
                           <ZIndex>11</ZIndex>
                           <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1112,7 +1115,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=FormatNumber(Sum(Fields!Profit.Value),2)</Value>
+                                  <Value>=FormatNumber(Sum(Fields!Profit.Value),Parameters!Digit.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1143,7 +1146,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=FormatNumber(Sum(Fields!AVGCost.Value),2)</Value>
+                                  <Value>=FormatNumber(Sum(Fields!AVGCost.Value),Parameters!Digit.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1174,7 +1177,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=FormatNumber(Sum(Fields!AVGSale.Value),2)</Value>
+                                  <Value>=FormatNumber(Sum(Fields!AVGSale.Value),Parameters!Digit.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1194,6 +1197,7 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -2457,6 +2461,10 @@
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Digit">
+      <DataType>Integer</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>

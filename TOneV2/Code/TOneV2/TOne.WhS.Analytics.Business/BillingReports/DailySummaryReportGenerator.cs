@@ -83,27 +83,27 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     MeasureValue durationNet;
                     analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
                     dailySummary.DurationNet = Convert.ToDecimal(durationNet.Value ?? 0.0);
-                    dailySummary.DurationNetFormatted = ReportHelpers.FormatNumber(dailySummary.DurationNet);
+                    dailySummary.DurationNetFormatted = ReportHelpers.FormatNormalNumberDigit(dailySummary.DurationNet);
 
                     MeasureValue saleDuration;
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
                     dailySummary.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
-                    dailySummary.SaleDurationFormatted = dailySummary.SaleNet == 0 ? "" : (dailySummary.SaleDuration.HasValue) ? ReportHelpers.FormatNumber(dailySummary.SaleDuration) : "0.00";
+                    dailySummary.SaleDurationFormatted = dailySummary.SaleNet == 0 ? "" : (dailySummary.SaleDuration.HasValue) ? ReportHelpers.FormatNormalNumberDigit(dailySummary.SaleDuration) : "0.00";
 
                     MeasureValue saleNet;
                     analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
                     dailySummary.SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
-                    dailySummary.SaleNetFormatted = dailySummary.SaleNet == 0 ? "" : (dailySummary.SaleNet.HasValue) ? ReportHelpers.FormatNumber(dailySummary.SaleNet) : "0.00";
+                    dailySummary.SaleNetFormatted = dailySummary.SaleNet == 0 ? "" : (dailySummary.SaleNet.HasValue) ? ReportHelpers.FormatNormalNumberDigit(dailySummary.SaleNet) : "0.00";
 
                     MeasureValue costNet;
                     analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
                     dailySummary.CostNet = Convert.ToDouble(costNet == null ? 0.0 : costNet.Value ?? 0.0);
-                    dailySummary.CostNetFormatted = (dailySummary.CostNet.HasValue) ? ReportHelpers.FormatNumber(dailySummary.CostNet) : "0.00";
+                    dailySummary.CostNetFormatted = (dailySummary.CostNet.HasValue) ? ReportHelpers.FormatNormalNumberDigit(dailySummary.CostNet) : "0.00";
 
                     MeasureValue profit;
                     analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
                     dailySummary.Profit = Convert.ToDouble(profit.Value ?? 0.0);
-                    dailySummary.ProfitFormatted = ReportHelpers.FormatNumber(dailySummary.Profit);
+                    dailySummary.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit(dailySummary.Profit);
 
 
                     dailySummary.ProfitPercentageFormatted = dailySummary.SaleNet == 0 ? "" : (dailySummary.SaleNet.HasValue) ? ReportHelpers.FormatNumberPercentage(((1 - dailySummary.CostNet / dailySummary.SaleNet))) : "-100%";
@@ -125,7 +125,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             list.Add("Title", new RdlcParameter { Value = "Summary by Day", IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
-            list.Add("DigitRate", new RdlcParameter { Value = "4", IsVisible = true });
+            list.Add("DigitRate", new RdlcParameter { Value = ReportHelpers.GetLongNumberDigit(), IsVisible = true });
+            list.Add("Digit", new RdlcParameter { Value = ReportHelpers.GetNormalNumberDigit(), IsVisible = true });
 
             return list;
         }

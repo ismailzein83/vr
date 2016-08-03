@@ -76,12 +76,12 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     analyticRecord.MeasureValues.TryGetValue("AverageCost", out averageCost);
                     costBySaleZoneSupplier.HighestRate = Convert.ToDouble(averageCost.Value ?? 0.0);
                     costBySaleZoneSupplier.HighestRateFormatted = costBySaleZoneSupplier.HighestRate == 0 ? "" : (costBySaleZoneSupplier.HighestRate.HasValue) ?
-                        ReportHelpers.FormatLongNumberDigitRate(costBySaleZoneSupplier.HighestRate) : "0.00";
+                        ReportHelpers.FormatLongNumberDigit(costBySaleZoneSupplier.HighestRate) : "0.00";
 
                     MeasureValue costDuration;
                     analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
                     costBySaleZoneSupplier.AvgDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
-                    costBySaleZoneSupplier.AvgDurationFormatted = ReportHelpers.FormatNormalNumberDigitRate(costBySaleZoneSupplier.AvgDuration);
+                    costBySaleZoneSupplier.AvgDurationFormatted = ReportHelpers.FormatNormalNumberDigit(costBySaleZoneSupplier.AvgDuration);
 
                     listCostBySaleZoneSupplier.Add(costBySaleZoneSupplier);
                 }
@@ -97,7 +97,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             list.Add("ToDate", new RdlcParameter { Value = (parameters.ToTime.HasValue)?parameters.ToTime.ToString():null, IsVisible = true });
             list.Add("Title", new RdlcParameter { Value = "Cost by Sale Zone - Grouped by Supplier", IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
-            list.Add("DigitRate", new RdlcParameter { Value = "2", IsVisible = true });
+            list.Add("DigitRate", new RdlcParameter { Value = ReportHelpers.GetNormalNumberDigit(), IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
 
             return list;

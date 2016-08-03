@@ -71,13 +71,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     MeasureValue costDuration;
                     analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
                     supplierCostDetails.Duration = (costDuration == null) ? 0 : Convert.ToDecimal(costDuration.Value ?? 0.0);
-                    supplierCostDetails.DurationFormatted = ReportHelpers.FormatNumber(supplierCostDetails.Duration);
+                    supplierCostDetails.DurationFormatted = ReportHelpers.FormatNormalNumberDigit(supplierCostDetails.Duration);
 
 
                     MeasureValue costNet;
                     analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
                     supplierCostDetails.Amount = (costNet == null) ? 0 : Convert.ToDouble(costNet.Value ?? 0.0);
-                    supplierCostDetails.AmountFormatted = ReportHelpers.FormatNumber(supplierCostDetails.Amount);
+                    supplierCostDetails.AmountFormatted = ReportHelpers.FormatNormalNumberDigit(supplierCostDetails.Amount);
 
                     listSupplierCostDetails.Add(supplierCostDetails);
                 }

@@ -1384,6 +1384,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2893,7 +2894,6 @@
     </ReportParameter>
     <ReportParameter Name="DigitRate">
       <DataType>Integer</DataType>
-      <AllowBlank>true</AllowBlank>
       <Prompt>DigitRate</Prompt>
     </ReportParameter>
     <ReportParameter Name="GroupeBySupplier">
@@ -2902,6 +2902,10 @@
     </ReportParameter>
     <ReportParameter Name="IsCost">
       <DataType>Boolean</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Digit">
+      <DataType>Integer</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>

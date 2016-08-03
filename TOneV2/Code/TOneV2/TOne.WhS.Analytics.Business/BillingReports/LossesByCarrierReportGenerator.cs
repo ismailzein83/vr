@@ -81,22 +81,22 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     lossesByCarrier.SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
                     lossesByCarrier.SaleNetFormatted = lossesByCarrier.SaleNet == 0 ? "" :
-                        ReportHelpers.FormatLongNumberDigitRate(lossesByCarrier.SaleNet);
+                        ReportHelpers.FormatLongNumberDigit(lossesByCarrier.SaleNet);
 
                     MeasureValue costNet;
                     analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
                     lossesByCarrier.CostNet = Convert.ToDouble(costNet == null ? 0.0 : costNet.Value ?? 0.0);
                     lossesByCarrier.CostNetFormatted = lossesByCarrier.CostNet == 0 ? "" :
-                        ReportHelpers.FormatLongNumberDigitRate(lossesByCarrier.CostNet);
+                        ReportHelpers.FormatLongNumberDigit(lossesByCarrier.CostNet);
 
                     MeasureValue saleDuration;
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
                     lossesByCarrier.Duration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
                     lossesByCarrier.DurationFormatted = lossesByCarrier.Duration == 0 ? "" :
-                        ReportHelpers.FormatNormalNumberDigitRate(lossesByCarrier.Duration);
+                        ReportHelpers.FormatNormalNumberDigit(lossesByCarrier.Duration);
               
                     lossesByCarrier.Margin =
-                        ReportHelpers.FormatLongNumberDigitRate(lossesByCarrier.SaleNet - lossesByCarrier.CostNet);
+                        ReportHelpers.FormatLongNumberDigit(lossesByCarrier.SaleNet - lossesByCarrier.CostNet);
                     
                     lossesByCarrier.Percentage =
                         ReportHelpers.FormatNumberPercentage(1 - lossesByCarrier.CostNet/lossesByCarrier.SaleNet);
@@ -120,8 +120,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             list.Add("Title", new RdlcParameter { Value = "Losses by Carrier", IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
-            list.Add("DigitRate", new RdlcParameter { Value = "5", IsVisible = true });
-            
+            list.Add("DigitRate", new RdlcParameter { Value = ReportHelpers.GetLongNumberDigit(), IsVisible = true });
+            list.Add("Digit", new RdlcParameter { Value = ReportHelpers.GetNormalNumberDigit(), IsVisible = true });
+
             list.Add("PageBreak", new RdlcParameter { Value = parameters.PageBreak.ToString(), IsVisible = true });
 
             return list;

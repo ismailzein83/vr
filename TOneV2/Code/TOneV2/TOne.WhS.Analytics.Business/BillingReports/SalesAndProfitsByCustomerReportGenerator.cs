@@ -82,7 +82,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
                     salesAndProfitsByCustomer.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
                     salesAndProfitsByCustomer.SaleDurationFormatted = salesAndProfitsByCustomer.SaleNet == 0 ? "" : (salesAndProfitsByCustomer.SaleDuration.HasValue) ?
-                        ReportHelpers.FormatNumber(salesAndProfitsByCustomer.SaleDuration) : "0.00";
+                        ReportHelpers.FormatNormalNumberDigit(salesAndProfitsByCustomer.SaleDuration) : "0.00";
 
                     MeasureValue costDuration;
                     analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
@@ -90,7 +90,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     salesAndProfitsByCustomer.CostDurationFormatted = ReportHelpers.FormatNumberDigitRate(salesAndProfitsByCustomer.CostDuration);
 
                     salesAndProfitsByCustomer.Profit = (salesAndProfitsByCustomer.SaleNet > 0) ? ((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet)) : 0;
-                    salesAndProfitsByCustomer.ProfitFormatted = ReportHelpers.FormatNumber((salesAndProfitsByCustomer.SaleNet > 0) ? ((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet)) : 0);
+                    salesAndProfitsByCustomer.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit((salesAndProfitsByCustomer.SaleNet > 0) ? ((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet)) : 0);
                     salesAndProfitsByCustomer.ProfitPercentageFormatted = (salesAndProfitsByCustomer.SaleNet > 0)
                         ? ReportHelpers.FormatNumberPercentage(((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet)/salesAndProfitsByCustomer.SaleNet))
                         : ReportHelpers.FormatNumberPercentage(0);
@@ -117,7 +117,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
             list.Add("Customer", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.CustomersId, "Customers"), IsVisible = true });
             list.Add("Supplier", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.SuppliersId, "Suppliers"), IsVisible = true });
-            list.Add("DigitRate", new RdlcParameter { Value = "2", IsVisible = true });
+            list.Add("DigitRate", new RdlcParameter { Value = ReportHelpers.GetLongNumberDigit(), IsVisible = true });
+            list.Add("Digit", new RdlcParameter { Value = ReportHelpers.GetNormalNumberDigit(), IsVisible = true });
             list.Add("ShowProfit", new RdlcParameter { Value = parameters.IsService.ToString(), IsVisible = true });
             list.Add("ServicesPerCustomer", new RdlcParameter { Value = parameters.ServicesForCustomer.ToString(), IsVisible = true });
 
@@ -130,7 +131,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             lstProfitSummary = summarieslist.Select(r => new ProfitSummary
             {
                 Profit = (r.SaleNet > 0) ? (double)((r.SaleNet - r.CostNet)) : 0,
-                FormattedProfit = ReportHelpers.FormatNumber((r.SaleNet > 0) ? ((r.SaleNet - r.CostNet)) : 0),
+                FormattedProfit = ReportHelpers.FormatNormalNumberDigit((r.SaleNet > 0) ? ((r.SaleNet - r.CostNet)) : 0),
                 Customer = r.Customer.ToString()
             }).OrderByDescending(r => r.Profit).Take(10).ToList();
             return lstProfitSummary;
@@ -144,7 +145,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 SaleAmountSummary s = new SaleAmountSummary()
                 {
                     SaleAmount = cs.SaleNet != null ? (double)cs.SaleNet : 0,
-                    FormattedSaleAmount = ReportHelpers.FormatNumber(cs.SaleNet != null ? (double)cs.SaleNet : 0),
+                    FormattedSaleAmount = ReportHelpers.FormatNormalNumberDigit(cs.SaleNet != null ? (double)cs.SaleNet : 0),
                     Customer = cs.Customer
                 };
                 saleAmountSummary.Add(s);

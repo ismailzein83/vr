@@ -413,7 +413,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!CustomerProfit.Value),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!CustomerProfit.Value),Parameters!Digit.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -445,7 +445,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!SupplierProfit.Value),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!SupplierProfit.Value),Parameters!Digit.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -466,6 +466,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1327,6 +1328,10 @@
       <DataType>Integer</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>DigitRate</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Digit">
+      <DataType>Integer</DataType>
+      <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
   <Code>    Public Function Base64ToImage(ByVal base64String As String) As Byte()

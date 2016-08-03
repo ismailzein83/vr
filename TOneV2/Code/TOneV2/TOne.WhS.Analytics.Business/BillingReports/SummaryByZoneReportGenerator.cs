@@ -124,7 +124,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     MeasureValue durationNet;
                     analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
                     summaryByZone.DurationNet = (durationNet == null) ? 0 : Convert.ToDecimal(durationNet.Value ?? 0.0);
-                    summaryByZone.DurationNetFormatted = ReportHelpers.FormatNumber(summaryByZone.DurationNet);
+                    summaryByZone.DurationNetFormatted = ReportHelpers.FormatNormalNumberDigit(summaryByZone.DurationNet);
 
                     MeasureValue rate;
                     if (parameters.IsCost)
@@ -140,7 +140,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     else
                         analyticRecord.MeasureValues.TryGetValue("SaleDuration", out durationInMinutes);
                     summaryByZone.DurationInSeconds = (durationInMinutes == null) ? 0 : Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
-                    summaryByZone.DurationInSecondsFormatted = ReportHelpers.FormatNumber(summaryByZone.DurationInSeconds);
+                    summaryByZone.DurationInSecondsFormatted = ReportHelpers.FormatNormalNumberDigit(summaryByZone.DurationInSeconds);
 
                     MeasureValue net;
                     if (parameters.IsCost)
@@ -148,7 +148,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     else
                         analyticRecord.MeasureValues.TryGetValue("SaleNet", out net);
                     summaryByZone.Net = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
-                    summaryByZone.NetFormatted = ReportHelpers.FormatNumber(summaryByZone.DurationInSeconds);
+                    summaryByZone.NetFormatted = ReportHelpers.FormatNormalNumberDigit(summaryByZone.DurationInSeconds);
 
                     MeasureValue extraChargeValue;
                     if (parameters.IsCost)
@@ -156,7 +156,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     else
                         analyticRecord.MeasureValues.TryGetValue("SaleExtraCharges", out extraChargeValue);
                     summaryByZone.ExtraChargeValue = (extraChargeValue == null) ? (decimal)0.0 : Convert.ToDecimal(extraChargeValue.Value ?? 0.0);
-                    summaryByZone.CommissionValueFormatted = ReportHelpers.FormatNumber(summaryByZone.ExtraChargeValue);
+                    summaryByZone.CommissionValueFormatted = ReportHelpers.FormatLongNumberDigit(summaryByZone.ExtraChargeValue);
 
                     listSummaryByZone.Add(summaryByZone);
                 }
@@ -187,7 +187,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
             list.Add("Customer", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.CustomersId, "Customers"), IsVisible = true });
             list.Add("Supplier", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.SuppliersId, "Suppliers"), IsVisible = true });
-            list.Add("DigitRate", new RdlcParameter { Value = "4", IsVisible = true });
+            list.Add("DigitRate", new RdlcParameter { Value = ReportHelpers.GetLongNumberDigit(), IsVisible = true });
+            list.Add("Digit", new RdlcParameter { Value = ReportHelpers.GetNormalNumberDigit(), IsVisible = true });
             list.Add("NormalNet", new RdlcParameter { Value = parameters.NormalNet.ToString(), IsVisible = true });
             list.Add("NormalDuration", new RdlcParameter { Value = parameters.NormalDuration.ToString(), IsVisible = true });
             list.Add("OffPeakNet", new RdlcParameter { Value = parameters.OffPeakNet.ToString(), IsVisible = true });

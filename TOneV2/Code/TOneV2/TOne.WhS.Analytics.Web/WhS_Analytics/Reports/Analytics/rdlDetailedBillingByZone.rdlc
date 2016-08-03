@@ -1772,7 +1772,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!DurationNet.Value),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!DurationNet.Value),Parameters!Digit.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -1803,7 +1803,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Round(Fields!DurationInSeconds.Value,2)),2)</Value>
+                              <Value>=FormatNumber(Sum(Round(Fields!DurationInSeconds.Value,2)),Parameters!Digit.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -1862,7 +1862,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!Net.Value),Parameters!DigitRate.Value)</Value>
+                              <Value>=FormatNumber(Sum(Fields!Net.Value),Parameters!Digit.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -1893,7 +1893,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!OffPeakDurationInSeconds.Value),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!OffPeakDurationInSeconds.Value),Parameters!Digit.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -1952,7 +1952,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!OffPeakNet.Value),Parameters!DigitRate.Value)</Value>
+                              <Value>=FormatNumber(Sum(Fields!OffPeakNet.Value),Parameters!Digit.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -2074,7 +2074,7 @@
                           <TextRuns>
                             <TextRun>
                               <Value>= FormatNumber(Sum(Round(Fields!DurationInSeconds.Value,2))+ Sum(Round(Fields!OffPeakDurationInSeconds.Value,2))+
-Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
+Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),Parameters!Digit.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -2103,7 +2103,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>= FormatNumber(Sum(Fields!Net.Value + Fields!OffPeakNet.Value + Fields!WeekEndNet.Value),Parameters!DigitRate.Value)</Value>
+                              <Value>= FormatNumber(Sum(Fields!Net.Value + Fields!OffPeakNet.Value + Fields!WeekEndNet.Value),Parameters!Digit.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -2121,6 +2121,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2965,11 +2966,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
             <TablixMember />
             <TablixMember />
             <TablixMember />
-            <TablixMember>
-              <Visibility>
-                <Hidden>=Parameters!IsCommission.Value=False</Hidden>
-              </Visibility>
-            </TablixMember>
+            <TablixMember />
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
@@ -3364,6 +3361,9 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
           <Height>0.375in</Height>
           <Width>1in</Width>
           <ZIndex>11</ZIndex>
+          <Visibility>
+            <Hidden>=IIF(Parameters!GroupeBySupplier.Value = "true"  , True, False)</Hidden>
+          </Visibility>
           <DataElementOutput>NoOutput</DataElementOutput>
           <Style>
             <Border>
@@ -3427,6 +3427,9 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
           <Height>0.375in</Height>
           <Width>2.75in</Width>
           <ZIndex>13</ZIndex>
+          <Visibility>
+            <Hidden>=IIF(Parameters!GroupeBySupplier.Value = "true"  , True, False)</Hidden>
+          </Visibility>
           <Style>
             <Border>
               <Style>None</Style>
@@ -3689,6 +3692,10 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
     </ReportParameter>
     <ReportParameter Name="IsCost">
       <DataType>Boolean</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Digit">
+      <DataType>Integer</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
