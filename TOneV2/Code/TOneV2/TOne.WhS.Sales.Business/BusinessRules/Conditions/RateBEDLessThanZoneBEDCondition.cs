@@ -20,11 +20,8 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         {
             DataByZone zone = context.Target as DataByZone;
 
-            foreach (RateToChange rateToChange in zone.RatesToChange)
-            {
-                if (rateToChange.BED < zone.BED)
-                    return false;
-            }
+            if (zone.RateToChange != null && zone.RateToChange.BED < zone.BED)
+                return false;
 
             return true;
         }

@@ -23,17 +23,11 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (zone.EED != null)
             {
-                foreach (RateToChange rateToChange in zone.RatesToChange)
-                {
-                    if (rateToChange.EED.VRGreaterThan(zone.EED))
-                        return false;
-                }
+                if (zone.RateToChange != null && zone.RateToChange.EED.VRGreaterThan(zone.EED))
+                    return false;
 
-                foreach (RateToClose rateToClose in zone.RatesToClose)
-                {
-                    if (rateToClose.CloseEffectiveDate > zone.EED.Value)
-                        return false;
-                }
+                if (zone.RateToClose != null && zone.RateToClose.CloseEffectiveDate > zone.EED.Value)
+                    return false;
             }
             
             return true;

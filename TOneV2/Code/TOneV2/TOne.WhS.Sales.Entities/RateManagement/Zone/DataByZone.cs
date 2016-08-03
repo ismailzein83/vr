@@ -9,45 +9,13 @@ namespace TOne.WhS.Sales.Entities
 {
     public class DataByZone : IRuleTarget
     {
-        private List<RateToChange> _ratesToChange = new List<RateToChange>();
+        public RateToChange RateToChange { get; set; }
 
-        public List<RateToChange> RatesToChange
-        {
-            get 
-            { 
-                return this._ratesToChange;
-            }
-        }
+        public RateToClose RateToClose { get; set; }
 
-        private List<RateToClose> _ratesToClose = new List<RateToClose>();
+        public SaleZoneRoutingProductToAdd SaleZoneRoutingProductToAdd { get; set; }
 
-        public List<RateToClose> RatesToClose 
-        {
-            get 
-            {
-                return this._ratesToClose;
-            }
-        }
-
-        private List<SaleZoneRoutingProductToAdd> _saleZoneRoutingProductsToAdd = new List<SaleZoneRoutingProductToAdd>();
-
-        public List<SaleZoneRoutingProductToAdd> SaleZoneRoutingProductsToAdd
-        {
-            get
-            {
-                return this._saleZoneRoutingProductsToAdd;
-            }
-        }
-
-        private List<SaleZoneRoutingProductToClose> _saleZoneRoutingProductsToClose = new List<SaleZoneRoutingProductToClose>();
-
-        public List<SaleZoneRoutingProductToClose> SaleZoneRoutingProductsToClose
-        {
-            get 
-            {
-                return this._saleZoneRoutingProductsToClose;
-            } 
-        }
+        public SaleZoneRoutingProductToClose SaleZoneRoutingProductToClose { get; set; }
 
         public string ZoneName { get; set; }
 

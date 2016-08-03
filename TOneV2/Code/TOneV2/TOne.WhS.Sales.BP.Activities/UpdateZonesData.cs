@@ -11,26 +11,32 @@ namespace TOne.WhS.Sales.BP.Activities
 {
     public class UpdateZonesData : CodeActivity
     {
+        #region Input Arguments
+
         [RequiredArgument]
         public InArgument<IEnumerable<ExistingZone>> ExistingZones { get; set; }
 
         [RequiredArgument]
         public InArgument<IEnumerable<DataByZone>> DataByZone { get; set; }
+        
+        #endregion
 
         protected override void Execute(CodeActivityContext context)
         {
-            IEnumerable<ExistingZone> existingZonesList = this.ExistingZones.Get(context);
+            IEnumerable<ExistingZone> existingZones = this.ExistingZones.Get(context);
             IEnumerable<DataByZone> dataByZoneList = this.DataByZone.Get(context);
 
-            Dictionary<string, List<ExistingZone>> existingZonesByZoneName = this.StructureExistingZonesByZoneName(existingZonesList);
+            Dictionary<string, List<ExistingZone>> existingZonesByZoneName = this.StructureExistingZonesByZoneName(existingZones);
 
             foreach (DataByZone item in dataByZoneList)
             {
-                List<ExistingZone> existingZones = existingZonesByZoneName[item.ZoneName];
-                item.BED = existingZones.OrderBy(x => x.BED).Min(x => x.BED);
-                item.EED = existingZones.Select(x => x.EED).VRMaximumDate();
+                List<ExistingZone> existingZoneList = existingZonesByZoneName[item.ZoneName];
+                item.BED = existingZoneList.OrderBy(x => x.BED).Min(x => x.BED);
+                item.EED = existingZoneList.Select(x => x.EED).VRMaximumDate();
             }
         }
+
+        #region Private Methods
 
         private Dictionary<string, List<ExistingZone>> StructureExistingZonesByZoneName(IEnumerable<ExistingZone> allExistingZones)
         {
@@ -50,5 +56,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
             return existingZonesByZoneName;
         }
+        
+        #endregion
     }
 }
