@@ -2965,7 +2965,11 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
             <TablixMember />
             <TablixMember />
             <TablixMember />
-            <TablixMember />
+            <TablixMember>
+              <Visibility>
+                <Hidden>=Parameters!IsCommission.Value=False</Hidden>
+              </Visibility>
+            </TablixMember>
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
@@ -3360,9 +3364,6 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
           <Height>0.375in</Height>
           <Width>1in</Width>
           <ZIndex>11</ZIndex>
-          <Visibility>
-            <Hidden>=IIF(Parameters!GroupeBySupplier.Value = "true"  , True, False)</Hidden>
-          </Visibility>
           <DataElementOutput>NoOutput</DataElementOutput>
           <Style>
             <Border>
@@ -3426,9 +3427,6 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),2)</Value>
           <Height>0.375in</Height>
           <Width>2.75in</Width>
           <ZIndex>13</ZIndex>
-          <Visibility>
-            <Hidden>=IIF(Parameters!GroupeBySupplier.Value = "true"  , True, False)</Hidden>
-          </Visibility>
           <Style>
             <Border>
               <Style>None</Style>
