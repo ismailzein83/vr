@@ -32,6 +32,10 @@ function (UtilsService) {
         function initializeController() {
             $scope.actionsAfterImport = [{ value: 0, name: 'Rename' }, { value: 1, name: 'Delete' }, { value: 2, name: 'Move' }];
 
+            $scope.actionIsRequired = function () {
+                return !$scope.basedOnTime;
+            }
+
             defineAPI();
         }
 
@@ -57,7 +61,8 @@ function (UtilsService) {
                     UserName: $scope.userName,
                     Password: $scope.password,
                     DirectorytoMoveFile: $scope.directorytoMoveFile,
-                    ActionAfterImport: $scope.selectedAction.value
+                    ActionAfterImport: $scope.selectedAction ? $scope.selectedAction.value : undefined,
+                    BasedOnLastModifiedTime: $scope.basedOnTime
                 };
             };
             api.getStateData = function () {
@@ -80,6 +85,7 @@ function (UtilsService) {
                         $scope.password = argumentData.Password;
                         $scope.directorytoMoveFile = argumentData.DirectorytoMoveFile;
                         $scope.selectedAction = UtilsService.getItemByVal($scope.actionsAfterImport, argumentData.ActionAfterImport, "value");
+                        $scope.basedOnTime = argumentData.BasedOnLastModifiedTime;
                     }
 
                 }

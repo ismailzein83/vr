@@ -1,5 +1,4 @@
 ﻿<vr-row>
-
     <vr-columns width="1/3row">
         <vr-textbox value="serverIP" label="Server IPs" isrequired />
     </vr-columns>
@@ -11,7 +10,6 @@
     </vr-columns>
 </vr-row>
 <vr-row>
-
     <vr-columns width="1/3row">
         <vr-textbox value="extension" label="Extension" isrequired />
     </vr-columns>
@@ -21,14 +19,15 @@
     <vr-columns width="1/3row">
         <vr-textbox value="directory" label="Directory Path" isrequired />
     </vr-columns>
-
 </vr-row>
 <vr-row>
     <vr-columns width="1/3row">
-        <vr-select datasource="actionsAfterImport" datatextfield="name" datavaluefield="value" label="Action After Import" selectedvalues="selectedAction" isrequired></vr-select>
+        <vr-switch label="Based On Modified Time" value="basedOnTime"></vr-switch>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-select datasource="actionsAfterImport" datatextfield="name" datavaluefield="value" label="Action After Import" selectedvalues="selectedAction" isrequired ="actionIsRequired()"></vr-select>
     </vr-columns>
     <vr-columns width="1/3row">
         <vr-textbox ng-show="selectedAction.value == 2" value="directorytoMoveFile" label="Directory to Move File" />
     </vr-columns>
-
 </vr-row>

@@ -13,7 +13,8 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments
         {
             Rename = 0,
             Delete = 1,
-            Move = 2 // Move to Folder
+            Move = 2,// Move to Folder
+            Copy = 3 // Copy To Folder and Keep the original file,
         }
 
         #region Properties
@@ -24,8 +25,14 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments
         public string UserName { get; set; }
         public string Password { get; set; }
         public string DirectorytoMoveFile { get; set; }
-        public int ActionAfterImport { get; set; }
+        public int? ActionAfterImport { get; set; }
+        public bool BasedOnLastModifiedTime { get; set; }
 
         # endregion
+    }
+
+    public class FTPAdapterState : BaseAdapterState
+    {
+        public DateTime LastRetrievedFileTime { get; set; }
     }
 }
