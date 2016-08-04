@@ -118,10 +118,10 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
 
 
         function defineMenuActions() {
-            var startNewInstance = {
+            var startNewInstanceMenu = {
                 name: "Start New Instance", clicked: startNewInstance
             };
-            var schedualTask = {
+            var schedualTaskMenu = {
                 name: "Schedule a Task", clicked: scheduleTask
             }
 
@@ -129,11 +129,11 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
                 var menuActions = [];
                 if (dataItem.Entity.Configuration.ManualExecEditor != undefined && dataItem.Entity.Configuration.ManualExecEditor != "")
                 {
-                    menuActions.push(startNewInstance);
+                    menuActions.push(startNewInstanceMenu);
                 }
                 if (dataItem.Entity.Configuration.ScheduledExecEditor != undefined && dataItem.Entity.Configuration.ScheduledExecEditor != "")
                 {
-                    menuActions.push(schedualTask);
+                    menuActions.push(schedualTaskMenu);
                 }
                 return menuActions;
             };
