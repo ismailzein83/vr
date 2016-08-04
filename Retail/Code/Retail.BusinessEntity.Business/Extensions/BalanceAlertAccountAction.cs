@@ -48,6 +48,7 @@ namespace Retail.BusinessEntity.Business.Extensions
                 ActionBPSettings = this.ActionBPSettings
             };
             var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput { InputArguments = actionBPInput };
+            createProcessInput.InputArguments.UserId = context.UserID;
             Vanrise.BusinessProcess.Business.BPInstanceManager bpInstanceManager = new Vanrise.BusinessProcess.Business.BPInstanceManager();
             var output = bpInstanceManager.CreateNewProcess(createProcessInput);            
         }
