@@ -2432,3 +2432,6 @@ vr-listitem div[class^="col"] {
     border-radius: 0px 0px 4px 0px;
     border-color: #000;
 }
+vr-validator[validationcontainer]  .required-inpute >div:first-of-type{
+    min-height: 53px !important;
+}

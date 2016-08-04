@@ -49,7 +49,12 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
         singleCustomerAccountDirectiveAPI = api;
         singleCustomerAccountReadyPromiseDeferred.resolve();
     }
-
+    $scope.validateBusinessCaseStatus = function () {
+        if ($scope.reporttype && $scope.reporttype.ParameterSettings && $scope.reporttype.ParameterSettings.CustomerIdNotOptional == true && UtilsService.diffDays($scope.fromDate, $scope.toDate) < 30) {
+            return 'At least you have to choose 30 days.';
+        }
+        return null;
+    }
     $scope.onSupplierAccountDirectiveReady = function (api) {
         supplierAccountDirectiveAPI = api;
         supplierAccountReadyPromiseDeferred.resolve();
@@ -81,8 +86,8 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
     }
 
     function defineScope() {
-        $scope.fromDate;
-        $scope.toDate;
+        $scope.fromDate = new  Date();
+        $scope.toDate = new Date().getDay() + 30;
 
         $scope.today = PeriodEnum.Today;
 
@@ -138,6 +143,9 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             $scope.singleCustomer = null;
             $scope.customers = [];
             $scope.suppliers = [];
+            if ($scope.reporttype && $scope.reporttype.ParameterSettings && $scope.reporttype.ParameterSettings.CustomerIdNotOptional) {
+                $scope.toDate = $scope.fromDate.getDay() + 30;
+            }
             $scope.params = {
                 groupByCustomer: false,
                 groupByProfile: false,

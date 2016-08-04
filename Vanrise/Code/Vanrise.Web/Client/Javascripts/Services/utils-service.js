@@ -734,6 +734,14 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         return Math.round(value * multiplier) / multiplier;
     }
 
+    function diffDays(date1, date2) {
+        var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        return diffDays ;
+    }
+   
+
+
     function getDateFromDateTime(dateTime) {
         var date = new Date(dateTime);
         date.setHours(0, 0, 0, 0);
@@ -788,7 +796,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         trim: trim,
         getUploadedFileName: getUploadedFileName,
         getDateFromDateTime: getDateFromDateTime,
-        round: round
+        round: round,
+        diffDays: diffDays
         
     });
 
