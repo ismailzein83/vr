@@ -13,6 +13,7 @@ namespace Vanrise.Common
         {
             s_SerializeMethod = typeof(ProtoBuf.Serializer).GetMethod("Serialize", BindingFlags.Static);
             s_DeserializeMethod = typeof(ProtoBuf.Serializer).GetMethod("Deserialize", BindingFlags.Public | BindingFlags.Static);
+            ProtoBuf.Meta.RuntimeTypeModel.Default.MetadataTimeoutMilliseconds = 300000;
         }
 
         static MethodInfo s_SerializeMethod;
