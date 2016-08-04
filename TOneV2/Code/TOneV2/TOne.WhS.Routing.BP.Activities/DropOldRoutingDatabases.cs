@@ -29,11 +29,13 @@ namespace TOne.WhS.Routing.BP.Activities
             if (routingdatabases != null)
             {
                 var orderedDatabases = routingdatabases.OrderByDescending(itm => itm.CreatedTime);
-                List<int> excludedDatabaseIds = GetExculdedDatabases(orderedDatabases, processType, databaseType);
+                int maximumExecutionTimeInSeconds;
+                List<int> excludedDatabaseIds = GetExculdedDatabases(orderedDatabases, processType, databaseType, out maximumExecutionTimeInSeconds);
+                DateTime now = DateTime.Now;
 
                 foreach (var db in routingdatabases)
                 {
-                    if (!excludedDatabaseIds.Contains(db.ID))
+                    if (!excludedDatabaseIds.Contains(db.ID) || (!db.IsReady && (now - db.CreatedTime).TotalSeconds > maximumExecutionTimeInSeconds))
                     {
                         try
                         {
@@ -48,7 +50,7 @@ namespace TOne.WhS.Routing.BP.Activities
             }
         }
 
-        List<int> GetExculdedDatabases(IEnumerable<RoutingDatabase> orderedDatabases, RoutingProcessType processType, RoutingDatabaseType databaseType)
+        List<int> GetExculdedDatabases(IEnumerable<RoutingDatabase> orderedDatabases, RoutingProcessType processType, RoutingDatabaseType databaseType, out int maximumExecutionTimeInSeconds)
         {
             SettingManager settingManager = new SettingManager();
             RouteSettingsData settings = settingManager.GetSetting<RouteSettingsData>(Routing.Business.Constants.RouteSettings);
@@ -59,8 +61,25 @@ namespace TOne.WhS.Routing.BP.Activities
             RouteDatabaseConfiguration routeDatabaseConfiguration;
             switch (processType)
             {
-                case RoutingProcessType.CustomerRoute: routeDatabaseConfiguration = settings.RouteDatabasesToKeep.CustomerRouteConfiguration; break;
-                case RoutingProcessType.RoutingProductRoute: routeDatabaseConfiguration = settings.RouteDatabasesToKeep.ProductRouteConfiguration; break;
+                case RoutingProcessType.CustomerRoute:
+                    routeDatabaseConfiguration = settings.RouteDatabasesToKeep.CustomerRouteConfiguration;
+                    switch (settings.RouteDatabasesToKeep.CustomerRouteConfiguration.TimeUnit)
+                    {
+                        case TimeUnit.Minutes: maximumExecutionTimeInSeconds = settings.RouteDatabasesToKeep.CustomerRouteConfiguration.MaximumEstimatedExecutionTime * 60; break;
+                        case TimeUnit.Hours: maximumExecutionTimeInSeconds = settings.RouteDatabasesToKeep.CustomerRouteConfiguration.MaximumEstimatedExecutionTime * 3600; break;
+                        default: throw new Exception(string.Format("Unsupported TimeUnit: {0}", settings.RouteDatabasesToKeep.CustomerRouteConfiguration.TimeUnit));
+                    }
+
+                    break;
+                case RoutingProcessType.RoutingProductRoute:
+                    routeDatabaseConfiguration = settings.RouteDatabasesToKeep.ProductRouteConfiguration;
+                    switch (settings.RouteDatabasesToKeep.ProductRouteConfiguration.TimeUnit)
+                    {
+                        case TimeUnit.Minutes: maximumExecutionTimeInSeconds = settings.RouteDatabasesToKeep.ProductRouteConfiguration.MaximumEstimatedExecutionTime * 60; break;
+                        case TimeUnit.Hours: maximumExecutionTimeInSeconds = settings.RouteDatabasesToKeep.ProductRouteConfiguration.MaximumEstimatedExecutionTime * 3600; break;
+                        default: throw new Exception(string.Format("Unsupported TimeUnit: {0}", settings.RouteDatabasesToKeep.ProductRouteConfiguration.TimeUnit));
+                    }
+                    break;
                 default: throw new Exception(string.Format("Unsupported RoutingProcessType: {0}", processType));
             }
 

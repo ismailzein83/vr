@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsRoutingRouteDatabaseConfiguration', [
-function () {
+app.directive('vrWhsRoutingRouteDatabaseConfiguration', ['UtilsService', 'WhS_Routing_TimeSettingsTypeEnum',
+function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -38,15 +38,21 @@ function () {
                     $type: "TOne.WhS.Routing.Entities.RouteDatabaseConfiguration, TOne.WhS.Routing.Entities",
                     //SpecificDBToKeep: ctrl.specific,
                     CurrentDBToKeep: ctrl.current,
-                    FutureDBToKeep: ctrl.future
+                    FutureDBToKeep: ctrl.future,
+                    MaximumEstimatedExecutionTime: ctrl.time,
+                    TimeUnit: ctrl.selectedTimeUnit.value
                 }
                 return obj;
             }
             api.load = function (payload) {
+                $scope.timeUnits = UtilsService.getArrayEnum(WhS_Routing_TimeSettingsTypeEnum);
+
                 if (payload != undefined) {
                     //ctrl.specific = payload.SpecificDBToKeep;
-                    ctrl.current = payload.CurrentDBToKeep,
-                    ctrl.future = payload.FutureDBToKeep
+                    ctrl.current = payload.CurrentDBToKeep;
+                    ctrl.future = payload.FutureDBToKeep;
+                    ctrl.time = payload.MaximumEstimatedExecutionTime;
+                    ctrl.selectedTimeUnit = UtilsService.getEnum(WhS_Routing_TimeSettingsTypeEnum, "value", payload.TimeUnit);
                 }
             }
 

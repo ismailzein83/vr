@@ -1,11 +1,18 @@
 ﻿<vr-row>
-    <vr-columns width="1/3row">
+    <vr-columns width="1/4row">
         <vr-textbox value="ctrl.current" type="number" label="Current" isrequired minvalue="0" decimalprecision="0"></vr-textbox>
     </vr-columns>
     <!--<vr-columns width="1/3row">
         <vr-textbox value="ctrl.specific" type="number" label="Specific" isrequired minvalue="0" decimalprecision="0"></vr-textbox>
     </vr-columns>-->
-    <vr-columns width="1/3row">
+    <vr-columns width="1/4row">
         <vr-textbox value="ctrl.future" type="number" label="Future" isrequired minvalue="0" decimalprecision="0"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/4row">
+        <vr-textbox value="ctrl.time" type="number" label="Maximium Estimated Execution Time" isrequired minvalue="0" decimalprecision="0"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/4row" withemptyline>
+        <vr-select datatextfield="description" datavaluefield="value" datasource="timeUnits"
+                   selectedvalues="ctrl.selectedTimeUnit" hideremoveicon isrequired="true" />
     </vr-columns>
 </vr-row>

@@ -162,6 +162,7 @@
     <Content Include="WhS_Routing\Constant\RoutingDatabaseTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RateOptionEnum.js" />
     <Content Include="WhS_Routing\Constant\RateOptionTypeEnum.js" />
+    <Content Include="WhS_Routing\Constant\TimeSettingsTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RoutingProcessTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RoutingSaleZoneRangeOptions.js" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\Templates\CustomerRouteDetailTemplate.html" />
