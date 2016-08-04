@@ -26,7 +26,7 @@ namespace Vanrise.BusinessProcess.Business
 
             Func<BPDefinition, bool> filterExpression = (prod) =>
             {
-                if (prod.Configuration.IsBrowsable)
+                if (input.Query.ShowOnlyVisibleInManagementScreen == true && prod.Configuration.NotVisibleInManagementScreen)
                     return false;
 
                 if (!string.IsNullOrEmpty(input.Query.Title) && !prod.Title.ToLower().Contains(input.Query.Title.ToLower()))

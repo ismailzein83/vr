@@ -24,7 +24,8 @@
 
         function getFilterObject() {
             filter = {
-                Title: $scope.title
+                Title: $scope.title,
+                ShowOnlyVisibleInManagementScreen:true
             };
         }
     }

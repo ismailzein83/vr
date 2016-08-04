@@ -63,7 +63,9 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
 
                 taskdrillDownDefinition.title = "Scheduled Instances";
                 taskdrillDownDefinition.directive = "vr-runtime-schedulertask-grid";
-
+                taskdrillDownDefinition.hideDrillDownFunction = function (dataItem) {
+                    return (dataItem.Entity.Configuration.ScheduledExecEditor == undefined || dataItem.Entity.Configuration.ScheduledExecEditor == "");
+                };
                 taskdrillDownDefinition.loadDirective = function (directiveAPI, bpDefinitionItem) {
                     bpDefinitionItem.bpInstanceGridAPI = directiveAPI;
                     
@@ -116,10 +118,26 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
 
 
         function defineMenuActions() {
-            $scope.gridMenuActions = [
-             { name: "Start New Instance", clicked: startNewInstance },
-             { name: "Schedule a Task", clicked: scheduleTask }
-            ];
+            var startNewInstance = {
+                name: "Start New Instance", clicked: startNewInstance
+            };
+            var schedualTask = {
+                name: "Schedule a Task", clicked: scheduleTask
+            }
+
+            $scope.gridMenuActions = function (dataItem) {
+                var menuActions = [];
+                if (dataItem.Entity.Configuration.ManualExecEditor != undefined && dataItem.Entity.Configuration.ManualExecEditor != "")
+                {
+                    menuActions.push(startNewInstance);
+                }
+                if (dataItem.Entity.Configuration.ScheduledExecEditor != undefined && dataItem.Entity.Configuration.ScheduledExecEditor != "")
+                {
+                    menuActions.push(schedualTask);
+                }
+                return menuActions;
+            };
+            
         }
 
         function startNewInstance(bpDefinitionObj) {
