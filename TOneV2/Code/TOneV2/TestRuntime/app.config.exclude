@@ -23,7 +23,7 @@
 
   <vanriseRuntime>
     <runtimeServiceGroups>
-      <runtimeServiceGroup name="group1" nbOfRuntimeInstances="2">
+      <runtimeServiceGroup name="group1" nbOfRuntimeInstances="20">
         <runtimeServices>
           <runtimeService name="Business Process Service" type="Vanrise.BusinessProcess.BusinessProcessService, Vanrise.BusinessProcess" interval="00:00:02"></runtimeService>
         </runtimeServices>
