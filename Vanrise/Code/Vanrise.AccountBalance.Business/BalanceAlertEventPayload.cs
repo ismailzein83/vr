@@ -12,6 +12,6 @@ namespace Vanrise.AccountBalance.Business
     {
         public long AccountId { get; set; }
 
-        public Decimal Threshod { get; set; }
+        public Decimal Threshold { get; set; }
     }
 }
