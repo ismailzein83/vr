@@ -41,16 +41,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 analyticQuery.Query.Filters.Add(dimensionFilter);
             }
 
-            if (!String.IsNullOrEmpty(parameters.SuppliersId))
-            {
-                DimensionFilter dimensionFilter = new DimensionFilter()
-                {
-                    Dimension = "Supplier",
-                    FilterValues = parameters.SuppliersId.Split(',').ToList().Cast<object>().ToList()
-                };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
-            }
-
             List<SalesAndProfitsByCustomer> listSalesAndProfitsByCustomer = new List<SalesAndProfitsByCustomer>();
 
             var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
@@ -116,7 +106,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
             list.Add("Customer", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.CustomersId, "Customers"), IsVisible = true });
-            list.Add("Supplier", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.SuppliersId, "Suppliers"), IsVisible = true });
             list.Add("DigitRate", new RdlcParameter { Value = ReportHelpers.GetLongNumberDigit(), IsVisible = true });
             list.Add("Digit", new RdlcParameter { Value = ReportHelpers.GetNormalNumberDigit(), IsVisible = true });
             list.Add("ShowProfit", new RdlcParameter { Value = parameters.IsService.ToString(), IsVisible = true });

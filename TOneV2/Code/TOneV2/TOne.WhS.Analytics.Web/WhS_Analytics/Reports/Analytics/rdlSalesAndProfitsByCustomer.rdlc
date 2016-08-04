@@ -1852,16 +1852,25 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
-                              <Style />
+                              <Value>Net Profit</Value>
+                              <Style>
+                                <FontSize>12pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                                <Color>DarkRed</Color>
+                              </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>textbox30</rd:DefaultName>
                       <ZIndex>41</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1899,14 +1908,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="textbox49">
+                    <Textbox Name="Textbox49">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Net Profit</Value>
+                              <Value />
                               <Style>
                                 <FontSize>12pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1919,10 +1928,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <Visibility>
-                        <Hidden>=IIF(Parameters!ShowProfit.Value = "false", True, False)</Hidden>
-                      </Visibility>
-                      <DataElementOutput>NoOutput</DataElementOutput>
+                      <rd:DefaultName>Textbox49</rd:DefaultName>
                       <Style>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2105,16 +2111,24 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
-                              <Style />
+                              <Value>=FormatNumber(Sum(Fields!Profit.Value)-(Parameters!ServicesPerCustomer.Value) , Parameters!Digit.Value)</Value>
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>textbox31</rd:DefaultName>
                       <ZIndex>49</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2157,14 +2171,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="textbox64">
+                    <Textbox Name="Textbox50">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!Profit.Value)-(Parameters!ServicesPerCustomer.Value) , Parameters!Digit.Value)</Value>
+                              <Value />
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2176,11 +2190,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <ZIndex>52</ZIndex>
-                      <Visibility>
-                        <Hidden>=IIF(Parameters!ShowProfit.Value = "false", True, False)</Hidden>
-                      </Visibility>
-                      <DataElementOutput>NoOutput</DataElementOutput>
+                      <rd:DefaultName>Textbox50</rd:DefaultName>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -2189,7 +2199,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -3185,38 +3194,6 @@
             <PaddingBottom>2pt</PaddingBottom>
           </Style>
         </Textbox>
-        <Textbox Name="lblCurrency2">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>Supplier:</Value>
-                  <Style>
-                    <FontSize>14pt</FontSize>
-                    <Color>DarkRed</Color>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style />
-            </Paragraph>
-          </Paragraphs>
-          <Top>1.625in</Top>
-          <Left>0.0425in</Left>
-          <Height>0.375in</Height>
-          <Width>1in</Width>
-          <ZIndex>10</ZIndex>
-          <Style>
-            <Border>
-              <Style>None</Style>
-            </Border>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
         <Textbox Name="lblCurrency3">
           <CanGrow>true</CanGrow>
           <KeepTogether>true</KeepTogether>
@@ -3234,11 +3211,11 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1.25in</Top>
+          <Top>1.45833in</Top>
           <Left>0.0425in</Left>
           <Height>0.375in</Height>
           <Width>1in</Width>
-          <ZIndex>11</ZIndex>
+          <ZIndex>10</ZIndex>
           <Style>
             <Border>
               <Style>None</Style>
@@ -3265,42 +3242,11 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1.25in</Top>
+          <Top>1.45833in</Top>
           <Left>1.08417in</Left>
-          <Height>0.32292in</Height>
-          <Width>2.23958in</Width>
-          <ZIndex>12</ZIndex>
-          <Style>
-            <Border>
-              <Style>None</Style>
-            </Border>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
-        <Textbox Name="txtSupplier">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>=Parameters!Supplier.Value</Value>
-                  <Style>
-                    <FontSize>14pt</FontSize>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style />
-            </Paragraph>
-          </Paragraphs>
-          <Top>1.64236in</Top>
-          <Left>1.05639in</Left>
           <Height>0.375in</Height>
-          <Width>2.1694in</Width>
-          <ZIndex>13</ZIndex>
+          <Width>3.69791in</Width>
+          <ZIndex>11</ZIndex>
           <Style>
             <Border>
               <Style>None</Style>
@@ -3519,11 +3465,6 @@
       <Prompt>DigitRate</Prompt>
     </ReportParameter>
     <ReportParameter Name="Customer">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="Supplier">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
