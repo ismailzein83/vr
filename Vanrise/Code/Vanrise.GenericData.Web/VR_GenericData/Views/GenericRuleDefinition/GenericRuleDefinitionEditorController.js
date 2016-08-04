@@ -7,11 +7,15 @@
     function GenericRuleDefinitionEditorController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VR_Sec_MenuAPIService, VR_Sec_ViewAPIService, InsertOperationResultEnum, VR_Sec_ViewTypeEnum, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var isEditMode;
+        var menuItems;
 
         var viewTypeName = "VR_GenericData_GenericRule";
         var viewEntity;
 
-        var menuItems;
+        var genericRuleDefinitionId;
+        var genericRuleDefinitionEntity;
+        //var objectsVariable = [];
+        var settingsTypeName;
 
         var treeAPI;
         var treeReadyDeferred = UtilsService.createPromiseDeferred();
@@ -25,9 +29,7 @@
         var settingsDirectiveAPI;
         var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var genericRuleDefinitionId;
-        var genericRuleDefinitionEntity;
-        var settingsTypeName;
+
 
 
         loadParameters();
@@ -112,6 +114,7 @@
             function getGenericRuleDefinition() {
                 return VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinition(genericRuleDefinitionId).then(function (response) {
                     genericRuleDefinitionEntity = response;
+                    //buildObjectsVariable();
                 });
             }
             function getGenericRuleDefinitionView() {
@@ -171,6 +174,7 @@
 
                 objectDirectiveReadyDeferred.promise.then(function () {
                     var objectDirectivePayload;
+
                     if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.Objects != null) {
 
                         var objects = [];
@@ -184,6 +188,10 @@
                         };
                     }
 
+                    //if (objectsVariable.length > 0) 
+                    //    objectDirectivePayload = { objects: objectsVariable };
+                    
+
                     VRUIUtilsService.callDirectiveLoad(objectDirectiveAPI, objectDirectivePayload, objectDirectiveLoadDeferred);
                 });
 
@@ -193,12 +201,10 @@
                 var criteriaDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 criteriaDirectiveReadyDeferred.promise.then(function () {
-                    var criteriaDirectivePayload;
+                    var criteriaDirectivePayload = { Context: buildContext() };
 
                     if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.CriteriaDefinition != null) {
-                        criteriaDirectivePayload = {
-                            GenericRuleDefinitionCriteriaFields: genericRuleDefinitionEntity.CriteriaDefinition.Fields
-                        };
+                        criteriaDirectivePayload.GenericRuleDefinitionCriteriaFields = genericRuleDefinitionEntity.CriteriaDefinition.Fields
                     }
 
                     VRUIUtilsService.callDirectiveLoad(criteriaDirectiveAPI, criteriaDirectivePayload, criteriaDirectiveLoadDeferred);
@@ -305,6 +311,37 @@
                 }
                     
             }
+        }
+
+        function buildObjectsVariable() {
+            if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.Objects != null) {
+
+                for (var key in genericRuleDefinitionEntity.Objects) {
+                    if (key != "$type")
+                        objectsVariable.push(genericRuleDefinitionEntity.Objects[key]);
+                }
+            }
+        }
+        function buildContext() {
+
+            var context =  {
+                getObjects: function () {
+
+                    //var objectsVariable = [];
+                    //if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.Objects != null) {
+
+                    //    for (var key in genericRuleDefinitionEntity.Objects) {
+                    //        if (key != "$type")
+                    //            objectsVariable.push(genericRuleDefinitionEntity.Objects[key]);
+                    //    }
+                    //}
+                    //return objectsVariable;
+
+                    return objectDirectiveAPI.getData();
+                }
+            }
+
+            return context;
         }
 
         function buildGenericRuleDefinitionObjectFromScope() {

@@ -11,8 +11,9 @@
             editGenericRuleDefinitionCriteriaField: editGenericRuleDefinitionCriteriaField
         };
 
-        function addGenericRuleDefinitionCriteriaField(genericRuleDefinitionCriteriaFields, onGenericRuleDefinitionCriteriaFieldAdded) {
+        function addGenericRuleDefinitionCriteriaField(genericRuleDefinitionCriteriaFields, context, onGenericRuleDefinitionCriteriaFieldAdded) {
             var modalParameters = {
+                Context: context,
                 GenericRuleDefinitionCriteriaFields: genericRuleDefinitionCriteriaFields
             };
 

@@ -12,8 +12,13 @@
         var criteriaFieldEntity;
         var criteriaFields; // criteriaFields are passed for validation
 
+        var objectVariables;
+
         var dataRecordFieldTypeSelectiveAPI;
         var dataRecordFieldTypeSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var objectPropertySelectorAPI;
+        var objectPropertySelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -25,30 +30,39 @@
             if (parameters != undefined) {
                 criteriaFieldName = parameters.GenericRuleDefinitionCriteriaFieldName;
                 criteriaFields = UtilsService.cloneObject(parameters.GenericRuleDefinitionCriteriaFields, true);
+                if (parameters.Context != undefined)
+                    objectVariables = parameters.Context.getObjects();
             }
 
             isEditMode = (criteriaFieldName != undefined);
         }
 
         function defineScope() {
-            $scope.behaviorTypes = UtilsService.getArrayEnum(VR_GenericData_MappingRuleStructureBehaviorTypeEnum);
+            $scope.scopeModel = {};
 
-            $scope.onDataRecordFieldTypeSelectiveReady = function (api) {
+            $scope.scopeModel.behaviorTypes = UtilsService.getArrayEnum(VR_GenericData_MappingRuleStructureBehaviorTypeEnum);
+
+            $scope.scopeModel.onDataRecordFieldTypeSelectiveReady = function (api) {
                 dataRecordFieldTypeSelectiveAPI = api;
                 dataRecordFieldTypeSelectiveReadyDeferred.resolve();
             };
 
-            $scope.save = function () {
+            $scope.scopeModel.onObjectPropertySelectorReady = function (api) {
+                objectPropertySelectorAPI = api;
+                objectPropertySelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.save = function () {
                 if (isEditMode)
                     return updateCriteriaField();
                 else
                     return insertCriteriaField();
             };
-            $scope.close = function () {
+            $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-            $scope.validateCriteriaField = function () {
-                var fieldName = ($scope.fieldName != undefined) ? $scope.fieldName.toUpperCase() : null;
+            $scope.scopeModel.validateCriteriaField = function () {
+                var fieldName = ($scope.scopeModel.fieldName != undefined) ? $scope.scopeModel.fieldName.toUpperCase() : null;
 
                 if (isEditMode && (fieldName == criteriaFieldName))
                     return null;
@@ -60,7 +74,7 @@
         }
 
         function load() {
-            $scope.isLoading = true;
+            $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
                 setCriteriaFieldEntityFromParameters().then(function () {
@@ -83,26 +97,30 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordFieldTypeSelective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordFieldTypeSelective, loadObjectPropertySelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
-                $scope.isLoading = false;
+                $scope.scopeModel.isLoading = false;
             });
 
             function setTitle() {
-                $scope.title = (isEditMode) ?
+                $scope.scopeModel.title = (isEditMode) ?
                     UtilsService.buildTitleForUpdateEditor((criteriaFieldEntity != undefined) ? criteriaFieldEntity.FieldName : null, 'Generic Rule Definition Criteria Field') :
                     UtilsService.buildTitleForAddEditor('Generic Rule Definition Criteria Field');
             }
             function loadStaticData() {
+
+                //if (context != undefined)
+                //    $scope.objectsVariable = context.getObjects();
+
                 if (criteriaFieldEntity == undefined) {
                     return;
                 }
-                $scope.fieldName = criteriaFieldEntity.FieldName;
-                $scope.fieldTitle = criteriaFieldEntity.Title;
-                $scope.showInBasicSearch = criteriaFieldEntity.ShowInBasicSearch;
+                $scope.scopeModel.fieldName = criteriaFieldEntity.FieldName;
+                $scope.scopeModel.fieldTitle = criteriaFieldEntity.Title;
+                $scope.scopeModel.showInBasicSearch = criteriaFieldEntity.ShowInBasicSearch;
 
-                $scope.selectedBehaviorType = UtilsService.getItemByVal($scope.behaviorTypes, criteriaFieldEntity.RuleStructureBehaviorType, 'value');
+                $scope.scopeModel.selectedBehaviorType = UtilsService.getItemByVal($scope.scopeModel.behaviorTypes, criteriaFieldEntity.RuleStructureBehaviorType, 'value');
 
                 prepareGlobalVarsForValidation();
 
@@ -128,6 +146,21 @@
 
                 return dataRecordFieldTypeSelectiveLoadDeferred.promise;
             }
+            function loadObjectPropertySelector() {
+                var objectPropertySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                objectPropertySelectorReadyDeferred.promise.then(function () {
+                    var payload;
+
+                    if (objectVariables != undefined) {
+                        payload = { objectVariables: objectVariables}
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(objectPropertySelectorAPI, payload, objectPropertySelectorLoadDeferred);
+                });
+
+                return objectPropertySelectorLoadDeferred.promise;
+            }
         }
 
         function insertCriteriaField() {
@@ -149,11 +182,12 @@
         function buildCriteriaFieldObjectFromScope() {
             return {
                 $type: "Vanrise.GenericData.Entities.GenericRuleDefinitionCriteriaField, Vanrise.GenericData.Entities",
-                FieldName: $scope.fieldName,
-                Title: $scope.fieldTitle,
+                FieldName: $scope.scopeModel.fieldName,
+                Title: $scope.scopeModel.fieldTitle,
                 FieldType: dataRecordFieldTypeSelectiveAPI.getData(),
-                RuleStructureBehaviorType: $scope.selectedBehaviorType.value,
-                ShowInBasicSearch: $scope.showInBasicSearch
+                RuleStructureBehaviorType: $scope.scopeModel.selectedBehaviorType.value,
+                ShowInBasicSearch: $scope.scopeModel.showInBasicSearch,
+                ValueEvaluator: objectPropertySelectorAPI.getData()
             };
         }
     }

@@ -11,7 +11,7 @@ namespace Vanrise.Common.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "VRObjectProperty")]
     [JSONWithTypeAttribute]
-    public class VRObjectPropertyController
+    public class VRObjectPropertyController : BaseAPIController
     {
         VRObjectPropertyEvaluatorManager _manager = new VRObjectPropertyEvaluatorManager();
 

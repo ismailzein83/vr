@@ -32,6 +32,7 @@
 
             var gridAPI;
             var dataRecordFieldTypeConfigs;
+            var context;
 
             function initializeController() {
                 ctrl.criteriaFields = [];
@@ -51,7 +52,7 @@
                         ctrl.criteriaFields.push(addedCriteriaField);
                         addPriorityDataItem(addedCriteriaField);
                     };
-                    VR_GenericData_GenericRuleDefinitionCriteriaFieldService.addGenericRuleDefinitionCriteriaField(ctrl.criteriaFields, onCriteriaFieldAdded);
+                    VR_GenericData_GenericRuleDefinitionCriteriaFieldService.addGenericRuleDefinitionCriteriaField(ctrl.criteriaFields, context, onCriteriaFieldAdded);
                 };
                 ctrl.onDeleteCriteriaField = function (criteriaField) { 
                     VRNotificationService.showConfirmation().then(function (confirmed) {
@@ -77,8 +78,12 @@
                 var api = {};
 
                 api.load = function (payload) {
+
+                    if (payload != undefined && payload.Context != undefined)
+                        context = payload.Context;
+
                     return loadDataRecordFieldTypeConfigs().then(function () {
-                        if (payload != undefined) {
+                        if (payload != undefined && payload.GenericRuleDefinitionCriteriaFields != undefined) {
                             for (var i = 0; i < payload.GenericRuleDefinitionCriteriaFields.length; i++) {
                                 var criteriaField = payload.GenericRuleDefinitionCriteriaFields[i];
                                 extendCriteriaFieldObject(criteriaField);
@@ -135,7 +140,8 @@
                             FieldType: dataItem.FieldType,
                             RuleStructureBehaviorType: dataItem.RuleStructureBehaviorType,
                             Priority: priority,
-                            ShowInBasicSearch: dataItem.ShowInBasicSearch
+                            ShowInBasicSearch: dataItem.ShowInBasicSearch,
+                            ValueEvaluator: dataItem.ValueEvaluator
                         };
                     }
                 };
