@@ -182,8 +182,8 @@ namespace TOne.WhS.Routing.Data.SQL
                                                         RoutingProductId int Not Null,
                                                         SaleZoneId bigint Not Null,
                                                         ExecutedRuleId int Null,
-                                                        OptionsDetailsBySupplier nvarchar(max) NULL,
-                                                        OptionsByPolicy nvarchar(max) NULL,
+                                                        OptionsDetailsBySupplier varchar(max) NULL,
+                                                        OptionsByPolicy varchar(max) NULL,
                                                         IsBlocked bit NULL
                                                     )ON [PRIMARY]
 

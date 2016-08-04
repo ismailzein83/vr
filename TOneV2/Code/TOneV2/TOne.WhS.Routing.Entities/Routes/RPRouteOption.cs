@@ -8,6 +8,11 @@ namespace TOne.WhS.Routing.Entities
 {
     public class RPRouteOption : IRouteOptionOrderTarget, IRouteOptionFilterTarget, IRouteOptionPercentageTarget
     {
+        static RPRouteOption()
+        {
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(RPRouteOption),
+                "SupplierId", "SupplierRate", "Percentage", "OptionWeight", "SaleZoneId");
+        }
         public int SupplierId { get; set; }
 
         public Decimal SupplierRate { get; set; }

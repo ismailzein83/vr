@@ -17,7 +17,7 @@ namespace TOne.WhS.Routing.BP.Arguments
         public bool IsFuture { get; set; }
         public override string GetTitle()
         {
-            return "Routing Product Build Process Input";
+            return string.Format("Routing Product Build Process Input for Zones: {0} to {1}", FromZoneId, ToZoneId);
         }
     }
 }

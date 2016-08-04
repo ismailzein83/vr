@@ -84,7 +84,8 @@
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:RPCodeMatchesByZone)">new MemoryQueue&lt;TOne.WhS.Routing.Entities.RPCodeMatchesByZone&gt;()</mca:CSharpValue>
         </Variable.Default>
       </Variable>
-      <Variable x:TypeArguments="x:Int32" Name="subProcessByPrefixCompleted" />
+      <Variable x:TypeArguments="x:Int32" Default="0" Name="subProcessByPrefixCompleted" />
+      <Variable x:TypeArguments="x:Int32" Default="0" Name="subProcessByZoneRangesCompleted" />
     </Sequence.Variables>
     <twrba1:CreateRoutingDatabase sap2010:WorkflowViewState.IdRef="CreateRoutingDatabase_2">
       <twrba1:CreateRoutingDatabase.DatabaseId>
@@ -362,9 +363,6 @@
             </If.Then>
             <If.Else>
               <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
-                <Sequence.Variables>
-                  <Variable x:TypeArguments="x:Int32" Name="subProcessByZoneRangesCompleted" />
-                </Sequence.Variables>
                 <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
                   <Assign.To>
                     <OutArgument x:TypeArguments="x:Int32">
@@ -421,7 +419,7 @@
         </InArgument>
       </twrba1:DropOldRoutingDatabases.ProcessType>
     </twrba1:DropOldRoutingDatabases>
-    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sUkoDqQMOAgEBVAtUrQECAQJZBXMkAwHqA3QFeiADAd4DewWZARADAakDmgEFuQEpAwGAA7oBBcABIAMB9ALBAQWPAhcDAYECkAIFoAIlAwHiAaECBbECHwMBwwGyAgW4AiADAbcBuQIFjQMXAgE4jgMFlAMgAgEslQMFmwMmAgEhnAMFpwMmAgEMawtrcAMBkwRhC2FoAwGJBFwLXGEDAf8DcAtwcgMB9QNmC2aOAQMB6wN3C3eFAQMB4AN0YHR0AwHfA3wHggEnAwHTA4MBB5gBJAMBqgOdAQudAWgDAZ8DpwELpwFZAwGVA6wBC6wBdgMBiwOiAQuiAVgDAYEDvQELvQGFAQMB9gK6AWC6AacBAwH1AsQBC8QBZgMB6gLLAQmNAhQDAYICmAILmAJYAwH3AZMCC5MCaAMB7QGdAgudAmUDAeMBpAILpAJbAwHYAakCC6kCcgMBzgGuAguuAl0DAcQBtQILtQKFAQMBuQGyAmCyAqEBAwG4AbwCC7wCeAMBrQHDAgmLAxQCATmRAwuRA4UBAgEujgNgjgOGAQIBLZgDC5gDWQIBIp8DC58DcgIBF6QDC6QDcAIBDX8Nf4ABAwHUA4sBDYsBcAMByQOQAQ2QAWoDAb8DhgENhgFgAwG1A5UBDZUBWgMBqwPPAQvgARwDAdAC4QELjAIQAwGDAsgCC9sCHAMBkQHcAguKAxACATrSARHYASADAd4C3QER3QGEAQMB0gLPAXzPAYIBAwHRAuQBEeQBkQEDAYQC6AEP7gEjAwHDAvEBD4oCGgMBkALLAhHTAiADAaAB2AIR2AKLAQMBkwHIAnzIAoIBAwGSAd8CEd8CmQECATvjAg/pAiMDAYMB7AIPiAMaAgFI6wEV6wHJAQMBxALyARH9ARoDAaoC/gERiQIsAwGRAuYCFeYCgAIDAYQB8AIR+wIaAgFm/AIRhwMsAgFJ+gEX+gFzAwG3AvUBF/UBdwMBqwKGAheGApEBAwGeAoECF4EC6gEDAZIC+AIX+AJ3AgF18wIX8wJ7AgFnhAMXhAORAQIBWP8CF/8ClwICAUo=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sVEoDpwMOAgEBVAtUrQECAQRXM1c2AgEDWDNYNgIBAloFdCQDAZEEdQV7IAMBhAR8BZoBEAMBygObAQW6ASkDAZ0DuwEFwQEgAwGQA8IBBZACFwMBlAKRAgWhAiUDAfIBogIFsgIfAwHQAbMCBbkCIAMBwwG6AgWLAxcCAT+MAwWSAyACATKTAwWZAyYCASaaAwWlAyYCAQ9sC2xwAwG+BGILYmgDAbMEXQtdYQMBqARxC3FyAwGdBGcLZ44BAwGSBHgLeIUBAwGGBHVgdXQDAYUEfQeDAScDAfgDhAEHmQEkAwHLA54BC54BaAMBvwOoAQuoAVkDAbQDrQELrQF2AwGpA6MBC6MBWAMBngO+AQu+AYUBAwGSA7sBYLsBpwEDAZEDxQELxQFmAwGFA8wBCY4CFAMBlQKZAguZAlgDAYkClAILlAJoAwH+AZ4CC54CZQMB8wGlAgulAlsDAecBqgILqgJyAwHcAa8CC68CXQMB0QG2Agu2AoUBAwHFAbMCYLMCoQEDAcQBvQILvQJ4AwG4AcQCCYkDFAIBQI8DC48DhQECATSMA2CMA4YBAgEzlgMLlgNZAgEnnQMLnQNyAgEbogMLogNwAgEQgAENgAGAAQMB+QOMAQ2MAXADAe0DkQENkQFqAwHiA4cBDYcBYAMB1wOWAQ2WAVoDAcwD0AEL4QEcAwHpAuIBC40CEAMBlgLJAgvcAhwDAZoB3QILiAMQAgFB0wER2QEgAwH4At4BEd4BhAEDAesC0AF80AGCAQMB6gLlARHlAZEBAwGXAukBD+8BIwMB2wLyAQ+LAhoDAaQCzAIR1AIgAwGqAdkCEdkCiwEDAZwByQJ8yQKCAQMBmwHgAhHgApkBAgFC5AIP6gIjAwGLAe0CD4YDGgIBUOwBFewByQEDAdwC8wER/gEaAwHAAv8BEYoCLAMBpQLnAhXnAoACAwGMAe4CEfkCGgIBbvoCEYUDLAIBUfsBF/sBcwMBzgL2ARf2AXcDAcEChwIXhwKRAQMBswKCAheCAuoBAwGmAvYCF/YCdwIBffECF/ECewIBb4IDF4IDkQECAWD9Ahf9ApcCAgFS</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
