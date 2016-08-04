@@ -1384,7 +1384,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2633,9 +2632,6 @@
           <Height>0.375in</Height>
           <Width>0.96875in</Width>
           <ZIndex>11</ZIndex>
-          <Visibility>
-            <Hidden>=IIF(Parameters!GroupeBySupplier.Value = "true"  , True, False)</Hidden>
-          </Visibility>
           <DataElementOutput>NoOutput</DataElementOutput>
           <Style>
             <Border>
