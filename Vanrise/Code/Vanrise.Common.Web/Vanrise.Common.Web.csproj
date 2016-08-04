@@ -134,6 +134,7 @@
     <Compile Include="Controllers\DataRecordFieldController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\RateTypeController.cs" />
+    <Compile Include="Controllers\VRObjectPropertyController.cs" />
     <Compile Include="Controllers\VRObjectTypeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -227,7 +228,7 @@
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-selector.js" />
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-grid.js" />
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-settings.js" />
-    <Content Include="Common\Directives\VRObjectProperty\Templates\VRObjectPropertySelectiveTemplate.html" />
+    <Content Include="Common\Directives\VRObjectProperty\Templates\VRObjectPropertySelectorTemplate.html" />
     <Content Include="Common\Directives\VRObjectProperty\vr-common-objectproperty-selector.js" />
     <Content Include="Common\Directives\VRObjectVariable\Templates\VRObjectTypeSelectiveTemplate.html" />
     <Content Include="Common\Directives\VRObjectVariable\Templates\VRObjectVariableManagementTemplate.html" />
@@ -247,6 +248,7 @@
     <Content Include="Common\Services\APIServices\DataRecordTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\RateTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\StyleDefinitionAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRObjectPropertyAPIService.js" />
     <Content Include="Common\Services\APIServices\VRObjectTypeAPIService.js" />
     <Content Include="Common\Services\CityService.js" />
     <Content Include="Common\Services\CurrencyExchangeRateService.js" />
