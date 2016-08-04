@@ -50,10 +50,11 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
         singleCustomerAccountReadyPromiseDeferred.resolve();
     }
     $scope.validateBusinessCaseStatus = function () {
-        if ($scope.reporttype && $scope.reporttype.ParameterSettings && $scope.reporttype.ParameterSettings.CustomerIdNotOptional == true && UtilsService.diffDays($scope.fromDate, $scope.toDate) < 30) {
-            return 'At least you have to choose 30 days.';
-        }
-        return null;
+            if ( $scope.reporttype && $scope.reporttype.ParameterSettings && $scope.reporttype.ParameterSettings.CustomerIdNotOptional == true && UtilsService.diffDays($scope.fromDate, $scope.toDate) < 30) {
+                return 'At least you have to choose 28 days.';
+            }
+            return null;
+          
     }
     $scope.onSupplierAccountDirectiveReady = function (api) {
         supplierAccountDirectiveAPI = api;
@@ -77,18 +78,10 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
         top: 10,
         pageBreak: false
     }
-    $scope.periodSelectionChanged = function () {
-        if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
-            var date = $scope.selectedPeriod.getInterval();
-            $scope.fromDate = date.from;
-            $scope.toDate = date.to;
-        }
-    }
+
 
     function defineScope() {
-        $scope.fromDate = new  Date();
-        $scope.toDate = new Date().getDay() + 30;
-
+       
         $scope.today = PeriodEnum.Today;
 
         $scope.onTimeRangeDirectiveReady = function (api) {
@@ -139,12 +132,19 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
                 return $scope.export();
         }
         $scope.resetReportParams = function () {
-            $scope.selectedPeriod = $scope.periods[6];
             $scope.singleCustomer = null;
             $scope.customers = [];
             $scope.suppliers = [];
-            if ($scope.reporttype && $scope.reporttype.ParameterSettings && $scope.reporttype.ParameterSettings.CustomerIdNotOptional) {
-                $scope.toDate = $scope.fromDate.getDay() + 30;
+            $scope.selectedPeriod = $scope.periods[6];
+
+            if ($scope.reporttype && $scope.reporttype.ParameterSettings && $scope.reporttype.ParameterSettings.CustomerIdNotOptional == true) {
+                setTimeout(function () {
+                     $scope.selectedPeriod = $scope.periods[1];
+                })
+
+            }
+            else {
+                    $scope.selectedPeriod = $scope.periods[6];
             }
             $scope.params = {
                 groupByCustomer: false,
