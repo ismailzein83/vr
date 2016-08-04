@@ -9,7 +9,7 @@
         var isEditMode;
         var balanceAlertThresholdAPI;
         var balanceAlertThresholdReadyDeferred = UtilsService.createPromiseDeferred();
-
+        var extensionType = "VR_Notification_VRAction";
         var vRActionManagementAPI;
         var vRActionManagementReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -76,7 +76,7 @@
         function loadVRActionManagement() {
             var vRActionManagementLoadDeferred = UtilsService.createPromiseDeferred();
             vRActionManagementReadyDeferred.promise.then(function () {
-                var vrActionPayload = thresholdEntity != undefined ? { actions: thresholdEntity.Actions } : undefined;
+                var vrActionPayload = { extensionType: extensionType, actions: thresholdEntity != undefined ? thresholdEntity.Actions : undefined };
                 VRUIUtilsService.callDirectiveLoad(vRActionManagementAPI, vrActionPayload, vRActionManagementLoadDeferred);
             });
             return vRActionManagementLoadDeferred.promises;

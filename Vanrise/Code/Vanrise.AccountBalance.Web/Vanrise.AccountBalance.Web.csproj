@@ -153,8 +153,10 @@
     <Content Include="VR_AccountBalance\Directives\MainExtensions\BalanceAlertRule\Templates\FixedBalanceAlertThresholdTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\BalanceAlertRule\vr-accountbalance-balancealertthreshold-fixed.js" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\Templates\AccountBalanceUpdateProcess.html" />
+    <Content Include="VR_AccountBalance\Directives\ProcessInput\Templates\BalanceAlertCheckerProcess.html" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\Templates\BalanceAlertThresholdUpdateProcess.html" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\vr-accountbalance-updateprocess.js" />
+    <Content Include="VR_AccountBalance\Directives\ProcessInput\vr-balancealertchecker-process.js" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\vr-balancealertthreshold-updateprocess.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\BalanceAlertAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\BillingTransactionAPIService.js" />

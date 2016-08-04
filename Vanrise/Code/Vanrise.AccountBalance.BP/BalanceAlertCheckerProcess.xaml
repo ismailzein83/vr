@@ -1,13 +1,23 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.AccountBalance.BP.BalanceAlertCheckerProcess" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.AccountBalance.BP.BalanceAlertCheckerProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
- xmlns:vaba="clr-namespace:Vanrise.AccountBalance.BP.Activities;assembly=Vanrise.AccountBalance.BP.Activities"
+ xmlns:vaba="clr-namespace:Vanrise.AccountBalance.BP.Arguments;assembly=Vanrise.AccountBalance.BP.Arguments"
+ xmlns:vaba1="clr-namespace:Vanrise.AccountBalance.BP.Activities;assembly=Vanrise.AccountBalance.BP.Activities"
+ xmlns:vae="clr-namespace:Vanrise.AccountBalance.Entities;assembly=Vanrise.AccountBalance.Entities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(vaba:BalanceAlertCheckerProcessInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Vanrise.AccountBalance.BP.BalanceAlertCheckerProcess_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System</x:String>
@@ -15,28 +25,74 @@
       <x:String>System.Data</x:String>
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>Vanrise.AccountBalance.BP.Arguments</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
-      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.AccountBalance.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.AccountBalance.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.AccountBalance.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.AccountBalance.Business</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Vanrise.AccountBalance.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence>
-    <Parallel>
-      <vaba:LoadBalancesToAlert sap2010:WorkflowViewState.IdRef="LoadBalancesToAlert_1" />
-      <vaba:CreateAlertActions sap2010:WorkflowViewState.IdRef="CreateAlertActions_1" />
-      <sap2010:WorkflowViewState.IdRef>Parallel_1</sap2010:WorkflowViewState.IdRef>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <Parallel.Variables>
+        <Variable x:TypeArguments="vq:BaseQueue(vae:AccountBalanceBatch)" Name="outputLoadBalanceToAlertQueue" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadBalancesToAlertStatus" />
+      </Parallel.Variables>
+      <vaba1:LoadBalancesToAlert sap2010:WorkflowViewState.IdRef="LoadBalancesToAlert_1">
+        <vaba1:LoadBalancesToAlert.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vae:AccountBalanceBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:AccountBalanceBatch)">outputLoadBalanceToAlertQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vaba1:LoadBalancesToAlert.OutputQueue>
+        <vaba1:LoadBalancesToAlert.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadBalancesToAlertStatus</mca:CSharpReference>
+          </OutArgument>
+        </vaba1:LoadBalancesToAlert.Status>
+      </vaba1:LoadBalancesToAlert>
+      <vaba1:CreateAlertActions Status="{x:Null}" sap2010:WorkflowViewState.IdRef="CreateAlertActions_1">
+        <vaba1:CreateAlertActions.InputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vae:AccountBalanceBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:AccountBalanceBatch)">outputLoadBalanceToAlertQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vaba1:CreateAlertActions.InputQueue>
+        <vaba1:CreateAlertActions.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadBalancesToAlertStatus</mca:CSharpValue>
+          </InArgument>
+        </vaba1:CreateAlertActions.PreviousActivityStatus>
+        <vaba1:CreateAlertActions.UserId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.UserId</mca:CSharpValue>
+          </InArgument>
+        </vaba1:CreateAlertActions.UserId>
+      </vaba1:CreateAlertActions>
     </Parallel>
-    <sap2010:WorkflowViewState.IdRef>Sequence_1</sap2010:WorkflowViewState.IdRef>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQWNjb3VudEJhbGFuY2UuQlBcQmFsYW5jZUFsZXJ0Q2hlY2tlclByb2Nlc3MueGFtbAQeAyYOAgEBHwUjEAIBAiAHIFsCAQQhByFZAgED</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQWNjb3VudEJhbGFuY2UuQlBcQmFsYW5jZUFsZXJ0Q2hlY2tlclByb2Nlc3MueGFtbAk6A18OAgEBOwVdEAIBAkAHSyMCARBMB1wiAgEDSA1IegIBFUMNQ40BAgERVA1UcgIBDE8NT40BAgEIWQ1ZVgIBBA==</sads:DebugSymbol.Symbol>
   </Sequence>
-  <sap2010:WorkflowViewState.IdRef>Vanrise.AccountBalance.BP.BalanceAlertCheckerProcess_1</sap2010:WorkflowViewState.IdRef>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="LoadBalancesToAlert_1" sap:VirtualizedContainerService.HintSize="200,40" />

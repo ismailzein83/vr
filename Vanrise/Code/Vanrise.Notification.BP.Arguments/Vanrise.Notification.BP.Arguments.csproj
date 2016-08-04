@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{918CE99A-576C-49F0-897E-07817959E79C}</ProjectGuid>
+    <ProjectGuid>{B9576176-3F9C-4F82-B782-8F5F81B0450C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Vanrise.Notification.Business</RootNamespace>
-    <AssemblyName>Vanrise.Notification.Business</AssemblyName>
+    <RootNamespace>Vanrise.Notification.BP.Arguments</RootNamespace>
+    <AssemblyName>Vanrise.Notification.BP.Arguments</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -41,38 +41,26 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.BusinessProcess.Business">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Context\VRActionExecutionContext.cs" />
+    <Compile Include="CreateActionProcessInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VRActionManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">
-      <Project>{571a68ec-2d45-4b5c-9e75-bb6fb7c0d7b7}</Project>
-      <Name>Vanrise.Common.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
-      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
-      <Name>Vanrise.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Notification.BP.Arguments\Vanrise.Notification.BP.Arguments.csproj">
-      <Project>{b9576176-3f9c-4f82-b782-8f5f81b0450c}</Project>
-      <Name>Vanrise.Notification.BP.Arguments</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Notification.Data\Vanrise.Notification.Data.csproj">
-      <Project>{c425f563-5869-495c-b4fb-e39b6ab48b82}</Project>
-      <Name>Vanrise.Notification.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Notification.Entities\Vanrise.Notification.Entities.csproj">
       <Project>{f58cc66a-3bc4-49ed-9143-d1abb031c242}</Project>
       <Name>Vanrise.Notification.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Business\Vanrise.Security.Business.csproj">
+      <Project>{98e54996-fad2-40e7-b236-be5a23fa64b1}</Project>
+      <Name>Vanrise.Security.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Entities\Vanrise.Security.Entities.csproj">
+      <Project>{04de17c7-70b4-40a1-84dd-26c91ca228ac}</Project>
+      <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

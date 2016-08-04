@@ -24,7 +24,7 @@ function (UtilsService, VR_Notification_VRActionService) {
 
 
     function VRActionsManagement(ctrl, $scope, $attrs) {
-
+        var extensionType;
         function initializeController() {
 
             ctrl.datasource = [];
@@ -41,7 +41,7 @@ function (UtilsService, VR_Notification_VRActionService) {
                 {
                     ctrl.datasource.push({ Entity: action });
                 }
-                VR_Notification_VRActionService.addVRAction(onVRActionAdded);
+                VR_Notification_VRActionService.addVRAction(onVRActionAdded, extensionType);
 
             };
 
@@ -72,6 +72,10 @@ function (UtilsService, VR_Notification_VRActionService) {
             }
 
             api.load = function (payload) {
+                if(payload != undefined)
+                {
+                    extensionType = payload.extensionType;
+                }
                 ctrl.datasource.length = 0;
                 if(payload != undefined && payload.actions !=undefined)
                 {
@@ -97,7 +101,7 @@ function (UtilsService, VR_Notification_VRActionService) {
             var onVRActionUpdated = function (vrActionObj) {
                 ctrl.datasource[ctrl.datasource.indexOf(dataItem)] = { Entity: vrActionObj };
             }
-            VR_Notification_VRActionService.editVRAction(dataItem.Entity, onVRActionUpdated);
+            VR_Notification_VRActionService.editVRAction(dataItem.Entity, onVRActionUpdated, extensionType);
         }
 
         this.initializeController = initializeController;

@@ -8,8 +8,10 @@
 
         var controllerName = "VRAction";
 
-        function GetVRActionConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, "GetVRActionConfigs"));
+        function GetVRActionConfigs(extensionType) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, "GetVRActionConfigs"), {
+                extensionType: extensionType
+            });
         }
 
         return ({

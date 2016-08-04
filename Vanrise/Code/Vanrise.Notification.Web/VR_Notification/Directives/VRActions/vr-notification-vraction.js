@@ -62,21 +62,25 @@
 
                     var promises = [];
                     var vrActionEntity;
-
+                    var extensionType;
                     if (payload != undefined) {
                         vrActionEntity = payload.vrActionEntity;
+                        extensionType = payload.extensionType;
                     }
 
                     if (vrActionEntity != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
+                    if (extensionType != undefined)
+                    {
+                        var getVRActionTemplateConfigsPromise = getVRActionTemplateConfigs(extensionType);
+                        promises.push(getVRActionTemplateConfigsPromise);
 
-                    var getVRActionTemplateConfigsPromise = getVRActionTemplateConfigs();
-                    promises.push(getVRActionTemplateConfigsPromise);
-
-                    function getVRActionTemplateConfigs() {
-                        return VR_Notification_VRActionAPIService.GetVRActionConfigs().then(function (response) {
+                    }
+                  
+                    function getVRActionTemplateConfigs(extensionType) {
+                        return VR_Notification_VRActionAPIService.GetVRActionConfigs(extensionType).then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);

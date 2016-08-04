@@ -16,9 +16,9 @@ namespace Vanrise.Notification.Web.Controllers
         VRActionManager _manager = new VRActionManager();
         [HttpGet]
         [Route("GetVRActionConfigs")]
-        public IEnumerable<VRActionConfig> GetVRActionConfigs()
+        public IEnumerable<VRActionConfig> GetVRActionConfigs(string extensionType)
         {
-            return _manager.GetVRActionConfigs();
+            return _manager.GetVRActionConfigs(extensionType);
         }
     }
 }

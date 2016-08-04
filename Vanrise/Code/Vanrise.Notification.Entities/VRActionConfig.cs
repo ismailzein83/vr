@@ -9,8 +9,6 @@ namespace Vanrise.Notification.Entities
 {
     public class VRActionConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "VR_Notification_VRAction";
-
         public string Editor { get; set; }
     }
 }

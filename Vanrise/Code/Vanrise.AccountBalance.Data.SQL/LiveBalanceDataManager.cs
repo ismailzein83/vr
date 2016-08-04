@@ -141,10 +141,11 @@ namespace Vanrise.AccountBalance.Data.SQL
                 AccountId = (long)reader["AccountId"],
                 UsageBalance = GetReaderValue<Decimal>(reader, "UsageBalance"),
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyID"),
-                AlertRuleID = GetReaderValue<long>(reader, "AlertRuleID"),
+                AlertRuleID = GetReaderValue<long?>(reader, "AlertRuleID"),
                 CurrentAlertThreshold = GetReaderValue<Decimal>(reader, "CurrentAlertThreshold"),
                 InitialBalance = GetReaderValue<Decimal>(reader, "InitialBalance"),
-                NextAlertThreshold = GetReaderValue<Decimal>(reader, "NextAlertThreshold"),
+                NextAlertThreshold = GetReaderValue<Decimal?>(reader, "NextAlertThreshold"),
+                ThresholdActionIndex = GetReaderValue<int?>(reader, "ThresholdActionIndex"),
             };
         }
         private LiveBalanceAccountInfo LiveBalanceAccountInfoMapper(IDataReader reader)

@@ -21,7 +21,7 @@ namespace Vanrise.Notification.Entities
     public interface IVRActionExecutionContext
     {
         IVRActionEventPayload EventPayload { get; }
-
+        int UserID { get; }
         int NumberOfExecutions { get; }
 
         DateTime? NextExecutionTime { set; }

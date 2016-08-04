@@ -54,6 +54,9 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Notification.Business">
+      <HintPath>..\Output\Vanrise.Notification.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Queueing">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
     </Reference>
@@ -61,12 +64,12 @@
   <ItemGroup>
     <Compile Include="AccountBalanceUpdate\LoadAccountBalanceUpdateHandler.cs" />
     <Compile Include="BalanceAlertThresholdUpdate\CalculateNextAlertThresholds.cs" />
-    <Compile Include="CreateAlertActions.cs" />
+    <Compile Include="BalanceAlertChecker\CreateAlertActions.cs" />
     <Compile Include="AccountBalanceUpdate\CreateBalanceClosingPeriod.cs" />
     <Compile Include="GetAlertRulesIfUpdated.cs" />
     <Compile Include="AccountBalanceUpdate\GetNextBalanceClosingDate.cs" />
     <Compile Include="BalanceAlertThresholdUpdate\LoadAccountBalances.cs" />
-    <Compile Include="LoadBalancesToAlert.cs" />
+    <Compile Include="BalanceAlertChecker\LoadBalancesToAlert.cs" />
     <Compile Include="AccountBalanceUpdate\LoadNewBillingTransactions.cs" />
     <Compile Include="AccountBalanceUpdate\LoadPendingUsageUpdates.cs" />
     <Compile Include="AccountBalanceUpdate\ProcessNewBillingTransactions.cs" />
@@ -102,6 +105,10 @@
     <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Notification.Entities\Vanrise.Notification.Entities.csproj">
+      <Project>{f58cc66a-3bc4-49ed-9143-d1abb031c242}</Project>
+      <Name>Vanrise.Notification.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Rules\Vanrise.Rules.csproj">
       <Project>{f8450e80-5d8e-4fea-a2e0-777cb05e0542}</Project>
