@@ -141,6 +141,7 @@
                             RuleStructureBehaviorType: dataItem.RuleStructureBehaviorType,
                             Priority: priority,
                             ShowInBasicSearch: dataItem.ShowInBasicSearch,
+                            ValueObjectName: dataItem.ValueObjectName,
                             ValueEvaluator: dataItem.ValueEvaluator
                         };
                     }
@@ -161,7 +162,7 @@
                     var index = UtilsService.getItemIndexByVal(ctrl.criteriaFields, criteriaField.FieldName, 'FieldName');
                     ctrl.criteriaFields[index] = updatedCriteriaField;
                 };
-                VR_GenericData_GenericRuleDefinitionCriteriaFieldService.editGenericRuleDefinitionCriteriaField(criteriaField.FieldName, ctrl.criteriaFields, onCriteriaFieldUpdated);
+                VR_GenericData_GenericRuleDefinitionCriteriaFieldService.editGenericRuleDefinitionCriteriaField(criteriaField.FieldName, ctrl.criteriaFields, context, onCriteriaFieldUpdated);
             }
 
             function extendCriteriaFieldObject(criteriaField) {

@@ -37,6 +37,7 @@
             var directiveAPI;
             var directiveReadyDeferred;
             //var directivePayload;
+            var criteriaField;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -52,6 +53,7 @@
                     defineAPI();
                 };
                 $scope.scopeModel.onObjectVariableSelectionChanged = function () {
+                    objectPropertySelectorAPI.clearDataSource();
 
                     if ($scope.scopeModel.selectedObjectVariable != undefined && $scope.scopeModel.selectedObjectVariable.ObjectType != undefined) {
                         var configId = $scope.scopeModel.selectedObjectVariable.ObjectType.ConfigId;
@@ -71,19 +73,24 @@
                     objectPropertySelectorAPI = api;
                     objectPropertySelectorReadyDeferred.resolve();
                 };
-                $scope.scopeModel.onObjectPropertySelectionChengaed = function () {
-                    if ($scope.scopeModel.selectedTemplateConfig != undefined)
-                        var idzz = $scope.scopeModel.selectedTemplateConfig.Editor;
-                }
+                //$scope.scopeModel.onObjectPropertySelectionChengaed = function () {
+                //    if ($scope.scopeModel.selectedTemplateConfig != undefined)
+                //        var idzz = $scope.scopeModel.selectedTemplateConfig.Editor;
+                //}
              
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
+
                     var directivePayload = {};
                     directivePayload.dataRecordTypeId = $scope.scopeModel.selectedObjectVariable.ObjectType.RecordTypeId;
+                    if (criteriaField != undefined)
+                        directivePayload.valueEvaluator = criteriaField.ValueEvaluator
+
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
+                    //VRUIUtilsService.callDirectiveLoad($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
             }
 
@@ -94,17 +101,36 @@
                     objectSelectorAPI.clearDataSource();
                     objectPropertySelectorAPI.clearDataSource();
 
-                    var promises = [];
+                    //var promises = [];
+
+                    if (payload != undefined && payload.criteriaField != undefined)
+                        criteriaField = payload.criteriaField;
 
                     //Loading ObjectSelector
                     if (payload != undefined && payload.objectVariables != undefined) {
                         for (var key in payload.objectVariables)
                             $scope.scopeModel.objectVariables.push(payload.objectVariables[key]);
+
+                        if (criteriaField != undefined) {
+                            $scope.scopeModel.selectedObjectVariable = UtilsService.getItemByVal($scope.scopeModel.objectVariables, criteriaField.ValueObjectName, 'ObjectName');
+                        }
                     }
 
+                    ////Loading ObjectPropertySelector
+                    //if ($scope.scopeModel.selectedObjectVariable != undefined && $scope.scopeModel.selectedObjectVariable.ObjectType != undefined) {
+                    //    var configId = $scope.scopeModel.selectedObjectVariable.ObjectType.ConfigId;
+
+                    //    objectPropertySelectorReadyDeferred.promise.then(function () {
+                    //        loadObjectTypeConfigs().then(function () {
+                    //                getObjectPropertySelectorTemplateConfigs(configId);
+                    //        });
+                    //    });
+                    //}
+
+                    //return UtilsService.waitMultiplePromises(promises);
 
                     //Loading ObjectPropertySelector
-                    //if ($scope.scopeModel.selectedObjectVariable != undefined && $scope.scopeModel.selectedObjectVariable.ObjectType) {
+                    //if ($scope.scopeModel.selectedObjectVariable != undefined && $scope.scopeModel.selectedObjectVariable.ObjectType != undefined) {
                     //    var configId = $scope.scopeModel.selectedObjectVariables.ObjectType.ConfigId;
 
                     //    objectPropertySelectorReadyDeferred.promise.then(function () {
@@ -116,27 +142,28 @@
                     //}
 
                     //Loading DirectiveWrapper
-                    //if ($scope.scopeModel.selectedTemplateConfig != undefined) {
-                    //    var loadDirectivePromise = loadDirective();
-                    //    promises.push(loadDirectivePromise);
+                    //if ($scope.scopemodel.selectedtemplateconfig != undefined) {
+                    //    var loaddirectivepromise = loaddirective();
+                    //    promises.push(loaddirectivepromise);
                     //}
-
-
-
-                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
-                    var data;
 
-                    if ($scope.scopeModel.selectedTemplateConfig != undefined && directiveAPI != undefined) {
-
-                        data = directiveAPI.getData();
-
-                        if (data != undefined) {
-                            data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
-                        }
+                    if ($scope.scopeModel.selectedObjectVariable != undefined) {
+                        var valueObjectName = $scope.scopeModel.selectedObjectVariable.ObjectName;
                     }
+                    if ($scope.scopeModel.selectedTemplateConfig != undefined && directiveAPI != undefined) {
+                        var valueEvaluator = directiveAPI.getData();
+                        if (valueEvaluator != undefined) 
+                            valueEvaluator.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;                     
+                    }
+
+                    var data = {
+                        ValueObjectName: valueObjectName,
+                        ValueEvaluator: valueEvaluator
+                    };
+
                     return data;
                 };
 
@@ -169,10 +196,10 @@
                                                 for (var i = 0; i < response.length; i++) {
                                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                                 }
-                                                //if (objectProperty != undefined && objectProperty.ConfigId != undefined) {
-                                                //    $scope.scopeModel.selectedTemplateConfig =
-                                                //        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, objectProperty.ConfigId, 'ExtensionConfigurationId');
-                                                //}
+                                                if (criteriaField != undefined && criteriaField.ValueEvaluator.ConfigId != undefined) {
+                                                    $scope.scopeModel.selectedTemplateConfig =
+                                                            UtilsService.getItemByVal($scope.scopeModel.templateConfigs, criteriaField.ValueEvaluator.ConfigId, 'ExtensionConfigurationId');
+                                                }
                                             }
                                         });
 

@@ -13,8 +13,8 @@
 
         function addGenericRuleDefinitionCriteriaField(genericRuleDefinitionCriteriaFields, context, onGenericRuleDefinitionCriteriaFieldAdded) {
             var modalParameters = {
-                Context: context,
-                GenericRuleDefinitionCriteriaFields: genericRuleDefinitionCriteriaFields
+                GenericRuleDefinitionCriteriaFields: genericRuleDefinitionCriteriaFields,
+                Context: context
             };
 
             var modalSettings = {};
@@ -26,10 +26,11 @@
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionCriteriaFieldEditor.html', modalParameters, modalSettings);
         }
 
-        function editGenericRuleDefinitionCriteriaField(genericRuleDefinitionCriteriaFieldName, genericRuleDefinitionCriteriaFields, onGenericRuleDefinitionCriteriaFieldUpdated) {
+        function editGenericRuleDefinitionCriteriaField(genericRuleDefinitionCriteriaFieldName, genericRuleDefinitionCriteriaFields, context, onGenericRuleDefinitionCriteriaFieldUpdated) {
             var modalParameters = {
                 GenericRuleDefinitionCriteriaFieldName: genericRuleDefinitionCriteriaFieldName,
-                GenericRuleDefinitionCriteriaFields: genericRuleDefinitionCriteriaFields
+                GenericRuleDefinitionCriteriaFields: genericRuleDefinitionCriteriaFields,
+                Context: context
             };
 
             var modalSettings = {};

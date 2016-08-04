@@ -38,10 +38,13 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    var selectorPayload;
+                    var selectorPayload = {};
 
                     if (payload != undefined && payload.dataRecordTypeId != undefined) {
-                        selectorPayload = { dataRecordTypeId: payload.dataRecordTypeId };
+                        selectorPayload.dataRecordTypeId = payload.dataRecordTypeId;
+                    }
+                    if (payload != undefined && payload.valueEvaluator != undefined) {
+                        selectorPayload.selectedIds = payload.valueEvaluator.FieldName;
                     }
 
                     var dataRecordObjectTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();

@@ -150,10 +150,13 @@
                 var objectPropertySelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                 objectPropertySelectorReadyDeferred.promise.then(function () {
-                    var payload;
+                    var payload = {};
 
                     if (objectVariables != undefined) {
-                        payload = { objectVariables: objectVariables}
+                        payload.objectVariables = objectVariables                        
+                    }
+                    if (criteriaFieldEntity != undefined) {
+                        payload.criteriaField = criteriaFieldEntity
                     }
 
                     VRUIUtilsService.callDirectiveLoad(objectPropertySelectorAPI, payload, objectPropertySelectorLoadDeferred);
@@ -180,6 +183,10 @@
         }
 
         function buildCriteriaFieldObjectFromScope() {
+
+            if (objectPropertySelectorAPI != undefined)
+                var objectPropertyData = objectPropertySelectorAPI.getData();
+
             return {
                 $type: "Vanrise.GenericData.Entities.GenericRuleDefinitionCriteriaField, Vanrise.GenericData.Entities",
                 FieldName: $scope.scopeModel.fieldName,
@@ -187,7 +194,8 @@
                 FieldType: dataRecordFieldTypeSelectiveAPI.getData(),
                 RuleStructureBehaviorType: $scope.scopeModel.selectedBehaviorType.value,
                 ShowInBasicSearch: $scope.scopeModel.showInBasicSearch,
-                ValueEvaluator: objectPropertySelectorAPI.getData()
+                ValueObjectName: objectPropertyData.ValueObjectName,
+                ValueEvaluator: objectPropertyData.ValueEvaluator
             };
         }
     }
