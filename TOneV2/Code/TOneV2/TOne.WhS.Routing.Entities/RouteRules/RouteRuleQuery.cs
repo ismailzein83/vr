@@ -17,5 +17,7 @@ namespace TOne.WhS.Routing.Entities
         public IEnumerable<int> CustomerIds { get; set; }
 
         public IEnumerable<long> SaleZoneIds { get; set; }
+
+        public DateTime? EffectiveOn { get; set; }
     }
 }

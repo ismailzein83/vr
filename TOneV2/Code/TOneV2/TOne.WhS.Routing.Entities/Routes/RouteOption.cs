@@ -8,6 +8,11 @@ namespace TOne.WhS.Routing.Entities
 {
     public class RouteOption
     {
+        static RouteOption()
+        {
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(RouteOption),
+                "SupplierId", "SupplierCode", "SupplierZoneId", "SupplierRate", "Percentage", "IsBlocked", "ExecutedRuleId");
+        }
         public int SupplierId { get; set; }
 
         public string SupplierCode { get; set; }

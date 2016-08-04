@@ -54,7 +54,7 @@
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                api.loadGrid({});
+                api.loadGrid(getFilterObject());
             }
 
             $scope.searchClicked = function () {
@@ -69,7 +69,8 @@
                     Name: $scope.name,
                     Code: $scope.code,
                     CustomerIds: carrierAccountDirectiveAPI.getSelectedIds(),
-                    SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds()
+                    SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds(),
+                    EffectiveOn: $scope.effectiveOn
                 };
                 return query;
             }
@@ -77,7 +78,8 @@
 
         function load() {
             $scope.isLoadingFilterData = true;
-
+            $scope.effectiveOn = new Date();
+            
             return UtilsService.waitMultipleAsyncOperations([loadCustomersSection, loadSellingNumberPlanSection]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {

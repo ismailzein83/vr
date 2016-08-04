@@ -151,13 +151,13 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [Rate] [decimal](20, 8) NULL,
 	                                                    [IsBlocked] [bit] NOT NULL,
 	                                                    [ExecutedRuleId] [int] NOT NULL,
-	                                                    [RouteOptions] [nvarchar](max) NULL,
-                                                     CONSTRAINT [PK_CustomerRoute] PRIMARY KEY CLUSTERED 
+	                                                    [RouteOptions] [varchar](max) NULL/*,
+                                                    CONSTRAINT [PK_CustomerRoute] PRIMARY KEY CLUSTERED 
                                                     (
 	                                                    [CustomerID] ASC,
 	                                                    [Code] ASC
                                                     )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-                                                    ) ON [PRIMARY]
+                                                    */) ON [PRIMARY]
 
                                 ";
 

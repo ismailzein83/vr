@@ -12,6 +12,11 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class CustomerRouteDataManager : RoutingDataManager, ICustomerRouteDataManager
     {
+        static CustomerRouteDataManager()
+        {
+            RouteOption dummy = new RouteOption();
+        }
+
         readonly string[] columns = { "CustomerId", "Code", "SaleZoneId", "Rate", "IsBlocked", "ExecutedRuleId", "RouteOptions" };
         public void ApplyCustomerRouteForDB(object preparedCustomerRoute)
         {
@@ -40,9 +45,10 @@ namespace TOne.WhS.Routing.Data.SQL
 
         public void WriteRecordToStream(Entities.CustomerRoute record, object dbApplyStream)
         {
+            string serializedOptions = Convert.ToBase64String(Vanrise.Common.ProtoBufSerializer.Serialize<List<RouteOption>>(record.Options));
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.CustomerId, record.Code, record.SaleZoneId,
-                record.Rate, record.IsBlocked ? 1 : 0, record.ExecutedRuleId, Vanrise.Common.Serializer.Serialize(record.Options, true));
+                record.Rate, record.IsBlocked ? 1 : 0, record.ExecutedRuleId, serializedOptions);//Vanrise.Common.Serializer.Serialize(record.Options, true));
         }
 
         public Vanrise.Entities.BigResult<Entities.CustomerRoute> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<Entities.CustomerRouteQuery> input)
@@ -76,9 +82,9 @@ namespace TOne.WhS.Routing.Data.SQL
             List<string> filters = new List<string>();
             if (customerId.HasValue)
                 filters.Add("[CustomerID] = @CustomerID");
-            if(!String.IsNullOrEmpty(codePrefix))
+            if (!String.IsNullOrEmpty(codePrefix))
                 filters.Add(String.Format("[Code] like '{0}%'", codePrefix));
-            if(filters.Count > 0)
+            if (filters.Count > 0)
             {
                 queryBuilder.Replace("#FILTER#", String.Format("WHERE {0}", String.Join(" AND ", filters)));
             }
@@ -89,7 +95,7 @@ namespace TOne.WhS.Routing.Data.SQL
             ExecuteReaderText(queryBuilder.ToString(),
                 (reader) =>
                 {
-                    while(reader.Read())
+                    while (reader.Read())
                     {
                         onRouteLoaded(CustomerRouteMapper(reader));
                     }
@@ -99,6 +105,36 @@ namespace TOne.WhS.Routing.Data.SQL
                     if (customerId.HasValue)
                         cmd.Parameters.Add(new SqlParameter("@CustomerID", customerId.Value));
                 });
+        }
+
+        public void FinalizeCurstomerRoute(Action<string> trackStep)
+        {
+            string query;
+
+            trackStep("Starting create Clustered Index on CustomerRoute table (CustomerId and Code).");
+            query = @"CREATE CLUSTERED INDEX [IX_CustomerRoute_CustomerCode] ON dbo.CustomerRoute
+                    (
+                          [CustomerID] ASC,
+                          Code ASC
+                    )";
+            ExecuteNonQueryText(query, null);
+            trackStep("Finishing create Clustered Index on CustomerRoute table (CustomerId and Code).");
+
+            trackStep("Starting create Index on CustomerRoute table (Code).");
+            query = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_Code] ON dbo.CustomerRoute
+                    (
+                          Code ASC
+                    )";
+            ExecuteNonQueryText(query, null);
+            trackStep("Finishing create Index on CustomerRoute table (Code).");
+
+            trackStep("Starting create Index on CustomerRoute table (SaleZoneId).");
+            query = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_SaleZone] ON dbo.CustomerRoute
+                    (
+                          SaleZoneId ASC
+                    )";
+            ExecuteNonQueryText(query, null);
+            trackStep("Finishing create Index on CustomerRoute table (SaleZoneId).");
         }
 
         private CustomerRoute CustomerRouteMapper(IDataReader reader)
@@ -111,7 +147,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 Rate = GetReaderValue<decimal>(reader, "Rate"),
                 IsBlocked = (bool)reader["IsBlocked"],
                 ExecutedRuleId = (int)reader["ExecutedRuleId"],
-                Options = reader["RouteOptions"] != null ? Vanrise.Common.Serializer.Deserialize<List<RouteOption>>(reader["RouteOptions"].ToString()) : null
+                Options = reader["RouteOptions"] != null ? Vanrise.Common.ProtoBufSerializer.Deserialize<List<RouteOption>>(Convert.FromBase64String(reader["RouteOptions"] as string)) : null
             };
         }
 
@@ -142,7 +178,5 @@ namespace TOne.WhS.Routing.Data.SQL
                                                     #FILTER#";
 
         #endregion
-
-
     }
 }

@@ -1,5 +1,4 @@
-﻿
-<vr-datagrid datasource="routeRules"
+﻿<vr-datagrid datasource="routeRules"
                 dataretrievalfunction="dataRetrievalFunction"
                 pagingtype="'PagingOnScroll'"
                 on-ready="onGridReady"
@@ -10,4 +9,6 @@
     <vr-datagridcolumn headertext="'Included Codes'" field="'IncludedCodes'" ng-show="hideIncludedCodesColumn"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Customers'" field="'Customers'" ng-show="hideCustomerColumn"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Sale Zones'" field="'SaleZones'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'BED'" field="'Entity.BeginEffectiveTime'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'Entity.EndEffectiveTime'" type="'Date'"></vr-datagridcolumn>
 </vr-datagrid>

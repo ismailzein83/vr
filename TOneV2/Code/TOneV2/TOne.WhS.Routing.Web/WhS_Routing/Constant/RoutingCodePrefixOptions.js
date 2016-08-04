@@ -1,1 +1,1 @@
-﻿app.constant('WhS_Routing_CodePrefixOptions', [0,1,2]);
+﻿app.constant('WhS_Routing_CodePrefixOptions', [2, 3]);

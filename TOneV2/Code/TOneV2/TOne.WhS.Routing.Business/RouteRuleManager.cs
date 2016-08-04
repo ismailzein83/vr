@@ -104,8 +104,10 @@ namespace TOne.WhS.Routing.Business
                  && (string.IsNullOrEmpty(input.Query.Name) || (!string.IsNullOrEmpty(routeRule.Name) && routeRule.Name.ToLower().Contains(input.Query.Name.ToLower())))
                  && (string.IsNullOrEmpty(input.Query.Code) || this.CheckIfCodeCriteriaSettingsContains(routeRule, input.Query.Code))
                  && (input.Query.CustomerIds == null || this.CheckIfCustomerSettingsContains(routeRule, input.Query.CustomerIds))
-                 && (input.Query.SaleZoneIds == null || this.CheckIfSaleZoneSettingsContains(routeRule, input.Query.SaleZoneIds));
-
+                 && (input.Query.SaleZoneIds == null || this.CheckIfSaleZoneSettingsContains(routeRule, input.Query.SaleZoneIds))
+                 && (!input.Query.EffectiveOn.HasValue || routeRule.BeginEffectiveTime <= input.Query.EffectiveOn)
+                 && (!input.Query.EffectiveOn.HasValue || !routeRule.EndEffectiveTime.HasValue || routeRule.EndEffectiveTime > input.Query.EffectiveOn);
+                
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeRules.ToBigResult(input, filterExpression, MapToDetails));
         }
 
