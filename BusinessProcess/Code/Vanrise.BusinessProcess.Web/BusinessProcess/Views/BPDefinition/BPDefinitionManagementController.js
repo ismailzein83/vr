@@ -6,7 +6,7 @@
 
     function BusinessProcess_BPDefinitionManagementController($scope) {
         var gridAPI;
-        var filter = {};
+        var filter = { ShowOnlyVisibleInManagementScreen: true };
         defineScope();
 
         function defineScope() {
@@ -23,10 +23,7 @@
         }
 
         function getFilterObject() {
-            filter = {
-                Title: $scope.title,
-                ShowOnlyVisibleInManagementScreen:true
-            };
+            filter.Title= $scope.title;
         }
     }
 
