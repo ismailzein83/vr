@@ -49,19 +49,22 @@ namespace Vanrise.AccountBalance.BP.Activities
                                 
                                 foreach(var accountBalance in balanceAccounts.AccountBalances)
                                 {
-
-                                    if(accountBalance.AlertRuleID.HasValue)
+                                    if (accountBalance.NextAlertThreshold.HasValue && accountBalance.NextAlertThreshold.Value > accountBalance.CurrentBalance)
                                     {
-                                       var rule =  ruleManager.GetGenericRule(Convert.ToInt32(accountBalance.AlertRuleID.Value)) as BalanceAlertRule;
-                                       var thresholdAction = rule.Settings.ThresholdActions[accountBalance.ThresholdActionIndex.Value];
-                                       foreach (var action in thresholdAction.Actions)
+                                        if (accountBalance.AlertRuleID.HasValue)
                                         {
-                                            CreateVRActionInput createVRActionInput = new CreateVRActionInput
+                                            var rule = ruleManager.GetGenericRule(Convert.ToInt32(accountBalance.AlertRuleID.Value)) as BalanceAlertRule;
+                                            var thresholdAction = rule.Settings.ThresholdActions[accountBalance.ThresholdActionIndex.Value];
+
+                                            foreach (var action in thresholdAction.Actions)
                                             {
-                                                Action = action,
-                                                EventPayload = new BalanceAlertEventPayload { AccountId = accountBalance.AccountId, Threshold = accountBalance.NextAlertThreshold.Value}
-                                            };
-                                            vrActionManager.CreateAction(createVRActionInput,inputArgument.UserId);
+                                                CreateVRActionInput createVRActionInput = new CreateVRActionInput
+                                                {
+                                                    Action = action,
+                                                    EventPayload = new BalanceAlertEventPayload { AccountId = accountBalance.AccountId, Threshold = accountBalance.NextAlertThreshold.Value }
+                                                };
+                                                vrActionManager.CreateAction(createVRActionInput, inputArgument.UserId);
+                                            }
                                         }
                                     }
                                 }
