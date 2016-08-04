@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.Analytics.Entities.BillingReport;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
@@ -14,7 +15,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
-
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var carrierAccounts = carrierAccountManager.GetAllCarriers();
+            var exchangeAccounts = carrierAccounts.Where(it => it.AccountType == CarrierAccountType.Exchange).Select(it => it.CarrierAccountId);
             #region customer part
 
             List<string> listCustomerDimensions = new List<string> { parameters.GroupByProfile ? "CustomerProfile" : "Customer" };
@@ -35,25 +38,16 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 SortByColumnName = "DimensionValues[0].Name"
             };
 
-            if (!String.IsNullOrEmpty(parameters.CustomersId))
+            if (exchangeAccounts.Any())
             {
                 DimensionFilter dimensionFilter = new DimensionFilter
                 {
                     Dimension = "Customer",
-                    FilterValues = parameters.CustomersId.Split(',').ToList().Cast<object>().ToList()
+                    FilterValues = exchangeAccounts.Cast<object>().ToList()
                 };
                 analyticCustomerQuery.Query.Filters.Add(dimensionFilter);
             }
 
-            if (!String.IsNullOrEmpty(parameters.SuppliersId))
-            {
-                DimensionFilter dimensionFilter = new DimensionFilter
-                {
-                    Dimension = "Supplier",
-                    FilterValues = parameters.SuppliersId.Split(',').ToList().Cast<object>().ToList()
-                };
-                analyticCustomerQuery.Query.Filters.Add(dimensionFilter);
-            }
             #endregion
             #region supplier part
             List<string> listSupplierDimensions = new List<string> { parameters.GroupByProfile ? "SupplierProfile" : "Supplier" };
@@ -73,23 +67,12 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 },
                 SortByColumnName = "DimensionValues[0].Name"
             };
-
-            if (!String.IsNullOrEmpty(parameters.CustomersId))
-            {
-                DimensionFilter dimensionFilter = new DimensionFilter
-                {
-                    Dimension = "Customer",
-                    FilterValues = parameters.CustomersId.Split(',').ToList().Cast<object>().ToList()
-                };
-                analyticSupplierQuery.Query.Filters.Add(dimensionFilter);
-            }
-
-            if (!String.IsNullOrEmpty(parameters.SuppliersId))
+            if (exchangeAccounts.Any())
             {
                 DimensionFilter dimensionFilter = new DimensionFilter
                 {
                     Dimension = "Supplier",
-                    FilterValues = parameters.SuppliersId.Split(',').ToList().Cast<object>().ToList()
+                    FilterValues = exchangeAccounts.Cast<object>().ToList()
                 };
                 analyticSupplierQuery.Query.Filters.Add(dimensionFilter);
             }
@@ -146,8 +129,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         profitByCarrier.Total = ReportHelpers.FormatNormalNumberDigit(profitByCarrier.TotalBase);
                     }
                 }
-
-            listprofitByCarrier = dictionaryprofitByCustomer.Values.ToList();
+            listprofitByCarrier = dictionaryprofitByCustomer.Values.OrderByDescending(it => it.TotalBase).ToList();
             Dictionary<string, System.Collections.IEnumerable> dataSources =
                 new Dictionary<string, System.Collections.IEnumerable>
                 {
