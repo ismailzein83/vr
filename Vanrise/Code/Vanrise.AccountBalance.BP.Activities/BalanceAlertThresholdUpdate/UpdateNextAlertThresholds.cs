@@ -37,12 +37,13 @@ namespace Vanrise.AccountBalance.BP.Activities
                     hasItems = inputArgument.InputQueue.TryDequeue(
                         (balanceAccountsThresholds) =>
                         {
+                            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Update next alert thresholds.");
                             ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
                             dataManager.UpdateLiveBalanceThreshold(balanceAccountsThresholds);
                         });
                 } while (!ShouldStop(handle) && hasItems);
             });
-            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "");
+            
         }
         protected override UpdateNextAlertThresholdsInput GetInputArgument2(AsyncCodeActivityContext context)
         {
