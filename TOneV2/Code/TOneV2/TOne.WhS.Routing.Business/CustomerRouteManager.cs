@@ -29,7 +29,10 @@ namespace TOne.WhS.Routing.Business
         {
             ICustomerRouteDataManager manager =  RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
-            manager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(input.Query.RoutingDatabaseId);
+            var routingDatabase = routingDatabaseManager.GetRoutingDatabase(input.Query.RoutingDatabaseId);
+
+            var customerRoutingDatabases = routingDatabaseManager.GetRoutingDatabasesReady(routingDatabase.ProcessType, routingDatabase.Type).OrderByDescending(itm => itm.CreatedTime);
+            manager.RoutingDatabase = customerRoutingDatabases.First();
 
             BigResult<CustomerRoute> customerRouteResult = manager.GetFilteredCustomerRoutes(input);
 
@@ -87,7 +90,7 @@ namespace TOne.WhS.Routing.Business
             {
                 foreach (CustomerRouteOptionDetail item in optionDetails)
                 {
-                    builder.AppendFormat(" {0} {1}%,", item.SupplierName, item.Percentage);
+                    builder.AppendFormat(" {0} {1}{2},", item.SupplierName, item.Percentage, item.Percentage.HasValue ? "%" : string.Empty);
                 }
             }
 
@@ -100,7 +103,7 @@ namespace TOne.WhS.Routing.Business
         internal void LoadRoutesFromCurrentDB(int? customerId, string codePrefix, Action<CustomerRoute> onRouteLoaded)
         {
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
-            var routingDatabases = routingDatabaseManager.GetRoutingDatabases(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
+            var routingDatabases = routingDatabaseManager.GetRoutingDatabasesReady(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
             if(routingDatabases != null && routingDatabases.Count() > 0)
             {
                 ICustomerRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();

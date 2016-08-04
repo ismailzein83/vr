@@ -24,7 +24,7 @@ namespace TOne.WhS.Routing.BP.Activities
             RoutingDatabaseType databaseType = context.GetValue<RoutingDatabaseType>(DatabaseType);
 
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
-            IEnumerable<RoutingDatabase> routingdatabases = routingDatabaseManager.GetRoutingDatabases(processType, databaseType);
+            IEnumerable<RoutingDatabase> routingdatabases = routingDatabaseManager.GetRoutingDatabasesReady(processType, databaseType);
 
             if (routingdatabases != null)
             {

@@ -6,7 +6,7 @@
             <vr-datagridcolumn headertext="'Supplier Code'" field="'SupplierCode'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Supplier Zone'" field="'SupplierZoneName'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Supplier Rate'" field="'SupplierRate'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Percentage'">{{dataItem.Percentage}}%</vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Percentage'">{{dataItem.Percentage}}<span ng-if="dataItem.Percentage">%</span></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Blocked'" field="'IsBlocked'"></vr-datagridcolumn>
         </vr-datagrid>
     </vr-columns>

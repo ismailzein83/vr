@@ -9,6 +9,10 @@
                     <vr-textbox value="code" type="number" minvalue="1" label="Code"></vr-textbox>
                 </vr-columns>
                 <vr-whs-be-carrieraccount-selector ismultipleselection getcustomers on-ready="onCarrierAccountDirectiveReady" normal-col-num="2"></vr-whs-be-carrieraccount-selector>
+
+                <vr-columns width="normal">
+                    <vr-textbox label="Limit Result To" value="limit" type="number" decimalprecision="0" minvalue="1" isrequired="true"></vr-textbox>
+                </vr-columns>
             </vr-row>
         </div>
         <vr-row removeline>

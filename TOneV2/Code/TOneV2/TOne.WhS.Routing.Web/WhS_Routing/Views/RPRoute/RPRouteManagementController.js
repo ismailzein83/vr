@@ -82,7 +82,8 @@
                     RoutingProductIds: routingProductSelectorAPI.getSelectedIds(),
                     SaleZoneIds: saleZoneSelectorAPI.getSelectedIds(),
                     FilteredPolicies: rpRoutePolicyAPI.getFilteredPoliciesIds(),
-                    DefaultPolicyId: rpRoutePolicyAPI.getDefaultPolicyId()
+                    DefaultPolicyId: rpRoutePolicyAPI.getDefaultPolicyId(),
+                    LimitResult: $scope.limit
                 };
                 return query;
             }
@@ -90,7 +91,7 @@
 
         function load() {
             $scope.isLoadingFilterData = true;
-
+            $scope.limit = 1000;
             return UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadRoutingProductSelector, loadSaleZoneSection]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {

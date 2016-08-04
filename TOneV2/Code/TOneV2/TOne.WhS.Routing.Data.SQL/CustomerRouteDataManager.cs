@@ -56,6 +56,7 @@ namespace TOne.WhS.Routing.Data.SQL
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 query_GetFilteredCustomerRoutes.Replace("#TEMPTABLE#", tempTableName);
+                query_GetFilteredCustomerRoutes.Replace("#LimitResult#", input.Query.LimitResult.ToString());
 
                 string customerIdsFilter = string.Empty;
 
@@ -155,7 +156,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
         private StringBuilder query_GetFilteredCustomerRoutes = new StringBuilder(@"IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
 	                                                        BEGIN
-                                                            SELECT [CustomerID]
+                                                            SELECT TOP #LimitResult# [CustomerID]
                                                                 ,[Code]
                                                                 ,[SaleZoneID]
                                                                 ,[Rate]

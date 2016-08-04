@@ -34,11 +34,21 @@ function (WhS_Routing_RPRouteService, UtilsService) {
             defineAPI();
         }
 
+        function buildTitle(supplierName, percentage) {
+            var result = supplierName;
+            if (percentage) {
+                result = result + ' Percentage: ' + percentage + '%';
+            }
+            return result;
+        }
+
         function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
                 ctrl.routeOptions = [];
+
+
 
                 if (payload != undefined) {
                     routingDatabaseId = payload.RoutingDatabaseId;
@@ -47,8 +57,12 @@ function (WhS_Routing_RPRouteService, UtilsService) {
 
                     ctrl.routeOptions = [];
                     if (payload.RouteOptions)
-                        for (var i = 0; i < payload.RouteOptions.length; i++)
-                            ctrl.routeOptions.push(payload.RouteOptions[i]);
+                        for (var i = 0; i < payload.RouteOptions.length; i++) {
+
+                            var currentItem = payload.RouteOptions[i];
+                            currentItem.title = buildTitle(currentItem.SupplierName, currentItem.Entity.Percentage);
+                            ctrl.routeOptions.push(currentItem);
+                        }
                 }
             };
 

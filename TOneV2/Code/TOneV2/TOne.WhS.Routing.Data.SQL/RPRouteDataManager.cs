@@ -49,6 +49,7 @@ namespace TOne.WhS.Routing.Data.SQL
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 query_GetFilteredRPRoutes.Replace("#TEMPTABLE#", tempTableName);
+                query_GetFilteredRPRoutes.Replace("#LimitResult#", input.Query.LimitResult.ToString());
 
                 string routingProductIdsFilter = " 1=1 ";
                 string saleZoneIdsFilter = " 1=1 ";
@@ -151,7 +152,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
         private StringBuilder query_GetFilteredRPRoutes = new StringBuilder(@"IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
 	                                                        BEGIN
-                                                            SELECT [RoutingProductId]
+                                                            SELECT TOP #LimitResult# [RoutingProductId]
                                                                   ,[SaleZoneId]
                                                                   ,[ExecutedRuleId]
                                                                   ,[OptionsDetailsBySupplier]

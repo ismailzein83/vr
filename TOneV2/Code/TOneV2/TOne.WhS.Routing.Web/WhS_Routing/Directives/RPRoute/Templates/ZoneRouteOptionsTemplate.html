@@ -1,7 +1,7 @@
 ﻿<div class="responsive-container" style="white-space: normal;">
     <vr-label isvalue breakline>
         <a style="cursor: pointer; display: inline-block; text-align: center; padding: 0px 10px 0px 0px;"
-           title="{{routeOption.SupplierName}}, Percentage: {{routeOption.Entity.Percentage}}%"
+           title="{{routeOption.title}}"
            ng-repeat="routeOption in ctrl.routeOptions"
            ng-click="ctrl.viewSupplier(routeOption)">
             {{routeOption.Entity.SupplierRate}}

@@ -17,7 +17,7 @@ namespace TOne.WhS.Routing.Business
             List<RoutingDatabaseInfo> routingDatabases = new List<RoutingDatabaseInfo>();
             foreach (RoutingDatabaseType routingDatabaseType in Enum.GetValues(typeof(RoutingDatabaseType)))
             {
-                IEnumerable<RoutingDatabase> databases = GetRoutingDatabases(filter.ProcessType, routingDatabaseType);
+                IEnumerable<RoutingDatabase> databases = GetRoutingDatabasesReady(filter.ProcessType, routingDatabaseType);
                 if (databases != null && databases.Count() > 0)
                 {
                     var item = RoutingDatabaseInfoMapper(databases.OrderByDescending(itm => itm.CreatedTime).First());
@@ -28,9 +28,9 @@ namespace TOne.WhS.Routing.Business
             return routingDatabases;
         }
 
-        public IEnumerable<RoutingDatabase> GetRoutingDatabases(RoutingProcessType routingProcessType, RoutingDatabaseType routingDatabaseType)
+        public IEnumerable<RoutingDatabase> GetRoutingDatabasesReady(RoutingProcessType routingProcessType, RoutingDatabaseType routingDatabaseType)
         {
-            Func<RoutingDatabase, bool> filterExpression = (itm) => (itm.ProcessType == routingProcessType && itm.Type == routingDatabaseType);
+            Func<RoutingDatabase, bool> filterExpression = (itm) => (itm.ProcessType == routingProcessType && itm.Type == routingDatabaseType && itm.IsReady);
             return GetNotDeletedDatabases().FindAllRecords(filterExpression);
         }
 

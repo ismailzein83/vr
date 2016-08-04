@@ -30,7 +30,11 @@ namespace TOne.WhS.Routing.Business
         {
             IRPRouteDataManager manager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
-            manager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(input.Query.RoutingDatabaseId);
+
+            var routingDatabase = routingDatabaseManager.GetRoutingDatabase(input.Query.RoutingDatabaseId);
+
+            var productRoutingDatabases = routingDatabaseManager.GetRoutingDatabasesReady(routingDatabase.ProcessType, routingDatabase.Type).OrderByDescending(itm => itm.CreatedTime);
+            manager.RoutingDatabase = productRoutingDatabases.First();
 
             BigResult<RPRoute> rpRouteResult = manager.GetFilteredRPRoutes(input);
 

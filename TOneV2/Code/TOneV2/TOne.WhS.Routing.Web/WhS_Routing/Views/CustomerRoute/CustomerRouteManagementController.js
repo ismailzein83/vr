@@ -42,7 +42,8 @@
                 var query = {
                     RoutingDatabaseId: routingDatabaseSelectorAPI.getSelectedIds(),
                     Code: $scope.code,
-                    CustomerIds: carrierAccountDirectiveAPI.getSelectedIds()
+                    CustomerIds: carrierAccountDirectiveAPI.getSelectedIds(),
+                    LimitResult: $scope.limit
                 };
                 return query;
             }
@@ -50,7 +51,7 @@
 
         function load() {
             $scope.isLoadingFilterData = true;
-
+            $scope.limit = 1000;
             return UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadCustomersSection]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {

@@ -13,5 +13,7 @@ namespace TOne.WhS.Routing.Entities
         public string Code { get; set; }
 
         public List<int> CustomerIds { get; set; }
+
+        public int LimitResult { get; set; }
     }
 }
