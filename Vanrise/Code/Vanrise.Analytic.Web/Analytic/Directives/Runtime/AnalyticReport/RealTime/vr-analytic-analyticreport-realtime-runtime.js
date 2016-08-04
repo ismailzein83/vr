@@ -114,7 +114,6 @@
                     if (job != undefined)
                         VRTimerService.unregisterJob(job);
                     job = VRTimerService.registerJob(search, $scope, $scope.scopeModel.timeInterval * 60);
-                    return search();
                 };
                
                 defineColumnWidth();
