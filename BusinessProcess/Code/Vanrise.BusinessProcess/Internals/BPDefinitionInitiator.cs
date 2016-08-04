@@ -80,10 +80,21 @@ namespace Vanrise.BusinessProcess
             if(pendingInstances != null)
             {
                 foreach(var instance in pendingInstances)
-                {
+                {                    
                     TryRunProcess(instance, currentRuntimeProcessId, runningRuntimeProcessesIds);
                 }
             }
+        }
+
+        private bool IsParentProcessRunning(long parentProcessInstanceId)
+        {
+            BPInstanceStatus parentStatus;
+            if (_instanceManager.TryGetBPInstanceStatus(parentProcessInstanceId, out parentStatus))
+            {
+                return parentStatus == BPInstanceStatus.Running;
+            }
+            else
+                return false;
         }
 
 
@@ -132,6 +143,13 @@ namespace Vanrise.BusinessProcess
             WorkflowApplication wfApp = inputs != null ? new WorkflowApplication(_workflowDefinition, inputs) : new WorkflowApplication(_workflowDefinition);
             if (!_instanceDataManager.TryLockProcessInstance(bpInstance.ProcessInstanceID, wfApp.Id, currentRuntimeProcessId, runningRuntimeProcessesIds, BusinessProcessRuntime.s_acceptableBPStatusesToRun))
                 return;
+
+            if (bpInstance.ParentProcessID.HasValue && !IsParentProcessRunning(bpInstance.ParentProcessID.Value))
+            {
+                bpInstance.Status = BPInstanceStatus.Terminated;
+                UpdateProcessStatus(bpInstance);
+                return;
+            }
 
             bpInstance.WorkflowInstanceID = wfApp.Id;
             BPRunningInstance runningInstance = new BPRunningInstance

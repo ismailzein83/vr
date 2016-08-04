@@ -20,9 +20,11 @@ namespace Vanrise.BusinessProcess.Data
 
         void SetRunningStatusTerminated(BPInstanceStatus bPInstanceStatus, IEnumerable<int> runningRuntimeProcessesIds);
 
-        void SetChildrenStatusesTerminated(IEnumerable<BPInstanceStatus> enumerable, IEnumerable<int> runningRuntimeProcessesIds);
+        //void SetChildrenStatusesTerminated(IEnumerable<BPInstanceStatus> enumerable, IEnumerable<int> runningRuntimeProcessesIds);
 
-        BPInstance GetBPInstance(int bpInstanceId);
+        BPInstance GetBPInstance(long bpInstanceId);
+
+        bool TryGetBPInstanceStatus(long bpInstanceId, out BPInstanceStatus instanceStatus);
 
         long InsertInstance(string processTitle, long? parentId, int definitionID, object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId,string entityId);       
     }

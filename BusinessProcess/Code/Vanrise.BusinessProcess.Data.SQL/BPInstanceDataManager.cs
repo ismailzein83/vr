@@ -94,12 +94,12 @@ namespace Vanrise.BusinessProcess.Data.SQL
             ExecuteNonQuerySP("[bp].[sp_BPInstance_SetRunningStatusTerminated]", (int)BPInstanceStatus.Terminated, (int)bPInstanceStatus, String.Join(",", runningRuntimeProcessesIds));
         }
 
-        public void SetChildrenStatusesTerminated(IEnumerable<BPInstanceStatus> openStatuses, IEnumerable<int> runningRuntimeProcessesIds)
-        {
-            ExecuteNonQuerySP("[bp].[sp_BPInstance_SetChildrenStatusesTerminated]", (int)BPInstanceStatus.Terminated, String.Join(",", openStatuses.Select(itm => (int)itm)), String.Join(",", runningRuntimeProcessesIds));
-        }
+        //public void SetChildrenStatusesTerminated(IEnumerable<BPInstanceStatus> openStatuses, IEnumerable<int> runningRuntimeProcessesIds)
+        //{
+        //    ExecuteNonQuerySP("[bp].[sp_BPInstance_SetChildrenStatusesTerminated]", (int)BPInstanceStatus.Terminated, String.Join(",", openStatuses.Select(itm => (int)itm)), String.Join(",", runningRuntimeProcessesIds));
+        //}
 
-        public BPInstance GetBPInstance(int bpInstanceId)
+        public BPInstance GetBPInstance(long bpInstanceId)
         {
             return GetItemSP("[bp].[sp_BPInstance_GetByID]", BPInstanceMapper, bpInstanceId);
         }
@@ -148,5 +148,21 @@ namespace Vanrise.BusinessProcess.Data.SQL
             };
         }
         #endregion
+
+
+        public bool TryGetBPInstanceStatus(long bpInstanceId, out BPInstanceStatus instanceStatus)
+        {
+            object statusValue = ExecuteScalarSP("[bp].[sp_BPInstance_GetStatusByID]", bpInstanceId);
+            if (statusValue != null)
+            {
+                instanceStatus = (BPInstanceStatus)statusValue;
+                return true;
+            }
+            else
+            {
+                instanceStatus = default(BPInstanceStatus);
+                return false;
+            }
+        }
     }
 }

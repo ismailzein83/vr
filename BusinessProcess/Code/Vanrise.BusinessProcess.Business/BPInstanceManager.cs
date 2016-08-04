@@ -47,10 +47,16 @@ namespace Vanrise.BusinessProcess.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredBPInstances(input));
         }
 
-        public BPInstance GetBPInstance(int bpInstanceId)
+        public BPInstance GetBPInstance(long bpInstanceId)
         {
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
             return dataManager.GetBPInstance(bpInstanceId);
+        }
+
+        public bool TryGetBPInstanceStatus(long bpInstanceId, out BPInstanceStatus instanceStatus)
+        {
+            IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
+            return dataManager.TryGetBPInstanceStatus(bpInstanceId, out instanceStatus);
         }
 
         public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput)

@@ -39,7 +39,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
         [HttpGet]
         [Route("GetBPInstance")]
-        public BPInstanceModel GetBPInstance(int id)
+        public BPInstanceModel GetBPInstance(long id)
         {
             BPInstanceManager manager = new BPInstanceManager();
             return BPMappers.MapInstance(manager.GetBPInstance(id));

@@ -54,7 +54,7 @@ namespace Vanrise.BusinessProcess
             IEnumerable<int> runningRuntimeProcessesIds = runningProcessManager.GetCachedRunningProcesses().Select(itm => itm.ProcessId);
             var openStatuses = BPInstanceStatusAttribute.GetNonClosedStatuses();
             _instanceDataManager.SetRunningStatusTerminated(BPInstanceStatus.Running, runningRuntimeProcessesIds);
-            _instanceDataManager.SetChildrenStatusesTerminated(BPInstanceStatusAttribute.GetNonClosedStatuses(), runningRuntimeProcessesIds);
+            //_instanceDataManager.SetChildrenStatusesTerminated(BPInstanceStatusAttribute.GetNonClosedStatuses(), runningRuntimeProcessesIds);
         }
 
         #region Process Execution
