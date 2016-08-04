@@ -5,8 +5,8 @@ CREATE PROCEDURE [integration].[sp_DataSourceRuntimeInstance_Insert]
 AS
 BEGIN
 	INSERT INTO integration.DataSourceRuntimeInstance
-	(ID, DataSourceID)
+	(ID, DataSourceID, CreatedTime)
 	VALUES
-	(@InstanceID, @DataSourceID)
+	(@InstanceID, @DataSourceID, GETDATE())
 	
 END

@@ -5,7 +5,9 @@ AS
 BEGIN
 	
 	DECLARE @ID UNIQUEIDENTIFIER, @IsLocked bit
-	SELECT TOP 1 @ID = ID FROM integration.DataSourceRuntimeInstance WITH(NOLOCK) WHERE LockedByProcessID IS NULL
+	SELECT TOP 1 @ID = ID FROM integration.DataSourceRuntimeInstance WITH(NOLOCK) 
+	WHERE LockedByProcessID IS NULL
+	ORDER BY CreatedTime
 	
 	IF (@ID IS NOT NULL)
 	BEGIN

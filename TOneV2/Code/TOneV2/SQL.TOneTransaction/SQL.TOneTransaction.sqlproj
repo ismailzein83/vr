@@ -229,6 +229,7 @@
     <Build Include="queue\Stored Procedures\sp_QueueActivatorInstance_Insert.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueActivatorInstance_GetAll.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueActivatorInstance_Delete.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_GetStatusByID.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
