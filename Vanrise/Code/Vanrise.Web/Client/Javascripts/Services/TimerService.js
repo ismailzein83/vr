@@ -13,7 +13,7 @@
                 id: UtilsService.guid(),
                 onTimerElapsed: callToBeExecuted,
                 jobInterval: jobIntervalInSeconds != undefined ? jobIntervalInSeconds : defaultJobIntervalInSeconds,
-                lastRun: new Date()
+                lastRun: undefined//new Date()
             };
 
             if (scope != undefined) {
@@ -53,8 +53,8 @@
         }, 1000);
 
         function executeJob(job) {
-            var secondsDiff = (new Date().getTime() - job.lastRun.getTime()) / 1000;
-            if (secondsDiff >= job.jobInterval) {
+            var secondsDiff = job.lastRun != undefined ? (new Date().getTime() - job.lastRun.getTime()) / 1000 : 0;
+            if (secondsDiff >= job.jobInterval || job.lastRun == undefined) {
                 job.onTimerElapsed().finally(function () {
                     job.lastRun = new Date();
                     executeNextJob();
