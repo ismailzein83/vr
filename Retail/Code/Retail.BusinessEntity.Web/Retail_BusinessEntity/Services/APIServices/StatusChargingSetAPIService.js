@@ -15,6 +15,11 @@
         function AddStatusChargingSet(statusChargingSetItem) {
             return baseApiService.post(utilsService.getServiceURL(retailBeModuleConfig.moduleName, controllerName, 'AddStatusChargingSet'), statusChargingSetItem);
         }
+        function GetStatusChargeInfos(entityTypeId) {
+            return baseApiService.get(utilsService.getServiceURL(retailBeModuleConfig.moduleName, controllerName, 'GetStatusChargeInfos'), {
+                entityTypeId: entityTypeId
+            });
+        }
         function GetStatusChargingSet(statusChargingSetId) {
             return baseApiService.get(utilsService.getServiceURL(retailBeModuleConfig.moduleName, controllerName, 'GetStatusChargingSet'), {
                 statusChargingSetId: statusChargingSetId
@@ -28,7 +33,8 @@
             AddStatusChargingSet: AddStatusChargingSet,
             GetFilteredStatusChargingSet: GetFilteredStatusChargingSet,
             GetStatusChargingSet: GetStatusChargingSet,
-            UpdateStatusChargingSet: UpdateStatusChargingSet
+            UpdateStatusChargingSet: UpdateStatusChargingSet,
+            GetStatusChargeInfos: GetStatusChargeInfos
         });
     }
 
