@@ -260,6 +260,8 @@
     <Content Include="WhS_BusinessEntity\Directives\RateType\vr-whs-be-ratetype-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\Templates\RoutingProductGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\vr-whs-be-routingproduct-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SaleAreaSettings\Templates\SaleAreaSettingsTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SaleAreaSettings\vr-whs-be-salearea-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleCode\Templates\SaleCodeGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SaleCode\vr-whs-be-salecode-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceList\Templates\SalePriceListGridTemplate.html" />
