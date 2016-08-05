@@ -23,6 +23,7 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.items = [];
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
                     return update();
@@ -34,12 +35,20 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-
             $scope.scopeModel.onEntityTypeSelectorReady = function (api) {
                 entityTypeAPI = api;
                 entityTypeSelectorReadyDeferred.resolve();
             }
+            $scope.scopeModel.onEntityTypeSelectionChanged = function () {
+                var selectedEntityType = entityTypeAPI.getSelectedIds();
+                if (selectedEntityType != undefined) {
+                    retailBeStatusChargingSetApiService.GetStatusChargeInfos(selectedEntityType).then(function (response) {
+                        $scope.scopeModel.items = response;
+                    });
+                }
+            }
         }
+
         function load() {
             $scope.scopeModel.isLoading = true;
             if (isEditMode) {
@@ -66,9 +75,13 @@
             }
         }
         function buildStatusChargingSetObjFromScope() {
-
+            var StatusCharge = {
+                InitialCharge: $scope.scopeModel.InitialCharge,
+                RecurringCharge: $scope.scopeModel.RecurringCharge
+            }
             var settings = {
-                EntityType: entityTypeAPI.getSelectedIds()
+                EntityType: entityTypeAPI.getSelectedIds(),
+                StatusCharge: StatusCharge
             }
 
             return {

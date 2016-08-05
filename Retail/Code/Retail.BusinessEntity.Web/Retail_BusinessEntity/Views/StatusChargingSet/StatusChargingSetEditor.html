@@ -7,8 +7,16 @@
                         <vr-columns width="1/2row">
                             <vr-textbox label="Name" value="scopeModel.name" isrequired></vr-textbox>
                         </vr-columns>
-                        <retail-be-entitytype-selector on-ready="scopeModel.onEntityTypeSelectorReady" normal-col-num="6" isrequired="true"></retail-be-entitytype-selector>
+                        <retail-be-entitytype-selector on-ready="scopeModel.onEntityTypeSelectorReady" normal-col-num="6" isrequired="true"
+                                                       onselectionchanged="scopeModel.onEntityTypeSelectionChanged"></retail-be-entitytype-selector>
                     </vr-row>
+                </vr-tab>
+                <vr-tab header="'Settings'">
+                    <vr-section ng-repeat="item in scopeModel.items" title="{{item.StatusName}}">
+                        <retail-be-statuscharginginfo>
+
+                        </retail-be-statuscharginginfo>
+                    </vr-section>
                 </vr-tab>
             </vr-tabs>
         </vr-form>
