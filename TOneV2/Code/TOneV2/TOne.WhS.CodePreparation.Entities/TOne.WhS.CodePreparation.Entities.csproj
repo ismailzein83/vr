@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddedRate.cs" />
     <Compile Include="AddedZone.cs" />
     <Compile Include="ChangedData\ChangedCode.cs" />
     <Compile Include="ChangedData\ChangedRate.cs" />
@@ -70,6 +71,8 @@
     <Compile Include="PreviewData\CountryPreview.cs" />
     <Compile Include="PreviewData\SPLPreviewQuery.cs" />
     <Compile Include="PreviewData\ZonePreview.cs" />
+    <Compile Include="NewData\RateToAdd.cs" />
+    <Compile Include="NewData\PriceListToAdd.cs" />
     <Compile Include="SaleCode\CloseCodesOutput.cs" />
     <Compile Include="SaleCode\CloseCodesInput.cs" />
     <Compile Include="CountryToProcess.cs" />

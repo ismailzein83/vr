@@ -17,6 +17,7 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
             CodesToClose = new List<CodeToClose>();
             AddedZones = new List<AddedZone>();
             ExistingZones = new List<ExistingZone>();
+
         }
         public string ZoneName { get; set; }
 
@@ -29,6 +30,17 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
         public List<AddedZone> AddedZones { get; set; }
 
         public List<ExistingZone> ExistingZones { get; set; }
+
+
+        private List<RateToAdd> _ratesToAdd = new List<RateToAdd>();
+
+        public List<RateToAdd> RatesToAdd
+        {
+            get
+            {
+                return this._ratesToAdd;
+            }
+        }
 
         public string RecentZoneName { get; set; }
 
