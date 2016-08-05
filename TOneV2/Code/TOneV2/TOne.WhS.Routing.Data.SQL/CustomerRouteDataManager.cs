@@ -148,7 +148,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 Rate = GetReaderValue<decimal>(reader, "Rate"),
                 IsBlocked = (bool)reader["IsBlocked"],
                 ExecutedRuleId = (int)reader["ExecutedRuleId"],
-                Options = reader["RouteOptions"] != null ? Vanrise.Common.ProtoBufSerializer.Deserialize<List<RouteOption>>(Convert.FromBase64String(reader["RouteOptions"] as string)) : null
+                Options = reader["RouteOptions"] != DBNull.Value ? Vanrise.Common.ProtoBufSerializer.Deserialize<List<RouteOption>>(Convert.FromBase64String(reader["RouteOptions"] as string)) : null
             };
         }
 

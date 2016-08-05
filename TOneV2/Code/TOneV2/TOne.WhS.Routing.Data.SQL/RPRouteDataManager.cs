@@ -157,8 +157,8 @@ namespace TOne.WhS.Routing.Data.SQL
                 SaleZoneId = (long)reader["SaleZoneId"],
                 IsBlocked = (bool)reader["IsBlocked"],
                 ExecutedRuleId = (int)reader["ExecutedRuleId"],
-                OptionsDetailsBySupplier = reader["OptionsDetailsBySupplier"] != null ? Vanrise.Common.ProtoBufSerializer.Deserialize<Dictionary<int, RPRouteOptionSupplier>>(Convert.FromBase64String(reader["OptionsDetailsBySupplier"] as string)) : null,
-                RPOptionsByPolicy = reader["OptionsByPolicy"] != null ? Vanrise.Common.ProtoBufSerializer.Deserialize<Dictionary<int, IEnumerable<RPRouteOption>>>(Convert.FromBase64String(reader["OptionsByPolicy"] as string)) : null
+                OptionsDetailsBySupplier = reader["OptionsDetailsBySupplier"]  != DBNull.Value ? Vanrise.Common.ProtoBufSerializer.Deserialize<Dictionary<int, RPRouteOptionSupplier>>(Convert.FromBase64String(reader["OptionsDetailsBySupplier"] as string)) : null,
+                RPOptionsByPolicy = reader["OptionsByPolicy"] != DBNull.Value ? Vanrise.Common.ProtoBufSerializer.Deserialize<Dictionary<int, IEnumerable<RPRouteOption>>>(Convert.FromBase64String(reader["OptionsByPolicy"] as string)) : null
             };
         }
 
