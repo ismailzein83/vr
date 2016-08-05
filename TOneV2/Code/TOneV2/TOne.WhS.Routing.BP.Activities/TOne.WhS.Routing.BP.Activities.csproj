@@ -85,6 +85,7 @@
     <Compile Include="BuildCustomerRoutes.cs" />
     <Compile Include="CreateRoutingDatabase.cs" />
     <Compile Include="DropOldRoutingDatabases.cs" />
+    <Compile Include="FinalizeProductRouteDatabase.cs" />
     <Compile Include="GenerateCustomerZoneDetails.cs" />
     <Compile Include="GenerateSupplierZoneDetails.cs" />
     <Compile Include="GetDistinctSaleZoneIds.cs" />
@@ -104,7 +105,7 @@
     <Compile Include="PrepareSupplierZoneDetailForDBApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RPBuildRoutes.cs" />
-    <Compile Include="FinalizeRoutingDatabase.cs" />
+    <Compile Include="FinalizeCustomerRouteDatabase.cs" />
     <Compile Include="SetRoutingDatabaseReady.cs" />
   </ItemGroup>
   <ItemGroup>

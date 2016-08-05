@@ -312,13 +312,14 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <twrba1:FinalizeRoutingDatabase sap2010:WorkflowViewState.IdRef="FinalizeRoutingDatabase_1">
-      <twrba1:FinalizeRoutingDatabase.RoutingDatabaseId>
+    <twrba1:FinalizeCustomerRouteDatabase>
+      <twrba1:FinalizeCustomerRouteDatabase.RoutingDatabaseId>
         <InArgument x:TypeArguments="x:Int32">
           <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
         </InArgument>
-      </twrba1:FinalizeRoutingDatabase.RoutingDatabaseId>
-    </twrba1:FinalizeRoutingDatabase>
+      </twrba1:FinalizeCustomerRouteDatabase.RoutingDatabaseId>
+      <sap2010:WorkflowViewState.IdRef>FinalizeCustomerRouteDatabase_1</sap2010:WorkflowViewState.IdRef>
+    </twrba1:FinalizeCustomerRouteDatabase>
     <twrba1:SetRoutingDatabaseReady sap2010:WorkflowViewState.IdRef="SetRoutingDatabaseReady_1">
       <twrba1:SetRoutingDatabaseReady.RoutingDatabaseId>
         <InArgument x:TypeArguments="x:Int32">
@@ -338,7 +339,7 @@
         </InArgument>
       </twrba1:DropOldRoutingDatabases.ProcessType>
     </twrba1:DropOldRoutingDatabases>
-    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUm91dGluZ1Byb2Nlc3MueGFtbEJHA9YCDgIBAUwLTKcBAgEKUQtRpwECAQJYBVwRAwHMAl0FdyQDAaMCeAV+IAMBmQJ/BaQBEAMB5QGlAQXmARADAaIB5wEF7QEgAwGYAe4BBbMCFwIBP7QCBboCIAIBNbsCBcECJgIBLMICBcgCJgIBI8kCBdQCJgIBEloJWnsDAc0CbwtvcAMBxAJlC2VqAwG8AmALYGEDAbQCdAt0cgMBrAJqC2pwAwGkAnsLe4UBAwGbAnhgeHQDAZoCgAEHhgEnAwGQAocBB40BJwMBhwKOAQejASQDAeYBpgEHxQErAwHEAcYBB+UBKwMBowHqAQvqAYUBAwGaAecBYOcBuAEDAZkB8QEL8QFuAwGQAfgBCbECFAIBQLcCC7cChQECATe0AmC0AoQBAgE2vgILvgJZAgEtxQILxQJZAgEkzAILzAJyAgEb0QIL0QJwAgETgwENgwGIAQMBkQKKAQ2KAYcBAwGIApYBDZYBeAMB/wGbAQ2bAWwDAfcBkQENkQFgAwHvAaABDaABWgMB5wGuAQ2uAWwDAd0BuAENuAFbAwHVAakBDakBgAEDAc0BswENswFaAwHFAckBDckBbAMBvAHTAQ3TAVsDAbQB2AEN2AF/AwGsAc4BDc4BWgMBpAH5AQuEAhwCAXyFAguwAhACAUH8ARH8Ac8CAwGHAYECEYEChAECAX75AXz5AYIBAgF9iAIRiAKzAQIBQowCD5ICIwIBcpUCD64CGgIBS48CFY8CyQECAXOWAhGhAhoCAV+iAhGtAiwCAUyeAheeAnMCAWmZAheZAncCAWCqAheqApEBAgFWpQIXpQLyAQIBTQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUm91dGluZ1Byb2Nlc3MueGFtbEJHA9cCDgIBAUwLTKcBAgEKUQtRpwECAQJYBVwRAwHMAl0FdyQDAaMCeAV+IAMBmQJ/BaQBEAMB5QGlAQXmARADAaIB5wEF7QEgAwGYAe4BBbMCFwIBP7QCBboCIAIBNbsCBcICLAIBLMMCBckCJgIBI8oCBdUCJgIBEloJWnsDAc0CbwtvcAMBxAJlC2VqAwG8AmALYGEDAbQCdAt0cgMBrAJqC2pwAwGkAnsLe4UBAwGbAnhgeHQDAZoCgAEHhgEnAwGQAocBB40BJwMBhwKOAQejASQDAeYBpgEHxQErAwHEAcYBB+UBKwMBowHqAQvqAYUBAwGaAecBYOcBuAEDAZkB8QEL8QFuAwGQAfgBCbECFAIBQLcCC7cChQECATe0AmC0AoQBAgE2vgILvgJZAgEtxgILxgJZAgEkzQILzQJyAgEb0gIL0gJwAgETgwENgwGIAQMBkQKKAQ2KAYcBAwGIApYBDZYBeAMB/wGbAQ2bAWwDAfcBkQENkQFgAwHvAaABDaABWgMB5wGuAQ2uAWwDAd0BuAENuAFbAwHVAakBDakBgAEDAc0BswENswFaAwHFAckBDckBbAMBvAHTAQ3TAVsDAbQB2AEN2AF/AwGsAc4BDc4BWgMBpAH5AQuEAhwCAXyFAguwAhACAUH8ARH8Ac8CAwGHAYECEYEChAECAX75AXz5AYIBAgF9iAIRiAKzAQIBQowCD5ICIwIBcpUCD64CGgIBS48CFY8CyQECAXOWAhGhAhoCAV+iAhGtAiwCAUyeAheeAnMCAWmZAheZAncCAWCqAheqApEBAgFWpQIXpQLyAQIBTQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -405,7 +406,7 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="794,22" />
-      <sap2010:ViewStateData Id="FinalizeRoutingDatabase_1" sap:VirtualizedContainerService.HintSize="794,22" />
+      <sap2010:ViewStateData Id="FinalizeCustomerRouteDatabase_1" sap:VirtualizedContainerService.HintSize="794,22" />
       <sap2010:ViewStateData Id="SetRoutingDatabaseReady_1" sap:VirtualizedContainerService.HintSize="794,22" />
       <sap2010:ViewStateData Id="DropOldRoutingDatabases_1" sap:VirtualizedContainerService.HintSize="794,22" />
       <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,1646">
