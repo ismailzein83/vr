@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [TOneWhS_Sales].[sp_SalePriceList_SyncWithTempData]
+CREATE PROCEDURE [TOneWhS_Sales].[sp_SalePriceList_SyncWithImportedData]
 	@ProcessInstanceId bigint,
 	@ReservedSalePriceListId int = null,
 	@OwnerType int,

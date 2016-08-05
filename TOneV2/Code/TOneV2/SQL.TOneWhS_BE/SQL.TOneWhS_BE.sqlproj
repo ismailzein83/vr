@@ -93,6 +93,7 @@
     <Folder Include="dbo\Tables\" />
     <Folder Include="TOneWhS_RouteSync\" />
     <Folder Include="TOneWhS_RouteSync\Tables\" />
+    <Folder Include="TOneWhS_RouteSync\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_BE\Tables\CarrierAccount.sql" />
@@ -306,7 +307,6 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetBetweenPeriod.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetEffectiveAfterByOwner.sql" />
     <Build Include="dbo\Functions\ParseStringList.sql" />
-    <Build Include="TOneWhS_Sales\Stored Procedures\sp_SalePriceList_SyncWithTempData.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetDefaultRoutingProductsEffectiveAfter.sql" />
     <Build Include="TOneWhS_SPL\Tables\SupplierPriceListTemplate.sql" />
     <Build Include="TOneWhS_Sales\Tables\RP_SaleZoneRoutingProduct_Preview.sql" />
@@ -343,5 +343,7 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_DealProgress_GetAll.sql" />
     <Build Include="Security\TOneWhS_RouteSync.sql" />
     <Build Include="TOneWhS_RouteSync\Tables\RouteSyncDefinition.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_SalePriceList_SyncWithImportedData.sql" />
+    <Build Include="TOneWhS_RouteSync\Stored Procedures\sp_RouteSyncDefinition_GetAll.sql" />
   </ItemGroup>
 </Project>
