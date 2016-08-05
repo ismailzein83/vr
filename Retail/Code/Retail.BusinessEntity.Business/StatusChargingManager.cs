@@ -75,9 +75,10 @@ namespace Retail.BusinessEntity.Business
             return false;
         }
 
-        public List<EntityStatusChargeInfo> GetStatusChargeInfos(EntityType entityType, string entityTypeId)
+        public List<EntityStatusChargeInfo> GetStatusChargeInfos(int entityTypeId)
         {
-            if (entityType == EntityType.Account)
+            var entityTypeTemp = (EntityType)entityTypeId;
+            if (entityTypeTemp == EntityType.Account)
                 return new List<EntityStatusChargeInfo>    
                 {
                     new EntityStatusChargeInfo
@@ -91,6 +92,7 @@ namespace Retail.BusinessEntity.Business
                     {
                         StatusDefinitionId = new Guid("007869D9-6DC2-4F56-88A4-18C8C442E49E"),
                         StatusName = "Suspended",
+                         HasInitialCharge = false,
                         HasRecurringCharge = true
                     }
             };
