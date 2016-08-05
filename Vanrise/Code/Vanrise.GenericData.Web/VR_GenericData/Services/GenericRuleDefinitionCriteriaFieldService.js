@@ -14,7 +14,7 @@
         function addGenericRuleDefinitionCriteriaField(genericRuleDefinitionCriteriaFields, context, onGenericRuleDefinitionCriteriaFieldAdded) {
             var modalParameters = {
                 GenericRuleDefinitionCriteriaFields: genericRuleDefinitionCriteriaFields,
-                Context: context
+                context: context
             };
 
             var modalSettings = {};
@@ -30,7 +30,7 @@
             var modalParameters = {
                 GenericRuleDefinitionCriteriaFieldName: genericRuleDefinitionCriteriaFieldName,
                 GenericRuleDefinitionCriteriaFields: genericRuleDefinitionCriteriaFields,
-                Context: context
+                context: context
             };
 
             var modalSettings = {};

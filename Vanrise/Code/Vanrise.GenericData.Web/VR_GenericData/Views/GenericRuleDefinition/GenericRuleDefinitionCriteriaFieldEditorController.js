@@ -30,8 +30,8 @@
             if (parameters != undefined) {
                 criteriaFieldName = parameters.GenericRuleDefinitionCriteriaFieldName;
                 criteriaFields = UtilsService.cloneObject(parameters.GenericRuleDefinitionCriteriaFields, true);
-                if (parameters.Context != undefined)
-                    objectVariables = parameters.Context.getObjects();
+                if (parameters.context != undefined)
+                    objectVariables = parameters.context.getObjectVariables();
             }
 
             isEditMode = (criteriaFieldName != undefined);
@@ -100,14 +100,11 @@
             });
 
             function setTitle() {
-                $scope.scopeModel.title = (isEditMode) ?
+                $scope.title = (isEditMode) ?
                     UtilsService.buildTitleForUpdateEditor((criteriaFieldEntity != undefined) ? criteriaFieldEntity.FieldName : null, 'Generic Rule Definition Criteria Field') :
                     UtilsService.buildTitleForAddEditor('Generic Rule Definition Criteria Field');
             }
             function loadStaticData() {
-
-                //if (context != undefined)
-                //    $scope.objectsVariable = context.getObjects();
 
                 if (criteriaFieldEntity == undefined) {
                     return;
@@ -152,7 +149,8 @@
                         payload.objectVariables = objectVariables                        
                     }
                     if (criteriaFieldEntity != undefined) {
-                        payload.criteriaField = criteriaFieldEntity
+                        var objectProperty = { objectName: criteriaFieldEntity.ValueObjectName, propertyEvaluator: criteriaFieldEntity.ValueEvaluator };
+                        payload.objectProperty = objectProperty;
                     }
 
                     VRUIUtilsService.callDirectiveLoad(objectPropertySelectorAPI, payload, objectPropertySelectorLoadDeferred);
@@ -179,8 +177,11 @@
 
         function buildCriteriaFieldObjectFromScope() {
 
-            if (objectPropertySelectorAPI != undefined)
-                var objectPropertyData = objectPropertySelectorAPI.getData();
+            var objectProperty = objectPropertySelectorAPI.getData();
+            if (objectProperty != undefined) {
+                var valueObjectName = objectProperty.objectName;
+                var valueEvaluator = objectProperty.propertyEvaluator;
+            }
 
             return {
                 $type: "Vanrise.GenericData.Entities.GenericRuleDefinitionCriteriaField, Vanrise.GenericData.Entities",
@@ -189,8 +190,8 @@
                 FieldType: dataRecordFieldTypeSelectiveAPI.getData(),
                 RuleStructureBehaviorType: $scope.scopeModel.selectedBehaviorType.value,
                 ShowInBasicSearch: $scope.scopeModel.showInBasicSearch,
-                ValueObjectName: objectPropertyData.ValueObjectName,
-                ValueEvaluator: objectPropertyData.ValueEvaluator
+                ValueObjectName: valueObjectName,
+                ValueEvaluator: valueEvaluator
             };
         }
     }

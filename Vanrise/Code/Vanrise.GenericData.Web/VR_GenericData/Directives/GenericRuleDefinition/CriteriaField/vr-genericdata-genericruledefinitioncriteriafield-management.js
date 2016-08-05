@@ -79,8 +79,8 @@
 
                 api.load = function (payload) {
 
-                    if (payload != undefined && payload.Context != undefined)
-                        context = payload.Context;
+                    if (payload != undefined && payload.context != undefined)
+                        context = payload.context;
 
                     return loadDataRecordFieldTypeConfigs().then(function () {
                         if (payload != undefined && payload.GenericRuleDefinitionCriteriaFields != undefined) {

@@ -20,6 +20,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetObjectTypeExtensionConfigs")]
         public IEnumerable<VRObjectTypeConfig> GetStyleFormatingExtensionConfigs()
         {
+            System.Threading.Thread.Sleep(2000);
             return _manager.GetObjectTypeExtensionConfigs();
         }
     }

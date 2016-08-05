@@ -56,6 +56,7 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    console.log(payload);
                     selectorAPI.clearDataSource();
 
                     var promises = [];
@@ -94,8 +95,8 @@
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
                             var directivePayload;
-                            if (objectType != undefined && objectType.RecordTypeId != undefined) {
-                               directivePayload = { recordTypeId: objectType.RecordTypeId }
+                            if (objectType != undefined) {
+                                directivePayload = { objectType: objectType }
                             }
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });

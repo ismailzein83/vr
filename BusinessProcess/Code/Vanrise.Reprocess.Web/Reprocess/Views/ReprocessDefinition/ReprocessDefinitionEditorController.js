@@ -43,7 +43,6 @@
                 dataRecordStorageAPI = api;
                 dataRecordStorageSelectorReadyDeferred.resolve();
             };
-
             $scope.scopeModel.onDataRecordStorageSelectionChanged = function () {
                 var selectedRecordStorageId = dataRecordStorageAPI.getSelectedIds();
                 if (selectedRecordStorageId != undefined) {
@@ -55,7 +54,6 @@
                 executionFlowDefinitionAPI = api;
                 executionFlowDefinitionSelectorReadyDeferred.resolve();
             };
-
             $scope.scopeModel.onExecutionFlowDefinitionSelectionChanged = function () {
                 var selectedExecutionFlowDefinitionId = executionFlowDefinitionAPI.getSelectedIds();
                 if (selectedExecutionFlowDefinitionId != undefined)

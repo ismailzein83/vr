@@ -197,7 +197,7 @@
                 var criteriaDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 criteriaDirectiveReadyDeferred.promise.then(function () {
-                    var criteriaDirectivePayload = { Context: buildContext() };
+                    var criteriaDirectivePayload = { context: buildContext() };
 
                     if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.CriteriaDefinition != null) {
                         criteriaDirectivePayload.GenericRuleDefinitionCriteriaFields = genericRuleDefinitionEntity.CriteriaDefinition.Fields
@@ -321,7 +321,7 @@
         function buildContext() {
 
             var context =  {
-                getObjects: function () { return objectDirectiveAPI.getData(); }
+                getObjectVariables: function () { return objectDirectiveAPI.getData(); }
             }
             return context;
         }

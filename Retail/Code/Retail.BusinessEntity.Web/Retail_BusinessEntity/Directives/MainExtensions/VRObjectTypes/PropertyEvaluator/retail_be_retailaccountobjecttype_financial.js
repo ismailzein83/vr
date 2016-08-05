@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/VRObjectType/PropertyEvaluator/Templates/FinancialRetailAccountEvaluatorTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/VRObjectTypes/PropertyEvaluator/Templates/FinancialRetailAccountEvaluatorTemplate.html"
 
         };
         function RetailAccountObjectType($scope, ctrl, $attrs) {
@@ -35,16 +35,16 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    if(payload !=undefined)
+                    if (payload != undefined && payload.valueEvaluator != undefined)
                     {
-                        $scope.scopeModel.selectedFinancialRetailAccount = UtilsService.getItemByVal($scope.scopeModel.financialRetailAccount, payload.FinancialAccount, "value");
+                        $scope.scopeModel.selectedFinancialRetailAccount = UtilsService.getItemByVal($scope.scopeModel.financialRetailAccount, payload.valueEvaluator.FinancialField, "value");
                     }
                 };
 
                 api.getData = function () {
                     var data = {
                         $type: "Retail.BusinessEntity.MainExtensions.VRObjectTypes.FinancialRetailAccountPropertyEvaluator, Retail.BusinessEntity.MainExtensions",
-                        FinancialAccount: $scope.scopeModel.selectedFinancialRetailAccount.value
+                        FinancialField: $scope.scopeModel.selectedFinancialRetailAccount.value
                     }
                     return data;
                 }
