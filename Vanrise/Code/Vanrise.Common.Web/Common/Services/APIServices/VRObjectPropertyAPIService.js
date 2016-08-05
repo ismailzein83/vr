@@ -10,7 +10,7 @@
 
 
         function GetObjectPropertyExtensionConfigs(configType) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetObjectPropertyExtensionConfigs"), { configType: configType });
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetObjectPropertyExtensionConfigs"), { configType: configType }, { useCache: true });
         }
 
 
@@ -22,6 +22,3 @@
     appControllers.service('VRCommon_VRObjectPropertyAPIService', VRObjectPropertyAPIService);
 
 })(appControllers);
-
-
-//, { useCache: true }

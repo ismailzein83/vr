@@ -10,7 +10,7 @@
 
 
         function GetObjectTypeExtensionConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetObjectTypeExtensionConfigs"), {});
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetObjectTypeExtensionConfigs"), {}, { useCache: true });
         }
 
 
@@ -23,4 +23,3 @@
 
 })(appControllers);
 
-//{useCache: true}

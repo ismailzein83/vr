@@ -66,10 +66,7 @@
                     if ($scope.scopeModel.selectedObjectVariable != undefined && $scope.scopeModel.selectedObjectVariable.ObjectType != undefined) {
                         var objectTypeConfigId = $scope.scopeModel.selectedObjectVariable.ObjectType.ConfigId;
 
-                        $scope.scopeModel.isSelectorLoading = true;
-                        loadObjectPropertySelector(objectTypeConfigId).finally(function () {
-                            //$scope.scopeModel.isSelectorLoading = false;
-                        });
+                        loadObjectPropertySelector(objectTypeConfigId);
                     }                
                 }
 
@@ -172,10 +169,10 @@
 
                 objectPropertySelectorReadyDeferred.promise.then(function () {
                     $scope.scopeModel.isSelectorLoading = true;
+
                     loadObjectTypeConfigs().then(function () {
                         var getObjectPropertyTemplateConfigsPromise = getObjectPropertySelectorTemplateConfigs(objectTypeConfigId);
                         objectPropertySelectorLoadDeferred.resolve();
-                        //$scope.scopeModel.isSelectorLoading = false;
                     });
                 });
 

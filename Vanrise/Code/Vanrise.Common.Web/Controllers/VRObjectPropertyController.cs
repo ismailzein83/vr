@@ -19,7 +19,6 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetObjectPropertyExtensionConfigs")]
         public IEnumerable<VRObjectPropertyEvaluatorConfig> GetObjectPropertyExtensionConfigs(string configType)
         {
-            System.Threading.Thread.Sleep(2000);
             return _manager.GetObjectPropertyExtensionConfigs(configType);
         }
     }
