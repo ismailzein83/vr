@@ -95,8 +95,8 @@ app.directive('retailBeEntitytypeSelector', ['Retail_BE_StatusDefinitionAPIServi
                 label = attrs.customlabel;
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
-                   '<vr-select ' + multipleselection + ' datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired" label="' + label +
-                       '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
+                   '<vr-select ' + multipleselection + ' datatextfield="description" label="' + label + '"  datavaluefield="value" isrequired="ctrl.isrequired"' +
+                       '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues"  entityName="' + label +'"   onselectionchanged="ctrl.onselectionchanged"' +
                        '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
                    '</vr-select>' +
                    '</vr-columns>';
