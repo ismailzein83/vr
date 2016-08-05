@@ -228,10 +228,10 @@ namespace TOne.WhS.Sales.Business
 
         #endregion
 
-        public bool SyncTempDataWithDB(long processInstanceId, int? salePriceListId, SalePriceListOwnerType ownerType, int ownerId, int currencyId, DateTime effectiveOn)
+        public bool SyncImportedDataWithDB(long processInstanceId, int? salePriceListId, SalePriceListOwnerType ownerType, int ownerId, int currencyId, DateTime effectiveOn)
         {
             var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-            return ratePlanDataManager.SyncTempDataWithDB(processInstanceId, salePriceListId, ownerType, ownerId, currencyId, effectiveOn);
+            return ratePlanDataManager.SyncImportedDataWithDB(processInstanceId, salePriceListId, ownerType, ownerId, currencyId, effectiveOn);
         }
 
         public int? GetSellingNumberPlanId(SalePriceListOwnerType ownerType, int ownerId)

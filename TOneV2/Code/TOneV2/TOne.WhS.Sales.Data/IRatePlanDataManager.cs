@@ -19,6 +19,6 @@ namespace TOne.WhS.Sales.Data
 
         bool CancelRatePlanChanges(SalePriceListOwnerType ownerType, int ownerId);
 
-        bool SyncTempDataWithDB(long processInstanceId, int? salePriceListId, SalePriceListOwnerType ownerType, int ownerId, int currencyId, DateTime effectiveOn);
+        bool SyncImportedDataWithDB(long processInstanceId, int? salePriceListId, SalePriceListOwnerType ownerType, int ownerId, int currencyId, DateTime effectiveOn);
     }
 }

@@ -10,7 +10,7 @@ using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class SyncTempDataWithDB : CodeActivity
+    public class SyncImportedDataWithDB : CodeActivity
     {
         #region Input Arguments
 
@@ -42,7 +42,7 @@ namespace TOne.WhS.Sales.BP.Activities
             var ratePlanManager = new RatePlanManager();
             
             long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
-            ratePlanManager.SyncTempDataWithDB(processInstanceId, reservedSalePriceListId, ownerType, ownerId, currencyId, effectiveOn);
+            ratePlanManager.SyncImportedDataWithDB(processInstanceId, reservedSalePriceListId, ownerType, ownerId, currencyId, effectiveOn);
         }
     }
 }
