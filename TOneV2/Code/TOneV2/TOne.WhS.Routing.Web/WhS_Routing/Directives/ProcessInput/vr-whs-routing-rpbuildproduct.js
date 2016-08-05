@@ -102,7 +102,7 @@ app.directive("vrWhsRoutingRpbuildproduct", [ 'WhS_Routing_RPRouteAPIService', '
                 $scope.selectedCodePrefixOption = WhS_Routing_CodePrefixOptions[0];
 
                 $scope.saleZoneRangeOptions = WhS_Routing_SaleZoneRangeOptions;
-                $scope.selectedSaleZoneRange = WhS_Routing_SaleZoneRangeOptions[0];
+                $scope.selectedSaleZoneRange = WhS_Routing_SaleZoneRangeOptions[5];
 
                 if (!$scope.isFuture)
                     $scope.effectiveOn = new Date();
