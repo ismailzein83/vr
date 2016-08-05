@@ -114,6 +114,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                 }
                 else
                 {
+                    Thread.Sleep(s_TryLockInterval);
                     retryCount++;
                     if (retryCount >= s_lockMaxRetryCount)
                         throw new Exception(String.Format("Max Retry Count '{0}' reached when trying to lock and get CDR database of Start Time '{1}'", retryCount, fromTime));
