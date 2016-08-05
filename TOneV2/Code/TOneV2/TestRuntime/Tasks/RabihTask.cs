@@ -27,12 +27,15 @@ namespace TestRuntime
         public void Execute()
         {
 
+            RouteSyncTechnicalSettings sett = new RouteSyncTechnicalSettings() { SwitchInfoGetter = new RouteSyncSwitchGetter() };
+            var ser = Serializer.Serialize(sett);
+
             System.Diagnostics.Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
             Console.WriteLine("Hello from Rabih!");
 
             var runtimeServices = new List<RuntimeService>();
-            //BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
-            //runtimeServices.Add(bpService);
+            BusinessProcessService bpservice = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bpservice);
 
             QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
             SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
