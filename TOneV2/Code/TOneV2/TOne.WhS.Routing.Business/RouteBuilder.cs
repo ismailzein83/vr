@@ -268,7 +268,8 @@ namespace TOne.WhS.Routing.Business
                     }
                     IEnumerable<RPRouteOption> rpRouteOptionsAsEnumerable = rpRouteOptions;
                     routeRule.Settings.ApplyRuleToRPOptions(routeRuleExecutionContext, ref rpRouteOptionsAsEnumerable);
-                    route.RPOptionsByPolicy.Add(supplierZoneToRPOptionPolicy.ConfigId, rpRouteOptionsAsEnumerable);
+                    if (rpRouteOptionsAsEnumerable != null && rpRouteOptionsAsEnumerable.ToList().Count > 0)
+                        route.RPOptionsByPolicy.Add(supplierZoneToRPOptionPolicy.ConfigId, rpRouteOptionsAsEnumerable);
                 }
             }
             return route;
