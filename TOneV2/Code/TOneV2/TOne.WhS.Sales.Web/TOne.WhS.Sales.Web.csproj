@@ -173,8 +173,8 @@
     <Content Include="WhS_Sales\Directives\Preview\Templates\SaleZoneRoutingProductPreviewGridTemplate.html" />
     <Content Include="WhS_Sales\Directives\Preview\vr-whs-sales-ratepreview-grid.js" />
     <Content Include="WhS_Sales\Directives\Preview\vr-whs-sales-salezoneroutingproductpreview-grid.js" />
-    <Content Include="WhS_Sales\Directives\RateType\Templates\RateTypeGridTemplate.html" />
-    <Content Include="WhS_Sales\Directives\RateType\vr-whs-sales-rate-type-grid.js" />
+    <Content Include="WhS_Sales\Directives\OtherRate\Templates\OtherRateGridTemplate.html" />
+    <Content Include="WhS_Sales\Directives\OtherRate\vr-whs-sales-otherrate-grid.js" />
     <Content Include="WhS_Sales\Directives\SellingRules\Templates\SellingRulesGridTemplate.html" />
     <Content Include="WhS_Sales\Directives\SellingRules\vr-whs-sales-sellingrules-grid.js" />
     <Content Include="WhS_Sales\Directives\Settings\Templates\RatePlanSettingsEditorTemplate.html" />

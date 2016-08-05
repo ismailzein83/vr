@@ -116,7 +116,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             {
                 if (existingCode.CodeEntity.BED <= importedCode.BED)
                     recentCodeZoneName = existingCode.ParentZone.ZoneEntity.Name;
-                if (existingCode.IsOverlapedWith(importedCode))
+                if (existingCode.IsOverlappedWith(importedCode))
                 {
                     if (SameCodes(importedCode, existingCode))
                     {

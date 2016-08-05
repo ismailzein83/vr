@@ -29,7 +29,7 @@ namespace TOne.WhS.Sales.Business
 
             if (changes != null && changes.ZoneChanges != null)
             {
-                _newRates = changes.ZoneChanges.MapRecords(itm => itm.NewRate, itm => itm.NewRate != null);
+                _newRates = changes.ZoneChanges.Where(x => x.NewRates != null).SelectMany(x => x.NewRates);
                 _rateChanges = changes.ZoneChanges.MapRecords(itm => itm.RateChange, itm => itm.RateChange != null);
             }
         }
@@ -49,7 +49,13 @@ namespace TOne.WhS.Sales.Business
                 zoneItem.CurrentRateBED = rate.Rate.BED;
                 zoneItem.CurrentRateEED = rate.Rate.EED;
                 zoneItem.IsCurrentRateEditable = (rate.Source == _ownerType);
-                zoneItem.CurrentOtherRates = rate.Rate.OtherRates;
+
+                if (rate.RatesByRateType != null)
+                {
+                    zoneItem.CurrentOtherRates = new Dictionary<int, decimal>();
+                    foreach (KeyValuePair<int, SaleRate> kvp in rate.RatesByRateType)
+                        zoneItem.CurrentOtherRates.Add(kvp.Key, kvp.Value.NormalRate);
+                }
             }
 
             SetZoneRateChanges(zoneItem);
@@ -57,17 +63,12 @@ namespace TOne.WhS.Sales.Business
 
         void SetZoneRateChanges(ZoneItem zoneItem)
         {
-            DraftRateToChange newRate = _newRates.FindRecord(itm => itm.ZoneId == zoneItem.ZoneId);
+            IEnumerable<DraftRateToChange> newRates = _newRates.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
             DraftRateToClose rateChange = _rateChanges.FindRecord(itm => itm.RateId == zoneItem.CurrentRateId); // What if currentRateId = null?
 
-            if (newRate != null)
-            {
-                zoneItem.NewRate = newRate.NormalRate;
-                zoneItem.NewRateBED = newRate.BED;
-                zoneItem.NewRateEED = newRate.EED;
-                zoneItem.NewOtherRates = newRate.OtherRates;
-            }
-            else if (rateChange != null)
+            zoneItem.NewRates = newRates;
+
+            if (rateChange != null)
                 zoneItem.RateChangeEED = rateChange.EED;
         }
     }

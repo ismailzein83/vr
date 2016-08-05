@@ -122,7 +122,7 @@ namespace TOne.WhS.Sales.Business
             {
                 if (existingRate.RateEntity.BED <= rateToChange.BED)
                     recentExistingRate = existingRate;
-                if (existingRate.IsOverlapedWith(rateToChange))
+                if (existingRate.IsOverlappedWith(rateToChange))
                 {
                     DateTime existingRateEED = Utilities.Max(rateToChange.BED, existingRate.BED);
                     existingRate.ChangedRate = new ChangedRate
@@ -160,6 +160,7 @@ namespace TOne.WhS.Sales.Business
             shouldAddMoreRates = false;
             var newRate = new NewRate
             {
+                RateTypeId = rateToChange.RateTypeId,
                 NormalRate = rateToChange.NormalRate,
                 OtherRates = rateToChange.OtherRates,
                 CurrencyId = rateToChange.CurrencyId,

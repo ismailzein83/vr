@@ -44,9 +44,9 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 saleEntityZoneRate = new SaleEntityZoneRate
                 {
-                    Rate = saleRatePriceList.Rate,
                     Source = ownerType,
-                    PriceList = saleRatePriceList.PriceList
+                    Rate = saleRatePriceList.Rate,
+                    RatesByRateType = saleRatePriceList.RatesByRateType
                 };
                 return true;
             }

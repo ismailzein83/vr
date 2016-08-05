@@ -91,10 +91,10 @@ namespace TOne.WhS.Sales.Business
                 {
                     ZoneId = zoneItem.ZoneId,
                     NormalRate = (decimal)zoneItem.CalculatedRate,
-                    BED = effectiveOn,
+                    BED = effectiveOn
                 };
 
-                ZoneChanges zoneItemChanges = new ZoneChanges() { ZoneId = zoneItem.ZoneId, NewRate = newRate };
+                ZoneChanges zoneItemChanges = new ZoneChanges() { ZoneId = zoneItem.ZoneId, NewRates = new List<DraftRateToChange>() { newRate } };
                 zoneChanges.Add(zoneItemChanges);
             }
 

@@ -30,7 +30,7 @@ namespace TOne.WhS.Sales.Business
 
             foreach (ExistingDefaultRoutingProduct existingDefaultRoutingProduct in existingDefaultRoutingProducts)
             {
-                if (existingDefaultRoutingProduct.IsOverlapedWith(defaultRoutingProductToAdd))
+                if (existingDefaultRoutingProduct.IsOverlappedWith(defaultRoutingProductToAdd))
                 {
                     DateTime existingDefaultRoutingProductEED = Utilities.Max(existingDefaultRoutingProduct.BED, defaultRoutingProductToAdd.BED);
                     existingDefaultRoutingProduct.ChangedDefaultRoutingProduct = new ChangedDefaultRoutingProduct()

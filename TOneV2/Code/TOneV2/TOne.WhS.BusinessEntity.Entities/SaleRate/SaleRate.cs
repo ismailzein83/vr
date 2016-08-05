@@ -14,6 +14,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int? CurrencyId { get; set; }
 
+        public int? RateTypeId { get; set; }
+
         public decimal NormalRate { get; set; }
 
         public Dictionary<int, decimal> OtherRates { get; set; }
@@ -30,6 +32,9 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public SaleRate Rate { get; set; }
 
+        public Dictionary<int, SaleRate> RatesByRateType { get; set; }
+
+        //TODO: Remove this property
         public SalePriceList PriceList { get; set; }
 
         public string SourceId { get; set; }

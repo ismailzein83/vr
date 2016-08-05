@@ -135,7 +135,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             {
                 if (existingRate.RateEntity.BED <= importedRate.BED)
                     recentExistingRate = existingRate;
-                if (existingRate.IsOverlapedWith(importedRate))
+                if (existingRate.IsOverlappedWith(importedRate))
                 {
                     if (SameRates(importedRate, existingRate))
                     {

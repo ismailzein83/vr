@@ -1,0 +1,19 @@
+﻿<vr-datagrid datasource="otherRates"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             norowhighlightonclick="'true'"
+             idfield="Entity.RateTypeId">
+    <vr-datagridcolumn headertext="'RateType Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Current Rate'" field="'currentRate'" type="'Number'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'New Rate'" widthfactor="2" disablesorting>
+        <span vr-disabled="!viewScope.areOtherRatesEditable()">
+            <vr-textbox type="number"
+                        value="dataItem.newRate"
+                        onvaluechanged="viewScope.onValueChanged"
+                        minvalue="0"
+                        tonextinput>
+            </vr-textbox>
+        </span>
+    </vr-datagridcolumn>
+</vr-datagrid>

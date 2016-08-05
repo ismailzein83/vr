@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -25,24 +26,21 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>().GetOrCreateObject(String.Format("GetSaleRates_{0}_{1}_{2:MM/dd/yy}", ownerType, ownerId, effectiveOn.Date),
                () =>
                {
-                   SalePriceListManager salePriceListManager = new SalePriceListManager();
                    ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
                    List<SaleRate> saleRates = dataManager.GetEffectiveSaleRates(ownerType, ownerId, this.effectiveOn);
                    SaleRatesByZone saleRatesByZone = new SaleRatesByZone();
                    if (saleRates != null)
                    {
-                       foreach (SaleRate saleRate in saleRates)
+                       IEnumerable<SaleRate> normalRates = saleRates.FindAllRecords(x => !x.RateTypeId.HasValue);
+
+                       foreach (SaleRate normalRate in normalRates)
                        {
-                           if (!saleRatesByZone.ContainsKey(saleRate.ZoneId))
-                           {
-                               SalePriceList priceList = salePriceListManager.GetPriceList(saleRate.PriceListId);
-                               SaleRatePriceList saleRatePriceList = new SaleRatePriceList()
-                               {
-                                   PriceList = priceList,
-                                   Rate = saleRate
-                               };
-                               saleRatesByZone.Add(saleRate.ZoneId, saleRatePriceList);
-                           }
+                           var saleRatePriceList = new SaleRatePriceList() { Rate = normalRate };
+
+                           IEnumerable<SaleRate> otherRates = saleRates.FindAllRecords(x => x.RateTypeId.HasValue && x.ZoneId == normalRate.ZoneId);
+                           saleRatePriceList.RatesByRateType = otherRates.ToDictionary(x => x.RateTypeId.Value);
+                           
+                           saleRatesByZone.Add(normalRate.ZoneId, saleRatePriceList);
                        }
                    }
                    return saleRatesByZone;

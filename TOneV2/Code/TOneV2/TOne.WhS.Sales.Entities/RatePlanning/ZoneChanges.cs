@@ -1,4 +1,4 @@
-﻿
+﻿using System.Collections.Generic;
 
 namespace TOne.WhS.Sales.Entities
 {
@@ -6,7 +6,7 @@ namespace TOne.WhS.Sales.Entities
     {
         public long ZoneId { get; set; }
 
-        public DraftRateToChange NewRate { get; set; }
+        public IEnumerable<DraftRateToChange> NewRates { get; set; }
 
         public DraftRateToClose RateChange { get; set; }
 

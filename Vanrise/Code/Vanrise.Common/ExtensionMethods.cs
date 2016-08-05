@@ -353,7 +353,7 @@ namespace Vanrise.Common
             return IsEffective(entity, date, false);
         }
 
-        public static bool IsOverlapedWith(this IDateEffectiveSettings entity, IDateEffectiveSettings target)
+        public static bool IsOverlappedWith(this IDateEffectiveSettings entity, IDateEffectiveSettings target)
         {
             return entity.EED.VRGreaterThan(target.BED) && target.EED.VRGreaterThan(entity.BED);
         }

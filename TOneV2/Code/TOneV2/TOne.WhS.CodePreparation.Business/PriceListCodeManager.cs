@@ -183,7 +183,7 @@ namespace TOne.WhS.CodePreparation.Business
         {
             foreach (var existingCode in matchExistingCodes)
             {
-                if (existingCode.IsOverlapedWith(codeToAdd))
+                if (existingCode.IsOverlappedWith(codeToAdd))
                 {
                     DateTime existingCodeEED = Utilities.Max(codeToAdd.BED, existingCode.BED);
                     existingCode.ChangedCode = new ChangedCode
@@ -200,7 +200,7 @@ namespace TOne.WhS.CodePreparation.Business
         {
             foreach (var existingCode in matchExistingCodes)
             {
-                if (existingCode.IsOverlapedWith(codeToMove))
+                if (existingCode.IsOverlappedWith(codeToMove))
                 {
                     if (String.Compare(existingCode.ParentZone.Name, codeToMove.OldZoneName, true) != 0)
                         codeToMove.HasOverlapedCodesInOtherZone = true;

@@ -13,6 +13,8 @@ namespace TOne.WhS.Sales.Entities
 
         public string ZoneName { get; set; }
 
+        public int? RateTypeId { get; set; }
+
         public Decimal NormalRate { get; set; }
 
         public ExistingRate RecentExistingRate { get; set; }
@@ -28,6 +30,7 @@ namespace TOne.WhS.Sales.Entities
         public DateTime? EED { get; set; }
 
         List<NewRate> _newRates = new List<NewRate>();
+
         public List<NewRate> NewRates
         {
             get
@@ -46,12 +49,4 @@ namespace TOne.WhS.Sales.Entities
             }
         }
     }
-
-    //public enum RateChangeType
-    //{
-    //    New = 0,
-    //    Increase = 1,
-    //    Decrease = 2,
-    //    Close = 3
-    //}
 }

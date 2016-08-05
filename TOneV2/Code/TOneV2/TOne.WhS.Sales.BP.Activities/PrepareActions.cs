@@ -154,18 +154,22 @@ namespace TOne.WhS.Sales.BP.Activities
             ref DateTime minDate
         )
         {
-            if (zoneChanges.NewRate != null)
+            if (zoneChanges.NewRates != null)
             {
-                ratesToChange.Add(new RateToChange()
+                foreach (DraftRateToChange newRate in zoneChanges.NewRates)
                 {
-                    ZoneId = zoneChanges.NewRate.ZoneId,
-                    ZoneName = saleZoneManager.GetSaleZoneName(zoneChanges.ZoneId),
-                    NormalRate = zoneChanges.NewRate.NormalRate,
-                    CurrencyId = currencyId,
-                    BED = zoneChanges.NewRate.BED,
-                    EED = zoneChanges.NewRate.EED
-                });
-                minDate = Vanrise.Common.Utilities.Min(minDate, zoneChanges.NewRate.BED);
+                    ratesToChange.Add(new RateToChange()
+                    {
+                        ZoneId = newRate.ZoneId,
+                        ZoneName = saleZoneManager.GetSaleZoneName(zoneChanges.ZoneId),
+                        RateTypeId = newRate.RateTypeId,
+                        NormalRate = newRate.NormalRate,
+                        CurrencyId = currencyId,
+                        BED = newRate.BED,
+                        EED = newRate.EED
+                    });
+                    minDate = Vanrise.Common.Utilities.Min(minDate, newRate.BED);
+                }
             }
             else if (zoneChanges.RateChange != null)
             {

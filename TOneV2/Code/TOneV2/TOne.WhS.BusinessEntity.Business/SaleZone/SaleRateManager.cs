@@ -13,7 +13,6 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleRateManager
     {
-
         #region Public Methods
         public List<SaleRate> GetRates(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
@@ -36,6 +35,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return BigDataManager.Instance.RetrieveData(input, new SaleRateRequestHandler());
         }
+
         public Dictionary<long, SaleRate> GetCachedSaleRatesInBetweenPeriod(DateTime fromTime, DateTime tillTime)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>().GetOrCreateObject("GetSaleRatesInBetweenPeriod",
@@ -70,7 +70,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (customerZoneRate != null)
             {
-                int currencyId = customerZoneRate.Rate.CurrencyId.HasValue ? customerZoneRate.Rate.CurrencyId.Value : customerZoneRate.PriceList.CurrencyId;
+                int currencyId = GetCurrencyId(customerZoneRate.Rate);
 
                 SalePricingRuleManager salePricingRuleManager = new SalePricingRuleManager();
                 SalePricingRulesInput salePricingRulesInput = new SalePricingRulesInput
@@ -121,6 +121,19 @@ namespace TOne.WhS.BusinessEntity.Business
             return startingId;
         }
 
+        public int GetCurrencyId(SaleRate saleRate)
+        {
+            if (saleRate == null)
+                throw new ArgumentNullException("saleRate");
+            if (saleRate.CurrencyId.HasValue)
+                return saleRate.CurrencyId.Value;
+            var salePriceListManager = new SalePriceListManager();
+            SalePriceList salePriceList = salePriceListManager.GetPriceList(saleRate.PriceListId);
+            if (salePriceList == null)
+                throw new NullReferenceException(String.Format("salePriceList (Id: {0}) does not exist for saleRate (Id: {1})", saleRate.SaleRateId, salePriceList.PriceListId));
+            return salePriceList.CurrencyId;
+        }
+
         #endregion
 
         #region Private Mappers
@@ -149,7 +162,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
-
         #region Private Classes
 
         private class SaleRateRequestHandler : BigDataRequestHandler<SaleRateQuery, SaleRate, SaleRateDetail>
@@ -168,6 +180,5 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
-
     }
 }

@@ -12,6 +12,8 @@ namespace TOne.WhS.Sales.Entities
 
         public ExistingZone Zone { get; set; }
 
+        public int? RateTypeId { get; set; }
+
         public Decimal NormalRate { get; set; }
 
         public Dictionary<int, Decimal> OtherRates { get; set; }

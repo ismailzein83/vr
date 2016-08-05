@@ -85,6 +85,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             saleRate.ZoneId = (long)reader["ZoneID"];
             saleRate.PriceListId = (int)reader["PriceListID"];
 
+            saleRate.RateTypeId = GetReaderValue<int?>(reader, "RateTypeID");
             saleRate.NormalRate = (decimal)reader["Rate"];
             saleRate.OtherRates = reader["OtherRates"] as string != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string) : null;
 

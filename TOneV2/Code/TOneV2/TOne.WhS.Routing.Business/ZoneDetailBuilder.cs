@@ -50,7 +50,8 @@ namespace TOne.WhS.Routing.Business
 
                     if (customerZoneRate != null)
                     {
-                        int currencyId = customerZoneRate.Rate.CurrencyId.HasValue ? customerZoneRate.Rate.CurrencyId.Value : customerZoneRate.PriceList.CurrencyId;
+                        var saleRateManager = new SaleRateManager();
+                        int currencyId = saleRateManager.GetCurrencyId(customerZoneRate.Rate);
 
                         var output = dataTransformer.ExecuteDataTransformation(data.RouteRuleDataTransformation.CustomerTransformationId, (context) =>
                         {

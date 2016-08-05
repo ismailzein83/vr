@@ -90,7 +90,7 @@ namespace TOne.WhS.Sales.Business
         {
             foreach (ExistingSaleZoneRoutingProduct existingRoutingProduct in matchedExistingRoutingProducts)
             {
-                if (existingRoutingProduct.IsOverlapedWith(routingProductToAdd))
+                if (existingRoutingProduct.IsOverlappedWith(routingProductToAdd))
                 {
                     DateTime changedSaleZoneRoutingProductEED = Utilities.Max(existingRoutingProduct.BED, routingProductToAdd.BED);
                     existingRoutingProduct.ChangedSaleZoneRoutingProduct = new ChangedSaleZoneRoutingProduct()

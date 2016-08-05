@@ -23,7 +23,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             var gridAPI;
             var gridQuery;
             var gridDrillDownTabs;
-            var rateTypes = [];
 
             var increasedRateDayOffset = 0;
             var decreasedRateDayOffset = 0;
@@ -56,8 +55,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         var query = {
                             OwnerType: gridQuery.OwnerType,
                             OwnerId: gridQuery.OwnerId,
-                            ZonesIds: [zoneItem.ZoneId],
-                            //EffectiveOn: new Date()
+                            ZonesIds: [zoneItem.ZoneId]
                         };
                         return saleRateGridAPI.loadGrid(query);
                     }
@@ -67,20 +65,17 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     loadDirective: function (saleCodeGridAPI, zoneItem) {
                         var query = {
                             SellingNumberPlanId: null,
-                            ZonesIds: [zoneItem.ZoneId],
-                            //EffectiveOn: new Date()
+                            ZonesIds: [zoneItem.ZoneId]
                         };
                         return saleCodeGridAPI.loadGrid(query);
                     }
                 }];
 
-                //var otherRatesDrillDownDefinition = {
+                //var temp = {
                 //    title: "Other Rates",
-                //    directive: "vr-whs-sales-rate-type-grid",
+                //    directive: "vr-whs-sales-otherrate-grid",
                 //    loadDirective: function (rateTypeGridAPI, zoneItem) {
-                //        var query = {
-                //            dataItem: zoneItem
-                //        };
+                //        var query = { zoneItem: zoneItem };
                 //        return rateTypeGridAPI.loadGrid(query);
                 //    }
                 //};
@@ -97,6 +92,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             $scope.costCalculationMethods = [];
                             for (var i = 0; i < query.CostCalculationMethods.length; i++)
                                 $scope.costCalculationMethods.push(query.CostCalculationMethods[i]);
+                        }
+                        else {
+                            $scope.costCalculationMethods.length = 0;
                         }
                         $scope.rateCalculationMethod = query.RateCalculationMethod;
                         setDayOffsets(query.Settings);
@@ -135,13 +133,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             function loadZoneItems() {
                 var promises = [];
                 $scope.isLoading = true;
-                var ratesPromis = VRCommon_RateTypeAPIService.GetAllRateTypes().then(function (response) {
-                    rateTypes = response;
-                });
-                promises.push(ratesPromis);
+
                 var zoneItemsGetPromise = WhS_Sales_RatePlanAPIService.GetZoneItems(getZoneItemsInput());
                 promises.push(zoneItemsGetPromise);
-
 
                 zoneItemsGetPromise.then(function (response) {
                     if (response != null) {
@@ -176,23 +170,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     };
                 }
 
-                function addRateTypesToZoneItem(zoneItem) {
-
-                    for (var i = 0; i < rateTypes.length; i++) {
-                        zoneItem.CurrentOtherRates[rateTypes[i].Name] = 0;
-                    }
-                }
-
                 function extendZoneItem(zoneItem) {
-
                     zoneItem.IsDirty = false;
-
-                    if (zoneItem.CurrentOtherRates == undefined)
-                        zoneItem.CurrentOtherRates = {};
-                    if (zoneItem.NewOtherRates == undefined)
-                        zoneItem.NewOtherRates = {};
-
-                    addRateTypesToZoneItem(zoneItem);
 
                     zoneItem.currentRateEED = zoneItem.CurrentRateEED; // Maintains the original value of zoneItem.CurrentRateEED in case the user deletes the new rate
                     setRouteOptionProperties(zoneItem);
@@ -251,10 +230,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     zoneItem.onCurrentRateEEDChanged = function (zoneItem) {
                         zoneItem.IsDirty = true;
                     };
-                    zoneItem.OnOtherRateChanges = function (zoneItem, dataItem) {
-                        zoneItem.NewOtherRates[dataItem.RateTypeId] = dataItem.NewRate;
-                        zoneItem.IsDirty = true;
-                    }
 
                     zoneItem.refreshZoneItem = function (zoneItem) {
                         var promises = [];
@@ -430,28 +405,14 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     zoneChanges.NewRate = null;
 
                     if (zoneItem.NewRate) {
-                        zoneChanges.NewRate = {
+                        var newRate = {
                             ZoneId: zoneItem.ZoneId,
                             NormalRate: zoneItem.NewRate,
                             BED: zoneItem.NewRateBED,
-                            EED: zoneItem.NewRateEED,
-                            OtherRates: getOtherRates(zoneItem)
+                            EED: zoneItem.NewRateEED
                         };
+                        zoneChanges.NewRates = [newRate];
                     }
-                    //else if (zoneItem.CurrentRate != null) {
-                    //    var otherRates = getOtherRates(zoneItem);
-                    //    if (otherRates != null) {
-                    //        zoneChanges.NewRate = {
-                    //            ZoneId: zoneItem.ZoneId,
-                    //            OtherRates: otherRates
-                    //        };
-                    //    }
-                    //}
-                }
-
-                function getOtherRates(zoneItem) {
-                    //TODO: get changed rates with current rates
-                    return zoneItem.NewOtherRates;
                 }
                 function setDraftRateToClose(zoneChanges, zoneItem) {
                     zoneChanges.RateChange = null;
