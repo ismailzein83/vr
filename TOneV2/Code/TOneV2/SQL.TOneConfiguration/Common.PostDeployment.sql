@@ -187,7 +187,7 @@ set identity_insert [common].[Setting] on;
 ;with cte_data([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'System Mail','VR_Common_Email','General','{"Editor":"vr-common-emailtemplate-settings-editor"}','{"$type":"Vanrise.Entities.EmailSettingData, Vanrise.Entities","SenderEmail":"testemail.vr@gmail.com","SenderPassword":"gmer2juIda","Host":"smtp.gmail.com","Port":587,"Timeout":10000}',0),
+(1,'System Mail','VR_Common_Email','General','{"Editor":"vr-common-emailtemplate-settings-editor"}',null,0),
 (2,'System Currency','VR_Common_BaseCurrency','General','{"Editor":"vr-common-currency-settings-editor"}',null,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
