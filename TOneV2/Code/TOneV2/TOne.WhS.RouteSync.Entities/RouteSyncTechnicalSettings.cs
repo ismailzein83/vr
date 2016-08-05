@@ -10,5 +10,6 @@ namespace TOne.WhS.RouteSync.Entities
     {
         public const string SETTING_TYPE = "WhS_RouteSync_Settings";
         public string SwitchInfoGetterFQTN { get; set; }
+        public SwitchInfoGetter SwitchInfoGetter { get; set; }
     }
 }

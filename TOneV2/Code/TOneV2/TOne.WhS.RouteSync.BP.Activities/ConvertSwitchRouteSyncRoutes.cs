@@ -12,7 +12,7 @@ namespace TOne.WhS.RouteSync.BP.Activities
     #region Argument Classes
 
     public class ConvertSwitchRouteSyncRoutesInput
-    {       
+    {
         public RouteRangeType? RangeType { get; set; }
 
         public RouteRangeInfo RangeInfo { get; set; }
@@ -77,12 +77,17 @@ namespace TOne.WhS.RouteSync.BP.Activities
 
         protected override ConvertSwitchRouteSyncRoutesInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            throw new NotImplementedException();
+            return new ConvertSwitchRouteSyncRoutesInput
+            {
+                RangeInfo = this.RangeInfo.Get(context),
+                RangeType = this.RangeType.Get(context),
+                SwitchInProcess = this.SwitchInProcess.Get(context)
+            };
         }
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, ConvertSwitchRouteSyncRoutesOutput result)
         {
-            throw new NotImplementedException();
+
         }
 
         #region Private Classes

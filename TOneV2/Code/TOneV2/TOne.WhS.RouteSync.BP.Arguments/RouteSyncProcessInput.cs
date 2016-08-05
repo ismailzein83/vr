@@ -11,7 +11,7 @@ namespace TOne.WhS.RouteSync.BP.Arguments
     {
         public override string GetTitle()
         {
-            throw new NotImplementedException();
+            return "Route Sync Process";
         }
 
         public int RouteSyncDefinitionId { get; set; }

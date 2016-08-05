@@ -64,12 +64,17 @@ namespace TOne.WhS.RouteSync.BP.Activities
 
         protected override UpdateSwitchRouteSyncRoutesInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            throw new NotImplementedException();
+            return new UpdateSwitchRouteSyncRoutesInput
+            {
+                RangeInfo = this.RangeInfo.Get(context),
+                RangeType = this.RangeType.Get(context),
+                SwitchInProcess = this.SwitchInProcess.Get(context)
+            };
         }
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, UpdateSwitchRouteSyncRoutesOutput result)
         {
-            throw new NotImplementedException();
+
         }
 
         #region Private Classes

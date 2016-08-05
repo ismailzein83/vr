@@ -3,3 +3,26 @@
         <vr-textbox label="Connection String" type="text" value="scopeModel.connectionString" isrequired></vr-textbox>
     </vr-columns>
 </vr-row>
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-textbox label="Separator" type="text" value="scopeModel.separator" isrequired></vr-textbox>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-column vr-loader="isLoading">
+        <vr-datagrid datasource="scopeModel.carrierAccountMappings"
+                     maxheight="500px"
+                     pagingtype="'PagingOnScroll'"
+                     idfield="CarrierAccountId">
+
+            <vr-datagridcolumn headertext="'ID'" field="'CarrierAccountId'" type="'Text'" widthfactor="2"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Account Name'" field="'CarrierAccountName'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Customer Mapping'" disablesorting>
+                <vr-textbox type="text" tonextinput value="dataItem.CustomerMapping"></vr-textbox>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Supplier Mapping'" disablesorting>
+                <vr-textbox type="text" tonextinput value="dataItem.SupplierMapping"></vr-textbox>
+            </vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-column>
+</vr-row>

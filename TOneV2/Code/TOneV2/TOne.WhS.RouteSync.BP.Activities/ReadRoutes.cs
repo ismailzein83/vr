@@ -45,7 +45,7 @@ namespace TOne.WhS.RouteSync.BP.Activities
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
-            foreach(var switchInProcess in this.SwitchesInProcess.Get(context))
+            foreach (var switchInProcess in this.SwitchesInProcess.Get(context))
             {
                 if (switchInProcess.RouteQueue == null)
                     switchInProcess.RouteQueue = new MemoryQueue<RouteBatch>();
@@ -103,12 +103,18 @@ namespace TOne.WhS.RouteSync.BP.Activities
 
         protected override ReadRoutesInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            throw new NotImplementedException();
+            return new ReadRoutesInput()
+            {
+                RangeInfo = this.RangeInfo.Get(context),
+                RangeType = this.RangeType.Get(context),
+                RouteReader = this.RouteReader.Get(context),
+                SwitchesInProcess = this.SwitchesInProcess.Get(context)
+            };
         }
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, ReadRoutesOutput result)
         {
-            throw new NotImplementedException();
+
         }
 
         #region Private Classes
@@ -134,7 +140,7 @@ namespace TOne.WhS.RouteSync.BP.Activities
 
             public void OnRouteReceived(Route route, RouteReceivedContext context)
             {
-                OnRouteReceived(route, context);
+                _onRouteReceived(route, context);
             }
         }
 
