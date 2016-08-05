@@ -19,6 +19,7 @@ BEGIN
 				  ,sr.[PriceListID]
 				  ,sr.[ZoneID]
 				  ,sr.[CurrencyID]
+				  ,sr.RateTypeID
 				  ,sr.[Rate]
 				  ,sr.[OtherRates]
 				  ,sr.[BED]

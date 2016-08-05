@@ -14,6 +14,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT  sr.[ID]
+		  ,sr.RateTypeID
 		  ,sr.Rate
 		  ,sr.OtherRates
 		  ,sr.PriceListID

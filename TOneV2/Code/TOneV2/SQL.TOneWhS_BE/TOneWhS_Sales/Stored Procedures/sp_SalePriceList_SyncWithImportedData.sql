@@ -22,11 +22,10 @@ BEGIN
 				insert into TOneWhS_BE.SalePriceList (ID, OwnerType, OwnerID, CurrencyID, EffectiveOn)
 				values (@ReservedSalePriceListId, @OwnerType, @OwnerID, @CurrencyID, @EffectiveOn)
 				
-				insert into TOneWhS_BE.SaleRate (ID, PriceListID, ZoneID, CurrencyID, Rate, OtherRates, BED, EED)
-				select ID, @ReservedSalePriceListId, ZoneID, CurrencyId, NormalRate, OtherRates, BED, EED
+				insert into TOneWhS_BE.SaleRate (ID, PriceListID, ZoneID, CurrencyID, RateTypeID, Rate, OtherRates, BED, EED)
+				select ID, @ReservedSalePriceListId, ZoneID, CurrencyId, RateTypeID, NormalRate, OtherRates, BED, EED
 				from TOneWhS_Sales.RP_SaleRate_New newRate
 				where newRate.ProcessInstanceID = @ProcessInstanceId
-				
 				
 				update TOneWhS_BE.SaleRate
 				set EED = changedRate.EED
