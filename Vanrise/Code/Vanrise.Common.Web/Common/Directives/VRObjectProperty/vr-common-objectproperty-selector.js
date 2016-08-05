@@ -98,8 +98,6 @@
                     objectSelectorAPI.clearDataSource();
                     objectPropertySelectorAPI.clearDataSource();
 
-                    //var promises = [];
-
                     if (payload != undefined && payload.criteriaField != undefined)
                         criteriaFieldEntity = payload.criteriaField;
 
@@ -117,8 +115,6 @@
                             }
                         }
                     }
-
-
                 };
 
                 api.getData = function () {
