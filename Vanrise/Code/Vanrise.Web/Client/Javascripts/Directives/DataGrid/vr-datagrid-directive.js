@@ -8,6 +8,7 @@
             scope: {
                 datasource: '=',
                 onReady: '=',
+                getrowstyle: '=',
                 maxheight: '@',
                 hideheader: '=',
                 noverticallines: '@',
@@ -543,6 +544,12 @@
                             for (var j = 0; j < ctrl.columnDefs.length; j++) {
                                 var colDef = ctrl.columnDefs[j];
                                 filldataItemColumnValues(dataItem, colDef);
+                                if (ctrl.getrowstyle != undefined && typeof (ctrl.getrowstyle) == 'function') {
+                                    var object = ctrl.getrowstyle(dataItem);
+                                    if (object!=null)
+                                      dataItem.CssClass = object.CssClass;
+                                }
+                                    
                             }
                             dataItem.isColumnValuesFilled = true;
                         }
