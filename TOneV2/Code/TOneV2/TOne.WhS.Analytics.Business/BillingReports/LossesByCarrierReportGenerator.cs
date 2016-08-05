@@ -81,13 +81,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     lossesByCarrier.SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
                     lossesByCarrier.SaleNetFormatted = lossesByCarrier.SaleNet == 0 ? "" :
-                        ReportHelpers.FormatLongNumberDigit(lossesByCarrier.SaleNet);
+                        ReportHelpers.FormatNormalNumberDigit(lossesByCarrier.SaleNet);
 
                     MeasureValue costNet;
                     analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
                     lossesByCarrier.CostNet = Convert.ToDouble(costNet == null ? 0.0 : costNet.Value ?? 0.0);
                     lossesByCarrier.CostNetFormatted = lossesByCarrier.CostNet == 0 ? "" :
-                        ReportHelpers.FormatLongNumberDigit(lossesByCarrier.CostNet);
+                        ReportHelpers.FormatNormalNumberDigit(lossesByCarrier.CostNet);
 
                     MeasureValue saleDuration;
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
@@ -96,7 +96,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         ReportHelpers.FormatNormalNumberDigit(lossesByCarrier.Duration);
               
                     lossesByCarrier.Margin =
-                        ReportHelpers.FormatLongNumberDigit(lossesByCarrier.SaleNet - lossesByCarrier.CostNet);
+                        ReportHelpers.FormatNormalNumberDigit(lossesByCarrier.SaleNet - lossesByCarrier.CostNet);
                     
                     lossesByCarrier.Percentage =
                         ReportHelpers.FormatNumberPercentage(1 - lossesByCarrier.CostNet/lossesByCarrier.SaleNet);
