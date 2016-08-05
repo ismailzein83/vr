@@ -167,6 +167,8 @@ namespace TOne.WhS.Analytics.Business
                     worksheet.Cells.SetColumnWidth(i + 1, 20);
                 }
                 worksheet.Cells.SetColumnWidth(lstCarrierProfileCount + 1, 20);
+                if (lstCarrierProfileCount == 1)
+                    worksheet.Cells.SetColumnWidth(1, 50);
 
                 worksheet.Cells.CreateRange("C2", colName + "2").SetStyle(style);
 
@@ -221,8 +223,11 @@ namespace TOne.WhS.Analytics.Business
                     d = d.AddMonths(1);
                     worksheet.Cells[irow, headerIndex++].PutValue(s);
                 }
+
                 worksheet.Cells.SetColumnWidth(numberOfMonths, maxZoneLenght + 6);
                 worksheet.Cells.SetColumnWidth(numberOfMonths + 1, maxZoneLenght + 6);
+                if (numberOfMonths == 1)
+                    worksheet.Cells.SetColumnWidth(1, 50);
 
                 for (int k = 0; k < lstZones.Count; k++)
                 {
