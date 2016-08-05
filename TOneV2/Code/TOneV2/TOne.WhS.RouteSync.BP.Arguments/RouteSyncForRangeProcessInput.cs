@@ -12,7 +12,7 @@ namespace TOne.WhS.RouteSync.BP.Arguments
     {
         public override string GetTitle()
         {
-            throw new NotImplementedException();
+            return "Route Sync For Range Process";
         }
 
         public int RouteSyncDefinitionId { get; set; }

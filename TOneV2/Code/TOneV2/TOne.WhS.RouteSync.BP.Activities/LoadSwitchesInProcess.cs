@@ -52,7 +52,7 @@ namespace TOne.WhS.RouteSync.BP.Activities
 
         private Dictionary<string, SwitchRouteSyncInitializationData> LoadSwitchesInitialiationData(Guid switchesInitializationDataId)
         {
-            throw new NotImplementedException();
+            return new Dictionary<string, SwitchRouteSyncInitializationData>();
         }
     }
 }

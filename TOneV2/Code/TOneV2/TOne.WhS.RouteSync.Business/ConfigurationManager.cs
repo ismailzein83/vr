@@ -16,16 +16,10 @@ namespace TOne.WhS.RouteSync.Business
                 () =>
                 {
                     var routeSyncTechnicalSettings = GetTechnicalSettings(settingManager);
-                    if (routeSyncTechnicalSettings.SwitchInfoGetterFQTN == null)
-                        throw new NullReferenceException("routeSyncTechnicalSettings.SwitchInfoGetterFQTN");
-                    Type switchInfoGetterType = Type.GetType(routeSyncTechnicalSettings.SwitchInfoGetterFQTN);
-                    if (switchInfoGetterType == null)
-                        throw new NullReferenceException(String.Format("switchInfoGetterType '{0}'", routeSyncTechnicalSettings.SwitchInfoGetterFQTN));
-                    SwitchInfoGetter switchInfoGetter = Activator.CreateInstance(switchInfoGetterType) as SwitchInfoGetter;
-                    if (switchInfoGetter == null)
-                        throw new NullReferenceException(String.Format("switchInfoGetter '{0}'", routeSyncTechnicalSettings.SwitchInfoGetterFQTN));
-                    return switchInfoGetter;
-                });           
+                    if (routeSyncTechnicalSettings.SwitchInfoGetter == null)
+                        throw new NullReferenceException("routeSyncTechnicalSettings.SwitchInfoGetter");
+                    return routeSyncTechnicalSettings.SwitchInfoGetter;
+                });
         }
 
         private RouteSyncTechnicalSettings GetTechnicalSettings(Vanrise.Common.Business.SettingManager settingManager)

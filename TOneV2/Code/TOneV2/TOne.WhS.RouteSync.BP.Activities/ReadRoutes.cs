@@ -55,7 +55,7 @@ namespace TOne.WhS.RouteSync.BP.Activities
 
         protected override ReadRoutesOutput DoWorkWithResult(ReadRoutesInput inputArgument, AsyncActivityHandle handle)
         {
-            int deliverRoutesBatchSize = 1000;
+            int deliverRoutesBatchSize = 50000;
             List<SwitchRouteDelivery> switchesRouteDelivery = BuildSwitchesRouteDelivery(inputArgument.SwitchesInProcess);
             Action<Route, RouteReceivedContext> onRouteReceived = BuildOnRouteReceivedAction(deliverRoutesBatchSize, switchesRouteDelivery);
             RouteReaderContext routeReaderContext = new RouteReaderContext(onRouteReceived);

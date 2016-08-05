@@ -34,11 +34,11 @@ namespace TOne.WhS.RouteSync.TelesRadius
                 {
                     foreach (string CustomerMapping in carrierMapping.CustomerMapping)
                     {
-                        if (string.IsNullOrEmpty(CustomerMapping))
-                            continue;
+                        //    if (string.IsNullOrEmpty(CustomerMapping))
+                        //        continue;
                         RadiusConvertedRoute radiusRoute = new RadiusConvertedRoute()
                         {
-                            CustomerId = CustomerMapping,
+                            CustomerId = string.IsNullOrEmpty(CustomerMapping) ? "Customer_No_Mapping" : CustomerMapping,
                             Code = route.Code,
                             Options = GetRouteOption(route.Options)
                         };
