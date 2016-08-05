@@ -27,6 +27,7 @@
         function ObjectPropertySelector($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var criteriaFieldEntity;
             var objectTypeConfigs;
 
             var objectSelectorAPI;
@@ -37,16 +38,16 @@
             var directiveAPI;
             var directiveReadyDeferred;
             //var directivePayload;
-            var criteriaField;
+
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.isLoadingDirective = true;
+                $scope.scopeModel.isDirectiveLoading = true;
 
                 $scope.scopeModel.objectVariables = [];
                 $scope.scopeModel.templateConfigs = [];
-                //$scope.scopeModel.selectedObjectVariable = {};
-                //$scope.scopeModel.selectedTemplateConfig = {};
+                $scope.scopeModel.selectedObjectVariable;
+                $scope.scopeModel.selectedTemplateConfig;
 
                 $scope.scopeModel.onObjectSelectorReady = function (api) {
                     objectSelectorAPI = api;
@@ -56,13 +57,13 @@
                     objectPropertySelectorAPI.clearDataSource();
 
                     if ($scope.scopeModel.selectedObjectVariable != undefined && $scope.scopeModel.selectedObjectVariable.ObjectType != undefined) {
-                        var configId = $scope.scopeModel.selectedObjectVariable.ObjectType.ConfigId;
+                        var objectTypeConfigId = $scope.scopeModel.selectedObjectVariable.ObjectType.ConfigId;
 
                         objectPropertySelectorReadyDeferred.promise.then(function () {
                                 loadObjectTypeConfigs().then(function () {
-                                    $scope.scopeModel.isLoadingSelector = true;
-                                    getObjectPropertySelectorTemplateConfigs(configId).then(function () {
-                                        $scope.scopeModel.isLoadingSelector = false;
+                                    $scope.scopeModel.isSelectorLoading = true;
+                                    getObjectPropertySelectorTemplateConfigs(objectTypeConfigId != undefined ? objectTypeConfigId : null).then(function () {
+                                        $scope.scopeModel.isSelectorLoading = false;
                                     });
                                 });
                         });
@@ -73,24 +74,20 @@
                     objectPropertySelectorAPI = api;
                     objectPropertySelectorReadyDeferred.resolve();
                 };
-                //$scope.scopeModel.onObjectPropertySelectionChengaed = function () {
-                //    if ($scope.scopeModel.selectedTemplateConfig != undefined)
-                //        var idzz = $scope.scopeModel.selectedTemplateConfig.Editor;
-                //}
              
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
 
                     var directivePayload = {};
-                    directivePayload.dataRecordTypeId = $scope.scopeModel.selectedObjectVariable.ObjectType.RecordTypeId;
-                    if (criteriaField != undefined)
-                        directivePayload.valueEvaluator = criteriaField.ValueEvaluator
+                    if ($scope.scopeModel.selectedObjectVariable.ObjectType.RecordTypeId != undefined)
+                        directivePayload.dataRecordTypeId = $scope.scopeModel.selectedObjectVariable.ObjectType.RecordTypeId;
+                    if (criteriaFieldEntity != undefined)
+                        directivePayload.valueEvaluator = criteriaFieldEntity.ValueEvaluator
 
                     var setLoader = function (value) {
-                        $scope.scopeModel.isLoadingDirective = value;
+                        $scope.scopeModel.isDirectiveLoading = value;
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
-                    //VRUIUtilsService.callDirectiveLoad($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
             }
 
@@ -104,48 +101,24 @@
                     //var promises = [];
 
                     if (payload != undefined && payload.criteriaField != undefined)
-                        criteriaField = payload.criteriaField;
+                        criteriaFieldEntity = payload.criteriaField;
 
                     //Loading ObjectSelector
                     if (payload != undefined && payload.objectVariables != undefined) {
                         for (var key in payload.objectVariables)
                             $scope.scopeModel.objectVariables.push(payload.objectVariables[key]);
 
-                        if (criteriaField != undefined) {
-                            $scope.scopeModel.selectedObjectVariable = UtilsService.getItemByVal($scope.scopeModel.objectVariables, criteriaField.ValueObjectName, 'ObjectName');
+                        if (criteriaFieldEntity != undefined) {
+                            $scope.scopeModel.selectedObjectVariable = UtilsService.getItemByVal($scope.scopeModel.objectVariables, criteriaFieldEntity.ValueObjectName, 'ObjectName');
+
+                            //In Case we have deleted the objectVariable
+                            if ($scope.scopeModel.selectedObjectVariable == undefined) {
+                                criteriaFieldEntity = undefined;
+                            }
                         }
                     }
 
-                    ////Loading ObjectPropertySelector
-                    //if ($scope.scopeModel.selectedObjectVariable != undefined && $scope.scopeModel.selectedObjectVariable.ObjectType != undefined) {
-                    //    var configId = $scope.scopeModel.selectedObjectVariable.ObjectType.ConfigId;
 
-                    //    objectPropertySelectorReadyDeferred.promise.then(function () {
-                    //        loadObjectTypeConfigs().then(function () {
-                    //                getObjectPropertySelectorTemplateConfigs(configId);
-                    //        });
-                    //    });
-                    //}
-
-                    //return UtilsService.waitMultiplePromises(promises);
-
-                    //Loading ObjectPropertySelector
-                    //if ($scope.scopeModel.selectedObjectVariable != undefined && $scope.scopeModel.selectedObjectVariable.ObjectType != undefined) {
-                    //    var configId = $scope.scopeModel.selectedObjectVariables.ObjectType.ConfigId;
-
-                    //    objectPropertySelectorReadyDeferred.promise.then(function () {
-                    //        loadObjectTypeConfigs().then(function () {
-                    //            var getObjectPropertyTemplateConfigsPromise = getObjectPropertySelectorTemplateConfigs(configId);
-                    //            promises.push(getObjectPropertyTemplateConfigsPromise);
-                    //        });
-                    //    });
-                    //}
-
-                    //Loading DirectiveWrapper
-                    //if ($scope.scopemodel.selectedtemplateconfig != undefined) {
-                    //    var loaddirectivepromise = loaddirective();
-                    //    promises.push(loaddirectivepromise);
-                    //}
                 };
 
                 api.getData = function () {
@@ -183,11 +156,11 @@
                     }
                 });
             }
-            function getObjectPropertySelectorTemplateConfigs(configId) {
+            function getObjectPropertySelectorTemplateConfigs(objectTypeConfigId) {
 
                 var propertyEvaluatorExtensionType;
                 for (var index = 0; index < objectTypeConfigs.length ; index++)
-                    if (objectTypeConfigs[index].ExtensionConfigurationId == configId)
+                    if (objectTypeConfigs[index].ExtensionConfigurationId == objectTypeConfigId)
                         propertyEvaluatorExtensionType = objectTypeConfigs[index].PropertyEvaluatorExtensionType;
 
                 return VRCommon_VRObjectPropertyAPIService.GetObjectPropertyExtensionConfigs(propertyEvaluatorExtensionType)
@@ -196,9 +169,9 @@
                                                 for (var i = 0; i < response.length; i++) {
                                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                                 }
-                                                if (criteriaField != undefined && criteriaField.ValueEvaluator.ConfigId != undefined) {
+                                                if (criteriaFieldEntity != undefined && criteriaFieldEntity.ValueEvaluator.ConfigId != undefined) {
                                                     $scope.scopeModel.selectedTemplateConfig =
-                                                            UtilsService.getItemByVal($scope.scopeModel.templateConfigs, criteriaField.ValueEvaluator.ConfigId, 'ExtensionConfigurationId');
+                                                            UtilsService.getItemByVal($scope.scopeModel.templateConfigs, criteriaFieldEntity.ValueEvaluator.ConfigId, 'ExtensionConfigurationId');
                                                 }
                                             }
                                         });

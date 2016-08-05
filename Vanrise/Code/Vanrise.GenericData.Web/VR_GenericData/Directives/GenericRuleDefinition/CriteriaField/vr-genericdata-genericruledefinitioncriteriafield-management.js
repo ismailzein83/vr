@@ -103,7 +103,6 @@
                             }
                         });
                     }
-
                     function loadPriorityDataItemsFromPayload() {
                         var clonedCriteriaFields = UtilsService.cloneObject(ctrl.criteriaFields, true);
                         clonedCriteriaFields.sort(function (first, second) {

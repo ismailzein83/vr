@@ -36,7 +36,6 @@
 
             isEditMode = (criteriaFieldName != undefined);
         }
-
         function defineScope() {
             $scope.scopeModel = {};
 
@@ -72,15 +71,12 @@
                 return null;
             };
         }
-
         function load() {
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
                 setCriteriaFieldEntityFromParameters().then(function () {
-                    loadAllControls().finally(function () {
-                        genericRuleDefinitionEntity = undefined;
-                    });
+                    loadAllControls()
                 });
             }
             else {
@@ -173,7 +169,6 @@
             }
             $scope.modalContext.closeModal();
         }
-
         function updateCriteriaField() {
             var criteriaFieldObject = buildCriteriaFieldObjectFromScope();
             if ($scope.onGenericRuleDefinitionCriteriaFieldUpdated != undefined && typeof ($scope.onGenericRuleDefinitionCriteriaFieldUpdated) == 'function') {

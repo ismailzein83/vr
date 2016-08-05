@@ -12,10 +12,10 @@
         var viewTypeName = "VR_GenericData_GenericRule";
         var viewEntity;
 
+        var settingsTypeName;
+
         var genericRuleDefinitionId;
         var genericRuleDefinitionEntity;
-        //var objectsVariable = [];
-        var settingsTypeName;
 
         var treeAPI;
         var treeReadyDeferred = UtilsService.createPromiseDeferred();
@@ -188,10 +188,6 @@
                         };
                     }
 
-                    //if (objectsVariable.length > 0) 
-                    //    objectDirectivePayload = { objects: objectsVariable };
-                    
-
                     VRUIUtilsService.callDirectiveLoad(objectDirectiveAPI, objectDirectivePayload, objectDirectiveLoadDeferred);
                 });
 
@@ -325,22 +321,8 @@
         function buildContext() {
 
             var context =  {
-                getObjects: function () {
-
-                    //var objectsVariable = [];
-                    //if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.Objects != null) {
-
-                    //    for (var key in genericRuleDefinitionEntity.Objects) {
-                    //        if (key != "$type")
-                    //            objectsVariable.push(genericRuleDefinitionEntity.Objects[key]);
-                    //    }
-                    //}
-                    //return objectsVariable;
-
-                    return objectDirectiveAPI.getData();
-                }
+                getObjects: function () { return objectDirectiveAPI.getData(); }
             }
-
             return context;
         }
 
