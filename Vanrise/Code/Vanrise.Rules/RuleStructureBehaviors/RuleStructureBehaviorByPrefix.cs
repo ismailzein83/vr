@@ -37,10 +37,10 @@ namespace Vanrise.Rules.RuleStructureBehaviors
                     notMatchRules.Add(rule);
             }
 
-            //add rules having prefixes equal to subprefix
+            //add rules having parent prefixes
             foreach(var ruleNodesByPrefix in _ruleNodesByPrefixes)
             {
-                foreach(var rule in _ruleNodesByPrefixes.Where(itm => itm.Key != ruleNodesByPrefix.Key && itm.Key.StartsWith(ruleNodesByPrefix.Key)).SelectMany(itm => itm.Value.Rules))
+                foreach(var rule in _ruleNodesByPrefixes.Where(itm => itm.Key != ruleNodesByPrefix.Key && ruleNodesByPrefix.Key.StartsWith(itm.Key)).SelectMany(itm => itm.Value.Rules))
                 {
                     if (!ruleNodesByPrefix.Value.Rules.Contains(rule))
                         ruleNodesByPrefix.Value.Rules.Add(rule);
