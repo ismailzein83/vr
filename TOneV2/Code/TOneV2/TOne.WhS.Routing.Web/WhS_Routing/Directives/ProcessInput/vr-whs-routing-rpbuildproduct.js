@@ -99,7 +99,7 @@ app.directive("vrWhsRoutingRpbuildproduct", [ 'WhS_Routing_RPRouteAPIService', '
                 $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', WhS_Routing_RoutingDatabaseTypeEnum.Current.value);
 
                 $scope.codePrefixOptions = WhS_Routing_CodePrefixOptions;
-                $scope.selectedCodePrefixOption = WhS_Routing_CodePrefixOptions[1];
+                $scope.selectedCodePrefixOption = WhS_Routing_CodePrefixOptions[0];
 
                 $scope.saleZoneRangeOptions = WhS_Routing_SaleZoneRangeOptions;
                 $scope.selectedSaleZoneRange = WhS_Routing_SaleZoneRangeOptions[0];

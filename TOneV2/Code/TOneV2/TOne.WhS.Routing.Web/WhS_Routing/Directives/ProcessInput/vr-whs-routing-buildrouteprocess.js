@@ -41,7 +41,7 @@ app.directive("vrWhsRoutingBuildrouteprocess", ['UtilsService', 'WhS_Routing_Rou
             $scope.routingDatabaseTypes = UtilsService.getArrayEnum(WhS_Routing_RoutingDatabaseTypeEnum);
             $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', WhS_Routing_RoutingDatabaseTypeEnum.Current.value);
             $scope.codePrefixOptions = WhS_Routing_CodePrefixOptions;
-            $scope.selectedCodePrefixOption = WhS_Routing_CodePrefixOptions[1];
+            $scope.selectedCodePrefixOption = WhS_Routing_CodePrefixOptions[2];
 
             $scope.onRoutingProductDatabaseTypeSelectionChanged = function () {
                 $scope.isFuture = $scope.selectedRoutingDatabaseType == WhS_Routing_RoutingDatabaseTypeEnum.Future;
