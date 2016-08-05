@@ -39,7 +39,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     if (parameters.GroupByProfile) listDimensions.Add("CustomerProfile"); else listDimensions.Add("Customer");
                 }
                 else
-                    if (parameters.GroupByProfile) listDimensions.Add("CustomerProfile"); else listDimensions.Add("Customer");
+                     listDimensions.Add("Customer");
             }
 
             if (parameters.IsCost)
@@ -132,9 +132,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     }
                     else
                     {
-                        var supplierValue = analyticRecord.DimensionValues[1];
-                        if (supplierValue != null)
-                            detailedBillingByZone.SupplierID = supplierValue.Name;
+                        var customerValue = analyticRecord.DimensionValues[1];
+                        if (customerValue != null)
+                            detailedBillingByZone.CustomerID = customerValue.Name;
                     }
 
                     MeasureValue durationNet;

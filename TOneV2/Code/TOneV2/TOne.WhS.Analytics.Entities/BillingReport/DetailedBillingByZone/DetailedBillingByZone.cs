@@ -14,6 +14,9 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
 
         public string SupplierID { get; set; }
 
+        public string CustomerID { get; set; }
+
+
         public int Calls { get; set; }
 
         public decimal? DurationNet { get; set; }
