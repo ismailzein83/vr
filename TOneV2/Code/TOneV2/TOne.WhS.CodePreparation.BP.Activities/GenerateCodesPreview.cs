@@ -65,8 +65,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                         ChangeType = CodeChangeType.Moved,
                         ZoneName = item.ZoneName,
                         RecentZoneName = item.OldZoneName,
-                        BED = item.BED,
-                        EED = item.EED
+                        BED = GetMovedCodeBED(item),
+                        EED = item.BED
                     });
                 }
             }
@@ -111,6 +111,12 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         {
             ExistingCode existingCode = codeToClose.ChangedExistingCodes.FindRecord(item => item.CodeEntity.Code == codeToClose.Code);
             return existingCode.BED;
+        }
+
+
+        private DateTime GetMovedCodeBED(CodeToMove codeToMove)
+        {
+            return codeToMove.ChangedExistingCodes.Select(item => item.CodeEntity.BED).Min();
         }
 
     }

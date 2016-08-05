@@ -95,21 +95,21 @@ namespace TOne.WhS.CodePreparation.Business
                 return output;
             }
 
-            SaleCodeManager saleCodeManager = new SaleCodeManager();
-            List<SaleCode> saleCodes = saleCodeManager.GetSaleCodesEffectiveByZoneID(input.ZoneId.Value, DateTime.Now);
-            output = ValidateZoneToRename(saleCodes.MapRecords(CodeItemMapper), input.OldZoneName);
-
-
-            if (output.Result == ValidationOutput.ValidationError)
-            {
-                output.Result = ValidationOutput.ValidationError;
-                output.Zone = renamedZone;
-                output.Message = string.Format("Zone {0} can not be renamed, it contains a pending codes", input.OldZoneName);
-                return output;
-            }
-
             if (input.ZoneId.HasValue)
             {
+                SaleCodeManager saleCodeManager = new SaleCodeManager();
+                List<SaleCode> saleCodes = saleCodeManager.GetSaleCodesEffectiveByZoneID(input.ZoneId.Value, DateTime.Now);
+                output = ValidateZoneToRename(saleCodes.MapRecords(CodeItemMapper), input.OldZoneName);
+
+
+                if (output.Result == ValidationOutput.ValidationError)
+                {
+                    output.Result = ValidationOutput.ValidationError;
+                    output.Zone = renamedZone;
+                    output.Message = string.Format("Zone {0} can not be renamed, it contains a pending codes", input.OldZoneName);
+                    return output;
+                }
+          
                 renamedZone.ZoneId = input.ZoneId.Value;
 
                 if (changes.RenamedZones.Any(x => x.ZoneId == input.ZoneId))
@@ -151,6 +151,8 @@ namespace TOne.WhS.CodePreparation.Business
             {
 
                 if (allZoneItems.FindRecord(x => x.Name.Equals(newZone.Name, StringComparison.InvariantCultureIgnoreCase)) != null)
+                    output.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId, Message = string.Format("Zone {0} already exists.", newZone.Name) });
+                else if (input.NewZones.FindAllRecords(item => item.Name.Equals(newZone.Name, StringComparison.InvariantCultureIgnoreCase)).Count() > 1)
                     output.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId, Message = string.Format("Zone {0} already exists.", newZone.Name) });
                 else
                     output.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId });

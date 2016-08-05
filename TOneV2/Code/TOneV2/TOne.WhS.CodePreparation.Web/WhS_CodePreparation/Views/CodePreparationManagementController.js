@@ -445,7 +445,7 @@
 
         function hideShowAddCode(draftStatus, status) {
             if(status != null)
-                $scope.showAddNewCode = status != WhS_CP_ZoneItemStatusEnum.PendingClosed.value;
+                $scope.showAddNewCode = false;
             else
                 $scope.showAddNewCode = draftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value;
         }

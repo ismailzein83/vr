@@ -21,31 +21,19 @@ namespace TOne.WhS.CodePreparation.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ZoneToProcess zoneTopProcess = context.Target as ZoneToProcess;
-            DateTime minExistingZonesBED = DateTime.MinValue;
-            if (zoneTopProcess.ExistingZones.Count() > 0)
-                minExistingZonesBED = zoneTopProcess.ExistingZones.Min(item => item.BED);
 
-            if (zoneTopProcess.CodesToAdd != null)
+            if (zoneTopProcess.ChangeType == ZoneChangeType.New)
+                return true;
+
+            if (zoneTopProcess.CodesToAdd != null && zoneTopProcess.CodesToAdd.Count()>0)
             {
-              
-                foreach (CodeToAdd codeToAdd in zoneTopProcess.CodesToAdd)
-                {
-                    if (codeToAdd.ChangedExistingCodes.Count() > 0)
-                    {
-                        ExistingCode changedExistingCode = codeToAdd.ChangedExistingCodes.FindRecord(item => item.CodeEntity.Code == codeToAdd.Code);
-                        
-                        //Checking if there is a codeToMove in a wrong way "Adding Code that already effective in a zone to another zone"
-                        //by checking if changedExistingCode.ParentZoneName != codeToAdd.ZoneName
-                        if (minExistingZonesBED != DateTime.MinValue && minExistingZonesBED > DateTime.Today.Date && changedExistingCode != null &&
-                             !codeToAdd.ZoneName.Equals(changedExistingCode.ParentZone.Name, StringComparison.InvariantCultureIgnoreCase))
-                            return false;
-                    }
-                }
+                if (zoneTopProcess.BED > DateTime.Today.Date)
+                    return false;
             }
 
             if (zoneTopProcess.CodesToMove != null && zoneTopProcess.CodesToMove.Count() > 0)
             {
-                return !(minExistingZonesBED != DateTime.MinValue && minExistingZonesBED > DateTime.Today.Date);
+                return !(zoneTopProcess.BED > DateTime.Today.Date);
             }
 
             return true;
@@ -53,7 +41,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Can not move code to the pending effective zone {0}", (target as ZoneToProcess).ZoneName);
+            return string.Format("Can not move or add code to the pending effective zone {0}", (target as ZoneToProcess).ZoneName);
         }
 
     }

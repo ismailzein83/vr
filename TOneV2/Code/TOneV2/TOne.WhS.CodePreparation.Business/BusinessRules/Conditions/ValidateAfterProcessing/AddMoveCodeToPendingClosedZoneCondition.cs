@@ -25,9 +25,7 @@ namespace TOne.WhS.CodePreparation.Business
 
             foreach (CodeToAdd codeToAdd in zoneToProcess.CodesToAdd)
             {
-                ExistingZone existingZone = zoneToProcess.ExistingZones.FindRecord(item=>item.ZoneEntity.Name.Equals(codeToAdd.ZoneName, StringComparison.InvariantCultureIgnoreCase));
-
-                if (existingZone != null && existingZone.EED.HasValue)
+                if (zoneToProcess.EED.HasValue)
                     return false;
             }
 
@@ -35,9 +33,7 @@ namespace TOne.WhS.CodePreparation.Business
 
             foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
             {
-                ExistingZone existingZone = zoneToProcess.ExistingZones.FindRecord(item => item.ZoneEntity.Name.Equals(codeToMove.ZoneName, StringComparison.InvariantCultureIgnoreCase));
-
-                if (existingZone != null && existingZone.EED.HasValue)
+                if (zoneToProcess.EED.HasValue)
                     return false;
             }
 

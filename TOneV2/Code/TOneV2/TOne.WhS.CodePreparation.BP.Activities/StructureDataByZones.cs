@@ -29,7 +29,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             IEnumerable<CodeToMove> codesToMove = this.CodesToMove.Get(context);
             IEnumerable<CodeToClose> codesToClose = this.CodesToClose.Get(context);
 
-            Dictionary<string, ZoneToProcess> zoneToProcessByZoneName = new Dictionary<string, ZoneToProcess>();
+            Dictionary<string, ZoneToProcess> zoneToProcessByZoneName = new Dictionary<string, ZoneToProcess>(StringComparer.InvariantCultureIgnoreCase);
             ZoneToProcess zoneToProcess;
             foreach (CodeToAdd code in codesToAdd)
             {

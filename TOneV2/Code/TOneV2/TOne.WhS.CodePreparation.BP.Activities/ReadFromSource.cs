@@ -57,6 +57,12 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 string code = worksheet.Cells[count, 1].StringValue.Trim();
                 string status = worksheet.Cells[count, 2].StringValue.Trim();
 
+                if(string.IsNullOrEmpty(zoneName) && string.IsNullOrEmpty(code) && string.IsNullOrEmpty(status))
+                {
+                    count++;
+                    continue;
+                }
+
                 importedCodes.Add(new ImportedCode()
                 {
                     Code = code,

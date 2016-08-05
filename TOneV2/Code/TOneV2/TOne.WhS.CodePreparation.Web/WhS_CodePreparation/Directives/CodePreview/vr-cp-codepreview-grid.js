@@ -93,6 +93,8 @@ function (WhS_CP_CodePreparationPreviewAPIService, WhS_CP_CodeChangeTypeEnum, VR
                         else {
                         dataItem.codeStatusIconUrl = WhS_CP_CodeChangeTypeEnum.MovedTo.icon;
                         dataItem.codeStatusIconTooltip = WhS_CP_CodeChangeTypeEnum.Moved.label + " from " + dataItem.Entity.RecentZoneName;
+                        dataItem.Entity.BED = dataItem.Entity.EED;
+                        dataItem.Entity.EED = "";
                         }
                     break;
             }

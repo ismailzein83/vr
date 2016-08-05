@@ -24,7 +24,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             IEnumerable<ImportedCode> importedCodesList = this.ImportedCodes.Get(context);
             IEnumerable<ImportedRate> importedRatesList = this.ImportedRates.Get(context);
 
-            Dictionary<string, ImportedZone> importedZonesByZoneName = new Dictionary<string, ImportedZone>();
+            Dictionary<string, ImportedZone> importedZonesByZoneName = new Dictionary<string, ImportedZone>(StringComparer.InvariantCultureIgnoreCase);
             ImportedZone importedZone;
 
             foreach (ImportedCode code in importedCodesList)
