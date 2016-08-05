@@ -40,6 +40,11 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.UpdateStatusChargingSet(statusChargingSet);
         }
-
+        [HttpGet]
+        [Route("GetStatusChargeInfos")]
+        public List<EntityStatusChargeInfo> GetStatusChargeInfos(int entityTypeId)
+        {
+            return _manager.GetStatusChargeInfos(entityTypeId);
+        }
     }
 }
