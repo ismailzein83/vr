@@ -203,6 +203,12 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         zoneItem.IsDirty = true;
                         zoneItem.showNewRateBED = true;
                         zoneItem.showNewRateEED = true;
+
+                        if (zoneItem.NewRateEED == null)
+                            zoneItem.NewRateEED = zoneItem.ZoneEED;
+                    }
+                    else if (zoneItem.CurrentRate != null && zoneItem.CurrentRateEED == null) {
+                        zoneItem.CurrentRateEED = zoneItem.ZoneEED;
                     }
 
                     zoneItem.setNewRateBED = function () {
@@ -224,6 +230,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             zoneItem.showNewRateBED = false;
                             zoneItem.showNewRateEED = false;
                         }
+
+                        if (zoneItem.NewRateEED == null)
+                            zoneItem.NewRateEED = zoneItem.ZoneEED;
 
                         function getNowPlusDays(days) {
                             return new Date(new Date().setDate(new Date().getDate() + days));
