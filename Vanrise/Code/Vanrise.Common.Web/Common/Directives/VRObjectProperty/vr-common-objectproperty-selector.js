@@ -37,7 +37,6 @@
 
             var directiveAPI;
             var directiveReadyDeferred;
-            //var directivePayload;
 
 
             function initializeController() {
@@ -172,22 +171,6 @@
                                             }
                                         });
 
-            }
-            function loadDirective() {
-                directiveReadyDeferred = UtilsService.createPromiseDeferred();
-                var directiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-                directiveReadyDeferred.promise.then(function () {
-                    directiveReadyDeferred = undefined;
-                    var directivePayload;
-                    //directivePayload.dataRecordTypeId = $scope.scopeModel.selectedObjectVariables.ObjectType.RecordTypeId;
-                    //if (objectProperty != undefined && objectProperty.RecordTypeId != undefined) {
-                    //    directivePayload = { recordTypeId: objectProperty.RecordTypeId }
-                    //}
-                    VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
-                });
-
-                return directiveLoadDeferred.promise;
             }
         }
     }
