@@ -55,9 +55,11 @@ namespace TOne.WhS.RouteSync.BP.Activities
 
         protected override ReadRoutesOutput DoWorkWithResult(ReadRoutesInput inputArgument, AsyncActivityHandle handle)
         {
-            int deliverRoutesBatchSize = 50000;
+            int deliverRoutesBatchSize = 200000;
+            int totalBatchesRead = 0;
+            long totalRoutesRead = 0;
             List<SwitchRouteDelivery> switchesRouteDelivery = BuildSwitchesRouteDelivery(inputArgument.SwitchesInProcess);
-            Action<Route, RouteReceivedContext> onRouteReceived = BuildOnRouteReceivedAction(deliverRoutesBatchSize, switchesRouteDelivery);
+            Action<Route, RouteReceivedContext> onRouteReceived = BuildOnRouteReceivedAction(deliverRoutesBatchSize, switchesRouteDelivery, ref totalBatchesRead, ref totalRoutesRead, handle);
             RouteReaderContext routeReaderContext = new RouteReaderContext(onRouteReceived);
             routeReaderContext.RouteRangeInfo = inputArgument.RangeInfo;
             routeReaderContext.RouteRangeType = inputArgument.RangeType;
@@ -67,10 +69,12 @@ namespace TOne.WhS.RouteSync.BP.Activities
             {
                 if (switchRouteDelivery.PendingRoutes.Count > 0)
                 {
+                    totalBatchesRead++;
+                    totalRoutesRead += switchRouteDelivery.PendingRoutes.Count;
                     switchRouteDelivery.SwitchInProcess.RouteQueue.Enqueue(new RouteBatch { Routes = switchRouteDelivery.PendingRoutes });
                 }
             }
-
+            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Batches Read, {1} Routes", totalBatchesRead, totalRoutesRead);
             return new ReadRoutesOutput { };
         }
 
@@ -84,8 +88,10 @@ namespace TOne.WhS.RouteSync.BP.Activities
             }).ToList();
         }
 
-        private Action<Route, RouteReceivedContext> BuildOnRouteReceivedAction(int deliverRoutesBatchSize, List<SwitchRouteDelivery> switchesRouteDelivery)
+        private Action<Route, RouteReceivedContext> BuildOnRouteReceivedAction(int deliverRoutesBatchSize, List<SwitchRouteDelivery> switchesRouteDelivery, ref int totalBatchesRead, ref long totalRoutesRead, AsyncActivityHandle handle)
         {
+            int totalBatchesRead_Internal = totalBatchesRead;
+            long totalRoutesRead_Internal = totalRoutesRead;
             Action<Route, RouteReceivedContext> onRouteReceived = (route, routeReceivedContext) =>
             {
                 foreach (var switchRouteDelivery in switchesRouteDelivery)
@@ -94,10 +100,15 @@ namespace TOne.WhS.RouteSync.BP.Activities
                     if ((switchRouteDelivery.DeliverRoutesInBatches && switchRouteDelivery.PendingRoutes.Count >= deliverRoutesBatchSize))
                     {
                         switchRouteDelivery.SwitchInProcess.RouteQueue.Enqueue(new RouteBatch { Routes = switchRouteDelivery.PendingRoutes });
+                        totalBatchesRead_Internal++;
+                        totalRoutesRead_Internal += switchRouteDelivery.PendingRoutes.Count;
+                        handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Batches Read, {1} Routes", totalBatchesRead_Internal, totalRoutesRead_Internal);
                         switchRouteDelivery.PendingRoutes = new List<Route>();
                     }
                 }
             };
+            totalBatchesRead = totalBatchesRead_Internal;
+            totalRoutesRead = totalRoutesRead_Internal;
             return onRouteReceived;
         }
 

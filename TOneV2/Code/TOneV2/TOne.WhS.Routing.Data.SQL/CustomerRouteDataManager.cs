@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,7 +46,8 @@ namespace TOne.WhS.Routing.Data.SQL
 
         public void WriteRecordToStream(Entities.CustomerRoute record, object dbApplyStream)
         {
-            string serializedOptions = Convert.ToBase64String(Vanrise.Common.ProtoBufSerializer.Serialize<List<RouteOption>>(record.Options));
+            string serializedOptions = record.Options != null ? SerializeOptions(record.Options) : null;// Convert.ToBase64String(Vanrise.Common.ProtoBufSerializer.Serialize<List<RouteOption>>(record.Options));
+            //string serializedOptions = Convert.ToBase64String(Vanrise.Common.ProtoBufSerializer.Serialize<List<RouteOption>>(record.Options));
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.CustomerId, record.Code, record.SaleZoneId,
                 record.Rate, record.IsBlocked ? 1 : 0, record.ExecutedRuleId, serializedOptions);//Vanrise.Common.Serializer.Serialize(record.Options, true));
@@ -138,6 +140,49 @@ namespace TOne.WhS.Routing.Data.SQL
             trackStep("Finishing create Index on CustomerRoute table (SaleZoneId).");
         }
 
+
+        private string SerializeOptions(List<RouteOption> options)
+        {
+            StringBuilder str = new StringBuilder();
+            foreach (var op in options)
+            {
+                if (str.Length > 0)
+                    str.Append("|");
+                str.AppendFormat("{0}~{1}~{2}~{3}~{4}~{5}~{6}", op.SupplierId, op.SupplierCode, op.ExecutedRuleId, op.Percentage, op.SupplierRate, op.SupplierZoneId, op.IsBlocked);
+            }
+            return str.ToString();
+        }
+
+        List<RouteOption> DeserializeOptions(string serializedOptions)
+        {
+            List<RouteOption> options = new List<RouteOption>();
+
+            string[] lines = serializedOptions.Split('|');
+            foreach (var line in lines)
+            {
+                string[] parts = line.Split('~');
+                var option = new RouteOption
+                {
+                    SupplierId = int.Parse(parts[0]),
+                    SupplierCode = parts[1],
+                    SupplierRate = Decimal.Parse(parts[4]),
+                    SupplierZoneId = long.Parse(parts[5])
+                };
+                int ruleId;
+                if (int.TryParse(parts[2], out ruleId))
+                    option.ExecutedRuleId = ruleId;
+                decimal percentage;
+                if (decimal.TryParse(parts[3], out percentage))
+                    option.Percentage = percentage;
+                bool isBlocked;
+                if (bool.TryParse(parts[6], out isBlocked))
+                    option.IsBlocked = isBlocked;
+                options.Add(option);
+            }
+
+            return options;
+        }
+
         private CustomerRoute CustomerRouteMapper(IDataReader reader)
         {
             return new CustomerRoute()
@@ -148,7 +193,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 Rate = GetReaderValue<decimal>(reader, "Rate"),
                 IsBlocked = (bool)reader["IsBlocked"],
                 ExecutedRuleId = (int)reader["ExecutedRuleId"],
-                Options = reader["RouteOptions"] != DBNull.Value ? Vanrise.Common.ProtoBufSerializer.Deserialize<List<RouteOption>>(Convert.FromBase64String(reader["RouteOptions"] as string)) : null
+                Options = reader["RouteOptions"] != DBNull.Value ? DeserializeOptions(reader["RouteOptions"] as string) : null
             };
         }
 

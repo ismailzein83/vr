@@ -48,6 +48,8 @@ namespace TOne.WhS.RouteSync.BP.Activities
 
         protected override ConvertSwitchRouteSyncRoutesOutput DoWorkWithResult(ConvertSwitchRouteSyncRoutesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            int totalBatchesConverted = 0;
+            long totalRoutesConverted = 0;
             var switchInProcess = inputArgument.SwitchInProcess;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -65,10 +67,15 @@ namespace TOne.WhS.RouteSync.BP.Activities
                         };
                         switchInProcess.Switch.RouteSynchronizer.ConvertRoutes(switchRouteSynchronizerConvertRoutesContext);
                         if (switchRouteSynchronizerConvertRoutesContext.ConvertedRoutes != null && switchRouteSynchronizerConvertRoutesContext.ConvertedRoutes.Count > 0)
+                        {
+                            totalBatchesConverted++;
+                            totalRoutesConverted += switchRouteSynchronizerConvertRoutesContext.ConvertedRoutes.Count;
                             switchInProcess.ConvertedRouteQueue.Enqueue(new ConvertedRouteBatch
                                 {
                                     ConvertedRoutes = switchRouteSynchronizerConvertRoutesContext.ConvertedRoutes
                                 });
+                            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Batches converted, {1} Routes", totalBatchesConverted, totalRoutesConverted);
+                        }
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });

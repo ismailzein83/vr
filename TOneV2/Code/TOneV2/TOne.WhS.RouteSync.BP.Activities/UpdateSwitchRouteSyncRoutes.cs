@@ -40,6 +40,8 @@ namespace TOne.WhS.RouteSync.BP.Activities
 
         protected override UpdateSwitchRouteSyncRoutesOutput DoWorkWithResult(UpdateSwitchRouteSyncRoutesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            int totalBatchesUpdated = 0;
+            long totalRoutesUpdated = 0;
             var switchInProcess = inputArgument.SwitchInProcess;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -56,6 +58,9 @@ namespace TOne.WhS.RouteSync.BP.Activities
                             InitializationData = switchInProcess.InitializationData
                         };
                         switchInProcess.Switch.RouteSynchronizer.UpdateConvertedRoutes(switchRouteSynchronizerUpdateConvertedRoutesContext);
+                        totalBatchesUpdated++;
+                        totalRoutesUpdated += convertedRouteBatch.ConvertedRoutes.Count;
+                        handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Batches updated, {1} Routes", totalBatchesUpdated, totalRoutesUpdated);
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });
