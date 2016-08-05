@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlertRuleThresholdActionDataManager.cs" />
     <Compile Include="BalanceHistoryDataManager.cs" />
     <Compile Include="BalanceUsageQueueDataManager.cs" />
     <Compile Include="BillingTransactionDataManager.cs" />

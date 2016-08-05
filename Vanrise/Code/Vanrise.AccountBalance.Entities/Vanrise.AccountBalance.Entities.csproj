@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account\AccountInfo.cs" />
+    <Compile Include="AlertRuleThresholdAction\AlertRuleThresholdAction.cs" />
+    <Compile Include="AlertRuleThresholdAction\AlertRuleThresholdActionBatch.cs" />
     <Compile Include="BalanceAlertRule\BalanceAlertRule.cs" />
     <Compile Include="BalanceAlertRule\BalanceAlertSettings.cs" />
     <Compile Include="BalanceAlertRule\BalanceAlertThresholdConfig.cs" />
@@ -57,6 +59,7 @@
     <Compile Include="Config\AccountBalanceConfig.cs" />
     <Compile Include="BalancePeriod\BalancePeriodSettings.cs" />
     <Compile Include="LiveBalance\AccountBalanceBatch.cs" />
+    <Compile Include="LiveBalance\AccountBalanceAlertRule.cs" />
     <Compile Include="LiveBalance\BalanceAccountThreshold.cs" />
     <Compile Include="LiveBalance\CurrentAccountBalance.cs" />
     <Compile Include="LiveBalance\LiveBalanceDetail.cs" />

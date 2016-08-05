@@ -13,7 +13,7 @@ namespace Vanrise.AccountBalance.Entities
         public Decimal UsageBalance { get; set; }
         public Decimal CurrentAlertThreshold { get; set; }
         public Decimal? NextAlertThreshold { get; set; }
-        public long? AlertRuleID { get; set; }
+        public int? AlertRuleID { get; set; }
         public Decimal CurrentBalance { get; set; }
         public int CurrencyId { get; set; }
         public int? ThresholdActionIndex { get; set; }

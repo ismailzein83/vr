@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountBalanceUpdate\LoadAccountBalanceUpdateHandler.cs" />
+    <Compile Include="BalanceAlertThresholdUpdate\AddOrUpdateAlertRuleThresholdAction.cs" />
     <Compile Include="BalanceAlertThresholdUpdate\CalculateNextAlertThresholds.cs" />
     <Compile Include="BalanceAlertChecker\CreateAlertActions.cs" />
     <Compile Include="AccountBalanceUpdate\CreateBalanceClosingPeriod.cs" />

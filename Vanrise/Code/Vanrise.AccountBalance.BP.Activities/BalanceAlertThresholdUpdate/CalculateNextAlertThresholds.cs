@@ -15,7 +15,7 @@ namespace Vanrise.AccountBalance.BP.Activities
     public class CalculateNextAlertThresholdsInput
     {
         public BaseQueue<AccountBalanceBatch> InputQueue { get; set; }
-        public BaseQueue<List<BalanceAccountThreshold>> OutputQueue { get; set; }
+        public BaseQueue<AlertRuleThresholdActionBatch> OutputQueue { get; set; }
     }
     #endregion
     public sealed class CalculateNextAlertThresholds : DependentAsyncActivity<CalculateNextAlertThresholdsInput>
@@ -27,9 +27,9 @@ namespace Vanrise.AccountBalance.BP.Activities
         public InOutArgument<BaseQueue<AccountBalanceBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<BaseQueue<List<BalanceAccountThreshold>>> OutputQueue { get; set; }
+        public InOutArgument<BaseQueue<AlertRuleThresholdActionBatch>> OutputQueue { get; set; }
+   
         #endregion
-
         protected override void DoWork(CalculateNextAlertThresholdsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             var counter = 0;
@@ -49,14 +49,12 @@ namespace Vanrise.AccountBalance.BP.Activities
             });
             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Next alert threshold has been calculated for {0} accounts ", counter);
         }
-
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.OutputQueue.Get(context) == null)
-                this.OutputQueue.Set(context, new MemoryQueue<List<BalanceAccountThreshold>>());
+                this.OutputQueue.Set(context, new MemoryQueue<AlertRuleThresholdActionBatch>());
             base.OnBeforeExecute(context, handle);
         }
-
         protected override CalculateNextAlertThresholdsInput GetInputArgument2(AsyncCodeActivityContext context)
         {
             return new CalculateNextAlertThresholdsInput()
@@ -65,53 +63,43 @@ namespace Vanrise.AccountBalance.BP.Activities
                 OutputQueue = this.OutputQueue.Get(context),
             };
         }
-        private List<BalanceAccountThreshold> ProcessLiveBalances(List<LiveBalance> accountBalances)
+        private AlertRuleThresholdActionBatch ProcessLiveBalances(List<LiveBalance> accountBalances)
         {
             BalanceAlertRuleManager ruleManager = new BalanceAlertRuleManager();
-            List<BalanceAccountThreshold> balanceAccountThresholds = new List<BalanceAccountThreshold>();
+            List<AlertRuleThresholdAction> alertRuleThresholdActions = new List<AlertRuleThresholdAction>();
+            List<AccountBalanceAlertRule> accountBalanceAlertRules = new List<AccountBalanceAlertRule>();
+
+            BalanceAlertThresholdContext context = new BalanceAlertThresholdContext();
             foreach(var balance in accountBalances)
             {
                 var rule = ruleManager.GetMatchRule(balance.AccountId);
                 if (rule == null)
                     continue;
-                var balanceAccountThreshold = GetBalanceAccountThreshold(rule.Settings.ThresholdActions, balance.AccountId, balance.CurrentBalance, rule.RuleId);
-                if (balanceAccountThreshold != null)
-                    balanceAccountThresholds.Add(balanceAccountThreshold);
-            }
-            return balanceAccountThresholds;
-        }
-
-
-        private BalanceAccountThreshold GetBalanceAccountThreshold(List<BalanceAlertThresholdAction>  thresholdActions, long accountId,decimal currentBalance,int alertRuleId)
-        {
-            BalanceAlertThresholdContext context = new BalanceAlertThresholdContext();
-            decimal? minThreshold = null;
-            int thresholdActionIndex = 0;
-            List<decimal> thresholds = new List<decimal>();
-            for(int i = 0 ; i < thresholdActions.Count ;i++)
-            {
-
-                var thresholdAction = thresholdActions[i];
-                decimal threshold = thresholdAction.Threshold.GetThreshold(context);
-                if (!minThreshold.HasValue && threshold < currentBalance)
+                if (!accountBalanceAlertRules.Any(x=>x.AlertRuleId == rule.RuleId))
                 {
-                      minThreshold = threshold;
-                      thresholdActionIndex = i;
-                }
-                else if (minThreshold.HasValue && threshold > minThreshold.Value && threshold < currentBalance)
-                {
-                    thresholdActionIndex = i;
-                     minThreshold = threshold;
+                    for (int i = 0; i < rule.Settings.ThresholdActions.Count; i++)
+                    {
+                        var thresholdAction = rule.Settings.ThresholdActions[i];
+                        decimal threshold = thresholdAction.Threshold.GetThreshold(context);
+
+                        alertRuleThresholdActions.Add(new AlertRuleThresholdAction
+                        {
+                            RuleId = rule.RuleId,
+                            Threshold = threshold,
+                            ThresholdActionIndex = i
+                        });
+                    }
+                    accountBalanceAlertRules.Add(new AccountBalanceAlertRule
+                    {
+                        AccountId = balance.AccountId,
+                        AlertRuleId = rule.RuleId,
+                    });
                 }
             }
-            if (!minThreshold.HasValue)
-                return null;
-            return new BalanceAccountThreshold
+            return new AlertRuleThresholdActionBatch
             {
-                Threshold = minThreshold.Value,
-                ThresholdActionIndex = thresholdActionIndex,
-                AccountId = accountId,
-                AlertRuleId = alertRuleId
+                AccountBalanceAlertRules = accountBalanceAlertRules,
+                AlertRuleThresholdActions = alertRuleThresholdActions
             };
         }
     }

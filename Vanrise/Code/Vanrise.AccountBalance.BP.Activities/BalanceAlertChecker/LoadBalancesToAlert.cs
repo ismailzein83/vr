@@ -31,7 +31,7 @@ namespace Vanrise.AccountBalance.BP.Activities
             var batchSize = 100;
             var list = new List<LiveBalance>();
             var counter = 0;
-            dataManager.GetLiveBalanceAccounts((liveBalance) =>
+            dataManager.GetLiveBalancesToAlert((liveBalance) =>
             {
                 counter++;
                 if (counter == batchSize)

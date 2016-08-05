@@ -90,6 +90,18 @@ namespace Vanrise.AccountBalance.Data.SQL
                    }
                });
         }
+
+        public void GetLiveBalancesToAlert(Action<LiveBalance> onLiveBalanceReady)
+        {
+            ExecuteReaderSP("[VR_AccountBalance].[sp_LiveBalance_GetBalancesForAlert]",
+               (reader) =>
+               {
+                   while (reader.Read())
+                   {
+                       onLiveBalanceReady(LiveBalanceMapper(reader));
+                   }
+               });
+        }
         public bool AddLiveBalance(long accountId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance)
         {
             return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_Insert]", accountId, initialBalance, currencyId, usageBalance, currentBalance) > 0);
@@ -129,6 +141,26 @@ namespace Vanrise.AccountBalance.Data.SQL
             return true;
         }
 
+        public void UpdateLiveBalanceAlertRule(List<AccountBalanceAlertRule> accountBalanceAlertRules)
+        {
+            DataTable liveBalanceAlertRuleTable = GetAccountBalanceAlertRuleTable();
+            foreach (var item in accountBalanceAlertRules)
+            {
+                DataRow dr = liveBalanceAlertRuleTable.NewRow();
+                FillLiveBalanceAlerRuleRow(dr, item);
+                liveBalanceAlertRuleTable.Rows.Add(dr);
+            }
+            liveBalanceAlertRuleTable.EndLoadData();
+            if (liveBalanceAlertRuleTable.Rows.Count > 0)
+                ExecuteNonQuerySPCmd("[VR_AccountBalance].[sp_LiveBalance_UpdateAlertRule]",
+                       (cmd) =>
+                       {
+                           var dtPrm = new System.Data.SqlClient.SqlParameter("@LiveBalanceAlertRuleTable", SqlDbType.Structured);
+                           dtPrm.Value = liveBalanceAlertRuleTable;
+                           cmd.Parameters.Add(dtPrm);
+                       });
+        }
+
         #endregion
 
         #region Mappers
@@ -141,7 +173,7 @@ namespace Vanrise.AccountBalance.Data.SQL
                 AccountId = (long)reader["AccountId"],
                 UsageBalance = GetReaderValue<Decimal>(reader, "UsageBalance"),
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyID"),
-                AlertRuleID = GetReaderValue<long?>(reader, "AlertRuleID"),
+                AlertRuleID = GetReaderValue<int?>(reader, "AlertRuleID"),
                 CurrentAlertThreshold = GetReaderValue<Decimal>(reader, "CurrentAlertThreshold"),
                 InitialBalance = GetReaderValue<Decimal>(reader, "InitialBalance"),
                 NextAlertThreshold = GetReaderValue<Decimal?>(reader, "NextAlertThreshold"),
@@ -189,6 +221,20 @@ namespace Vanrise.AccountBalance.Data.SQL
             dt.Columns.Add("AlertRuleId", typeof(int));
             return dt;
         }
+
+        private void FillLiveBalanceAlerRuleRow(DataRow dr, AccountBalanceAlertRule accountBalanceAlertRule)
+        {
+            dr["AccountID"] = accountBalanceAlertRule.AccountId;
+            dr["AlertRuleId"] = accountBalanceAlertRule.AlertRuleId;
+        }
+        private DataTable GetAccountBalanceAlertRuleTable()
+        {
+            DataTable dt = new DataTable(LiveBalance_TABLENAME);
+            dt.Columns.Add("AccountID", typeof(long));
+            dt.Columns.Add("AlertRuleId", typeof(decimal));
+            return dt;
+        }
+
         #endregion
 
     }

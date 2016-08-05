@@ -53,7 +53,7 @@ namespace Vanrise.AccountBalance.BP.Activities
                                     {
                                         if (accountBalance.AlertRuleID.HasValue)
                                         {
-                                            var rule = ruleManager.GetGenericRule(Convert.ToInt32(accountBalance.AlertRuleID.Value)) as BalanceAlertRule;
+                                            var rule = ruleManager.GetGenericRule(accountBalance.AlertRuleID.Value) as BalanceAlertRule;
                                             var thresholdAction = rule.Settings.ThresholdActions[accountBalance.ThresholdActionIndex.Value];
 
                                             foreach (var action in thresholdAction.Actions)
@@ -61,7 +61,7 @@ namespace Vanrise.AccountBalance.BP.Activities
                                                 CreateVRActionInput createVRActionInput = new CreateVRActionInput
                                                 {
                                                     Action = action,
-                                                    EventPayload = new BalanceAlertEventPayload { AccountId = accountBalance.AccountId, Threshold = accountBalance.NextAlertThreshold.Value }
+                                                    EventPayload = new BalanceAlertEventPayload { AccountId = accountBalance.AccountId, Threshold =              accountBalance.NextAlertThreshold.Value }
                                                 };
                                                 vrActionManager.CreateAction(createVRActionInput, inputArgument.UserId);
                                             }

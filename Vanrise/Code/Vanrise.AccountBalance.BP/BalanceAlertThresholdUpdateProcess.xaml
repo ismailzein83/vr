@@ -61,9 +61,10 @@
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Parallel.Variables>
         <Variable x:TypeArguments="vq:BaseQueue(vae:AccountBalanceBatch)" Name="outputAccountBalanceBatchQueue" />
-        <Variable x:TypeArguments="vq:BaseQueue(scg:List(vae:BalanceAccountThreshold))" Name="outputBalanceAccountThresholdQueue" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadAccountBalanceStatus" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="calculateNextAlertThresholdStatus" />
+        <Variable x:TypeArguments="scg:List(vae:AccountBalanceAlertRule)" Name="accountBalanceAlertRules" />
+        <Variable x:TypeArguments="vq:BaseQueue(vae:AlertRuleThresholdActionBatch)" Name="outputAlertRuleThresholdActionBatch" />
       </Parallel.Variables>
       <vaba1:LoadAccountBalances sap2010:WorkflowViewState.IdRef="LoadAccountBalances_1">
         <vaba1:LoadAccountBalances.OutputQueue>
@@ -84,8 +85,8 @@
           </InOutArgument>
         </vaba1:CalculateNextAlertThresholds.InputQueue>
         <vaba1:CalculateNextAlertThresholds.OutputQueue>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(scg:List(vae:BalanceAccountThreshold))">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(scg:List(vae:BalanceAccountThreshold))">outputBalanceAccountThresholdQueue</mca:CSharpReference>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vae:AlertRuleThresholdActionBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:AlertRuleThresholdActionBatch)">outputAlertRuleThresholdActionBatch</mca:CSharpReference>
           </InOutArgument>
         </vaba1:CalculateNextAlertThresholds.OutputQueue>
         <vaba1:CalculateNextAlertThresholds.PreviousActivityStatus>
@@ -99,26 +100,26 @@
           </OutArgument>
         </vaba1:CalculateNextAlertThresholds.Status>
       </vaba1:CalculateNextAlertThresholds>
-      <vaba1:UpdateNextAlertThresholds Status="{x:Null}" sap2010:WorkflowViewState.IdRef="UpdateNextAlertThresholds_1">
-        <vaba1:UpdateNextAlertThresholds.InputQueue>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(scg:List(vae:BalanceAccountThreshold))">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(scg:List(vae:BalanceAccountThreshold))">outputBalanceAccountThresholdQueue</mca:CSharpReference>
+      <vaba1:AddOrUpdateAlertRuleThresholdAction Status="{x:Null}" sap2010:WorkflowViewState.IdRef="AddOrUpdateAlertRuleThresholdAction_1">
+        <vaba1:AddOrUpdateAlertRuleThresholdAction.InputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vae:AlertRuleThresholdActionBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:AlertRuleThresholdActionBatch)">outputAlertRuleThresholdActionBatch</mca:CSharpReference>
           </InOutArgument>
-        </vaba1:UpdateNextAlertThresholds.InputQueue>
-        <vaba1:UpdateNextAlertThresholds.PreviousActivityStatus>
+        </vaba1:AddOrUpdateAlertRuleThresholdAction.InputQueue>
+        <vaba1:AddOrUpdateAlertRuleThresholdAction.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">calculateNextAlertThresholdStatus</mca:CSharpValue>
           </InArgument>
-        </vaba1:UpdateNextAlertThresholds.PreviousActivityStatus>
-      </vaba1:UpdateNextAlertThresholds>
+        </vaba1:AddOrUpdateAlertRuleThresholdAction.PreviousActivityStatus>
+      </vaba1:AddOrUpdateAlertRuleThresholdAction>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d1VDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQWNjb3VudEJhbGFuY2UuQlBcQmFsYW5jZUFsZXJ0VGhyZXNob2xkVXBkYXRlUHJvY2Vzcy54YW1sDTwDdA4CAQE9BXIQAgECRAdPIwIBKVAHZSwCARBmB3EpAgEDTA1MeQIBMEcNR44BAgEqXQ1dcQIBI1MNU44BAgEdYg1iggECARdYDVigAQIBEW4NbnoCAQppDWmgAQIBBA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1VDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQWNjb3VudEJhbGFuY2UuQlBcQmFsYW5jZUFsZXJ0VGhyZXNob2xkVXBkYXRlUHJvY2Vzcy54YW1sDTwDdQ4CAQE9BXMQAgECRQdQIwIBL1EHZiwCARJnB3IzAgEDTQ1NeQIBN0gNSI4BAgEwXg1ecQIBKFQNVI4BAgEhYw1jggECARpZDVmdAQIBE28Nb3oCAQtqDWqdAQIBBA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="LoadAccountBalances_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="CalculateNextAlertThresholds_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="UpdateNextAlertThresholds_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="AddOrUpdateAlertRuleThresholdAction_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />
       <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,210">
         <sap:WorkflowViewStateService.ViewState>

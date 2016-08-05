@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountBalanceDataManagerFactory.cs" />
+    <Compile Include="IAlertRuleThresholdActionDataManager.cs" />
     <Compile Include="IBalanceHistoryDataManager.cs" />
     <Compile Include="IBalanceUsageQueueDataManager.cs" />
     <Compile Include="IBillingTransactionDataManager.cs" />
