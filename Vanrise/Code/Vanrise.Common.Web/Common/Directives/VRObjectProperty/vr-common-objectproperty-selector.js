@@ -165,8 +165,6 @@
 
             function loadObjectPropertySelector(objectTypeConfigId) {
 
-                //objectPropertySelectorLoadDeferred;
-
                 objectPropertySelectorReadyDeferred.promise.then(function () {
                     $scope.scopeModel.isSelectorLoading = true;
 
