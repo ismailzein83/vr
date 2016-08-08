@@ -17,6 +17,7 @@ namespace Vanrise.Business
         #endregion
 
         #region Public Methods
+
         public IDataRetrievalResult<Vanrise.Entities.RateTypeDetail> GetFilteredRateTypes(DataRetrievalInput<Vanrise.Entities.RateTypeQuery> input)
         {
             var allRateTypes = GetCachedRateTypes();
@@ -24,7 +25,6 @@ namespace Vanrise.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRateTypes.ToBigResult(input, filterExpression, RateTypeDetailMapper));
 
         }
-
         public IEnumerable<Vanrise.Entities.RateTypeInfo> GetAllRateTypes()
         {
             return this.GetCachedRateTypes().MapRecords(RateTypeInfoMapper).OrderBy(x => x.Name);
@@ -33,6 +33,11 @@ namespace Vanrise.Business
         {
             var allRateTypes = GetCachedRateTypes();
             return allRateTypes.GetRecord(rateTypeId);
+        }
+        public string GetRateTypeName(int rateTypeId)
+        {
+            var rateType = GetRateType(rateTypeId);
+            return (rateType != null) ? rateType.Name : null;
         }
         public Vanrise.Entities.InsertOperationOutput<Vanrise.Entities.RateTypeDetail> AddRateType(Vanrise.Entities.RateType rateType)
         {
