@@ -300,9 +300,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.WhS.RouteSync.Data", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.WhS.RouteSync.Data.SQL", "TOne.WhS.RouteSync.Data.SQL\TOne.WhS.RouteSync.Data.SQL.csproj", "{BC257A2D-4AB6-4FDB-A66D-8E70A085BD16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.WhS.RouteSync.TelesRadius.SQL", "TOne.WhS.RouteSync.TelesRadius.SQL\TOne.WhS.RouteSync.TelesRadius.SQL.csproj", "{B730CF12-3175-4AFD-B693-604F2B441E4D}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 126
+		SccNumberOfProjects = 127
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -806,6 +808,10 @@ Global
 		SccProjectTopLevelParentUniqueName125 = TOneV2.sln
 		SccProjectName125 = TOne.WhS.RouteSync.Data.SQL
 		SccLocalPath125 = TOne.WhS.RouteSync.Data.SQL
+		SccProjectUniqueName126 = TOne.WhS.RouteSync.TelesRadius.SQL\\TOne.WhS.RouteSync.TelesRadius.SQL.csproj
+		SccProjectTopLevelParentUniqueName126 = TOneV2.sln
+		SccProjectName126 = TOne.WhS.RouteSync.TelesRadius.SQL
+		SccLocalPath126 = TOne.WhS.RouteSync.TelesRadius.SQL
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CD_ROM|Any CPU = CD_ROM|Any CPU
@@ -5439,6 +5445,42 @@ Global
 		{BC257A2D-4AB6-4FDB-A66D-8E70A085BD16}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
 		{BC257A2D-4AB6-4FDB-A66D-8E70A085BD16}.SingleImage|x64.ActiveCfg = Release|Any CPU
 		{BC257A2D-4AB6-4FDB-A66D-8E70A085BD16}.SingleImage|x86.ActiveCfg = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.CD_ROM|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.CD_ROM|Mixed Platforms.Build.0 = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.CD_ROM|x64.ActiveCfg = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.CD_ROM|x86.ActiveCfg = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.DVD-5|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.DVD-5|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.DVD-5|x64.ActiveCfg = Debug|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.DVD-5|x86.ActiveCfg = Debug|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.Optimized|Any CPU.ActiveCfg = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.Optimized|Any CPU.Build.0 = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.Optimized|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.Optimized|Mixed Platforms.Build.0 = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.Optimized|x64.ActiveCfg = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.Optimized|x86.ActiveCfg = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.Release|x64.ActiveCfg = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.Release|x86.ActiveCfg = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.SingleImage|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.SingleImage|x64.ActiveCfg = Release|Any CPU
+		{B730CF12-3175-4AFD-B693-604F2B441E4D}.SingleImage|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -5586,5 +5628,6 @@ Global
 		{1759BC47-FF2D-4AEB-BD44-684D1D172677} = {AFCE007F-63FD-4982-A774-461D14440BEC}
 		{A911883E-2AC4-473C-806B-8BF7E94F96E2} = {AFCE007F-63FD-4982-A774-461D14440BEC}
 		{BC257A2D-4AB6-4FDB-A66D-8E70A085BD16} = {AFCE007F-63FD-4982-A774-461D14440BEC}
+		{B730CF12-3175-4AFD-B693-604F2B441E4D} = {AFCE007F-63FD-4982-A774-461D14440BEC}
 	EndGlobalSection
 EndGlobal
