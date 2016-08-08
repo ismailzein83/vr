@@ -1,5 +1,5 @@
 ﻿<div class="action-bar">
-    <div class="btn-group action-bar-left" style="border-width:1px;border-color:white">
+    <div class="btn-group action-bar-left" >
         <button ng-show="ctrl.showcollapsebutton" ng-click="ctrl.issectioncollapsed = !ctrl.issectioncollapsed" style="border-bottom-color: transparent; border-color: transparent; border-radius: 15px; background-color: transparent; color: #FFF; " data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" type="button" class="btn btn-default btncustom" aria-label="Left Align">
             <span ng-hide="ctrl.issectioncollapsed" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
             <span ng-show="ctrl.issectioncollapsed" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
@@ -8,7 +8,7 @@
         </div>
     </div>
     
-    <div class="btn-group" style="width: 49%;">
+    <div class="btn-group" style="position: absolute;width: calc(100% - 15px);">
         <div style="float:right">
             <div transclude-id="buttons"></div>
         </div>

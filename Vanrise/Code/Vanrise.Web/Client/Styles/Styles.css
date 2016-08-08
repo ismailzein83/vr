@@ -576,6 +576,7 @@ add padding .left-addon input {
     z-index: 1;
     position: relative;
     border-radius: 15px;
+    height: 25px;
 }
 
 .modal-body .panel-body {
@@ -620,12 +621,15 @@ vr-modalcontent .action-bar {
 }
 
 .action-bar-left {
-    width: 49%;
+    border-width: 1px;
+    border-color: white;
+    position: absolute;
+    width: 50px;
 }
 
-    .action-bar-left button {
-        float: left;
-    }
+.action-bar-left button {
+    float: left;
+}
 
 .action-bar-right {
     width: 49%;
