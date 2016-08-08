@@ -13,5 +13,14 @@ namespace TOne.WhS.BusinessEntity.Entities
         public SaleRate Rate { get; set; }
 
         public Dictionary<int, SaleRate> RatesByRateType { get; set; }
+
+        public int EffectiveCurrencyId
+        {
+            get
+            {
+                ISaleEntityZoneRateManager manager = BEManagerFactory.GetManager<ISaleEntityZoneRateManager>();
+                return manager.GetCurrencyId(this.Rate);
+            }
+        }
     }
 }

@@ -11,7 +11,7 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class SaleRateManager
+    public class SaleRateManager : ISaleEntityZoneRateManager
     {
         #region Public Methods
         public List<SaleRate> GetRates(DateTime? effectiveOn, bool isEffectiveInFuture)

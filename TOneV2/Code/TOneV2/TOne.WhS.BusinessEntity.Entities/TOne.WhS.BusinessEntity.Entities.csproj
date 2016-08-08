@@ -70,6 +70,7 @@
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
     <Compile Include="BusinessManagers\ContextFactory.cs" />
     <Compile Include="BusinessManagers\IBEManager.cs" />
+    <Compile Include="BusinessManagers\ISaleEntityZoneRateManager.cs" />
     <Compile Include="BusinessManagers\ISellingNumberPlanManager.cs" />
     <Compile Include="BusinessManagers\IContext.cs" />
     <Compile Include="BusinessManagers\ISaleZoneManager.cs" />
