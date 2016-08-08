@@ -75,7 +75,8 @@ namespace Vanrise.BusinessProcess.Business
 
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
             string processTitle = createProcessInput.InputArguments.GetTitle();
-
+            if (processTitle != null)
+                processTitle = processTitle.Replace("#BPDefinitionTitle#", processDefinition.Title);
             long processInstanceId = dataManager.InsertInstance(processTitle, createProcessInput.ParentProcessID, processDefinition.BPDefinitionID, createProcessInput.InputArguments, BPInstanceStatus.New, createProcessInput.InputArguments.UserId, createProcessInput.InputArguments.EntityId);
             IBPTrackingDataManager dataManagerTracking = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
             dataManagerTracking.Insert(new BPTrackingMessage

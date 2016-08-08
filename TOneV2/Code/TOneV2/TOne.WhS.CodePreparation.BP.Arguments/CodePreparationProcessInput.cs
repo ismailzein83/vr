@@ -14,7 +14,7 @@ namespace TOne.WhS.CodePreparation.BP.Arguments
         public DateTime EffectiveDate { get; set; }
         public override string GetTitle()
         {
-            return String.Format("CodePreparation Process Started for Package: {0}", SellingNumberPlanId);
+            return String.Format("#BPDefinitionTitle# Process Started for Package: {0}", SellingNumberPlanId);
         }
 
 

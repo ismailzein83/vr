@@ -18,7 +18,7 @@ namespace TOne.WhS.Routing.BP.Arguments
         public List<SupplierZoneToRPOptionPolicy> SupplierZoneRPOptionPolicies { get; set; }
         public override string GetTitle()
         {
-            return String.Format("RP Routing Process for Effective Time {0}", EffectiveOn);
+            return String.Format("#BPDefinitionTitle# for Effective Time {0}", EffectiveOn);
         }
     }
 }

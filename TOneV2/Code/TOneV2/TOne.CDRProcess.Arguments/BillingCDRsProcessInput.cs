@@ -14,7 +14,7 @@ namespace TOne.CDRProcess.Arguments
 
         public override string GetTitle()
         {
-            return String.Format("Billing CDRs Process for Switch {0}", SwitchID);
+            return String.Format("#BPDefinitionTitle# for Switch {0}", SwitchID);
         }
     }
 }

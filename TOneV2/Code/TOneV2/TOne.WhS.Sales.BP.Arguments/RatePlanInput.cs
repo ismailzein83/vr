@@ -37,7 +37,7 @@ namespace TOne.WhS.Sales.BP.Arguments
                     throw new NotImplementedException();
             }
 
-            return String.Format("Started the Rate Plan process for {0} '{1}'", ownerTypeDescription, ownerName);
+            return String.Format("Started the #BPDefinitionTitle# process for {0} '{1}'", ownerTypeDescription, ownerName);
         }
     }
 }

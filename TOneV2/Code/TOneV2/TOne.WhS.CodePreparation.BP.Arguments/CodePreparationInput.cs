@@ -19,7 +19,7 @@ namespace TOne.WhS.CodePreparation.BP.Arguments
         {
             ISellingNumberPlanManager sellingNumberPlanManager = BEManagerFactory.GetManager<ISellingNumberPlanManager>();
             string sellingNumberPlanName = sellingNumberPlanManager.GetSellingNumberPlanName(SellingNumberPlanId);
-            return String.Format("Numbering Plan Process Started for Selling Number Plan: {0}", sellingNumberPlanName);
+            return String.Format("#BPDefinitionTitle# Process Started for Selling Number Plan: {0}", sellingNumberPlanName);
         }
     }
 }

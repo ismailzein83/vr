@@ -12,7 +12,7 @@ namespace TOne.CDRProcess.Arguments
 
         public override string GetTitle()
         {
-            return String.Format("Generate Daily Statistics Process for Switch {0}", SwitchID);
+            return String.Format("Generate #BPDefinitionTitle# for Switch {0}", SwitchID);
         }
     }
 }

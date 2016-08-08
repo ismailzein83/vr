@@ -23,7 +23,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Arguments
         {
             ICarrierAccountManager carrierAccountManager = BEManagerFactory.GetManager<ICarrierAccountManager>();
             string supplierName = carrierAccountManager.GetCarrierAccountName(SupplierAccountId);
-            return String.Format("SupplierPriceList Process Started for Supplier: {0}", supplierName);
+            return String.Format("#BPDefinitionTitle# Process Started for Supplier: {0}", supplierName);
         }
     }
 }

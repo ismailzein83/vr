@@ -19,7 +19,7 @@ namespace TOne.LCRProcess.Arguments
 
         public override string GetTitle()
         {
-            return String.Format("Routing Process for Codes starts by {0}", CodePrefix);
+            return String.Format("#BPDefinitionTitle# for Codes starts by {0}", CodePrefix);
         }
     }
 }

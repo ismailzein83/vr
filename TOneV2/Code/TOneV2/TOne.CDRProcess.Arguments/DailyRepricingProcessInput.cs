@@ -15,7 +15,7 @@ namespace TOne.CDRProcess.Arguments
 
         public override string GetTitle()
         {
-            return String.Format("Daily Repricing Process for date {0:dd-MMM-yyyy}", this.RepricingDay);
+            return String.Format("#BPDefinitionTitle# for date {0:dd-MMM-yyyy}", this.RepricingDay);
         }
 
         public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)

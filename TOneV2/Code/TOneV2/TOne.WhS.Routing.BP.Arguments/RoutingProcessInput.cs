@@ -19,7 +19,7 @@ namespace TOne.WhS.Routing.BP.Arguments
         public bool DivideProcessIntoSubProcesses { get; set; }
         public override string GetTitle()
         {
-            return String.Format("Routing Process for Effective Time {0}", EffectiveTime);
+            return String.Format("#BPDefinitionTitle# for Effective Time {0}", EffectiveTime);
         }
     }
 }
