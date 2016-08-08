@@ -16,7 +16,7 @@ namespace Vanrise.GenericData.Transformation.Entities
 
         public string RuleId { get; set; }
         public List<GenericRuleCriteriaFieldMapping> RuleFieldsMappings { get; set; }
-
+        public List<GenericRuleObjectMapping> RuleObjectsMappings { get; set; }
         protected void GenerateRuleTargetExecutionCode<T>(IDataTransformationCodeGenerationContext context, out string ruleTargetVariableName)
             where T : GenericRuleTarget
         {
@@ -25,10 +25,21 @@ namespace Vanrise.GenericData.Transformation.Entities
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.EffectiveOn = {1};", ruleTargetVariableName, this.EffectiveTime);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.TargetFieldValues = new Dictionary<string, object>();", ruleTargetVariableName);
 
-            foreach (var ruleFieldMapping in this.RuleFieldsMappings)
+            if (this.RuleFieldsMappings != null)
             {
-                context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null) {1}.TargetFieldValues.Add({3}{2}{3}, {0});",
-                    ruleFieldMapping.Value, ruleTargetVariableName, ruleFieldMapping.RuleCriteriaFieldName, "\"");
+                foreach (var ruleFieldMapping in this.RuleFieldsMappings)
+                {
+                    context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null) {1}.TargetFieldValues.Add({3}{2}{3}, {0});",
+                        ruleFieldMapping.Value, ruleTargetVariableName, ruleFieldMapping.RuleCriteriaFieldName, "\"");
+                }
+            }
+            if (this.RuleObjectsMappings != null)
+            {
+                foreach (var ruleObjectMapping in this.RuleObjectsMappings)
+                {
+                    context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null) {1}.Objects.Add({3}{2}{3}, {0});",
+                        ruleObjectMapping.Value, ruleTargetVariableName, ruleObjectMapping.RuleObjectName, "\"");
+                }
             }
         }
 

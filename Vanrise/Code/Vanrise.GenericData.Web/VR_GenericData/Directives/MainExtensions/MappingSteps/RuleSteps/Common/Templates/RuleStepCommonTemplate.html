@@ -10,15 +10,29 @@
 
 <vr-row>
     <vr-columns width="fullrow">
-        <vr-section title="Mapping" vr-loader="isLoadingMappingData">
-            <vr-datagrid datasource="ruleFieldsMappings"
-                         hidegridmenu norowhighlightonclick="true">
-                <vr-datagridcolumn headertext="'Rule Field Name'" type="'Text'" field="'Title'" widthfactor="7" disablesorting></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Mapping From'" type="'Text'" field="''" widthfactor="15" disablesorting>
-                    <vr-genericdata-expressionbuilder on-ready="dataItem.onSourceMappingReady" hidelabel label="From" isrequired="true"></vr-genericdata-expressionbuilder>
-                </vr-datagridcolumn>
-            </vr-datagrid>
+        <vr-section title="Mapping Values" vr-loader="isLoadingMappingData">
+            <vr-tabs>
+                <vr-tab header="'Fields'">
+                    <vr-datagrid datasource="scopeModel.ruleFieldsMappings"
+                                 hidegridmenu norowhighlightonclick="true">
+                        <vr-datagridcolumn headertext="'Rule Field Name'" type="'Text'" field="'Title'" widthfactor="7" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Mapping From'" type="'Text'" field="''" widthfactor="15" disablesorting>
+                            <vr-genericdata-expressionbuilder on-ready="dataItem.onSourceMappingReady" hidelabel label="From" ></vr-genericdata-expressionbuilder>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-tab>
+                <vr-tab header="'Objects'">
+                    <vr-datagrid datasource="scopeModel.ruleObjectsMappings"
+                                 hidegridmenu norowhighlightonclick="true">
+                        <vr-datagridcolumn headertext="'Rule Object Name'" type="'Text'" field="'Title'" widthfactor="7" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Mapping From'" type="'Text'" field="''" widthfactor="15" disablesorting>
+                            <vr-genericdata-expressionbuilder on-ready="dataItem.onObjectSourceMappingReady" hidelabel label="From"></vr-genericdata-expressionbuilder>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-tab>
+            </vr-tabs>
         </vr-section>
+
         <vr-section title="Rule">
             <vr-genericdata-expressionbuilder on-ready="onRuleIdDirectiveReady" label="Rule Id"></vr-genericdata-expressionbuilder>
         </vr-section>

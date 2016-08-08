@@ -36,6 +36,9 @@ app.directive('vrGenericdataDatatransformationRulestepcommonPreview', ['UtilsSer
 
             function initializeController() {
                 ctrl.ruleFieldsMappings = [];
+                ctrl.ruleObjectsMappings = [];
+
+
                 defineAPI();
             }
 
@@ -44,16 +47,15 @@ app.directive('vrGenericdataDatatransformationRulestepcommonPreview', ['UtilsSer
 
                 api.load = function (payload) {
                     ctrl.ruleFieldsMappings.length = 0;
+                    ctrl.ruleObjectsMappings.length = 0;
+
                     if (payload != undefined) {
                         if (payload.stepDetails != undefined) {
                             stepObj.stepDetails = payload.stepDetails;
-                            if (payload.stepDetails.RuleFieldsMappings != undefined && payload.stepDetails.RuleFieldsMappings.length > 0)
-                            {
-                                ctrl.ruleFieldsMappings = payload.stepDetails.RuleFieldsMappings;
-                                ctrl.effectiveTime = payload.stepDetails.EffectiveTime
-                                ctrl.ruleId = payload.stepDetails.RuleId
-                            }
-                              
+                            ctrl.ruleFieldsMappings = payload.stepDetails.RuleFieldsMappings;
+                            ctrl.ruleObjectsMappings = payload.stepDetails.RuleObjectsMappings;
+                            ctrl.effectiveTime = payload.stepDetails.EffectiveTime
+                            ctrl.ruleId = payload.stepDetails.RuleId;
                         }
 
                     }
@@ -63,6 +65,7 @@ app.directive('vrGenericdataDatatransformationRulestepcommonPreview', ['UtilsSer
                 api.applyChanges = function (changes) {
                     stepObj.stepDetails = changes;
                     ctrl.ruleFieldsMappings = changes.RuleFieldsMappings;
+                    ctrl.ruleObjectsMappings = changes.RuleObjectsMappings;
                     ctrl.effectiveTime = changes.EffectiveTime;
                     ctrl.ruleId = changes.RuleId;
                 }
@@ -81,20 +84,33 @@ app.directive('vrGenericdataDatatransformationRulestepcommonPreview', ['UtilsSer
             }
 
             function checkValidation() {
-                if (ctrl.ruleFieldsMappings != undefined) {
-                    for (var i = 0 ; i < ctrl.ruleFieldsMappings.length; i++) {
-                        if (ctrl.ruleFieldsMappings[i].Value == undefined)
+                if (ctrl.ruleObjectsMappings != undefined)
+                {
+                    if (!checkRuleObjectsFilled(ctrl.ruleObjectsMappings))
+                    {
+                        if (ctrl.ruleFieldsMappings != undefined) {
+                            for (var i = 0 ; i < ctrl.ruleFieldsMappings.length; i++) {
+                                if (ctrl.ruleFieldsMappings[i].Value == undefined)
+                                    return "All fields should be mapped.";
+                            }
+                        } else {
                             return "All fields should be mapped.";
+                        }
                     }
-                } else {
-                    return "All fields should be mapped.";
                 }
                 if (ctrl.effectiveTime == undefined)
                     return "Missing effective time mapping.";
 
                 return null;
             }
-
+            function checkRuleObjectsFilled(ruleObjectsMappings)
+            {
+                for (var i = 0 ; i < ruleObjectsMappings.length; i++) {
+                    if (ruleObjectsMappings[i].Value != undefined)
+                        return true;
+                }
+                return false;
+            }
             this.initializeController = initializeController;
         }
         return directiveDefinitionObject;

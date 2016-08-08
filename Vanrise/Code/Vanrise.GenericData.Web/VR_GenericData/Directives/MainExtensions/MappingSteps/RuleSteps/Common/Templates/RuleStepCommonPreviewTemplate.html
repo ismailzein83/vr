@@ -10,14 +10,23 @@
     <vr-columns width="3/4row">
         <vr-list maxitemsperrow="1" ng-show="ctrl.ruleFieldsMappings.length > 0">
             <vr-listitem>
-                <vr-label>Mapping</vr-label>
+                <vr-label>Mapping Fields</vr-label>
                 <vr-list maxitemsperrow="1" ng-repeat="field in ctrl.ruleFieldsMappings" >
                     <vr-listitem><vr-label>{{field.RuleCriteriaFieldName}} = {{field.Value}}</vr-label></vr-listitem>
                 </vr-list>
 
             </vr-listitem>
         </vr-list>
-    
+        <vr-list maxitemsperrow="1" ng-show="ctrl.ruleObjectsMappings.length > 0">
+            <vr-listitem>
+                <vr-label>Mapping Objects</vr-label>
+                <vr-list maxitemsperrow="1" ng-repeat="object in ctrl.ruleObjectsMappings">
+                    <vr-listitem><vr-label>{{object.RuleObjectName}} = {{object.Value}}</vr-label></vr-listitem>
+                </vr-list>
+
+            </vr-listitem>
+        </vr-list>
+
     <!--<vr-datagrid datasource="ctrl.ruleFieldsMappings"
                  hidegridmenu norowhighlightonclick="true">
         <vr-datagridcolumn headertext="'Rule Field Name'" type="'Text'" field="'RuleCriteriaFieldName'" widthfactor="5" disablesorting></vr-datagridcolumn>

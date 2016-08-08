@@ -91,6 +91,7 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestep', ['UtilsServi
                             payloadRuleStep.context = payload.context;
                         if (payload != undefined && payload.stepDetails) {
                             payloadRuleStep.ruleFieldsMappings = payload.stepDetails.RuleFieldsMappings;
+                            payloadRuleStep.ruleObjectsMappings = payload.stepDetails.RuleObjectsMappings;
                             payloadRuleStep.effectiveTime = payload.stepDetails.EffectiveTime;
                             payloadRuleStep.ruleDefinitionId = payload.stepDetails.RuleDefinitionId;
                             payloadRuleStep.ruleId = payload.stepDetails.RuleId;

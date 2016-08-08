@@ -57,6 +57,7 @@
     <Compile Include="DataTransformationRecordType.cs" />
     <Compile Include="DataTransformationStepConfig.cs" />
     <Compile Include="GenericRuleCriteriaFieldMapping.cs" />
+    <Compile Include="GenericRuleObjectMapping.cs" />
     <Compile Include="IDataTransformationExecutionContext.cs" />
     <Compile Include="IDataTransformationCodeGenerationContext.cs" />
     <Compile Include="BusinessManagers\IDataTransformer.cs" />
