@@ -25,6 +25,20 @@ namespace TOne.WhS.RouteSync.Business
             return allRouteSyncDefinitions[routeSyncDefinitionId];
         }
 
+        public IEnumerable<RouteSyncDefinitionInfo> GetRouteSyncDefinitionsInfo()
+        {
+            return GetCachedRouteSyncDefinitions().MapRecords(RouteSyncDefinitionInfoMapper).OrderBy(d => d.Name);
+        }
+
+        RouteSyncDefinitionInfo RouteSyncDefinitionInfoMapper(RouteSyncDefinition routeSyncDefinition)
+        {
+            return new RouteSyncDefinitionInfo
+            {
+                Name = routeSyncDefinition.Name,
+                RouteSyncDefinitionId = routeSyncDefinition.RouteSyncDefinitionId
+            };
+        }
+
         Dictionary<int, RouteSyncDefinition> GetCachedRouteSyncDefinitions()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRouteSyncDefinitions",

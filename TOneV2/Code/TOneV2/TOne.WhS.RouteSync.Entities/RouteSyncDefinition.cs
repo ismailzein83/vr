@@ -21,4 +21,12 @@ namespace TOne.WhS.RouteSync.Entities
 
         public List<string> SwitchIds { get; set; }
     }
+
+    public class RouteSyncDefinitionInfo
+    {
+        public int RouteSyncDefinitionId { get; set; }
+
+        public string Name { get; set; }
+
+    }
 }

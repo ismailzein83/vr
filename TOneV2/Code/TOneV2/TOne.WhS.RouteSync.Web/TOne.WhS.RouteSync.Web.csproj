@@ -135,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\RouteSyncDefinitionController.cs" />
     <Compile Include="Controllers\SwitchRouteSynchronizerController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -142,12 +143,20 @@
     <Content Include="WhS_RouteSync\Constant\ModuleConfig.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\Templates\TelesRadiusSWSyncTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\whs-routesync-telesradius-swsync.js" />
+    <Content Include="WhS_RouteSync\Directives\ProcessInput\Normal\Templates\RouteSyncProcessManualTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\ProcessInput\Normal\whs-routesync-process-manual.js" />
+    <Content Include="WhS_RouteSync\Directives\ProcessInput\Scheduled\Templates\RouteSyncProcessScheduledTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\ProcessInput\Scheduled\whs-routesync-process-scheduled.js" />
+    <Content Include="WhS_RouteSync\Directives\RouteSyncDefinition\whs-routesync-routesyncdefinition-selector.js" />
     <Content Include="WhS_RouteSync\Directives\SwitchRouteSynchronizer\Templates\SwitchRouteSynchronizerTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\SwitchRouteSynchronizer\whs-routesync-switchroutesynchronizer-settings.js" />
+    <Content Include="WhS_RouteSync\Services\APIServices\RouteSyncDefinitionAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\SwitchRouteSynchronizerAPIService.js" />
+    <Content Include="WhS_RouteSync\Services\RouteSyncDefinitionService.js" />
     <Content Include="WhS_RouteSync\Services\SwitchRouteSynchronizerService.js" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="WhS_RouteSync\Directives\RouteSyncDefinition\Templates\" />
     <Folder Include="WhS_RouteSync\Views\" />
   </ItemGroup>
   <ItemGroup>
