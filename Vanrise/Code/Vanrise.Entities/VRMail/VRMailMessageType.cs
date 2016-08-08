@@ -19,6 +19,8 @@ namespace Vanrise.Entities
     {
         public VRObjectVariableCollection Objects { get; set; }
 
+        public List<VRObjectPropertyVariable> Variables { get; set; }
+
         public bool SupportMultipleTemplates { get; set; }
     }
 }
