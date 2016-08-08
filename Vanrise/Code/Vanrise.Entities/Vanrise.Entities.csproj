@@ -95,6 +95,8 @@
     <Compile Include="StyleDefinition\StyleDefinitionInfo.cs" />
     <Compile Include="StyleDefinition\StyleDefinitionQuery.cs" />
     <Compile Include="StyleDefinition\StyleFormatingConfig.cs" />
+    <Compile Include="VRMail\VRMailMessageTypeDetail.cs" />
+    <Compile Include="VRMail\VRMailMessageTypeQuery.cs" />
     <Compile Include="VRObject\VRExpression.cs" />
     <Compile Include="ExtensionConfiguration.cs" />
     <Compile Include="File\FileUploadResult.cs" />

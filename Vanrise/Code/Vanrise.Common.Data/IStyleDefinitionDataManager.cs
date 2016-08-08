@@ -14,8 +14,8 @@ namespace Vanrise.Common.Data
 
         bool AreStyleDefinitionUpdated(ref object updateHandle);
 
-        bool Insert(StyleDefinition StyleDefinitionItem);
+        bool Insert(StyleDefinition styleDefinitionItem);
 
-        bool Update(StyleDefinition StyleDefinitionItem);
+        bool Update(StyleDefinition styleDefinitionItem);
     }
 }

@@ -1,0 +1,23 @@
+﻿<div>
+    <vr-row removeline>
+        <vr-columns width="fullrow" simplecol>
+            <vr-button type="Add" data-onclick="ctrl.onAddObjectPropertyVariable" standalone></vr-button>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow">
+            <!--<vr-validator validate="ctrl.onValidateCriteriaFields()">-->
+            <vr-datagrid on-ready="ctrl.onGridReady"
+                         datasource="ctrl.objectPropertyVariables"
+                         menuactions="ctrl.menuActions"
+                         ondeleterow="ctrl.onObjectPropertyVariable"
+                         enabledraggablerow="true"
+                         hidegridmenu>
+                <vr-datagridcolumn headertext="'Variable Name'" type="'Text'" field="'VariableName'" widthfactor="5" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Object Name'" type="'Text'" field="'ObjectName'" widthfactor="5" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Property Evaluator'" type="'Text'" field="'PropertyEvaluator'" widthfactor="4" disablesorting></vr-datagridcolumn>
+            </vr-datagrid>
+            <!--</vr-validator>-->
+        </vr-columns>
+    </vr-row>
+</div>

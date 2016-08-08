@@ -65,6 +65,7 @@
     <Compile Include="CurrencyDataManager.cs" />
     <Compile Include="TypeDataManager.cs" />
     <Compile Include="VRFileDataManager.cs" />
+    <Compile Include="VRMailMessageTypeDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Common.Data\Vanrise.Common.Data.csproj">
