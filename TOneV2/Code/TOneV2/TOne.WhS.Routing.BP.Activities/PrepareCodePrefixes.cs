@@ -6,6 +6,7 @@ using System.Activities;
 using TOne.WhS.BusinessEntity.Business;
 using Vanrise.Entities;
 using Vanrise.BusinessProcess;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -33,34 +34,49 @@ namespace TOne.WhS.Routing.BP.Activities
             bool isFuture = this.IsFuture.Get(context);
 
             HashSet<string> prefixesHashSet = new HashSet<string>();
-
-            SaleCodeManager saleCodeManager = new SaleCodeManager();
-            IEnumerable<string> saleCodePrefixes = saleCodeManager.GetDistinctCodeByPrefixes(prefixLenght, effectiveOn, isFuture);
-
+            List<CodePrefixInfo> codePrefixes = new List<CodePrefixInfo>();
             long validNumberPrefix;
 
-            if (saleCodePrefixes != null)
-            {
-                foreach (string item in saleCodePrefixes)
-                    if (long.TryParse(item, out validNumberPrefix))
-                        prefixesHashSet.Add(item);
-                    else
-                        context.WriteTrackingMessage(LogEntryType.Warning, "Invalid Sale Code Prefix: {0}", item);
-            }
-
             SupplierCodeManager supplierCodeManager = new SupplierCodeManager();
-            IEnumerable<string> supplierCodePrefixes = supplierCodeManager.GetDistinctCodeByPrefixes(prefixLenght, effectiveOn, isFuture);
+            IEnumerable<CodePrefixInfo> supplierCodePrefixes = supplierCodeManager.GetDistinctCodeByPrefixes(prefixLenght, effectiveOn, isFuture);
 
             if (supplierCodePrefixes != null)
             {
-                foreach (string item in supplierCodePrefixes)
-                    if (long.TryParse(item, out validNumberPrefix))
-                        prefixesHashSet.Add(item);
+                foreach (CodePrefixInfo item in supplierCodePrefixes)
+                    if (long.TryParse(item.CodePrefix, out validNumberPrefix))
+                    {
+                        if (!prefixesHashSet.Contains(item.CodePrefix))
+                        {
+                            codePrefixes.Add(item);
+                            prefixesHashSet.Add(item.CodePrefix);
+                        }
+                    }
                     else
-                        context.WriteTrackingMessage(LogEntryType.Warning, "Invalid Supplier Code Prefix: {0}", item);
+                        context.WriteTrackingMessage(LogEntryType.Warning, "Invalid Supplier Code Prefix: {0}", item.CodePrefix);
             }
 
-            this.DistinctCodePrefixes.Set(context, prefixesHashSet);
+
+            SaleCodeManager saleCodeManager = new SaleCodeManager();
+            IEnumerable<CodePrefixInfo> saleCodePrefixes = saleCodeManager.GetDistinctCodeByPrefixes(prefixLenght, effectiveOn, isFuture);
+
+            if (saleCodePrefixes != null)
+            {
+                foreach (CodePrefixInfo item in saleCodePrefixes)
+                    if (long.TryParse(item.CodePrefix, out validNumberPrefix))
+                    {
+                        if (!prefixesHashSet.Contains(item.CodePrefix))
+                        {
+                            codePrefixes.Add(item);
+                            prefixesHashSet.Add(item.CodePrefix);
+                        }
+                    }
+                    else
+                        context.WriteTrackingMessage(LogEntryType.Warning, "Invalid Sale Code Prefix: {0}", item.CodePrefix);
+            }
+
+            IEnumerable<string> result = codePrefixes.OrderBy(itm => itm.Count).Select(itm => itm.CodePrefix);
+
+            this.DistinctCodePrefixes.Set(context, result);
             context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Preparing Code Prefixes is done", null);
         }
     }

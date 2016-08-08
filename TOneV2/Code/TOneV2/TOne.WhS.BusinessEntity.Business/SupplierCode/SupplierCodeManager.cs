@@ -30,7 +30,7 @@ namespace TOne.WhS.BusinessEntity.Business
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
             return dataManager.GetActiveSupplierCodesByPrefix(codePrefix, effectiveOn, isFuture, getChildCodes, getParentCodes, supplierInfo);
         }
-        public IEnumerable<string> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
+        public IEnumerable<CodePrefixInfo> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
         {
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
             return dataManager.GetDistinctCodeByPrefixes(prefixLength, effectiveOn, isFuture);

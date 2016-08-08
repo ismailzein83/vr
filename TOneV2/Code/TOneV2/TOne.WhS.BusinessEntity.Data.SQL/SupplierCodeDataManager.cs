@@ -13,14 +13,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SupplierCodeDataManager : Vanrise.Data.SQL.BaseSQLDataManager, ISupplierCodeDataManager
     {
-    
+
         #region ctor/Local Variables
         public SupplierCodeDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
-       
+
         #endregion
 
         #region Public Methods
@@ -48,7 +48,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@GetParentCodes", getParentCodes));
             });
         }
-        public IEnumerable<string> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
+        public IEnumerable<CodePrefixInfo> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetDistinctCodePrefixes", CodePrefixMapper, prefixLength, effectiveOn, isFuture);
         }
@@ -86,9 +86,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             };
             return supplierCode;
         }
-        string CodePrefixMapper(IDataReader reader)
+        CodePrefixInfo CodePrefixMapper(IDataReader reader)
         {
-            return reader["CodePrefix"].ToString();
+            return new CodePrefixInfo()
+            {
+                CodePrefix = reader["CodePrefix"] as string,
+                Count = GetReaderValue<int>(reader, "codeCount")
+            };
         }
 
         #endregion
