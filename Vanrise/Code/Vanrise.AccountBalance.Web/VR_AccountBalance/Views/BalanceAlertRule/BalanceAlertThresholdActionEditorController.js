@@ -13,6 +13,10 @@
         var vRActionManagementAPI;
         var vRActionManagementReadyDeferred = UtilsService.createPromiseDeferred();
 
+
+        var rollBackVRActionManagementAPI;
+        var rollBackVRActionManagementReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -38,6 +42,11 @@
                 vRActionManagementReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onRollBackVRActionManagementDirectiveReady = function (api) {
+                rollBackVRActionManagementAPI = api;
+                rollBackVRActionManagementReadyDeferred.resolve();
+            };
+
             $scope.scopeModel.saveThreshold = function () {
                 if (isEditMode) {
                     return update();
@@ -58,7 +67,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRActionManagement, loadBalanceAlertThresholdDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRActionManagement, loadBalanceAlertThresholdDirective, loadRollBackVRActionManagement]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -76,10 +85,19 @@
         function loadVRActionManagement() {
             var vRActionManagementLoadDeferred = UtilsService.createPromiseDeferred();
             vRActionManagementReadyDeferred.promise.then(function () {
-                var vrActionPayload = { extensionType: extensionType, actions: thresholdEntity != undefined ? thresholdEntity.Actions : undefined };
+                var vrActionPayload = { extensionType: extensionType, actions: thresholdEntity != undefined ? thresholdEntity.Actions : undefined,isRequired:true };
                 VRUIUtilsService.callDirectiveLoad(vRActionManagementAPI, vrActionPayload, vRActionManagementLoadDeferred);
             });
             return vRActionManagementLoadDeferred.promises;
+        }
+
+        function loadRollBackVRActionManagement() {
+            var rollBackVRActionManagementLoadDeferred = UtilsService.createPromiseDeferred();
+            rollBackVRActionManagementReadyDeferred.promise.then(function () {
+                var vrActionPayload = { extensionType: extensionType, actions: thresholdEntity != undefined ? thresholdEntity.RollbackActions : undefined, isRequired :false };
+                VRUIUtilsService.callDirectiveLoad(rollBackVRActionManagementAPI, vrActionPayload, rollBackVRActionManagementLoadDeferred);
+            });
+            return rollBackVRActionManagementLoadDeferred.promises;
         }
 
         function loadBalanceAlertThresholdDirective() {
@@ -108,7 +126,8 @@
         function buildBalanceAlertThresholdObjFromScope() {
             var obj = {
                 Threshold: balanceAlertThresholdAPI.getData(),
-                Actions: vRActionManagementAPI.getData()
+                Actions: vRActionManagementAPI.getData(),
+                RollbackActions: rollBackVRActionManagementAPI.getData()
             };
             return obj;
         }

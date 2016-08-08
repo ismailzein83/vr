@@ -11,7 +11,6 @@ namespace Vanrise.AccountBalance.Data
     {
         LiveBalance GetLiveBalance(long accountId);
         void GetLiveBalanceAccounts(Action<LiveBalance> onLiveBalanceReady);
-        void GetLiveBalancesToAlert(Action<LiveBalance> onLiveBalanceReady);
         bool UpdateLiveBalanceFromBillingTransaction(long accountId, List<long> billingTransactionIds, decimal amount);
         bool UpdateLiveBalanceFromBalanceUsageQueue(IEnumerable<UsageBalanceUpdate> groupedResult, long balanceUsageQueueId);
         IEnumerable<LiveBalanceAccountInfo> GetLiveBalanceAccountsInfo();

@@ -24,29 +24,30 @@ function (UtilsService, VR_AccountBalance_BalanceAlertService) {
 
 
     function BalanceAlartruleSettings(ctrl, $scope, $attrs) {
-
         function initializeController() {
 
             ctrl.datasource = [];
 
             ctrl.isValid = function () {
-
                 if (ctrl.datasource.length > 0)
                     return null;
+
                 return "You Should Select at least one threshold action.";
             }
 
             ctrl.addThresholdAction = function () {
                 var onBalanceAlertThresholdAdded = function (balanceAlertThreshold)
                 {
-                    balanceAlertThreshold.ActionNames = getActionNames(balanceAlertThreshold.Actions)
+                    balanceAlertThreshold.ActionNames = getActionNames(balanceAlertThreshold.Actions);
+
+                    balanceAlertThreshold.RollbackActionNames = getActionNames(balanceAlertThreshold.RollbackActions);
                     ctrl.datasource.push({ Entity: balanceAlertThreshold });
                 }
                 VR_AccountBalance_BalanceAlertService.addBalanceAlertThreshold(onBalanceAlertThresholdAdded);
             };
 
             ctrl.removeThresholdAction = function (dataItem) {
-                var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataItem.id, 'id');
+                var index = ctrl.datasource.indexOf(dataItem);
                 ctrl.datasource.splice(index, 1);
             };
 
@@ -75,6 +76,7 @@ function (UtilsService, VR_AccountBalance_BalanceAlertService) {
             api.load = function (payload) {
                 if(payload !=undefined && payload.settings !=undefined)
                 {
+                    
                     if(payload.settings.ThresholdActions !=undefined)
                     {
                         for(var i=0;i<payload.settings.ThresholdActions.length;i++)
@@ -83,6 +85,9 @@ function (UtilsService, VR_AccountBalance_BalanceAlertService) {
                             if (thresholdAction.Actions != undefined && thresholdAction.Actions.length > 0)
                             {
                                 thresholdAction.ActionNames = getActionNames(thresholdAction.Actions);
+                            }
+                            if (thresholdAction.RollbackActions != undefined && thresholdAction.RollbackActions.length > 0) {
+                                thresholdAction.RollbackActionNames = getActionNames(thresholdAction.RollbackActions);
                             }
                             ctrl.datasource.push({ Entity: thresholdAction });
                         }
@@ -96,17 +101,21 @@ function (UtilsService, VR_AccountBalance_BalanceAlertService) {
 
         function getActionNames(actions)
         {
-            var actionNames;
-            for (var i = 0; i < actions.length; i++) {
-                var action = actions[i];
-                if (actionNames == undefined)
-                    actionNames = "";
-                else
-                    actionNames += ", ";
-                actionNames += action.ActionName;
+            if (actions != undefined)
+            {
+                var actionNames;
+                for (var i = 0; i < actions.length; i++) {
+                    var action = actions[i];
+                    if (actionNames == undefined)
+                        actionNames = "";
+                    else
+                        actionNames += ", ";
+                    actionNames += action.ActionName;
 
+                }
+                return actionNames;
             }
-            return actionNames;
+            
         }
 
         function defineMenuActions() {
@@ -119,7 +128,9 @@ function (UtilsService, VR_AccountBalance_BalanceAlertService) {
 
         function editThresholdAction(dataItem) {
             var onThresholdActionUpdated = function (thresholdActionObj) {
-                thresholdActionObj.ActionNames = getActionNames(thresholdActionObj.Actions)
+                thresholdActionObj.ActionNames = getActionNames(thresholdActionObj.Actions);
+                thresholdActionObj.RollbackActionNames = getActionNames(thresholdActionObj.RollbackActions);
+
                 ctrl.datasource[ctrl.datasource.indexOf(dataItem)] = { Entity: thresholdActionObj };
             }
             VR_AccountBalance_BalanceAlertService.editBalanceAlertThreshold(dataItem.Entity, onThresholdActionUpdated);

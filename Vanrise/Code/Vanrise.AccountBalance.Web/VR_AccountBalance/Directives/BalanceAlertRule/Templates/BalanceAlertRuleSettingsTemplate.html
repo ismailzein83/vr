@@ -9,7 +9,8 @@
             <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions"
                          on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeThresholdAction" hidegridmenu>
                 <vr-datagridcolumn headertext="'Threshold'" field="'Entity.Threshold.Threshold'" widthfactor="5"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Actions'" field="'Entity.ActionNames'" widthfactor="20"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Actions'" field="'Entity.ActionNames'" widthfactor="10"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Rollback Action Names'" field="'Entity.RollbackActionNames'" widthfactor="10"></vr-datagridcolumn>
             </vr-datagrid>
         </vr-validator>
     </vr-columns>

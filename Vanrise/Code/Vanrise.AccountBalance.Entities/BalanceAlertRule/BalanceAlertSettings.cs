@@ -16,6 +16,8 @@ namespace Vanrise.AccountBalance.Entities
         public BalanceAlertThreshold Threshold { get; set; }
 
         public List<VRAction> Actions { get; set; }
+
+        public List<VRAction> RollbackActions { get; set; }
     }
 
     public abstract class BalanceAlertThreshold

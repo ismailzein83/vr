@@ -13,7 +13,7 @@ namespace Vanrise.AccountBalance.BP.Activities
     #region Argument Classes
     public class LoadBalancesToAlertInput
     {
-        public BaseQueue<AccountBalanceBatch> OutputQueue { get; set; }
+        public BaseQueue<AccountBalanceForAlertRuleBatch> OutputQueue { get; set; }
     }
     #endregion
     public sealed class LoadBalancesToAlert : BaseAsyncActivity<LoadBalancesToAlertInput>
@@ -21,24 +21,24 @@ namespace Vanrise.AccountBalance.BP.Activities
         #region Arguments
 
         [RequiredArgument]
-        public InOutArgument<BaseQueue<AccountBalanceBatch>> OutputQueue { get; set; }
+        public InOutArgument<BaseQueue<AccountBalanceForAlertRuleBatch>> OutputQueue { get; set; }
         #endregion
         protected override void DoWork(LoadBalancesToAlertInput inputArgument, AsyncActivityHandle handle)
         {
             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Started Loading Account Balances.");
 
-            ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
+            IBalanceAlertRuleDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBalanceAlertRuleDataManager>();
             var batchSize = 100;
-            var list = new List<LiveBalance>();
+            var list = new List<AccountBalanceForAlertRule>();
             var counter = 0;
             dataManager.GetLiveBalancesToAlert((liveBalance) =>
             {
                 counter++;
                 if (counter == batchSize)
                 {
-                    var liveBalanceBatch = new AccountBalanceBatch() { AccountBalances = list };
+                    var liveBalanceBatch = new AccountBalanceForAlertRuleBatch() { AccountBalancesForAlertRules = list };
                     inputArgument.OutputQueue.Enqueue(liveBalanceBatch);
-                    list = new List<LiveBalance>();
+                    list = new List<AccountBalanceForAlertRule>();
                     counter = 0;
                 }
                 list.Add(liveBalance);
@@ -46,7 +46,7 @@ namespace Vanrise.AccountBalance.BP.Activities
 
             if (list.Count > 0)
             {
-                var liveBalanceBatch = new AccountBalanceBatch() { AccountBalances = list };
+                var liveBalanceBatch = new AccountBalanceForAlertRuleBatch() { AccountBalancesForAlertRules = list };
                 inputArgument.OutputQueue.Enqueue(liveBalanceBatch);
             }
             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finish Loading Account Balances.");
@@ -54,7 +54,7 @@ namespace Vanrise.AccountBalance.BP.Activities
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.OutputQueue.Get(context) == null)
-                this.OutputQueue.Set(context, new MemoryQueue<AccountBalanceBatch>());
+                this.OutputQueue.Set(context, new MemoryQueue<AccountBalanceForAlertRuleBatch>());
             base.OnBeforeExecute(context, handle);
         }
         protected override LoadBalancesToAlertInput GetInputArgument(AsyncCodeActivityContext context)

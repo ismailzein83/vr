@@ -25,12 +25,15 @@ function (UtilsService, VR_Notification_VRActionService) {
 
     function VRActionsManagement(ctrl, $scope, $attrs) {
         var extensionType;
+        var isRequired;
+
         function initializeController() {
 
             ctrl.datasource = [];
 
             ctrl.isValid = function () {
-
+                if (!isRequired)
+                    return null;
                 if (ctrl.datasource.length > 0)
                     return null;
                 return "You Should Select at least one action.";
@@ -74,6 +77,7 @@ function (UtilsService, VR_Notification_VRActionService) {
             api.load = function (payload) {
                 if(payload != undefined)
                 {
+                    isRequired = payload.isRequired;
                     extensionType = payload.extensionType;
                 }
                 ctrl.datasource.length = 0;
