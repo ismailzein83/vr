@@ -9,7 +9,7 @@ namespace TOne.WhS.RouteSync.TelesRadius
 {
     public class TelesRadiusSWSync : SwitchRouteSynchronizer
     {
-        public DBSetting DBSetting { get; set; }
+        public IRadiusDataManager DataManager { get; set; }
         /// <summary>
         /// Key = Carrier Account Id
         /// </summary>
@@ -19,9 +19,7 @@ namespace TOne.WhS.RouteSync.TelesRadius
 
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
         {
-            RadiusSQLDataManager dataManager = new RadiusSQLDataManager();
-            dataManager.ConnectionString = DBSetting.ConnectionString;
-            dataManager.PrepareTables();
+            this.DataManager.PrepareTables();
         }
 
         public override void ConvertRoutes(ISwitchRouteSynchronizerConvertRoutesContext context)
@@ -69,27 +67,16 @@ namespace TOne.WhS.RouteSync.TelesRadius
             return strOptions.Length == 0 ? "BLK" : strOptions.ToString();
         }
 
-
-
         public override void UpdateConvertedRoutes(ISwitchRouteSynchronizerUpdateConvertedRoutesContext context)
         {
-            RadiusSQLDataManager dataManager = new RadiusSQLDataManager();
-            dataManager.ConnectionString = DBSetting.ConnectionString;
-            dataManager.InsertRoutes(context.ConvertedRoutes);
+            this.DataManager.InsertRoutes(context.ConvertedRoutes);
             //throw new NotImplementedException();
         }
 
         public override void Finalize(ISwitchRouteSynchronizerFinalizeContext context)
         {
-            RadiusSQLDataManager dataManager = new RadiusSQLDataManager();
-            dataManager.ConnectionString = DBSetting.ConnectionString;
-            dataManager.SwapTables();
+            this.DataManager.SwapTables();
         }
-    }
-
-    public class DBSetting
-    {
-        public string ConnectionString { get; set; }
     }
 
     public class CarrierMapping
@@ -101,4 +88,6 @@ namespace TOne.WhS.RouteSync.TelesRadius
         public List<string> SupplierMapping { get; set; }
 
     }
+
+
 }

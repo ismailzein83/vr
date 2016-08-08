@@ -23,8 +23,12 @@
         function TelesRadiusSWSyncronizer($scope, ctrl, $attrs) {
             var gridAPI;
 
+            var radiusDataManager;
             var carrierAccountsAPI;
             var carrierAccountsPromiseDiffered;
+
+            var radiusDataManagerSettingsDirectiveAPI;
+            var radiusDataManagerSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             this.initializeController = initializeController;
 
@@ -35,6 +39,11 @@
                 $scope.scopeModel.separator = ';';
                 $scope.scopeModel.carrierAccountMappings = [];
 
+                $scope.onRadiusDataManagerSettingsDirectiveReady = function (api) {
+                    radiusDataManagerSettingsDirectiveAPI = api;
+                    radiusDataManagerSettingsDirectiveReadyDeferred.resolve();
+                };
+
                 defineAPI();
             }
 
@@ -43,6 +52,8 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
+
                     var telesRadiusSWSynSettings;
 
                     if (payload != undefined) {
@@ -50,11 +61,17 @@
                     }
 
                     if (telesRadiusSWSynSettings) {
-                        $scope.scopeModel.connectionString = telesRadiusSWSynSettings.DBSetting.ConnectionString;
                         $scope.scopeModel.separator = telesRadiusSWSynSettings.MappingSeparator;
+                        radiusDataManager = telesRadiusSWSynSettings.DataManager;
                     }
 
-                    return loadCarrierMappings(payload);
+                    var loadCarrierMappingPromise = loadCarrierMappings(payload);
+                    promises.push(loadCarrierMappingPromise);
+
+                    var loadDataManagerSettings = loadSwitchSyncSettingsDirective();
+                    promises.push(loadDataManagerSettings);
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = getData;
@@ -62,7 +79,7 @@
                 function getData() {
                     var data = {
                         $type: "TOne.WhS.RouteSync.TelesRadius.TelesRadiusSWSync, TOne.WhS.RouteSync.TelesRadius",
-                        DBSetting: getDBSetting(),
+                        DataManager: getDataManager(),
                         CarrierMappings: getCarrierMappings(),
                         MappingSeparator: $scope.scopeModel.separator
                     }
@@ -129,10 +146,23 @@
                 return result;
             }
 
-            function getDBSetting() {
-                return {
-                    ConnectionString: $scope.scopeModel.connectionString
-                }
+            function getDataManager() {
+                return radiusDataManagerSettingsDirectiveAPI.getData().DataManager;
+            }
+
+            function loadSwitchSyncSettingsDirective() {
+                var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                radiusDataManagerSettingsDirectiveReadyDeferred.promise.then(function () {
+                    var settingsDirectivePayload;
+                    if (radiusDataManager != undefined)
+                    {
+                        settingsDirectivePayload = { radiusDataManagersSettings: radiusDataManager }
+                    }
+                    VRUIUtilsService.callDirectiveLoad(radiusDataManagerSettingsDirectiveAPI, settingsDirectivePayload, radiusDataManagerSettingsDirectiveReadyDeferred);
+                });
+
+                return radiusDataManagerSettingsDirectiveReadyDeferred.promise;
             }
         }
     }
