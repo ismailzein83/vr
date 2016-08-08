@@ -114,7 +114,6 @@
             function getGenericRuleDefinition() {
                 return VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinition(genericRuleDefinitionId).then(function (response) {
                     genericRuleDefinitionEntity = response;
-                    //buildObjectsVariable();
                 });
             }
             function getGenericRuleDefinitionView() {
@@ -309,15 +308,6 @@
             }
         }
 
-        function buildObjectsVariable() {
-            if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.Objects != null) {
-
-                for (var key in genericRuleDefinitionEntity.Objects) {
-                    if (key != "$type")
-                        objectsVariable.push(genericRuleDefinitionEntity.Objects[key]);
-                }
-            }
-        }
         function buildContext() {
 
             var context =  {

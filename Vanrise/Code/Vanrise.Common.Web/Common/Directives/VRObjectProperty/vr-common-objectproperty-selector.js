@@ -56,42 +56,15 @@
                 };
                 $scope.scopeModel.onObjectVariableSelectionChanged = function () {
 
-                    if (onObjectVariableSelectionChangedDeferred != undefined) {
-                        onObjectVariableSelectionChangedDeferred.resolve();
-                    }
-                    else {
-                        objectPropertySelectorAPI.clearDataSource();
-                        objectProperty = undefined;
+                    if ($scope.scopeModel.selectedObjectVariable != undefined) {
 
-                        if ($scope.scopeModel.selectedObjectVariable != undefined && $scope.scopeModel.selectedObjectVariable.ObjectType != undefined) {
-                            $scope.scopeModel.isSelectorLoading = true;
-                            var objectTypeConfigId = $scope.scopeModel.selectedObjectVariable.ObjectType.ConfigId;
-
-                            VRCommon_VRObjectTypeAPIService.GetObjectTypeExtensionConfigs().then(function (response) {
-                                if (response != null) {
-                                    objectTypeConfigs = [];
-                                    for (var i = 0; i < response.length; i++) 
-                                        objectTypeConfigs.push(response[i]);
-                                    
-                                    var propertyEvaluatorExtensionType;
-                                    for (var index = 0; index < objectTypeConfigs.length ; index++)
-                                        if (objectTypeConfigs[index].ExtensionConfigurationId == objectTypeConfigId)
-                                            propertyEvaluatorExtensionType = objectTypeConfigs[index].PropertyEvaluatorExtensionType;
-
-                                    VRCommon_VRObjectPropertyAPIService.GetObjectPropertyExtensionConfigs(propertyEvaluatorExtensionType)
-                                                            .then(function (response) {
-                                                                if (response != null) {
-                                                                    for (var i = 0; i < response.length; i++) {
-                                                                        $scope.scopeModel.templateConfigs.push(response[i]);
-                                                                    }
-
-                                                                    $scope.scopeModel.isSelectorLoading = false;
-                                                                }
-                                                            });
-                                }
-                            });
+                        if (onObjectVariableSelectionChangedDeferred != undefined) {
+                            onObjectVariableSelectionChangedDeferred.resolve();
                         }
-                    }       
+                        else {
+                            loadObjectPropertySelector();
+                        }
+                    }
                 }
 
                 $scope.scopeModel.onObjectPropertySelectorReady = function (api) {
@@ -116,6 +89,38 @@
                 UtilsService.waitMultiplePromises(_promises).then(function () {
                     defineAPI();
                 });
+
+                function loadObjectPropertySelector() {
+                    objectPropertySelectorAPI.clearDataSource();
+                    objectProperty = undefined;
+
+                    $scope.scopeModel.isSelectorLoading = true;
+                    var objectTypeConfigId = $scope.scopeModel.selectedObjectVariable.ObjectType.ConfigId;
+
+                    VRCommon_VRObjectTypeAPIService.GetObjectTypeExtensionConfigs().then(function (response) {
+                        if (response != null) {
+                            objectTypeConfigs = [];
+                            for (var i = 0; i < response.length; i++)
+                                objectTypeConfigs.push(response[i]);
+
+                            var propertyEvaluatorExtensionType;
+                            for (var index = 0; index < objectTypeConfigs.length ; index++)
+                                if (objectTypeConfigs[index].ExtensionConfigurationId == objectTypeConfigId)
+                                    propertyEvaluatorExtensionType = objectTypeConfigs[index].PropertyEvaluatorExtensionType;
+
+                            VRCommon_VRObjectPropertyAPIService.GetObjectPropertyExtensionConfigs(propertyEvaluatorExtensionType)
+                                                    .then(function (response) {
+                                                        if (response != null) {
+                                                            for (var i = 0; i < response.length; i++) {
+                                                                $scope.scopeModel.templateConfigs.push(response[i]);
+                                                            }
+
+                                                            $scope.scopeModel.isSelectorLoading = false;
+                                                        }
+                                                    });
+                        }
+                    });
+                }
             }
 
             function defineAPI() {

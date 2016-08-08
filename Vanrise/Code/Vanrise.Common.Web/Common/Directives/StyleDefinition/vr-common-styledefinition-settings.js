@@ -55,7 +55,6 @@
 
             function defineAPI() {
                 var api = {};
-                var serviceSettings;
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
