@@ -35,12 +35,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
                        foreach (SaleRate normalRate in normalRates)
                        {
-                           var saleRatePriceList = new SaleRatePriceList() { Rate = normalRate };
+                           // TODO: Consider removing this check as there should be only 1 effective normal rate per zone
+                           if (!saleRatesByZone.ContainsKey(normalRate.ZoneId))
+                           {
+                               var saleRatePriceList = new SaleRatePriceList() { Rate = normalRate };
 
-                           IEnumerable<SaleRate> otherRates = saleRates.FindAllRecords(x => x.RateTypeId.HasValue && x.ZoneId == normalRate.ZoneId);
-                           saleRatePriceList.RatesByRateType = otherRates.ToDictionary(x => x.RateTypeId.Value);
-                           
-                           saleRatesByZone.Add(normalRate.ZoneId, saleRatePriceList);
+                               IEnumerable<SaleRate> otherRates = saleRates.FindAllRecords(x => x.RateTypeId.HasValue && x.ZoneId == normalRate.ZoneId);
+                               saleRatePriceList.RatesByRateType = otherRates.ToDictionary(x => x.RateTypeId.Value);
+
+                               saleRatesByZone.Add(normalRate.ZoneId, saleRatePriceList);
+                           }
                        }
                    }
                    return saleRatesByZone;
