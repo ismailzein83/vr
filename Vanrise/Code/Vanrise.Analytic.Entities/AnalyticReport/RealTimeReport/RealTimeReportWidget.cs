@@ -13,5 +13,7 @@ namespace Vanrise.Analytic.Entities
         public string WidgetTitle { get; set; }
         public int ColumnWidth { get; set; }
         public bool ShowTitle { get; set; }
+        public abstract List<string> GetMeasureNames();
+
     }
 }

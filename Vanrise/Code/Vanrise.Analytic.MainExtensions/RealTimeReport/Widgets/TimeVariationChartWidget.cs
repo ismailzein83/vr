@@ -12,6 +12,10 @@ namespace Vanrise.Analytic.MainExtensions.RealTimeReport.Widgets
         public List<RealTimeTimeVariationChartWidgetMeasure> Measures { get; set; }
         public string ChartType { get; set; }
 
+        public override List<string> GetMeasureNames()
+        {
+            return this.Measures.Select(m => m.MeasureName).ToList();
+        }
     }
     public class RealTimeTimeVariationChartWidgetMeasure
     {

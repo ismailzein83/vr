@@ -14,7 +14,12 @@ namespace Vanrise.Analytic.MainExtensions.RealTimeReport.Widgets
         public string TopMeasure { get; set; }
         public int TopRecords { get; set; }
         public string ChartType { get; set; }
+        public override List<string> GetMeasureNames(){
+            return this.Measures.Select(m => m.MeasureName).ToList();
+        }
     }
+   
+
     public class RealTimeChartWidgetDimension
     {
         public string DimensionName { get; set; }

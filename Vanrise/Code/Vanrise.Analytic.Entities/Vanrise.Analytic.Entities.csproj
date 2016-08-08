@@ -68,6 +68,8 @@
     <Compile Include="AnalyticTableDetail.cs" />
     <Compile Include="AnalyticTableQuery.cs" />
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
+    <Compile Include="BusinessManagers\IAnalyticItemConfigManager.cs" />
+    <Compile Include="BusinessManagers\IAnalyticTableManager.cs" />
     <Compile Include="BusinessManagers\IAnalyticReportManager.cs" />
     <Compile Include="BusinessManagers\IBEManager.cs" />
     <Compile Include="Config\Aggregate\AnalyticAggregate.cs" />

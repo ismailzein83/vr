@@ -1,4 +1,4 @@
-﻿    using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +11,10 @@ using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
+using Vanrise.Security.Business;
 namespace Vanrise.Analytic.Business
 {
-    public class AnalyticItemConfigManager
+    public class AnalyticItemConfigManager : IAnalyticItemConfigManager
     {
         #region Public Methods
 
@@ -23,7 +24,7 @@ namespace Vanrise.Analytic.Business
             var analyticTable = analyticTableManager.GetAnalyticTableById(input.TableId);
             AnalyticDimensionEditorRuntime analyticDimensionEditorRuntime = new AnalyticDimensionEditorRuntime();
 
-            if(analyticTable.Settings !=null && analyticTable.Settings.DataRecordTypeIds !=null)
+            if (analyticTable.Settings != null && analyticTable.Settings.DataRecordTypeIds != null)
             {
                 DataRecordTypeInfoFilter filter = new DataRecordTypeInfoFilter { RecordTypeIds = analyticTable.Settings.DataRecordTypeIds };
                 DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
@@ -54,7 +55,7 @@ namespace Vanrise.Analytic.Business
                     }
                     DynamicTypeGenerator.BuildDimensionEvaluators(tableId, analyticDimensions.Values);
                     return analyticDimensions;
-                });            
+                });
         }
 
         public Dictionary<string, AnalyticAggregate> GetAggregates(int tableId)
@@ -98,14 +99,14 @@ namespace Vanrise.Analytic.Business
                         AnalyticMeasure measure = new AnalyticMeasure
                         {
                             AnalyticMeasureConfigId = itemConfig.AnalyticItemConfigId,
-                            Config = measureConfig                          
+                            Config = measureConfig
                         };
                         analyticMeasures.Add(itemConfig.Name, measure);
                     }
                     DynamicTypeGenerator.BuildMeasureEvaluators(tableId, analyticMeasures.Values);
                     return analyticMeasures;
                 });
-            
+
         }
 
         public Dictionary<string, AnalyticJoin> GetJoins(int tableId)
@@ -174,9 +175,9 @@ namespace Vanrise.Analytic.Business
             return AggregateConfigs;
         }
 
-        public IEnumerable<Object> GetAnalyticItemConfigs(List<int> tableIds , AnalyticItemType itemType)
+        public IEnumerable<Object> GetAnalyticItemConfigs(List<int> tableIds, AnalyticItemType itemType)
         {
-         return GetCachedAnalyticItemConfigsByItemType(tableIds,itemType);
+            return GetCachedAnalyticItemConfigsByItemType(tableIds, itemType);
         }
         public Vanrise.Entities.IDataRetrievalResult<Object> GetFilteredAnalyticItemConfigs(Vanrise.Entities.DataRetrievalInput<AnalyticItemConfigQuery> input)
         {
@@ -189,9 +190,9 @@ namespace Vanrise.Analytic.Business
             Func<Object, bool> filterExpression = (prod) =>
                  (true);
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, itemConfigs.ToBigResult(input,filterExpression));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, itemConfigs.ToBigResult(input, filterExpression));
         }
-        public Object GetAnalyticItemConfigsById(int tableId,AnalyticItemType itemType,int  analyticItemConfigId)
+        public Object GetAnalyticItemConfigsById(int tableId, AnalyticItemType itemType, int analyticItemConfigId)
         {
             return GetCachedAnalyticItemConfigByItemType(tableId, itemType, analyticItemConfigId);
         }
@@ -245,11 +246,29 @@ namespace Vanrise.Analytic.Business
 
             return updateOperationOutput;
         }
-        
+
 
         public bool DoesUserHaveAccess(int userId, int analyticTableId, List<string> measureNames)
         {
-            throw new NotImplementedException();
+            var filterdMeasures = this.GetMeasures(analyticTableId).Where(k => measureNames.Contains(k.Key)).Select(v => v.Value);
+            SecurityManager secManager = new SecurityManager();
+
+            try
+            {
+                foreach (var m in filterdMeasures)
+                {
+                    if (m.Config != null && m.Config.RequiredPermission != null && !secManager.IsAllowed(m.Config.RequiredPermission, userId))
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return true;
+
         }
 
         #endregion
@@ -277,27 +296,27 @@ namespace Vanrise.Analytic.Business
                 case AnalyticItemType.Dimension:
                     List<AnalyticItemConfig<AnalyticDimensionConfig>> dimensions = new List<AnalyticItemConfig<AnalyticDimensionConfig>>();
 
-                    foreach(int tableId in tableIds)
+                    foreach (int tableId in tableIds)
                     {
                         var obj = GetCachedAnalyticItemConfigs<AnalyticDimensionConfig>(tableId, itemType).ToList();
                         RemoveCommonItemsInList(obj, dimensions);
                         dimensions.AddRange(obj);
                     }
                     data = dimensions;
-                    break; 
+                    break;
                 case AnalyticItemType.Join:
                     List<AnalyticItemConfig<AnalyticJoinConfig>> joins = new List<AnalyticItemConfig<AnalyticJoinConfig>>();
-                    foreach(int tableId in tableIds)
+                    foreach (int tableId in tableIds)
                     {
                         var obj = GetCachedAnalyticItemConfigs<AnalyticJoinConfig>(tableId, itemType).ToList();
                         RemoveCommonItemsInList(obj, joins);
                         joins.AddRange(obj);
                     }
                     data = joins;
-                    break; 
+                    break;
                 case AnalyticItemType.Measure:
                     List<AnalyticItemConfig<AnalyticMeasureConfig>> measures = new List<AnalyticItemConfig<AnalyticMeasureConfig>>();
-                    foreach(int tableId in tableIds)
+                    foreach (int tableId in tableIds)
                     {
                         var obj = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(tableId, itemType).ToList();
                         RemoveCommonItemsInList(obj, measures);
@@ -307,7 +326,7 @@ namespace Vanrise.Analytic.Business
                     break;
                 case AnalyticItemType.Aggregate:
                     List<AnalyticItemConfig<AnalyticAggregateConfig>> aggregates = new List<AnalyticItemConfig<AnalyticAggregateConfig>>();
-                    foreach(int tableId in tableIds)
+                    foreach (int tableId in tableIds)
                     {
                         var obj = GetCachedAnalyticItemConfigs<AnalyticAggregateConfig>(tableId, itemType).ToList();
                         RemoveCommonItemsInList(obj, aggregates);
@@ -323,7 +342,7 @@ namespace Vanrise.Analytic.Business
         private IEnumerable<Object> GetCachedAnalyticItemConfigsDetailByItemType(int tableId, AnalyticItemType itemType)
         {
             IEnumerable<Object> data = null;
-            switch(itemType)
+            switch (itemType)
             {
                 case AnalyticItemType.Dimension: data = GetCachedAnalyticItemConfigs<AnalyticDimensionConfig>(tableId, itemType).MapRecords(AnalyticConfigDetailMapper<AnalyticDimensionConfig>); break;
                 case AnalyticItemType.Join: data = GetCachedAnalyticItemConfigs<AnalyticJoinConfig>(tableId, itemType).MapRecords(AnalyticConfigDetailMapper<AnalyticJoinConfig>); break;
@@ -331,7 +350,7 @@ namespace Vanrise.Analytic.Business
                 case AnalyticItemType.Aggregate: data = GetCachedAnalyticItemConfigs<AnalyticAggregateConfig>(tableId, itemType).MapRecords(AnalyticConfigDetailMapper<AnalyticAggregateConfig>); break;
 
             }
-           return data; 
+            return data;
         }
         AnalyticItemConfigDetail<T> AnalyticConfigDetailMapper<T>(AnalyticItemConfig<T> analyticItemConfig) where T : class
         {
@@ -353,7 +372,7 @@ namespace Vanrise.Analytic.Business
                });
         }
 
-        private void RemoveCommonItemsInList<T>(List<AnalyticItemConfig<T>> mainItems,List<AnalyticItemConfig<T>> comparedList)
+        private void RemoveCommonItemsInList<T>(List<AnalyticItemConfig<T>> mainItems, List<AnalyticItemConfig<T>> comparedList)
         {
             var commonItems = mainItems.Where(x => comparedList.Any(y => y.Name == x.Name));
             if (commonItems != null)
@@ -364,7 +383,7 @@ namespace Vanrise.Analytic.Business
                 }
             }
         }
-      
+
         #endregion
 
         #region Private Classes

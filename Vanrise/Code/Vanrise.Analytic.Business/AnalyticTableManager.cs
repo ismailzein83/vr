@@ -9,9 +9,10 @@ using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Security.Business;
 namespace Vanrise.Analytic.Business
 {
-    public class AnalyticTableManager
+    public class AnalyticTableManager : IAnalyticTableManager
     {
         #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<AnalyticTableDetail> GetFilteredAnalyticTables(Vanrise.Entities.DataRetrievalInput<AnalyticTableQuery> input)
@@ -88,7 +89,13 @@ namespace Vanrise.Analytic.Business
 
         public bool DoesUserHaveAccess(int userId, int analyticTableId)
         {
-            throw new NotImplementedException();
+            AnalyticTable table = GetAnalyticTableById(analyticTableId); 
+            SecurityManager secManager = new SecurityManager();
+            if (table.Settings.RequiredPermission != null && !secManager.IsAllowed(table.Settings.RequiredPermission, userId))
+            {
+                return false;
+            }
+            return true;
         }
 
         #endregion
