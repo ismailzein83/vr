@@ -171,14 +171,18 @@ namespace TOne.WhS.Sales.BP.Activities
                     minDate = Vanrise.Common.Utilities.Min(minDate, newRate.BED);
                 }
             }
-            else if (zoneChanges.RateChange != null)
+            else if (zoneChanges.ClosedRates != null)
             {
-                ratesToClose.Add(new RateToClose()
+                foreach (DraftRateToClose closedRate in zoneChanges.ClosedRates)
                 {
-                    ZoneName = saleZoneManager.GetSaleZoneName(zoneChanges.ZoneId),
-                    CloseEffectiveDate = zoneChanges.RateChange.EED
-                });
-                minDate = Vanrise.Common.Utilities.Min(minDate, zoneChanges.RateChange.EED);
+                    ratesToClose.Add(new RateToClose()
+                    {
+                        ZoneName = saleZoneManager.GetSaleZoneName(zoneChanges.ZoneId),
+                        RateTypeId = closedRate.RateTypeId,
+                        CloseEffectiveDate = closedRate.EED
+                    });
+                    minDate = Vanrise.Common.Utilities.Min(minDate, closedRate.EED);
+                }
             }
         }
 

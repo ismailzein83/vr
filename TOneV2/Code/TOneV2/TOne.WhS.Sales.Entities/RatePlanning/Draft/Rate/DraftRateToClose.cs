@@ -10,7 +10,7 @@ namespace TOne.WhS.Sales.Entities
     public class DraftRateToClose
     {
         public long RateId { get; set; }
-
+        public int? RateTypeId { get; set; }
         public DateTime EED { get; set; }
     }
 }

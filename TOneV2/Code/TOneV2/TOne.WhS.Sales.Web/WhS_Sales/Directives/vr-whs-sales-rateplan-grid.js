@@ -417,10 +417,12 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     zoneChanges.RateChange = null;
 
                     if (zoneItem.IsCurrentRateEditable && !compareDates(zoneItem.CurrentRateEED, zoneItem.currentRateEED)) {
-                        zoneChanges.RateChange = {
+                        var rateToClose = {
                             RateId: zoneItem.CurrentRateId,
                             EED: zoneItem.CurrentRateEED
                         };
+                        zoneChanges.RateChange = rateToClose;
+                        zoneChanges.ClosedRates = [rateToClose];
                     }
 
                     function compareDates(date1, date2) {

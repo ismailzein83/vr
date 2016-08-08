@@ -10,6 +10,8 @@ namespace TOne.WhS.Sales.Entities
     {
         public string ZoneName { get; set; }
 
+        public int? RateTypeId { get; set; }
+
         public decimal Rate { get; set; }
 
         public DateTime CloseEffectiveDate { get; set; }

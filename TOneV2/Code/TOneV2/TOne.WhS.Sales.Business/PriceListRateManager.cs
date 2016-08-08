@@ -31,12 +31,12 @@ namespace TOne.WhS.Sales.Business
 
             foreach (RateToChange rateToChange in ratesToChange)
             {
-                List<ExistingRate> matchExistingRates;
-                if (existingRatesByZoneName.TryGetValue(rateToChange.ZoneName, out matchExistingRates))
+                IEnumerable<ExistingRate> matchedExistingRates = GetMatchedExistingRates(existingRatesByZoneName, rateToChange.ZoneName, rateToChange.RateTypeId);
+                if (matchedExistingRates != null)
                 {
                     bool shouldNotAddRate;
                     ExistingRate recentExistingRate;
-                    CloseExistingOverlappedRates(rateToChange, matchExistingRates, out shouldNotAddRate, out recentExistingRate);
+                    CloseExistingOverlappedRates(rateToChange, matchedExistingRates, out shouldNotAddRate, out recentExistingRate);
                     if (!shouldNotAddRate)
                     {
                         if (recentExistingRate != null)
@@ -64,8 +64,8 @@ namespace TOne.WhS.Sales.Business
 
             foreach (RateToClose rateToClose in ratesToClose)
             {
-                List<ExistingRate> matchExistingRates;
-                if (existingRatesByZoneName.TryGetValue(rateToClose.ZoneName, out matchExistingRates))
+                IEnumerable<ExistingRate> matchExistingRates = GetMatchedExistingRates(existingRatesByZoneName, rateToClose.ZoneName, rateToClose.RateTypeId);
+                if (matchExistingRates != null)
                     CloseExistingRates(rateToClose, matchExistingRates);
             }
         }
@@ -112,9 +112,23 @@ namespace TOne.WhS.Sales.Business
             return existingRatesByZoneName;
         }
 
+        private IEnumerable<ExistingRate> GetMatchedExistingRates(ExistingRatesByZoneName ratesByZone, string zoneName, int? rateTypeId)
+        {
+            List<ExistingRate> matchedRates;
+            if (ratesByZone.TryGetValue(zoneName, out matchedRates))
+            {
+                return matchedRates.FindAllRecords
+                (
+                    x => (!rateTypeId.HasValue && !x.RateEntity.RateTypeId.HasValue) ||
+                    (rateTypeId.HasValue && x.RateEntity.RateTypeId.HasValue && x.RateEntity.RateTypeId.Value == rateTypeId.Value)
+                );
+            }
+            return matchedRates;
+        }
+
         #region Process Rates To Change
 
-        private void CloseExistingOverlappedRates(RateToChange rateToChange, List<ExistingRate> matchExistingRates, out bool shouldNotAddRate, out ExistingRate recentExistingRate)
+        private void CloseExistingOverlappedRates(RateToChange rateToChange, IEnumerable<ExistingRate> matchExistingRates, out bool shouldNotAddRate, out ExistingRate recentExistingRate)
         {
             shouldNotAddRate = false;
             recentExistingRate = null;
@@ -184,35 +198,7 @@ namespace TOne.WhS.Sales.Business
 
         #region Process Rates To Close
 
-        //private bool SameRates(RateToChange importedRate, ExistingRate existingRate)
-        //{
-        //    return importedRate.BED == existingRate.RateEntity.BED
-        //       && importedRate.NormalRate == existingRate.RateEntity.NormalRate
-        //       && importedRate.CurrencyId == existingRate.RateEntity.CurrencyId
-        //        //TODO: compare CurrencyId of the Pricelists
-        //       && SameRateOtherRates(importedRate, existingRate);
-        //}
-
-        //private bool SameRateOtherRates(RateToChange importedRate, ExistingRate existingRate)
-        //{
-        //    int importedRatesCount = importedRate.OtherRates != null ? importedRate.OtherRates.Count : 0;
-        //    int existingRatesCount = existingRate.RateEntity.OtherRates != null ? existingRate.RateEntity.OtherRates.Count : 0;
-        //    if (importedRatesCount != existingRatesCount)
-        //        return false;
-        //    if (importedRatesCount == 0)
-        //        return true;
-        //    //if rates Count is > 0, then both dictionaries are not null
-
-        //    foreach (var importedRateEntry in importedRate.OtherRates)
-        //    {
-        //        Decimal matchExistingRate;
-        //        if (!existingRate.RateEntity.OtherRates.TryGetValue(importedRateEntry.Key, out matchExistingRate) || importedRateEntry.Value != matchExistingRate)
-        //            return false;
-        //    }
-        //    return true;
-        //}
-
-        private void CloseExistingRates(RateToClose rateToClose, List<ExistingRate> matchExistingRates)
+        private void CloseExistingRates(RateToClose rateToClose, IEnumerable<ExistingRate> matchExistingRates)
         {
             foreach (var existingRate in matchExistingRates.OrderBy(x => x.BED))
             {

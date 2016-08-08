@@ -30,7 +30,7 @@ namespace TOne.WhS.Sales.Business
             if (changes != null && changes.ZoneChanges != null)
             {
                 _newRates = changes.ZoneChanges.Where(x => x.NewRates != null).SelectMany(x => x.NewRates);
-                _rateChanges = changes.ZoneChanges.MapRecords(itm => itm.RateChange, itm => itm.RateChange != null);
+                _rateChanges = changes.ZoneChanges.Where(x => x.ClosedRates != null).SelectMany(x => x.ClosedRates);
             }
         }
 
@@ -63,11 +63,9 @@ namespace TOne.WhS.Sales.Business
 
         void SetZoneRateChanges(ZoneItem zoneItem)
         {
-            IEnumerable<DraftRateToChange> newRates = _newRates.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
+            zoneItem.NewRates = _newRates.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
+            
             DraftRateToClose rateChange = _rateChanges.FindRecord(itm => itm.RateId == zoneItem.CurrentRateId); // What if currentRateId = null?
-
-            zoneItem.NewRates = newRates;
-
             if (rateChange != null)
                 zoneItem.RateChangeEED = rateChange.EED;
         }

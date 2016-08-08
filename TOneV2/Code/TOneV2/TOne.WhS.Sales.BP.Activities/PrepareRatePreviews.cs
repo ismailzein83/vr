@@ -11,6 +11,8 @@ using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
+    #region Public Classes
+
     public class PrepareRatePreviewsInput
     {
         public IEnumerable<RateToChange> RatesToChange { get; set; }
@@ -28,6 +30,8 @@ namespace TOne.WhS.Sales.BP.Activities
     {
         public IEnumerable<RatePreview> RatePreviews { get; set; }
     }
+
+    #endregion
 
     public class PrepareRatePreviews : BaseAsyncActivity<PrepareRatePreviewsInput, PrepareRatePreviewsOutput>
     {
@@ -107,7 +111,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     SaleEntityZoneRate currentRate = rateLocator.GetSellingProductZoneRate(ownerId, rateToChange.ZoneId);
                     if (currentRate != null)
                     {
-                        ratePreview.CurrentRate = currentRate.Rate.NormalRate;
+                        ratePreview.CurrentRate = GetRateValue(rateToChange.RateTypeId, currentRate);
                         ratePreview.IsCurrentRateInherited = false;
                     }
                 }
@@ -120,7 +124,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     SaleEntityZoneRate currentRate = rateLocator.GetCustomerZoneRate(ownerId, sellingProductId.Value, rateToChange.ZoneId);
                     if (currentRate != null)
                     {
-                        ratePreview.CurrentRate = currentRate.Rate.NormalRate;
+                        ratePreview.CurrentRate = GetRateValue(rateToChange.RateTypeId, currentRate);
                         ratePreview.IsCurrentRateInherited = (currentRate.Source != SalePriceListOwnerType.Customer);
                     }
                 }
@@ -150,5 +154,27 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             this.RatePreviews.Set(context, result.RatePreviews);
         }
+
+        #region Private Methods
+
+
+        private decimal GetRateValue(int? rateTypeId, SaleEntityZoneRate rate)
+        {
+            if (!rateTypeId.HasValue)
+                return rate.Rate.NormalRate;
+            
+            if (rate.RatesByRateType == null)
+                throw new NullReferenceException("currentRate.RatesByRateType");
+            
+            SaleRate otherRate;
+            rate.RatesByRateType.TryGetValue(rateTypeId.Value, out otherRate);
+
+            if (otherRate == null)
+                throw new NullReferenceException("otherRate");
+
+            return otherRate.NormalRate;
+        }
+        
+        #endregion
     }
 }
