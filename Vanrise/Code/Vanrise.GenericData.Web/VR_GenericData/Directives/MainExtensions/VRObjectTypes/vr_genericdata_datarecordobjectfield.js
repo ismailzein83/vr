@@ -40,9 +40,10 @@
                 api.load = function (payload) {
                     var selectorPayload = {};
 
-                    if (payload != undefined && payload.dataRecordTypeId != undefined) {
-                        selectorPayload.dataRecordTypeId = payload.dataRecordTypeId;
+                    if (payload != undefined && payload.objectType != undefined) {
+                        selectorPayload.dataRecordTypeId = payload.objectType.RecordTypeId;
                     }
+
                     if (payload != undefined && payload.valueEvaluator != undefined) {
                         selectorPayload.selectedIds = payload.valueEvaluator.FieldName;
                     }
