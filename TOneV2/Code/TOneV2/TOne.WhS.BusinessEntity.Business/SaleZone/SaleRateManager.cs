@@ -140,23 +140,18 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private SaleRateDetail SaleRateDetailMapper(SaleRate saleRate)
         {
-            SaleZoneManager sz = new SaleZoneManager();
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
             CurrencyManager currencyManager = new CurrencyManager();
+            var rateTypeManager = new Vanrise.Business.RateTypeManager();
 
-            int currencyId;
-            if (saleRate.CurrencyId.HasValue)
-                currencyId = saleRate.CurrencyId.Value;
-            else
-            {
-                SalePriceListManager salePriceListManager = new SalePriceListManager();
-                SalePriceList priceList = salePriceListManager.GetPriceList(saleRate.PriceListId);
-                currencyId = priceList.CurrencyId;
-            }
+            int currencyId = GetCurrencyId(saleRate);
 
             SaleRateDetail saleRateDetail = new SaleRateDetail();
             saleRateDetail.Entity = saleRate;
-            saleRateDetail.ZoneName = sz.GetSaleZone(saleRate.ZoneId).Name;
+            saleRateDetail.ZoneName = saleZoneManager.GetSaleZoneName(saleRate.ZoneId);
             saleRateDetail.CurrencyName = currencyManager.GetCurrencySymbol(currencyId);
+            if (saleRate.RateTypeId.HasValue)
+                saleRateDetail.RateTypeName = rateTypeManager.GetRateTypeName(saleRate.RateTypeId.Value);
             return saleRateDetail;
         }
 
