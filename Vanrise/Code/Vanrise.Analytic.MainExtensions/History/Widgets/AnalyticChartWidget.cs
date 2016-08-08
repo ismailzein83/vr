@@ -15,6 +15,11 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
         public int? TopRecords { get; set; }
         public string ChartType { get; set; }
         public bool RootDimensionsFromSearch { get; set; }
+
+        public override List<string> GetMeasureNames()
+        {
+            return this.Measures.Select(measure => measure.MeasureName).ToList();
+        }
     }
 
     public class AnalyticChartWidgetDimension

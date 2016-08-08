@@ -11,7 +11,7 @@ using Vanrise.Analytic.Data;
 using Vanrise.Common.Business;
 namespace Vanrise.Analytic.Business
 {
-    public class AnalyticReportManager
+    public class AnalyticReportManager : IAnalyticReportManager
     {
         #region Fields
 

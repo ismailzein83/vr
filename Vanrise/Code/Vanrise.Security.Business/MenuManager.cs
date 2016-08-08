@@ -112,12 +112,17 @@ namespace Vanrise.Security.Business
 
             List<View> childViews = views.FindAll(x => x.ModuleId == module.ModuleId);
 
+            IViewUserAccessContext viewUserAccessContext = new ViewUserAccessContext { UserId = SecurityContext.Current.GetLoggedInUserId() };
+
             if (childViews.Count > 0)
             {
                 menu.Childs = new List<MenuItem>();
                 foreach (View viewItem in childViews)
                 {
-                    if (viewItem.ActionNames == null || SecurityContext.Current.HasPermissionToActions(viewItem.ActionNames))
+                    if ((viewItem.ActionNames == null || SecurityContext.Current.HasPermissionToActions(viewItem.ActionNames))
+                        &&
+                        (viewItem.Settings == null || viewItem.Settings.DoesUserHaveAccess(viewUserAccessContext))
+                        )
                     {
                         MenuItem viewMenu = new MenuItem() { Id = viewItem.ViewId, Name = viewItem.Name, Title = viewItem.Title, Location = viewItem.Url, Type = viewItem.Type, Rank = viewItem.Rank, MenuType = MenuType.View };
                         menu.Childs.Add(viewMenu);

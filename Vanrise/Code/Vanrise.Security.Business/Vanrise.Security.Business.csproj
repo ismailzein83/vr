@@ -88,6 +88,7 @@
     <Compile Include="SecurityManager.cs" />
     <Compile Include="UserManager.cs" />
     <Compile Include="ViewTypeManager.cs" />
+    <Compile Include="ViewUserAccessContext.cs" />
     <Compile Include="WidgetDefinitionManager.cs" />
     <Compile Include="WidgetsManager.cs" />
   </ItemGroup>

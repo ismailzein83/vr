@@ -245,6 +245,13 @@ namespace Vanrise.Analytic.Business
 
             return updateOperationOutput;
         }
+        
+
+        public bool DoesUserHaveAccess(int userId, int analyticTableId, List<string> measureNames)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Private Methods

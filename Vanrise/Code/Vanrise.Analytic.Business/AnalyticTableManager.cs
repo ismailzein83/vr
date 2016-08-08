@@ -86,7 +86,10 @@ namespace Vanrise.Analytic.Business
             return updateOperationOutput;
         }
 
-
+        public bool DoesUserHaveAccess(int userId, int analyticTableId)
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion
 

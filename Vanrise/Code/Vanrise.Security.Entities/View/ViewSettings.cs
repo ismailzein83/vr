@@ -12,5 +12,15 @@ namespace Vanrise.Security.Entities
         {
             return view.Url;
         }
+
+        public virtual bool DoesUserHaveAccess(IViewUserAccessContext context)
+        {
+            return true;
+        }
+    }
+
+    public interface IViewUserAccessContext
+    {
+        int UserId { get; }
     }
 }

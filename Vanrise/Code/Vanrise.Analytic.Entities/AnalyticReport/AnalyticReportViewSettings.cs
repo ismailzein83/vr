@@ -14,5 +14,11 @@ namespace Vanrise.Analytic.Entities
         {
             return String.Format("#/viewwithparams/Analytic/Views/GenericAnalytic/Runtime/GenericAnalyticReport/{{\"analyticReportId\":\"{0}\"}}", this.AnalyticReportId);
         }
+
+        public override bool DoesUserHaveAccess(Security.Entities.IViewUserAccessContext context)
+        {
+            var analyticReport = BEManagerFactory.GetManager<IAnalyticReportManager>().GetAnalyticReportById(this.AnalyticReportId);
+            return analyticReport != null && analyticReport.Settings.DoesUserHaveAccess(context);
+        }
     }
 }

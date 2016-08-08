@@ -19,6 +19,11 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
         public List<Entities.AnalyticItemAction> ItemActions { get; set; }
         public AnalyticQueryOrderType OrderType { get; set; }
         public bool WithSummary { get; set; }
+
+        public override List<string> GetMeasureNames()
+        {
+            return this.Measures.Select(measure => measure.MeasureName).ToList();
+        }
     }
 
     public class AnalyticGridWidgetDimension
