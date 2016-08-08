@@ -30,12 +30,12 @@
             var objectProperty;
             var objectTypeConfigs;
 
-            var objectSelectorAPI;
-            var objectSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var objectVariableSelectorAPI;
+            var objectVariableSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var onObjectVariableSelectionChangedDeferred;
 
             var objectPropertySelectorAPI;
             var objectPropertySelectorReadyDeferred = UtilsService.createPromiseDeferred();
-            var objectPropertySelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             var directiveAPI;
             var directiveReadyDeferred;
@@ -43,6 +43,7 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
+                var _promises = [objectVariableSelectorReadyDeferred.promise, objectPropertySelectorReadyDeferred.promise];
 
                 $scope.scopeModel.objectVariables = [];
                 $scope.scopeModel.templateConfigs = [];
@@ -50,31 +51,52 @@
                 $scope.scopeModel.selectedTemplateConfig;
 
                 $scope.scopeModel.onObjectSelectorReady = function (api) {
-                    objectSelectorAPI = api;
-                    objectSelectorReadyDeferred.resolve();
+                    objectVariableSelectorAPI = api;
+                    objectVariableSelectorReadyDeferred.resolve();
                 };
                 $scope.scopeModel.onObjectVariableSelectionChanged = function () {
 
-                    if (objectPropertySelectorLoadDeferred != undefined) {
-                        return;
+                    if (onObjectVariableSelectionChangedDeferred != undefined) {
+                        onObjectVariableSelectionChangedDeferred.resolve();
                     }
+                    else {
+                        objectPropertySelectorAPI.clearDataSource();
+                        objectProperty = undefined;
 
-                    objectPropertySelectorAPI.clearDataSource();
-                    objectProperty = undefined;
+                        if ($scope.scopeModel.selectedObjectVariable != undefined && $scope.scopeModel.selectedObjectVariable.ObjectType != undefined) {
+                            $scope.scopeModel.isSelectorLoading = true;
+                            var objectTypeConfigId = $scope.scopeModel.selectedObjectVariable.ObjectType.ConfigId;
 
-                    if ($scope.scopeModel.selectedObjectVariable != undefined && $scope.scopeModel.selectedObjectVariable.ObjectType != undefined) {
-                        var objectTypeConfigId = $scope.scopeModel.selectedObjectVariable.ObjectType.ConfigId;
+                            VRCommon_VRObjectTypeAPIService.GetObjectTypeExtensionConfigs().then(function (response) {
+                                if (response != null) {
+                                    objectTypeConfigs = [];
+                                    for (var i = 0; i < response.length; i++) 
+                                        objectTypeConfigs.push(response[i]);
+                                    
+                                    var propertyEvaluatorExtensionType;
+                                    for (var index = 0; index < objectTypeConfigs.length ; index++)
+                                        if (objectTypeConfigs[index].ExtensionConfigurationId == objectTypeConfigId)
+                                            propertyEvaluatorExtensionType = objectTypeConfigs[index].PropertyEvaluatorExtensionType;
 
-                        loadObjectPropertySelector(objectTypeConfigId);
-                    }                
+                                    VRCommon_VRObjectPropertyAPIService.GetObjectPropertyExtensionConfigs(propertyEvaluatorExtensionType)
+                                                            .then(function (response) {
+                                                                if (response != null) {
+                                                                    for (var i = 0; i < response.length; i++) {
+                                                                        $scope.scopeModel.templateConfigs.push(response[i]);
+                                                                    }
+
+                                                                    $scope.scopeModel.isSelectorLoading = false;
+                                                                }
+                                                            });
+                                }
+                            });
+                        }
+                    }       
                 }
 
                 $scope.scopeModel.onObjectPropertySelectorReady = function (api) {
                     objectPropertySelectorAPI = api;
                     objectPropertySelectorReadyDeferred.resolve();
-                    objectSelectorReadyDeferred.promise.then(function () {
-                        defineAPI();
-                    });
                 };
              
                 $scope.scopeModel.onDirectiveReady = function (api) {
@@ -83,21 +105,24 @@
                     var directivePayload = {};
                     if ($scope.scopeModel.selectedObjectVariable.ObjectType != undefined)
                         directivePayload.objectType = $scope.scopeModel.selectedObjectVariable.ObjectType;
-                    if (objectProperty != undefined)
-                        directivePayload.valueEvaluator = objectProperty.propertyEvaluator;
 
                     var setLoader = function (value) {
                         $scope.scopeModel.isDirectiveLoading = value;
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
+
+
+                UtilsService.waitMultiplePromises(_promises).then(function () {
+                    defineAPI();
+                });
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    objectSelectorAPI.clearDataSource();
+                    objectVariableSelectorAPI.clearDataSource();
                     objectPropertySelectorAPI.clearDataSource();
 
                     var promises = [];
@@ -135,9 +160,7 @@
                         promises.push(loadDirectivePromise);
                     }
 
-                    return UtilsService.waitMultiplePromises(promises).finally(function () {
-                                                                            objectPropertySelectorLoadDeferred = undefined;
-                                                                       });
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
@@ -165,9 +188,13 @@
 
             function loadObjectPropertySelector(objectTypeConfigId) {
 
-                objectPropertySelectorReadyDeferred.promise.then(function () {
-                    $scope.scopeModel.isSelectorLoading = true;
+                if (onObjectVariableSelectionChangedDeferred == undefined)
+                    onObjectVariableSelectionChangedDeferred = UtilsService.createPromiseDeferred();
 
+                var objectPropertySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                onObjectVariableSelectionChangedDeferred.promise.then(function () {
+                    onObjectVariableSelectionChangedDeferred = undefined;
                     loadObjectTypeConfigs().then(function () {
                         var getObjectPropertyTemplateConfigsPromise = getObjectPropertySelectorTemplateConfigs(objectTypeConfigId);
                         objectPropertySelectorLoadDeferred.resolve();
@@ -204,8 +231,6 @@
                                                     $scope.scopeModel.selectedTemplateConfig =
                                                             UtilsService.getItemByVal($scope.scopeModel.templateConfigs, objectProperty.propertyEvaluator.ConfigId, 'ExtensionConfigurationId');
                                                 }
-
-                                                $scope.scopeModel.isSelectorLoading = false;
                                             }
                                         });
 
