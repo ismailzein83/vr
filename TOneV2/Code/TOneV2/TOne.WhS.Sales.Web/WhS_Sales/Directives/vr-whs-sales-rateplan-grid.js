@@ -69,16 +69,14 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         };
                         return saleCodeGridAPI.loadGrid(query);
                     }
+                }, {
+                    title: "Other Rates",
+                    directive: "vr-whs-sales-otherrate-grid",
+                    loadDirective: function (rateTypeGridAPI, zoneItem) {
+                        var query = { zoneItem: zoneItem };
+                        return rateTypeGridAPI.loadGrid(query);
+                    }
                 }];
-
-                //var temp = {
-                //    title: "Other Rates",
-                //    directive: "vr-whs-sales-otherrate-grid",
-                //    loadDirective: function (rateTypeGridAPI, zoneItem) {
-                //        var query = { zoneItem: zoneItem };
-                //        return rateTypeGridAPI.loadGrid(query);
-                //    }
-                //};
             }
 
             function defineAPI() {
@@ -137,7 +135,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 var zoneItemsGetPromise = WhS_Sales_RatePlanAPIService.GetZoneItems(getZoneItemsInput());
                 promises.push(zoneItemsGetPromise);
 
-                zoneItemsGetPromise.then(function (response) {
+                zoneItemsGetPromise.then(function (response)
+                {
                     if (response != null) {
                         var zoneItems = [];
 
