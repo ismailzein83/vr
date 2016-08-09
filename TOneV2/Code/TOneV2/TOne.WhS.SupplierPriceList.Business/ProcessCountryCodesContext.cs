@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
     public class ProcessCountryCodesContext : IProcessCountryCodesContext
     {
+        public SupplierPriceListType SupplierPriceListType { get; set; }
+
+        public IEnumerable<ImportedZone> ImportedZones { get; set; }
+
         public IEnumerable<ImportedCode> ImportedCodes { get; set; }
 
         public IEnumerable<ExistingCode> ExistingCodes { get; set; }

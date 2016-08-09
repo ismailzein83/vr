@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.Common;
 
@@ -16,7 +17,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             ZonesByName newAndExistingZones = new ZonesByName();
             context.NewAndExistingZones = newAndExistingZones;
-            ProcessCountryCodes(context.ImportedCodes, context.ExistingCodes, newAndExistingZones, context.ExistingZones, context.DeletedCodesDate, context.PriceListDate);
+            ProcessCountryCodes(context.SupplierPriceListType, context.ImportedZones, context.ImportedCodes, context.ExistingCodes, newAndExistingZones, context.ExistingZones, context.DeletedCodesDate, context.PriceListDate);
             context.NewCodes = context.ImportedCodes.SelectMany(itm => itm.NewCodes);
             context.NewZones = newAndExistingZones.GetNewZones();
             context.ChangedZones = context.ExistingZones.Where(itm => itm.ChangedZone != null).Select(itm => itm.ChangedZone);
@@ -61,7 +62,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             return existingCodesByCodeValue;
         }
 
-        private void ProcessCountryCodes(IEnumerable<ImportedCode> importedCodes, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones, DateTime codeCloseDate, DateTime priceListDate)
+        private void ProcessCountryCodes(SupplierPriceListType supplierPriceListType, IEnumerable<ImportedZone> importedZones, IEnumerable<ImportedCode> importedCodes, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones, DateTime codeCloseDate, DateTime priceListDate)
         {
             ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
             ExistingCodesByCodeValue existingCodesByCodeValue = StructureExistingCodesByCodeValue(existingCodes);
@@ -104,6 +105,8 @@ namespace TOne.WhS.SupplierPriceList.Business
                     }
                 }
             }
+
+            GetExistingCodesToClose(supplierPriceListType, importedZones, importedCodes, existingCodes);
             CloseNotImportedCodes(existingCodes, importedCodeValues, codeCloseDate);
             CloseZonesWithNoCodes(existingZones);
         }
@@ -230,6 +233,40 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             return importedCode.BED == existingCode.CodeEntity.BED
                 && importedCode.ZoneName == existingCode.ParentZone.ZoneEntity.Name;
+        }
+
+        private IEnumerable<ExistingCode> GetExistingCodesToClose(SupplierPriceListType supplierPriceListType, IEnumerable<ImportedZone> importedZones, IEnumerable<ImportedCode> importedCodes, IEnumerable<ExistingCode> existingCodes)
+        {
+            IEnumerable<ExistingCode> existingCodesToClose = new List<ExistingCode>();
+
+            if (importedZones.Count() > 0) // Country is included
+            {
+                if (!DoCountryCodeGroupsExist(importedCodes) || supplierPriceListType == SupplierPriceListType.RateChange)
+                {
+                    IEnumerable<string> importedCodeValues = importedCodes.MapRecords(x => x.Code);
+                    existingCodesToClose = existingCodes.FindAllRecords(x => importedCodeValues.Contains(x.CodeEntity.Code));
+                }
+                else
+                    existingCodesToClose = existingCodes;
+            }
+            else // Country is excluded
+            {
+                if (supplierPriceListType == SupplierPriceListType.Full)
+                    existingCodesToClose = existingCodes;
+            }
+
+            return existingCodesToClose;
+        }
+
+        private bool DoCountryCodeGroupsExist(IEnumerable<ImportedCode> importedCodes)
+        {
+            if (importedCodes.Count() > 0)
+            {
+                IEnumerable<ImportedCode> importedCodesWithCodeGroup = importedCodes.FindAllRecords(x => x.CodeGroup != null);
+                if (importedCodesWithCodeGroup.Count() > 0)
+                    return true;
+            }
+            return false;
         }
 
         private void CloseNotImportedCodes(IEnumerable<ExistingCode> existingCodes, HashSet<string> importedCodeValues, DateTime codeCloseDate)

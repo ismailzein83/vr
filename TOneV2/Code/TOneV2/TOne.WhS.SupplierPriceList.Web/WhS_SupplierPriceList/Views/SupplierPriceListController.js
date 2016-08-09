@@ -1,8 +1,8 @@
 ﻿(
     function (appControllers) {
         "use strict";
-        priceListConversionController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_SupPL_SupplierPriceListAPIService', 'WhS_SupPL_SupplierPriceListTemplateAPIService', 'WhS_BE_CarrierAccountAPIService', 'BusinessProcess_BPInstanceAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService'];
-        function priceListConversionController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_SupPL_SupplierPriceListAPIService, WhS_SupPL_SupplierPriceListTemplateAPIService, WhS_BE_CarrierAccountAPIService, BusinessProcess_BPInstanceAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService) {
+        priceListConversionController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_SupPL_SupplierPriceListAPIService', 'WhS_SupPL_SupplierPriceListTemplateAPIService', 'WhS_BE_CarrierAccountAPIService', 'BusinessProcess_BPInstanceAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'WhS_SupPL_SupplierPriceListTypeEnum'];
+        function priceListConversionController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_SupPL_SupplierPriceListAPIService, WhS_SupPL_SupplierPriceListTemplateAPIService, WhS_BE_CarrierAccountAPIService, BusinessProcess_BPInstanceAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, WhS_SupPL_SupplierPriceListTypeEnum) {
 
             var inputWorkBookApi;
             var supplierPriceListConfigurationAPI;
@@ -22,6 +22,8 @@
             function defineScope() {
 
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.priceListTypes = UtilsService.getArrayEnum(WhS_SupPL_SupplierPriceListTypeEnum);
 
                 $scope.scopeModel.onCurrencyDirectiveReady = function (api) {
                     currencyDirectiveAPI = api;
@@ -127,6 +129,7 @@
 
                 var inputArguments = {
                     $type: "TOne.WhS.SupplierPriceList.BP.Arguments.SupplierPriceListProcessInput, TOne.WhS.SupplierPriceList.BP.Arguments",
+                    SupplierPriceListType: $scope.scopeModel.selectedPriceListType.value,
                     SupplierAccountId: carrierAccountDirectiveAPI.getSelectedIds(),
                     CurrencyId: currencyDirectiveAPI.getSelectedIds(),
                     FileId: $scope.scopeModel.inPutFile.fileId,

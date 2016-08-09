@@ -138,8 +138,6 @@ function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService) {
                     }
                 }
 
-                console.log(zoneChanges);
-
                 function compareDates(date1, date2) {
                     var d1 = new Date(date1);
                     var d2 = new Date(date2);

@@ -9,6 +9,10 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
     public interface IProcessCountryCodesContext
     {
+        SupplierPriceListType SupplierPriceListType { get; }
+
+        IEnumerable<ImportedZone> ImportedZones { get; }
+
         IEnumerable<ImportedCode> ImportedCodes { get; }
 
         IEnumerable<ExistingCode> ExistingCodes { get; }

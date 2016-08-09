@@ -10,9 +10,14 @@ using TOne.WhS.SupplierPriceList.Entities;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
+    #region Public Classes
 
     public class ProcessCountryCodesInput
     {
+        public SupplierPriceListType SupplierPriceListType { get; set; }
+
+        public IEnumerable<ImportedZone> ImportedZones { get; set; }
+
         public IEnumerable<ImportedCode> ImportedCodes { get; set; }
 
         public IEnumerable<ExistingCode> ExistingCodes { get; set; }
@@ -37,8 +42,18 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
     }
 
+    #endregion
+
     public sealed class ProcessCountryCodes : BaseAsyncActivity<ProcessCountryCodesInput, ProcessCountryCodesOutput>
     {
+        #region Input Arguments
+
+        [RequiredArgument]
+        public InArgument<SupplierPriceListType> SupplierPriceListType { get; set; }
+
+        [RequiredArgument]
+        public InArgument<IEnumerable<ImportedZone>> ImportedZones { get; set; }
+
         [RequiredArgument]
         public InArgument<IEnumerable<ImportedCode>> ImportedCodes { get; set; }
 
@@ -50,6 +65,10 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         [RequiredArgument]
         public InArgument<DateTime> PriceListDate { get; set; }
+        
+        #endregion
+
+        #region Output Arguments
 
         [RequiredArgument]
         public OutArgument<ZonesByName> NewAndExistingZones { get; set; }
@@ -65,8 +84,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         [RequiredArgument]
         public OutArgument<IEnumerable<ChangedCode>> ChangedCodes { get; set; }
+        
+        #endregion
 
         const string ImportSPLContext_CustomeDataKey = "ImportSPLContext";
+
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             handle.CustomData.Add(ImportSPLContext_CustomeDataKey, context.GetSPLParameterContext());
@@ -83,6 +105,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             ProcessCountryCodesContext processCountryCodesContext = new ProcessCountryCodesContext()
             {
+                SupplierPriceListType = inputArgument.SupplierPriceListType,
+                ImportedZones = inputArgument.ImportedZones,
                 ImportedCodes = inputArgument.ImportedCodes,
                 ExistingCodes = inputArgument.ExistingCodes,
                 ExistingZones = existingZones,
@@ -107,6 +131,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         {
             return new ProcessCountryCodesInput()
             {
+                SupplierPriceListType = this.SupplierPriceListType.Get(context),
+                ImportedZones = this.ImportedZones.Get(context),
                 PriceListDate = this.PriceListDate.Get(context),
                 ExistingCodes = this.ExistingCodes.Get(context),
                 ExistingZonesByZoneId = this.ExistingZonesByZoneId.Get(context),
