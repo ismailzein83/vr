@@ -54,6 +54,7 @@
     <Compile Include="ExcelManager.cs" />
     <Compile Include="GetConcatenatedPartTextContext.cs" />
     <Compile Include="GetFieldValueContext.cs" />
+    <Compile Include="Context\MappingFilterMatchContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +69,14 @@
     <ProjectReference Include="..\Vanrise.ExcelConversion.Entities\Vanrise.ExcelConversion.Entities.csproj">
       <Project>{ea4a61bc-3231-4c64-b8ba-960604a71a54}</Project>
       <Name>Vanrise.ExcelConversion.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Business\Vanrise.GenericData.Business.csproj">
+      <Project>{e196c862-be33-49dd-9e0d-2948fb289861}</Project>
+      <Name>Vanrise.GenericData.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
+      <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
+      <Name>Vanrise.GenericData.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

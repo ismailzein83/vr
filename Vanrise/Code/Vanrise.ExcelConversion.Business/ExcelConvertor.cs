@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.ExcelConversion.Entities;
+using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.ExcelConversion.Business
 {
@@ -64,17 +66,31 @@ namespace Vanrise.ExcelConversion.Business
             {
                 foreach (var listMapping in conversionSettings.ListMappings)
                 {
+
                     if (workbook.Worksheets.Count <= listMapping.SheetIndex)
                         throw new Exception(String.Format("List SheetIndex '{0}' is greater than max index in the workbook", listMapping.SheetIndex));
                     var workSheet = workbook.Worksheets[listMapping.SheetIndex];
                     int lastRowIndex = listMapping.LastRowIndex.HasValue && listMapping.LastRowIndex.Value <= workSheet.Cells.MaxDataRow ? listMapping.LastRowIndex.Value : (workSheet.Cells.MaxDataRow);
 
-                    BuildExceRecord(conversionSettings,convertedExcel, listMapping, workbook, workSheet, lastRowIndex, stopOnFirstEmptyRow,isCommaDecimalSeparator);
+                    Dictionary<string, DataRecordFieldType> fieldTypeByFieldName = null;
+                    if (listMapping.Filter != null && listMapping.Filter.Fields != null && listMapping.Filter.Fields.Count >0)
+                    {
+                        fieldTypeByFieldName = new Dictionary<string, DataRecordFieldType>();
+                        foreach(var field in listMapping.Filter.Fields)
+                        {
+                            DataRecordFieldType fieldType = null;
+                            if (!fieldTypeByFieldName.TryGetValue(field.FieldName, out fieldType))
+                                fieldTypeByFieldName.Add(field.FieldName, field.FieldType);
+                        }
+                    }
+
+
+                    BuildExceRecord(conversionSettings, convertedExcel, listMapping, workbook, workSheet, lastRowIndex, stopOnFirstEmptyRow, isCommaDecimalSeparator, fieldTypeByFieldName);
                 }
             }
         }
 
-        private void BuildExceRecord(ExcelConversionSettings conversionSettings, ConvertedExcel convertedExcel, ListMapping listMapping, Workbook workbook, Worksheet workSheet, int lastRowIndex, bool stopOnFirstEmptyRow, bool isCommaDecimalSeparator)
+        private void BuildExceRecord(ExcelConversionSettings conversionSettings, ConvertedExcel convertedExcel, ListMapping listMapping, Workbook workbook, Worksheet workSheet, int lastRowIndex, bool stopOnFirstEmptyRow, bool isCommaDecimalSeparator, Dictionary<string, DataRecordFieldType> fieldTypeByFieldName)
         {
             ConvertedExcelList lst = new ConvertedExcelList
             {
@@ -91,6 +107,26 @@ namespace Vanrise.ExcelConversion.Business
                 {
                     break;
                 }
+
+                if (fieldTypeByFieldName != null)
+                {
+                    RecordFilterManager manager = new RecordFilterManager();
+                    MappingFilterMatchContext context = new MappingFilterMatchContext();
+                    context.fieldTypeByFieldName = fieldTypeByFieldName;
+                    Dictionary<string, Object> fieldValueByFieldName = new Dictionary<string, object>() ;
+                    foreach(var field in listMapping.Filter.Fields)
+                    {
+                        object fieldValue = null;
+                        if(!fieldValueByFieldName.TryGetValue(field.FieldName,out fieldValue))
+                        {
+                            fieldValueByFieldName.Add(field.FieldName, GetFieldValue(workbook, field.FieldMapping, conversionSettings, workSheet, row, isCommaDecimalSeparator));
+                        }
+                    }
+                    context.fieldValueByFieldName = fieldValueByFieldName;
+                    if (!manager.IsFilterGroupMatch(listMapping.Filter.FilterGroup, context))
+                        break;
+                }
+
                 var convertedRecord = new ConvertedExcelRecord { Fields = new ConvertedExcelFieldsByName() };
 
                 lst.Records.Add(convertedRecord);
