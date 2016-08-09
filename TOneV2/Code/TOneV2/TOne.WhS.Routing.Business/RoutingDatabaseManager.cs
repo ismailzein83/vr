@@ -33,6 +33,11 @@ namespace TOne.WhS.Routing.Business
             Func<RoutingDatabase, bool> filterExpression = (itm) => (itm.ProcessType == routingProcessType && itm.Type == routingDatabaseType && itm.IsReady);
             return GetNotDeletedDatabases().FindAllRecords(filterExpression);
         }
+        public IEnumerable<RoutingDatabase> GetRoutingDatabases(RoutingProcessType routingProcessType, RoutingDatabaseType routingDatabaseType)
+        {
+            Func<RoutingDatabase, bool> filterExpression = (itm) => (itm.ProcessType == routingProcessType && itm.Type == routingDatabaseType);
+            return GetNotDeletedDatabases().FindAllRecords(filterExpression);
+        }
 
         public RoutingDatabase GetRoutingDatabase(int routingDatabaseId)
         {
