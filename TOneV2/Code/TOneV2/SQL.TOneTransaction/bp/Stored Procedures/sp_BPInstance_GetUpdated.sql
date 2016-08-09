@@ -28,7 +28,7 @@ IF (@TimestampAfter IS NULL)
       ,[InitiatorUserId]
 	  ,[timestamp]
             INTO #temp_table
-            FROM [BP].[BPInstance] 
+            FROM [BP].[BPInstance] WITH(NOLOCK)
             WHERE (@EntityID is null or EntityID = @EntityID) and (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable))
             AND (@ParentId is null or ParentID = @ParentId) 
             ORDER BY ID DESC
@@ -56,7 +56,7 @@ IF (@TimestampAfter IS NULL)
       ,[InitiatorUserId]
 	  ,[timestamp]
             INTO #temp2_table
-            FROM [BP].[BPInstance] 
+            FROM [BP].[BPInstance] WITH(NOLOCK) 
             WHERE (@EntityID is null or EntityID = @EntityID) and (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable))  AND
             ([timestamp] > @TimestampAfter) --ONLY Updated records
             AND (@ParentId is null or ParentID = @ParentId)
