@@ -121,6 +121,7 @@
     <Content Include="Databases\IDs ranges\Configuration\sec.BusinessEntityModule.txt" />
     <Content Include="Databases\IDs ranges\Configuration\sec.Module.txt" />
     <Content Include="Databases\IDs ranges\Configuration\sec.View.txt" />
+    <Content Include="Databases\IDs ranges\Configuration\reprocess.ReprocessDefinition.txt" />
     <Content Include="Databases\IDs ranges\Configuration\sec.ViewType.txt" />
     <Content Include="Databases\IDs ranges\Transaction\runtime.SchedulerTaskActionType.txt" />
     <Content Include="Databases\IDs ranges\Transaction\Transaction.txt" />
