@@ -12,7 +12,8 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                 selectedvalues: '=',
                 hideremoveicon: "@",
                 onselectitem: "=",
-                ondeselectitem: "="
+                ondeselectitem: "=",
+                hideselectedvaluessection: "@"
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -57,9 +58,13 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
             if (attrs.hideremoveicon != undefined)
                 hideremoveicon = "hideremoveicon";
 
+            var hideselectedvaluessection = "";
+            if (attrs.hideselectedvaluessection != undefined)
+                hideselectedvaluessection = "hideselectedvaluessection";
+
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="RoutingProductId" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem"'
-            + required + ' label="' + label + '" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" ' + hideremoveicon + '></vr-select>'
+            + required + ' label="' + label + '" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" ' + hideremoveicon + ' ' + hideselectedvaluessection + '></vr-select>'
                + '</div>'
         }
 

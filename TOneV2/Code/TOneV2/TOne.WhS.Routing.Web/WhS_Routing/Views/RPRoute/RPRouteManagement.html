@@ -11,11 +11,10 @@
                 <vr-columns colnum="2">
                     <vr-textbox label="Number of Options" value="numberOfOptions" isrequired type="number" minvalue="1" decimalprecision="0"></vr-textbox>
                 </vr-columns>
-               
-                <vr-columns colnum="2">
-                    <vr-whs-be-routingproduct-selector ismultipleselection on-ready="onRoutingProductSelectorReady" />
-                </vr-columns>
                 <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneSelectorReady" normal-col-num="2" ></vr-whs-be-salezone-selector>
+                <vr-columns colnum="2">
+                    <vr-whs-be-routingproduct-selector ismultipleselection on-ready="onRoutingProductSelectorReady" hideselectedvaluessection />
+                </vr-columns>
                 <vr-columns colnum="2">
                     <vr-textbox label="Limit Result To" value="limit" type="number" decimalprecision="0" minvalue="1" isrequired="true"></vr-textbox>
                 </vr-columns>
