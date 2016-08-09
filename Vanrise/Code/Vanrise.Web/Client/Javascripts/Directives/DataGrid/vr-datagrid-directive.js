@@ -1182,11 +1182,12 @@
                         if (clearBeforeRetrieve || isSorting)
                             gridApi.clearDataAndContinuePaging();
 
-                        gridApi.addItemsToSource(response.Data);//response should be of type Vanrise.Entities.BigResult<T>
-                        retrieveDataResultKey = response.ResultKey;
-                        if (ctrl.pagerSettings != undefined && ctrl.pagerSettings != null)
-                            ctrl.pagerSettings.totalDataCount = response.TotalCount;
-
+                        if (response != undefined) {
+                            gridApi.addItemsToSource(response.Data);//response should be of type Vanrise.Entities.BigResult<T>
+                            retrieveDataResultKey = response.ResultKey;
+                            if (ctrl.pagerSettings != undefined && ctrl.pagerSettings != null)
+                                ctrl.pagerSettings.totalDataCount = response.TotalCount;
+                        }
                     }
                 };
 
