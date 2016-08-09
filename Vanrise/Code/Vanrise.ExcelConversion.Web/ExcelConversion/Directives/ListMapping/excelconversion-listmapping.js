@@ -2,9 +2,9 @@
 
     'use strict';
 
-    excelconversionListmapping.$inject = ['UtilsService', 'VRUIUtilsService'];
+    excelconversionListmapping.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_MappingFieldTypeEnum', 'VR_GenericData_DataRecordTypeService'];
 
-    function excelconversionListmapping(UtilsService, VRUIUtilsService) {
+    function excelconversionListmapping(UtilsService, VRUIUtilsService, VR_GenericData_MappingFieldTypeEnum, VR_GenericData_DataRecordTypeService) {
         return {
             restrict: "E",
             scope: {
@@ -27,6 +27,7 @@
             var context;
             var listName;
             var listMappingData;
+            var filterObj;
             function initializeController() {
                 ctrl.fieldMappings = [];
                 ctrl.updateLastRowIndexRange = function () {
@@ -68,7 +69,84 @@
                     }
                 }
 
+                ctrl.filterFieldsMappings = [];
+                ctrl.addField = function () {
+                    var dataItem =
+                        {
+                            readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                            loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                        };
+                    addFilterAPIExtension(dataItem);
+                }
+                ctrl.dataTypes = UtilsService.getArrayEnum(VR_GenericData_MappingFieldTypeEnum);
+                ctrl.addFilterValidate = function()
+                {
+                    if (ctrl.filterFieldsMappings.length == 0)
+                        return true;
+                    for(var i=0 ;i<ctrl.filterFieldsMappings.length ;i++)
+                    {
+                        var filterFieldsMapping = ctrl.filterFieldsMappings[i];
+                        if (filterFieldsMapping.FieldName == undefined || filterFieldsMapping.selectedDataTypes == undefined)
+                            return true;
+                    }
+                    return false;
+                }
+                ctrl.removeFilter = function(dataItem)
+                {
+                    var index = ctrl.filterFieldsMappings.indexOf(dataItem);
+                    ctrl.filterFieldsMappings.splice(index, 1);
+                }
+                ctrl.addFilter = function () {
+                    var onFilterAdded = function (filter, expression) {
+                        filterObj = filter;
+                        ctrl.expression = expression;
+                    }
+                    var fields = [];
+                    for (var i = 0; i < ctrl.filterFieldsMappings.length; i++) {
+                        var filterFieldsMapping = ctrl.filterFieldsMappings[i];
+
+                        fields.push({
+                            FieldName: filterFieldsMapping.FieldName,
+                            FieldTitle: filterFieldsMapping.FieldName,
+                            Type: filterFieldsMapping.selectedDataTypes.value,
+                        });
+                    }
+                    VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter(fields, filterObj, onFilterAdded);
+                };
+                ctrl.resetFilter = function () {
+                    ctrl.expression = undefined;
+                    filterObj = null;
+                }
+                ctrl.isFilterFilled = function()
+                {
+                    if (ctrl.filterFieldsMappings.length > 0 && filterObj == undefined)
+                        return "Filter does not edited yet.";
+                    return null;
+                }
                 defineAPI();
+            }
+
+            function addFilterAPIExtension(dataItem, payloadEntity) {
+                var payload = {
+                    context: getContext()
+                };
+                if (payloadEntity != undefined) {
+                    payload.fieldMapping = payloadEntity.FieldMapping;
+                    dataItem.FieldName = payloadEntity.FieldName;
+                    dataItem.selectedDataTypes = UtilsService.getItemByVal(ctrl.dataTypes, payloadEntity.FieldType.ConfigId,"value.ConfigId")
+                }
+                dataItem.normalColNum = ctrl.normalColNum;
+
+                dataItem.onFieldMappingReady = function (api) {
+                    dataItem.fieldMappingAPI = api;
+                    dataItem.readyPromiseDeferred.resolve();
+                }
+                dataItem.readyPromiseDeferred.promise
+              .then(function () {
+                  
+                  VRUIUtilsService.callDirectiveLoad(dataItem.fieldMappingAPI, payload, dataItem.loadPromiseDeferred);
+              });
+                ctrl.filterFieldsMappings.push(dataItem);
             }
 
             function defineAPI() {
@@ -101,6 +179,20 @@
                                     sheet: listMappingData.SheetIndex
                                 }
                             }
+                            if(listMappingData.Filter != undefined && listMappingData.Filter.Fields != undefined)
+                            {
+                                ctrl.expression = listMappingData.Filter.ConditionExpression;
+                                filterObj = listMappingData.Filter.FilterGroup;
+                                for (var j = 0; j < listMappingData.Filter.Fields.length; j++) {
+                                    var filterItem = {
+                                        readyPromiseDeferred : UtilsService.createPromiseDeferred(),
+                                        loadPromiseDeferred : UtilsService.createPromiseDeferred()
+                                    }
+                                    var filterFieldsMappingEntity = listMappingData.Filter.Fields[j];
+                                    promises.push(filterItem.loadPromiseDeferred.promise);
+                                    addFilterAPIExtension(filterItem, filterFieldsMappingEntity);
+                                }
+                            }
 
                         }
                         ctrl.fieldMappings = payload.fieldMappings;
@@ -112,6 +204,7 @@
                             addAPIExtension(ctrl.fieldMappings[i]);
                         }
 
+                      
 
                     }
                     function addAPIExtension(dataItem) {
@@ -168,26 +261,47 @@
                         }
 
                     }
+                    var filter;
+                    if (ctrl.filterFieldsMappings.length > 0)
+                    {
+                        filter = {
+                            ConditionExpression: ctrl.expression ,
+                            Fields: [],
+                            FilterGroup: filterObj
+                        };
+                        for(var i=0;i<ctrl.filterFieldsMappings.length;i++)
+                        {
+                            var filterFieldsMapping = ctrl.filterFieldsMappings[i];
+                            filter.Fields.push({
+                                FieldName: filterFieldsMapping.FieldName,
+                                FieldMapping: filterFieldsMapping.fieldMappingAPI !=undefined? filterFieldsMapping.fieldMappingAPI.getData():undefined,
+                                FieldType: filterFieldsMapping.selectedDataTypes.value
+                            });
+                        }
+                    }
+
                     var data = {
                         ListName: listName,
                         SheetIndex: ctrl.firstRowIndex != undefined ? ctrl.firstRowIndex.sheet : undefined,
                         FirstRowIndex: ctrl.firstRowIndex != undefined ? ctrl.firstRowIndex.row : undefined,
                         LastRowIndex: ctrl.lastRowIndex != undefined ? ctrl.lastRowIndex.row : undefined,
                         FieldMappings: fieldMappings,
+                        Filter: filter
                     };
                     return data;
                 }
-                function getContext() {
+                
+            }
+            function getContext() {
 
-                    if (context != undefined) {
-                        var currentContext = UtilsService.cloneObject(context);
-                        if (currentContext == undefined)
-                            currentContext = {};
-                        currentContext.getFirstRowIndex = function () {
-                            return ctrl.firstRowIndex;
-                        }
-                        return currentContext;
+                if (context != undefined) {
+                    var currentContext = UtilsService.cloneObject(context);
+                    if (currentContext == undefined)
+                        currentContext = {};
+                    currentContext.getFirstRowIndex = function () {
+                        return ctrl.firstRowIndex;
                     }
+                    return currentContext;
                 }
             }
         }

@@ -1,4 +1,5 @@
-﻿<vr-row>
+﻿
+<vr-row>
     <vr-columns colnum="{{listMappingCtrl.normalColNum}}">
         <vr-cellviewer on-select="listMappingCtrl.selectFirstRowIndex" on-update="listMappingCtrl.updateFirstRowIndexRange" isrequired="true" value="listMappingCtrl.firstRowIndex" label="First Row" type="'row'"> </vr-cellviewer>
     </vr-columns>
@@ -6,15 +7,76 @@
         <vr-cellviewer on-select="listMappingCtrl.selectLastRowIndex" on-update="listMappingCtrl.updateLastRowIndexRange" value="listMappingCtrl.lastRowIndex" label="Last Row" type="'row'"> </vr-cellviewer>
     </vr-columns>
 </vr-row>
-<vr-row>
-    <vr-columns colnum="fullrow">
-        <vr-datagrid datasource="listMappingCtrl.fieldMappings" norowhighlightonclick="true"
-                     on-ready="onGridReady" hidegridmenu>
-            <vr-datagridcolumn headertext="'Field Name'" field="'FieldTitle'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Field Mapping'" widthfactor="15" disablesorting="true">
-                <vr-excelconversion-fieldmapping-selective hidelabel="true" on-ready="dataItem.onFieldMappingReady" normal-col-num="{{dataItem.normalColNum}}" isrequired="dataItem.isRequired" customvalidate="dataItem.validate()" type="dataItem.type"> </vr-excelconversion-fieldmapping-selective>
-            </vr-datagridcolumn>
-        </vr-datagrid>
-    </vr-columns>
-</vr-row>
+<vr-tabs>
+    <vr-tab header="'Field Mapping'">
+        <vr-row>
+            <vr-columns colnum="fullrow">
+                <vr-datagrid datasource="listMappingCtrl.fieldMappings" norowhighlightonclick="true"
+                             on-ready="onGridReady" hidegridmenu>
+                    <vr-datagridcolumn headertext="'Field Name'" field="'FieldTitle'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Field Mapping'" widthfactor="15" disablesorting="true">
+                        <vr-excelconversion-fieldmapping-selective hidelabel="true" on-ready="dataItem.onFieldMappingReady" normal-col-num="{{dataItem.normalColNum}}" isrequired="dataItem.isRequired" customvalidate="dataItem.validate()" type="dataItem.type"> </vr-excelconversion-fieldmapping-selective>
+                    </vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+    <vr-tab header="'Condition'">
+        <vr-row>
+            <vr-columns width="1/3row">
+                <vr-button type="Add" data-onclick="listMappingCtrl.addField" standalone></vr-button>
+            </vr-columns>  
+            <vr-columns colnum="fullrow">
+                <vr-datagrid datasource="listMappingCtrl.filterFieldsMappings" norowhighlightonclick="true"
+                             on-ready="onGridReady" hidegridmenu ondeleterow="    listMappingCtrl.removeFilter">
+                    <vr-datagridcolumn headertext="'Field Name'" field="'FieldTitle'" widthfactor="10" disablesorting="true">
+                        <vr-row>
+                            <vr-columns width="fullrow">
+                                <vr-textbox value="dataItem.FieldName" isrequired="true"></vr-textbox>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Field Mapping'" widthfactor="15" disablesorting="true">
+                        <vr-excelconversion-fieldmapping-selective hidelabel="true" on-ready="dataItem.onFieldMappingReady" normal-col-num="{{dataItem.normalColNum}}" isrequired="true" customvalidate="dataItem.validate()" type="dataItem.type"> </vr-excelconversion-fieldmapping-selective>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Field Type'" widthfactor="10" disablesorting="true">
+                        <vr-row>
+                            <vr-columns width="fullrow">
+                                <vr-select datasource="viewScope.listMappingCtrl.dataTypes" hideremoveicon datatextfield="description" datavaluefield="value" selectedvalues="dataItem.selectedDataTypes" hidefilterbox isrequired="true"></vr-select>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+            <vr-columns width="fullrow">
+                <vr-section title="Filter">
+                   
+                        <vr-row  removeline>
+                            <vr-columns width="fullrow">
+                                <vr-validator validate="listMappingCtrl.isFilterFilled()">
+                                    <vr-label isvalue breakline>{{listMappingCtrl.expression}}</vr-label>
+                                </vr-validator>
+                            </vr-columns>
+                        </vr-row>
+                        <vr-row>
+                            <vr-columns width="1/4row" class="pull-right">
+                                <button type="button" class="btn btn-xs btn-primary" ng-click="listMappingCtrl.addFilter()" ng-disabled="listMappingCtrl.addFilterValidate()">
+                                    <i class="glyphicon glyphicon-pencil"></i> Edit Filter
+                                </button>
+                            </vr-columns>
+
+                            <vr-columns width="1/4row" class="pull-right">
+                                <button type="button" class="btn btn-xs btn-primary" ng-click="listMappingCtrl.resetFilter()" ng-disabled="listMappingCtrl.expression ==undefined">
+                                    <i class="glyphicon glyphicon-remove"></i> Reset Filter
+                                </button>
+                            </vr-columns>
+                        </vr-row>
+
+               
+                </vr-section> 
+            </vr-columns>  
+        </vr-row>
+    </vr-tab>
+</vr-tabs>
+
 
