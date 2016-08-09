@@ -2,9 +2,9 @@
 
     "use strict";
 
-    MailMessageTypeEditorController.$inject = ['$scope', 'VRCommon_MailMessageTypeAPIService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService'];
+    MailMessageTypeEditorController.$inject = ['$scope', 'VRCommon_VRMailMessageTypeAPIService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService'];
 
-    function MailMessageTypeEditorController($scope, VRCommon_MailMessageTypeAPIService, VRNotificationService, UtilsService, VRUIUtilsService, VRNavigationService) {
+    function MailMessageTypeEditorController($scope, VRCommon_VRMailMessageTypeAPIService, VRNotificationService, UtilsService, VRUIUtilsService, VRNavigationService) {
 
         var isEditMode;
 
@@ -73,7 +73,7 @@
 
 
         function getMailMessageType() {
-            return VRCommon_MailMessageTypeAPIService.GetMailMessageType(mailMessageTypeId).then(function (response) {
+            return VRCommon_VRMailMessageTypeAPIService.GetMailMessageType(mailMessageTypeId).then(function (response) {
                 mailMessageTypeEntity = response;
             });
         }
@@ -88,10 +88,10 @@
         function setTitle() {
             if (isEditMode) {
                 var mailMessageTypeName = (mailMessageTypeEntity != undefined) ? mailMessageTypeEntity.Name : null;
-                $scope.title = UtilsService.buildTitleForUpdateEditor(mailMessageTypeName, 'MailMessageType');
+                $scope.title = UtilsService.buildTitleForUpdateEditor(mailMessageTypeName, 'Mail Message Type');
             }
             else {
-                $scope.title = UtilsService.buildTitleForAddEditor('MailMessageType');
+                $scope.title = UtilsService.buildTitleForAddEditor('Mail Message Type');
             }
         }
         function loadStaticData() {
@@ -128,20 +128,18 @@
             var variableDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
             variableDirectiveReadyDeferred.promise.then(function () {
-                var variableDirectivePayload;
+                var variableDirectivePayload = {};
 
-                if (mailMessageTypeEntity != undefined && mailMessageTypeEntity.Settings != undefined && mailMessageTypeEntity.Settings.Objects != undefined) {
+                variableDirectivePayload.context = buildContext();
+
+                if (mailMessageTypeEntity != undefined && mailMessageTypeEntity.Settings != undefined && mailMessageTypeEntity.Settings.Variables != undefined) {
 
                     var settings = mailMessageTypeEntity.Settings;
-                    var objects = [];
-                    for (var key in settings.Objects) {
-                        if (key != "$type")
-                            objects.push(settings.Objects[key]);
-                    }
+                    var variables = [];
+                    for (var index = 0 ; index < settings.Variables.length; index++)
+                            variables.push(settings.Variables[index]);
 
-                    variableDirectivePayload = {
-                        objects: objects
-                    };
+                    variableDirectivePayload.variables = variables
                 }
 
                 VRUIUtilsService.callDirectiveLoad(variableDirectiveAPI, variableDirectivePayload, variableDirectiveLoadDeferred);
@@ -152,7 +150,7 @@
 
         function insert() {
             $scope.scopeModel.isLoading = true;
-            return VRCommon_MailMessageTypeAPIService.AddMailMessageType(buildMailMessageTypeObjFromScope()).then(function (response) {
+            return VRCommon_VRMailMessageTypeAPIService.AddMailMessageType(buildMailMessageTypeObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('MailMessageType', response, 'Name')) {
                     if ($scope.onMailMessageTypeAdded != undefined)
                         $scope.onMailMessageTypeAdded(response.InsertedObject);
@@ -166,7 +164,7 @@
         }
         function update() {
             $scope.scopeModel.isLoading = true;
-            return VRCommon_MailMessageTypeAPIService.UpdateMailMessageType(buildMailMessageTypeObjFromScope()).then(function (response) {
+            return VRCommon_VRMailMessageTypeAPIService.UpdateMailMessageType(buildMailMessageTypeObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated('MailMessageType', response, 'Name')) {
                     if ($scope.onMailMessageTypeUpdated != undefined) {
                         $scope.onMailMessageTypeUpdated(response.UpdatedObject);
@@ -180,13 +178,25 @@
             });
         }
 
+        function buildContext() {
+
+            var context = {
+                getObjectVariables: function () { return objectDirectiveAPI.getData(); }
+            }
+            return context;
+        }
         function buildMailMessageTypeObjFromScope() {
-            //var mailMessageTypeSettings = settingsDirectiveAPI.getData();
+
+            var objects = objectDirectiveAPI.getData();
+            var variables = variableDirectiveAPI.getData();
 
             return {
                 VRMailMessageTypeId: mailMessageTypeEntity != undefined ? mailMessageTypeEntity.VRMailMessageTypeId : undefined,
                 Name: $scope.scopeModel.name,
-                //MailMessageTypeSettings: mailMessageTypeSettings
+                Settings: {
+                    Objects: objects,
+                    Variables: variables
+                }
             };
         }
     }

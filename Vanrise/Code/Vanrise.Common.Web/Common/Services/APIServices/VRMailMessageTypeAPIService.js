@@ -36,6 +36,6 @@
         });
     }
 
-    appControllers.service('VRCommon_MailMessageTypeAPIService', VRMailMessageTypeAPIService);
+    appControllers.service('VRCommon_VRMailMessageTypeAPIService', VRMailMessageTypeAPIService);
 
 })(appControllers);

@@ -315,7 +315,6 @@
             }
             return context;
         }
-
         function buildGenericRuleDefinitionObjectFromScope() {
             return {
                 GenericRuleDefinitionId: genericRuleDefinitionId,

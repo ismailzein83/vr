@@ -2,9 +2,9 @@
 
     "use strict";
 
-    MailMessageTypeManagementController.$inject = ['$scope', 'VRCommon_MailMessageTypeService', 'UtilsService', 'VRUIUtilsService'];
+    MailMessageTypeManagementController.$inject = ['$scope', 'VRCommon_VRMailMessageTypeService', 'UtilsService', 'VRUIUtilsService'];
 
-    function MailMessageTypeManagementController($scope, VRCommon_MailMessageTypeService, UtilsService, VRUIUtilsService) {
+    function MailMessageTypeManagementController($scope, VRCommon_VRMailMessageTypeService, UtilsService, VRUIUtilsService) {
 
         var gridAPI;
 
@@ -24,7 +24,7 @@
                 var onMailMessageTypeAdded = function (addedMailMessageType) {
                     gridAPI.onMailMessageTypeAdded(addedMailMessageType);
                 }
-                VRCommon_MailMessageTypeService.addMailMessageType(onMailMessageTypeAdded);
+                VRCommon_VRMailMessageTypeService.addMailMessageType(onMailMessageTypeAdded);
             };
 
             $scope.scopeModel.onGridReady = function (api) {

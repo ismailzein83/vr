@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonMailmessagetypeGrid', ['VRCommon_MailMessageTypeAPIService', 'VRCommon_MailMessageTypeService', 'VRNotificationService',
-    function (VRCommon_MailMessageTypeAPIService, VRCommon_MailMessageTypeService, VRNotificationService) {
+app.directive('vrCommonMailmessagetypeGrid', ['VRCommon_VRMailMessageTypeAPIService', 'VRCommon_VRMailMessageTypeService', 'VRNotificationService',
+    function (VRCommon_VRMailMessageTypeAPIService, VRCommon_VRMailMessageTypeService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -33,7 +33,7 @@ app.directive('vrCommonMailmessagetypeGrid', ['VRCommon_MailMessageTypeAPIServic
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return VRCommon_MailMessageTypeAPIService.GetFilteredMailMessageTypes(dataRetrievalInput).then(function (response) {
+                    return VRCommon_VRMailMessageTypeAPIService.GetFilteredMailMessageTypes(dataRetrievalInput).then(function (response) {
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -70,7 +70,7 @@ app.directive('vrCommonMailmessagetypeGrid', ['VRCommon_MailMessageTypeAPIServic
                     gridAPI.itemUpdated(updatedMailMessageType);
                 };
 
-                VRCommon_MailMessageTypeService.editMailMessageType(mailMessageTypeItem.Entity.VRMailMessageTypeId, onMailMessageTypeUpdated);
+                VRCommon_VRMailMessageTypeService.editMailMessageType(mailMessageTypeItem.Entity.VRMailMessageTypeId, onMailMessageTypeUpdated);
             }
         }
     }]);

@@ -6,8 +6,9 @@
 
     function ObjectPropertyVariableService(VRModalService) {
 
-        function addObjectPropertyVariable(context, onObjectPropertyVariableAdded) {
+        function addObjectPropertyVariable(variables, context, onObjectPropertyVariableAdded) {
             var modalParameters = {
+                variables: variables,
                 context: context
             };
 
@@ -17,13 +18,13 @@
                 modalScope.onObjectPropertyVariableAdded = onObjectPropertyVariableAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/Common/Views/VRMail/VRObjectPropertyVariableEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Common/Views/VRObjectPropertyVariable/VRObjectPropertyVariableEditor.html', modalParameters, modalSettings);
         }
 
-        function editObjectPropertyVariable(genericRuleDefinitionCriteriaFieldName, genericRuleDefinitionCriteriaFields, context, onGenericRuleDefinitionCriteriaFieldUpdated) {
+        function editObjectPropertyVariable(variableName, variables, context, onObjectPropertyVariableUpdated) {
             var modalParameters = {
-                GenericRuleDefinitionCriteriaFieldName: genericRuleDefinitionCriteriaFieldName,
-                GenericRuleDefinitionCriteriaFields: genericRuleDefinitionCriteriaFields,
+                variableName: variableName,
+                variables: variables,
                 context: context
             };
 
@@ -33,7 +34,7 @@
                 modalScope.onObjectPropertyVariableUpdated = onObjectPropertyVariableUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/Common/Views/VRMail/VRObjectPropertyVariableEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Common/Views/VRObjectPropertyVariable/VRObjectPropertyVariableEditor.html', modalParameters, modalSettings);
         }
 
 
@@ -43,6 +44,6 @@
         };
     }
 
-    appControllers.service('VRCommon_ObjectPropertyVariableService', ObjectPropertyVariableService);
+    appControllers.service('VRCommon_VRObjectPropertyVariableService', ObjectPropertyVariableService);
 
 })(appControllers);
