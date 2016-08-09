@@ -45,6 +45,12 @@ namespace TOne.WhS.Routing.Business
             return items.GetRecord(routingDatabaseId);
         }
 
+        public RoutingDatabase GetRoutingDatabaseFromDB(int routingDatabaseId)
+        {
+            IRoutingDatabaseDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRoutingDatabaseDataManager>();
+            return dataManager.GetRoutingDatabase(routingDatabaseId);
+        }
+
         public Dictionary<int, RoutingDatabase> GetNotDeletedDatabases()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRoutingDatabases",

@@ -31,6 +31,12 @@ namespace TOne.WhS.Routing.Business
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
             var routingDatabase = routingDatabaseManager.GetRoutingDatabase(input.Query.RoutingDatabaseId);
 
+            if (routingDatabase == null)//in case of deleted database
+                routingDatabase = routingDatabaseManager.GetRoutingDatabaseFromDB(input.Query.RoutingDatabaseId);
+
+            if(routingDatabase == null)
+                throw new NullReferenceException(string.Format("routingDatabase. RoutingDatabaseId:{0}", input.Query.RoutingDatabaseId));
+
             var customerRoutingDatabases = routingDatabaseManager.GetRoutingDatabasesReady(routingDatabase.ProcessType, routingDatabase.Type).OrderByDescending(itm => itm.CreatedTime);
             manager.RoutingDatabase = customerRoutingDatabases.First();
 

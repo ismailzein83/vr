@@ -82,6 +82,11 @@ namespace TOne.WhS.Routing.Data.SQL
             return base.IsDataUpdated("TOneWhS_Routing.RoutingDatabase", ref updateHandle);
         }
 
+        public RoutingDatabase GetRoutingDatabase(int routingDatabaseId)
+        {
+            return GetItemSP("[TOneWhS_Routing].[sp_RoutingDatabase_GetById]", RoutingDatabaseMapper, routingDatabaseId);
+        }
+
         RoutingDatabase RoutingDatabaseMapper(IDataReader reader)
         {
             RoutingProcessType processType = GetReaderValue<RoutingProcessType>(reader, "ProcessType");
