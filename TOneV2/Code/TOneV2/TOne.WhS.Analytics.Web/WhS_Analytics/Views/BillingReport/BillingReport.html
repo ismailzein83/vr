@@ -15,13 +15,7 @@
                 <span ng-show="reporttype.ParameterSettings.RequiresSupplierId">
                     <vr-whs-be-carrieraccount-selector normal-col-num="2" getsuppliers selectedvalues="suppliers" ismultipleselection on-ready="onSupplierAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
                 </span>
-                <vr-columns colnum="6" haschildcolumns>
-                    <vr-validator validate="validateBusinessCaseStatus()">
-                        <div validationcontainer>
-                            <vr-timerange on-ready="onTimeRangeDirectiveReady" type="date" width="1/3row" period="selectedPeriod" from="fromDate" to="toDate" isrequired="reporttype.ParameterSettings.RequiresToTime == true"></vr-timerange>
-                        </div>
-                    </vr-validator>
-                </vr-columns>
+                <vr-timerange on-ready="onTimeRangeDirectiveReady" customvalidation="validateBusinessCaseStatus" type="date" width="normal" period="selectedPeriod" from="fromDate" to="toDate" isrequired="reporttype.ParameterSettings.RequiresToTime == true"></vr-timerange>
                 <span ng-show="reporttype.ParameterSettings.RequiresZoneId">
                     <vr-whs-be-salezone-selector ismultipleselection normal-col-num="2" on-ready="onSaleZoneDirectiveReady">
                     </vr-whs-be-salezone-selector>

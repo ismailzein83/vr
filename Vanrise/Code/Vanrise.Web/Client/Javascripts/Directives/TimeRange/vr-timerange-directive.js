@@ -7,6 +7,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
         scope: {
             onReady: '=',
             hideperiodsection: "@",
+            customvalidation:"=",
             width: '@',
             type: '@',
             from: '=',
@@ -67,7 +68,10 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
             var date;
             $scope.scopeModel = {};
             $scope.scopeModel.validateDateTime = function () {
-                return VRValidationService.validateTimeRange(ctrl.from, ctrl.to);
+                if (ctrl.customvalidation != null && VRValidationService.validateTimeRange(ctrl.from, ctrl.to)== null)
+                    return ctrl.customvalidation();
+                else
+                  return VRValidationService.validateTimeRange(ctrl.from, ctrl.to);
             }
 
             $scope.scopeModel.onPeriodDirectiveReady = function (api)
