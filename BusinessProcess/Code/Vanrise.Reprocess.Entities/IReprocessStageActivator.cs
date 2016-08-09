@@ -36,10 +36,16 @@ namespace Vanrise.Reprocess.Entities
         DateTime To { get; }
 
         List<string> StageNames { get; }
+
+        string CurrentStageName { get; }
+
+        long ProcessInstanceId { get; }
     }
 
     public interface IReprocessStageActivatorFinalizingContext
     {
+        long ProcessInstanceId { get; }
 
+        string CurrentStageName { get; }
     }
 }

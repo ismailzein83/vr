@@ -5,6 +5,7 @@ using System.Text;
 using System.Activities;
 using Vanrise.BusinessProcess;
 using Vanrise.Reprocess.Entities;
+using Vanrise.Entities;
 
 namespace Vanrise.Reprocess.BP.Activities
 {
@@ -19,6 +20,8 @@ namespace Vanrise.Reprocess.BP.Activities
         public DateTime To { get; set; }
 
         public List<string> StageNames { get; set; }
+
+        public long CurrentProcessId { get; set; }
     }
 
     public class ExecuteStageOutput
@@ -51,7 +54,8 @@ namespace Vanrise.Reprocess.BP.Activities
                 StageManager = this.StageManager.Get(context),
                 From = this.From.Get(context),
                 To = this.To.Get(context),
-                StageNames = this.StageNames.Get(context)
+                StageNames = this.StageNames.Get(context),
+                CurrentProcessId = context.GetSharedInstanceData().InstanceInfo.ParentProcessID.HasValue ? context.GetSharedInstanceData().InstanceInfo.ParentProcessID.Value : context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID
             };
         }
 
@@ -60,7 +64,8 @@ namespace Vanrise.Reprocess.BP.Activities
             var executionContext = new ReprocessStageActivatorExecutionContext(inputArgument.Stage.StageQueue,
                 (actionToDo) => base.DoWhilePreviousRunning(previousActivityStatus, handle, actionToDo),
                 (previousActivityStatus_Internal, actionToDo) => base.DoWhilePreviousRunning(previousActivityStatus_Internal, handle, actionToDo),
-                () => base.ShouldStop(handle), inputArgument.StageManager.EnqueueBatch, inputArgument.From, inputArgument.To, inputArgument.StageNames);
+                () => base.ShouldStop(handle), inputArgument.StageManager.EnqueueBatch, inputArgument.From, inputArgument.To, inputArgument.StageNames, 
+                inputArgument.Stage.StageName, inputArgument.CurrentProcessId);
 
             inputArgument.Stage.Activator.ExecuteStage(executionContext);
             return new ExecuteStageOutput();
@@ -68,7 +73,7 @@ namespace Vanrise.Reprocess.BP.Activities
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, ExecuteStageOutput result)
         {
-
+            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, string.Format("{0} execution is done.", this.Stage.Get(context).StageName), null);
         }
 
         private class ReprocessStageActivatorExecutionContext : IReprocessStageActivatorExecutionContext
@@ -81,8 +86,12 @@ namespace Vanrise.Reprocess.BP.Activities
             DateTime _from;
             DateTime _to;
             List<string> _stageNames;
+            string _currentStageName;
+            long _processInstanceId;
 
-            public ReprocessStageActivatorExecutionContext(Queueing.BaseQueue<IReprocessBatch> inputQueue, Action<Action> doWhilePreviousRunningAction, Action<AsyncActivityStatus, Action> doWhilePreviousRunningAction2, Func<bool> shouldStopFunc, Action<string, IReprocessBatch> enqueueItem, DateTime from, DateTime to, List<string> stageNames)
+            public ReprocessStageActivatorExecutionContext(Queueing.BaseQueue<IReprocessBatch> inputQueue, Action<Action> doWhilePreviousRunningAction, Action<AsyncActivityStatus,
+                Action> doWhilePreviousRunningAction2, Func<bool> shouldStopFunc, Action<string, IReprocessBatch> enqueueItem, DateTime from, DateTime to, List<string> stageNames,
+                string currentStageName, long processInstanceId)
             {
                 _inputQueue = inputQueue;
                 _doWhilePreviousRunningAction = doWhilePreviousRunningAction;
@@ -92,6 +101,8 @@ namespace Vanrise.Reprocess.BP.Activities
                 _from = from;
                 _to = to;
                 _stageNames = stageNames;
+                _processInstanceId = processInstanceId;
+                _currentStageName = currentStageName;
             }
 
             public Queueing.BaseQueue<IReprocessBatch> InputQueue
@@ -135,6 +146,17 @@ namespace Vanrise.Reprocess.BP.Activities
             public List<string> StageNames
             {
                 get { return _stageNames; }
+            }
+
+
+            public string CurrentStageName
+            {
+                get { return _currentStageName; }
+            }
+
+            public long ProcessInstanceId
+            {
+                get { return _processInstanceId; }
             }
         }
     }

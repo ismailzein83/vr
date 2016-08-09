@@ -31,6 +31,8 @@
       <x:String>Vanrise.Reprocess.BP</x:String>
       <x:String>Vanrise.Reprocess.BP.Arguments</x:String>
       <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>Vanrise.Reprocess.Entities</x:String>
+      <x:String>Vanrise.Reprocess.BP.Activities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -63,6 +65,8 @@
       <Variable x:TypeArguments="x:Int32" Name="TotalRangesCount" />
       <Variable x:TypeArguments="x:Int32" Default="0" Name="ProcessedRangesCount" />
       <Variable x:TypeArguments="x:Int32" Default="0" Name="TotalEventCount" />
+      <Variable x:TypeArguments="vre:ReprocessDefinition" Name="ReprocessDefintion" />
+      <Variable x:TypeArguments="vrba1:StageManager" Name="stageManager" />
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_3" Message="Starting Reprocessing Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -171,7 +175,7 @@
               </InArgument>
             </If.Condition>
             <If.Then>
-              <vbw:WriteTrackingMessage>
+              <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5">
                 <vbw:WriteTrackingMessage.Message>
                   <InArgument x:TypeArguments="x:String">
                     <mca:CSharpValue x:TypeArguments="x:String">string.Format("Error while processing Range From {0}, To {1}.", item.From, item.To)</mca:CSharpValue>
@@ -182,11 +186,10 @@
                     <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Error</mca:CSharpValue>
                   </InArgument>
                 </vbw:WriteTrackingMessage.Severity>
-                <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_5</sap2010:WorkflowViewState.IdRef>
               </vbw:WriteTrackingMessage>
             </If.Then>
             <If.Else>
-              <Sequence>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
                 <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
                   <Assign.To>
                     <OutArgument x:TypeArguments="vrba:ReProcessingSubProcessOutput">
@@ -235,10 +238,54 @@
                     </InArgument>
                   </vbw:WriteTrackingMessage.Severity>
                 </vbw:WriteTrackingMessage>
-                <sap2010:WorkflowViewState.IdRef>Sequence_3</sap2010:WorkflowViewState.IdRef>
               </Sequence>
             </If.Else>
           </If>
+        </Sequence>
+      </ActivityAction>
+    </ParallelForEach>
+    <vrba1:GetReprocessDefinition sap2010:WorkflowViewState.IdRef="GetReprocessDefinition_1">
+      <vrba1:GetReprocessDefinition.ReprocessDefinition>
+        <OutArgument x:TypeArguments="vre:ReprocessDefinition">
+          <mca:CSharpReference x:TypeArguments="vre:ReprocessDefinition">ReprocessDefintion</mca:CSharpReference>
+        </OutArgument>
+      </vrba1:GetReprocessDefinition.ReprocessDefinition>
+      <vrba1:GetReprocessDefinition.ReprocessDefinitionId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReprocessDefinitionId</mca:CSharpValue>
+        </InArgument>
+      </vrba1:GetReprocessDefinition.ReprocessDefinitionId>
+    </vrba1:GetReprocessDefinition>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_6">
+      <Assign.To>
+        <OutArgument x:TypeArguments="vrba1:StageManager">
+          <mca:CSharpReference x:TypeArguments="vrba1:StageManager">stageManager</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="vrba1:StageManager">
+          <mca:CSharpValue x:TypeArguments="vrba1:StageManager">new StageManager(ReprocessDefintion)</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
+    <ParallelForEach x:TypeArguments="vrba1:ReprocessStage" DisplayName="ParallelForEach&lt;ReprocessStage&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_2">
+      <ParallelForEach.Values>
+        <InArgument x:TypeArguments="scg:IEnumerable(vrba1:ReprocessStage)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vrba1:ReprocessStage)">stageManager.GetReprocessingStages()</mca:CSharpValue>
+        </InArgument>
+      </ParallelForEach.Values>
+      <ActivityAction x:TypeArguments="vrba1:ReprocessStage">
+        <ActivityAction.Argument>
+          <DelegateInArgument x:TypeArguments="vrba1:ReprocessStage" Name="stage" />
+        </ActivityAction.Argument>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+          <vrba1:FinalizeStage PreviousActivityStatus="{x:Null}" Status="{x:Null}" sap2010:WorkflowViewState.IdRef="FinalizeStage_1">
+            <vrba1:FinalizeStage.Stage>
+              <InArgument x:TypeArguments="vrba1:ReprocessStage">
+                <mca:CSharpValue x:TypeArguments="vrba1:ReprocessStage">stage</mca:CSharpValue>
+              </InArgument>
+            </vrba1:FinalizeStage.Stage>
+          </vrba1:FinalizeStage>
         </Sequence>
       </ActivityAction>
     </ParallelForEach>
@@ -249,7 +296,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sMDwD/QEOAgEBQDNANgIBA0EzQTYCAQJDBUkgAwHvAUoFXyQDAdYBYAVrDgMByQFsBfQBFwIBDPUBBfsBIAIBBEYLRoUBAwHxAUNgQ4ABAwHwAVwLXFcDAekBTQtNXQMB4wFXC1dZAwHdAVILUnIDAdcBaAtoXAMB0AFjC2NgAwHKAW8Lb3EDAcMBdgnyARQCAQ34AQv4AYUBAgEG9QFg9QGAAQIBBXwLhwEmAwGuAYgBC5oBHAMBmAGbAQumARQDAYMBpwEL8QEQAgEOhAERhAGLAQMBuQF/EX+RAQMBrwGLARGSASADAaQBlwERlwGEAQMBmgGIAXyIAYIBAwGZAaMBEaMBZAMBjgGeARGeAWoDAYQBqgERqgGxAQIBD64BD7oBKgIBbr0BD+8BGgIBGbYBFbYBiQECAXmxARWxAaYBAgFvvgERyQEaAgFZygER1QEaAgFE1gER4QEaAgEv4gER7QEsAgEaxgEXxgGwAQIBZMEBF8EBkgECAVrSARfSAXsCAU/NARfNAWsCAUXeARfeAXUCATrZARfZAWsCATDqARfqAZEBAgEl5QEX5QGuAgIBGw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sOz4DrAIOAgEBQjNCNgIBA0MzQzYCAQJHBU0gAwHXAk4FYyQDAbYCZAVvDgMBpQJwBfYBFwIBRPcBBYICJAIBM4MCBY4CDgIBIo8CBaMCFwIBDqQCBaoCIAIBBEoLSoUBAwHZAkdgR4ABAwHYAmALYFcDAc8CUQtRXQMBxwJbC1tZAwG/AlYLVnIDAbcCbAtsXAMBrgJnC2dgAwGmAnMLc3EDAZ0Cegn0ARQCAUX/AQv/AWMCATz6AQv6AXICATSLAguLAncCASuGAguGAmcCASOSAguSAooBAgEamQIJoQIUAgEPpwILpwKFAQIBBqQCYKQCgAECAQWAAQuLASYDAYQCjAELngEcAwHqAZ8BC6oBFAMB0QGrAQvzARACAUaaAgugAiECARCIARGIAYsBAwGRAoMBEYMBkQEDAYUCjwERlgEgAwH4AZsBEZsBhAEDAewBjAF8jAGCAQMB6wGnARGnAWQDAd4BogERogFqAwHSAa4BEa4BsQECAUeyAQ+9ASoDAbgBwAEP8QEaAgFTnQIRnQJgAgERugEVugGJAQMBxQG1ARW1AaYBAwG5AcEBEcwBGgMBnwHNARHYARoDAYYB2QER5AEaAgFt5QER8AEsAgFUyQEXyQGwAQMBrAHEARfEAZIBAwGgAdUBF9UBewMBkwHQARfQAWsDAYcB4QEX4QF1AgF63AEX3AFrAgFu7QEX7QGRAQIBYegBF+gBrgICAVU=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -280,15 +327,26 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="541,1102" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="541,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="563,1514">
+      <sap2010:ViewStateData Id="GetReprocessDefinition_1" sap:VirtualizedContainerService.HintSize="541,22" />
+      <sap2010:ViewStateData Id="Assign_6" sap:VirtualizedContainerService.HintSize="541,62" />
+      <sap2010:ViewStateData Id="FinalizeStage_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="222,146">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Reprocess.BP.ReProcessingProcess_1" sap:VirtualizedContainerService.HintSize="603,1594" />
+      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="541,296" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="541,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="563,2014">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Vanrise.Reprocess.BP.ReProcessingProcess_1" sap:VirtualizedContainerService.HintSize="603,2094" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
