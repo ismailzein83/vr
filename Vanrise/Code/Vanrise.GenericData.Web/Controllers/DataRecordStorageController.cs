@@ -52,5 +52,11 @@ namespace Vanrise.GenericData.Web.Controllers
             return _manager.UpdateDataRecordStorage(dataRecordStorage);
         }
 
+        [HttpGet]
+        [Route("CheckRecordStoragesAccess")]
+        public List<int> CheckRecordStoragesAccess(List<int> dataRecordStorages)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
