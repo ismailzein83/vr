@@ -46,7 +46,7 @@
 
                 function getData() {
                     var data = {
-                        $type: "TOne.WhS.RouteSync.TelesRadius.RadiusDataManagerConfig, TOne.WhS.RouteSync.TelesRadius",
+                        $type: "TOne.WhS.RouteSync.TelesRadius.SQL.RadiusSQLDataManager, TOne.WhS.RouteSync.TelesRadius.SQL",
                         ConnectionString: $scope.scopeModel.connectionString
                     }
                     return data;

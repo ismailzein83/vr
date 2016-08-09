@@ -61,7 +61,7 @@
     <Compile Include="Data\IRadiusDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RadiusConvertedRoute.cs" />
-    <Compile Include="RadiusDataManagerSetting.cs" />
+    <Compile Include="RadiusDataManagerConfig.cs" />
     <Compile Include="RadiusDataManagersSettingManager.cs" />
     <Compile Include="TelesRadiusSWSync.cs" />
   </ItemGroup>

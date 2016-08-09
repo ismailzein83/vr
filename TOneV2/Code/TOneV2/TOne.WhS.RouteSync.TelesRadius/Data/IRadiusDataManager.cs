@@ -14,6 +14,5 @@ namespace TOne.WhS.RouteSync.TelesRadius
         void PrepareTables();
         void InsertRoutes(List<ConvertedRoute> radiusRoutes);
         void SwapTables();
-        string ConnectionString { get; set; }
     }
 }

@@ -20,7 +20,7 @@
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: '/Client/Modules/Whs_RouteSync/Directives/RadiusDataManagers/Templates/TadiusDataManagersTemplate.html'
+            templateUrl: '/Client/Modules/Whs_RouteSync/Directives/RadiusDataManagers/Templates/RadiusDataManagersTemplate.html'
         };
 
         function RadiusDataManagersSettings($scope, ctrl, $attrs) {

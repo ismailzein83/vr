@@ -150,7 +150,7 @@
     <Content Include="WhS_RouteSync\Directives\ProcessInput\Normal\whs-routesync-process-manual.js" />
     <Content Include="WhS_RouteSync\Directives\ProcessInput\Scheduled\Templates\RouteSyncProcessScheduledTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\ProcessInput\Scheduled\whs-routesync-process-scheduled.js" />
-    <Content Include="WhS_RouteSync\Directives\RadiusDataManagers\Templates\TadiusDataManagersTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\RadiusDataManagers\Templates\RadiusDataManagersTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\RadiusDataManagers\whs-routesync-radiusdatamanagers-settings.js" />
     <Content Include="WhS_RouteSync\Directives\RouteSyncDefinition\whs-routesync-routesyncdefinition-selector.js" />
     <Content Include="WhS_RouteSync\Directives\SwitchRouteSynchronizer\Templates\SwitchRouteSynchronizerTemplate.html" />

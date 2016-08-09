@@ -9,6 +9,7 @@ using TOne.BusinessEntity.Entities;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.TelesRadius;
+using TOne.WhS.RouteSync.TelesRadius.SQL;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Business.Extensions;
 using TOne.WhS.Routing.Entities;
@@ -27,8 +28,15 @@ namespace TestRuntime
         public void Execute()
         {
 
+            RadiusDataManagerConfig settings = new RadiusDataManagerConfig
+            {
+                RadiusDataManager = new RadiusSQLDataManager()
+            };
+
+            RadiusSQLDataManager dataManager = new RadiusSQLDataManager();
+
             RouteSyncTechnicalSettings sett = new RouteSyncTechnicalSettings() { SwitchInfoGetter = new RouteSyncSwitchGetter() };
-            var ser = Serializer.Serialize(sett);
+            var ser = Serializer.Serialize(settings);
 
             System.Diagnostics.Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
             Console.WriteLine("Hello from Rabih!");
