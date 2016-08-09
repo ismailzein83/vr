@@ -9,7 +9,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 
-	SELECT [ID], [ProcessInstanceId], [StageName], [BatchStart], [Data]
+	SELECT [ProcessInstanceId], [StageName], [BatchStart], [Data]
     from reprocess.StagingSummaryRecord
     where ProcessInstanceId = @ProcessInstanceId and StageName = @StageName
     order by BatchStart
