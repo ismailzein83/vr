@@ -1277,3 +1277,24 @@ when not matched by target then
 	insert([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 	values(s.[Id],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
 set identity_insert [common].[setting] off;
+
+--[reprocess].[ReprocessDefinition]---------------------- 1 to 100----------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [reprocess].[ReprocessDefinition] on;
+;with cte_data([ID],[Name],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'CDR Reprocessing','{"$type":"Vanrise.Reprocess.Entities.ReprocessDefinitionSettings, Vanrise.Reprocess.Entities","SourceRecordStorageId":44,"ExecutionFlowDefinitionId":-100,"StageNames":["CDR Billing Stage","Main CDR Storage Stage","Invalid CDR Storage Stage","Failed CDR Storage Stage","Billing Stats Daily Generation Stage","Traffic Stats XMin Generation Stage","Traffic Stats Daily Generation Stage"],"InitiationStageNames":["CDR Billing Stage"]}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Settings]))
+merge	[reprocess].[ReprocessDefinition] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Settings])
+	values(s.[ID],s.[Name],s.[Settings]);
+set identity_insert [reprocess].[ReprocessDefinition] off;

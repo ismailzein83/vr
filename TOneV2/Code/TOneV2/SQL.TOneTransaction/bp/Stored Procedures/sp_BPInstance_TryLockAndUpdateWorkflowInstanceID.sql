@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [bp].[sp_BPInstance_TryLockAndUpdateWorkflowInstanceID]	
+﻿CREATE PROCEDURE [bp].[sp_BPInstance_TryLockAndUpdateWorkflowInstanceID]	
 	@ProcessInstanceID bigint,
 	@WorkflowInstanceID uniqueidentifier,
 	@CurrentRuntimeProcessID int,
@@ -17,6 +16,7 @@ BEGIN
 	SELECT Convert(int, ParsedString) FROM bp.[ParseStringList](@RunningProcessIDs)
 	
 	DECLARE @IsLocked bit
+	SET @IsLocked = 0
     UPDATE bp.BPInstance
     SET	LockedByProcessID = @CurrentRuntimeProcessID,
 		@IsLocked = 1,
