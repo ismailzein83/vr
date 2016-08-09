@@ -4,7 +4,6 @@ namespace Vanrise.GenericData.Entities
 {
     public class StagingSummaryRecord
     {
-        public long StagingSummaryRecordId { get; set; }
         public long ProcessInstanceId { get; set; }
         public string StageName { get; set; }
         public DateTime BatchStart { get; set; }

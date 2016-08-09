@@ -78,7 +78,6 @@ namespace Vanrise.GenericData.Data.SQL
         {
             return new StagingSummaryRecord()
             {
-                StagingSummaryRecordId = GetReaderValue<long>(reader, "Id"),
                 ProcessInstanceId = GetReaderValue<long>(reader, "ProcessInstanceId"),
                 BatchStart = GetReaderValue<DateTime>(reader, "BatchStart"),
                 Data = reader["Data"] != DBNull.Value ? Convert.FromBase64String(reader["Data"] as string) : null,
