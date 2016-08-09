@@ -44,6 +44,7 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageFixed', ['UtilsService',
                         percentage: ctrl.percentageValue
                     });
                     ctrl.percentageValue = undefined;
+                    ctrl.disableButton = true;
                 };
                 
                 ctrl.onvaluechanged = function (value) {
@@ -54,8 +55,9 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageFixed', ['UtilsService',
                     
                     if (value > 100 - totalPercentage)
                         ctrl.disableButton = true;
-                    else
+                    else {
                         ctrl.disableButton = (value == undefined);
+                    }
                 }
 
                 ctrl.removeFilter = function (dataItem) {

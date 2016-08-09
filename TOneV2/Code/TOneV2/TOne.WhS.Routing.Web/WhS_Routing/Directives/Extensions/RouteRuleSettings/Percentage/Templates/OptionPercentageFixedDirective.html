@@ -1,6 +1,6 @@
 ﻿<vr-row removeline>
     <vr-columns width="1/4row">
-        <vr-textbox label="Percentage Value" value="ctrl.percentageValue" type="number" onvaluechanged="ctrl.onvaluechanged" maxvalue="100"></vr-textbox>
+        <vr-textbox label="Percentage Value" value="ctrl.percentageValue" type="number" onvaluechanged="ctrl.onvaluechanged" minvalue="0" maxvalue="100"></vr-textbox>
     </vr-columns>
     <vr-columns withemptyline width="1/4row">
         <vr-button type="Add" data-onclick="ctrl.addPercentageOption" vr-disabled="ctrl.disableButton" standalone></vr-button>
