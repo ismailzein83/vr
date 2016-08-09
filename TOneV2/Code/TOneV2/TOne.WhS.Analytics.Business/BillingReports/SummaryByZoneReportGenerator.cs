@@ -148,7 +148,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     else
                         analyticRecord.MeasureValues.TryGetValue("SaleNet", out net);
                     summaryByZone.Net = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
-                    summaryByZone.NetFormatted = ReportHelpers.FormatNormalNumberDigit(summaryByZone.DurationInSeconds);
+                    summaryByZone.NetFormatted = ReportHelpers.FormatNormalNumberDigit(summaryByZone.Net);
 
                     MeasureValue extraChargeValue;
                     if (parameters.IsCost)
