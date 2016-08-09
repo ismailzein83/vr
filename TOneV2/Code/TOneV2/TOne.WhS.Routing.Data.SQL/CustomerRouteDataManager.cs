@@ -69,7 +69,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
                 ExecuteNonQueryText(query_GetFilteredCustomerRoutes.ToString(), (cmd) =>
                 {
-                    cmd.Parameters.Add(new SqlParameter("@Code", input.Query.Code != null ? input.Query.Code : (object)DBNull.Value));
+                    cmd.Parameters.Add(new SqlParameter("@Code", !string.IsNullOrEmpty(input.Query.Code) ? string.Format("{0}%", input.Query.Code) : (object)DBNull.Value));
                 });
             };
 
@@ -209,7 +209,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                 ,[ExecutedRuleId]
                                                                 ,[RouteOptions]
                                                             INTO #TEMPTABLE# FROM [dbo].[CustomerRoute] with(nolock)
-                                                            Where (@Code is Null or Code = @Code)
+                                                            Where (@Code is Null or Code like @Code)
                                                                 #CUSTOMERIDS#
                                                             END");
 
