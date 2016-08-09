@@ -182,7 +182,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
             }
         }
 
-        private void SaveSummaryBatchToDB(IEnumerable<SummaryItemInProcess<Q>> summaryBatch)
+        public void SaveSummaryBatchToDB(IEnumerable<SummaryItemInProcess<Q>> summaryBatch)
         {           
             List<Q> itemsToAdd = new List<Q>();
             List<Q> itemsToUpdate = new List<Q>();

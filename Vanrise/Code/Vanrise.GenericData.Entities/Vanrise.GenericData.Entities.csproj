@@ -171,6 +171,7 @@
     <Compile Include="DataRecordVanriseType.cs" />
     <Compile Include="RecordFilter\RecordFilterFieldInfo.cs" />
     <Compile Include="RecordFilter\RecordFilterGroupExpressionInput.cs" />
+    <Compile Include="StagingSummary\StagingSummaryRecord.cs" />
     <Compile Include="SummaryTransformation\SummaryTransformationDefinitionQuery.cs" />
     <Compile Include="SummaryTransformation\SummaryTransformationDefinitionInfoFilter.cs" />
     <Compile Include="SummaryTransformation\SummaryTransformationDefinitionInfo.cs" />

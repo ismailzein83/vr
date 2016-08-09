@@ -374,7 +374,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             string tableName = GetTableName();
             Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
 
-            string query = string.Format(@"delete from {0}
+            string query = string.Format(@"delete {0} from {0} WITH (NOLOCK)
                                            where ({1} >= @FromTime) 
                                            and ({1} < @ToTime)", tableName, dateTimeColumn);
 
@@ -383,6 +383,26 @@ namespace Vanrise.GenericData.SQLDataStorage
             {
                 cmd.Parameters.Add(new SqlParameter("@FromTime", from));
                 cmd.Parameters.Add(new SqlParameter("@ToTime", to));
+                foreach (var prm in parameterValues)
+                {
+                    cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
+                }
+            });
+        }
+
+        public void DeleteRecords(DateTime dateTime)
+        {
+            string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
+            string tableName = GetTableName();
+            Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
+
+            string query = string.Format(@"delete {0} from {0} WITH (NOLOCK)
+                                           where ({1} = @dateTime)", tableName, dateTimeColumn);
+
+
+            ExecuteNonQueryText(query, (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@dateTime", dateTime));
                 foreach (var prm in parameterValues)
                 {
                     cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));

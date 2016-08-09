@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.BusinessProcess;
+using Vanrise.Common.Business.SummaryTransformation;
+using Vanrise.Entities.SummaryTransformation;
 using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Data;
+using Vanrise.GenericData.Data.SQL;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.QueueActivators
@@ -21,7 +27,7 @@ namespace Vanrise.GenericData.QueueActivators
             if (queueItemType == null)
                 throw new Exception("current stage QueueItemType is not of type DataRecordBatchQueueItemType");
             var recordTypeId = queueItemType.DataRecordTypeId;
-            
+
 
             var batchRecords = dataRecordBatch.GetBatchRecords(recordTypeId);
 
@@ -35,7 +41,7 @@ namespace Vanrise.GenericData.QueueActivators
             var summaryBatches = transformationManager.ConvertRawItemsToBatches(batchRecords, () => new GenericSummaryRecordBatch());
             if (summaryBatches != null)
             {
-                foreach(var b in summaryBatches)
+                foreach (var b in summaryBatches)
                 {
                     b.SummaryTransformationDefinitionId = this.SummaryTransformationDefinitionId;
                     b.DescriptionTemplate = queueItemType.BatchDescription;
@@ -65,7 +71,7 @@ namespace Vanrise.GenericData.QueueActivators
                             foreach (var summaryBatch in summaryRecordBatches)
                             {
                                 Dictionary<string, Vanrise.Common.Business.SummaryTransformation.SummaryItemInProcess<GenericSummaryItem>> matchBatch;
-                                if (allSummaryBatches.TryGetValue(summaryBatch.BatchStart, out matchBatch))
+                                if (!allSummaryBatches.TryGetValue(summaryBatch.BatchStart, out matchBatch))
                                 {
                                     matchBatch = new Dictionary<string, Common.Business.SummaryTransformation.SummaryItemInProcess<GenericSummaryItem>>();
                                     allSummaryBatches.Add(summaryBatch.BatchStart, matchBatch);
@@ -75,7 +81,12 @@ namespace Vanrise.GenericData.QueueActivators
                         }
                     });
                 } while (!context.ShouldStop() && hasItem);
+
             });
+
+            IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
+
+            var dbApplyStream = dataManager.InitialiazeStreamForDBApply();
 
             //Store Summary Batches for finalization step
             foreach (var summaryBatchEntry in allSummaryBatches)
@@ -87,12 +98,131 @@ namespace Vanrise.GenericData.QueueActivators
                     SummaryTransformationDefinitionId = this.SummaryTransformationDefinitionId
                 };
                 byte[] serializedBatch = genericSummaryBatch.Serialize();
+
+                StagingSummaryRecord obj = new StagingSummaryRecord()
+                {
+                    ProcessInstanceId = context.ProcessInstanceId,
+                    Data = serializedBatch,
+                    BatchStart = summaryBatchEntry.Key,
+                    StageName = context.CurrentStageName,
+                };
+
+
+                dataManager.WriteRecordToStream(obj, dbApplyStream);
             }
+            var streamReadyToApply = dataManager.FinishDBApplyStream(dbApplyStream);
+            dataManager.ApplyStreamToDB(streamReadyToApply);
         }
 
         void Reprocess.Entities.IReprocessStageActivator.FinalizeStage(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
         {
-            throw new NotImplementedException();
+            DataRecordStorageManager _dataRecordStorageManager = new DataRecordStorageManager();
+            var transformationManager = new GenericSummaryTransformationManager() { SummaryTransformationDefinitionId = this.SummaryTransformationDefinitionId };
+
+            var recordStorageDataManager = _dataRecordStorageManager.GetStorageDataManager(transformationManager.SummaryTransformationDefinition.DataRecordStorageId);
+            if (recordStorageDataManager == null)
+                throw new NullReferenceException(String.Format("recordStorageDataManager. ID '{0}'", transformationManager.SummaryTransformationDefinition.DataRecordStorageId));
+
+            Queueing.MemoryQueue<Object> queueLoadedBatches = new Queueing.MemoryQueue<object>();
+            AsyncActivityStatus loadBatchStatus = new AsyncActivityStatus();
+            StartLoadingBatches(context, recordStorageDataManager, queueLoadedBatches, loadBatchStatus);
+
+            Queueing.MemoryQueue<Object> queuePreparedBatches = new Queueing.MemoryQueue<object>();
+            AsyncActivityStatus prepareBatchStatus = new AsyncActivityStatus();
+            StartPreparingBatches(context, recordStorageDataManager, queueLoadedBatches, loadBatchStatus, queuePreparedBatches, prepareBatchStatus);
+
+            StartInsertingBatches(transformationManager, recordStorageDataManager, queuePreparedBatches, prepareBatchStatus);
+        }
+
+        private static void StartLoadingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, IDataRecordDataManager recordStorageDataManager, Queueing.MemoryQueue<Object> queueLoadedBatches, AsyncActivityStatus loadBatchStatus)
+        {
+            Task loadDataTask = new Task(() =>
+            {
+                IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
+                try
+                {
+                    dataManager.GetStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, (stagingSummaryRecord) =>
+                    {
+                        GenericSummaryRecordBatch genericSummaryRecordBatch = new GenericSummaryRecordBatch();
+                        genericSummaryRecordBatch = genericSummaryRecordBatch.Deserialize<GenericSummaryRecordBatch>(stagingSummaryRecord.Data);
+                        queueLoadedBatches.Enqueue(genericSummaryRecordBatch);
+                    });
+                }
+                finally
+                {
+                    dataManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName);
+                    loadBatchStatus.IsComplete = true;
+                }
+            });
+            loadDataTask.Start();
+        }
+
+        private static void StartPreparingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, IDataRecordDataManager recordStorageDataManager, Queueing.MemoryQueue<Object> queueLoadedBatches, AsyncActivityStatus loadBatchStatus, Queueing.MemoryQueue<Object> queuePreparedBatches, AsyncActivityStatus prepareBatchStatus)
+        {
+            List<GenericSummaryRecordBatch> batches = null;
+            DateTime batchStart = default(DateTime);
+
+            Task prepareDataTask = new Task(() =>
+            {
+                try
+                {
+                    bool hasItem = false;
+                    do
+                    {
+                        hasItem = queueLoadedBatches.TryDequeue((item) =>
+                        {
+                            GenericSummaryRecordBatch genericSummaryRecordBatch = item as GenericSummaryRecordBatch;
+                            if (genericSummaryRecordBatch == null)
+                                throw new Exception(String.Format("item should be of type 'GenericSummaryRecordBatch' and not of type '{0}'", item.GetType()));
+
+                            if (genericSummaryRecordBatch.BatchStart != batchStart)
+                            {
+                                if (batches != null)
+                                {
+                                    queuePreparedBatches.Enqueue(batches);
+                                }
+                                batches = new List<GenericSummaryRecordBatch>();
+                            }
+                            batches.Add(genericSummaryRecordBatch);
+                            batchStart = genericSummaryRecordBatch.BatchStart;
+                        });
+                    } while (!loadBatchStatus.IsComplete || hasItem);
+                }
+                finally
+                {
+                    if (batches != null && batches.Count > 0)
+                        queuePreparedBatches.Enqueue(batches);
+
+                    prepareBatchStatus.IsComplete = true;
+                }
+            });
+            prepareDataTask.Start();
+        }
+
+        private static void StartInsertingBatches(GenericSummaryTransformationManager transformationManager, IDataRecordDataManager recordStorageDataManager, Queueing.MemoryQueue<Object> queuePreparedBatches, AsyncActivityStatus prepareBatchStatus)
+        {
+            IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
+
+            bool hasItem = false;
+            do
+            {
+                hasItem = queuePreparedBatches.TryDequeue((item) =>
+                {
+                    List<GenericSummaryRecordBatch> genericSummaryRecordBatchList = item as List<GenericSummaryRecordBatch>;
+                    if (genericSummaryRecordBatchList == null)
+                        throw new Exception(String.Format("item should be of type 'List<GenericSummaryRecordBatch>' and not of type '{0}'", item.GetType()));
+
+                    DateTime batchStart = genericSummaryRecordBatchList[0].BatchStart;
+                    recordStorageDataManager.DeleteRecords(batchStart);
+
+                    Dictionary<string, SummaryItemInProcess<GenericSummaryItem>> _existingSummaryBatches = new Dictionary<string, SummaryItemInProcess<GenericSummaryItem>>();
+
+                    foreach (GenericSummaryRecordBatch genericSummaryRecordBatch in genericSummaryRecordBatchList)
+                        transformationManager.UpdateExistingFromNew(_existingSummaryBatches, genericSummaryRecordBatch);
+
+                    transformationManager.SaveSummaryBatchToDB(_existingSummaryBatches.Values);
+                });
+            } while (!prepareBatchStatus.IsComplete || hasItem);
         }
 
         List<string> Reprocess.Entities.IReprocessStageActivator.GetOutputStages(List<string> stageNames)

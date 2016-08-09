@@ -63,6 +63,7 @@
     <Compile Include="DataStoreConfigDataManager.cs" />
     <Compile Include="GenericRuleTypeConfigDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StagingSummaryRecordDataManager.cs" />
     <Compile Include="SummaryTransformationDefinitionDataManager.cs" />
   </ItemGroup>
   <ItemGroup>

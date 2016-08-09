@@ -15,6 +15,8 @@ namespace Vanrise.GenericData.Entities
         void GetDataRecords(DateTime from, DateTime to, Action<dynamic> onItemReady);
 
         void DeleteRecords(DateTime from, DateTime to);
+
+        void DeleteRecords(DateTime dateTime);
     }
 
     public interface ISummaryRecordDataManager

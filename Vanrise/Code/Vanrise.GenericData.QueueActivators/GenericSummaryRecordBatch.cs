@@ -14,7 +14,7 @@ namespace Vanrise.GenericData.QueueActivators
     {
         static GenericSummaryRecordBatch()
         {
-            ProtoBufSerializer.AddSerializableType(typeof(GenericSummaryRecordBatch), "SummaryTransformationDefinitionId", "SerializedRecordsList");
+            ProtoBufSerializer.AddSerializableType(typeof(GenericSummaryRecordBatch), "SummaryTransformationDefinitionId", "SerializedRecordsList", "BatchStart");
         }
         
         public int SummaryTransformationDefinitionId { get; set; }

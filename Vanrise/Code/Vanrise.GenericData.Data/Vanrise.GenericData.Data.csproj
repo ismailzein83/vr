@@ -66,10 +66,15 @@
     <Compile Include="IGenericRuleDefinitionDataManager.cs" />
     <Compile Include="IDataStoreConfigDataManager.cs" />
     <Compile Include="IGenericRuleTypeConfigDataManager.cs" />
+    <Compile Include="IStagingSummaryRecordDataManager.cs" />
     <Compile Include="ISummaryTransformationDefinitionDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Data\Vanrise.Data.csproj">
+      <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
+      <Name>Vanrise.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>
