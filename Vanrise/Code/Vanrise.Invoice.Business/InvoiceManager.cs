@@ -9,7 +9,7 @@ namespace Vanrise.Invoice.Business
 {
     public class InvoiceManager
     {
-        public void CreateInvoice(CreateInvoiceInput createInvoiceInput)
+        public void GenerateInvoice(GenerateInvoiceInput createInvoiceInput)
         {
 
         }

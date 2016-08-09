@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Invoice.Entities
 {
     public abstract class InvoiceTypeSettings
     {
-        public abstract void CreateInvoice(IInvoiceCreationContext context);
+        public virtual InvoiceTypeUISettings UISettings { get; set; }
+
+        public virtual List<DataRecordField> InvoiceFields { get; set; }
+
+        public abstract void GenerateInvoice(IInvoiceGenerationContext context);
     }
 
-    public interface IInvoiceCreationContext
+    public interface IInvoiceGenerationContext
     {
         string PartnerId { get; }
 
@@ -19,8 +24,8 @@ namespace Vanrise.Invoice.Entities
 
         DateTime ToDate { get; }
 
-        Invoice Invoice { set; }
+        dynamic CustomSectionPayload { get; }
 
-        List<InvoiceItem> InvoiceItems { set; }
+        GeneratedInvoice Invoice { set; }
     }
 }

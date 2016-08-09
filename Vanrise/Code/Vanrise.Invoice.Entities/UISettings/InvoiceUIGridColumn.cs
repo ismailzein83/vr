@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Invoice.Entities
 {
-    public class CreateInvoiceInput
+    public class InvoiceUIGridColumn
     {
-        string PartnerId { get; set; }
+        public string Header { get; set; }
 
-        DateTime FromDate { get; set; }
+        public InvoiceField Field { get; set; }
 
-        DateTime ToDate { get; set; }
+        public string CustomFieldName { get; set; }
     }
 }

@@ -6,14 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
 
-namespace Vanrise.Notification.Data
+namespace Vanrise.Invoice.Data
 {
-    public static class NotificationDataManagerFactory
+    public static class InvoiceDataManagerFactory
     {
         static ObjectFactory s_objectFactory;
-        static NotificationDataManagerFactory()
+        static InvoiceDataManagerFactory()
         {
-            s_objectFactory = new ObjectFactory(Assembly.Load("Vanrise.Notification.Data.SQL"));
+            s_objectFactory = new ObjectFactory(Assembly.Load("Vanrise.Invoice.Data.SQL"));
         }
 
         public static T GetDataManager<T>() where T : class, IDataManager
