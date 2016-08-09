@@ -171,9 +171,6 @@
     <Reference Include="Vanrise.BusinessProcess.Business">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Client">
-      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Client.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Data">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.dll</HintPath>
     </Reference>
@@ -275,15 +272,6 @@
     <Reference Include="Vanrise.GenericData.Web">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Web.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Integration.Adapters.BaseDB">
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.BaseDB.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Integration.Adapters.BaseFTP">
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.BaseFTP.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Integration.Adapters.BaseTP">
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.BaseTP.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments.dll</HintPath>
     </Reference>
@@ -320,14 +308,26 @@
     <Reference Include="Vanrise.Integration.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Integration.Extensions">
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Extensions.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Integration.Mappers">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Mappers.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Integration.Web">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.Data.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.Web">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Web.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
@@ -726,6 +726,18 @@
     <ProjectReference Include="..\TOne.WhS.DBSync.Business\TOne.WhS.DBSync.Business.csproj">
       <Project>{66a454c0-d24c-4378-942f-4b7bc0f1e05a}</Project>
       <Name>TOne.WhS.DBSync.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Invoice.Business\TOne.WhS.Invoice.Business.csproj">
+      <Project>{3751a44f-a40a-4e0e-a86e-5665664ce616}</Project>
+      <Name>TOne.WhS.Invoice.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Invoice.Entities\TOne.WhS.Invoice.Entities.csproj">
+      <Project>{a3474129-600a-44fa-a71c-bc746f104a39}</Project>
+      <Name>TOne.WhS.Invoice.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Invoice.Web\TOne.WhS.Invoice.Web.csproj">
+      <Project>{b4780a4b-c94d-4c68-91d3-6c27e9ca6804}</Project>
+      <Name>TOne.WhS.Invoice.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.BP.Arguments\TOne.WhS.RouteSync.BP.Arguments.csproj">
       <Project>{c5c38b71-3244-4bc0-bdbf-31b7a5e71c74}</Project>
