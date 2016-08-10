@@ -2,17 +2,19 @@
 
     "use strict";
 
-    MailMessageTemplateEditorController.$inject = ['$scope', 'VRCommon_VRMailMessageTemplateAPIService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService'];
+    MailMessageTemplateEditorController.$inject = ['$scope', 'VRCommon_VRMailMessageTemplateAPIService', 'VRCommon_VRMailMessageTypeAPIService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService'];
 
-    function MailMessageTemplateEditorController($scope, VRCommon_VRMailMessageTemplateAPIService, VRNotificationService, UtilsService, VRUIUtilsService, VRNavigationService) {
+    function MailMessageTemplateEditorController($scope, VRCommon_VRMailMessageTemplateAPIService, VRCommon_VRMailMessageTypeAPIService, VRNotificationService, UtilsService, VRUIUtilsService, VRNavigationService) {
 
         var isEditMode;
 
         var mailMessageTemplateId;
         var mailMessageTemplateEntity;
+        var mailMessageTypeId;
 
         var mailMessageTypeSelectorAPI;
         var mailMessageTypeSelectoReadyDeferred = UtilsService.createPromiseDeferred();
+        var onMailMessageTypeSelectionChangedDeferred;
 
         var gridAPI;
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
@@ -35,23 +37,29 @@
             $scope.scopeModel = {};
             $scope.scopeModel.variables = [];
             $scope.scopeModel.menuActions = [];
+            $scope.scopeModel.isGridLoading;
 
             $scope.scopeModel.onMailMessageTypeSelectorReady = function (api) {
                 mailMessageTypeSelectorAPI = api;
                 mailMessageTypeSelectoReadyDeferred.resolve();
             }
+            $scope.scopeModel.onMailMessageTypeSelectionChanged = function () {
+                mailMessageTypeId = mailMessageTypeSelectorAPI.getSelectedIds();
+                if (mailMessageTypeId != undefined) {
+
+                    if (onMailMessageTypeSelectionChangedDeferred != undefined) {
+                        onMailMessageTypeSelectionChangedDeferred.resolve();
+                    }
+                    else {
+                        $scope.scopeModel.isGridLoading = true;
+                        getMailMessageType(undefined);
+                    }
+                }
+            }
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 gridReadyDeferred.resolve();
-            };
-
-            $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return VRCommon_StyleDefinitionAPIService.GetFilteredStyleDefinitions(dataRetrievalInput).then(function (response) {
-                    onResponseReady(response);
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                });
             };
 
             $scope.scopeModel.save = function () {
@@ -88,6 +96,24 @@
                 mailMessageTemplateEntity = response;
             });
         }
+        function getMailMessageType(loadPromiseDeferred) {
+            return VRCommon_VRMailMessageTypeAPIService.GetMailMessageType(mailMessageTypeId).then(function (response) {
+                var mailMessageTypeEntity = response;
+                $scope.scopeModel.variables = [];
+                if (mailMessageTypeEntity.Settings != undefined) {
+                    var mailMessageTypeVariable;
+                    var mailMessageTypeVariables = mailMessageTypeEntity.Settings.Variables;
+                    for (var i = 0 ; i < mailMessageTypeVariables.length; i++) {
+                        mailMessageTypeVariable = mailMessageTypeVariables[i]
+                        extendVariableObject(mailMessageTypeVariable);
+                        $scope.scopeModel.variables.push(mailMessageTypeVariable);
+                    }
+                }
+                $scope.scopeModel.isGridLoading = false;
+                if (loadPromiseDeferred != undefined)
+                    loadPromiseDeferred.resolve();
+            });
+        }
 
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadMailMessageTypeSelector, loadGrid]).catch(function (error) {
@@ -112,9 +138,10 @@
                 $scope.scopeModel.name = mailMessageTemplateEntity.Name;
 
                 if (mailMessageTemplateEntity.Settings != undefined) {
-                    $scope.scopeModel.to = mailMessageTemplateEntity.Settings.To;
-                    $scope.scopeModel.cc = mailMessageTemplateEntity.Settings.CC;
-                    $scope.scopeModel.subject = mailMessageTemplateEntity.Settings.Subject;
+                    $scope.scopeModel.to = mailMessageTemplateEntity.Settings.To.ExpressionString;
+                    $scope.scopeModel.cc = mailMessageTemplateEntity.Settings.CC.ExpressionString;
+                    $scope.scopeModel.subject = mailMessageTemplateEntity.Settings.Subject.ExpressionString;
+                    $scope.scopeModel.body = mailMessageTemplateEntity.Settings.Body.ExpressionString;
                 }
             }
             function loadMailMessageTypeSelector() {
@@ -131,16 +158,17 @@
                 return mailMessageTypeSelectorLoadDeferred.promise;
             }
             function loadGrid() {
+                onMailMessageTypeSelectionChangedDeferred = UtilsService.createPromiseDeferred();
                 var gridLoadDeferred = UtilsService.createPromiseDeferred();
-                gridReadyDeferred.promise.then(function () {
-                    var mailMessageTypeSelectorPayload = null;
-                    if (isEditMode) {
-                        mailMessageTypeSelectorPayload = {
-                            selectedIds: mailMessageTemplateEntity.VRMailMessageTypeId
-                        };
-                    }
-                    VRUIUtilsService.callDirectiveLoad(mailMessageTypeSelectorAPI, mailMessageTypeSelectorPayload, gridLoadDeferred);
+
+                onMailMessageTypeSelectionChangedDeferred.promise.then(function () {
+                    gridReadyDeferred.promise.then(function () {
+                        onMailMessageTypeSelectionChangedDeferred = undefined;
+                        if (mailMessageTypeId != undefined)
+                            getMailMessageType(gridLoadDeferred);
+                    });
                 });
+
                 return gridLoadDeferred.promise;
             }
         }
@@ -175,26 +203,23 @@
             });
         }
 
-        function buildContext() {
+        function extendVariableObject(mailMessageTypeVariable) {
 
-            var context = {
-                getObjectVariables: function () { return objectDirectiveAPI.getData(); }
-            }
-            return context;
+            mailMessageTypeVariable.ValueExpression = "@Model.Variables[\"" + mailMessageTypeVariable.VariableName + "\"]";
         }
-        function buildMailMessageTemplateObjFromScope() {
 
-            //var objects = objectDirectiveAPI.getData();
-            //var variables = variableDirectiveAPI.getData();
+        function buildMailMessageTemplateObjFromScope() {
 
             return {
                 VRMailMessageTemplateId: mailMessageTemplateEntity != undefined ? mailMessageTemplateEntity.VRMailMessageTemplateId : undefined,
                 Name: $scope.scopeModel.name,
                 VRMailMessageTypeId: mailMessageTypeSelectorAPI.getSelectedIds(),
                 Settings: {
-                    To: $scope.scopeModel.to,
-                    CC: $scope.scopeModel.cc,
-                    Subject: $scope.scopeModel.subject
+                    Variables: $scope.scopeModel.variables,
+                    To: { ExpressionString: $scope.scopeModel.to } ,
+                    CC: { ExpressionString: $scope.scopeModel.cc },
+                    Subject: { ExpressionString: $scope.scopeModel.subject },
+                    Body: { ExpressionString: $scope.scopeModel.body }
                 }       
             };          
         }
