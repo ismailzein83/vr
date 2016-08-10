@@ -10,6 +10,8 @@ namespace Vanrise.Entities
     {
         public string ObjectName { get; set; }
 
+        public Guid ObjectTypeDefinitionId { get; set; }
+
         public VRObjectType ObjectType { get; set; }
     }
 
