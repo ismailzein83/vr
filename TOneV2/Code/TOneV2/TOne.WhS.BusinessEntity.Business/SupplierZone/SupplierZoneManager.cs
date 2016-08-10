@@ -29,11 +29,14 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfo(SupplierZoneInfoFilter filter, int supplierId, string searchValue)
         {
             string nameFilterLower = searchValue != null ? searchValue.ToLower() : null;
+            DateTime now = DateTime.Now;
 
             IEnumerable<SupplierZone> supplierZones = GetSupplierZonesBySupplier(supplierId);
 
             Func<SupplierZone, bool> filterExpression = (item) =>
                {
+                   if (filter.GetEffectiveOnly && (item.BED > now || (item.EED.HasValue && item.EED.Value < now)))
+                       return false;
                    if (nameFilterLower != null && !item.Name.ToLower().Contains(nameFilterLower))
                        return false;
                    return true;

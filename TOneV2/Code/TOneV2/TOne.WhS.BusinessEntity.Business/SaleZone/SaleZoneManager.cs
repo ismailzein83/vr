@@ -98,12 +98,17 @@ namespace TOne.WhS.BusinessEntity.Business
             string nameFilterLower = nameFilter != null ? nameFilter.ToLower() : null;
             IEnumerable<SaleZone> saleZonesBySellingNumberPlan = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
             HashSet<long> filteredZoneIds = SaleZoneGroupContext.GetFilteredZoneIds(filter.SaleZoneFilterSettings);
+            DateTime now = DateTime.Now;
+
             Func<SaleZone, bool> zoneFilter = (zone) =>
             {
+                if (filter.GetEffectiveOnly && (zone.BED > now || (zone.EED.HasValue && zone.EED.Value < now)))
+                    return false;
                 if (filteredZoneIds != null && !filteredZoneIds.Contains(zone.SaleZoneId))
                     return false;
                 if (nameFilterLower != null && !zone.Name.ToLower().Contains(nameFilterLower))
                     return false;
+
                 return true;
             };
             return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, zoneFilter).OrderBy(x => x.Name);
@@ -148,7 +153,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public bool IsCountryEmpty(int sellingNumberPlanId, int countryId, DateTime minimumDate)
         {
-            IEnumerable<SaleZone> saleZones =this.GetSaleZonesEffectiveAfter(sellingNumberPlanId, countryId, minimumDate);
+            IEnumerable<SaleZone> saleZones = this.GetSaleZonesEffectiveAfter(sellingNumberPlanId, countryId, minimumDate);
             if (saleZones == null || saleZones.Count() == 0)
                 return true;
             return false;
@@ -182,7 +187,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
-        
+
         #region Private Members
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
@@ -243,11 +248,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private SaleZoneInfo SaleZoneInfoMapper(SaleZone saleZone)
         {
-            return new SaleZoneInfo { SaleZoneId = saleZone.SaleZoneId, Name = saleZone.Name , SellingNumberPlanId =  saleZone.SellingNumberPlanId};
+            return new SaleZoneInfo { SaleZoneId = saleZone.SaleZoneId, Name = saleZone.Name, SellingNumberPlanId = saleZone.SellingNumberPlanId };
         }
 
         #endregion
-       
+
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             return GetSaleZone(context.EntityId);

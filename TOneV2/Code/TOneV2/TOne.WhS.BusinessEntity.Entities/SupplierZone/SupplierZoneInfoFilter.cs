@@ -8,6 +8,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SupplierZoneInfoFilter
     {
-
+        public bool GetEffectiveOnly { get; set; }
     }
 }

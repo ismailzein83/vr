@@ -9,5 +9,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class SaleZoneInfoFilter
     {
         public SaleZoneFilterSettings SaleZoneFilterSettings { get; set; }
+
+        public bool GetEffectiveOnly { get; set; }
     }
 }

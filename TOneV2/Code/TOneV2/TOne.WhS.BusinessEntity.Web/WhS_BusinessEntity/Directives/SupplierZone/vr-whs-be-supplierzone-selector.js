@@ -101,9 +101,18 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                         return deferredPromise.promise;
                     }
 
-                    var serializedFilter = {};
-                    if (filter != undefined)
-                        serializedFilter = UtilsService.serializetoJson(filter);
+                    var getEffectiveOnly = true;
+
+                    if (filter != undefined) {
+                        if (filter.GetEffectiveOnly == undefined) {
+                            filter.GetEffectiveOnly = getEffectiveOnly;
+                        }
+                    }
+                    else {
+                        filter = { GetEffectiveOnly: getEffectiveOnly };
+                    }
+
+                    var serializedFilter = UtilsService.serializetoJson(filter);
 
                     return WhS_BE_SupplierZoneAPIService.GetSupplierZoneInfo(searchValue, supplierId, serializedFilter);
                 }
