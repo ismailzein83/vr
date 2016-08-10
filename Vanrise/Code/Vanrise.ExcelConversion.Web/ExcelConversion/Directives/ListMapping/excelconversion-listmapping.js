@@ -2,9 +2,9 @@
 
     'use strict';
 
-    excelconversionListmapping.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_MappingFieldTypeEnum', 'VR_GenericData_DataRecordTypeService'];
+    excelconversionListmapping.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_MappingFieldTypeEnum', 'VR_GenericData_DataRecordTypeService','VR_GenericData_RecordFilterService'];
 
-    function excelconversionListmapping(UtilsService, VRUIUtilsService, VR_GenericData_MappingFieldTypeEnum, VR_GenericData_DataRecordTypeService) {
+    function excelconversionListmapping(UtilsService, VRUIUtilsService, VR_GenericData_MappingFieldTypeEnum, VR_GenericData_DataRecordTypeService, VR_GenericData_RecordFilterService) {
         return {
             restrict: "E",
             scope: {
@@ -121,7 +121,24 @@
                 {
                     if (ctrl.filterFieldsMappings.length > 0 && filterObj == undefined)
                         return "Filter does not edited yet.";
+                    if (ctrl.checkIfFieldNameChanges())
+                        return "Fields are not matched."
                     return null;
+                }
+
+                ctrl.checkIfFieldNameChanges = function()
+                {
+                    var fieldNames = VR_GenericData_RecordFilterService.getFilterGroupFieldNames(filterObj);
+                    if(fieldNames != undefined)
+                    {
+                        for (var i = 0; i < fieldNames.length ; i++)
+                        {
+                            var fieldName = fieldNames[i];
+                            if (UtilsService.getItemByVal(ctrl.filterFieldsMappings, fieldName ,"FieldName") == undefined)
+                                return true;
+                        }
+                    }
+                    return false;
                 }
                 defineAPI();
             }
@@ -275,7 +292,7 @@
                             filter.Fields.push({
                                 FieldName: filterFieldsMapping.FieldName,
                                 FieldMapping: filterFieldsMapping.fieldMappingAPI !=undefined? filterFieldsMapping.fieldMappingAPI.getData():undefined,
-                                FieldType: filterFieldsMapping.selectedDataTypes.value
+                                FieldType: filterFieldsMapping.selectedDataTypes != undefined ? filterFieldsMapping.selectedDataTypes.value : undefined,
                             });
                         }
                     }

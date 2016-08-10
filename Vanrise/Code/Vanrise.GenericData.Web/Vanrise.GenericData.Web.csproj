@@ -445,6 +445,7 @@
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionCriteriaFieldService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleService.js" />
+    <Content Include="VR_GenericData\Services\RecordFilterService.js" />
     <Content Include="VR_GenericData\Services\SummaryTransformationDefinitionService.js" />
     <Content Include="VR_GenericData\Views\BELookupRuleDefinition\BELookupRuleDefinitionCriteriaFieldEditor.html" />
     <Content Include="VR_GenericData\Views\BELookupRuleDefinition\BELookupRuleDefinitionCriteriaFieldEditorController.js" />
