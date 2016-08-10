@@ -37,7 +37,6 @@
             $scope.scopeModel = {};
             $scope.scopeModel.variables = [];
             $scope.scopeModel.menuActions = [];
-            $scope.scopeModel.isGridLoading;
 
             $scope.scopeModel.onMailMessageTypeSelectorReady = function (api) {
                 mailMessageTypeSelectorAPI = api;
@@ -225,6 +224,6 @@
         }
     }
 
-    appControllers.controller('VRCommon_MailMessageTemplateEditorController', MailMessageTemplateEditorController);
+    appControllers.controller('VRCommon_VRMailMessageTemplateEditorController', MailMessageTemplateEditorController);
 
 })(appControllers);
