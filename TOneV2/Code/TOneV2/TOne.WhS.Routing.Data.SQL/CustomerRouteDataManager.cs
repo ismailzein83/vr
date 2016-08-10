@@ -114,14 +114,13 @@ namespace TOne.WhS.Routing.Data.SQL
         {
             string query;
 
-            trackStep("Starting create Clustered Index on CustomerRoute table (CustomerId and Code).");
-            query = @"CREATE CLUSTERED INDEX [IX_CustomerRoute_CustomerCode] ON dbo.CustomerRoute
+            trackStep("Starting create Index on CustomerRoute table (CustomerId).");
+            query = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_CustomerId] ON dbo.CustomerRoute
                     (
-                          [CustomerID] ASC,
-                          Code ASC
+                          CustomerID ASC
                     )";
             ExecuteNonQueryText(query, null);
-            trackStep("Finishing create Clustered Index on CustomerRoute table (CustomerId and Code).");
+            trackStep("Finishing create Index on CustomerRoute table (CustomerId).");
 
             trackStep("Starting create Index on CustomerRoute table (Code).");
             query = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_Code] ON dbo.CustomerRoute
