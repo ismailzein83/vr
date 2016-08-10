@@ -54,6 +54,9 @@ namespace TOne.WhS.Routing.Business
                 {
                     foreach (var optionSettings in optionsSettings)
                     {
+                        if (optionSettings.SupplierId == target.CustomerId)
+                            continue;
+
                         SupplierCodeMatchWithRate optionSupplierCodeMatch = context.GetSupplierCodeMatch(optionSettings.SupplierId);
                         if (optionSupplierCodeMatch != null)
                         {
@@ -70,6 +73,8 @@ namespace TOne.WhS.Routing.Business
                 {
                     foreach (var supplierCodeMatch in allSuppliersCodeMatches)
                     {
+                        if (supplierCodeMatch.CodeMatch.SupplierId == target.CustomerId)
+                            continue;
                         var option = CreateOption(target, supplierCodeMatch, null);
                         options.Add(option);
                     }
