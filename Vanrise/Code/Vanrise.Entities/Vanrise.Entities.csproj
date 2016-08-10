@@ -60,6 +60,8 @@
     <Compile Include="DateTimeType.cs" />
     <Compile Include="VRMail\VRMailMessage.cs" />
     <Compile Include="VRMail\VRMailMessageTemplate.cs" />
+    <Compile Include="VRMail\VRMailMessageTemplateDetail.cs" />
+    <Compile Include="VRMail\VRMailMessageTemplateQuery.cs" />
     <Compile Include="VRMail\VRMailMessageType.cs" />
     <Compile Include="StyleDefinition\StyleDefinition.cs" />
     <Compile Include="Country\UploadCountryLog.cs" />
@@ -96,6 +98,8 @@
     <Compile Include="StyleDefinition\StyleDefinitionQuery.cs" />
     <Compile Include="StyleDefinition\StyleFormatingConfig.cs" />
     <Compile Include="VRMail\VRMailMessageTypeDetail.cs" />
+    <Compile Include="VRMail\VRMailMessageTypeFilter.cs" />
+    <Compile Include="VRMail\VRMailMessageTypeInfo.cs" />
     <Compile Include="VRMail\VRMailMessageTypeQuery.cs" />
     <Compile Include="VRObject\VRExpression.cs" />
     <Compile Include="ExtensionConfiguration.cs" />

@@ -65,6 +65,7 @@
     <Compile Include="ITemplateConfigDataManager.cs" />
     <Compile Include="ITypeDataManager.cs" />
     <Compile Include="IVRFileDataManager.cs" />
+    <Compile Include="IVRMailMessageTemplateDataManager.cs" />
     <Compile Include="IVRMailMessageTypeDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

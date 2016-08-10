@@ -2,9 +2,9 @@
 
     "use strict";
 
-    MailMessageTypeManagementController.$inject = ['$scope', 'VRCommon_VRMailMessageTypeService', 'UtilsService', 'VRUIUtilsService'];
+    MailMessageTemplateManagementController.$inject = ['$scope', 'VRCommon_VRMailMessageTemplateService', 'UtilsService', 'VRUIUtilsService'];
 
-    function MailMessageTypeManagementController($scope, VRCommon_VRMailMessageTypeService, UtilsService, VRUIUtilsService) {
+    function MailMessageTemplateManagementController($scope, VRCommon_VRMailMessageTemplateService, UtilsService, VRUIUtilsService) {
 
         var gridAPI;
 
@@ -21,10 +21,10 @@
             };
 
             $scope.scopeModel.add = function () {
-                var onMailMessageTypeAdded = function (addedMailMessageType) {
-                    gridAPI.onMailMessageTypeAdded(addedMailMessageType);
+                var onMailMessageTemplateAdded = function (addedMailMessageTemplate) {
+                    gridAPI.onMailMessageTemplateAdded(addedMailMessageTemplate);
                 }
-                VRCommon_VRMailMessageTypeService.addMailMessageType(onMailMessageTypeAdded);
+                VRCommon_VRMailMessageTemplateService.addMailMessageTemplate(onMailMessageTemplateAdded);
             };
 
             $scope.scopeModel.onGridReady = function (api) {
@@ -32,7 +32,6 @@
                 gridAPI.load({});
             };
         }
-
         function load() {
 
         }
@@ -44,6 +43,6 @@
         }
     }
 
-    appControllers.controller('VRCommon_VRMailMessageTypeManagementController', MailMessageTypeManagementController);
+    appControllers.controller('VRCommon_VRMailMessageTemplateManagementController', MailMessageTemplateManagementController);
 
 })(appControllers);

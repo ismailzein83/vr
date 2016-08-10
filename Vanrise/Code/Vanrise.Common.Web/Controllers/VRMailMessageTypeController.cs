@@ -20,7 +20,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetFilteredMailMessageTypes")]
         public object GetFilteredMailMessageTypes(Vanrise.Entities.DataRetrievalInput<VRMailMessageTypeQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredVRMailMessageTypes(input));
+            return GetWebResponse(input, _manager.GetFilteredMailMessageTypes(input));
         }
 
         [HttpGet]
@@ -34,14 +34,22 @@ namespace Vanrise.Common.Web.Controllers
         [Route("AddMailMessageType")]
         public Vanrise.Entities.InsertOperationOutput<VRMailMessageTypeDetail> AddMailMessageType(VRMailMessageType vrMailMessageTypeItem)
         {
-            return _manager.AddVRMailMessageType(vrMailMessageTypeItem);
+            return _manager.AddMailMessageType(vrMailMessageTypeItem);
         }
 
         [HttpPost]
         [Route("UpdateMailMessageType")]
         public Vanrise.Entities.UpdateOperationOutput<VRMailMessageTypeDetail> UpdateMailMessageType(VRMailMessageType vrMailMessageTypeItem)
         {
-            return _manager.UpdateVRMailMessageType(vrMailMessageTypeItem);
+            return _manager.UpdateMailMessageType(vrMailMessageTypeItem);
+        }
+
+        [HttpGet]
+        [Route("GetMailMessageTypesInfo")]
+        public IEnumerable<VRMailMessageTypeInfo> GetMailMessageTypesInfo(string filter = null)
+        {
+            VRMailMessageTypeFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<VRMailMessageTypeFilter>(filter) : null;
+            return _manager.GetMailMessageTypesInfo(deserializedFilter);
         }
     }
 }

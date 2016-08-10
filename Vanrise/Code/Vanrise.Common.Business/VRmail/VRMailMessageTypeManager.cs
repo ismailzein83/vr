@@ -19,14 +19,14 @@ namespace Vanrise.Common.Business
             return cachedVRMailMessageTypes.GetRecord(vrMailMessageTypeId);
         }
 
-        public IDataRetrievalResult<VRMailMessageTypeDetail> GetFilteredVRMailMessageTypes(DataRetrievalInput<VRMailMessageTypeQuery> input)
+        public IDataRetrievalResult<VRMailMessageTypeDetail> GetFilteredMailMessageTypes(DataRetrievalInput<VRMailMessageTypeQuery> input)
         {
             var allVRMailMessageTypes = GetCachedVRMailMessageTypes();
             Func<VRMailMessageType, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRMailMessageTypes.ToBigResult(input, filterExpression, VRMailMessageTypeDetailMapper));
         }
 
-        public Vanrise.Entities.InsertOperationOutput<VRMailMessageTypeDetail> AddVRMailMessageType(VRMailMessageType vrMailMessageTypeItem)
+        public Vanrise.Entities.InsertOperationOutput<VRMailMessageTypeDetail> AddMailMessageType(VRMailMessageType vrMailMessageTypeItem)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<VRMailMessageTypeDetail>();
 
@@ -51,7 +51,7 @@ namespace Vanrise.Common.Business
             return insertOperationOutput;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<VRMailMessageTypeDetail> UpdateVRMailMessageType(VRMailMessageType vrMailMessageTypeItem)
+        public Vanrise.Entities.UpdateOperationOutput<VRMailMessageTypeDetail> UpdateMailMessageType(VRMailMessageType vrMailMessageTypeItem)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<VRMailMessageTypeDetail>();
 
@@ -72,6 +72,13 @@ namespace Vanrise.Common.Business
             }
 
             return updateOperationOutput;
+        }
+
+        public IEnumerable<VRMailMessageTypeInfo> GetMailMessageTypesInfo(VRMailMessageTypeFilter filter)
+        {
+            Func<VRMailMessageType, bool> filterExpression = null;
+
+            return this.GetCachedVRMailMessageTypes().MapRecords(VRMailMessageTypeInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
         #endregion
@@ -117,6 +124,16 @@ namespace Vanrise.Common.Business
                 Entity = vrMailMessageType
             };
             return vrMailMessageTypeDetail;
+        }
+
+        public VRMailMessageTypeInfo VRMailMessageTypeInfoMapper(VRMailMessageType vrMailMessageType)
+        {
+            VRMailMessageTypeInfo vrMailMessageTypeInfo = new VRMailMessageTypeInfo()
+            {
+                VRMailMessageTypeId = vrMailMessageType.VRMailMessageTypeId,
+                Name = vrMailMessageType.Name
+            };
+            return vrMailMessageTypeInfo;
         }
 
         #endregion

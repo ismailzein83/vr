@@ -1,0 +1,67 @@
+﻿<div vr-modalcontent ng-controller="VRCommon_MailMessageTemplateEditorController" width="'70%'" vr-loader="scopemodel.isloading">
+    <vr-modalbody>
+        <vr-form name="formMailMessageTemplateEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox label="Name" value="scopeModel.name" isrequired></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-common-mailmessagetype-selector on-ready="scopeModel.onMailMessageTypeSelectorReady" isrequired="true"></vr-common-mailmessagetype-selector>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+
+                <vr-tab header="'Settings'">
+                    <vr-column width="1/2row">
+                        <vr-row removeline>
+                            <vr-columns width="fullrow">
+                                <vr-textbox label="To" value="scopeModel.to" isrequired></vr-textbox>
+                            </vr-columns>
+                        </vr-row>
+                        <vr-row removeline>
+                            <vr-columns width="fullrow">
+                                <vr-textbox label="CC" value="scopeModel.cc" isrequired></vr-textbox>
+                            </vr-columns>
+                        </vr-row>
+                        <vr-row removeline>
+                            <vr-columns width="fullrow">
+                                <vr-textbox label="Subject" value="scopeModel.subject" isrequired></vr-textbox>
+                            </vr-columns>
+                        </vr-row>
+
+                        <vr-row removeline>
+                            <textarea name="htmlEditor" id="scopeModel.htmlEditor" rows="10" cols="80">
+                                This is my textarea to be replaced with CKEditor.
+                            </textarea>
+                        </vr-row>
+                    </vr-column>
+
+                    <vr-column width="1/2row">
+                        <vr-datagrid datasource="scopeModel.variables"
+                                     dataretrievalfunction="scopeModel.dataRetrievalFunction"
+                                     pagingtype="'PagingOnScroll'"
+                                     on-ready="scopeModel.onGridReady"
+                                     menuactions="scopeModel.menuActions"
+                                     idfield="Entity.VariableName">
+                            <vr-datagridcolumn headertext="'Variable Name'" field="'Entity.VariableName'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Name'" field="'Entity.ValueExpression'"></vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-column>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formMailMessageTemplateEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

@@ -65,6 +65,7 @@
     <Compile Include="CurrencyDataManager.cs" />
     <Compile Include="TypeDataManager.cs" />
     <Compile Include="VRFileDataManager.cs" />
+    <Compile Include="VRMailMessageTemplateDataManager.cs" />
     <Compile Include="VRMailMessageTypeDataManager.cs" />
   </ItemGroup>
   <ItemGroup>

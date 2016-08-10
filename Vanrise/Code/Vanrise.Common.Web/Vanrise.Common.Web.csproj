@@ -134,6 +134,7 @@
     <Compile Include="Controllers\DataRecordFieldController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\RateTypeController.cs" />
+    <Compile Include="Controllers\VRMailMessageTemplateController.cs" />
     <Compile Include="Controllers\VRMailMessageTypeController.cs" />
     <Compile Include="Controllers\VRObjectPropertyController.cs" />
     <Compile Include="Controllers\VRObjectTypeController.cs" />
@@ -229,6 +230,9 @@
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-selector.js" />
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-grid.js" />
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-settings.js" />
+    <Content Include="Common\Directives\VRMail\Templates\VRMailMessageTemplateGridTemplate.html" />
+    <Content Include="Common\Directives\VRMail\vr-common-mailmessagetemplate-grid.js" />
+    <Content Include="Common\Directives\VRMail\vr-common-mailmessagetype-selector.js" />
     <Content Include="Common\Directives\VRObjectPropertyVariable\Templates\VRObjectPropertyVariableManagementTemplate.html" />
     <Content Include="Common\Directives\VRObjectPropertyVariable\vr-common-objectpropertyvariable-management.js" />
     <Content Include="Common\Directives\VRMail\Templates\VRMailMessageTypeGridTemplate.html" />
@@ -253,7 +257,9 @@
     <Content Include="Common\Services\APIServices\DataRecordTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\RateTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\StyleDefinitionAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRMailMessageTemplateAPIService.js" />
     <Content Include="Common\Services\APIServices\VRMailMessageTypeAPIService.js" />
+    <Content Include="Common\Services\VRMailMessageTemplateService.js" />
     <Content Include="Common\Services\VRObjectPropertyVariableService.js" />
     <Content Include="Common\Services\VRMailMessageTypeService.js" />
     <Content Include="Common\Services\APIServices\VRObjectPropertyAPIService.js" />
@@ -334,6 +340,10 @@
     <Content Include="Common\Views\Support.html" />
     <Content Include="Common\Views\Settings\SettingsManagement.html" />
     <Content Include="Common\Views\Settings\SettingsManagementController.js" />
+    <Content Include="Common\Views\VRMail\VRMailMessageTemplateEditor.html" />
+    <Content Include="Common\Views\VRMail\VRMailMessageTemplateEditorController.js" />
+    <Content Include="Common\Views\VRMail\VRMailMessageTemplateManagement.html" />
+    <Content Include="Common\Views\VRMail\VRMailMessageTemplateManagementController.js" />
     <Content Include="Common\Views\VRMail\VRMailMessageTypeEditor.html" />
     <Content Include="Common\Views\VRMail\VRMailMessageTypeEditorController.js" />
     <Content Include="Common\Views\VRMail\VRMailMessageTypeManagement.html" />

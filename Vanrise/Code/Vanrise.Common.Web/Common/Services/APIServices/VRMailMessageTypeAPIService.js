@@ -28,11 +28,18 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'UpdateMailMessageType'), vrMailMessageTypeItem);
         }
 
+        function GetMailMessageTypesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetMailMessageTypesInfo"), {
+                filter: filter
+            });
+        }
+
         return ({
             GetFilteredMailMessageTypes: GetFilteredMailMessageTypes,
             GetMailMessageType: GetMailMessageType,
             AddMailMessageType: AddMailMessageType,
-            UpdateMailMessageType: UpdateMailMessageType
+            UpdateMailMessageType: UpdateMailMessageType,
+            GetMailMessageTypesInfo: GetMailMessageTypesInfo
         });
     }
 

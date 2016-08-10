@@ -201,6 +201,6 @@
         }
     }
 
-    appControllers.controller('VRCommon_MailMessageTypeEditorController', MailMessageTypeEditorController);
+    appControllers.controller('VRCommon_VRMailMessageTypeEditorController', MailMessageTypeEditorController);
 
 })(appControllers);

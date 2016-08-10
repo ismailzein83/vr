@@ -10,6 +10,8 @@ namespace Vanrise.Entities
     {
         public string VariableName { get; set; }
 
+        public string Description { get; set; }
+
         public string ObjectName { get; set; }
 
         public VRObjectPropertyEvaluator PropertyEvaluator { get; set; }
