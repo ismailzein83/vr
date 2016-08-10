@@ -1,42 +1,55 @@
 ﻿<div vr-modalcontent ng-controller="VR_GenericData_DataRecordStorageEditorController" width="'40%'" vr-loader="isLoading">
     <vr-modalbody maxheight="'600px'">
         <vr-form name="formDataRecordStorageEditor">
-            <vr-row>
-                <vr-columns width="1/3row">
-                    <vr-textbox value="name" label="Name" isrequired="true"></vr-textbox>
-                </vr-columns>
-                <vr-columns width="1/3row">
-                    <vr-genericdata-datarecordtype-selector on-ready="onDataRecordTypeSelectorReady"
-                                                            selectedvalues="selectedDataRecordType"
-                                                            onselectionchanged="onDataRecordTypeSelectionChanged"
-                                                            isrequired="true"
-                                                            hideremoveicon>
-                    </vr-genericdata-datarecordtype-selector>
-                </vr-columns>
-                <vr-columns width="1/3row">
-                    <vr-select label="Time Field" datasource="dataRecordTypeFields" selectedvalues="selectedDataRecordTypeField"
-                               datavaluefield="Entity.Name" datatextfield="Entity.Name" isrequired="true" hideremoveicon>
-                    </vr-select>
 
-                </vr-columns>
-            </vr-row>
-            <vr-row>
-                <vr-columns width="1/3row">
-                    <vr-genericdata-datastore-selector on-ready="onDataStoreSelectorReady"
-                                                       selectedvalues="selectedDataStore"
-                                                       onselectionchanged="onDataStoreSelectionChanged"
-                                                       isrequired="true"
-                                                       hideremoveicon>
-                    </vr-genericdata-datastore-selector>
-                </vr-columns>
-            </vr-row>
-            <vr-row ng-show="selectedDataRecordType != undefined && selectedDataStore != undefined">
-                <vr-columns width="fullrow">
-                    <vr-section title="Settings">
-                        <vr-directivewrapper directive="settingsEditor" on-ready="onSettingsDirectiveReady"></vr-directivewrapper>
-                    </vr-section>
-                </vr-columns>
-            </vr-row>
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+
+                        <vr-columns width="1/3row">
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorReady"
+                                                                    selectedvalues="scopeModel.selectedDataRecordType"
+                                                                    onselectionchanged="scopeModel.onDataRecordTypeSelectionChanged"
+                                                                    isrequired="true"
+                                                                    hideremoveicon>
+                            </vr-genericdata-datarecordtype-selector>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-select label="Time Field" datasource="scopeModel.dataRecordTypeFields" selectedvalues="scopeModel.selectedDataRecordTypeField"
+                                       datavaluefield="Entity.Name" datatextfield="Entity.Name" isrequired="true" hideremoveicon>
+                            </vr-select>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-genericdata-datastore-selector on-ready="scopeModel.onDataStoreSelectorReady"
+                                                               selectedvalues="scopeModel.selectedDataStore"
+                                                               onselectionchanged="scopeModel.onDataStoreSelectionChanged"
+                                                               isrequired="true"
+                                                               hideremoveicon>
+                            </vr-genericdata-datastore-selector>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Setting'">
+                    <vr-row>
+                        
+                        <vr-columns width="fullrow" ng-show="scopeModel.selectedDataRecordType != undefined && scopeModel.selectedDataStore != undefined">
+                            <vr-section title="Settings">
+                                <vr-directivewrapper directive="scopeModel.settingsEditor" on-ready="scopeModel.onSettingsDirectiveReady"></vr-directivewrapper>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Security'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-sec-requiredpermission-grid on-ready="scopeModel.onRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
         </vr-form>
     </vr-modalbody>
     <div>

@@ -62,6 +62,7 @@
     <Compile Include="BusinessEntities\BusinessEntityMatchContext.cs" />
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
+    <Compile Include="BusinessManagers\IDataRecordStorageManager.cs" />
     <Compile Include="BusinessManagers\IDataRecordTypeManager.cs" />
     <Compile Include="BusinessManagers\IGenericBusinessEntityManager.cs" />
     <Compile Include="DataRecordCondition.cs" />

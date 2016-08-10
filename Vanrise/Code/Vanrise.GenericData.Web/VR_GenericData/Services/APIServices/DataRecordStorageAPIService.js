@@ -12,7 +12,8 @@
             AddDataRecordStorage: AddDataRecordStorage,
             HasAddDataRecordStorage :HasAddDataRecordStorage,
             UpdateDataRecordStorage: UpdateDataRecordStorage,
-            HasUpdateDataRecordStorage :HasUpdateDataRecordStorage
+            HasUpdateDataRecordStorage: HasUpdateDataRecordStorage,
+            CheckRecordStoragesAccess: CheckRecordStoragesAccess
         };
 
         function GetFilteredDataRecordStorages(input) {
@@ -40,6 +41,10 @@
         }
         function HasUpdateDataRecordStorage() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_GenericData_ModuleConfig.moduleName, "DataRecordStorage", ['UpdateDataRecordStorage']));
+        }
+
+        function CheckRecordStoragesAccess(dataRecordStorages) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordStorage', 'CheckRecordStoragesAccess'), dataRecordStorages);
         }
     }
 

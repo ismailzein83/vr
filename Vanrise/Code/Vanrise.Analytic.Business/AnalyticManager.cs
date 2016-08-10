@@ -621,22 +621,18 @@ namespace Vanrise.Analytic.Business
         private void CheckAnalyticRequiredPermission(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
             AnalyticTableManager manager = new AnalyticTableManager();
-            AnalyticTable table = manager.GetAnalyticTableById(input.Query.TableId);
 
             int userId = SecurityContext.Current.GetLoggedInUserId();
-            SecurityManager secManager = new SecurityManager();
-            if (table.Settings.RequiredPermission!=null && !secManager.IsAllowed(table.Settings.RequiredPermission, userId))
+
+            if (!manager.DoesUserHaveAccess(input.Query.TableId, userId))
             {
                 throw new UnauthorizedAccessException();
             }
-            var measures = new AnalyticItemConfigManager().GetMeasures(input.Query.TableId);
-            foreach (string m in input.Query.MeasureFields)
+            AnalyticItemConfigManager analyticItemConfigManager = new AnalyticItemConfigManager();
+
+            if (!analyticItemConfigManager.DoesUserHaveAccess(userId, input.Query.TableId, input.Query.MeasureFields))
             {
-                var measure = measures.GetRecord(m);
-                if (measure.Config.RequiredPermission!=null && !secManager.IsAllowed(measure.Config.RequiredPermission, userId))
-                {
-                    throw new UnauthorizedAccessException();
-                }
+                throw new UnauthorizedAccessException();
             }
         }
         #endregion

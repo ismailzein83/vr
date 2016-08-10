@@ -21,13 +21,12 @@ namespace Vanrise.Analytic.Entities
                 if(analyticTable.DoesUserHaveAccess(context.UserId, id) == false)
                     return false;
             }
-            //foreach (var w in this.Widgets)
-            //{
-            //    if (analyticItem.DoesUserHaveAccess(context.UserId, w.AnalyticTableId, w.GetMeasureNames()) == false)
-            //        return false;
-            //}
+            foreach (var w in this.Widgets)
+            {
+                if (analyticItem.DoesUserHaveAccess(context.UserId, w.AnalyticTableId, w.GetMeasureNames()) == false)
+                    return false;
+            }
             return true;
-            //return analyticReport != null && analyticReport.Settings.DoesUserHaveAccess(context);
         }
 
     }

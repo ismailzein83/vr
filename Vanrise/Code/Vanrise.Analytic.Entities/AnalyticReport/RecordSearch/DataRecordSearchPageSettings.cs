@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
@@ -11,6 +12,17 @@ namespace Vanrise.Analytic.Entities
         public List<DRSearchPageStorageSource> Sources { get; set; }
         public int? MaxNumberOfRecords { get; set; }
         public int NumberOfRecords { get; set; }
+        public override bool DoesUserHaveAccess(Security.Entities.IViewUserAccessContext context)
+        {
+            IDataRecordStorageManager _genericBusinessEntityManager = BusinessManagerFactory.GetManager<IDataRecordStorageManager>();
+            foreach (var r in this.Sources)
+            {
+                if (_genericBusinessEntityManager.DoesUserHaveAccess(context.UserId, r.RecordStorageIds) == true)
+                    return true;
+            }
+            return false;
+        }
+
     }
 
     public class DRSearchPageStorageSource

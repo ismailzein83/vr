@@ -9,10 +9,11 @@ using Vanrise.Common.Business;
 using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Entities.DataStorage.DataRecordStorage;
+using Vanrise.Security.Business;
 
 namespace Vanrise.GenericData.Business
 {
-    public class DataRecordStorageManager
+    public class DataRecordStorageManager : IDataRecordStorageManager
     {
         #region Constructors/Fields
 
@@ -33,6 +34,11 @@ namespace Vanrise.GenericData.Business
 
             if (input.Query.Columns == null)
                 throw new NullReferenceException("input.Query.Columns");
+
+            if (CheckRecordStoragesAccess(SecurityContext.Current.GetLoggedInUserId(), input.Query.DataRecordStorageIds).Count < input.Query.DataRecordStorageIds.Count)
+            {
+                throw new UnauthorizedAccessException();
+            }
 
             input.Query.Columns = new HashSet<string>(input.Query.Columns).ToList();
 
@@ -216,10 +222,53 @@ namespace Vanrise.GenericData.Business
 
              dataManager.GetDataRecords(from, to, onItemReady);
         }
+
+        public List<int> CheckRecordStoragesAccess(int userId , List<int> dataRecordStorages )
+        {
+            var allRecordStorages = GetCachedDataRecordStorages().Where(k => dataRecordStorages.Contains(k.Key)).Select(v => v.Value).ToList();
+            List<int> filterdRecrodsIds = new List<int>();
+
+            foreach (var r in allRecordStorages)
+            {
+                if (DoesUserHaveAccessOnRecordStorage(userId , r) )
+                    filterdRecrodsIds.Add(r.DataRecordStorageId);
+            }
+            return filterdRecrodsIds;
+        }
+        public List<int> CheckRecordStoragesAccess(List<int> dataRecordStorages)
+        {
+            var allRecordStorages = GetCachedDataRecordStorages().Where(k => dataRecordStorages.Contains(k.Key)).Select(v => v.Value).ToList();
+            List<int> filterdRecrodsIds = new List<int>();
+
+            foreach (var r in allRecordStorages)
+            {
+                if (DoesUserHaveAccessOnRecordStorage(SecurityContext.Current.GetLoggedInUserId(), r))
+                    filterdRecrodsIds.Add(r.DataRecordStorageId);
+            }
+            return filterdRecrodsIds;
+        }
+
+        public bool DoesUserHaveAccess(int userId, List<int> dataRecordStorages)
+        {
+            var allRecordStorages = GetCachedDataRecordStorages().Where(k => dataRecordStorages.Contains(k.Key)).Select(v => v.Value).ToList();
+            foreach (var r in allRecordStorages)
+            {
+                if (!DoesUserHaveAccessOnRecordStorage(userId,r))
+                    return false;
+            }
+            return true;
+        }
         #endregion
 
         #region Private Methods
 
+        bool DoesUserHaveAccessOnRecordStorage(int userId, DataRecordStorage dataRecordStorage)
+        {
+             SecurityManager secManager = new SecurityManager();
+             if (dataRecordStorage.Settings.RequiredPermission != null && !secManager.IsAllowed(dataRecordStorage.Settings.RequiredPermission, userId))
+                    return false;
+             return true;
+        }
         Dictionary<int, DataRecordStorage> GetCachedDataRecordStorages()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDataRecordStorages",

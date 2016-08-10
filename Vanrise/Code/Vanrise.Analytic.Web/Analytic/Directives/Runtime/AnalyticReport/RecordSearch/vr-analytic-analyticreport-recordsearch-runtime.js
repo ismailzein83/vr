@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RecordSearchAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_OrderDirectionEnum', 'VRValidationService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_DataRecordTypeService','PeriodEnum','VR_Analytic_AnalyticAPIService','VR_GenericData_RecordFilterAPIService'];
+    RecordSearchAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_OrderDirectionEnum', 'VRValidationService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_DataRecordTypeService', 'PeriodEnum', 'VR_Analytic_AnalyticAPIService', 'VR_GenericData_RecordFilterAPIService', 'VR_GenericData_DataRecordStorageAPIService'];
 
-    function RecordSearchAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_OrderDirectionEnum, VRValidationService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_DataRecordTypeService, PeriodEnum, VR_Analytic_AnalyticAPIService, VR_GenericData_RecordFilterAPIService) {
+    function RecordSearchAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_OrderDirectionEnum, VRValidationService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_DataRecordTypeService, PeriodEnum, VR_Analytic_AnalyticAPIService, VR_GenericData_RecordFilterAPIService, VR_GenericData_DataRecordStorageAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -203,12 +203,32 @@
             }
 
             function setSourceSelector() {
-                if (settings != undefined)
-                    $scope.drSearchPageStorageSources = settings.Sources;
-                if(itemActionSettings !=undefined)
-                {
+                var tabids = [];
+                $scope.drSearchPageStorageSources =[];
+                if (settings != undefined) {
+                    // $scope.drSearchPageStorageSources = settings.Sources;
+                    for (var i = 0; i < settings.Sources.length ; i++) {
+                        for (var j = 0; j < settings.Sources[i].RecordStorageIds.length ; j++) {
+                            var id = settings.Sources[i].RecordStorageIds[j]
+                            if (tabids.indexOf(id) == -1)
+                                tabids[tabids.length] = id;
+                        }
+                    }
+
+                   return VR_GenericData_DataRecordStorageAPIService.CheckRecordStoragesAccess(tabids).then(function (response) {
+                        for (var i = 0; i < settings.Sources.length ; i++) {
+                            var neededIds = settings.Sources[i].RecordStorageIds ;
+                            if(checkIfAllow(settings.Sources[i].RecordStorageIds,response))
+                                $scope.drSearchPageStorageSources[$scope.drSearchPageStorageSources.length] = settings.Sources[i]
+                        }
+                    });
+                }
+                if (itemActionSettings != undefined) {
                     $scope.selectedDRSearchPageStorageSource = UtilsService.getItemByVal($scope.drSearchPageStorageSources, itemActionSettings.SourceName, "Name");
                 }
+
+
+               
             }
             function setStaticData() {
                 $scope.orderDirectionList = UtilsService.getArrayEnum(VR_Analytic_OrderDirectionEnum);
@@ -219,7 +239,13 @@
 
                
             }
-
+            function checkIfAllow(tab1, tab2) {
+                for (var i = 0; i < tab1.length; i++) {
+                    if (tab2.indexOf(tab1[i]) === -1)
+                        return false;
+                }
+                return true;
+            }
             function setGridQuery() {
                 gridQuery = {
                     DataRecordStorageIds: $scope.selectedDRSearchPageStorageSource.RecordStorageIds,

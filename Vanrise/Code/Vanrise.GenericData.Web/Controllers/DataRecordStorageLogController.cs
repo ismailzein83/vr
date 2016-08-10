@@ -20,7 +20,15 @@ namespace Vanrise.GenericData.Web.Controllers
         [Route("GetFilteredDataRecordStorageLogs")]
         public object GetFilteredDataRecordStorageLogs(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredDataRecords(input));
+            try
+            {
+                return GetWebResponse(input, _manager.GetFilteredDataRecords(input));
+
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return GetUnauthorizedResponse();
+            }
         }
     }
 }
