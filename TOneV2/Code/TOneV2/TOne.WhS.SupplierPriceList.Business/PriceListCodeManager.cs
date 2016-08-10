@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.Common;
@@ -106,8 +107,8 @@ namespace TOne.WhS.SupplierPriceList.Business
                 }
             }
 
-            GetExistingCodesToClose(supplierPriceListType, importedZones, importedCodes, existingCodes);
-            CloseNotImportedCodes(existingCodes, importedCodeValues, codeCloseDate);
+            IEnumerable<ExistingCode> existingCodesToClose = GetExistingCodesToClose(supplierPriceListType, importedZones, importedCodes, existingCodes);
+            CloseNotImportedCodes(existingCodesToClose, importedCodeValues, codeCloseDate);
             CloseZonesWithNoCodes(existingZones);
         }
 
@@ -241,7 +242,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             if (importedZones.Count() > 0) // Country is included
             {
-                if (!DoCountryCodeGroupsExist(importedCodes) || supplierPriceListType == SupplierPriceListType.RateChange)
+                if (!DoCountryCodeGroupsExistInImportedData(importedCodes) || supplierPriceListType == SupplierPriceListType.RateChange)
                 {
                     IEnumerable<string> importedCodeValues = importedCodes.MapRecords(x => x.Code);
                     existingCodesToClose = existingCodes.FindAllRecords(x => importedCodeValues.Contains(x.CodeEntity.Code));
@@ -258,14 +259,16 @@ namespace TOne.WhS.SupplierPriceList.Business
             return existingCodesToClose;
         }
 
-        private bool DoCountryCodeGroupsExist(IEnumerable<ImportedCode> importedCodes)
+        private bool DoCountryCodeGroupsExistInImportedData(IEnumerable<ImportedCode> importedCodes)
         {
-            if (importedCodes.Count() > 0)
+            IEnumerable<string> codeGroupCodes = importedCodes.MapRecords(x => x.CodeGroup.Code, x => x.CodeGroup != null).Distinct();
+            
+            foreach (ImportedCode importedCode in importedCodes)
             {
-                IEnumerable<ImportedCode> importedCodesWithCodeGroup = importedCodes.FindAllRecords(x => x.CodeGroup != null);
-                if (importedCodesWithCodeGroup.Count() > 0)
+                if (codeGroupCodes.Contains(importedCode.Code))
                     return true;
             }
+
             return false;
         }
 
