@@ -20,7 +20,7 @@ namespace TOne.WhS.Routing.BP.Arguments
 
         public override string GetTitle()
         {
-            return string.Format("RP Build Code Matches By Code Prefix: {0}", CodePrefix);
+            return string.Format("#BPDefinitionTitle#: {0}", CodePrefix);
         }
     }
 }
