@@ -14,8 +14,10 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
     {
      
         #region Properties
-     
-        public ExcelConversionSettings ExcelConversionSettings { get; set; }
+        public ListMapping CodeListMapping { get; set; }
+        public ListMapping NormalRateListMapping { get; set; }
+        public string  DateTimeFormat { get; set; }
+        public List<OtherRateListMapping> OtherRateListMapping { get; set; }
         public CodeLayout CodeLayout { get; set; }
         public char Delimiter { get; set; }
         public bool HasCodeRange { get; set; }
@@ -28,7 +30,20 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
         public override ConvertedPriceList Execute(ISupplierPriceListExecutionContext context)
         {
             ExcelConvertor excelConvertor = new ExcelConvertor();
-            ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(context.InputFileId, this.ExcelConversionSettings, true, this.IsCommaDecimalSeparator);
+
+            ExcelConversionSettings excelConversionSettings = new Vanrise.ExcelConversion.Entities.ExcelConversionSettings();
+            excelConversionSettings.DateTimeFormat = this.DateTimeFormat;
+            excelConversionSettings.ListMappings = new List<ListMapping>();
+            excelConversionSettings.ListMappings.Add(this.CodeListMapping);
+            excelConversionSettings.ListMappings.Add(this.NormalRateListMapping);
+            if(this.OtherRateListMapping != null)
+            {
+                foreach(var list in this.OtherRateListMapping )
+                {
+                    excelConversionSettings.ListMappings.Add(list.RateListMapping);
+                }
+            }
+            ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(context.InputFileId, excelConversionSettings, true, this.IsCommaDecimalSeparator);
             return ConvertToPriceListItem(convertedExcel);
         }
       
@@ -41,6 +56,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
             {
                 PriceListCodes = BuildPriceListCodes(convertedExcel),
                 PriceListRates = BuildPriceListRates(convertedExcel),
+                PriceListOtherRates = BuildPriceListOtherRates(convertedExcel),
             };
         }
         private List<PriceListCode> BuildPriceListCodes(ConvertedExcel convertedExcel)
@@ -191,6 +207,65 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                 }
             }
             return priceListRates;
+        }
+
+        private Dictionary<int, List<PriceListRate>> BuildPriceListOtherRates(ConvertedExcel convertedExcel)
+        {
+            Dictionary<int, List<PriceListRate>> otherRatesByRateType = null;
+
+            if(this.OtherRateListMapping != null)
+            {
+                otherRatesByRateType = new Dictionary<int, List<PriceListRate>>();
+                foreach(var list in this.OtherRateListMapping)
+                {
+                    ConvertedExcelList RateConvertedExcelList;
+                    if (convertedExcel.Lists.TryGetValue(list.RateListMapping.ListName, out RateConvertedExcelList))
+                    {
+                        foreach (var obj in RateConvertedExcelList.Records)
+                        {
+                            ConvertedExcelField zoneField;
+                            ConvertedExcelField rateField;
+                            ConvertedExcelField rateEffectiveDateField;
+                            DateTime? result = null;
+                            if (obj.Fields.TryGetValue("EffectiveDate", out rateEffectiveDateField))
+                            {
+                                if (rateEffectiveDateField.FieldValue != null)
+                                    result = (DateTime)rateEffectiveDateField.FieldValue;
+                            };
+                            if (obj.Fields.TryGetValue("Zone", out zoneField))
+                            {
+                                if (obj.Fields.TryGetValue("Rate", out rateField))
+                                {
+                                    decimal? rate = null;
+                                    if (rateField.FieldValue != null)
+                                        rate = (decimal)rateField.FieldValue;
+
+                                   PriceListRate priceListRate = new PriceListRate
+                                    {
+                                        ZoneName = zoneField.FieldValue != null ? zoneField.FieldValue.ToString() : null,
+                                        Rate = rateField.FieldValue != null ? (decimal)rateField.FieldValue : default(decimal?),
+                                        EffectiveDate = result
+                                    };
+
+                                    List<PriceListRate> priceListRates = null;
+
+
+                                    if (!otherRatesByRateType.TryGetValue(list.RateTypeId, out priceListRates))
+                                    {
+                                        priceListRates = new List<PriceListRate> { priceListRate };
+                                        otherRatesByRateType.Add(list.RateTypeId, priceListRates);
+                                    }else
+                                    {
+                                        priceListRates.Add(priceListRate);
+                                        otherRatesByRateType[list.RateTypeId] = priceListRates;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return otherRatesByRateType;
         }
         #endregion
 

@@ -1,10 +1,17 @@
-﻿
-<vr-tabs>
-    <vr-tab header="'Codes'">
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-whs-be-ratetype-selector on-ready="scopeModel.onRateTypeSelectorReady" label="Rate Types" ismultipleselection onselectitem="    scopeModel.onSelectRateType" ondeselectitem="scopeModel.onDeselectRateType""></vr-whs-be-ratetype-selector>
+    </vr-columns>
+</vr-row>
+<vr-tabs >
+    <vr-tab header="'Codes'" tabobject="scopeModel.codeTabObject">
         <vr-excelconversion-listmapping on-ready="scopeModel.onCodeListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
     </vr-tab>
-    <vr-tab header="'Rates'">
+    <vr-tab header="'Normal Rates'">
         <vr-excelconversion-listmapping on-ready="scopeModel.onRateListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
+    </vr-tab>
+    <vr-tab ng-repeat="rate in scopeModel.rateTypesSelected" header="'{{rate.Name}}'">
+        <vr-excelconversion-listmapping on-ready="rate.onRateListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
     </vr-tab>
 </vr-tabs>
 <vr-row>
@@ -13,7 +20,7 @@
 <vr-row>
     <vr-columns width="1/2row">
         <vr-select datatextfield="description" datavaluefield="value" label="Code Layout"
-                   selectedvalues="scopeModel.selectedCodeLayout" datasource="scopeModel.codeLayouts" isrequired="true" onselectionchanged="scopeModel.onCodeLayoutSelectionChanged"></vr-select>
+                    selectedvalues="scopeModel.selectedCodeLayout" datasource="scopeModel.codeLayouts" isrequired="true" onselectionchanged="scopeModel.onCodeLayoutSelectionChanged"></vr-select>
     </vr-columns>
     <vr-columns width="1/2row" ng-if="scopeModel.selectedCodeLayout!=undefined && scopeModel.showDelimiter">
         <vr-textbox label="Delimiter" value="scopeModel.delimiterValue" isrequired="true" customvalidate="scopeModel.validate()"></vr-textbox>

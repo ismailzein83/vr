@@ -14,7 +14,9 @@ app.directive('vrWhsBeRatetypeSelector', ['WhS_BE_RateTypeAPIService', 'WhS_BE_R
             isdisabled: "=",
             selectedvalues: "=",
             showaddbutton: '@',
-            hidelabel:'@'
+            hidelabel: '@',
+            onselectitem: "=",
+            ondeselectitem: "=",
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -67,12 +69,12 @@ app.directive('vrWhsBeRatetypeSelector', ['WhS_BE_RateTypeAPIService', 'WhS_BE_R
         if (attrs.ismultipleselection != undefined)
             multipleselection = "ismultipleselection"
 
-            return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="RateTypeId"'
-                   + 'entityname="RateType" ' + label + ' ' + addCliked + '></vr-select>';
+        return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name"  on-ready="ctrl.onSelectorReady" datavaluefield="RateTypeId" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"'
+                   + 'entityname="RateType" ' + label + ' ' + addCliked + ' ></vr-select>';
        
     }
     function rateTypeCtor(ctrl, $scope, WhS_BE_RateTypeAPIService, $attrs) {
-
+        var selectorApi;
         function initializeController() {
             ctrl.addNewRateType = function () {
                 var onRateTypeAdded = function (rateTypeObj) {
@@ -85,7 +87,10 @@ app.directive('vrWhsBeRatetypeSelector', ['WhS_BE_RateTypeAPIService', 'WhS_BE_R
                 WhS_BE_RateTypeService.addRateType(onRateTypeAdded);
             }
 
-            defineAPI();
+            ctrl.onSelectorReady = function (api) {
+                selectorApi = api;
+                defineAPI();
+            }
         }
 
         function defineAPI() {
@@ -102,6 +107,7 @@ app.directive('vrWhsBeRatetypeSelector', ['WhS_BE_RateTypeAPIService', 'WhS_BE_R
                 }
 
                 return WhS_BE_RateTypeAPIService.GetAllRateTypes().then(function (response) {
+                    selectorApi.clearDataSource();
                     angular.forEach(response, function (item) {
                         ctrl.datasource.push(item);
 

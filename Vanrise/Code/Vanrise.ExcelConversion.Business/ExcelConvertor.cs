@@ -124,7 +124,7 @@ namespace Vanrise.ExcelConversion.Business
                     }
                     context.fieldValueByFieldName = fieldValueByFieldName;
                     if (!manager.IsFilterGroupMatch(listMapping.Filter.FilterGroup, context))
-                        break;
+                        continue;
                 }
 
                 var convertedRecord = new ConvertedExcelRecord { Fields = new ConvertedExcelFieldsByName() };
@@ -184,7 +184,7 @@ namespace Vanrise.ExcelConversion.Business
                     {
                         return result;
                     }
-                    else if (!isCommaDecimalSeparator && Decimal.TryParse(fldValue.ToString(), out result))
+                    else if (!isCommaDecimalSeparator && (Decimal.TryParse(fldValue.ToString(),NumberStyles.Any,CultureInfo.InvariantCulture, out result)))
                     {
                         return result;
                     }else

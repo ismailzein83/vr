@@ -75,6 +75,7 @@
                         {
                             readyPromiseDeferred: UtilsService.createPromiseDeferred(),
                             loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                            selectedDataTypes : VR_GenericData_MappingFieldTypeEnum.Text
                         };
                     addFilterAPIExtension(dataItem);
                 }
@@ -125,7 +126,6 @@
                         return "Fields are not matched."
                     return null;
                 }
-
                 ctrl.checkIfFieldNameChanges = function()
                 {
                     var fieldNames = VR_GenericData_RecordFilterService.getFilterGroupFieldNames(filterObj);
