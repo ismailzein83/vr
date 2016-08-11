@@ -1,15 +1,11 @@
 ﻿<vr-row removeline>
     <vr-columns width="1/2row" haschildcolumns>
-        <vr-validator validate="ctrl.validate()">
-            <div style="overflow:auto">
-                <vr-columns width="1/2row">
-                    <vr-textbox value="ctrl.fromRate" type="number" label="From Rate" isrequired minvalue="0"></vr-textbox>
-                </vr-columns>
-                <vr-columns width="1/2row">
-                    <vr-textbox value="ctrl.toRate" type="number" label="To Rate" isrequired minvalue="0"></vr-textbox>
-                </vr-columns>
-            </div>
-        </vr-validator>
+        <vr-columns width="1/2row">
+            <vr-textbox value="ctrl.fromRate" customvalidate="ctrl.validate()" type="number" label="From Rate" isrequired minvalue="0"></vr-textbox>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-textbox value="ctrl.toRate" customvalidate="ctrl.validate()" type="number" label="To Rate" isrequired minvalue="0"></vr-textbox>
+        </vr-columns>
     </vr-columns>
     <vr-columns width="1/4row">
         <vr-textbox value="ctrl.extraPercentage" type="number" label="Extra Percentage" isrequired minvalue="-100" maxvalue="100"></vr-textbox>
