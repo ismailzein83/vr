@@ -9,7 +9,7 @@
         var isEditMode;
         var balanceAlertThresholdAPI;
         var balanceAlertThresholdReadyDeferred = UtilsService.createPromiseDeferred();
-        var extensionType = "VR_Notification_VRAction";
+        var balanceAlertActionExtensionType = "VR_AccountBalance_BalanceAlert_VRAction";
         var vRActionManagementAPI;
         var vRActionManagementReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -85,7 +85,7 @@
         function loadVRActionManagement() {
             var vRActionManagementLoadDeferred = UtilsService.createPromiseDeferred();
             vRActionManagementReadyDeferred.promise.then(function () {
-                var vrActionPayload = { extensionType: extensionType, actions: thresholdEntity != undefined ? thresholdEntity.Actions : undefined,isRequired:true };
+                var vrActionPayload = { extensionType: balanceAlertActionExtensionType, actions: thresholdEntity != undefined ? thresholdEntity.Actions : undefined, isRequired: true };
                 VRUIUtilsService.callDirectiveLoad(vRActionManagementAPI, vrActionPayload, vRActionManagementLoadDeferred);
             });
             return vRActionManagementLoadDeferred.promises;
@@ -94,7 +94,7 @@
         function loadRollBackVRActionManagement() {
             var rollBackVRActionManagementLoadDeferred = UtilsService.createPromiseDeferred();
             rollBackVRActionManagementReadyDeferred.promise.then(function () {
-                var vrActionPayload = { extensionType: extensionType, actions: thresholdEntity != undefined ? thresholdEntity.RollbackActions : undefined, isRequired :false };
+                var vrActionPayload = { extensionType: balanceAlertActionExtensionType, actions: thresholdEntity != undefined ? thresholdEntity.RollbackActions : undefined, isRequired: false };
                 VRUIUtilsService.callDirectiveLoad(rollBackVRActionManagementAPI, vrActionPayload, rollBackVRActionManagementLoadDeferred);
             });
             return rollBackVRActionManagementLoadDeferred.promises;
