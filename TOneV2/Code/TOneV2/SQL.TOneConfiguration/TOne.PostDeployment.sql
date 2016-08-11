@@ -245,14 +245,18 @@ as (select * from (values
 
 (3302,'WhS_Analytics_Variation','Variation',1204,0,'["View"]'),
 (3303,'WhS_Analytics_BillingReport','Billing Report',1204,0,'["View"]'),
-(3304,'Generic_Billing_Reports','Generic Billing Reports',1204,0,'["View"]'),
+(3304,'BillingStatistic','Billing Statistic',1204,0,'["View"]'),
+(3310,'BillingCDR','Billing CDR',1204,0,'["View"]'),
 
 (3305,'WhS_BE_SwitchConnectivity','Switch Connectivity',2,0,'["View", "Add", "Edit"]'),
 
 (3306,'WhS_Analytics_RepeatedNumber','Repeated Number',1205,0,'["View"]'),
 (3307,'WhS_Analytics_BlockedAttempts','BlockedAttempts',1205,0,'["View"]'),
 (3308,'WhS_Analytics_ReleaseCode','Release Code',1205,0,'["View"]'),
-(3309,'Generic_Traffic_Reports','Generic Traffic Reports',1205,0,'["View"]'),
+(3309,'TrafficStatistic','Traffic Statistic',1205,0,'["View"]'),
+(3311,'CDR','Raw CDR',1205,0,'["View"]'),
+(3312,'FailedCDR','Failed CDR',1205,0,'["View"]'),
+(3313,'InvalidCDR','Invalid CDR',1205,0,'["View"]'),
 
 (3320,'WhS_BE_CarrierAccount','Carrier Account',201,0,'["View", "Add", "Edit", "Delete"]'),
 (3321,'WhS_BE_CarrierProfile','Carrier Profile',201,0,'["View"]'),
