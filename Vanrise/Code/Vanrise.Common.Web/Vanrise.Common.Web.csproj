@@ -267,6 +267,7 @@
     <Content Include="Common\Services\APIServices\VRMailMessageTemplateAPIService.js" />
     <Content Include="Common\Services\APIServices\VRMailMessageTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRObjectTypeDefinitionAPIService.js" />
+    <Content Include="Common\Services\TextManipulationService.js" />
     <Content Include="Common\Services\VRMailMessageTemplateService.js" />
     <Content Include="Common\Services\VRObjectPropertyVariableService.js" />
     <Content Include="Common\Services\VRMailMessageTypeService.js" />
@@ -350,6 +351,8 @@
     <Content Include="Common\Views\Support.html" />
     <Content Include="Common\Views\Settings\SettingsManagement.html" />
     <Content Include="Common\Views\Settings\SettingsManagementController.js" />
+    <Content Include="Common\Views\TextManipulation\TextManipulationEditor.html" />
+    <Content Include="Common\Views\TextManipulation\TextManipulationEditorController.js" />
     <Content Include="Common\Views\VRMail\VRMailMessageTemplateEditor.html" />
     <Content Include="Common\Views\VRMail\VRMailMessageTemplateEditorController.js" />
     <Content Include="Common\Views\VRMail\VRMailMessageTemplateManagement.html" />
