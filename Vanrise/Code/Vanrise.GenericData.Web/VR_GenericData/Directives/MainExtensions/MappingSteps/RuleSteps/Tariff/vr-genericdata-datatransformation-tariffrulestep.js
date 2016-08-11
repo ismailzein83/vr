@@ -122,6 +122,7 @@ app.directive('vrGenericdataDatatransformationTariffrulestep', ['UtilsService', 
                         if (payload != undefined && payload.stepDetails) {
                             payloadRuleStep.ruleFieldsMappings = payload.stepDetails.RuleFieldsMappings;
                             payloadRuleStep.effectiveTime = payload.stepDetails.EffectiveTime;
+                            payloadRuleStep.isEffectiveInFuture = payload.stepDetails.IsEffectiveInFuture;
                             payloadRuleStep.ruleObjectsMappings = payload.stepDetails.RuleObjectsMappings;
 
                             payloadRuleStep.ruleDefinitionId = payload.stepDetails.RuleDefinitionId;

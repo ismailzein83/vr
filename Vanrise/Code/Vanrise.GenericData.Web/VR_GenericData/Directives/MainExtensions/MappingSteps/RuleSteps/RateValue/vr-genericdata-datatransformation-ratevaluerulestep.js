@@ -77,6 +77,7 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestep', ['UtilsService
                             payloadRuleStep.ruleFieldsMappings = payload.stepDetails.RuleFieldsMappings;
                             payloadRuleStep.ruleObjectsMappings = payload.stepDetails.RuleObjectsMappings;
                             payloadRuleStep.effectiveTime = payload.stepDetails.EffectiveTime;
+                            payloadRuleStep.isEffectiveInFuture = payload.stepDetails.IsEffectiveInFuture;
                             payloadRuleStep.ruleDefinitionId = payload.stepDetails.RuleDefinitionId;
                             payloadRuleStep.ruleId = payload.stepDetails.RuleId;
                         }

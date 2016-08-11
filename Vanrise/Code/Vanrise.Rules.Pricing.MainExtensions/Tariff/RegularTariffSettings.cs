@@ -21,14 +21,16 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
 
         protected override void Execute(IPricingRuleTariffContext context)
         {
+            DateTime effectiveOn = context.TargetTime.HasValue ? context.TargetTime.Value : DateTime.Now;
+
             CurrencyExchangeRateManager currencyExchangeManager = new CurrencyExchangeRateManager();
             decimal convertedFirstPeriodRate;
             decimal convertedCallFee;
 
             if (context.DestinationCurrencyId.HasValue)
             {
-                convertedFirstPeriodRate = currencyExchangeManager.ConvertValueToCurrency(FirstPeriodRate, context.SourceCurrencyId, context.DestinationCurrencyId.Value, context.TargetTime.Value);
-                convertedCallFee = currencyExchangeManager.ConvertValueToCurrency(CallFee, context.SourceCurrencyId, context.DestinationCurrencyId.Value, context.TargetTime.Value);
+                convertedFirstPeriodRate = currencyExchangeManager.ConvertValueToCurrency(FirstPeriodRate, context.SourceCurrencyId, context.DestinationCurrencyId.Value, effectiveOn);
+                convertedCallFee = currencyExchangeManager.ConvertValueToCurrency(CallFee, context.SourceCurrencyId, context.DestinationCurrencyId.Value, effectiveOn);
             }
             else
             {

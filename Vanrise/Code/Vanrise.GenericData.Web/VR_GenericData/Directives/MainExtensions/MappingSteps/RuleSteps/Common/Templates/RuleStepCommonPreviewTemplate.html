@@ -2,6 +2,7 @@
     <vr-columns width="3/4row">
         <vr-list maxitemsperrow="1">
             <vr-listitem ng-show="ctrl.effectiveTime != undefined"><vr-label>Effective Time = {{ctrl.effectiveTime}}</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.isEffectiveInFuture != undefined"><vr-label>Is Effective In Future = {{ctrl.isEffectiveInFuture}}</vr-label></vr-listitem>
             <vr-listitem ng-show="ctrl.ruleId != undefined"><vr-label>{{ctrl.ruleId}} = Rule Id</vr-label></vr-listitem>
         </vr-list>
     </vr-columns>

@@ -81,7 +81,7 @@ namespace Vanrise.Rules
                     continue;
                 return rule;
             }
-            while(node.ParentNode != null)//not root node
+            while (node.ParentNode != null)//not root node
             {
                 if (!node.IsUnMatchedRulesNode && node.ParentNode.UnMatchedRulesNode != null)
                     return GetMatchRule(node.ParentNode.UnMatchedRulesNode, target);
@@ -92,18 +92,16 @@ namespace Vanrise.Rules
 
         bool IsRuleMatched(BaseRule rule, BaseRuleTarget target)
         {
-            if (target.EffectiveOn.HasValue
-                        &&
-                        (target.EffectiveOn.Value < rule.BeginEffectiveTime
-                        ||
-                        (rule.EndEffectiveTime.HasValue && target.EffectiveOn.Value >= rule.EndEffectiveTime.Value)
-                        )
-                      )
+            DateTime now = DateTime.Now;
+
+            if ((target.EffectiveOn.HasValue && (target.EffectiveOn.Value < rule.BeginEffectiveTime
+                                                || (rule.EndEffectiveTime.HasValue && target.EffectiveOn.Value >= rule.EndEffectiveTime.Value)))
+                || (target.IsEffectiveInFuture && now > rule.BeginEffectiveTime && rule.EndEffectiveTime.HasValue))
                 return false;
 
             if (rule.IsAnyCriteriaExcluded(target))
                 return false;
-            
+
             return true;
         }
     }

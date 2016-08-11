@@ -14,6 +14,8 @@ namespace Vanrise.GenericData.Transformation.Entities
 
         public string EffectiveTime { get; set; }
 
+        public string IsEffectiveInFuture { get; set; }
+
         public string RuleId { get; set; }
         public List<GenericRuleCriteriaFieldMapping> RuleFieldsMappings { get; set; }
         public List<GenericRuleObjectMapping> RuleObjectsMappings { get; set; }
@@ -22,7 +24,13 @@ namespace Vanrise.GenericData.Transformation.Entities
         {
             ruleTargetVariableName = context.GenerateUniqueMemberName("ruleTarget");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new {1}();", ruleTargetVariableName, CSharpCompiler.TypeToString(typeof(T)));
-            context.AddCodeToCurrentInstanceExecutionBlock("{0}.EffectiveOn = {1};", ruleTargetVariableName, this.EffectiveTime);
+
+            if (this.EffectiveTime != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0}.EffectiveOn = {1};", ruleTargetVariableName, this.EffectiveTime);
+
+            if (this.IsEffectiveInFuture != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0}.IsEffectiveInFuture = {1};", ruleTargetVariableName, this.IsEffectiveInFuture);
+
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.TargetFieldValues = new Dictionary<string, object>();", ruleTargetVariableName);
 
             if (this.RuleFieldsMappings != null)

@@ -54,7 +54,8 @@ app.directive('vrGenericdataDatatransformationRulestepcommonPreview', ['UtilsSer
                             stepObj.stepDetails = payload.stepDetails;
                             ctrl.ruleFieldsMappings = payload.stepDetails.RuleFieldsMappings;
                             ctrl.ruleObjectsMappings = payload.stepDetails.RuleObjectsMappings;
-                            ctrl.effectiveTime = payload.stepDetails.EffectiveTime
+                            ctrl.effectiveTime = payload.stepDetails.EffectiveTime;
+                            ctrl.isEffectiveInFuture = payload.stepDetails.IsEffectiveInFuture;
                             ctrl.ruleId = payload.stepDetails.RuleId;
                         }
 
@@ -67,6 +68,7 @@ app.directive('vrGenericdataDatatransformationRulestepcommonPreview', ['UtilsSer
                     ctrl.ruleFieldsMappings = changes.RuleFieldsMappings;
                     ctrl.ruleObjectsMappings = changes.RuleObjectsMappings;
                     ctrl.effectiveTime = changes.EffectiveTime;
+                    ctrl.isEffectiveInFuture = changes.IsEffectiveInFuture;
                     ctrl.ruleId = changes.RuleId;
                 }
 
@@ -98,8 +100,6 @@ app.directive('vrGenericdataDatatransformationRulestepcommonPreview', ['UtilsSer
                         }
                     }
                 }
-                if (ctrl.effectiveTime == undefined)
-                    return "Missing effective time mapping.";
 
                 return null;
             }
