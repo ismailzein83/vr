@@ -101,6 +101,8 @@
     <Folder Include="reprocess\" />
     <Folder Include="reprocess\Tables\" />
     <Folder Include="reprocess\Stored Procedures\" />
+    <Folder Include="VRNotification\" />
+    <Folder Include="VRNotification\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -364,6 +366,20 @@
     <Build Include="reprocess\Stored Procedures\sp_ReprocessDefinition_Insert.sql" />
     <Build Include="reprocess\Stored Procedures\sp_ReprocessDefinition_GetAll.sql" />
     <Build Include="Security\reprocess.sql" />
+    <Build Include="common\Tables\VRObjectTypeDefinition.sql" />
+    <Build Include="common\Tables\MailMessageType.sql" />
+    <Build Include="common\Tables\MailMessageTemplate.sql" />
+    <Build Include="VRNotification\Tables\VRAlertRule.sql" />
+    <Build Include="common\Stored Procedures\sp_VRObjectTypeDefinition_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_VRObjectTypeDefinition_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_VRObjectTypeDefinition_GetAll.sql" />
+    <Build Include="common\Stored Procedures\sp_MailMessageType_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_MailMessageType_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_MailMessageType_GetAll.sql" />
+    <Build Include="common\Stored Procedures\sp_MailMessageTemplate_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_MailMessageTemplate_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_MailMessageTemplate_GetAll.sql" />
+    <Build Include="Security\VRNotification.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
