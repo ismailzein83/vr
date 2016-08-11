@@ -318,9 +318,7 @@
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-ruledefinition-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\EntityType\retail-be-entitytype-selector.js" />
-    <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\retail-be-statuscharginginfo.js" />
     <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\retail-be-statuschargingset-grid.js" />
-    <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\Templates\StatusChargingInfoTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Status\retail-be-statusdefinition-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Status\retail-be-statusdefinition-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\Templates\StatusChargingSetGridTemplate.html" />
