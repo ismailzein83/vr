@@ -49,31 +49,9 @@
                 </vr-datagrid>
             </vr-columns>
             <vr-columns width="fullrow">
-                <vr-section title="Filter">
-                   
-                        <vr-row  removeline>
-                            <vr-columns width="fullrow">
-                                <vr-validator validate="listMappingCtrl.isFilterFilled()">
-                                    <vr-label isvalue breakline>{{listMappingCtrl.expression}}</vr-label>
-                                </vr-validator>
-                            </vr-columns>
-                        </vr-row>
-                        <vr-row>
-                            <vr-columns width="1/4row" class="pull-right">
-                                <button type="button" class="btn btn-xs btn-primary" ng-click="listMappingCtrl.addFilter()" ng-disabled="listMappingCtrl.addFilterValidate()">
-                                    <i class="glyphicon glyphicon-pencil"></i> Edit Filter
-                                </button>
-                            </vr-columns>
-
-                            <vr-columns width="1/4row" class="pull-right">
-                                <button type="button" class="btn btn-xs btn-primary" ng-click="listMappingCtrl.resetFilter()" ng-disabled="listMappingCtrl.expression ==undefined">
-                                    <i class="glyphicon glyphicon-remove"></i> Reset Filter
-                                </button>
-                            </vr-columns>
-                        </vr-row>
-
-               
-                </vr-section> 
+                    <vr-section title="Filter">
+                        <vr-genericdata-recordfilter on-ready="listMappingCtrl.onRecordFilterReady" customvalidate="listMappingCtrl.isFilterFilled" validateedit="listMappingCtrl.addFilterValidate"></vr-genericdata-recordfilter>
+                    </vr-section>
             </vr-columns>  
         </vr-row>
     </vr-tab>

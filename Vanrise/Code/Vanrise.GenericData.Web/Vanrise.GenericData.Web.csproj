@@ -378,6 +378,8 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DateTime\Templates\DateTimeFieldTypeRuleFilterEditor.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Number\Templates\NumberFieldTypeRuleFilterEditor.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\Templates\TextFieldTypeRuleFilterEditor.html" />
+    <Content Include="VR_GenericData\Directives\RecordFilter\Templates\RecordFilterTemplate.html" />
+    <Content Include="VR_GenericData\Directives\RecordFilter\vr-genericdata-recordfilter.js" />
     <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\Templates\DataRecordTypeFieldEmptyFilter.html" />
     <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\Templates\DataRecordTypeFieldNonEmptyFilter.html" />
     <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\Templates\DataRecordTypeFieldRuleFilter.html" />

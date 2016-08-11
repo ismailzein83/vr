@@ -27,7 +27,9 @@
             var context;
             var listName;
             var listMappingData;
-            var filterObj;
+            var recordFilterAPI;
+            var recordFilterReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 ctrl.fieldMappings = [];
                 ctrl.updateLastRowIndexRange = function () {
@@ -69,6 +71,12 @@
                     }
                 }
 
+                ctrl.onRecordFilterReady = function(api)
+                {
+                    recordFilterAPI = api;
+                    recordFilterReadyPromiseDeferred.resolve();
+                }
+
                 ctrl.filterFieldsMappings = [];
                 ctrl.addField = function () {
                     var dataItem =
@@ -97,45 +105,26 @@
                     var index = ctrl.filterFieldsMappings.indexOf(dataItem);
                     ctrl.filterFieldsMappings.splice(index, 1);
                 }
-                ctrl.addFilter = function () {
-                    var onFilterAdded = function (filter, expression) {
-                        filterObj = filter;
-                        ctrl.expression = expression;
-                    }
-                    var fields = [];
-                    for (var i = 0; i < ctrl.filterFieldsMappings.length; i++) {
-                        var filterFieldsMapping = ctrl.filterFieldsMappings[i];
-
-                        fields.push({
-                            FieldName: filterFieldsMapping.FieldName,
-                            FieldTitle: filterFieldsMapping.FieldName,
-                            Type: filterFieldsMapping.selectedDataTypes.value,
-                        });
-                    }
-                    VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter(fields, filterObj, onFilterAdded);
-                };
-                ctrl.resetFilter = function () {
-                    ctrl.expression = undefined;
-                    filterObj = null;
-                }
                 ctrl.isFilterFilled = function()
                 {
-                    if (ctrl.filterFieldsMappings.length > 0 && filterObj == undefined)
+                    var recordFilterData = recordFilterAPI.getData();
+                    if (ctrl.filterFieldsMappings.length > 0 && recordFilterData.filterObj == undefined)
                         return "Filter does not edited yet.";
-                    if (ctrl.checkIfFieldNameChanges())
+                    if (ctrl.checkIfFieldNameChanges(recordFilterData))
                         return "Fields are not matched."
                     return null;
                 }
-                ctrl.checkIfFieldNameChanges = function()
+                ctrl.checkIfFieldNameChanges = function (recordFilterData)
                 {
-                    var fieldNames = VR_GenericData_RecordFilterService.getFilterGroupFieldNames(filterObj);
-                    if(fieldNames != undefined)
+                    if (recordFilterData != undefined && recordFilterData.filterObj != undefined)
                     {
-                        for (var i = 0; i < fieldNames.length ; i++)
-                        {
-                            var fieldName = fieldNames[i];
-                            if (UtilsService.getItemByVal(ctrl.filterFieldsMappings, fieldName ,"FieldName") == undefined)
-                                return true;
+                        var fieldNames = VR_GenericData_RecordFilterService.getFilterGroupFieldNames(recordFilterData.filterObj);
+                        if (fieldNames != undefined) {
+                            for (var i = 0; i < fieldNames.length ; i++) {
+                                var fieldName = fieldNames[i];
+                                if (UtilsService.getItemByVal(ctrl.filterFieldsMappings, fieldName, "FieldName") == undefined)
+                                    return true;
+                            }
                         }
                     }
                     return false;
@@ -198,8 +187,6 @@
                             }
                             if(listMappingData.Filter != undefined && listMappingData.Filter.Fields != undefined)
                             {
-                                ctrl.expression = listMappingData.Filter.ConditionExpression;
-                                filterObj = listMappingData.Filter.FilterGroup;
                                 for (var j = 0; j < listMappingData.Filter.Fields.length; j++) {
                                     var filterItem = {
                                         readyPromiseDeferred : UtilsService.createPromiseDeferred(),
@@ -223,6 +210,22 @@
 
                       
 
+                    }
+                    promises.push(loadRecordFilterDirective());
+                    function loadRecordFilterDirective() {
+                        var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+                        recordFilterReadyPromiseDeferred.promise.then(function () {
+                            var directivePayload = { context: getRecordFilterContext() };
+                            if (listMappingData.Filter != undefined)
+                            {
+                                directivePayload.FilterGroup = listMappingData.Filter.FilterGroup;
+                                directivePayload.ConditionExpression = listMappingData.Filter.ConditionExpression;
+
+                            }
+                            VRUIUtilsService.callDirectiveLoad(recordFilterAPI, directivePayload, directiveLoadDeferred);
+                        });
+
+                        return directiveLoadDeferred.promise;
                     }
                     function addAPIExtension(dataItem) {
                         var payload = {
@@ -282,10 +285,16 @@
                     if (ctrl.filterFieldsMappings.length > 0)
                     {
                         filter = {
-                            ConditionExpression: ctrl.expression ,
-                            Fields: [],
-                            FilterGroup: filterObj
+                            Fields: []
                         };
+                        if (recordFilterAPI != undefined) {
+                            var filterObj = recordFilterAPI.getData();
+
+                            filter.ConditionExpression = filterObj.expression;
+
+                            filter.FilterGroup = filterObj.filterObj;
+                        }
+                        
                         for(var i=0;i<ctrl.filterFieldsMappings.length;i++)
                         {
                             var filterFieldsMapping = ctrl.filterFieldsMappings[i];
@@ -320,6 +329,27 @@
                     }
                     return currentContext;
                 }
+            }
+
+            function getRecordFilterContext()
+            {
+                var context =
+                    {
+                        getFields: function () {
+                            var fields = [];
+                            for (var i = 0; i < ctrl.filterFieldsMappings.length; i++) {
+                                var filterFieldsMapping = ctrl.filterFieldsMappings[i];
+
+                                fields.push({
+                                    FieldName: filterFieldsMapping.FieldName,
+                                    FieldTitle: filterFieldsMapping.FieldName,
+                                    Type: filterFieldsMapping.selectedDataTypes.value,
+                                });
+                            }
+                            return fields;
+                        }
+                    };
+                return context;
             }
         }
     }
