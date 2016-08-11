@@ -11,6 +11,11 @@ namespace TOne.WhS.RouteSync.TelesRadius.SQL
     public class RadiusSQLDataManager : BaseSQLDataManager, IRadiusDataManager
     {
 
+        public RadiusSQLDataManager()
+            : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
+        {
+
+        }
         string _connectionString;
         int _configId;
         public void ApplyRadiusRoutesForDB(object preparedRadiusRoutes)

@@ -29,18 +29,7 @@ namespace TOne.WhS.Routing.Business
         public Vanrise.Entities.IDataRetrievalResult<RPRouteDetail> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<RPRouteQuery> input)
         {
             IRPRouteDataManager manager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
-            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
-
-            var routingDatabase = routingDatabaseManager.GetRoutingDatabase(input.Query.RoutingDatabaseId);
-
-            if (routingDatabase == null)//in case of deleted database
-                routingDatabase = routingDatabaseManager.GetRoutingDatabaseFromDB(input.Query.RoutingDatabaseId);
-
-            if (routingDatabase == null)
-                throw new NullReferenceException(string.Format("routingDatabase. RoutingDatabaseId:{0}", input.Query.RoutingDatabaseId));
-
-            var productRoutingDatabases = routingDatabaseManager.GetRoutingDatabasesReady(routingDatabase.ProcessType, routingDatabase.Type).OrderByDescending(itm => itm.CreatedTime);
-            manager.RoutingDatabase = productRoutingDatabases.First();
+            manager.RoutingDatabase = GetLatestRoutingDatabase(input.Query.RoutingDatabaseId);
 
             BigResult<RPRoute> rpRouteResult = manager.GetFilteredRPRoutes(input);
 
@@ -57,8 +46,7 @@ namespace TOne.WhS.Routing.Business
         public IEnumerable<RPRouteDetail> GetRPRoutes(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones)
         {
             IRPRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
-            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
-            dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(routingDatabaseId);
+            dataManager.RoutingDatabase = GetLatestRoutingDatabase(routingDatabaseId);
 
             IEnumerable<RPRoute> rpRoutes = dataManager.GetRPRoutes(rpZones);
             return rpRoutes.MapRecords(x => RPRouteDetailMapper(x, policyConfigId, numberOfOptions));
@@ -68,7 +56,7 @@ namespace TOne.WhS.Routing.Business
         {
             IRPRouteDataManager routeManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
-            routeManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(routingDatabaseId);
+            routeManager.RoutingDatabase = GetLatestRoutingDatabase(routingDatabaseId);
 
             Dictionary<int, RPRouteOptionSupplier> dicRouteOptionSuppliers = routeManager.GetRouteOptionSuppliers(routingProductId, saleZoneId);
 
@@ -88,8 +76,7 @@ namespace TOne.WhS.Routing.Business
         public Vanrise.Entities.IDataRetrievalResult<RPRouteOptionDetail> GetFilteredRPRouteOptions(Vanrise.Entities.DataRetrievalInput<RPRouteOptionQuery> input)
         {
             IRPRouteDataManager manager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
-            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
-            manager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(input.Query.RoutingDatabaseId);
+            manager.RoutingDatabase = GetLatestRoutingDatabase(input.Query.RoutingDatabaseId);
 
             Dictionary<int, IEnumerable<RPRouteOption>> allOptions = manager.GetRouteOptions(input.Query.RoutingProductId, input.Query.SaleZoneId);
             if (allOptions == null || !allOptions.ContainsKey(input.Query.PolicyOptionConfigId))
@@ -108,7 +95,10 @@ namespace TOne.WhS.Routing.Business
                 return cachedConfigs.OrderBy(x => x.Title);
 
             int defaultPolicyId;
-            IEnumerable<int> selectedPolicyIds = this.GetRoutingDatabasePolicyIds(filter.RoutingDatabaseId, out defaultPolicyId);
+            var routingDatabase = GetLatestRoutingDatabase(filter.RoutingDatabaseId);
+
+
+            IEnumerable<int> selectedPolicyIds = this.GetRoutingDatabasePolicyIds(routingDatabase.ID, out defaultPolicyId);
             Func<RPRouteOptionPolicySetting, bool> filterExpression = (itm) => selectedPolicyIds.Contains(itm.ExtensionConfigurationId);
 
             IEnumerable<RPRouteOptionPolicySetting> cachedFilteredConfigs = cachedConfigs.FindAllRecords(filterExpression);
@@ -146,6 +136,22 @@ namespace TOne.WhS.Routing.Business
         }
 
         #region Private Members
+
+        private RoutingDatabase GetLatestRoutingDatabase(int routingDatabaseId)
+        {
+            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
+
+            var routingDatabase = routingDatabaseManager.GetRoutingDatabase(routingDatabaseId);
+
+            if (routingDatabase == null)//in case of deleted database
+                routingDatabase = routingDatabaseManager.GetRoutingDatabaseFromDB(routingDatabaseId);
+
+            if (routingDatabase == null)
+                throw new NullReferenceException(string.Format("routingDatabase. RoutingDatabaseId:{0}", routingDatabaseId));
+
+            var productRoutingDatabases = routingDatabaseManager.GetRoutingDatabasesReady(routingDatabase.ProcessType, routingDatabase.Type).OrderByDescending(itm => itm.CreatedTime);
+            return productRoutingDatabases.First();
+        }
 
         private RPRouteDetail RPRouteDetailMapper(RPRoute rpRoute, int policyConfigId, int numberOfOptions)
         {
