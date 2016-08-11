@@ -92,7 +92,6 @@ namespace Retail.BusinessEntity.Business
                     {
                         StatusDefinitionId = new Guid("007869D9-6DC2-4F56-88A4-18C8C442E49E"),
                         StatusName = "Suspended",
-                         HasInitialCharge = false,
                         HasRecurringCharge = true
                     }
             };
