@@ -44,6 +44,7 @@
                     defineAPI();
                 };
                 $scope.scopeModel.onObjectTypeSelectionChanged = function () {
+                    if (ctrl.onObjecttypeselectionchanged != null && typeof (ctrl.onObjecttypeselectionchanged) == "function")
                     ctrl.onObjecttypeselectionchanged();
                 }
 
