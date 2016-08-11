@@ -60,7 +60,8 @@ namespace TOne.WhS.Routing.Business
                             context.SetRecordValue("SaleCurrencyId", currencyId);
                             context.SetRecordValue("NormalRate", customerZoneRate.Rate.NormalRate);
                             context.SetRecordValue("OtherRates", customerZoneRate.Rate.OtherRates);
-                            context.SetRecordValue("EffectiveDate", effectiveDate);
+                            context.SetRecordValue("EffectiveDate", effectiveOn);
+                            context.SetRecordValue("IsEffectiveInFuture", isEffectiveInFuture);
                         });
 
                         decimal rateValue = output.GetRecordValue("EffectiveRate");
@@ -120,7 +121,8 @@ namespace TOne.WhS.Routing.Business
                         context.SetRecordValue("SupplierCurrencyId", currencyId);
                         context.SetRecordValue("NormalRate", supplierRate.NormalRate);
                         context.SetRecordValue("OtherRates", supplierRate.OtherRates);
-                        context.SetRecordValue("EffectiveDate", effectiveDate);
+                        context.SetRecordValue("EffectiveDate", effectiveOn);
+                        context.SetRecordValue("IsEffectiveInFuture", isEffectiveInFuture);
                     });
 
                     decimal rateValue = output.GetRecordValue("EffectiveRate");

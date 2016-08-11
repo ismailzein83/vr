@@ -151,7 +151,8 @@ namespace TOne.WhS.Routing.Business
                 SupplierCode = supplierCodeMatch.SupplierCode,
                 SupplierZoneId = supplierCodeMatch.SupplierZoneId,
                 SupplierRate = supplierCodeMatchWithRate.RateValue,
-                EffectiveOn = routeRuleTarget.EffectiveOn
+                EffectiveOn = routeRuleTarget.EffectiveOn,
+                IsEffectiveInFuture = routeRuleTarget.IsEffectiveInFuture
             };
             if (percentage.HasValue)
                 option.Percentage = percentage.Value;
