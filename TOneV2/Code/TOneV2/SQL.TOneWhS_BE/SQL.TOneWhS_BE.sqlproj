@@ -351,5 +351,8 @@
     <Build Include="VR_Invoice\Tables\InvoiceItem.sql" />
     <Build Include="VR_Invoice\Tables\InvoiceType.sql" />
     <Build Include="Security\VR_Invoice.sql" />
+    <Build Include="TOneWhS_BE\Tables\CP_SaleRate_New.sql" />
+    <Build Include="TOneWhS_BE\Tables\CP_SalePriceList_New.sql" />
+    <Build Include="TOneWhS_Routing\Stored Procedures\sp_RoutingDatabase_GetById.sql" />
   </ItemGroup>
 </Project>
