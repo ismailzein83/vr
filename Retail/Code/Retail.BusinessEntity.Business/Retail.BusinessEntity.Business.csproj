@@ -47,6 +47,9 @@
     <Reference Include="Vanrise.AccountBalance.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BEBridge.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Business">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
     </Reference>
@@ -100,6 +103,7 @@
     <Compile Include="AccountManager.cs" />
     <Compile Include="AccountPartDefinitionManager.cs" />
     <Compile Include="AccountServiceManager.cs" />
+    <Compile Include="AccountSyncronizer.cs" />
     <Compile Include="AccountTypeManager.cs" />
     <Compile Include="Action\ActionDefinitionManager.cs" />
     <Compile Include="CreditClassManager.cs" />

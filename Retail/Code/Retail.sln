@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C9D155CA-F029-4600-994D-B363EB3036AC}"
 EndProject
@@ -73,9 +73,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.BusinessEntity.MainA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.BusinessEntity.MainActionBPs.Entities", "Retail.BusinessEntity.MainActionBPs.Entities\Retail.BusinessEntity.MainActionBPs.Entities.csproj", "{B6E5274A-9455-41E7-A07D-E78731DC1767}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.BusinessEntity.Entities.RingoExtenstions", "Retail.BusinessEntity.Entities.RingoExtenstions\Retail.BusinessEntity.Entities.RingoExtenstions.csproj", "{ABE8BAAC-AEF7-4FFF-9CEE-4A6D051E9F99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.BusinessEntity.BP", "Retail.BusinessEntity.BP\Retail.BusinessEntity.BP.csproj", "{29E01517-DED6-446F-9A27-ECCC66BEC313}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.BusinessEntity.BP.Activities", "Retail.BusinessEntity.BP.Activities\Retail.BusinessEntity.BP.Activities.csproj", "{D0762B7A-7F81-4EEE-8460-F013B97B8F1C}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 27
+		SccNumberOfProjects = 30
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -183,6 +189,18 @@ Global
 		SccProjectTopLevelParentUniqueName26 = Retail.sln
 		SccProjectName26 = Retail.BusinessEntity.MainActionBPs.Entities
 		SccLocalPath26 = Retail.BusinessEntity.MainActionBPs.Entities
+		SccProjectUniqueName27 = Retail.BusinessEntity.Entities.RingoExtenstions\\Retail.BusinessEntity.Entities.RingoExtenstions.csproj
+		SccProjectTopLevelParentUniqueName27 = Retail.sln
+		SccProjectName27 = Retail.BusinessEntity.Entities.RingoExtenstions
+		SccLocalPath27 = Retail.BusinessEntity.Entities.RingoExtenstions
+		SccProjectUniqueName28 = Retail.BusinessEntity.BP\\Retail.BusinessEntity.BP.csproj
+		SccProjectTopLevelParentUniqueName28 = Retail.sln
+		SccProjectName28 = Retail.BusinessEntity.BP
+		SccLocalPath28 = Retail.BusinessEntity.BP
+		SccProjectUniqueName29 = Retail.BusinessEntity.BP.Activities\\Retail.BusinessEntity.BP.Activities.csproj
+		SccProjectTopLevelParentUniqueName29 = Retail.sln
+		SccProjectName29 = Retail.BusinessEntity.BP.Activities
+		SccLocalPath29 = Retail.BusinessEntity.BP.Activities
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -297,6 +315,18 @@ Global
 		{B6E5274A-9455-41E7-A07D-E78731DC1767}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6E5274A-9455-41E7-A07D-E78731DC1767}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6E5274A-9455-41E7-A07D-E78731DC1767}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABE8BAAC-AEF7-4FFF-9CEE-4A6D051E9F99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABE8BAAC-AEF7-4FFF-9CEE-4A6D051E9F99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABE8BAAC-AEF7-4FFF-9CEE-4A6D051E9F99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABE8BAAC-AEF7-4FFF-9CEE-4A6D051E9F99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29E01517-DED6-446F-9A27-ECCC66BEC313}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29E01517-DED6-446F-9A27-ECCC66BEC313}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29E01517-DED6-446F-9A27-ECCC66BEC313}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29E01517-DED6-446F-9A27-ECCC66BEC313}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0762B7A-7F81-4EEE-8460-F013B97B8F1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0762B7A-7F81-4EEE-8460-F013B97B8F1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0762B7A-7F81-4EEE-8460-F013B97B8F1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0762B7A-7F81-4EEE-8460-F013B97B8F1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -332,5 +362,8 @@ Global
 		{0814DD36-FD4D-406E-861B-0155CC5EBAEF} = {025EE35C-62EB-43DE-B92E-C8633EFEBD16}
 		{48D55B41-D141-4CC8-97CA-06A6A7F993BA} = {025EE35C-62EB-43DE-B92E-C8633EFEBD16}
 		{B6E5274A-9455-41E7-A07D-E78731DC1767} = {025EE35C-62EB-43DE-B92E-C8633EFEBD16}
+		{ABE8BAAC-AEF7-4FFF-9CEE-4A6D051E9F99} = {025EE35C-62EB-43DE-B92E-C8633EFEBD16}
+		{29E01517-DED6-446F-9A27-ECCC66BEC313} = {025EE35C-62EB-43DE-B92E-C8633EFEBD16}
+		{D0762B7A-7F81-4EEE-8460-F013B97B8F1C} = {025EE35C-62EB-43DE-B92E-C8633EFEBD16}
 	EndGlobalSection
 EndGlobal

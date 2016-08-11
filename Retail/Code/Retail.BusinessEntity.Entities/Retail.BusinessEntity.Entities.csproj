@@ -41,6 +41,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BEBridge.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
@@ -86,6 +89,7 @@
     <Compile Include="Account\AccountInfo.cs" />
     <Compile Include="Account\AccountQuery.cs" />
     <Compile Include="Account\AccountStatus.cs" />
+    <Compile Include="Account\SourceAccountData.cs" />
     <Compile Include="Action\ActionBPDefinitionConfig.cs" />
     <Compile Include="Action\ActionBP\ActionBPDefinitionSettings.cs" />
     <Compile Include="Action\ActionBP\ActionBPInputArgument.cs" />

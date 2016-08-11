@@ -16,10 +16,10 @@ namespace Retail.Runtime
             var ringoSmsEDRs = new List<dynamic>();
 
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
-            Type ringoMessageEDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("RingoMessageEDR");
+            Type ringoMessageEDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("RingoEventEDR");
 
-
-            var currentItemCount = 15;
+            DateTime creationDate = default(DateTime);
+            var currentItemCount = 5;
             System.IO.StreamReader sr = ImportedData.StreamReader;
             while (!sr.EndOfStream)
             {
@@ -27,34 +27,25 @@ namespace Retail.Runtime
                 if (string.IsNullOrEmpty(currentLine))
                     continue;
 
-                string[] rowData = currentLine.Split('|');
+                string[] rowData = currentLine.Split(';');
 
 
                 if (rowData.Length != currentItemCount)
                     continue;
 
                 dynamic edr = Activator.CreateInstance(ringoMessageEDRRuntimeType) as dynamic;
-                edr.Sender = rowData[0];
-                edr.Recipient = rowData[1];
-                edr.SenderNetwork = edr.Recipient = rowData[2];
-                edr.RecipientNetwork = rowData[3];
-                edr.MSISDN = rowData[4];
-                edr.RecipientRequestCode = rowData[5];
-                edr.MessageType = int.Parse(rowData[6]);
-                edr.FileName = rowData[7];
-                edr.MessageDate = DateTime.ParseExact(rowData[8], "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                edr.ACKMessageFileName = rowData[9];
-                edr.ACKMessageDate = DateTime.ParseExact(rowData[10], "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                edr.StateRequest = int.Parse(rowData[11]);
-                edr.FlagCredit = string.IsNullOrEmpty(rowData[12]) ? 0 : int.Parse(rowData[12]);
-                edr.TransferredCredit = string.IsNullOrEmpty(rowData[13]) ? 0 : int.Parse(rowData[13]);
-                edr.FlagRequestCreditTransfer = string.IsNullOrEmpty(rowData[14]) ? 0 : int.Parse(rowData[14]);
+                edr.MSISDN = rowData[0];
+                edr.EventIdMvno = int.Parse(rowData[1]);
+                edr.EventId = int.Parse(rowData[2]);
+                edr.CreatedDate = creationDate;
+                edr.Event = rowData[3];
+                edr.Token = rowData[4];
 
                 ringoSmsEDRs.Add(edr);
             }
 
             var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(ringoSmsEDRs, "#RECORDSCOUNT# of Raw EDRs");
-            mappedBatches.Add("Ringo Message EDR Storage Stage", batch);
+            mappedBatches.Add("Ringo Event EDR Storage Stage", batch);
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;

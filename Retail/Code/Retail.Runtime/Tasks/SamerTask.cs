@@ -8,7 +8,6 @@ using Vanrise.AccountBalance.Entities;
 using Vanrise.AccountBalance.MainExtensions.BalancePeriod;
 using Vanrise.BusinessProcess;
 using Vanrise.Runtime;
-using Vanrise.Runtime;
 
 namespace Retail.Runtime.Tasks
 {
