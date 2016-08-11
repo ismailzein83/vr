@@ -8,6 +8,8 @@
 
         var isEditMode;
 
+        var context;
+
         var vrObjectTypeDefinitionId;
         var vrObjectTypeDefinitionEntity;
 
@@ -38,28 +40,20 @@
                 objectTypeSelectiveAPI = api;
                 objectTypeSelectiveReadyDeferred.resolve();
             };
+            $scope.scopeModel.onObjectTypeSelectionChanged = function () {
+                if (propertyDirectiveAPI != undefined) {
+                    var payload = {};
+                    payload.context = buildContext();
+                    propertyDirectiveAPI.load(payload);
+                }
+            }
 
             $scope.scopeModel.onPropertyDirectiveReady = function (api) {
                 propertyDirectiveAPI = api;
                 propertyDirectiveReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onObjectTypeSelectionChanged = function () {
 
-                setTimeout(function () {
-                    UtilsService.safeApply($scope, function () {
-
-                        var objectType = objectTypeSelectiveAPI.getData();
-
-                        if (objectType == undefined)
-                            return;
-
-                        VRUIUtilsService.callDirectiveLoad(propertyDirectiveAPI, undefined, propertyDirectiveLoadDeferred);
-
-                        return propertyDirectiveLoadDeferred.promise;
-                    });
-                });
-            }
 
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
@@ -135,12 +129,11 @@
                 var propertyDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 propertyDirectiveReadyDeferred.promise.then(function () {
-                    var payload;
+                    var payload = {};
+                    payload.context = buildContext();
+
                     if (vrObjectTypeDefinitionEntity != undefined) {
-                        payload = {
-                            properties: vrObjectTypeDefinitionEntity.Settings.Properties,
-                            objectType: vrObjectTypeDefinitionEntity.Settings.ObjectType
-                        };
+                        payload.properties = vrObjectTypeDefinitionEntity.Settings.Properties;
                     }
 
                     VRUIUtilsService.callDirectiveLoad(propertyDirectiveAPI, payload, propertyDirectiveLoadDeferred);
@@ -180,6 +173,13 @@
             });
         }
 
+        function buildContext() {
+            var context = {
+                getObjectType: function () { return objectTypeSelectiveAPI.getData(); }
+            }
+
+            return context;
+        }
         function buildVRObjectTypeDefinitionObjFromScope() {
 
             return {

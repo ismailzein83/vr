@@ -6,10 +6,10 @@
 
     function ObjectTypePropertyDefinitionService(VRModalService) {
 
-        function addObjectTypePropertyDefinition(properties, objectType, onObjectTypePropertyDefinitionAdded) {
+        function addObjectTypePropertyDefinition(properties, context, onObjectTypePropertyDefinitionAdded) {
             var modalParameters = {
                 properties: properties,
-                objectType: objectType
+                context: context
             };
 
             var modalSettings = {};
@@ -21,11 +21,11 @@
             VRModalService.showModal('/Client/Modules/Common/Views/VRObjectTypePropertyDefinition/VRObjectTypePropertyDefinitionEditor.html', modalParameters, modalSettings);
         }
 
-        function editObjectTypePropertyDefinition(propertyName, properties, objectType, onObjectTypePropertyDefinitionUpdated) {
+        function editObjectTypePropertyDefinition(propertyName, properties, context, onObjectTypePropertyDefinitionUpdated) {
             var modalParameters = {
                 propertyName: propertyName,
                 properties: properties,
-                objectType: objectType
+                context: context
             };
 
             var modalSettings = {};

@@ -26,7 +26,8 @@
             if (parameters != undefined) {
                 propertyName = parameters.propertyName;
                 properties = parameters.properties;
-                objectType = parameters.objectType;
+                if (parameters.context != undefined)
+                    objectType = parameters.context.getObjectType();
             }
             isEditMode = (propertyName != undefined);
         }
@@ -38,19 +39,19 @@
                 objectPropertySelectorReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onValidateProperties = function () {
+            //$scope.scopeModel.onValidateProperties = function () {
 
-                if (propertyEntity != undefined && propertyEntity.Name == $scope.scopeModel.propertyName)
-                    return null;
+            //    if (propertyEntity != undefined && propertyEntity.Name == $scope.scopeModel.propertyName)
+            //        return null;
 
-                for (var i = 0; i < properties.length; i++) {
-                    var property = properties[i];
-                    if ($scope.scopeModel.propertyName.toLowerCase() == property.VariableName.toLowerCase()) {
-                        return 'Same Property Name Exists';
-                    }
-                }
-                return null;
-            }
+            //    for (var i = 0; i < properties.length; i++) {
+            //        var property = properties[i];
+            //        if ($scope.scopeModel.propertyName.toLowerCase() == property.VariableName.toLowerCase()) {
+            //            return 'Same Property Name Exists';
+            //        }
+            //    }
+            //    return null;
+            //}
 
             $scope.scopeModel.save = function () {
                 if (isEditMode)
@@ -92,7 +93,7 @@
 
             function setTitle() {
                 $scope.title = (isEditMode) ?
-                    UtilsService.buildTitleForUpdateEditor((propertyEntity != undefined) ? propertyEntity.FieldName : null, 'Object Type Property Definition') :
+                    UtilsService.buildTitleForUpdateEditor((propertyEntity != undefined) ? propertyEntity.Name : null, 'Object Type Property Definition') :
                     UtilsService.buildTitleForAddEditor('Object Type Property Definition');
             }
             function loadStaticData() {

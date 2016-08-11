@@ -32,7 +32,7 @@
 
             var gridAPI;
 
-            var objectType;
+            var context;
 
             function initializeController() {
                 ctrl.objectTypePropertyDefinitions = [];
@@ -46,7 +46,7 @@
                     var onObjectTypePropertyDefinitionAdded = function (addedObjectTypePropertyDefinition) {
                         ctrl.objectTypePropertyDefinitions.push(addedObjectTypePropertyDefinition);
                     };
-                    VRCommon_VRObjectTypePropertyDefinitionService.addObjectTypePropertyDefinition(ctrl.objectTypePropertyDefinitions, objectType, onObjectTypePropertyDefinitionAdded);
+                    VRCommon_VRObjectTypePropertyDefinitionService.addObjectTypePropertyDefinition(ctrl.objectTypePropertyDefinitions, context, onObjectTypePropertyDefinitionAdded);
                 };
                 ctrl.onDeleteObjectTypeProperty = function (objectTypePropertyDefinition) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
@@ -64,8 +64,10 @@
 
                 api.load = function (payload) {
 
-                    if (payload != undefined && payload.objectType != undefined)
-                        objectType = payload.objectType;
+                    ctrl.objectTypePropertyDefinitions = [];
+
+                    if (payload != undefined && payload.context != undefined)
+                        context = payload.context;
 
                     if (payload != undefined && payload.properties != undefined) {
                         for (var i = 0; i < payload.properties.length; i++) {
@@ -100,10 +102,10 @@
 
             function editObjectTypePropertyDefinition(objectTypePropertyDefinition) {
                 var onObjectTypePropertyDefinitionUpdated = function (updatedObjectTypePropertyDefinition) {
-                    var index = UtilsService.getItemIndexByVal(ctrl.objectTypePropertyDefinitions, objectTypePropertyDefinition.VariableName, 'VariableName');
+                    var index = UtilsService.getItemIndexByVal(ctrl.objectTypePropertyDefinitions, objectTypePropertyDefinition.Name, 'Name');
                     ctrl.objectTypePropertyDefinitions[index] = updatedObjectTypePropertyDefinition;
                 };
-                VRCommon_VRObjectTypePropertyDefinitionService.editObjectTypePropertyDefinition(objectTypePropertyDefinition.Name, ctrl.objectTypePropertyDefinitions, objectType, onObjectTypePropertyDefinitionUpdated);
+                VRCommon_VRObjectTypePropertyDefinitionService.editObjectTypePropertyDefinition(objectTypePropertyDefinition.Name, ctrl.objectTypePropertyDefinitions, context, onObjectTypePropertyDefinitionUpdated);
             }
         }
     }

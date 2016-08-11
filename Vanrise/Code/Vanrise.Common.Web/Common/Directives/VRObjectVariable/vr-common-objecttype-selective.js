@@ -39,11 +39,13 @@
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.selectedTemplateConfig = {};
 
-                $scope.scopeModel.onSelectorReady = function (api) {
+                $scope.scopeModel.onObjectTypeSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
                 };
-                $scope.scopeModel.onObjectTypeSelectionChanged = ctrl.onObjecttypeselectionchanged;
+                $scope.scopeModel.onObjectTypeSelectionChanged = function () {
+                    ctrl.onObjecttypeselectionchanged();
+                }
 
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;

@@ -28,6 +28,7 @@
             this.initializeController = initializeController;
 
             var objectType;
+            var objectTypeConfigs;
             var objectPropertyEvaluator;
 
             var objectPropertyEvaluatorSelectorAPI;
@@ -51,8 +52,8 @@
                     directiveAPI = api;
 
                     var directivePayload = {};
-                    if ($scope.scopeModel.selectedObjectVariable.ObjectType != undefined)
-                        directivePayload.objectType = $scope.scopeModel.selectedObjectVariable.ObjectType;
+                    if (objectType != undefined)
+                        directivePayload.objectType = objectType;
 
                     var setLoader = function (value) {
                         $scope.scopeModel.isDirectiveLoading = value;
@@ -60,7 +61,6 @@
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
             }
-
             function defineAPI() {
                 var api = {};
 
@@ -78,15 +78,15 @@
 
                     //Loading ObjectPropertySelector
                     if (objectType != undefined) {
-                        var loadObjectPropertySelectorPromise = loadObjectPropertySelector()
+                        var loadObjectPropertySelectorPromise = loadObjectPropertySelector(objectType.ConfigId)
                         promises.push(loadObjectPropertySelectorPromise);
                     }
 
                     //Loading DirrectiveWrapper               
-                    //if (objectType != undefined) {
-                    //    var loadDirectivePromise = loadDirective();
-                    //    promises.push(loadDirectivePromise);
-                    //}
+                    if (objectPropertyEvaluator != undefined) {
+                        var loadDirectivePromise = loadDirective();
+                        promises.push(loadDirectivePromise);
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -107,9 +107,35 @@
                 }
             }
 
-            function loadObjectPropertySelector() {
+            function loadObjectPropertySelector(objectTypeConfigId) {
 
-                return VRCommon_VRObjectPropertyAPIService.GetObjectPropertyExtensionConfigs(objectType.Settings.PropertyEvaluatorExtensionType)
+                var objectPropertySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                loadObjectTypeConfigs().then(function () {
+                    getObjectPropertySelectorTemplateConfigs(objectTypeConfigId).then(function () {
+                        objectPropertySelectorLoadDeferred.resolve();
+                    });
+                });
+
+                return objectPropertySelectorLoadDeferred.promise;
+            }
+            function loadObjectTypeConfigs() {
+                return VRCommon_VRObjectTypeAPIService.GetObjectTypeExtensionConfigs().then(function (response) {
+                    if (response != null) {
+                        objectTypeConfigs = [];
+                        for (var i = 0; i < response.length; i++) {
+                            objectTypeConfigs.push(response[i]);
+                        }
+                    }
+                });
+            }
+            function getObjectPropertySelectorTemplateConfigs(objectTypeConfigId) {
+
+                var propertyEvaluatorExtensionType;
+                for (var index = 0; index < objectTypeConfigs.length ; index++)
+                    if (objectTypeConfigs[index].ExtensionConfigurationId == objectTypeConfigId)
+                        propertyEvaluatorExtensionType = objectTypeConfigs[index].PropertyEvaluatorExtensionType;
+
+                return VRCommon_VRObjectPropertyAPIService.GetObjectPropertyExtensionConfigs(propertyEvaluatorExtensionType)
                                         .then(function (response) {
                                             if (response != null) {
                                                 for (var i = 0; i < response.length; i++) {
@@ -122,6 +148,7 @@
                                                 }
                                             }
                                         });
+
             }
             function loadDirective() {
                 directiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -131,10 +158,8 @@
                     directiveReadyDeferred = undefined;
 
                     var directivePayload = {};
-                    if ($scope.scopeModel.selectedObjectVariable.ObjectType != undefined)
-                        directivePayload.objectType = objectType;
-                    if (objectPropertyEvaluator != undefined)
-                        directivePayload.valueEvaluator = objectPropertyEvaluator.propertyEvaluator;
+                    directivePayload.objectType = objectType;
+                    directivePayload.valueEvaluator = objectPropertyEvaluator;
 
                     VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                 });
@@ -147,3 +172,25 @@
     app.directive('vrCommonObjectproperty2Selector', VRObjectPropertySelector);
 
 })(app);
+
+
+
+
+
+
+//function loadObjectPropertySelector() {
+
+//    return VRCommon_VRObjectPropertyAPIService.GetObjectPropertyExtensionConfigs(objectType.Settings.PropertyEvaluatorExtensionType)
+//                            .then(function (response) {
+//                                if (response != null) {
+//                                    for (var i = 0; i < response.length; i++) {
+//                                        $scope.scopeModel.templateConfigs.push(response[i]);
+//                                    }
+
+//                                    if (objectPropertyEvaluator != undefined && objectPropertyEvaluator.ConfigId != undefined) {
+//                                        $scope.scopeModel.selectedTemplateConfig =
+//                                                UtilsService.getItemByVal($scope.scopeModel.templateConfigs, objectPropertyEvaluator.ConfigId, 'ExtensionConfigurationId');
+//                                    }
+//                                }
+//                            });
+//}
