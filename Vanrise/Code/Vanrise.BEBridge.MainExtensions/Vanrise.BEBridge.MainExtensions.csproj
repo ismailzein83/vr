@@ -34,6 +34,33 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Rebex.Net.Ftp">
+      <HintPath>..\Resources\DLLs\Rebex.Net.Ftp.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.ProxySocket">
+      <HintPath>..\Resources\DLLs\Rebex.Net.ProxySocket.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.SecureSocket">
+      <HintPath>..\Resources\DLLs\Rebex.Net.SecureSocket.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Sftp">
+      <HintPath>..\Resources\DLLs\Rebex.Net.Sftp.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Ssh">
+      <HintPath>..\Resources\DLLs\Rebex.Net.Ssh.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.SshShell">
+      <HintPath>..\Resources\DLLs\Rebex.Net.SshShell.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Telnet">
+      <HintPath>..\Resources\DLLs\Rebex.Net.Telnet.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Security">
+      <HintPath>..\Resources\DLLs\Rebex.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.TerminalEmulation">
+      <HintPath>..\Resources\DLLs\Rebex.TerminalEmulation.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,9 +71,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SourceBEReaders\FileSourceReader.cs" />
+    <Compile Include="SourceBEReaders\FTPSourceReader.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="SourceBEReaders\" />
+    <ProjectReference Include="..\Vanrise.BEBridge.Entities\Vanrise.BEBridge.Entities.csproj">
+      <Project>{9e370ac3-9718-4e10-ab12-b71605880d67}</Project>
+      <Name>Vanrise.BEBridge.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
