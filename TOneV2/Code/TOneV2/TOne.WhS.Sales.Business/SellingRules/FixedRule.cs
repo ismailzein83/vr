@@ -13,7 +13,13 @@ namespace TOne.WhS.Sales.Business.SellingRules
         public decimal ToRate { get; set; }
         public override void Execute(ISellingRuleExecutionContext context)
         {
-            throw new NotImplementedException();
+            if ((context.CustomerRate.HasValue && context.CustomerRate.Value >= FromRate && context.CustomerRate.Value <= ToRate)
+                || (context.ProductRate.HasValue && context.ProductRate.Value >= FromRate && context.ProductRate.Value <= ToRate))
+            {
+                context.Status = MarginStatus.Valid;
+                return;
+            }
+            context.Status = MarginStatus.Invalid;
         }
     }
 }
