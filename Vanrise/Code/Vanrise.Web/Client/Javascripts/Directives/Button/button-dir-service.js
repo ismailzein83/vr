@@ -281,7 +281,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Convert',
                     class: 'glyphicon glyphicon-retweet'
                 };
-               
+            case 'Manipulation':
+                return {
+                    text: 'Manipulation',
+                    class: "glyphicon glyphicon-check"
+                }
         } 
     }
 }]);

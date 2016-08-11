@@ -65,6 +65,9 @@
     <Compile Include="SourceCountryReader\CountryTOneV1SQLReader.cs" />
     <Compile Include="SourceCountryReader\CountryTOneV2SQLReader.cs" />
     <Compile Include="StyleFormatingSettings\CSSClass.cs" />
+    <Compile Include="TextManipulationAction\AddPrefixActionSettings.cs" />
+    <Compile Include="TextManipulationAction\ReplaceStringActionSettings.cs" />
+    <Compile Include="TextManipulationAction\SubstringActionSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">

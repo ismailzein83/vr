@@ -58,6 +58,12 @@
     <Compile Include="City\CityInfoFilter.cs" />
     <Compile Include="City\CityQuery.cs" />
     <Compile Include="DateTimeType.cs" />
+    <Compile Include="TextManipulation\ITextManipulationActionContext.cs" />
+    <Compile Include="TextManipulation\ITextManipulationContext.cs" />
+    <Compile Include="TextManipulation\TextManipulationActionSettings.cs" />
+    <Compile Include="TextManipulation\TextManipulationActionSettingsConfig.cs" />
+    <Compile Include="TextManipulation\TextManipulationSettings.cs" />
+    <Compile Include="TextManipulation\TextManipulationTarget.cs" />
     <Compile Include="VRMail\VRMailMessage.cs" />
     <Compile Include="VRMail\VRMailMessageTemplate.cs" />
     <Compile Include="VRMail\VRMailMessageTemplateDetail.cs" />

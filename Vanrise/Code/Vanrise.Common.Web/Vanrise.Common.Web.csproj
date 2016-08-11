@@ -134,6 +134,7 @@
     <Compile Include="Controllers\DataRecordFieldController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\RateTypeController.cs" />
+    <Compile Include="Controllers\TextManipulationController.cs" />
     <Compile Include="Controllers\VRMailMessageTemplateController.cs" />
     <Compile Include="Controllers\VRMailMessageTypeController.cs" />
     <Compile Include="Controllers\VRObjectPropertyController.cs" />
@@ -222,6 +223,12 @@
     <Content Include="Common\Directives\MainExtensions\GenericDataRecord\vr-common-boolean-selective.js" />
     <Content Include="Common\Directives\MainExtensions\StyleFormating\Templates\VRCommonStyleFormatingTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\StyleFormating\vr-common-styleformating-cssclass.js" />
+    <Content Include="Common\Directives\MainExtensions\TextManipulation\Templates\AddPrefixDirectiveTemplate.html" />
+    <Content Include="Common\Directives\MainExtensions\TextManipulation\Templates\ReplaceStringDirectiveTemplate.html" />
+    <Content Include="Common\Directives\MainExtensions\TextManipulation\Templates\SubstringDirectiveTemplate.html" />
+    <Content Include="Common\Directives\MainExtensions\TextManipulation\vr-common-textmanipulationsettings-addprefix.js" />
+    <Content Include="Common\Directives\MainExtensions\TextManipulation\vr-common-textmanipulationsettings-replacestring.js" />
+    <Content Include="Common\Directives\MainExtensions\TextManipulation\vr-common-textmanipulationsettings-substring.js" />
     <Content Include="Common\Directives\RateType\Templates\RateTypeGridTemplate.html" />
     <Content Include="Common\Directives\RateType\vr-common-ratetype-grid.js" />
     <Content Include="Common\Directives\RateType\vr-common-ratetype-selector.js" />
@@ -231,6 +238,8 @@
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-selector.js" />
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-grid.js" />
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-settings.js" />
+    <Content Include="Common\Directives\TextManipulation\Templates\TextManiplutaionSettingsDirectiveTemplate.html" />
+    <Content Include="Common\Directives\TextManipulation\vr-common-textmanipulationsettings.js" />
     <Content Include="Common\Directives\VRMail\Templates\VRMailMessageTemplateGridTemplate.html" />
     <Content Include="Common\Directives\VRMail\vr-common-mailmessagetemplate-grid.js" />
     <Content Include="Common\Directives\VRMail\vr-common-mailmessagetype-selector.js" />
@@ -264,6 +273,7 @@
     <Content Include="Common\Services\APIServices\DataRecordTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\RateTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\StyleDefinitionAPIService.js" />
+    <Content Include="Common\Services\APIServices\TextManipulationAPIService.js" />
     <Content Include="Common\Services\APIServices\VRMailMessageTemplateAPIService.js" />
     <Content Include="Common\Services\APIServices\VRMailMessageTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRObjectTypeDefinitionAPIService.js" />

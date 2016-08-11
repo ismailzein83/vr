@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.ExcelConversion.Entities;
-
+using Vanrise.Entities;
+using Vanrise.Common.Business;
 namespace Vanrise.ExcelConversion.MainExtensions.FieldMappings
 {
     public class CellFieldMapping : FieldMapping
@@ -14,6 +15,8 @@ namespace Vanrise.ExcelConversion.MainExtensions.FieldMappings
         public int? RowIndex { get; set; }
 
         public int CellIndex { get; set; }
+
+        public TextManipulationSettings ManipulationSettings { get; set; }
 
         public override object GetFieldValue(IGetFieldValueContext context)
         {
@@ -38,6 +41,20 @@ namespace Vanrise.ExcelConversion.MainExtensions.FieldMappings
                 row = worksheet.Cells.Rows[this.RowIndex.Value];
             }
             var cell = row.GetCellOrNull(this.CellIndex);
+
+            if (this.ManipulationSettings != null && this.ManipulationSettings.Actions != null)
+            {
+                TextManipulationActionContext textManipulationActionContext = new TextManipulationActionContext();
+                TextManipulationTarget target = new TextManipulationTarget
+                {
+                    TextValue = cell != null ? cell.Value.ToString() : null
+                };
+                foreach(var action in this.ManipulationSettings.Actions)
+                {
+                    action.Execute(textManipulationActionContext, target);
+                }
+                return target.TextValue;
+            }
             if (cell != null)
                 return cell.Value;
             else
