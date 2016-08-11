@@ -138,6 +138,7 @@
     <Compile Include="Controllers\VRMailMessageTypeController.cs" />
     <Compile Include="Controllers\VRObjectPropertyController.cs" />
     <Compile Include="Controllers\VRObjectTypeController.cs" />
+    <Compile Include="Controllers\VRObjectTypeDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -237,8 +238,14 @@
     <Content Include="Common\Directives\VRObjectPropertyVariable\vr-common-objectpropertyvariable-management.js" />
     <Content Include="Common\Directives\VRMail\Templates\VRMailMessageTypeGridTemplate.html" />
     <Content Include="Common\Directives\VRMail\vr-common-mailmessagetype-grid.js" />
+    <Content Include="Common\Directives\VRObjectProperty\Templates\VRObjectPropertySelector2Template.html" />
     <Content Include="Common\Directives\VRObjectProperty\Templates\VRObjectPropertySelectorTemplate.html" />
     <Content Include="Common\Directives\VRObjectProperty\vr-common-objectproperty-selector.js" />
+    <Content Include="Common\Directives\VRObjectProperty\vr-common-objectproperty2-selector.js" />
+    <Content Include="Common\Directives\VRObjectTypeDefinition\Templates\VRObjectTypeDefinitionGridTemplate.html" />
+    <Content Include="Common\Directives\VRObjectTypeDefinition\vr-common-objecttypedefinition-grid.js" />
+    <Content Include="Common\Directives\VRObjectTypePropertyDefinition\Templates\VRObjectTypePropertyDefinitionManagementTemplate.html" />
+    <Content Include="Common\Directives\VRObjectTypePropertyDefinition\vr-common-objecttypepropertydefinition-management.js" />
     <Content Include="Common\Directives\VRObjectVariable\Templates\VRObjectTypeSelectiveTemplate.html" />
     <Content Include="Common\Directives\VRObjectVariable\Templates\VRObjectVariableManagementTemplate.html" />
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objecttype-selective.js" />
@@ -259,6 +266,7 @@
     <Content Include="Common\Services\APIServices\StyleDefinitionAPIService.js" />
     <Content Include="Common\Services\APIServices\VRMailMessageTemplateAPIService.js" />
     <Content Include="Common\Services\APIServices\VRMailMessageTypeAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRObjectTypeDefinitionAPIService.js" />
     <Content Include="Common\Services\VRMailMessageTemplateService.js" />
     <Content Include="Common\Services\VRObjectPropertyVariableService.js" />
     <Content Include="Common\Services\VRMailMessageTypeService.js" />
@@ -277,6 +285,8 @@
     <Content Include="Common\Services\MasterLogService.js" />
     <Content Include="Common\Services\RateTypeService.js" />
     <Content Include="Common\Services\StyleDefinitionService.js" />
+    <Content Include="Common\Services\VRObjectTypeDefinitionService.js" />
+    <Content Include="Common\Services\VRObjectTypePropertyDefinitionService.js" />
     <Content Include="Common\Services\VRObjectVariableService.js" />
     <Content Include="Common\Views\City\CityEditor.html" />
     <Content Include="Common\Views\City\CityEditorController.js" />
@@ -350,6 +360,12 @@
     <Content Include="Common\Views\VRMail\VRMailMessageTypeManagementController.js" />
     <Content Include="Common\Views\VRObjectPropertyVariable\VRObjectPropertyVariableEditor.html" />
     <Content Include="Common\Views\VRObjectPropertyVariable\VRObjectPropertyVariableEditorController.js" />
+    <Content Include="Common\Views\VRObjectTypeDefinition\VRObjectTypeDefinitionEditor.html" />
+    <Content Include="Common\Views\VRObjectTypeDefinition\VRObjectTypeDefinitionEditorController.js" />
+    <Content Include="Common\Views\VRObjectTypeDefinition\VRObjectTypeDefinitionManagement.html" />
+    <Content Include="Common\Views\VRObjectTypeDefinition\VRObjectTypeDefinitionManagementController.js" />
+    <Content Include="Common\Views\VRObjectTypePropertyDefinition\VRObjectTypePropertyDefinitionEditor.html" />
+    <Content Include="Common\Views\VRObjectTypePropertyDefinition\VRObjectTypePropertyDefinitionEditorController.js" />
     <Content Include="Common\Views\VRObjectVariable\VRObjectVariableEditor.html" />
     <Content Include="Common\Views\VRObjectVariable\VRObjectVariableEditorController.js" />
   </ItemGroup>

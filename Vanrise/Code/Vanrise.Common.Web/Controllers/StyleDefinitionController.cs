@@ -57,6 +57,5 @@ namespace Vanrise.Common.Web.Controllers
             StyleDefinitionFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<StyleDefinitionFilter>(filter) : null;
             return _manager.GetStyleDefinitionsInfo(deserializedFilter);
         }
-
     }
 }

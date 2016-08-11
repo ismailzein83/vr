@@ -102,7 +102,7 @@
                             };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, executionFlowStageAPI, payload, setExecutionFlowStagesLoader, promiseDeferred);
                         });                        
-                    });      
+                    }, 1000);      
                  } 
             }
         }

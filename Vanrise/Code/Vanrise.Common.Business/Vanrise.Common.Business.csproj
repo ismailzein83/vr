@@ -96,6 +96,7 @@
     <Compile Include="TemplateConfigManager.cs" />
     <Compile Include="TypeManager.cs" />
     <Compile Include="VRObject\VRObjectPropertyEvaluatorManager.cs" />
+    <Compile Include="VRObject\VRObjectTypeDefinitionManager.cs" />
     <Compile Include="VRObject\VRObjectTypeManager.cs" />
     <Compile Include="VRObject\VRObjectManager.cs" />
     <Compile Include="VRObject\VRObjectPropertyEvaluatorContext.cs" />

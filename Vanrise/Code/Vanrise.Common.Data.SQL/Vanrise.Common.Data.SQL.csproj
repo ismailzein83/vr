@@ -67,6 +67,7 @@
     <Compile Include="VRFileDataManager.cs" />
     <Compile Include="VRMailMessageTemplateDataManager.cs" />
     <Compile Include="VRMailMessageTypeDataManager.cs" />
+    <Compile Include="VRObjectTypeDefinitionDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Common.Data\Vanrise.Common.Data.csproj">

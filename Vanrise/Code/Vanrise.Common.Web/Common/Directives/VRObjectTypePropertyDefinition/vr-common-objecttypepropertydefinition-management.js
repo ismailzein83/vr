@@ -1,0 +1,113 @@
+﻿(function (app) {
+
+    'use strict';
+
+    ObjectTypePropertyDefinitionManagementDirective.$inject = ['VRCommon_VRObjectTypePropertyDefinitionService', 'UtilsService', 'VRNotificationService'];
+
+    function ObjectTypePropertyDefinitionManagementDirective(VRCommon_VRObjectTypePropertyDefinitionService, UtilsService, VRNotificationService) {
+        return {
+            restrict: 'E',
+            scope: {
+                onReady: '=',
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var objectTypePropertyDefinition = new ObjectTypePropertyDefinition($scope, ctrl);
+                objectTypePropertyDefinition.initializeController();
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            compile: function (element, attrs) {
+                return {
+                    pre: function ($scope, iElem, iAttrs, ctrl) {
+
+                    }
+                }
+            },
+            templateUrl: '/Client/Modules/Common/Directives/VRObjectTypePropertyDefinition/Templates/VRObjectTypePropertyDefinitionManagementTemplate.html'
+        };
+
+        function ObjectTypePropertyDefinition($scope, ctrl) {
+            this.initializeController = initializeController;
+
+            var gridAPI;
+
+            var objectType;
+
+            function initializeController() {
+                ctrl.objectTypePropertyDefinitions = [];
+
+                ctrl.onGridReady = function (api) {
+                    gridAPI = api;
+                    defineAPI();
+                };
+
+                ctrl.onAddObjectTypePropertyDefinition = function () {
+                    var onObjectTypePropertyDefinitionAdded = function (addedObjectTypePropertyDefinition) {
+                        ctrl.objectTypePropertyDefinitions.push(addedObjectTypePropertyDefinition);
+                    };
+                    VRCommon_VRObjectTypePropertyDefinitionService.addObjectTypePropertyDefinition(ctrl.objectTypePropertyDefinitions, objectType, onObjectTypePropertyDefinitionAdded);
+                };
+                ctrl.onDeleteObjectTypeProperty = function (objectTypePropertyDefinition) {
+                    VRNotificationService.showConfirmation().then(function (confirmed) {
+                        if (confirmed) {
+                            var index = UtilsService.getItemIndexByVal(ctrl.objectTypePropertyDefinitions, objectTypePropertyDefinition.Name, 'Name');
+                            ctrl.objectTypePropertyDefinitions.splice(index, 1);
+                        }
+                    });
+                }
+
+                defineMenuActions();
+            }
+            function defineAPI() {
+                var api = {};
+
+                api.load = function (payload) {
+
+                    if (payload != undefined && payload.objectType != undefined)
+                        objectType = payload.objectType;
+
+                    if (payload != undefined && payload.properties != undefined) {
+                        for (var i = 0; i < payload.properties.length; i++) {
+                            var property = payload.properties[i];
+                            ctrl.objectTypePropertyDefinitions.push(property);
+                        }
+                    }
+                };
+
+                api.getData = function () {
+
+                    if (ctrl.objectTypePropertyDefinitions.length > 0) {
+                        var properties = [];
+                        for (var i = 0; i < ctrl.objectTypePropertyDefinitions.length; i++)
+                            properties.push(ctrl.objectTypePropertyDefinitions[i]);
+                    }
+
+                    return properties;
+                };
+
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
+                    ctrl.onReady(api);
+                }
+            }
+
+            function defineMenuActions() {
+                ctrl.menuActions = [{
+                    name: 'Edit',
+                    clicked: editObjectTypePropertyDefinition
+                }];
+            }
+
+            function editObjectTypePropertyDefinition(objectTypePropertyDefinition) {
+                var onObjectTypePropertyDefinitionUpdated = function (updatedObjectTypePropertyDefinition) {
+                    var index = UtilsService.getItemIndexByVal(ctrl.objectTypePropertyDefinitions, objectTypePropertyDefinition.VariableName, 'VariableName');
+                    ctrl.objectTypePropertyDefinitions[index] = updatedObjectTypePropertyDefinition;
+                };
+                VRCommon_VRObjectTypePropertyDefinitionService.editObjectTypePropertyDefinition(objectTypePropertyDefinition.Name, ctrl.objectTypePropertyDefinitions, objectType, onObjectTypePropertyDefinitionUpdated);
+            }
+        }
+    }
+
+    app.directive('vrCommonObjecttypepropertydefinitionManagement', ObjectTypePropertyDefinitionManagementDirective);
+
+})(app);

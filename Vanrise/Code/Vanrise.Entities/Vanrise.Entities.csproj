@@ -153,6 +153,8 @@
     <Compile Include="VRObject\VRObjectType.cs" />
     <Compile Include="VRObject\VRObjectTypeConfig.cs" />
     <Compile Include="VRObject\VRObjectTypeDefinition.cs" />
+    <Compile Include="VRObject\VRObjectTypeDefinitionDetail.cs" />
+    <Compile Include="VRObject\VRObjectTypeDefinitionQuery.cs" />
     <Compile Include="VRObject\VRObjectVariable.cs" />
   </ItemGroup>
   <ItemGroup />

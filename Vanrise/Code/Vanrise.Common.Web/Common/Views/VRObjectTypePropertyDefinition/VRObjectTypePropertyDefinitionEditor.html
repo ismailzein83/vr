@@ -1,0 +1,25 @@
+﻿<div vr-modalcontent ng-controller="VRCommon_VRObjectTypePropertyDefinitionController" width="'40%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formVRObjectTypePropertyDefinitionEditor">
+
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-textbox type="text" label="Property Name" value="scopeModel.propertyName" customvalidate="scopeModel.onValidateProperties()" isrequired></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-textbox type="text" label="Description" value="scopeModel.description"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <vr-common-objectproperty2-selector on-ready="scopeModel.onObjectPropertySelectorReady"></vr-common-objectproperty2-selector>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formVRObjectTypePropertyDefinitionEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

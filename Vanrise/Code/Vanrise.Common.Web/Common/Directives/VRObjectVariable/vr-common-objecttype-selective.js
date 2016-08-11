@@ -9,6 +9,7 @@
             restrict: "E",
             scope: {
                 onReady: "=",
+                onObjecttypeselectionchanged: "=",
                 normalColNum: '@',
                 label: '@',
                 customvalidate: '=',
@@ -42,6 +43,7 @@
                     selectorAPI = api;
                     defineAPI();
                 };
+                $scope.scopeModel.onObjectTypeSelectionChanged = ctrl.onObjecttypeselectionchanged;
 
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
