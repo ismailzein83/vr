@@ -44,6 +44,18 @@
                 if (selectedEntityType != undefined) {
                     retailBeStatusChargingSetApiService.GetStatusChargeInfos(selectedEntityType).then(function (response) {
                         $scope.scopeModel.items = response;
+                        if (statusChargingEntity != undefined && statusChargingEntity.Settings != undefined && statusChargingEntity.Settings.StatusCharges != undefined) {
+                            for (var i = 0; i < statusChargingEntity.Settings.StatusCharges.length; i++) {
+                                var currentStatusChargingEntity = statusChargingEntity.Settings.StatusCharges[i];
+                                for (var j = 0; j < $scope.scopeModel.items.length; j++) {
+                                    var currentItem = $scope.scopeModel.items[j];
+                                    if (currentStatusChargingEntity.StatusDefinitionId == currentItem.StatusDefinitionId) {
+                                        currentItem.InitialCharge = currentStatusChargingEntity.InitialCharge;
+                                        currentItem.RecurringCharge = currentStatusChargingEntity.RecurringCharge;
+                                    }
+                                }
+                            }
+                        }
                     });
                 }
             }
@@ -75,13 +87,20 @@
             }
         }
         function buildStatusChargingSetObjFromScope() {
-            var StatusCharge = {
-                InitialCharge: $scope.scopeModel.InitialCharge,
-                RecurringCharge: $scope.scopeModel.RecurringCharge
+            var i;
+            var statusCharges = [];
+            for (i = 0; i < $scope.scopeModel.items.length; i++) {
+                var item = $scope.scopeModel.items[i];
+                var statusCharge = {
+                    InitialCharge: item.HasInitialCharge ? item.InitialCharge : 0,
+                    RecurringCharge: item.RecurringCharge ? item.RecurringCharge : 0,
+                    StatusDefinitionId: item.StatusDefinitionId
+                }
+                statusCharges.push(statusCharge);
             }
             var settings = {
                 EntityType: entityTypeAPI.getSelectedIds(),
-                StatusCharge: StatusCharge
+                StatusCharges: statusCharges
             }
 
             return {

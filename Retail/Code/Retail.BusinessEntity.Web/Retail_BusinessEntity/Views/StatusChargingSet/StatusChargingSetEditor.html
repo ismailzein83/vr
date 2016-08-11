@@ -11,11 +11,16 @@
                                                        onselectionchanged="scopeModel.onEntityTypeSelectionChanged"></retail-be-entitytype-selector>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Settings'">
+                <vr-tab header="'Charges'">
                     <vr-section ng-repeat="item in scopeModel.items" title="{{item.StatusName}}">
-                        <retail-be-statuscharginginfo>
-
-                        </retail-be-statuscharginginfo>
+                        <vr-row>
+                            <vr-columns width="1/2row" ng-if="item.HasInitialCharge">
+                                <vr-textbox label="Initial Charge" value="item.InitialCharge" isrequired="true"></vr-textbox>
+                            </vr-columns>
+                            <vr-columns width="1/2row" ng-if="item.HasRecurringCharge">
+                                <vr-textbox label="Recurring Charge" value="item.RecurringCharge" isrequired="true"></vr-textbox>
+                            </vr-columns>
+                        </vr-row>
                     </vr-section>
                 </vr-tab>
             </vr-tabs>
