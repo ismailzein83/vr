@@ -116,12 +116,9 @@
                     if ($scope.scopeModel.selectedTemplateConfig != undefined && directiveAPI != undefined) {
                         
                         data = directiveAPI.getData();
-
                         if (data != undefined) {
                             data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
                         }
-
-                        console.log(data);
                     }
                     return data;
                 };

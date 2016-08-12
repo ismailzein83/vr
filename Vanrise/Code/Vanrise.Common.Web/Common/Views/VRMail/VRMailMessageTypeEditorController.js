@@ -14,9 +14,6 @@
         var objectDirectiveAPI;
         var objectDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var variableDirectiveAPI;
-        var variableDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
         loadParameters();
         defineScope();
         load();
@@ -37,10 +34,6 @@
             $scope.scopeModel.onObjectDirectiveReady = function (api) {
                 objectDirectiveAPI = api;
                 objectDirectiveReadyDeferred.resolve();
-            };
-            $scope.scopeModel.onVariableDirectiveReady = function (api) {
-                variableDirectiveAPI = api;
-                variableDirectiveReadyDeferred.resolve();
             };
 
             $scope.scopeModel.save = function () {
@@ -79,7 +72,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadObjectDirective, loadVariableDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadObjectDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -124,29 +117,6 @@
 
             return objectDirectiveLoadDeferred.promise;
         }
-        function loadVariableDirective() {
-            var variableDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-            variableDirectiveReadyDeferred.promise.then(function () {
-                var variableDirectivePayload = {};
-
-                variableDirectivePayload.context = buildContext();
-
-                if (mailMessageTypeEntity != undefined && mailMessageTypeEntity.Settings != undefined && mailMessageTypeEntity.Settings.Variables != undefined) {
-
-                    var settings = mailMessageTypeEntity.Settings;
-                    var variables = [];
-                    for (var index = 0 ; index < settings.Variables.length; index++)
-                            variables.push(settings.Variables[index]);
-
-                    variableDirectivePayload.variables = variables
-                }
-
-                VRUIUtilsService.callDirectiveLoad(variableDirectiveAPI, variableDirectivePayload, variableDirectiveLoadDeferred);
-            });
-
-            return variableDirectiveLoadDeferred.promise;
-        }
 
         function insert() {
             $scope.scopeModel.isLoading = true;
@@ -188,14 +158,12 @@
         function buildMailMessageTypeObjFromScope() {
 
             var objects = objectDirectiveAPI.getData();
-            var variables = variableDirectiveAPI.getData();
 
             return {
                 VRMailMessageTypeId: mailMessageTypeEntity != undefined ? mailMessageTypeEntity.VRMailMessageTypeId : undefined,
                 Name: $scope.scopeModel.name,
                 Settings: {
                     Objects: objects,
-                    Variables: variables
                 }
             };
         }

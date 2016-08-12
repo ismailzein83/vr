@@ -42,5 +42,13 @@ namespace Vanrise.Common.Web.Controllers
         {
             return _manager.UpdateVRObjectTypeDefinition(VRObjectTypeDefinitionItem);
         }
+
+        [HttpGet]
+        [Route("GetVRObjectTypeDefinitionsInfo")]
+        public IEnumerable<VRObjectTypeDefinitionInfo> GetVRObjectTypeDefinitionsInfo(string filter = null)
+        {
+            StyleDefinitionFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<StyleDefinitionFilter>(filter) : null;
+            return _manager.GetVRObjectTypeDefinitionsInfo(deserializedFilter);
+        }
     }
 }

@@ -74,6 +74,13 @@ namespace Vanrise.Common.Business.VRObject
             return updateOperationOutput;
         }
 
+        public IEnumerable<VRObjectTypeDefinitionInfo> GetVRObjectTypeDefinitionsInfo(StyleDefinitionFilter filter)
+        {
+            Func<VRObjectTypeDefinition, bool> filterExpression = null;
+
+            return this.GetCachedVRObjectTypeDefinitions().MapRecords(VRObjectTypeDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
+        }
+
         #endregion
 
 
@@ -117,6 +124,16 @@ namespace Vanrise.Common.Business.VRObject
                 Entity = styleDefinition
             };
             return styleDefinitionDetail;
+        }
+
+        public VRObjectTypeDefinitionInfo VRObjectTypeDefinitionInfoMapper(VRObjectTypeDefinition vrObjectTypeDefinition)
+        {
+            VRObjectTypeDefinitionInfo vrObjectTypeDefinitionInfo = new VRObjectTypeDefinitionInfo()
+            {
+                VRObjectTypeDefinitionId = vrObjectTypeDefinition.VRObjectTypeDefinitionId,
+                Name = vrObjectTypeDefinition.Name
+            };
+            return vrObjectTypeDefinitionInfo;
         }
 
         #endregion

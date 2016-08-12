@@ -13,18 +13,22 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetFilteredVRObjectTypeDefinitions'), input);
         }
 
-        function GetVRObjectTypeDefinition(VRObjectTypeDefinitionId) {
+        function GetVRObjectTypeDefinition(vrObjectTypeDefinitionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetVRObjectTypeDefinition'), {
-                VRObjectTypeDefinitionId: VRObjectTypeDefinitionId
+                VRObjectTypeDefinitionId: vrObjectTypeDefinitionId
             });
         }
 
-        function AddVRObjectTypeDefinition(VRObjectTypeDefinitionItem) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'AddVRObjectTypeDefinition'), VRObjectTypeDefinitionItem);
+        function AddVRObjectTypeDefinition(vrObjectTypeDefinitionItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'AddVRObjectTypeDefinition'), vrObjectTypeDefinitionItem);
         }
 
-        function UpdateVRObjectTypeDefinition(VRObjectTypeDefinitionItem) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'UpdateVRObjectTypeDefinition'), VRObjectTypeDefinitionItem);
+        function UpdateVRObjectTypeDefinition(vrObjectTypeDefinitionItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'UpdateVRObjectTypeDefinition'), vrObjectTypeDefinitionItem);
+        }
+
+        function GetVRObjectTypeDefinitionsInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRObjectTypeDefinitionsInfo"), {filter:filter}, {useCache:true});
         }
 
 
@@ -33,6 +37,7 @@
             GetVRObjectTypeDefinition: GetVRObjectTypeDefinition,
             AddVRObjectTypeDefinition: AddVRObjectTypeDefinition,
             UpdateVRObjectTypeDefinition: UpdateVRObjectTypeDefinition,
+            GetVRObjectTypeDefinitionsInfo: GetVRObjectTypeDefinitionsInfo,
         });
     }
 

@@ -42,6 +42,6 @@
         };
     }
 
-    appControllers.service('VRCommon_ObjectVariableService', VRObjectVariableService);
+    appControllers.service('VRCommon_VRObjectVariableService', VRObjectVariableService);
 
 })(appControllers);

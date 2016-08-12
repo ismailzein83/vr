@@ -43,13 +43,15 @@
 
                             <vr-columns width="1/2row" vr-loader="scopeModel.isGridLoading">
                                 <vr-datagrid on-ready="scopeModel.onGridReady"
-                                             datasource="scopeModel.variables"
+                                             datasource="scopeModel.objects"
                                              menuactions="scopeModel.menuActions"
                                              pagingtype="'PagingOnScroll'"
                                              hidegridmenu>
-                                    <vr-datagridcolumn headertext="'Variable Name'" field="'VariableName'"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Value Expression'" field="'ValueExpression'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Object Name'" field="'ObjectName'"></vr-datagridcolumn>
+
+                                    <vr-datagridexpandablerow>
+                                        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+                                    </vr-datagridexpandablerow>
                                 </vr-datagrid>
                             </vr-columns>
                         </vr-row>
@@ -66,7 +68,3 @@
         </vr-actionbar>
     </div>
 </div>
-
-
-<!--dataretrievalfunction="scopeModel.dataRetrievalFunction"-->
-<!--menuactions="scopeModel.menuActions"-->

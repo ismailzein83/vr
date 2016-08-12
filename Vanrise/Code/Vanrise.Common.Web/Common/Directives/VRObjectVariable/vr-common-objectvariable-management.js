@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VRObjectVariableManagementDirective.$inject = ['VRCommon_ObjectVariableService', 'VRCommon_VRObjectTypeAPIService', 'UtilsService', 'VRNotificationService'];
+    VRObjectVariableManagementDirective.$inject = ['VRCommon_VRObjectVariableService', 'VRCommon_VRObjectTypeDefinitionAPIService', 'UtilsService', 'VRNotificationService'];
 
-    function VRObjectVariableManagementDirective(VRCommon_ObjectVariableService, VRCommon_VRObjectTypeAPIService, UtilsService, VRNotificationService) {
+    function VRObjectVariableManagementDirective(VRCommon_VRObjectVariableService, VRCommon_VRObjectTypeDefinitionAPIService, UtilsService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -32,6 +32,7 @@
 
             var gridAPI;
             var objectTypeConfigs;
+            var VRObjectTypeDefinitionsInfo; // used to map VRObjectTypeId to VRObjectTypeName for the grid ObjectType column 
 
             function initializeController() {
                 ctrl.objectVariables = [];
@@ -46,7 +47,7 @@
                         extendObjectVariableObject(addedObjectVariable);
                         ctrl.objectVariables.push(addedObjectVariable);
                     };
-                    VRCommon_ObjectVariableService.addVRObjectVariable(ctrl.objectVariables, onObjectVariableAdded);
+                    VRCommon_VRObjectVariableService.addVRObjectVariable(ctrl.objectVariables, onObjectVariableAdded);
                 };
 
                 ctrl.onRemoveObjectVariable = function (objectVariable) {
@@ -60,12 +61,11 @@
 
                 defineMenuActions();
             }
-
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    return loadObjectTypeConfigs().then(function () {
+                    return loadVRObjectTypeDefinitionsInfo().then(function () {
                         var objectVariable;
                         if (payload != undefined && payload.objects != undefined) {
                             for (var i = 0; i < payload.objects.length; i++) {
@@ -76,17 +76,17 @@
                         }
                     });
 
-                    function loadObjectTypeConfigs() {
-                        return VRCommon_VRObjectTypeAPIService.GetObjectTypeExtensionConfigs().then(function (response) {
+                    function loadVRObjectTypeDefinitionsInfo() {
+                        var filter;
+
+                        return VRCommon_VRObjectTypeDefinitionAPIService.GetVRObjectTypeDefinitionsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                            VRObjectTypeDefinitionsInfo = [];
                             if (response != null) {
-                                objectTypeConfigs = [];
-                                for (var i = 0; i < response.length; i++) {
-                                    objectTypeConfigs.push(response[i]);
-                                }
+                                for (var i = 0; i < response.length; i++) 
+                                    VRObjectTypeDefinitionsInfo.push(response[i]);
                             }
                         });
                     }
-                    
                 };
 
                 api.getData = function () {
@@ -105,7 +105,7 @@
                     function getMappedObjectVariable(dataItem) {
                         return {
                             ObjectName: dataItem.ObjectName,
-                            ObjectType: dataItem.ObjectType
+                            VRObjectTypeDefinitionId: dataItem.VRObjectTypeDefinitionId
                         };
                     }
 
@@ -116,6 +116,7 @@
                     ctrl.onReady(api);
                 }
             }
+
             function defineMenuActions() {
                 ctrl.menuActions = [{
                     name: 'Edit',
@@ -129,12 +130,21 @@
                     extendObjectVariableObject(updatedObjectVariable);
                     ctrl.objectVariables[index] = updatedObjectVariable;
                 };
-                VRCommon_ObjectVariableService.editVRObjectVariable(objectVariable, ctrl.objectVariables, onObjectVariableUpdated);
+                VRCommon_VRObjectVariableService.editVRObjectVariable(objectVariable, ctrl.objectVariables, onObjectVariableUpdated);
             }
             function extendObjectVariableObject(objectVariable) {
-                var dataRecordTypeConfigObject = UtilsService.getItemByVal(objectTypeConfigs, objectVariable.ObjectType.ConfigId, 'ExtensionConfigurationId');
-                if (dataRecordTypeConfigObject != null) {
-                    objectVariable.DataRecordType = dataRecordTypeConfigObject.Title;
+                console.log(objectVariable);
+                console.log(VRObjectTypeDefinitionsInfo);
+
+                if (VRObjectTypeDefinitionsInfo != undefined) {
+                    var VRObjectTypeDefinitionInfo;
+                    for (var i = 0; i < VRObjectTypeDefinitionsInfo.length; i++) {
+                        VRObjectTypeDefinitionInfo = VRObjectTypeDefinitionsInfo[i];
+                        if (VRObjectTypeDefinitionInfo.VRObjectTypeDefinitionId == objectVariable.VRObjectTypeDefinitionId) {
+                            objectVariable.ObjectTypeName = VRObjectTypeDefinitionInfo.Name;
+                            return;
+                        }
+                    }
                 }
             }
         }

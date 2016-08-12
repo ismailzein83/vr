@@ -13,8 +13,8 @@
         var properties; // properties are passed for validation
         var objectType;
 
-        var objectPropertySelectorAPI;
-        var objectPropertySelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var objectPropertySelectiveAPI;
+        var objectPropertySelectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -34,24 +34,24 @@
         function defineScope() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.onObjectPropertySelectorReady = function (api) {
-                objectPropertySelectorAPI = api;
-                objectPropertySelectorReadyDeferred.resolve();
+            $scope.scopeModel.onObjectPropertySelectiveReady = function (api) {
+                objectPropertySelectiveAPI = api;
+                objectPropertySelectiveReadyDeferred.resolve();
             };
 
-            //$scope.scopeModel.onValidateProperties = function () {
+            $scope.scopeModel.onValidateProperties = function () {
 
-            //    if (propertyEntity != undefined && propertyEntity.Name == $scope.scopeModel.propertyName)
-            //        return null;
+                if (propertyEntity != undefined && propertyEntity.Name == $scope.scopeModel.propertyName)
+                    return null;
 
-            //    for (var i = 0; i < properties.length; i++) {
-            //        var property = properties[i];
-            //        if ($scope.scopeModel.propertyName.toLowerCase() == property.VariableName.toLowerCase()) {
-            //            return 'Same Property Name Exists';
-            //        }
-            //    }
-            //    return null;
-            //}
+                for (var i = 0; i < properties.length; i++) {
+                    var property = properties[i];
+                    if ($scope.scopeModel.propertyName.toLowerCase() == property.Name.toLowerCase()) {
+                        return 'Same Property Name Exists';
+                    }
+                }
+                return null;
+            }
 
             $scope.scopeModel.save = function () {
                 if (isEditMode)
@@ -105,9 +105,9 @@
                 $scope.scopeModel.description = propertyEntity.Description;
             }
             function loadObjectPropertySelector() {
-                var objectPropertySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                var objectPropertySelectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                objectPropertySelectorReadyDeferred.promise.then(function () {
+                objectPropertySelectiveReadyDeferred.promise.then(function () {
                     var payload = {};
 
                     if (objectType != undefined) {
@@ -117,10 +117,10 @@
                         payload.objectPropertyEvaluator = propertyEntity.PropertyEvaluator;
                     }
 
-                    VRUIUtilsService.callDirectiveLoad(objectPropertySelectorAPI, payload, objectPropertySelectorLoadDeferred);
+                    VRUIUtilsService.callDirectiveLoad(objectPropertySelectiveAPI, payload, objectPropertySelectiveLoadDeferred);
                 });
 
-                return objectPropertySelectorLoadDeferred.promise;
+                return objectPropertySelectiveLoadDeferred.promise;
             }
         }
 
@@ -141,7 +141,7 @@
 
         function buildCriteriaFieldObjectFromScope() {
 
-            var propertyEvaluator = objectPropertySelectorAPI.getData();
+            var propertyEvaluator = objectPropertySelectiveAPI.getData();
 
             return {
                 Name: $scope.scopeModel.propertyName,

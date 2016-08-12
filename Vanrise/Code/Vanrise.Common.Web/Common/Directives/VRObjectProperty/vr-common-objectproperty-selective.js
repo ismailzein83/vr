@@ -21,7 +21,7 @@
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: '/Client/Modules/Common/Directives/VRObjectProperty/Templates/VRObjectPropertySelector2Template.html'
+            templateUrl: '/Client/Modules/Common/Directives/VRObjectProperty/Templates/VRObjectPropertySelectiveTemplate.html'
         };
 
         function ObjectPropertySelector($scope, ctrl, $attrs) {
@@ -169,28 +169,6 @@
         }
     }
 
-    app.directive('vrCommonObjectproperty2Selector', VRObjectPropertySelector);
+    app.directive('vrCommonObjectpropertySelective', VRObjectPropertySelector);
 
 })(app);
-
-
-
-
-
-
-//function loadObjectPropertySelector() {
-
-//    return VRCommon_VRObjectPropertyAPIService.GetObjectPropertyExtensionConfigs(objectType.Settings.PropertyEvaluatorExtensionType)
-//                            .then(function (response) {
-//                                if (response != null) {
-//                                    for (var i = 0; i < response.length; i++) {
-//                                        $scope.scopeModel.templateConfigs.push(response[i]);
-//                                    }
-
-//                                    if (objectPropertyEvaluator != undefined && objectPropertyEvaluator.ConfigId != undefined) {
-//                                        $scope.scopeModel.selectedTemplateConfig =
-//                                                UtilsService.getItemByVal($scope.scopeModel.templateConfigs, objectPropertyEvaluator.ConfigId, 'ExtensionConfigurationId');
-//                                    }
-//                                }
-//                            });
-//}

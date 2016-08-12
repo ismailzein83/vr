@@ -18,6 +18,7 @@
 
         var gridAPI;
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
+        var drillDownManager;
 
         loadParameters();
         defineScope();
@@ -35,7 +36,7 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.variables = [];
+            $scope.scopeModel.objects = [];
             $scope.scopeModel.menuActions = [];
 
             $scope.scopeModel.onMailMessageTypeSelectorReady = function (api) {
@@ -58,6 +59,7 @@
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
+                drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(buildDrillDownTabs(), gridAPI, $scope.scopeModel.menuActions, true);
                 gridReadyDeferred.resolve();
             };
 
@@ -87,31 +89,6 @@
             else {
                 loadAllControls();
             }
-        }
-
-
-        function getMailMessageTemplate() {
-            return VRCommon_VRMailMessageTemplateAPIService.GetMailMessageTemplate(mailMessageTemplateId).then(function (response) {
-                mailMessageTemplateEntity = response;
-            });
-        }
-        function getMailMessageType(loadPromiseDeferred) {
-            return VRCommon_VRMailMessageTypeAPIService.GetMailMessageType(mailMessageTypeId).then(function (response) {
-                var mailMessageTypeEntity = response;
-                $scope.scopeModel.variables = [];
-                if (mailMessageTypeEntity.Settings != undefined) {
-                    var mailMessageTypeVariable;
-                    var mailMessageTypeVariables = mailMessageTypeEntity.Settings.Variables;
-                    for (var i = 0 ; i < mailMessageTypeVariables.length; i++) {
-                        mailMessageTypeVariable = mailMessageTypeVariables[i]
-                        extendVariableObject(mailMessageTypeVariable);
-                        $scope.scopeModel.variables.push(mailMessageTypeVariable);
-                    }
-                }
-                $scope.scopeModel.isGridLoading = false;
-                if (loadPromiseDeferred != undefined)
-                    loadPromiseDeferred.resolve();
-            });
         }
 
         function loadAllControls() {
@@ -172,6 +149,81 @@
             }
         }
 
+        function getMailMessageTemplate() {
+            return VRCommon_VRMailMessageTemplateAPIService.GetMailMessageTemplate(mailMessageTemplateId).then(function (response) {
+                mailMessageTemplateEntity = response;
+            });
+        }
+        function getMailMessageType(loadPromiseDeferred) {
+            return VRCommon_VRMailMessageTypeAPIService.GetMailMessageType(mailMessageTypeId).then(function (response) {
+                var mailMessageTypeEntity = response;
+
+                if (mailMessageTypeEntity.Settings != undefined) {
+                    $scope.scopeModel.objects = [];
+                    var mailMessageTypeObjects = mailMessageTypeEntity.Settings.Objects;
+                    var mailMessageTypeObject;
+                    for (var key in mailMessageTypeObjects) {
+                        if (key != "$type") {
+                            mailMessageTypeObject = mailMessageTypeObjects[key];
+                            //extendVariableObject(mailMessageTypeObject);
+                            $scope.scopeModel.objects.push(mailMessageTypeObject);
+
+                            drillDownManager.setDrillDownExtensionObject(mailMessageTypeObject);
+                        }
+                    }
+                }
+                $scope.scopeModel.isGridLoading = false;
+                if (loadPromiseDeferred != undefined)
+                    loadPromiseDeferred.resolve();
+            });
+        }
+        function buildDrillDownTabs() {
+            var drillDownTabs = [];
+
+            drillDownTabs.push(buildObjectTypePropertiesTab());
+
+            function buildObjectTypePropertiesTab() {
+                var objectTypePropertiesTab = {};
+
+                objectTypePropertiesTab.title = 'Properties';
+                objectTypePropertiesTab.directive = 'vr-common-objecttypeproperty-grid';
+
+                objectTypePropertiesTab.loadDirective = function (objectTypePropertyGridAPI, parentAccount) {
+                    parentAccount.objectTypePropertyGridAPI = objectTypePropertyGridAPI;
+                    var objectTypePropertyGridPayload = {
+                        vrObjectTypeDefinitionId: parentAccount.VRObjectTypeDefinitionId
+                    };
+                    return parentAccount.objectTypePropertyGridAPI.load(objectTypePropertyGridPayload);
+                };
+
+                //objectTypePropertiesTab.hideDrillDownFunction = function (dataItem) {
+                //    return !dataItem.CanAddSubAccounts;
+                //};
+
+                //objectTypePropertiesTab.parentMenuActions = [{
+                //    name: 'Add Sub Account',
+                //    clicked: function (parentAccount) {
+                //        if (objectTypePropertiesTab.setTabSelected != undefined)
+                //            objectTypePropertiesTab.setTabSelected(parentAccount);
+                //        var onSubAccountAdded = function (addedSubAccount) {
+                //            parentAccount.objectTypePropertyGridAPI.onAccountAdded(addedSubAccount);
+                //        };
+                //        Retail_BE_AccountService.addAccount(parentAccount.Entity.AccountId, onSubAccountAdded);
+                //    },
+                //    haspermission: hasAddSubAccountPermission
+                //}];
+
+                //objectTypePropertiesTab.haspermission = function () {
+                //    return Retail_BE_AccountAPIService.HasViewAccountsPermission();
+                //};
+
+                return objectTypePropertiesTab;
+            }
+
+            return drillDownTabs;
+        }
+
+
         function insert() {
             $scope.scopeModel.isLoading = true;
             return VRCommon_VRMailMessageTemplateAPIService.AddMailMessageTemplate(buildMailMessageTemplateObjFromScope()).then(function (response) {
@@ -214,7 +266,7 @@
                 Name: $scope.scopeModel.name,
                 VRMailMessageTypeId: mailMessageTypeSelectorAPI.getSelectedIds(),
                 Settings: {
-                    Variables: $scope.scopeModel.variables,
+                    Variables: $scope.scopeModel.objects,
                     To: { ExpressionString: $scope.scopeModel.to } ,
                     CC: { ExpressionString: $scope.scopeModel.cc },
                     Subject: { ExpressionString: $scope.scopeModel.subject },

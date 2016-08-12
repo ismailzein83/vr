@@ -9,10 +9,10 @@
         var isEditMode;
 
         var objectVariableEntity;
-        var objectVariables;
+        var objectVariables; // objectVariables are passed for validation
 
-        var objectTypeSelectiveAPI;
-        var objectTypeSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var objectTypeDefinitionSelectorAPI;
+        var objectTypeDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
 
         loadParameters();
@@ -33,9 +33,9 @@
 
             $scope.scopeModal = {};
 
-            $scope.scopeModal.onObjectTypeSelectiveReady = function (api) {
-                objectTypeSelectiveAPI = api;
-                objectTypeSelectiveReadyDeferred.resolve();
+            $scope.scopeModal.onObjectTypeDefinitionSelectorReady = function (api) {
+                objectTypeDefinitionSelectorAPI = api;
+                objectTypeDefinitionSelectorReadyDeferred.resolve();
             };
 
             $scope.scopeModal.validateObjectVariables = function () {
@@ -69,37 +69,37 @@
 
         function loadAllControls() {
             $scope.isLoading = true;
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadObjectTypeSelective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadObjectTypeDefinitionSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
             });
-        }
 
-        function setTitle() {
-            $scope.title = (isEditMode) ?
-                UtilsService.buildTitleForUpdateEditor((objectVariableEntity != undefined) ? objectVariableEntity.ObjectName : null, 'Object Variable') :
-                UtilsService.buildTitleForAddEditor('Object Variable');
-        }
-        function loadStaticData() {
-            if (objectVariableEntity == undefined) {
-                return;
+            function setTitle() {
+                $scope.title = (isEditMode) ?
+                    UtilsService.buildTitleForUpdateEditor((objectVariableEntity != undefined) ? objectVariableEntity.ObjectName : null, 'Object Variable') :
+                    UtilsService.buildTitleForAddEditor('Object Variable');
             }
-            $scope.scopeModal.objectName = objectVariableEntity.ObjectName;
-        }
-        function loadObjectTypeSelective() {
-            var objectTypeSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-            objectTypeSelectiveReadyDeferred.promise.then(function () {
-                var payload;
-                if (objectVariableEntity != undefined) {
-                    payload = { objectType: objectVariableEntity.ObjectType };
+            function loadStaticData() {
+                if (objectVariableEntity == undefined) {
+                    return;
                 }
+                $scope.scopeModal.objectName = objectVariableEntity.ObjectName;
+            }
+            function loadObjectTypeDefinitionSelector() {
+                var objectTypeDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-                VRUIUtilsService.callDirectiveLoad(objectTypeSelectiveAPI, payload, objectTypeSelectiveLoadDeferred);
-            });
+                objectTypeDefinitionSelectorReadyDeferred.promise.then(function () {
+                    var payload;
+                    if (objectVariableEntity != undefined) {
+                        payload = { selectedIds: objectVariableEntity.VRObjectTypeDefinitionId };
+                    }
 
-            return objectTypeSelectiveLoadDeferred.promise;
+                    VRUIUtilsService.callDirectiveLoad(objectTypeDefinitionSelectorAPI, payload, objectTypeDefinitionSelectorLoadDeferred);
+                });
+
+                return objectTypeDefinitionSelectorLoadDeferred.promise;
+            }
         }
 
         function insert() {
@@ -120,7 +120,7 @@
         function buildObjectVariableFromScope() {
             return {
                 ObjectName: $scope.scopeModal.objectName,
-                ObjectType: objectTypeSelectiveAPI.getData(),
+                VRObjectTypeDefinitionId: objectTypeDefinitionSelectorAPI.getSelectedIds(),
             };
         }
     }
