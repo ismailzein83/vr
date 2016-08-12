@@ -73,6 +73,7 @@
       <DependentUpon>ParallelForEachDesigner.xaml</DependentUpon>
     </Compile>
     <Compile Include="EnqueueItem.cs" />
+    <Compile Include="ExecuteChildActivity.cs" />
     <Compile Include="GetDefinitionObjectState.cs" />
     <Compile Include="ParallelForEach.cs" />
     <Compile Include="SaveDefinitionObjectState.cs" />
