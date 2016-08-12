@@ -8,6 +8,8 @@ namespace Vanrise.Invoice.Entities
 {
     public class GenerateInvoiceInput
     {
+        public Guid InvoiceTypeId { get; set; }
+
         string PartnerId { get; set; }
 
         DateTime FromDate { get; set; }

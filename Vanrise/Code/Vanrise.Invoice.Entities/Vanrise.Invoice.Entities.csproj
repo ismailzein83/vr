@@ -49,6 +49,7 @@
     <Compile Include="GeneratedInvoice\GeneratedInvoiceItemSet.cs" />
     <Compile Include="Invoice.cs" />
     <Compile Include="InvoiceField.cs" />
+    <Compile Include="InvoiceGenerator.cs" />
     <Compile Include="InvoiceItem.cs" />
     <Compile Include="InvoiceType.cs" />
     <Compile Include="InvoiceTypeSettings.cs" />
