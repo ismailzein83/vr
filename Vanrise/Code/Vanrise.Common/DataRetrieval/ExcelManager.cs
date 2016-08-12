@@ -189,6 +189,86 @@ namespace Vanrise.Common
             excelResult.ExcelFileStream = memoryStream;
             return excelResult;
         }
+   
+        public ExcelResult ExportExcel(List<ExportExcelSheet> excelSheets)
+        {
+            Workbook wbk = new Workbook();
+            Common.Utilities.ActivateAspose();
+            wbk.Worksheets.Clear();
+            ExcelResult excelResult = new ExcelResult();
+
+            foreach (var excelSheet in excelSheets)
+            {
+                BuildWorkBookSheet(wbk, excelSheet);
+            }
+            MemoryStream memoryStream = new MemoryStream();
+            memoryStream = wbk.SaveToStream();
+
+            excelResult.ExcelFileStream = memoryStream;
+            return excelResult;
+        }
+        private void BuildWorkBookSheet(Workbook wbk,ExportExcelSheet excelSheet)
+        {
+            ValidateSheet(excelSheet);
+            Worksheet workSheet = wbk.Worksheets.Add(excelSheet.SheetName);
+            int rowIndex = 0;
+            int colIndex = 0;
+            BuildHeaderCells(workSheet, excelSheet.Header.Cells, rowIndex, colIndex);  //filling header
+            rowIndex++;
+            colIndex = 0;
+            BuildSheetRows(workSheet, excelSheet, excelSheet.Rows, rowIndex, colIndex);//filling result
+        }
+        private void BuildHeaderCells( Worksheet workSheet,List<ExportExcelHeaderCell> exportExcelHeaderCells, int rowIndex, int colIndex)
+        {
+            foreach (var headerCell in exportExcelHeaderCells)
+            {
+                workSheet.Cells.SetColumnWidth(colIndex, 20);
+                workSheet.Cells[rowIndex, colIndex].PutValue(headerCell.Title);
+                Cell cell = workSheet.Cells.GetCell(rowIndex, colIndex);
+                Style style = cell.GetStyle();
+                style.Font.Name = "Times New Roman";
+                style.Font.Color = Color.FromArgb(255, 0, 0); ;
+                style.Font.Size = 14;
+                style.Font.IsBold = true;
+                cell.SetStyle(style);
+                colIndex++;
+            }
+        }
+        private void BuildSheetRows(Worksheet workSheet, ExportExcelSheet excelSheet, List<ExportExcelRow> exportExcelRows, int rowIndex, int colIndex)
+        {
+            foreach (var excelRow in exportExcelRows)
+            {
+                if (excelRow.Cells == null)
+                    throw new NullReferenceException(String.Format("excelRow.Cells. RowIndex '{0}'", rowIndex));
+                if (excelRow.Cells.Count != excelSheet.Header.Cells.Count)
+                    throw new Exception(String.Format("Invalid Row Cell Count. RowIndex '{0}'. Row Cell Count '{1}' Header Cell Count '{2}'", rowIndex, excelRow.Cells.Count, excelSheet.Header.Cells.Count));
+                colIndex = 0;
+                foreach (var cell in excelRow.Cells)
+                {
+                    var excelCell = workSheet.Cells[rowIndex, colIndex];
+                    if (colIndex >= excelSheet.Header.Cells.Count)
+                        throw new Exception(String.Format("Cell Index '{0}' in row '{1}' is greater than header cell count '{2}'", colIndex, rowIndex, excelSheet.Header.Cells.Count));
+                    var headerCell = excelSheet.Header.Cells[colIndex];
+                    if (headerCell.CellType.HasValue)
+                        SetExcelCellFormat(excelCell, headerCell);
+                    excelCell.PutValue(cell.Value);
+                    colIndex++;
+                }
+
+                rowIndex++;
+            }
+        }
+        private void ValidateSheet(ExportExcelSheet excelSheet)
+        {
+            if (excelSheet == null)
+                throw new ArgumentNullException("excelSheet");
+            if (excelSheet.Header == null)
+                throw new ArgumentNullException("excelSheet.Header");
+            if (excelSheet.Header.Cells == null)
+                throw new ArgumentNullException("excelSheet.Header.Cells");
+            if (excelSheet.Rows == null)
+                throw new ArgumentNullException("excelSheet.Rows");
+        }
 
         private void SetExcelCellFormat(Cell excelCell, ExportExcelHeaderCell headerCell)
         {

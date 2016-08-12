@@ -281,9 +281,9 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Convert',
                     class: 'glyphicon glyphicon-retweet'
                 };
-            case 'Manipulation':
+            case 'TestConversion':
                 return {
-                    text: 'Manipulation',
+                    text: 'Test Conversion',
                     class: "glyphicon glyphicon-check"
                 }
         } 
