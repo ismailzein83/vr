@@ -243,16 +243,11 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (3301,'WhS_BE_SupplierPricelist','Supplier PriceList',1201,0,'["View"]'),
 
-(3302,'WhS_Analytics_Variation','Variation',1204,0,'["View"]'),
-(3303,'WhS_Analytics_BillingReport','Billing Report',1204,0,'["View"]'),
 (3304,'BillingStatistic','Billing Statistic',1204,0,'["View"]'),
 (3310,'BillingCDR','Billing CDR',1204,0,'["View"]'),
 
 (3305,'WhS_BE_SwitchConnectivity','Switch Connectivity',2,0,'["View", "Add", "Edit"]'),
 
-(3306,'WhS_Analytics_RepeatedNumber','Repeated Number',1205,0,'["View"]'),
-(3307,'WhS_Analytics_BlockedAttempts','BlockedAttempts',1205,0,'["View"]'),
-(3308,'WhS_Analytics_ReleaseCode','Release Code',1205,0,'["View"]'),
 (3309,'TrafficStatistic','Traffic Statistic',1205,0,'["View"]'),
 (3311,'CDR','Raw CDR',1205,0,'["View"]'),
 (3312,'FailedCDR','Failed CDR',1205,0,'["View"]'),
@@ -300,6 +295,25 @@ when not matched by target then
 	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
+
+
+--[sec].[BusinessEntity]-------------------delet action-------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(3302,'WhS_Analytics_Variation','Variation',1204,0,'["View"]'),
+(3303,'WhS_Analytics_BillingReport','Billing Report',1204,0,'["View"]'),
+(3306,'WhS_Analytics_RepeatedNumber','Repeated Number',1205,0,'["View"]'),
+(3307,'WhS_Analytics_BlockedAttempts','BlockedAttempts',1205,0,'["View"]'),
+(3308,'WhS_Analytics_ReleaseCode','Release Code',1205,0,'["View"]')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
+merge	[sec].[BusinessEntity] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	delete;
 
 --[common].[TemplateConfig]----------1 to 10000---------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
@@ -527,12 +541,12 @@ as (select * from (values
 ('WhS_Routing/RouteOptionRule/DeleteRule',null),
 ('WhS_Routing/RouteOptionRule/GetRouteOptionRuleSettingsTemplates',null),
 
-('WhS_Analytics/VariationReport/GetFilteredVariationReportRecords','WhS_Analytics_Variation: View'),
-('WhS_Analytics/ReportDefinition/GetAllRDLCReportDefinition','WhS_Analytics_BillingReport: View'),
+('WhS_Analytics/VariationReport/GetFilteredVariationReportRecords','BillingStatistic: View'),
+('WhS_Analytics/ReportDefinition/GetAllRDLCReportDefinition','BillingStatistic: View'),
 
-('WhS_Analytics/RepeatedNumber/GetAllFilteredRepeatedNumbers','WhS_Analytics_RepeatedNumber: View'),
-('WhS_Analytics/BlockedAttempts/GetBlockedAttemptsData','WhS_Analytics_BlockedAttempts: View'),
-('WhS_Analytics/ReleaseCode/GetAllFilteredReleaseCodes','WhS_Analytics_ReleaseCode: View'),
+('WhS_Analytics/RepeatedNumber/GetAllFilteredRepeatedNumbers','TrafficStatistic: View'),
+('WhS_Analytics/BlockedAttempts/GetBlockedAttemptsData','TrafficStatistic: View'),
+('WhS_Analytics/ReleaseCode/GetAllFilteredReleaseCodes','TrafficStatistic: View'),
 
 ('WhS_BE/SwitchConnectivity/GetFilteredSwitchConnectivities','WhS_BE_SwitchConnectivity: View'),
 ('WhS_BE/SwitchConnectivity/GetSwitchConnectivity','WhS_BE_SwitchConnectivity: View'),
