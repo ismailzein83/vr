@@ -7,13 +7,13 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace Vanrise.BEBridge.BP.Arguments
 {
-    public  class SourceBESyncProcessInput : BaseProcessInputArgument
+    public class SourceBESyncProcessInput : BaseProcessInputArgument
     {
         public override string GetTitle()
         {
-            throw new NotImplementedException();
+            return "Source BE Sync Process";
         }
 
-        public Guid BEReceiveDefinitionId { get; set; }
+        public List<Guid> BEReceiveDefinitionIds { get; set; }
     }
 }
