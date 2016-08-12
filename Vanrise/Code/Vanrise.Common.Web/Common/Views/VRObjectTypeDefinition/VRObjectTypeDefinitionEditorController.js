@@ -53,7 +53,10 @@
                 propertyDirectiveReadyDeferred.resolve();
             };
 
-
+            $scope.scopeModel.showObjectTypeProperty = function () {
+               
+                return $scope.scopeModel.name != undefined && $scope.scopeModel.name != null && objectTypeSelectiveAPI.getData() != null && objectTypeSelectiveIsLoaded(objectTypeSelectiveAPI.getData());
+            }
 
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
@@ -173,7 +176,15 @@
             });
         }
 
+        function objectTypeSelectiveIsLoaded(objectType) {
+            for (var key in objectType) 
+                if (key != "$type" && key != "ConfigId")
+                    return objectType[key] != undefined;     
+        }
+
         function buildContext() {
+            var hideButton;
+
             var context = {
                 getObjectType: function () { return objectTypeSelectiveAPI.getData(); }
             }
