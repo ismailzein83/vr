@@ -23,16 +23,18 @@
     </exceptionLoggers>
   </vanriseLogging>
   <connectionStrings>
-    <add name="TOneV2DBConnString" connectionString="Server=192.168.110.185;Database=TOneV2_Dev;User ID=Development;Password=dev!123"/>
-    <add name="TOneCDRDBConnString" connectionString="Server=192.168.110.185;Database=TOneV2_Dev_CDR;User ID=Development;Password=dev!123"/>
-    <add name="TOneAnalyticsDBConnString" connectionString="Server=192.168.110.185;Database=TOneV2_Dev_Analytics;User ID=Development;Password=dev!123"/>
-    <add name="TransactionDBConnString" connectionString="Data Source=.;Initial Catalog=TOneTransactionDB;User ID=sa; Password=p@ssw0rd" />
-    <add name="LogDBConnString" connectionString="Data Source=.;Initial Catalog=TOneWFTracking;User ID=sa; Password=p@ssw0rd" />
-    <add name="ConfigurationDBConnString" connectionString="Server=192.168.110.185;Database=TOneConfiguration;User ID=Development;Password=dev!123"/>
-    <add name="BIConnectionString" connectionString="Provider=MSOLAP;Data Source = http://192.168.110.185:1214/msmdpump.dll; Initial Catalog = ToneDebTest01_BI_Latest; User Id = vanrise\olap.access; Password = 0l@p@cce$$" />
-    <add name="QueueItemDBConnString" connectionString="Data Source=.;Initial Catalog=TOneQueueDB;User ID=sa; Password=p@ssw0rd" />
-    <add name="RoutingDBConnStringTemplateKey" connectionString="Data Source=192.168.110.185;Initial Catalog=TOneV2Dev_#WorkflowType#_#DatabaseId#;user id=development;password=dev!123"/>
-    <add name="MainDBConnString" connectionString=""/>
+    <add name="TOneV2DBConnString" connectionString="Server=localhost;Database=TOne_Configuration;User ID=sa;Password= "/>
+    <add name="TOneCDRDBConnString" connectionString="Server=localhost;Database=TOneV2_CDR;User ID=sa;Password= "/>
+    <add name="TOneAnalyticsDBConnString" connectionString="Server=localhost;Database=TOneV2_Analytics;User ID=sa;Password= "/>
+
+    <add name="QueueItemDBConnString" connectionString="Data Source=localhost;Initial Catalog=TOneQueueDB;User ID=sa; Password=p@ssw0rd" />
+    <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=TOneTransactionDB;User ID=sa; Password=p@ssw0rd" />
+    <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=TOneWFTracking;User ID=sa; Password=p@ssw0rd" />
+
+    <add name="RoutingDBConnStringTemplateKey" connectionString="Data Source=localhost;Initial Catalog=TOneV2_#WorkflowType#_#DatabaseId#;User ID=sa;Password= "/>
+    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=TOne_Configuration;User ID=sa;Password= "/>
+    <add name="BIConnectionString" connectionString="Provider=MSOLAP;Data Source = http://localhost:1214/msmdpump.dll; Initial Catalog = TOne_BI; User Id = vanrise\olap.access; Password = 0l@p@cce$$" />
+    <add name="MainDBConnString" connectionString=""/>    
   </connectionStrings>
   <appSettings>
     <add key="vs:EnableBrowserLink" value="false"/>
