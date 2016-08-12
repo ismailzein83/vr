@@ -216,7 +216,7 @@
                         var directiveLoadDeferred = UtilsService.createPromiseDeferred();
                         recordFilterReadyPromiseDeferred.promise.then(function () {
                             var directivePayload = { context: getRecordFilterContext() };
-                            if (listMappingData.Filter != undefined)
+                            if (listMappingData !=undefined && listMappingData.Filter != undefined)
                             {
                                 directivePayload.FilterGroup = listMappingData.Filter.FilterGroup;
                                 directivePayload.ConditionExpression = listMappingData.Filter.ConditionExpression;
