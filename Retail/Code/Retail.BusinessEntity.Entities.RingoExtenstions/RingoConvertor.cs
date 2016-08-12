@@ -11,6 +11,8 @@ namespace Retail.BusinessEntity.Entities.RingoExtenstions
     {
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
+            List<SourceAccountData> sourceAccounts = new List<SourceAccountData>();
+            FileSourceBatch batch = context.SourceBEBatch as FileSourceBatch;
 
         }
 

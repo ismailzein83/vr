@@ -12,12 +12,12 @@ namespace Retail.BusinessEntity.Entities
         public Account Account { get; set; }
         public object SourceBEId
         {
-            get { throw new NotImplementedException(); }
+            get { return null; }
         }
 
         public object TargetBEId
         {
-            get { throw new NotImplementedException(); }
+            get { return this.Account.AccountId; }
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Retail.BusinessEntity.Entities;
 using Vanrise.BEBridge.Entities;
 
 namespace Retail.BusinessEntity.Business
@@ -11,17 +12,37 @@ namespace Retail.BusinessEntity.Business
     {
         public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)
         {
-            
+            AccountManager accountManager = new AccountManager();
+            foreach (var targetAccount in context.TargetBE)
+            {
+                 SourceAccountData accountData = targetAccount as SourceAccountData;
+                 accountManager.AddAccount(accountData.Account);
+            }
         }
 
         public override bool TryGetExistingBE(ITargetBESynchronizerTryGetExistingBEContext context)
         {
-            throw new NotImplementedException();
+            AccountManager accountManager = new AccountManager();
+            Account account = accountManager.GetAccountBySourceId(context.SourceBEId as string);
+            if (account != null)
+            {
+                context.TargetBE = new SourceAccountData
+                {
+                    Account = account
+                };
+                return true;
+            }
+            return false;
         }
 
         public override void UpdateBEs(ITargetBESynchronizerInsertBEsContext context)
         {
-          
+            AccountManager accountManager = new AccountManager();
+            foreach (var target in context.TargetBE)
+            {
+                SourceAccountData accountData = target as SourceAccountData;
+                //accountManager.UpdateAccount(accountData.Account);
+            }
         }
     }
 }

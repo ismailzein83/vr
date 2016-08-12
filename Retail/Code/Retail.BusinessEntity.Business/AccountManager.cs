@@ -39,6 +39,12 @@ namespace Retail.BusinessEntity.Business
             Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts();
             return cachedAccounts.GetRecord(accountId);
         }
+
+        public Account GetAccountBySourceId(string accountId)
+        {
+            Dictionary<string, Account> cachedAccounts = this.GetCachedAccountsBySourceId();
+            return cachedAccounts.GetRecord(accountId);
+        }
         public AccountDetail GetAccountDetail(long accountId)
         {
             Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts();
@@ -332,6 +338,14 @@ namespace Retail.BusinessEntity.Business
                 IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
                 IEnumerable<Account> accounts = dataManager.GetAccounts();
                 return accounts.ToDictionary(kvp => kvp.AccountId, kvp => kvp);
+            });
+        }
+
+        Dictionary<string, Account> GetCachedAccountsBySourceId()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountsBySource", () =>
+            {
+                return GetCachedAccounts().ToDictionary(kvp =>  kvp.Key.ToString(), kvp => kvp.Value);
             });
         }
 
