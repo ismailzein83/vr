@@ -140,10 +140,14 @@
     <Folder Include="Controllers\" />
     <Folder Include="VR_Invoice\Directives\" />
     <Folder Include="VR_Invoice\Services\APIServices\" />
-    <Folder Include="VR_Invoice\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_Invoice\Constants\ModuleConfig.js" />
+    <Content Include="VR_Invoice\Services\GenericInvoiceService.js" />
+    <Content Include="VR_Invoice\Views\GenerateInvoiceEditor.html" />
+    <Content Include="VR_Invoice\Views\GenerateInvoiceEditorController.js" />
+    <Content Include="VR_Invoice\Views\GenericInvoiceManagement.html" />
+    <Content Include="VR_Invoice\Views\GenericInvoiceManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

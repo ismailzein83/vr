@@ -53,6 +53,7 @@
     <Compile Include="InvoiceItem.cs" />
     <Compile Include="InvoiceType.cs" />
     <Compile Include="InvoiceTypeSettings.cs" />
+    <Compile Include="InvoiceViewSettings.cs" />
     <Compile Include="UISettings\InvoiceTypeUISettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UISettings\InvoiceUIGridColumn.cs" />
@@ -62,6 +63,10 @@
     <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Entities\Vanrise.Security.Entities.csproj">
+      <Project>{04de17c7-70b4-40a1-84dd-26c91ca228ac}</Project>
+      <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

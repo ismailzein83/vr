@@ -1,0 +1,22 @@
+﻿<vr-panel ng-controller="VR_Invoice_GenericInvoiceManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="GenerateInvoice" data-onclick="generateInvoice"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>
