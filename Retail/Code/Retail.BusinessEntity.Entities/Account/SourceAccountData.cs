@@ -7,8 +7,17 @@ using Vanrise.BEBridge.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class SourceAccountData
+    public class SourceAccountData : ITargetBE
     {
-        public TargetBEConvertor TargetConverter { get; set; }
+        public Account Account { get; set; }
+        public object SourceBEId
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public object TargetBEId
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

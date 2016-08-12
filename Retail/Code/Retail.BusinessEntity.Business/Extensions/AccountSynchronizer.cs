@@ -7,11 +7,11 @@ using Vanrise.BEBridge.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
-    public class AccountSyncronizer : TargetBESynchronizer
+    public class AccountSynchronizer : TargetBESynchronizer
     {
         public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)
         {
-            throw new NotImplementedException();
+            
         }
 
         public override bool TryGetExistingBE(ITargetBESynchronizerTryGetExistingBEContext context)
@@ -21,7 +21,7 @@ namespace Retail.BusinessEntity.Business
 
         public override void UpdateBEs(ITargetBESynchronizerInsertBEsContext context)
         {
-            throw new NotImplementedException();
+          
         }
     }
 }

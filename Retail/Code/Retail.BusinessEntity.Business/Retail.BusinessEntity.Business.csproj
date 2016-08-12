@@ -103,7 +103,6 @@
     <Compile Include="AccountManager.cs" />
     <Compile Include="AccountPartDefinitionManager.cs" />
     <Compile Include="AccountServiceManager.cs" />
-    <Compile Include="AccountSyncronizer.cs" />
     <Compile Include="AccountTypeManager.cs" />
     <Compile Include="Action\ActionDefinitionManager.cs" />
     <Compile Include="CreditClassManager.cs" />
@@ -112,6 +111,7 @@
     <Compile Include="ChargingPolicyManager.cs" />
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Extensions\AccountSynchronizer.cs" />
     <Compile Include="Extensions\BalanceAlertAccountAction.cs" />
     <Compile Include="Extensions\ChargingPolicyRuleDefinitionFilter.cs" />
     <Compile Include="StatusChargingManager.cs" />
