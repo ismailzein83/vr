@@ -15,7 +15,7 @@ namespace Retail.BusinessEntity.Entities
 
     public abstract class AccountPartSettings
     {
-
+       
     }
 
     public class AccountPartCollection : Dictionary<int, AccountPart>

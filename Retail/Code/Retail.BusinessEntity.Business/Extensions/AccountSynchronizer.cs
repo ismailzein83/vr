@@ -15,8 +15,8 @@ namespace Retail.BusinessEntity.Business
             AccountManager accountManager = new AccountManager();
             foreach (var targetAccount in context.TargetBE)
             {
-                 SourceAccountData accountData = targetAccount as SourceAccountData;
-                 accountManager.AddAccount(accountData.Account);
+                SourceAccountData accountData = targetAccount as SourceAccountData;
+                accountManager.AddAccount(accountData.Account);
             }
         }
 
@@ -41,7 +41,15 @@ namespace Retail.BusinessEntity.Business
             foreach (var target in context.TargetBE)
             {
                 SourceAccountData accountData = target as SourceAccountData;
-                //accountManager.UpdateAccount(accountData.Account);
+                AccountToEdit editAccount = new AccountToEdit
+                {
+                    Settings = accountData.Account.Settings,
+                    AccountId = accountData.Account.AccountId,
+                    Name = accountData.Account.Name,
+                    TypeId = accountData.Account.TypeId,
+                    SourceId = accountData.Account.SourceId
+                };
+                accountManager.UpdateAccount(editAccount);
             }
         }
     }

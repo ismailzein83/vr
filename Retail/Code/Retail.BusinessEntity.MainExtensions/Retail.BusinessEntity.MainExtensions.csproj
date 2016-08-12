@@ -71,6 +71,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountParts\AccountPartPersonalInfo.cs" />
+    <Compile Include="AccountParts\AccountPartPersonalInfoDefinition.cs" />
     <Compile Include="ChargingPolicyParts\DurationTariffs\GenericRuleDurationTariff.cs" />
     <Compile Include="ChargingPolicyParts\DurationTariffs\GenericRuleDurationTariffDefinition.cs" />
     <Compile Include="ChargingPolicyParts\DurationTariffs\SingleDurationTariff.cs" />

@@ -9,6 +9,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
     public class AccountPartCompanyProfile : AccountPartSettings
     {
+        public const int ExtensionConfigId = 21;
         public int? CountryId { get; set; }
 
         public int? CityId { get; set; }

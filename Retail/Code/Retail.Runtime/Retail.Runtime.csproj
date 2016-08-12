@@ -121,6 +121,16 @@
     <Reference Include="Vanrise.AccountBalance.Web">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BEBridge.BP.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.BP.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BEBridge.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BEBridge.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
@@ -363,6 +373,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tasks\AnthonyTask.cs" />
+    <Compile Include="Tasks\RabihTask.cs" />
     <Compile Include="Tasks\SamerTask.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -405,6 +416,10 @@
     <ProjectReference Include="..\Retail.BusinessEntity.MainExtensions\Retail.BusinessEntity.MainExtensions.csproj">
       <Project>{e4c4ef32-adfb-48c3-a3d3-489a4fc53b89}</Project>
       <Name>Retail.BusinessEntity.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.RingoExtensions\Retail.BusinessEntity.RingoExtensions.csproj">
+      <Project>{79ee241b-c553-470e-a091-03fbbccd971f}</Project>
+      <Name>Retail.BusinessEntity.RingoExtensions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

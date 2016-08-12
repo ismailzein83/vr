@@ -9,6 +9,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
     public class AccountPartFinancial : AccountPartSettings, IAccountPayment
     {
+        public const int ExtensionConfigId = 14;
         public PaymentMethod PaymentMethod { get; set; }
 
         public int CurrencyId { get; set; }

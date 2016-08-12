@@ -40,10 +40,10 @@ namespace Retail.BusinessEntity.Business
             return cachedAccounts.GetRecord(accountId);
         }
 
-        public Account GetAccountBySourceId(string accountId)
+        public Account GetAccountBySourceId(string sourceId)
         {
             Dictionary<string, Account> cachedAccounts = this.GetCachedAccountsBySourceId();
-            return cachedAccounts.GetRecord(accountId);
+            return cachedAccounts.GetRecord(sourceId);
         }
         public AccountDetail GetAccountDetail(long accountId)
         {
@@ -93,7 +93,7 @@ namespace Retail.BusinessEntity.Business
                 throw new NullReferenceException("AccountType is null");
             if (accountType.Settings == null)
                 throw new NullReferenceException("AccountType settings is null");
-           
+
             account.StatusId = accountType.Settings.InitialStatusId;
 
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AccountDetail>();
@@ -123,7 +123,7 @@ namespace Retail.BusinessEntity.Business
         {
             IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
             bool updateStatus = dataManager.UpdateStatus(accountId, statusId);
-            if(updateStatus)
+            if (updateStatus)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
@@ -162,12 +162,12 @@ namespace Retail.BusinessEntity.Business
             if (account == null)
                 throw new NullReferenceException(String.Format("account '{0}'", accountId));
 
-            if(account.Settings == null)
+            if (account.Settings == null)
                 throw new NullReferenceException(String.Format("account.Settings '{0}'", accountId));
 
-            if(account.Settings.Parts != null)
+            if (account.Settings.Parts != null)
             {
-                foreach(var part in account.Settings.Parts)
+                foreach (var part in account.Settings.Parts)
                 {
                     accountPayment = part.Value as IAccountPayment;
                     if (accountPayment != null)
@@ -191,7 +191,7 @@ namespace Retail.BusinessEntity.Business
 
             var accountPartDefinitionManager = new AccountPartDefinitionManager();
 
-             IEnumerable<AccountTypePartSettings> partSettingsList = GetAccountTypePartDefinitionSettingsList(accountTypeId);
+            IEnumerable<AccountTypePartSettings> partSettingsList = GetAccountTypePartDefinitionSettingsList(accountTypeId);
 
             var runtimeParts = new List<AccountPartRuntime>();
 
@@ -345,7 +345,7 @@ namespace Retail.BusinessEntity.Business
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountsBySource", () =>
             {
-                return GetCachedAccounts().ToDictionary(kvp =>  kvp.Key.ToString(), kvp => kvp.Value);
+                return GetCachedAccounts().Where(v => !string.IsNullOrEmpty(v.Value.SourceId)).ToDictionary(kvp => kvp.Value.SourceId, kvp => kvp.Value);
             });
         }
 
@@ -410,11 +410,11 @@ namespace Retail.BusinessEntity.Business
             IEnumerable<AccountTypeInfo> accountTypeInfoEntities =
                 accountTypeManager.GetAccountTypesInfo(new AccountTypeFilter() { ParentAccountId = account.AccountId });
             ActionDefinitionManager manager = new ActionDefinitionManager();
-            IEnumerable<ActionDefinitionInfo> actionDefinitions = manager.GetActionDefinitionInfoByEntityType(EntityType.Account,account.StatusId);
+            IEnumerable<ActionDefinitionInfo> actionDefinitions = manager.GetActionDefinitionInfoByEntityType(EntityType.Account, account.StatusId);
 
             StatusDefinitionManager statusDefinitionManager = new Business.StatusDefinitionManager();
 
-            var statusDesciption =  statusDefinitionManager.GetStatusDefinitionName(account.StatusId);
+            var statusDesciption = statusDefinitionManager.GetStatusDefinitionName(account.StatusId);
 
             var accountServices = new AccountServiceManager();
             var accountPackages = new AccountPackageManager();
@@ -427,7 +427,7 @@ namespace Retail.BusinessEntity.Business
                 TotalSubAccountCount = GetSubAccountsCount(account.AccountId, accounts, true, accountsByParent),
                 CanAddSubAccounts = (accountTypeInfoEntities != null && accountTypeInfoEntities.Count() > 0),
                 ActionDefinitions = actionDefinitions,
-                StatusDesciption =statusDesciption,
+                StatusDesciption = statusDesciption,
                 Style = GetStatuStyle(account.StatusId),
                 NumberOfServices = accountServices.GetAccountServicesCount(account.AccountId),
                 NumberOfPackages = accountPackages.GetAccountPackagesCount(account.AccountId)
@@ -526,23 +526,24 @@ namespace Retail.BusinessEntity.Business
 
         public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
-            switch(context.InfoType)
+            switch (context.InfoType)
             {
                 case Vanrise.AccountBalance.Entities.AccountInfo.BEInfoType:
                     {
                         var account = context.Entity as Account;
                         StatusDefinitionManager statusDefinitionManager = new Business.StatusDefinitionManager();
-                        var statusDesciption =  statusDefinitionManager.GetStatusDefinitionName(account.StatusId);
+                        var statusDesciption = statusDefinitionManager.GetStatusDefinitionName(account.StatusId);
                         Vanrise.AccountBalance.Entities.AccountInfo accountInfo = new Vanrise.AccountBalance.Entities.AccountInfo
                         {
                             Name = account.Name,
                             StatusDescription = statusDesciption,
                         };
                         var currency = GetCurrencyId(account.Settings.Parts.Values);
-                        if(currency.HasValue)
+                        if (currency.HasValue)
                         {
                             accountInfo.CurrencyId = currency.Value;
-                        }else
+                        }
+                        else
                         {
                             throw new Exception(string.Format("Account {0} does not have currency", accountInfo.Name));
                         }
@@ -554,7 +555,7 @@ namespace Retail.BusinessEntity.Business
 
         private int? GetCurrencyId(IEnumerable<AccountPart> parts)
         {
-            foreach(AccountPart part in parts)
+            foreach (AccountPart part in parts)
             {
                 var actionpartSetting = part.Settings as IAccountPayment;
                 if (actionpartSetting != null)

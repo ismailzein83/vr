@@ -244,6 +244,7 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-financial-postpaid.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-financial.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-generic.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-personalinfo.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-residentialprofile.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeActivationPartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeCompanyProfilePartRuntimeTemplate.html" />
@@ -251,6 +252,7 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeFinancialPrepaidPartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeFinancialPostpaidPartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeGenericPartRuntimeTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypePersonalInfoPartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeResidentialProfilePartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ActionBPDefinition\retail-be-actionbpdefinition-definitionsettings-regular.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ActionBPDefinition\Templates\RegularActionBPDefinitionSettingsTemplate.html" />

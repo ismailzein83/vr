@@ -32,7 +32,7 @@ namespace Retail.BusinessEntity.Data.SQL
         {
             object accountId;
             string serializedSettings = account.Settings != null ? Vanrise.Common.Serializer.Serialize(account.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_Insert", out accountId, account.Name, account.TypeId, serializedSettings, account.ParentAccountId, account.StatusId);
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_Insert", out accountId, account.Name, account.TypeId, serializedSettings, account.ParentAccountId, account.StatusId, account.SourceId);
 
             if (affectedRecords > 0)
             {
@@ -74,6 +74,7 @@ namespace Retail.BusinessEntity.Data.SQL
                 Settings = Vanrise.Common.Serializer.Deserialize<AccountSettings>(reader["Settings"] as string),
                 ParentAccountId = GetReaderValue<int?>(reader, "ParentID"),
                 StatusId = GetReaderValue<Guid>(reader, "StatusID"),
+                SourceId = reader["SourceID"] as string
             };
         }
 
