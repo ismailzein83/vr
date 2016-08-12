@@ -44,7 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReProcessingFinalizeProcessOutput.cs" />
     <Compile Include="ReProcessingProcessInput.cs" />
+    <Compile Include="ReProcessingFinalizeProcessInput.cs" />
     <Compile Include="ReProcessingSubProcessOutput.cs" />
     <Compile Include="ReProcessingSubProcessInput.cs" />
   </ItemGroup>
