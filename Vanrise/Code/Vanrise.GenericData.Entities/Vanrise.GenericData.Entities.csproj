@@ -71,6 +71,7 @@
     <Compile Include="DataRecordFieldChoice\DataRecordFieldChoiceInfo.cs" />
     <Compile Include="DataRecordFieldChoice\DataRecordFieldChoiceQuery.cs" />
     <Compile Include="DataRecords\DataRecord.cs" />
+    <Compile Include="DataRecords\RecordBatch.cs" />
     <Compile Include="DataRecords\DataRecordColumn.cs" />
     <Compile Include="DataRecords\DataRecordDetailBigResult.cs" />
     <Compile Include="DataRecords\DataRecordSearchPageSettings.cs" />

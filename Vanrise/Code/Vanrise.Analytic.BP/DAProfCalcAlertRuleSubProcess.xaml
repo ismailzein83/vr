@@ -1,0 +1,189 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Analytic.BP.DAProfCalcAlertRuleSubProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:local="clr-namespace:Vanrise.Analytic.BP"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:vabad="clr-namespace:Vanrise.Analytic.BP.Activities.DAProfCalc;assembly=Vanrise.Analytic.BP.Activities"
+ xmlns:vae="clr-namespace:Vanrise.Analytic.Entities;assembly=Vanrise.Analytic.Entities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vnba="clr-namespace:Vanrise.Notification.BP.Activities;assembly=Vanrise.Notification.BP.Activities"
+ xmlns:vne="clr-namespace:Vanrise.Notification.Entities;assembly=Vanrise.Notification.Entities"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(vne:VRAlertRuleCheckerInput)" />
+    <x:Property Name="Output" Type="OutArgument(vne:VRAlertRuleCheckerOutput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Vanrise.Analytic.BP.DAProfCalcAlertRuleSubProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>Vanrise.Notification.Entities</x:String>
+      <x:String>Vanrise.Analytic.Entities</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.Analytic.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Analytic.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.Notification.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Notification.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Vanrise.Analytic.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="vae:DAProfCalcAlertRuleTypeSettings" Name="ruleTypeSettings" />
+      <Variable x:TypeArguments="scg:List(vne:VRAlertRule(vae:DAProfCalcAlertRuleCriteria))" Name="alertRules" />
+    </Sequence.Variables>
+    <vnba:GetAlertRuleTypeSettings x:TypeArguments="vae:DAProfCalcAlertRuleTypeSettings" sap2010:WorkflowViewState.IdRef="GetAlertRuleTypeSettings`1_1">
+      <vnba:GetAlertRuleTypeSettings.AlertRuleTypeId>
+        <InArgument x:TypeArguments="s:Guid">
+          <mca:CSharpValue x:TypeArguments="s:Guid">Input.RuleTypeId</mca:CSharpValue>
+        </InArgument>
+      </vnba:GetAlertRuleTypeSettings.AlertRuleTypeId>
+      <vnba:GetAlertRuleTypeSettings.AlertRuleTypeSettings>
+        <OutArgument x:TypeArguments="vae:DAProfCalcAlertRuleTypeSettings">
+          <mca:CSharpReference x:TypeArguments="vae:DAProfCalcAlertRuleTypeSettings">ruleTypeSettings</mca:CSharpReference>
+        </OutArgument>
+      </vnba:GetAlertRuleTypeSettings.AlertRuleTypeSettings>
+    </vnba:GetAlertRuleTypeSettings>
+    <vnba:GetAlertRulesByType x:TypeArguments="vae:DAProfCalcAlertRuleCriteria" sap2010:WorkflowViewState.IdRef="GetAlertRulesByType`1_1">
+      <vnba:GetAlertRulesByType.AlertRuleTypeId>
+        <InArgument x:TypeArguments="s:Guid">
+          <mca:CSharpValue x:TypeArguments="s:Guid">Input.RuleTypeId</mca:CSharpValue>
+        </InArgument>
+      </vnba:GetAlertRulesByType.AlertRuleTypeId>
+      <vnba:GetAlertRulesByType.AlertRules>
+        <OutArgument x:TypeArguments="scg:List(vne:VRAlertRule(vae:DAProfCalcAlertRuleCriteria))">
+          <mca:CSharpReference x:TypeArguments="scg:List(vne:VRAlertRule(vae:DAProfCalcAlertRuleCriteria))">alertRules</mca:CSharpReference>
+        </OutArgument>
+      </vnba:GetAlertRulesByType.AlertRules>
+    </vnba:GetAlertRulesByType>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <Parallel.Variables>
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="profilingAndCalculationStatus">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">new AsyncActivityStatus()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
+        <Variable x:TypeArguments="vq:BaseQueue(vae:DAProfCalcOutputRecordBatch)" Name="queueProfCalcOutputRecords">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vae:DAProfCalcOutputRecordBatch)">new MemoryQueue&lt;DAProfCalcOutputRecordBatch&gt;()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
+      </Parallel.Variables>
+      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+        <local:DAProfCalcSubProcess FromTime="{x:Null}" ToTime="{x:Null}" sap2010:WorkflowViewState.IdRef="DAProfCalcSubProcess_1">
+          <local:DAProfCalcSubProcess.DAProfCalcDefinitionId>
+            <InArgument x:TypeArguments="s:Guid">
+              <mca:CSharpValue x:TypeArguments="s:Guid">ruleTypeSettings.DataAnalysisDefinitionId</mca:CSharpValue>
+            </InArgument>
+          </local:DAProfCalcSubProcess.DAProfCalcDefinitionId>
+          <local:DAProfCalcSubProcess.IncludedDAProfCalcItemDefinitionIds>
+            <InArgument x:TypeArguments="scg:List(s:Guid)">
+              <mca:CSharpValue x:TypeArguments="scg:List(s:Guid)">alertRules.Select(itm =&gt; itm.RuleCriteria.DAProfCalcOutputItemDefinitionId).Distinct().ToList()</mca:CSharpValue>
+            </InArgument>
+          </local:DAProfCalcSubProcess.IncludedDAProfCalcItemDefinitionIds>
+          <local:DAProfCalcSubProcess.OutputRecordsQueue>
+            <InArgument x:TypeArguments="vq:BaseQueue(vae:DAProfCalcOutputRecordBatch)">
+              <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vae:DAProfCalcOutputRecordBatch)">queueProfCalcOutputRecords</mca:CSharpValue>
+            </InArgument>
+          </local:DAProfCalcSubProcess.OutputRecordsQueue>
+          <local:DAProfCalcSubProcess.RecordStorageIds>
+            <InArgument x:TypeArguments="scg:List(x:Int32)">
+              <mca:CSharpValue x:TypeArguments="scg:List(x:Int32)">ruleTypeSettings.SourceRecordStorages.Select(itm =&gt; itm.DataRecordStorageId).ToList()</mca:CSharpValue>
+            </InArgument>
+          </local:DAProfCalcSubProcess.RecordStorageIds>
+        </local:DAProfCalcSubProcess>
+        <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+          <Assign.To>
+            <OutArgument x:TypeArguments="x:Boolean">
+              <mca:CSharpReference x:TypeArguments="x:Boolean">profilingAndCalculationStatus.IsComplete</mca:CSharpReference>
+            </OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+          </Assign.Value>
+        </Assign>
+      </Sequence>
+      <vabad:GenerateVRAlertEvents Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GenerateVRAlertEvents_1">
+        <vabad:GenerateVRAlertEvents.AlertRules>
+          <InArgument x:TypeArguments="scg:List(vne:VRAlertRule(vae:DAProfCalcAlertRuleCriteria))">
+            <mca:CSharpValue x:TypeArguments="scg:List(vne:VRAlertRule(vae:DAProfCalcAlertRuleCriteria))">alertRules</mca:CSharpValue>
+          </InArgument>
+        </vabad:GenerateVRAlertEvents.AlertRules>
+        <vabad:GenerateVRAlertEvents.InputQueue>
+          <InArgument x:TypeArguments="vq:BaseQueue(vae:DAProfCalcOutputRecordBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vae:DAProfCalcOutputRecordBatch)">queueProfCalcOutputRecords</mca:CSharpValue>
+          </InArgument>
+        </vabad:GenerateVRAlertEvents.InputQueue>
+        <vabad:GenerateVRAlertEvents.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vne:VRAlertRuleMatchedEvent)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vne:VRAlertRuleMatchedEvent)">Input.MatchedEventsOutputQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vabad:GenerateVRAlertEvents.OutputQueue>
+        <vabad:GenerateVRAlertEvents.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">profilingAndCalculationStatus</mca:CSharpValue>
+          </InArgument>
+        </vabad:GenerateVRAlertEvents.PreviousActivityStatus>
+      </vabad:GenerateVRAlertEvents>
+    </Parallel>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY0FsZXJ0UnVsZVN1YlByb2Nlc3MueGFtbBg/A6MBDgIBAUQFTyUCAWBQBVsgAgFVXAWhARACAQJMC0x8AgFmRwtHVwIBYVgLWI0BAgFbUwtTVwIBVmANYHICAQplDWWkAQIBA2kHigESAgEuiwEHoAElAgERagl/JgIBOIABCYkBEgIBL44BDY4BhwECASedAQ2dAXYCASCTAQ2TAYoBAgEZmAENmAGSAQIBEncPd4wBAgFObQ9tdAIBR3wPfK4BAgFAcg9ytwECATmHATWHATkCATeDAQ+DAX4CATA=</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="GetAlertRuleTypeSettings`1_1" sap:VirtualizedContainerService.HintSize="618,22" />
+      <sap2010:ViewStateData Id="GetAlertRulesByType`1_1" sap:VirtualizedContainerService.HintSize="618,22" />
+      <sap2010:ViewStateData Id="DAProfCalcSubProcess_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="264,248">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="GenerateVRAlertEvents_1" sap:VirtualizedContainerService.HintSize="200,248" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="618,294" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="640,542">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Vanrise.Analytic.BP.DAProfCalcAlertRuleSubProcess_1" sap:VirtualizedContainerService.HintSize="680,622" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

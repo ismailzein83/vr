@@ -103,9 +103,27 @@
     <Compile Include="Config\Measure\AnalyticMeasureConfig.cs" />
     <Compile Include="Config\Measure\IMeasureEvaluator.cs" />
     <Compile Include="Config\Measure\AnalyticMeasureConfigQuery.cs" />
+    <Compile Include="DataAnalysis\DARecordAggregate.cs" />
+    <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinition.cs" />
+    <Compile Include="DataAnalysis\DataAnalysisDefinitionItem\DataAnalysisItemDefinition.cs" />
+    <Compile Include="DataAnalysis\DataAnalysisDefinitionItem\DataAnalysisItemDefinitionSettings.cs" />
+    <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionConfig.cs" />
+    <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionSettings.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleCriteria.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleTypeSettings.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\DAProfCalcAggregationField.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\DAProfCalcCalculationField.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\DAProfCalcGroupingField.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\Output\DAProfCalcOutputRecord.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\DAProfCalcOutputSettings.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\DAProfCalcSettings.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\OutputDefinitions\MergingProfiledOutputSettings.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\OutputDefinitions\RecordProfilingOutputSettings.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\Output\DAProfCalcOutputRecordBatch.cs" />
     <Compile Include="DimensionFilter.cs" />
     <Compile Include="DimensionValue.cs" />
     <Compile Include="MeasureStyleRuleTemplate.cs" />
+    <Compile Include="DataAnalysis\TimeRangeFilter.cs" />
     <Compile Include="RecordSearchFilterGroupInput.cs" />
     <Compile Include="StyleRule.cs" />
     <Compile Include="MeasureValues.cs" />
@@ -128,6 +146,10 @@
     <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Notification.Entities\Vanrise.Notification.Entities.csproj">
+      <Project>{f58cc66a-3bc4-49ed-9143-d1abb031c242}</Project>
+      <Name>Vanrise.Notification.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Security.Entities\Vanrise.Security.Entities.csproj">
       <Project>{04de17c7-70b4-40a1-84dd-26c91ca228ac}</Project>

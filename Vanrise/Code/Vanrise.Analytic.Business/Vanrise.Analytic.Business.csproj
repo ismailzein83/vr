@@ -58,6 +58,8 @@
     <Compile Include="AnalyticTableManager.cs" />
     <Compile Include="AnalyticTableQueryContext.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="DataAnalysis\DataAnalysisItemDefinitionManager.cs" />
+    <Compile Include="DataAnalysis\DataAnalysisDefinitionManager.cs" />
     <Compile Include="DynamicTypeGenerator.cs" />
     <Compile Include="GetDimensionValueContext.cs" />
     <Compile Include="GetMeasureValueContext.cs" />
