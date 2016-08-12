@@ -7,6 +7,7 @@ using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.Common;
 using Vanrise.BusinessProcess;
 using TOne.WhS.CodePreparation.Business;
+using TOne.WhS.CodePreparation.Entities;
 
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
@@ -14,14 +15,19 @@ namespace TOne.WhS.CodePreparation.BP.Activities
     public class ProcessCountryRatesInput
     {
         public Dictionary<long, ExistingZone> ExistingZonesByZoneId { get; set; }
-
         public IEnumerable<ExistingRate> ExistingRates { get; set; }
+        public IEnumerable<ZoneToProcess> ZonesToProcess { get; set; }
+        public DateTime EffectiveDate { get; set; }
+        public SalePriceListsByOwner SalePriceListsByOwner { get; set; }
 
+        public int SellingNumberPlanId { get; set; }
     }
 
     public class ProcessCountryRatesOutput
     {
         public IEnumerable<ChangedRate> ChangedRates { get; set; }
+        public IEnumerable<AddedRate> NewRates { get; set; }
+        public SalePriceListsByOwner SalePriceListsByOwner { get; set; }
 
     }
 
@@ -32,15 +38,31 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<Dictionary<long, ExistingZone>> ExistingZonesByZoneId { get; set; }
 
         [RequiredArgument]
+        public InArgument<IEnumerable<ZoneToProcess>> ZonesToProcess { get; set; }
+
+        [RequiredArgument]
         public InArgument<IEnumerable<ExistingRate>> ExistingRates { get; set; }
+
+        [RequiredArgument]
+        public InArgument<DateTime> EffectiveDate { get; set; }
+
+        [RequiredArgument]
+        public InArgument<SalePriceListsByOwner> SalePriceListsByOwner { get; set; }
+
+        [RequiredArgument]
+        public InArgument<int> SellingNumberPlanId { get; set; }
+
 
         [RequiredArgument]
         public OutArgument<IEnumerable<ChangedRate>> ChangedRates { get; set; }
 
+        [RequiredArgument]
+        public OutArgument<IEnumerable<AddedRate>> NewRates { get; set; }
 
         protected override ProcessCountryRatesOutput DoWorkWithResult(ProcessCountryRatesInput inputArgument, AsyncActivityHandle handle)
         {
             IEnumerable<ExistingZone> existingZones = null;
+            SalePriceListsByOwner salePriceListsByOwner = inputArgument.SalePriceListsByOwner;
 
             if (inputArgument.ExistingZonesByZoneId != null)
                 existingZones = inputArgument.ExistingZonesByZoneId.Select(item => item.Value);
@@ -49,15 +71,21 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             {
                 ExistingZones = existingZones,
                 ExistingRates = inputArgument.ExistingRates,
+                ZonesToProcess = inputArgument.ZonesToProcess,
+                EffectiveDate = inputArgument.EffectiveDate,
+                SalePriceListsByOwner = inputArgument.SalePriceListsByOwner,
+                SellingNumberPlanId = inputArgument.SellingNumberPlanId
             };
 
             PriceListRateManager plCodeManager = new PriceListRateManager();
-            plCodeManager.ProcessCountryRates(processCountryRateContext);
+            plCodeManager.ProcessCountryRates(processCountryRateContext, salePriceListsByOwner);
 
 
             return new ProcessCountryRatesOutput()
             {
-                ChangedRates = processCountryRateContext.ChangedRates
+                ChangedRates = processCountryRateContext.ChangedRates,
+                NewRates = processCountryRateContext.NewRates,
+                SalePriceListsByOwner = salePriceListsByOwner
             };
         }
 
@@ -66,13 +94,19 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             return new ProcessCountryRatesInput()
             {
                 ExistingRates = this.ExistingRates.Get(context),
-                ExistingZonesByZoneId = this.ExistingZonesByZoneId.Get(context)
+                ExistingZonesByZoneId = this.ExistingZonesByZoneId.Get(context),
+                ZonesToProcess = this.ZonesToProcess.Get(context),
+                EffectiveDate = this.EffectiveDate.Get(context),
+                SalePriceListsByOwner = this.SalePriceListsByOwner.Get(context),
+                SellingNumberPlanId = this.SellingNumberPlanId.Get(context)
             };
         }
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, ProcessCountryRatesOutput result)
         {
             ChangedRates.Set(context, result.ChangedRates);
+            NewRates.Set(context, result.NewRates);
+            SalePriceListsByOwner.Set(context, result.SalePriceListsByOwner);
         }
     }
 }

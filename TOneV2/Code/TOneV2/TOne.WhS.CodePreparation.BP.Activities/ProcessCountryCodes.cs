@@ -40,14 +40,18 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public IEnumerable<ChangedCode> ChangedCodes { get; set; }
 
         public Dictionary<string, List<ExistingZone>> ClosedExistingZones { get; set; }
+
+        public IEnumerable<ExistingCode> NotChangedCodes { get; set; }
     }
 
     public sealed class ProcessCountryCodes : BaseAsyncActivity<ProcessCountryCodesInput, ProcessCountryCodesOutput>
     {
         [RequiredArgument]
         public InArgument<IEnumerable<CodeToAdd>> CodesToAdd { get; set; }
+        
         [RequiredArgument]
         public InArgument<IEnumerable<CodeToMove>> CodesToMove { get; set; }
+        
         [RequiredArgument]
         public InArgument<IEnumerable<CodeToClose>> CodesToClose { get; set; }
 
@@ -74,6 +78,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
        
         [RequiredArgument]
         public OutArgument<Dictionary<string, List<ExistingZone>>> ClosedExistingZones { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<IEnumerable<ExistingCode>> NotChangedCodes { get; set; }
 
 
         protected override ProcessCountryCodesInput GetInputArgument(AsyncCodeActivityContext context)
@@ -114,7 +121,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 NewAndExistingZones= processCountryCodesContext.NewAndExistingZones,
                 NewCodes = processCountryCodesContext.NewCodes,
                 ChangedCodes = processCountryCodesContext.ChangedCodes,
-                ClosedExistingZones = processCountryCodesContext.ClosedExistingZones
+                ClosedExistingZones = processCountryCodesContext.ClosedExistingZones,
+                NotChangedCodes = processCountryCodesContext.NotChangedCodes
             };
         }
 
@@ -126,6 +134,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             this.NewCodes.Set(context, result.NewCodes);
             this.ChangedCodes.Set(context, result.ChangedCodes);
             this.ClosedExistingZones.Set(context, result.ClosedExistingZones);
+            this.NotChangedCodes.Set(context, result.NotChangedCodes);
         }
     }
 }

@@ -15,6 +15,8 @@ namespace TOne.WhS.CodePreparation.Entities
 
         public AddedZone AddedZone { get; set; }
 
+        public decimal NoramlRate { get; set; }
+
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }

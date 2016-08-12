@@ -17,8 +17,13 @@ namespace TOne.WhS.CodePreparation.Business
             Dictionary<string, List<ExistingZone>> closedExistingZones;
 
             context.NewAndExistingZones = newAndExistingZones;
+            
+            HashSet<string> codesToAddHashSet;
+            HashSet<string> codesToMoveHashSet;
+            HashSet<string> codesToCloseHashSet;
 
-            ProcessCountryCodes(context.CodesToAdd, context.CodesToMove, context.CodesToClose, context.ExistingCodes, newAndExistingZones, context.ExistingZones, out closedExistingZones);
+            ProcessCountryCodes(context.CodesToAdd, context.CodesToMove, context.CodesToClose, context.ExistingCodes, newAndExistingZones, context.ExistingZones, out closedExistingZones,
+                out codesToAddHashSet, out codesToMoveHashSet, out codesToCloseHashSet);
 
             context.ClosedExistingZones = closedExistingZones;
             context.NewCodes = context.CodesToAdd.SelectMany(itm => itm.AddedCodes).Union(context.CodesToMove.SelectMany(itm => itm.AddedCodes));
@@ -26,18 +31,23 @@ namespace TOne.WhS.CodePreparation.Business
             context.ChangedZones = context.ExistingZones.Where(itm => itm.ChangedZone != null).Select(itm => itm.ChangedZone);
             context.ChangedCodes = context.ExistingCodes.Where(itm => itm.ChangedCode != null).Select(itm => itm.ChangedCode);
 
+            PrepareNotChangedCodes(context.ExistingCodes, codesToAddHashSet, codesToMoveHashSet, codesToCloseHashSet, context.NotChangedCodes);
         }
-
-        private void ProcessCountryCodes(IEnumerable<CodeToAdd> codesToAdd, IEnumerable<CodeToMove> codesToMove, IEnumerable<CodeToClose> codesToClose, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones, out Dictionary<string, List<ExistingZone>> closedExistingZones)
+        private void ProcessCountryCodes(IEnumerable<CodeToAdd> codesToAdd, IEnumerable<CodeToMove> codesToMove, IEnumerable<CodeToClose> codesToClose, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones,
+            IEnumerable<ExistingZone> existingZones, out Dictionary<string, List<ExistingZone>> closedExistingZones, out HashSet<string> codesToAddHashSet, out HashSet<string> codesToMoveHashSet, out HashSet<string> codesToCloseHashSet)
         {
             ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
             ExistingCodesByCodeValue existingCodesByCodeValue = StructureExistingCodesByCodeValue(existingCodes);
+
+            codesToAddHashSet = new HashSet<string>();
+            codesToMoveHashSet = new HashSet<string>();
+            codesToCloseHashSet = new HashSet<string>();
 
             if (codesToAdd != null)
             {
                 foreach (var codeToAdd in codesToAdd)
                 {
-
+                    codesToAddHashSet.Add(codeToAdd.Code);
                     List<ExistingCode> matchExistingCodes;
                     if (existingCodesByCodeValue.TryGetValue(codeToAdd.Code, out matchExistingCodes))
                         CloseExistingOverlapedCodes(codeToAdd, matchExistingCodes);
@@ -49,7 +59,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 foreach (var codeToMove in codesToMove)
                 {
-
+                    codesToMoveHashSet.Add(codeToMove.Code);
                     List<ExistingCode> matchExistingCodes;
                     if (existingCodesByCodeValue.TryGetValue(codeToMove.Code, out matchExistingCodes))
                         CloseExistingOverlapedCodes(codeToMove, matchExistingCodes);
@@ -61,7 +71,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 foreach (var codeToClose in codesToClose)
                 {
-
+                    codesToCloseHashSet.Add(codeToClose.Code);
                     List<ExistingCode> matchExistingCodes;
                     if (existingCodesByCodeValue.TryGetValue(codeToClose.Code, out matchExistingCodes))
                         CloseExistingCodes(codeToClose, matchExistingCodes);
@@ -71,7 +81,6 @@ namespace TOne.WhS.CodePreparation.Business
             CloseZonesWithNoCodes(existingZones, out closedExistingZones);
 
         }
-
         private void CloseZonesWithNoCodes(IEnumerable<ExistingZone> existingZones, out Dictionary<string, List<ExistingZone>> closedExistingZones)
         {
             closedExistingZones = new Dictionary<string, List<ExistingZone>>();
@@ -139,8 +148,18 @@ namespace TOne.WhS.CodePreparation.Business
                 }
             }
         }
-
-
+       
+        private void PrepareNotChangedCodes(IEnumerable<ExistingCode> existingCodes, HashSet<string> codesToAddHashSet, HashSet<string> codesToMoveHashSet, HashSet<string> codesToCloseHashSet, IEnumerable<ExistingCode> notChangedCodes)
+        {
+            List<ExistingCode> notChangedCodesList = new List<ExistingCode>();
+            foreach (ExistingCode existingCode in existingCodes)
+            {
+                if (!(codesToAddHashSet.Contains(existingCode.CodeEntity.Code) || codesToMoveHashSet.Contains(existingCode.CodeEntity.Code)
+                    || codesToCloseHashSet.Contains(existingCode.CodeEntity.Code)))
+                    notChangedCodesList.Add(existingCode);
+            }
+            notChangedCodes = notChangedCodesList;
+        }
         private ExistingZonesByName StructureExistingZonesByName(IEnumerable<ExistingZone> existingZones)
         {
             ExistingZonesByName existingZonesByName = new ExistingZonesByName();
@@ -159,7 +178,6 @@ namespace TOne.WhS.CodePreparation.Business
 
             return existingZonesByName;
         }
-
         private ExistingCodesByCodeValue StructureExistingCodesByCodeValue(IEnumerable<ExistingCode> existingCodes)
         {
             ExistingCodesByCodeValue existingCodesByCodeValue = new ExistingCodesByCodeValue();
@@ -178,7 +196,6 @@ namespace TOne.WhS.CodePreparation.Business
 
             return existingCodesByCodeValue;
         }
-
         private void CloseExistingOverlapedCodes(CodeToAdd codeToAdd, List<ExistingCode> matchExistingCodes)
         {
             foreach (var existingCode in matchExistingCodes)
@@ -195,7 +212,6 @@ namespace TOne.WhS.CodePreparation.Business
                 }
             }
         }
-
         private void CloseExistingOverlapedCodes(CodeToMove codeToMove, List<ExistingCode> matchExistingCodes)
         {
             foreach (var existingCode in matchExistingCodes)
@@ -215,7 +231,6 @@ namespace TOne.WhS.CodePreparation.Business
                 }
             }
         }
-
         private void CloseExistingCodes(CodeToClose codeToClose, List<ExistingCode> matchExistingCodes)
         {
             foreach (var existingCode in matchExistingCodes)
@@ -233,7 +248,6 @@ namespace TOne.WhS.CodePreparation.Business
                 }
             }
         }
-
         private bool AddImportedCode(CodeToAdd importedCode, ZonesByName newAndExistingZones, ExistingZonesByName allExistingZones)
         {
             List<IZone> zones;
@@ -276,7 +290,6 @@ namespace TOne.WhS.CodePreparation.Business
                 zones.AddRange(addedZones);
             return true;
         }
-
         private AddedZone AddNewZone(List<IZone> addedZones, string zoneName, int countryId, DateTime bed, DateTime? eed)
         {
             AddedZone newZone = new AddedZone
@@ -289,7 +302,6 @@ namespace TOne.WhS.CodePreparation.Business
             addedZones.Add(newZone);
             return newZone;
         }
-
         private void AddNewCode(CodeToAdd importedCode, int codeGroupId, ref DateTime currentCodeBED, IZone zone, out bool shouldAddMoreCodes)
         {
             shouldAddMoreCodes = false;

@@ -20,6 +20,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public const string PricingRuleExtraChargeSettingsConfigType = "WhS_BE_PricingRuleExtraChargeSettings";
         public const string SuppliersWithZonesGroupSettingsConfigType = "WhS_BE_SuppliersWithZonesGroupSettings";
         public const string SupplierZoneGroupTemplate = "WhS_BE_SupplierZoneGroup";
+        public const string SaleAreaSettings = "WhS_BE_SaleArea_Settings";
 
     }
 }

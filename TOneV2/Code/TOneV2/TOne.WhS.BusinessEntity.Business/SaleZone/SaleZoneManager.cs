@@ -83,12 +83,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return saleZonesBySellingNumberPlan;
         }
 
-        public IEnumerable<SaleZone> GetSaleZonesByCountryId(int sellingNumberPlanId, int countryId)
+        public IEnumerable<SaleZone> GetSaleZonesByCountryId(int sellingNumberPlanId, int countryId, DateTime effectiveOn)
         {
             IEnumerable<SaleZone> saleZonesBySellingNumberPlan = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
 
             if (saleZonesBySellingNumberPlan != null)
-                saleZonesBySellingNumberPlan = saleZonesBySellingNumberPlan.FindAllRecords(z => (!z.EED.HasValue || (z.EED > DateTime.Now)) && countryId == z.CountryId);
+                saleZonesBySellingNumberPlan = saleZonesBySellingNumberPlan.FindAllRecords(z => (!z.EED.HasValue || (z.EED > effectiveOn)) && countryId == z.CountryId);
 
             return saleZonesBySellingNumberPlan;
         }

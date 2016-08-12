@@ -65,6 +65,8 @@
     <Compile Include="ChangedSaleCodeDataManager.cs" />
     <Compile Include="ChangedSaleZoneDataManager.cs" />
     <Compile Include="CodePreparationDataManager.cs" />
+    <Compile Include="NewSalePriceListDataManager.cs" />
+    <Compile Include="NewSaleRateDataManager.cs" />
     <Compile Include="NewSaleCodeDataManager.cs" />
     <Compile Include="NewSaleZoneDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

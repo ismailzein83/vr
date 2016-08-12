@@ -11,7 +11,7 @@ using Vanrise.BusinessProcess;
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
 
-    public class PrepareZoneForPreviewInput
+    public class ProcessCountryZonesInput
     {
         public IEnumerable<ExistingZone> ExistingZones { get; set; }
 
@@ -24,12 +24,12 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public Dictionary<string, List<ExistingZone>> ClosedExistingZones { get; set; }
 
     }
-    public class PrepareZoneForPreviewOutput
+    public class ProcessCountryZonesOutput
     {
         public IEnumerable<ExistingZone> NotChangedZones { get; set; }
     }
 
-    public sealed class PrepareZonesForPreview : BaseAsyncActivity<PrepareZoneForPreviewInput, PrepareZoneForPreviewOutput>
+    public sealed class ProcessCountryZones : BaseAsyncActivity<ProcessCountryZonesInput, ProcessCountryZonesOutput>
     {
         [RequiredArgument]
         public InArgument<IEnumerable<ExistingZone>> ExistingZones { get; set; }
@@ -49,7 +49,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         [RequiredArgument]
         public OutArgument<IEnumerable<ExistingZone>> NotChangedZones { get; set; }
 
-        protected override PrepareZoneForPreviewOutput DoWorkWithResult(PrepareZoneForPreviewInput inputArgument, AsyncActivityHandle handle)
+        protected override ProcessCountryZonesOutput DoWorkWithResult(ProcessCountryZonesInput inputArgument, AsyncActivityHandle handle)
         {
             Dictionary<string, Dictionary<string, List<ExistingCode>>> existingCodeByZoneName = StructureExistingCodesByZonesNames(inputArgument.ExistingCodes);
 
@@ -59,15 +59,15 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             IEnumerable<ExistingZone> notChangedZones = PrepareNotChangedZones(inputArgument.ExistingZones, zonesToProcessNamesHashSet);
 
-            return new PrepareZoneForPreviewOutput()
+            return new ProcessCountryZonesOutput()
             {
                 NotChangedZones = notChangedZones
             };
         }
 
-        protected override PrepareZoneForPreviewInput GetInputArgument(AsyncCodeActivityContext context)
+        protected override ProcessCountryZonesInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            return new PrepareZoneForPreviewInput()
+            return new ProcessCountryZonesInput()
             {
                 ClosedExistingZones = this.ClosedExistingZones.Get(context),
                 ExistingCodes = this.ExistingCodes.Get(context),
@@ -77,7 +77,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             };
         }
 
-        protected override void OnWorkComplete(AsyncCodeActivityContext context, PrepareZoneForPreviewOutput result)
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, ProcessCountryZonesOutput result)
         {
             this.NotChangedZones.Set(context, result.NotChangedZones);
         }

@@ -71,6 +71,9 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
 
                 api.load = function (payload) {
                     if (payload != undefined && payload.data != undefined) {
+
+                        ctrl.defaultRate = payload.data.DefaultRate;
+
                         angular.forEach(payload.data.FixedKeywords, function (val) {
                             ctrl.fixedKeywords.push({fixedKeyword: val});
                         });
@@ -85,7 +88,8 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                     return {
                         $type: "TOne.WhS.BusinessEntity.Entities.SaleAreaSettingsData, TOne.WhS.BusinessEntity.Entities",
                         FixedKeywords: UtilsService.getPropValuesFromArray(ctrl.fixedKeywords, "fixedKeyword"),
-                        MobileKeywords: UtilsService.getPropValuesFromArray(ctrl.mobileKeywords, "mobileKeyword")
+                        MobileKeywords: UtilsService.getPropValuesFromArray(ctrl.mobileKeywords, "mobileKeyword"),
+                        DefaultRate: ctrl.defaultRate
                     };
                 }
 

@@ -88,6 +88,8 @@
     <Compile Include="ApplyChangedRatesToDB.cs" />
     <Compile Include="ApplyChangedCodesToDB.cs" />
     <Compile Include="ApplyChangedZonesToDB.cs" />
+    <Compile Include="ApplyNewSalePriceListsToDB.cs" />
+    <Compile Include="ApplyNewRatesToDB.cs" />
     <Compile Include="ApplyNewCodesToDB.cs" />
     <Compile Include="ApplyNewZonesToDB.cs" />
     <Compile Include="ApplyPreviewCodesToDB.cs" />
@@ -96,8 +98,8 @@
     <Compile Include="GenerateZonesPreview.cs" />
     <Compile Include="GetExisitngRates.cs" />
     <Compile Include="PrepareChangedRatesForApply.cs" />
-    <Compile Include="PrepareCodesForPreview.cs" />
     <Compile Include="PrepareExistingRates.cs" />
+    <Compile Include="PrepareNewRatesForApply.cs" />
     <Compile Include="PreparePreviewCodesForDBApply.cs" />
     <Compile Include="PreparePreviewZonesForDBApply.cs" />
     <Compile Include="PrepareZonesInfo.cs" />
@@ -125,7 +127,7 @@
     <Compile Include="PrepareNewZonesForApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UpdateCodePreparationStateStatus.cs" />
-    <Compile Include="PrepareZonesForPreview.cs" />
+    <Compile Include="ProcessCountryZones.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">

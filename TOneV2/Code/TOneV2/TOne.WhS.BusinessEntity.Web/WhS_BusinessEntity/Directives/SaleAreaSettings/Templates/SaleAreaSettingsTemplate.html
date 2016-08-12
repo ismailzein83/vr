@@ -1,9 +1,18 @@
 ﻿<vr-columns width="fullrow">
     <vr-tabs>
+
+        <vr-tab header="'General'">
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-label>Default Rate</vr-label>
+                    <vr-textbox value="ctrl.defaultRate" type="number" minvalue="0" decimalprecision="8" isrequired></vr-textbox>
+                </vr-columns>
+        </vr-tab>
+
         <vr-tab header="'Keywords'">
             <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-label>Fixed Keywords</vr-label>
+                    <vr-label>Fixed Zones</vr-label>
                     <vr-textbox value="ctrl.fixedKeywordvalue" type="text" onvaluechanged="ctrl.onFixedKeywordValueChange"></vr-textbox>
                 </vr-columns>
 
@@ -17,7 +26,7 @@
                 <vr-columns width="fullrow">
                     <vr-validator validate="ctrl.validateAddFixedKeyWords()">
                         <vr-datalist maxitemsperrow="3" datasource="ctrl.fixedKeywords" autoremoveitem="true">
-                                {{dataItem.fixedKeyword}}
+                            {{dataItem.fixedKeyword}}
                         </vr-datalist>
                     </vr-validator>
                 </vr-columns>
@@ -25,7 +34,7 @@
 
             <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-label>Mobile Keywords</vr-label>
+                    <vr-label>Mobile Zones</vr-label>
                     <vr-textbox value="ctrl.mobileKeywordvalue" type="text" onvaluechanged="ctrl.onMobileKeywordValueChange"></vr-textbox>
                 </vr-columns>
 
@@ -39,12 +48,13 @@
                 <vr-columns width="fullrow">
                     <vr-validator validate="ctrl.validateAddMobileKeyWords()">
                         <vr-datalist maxitemsperrow="3" datasource="ctrl.mobileKeywords" autoremoveitem="true">
-                                {{dataItem.mobileKeyword}}
+                            {{dataItem.mobileKeyword}}
                         </vr-datalist>
                     </vr-validator>
                 </vr-columns>
             </vr-row>
 
         </vr-tab>
+
     </vr-tabs>
 </vr-columns> 

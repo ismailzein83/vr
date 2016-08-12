@@ -2,6 +2,11 @@
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
+    public enum SaleZoneTypeEnum
+    {
+        Fixed = 0,
+        Mobile = 1
+    }
     public class SaleZone : Vanrise.Entities.IDateEffectiveSettings
     {
         public long SaleZoneId { get; set; }

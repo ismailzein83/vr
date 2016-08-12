@@ -57,7 +57,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return GetCachedSellingProducts().MapRecords(SellingProductInfoMapper, filterPredicate).OrderBy(x => x.Name);
         }
-
+        public IEnumerable<SellingProduct> GetSellingProductsBySellingNumberPlan(int sellingNumberPlanId)
+        {
+            IEnumerable<SellingProduct> sellingProducts = GetCachedSellingProducts().Values;
+            return sellingProducts.FindAllRecords(item => item.SellingNumberPlanId == sellingNumberPlanId);
+        }
         public IEnumerable<SellingProductInfo> GetAllSellingProduct()
         {
             var sellingProducts = GetCachedSellingProducts();

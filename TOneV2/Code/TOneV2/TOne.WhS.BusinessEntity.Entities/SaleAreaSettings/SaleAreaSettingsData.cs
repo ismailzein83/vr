@@ -9,8 +9,9 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SaleAreaSettingsData : SettingData
     {
-        public List<string> FixedKeywords { get; set; }
-        public List<string> MobileKeywords { get; set; }
+        public decimal DefaultRate { get; set; }
+        public IEnumerable<string> FixedKeywords { get; set; }
+        public IEnumerable<string> MobileKeywords { get; set; }
 
     }
 }

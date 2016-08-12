@@ -63,6 +63,8 @@
     <Compile Include="IChangedSaleZoneDataManager.cs" />
     <Compile Include="ICodePreparationDataManager.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="INewSalePriceListDataManager.cs" />
+    <Compile Include="INewSaleRateDataManager.cs" />
     <Compile Include="INewSaleCodeDataManager.cs" />
     <Compile Include="INewSaleZoneDataManager.cs" />
     <Compile Include="ISaleZonePreviewDataManager.cs" />

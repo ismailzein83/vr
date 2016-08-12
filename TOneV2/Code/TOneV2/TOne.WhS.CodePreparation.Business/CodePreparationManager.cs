@@ -42,7 +42,7 @@ namespace TOne.WhS.CodePreparation.Business
         public CPSettingsData GetCPSettings()
         {
             SettingManager settingManager = new SettingManager();
-            return settingManager.GetSetting<CPSettingsData>(Constants.CPSettigns);
+            return settingManager.GetSetting<CPSettingsData>(Constants.CPSettings);
         }
     }
 }

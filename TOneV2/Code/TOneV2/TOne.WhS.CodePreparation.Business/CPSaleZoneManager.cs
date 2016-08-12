@@ -26,7 +26,7 @@ namespace TOne.WhS.CodePreparation.Business
         {
             SaleZoneManager saleZoneManager = new SaleZoneManager();
 
-            IEnumerable<SaleZone> existingZones = saleZoneManager.GetSaleZonesByCountryId(sellingNumberPlanId, countryId);
+            IEnumerable<SaleZone> existingZones = saleZoneManager.GetSaleZonesByCountryId(sellingNumberPlanId, countryId, DateTime.Today);
             Changes existingChanges = GetChanges(sellingNumberPlanId);
 
             List<ZoneItem> allZoneItems = new List<ZoneItem>();

@@ -64,9 +64,11 @@
     <Compile Include="ImportedData\ImportedCode.cs" />
     <Compile Include="IProcessCountryRatesContext.cs" />
     <Compile Include="IZone.cs" />
+    <Compile Include="ExistingRatesByOwner.cs" />
     <Compile Include="NewData\CodeToAdd.cs" />
     <Compile Include="NewData\CodeToClose.cs" />
     <Compile Include="NewData\CodeToMove.cs" />
+    <Compile Include="Owner.cs" />
     <Compile Include="PreviewData\CodePreview.cs" />
     <Compile Include="PreviewData\CountryPreview.cs" />
     <Compile Include="PreviewData\SPLPreviewQuery.cs" />

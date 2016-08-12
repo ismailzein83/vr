@@ -8,6 +8,8 @@ namespace TOne.WhS.CodePreparation.Business
 {
     public static class Constants
     {
-        public const string CPSettigns = "WhS.CodePreparation";
+        public const string CPSettings = "WhS.CodePreparation";
+
+        
     }
 }
