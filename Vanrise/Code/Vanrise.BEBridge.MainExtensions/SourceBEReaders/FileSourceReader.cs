@@ -21,21 +21,14 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
 
             if (System.IO.Directory.Exists(Setting.Directory))
             {
-                try
+                DirectoryInfo d = new DirectoryInfo(Setting.Directory);
+                FileInfo[] Files = d.GetFiles("*" + Setting.Extension);
+                foreach (FileInfo file in Files)
                 {
-                    DirectoryInfo d = new DirectoryInfo(Setting.Directory);
-                    FileInfo[] Files = d.GetFiles("*" + Setting.Extension);
-                    foreach (FileInfo file in Files)
+                    if (regEx.IsMatch(file.Name))
                     {
-                        if (regEx.IsMatch(file.Name))
-                        {
-                            GetFileContent(context.OnSourceBEBatchRetrieved, file);
-                        }
+                        context.OnSourceBEBatchRetrieved(GetFileSourceBatch(file), null);
                     }
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
                 }
             }
             else
@@ -44,7 +37,7 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
             }
         }
 
-        void GetFileContent(Action<FileSourceBatch, SourceBEBatchRetrievedContext> fileBatchAction, FileInfo fileInfo)
+        FileSourceBatch GetFileSourceBatch(FileInfo fileInfo)
         {
             string fileName = string.Format("{0}/{1}", Setting.Directory, fileInfo.Name);
             byte[] content = null;
@@ -55,12 +48,11 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
             }
             if (content == null)
                 throw new NullReferenceException(string.Format("content"));
-            FileSourceBatch batch = new FileSourceBatch
+            return new FileSourceBatch
             {
                 FileName = fileInfo.Name,
                 Content = content
             };
-            fileBatchAction(batch, null);
         }
     }
 

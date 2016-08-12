@@ -35,7 +35,7 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
                         if (!fileObj.IsDirectory && regEx.IsMatch(fileObj.Name))
                         {
                             String filePath = Setting.Directory + "/" + fileObj.Name;
-                            GetFileContent(context.OnSourceBEBatchRetrieved, ftp, fileObj, filePath);
+                            context.OnSourceBEBatchRetrieved(GetFileSourceBatch(ftp, fileObj, filePath), null);
                         }
                     }
                 }
@@ -57,17 +57,16 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
             ftp.Dispose();
         }
 
-        void GetFileContent(Action<FileSourceBatch, SourceBEBatchRetrievedContext> fileBatchAction, Ftp ftp, FtpItem fileObj, String filePath)
+        FileSourceBatch GetFileSourceBatch(Ftp ftp, FtpItem fileObj, String filePath)
         {
             var stream = new MemoryStream();
             ftp.GetFile(filePath, stream);
             byte[] content = stream.ToArray();
-            FileSourceBatch batch = new FileSourceBatch
-            {
-                FileName = fileObj.Name,
-                Content = content
-            };
-            fileBatchAction(batch, null);
+            return new FileSourceBatch
+              {
+                  FileName = fileObj.Name,
+                  Content = content
+              };
         }
     }
 
