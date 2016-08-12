@@ -96,6 +96,7 @@
     <Folder Include="TOneWhS_RouteSync\Stored Procedures\" />
     <Folder Include="VR_Invoice\" />
     <Folder Include="VR_Invoice\Tables\" />
+    <Folder Include="VR_Invoice\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_BE\Tables\CarrierAccount.sql" />
@@ -354,5 +355,6 @@
     <Build Include="TOneWhS_BE\Tables\CP_SaleRate_New.sql" />
     <Build Include="TOneWhS_BE\Tables\CP_SalePriceList_New.sql" />
     <Build Include="TOneWhS_Routing\Stored Procedures\sp_RoutingDatabase_GetById.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceType_GetAll.sql" />
   </ItemGroup>
 </Project>
