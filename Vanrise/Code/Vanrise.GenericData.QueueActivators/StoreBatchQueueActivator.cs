@@ -132,5 +132,11 @@ namespace Vanrise.GenericData.QueueActivators
         {
             return new Queueing.MemoryQueue<Reprocess.Entities.IReprocessBatch>();
         }
+
+
+        public List<Reprocess.Entities.StageRecordInfo> GetStageRecordInfo(Reprocess.Entities.IReprocessStageActivatorPreparingContext context)
+        {
+            return null;
+        }
     }
 }

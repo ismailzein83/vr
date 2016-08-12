@@ -125,16 +125,16 @@ namespace Vanrise.GenericData.QueueActivators
 
             Queueing.MemoryQueue<Object> queueLoadedBatches = new Queueing.MemoryQueue<object>();
             AsyncActivityStatus loadBatchStatus = new AsyncActivityStatus();
-            StartLoadingBatches(context, recordStorageDataManager, queueLoadedBatches, loadBatchStatus);
+            StartLoadingBatches(context, queueLoadedBatches, loadBatchStatus);
 
             Queueing.MemoryQueue<Object> queuePreparedBatches = new Queueing.MemoryQueue<object>();
             AsyncActivityStatus prepareBatchStatus = new AsyncActivityStatus();
-            StartPreparingBatches(context, recordStorageDataManager, queueLoadedBatches, loadBatchStatus, queuePreparedBatches, prepareBatchStatus);
+            StartPreparingBatches(context, queueLoadedBatches, loadBatchStatus, queuePreparedBatches, prepareBatchStatus);
 
             StartInsertingBatches(transformationManager, recordStorageDataManager, queuePreparedBatches, prepareBatchStatus);
         }
 
-        private static void StartLoadingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, IDataRecordDataManager recordStorageDataManager, Queueing.MemoryQueue<Object> queueLoadedBatches, AsyncActivityStatus loadBatchStatus)
+        private static void StartLoadingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, Queueing.MemoryQueue<Object> queueLoadedBatches, AsyncActivityStatus loadBatchStatus)
         {
             Task loadDataTask = new Task(() =>
             {
@@ -157,7 +157,7 @@ namespace Vanrise.GenericData.QueueActivators
             loadDataTask.Start();
         }
 
-        private static void StartPreparingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, IDataRecordDataManager recordStorageDataManager, Queueing.MemoryQueue<Object> queueLoadedBatches, AsyncActivityStatus loadBatchStatus, Queueing.MemoryQueue<Object> queuePreparedBatches, AsyncActivityStatus prepareBatchStatus)
+        private static void StartPreparingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, Queueing.MemoryQueue<Object> queueLoadedBatches, AsyncActivityStatus loadBatchStatus, Queueing.MemoryQueue<Object> queuePreparedBatches, AsyncActivityStatus prepareBatchStatus)
         {
             List<GenericSummaryRecordBatch> batches = null;
             DateTime batchStart = default(DateTime);
@@ -233,6 +233,13 @@ namespace Vanrise.GenericData.QueueActivators
         Queueing.BaseQueue<Reprocess.Entities.IReprocessBatch> Reprocess.Entities.IReprocessStageActivator.GetQueue()
         {
             return new Queueing.MemoryQueue<Reprocess.Entities.IReprocessBatch>();
+        }
+
+
+        public List<Reprocess.Entities.StageRecordInfo> GetStageRecordInfo(Reprocess.Entities.IReprocessStageActivatorPreparingContext context)
+        {
+            IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
+            return dataManager.GetStageRecordInfo(context.ProcessInstanceId, context.CurrentStageName);
         }
     }
 }

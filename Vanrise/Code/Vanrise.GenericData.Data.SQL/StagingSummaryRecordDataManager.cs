@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.SQL;
 using Vanrise.GenericData.Entities;
+using Vanrise.Reprocess.Entities;
 
 namespace Vanrise.GenericData.Data.SQL
 {
@@ -20,17 +21,22 @@ namespace Vanrise.GenericData.Data.SQL
         }
 
         #region Public Methods
+        public List<StageRecordInfo> GetStageRecordInfo(long processInstanceId, string stageName)
+        {
+            return GetItemsSP("reprocess.sp_StagingSummaryRecord_GetStageRecordInfo", StageRecordInfoMapper, processInstanceId, stageName);
+        }
+
         public void GetStagingSummaryRecords(long processInstanceId, string stageName, Action<StagingSummaryRecord> onItemLoaded)
         {
-             ExecuteReaderSP("reprocess.sp_StagingSummaryRecord_GetAll",
-                (reader) =>
-                {
-                    while(reader.Read())
-                    {
+            ExecuteReaderSP("reprocess.sp_StagingSummaryRecord_GetAll",
+               (reader) =>
+               {
+                   while (reader.Read())
+                   {
                        StagingSummaryRecord instance = StagingSummaryRecordMapper(reader);
                        onItemLoaded(instance);
-                    }
-                }, processInstanceId, stageName);
+                   }
+               }, processInstanceId, stageName);
 
             //return GetItemsSP("reprocess.sp_StagingSummaryRecord_GetAll", StagingSummaryRecordMapper, processInstanceId, stageName);
         }
@@ -82,6 +88,14 @@ namespace Vanrise.GenericData.Data.SQL
                 BatchStart = GetReaderValue<DateTime>(reader, "BatchStart"),
                 Data = reader["Data"] != DBNull.Value ? Convert.FromBase64String(reader["Data"] as string) : null,
                 StageName = reader["StageName"] as string
+            };
+        }
+
+        private StageRecordInfo StageRecordInfoMapper(IDataReader reader)
+        {
+            return new StageRecordInfo()
+            {
+                BatchStart = GetReaderValue<DateTime>(reader, "BatchStart")
             };
         }
         #endregion

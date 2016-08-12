@@ -45,6 +45,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Reprocess.Entities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BELookupRuleDefinitionDataManager.cs" />
