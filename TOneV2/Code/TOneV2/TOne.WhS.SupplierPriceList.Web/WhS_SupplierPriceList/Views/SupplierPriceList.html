@@ -49,6 +49,7 @@
                     <div transclude-to="buttons">
                         <vr-button type="Save" formname="formFilter" ng-show="scopeModel.selectedSupplier != undefined" validationcontext="scopeModel.configurationValidation" data-onclick="scopeModel.saveSupplierPriceListConfiguration" haspermission="scopeModel.hassaveSupplierPriceListConfigurationPermission"></vr-button>
                         <vr-button type="Upload" validationcontext="inPutExcelGroupValid" data-onclick="scopeModel.startImport"></vr-button>
+                        <vr-button type="TestConversion" validationcontext="inPutExcelGroupValid" data-onclick="scopeModel.testConversion"></vr-button>
                     </div>
                 </vr-actionbar>
             </vr-row>

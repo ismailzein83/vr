@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.SupplierPriceList.Data;
 using TOne.WhS.SupplierPriceList.Entities;
 using Vanrise.Caching;
@@ -93,6 +94,44 @@ namespace TOne.WhS.SupplierPriceList.Business
             var extensionConfigurationManager = new ExtensionConfigurationManager();
             return extensionConfigurationManager.GetExtensionConfigurations<SupplierPriceListInputConfig>(SupplierPriceListInputConfig.EXTENSION_TYPE);
         }
+
+        public ExcelResult TestConversionForSupplierPriceList(long fileId, SupplierPriceListSettings settings)
+        {
+            SupplierPriceListExecutionContext contextObj = new SupplierPriceListExecutionContext
+            {
+                InputFileId = fileId
+            };
+            ConvertedPriceList convertedPriceList = settings.Execute(contextObj);
+            ExcelManager manager = new ExcelManager();
+
+            List<ExportExcelSheet> exportExcelSheets = new List<ExportExcelSheet>();
+
+            if (convertedPriceList.PriceListCodes != null)
+            {
+                ExportExcelSheet exportCodeExcelSheet = ConvertPriceListCodesToExcelSheet(convertedPriceList.PriceListCodes);
+                if (exportCodeExcelSheet != null)
+                    exportExcelSheets.Add(exportCodeExcelSheet);
+            }
+            if (convertedPriceList.PriceListRates != null)
+            {
+                ExportExcelSheet exportRateExcelSheet = ConvertPriceListRatesToExcelSheet(convertedPriceList.PriceListRates, "Normal");
+                if (exportRateExcelSheet != null)
+                    exportExcelSheets.Add(exportRateExcelSheet);
+            }
+            if (convertedPriceList.PriceListOtherRates != null)
+            {
+                RateTypeManager rateTypeManager = new RateTypeManager();
+
+                foreach (var otherRates in convertedPriceList.PriceListOtherRates)
+                {
+                    var rateType = rateTypeManager.GetRateType(otherRates.Key);
+                    ExportExcelSheet exportExcelSheet = ConvertPriceListRatesToExcelSheet(otherRates.Value, rateType.Name);
+                    exportExcelSheets.Add(exportExcelSheet);
+                }
+            }
+            return manager.ExportExcel(exportExcelSheets);
+        }
+
         #endregion
 
         #region Private Classes
@@ -129,6 +168,73 @@ namespace TOne.WhS.SupplierPriceList.Business
                 IEnumerable<SupplierPriceListTemplate> priceListTemplates = dataManager.GetSupplierPriceListTemplates();
                 return priceListTemplates.ToDictionary(kvp => kvp.SupplierId, kvp => kvp);
             });
+        }
+
+
+        private ExportExcelSheet ConvertPriceListCodesToExcelSheet(List<PriceListCode> priceListCodes)
+        {
+            ExportExcelSheet exportExcelSheet = null;
+            if(priceListCodes.Count > 0)
+            {
+                 List<ExportExcelHeaderCell> exportExcelHeaderCell = new List<ExportExcelHeaderCell>(){
+                    new ExportExcelHeaderCell{ Title = "Zone" },
+                    new ExportExcelHeaderCell{ Title = "Code" },
+                    new ExportExcelHeaderCell{ Title = "Effective Date" ,CellType = ExcelCellType.DateTime ,DateTimeType = DateTimeType.DateTime}
+                };
+                exportExcelSheet = CreateExcelSheet("Codes", exportExcelHeaderCell);
+                foreach (var priceListCode in priceListCodes)
+                {
+                    exportExcelSheet.Rows.Add(new ExportExcelRow
+                    {
+                        Cells = new List<ExportExcelCell>(){
+                            new ExportExcelCell{ Value = priceListCode.ZoneName},
+                            new ExportExcelCell{ Value = priceListCode.Code },
+                            new ExportExcelCell{ Value = priceListCode.EffectiveDate}
+                        }
+                    });
+                }
+            }
+            
+            return exportExcelSheet;
+        }
+        private ExportExcelSheet ConvertPriceListRatesToExcelSheet(List<PriceListRate> priceListRates, string rateTypeName)
+        {
+            ExportExcelSheet exportExcelSheet = null;
+            if (priceListRates.Count > 0)
+            {
+                List<ExportExcelHeaderCell> exportExcelHeaderCell = new List<ExportExcelHeaderCell>(){
+                        new ExportExcelHeaderCell{ Title = "Zone" },
+                        new ExportExcelHeaderCell{ Title = string.Format("{0} Rate",rateTypeName) },
+                        new ExportExcelHeaderCell{ Title = "Effective Date" ,CellType = ExcelCellType.DateTime ,DateTimeType = DateTimeType.DateTime}
+                    };
+                exportExcelSheet = CreateExcelSheet(string.Format("{0} Rates", rateTypeName), exportExcelHeaderCell);
+                foreach (var priceListRate in priceListRates)
+                {
+                    exportExcelSheet.Rows.Add(new ExportExcelRow
+                    {
+                        Cells = new List<ExportExcelCell>(){
+                            new ExportExcelCell{ Value = priceListRate.ZoneName},
+                            new ExportExcelCell{ Value = priceListRate.Rate },
+                            new ExportExcelCell{ Value = priceListRate.EffectiveDate}
+                        }
+                    });
+                }
+
+            }
+             
+            return exportExcelSheet;
+        }
+
+        private ExportExcelSheet CreateExcelSheet(string sheetName, List<ExportExcelHeaderCell> exportExcelHeaderCell)
+        {
+            ExportExcelHeader exportExcelHeader = new ExportExcelHeader();
+            exportExcelHeader.Cells = exportExcelHeaderCell;
+            return new ExportExcelSheet
+                {
+                    SheetName = sheetName,
+                    Header = exportExcelHeader,
+                    Rows = new List<ExportExcelRow>(),
+                };
         }
         #endregion
     }

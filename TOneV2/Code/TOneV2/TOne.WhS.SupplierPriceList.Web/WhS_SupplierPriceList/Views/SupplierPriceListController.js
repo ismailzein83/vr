@@ -25,6 +25,20 @@
 
                 $scope.scopeModel.priceListTypes = UtilsService.getArrayEnum(WhS_SupPL_SupplierPriceListTypeEnum);
 
+                $scope.scopeModel.testConversion = function () {
+                    $scope.scopeModel.isLoading = true;
+                    var priceListTemplateObject =
+                        {
+                            FileId: $scope.scopeModel.inPutFile.fileId,
+                            Settings: buildSupplierPriceListConfigurationObj()
+
+                        };
+                    return WhS_SupPL_SupplierPriceListTemplateAPIService.TestConversionForSupplierPriceList(priceListTemplateObject).then(function (response) {
+                        $scope.scopeModel.isLoading = false;
+                        UtilsService.downloadFile(response.data, response.headers);
+                    });
+                }
+
                 $scope.scopeModel.onCurrencyDirectiveReady = function (api) {
                     currencyDirectiveAPI = api;
                     currencyReadyPromiseDeferred.resolve();
@@ -77,9 +91,8 @@
                 $scope.scopeModel.startImport = function () {
 
                     var promiseDeffered = UtilsService.createPromiseDeferred();
-
+                    var priceListTemplateObject = buildPriceListTemplateObjFromScope(true);
                     if (!priceListTemplateEntity) {
-                        var priceListTemplateObject = buildPriceListTemplateObjFromScope(true);
                         insertPriceListTemplate(priceListTemplateObject).then(function (response) {
                             if (response != undefined && response.InsertedObject != undefined) {
                                 priceListTemplateEntity = response.InsertedObject;
@@ -95,13 +108,10 @@
                             promiseDeffered.reject(error);
                         });;
                     } else {
-                        var priceListTemplateObject = buildPriceListTemplateObjFromScope(true);
-
                         return updatePriceListTemplate(priceListTemplateObject).then(function (response) {
                             if (response != undefined && response.UpdatedObject != undefined) {
                                 priceListTemplateEntity = response.UpdatedObject;
                                 startImportSupplierPriceList(response.UpdatedObject.SupplierPriceListTemplateId).then(function () {
-
                                     promiseDeffered.resolve();
                                 }).catch(function (error) {
                                     promiseDeffered.reject(error);

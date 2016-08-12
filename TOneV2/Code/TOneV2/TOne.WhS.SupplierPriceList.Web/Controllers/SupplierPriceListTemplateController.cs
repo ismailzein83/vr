@@ -53,7 +53,17 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
         {
             return _manager.GetSupplierPriceListTemplateBySupplierId(supplierId);
         }
-   
-       
+
+        [HttpPost]
+        [Route("TestConversionForSupplierPriceList")]
+        public Object TestConversionForSupplierPriceList(SupplierPriceListTestConversionInput input)
+        {
+            return base.GetExcelResponse(_manager.TestConversionForSupplierPriceList(input.FileId, input.Settings));
+        }
+    }
+    public class SupplierPriceListTestConversionInput
+    {
+        public long FileId { get; set; }
+        public SupplierPriceListSettings Settings { get; set; }
     }
 }

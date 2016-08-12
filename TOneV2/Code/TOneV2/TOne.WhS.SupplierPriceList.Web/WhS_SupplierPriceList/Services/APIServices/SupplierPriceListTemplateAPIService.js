@@ -35,6 +35,15 @@
                 });
         }
 
+        function TestConversionForSupplierPriceList(input)
+        {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, controllerName, 'TestConversionForSupplierPriceList'),
+                 input,{
+            returnAllResponseParameters: true,
+            responseTypeAsBufferArray: true
+        });
+
+        }
 
         function GetSupplierPriceListConfigurationTemplateConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, controllerName, 'GetSupplierPriceListConfigurationTemplateConfigs'));
@@ -61,7 +70,8 @@
             HasaddSupplierPriceListTemplatePermission: HasaddSupplierPriceListTemplatePermission,
             HasUpdateSupplierPriceListTemplatePermission: HasUpdateSupplierPriceListTemplatePermission,
             HassaveSupplierPriceListConfigurationPermission: HassaveSupplierPriceListConfigurationPermission,
-            GetSupplierPriceListTemplateBySupplierId: GetSupplierPriceListTemplateBySupplierId
+            GetSupplierPriceListTemplateBySupplierId: GetSupplierPriceListTemplateBySupplierId,
+            TestConversionForSupplierPriceList: TestConversionForSupplierPriceList
         });
     }
     appControllers.service('WhS_SupPL_SupplierPriceListTemplateAPIService', SupplierPriceListTemplateAPIService);
