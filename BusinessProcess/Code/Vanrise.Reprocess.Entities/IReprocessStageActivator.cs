@@ -17,6 +17,8 @@ namespace Vanrise.Reprocess.Entities
         void ExecuteStage(IReprocessStageActivatorExecutionContext context);
 
         void FinalizeStage(IReprocessStageActivatorFinalizingContext context);
+
+        List<StageRecordInfo> GetStageRecordInfo(IReprocessStageActivatorPreparingContext context);
     }
 
     public interface IReprocessStageActivatorExecutionContext
@@ -42,10 +44,24 @@ namespace Vanrise.Reprocess.Entities
         long ProcessInstanceId { get; }
     }
 
-    public interface IReprocessStageActivatorFinalizingContext
+    public interface IReprocessStageActivatorFinalizingContext 
     {
         long ProcessInstanceId { get; }
 
         string CurrentStageName { get; }
+
+        DateTime BatchStart { get; }
+    }
+
+    public interface IReprocessStageActivatorPreparingContext
+    {
+        long ProcessInstanceId { get; }
+
+        string CurrentStageName { get; }
+    }
+
+    public class StageRecordInfo
+    {
+        public DateTime BatchStart { get; set; }
     }
 }

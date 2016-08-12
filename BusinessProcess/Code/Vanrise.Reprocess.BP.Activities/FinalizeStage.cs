@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
 using Vanrise.BusinessProcess;
 using Vanrise.Reprocess.Entities;
@@ -9,53 +6,36 @@ using Vanrise.Entities;
 
 namespace Vanrise.Reprocess.BP.Activities
 {
-    public class FinalizeStageInput
-    {
-        public ReprocessStage Stage { get; set; }
-
-        public long CurrentProcessId { get; set; }
-    }
-
-    public class FinalizeStageOutput
-    {
-    }
-
-    public sealed class FinalizeStage : DependentAsyncActivity<FinalizeStageInput, FinalizeStageOutput>
+    public sealed class FinalizeStage : CodeActivity
     {
         [RequiredArgument]
-        public InArgument<ReprocessStage> Stage { get; set; }
+        public InArgument<IReprocessStageActivator> StageActivator { get; set; }
 
-        protected override FinalizeStageInput GetInputArgument2(AsyncCodeActivityContext context)
+        [RequiredArgument]
+        public InArgument<string> StageName { get; set; }
+
+        [RequiredArgument]
+        public InArgument<DateTime> BatchStart { get; set; }
+
+        protected override void Execute(CodeActivityContext context)
         {
-            return new FinalizeStageInput()
-            {
-                Stage = this.Stage.Get(context),
-                CurrentProcessId = context.GetSharedInstanceData().InstanceInfo.ParentProcessID.HasValue ? context.GetSharedInstanceData().InstanceInfo.ParentProcessID.Value : context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID
-            };
-        }
+            long currentProcessId = context.GetSharedInstanceData().InstanceInfo.ParentProcessID.HasValue ? context.GetSharedInstanceData().InstanceInfo.ParentProcessID.Value : context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
+            var executionContext = new ReprocessStageActivatorFinalizingContext(this.StageName.Get(context), currentProcessId, this.BatchStart.Get(context));
 
-        protected override FinalizeStageOutput DoWorkWithResult(FinalizeStageInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
-        {
-            var executionContext = new ReprocessStageActivatorFinalizingContext(inputArgument.Stage.StageName, inputArgument.CurrentProcessId);
-
-            inputArgument.Stage.Activator.FinalizeStage(executionContext);
-            return new FinalizeStageOutput();
-        }
-
-        protected override void OnWorkComplete(AsyncCodeActivityContext context, FinalizeStageOutput result)
-        {
-            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, string.Format("{0} finalization is done.", this.Stage.Get(context).StageName), null);
+            this.StageActivator.Get(context).FinalizeStage(executionContext);
         }
 
         private class ReprocessStageActivatorFinalizingContext : IReprocessStageActivatorFinalizingContext
         {
             string _currentStageName;
             long _processInstanceId;
+            DateTime _batchStart;
 
-            public ReprocessStageActivatorFinalizingContext(string currentStageName, long processInstanceId)
+            public ReprocessStageActivatorFinalizingContext(string currentStageName, long processInstanceId, DateTime batchStart)
             {
                 _currentStageName = currentStageName;
                 _processInstanceId = processInstanceId;
+                _batchStart = batchStart;
             }
 
             public long ProcessInstanceId
@@ -67,8 +47,11 @@ namespace Vanrise.Reprocess.BP.Activities
             {
                 get { return _currentStageName; }
             }
+
+            public DateTime BatchStart
+            {
+                get { return _batchStart; }
+            }
         }
-
-
     }
 }

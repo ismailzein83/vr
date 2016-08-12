@@ -1,0 +1,141 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Reprocess.BP.ReProcessingFinalizeProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:vrba="clr-namespace:Vanrise.Reprocess.BP.Arguments;assembly=Vanrise.Reprocess.BP.Arguments"
+ xmlns:vrba1="clr-namespace:Vanrise.Reprocess.BP.Activities;assembly=Vanrise.Reprocess.BP.Activities"
+ xmlns:vre="clr-namespace:Vanrise.Reprocess.Entities;assembly=Vanrise.Reprocess.Entities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(vrba:ReProcessingFinalizeProcessInput)" />
+    <x:Property Name="Output" Type="OutArgument(vrba:ReProcessingFinalizeProcessOutput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Vanrise.Reprocess.BP.ReProcessingFinalizeProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>Vanrise.Reprocess.BP.Arguments</x:String>
+      <x:String>Vanrise.Reprocess.Entities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.Reprocess.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.Reprocess.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.Reprocess.Entities</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Vanrise.Reprocess.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="vre:ReprocessDefinition" Name="reprocessDefinition" />
+      <Variable x:TypeArguments="vre:IReprocessStageActivator" Name="StageActivator" />
+    </Sequence.Variables>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="vrba:ReProcessingFinalizeProcessOutput">
+          <mca:CSharpReference x:TypeArguments="vrba:ReProcessingFinalizeProcessOutput">Output</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="vrba:ReProcessingFinalizeProcessOutput">
+          <mca:CSharpValue x:TypeArguments="vrba:ReProcessingFinalizeProcessOutput">new ReProcessingFinalizeProcessOutput()</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
+    <vrba1:GetReprocessDefinition sap2010:WorkflowViewState.IdRef="GetReprocessDefinition_1">
+      <vrba1:GetReprocessDefinition.ReprocessDefinition>
+        <OutArgument x:TypeArguments="vre:ReprocessDefinition">
+          <mca:CSharpReference x:TypeArguments="vre:ReprocessDefinition">reprocessDefinition</mca:CSharpReference>
+        </OutArgument>
+      </vrba1:GetReprocessDefinition.ReprocessDefinition>
+      <vrba1:GetReprocessDefinition.ReprocessDefinitionId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReprocessDefinitionId</mca:CSharpValue>
+        </InArgument>
+      </vrba1:GetReprocessDefinition.ReprocessDefinitionId>
+    </vrba1:GetReprocessDefinition>
+    <vrba1:GetStageActivator sap2010:WorkflowViewState.IdRef="GetStageActivator_1">
+      <vrba1:GetStageActivator.ReprocessDefinition>
+        <InArgument x:TypeArguments="vre:ReprocessDefinition">
+          <mca:CSharpValue x:TypeArguments="vre:ReprocessDefinition">reprocessDefinition</mca:CSharpValue>
+        </InArgument>
+      </vrba1:GetStageActivator.ReprocessDefinition>
+      <vrba1:GetStageActivator.StageActivator>
+        <OutArgument x:TypeArguments="vre:IReprocessStageActivator">
+          <mca:CSharpReference x:TypeArguments="vre:IReprocessStageActivator">StageActivator</mca:CSharpReference>
+        </OutArgument>
+      </vrba1:GetStageActivator.StageActivator>
+      <vrba1:GetStageActivator.StageName>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">Input.StageName</mca:CSharpValue>
+        </InArgument>
+      </vrba1:GetStageActivator.StageName>
+    </vrba1:GetStageActivator>
+    <vrba1:FinalizeStage sap2010:WorkflowViewState.IdRef="FinalizeStage_1">
+      <vrba1:FinalizeStage.BatchStart>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.BatchStart</mca:CSharpValue>
+        </InArgument>
+      </vrba1:FinalizeStage.BatchStart>
+      <vrba1:FinalizeStage.StageActivator>
+        <InArgument x:TypeArguments="vre:IReprocessStageActivator">
+          <mca:CSharpValue x:TypeArguments="vre:IReprocessStageActivator">StageActivator</mca:CSharpValue>
+        </InArgument>
+      </vrba1:FinalizeStage.StageActivator>
+      <vrba1:FinalizeStage.StageName>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">Input.StageName</mca:CSharpValue>
+        </InArgument>
+      </vrba1:FinalizeStage.StageName>
+    </vrba1:FinalizeStage>
+    <sads:DebugSymbol.Symbol>d1FDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nRmluYWxpemVQcm9jZXNzLnhhbWwPPAN8DgIBAUEFTA4CAS1NBVgkAgEiWQVpHwIBEmoFehsCAQJJC0mOAQIBM0QLRHUCAS5VC1VjAgEoUAtQcwIBI2YLZlgCAR1hC2FzAgEYXAtcawIBE20LbVsCAQ13C3dYAgEIcgtyawIBAw==</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="GetReprocessDefinition_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="GetStageActivator_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="FinalizeStage_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="264,372">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Vanrise.Reprocess.BP.ReProcessingFinalizeProcess_1" sap:VirtualizedContainerService.HintSize="304,452" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Activities;
 using Vanrise.Reprocess.Entities;
+using System.Linq;
 
 namespace Vanrise.Reprocess.BP.Activities
 {
@@ -46,7 +47,7 @@ namespace Vanrise.Reprocess.BP.Activities
 
                 dateTimeRanges.Add(new DateTimeRange() { From = startDate, To = endDate });
             }
-
+            dateTimeRanges = dateTimeRanges.OrderBy(itm => itm.From).ToList();
             this.DateTimeRanges.Set(context, dateTimeRanges);
         }
     }
