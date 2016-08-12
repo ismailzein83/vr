@@ -105,8 +105,7 @@
     <add key="BusinessProcessDisabledNamedPipeService" value="true"/>
     <add key="RepricingParallelThreads" value="1"/>
     <add key="RoutingCodePrefixLength" value="2"/>
-    <add key="BCPDonotDeleteFiles" value="false"/>
-    <!--this should be always false at production. could be only set to true for troubleshooting-->
+    <add key="BCPDonotDeleteFiles" value="false"/><!--BCPDonotDeleteFiles should be always false at production. could be only set to true for troubleshooting-->
     <add key="RebuildZoneRates" value="true"/>
     <add key="BCPTempFilesDirectory" value="C:\BCPFiles" />
     <add key="TOneWhS_BE_DBConnStringKey" value="TOneV2DBConnString"/>
@@ -145,10 +144,6 @@
   </system.codedom>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
-      <!--<dependentAssembly>
-        <assemblyIdentity name="Microsoft.Scripting.ExtensionAttribute" publicKeyToken="31bf3856ad364e35"/>
-        <bindingRedirect oldVersion="2.0.0.0-2.1.0.0" newVersion="3.5.0.0"/>
-      </dependentAssembly>-->
     </assemblyBinding>
     <assemblyBinding appliesTo="v2.0.50727" xmlns="urn:schemas-microsoft-com:asm.v1">
       <dependentAssembly>
