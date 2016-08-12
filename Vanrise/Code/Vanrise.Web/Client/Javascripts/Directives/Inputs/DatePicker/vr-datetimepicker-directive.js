@@ -82,14 +82,19 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                     var eltop = selfOffset.top - $(window).scrollTop();
                     var elleft = selfOffset.left - $(window).scrollLeft();
                     $(dropDown).removeClass('pull-right');
+                    $(dropDown).removeClass('dropdown-menu.top');
                     if (innerWidth - elleft < 228) {
                         elleft = elleft - ((innerWidth - elleft) - $(this).width() / 2 );
                             $(dropDown).addClass('vr-datetime-pull-right');
-                        }
+                    }
+
                     if (innerHeight - eltop < 284) {
                         basetop = (eltop - 284) - 10;
                         $(dropDown).addClass('vr-datetime-top');
                     }
+                    else
+                        $(dropDown).addClass('vr-datetime');
+
                     $(dropDown).css({ position: 'fixed', top: basetop, left: elleft , bottom: 'unset' });
 
                 });
