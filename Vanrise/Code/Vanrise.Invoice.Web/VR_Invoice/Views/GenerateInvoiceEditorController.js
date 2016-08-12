@@ -2,10 +2,13 @@
 
     "use strict";
 
-    genericInvoiceEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    genericInvoiceEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService','VR_Invoice_InvoiceTypeService'];
 
-    function genericInvoiceEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function genericInvoiceEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeService) {
         var invoiceTypeId;
+        $scope.invoiceTypeEntity;
+        var partnerSelectorAPI;
+        var partnerSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         loadParameters();
         load();
@@ -18,6 +21,11 @@
         }
         function defineScope() {
 
+            $scope.onPartnerSelectorReady = function (api) {
+                partnerSelectorAPI = api;
+                partnerSelectorReadyDeferred.resolve();
+            }
+
             $scope.generateInvoice = function () {
                 return generateInvoice();
             };
@@ -28,11 +36,15 @@
         }
         function load() {
             $scope.isLoading = true;
-            loadAllControls();
+            getInvoiceType().then(function () {
+                loadAllControls();
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.scopeModel.isLoading = false;
+            });
         }
-
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadPartnerSelectorDirective])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -40,20 +52,29 @@
                   $scope.isLoading = false;
               });
         }
-
         function setTitle() {
             $scope.title = "Generate Invoice";
         }
-
+        function getInvoiceType() {
+            return VR_Invoice_InvoiceTypeService.GetInvoiceType(invoiceTypeId).then(function (response) {
+                $scope.invoiceTypeEntity = response;
+            });
+        }
+        function loadPartnerSelectorDirective() {
+            var partnerSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
+            partnerSelectorReadyDeferred.promise.then(function () {
+                var partnerSelectorPayload;
+                VRUIUtilsService.callDirectiveLoad(partnerSelectorAPI, partnerSelectorPayload, partnerSelectorPayloadLoadDeferred);
+            });
+            return partnerSelectorPayloadLoadDeferred.promise;
+        }
         function loadStaticData() {
         }
-
         function buildTextManipulationObjFromScope() {
             var obj = {
             };
             return obj;
         }
-
         function generateInvoice() {
         }
 

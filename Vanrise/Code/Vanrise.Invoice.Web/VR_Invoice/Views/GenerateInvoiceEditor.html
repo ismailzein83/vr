@@ -2,7 +2,12 @@
     <vr-modalbody>
         <vr-form name="formGenericInvoiceEditor">
             <vr-row removeline>
-                <vr-columns width="fullrow">
+                <vr-directivewrapper directive="invoiceTypeEntity.Settings.UISettings.PartnerSelector" on-ready="onPartnerSelectorReady" normal-col-num="4"></vr-directivewrapper>
+                <vr-columns width="1/3row">
+                    <vr-datetimepicker type="dateTime" label="From" value="fromDate"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns width="1/3row">
+                    <vr-datetimepicker type="dateTime" label="To" value="toDate"></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
         </vr-form>
@@ -10,7 +15,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formGenericInvoiceEditor" data-onclick="generateInvoice"></vr-button>
+                <vr-button type="GenerateInvoice" formname="formGenericInvoiceEditor" data-onclick="generateInvoice"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>

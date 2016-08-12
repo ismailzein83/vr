@@ -286,6 +286,12 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Test Conversion',
                     class: "glyphicon glyphicon-check"
                 }
+            case 'GenerateInvoice':
+                return {
+                    text: 'Generate Invoice',
+                    class: "glyphicon glyphicon-retweet"
+                }
+                
         } 
     }
 }]);

@@ -2,7 +2,13 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
             <vr-row removeline>
+                <vr-directivewrapper directive="invoiceTypeEntity.Settings.UISettings.PartnerSelector" on-ready="onPartnerSelectorReady" normal-col-num="2"></vr-directivewrapper>
+
                 <vr-columns width="normal">
+                    <vr-datetimepicker type="dateTime" label="From" value="fromDate"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="dateTime" label="To" value="toDate"></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
         </div>
