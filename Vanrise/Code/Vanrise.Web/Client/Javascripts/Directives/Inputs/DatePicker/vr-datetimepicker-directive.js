@@ -70,29 +70,30 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                 format: format,
                 showClose: true
             });
-            if (divDatePicker.parents('.modal-body').length > 0) {
-                divDatePicker
-                 .on('dp.show', function (e) {
-                     var self = $(this);
-                     var selfHeight = $(this).height();
-                     var selfOffset = $(self).offset();
-                     var dropDown = self.parent().find('.bootstrap-datetimepicker-widget')[0];
-                     $(dropDown).removeClass("pull-right")
-                     $(dropDown).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: selfOffset.left - $(window).scrollLeft() });
+            divDatePicker
+                .on('dp.show', function (e) {
+                    var istop = false;
+                    var isright = false;
+                    var self = $(this);
+                    var selfHeight = $(this).height();
+                    var selfOffset = $(self).offset();
+                    var dropDown = self.parent().find('.bootstrap-datetimepicker-widget')[0];
+                    var basetop = selfOffset.top - $(window).scrollTop() + $(this).height();
+                    var eltop = selfOffset.top - $(window).scrollTop();
+                    var elleft = selfOffset.left - $(window).scrollLeft();
+                    $(dropDown).removeClass('pull-right');
+                    if (innerWidth - elleft < 228) {
+                        elleft = elleft - ((innerWidth - elleft) - $(this).width() / 2 );
+                            $(dropDown).addClass('vr-datetime-pull-right');
+                        }
+                    if (innerHeight - eltop < 284) {
+                        basetop = (eltop - 284) - 10;
+                        $(dropDown).addClass('vr-datetime-top');
+                    }
+                    $(dropDown).css({ position: 'fixed', top: basetop, left: elleft , bottom: 'unset' });
 
-                 });
-            }
-
-            //if (divDatePicker.parents('.vr-datagrid').length > 0) {
-            //    divDatePicker.on('dp.show', function (e) {
-            //        $('#gridBodyContainer').css({ "overflow-y": 'hidden', "overflow-x": 'hidden' })
-
-            //    });
-            //    divDatePicker.on('dp.hide', function (e) {
-            //        $('#gridBodyContainer').css({ "overflow-y": 'auto', "overflow-x": 'hidden' })
-
-            //    });
-            //}
+                });
+        
             $(divDatePicker.parents('div')).scroll(function () {
                 fixDateTimePickerPosition();
             })

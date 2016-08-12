@@ -2440,3 +2440,43 @@ vr-listitem div[class^="col"] {
 div[validationcontainer]{
     min-height: 53px !important;
 }
+
+
+.vr-datetime:before {
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 7px solid #cccccc;
+  border-bottom-color: rgba(0, 0, 0, 0.2);
+  top: -7px;
+  left: 7px;
+}
+.vr-datetime:after {
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid white;
+  top: -6px;
+  left: 8px;
+}
+.vr-datetime-top:before {
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 7px solid #cccccc;
+  border-top-color: rgba(0, 0, 0, 0.2);
+  bottom: -7px;
+  left: 6px;
+}
+.vr-datetime-top:after {
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid white;
+  bottom: -6px;
+  left: 7px;
+}
+.vr-datetime-pull-right:before {
+  left: auto !important;
+  right: 6px;
+}
+.vr-datetime-pull-right:after {
+  left: auto !important;
+  right: 7px;
+}
