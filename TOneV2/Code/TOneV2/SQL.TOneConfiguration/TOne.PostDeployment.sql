@@ -887,7 +887,10 @@ as (select * from (values
 (1010,'WhS_Sales_CostCalculationMethod_MarginPercentage','Margin Percentage','WhS_Sales_RateCalculationMethod','{"Editor":"vr-whs-sales-marginpercentageratecalculation"}','2016-06-06 11:08:44.103'),
 (1011,'VR_Analytic_Report_ItemAction_OpenRecordSearch','Open Record Search','Analytic_ItemActionTemplates','{"Editor":"vr-analytic-analyticitemaction-openrecordsearch"}','2016-06-08 12:51:42.007'),
 (1013,'WhS_SupPL_SupplierPriceListConfiguration_Basic','Basic','WhS_SupPL_SupplierPriceListConfiguration','{"Editor":"whs-suppl-supplierpricelistconfiguration-basic"}','2016-07-08 15:49:29.080'),
-(1014,'WhS_RouteSync_SwitchRouteSynchronizer_TelesRadius','Teles Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer','{"Editor":"whs-routesync-telesradius-swsync"}','2016-07-29 16:17:12.240')
+(1014,'WhS_RouteSync_SwitchRouteSynchronizer_TelesRadius','Teles Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer','{"Editor":"whs-routesync-telesradius-swsync"}','2016-07-29 16:17:12.240'),
+(3004,'AddPrefix','Add Prefix',	'VRCommon_TextManipulationActionSettings','{"Editor":"vr-common-textmanipulationsettings-addprefix"}','2016-08-11 17:34:11.917'),
+(3005,'ReplaceString','Replace String',	'VRCommon_TextManipulationActionSettings','{"Editor":"vr-common-textmanipulationsettings-replacestring"}','2016-08-11 17:34:11.917'),
+(3006,'Substring','Substring',	'VRCommon_TextManipulationActionSettings','{"Editor":"vr-common-textmanipulationsettings-substring"}','2016-08-11 17:34:11.917')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings],[CreatedTime]))
 merge	[common].[ExtensionConfiguration] as t
