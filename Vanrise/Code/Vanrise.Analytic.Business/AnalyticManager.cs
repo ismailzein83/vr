@@ -624,7 +624,7 @@ namespace Vanrise.Analytic.Business
 
             int userId = SecurityContext.Current.GetLoggedInUserId();
 
-            if (!manager.DoesUserHaveAccess(input.Query.TableId, userId))
+            if (!manager.DoesUserHaveAccess( userId , input.Query.TableId ))
             {
                 throw new UnauthorizedAccessException();
             }
