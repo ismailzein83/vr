@@ -12,17 +12,20 @@ namespace TOne.WhS.Routing.Business.RouteRules.Filters
         public decimal RateOptionValue { get; set; }
         public override void Execute(IRouteOptionFilterExecutionContext context)
         {
-            if (!context.SaleRate.HasValue || context.SaleRate.Value == 0)
-            {
-                context.FilterOption = true;
+            if (!context.SaleRate.HasValue)
                 return;
-            }
 
             decimal profitValue = 0;
             switch (RateOptionType)
             {
                 case Filters.RateOptionType.Fixed: profitValue = context.SaleRate.Value - context.Option.SupplierRate; break;
-                case Filters.RateOptionType.Percentage: profitValue = (context.SaleRate.Value - context.Option.SupplierRate) * 100 / context.SaleRate.Value; break;
+                case Filters.RateOptionType.Percentage:
+                    if (context.SaleRate.Value == 0)
+                    {
+                        context.FilterOption = true;
+                        return;
+                    }
+                    profitValue = (context.SaleRate.Value - context.Option.SupplierRate) * 100 / context.SaleRate.Value; break;
             }
 
             decimal valueLimit = 0;
