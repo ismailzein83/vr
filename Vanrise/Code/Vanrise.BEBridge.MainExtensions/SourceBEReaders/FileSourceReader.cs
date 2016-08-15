@@ -58,6 +58,7 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
 
     public class FileSourceReaderSetting
     {
+        public int ConfigId { get; set; }
         public string Extension { get; set; }
         public string Mask { get; set; }
         public string Directory { get; set; }

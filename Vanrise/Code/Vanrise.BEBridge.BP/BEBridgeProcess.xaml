@@ -46,6 +46,7 @@
       <AssemblyReference>Vanrise.BEBridge.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.MainExtensions</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.BP</AssemblyReference>
     </sco:Collection>
@@ -84,7 +85,7 @@
               </InArgument>
             </vbba1:GetBEReceiveDefinition.BEReceiveDefinitionId>
           </vbba1:GetBEReceiveDefinition>
-          <vbba1:ReadSourceBEs Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ReadSourceBEs_1">
+          <vbba1:ReadSourceBEs sap2010:WorkflowViewState.IdRef="ReadSourceBEs_1">
             <vbba1:ReadSourceBEs.SourceBatch>
               <InOutArgument x:TypeArguments="vbe:SourceBEBatch">
                 <mca:CSharpReference x:TypeArguments="vbe:SourceBEBatch">sourceBEBatch</mca:CSharpReference>
@@ -92,7 +93,7 @@
             </vbba1:ReadSourceBEs.SourceBatch>
             <vbba1:ReadSourceBEs.SourceReader>
               <InArgument x:TypeArguments="vbe:SourceBEReader">
-                <mca:CSharpValue x:TypeArguments="vbe:SourceBEReader">sourceBEReader</mca:CSharpValue>
+                <mca:CSharpValue x:TypeArguments="vbe:SourceBEReader">beRecieveDefinition.Settings.SourceBEReader</mca:CSharpValue>
               </InArgument>
             </vbba1:ReadSourceBEs.SourceReader>
           </vbba1:ReadSourceBEs>
@@ -110,31 +111,39 @@
               </vbba1:ConvertSourceToTargetBEs.TargetBEs>
               <vbba1:ConvertSourceToTargetBEs.TargetConverter>
                 <InArgument x:TypeArguments="vbe:TargetBEConvertor">
-                  <mca:CSharpValue x:TypeArguments="vbe:TargetBEConvertor">targetConverter</mca:CSharpValue>
+                  <mca:CSharpValue x:TypeArguments="vbe:TargetBEConvertor">beRecieveDefinition.Settings.TargetBEConvertor</mca:CSharpValue>
                 </InArgument>
               </vbba1:ConvertSourceToTargetBEs.TargetConverter>
             </vbba1:ConvertSourceToTargetBEs>
-            <vbba1:InsertNewBEs>
+            <vbba1:InsertNewBEs sap2010:WorkflowViewState.IdRef="InsertNewBEs_1">
               <vbba1:InsertNewBEs.TargetBESynchronizer>
                 <InArgument x:TypeArguments="vbe:TargetBESynchronizer">
-                  <mca:CSharpValue x:TypeArguments="vbe:TargetBESynchronizer">targetBESynchronizer</mca:CSharpValue>
+                  <mca:CSharpValue x:TypeArguments="vbe:TargetBESynchronizer">beRecieveDefinition.Settings.TargetBESynchronizer</mca:CSharpValue>
                 </InArgument>
               </vbba1:InsertNewBEs.TargetBESynchronizer>
-              <sap2010:WorkflowViewState.IdRef>InsertNewBEs_1</sap2010:WorkflowViewState.IdRef>
+              <vbba1:InsertNewBEs.TargetBEs>
+                <InArgument x:TypeArguments="scg:List(vbe:ITargetBE)">
+                  <mca:CSharpValue x:TypeArguments="scg:List(vbe:ITargetBE)">targetBEs</mca:CSharpValue>
+                </InArgument>
+              </vbba1:InsertNewBEs.TargetBEs>
             </vbba1:InsertNewBEs>
-            <vbba1:UpdateExistingBEs>
+            <vbba1:UpdateExistingBEs sap2010:WorkflowViewState.IdRef="UpdateExistingBEs_1">
               <vbba1:UpdateExistingBEs.TargetBESynchronizer>
                 <InArgument x:TypeArguments="vbe:TargetBESynchronizer">
-                  <mca:CSharpValue x:TypeArguments="vbe:TargetBESynchronizer">targetBESynchronizer</mca:CSharpValue>
+                  <mca:CSharpValue x:TypeArguments="vbe:TargetBESynchronizer">beRecieveDefinition.Settings.TargetBESynchronizer</mca:CSharpValue>
                 </InArgument>
               </vbba1:UpdateExistingBEs.TargetBESynchronizer>
-              <sap2010:WorkflowViewState.IdRef>UpdateExistingBEs_1</sap2010:WorkflowViewState.IdRef>
+              <vbba1:UpdateExistingBEs.TargetBEs>
+                <InArgument x:TypeArguments="scg:List(vbe:ITargetBE)">
+                  <mca:CSharpValue x:TypeArguments="scg:List(vbe:ITargetBE)">targetBEs</mca:CSharpValue>
+                </InArgument>
+              </vbba1:UpdateExistingBEs.TargetBEs>
             </vbba1:UpdateExistingBEs>
           </Parallel>
         </Sequence>
       </ActivityAction>
     </ForEach>
-    <sads:DebugSymbol.Symbol>dzxDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQkVCcmlkZ2UuQlBcQkVCcmlkZ2VQcm9jZXNzLnhhbWwTNQOKAQ4CAQE9BYgBDwIBAkALQHQCAVtHCYYBFAIBA0sLVioCAUhXC2IhAgE1YwuFARYCAQROEU55AgFSUxFTYAIBSV8RX2cCAT9aEVptAgE2ZA10LgIBGXUNfCICAQ99DYQBJwIBBWwTbHECASxxE3FtAgEjZxNnZwIBGngTeHUCARCAAROAAXUCAQY=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dzxDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQkVCcmlkZ2UuQlBcQkVCcmlkZ2VQcm9jZXNzLnhhbWwVNgOTAQ4CAQE+BZEBDwIBAkELQXQCAW1ICY8BFAIBA0wLVyoCAVpYC2MhAgFHZAuOARYCAQRPEU95AgFkVBFUYAIBW2ARYIQBAgFRWxFbbQIBSGUNdS4CASt2DYEBIgIBGIIBDY0BJwIBBW0TbXECAT5yE3KMAQIBNWgTaGcCASx5E3mSAQIBIn4TfmkCARmFAROFAZIBAgEPigETigFpAgEG</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

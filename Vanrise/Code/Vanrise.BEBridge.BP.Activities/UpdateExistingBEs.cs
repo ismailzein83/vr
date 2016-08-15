@@ -12,10 +12,11 @@ namespace Vanrise.BEBridge.BP.Activities
     {
         [RequiredArgument]
         public InArgument<TargetBESynchronizer> TargetBESynchronizer { get; set; }
-
+        public InArgument<List<ITargetBE>> TargetBEs { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
             TargetSynchronizerUpdateContext targetSynchronizerContext = new TargetSynchronizerUpdateContext();
+            targetSynchronizerContext.TargetBE = TargetBEs.Get(context);
             this.TargetBESynchronizer.Get(context).UpdateBEs(targetSynchronizerContext);
         }
 

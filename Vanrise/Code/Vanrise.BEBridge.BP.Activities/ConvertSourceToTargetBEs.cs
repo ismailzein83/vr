@@ -21,6 +21,7 @@ namespace Vanrise.BEBridge.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             TargetBEConvertorConvertSourceBEsContext targetBEConvertorContext = new TargetBEConvertorConvertSourceBEsContext();
+            targetBEConvertorContext.SourceBEBatch = SourceBEBatch.Get(context);
             TargetConverter.Get(context).ConvertSourceBEs(targetBEConvertorContext);
             TargetBEs.Set(context, targetBEConvertorContext.TargetBEs);
         }

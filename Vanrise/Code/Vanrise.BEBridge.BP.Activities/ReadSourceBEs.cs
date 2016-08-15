@@ -16,29 +16,22 @@ namespace Vanrise.BEBridge.BP.Activities
         public SourceBEBatch SourceBatch { get; set; }
     }
 
-    public sealed class ReadSourceBEs : BaseAsyncActivity<ReadSourceBEsInput>
+    public sealed class ReadSourceBEs : CodeActivity
     {
         [RequiredArgument]
         public InArgument<SourceBEReader> SourceReader { get; set; }
         [RequiredArgument]
         public InOutArgument<SourceBEBatch> SourceBatch { get; set; }
-        protected override void DoWork(ReadSourceBEsInput inputArgument, AsyncActivityHandle handle)
+
+        protected override void Execute(CodeActivityContext context)
         {
             Action<SourceBEBatch, SourceBEBatchRetrievedContext> onSourceBEBatchRetrieved = (sourceBEBatch, sourceRetrievedContext) =>
             {
-                inputArgument.SourceBatch = sourceBEBatch;
+                SourceBatch.Set(context, sourceBEBatch);
             };
-            SourceBEReaderRetrieveUpdatedBEsContext context = new SourceBEReaderRetrieveUpdatedBEsContext(onSourceBEBatchRetrieved);
-            inputArgument.SourceReader.RetrieveUpdatedBEs(context);
-        }
+            SourceBEReaderRetrieveUpdatedBEsContext sourceBEReaderContext = new SourceBEReaderRetrieveUpdatedBEsContext(onSourceBEBatchRetrieved);
+            SourceReader.Get(context).RetrieveUpdatedBEs(sourceBEReaderContext);
 
-        protected override ReadSourceBEsInput GetInputArgument(AsyncCodeActivityContext context)
-        {
-            return new ReadSourceBEsInput
-            {
-                SourceBatch = this.SourceBatch.Get(context),
-                SourceReader = this.SourceReader.Get(context)
-            };
         }
 
         private class SourceBEReaderRetrieveUpdatedBEsContext : ISourceBEReaderRetrieveUpdatedBEsContext
