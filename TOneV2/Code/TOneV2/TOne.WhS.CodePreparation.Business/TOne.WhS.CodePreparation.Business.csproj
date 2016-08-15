@@ -71,6 +71,7 @@
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\AddMoveCodeToPendingClosedZoneCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\MoveCodeNotExistAndEffectiveCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ClosePendingClosedCodeCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\NewZoneWithNoRatesCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\MoveCodeToPendingEffectiveZoneCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\AllCodesInZoneClosedCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ClosePendingEffectiveCodeCondition.cs" />
