@@ -84,12 +84,12 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                     $(dropDown).removeClass('pull-right');
                     $(dropDown).removeClass('dropdown-menu.top');
                     if (innerWidth - elleft < 228) {
-                        elleft = elleft - ((innerWidth - elleft) - $(this).width() / 2 );
+                        elleft = elleft - (228 - $(this).width() );
                             $(dropDown).addClass('vr-datetime-pull-right');
                     }
 
                     if (innerHeight - eltop < 284) {
-                        basetop = (eltop - 284) - 10;
+                        basetop = eltop - (284 + $(this).height()/2);
                         $(dropDown).addClass('vr-datetime-top');
                     }
                     else
