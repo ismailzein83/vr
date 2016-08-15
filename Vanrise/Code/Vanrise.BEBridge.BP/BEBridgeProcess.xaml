@@ -9,6 +9,7 @@
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:vbba="clr-namespace:Vanrise.BEBridge.BP.Arguments;assembly=Vanrise.BEBridge.BP.Arguments"
+ xmlns:vbba1="clr-namespace:Vanrise.BEBridge.BP.Activities;assembly=Vanrise.BEBridge.BP.Activities"
  xmlns:vbe="clr-namespace:Vanrise.BEBridge.Entities;assembly=Vanrise.BEBridge.Entities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
@@ -30,21 +31,21 @@
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
       <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
       <AssemblyReference>Microsoft.CSharp</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
-      <AssemblyReference>System.Activities</AssemblyReference>
-      <AssemblyReference>System.ServiceModel</AssemblyReference>
-      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
-      <AssemblyReference>System.Xaml</AssemblyReference>
-      <AssemblyReference>Vanrise.BEBridge.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.BEBridge.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.MainExtensions</AssemblyReference>
-      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.BP</AssemblyReference>
     </sco:Collection>
@@ -53,9 +54,11 @@
     <Sequence.Variables>
       <Variable x:TypeArguments="vbe:SourceBEBatch" Name="sourceBEBatch" />
       <Variable x:TypeArguments="vbe:SourceBEReader" Name="sourceBEReader" />
-      <Variable x:TypeArguments="x:String" Name="targetConverter" />
+      <Variable x:TypeArguments="vbe:TargetBEConvertor" Name="targetConverter" />
+      <Variable x:TypeArguments="scg:List(vbe:ITargetBE)" Name="targetBEs" />
+      <Variable x:TypeArguments="vbe:TargetBESynchronizer" Name="targetBESynchronizer" />
     </Sequence.Variables>
-    <ForEach x:TypeArguments="s:Guid" DisplayName="ForEach&lt;Guid&gt;">
+    <ForEach x:TypeArguments="s:Guid" DisplayName="ForEach&lt;Guid&gt;" sap2010:WorkflowViewState.IdRef="ForEach`1_1">
       <ForEach.Values>
         <InArgument x:TypeArguments="scg:IEnumerable(s:Guid)">
           <mca:CSharpValue x:TypeArguments="scg:IEnumerable(s:Guid)">Input.BEReceiveDefinitionIds</mca:CSharpValue>
@@ -65,22 +68,98 @@
         <ActivityAction.Argument>
           <DelegateInArgument x:TypeArguments="s:Guid" Name="recieveDefinitionId" />
         </ActivityAction.Argument>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="vbe:BEReceiveDefinition" Name="beRecieveDefinition" />
+          </Sequence.Variables>
+          <vbba1:GetBEReceiveDefinition sap2010:WorkflowViewState.IdRef="GetBEReceiveDefinition_1">
+            <vbba1:GetBEReceiveDefinition.BEReceiveDefinition>
+              <OutArgument x:TypeArguments="vbe:BEReceiveDefinition">
+                <mca:CSharpReference x:TypeArguments="vbe:BEReceiveDefinition">beRecieveDefinition</mca:CSharpReference>
+              </OutArgument>
+            </vbba1:GetBEReceiveDefinition.BEReceiveDefinition>
+            <vbba1:GetBEReceiveDefinition.BEReceiveDefinitionId>
+              <InArgument x:TypeArguments="s:Guid">
+                <mca:CSharpValue x:TypeArguments="s:Guid">recieveDefinitionId</mca:CSharpValue>
+              </InArgument>
+            </vbba1:GetBEReceiveDefinition.BEReceiveDefinitionId>
+          </vbba1:GetBEReceiveDefinition>
+          <vbba1:ReadSourceBEs Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ReadSourceBEs_1">
+            <vbba1:ReadSourceBEs.SourceBatch>
+              <InOutArgument x:TypeArguments="vbe:SourceBEBatch">
+                <mca:CSharpReference x:TypeArguments="vbe:SourceBEBatch">sourceBEBatch</mca:CSharpReference>
+              </InOutArgument>
+            </vbba1:ReadSourceBEs.SourceBatch>
+            <vbba1:ReadSourceBEs.SourceReader>
+              <InArgument x:TypeArguments="vbe:SourceBEReader">
+                <mca:CSharpValue x:TypeArguments="vbe:SourceBEReader">sourceBEReader</mca:CSharpValue>
+              </InArgument>
+            </vbba1:ReadSourceBEs.SourceReader>
+          </vbba1:ReadSourceBEs>
+          <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+            <vbba1:ConvertSourceToTargetBEs sap2010:WorkflowViewState.IdRef="ConvertSourceToTargetBEs_1">
+              <vbba1:ConvertSourceToTargetBEs.SourceBEBatch>
+                <InArgument x:TypeArguments="vbe:SourceBEBatch">
+                  <mca:CSharpValue x:TypeArguments="vbe:SourceBEBatch">sourceBEBatch</mca:CSharpValue>
+                </InArgument>
+              </vbba1:ConvertSourceToTargetBEs.SourceBEBatch>
+              <vbba1:ConvertSourceToTargetBEs.TargetBEs>
+                <InOutArgument x:TypeArguments="scg:List(vbe:ITargetBE)">
+                  <mca:CSharpReference x:TypeArguments="scg:List(vbe:ITargetBE)">targetBEs</mca:CSharpReference>
+                </InOutArgument>
+              </vbba1:ConvertSourceToTargetBEs.TargetBEs>
+              <vbba1:ConvertSourceToTargetBEs.TargetConverter>
+                <InArgument x:TypeArguments="vbe:TargetBEConvertor">
+                  <mca:CSharpValue x:TypeArguments="vbe:TargetBEConvertor">targetConverter</mca:CSharpValue>
+                </InArgument>
+              </vbba1:ConvertSourceToTargetBEs.TargetConverter>
+            </vbba1:ConvertSourceToTargetBEs>
+            <vbba1:InsertNewBEs>
+              <vbba1:InsertNewBEs.TargetBESynchronizer>
+                <InArgument x:TypeArguments="vbe:TargetBESynchronizer">
+                  <mca:CSharpValue x:TypeArguments="vbe:TargetBESynchronizer">targetBESynchronizer</mca:CSharpValue>
+                </InArgument>
+              </vbba1:InsertNewBEs.TargetBESynchronizer>
+              <sap2010:WorkflowViewState.IdRef>InsertNewBEs_1</sap2010:WorkflowViewState.IdRef>
+            </vbba1:InsertNewBEs>
+            <vbba1:UpdateExistingBEs>
+              <vbba1:UpdateExistingBEs.TargetBESynchronizer>
+                <InArgument x:TypeArguments="vbe:TargetBESynchronizer">
+                  <mca:CSharpValue x:TypeArguments="vbe:TargetBESynchronizer">targetBESynchronizer</mca:CSharpValue>
+                </InArgument>
+              </vbba1:UpdateExistingBEs.TargetBESynchronizer>
+              <sap2010:WorkflowViewState.IdRef>UpdateExistingBEs_1</sap2010:WorkflowViewState.IdRef>
+            </vbba1:UpdateExistingBEs>
+          </Parallel>
+        </Sequence>
       </ActivityAction>
-      <sap2010:WorkflowViewState.IdRef>ForEach`1_1</sap2010:WorkflowViewState.IdRef>
     </ForEach>
-    <sads:DebugSymbol.Symbol>dzxDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQkVCcmlkZ2UuQlBcQkVCcmlkZ2VQcm9jZXNzLnhhbWwDNANIDgIBAToFRg8CAQI9Cz10AgED</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dzxDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQkVCcmlkZ2UuQlBcQkVCcmlkZ2VQcm9jZXNzLnhhbWwTNQOKAQ4CAQE9BYgBDwIBAkALQHQCAVtHCYYBFAIBA0sLVioCAUhXC2IhAgE1YwuFARYCAQROEU55AgFSUxFTYAIBSV8RX2cCAT9aEVptAgE2ZA10LgIBGXUNfCICAQ99DYQBJwIBBWwTbHECASxxE3FtAgEjZxNnZwIBGngTeHUCARCAAROAAXUCAQY=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="287,210" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="309,334">
+      <sap2010:ViewStateData Id="GetBEReceiveDefinition_1" sap:VirtualizedContainerService.HintSize="794,22" />
+      <sap2010:ViewStateData Id="ReadSourceBEs_1" sap:VirtualizedContainerService.HintSize="794,22" />
+      <sap2010:ViewStateData Id="ConvertSourceToTargetBEs_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="InsertNewBEs_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="UpdateExistingBEs_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="816,334">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.BEBridge.BP.BEBridgeProcess_1" sap:VirtualizedContainerService.HintSize="349,414" />
+      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="846,484" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="868,608">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Vanrise.BEBridge.BP.BEBridgeProcess_1" sap:VirtualizedContainerService.HintSize="908,688" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
