@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.VisualBasic.FileIO;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,21 +17,26 @@ namespace Retail.BusinessEntity.RingoExtensions
     {
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
+
+
             FileSourceBatch fileBatch = context.SourceBEBatch as FileSourceBatch;
+
             List<ITargetBE> lstTargets = new List<ITargetBE>();
             string fileContent = System.Text.Encoding.UTF8.GetString(fileBatch.Content, 0, fileBatch.Content.Length);
-            using (StringReader reader = new StringReader(fileContent))
+            using (Stream stream = new MemoryStream(fileBatch.Content))
             {
+                TextFieldParser parser = new TextFieldParser(stream);
+                parser.Delimiters = new string[] { "," };
                 while (true)
                 {
-                    string recordLine = reader.ReadLine();
-                    if (!string.IsNullOrEmpty(recordLine))
+                    string[] accountRecords = parser.ReadFields();
+                    if (accountRecords != null)
                     {
+                        accountRecords = accountRecords.Select(s => s.Trim(new char[] { '\'' })).ToArray();
                         SourceAccountData accountData = new SourceAccountData
                         {
-                            Account = new Account()
+                            Account = new Account { TypeId = 19 }
                         };
-                        string[] accountRecords = recordLine.Split(',');
                         accountData.Account.Name = string.Format("{0} {1}", accountRecords[2], accountRecords[3]);
                         accountData.Account.SourceId = accountRecords[22];
                         FillAccountSettings(accountData, accountRecords);
@@ -78,11 +84,13 @@ namespace Retail.BusinessEntity.RingoExtensions
 
         void FillActivationPart(SourceAccountData accountData, string[] accountRecords)
         {
+            DateTime activationDate;
+            DateTime.TryParseExact(accountRecords[16], "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out activationDate);
             accountData.Account.Settings.Parts.Add(AccountPartActivation.ExtensionConfigId, new AccountPart
             {
                 Settings = new AccountPartActivation
                 {
-                    ActivationDate = DateTime.ParseExact(accountRecords[1], "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
+                    ActivationDate = activationDate
                 }
             });
         }
@@ -91,7 +99,8 @@ namespace Retail.BusinessEntity.RingoExtensions
         {
             CountryManager countryManager = new CountryManager();
             Country country = countryManager.GetCountry(accountRecords[5]);
-
+            DateTime birthDate;
+            DateTime.TryParseExact(accountRecords[16], "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out birthDate);
             accountData.Account.Settings.Parts.Add(AccountPartPersonalInfo.ExtensionConfigId, new AccountPart
             {
                 Settings = new AccountPartPersonalInfo
@@ -101,7 +110,7 @@ namespace Retail.BusinessEntity.RingoExtensions
                     Gender = accountRecords[4] == "M" ? Gender.Male : Gender.Female,
                     BirthCountryId = country != null ? (int?)country.CountryId : null,
                     BirthCityId = null,
-                    BirthDate = DateTime.ParseExact(accountRecords[16], "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
+                    BirthDate = birthDate
                 }
             });
         }

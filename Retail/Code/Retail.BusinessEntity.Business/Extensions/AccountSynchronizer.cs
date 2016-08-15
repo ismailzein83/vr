@@ -12,6 +12,8 @@ namespace Retail.BusinessEntity.Business
     {
         public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)
         {
+            if (context.TargetBE == null)
+                throw new NullReferenceException("context.TargetBE");
             AccountManager accountManager = new AccountManager();
             foreach (var targetAccount in context.TargetBE)
             {
@@ -35,9 +37,13 @@ namespace Retail.BusinessEntity.Business
             return false;
         }
 
-        public override void UpdateBEs(ITargetBESynchronizerInsertBEsContext context)
+
+        public override void UpdateBEs(ITargetBESynchronizerUpdateBEsContext context)
         {
+            if (context.TargetBE == null)
+                throw new NullReferenceException("context.TargetBE");
             AccountManager accountManager = new AccountManager();
+         
             foreach (var target in context.TargetBE)
             {
                 SourceAccountData accountData = target as SourceAccountData;

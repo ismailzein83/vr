@@ -8,7 +8,13 @@ using Retail.BusinessEntity.RingoExtensions;
 using Vanrise.BEBridge.BP.Arguments;
 using Vanrise.BEBridge.Entities;
 using Vanrise.BEBridge.MainExtensions.SourceBEReaders;
+using Vanrise.BusinessProcess;
+using Vanrise.BusinessProcess.Business;
+using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
+using Vanrise.Queueing;
+using Vanrise.Runtime;
+using Vanrise.Runtime.Configuration;
 
 namespace Retail.Runtime.Tasks
 {
@@ -16,37 +22,59 @@ namespace Retail.Runtime.Tasks
     {
         public void Execute()
         {
-            BEReceiveDefinition beDefinition = new BEReceiveDefinition
+
+            //BEReceiveDefinitionSettings setting = new BEReceiveDefinitionSettings
+            //{
+            //    SourceBEReader = new FileSourceReader
+            //    {
+            //        Setting = new FileSourceReaderSetting
+            //        {
+            //            Directory = @"c:\RingoSubscriberFiles",
+            //            Mask = "",
+            //            Extension = ".csv"
+            //        }
+            //    },
+            //    TargetBEConvertor = new RingoFileAccountConvertor
+            //    {
+
+            //    },
+            //    TargetBESynchronizer = new AccountSynchronizer { }
+            //};
+
+            //var str = Serializer.Serialize(setting);
+
+            var runtimeServices = new List<Vanrise.Runtime.RuntimeService>();
+            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bpService);
+
+            QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
+            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
+            Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
+            runtimeServices.Add(transactionLockRuntimeService);
+            runtimeServices.Add(queueActivationService);
+            runtimeServices.Add(schedulerService);
+            runtimeServices.Add(dsRuntimeService);
+
+            RuntimeHost host = new RuntimeHost(runtimeServices);
+            host.Start();
+            RunBESyncProcess();
+            Console.ReadKey();
+
+        }
+
+        void RunBESyncProcess()
+        {
+
+            BPInstanceManager bpClient = new BPInstanceManager();
+            bpClient.CreateNewProcess(new CreateProcessInput
             {
-                BEReceiveDefinitionId = Guid.NewGuid(),
-                Name = "Ringo Subscriber Account Recieve Definition",
-                Settings = new BEReceiveDefinitionSettings
+                InputArguments = new SourceBESyncProcessInput()
                 {
-                    SourceBEReader = new FileSourceReader
-                    {
-                        Setting = new FileSourceReaderSetting
-                        {
-                            Directory = @"c:\RingoSubscriberFiles",
-                            Extension = "CSV",
-                            Mask = ""
-                        }
-                    },
-                    TargetBEConvertor = new RingoFileAccountConvertor(),
-                    TargetBESynchronizer = new AccountSynchronizer()
+                    BEReceiveDefinitionIds = new List<Guid>() { Guid.Parse("01BAC79F-F20D-4D8C-8C39-EFE51908C35C") },
+                    UserId = 1
                 }
-            };
-
-            string str = Serializer.Serialize(beDefinition);
-
-            SourceBESyncProcessInput processInput = new SourceBESyncProcessInput
-            {
-                BEReceiveDefinitionIds = new List<Guid> { new Guid("01bac79f-f20d-4d8c-8c39-efe51908c35c") },
-                 UserId = 1
-                  
-            };
-
-            str = Serializer.Serialize(processInput);
-            
+            });
         }
     }
 }
