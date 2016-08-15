@@ -72,8 +72,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessRules\Conditions\RateBEDLessThanZoneBEDCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\RateEEDGreaterThanZoneEEDCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\NormalRateBEDLessThanValidBEDCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\NormalRateEEDGreaterThanZoneEED.cs" />
+    <Compile Include="BusinessRules\Conditions\OtherRateBEDLessThanValidBEDCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\OtherRateEEDGreaterThanValidEEDCondition.cs" />
     <Compile Include="RatePlanDraftManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CostCalculationMethodContext.cs" />

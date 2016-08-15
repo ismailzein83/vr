@@ -273,6 +273,21 @@ namespace TOne.WhS.Sales.Business
                 return ownerId;
         }
 
+        public SaleEntityZoneRate GetRate(SalePriceListOwnerType ownerType, int ownerId, long zoneId, DateTime effectiveOn)
+        {
+            var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveOn));
+
+            if (ownerType == SalePriceListOwnerType.SellingProduct)
+                return rateLocator.GetSellingProductZoneRate(ownerId, zoneId);
+            else
+            {
+                int? sellingProductId = GetSellingProductId(ownerType, ownerId, effectiveOn, false);
+                if (sellingProductId == null)
+                    throw new NullReferenceException("sellingProductId");
+                return rateLocator.GetCustomerZoneRate(ownerId, sellingProductId.Value, zoneId);
+            }
+        }
+
         #endregion
     }
 }
