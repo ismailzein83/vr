@@ -39,9 +39,6 @@ namespace Retail.BusinessEntity.RingoExtensions
                         };
                         accountRecords = accountRecords.Select(s => s.Trim(new char[] { '\'' })).ToArray();
                         var sourceId = accountRecords[22];
-                        var existingAccount = accountManager.GetAccountBySourceId(sourceId);
-                        if (existingAccount != null)
-                            accountData.Account.AccountId = existingAccount.AccountId;
                         accountData.Account.Name = string.Format("{0} {1}", accountRecords[2], accountRecords[3]);
                         accountData.Account.SourceId = sourceId;
                         FillAccountSettings(accountData, accountRecords);
