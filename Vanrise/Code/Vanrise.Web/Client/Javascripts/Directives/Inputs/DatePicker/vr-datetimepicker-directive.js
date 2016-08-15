@@ -94,8 +94,13 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                     }
                     else
                         $(dropDown).addClass('vr-datetime');
+                    setTimeout(function () {
 
-                    $(dropDown).css({ position: 'fixed', top: basetop, left: elleft , bottom: 'unset' });
+                        $(dropDown).slideDown();
+                    },100)
+
+                    $(dropDown).css({ position: 'fixed', top: basetop, left: elleft, bottom: 'unset' });
+
 
                 });
         

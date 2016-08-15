@@ -334,16 +334,44 @@
                         vrSelectSharedObject.onOpenDropDown($attrs.id);
 
                         setTimeout(function () { $('#filterInput').focus(); }, 1);
+                        var selfHeight = $(this).height();
+                        var selfOffset = $(this).offset();
+                        var basetop = selfOffset.top - $(window).scrollTop() + selfHeight;
                        
-                        $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+                        var heigth = $(this).parents('.vr-pager-container').length > 0 ? 235 : 200;
+
+                        if (innerHeight - basetop < heigth) {
+                            var div = $(this).find('.dropdown-menu');
+                            var height = div.css({
+                                display: "block"
+                            }).height();
+
+                            div.css({
+                                overflow: "hidden",
+                                marginTop: height,
+                                height: 0
+                            }).animate({
+                                marginTop: 0,
+                                height: height
+                            }, 1000, function () {
+                                $(this).css({
+                                    display: "",
+                                    overflow: "",
+                                    height: "",
+                                    marginTop: ""
+                                });
+                            });
+                           
+                        }
+                        else
+                           $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
                     });
 
                     $('div[name=' + $attrs.id + ']').attr('name', $attrs.id).on('hide.bs.dropdown', function () {
-
+                        
                         $('#filterInput').blur();
 
                         vrSelectSharedObject.onCloseDropDown($attrs.id);
-
                         $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
                     });
                 }, 100);
@@ -357,13 +385,16 @@
                             var selfOffset = $(self).offset();
                             var dropDown = self.parent().find('ul');
                             var top = 0;
-                            var ulHeight = 260;
-                            if ($(dropDown).hasClass("menu-to-top"))
-                                top = selfOffset.top - $(window).scrollTop()  - (ulHeight + selfHeight);
+                            var basetop = selfOffset.top - $(window).scrollTop() + selfHeight;
+                            var baseleft = selfOffset.left - $(window).scrollLeft();
+                         
+                            var heigth = $(this).parents('.vr-pager-container').length > 0 ? 245 : 200;
+                            if (innerHeight - basetop < heigth)
+                                top = basetop - (heigth + (selfHeight * 2.7));
                             else
                                 top = selfOffset.top - $(window).scrollTop() + selfHeight;
 
-                            $(dropDown).css({ position: 'fixed', top: top, left: selfOffset.left - $(window).scrollLeft() });
+                            $(dropDown).css({ position: 'fixed', top: top, left: baseleft });
                         });
 
                         $('div[name=' + $attrs.id + ']').parents('div').scroll(function () {
