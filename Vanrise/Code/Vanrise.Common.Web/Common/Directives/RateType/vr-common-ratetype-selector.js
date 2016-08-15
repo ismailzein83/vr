@@ -15,7 +15,9 @@ app.directive('vrCommonRatetypeSelector', ['VRCommon_RateTypeAPIService', 'VRCom
             selectedvalues: "=",
             showaddbutton: '@',
             hidelabel: '@',
-            customvalidate : '='
+            customvalidate: '=',
+            onselectitem: "=",
+            ondeselectitem: "=",
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -71,7 +73,7 @@ app.directive('vrCommonRatetypeSelector', ['VRCommon_RateTypeAPIService', 'VRCom
             multipleselection = "ismultipleselection"
 
         return ' <vr-select ' + multipleselection + ' customvalidate="ctrl.customvalidate" datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="RateTypeId"'
-               + 'entityname="RateType" ' + ' label="' + label + '" ' + addCliked + '></vr-select>';
+               + 'entityname="RateType" ' + ' label="' + label + '" ' + addCliked + ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>';
 
     }
     function rateTypeCtor(ctrl, $scope, VRCommon_RateTypeAPIService, $attrs) {
