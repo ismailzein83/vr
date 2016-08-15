@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{62EA9EF9-12FF-4E59-A556-FA5ADA77AE92}</ProjectGuid>
+    <ProjectGuid>{3BB5B698-9767-49C7-B9CC-5B1418870A8A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Vanrise.BEBridge.Data.SQL</RootNamespace>
-    <AssemblyName>Vanrise.BEBridge.Data.SQL</AssemblyName>
+    <RootNamespace>Vanrise.BEBridge.Business</RootNamespace>
+    <AssemblyName>Vanrise.BEBridge.Business</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -41,18 +41,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Caching">
+      <HintPath>..\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\Output\Vanrise.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Data">
-      <HintPath>..\Output\Vanrise.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Data.SQL">
-      <HintPath>..\Output\Vanrise.Data.SQL.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BEReceiveDefinitionDataManager.cs" />
+    <Compile Include="BEReceiveDefinitionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
