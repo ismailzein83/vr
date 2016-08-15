@@ -28,13 +28,17 @@
         function UpdateStatusChargingSet(statusChargingSetItem) {
             return baseApiService.post(utilsService.getServiceURL(retailBeModuleConfig.moduleName, controllerName, 'UpdateStatusChargingSet'), statusChargingSetItem);
         }
+        function GetRecurringPeriodExtensionConfigs() {
+            return baseApiService.get(utilsService.getServiceURL(retailBeModuleConfig.moduleName, controllerName, "GetRecurringPeriodExtensionConfigs"));
+        }
 
         return ({
             AddStatusChargingSet: AddStatusChargingSet,
             GetFilteredStatusChargingSet: GetFilteredStatusChargingSet,
             GetStatusChargingSet: GetStatusChargingSet,
             UpdateStatusChargingSet: UpdateStatusChargingSet,
-            GetStatusChargeInfos: GetStatusChargeInfos
+            GetStatusChargeInfos: GetStatusChargeInfos,
+            GetRecurringPeriodExtensionConfigs: GetRecurringPeriodExtensionConfigs
         });
     }
 

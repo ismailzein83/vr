@@ -10,6 +10,10 @@
         var entityTypeAPI;
         var entityTypeSelectorReadyDeferred = utilsService.createPromiseDeferred();
 
+        var chargingSetPeriodDefinitionAPI;
+        var chargingSetPeriodDefinitionReadyDeferred = utilsService.createPromiseDeferred();
+
+
         loadParameters();
         defineScope();
         load();
@@ -24,6 +28,11 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.items = [];
+
+            $scope.scopeModel.chargingSetPeriodDefinitionDirectiveReady = function (api) {
+                chargingSetPeriodDefinitionAPI = api;
+                chargingSetPeriodDefinitionReadyDeferred.resolve();
+            }
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
                     return update();
@@ -44,6 +53,13 @@
                 if (selectedEntityType != undefined) {
                     retailBeStatusChargingSetApiService.GetStatusChargeInfos(selectedEntityType).then(function (response) {
                         $scope.scopeModel.items = response;
+                        for (var j = 0; j < $scope.scopeModel.items.length; j++) {
+                            var tempItem = $scope.scopeModel.items[j];
+                            if (tempItem != undefined) {
+                                
+                                SetRecuringPeriodDefinitions(tempItem);
+                            }
+                        }
                         if (statusChargingEntity != undefined && statusChargingEntity.Settings != undefined && statusChargingEntity.Settings.StatusCharges != undefined) {
                             for (var i = 0; i < statusChargingEntity.Settings.StatusCharges.length; i++) {
                                 var currentStatusChargingEntity = statusChargingEntity.Settings.StatusCharges[i];
@@ -61,6 +77,17 @@
             }
         }
 
+
+        function SetRecuringPeriodDefinitions(tempItem) {
+
+            tempItem.chargingSetPeriodDefinitionDirectiveReady = function (api) {
+                tempItem.APItemp = api;
+                api.load();
+            }
+      
+
+
+        }
         function load() {
             $scope.scopeModel.isLoading = true;
             if (isEditMode) {
@@ -109,7 +136,6 @@
                 Settings: settings
             };
         }
-
         function update() {
             $scope.scopeModel.isLoading = true;
             return retailBeStatusChargingSetApiService.UpdateStatusChargingSet(buildStatusChargingSetObjFromScope()).then(function (response) {
@@ -151,7 +177,7 @@
                         selectedIds: statusChargingEntity.Settings.EntityType
                     };
                 }
-                vruiUtilsService.callDirectiveLoad(entityTypeAPI, entityTypeSelectorPayload, entityTypeSelectorLoadDeferred);
+                vruiUtilsService.callDirectiveLoad(entityTypeAPI, entityTypeSelectorPayload, entityTypeSelectorLoadDeferred, chargingSetPeriodDefinitionAPI);
             });
             return entityTypeSelectorLoadDeferred.promise;
         }
@@ -160,6 +186,7 @@
                 return;
             $scope.scopeModel.name = statusChargingEntity.Name;
         }
+
         function loadAllControls() {
             return utilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadEntityTypeSelector]).catch(function (error) {
                 vrNotificationService.notifyExceptionWithClose(error, $scope);
@@ -167,6 +194,7 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
+
         function GetStatusChargingSet() {
             return retailBeStatusChargingSetApiService.GetStatusChargingSet(statusChargingSetId).then(function (response) {
                 statusChargingEntity = response;
