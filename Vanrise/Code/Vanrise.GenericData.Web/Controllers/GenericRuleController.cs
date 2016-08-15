@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
+using Vanrise.Security.Entities;
 using Vanrise.Web.Base;
 
 namespace Vanrise.GenericData.Web.Controllers
@@ -14,10 +15,15 @@ namespace Vanrise.GenericData.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "GenericRule")]
     public class GenericRuleController : Vanrise.Web.Base.BaseAPIController
     {
+        GenericRuleDefinitionManager _manager = new GenericRuleDefinitionManager();
+
         [HttpPost]
         [Route("GetFilteredGenericRules")]
         public object GetFilteredGenericRules(Vanrise.Entities.DataRetrievalInput<GenericRuleQuery> input)
         {
+            if (!_manager.DoesUserHaveViewAccess(input.Query.RuleDefinitionId))
+                return GetUnauthorizedResponse();
+            
             var manager = GetManager(input.Query.RuleDefinitionId);
             return GetWebResponse(input, manager.GetFilteredRules(input));
         }
@@ -32,18 +38,39 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpPost]
         [Route("AddGenericRule")]
-        public Vanrise.Entities.InsertOperationOutput<GenericRuleDetail> AddGenericRule(GenericRule rule)
+        public object AddGenericRule(GenericRule rule)
         {
+            if (!DoesUserHaveAddAccess(rule.DefinitionId))
+             return   GetUnauthorizedResponse();
+
             var manager = GetManager(rule.DefinitionId);
             return manager.AddGenericRule(rule);
         }
 
+        [HttpGet]
+        [Route("DoesUserHaveAddAccess")]
+        public bool DoesUserHaveAddAccess(int ruleDefinitionId)
+        {
+            return _manager.DoesUserHaveAddAccess(ruleDefinitionId);
+        }
+
         [HttpPost]
         [Route("UpdateGenericRule")]
-        public Vanrise.Entities.UpdateOperationOutput<GenericRuleDetail> UpdateGenericRule(GenericRule rule)
+        public object UpdateGenericRule(GenericRule rule)
         {
+            if (!DoesUserHaveEditAccess(rule.DefinitionId))
+                return GetUnauthorizedResponse();
+
             var manager = GetManager(rule.DefinitionId);
             return manager.UpdateGenericRule(rule);
+           
+        }
+
+        [HttpGet]
+        [Route("DoesUserHaveEditAccess")]
+        public bool DoesUserHaveEditAccess(int ruleDefinitionId)
+        {
+            return _manager.DoesUserHaveEditAccess(ruleDefinitionId);
         }
 
         [HttpPost]
@@ -58,7 +85,7 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
             GenericRuleDefinition ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(ruleDefinitionId);
-
+            
             GenericRuleTypeConfigManager ruleTypeManager = new GenericRuleTypeConfigManager();
             GenericRuleTypeConfig ruleTypeConfig = ruleTypeManager.GetGenericRuleTypeById(ruleDefinition.SettingsDefinition.ConfigId);
 

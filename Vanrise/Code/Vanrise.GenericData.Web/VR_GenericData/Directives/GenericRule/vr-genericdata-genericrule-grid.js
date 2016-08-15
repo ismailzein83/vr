@@ -115,7 +115,12 @@
                 $scope.gridMenuActions = [{
                     name: 'Edit',
                     clicked: editGenericRule,
+                    haspermission: hasEditGenericRulePermission
                 }];
+            }
+
+            function hasEditGenericRulePermission(genericRule) {
+                return VR_GenericData_GenericRuleAPIService.DoesUserHaveEditAccess(genericRule.Entity.DefinitionId);
             }
 
             function editGenericRule(genericRule) {

@@ -11,11 +11,11 @@
                             <vr-section title="Menu Location">
                                 <vr-validator validate="scopeModel.validateMenuLocation()">
                                     <vr-treeview on-ready="scopeModel.onTreeReady"
-                                                    datavaluefield="Id"
-                                                    datatextfield="Name"
-                                                    datachildrenfield="Childs"
-                                                    selecteditem="scopeModel.selectedMenuItem"
-                                                    wholerow>
+                                                 datavaluefield="Id"
+                                                 datatextfield="Name"
+                                                 datachildrenfield="Childs"
+                                                 selecteditem="scopeModel.selectedMenuItem"
+                                                 wholerow>
                                     </vr-treeview>
                                 </vr-validator>
                             </vr-section>
@@ -43,6 +43,31 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
+
+                <vr-tab header="'Security'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-section title="View Security">
+                                <vr-sec-requiredpermission-grid on-ready="scopeModel.onViewRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-section title="Add Security">
+                                <vr-sec-requiredpermission-grid on-ready="scopeModel.onAddRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-section title="Edit Security">
+                                <vr-sec-requiredpermission-grid on-ready="scopeModel.onEditRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+
             </vr-tabs>
         </vr-form>
     </vr-modalbody>

@@ -29,6 +29,15 @@
         var settingsDirectiveAPI;
         var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var viewPermissionAPI;
+        var viewPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var addPermissionAPI;
+        var addPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var editPermissionAPI;
+        var editPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
 
 
 
@@ -67,6 +76,19 @@
                 settingsDirectiveAPI = api;
                 settingsDirectiveReadyDeferred.resolve();
             };
+
+            $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
+                viewPermissionAPI = api;
+                viewPermissionReadyDeferred.resolve();
+            }
+            $scope.scopeModel.onAddRequiredPermissionReady = function (api) {
+                addPermissionAPI = api;
+                addPermissionReadyDeferred.resolve();
+            }
+            $scope.scopeModel.onEditRequiredPermissionReady = function (api) {
+                editPermissionAPI = api;
+                editPermissionReadyDeferred.resolve();
+            }
 
             $scope.scopeModel.save = function () {
                 if (isEditMode)
@@ -123,7 +145,7 @@
             }
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTree, loadCriteriaDirective, loadSettingsDirective, loadObjectDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTree, loadCriteriaDirective, loadSettingsDirective, loadObjectDirective, loadViewRequiredPermission, loadAddRequiredPermission, loadEditRequiredPermission]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -220,6 +242,57 @@
                 });
 
                 return settingsDirectiveLoadDeferred.promise;
+            }
+            function loadViewRequiredPermission() {
+                var viewPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+
+                viewPermissionReadyDeferred.promise.then(function () {
+                    var payload;
+
+                    if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.Security != undefined && genericRuleDefinitionEntity.Security.ViewRequiredPermission != null) {
+                        payload = {
+                            data: genericRuleDefinitionEntity.Security.ViewRequiredPermission
+                        };
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(viewPermissionAPI, payload, viewPermissionLoadDeferred);
+                });
+
+                return viewPermissionLoadDeferred.promise;
+            }
+            function loadAddRequiredPermission() {
+                var addPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+
+                addPermissionReadyDeferred.promise.then(function () {
+                    var payload;
+
+                    if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.Security != undefined && genericRuleDefinitionEntity.Security.AddRequiredPermission != null) {
+                        payload = {
+                            data: genericRuleDefinitionEntity.Security.AddRequiredPermission
+                        };
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(addPermissionAPI, payload, addPermissionLoadDeferred);
+                });
+
+                return addPermissionLoadDeferred.promise;
+            }
+            function loadEditRequiredPermission() {
+                var editPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+
+                editPermissionReadyDeferred.promise.then(function () {
+                    var payload;
+
+                    if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.Security != undefined && genericRuleDefinitionEntity.Security.EditRequiredPermission != null) {
+                        payload = {
+                            data: genericRuleDefinitionEntity.Security.EditRequiredPermission
+                        };
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(editPermissionAPI, payload, editPermissionLoadDeferred);
+                });
+
+                return editPermissionLoadDeferred.promise;
             }
         }
 
@@ -321,7 +394,12 @@
                 Name: $scope.scopeModel.name,
                 CriteriaDefinition: criteriaDirectiveAPI.getData(),
                 SettingsDefinition: settingsDirectiveAPI.getData(),
-                Objects: objectDirectiveAPI.getData()
+                Objects: objectDirectiveAPI.getData(),
+                Security: {
+                    ViewRequiredPermission: viewPermissionAPI.getData(),
+                    AddRequiredPermission:  addPermissionAPI.getData(),
+                    EditRequiredPermission: editPermissionAPI.getData()
+                }
             };
         }
         function buildViewObjectFromScope(genericRuleDefinitionId) {

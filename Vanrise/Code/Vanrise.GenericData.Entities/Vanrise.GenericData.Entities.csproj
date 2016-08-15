@@ -63,6 +63,7 @@
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
     <Compile Include="BusinessManagers\IDataRecordStorageManager.cs" />
+    <Compile Include="BusinessManagers\IGenericRuleDefinitionManager.cs" />
     <Compile Include="BusinessManagers\IDataRecordTypeManager.cs" />
     <Compile Include="BusinessManagers\IGenericBusinessEntityManager.cs" />
     <Compile Include="DataRecordCondition.cs" />
@@ -71,13 +72,13 @@
     <Compile Include="DataRecordFieldChoice\DataRecordFieldChoiceInfo.cs" />
     <Compile Include="DataRecordFieldChoice\DataRecordFieldChoiceQuery.cs" />
     <Compile Include="DataRecords\DataRecord.cs" />
-    <Compile Include="DataRecords\RecordBatch.cs" />
     <Compile Include="DataRecords\DataRecordColumn.cs" />
     <Compile Include="DataRecords\DataRecordDetailBigResult.cs" />
     <Compile Include="DataRecords\DataRecordSearchPageSettings.cs" />
     <Compile Include="DataRecords\Filters.cs" />
     <Compile Include="DataRecords\DataRecordDetail.cs" />
     <Compile Include="DataRecords\DataRecordFieldValue.cs" />
+    <Compile Include="DataRecords\RecordBatch.cs" />
     <Compile Include="DataRecordTypes\DataRecordCalculatedField.cs" />
     <Compile Include="DataRecordTypes\DataRecordFieldFormulaConfig.cs" />
     <Compile Include="DataRecordTypes\DataRecordFieldInfoFilter.cs" />

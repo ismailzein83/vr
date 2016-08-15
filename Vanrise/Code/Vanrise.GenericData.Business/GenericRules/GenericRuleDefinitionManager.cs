@@ -9,10 +9,12 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
+using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.GenericData.Business
 {
-    public class GenericRuleDefinitionManager
+    public class GenericRuleDefinitionManager : IGenericRuleDefinitionManager
     {
         #region Public Methods
 
@@ -69,6 +71,7 @@ namespace Vanrise.GenericData.Business
             if (added)
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
             else
@@ -116,7 +119,32 @@ namespace Vanrise.GenericData.Business
             return allViews.FirstOrDefault(v => (v.Settings as GenericRuleViewSettings) != null && (v.Settings as GenericRuleViewSettings).RuleDefinitionId == genericRuleDefinitionId);
         }
 
-        public 
+        public bool DoesUserHaveViewAccess(int genericRuleDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveViewAccess(userId, genericRuleDefinitionId);
+        }
+        public bool DoesUserHaveViewAccess(int userId, int genericRuleDefinitionId)
+        {
+            var genericRuleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(genericRuleDefinitionId);
+            if (genericRuleDefinition != null && genericRuleDefinition.Security != null && genericRuleDefinition.Security.ViewRequiredPermission != null)
+                return DoesUserHaveAccess(userId, genericRuleDefinition.Security.ViewRequiredPermission);
+            return true;
+        }
+        public bool DoesUserHaveAddAccess(int genericRuleDefinitionId)
+        {
+            var genericRuleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(genericRuleDefinitionId);
+            if (genericRuleDefinition != null && genericRuleDefinition.Security != null && genericRuleDefinition.Security.AddRequiredPermission != null)
+                return DoesUserHaveAccess(genericRuleDefinition.Security.AddRequiredPermission);
+            return true;
+        }
+        public bool DoesUserHaveEditAccess(int genericRuleDefinitionId)
+        {
+            var genericRuleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(genericRuleDefinitionId);
+            if (genericRuleDefinition != null && genericRuleDefinition.Security != null && genericRuleDefinition.Security.EditRequiredPermission != null)
+                return DoesUserHaveAccess(genericRuleDefinition.Security.EditRequiredPermission);
+            return true;
+        }
 
         #endregion
 
@@ -134,6 +162,23 @@ namespace Vanrise.GenericData.Business
                 });
         }
 
+        private bool DoesUserHaveAccess(RequiredPermissionSettings requiredPermission)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            SecurityManager secManager = new SecurityManager();
+            if (!secManager.IsAllowed(requiredPermission, userId))
+                return false;
+            return true;
+
+        }
+        private bool DoesUserHaveAccess(int userId, RequiredPermissionSettings requiredPermission)
+        {
+            SecurityManager secManager = new SecurityManager();
+            if (!secManager.IsAllowed(requiredPermission, userId))
+                return false;
+            return true;
+
+        }
         #endregion
 
         #region Private Classes

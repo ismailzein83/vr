@@ -29,7 +29,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
-                    <vr-button type="Add" data-onclick="addGenericRule"></vr-button>
+                    <vr-button type="Add" data-onclick="addGenericRule" haspermission="hasAddGenericRulePermission"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>

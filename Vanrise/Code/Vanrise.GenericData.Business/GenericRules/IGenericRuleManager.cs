@@ -11,7 +11,6 @@ namespace Vanrise.GenericData.Business
     public interface IGenericRuleManager
     {
         IDataRetrievalResult<GenericRuleDetail> GetFilteredRules(DataRetrievalInput<GenericRuleQuery> input);
-
         GenericRule GetGenericRule(int ruleId);
 
         Vanrise.Entities.InsertOperationOutput<GenericRuleDetail> AddGenericRule(GenericRule rule);

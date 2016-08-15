@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    genericRuleManagementController.$inject = ['$scope', 'VRNavigationService', 'VR_GenericData_GenericRule', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_GenericData_GenericRuleTypeConfigAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    genericRuleManagementController.$inject = ['$scope', 'VRNavigationService', 'VR_GenericData_GenericRule','VR_GenericData_GenericRuleAPIService' ,'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_GenericData_GenericRuleTypeConfigAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function genericRuleManagementController($scope, VRNavigationService, VR_GenericData_GenericRule, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_GenericData_GenericRuleTypeConfigAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function genericRuleManagementController($scope, VRNavigationService, VR_GenericData_GenericRule, VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_GenericData_GenericRuleTypeConfigAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var gridAPI;
 
@@ -46,7 +46,9 @@
                 };
                 gridAPI.loadGrid(defFilter);
             };
-
+            $scope.hasAddGenericRulePermission = function () {
+                return VR_GenericData_GenericRuleAPIService.DoesUserHaveAddAccess(ruleDefinitionId);
+            }
             $scope.search = function () {
                 var filter = getFilterObject();
                 return gridAPI.loadGrid(filter);

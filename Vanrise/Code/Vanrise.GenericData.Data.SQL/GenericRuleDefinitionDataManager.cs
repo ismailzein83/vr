@@ -59,7 +59,8 @@ namespace Vanrise.GenericData.Data.SQL
                 Name = (string)reader["Name"],
                 CriteriaDefinition = details.CriteriaDefinition,
                 SettingsDefinition = details.SettingsDefinition,
-                Objects = details.Objects
+                Objects = details.Objects,
+                Security = details.Security
             };
         }
 

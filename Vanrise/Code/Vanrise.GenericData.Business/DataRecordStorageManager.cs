@@ -35,11 +35,6 @@ namespace Vanrise.GenericData.Business
             if (input.Query.Columns == null)
                 throw new NullReferenceException("input.Query.Columns");
 
-            if (CheckRecordStoragesAccess(SecurityContext.Current.GetLoggedInUserId(), input.Query.DataRecordStorageIds).Count < input.Query.DataRecordStorageIds.Count)
-            {
-                throw new UnauthorizedAccessException();
-            }
-
             input.Query.Columns = new HashSet<string>(input.Query.Columns).ToList();
 
             var recordTypeManager = new DataRecordTypeManager();
@@ -222,19 +217,6 @@ namespace Vanrise.GenericData.Business
 
              dataManager.GetDataRecords(from, to, onItemReady);
         }
-
-        public List<int> CheckRecordStoragesAccess(int userId , List<int> dataRecordStorages )
-        {
-            var allRecordStorages = GetCachedDataRecordStorages().Where(k => dataRecordStorages.Contains(k.Key)).Select(v => v.Value).ToList();
-            List<int> filterdRecrodsIds = new List<int>();
-
-            foreach (var r in allRecordStorages)
-            {
-                if (DoesUserHaveAccessOnRecordStorage(userId , r) )
-                    filterdRecrodsIds.Add(r.DataRecordStorageId);
-            }
-            return filterdRecrodsIds;
-        }
         public List<int> CheckRecordStoragesAccess(List<int> dataRecordStorages)
         {
             var allRecordStorages = GetCachedDataRecordStorages().Where(k => dataRecordStorages.Contains(k.Key)).Select(v => v.Value).ToList();
@@ -247,7 +229,11 @@ namespace Vanrise.GenericData.Business
             }
             return filterdRecrodsIds;
         }
+        public bool DoesUserHaveAccess(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)        
+        {
 
+            return this.DoesUserHaveAccess(SecurityContext.Current.GetLoggedInUserId(), input.Query.DataRecordStorageIds);
+        }
         public bool DoesUserHaveAccess(int userId, List<int> dataRecordStorages)
         {
             var allRecordStorages = GetCachedDataRecordStorages().Where(k => dataRecordStorages.Contains(k.Key)).Select(v => v.Value).ToList();

@@ -20,6 +20,7 @@ namespace Vanrise.GenericData.Business
         {
             var ruleDefinition = GetRuleDefinition(input.Query.RuleDefinitionId);
 
+
             Func<T, bool> filterExpression = (rule) => rule.DefinitionId == input.Query.RuleDefinitionId
                 && (string.IsNullOrEmpty(input.Query.Description) || (!string.IsNullOrEmpty(rule.Description) && rule.Description.IndexOf(input.Query.Description, StringComparison.OrdinalIgnoreCase) >= 0))
                 && (!input.Query.EffectiveDate.HasValue || (rule.BeginEffectiveTime <= input.Query.EffectiveDate.Value && (!rule.EndEffectiveTime.HasValue || input.Query.EffectiveDate.Value < rule.EndEffectiveTime)))
@@ -29,6 +30,8 @@ namespace Vanrise.GenericData.Business
             var allRules = GetAllRules();
             return DataRetrievalManager.Instance.ProcessResult(input, allRules.ToBigResult(input, filterExpression, (rule) => MapToDetails(rule)));
         }
+
+
 
         public GenericRule GetGenericRule(int ruleId)
         {
