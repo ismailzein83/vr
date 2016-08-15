@@ -1,5 +1,6 @@
 ﻿using Retail.BusinessEntity.Business;
 using Retail.BusinessEntity.Entities;
+using Retail.BusinessEntity.Entities.RecurringPeriod;
 using Retail.BusinessEntity.Entities.Status;
 using System;
 using System.Collections.Generic;
@@ -45,6 +46,12 @@ namespace Retail.BusinessEntity.Web.Controllers
         public List<EntityStatusChargeInfo> GetStatusChargeInfos(int entityTypeId)
         {
             return _manager.GetStatusChargeInfos(entityTypeId);
+        }
+        [HttpGet]
+        [Route("GetRecurringPeriodExtensionConfigs")]
+        public IEnumerable<RecurringPeriodConfig> GetRecurringPeriodExtensionConfigs()
+        {
+            return _manager.GetRecurringPeriodExtensionConfigs();
         }
     }
 }
