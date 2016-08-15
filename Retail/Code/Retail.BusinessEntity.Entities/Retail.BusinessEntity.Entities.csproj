@@ -138,6 +138,7 @@
     <Compile Include="Package\PackageServiceDetail.cs" />
     <Compile Include="Package\PackageServiceQuery.cs" />
     <Compile Include="Package\ServicePackageItemConfig.cs" />
+    <Compile Include="RecurringPeriod\RecurringPeriodConfig.cs" />
     <Compile Include="ServiceType\ServiceType.cs" />
     <Compile Include="Package\Package.cs" />
     <Compile Include="Package\PackageDetail.cs" />
