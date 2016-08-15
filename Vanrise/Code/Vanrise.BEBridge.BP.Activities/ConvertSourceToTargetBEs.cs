@@ -10,8 +10,11 @@ namespace Vanrise.BEBridge.BP.Activities
 {
     public sealed class ConvertSourceToTargetBEs : CodeActivity
     {
+        [RequiredArgument]
         public InArgument<SourceBEBatch> SourceBEBatch { get; set; }
+        [RequiredArgument]
         public InArgument<TargetBEConvertor> TargetConverter { get; set; }
+        [RequiredArgument]
         public InOutArgument<List<ITargetBE>> TargetBEs { get; set; }
 
 

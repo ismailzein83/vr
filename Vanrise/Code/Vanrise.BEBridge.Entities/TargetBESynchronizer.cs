@@ -14,7 +14,7 @@ namespace Vanrise.BEBridge.Entities
 
         public abstract void InsertBEs(ITargetBESynchronizerInsertBEsContext context);
 
-        public abstract void UpdateBEs(ITargetBESynchronizerInsertBEsContext context);
+        public abstract void UpdateBEs(ITargetBESynchronizerUpdateBEsContext context);
     }
 
     public interface ITargetBESynchronizerTryGetExistingBEContext

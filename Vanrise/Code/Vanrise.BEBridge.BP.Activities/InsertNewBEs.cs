@@ -3,21 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Activities;
+using Vanrise.BEBridge.Entities;
 
 namespace Vanrise.BEBridge.BP.Activities
 {
 
     public sealed class InsertNewBEs : CodeActivity
     {
-        // Define an activity input argument of type string
-        public InArgument<string> Text { get; set; }
+        [RequiredArgument]
+        public InArgument<TargetBESynchronizer> TargetBESynchronizer { get; set; }
 
-        // If your activity returns a value, derive from CodeActivity<TResult>
-        // and return the value from the Execute method.
         protected override void Execute(CodeActivityContext context)
         {
-            // Obtain the runtime value of the Text input argument
-            string text = context.GetValue(this.Text);
+            TargetSynchronizerInsertContext targetSynchronizerContext = new TargetSynchronizerInsertContext();
+            this.TargetBESynchronizer.Get(context).InsertBEs(targetSynchronizerContext);
+        }
+
+        private class TargetSynchronizerInsertContext : ITargetBESynchronizerInsertBEsContext
+        {
+            public List<ITargetBE> TargetBE
+            {
+                get;
+                set;
+            }
         }
     }
 }

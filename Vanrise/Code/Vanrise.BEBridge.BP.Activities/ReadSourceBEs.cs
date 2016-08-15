@@ -18,8 +18,9 @@ namespace Vanrise.BEBridge.BP.Activities
 
     public sealed class ReadSourceBEs : BaseAsyncActivity<ReadSourceBEsInput>
     {
+        [RequiredArgument]
         public InArgument<SourceBEReader> SourceReader { get; set; }
-
+        [RequiredArgument]
         public InOutArgument<SourceBEBatch> SourceBatch { get; set; }
         protected override void DoWork(ReadSourceBEsInput inputArgument, AsyncActivityHandle handle)
         {
