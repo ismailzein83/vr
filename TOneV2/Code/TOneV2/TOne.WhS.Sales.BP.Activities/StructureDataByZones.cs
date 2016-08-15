@@ -41,54 +41,51 @@ namespace TOne.WhS.Sales.BP.Activities
             IEnumerable<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd = this.SaleZoneRoutingProductsToAdd.Get(context);
             IEnumerable<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose = this.SaleZoneRoutingProductsToClose.Get(context);
 
-            Dictionary<string, DataByZone> dataGroupedByZoneName = new Dictionary<string, DataByZone>();
+            Dictionary<string, DataByZone> dataByZoneName = new Dictionary<string, DataByZone>();
             DataByZone dataByZone;
 
             foreach (RateToChange rateToChange in ratesToChange)
             {
-                if (!dataGroupedByZoneName.TryGetValue(rateToChange.ZoneName, out dataByZone))
-                {
-                    dataByZone = new DataByZone();
-                    dataByZone.ZoneName = rateToChange.ZoneName;
-                    dataGroupedByZoneName.Add(rateToChange.ZoneName, dataByZone);
-                }
-                dataByZone.RateToChange = rateToChange;
+                if (!dataByZoneName.TryGetValue(rateToChange.ZoneName, out dataByZone))
+                    AddEmptyDataByZone(dataByZoneName, rateToChange.ZoneName, out dataByZone);
+                dataByZone.OtherRatesToChange.Add(rateToChange);
             }
 
             foreach (RateToClose rateToClose in ratesToClose)
             {
-                if (!dataGroupedByZoneName.TryGetValue(rateToClose.ZoneName, out dataByZone))
-                {
-                    dataByZone = new DataByZone();
-                    dataByZone.ZoneName = rateToClose.ZoneName;
-                    dataGroupedByZoneName.Add(rateToClose.ZoneName, dataByZone);
-                }
-                dataByZone.RateToClose = rateToClose;
+                if (!dataByZoneName.TryGetValue(rateToClose.ZoneName, out dataByZone))
+                    AddEmptyDataByZone(dataByZoneName, rateToClose.ZoneName, out dataByZone);
+                dataByZone.OtherRatesToClose.Add(rateToClose);
             }
 
             foreach (SaleZoneRoutingProductToAdd routingProductToAdd in saleZoneRoutingProductsToAdd)
             {
-                if (!dataGroupedByZoneName.TryGetValue(routingProductToAdd.ZoneName, out dataByZone))
-                {
-                    dataByZone = new DataByZone();
-                    dataByZone.ZoneName = routingProductToAdd.ZoneName;
-                    dataGroupedByZoneName.Add(routingProductToAdd.ZoneName, dataByZone);
-                }
+                if (!dataByZoneName.TryGetValue(routingProductToAdd.ZoneName, out dataByZone))
+                    AddEmptyDataByZone(dataByZoneName, routingProductToAdd.ZoneName, out dataByZone);
                 dataByZone.SaleZoneRoutingProductToAdd = routingProductToAdd;
             }
 
             foreach (SaleZoneRoutingProductToClose routingProductToClose in saleZoneRoutingProductsToClose)
             {
-                if (!dataGroupedByZoneName.TryGetValue(routingProductToClose.ZoneName, out dataByZone))
-                {
-                    dataByZone = new DataByZone();
-                    dataByZone.ZoneName = routingProductToClose.ZoneName;
-                    dataGroupedByZoneName.Add(routingProductToClose.ZoneName, dataByZone);
-                }
+                if (!dataByZoneName.TryGetValue(routingProductToClose.ZoneName, out dataByZone))
+                    AddEmptyDataByZone(dataByZoneName, routingProductToClose.ZoneName, out dataByZone);
                 dataByZone.SaleZoneRoutingProductToClose = routingProductToClose;
             }
 
-            this.DataByZone.Set(context, dataGroupedByZoneName.Values);
+            this.DataByZone.Set(context, dataByZoneName.Values);
         }
+
+        #region Private Methods
+
+        private void AddEmptyDataByZone(Dictionary<string, DataByZone> dataByZoneName, string zoneName, out DataByZone dataByZone)
+        {
+            dataByZone = new DataByZone();
+            dataByZone.ZoneName = zoneName;
+            dataByZone.OtherRatesToChange = new List<RateToChange>();
+            dataByZone.OtherRatesToClose = new List<RateToClose>();
+            dataByZoneName.Add(zoneName, dataByZone);
+        }
+        
+        #endregion
     }
 }
