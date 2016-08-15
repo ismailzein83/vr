@@ -62,6 +62,10 @@
     </XamlAppDef>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Analytic.BP\Vanrise.Analytic.BP.csproj">
+      <Project>{82976F57-46A5-4809-93AA-87FA42660979}</Project>
+      <Name>Vanrise.Analytic.BP</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.BEBridge.BP.Activities\Vanrise.BEBridge.BP.Activities.csproj">
       <Project>{55a88c24-8be3-495b-93f7-0b7e060b5f44}</Project>
       <Name>Vanrise.BEBridge.BP.Activities</Name>

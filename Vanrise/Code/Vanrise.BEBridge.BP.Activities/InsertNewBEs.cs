@@ -17,9 +17,12 @@ namespace Vanrise.BEBridge.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
+            TargetBESynchronizer targetSynchronizer = this.TargetBESynchronizer.Get(context);
+            if (targetSynchronizer == null)
+                throw new NullReferenceException("targetSynchronizer");
             TargetSynchronizerInsertContext targetSynchronizerContext = new TargetSynchronizerInsertContext();
             targetSynchronizerContext.TargetBE = TargetBEs.Get(context);
-            this.TargetBESynchronizer.Get(context).InsertBEs(targetSynchronizerContext);
+            targetSynchronizer.InsertBEs(targetSynchronizerContext);
         }
 
         private class TargetSynchronizerInsertContext : ITargetBESynchronizerInsertBEsContext

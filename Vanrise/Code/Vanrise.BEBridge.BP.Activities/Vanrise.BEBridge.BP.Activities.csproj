@@ -80,6 +80,7 @@
     <Compile Include="InsertNewBEs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadSourceBEs.cs" />
+    <Compile Include="SetTargetBEs.cs" />
     <Compile Include="UpdateExistingBEs.cs" />
   </ItemGroup>
   <ItemGroup>

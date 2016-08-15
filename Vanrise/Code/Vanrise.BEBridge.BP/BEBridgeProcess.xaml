@@ -41,12 +41,13 @@
       <AssemblyReference>Microsoft.CSharp</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Analytic.BP</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.MainExtensions</AssemblyReference>
-      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.BP</AssemblyReference>
     </sco:Collection>
@@ -72,6 +73,8 @@
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
           <Sequence.Variables>
             <Variable x:TypeArguments="vbe:BEReceiveDefinition" Name="beRecieveDefinition" />
+            <Variable x:TypeArguments="scg:List(vbe:ITargetBE)" Name="targetBEsToInsert" />
+            <Variable x:TypeArguments="scg:List(vbe:ITargetBE)" Name="targetBEsToUpdate" />
           </Sequence.Variables>
           <vbba1:GetBEReceiveDefinition sap2010:WorkflowViewState.IdRef="GetBEReceiveDefinition_1">
             <vbba1:GetBEReceiveDefinition.BEReceiveDefinition>
@@ -97,24 +100,46 @@
               </InArgument>
             </vbba1:ReadSourceBEs.SourceReader>
           </vbba1:ReadSourceBEs>
+          <vbba1:ConvertSourceToTargetBEs sap2010:WorkflowViewState.IdRef="ConvertSourceToTargetBEs_1">
+            <vbba1:ConvertSourceToTargetBEs.SourceBEBatch>
+              <InArgument x:TypeArguments="vbe:SourceBEBatch">
+                <mca:CSharpValue x:TypeArguments="vbe:SourceBEBatch">sourceBEBatch</mca:CSharpValue>
+              </InArgument>
+            </vbba1:ConvertSourceToTargetBEs.SourceBEBatch>
+            <vbba1:ConvertSourceToTargetBEs.TargetBEs>
+              <InOutArgument x:TypeArguments="scg:List(vbe:ITargetBE)">
+                <mca:CSharpReference x:TypeArguments="scg:List(vbe:ITargetBE)">targetBEs</mca:CSharpReference>
+              </InOutArgument>
+            </vbba1:ConvertSourceToTargetBEs.TargetBEs>
+            <vbba1:ConvertSourceToTargetBEs.TargetConverter>
+              <InArgument x:TypeArguments="vbe:TargetBEConvertor">
+                <mca:CSharpValue x:TypeArguments="vbe:TargetBEConvertor">beRecieveDefinition.Settings.TargetBEConvertor</mca:CSharpValue>
+              </InArgument>
+            </vbba1:ConvertSourceToTargetBEs.TargetConverter>
+          </vbba1:ConvertSourceToTargetBEs>
+          <vbba1:SetTargetBEs sap2010:WorkflowViewState.IdRef="SetTargetBEs_1">
+            <vbba1:SetTargetBEs.TargetBESynchronizer>
+              <InArgument x:TypeArguments="vbe:TargetBESynchronizer">
+                <mca:CSharpValue x:TypeArguments="vbe:TargetBESynchronizer">beRecieveDefinition.Settings.TargetBESynchronizer</mca:CSharpValue>
+              </InArgument>
+            </vbba1:SetTargetBEs.TargetBESynchronizer>
+            <vbba1:SetTargetBEs.TargetBEs>
+              <InArgument x:TypeArguments="scg:List(vbe:ITargetBE)">
+                <mca:CSharpValue x:TypeArguments="scg:List(vbe:ITargetBE)">targetBEs</mca:CSharpValue>
+              </InArgument>
+            </vbba1:SetTargetBEs.TargetBEs>
+            <vbba1:SetTargetBEs.TargetsToInsert>
+              <OutArgument x:TypeArguments="scg:List(vbe:ITargetBE)">
+                <mca:CSharpReference x:TypeArguments="scg:List(vbe:ITargetBE)">targetBEsToInsert</mca:CSharpReference>
+              </OutArgument>
+            </vbba1:SetTargetBEs.TargetsToInsert>
+            <vbba1:SetTargetBEs.TargetsToUpdate>
+              <OutArgument x:TypeArguments="scg:List(vbe:ITargetBE)">
+                <mca:CSharpReference x:TypeArguments="scg:List(vbe:ITargetBE)">targetBEsToUpdate</mca:CSharpReference>
+              </OutArgument>
+            </vbba1:SetTargetBEs.TargetsToUpdate>
+          </vbba1:SetTargetBEs>
           <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
-            <vbba1:ConvertSourceToTargetBEs sap2010:WorkflowViewState.IdRef="ConvertSourceToTargetBEs_1">
-              <vbba1:ConvertSourceToTargetBEs.SourceBEBatch>
-                <InArgument x:TypeArguments="vbe:SourceBEBatch">
-                  <mca:CSharpValue x:TypeArguments="vbe:SourceBEBatch">sourceBEBatch</mca:CSharpValue>
-                </InArgument>
-              </vbba1:ConvertSourceToTargetBEs.SourceBEBatch>
-              <vbba1:ConvertSourceToTargetBEs.TargetBEs>
-                <InOutArgument x:TypeArguments="scg:List(vbe:ITargetBE)">
-                  <mca:CSharpReference x:TypeArguments="scg:List(vbe:ITargetBE)">targetBEs</mca:CSharpReference>
-                </InOutArgument>
-              </vbba1:ConvertSourceToTargetBEs.TargetBEs>
-              <vbba1:ConvertSourceToTargetBEs.TargetConverter>
-                <InArgument x:TypeArguments="vbe:TargetBEConvertor">
-                  <mca:CSharpValue x:TypeArguments="vbe:TargetBEConvertor">beRecieveDefinition.Settings.TargetBEConvertor</mca:CSharpValue>
-                </InArgument>
-              </vbba1:ConvertSourceToTargetBEs.TargetConverter>
-            </vbba1:ConvertSourceToTargetBEs>
             <vbba1:InsertNewBEs sap2010:WorkflowViewState.IdRef="InsertNewBEs_1">
               <vbba1:InsertNewBEs.TargetBESynchronizer>
                 <InArgument x:TypeArguments="vbe:TargetBESynchronizer">
@@ -123,7 +148,7 @@
               </vbba1:InsertNewBEs.TargetBESynchronizer>
               <vbba1:InsertNewBEs.TargetBEs>
                 <InArgument x:TypeArguments="scg:List(vbe:ITargetBE)">
-                  <mca:CSharpValue x:TypeArguments="scg:List(vbe:ITargetBE)">targetBEs</mca:CSharpValue>
+                  <mca:CSharpValue x:TypeArguments="scg:List(vbe:ITargetBE)">targetBEsToInsert</mca:CSharpValue>
                 </InArgument>
               </vbba1:InsertNewBEs.TargetBEs>
             </vbba1:InsertNewBEs>
@@ -135,7 +160,7 @@
               </vbba1:UpdateExistingBEs.TargetBESynchronizer>
               <vbba1:UpdateExistingBEs.TargetBEs>
                 <InArgument x:TypeArguments="scg:List(vbe:ITargetBE)">
-                  <mca:CSharpValue x:TypeArguments="scg:List(vbe:ITargetBE)">targetBEs</mca:CSharpValue>
+                  <mca:CSharpValue x:TypeArguments="scg:List(vbe:ITargetBE)">targetBEsToUpdate</mca:CSharpValue>
                 </InArgument>
               </vbba1:UpdateExistingBEs.TargetBEs>
             </vbba1:UpdateExistingBEs>
@@ -143,32 +168,33 @@
         </Sequence>
       </ActivityAction>
     </ForEach>
-    <sads:DebugSymbol.Symbol>dzxDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQkVCcmlkZ2UuQlBcQkVCcmlkZ2VQcm9jZXNzLnhhbWwVNgOTAQ4CAQE+BZEBDwIBAkELQXQCAW1ICY8BFAIBA0wLVyoCAVpYC2MhAgFHZAuOARYCAQRPEU95AgFkVBFUYAIBW2ARYIQBAgFRWxFbbQIBSGUNdS4CASt2DYEBIgIBGIIBDY0BJwIBBW0TbXECAT5yE3KMAQIBNWgTaGcCASx5E3mSAQIBIn4TfmkCARmFAROFAZIBAgEPigETigFpAgEG</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dzxDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQkVCcmlkZ2UuQlBcQkVCcmlkZ2VQcm9jZXNzLnhhbWwaNwOsAQ4CAQE/BaoBDwIBAkILQnQDAbABSQmoARQCAQNPC1oqAwGZAVsLZiEDAYIBZwt3LAIBYHgLjQEgAgEzjgELpwEWAgEEUhFSeQMBpQFXEVdgAwGaAWMRY4QBAwGOAV4RXm0DAYMBbxFvbwIBd3QRdIoBAgFsahFqZQIBYXsRe5ABAgFVgAERgAFnAgFKigERigF3AgE/hQERhQF3AgE0jwENmgEiAgEcmwENpgEnAgEFkgETkgGSAQIBKJcBE5cBcQIBHZ4BE54BkgECARGjAROjAXECAQY=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="GetBEReceiveDefinition_1" sap:VirtualizedContainerService.HintSize="794,22" />
-      <sap2010:ViewStateData Id="ReadSourceBEs_1" sap:VirtualizedContainerService.HintSize="794,22" />
-      <sap2010:ViewStateData Id="ConvertSourceToTargetBEs_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="GetBEReceiveDefinition_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="ReadSourceBEs_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="ConvertSourceToTargetBEs_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="SetTargetBEs_1" sap:VirtualizedContainerService.HintSize="554,22" />
       <sap2010:ViewStateData Id="InsertNewBEs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="UpdateExistingBEs_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="816,334">
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="576,458">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="846,484" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="868,608">
+      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="606,608" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="628,732">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.BEBridge.BP.BEBridgeProcess_1" sap:VirtualizedContainerService.HintSize="908,688" />
+      <sap2010:ViewStateData Id="Vanrise.BEBridge.BP.BEBridgeProcess_1" sap:VirtualizedContainerService.HintSize="668,812" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
