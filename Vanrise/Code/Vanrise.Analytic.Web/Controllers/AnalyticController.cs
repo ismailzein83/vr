@@ -19,14 +19,13 @@ namespace Vanrise.Analytic.Web.Controllers
         [Route("GetFilteredRecords")]
         public Object GetFilteredRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
-            try {
-                AnalyticManager manager = new AnalyticManager();
+            AnalyticManager manager = new AnalyticManager();
+            if (manager.CheckAnalyticRequiredPermission(input))
+
                 return GetWebResponse(input, manager.GetFilteredRecords(input));
-            }
-            catch (UnauthorizedAccessException )
-            {
-                return GetUnauthorizedResponse();
-            }
+
+            return GetUnauthorizedResponse();
+          
         }
         [HttpPost]
         [Route("GetRecordSearchFilterGroup")]
