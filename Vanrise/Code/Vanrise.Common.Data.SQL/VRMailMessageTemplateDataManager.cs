@@ -20,7 +20,6 @@ namespace Vanrise.Common.Data.SQL
         }
         #endregion
 
-
         #region Public Methods
 
         public List<VRMailMessageTemplate> GetMailMessageTemplates()
@@ -54,7 +53,6 @@ namespace Vanrise.Common.Data.SQL
         }
 
         #endregion
-
 
         #region Mappers
 

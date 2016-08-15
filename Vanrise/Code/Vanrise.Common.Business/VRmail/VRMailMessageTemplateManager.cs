@@ -11,7 +11,6 @@ namespace Vanrise.Common.Business
     public class VRMailMessageTemplateManager
     {
         #region Public Methods
-
         public VRMailMessageTemplate GetMailMessageTemplate(Guid vrMailMessageTemplateId)
         {
             Dictionary<Guid, VRMailMessageTemplate> cachedVRMailMessageTemplates = this.GetCachedVRMailMessageTemplates();
@@ -72,9 +71,7 @@ namespace Vanrise.Common.Business
 
             return updateOperationOutput;
         }
-
         #endregion
-
 
         #region Private Classes
 
@@ -91,7 +88,6 @@ namespace Vanrise.Common.Business
 
         #endregion
 
-
         #region Private Methods
 
         Dictionary<Guid, VRMailMessageTemplate> GetCachedVRMailMessageTemplates()
@@ -106,18 +102,21 @@ namespace Vanrise.Common.Business
 
         #endregion
 
-
         #region Mappers
-
         public VRMailMessageTemplateDetail VRMailMessageTemplateDetailMapper(VRMailMessageTemplate vrMailMessageTemplate)
         {
+            VRMailMessageTypeManager vrMailMessageTypeManager = new VRMailMessageTypeManager();
+            VRMailMessageType vrMailMessageType = vrMailMessageTypeManager.GetMailMessageType(vrMailMessageTemplate.VRMailMessageTypeId);
+            string vrMailMessageTypeName = vrMailMessageType != null ? vrMailMessageType.Name : string.Empty;
+
             VRMailMessageTemplateDetail vrMailMessageTemplateDetail = new VRMailMessageTemplateDetail()
             {
-                Entity = vrMailMessageTemplate
+                Entity = vrMailMessageTemplate,
+
+                VRMailMessageTypeName =  vrMailMessageTypeName
             };
             return vrMailMessageTemplateDetail;
         }
-
         #endregion
     }
 }

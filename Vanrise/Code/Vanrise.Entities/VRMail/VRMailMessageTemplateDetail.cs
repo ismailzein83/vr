@@ -9,5 +9,7 @@ namespace Vanrise.Entities
     public class VRMailMessageTemplateDetail
     {
         public VRMailMessageTemplate Entity { get; set; }
+
+        public string VRMailMessageTypeName { get; set; }
     }
 }

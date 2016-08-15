@@ -49,7 +49,6 @@
                     };
                     VRCommon_VRObjectVariableService.addVRObjectVariable(ctrl.objectVariables, onObjectVariableAdded);
                 };
-
                 ctrl.onRemoveObjectVariable = function (objectVariable) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
                         if (confirmed) {
@@ -133,8 +132,6 @@
                 VRCommon_VRObjectVariableService.editVRObjectVariable(objectVariable, ctrl.objectVariables, onObjectVariableUpdated);
             }
             function extendObjectVariableObject(objectVariable) {
-                console.log(objectVariable);
-                console.log(VRObjectTypeDefinitionsInfo);
 
                 if (VRObjectTypeDefinitionsInfo != undefined) {
                     var VRObjectTypeDefinitionInfo;

@@ -165,7 +165,6 @@
                     for (var key in mailMessageTypeObjects) {
                         if (key != "$type") {
                             mailMessageTypeObject = mailMessageTypeObjects[key];
-                            //extendVariableObject(mailMessageTypeObject);
                             $scope.scopeModel.objects.push(mailMessageTypeObject);
 
                             drillDownManager.setDrillDownExtensionObject(mailMessageTypeObject);
@@ -177,6 +176,7 @@
                     loadPromiseDeferred.resolve();
             });
         }
+
         function buildDrillDownTabs() {
             var drillDownTabs = [];
 
@@ -188,41 +188,19 @@
                 objectTypePropertiesTab.title = 'Properties';
                 objectTypePropertiesTab.directive = 'vr-common-objecttypeproperty-grid';
 
-                objectTypePropertiesTab.loadDirective = function (objectTypePropertyGridAPI, parentAccount) {
-                    parentAccount.objectTypePropertyGridAPI = objectTypePropertyGridAPI;
+                objectTypePropertiesTab.loadDirective = function (objectTypePropertyGridAPI, mailMessageTypeObject) {
+                    mailMessageTypeObject.objectTypePropertyGridAPI = objectTypePropertyGridAPI;
                     var objectTypePropertyGridPayload = {
-                        vrObjectTypeDefinitionId: parentAccount.VRObjectTypeDefinitionId
+                        vrObjectTypeDefinitionId: mailMessageTypeObject.VRObjectTypeDefinitionId
                     };
-                    return parentAccount.objectTypePropertyGridAPI.load(objectTypePropertyGridPayload);
+                    return mailMessageTypeObject.objectTypePropertyGridAPI.load(objectTypePropertyGridPayload);
                 };
-
-                //objectTypePropertiesTab.hideDrillDownFunction = function (dataItem) {
-                //    return !dataItem.CanAddSubAccounts;
-                //};
-
-                //objectTypePropertiesTab.parentMenuActions = [{
-                //    name: 'Add Sub Account',
-                //    clicked: function (parentAccount) {
-                //        if (objectTypePropertiesTab.setTabSelected != undefined)
-                //            objectTypePropertiesTab.setTabSelected(parentAccount);
-                //        var onSubAccountAdded = function (addedSubAccount) {
-                //            parentAccount.objectTypePropertyGridAPI.onAccountAdded(addedSubAccount);
-                //        };
-                //        Retail_BE_AccountService.addAccount(parentAccount.Entity.AccountId, onSubAccountAdded);
-                //    },
-                //    haspermission: hasAddSubAccountPermission
-                //}];
-
-                //objectTypePropertiesTab.haspermission = function () {
-                //    return Retail_BE_AccountAPIService.HasViewAccountsPermission();
-                //};
 
                 return objectTypePropertiesTab;
             }
 
             return drillDownTabs;
         }
-
 
         function insert() {
             $scope.scopeModel.isLoading = true;
@@ -252,11 +230,6 @@
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
-        }
-
-        function extendVariableObject(mailMessageTypeVariable) {
-
-            mailMessageTypeVariable.ValueExpression = "@Model.Variables[\"" + mailMessageTypeVariable.VariableName + "\"]";
         }
 
         function buildMailMessageTemplateObjFromScope() {

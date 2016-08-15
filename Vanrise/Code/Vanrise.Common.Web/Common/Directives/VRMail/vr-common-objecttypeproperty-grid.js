@@ -43,7 +43,6 @@ app.directive('vrCommonObjecttypepropertyGrid', ['VRCommon_VRObjectTypeDefinitio
 
                 return VRCommon_VRObjectTypeDefinitionAPIService.GetVRObjectTypeDefinition(vrObjectTypeDefintionId).then(function (response) {
 
-                    console.log(response);
                     var objectTypeDefinition = response;
                     var properties = objectTypeDefinition.Settings.Properties;
                     var property;
