@@ -43,10 +43,11 @@ namespace Retail.BusinessEntity.Business
             if (context.TargetBE == null)
                 throw new NullReferenceException("context.TargetBE");
             AccountManager accountManager = new AccountManager();
-         
+
             foreach (var target in context.TargetBE)
             {
                 SourceAccountData accountData = target as SourceAccountData;
+
                 AccountToEdit editAccount = new AccountToEdit
                 {
                     Settings = accountData.Account.Settings,

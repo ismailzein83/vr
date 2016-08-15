@@ -122,6 +122,9 @@
     <Reference Include="Vanrise.AccountBalance.Web">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Analytic.BP">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.BP.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BEBridge.BP">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.BP.dll</HintPath>
     </Reference>

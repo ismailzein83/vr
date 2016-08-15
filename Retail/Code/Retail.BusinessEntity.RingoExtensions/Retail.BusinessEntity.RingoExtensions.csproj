@@ -63,6 +63,10 @@
     <Compile Include="RingoFileAccountConvertor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Retail.BusinessEntity.Business\Retail.BusinessEntity.Business.csproj">
+      <Project>{194f2715-17dc-49fa-b701-2386aaa9eddf}</Project>
+      <Name>Retail.BusinessEntity.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
       <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
       <Name>Retail.BusinessEntity.Entities</Name>

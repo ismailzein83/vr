@@ -10,6 +10,7 @@ using Retail.BusinessEntity.MainExtensions.AccountParts;
 using Vanrise.BEBridge.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Retail.BusinessEntity.Business;
 
 namespace Retail.BusinessEntity.RingoExtensions
 {
@@ -17,7 +18,7 @@ namespace Retail.BusinessEntity.RingoExtensions
     {
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
-
+            AccountManager accountManager = new AccountManager();
 
             FileSourceBatch fileBatch = context.SourceBEBatch as FileSourceBatch;
 
@@ -32,13 +33,17 @@ namespace Retail.BusinessEntity.RingoExtensions
                     string[] accountRecords = parser.ReadFields();
                     if (accountRecords != null)
                     {
-                        accountRecords = accountRecords.Select(s => s.Trim(new char[] { '\'' })).ToArray();
                         SourceAccountData accountData = new SourceAccountData
                         {
                             Account = new Account { TypeId = 19 }
                         };
+                        accountRecords = accountRecords.Select(s => s.Trim(new char[] { '\'' })).ToArray();
+                        var sourceId = accountRecords[22];
+                        var existingAccount = accountManager.GetAccountBySourceId(sourceId);
+                        if (existingAccount != null)
+                            accountData.Account.AccountId = existingAccount.AccountId;
                         accountData.Account.Name = string.Format("{0} {1}", accountRecords[2], accountRecords[3]);
-                        accountData.Account.SourceId = accountRecords[22];
+                        accountData.Account.SourceId = sourceId;
                         FillAccountSettings(accountData, accountRecords);
 
                         lstTargets.Add(accountData);
