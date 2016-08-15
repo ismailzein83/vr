@@ -1026,26 +1026,26 @@
 
                         var arrayOfActions = (typeof (actionsAttribute) == 'function' ? actionsAttribute(dataItem) : actionsAttribute);
                         if (arrayOfActions != undefined) {
-                            checkMenuActionPermission(arrayOfActions);
+                            checkMenuActionPermission(arrayOfActions, dataItem);
                         }
                         dataItem.menuActionObj.menuActions = arrayOfActions;
                     }
 
                     return dataItem.menuActionObj.menuActions;
 
-                    function checkMenuActionPermission(arrayOfActions) {
+                    function checkMenuActionPermission(arrayOfActions, dataItem) {
                         var indexOfActionsInArray = menuActionsArrays.indexOf(arrayOfActions);
                         if (indexOfActionsInArray < 0) {
                             for (var i = 0; i < arrayOfActions.length; i++) {
-                                invokeHasPermission(arrayOfActions[i]);
+                                invokeHasPermission(arrayOfActions[i], dataItem);
                             }
                             menuActionsArrays.push(arrayOfActions);
                         }
 
-                        function invokeHasPermission(menuAction) {
+                        function invokeHasPermission(menuAction, dataItem) {
                             if (menuAction.haspermission == undefined || menuAction.haspermission == null) { return; }
                             menuAction.disable = true;
-                            UtilsService.convertToPromiseIfUndefined(menuAction.haspermission()).then(function (isAllowed) {
+                            UtilsService.convertToPromiseIfUndefined(menuAction.haspermission(dataItem)).then(function (isAllowed) {
                                 if (isAllowed) { menuAction.disable = false; }
                             });
                         }
