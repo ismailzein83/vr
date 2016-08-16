@@ -2,9 +2,11 @@
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using System.Linq;
 using System.Collections.Generic;
-using Vanrise.Common;
 using System;
 using TOne.WhS.SupplierPriceList.Entities;
+using Vanrise.Entities;
+using TOne.WhS.BusinessEntity.Business;
+using Vanrise.Common;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -22,7 +24,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<IEnumerable<ImportedZone>> ImportedZones { get; set; }
 
         [RequiredArgument]
-        public OutArgument<IEnumerable<ExistingZone>> NotImportedZones { get; set; }
+        public OutArgument<IEnumerable<NotImportedZone>> NotImportedZones { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
@@ -34,7 +36,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             UpdateImportedZonesInfo(importedZones, newAndExistingZones, existingZones, importedZoneNamesHashSet);
 
-            IEnumerable<ExistingZone> notImportedZones = PrepareNotImportedZones(existingZones, importedZoneNamesHashSet);
+            IEnumerable<NotImportedZone> notImportedZones = PrepareNotImportedZones(existingZones, importedZoneNamesHashSet);
             NotImportedZones.Set(context, notImportedZones);
         }
 
@@ -54,24 +56,50 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 
                 importedZone.ChangeType = GetZoneChangeType(importedZone, existingZones, importedZoneNamesHashSet);
                 importedZone.BED = GetZoneBED(importedZone);
-                importedZone.EED = (importedZone.ChangeType == ZoneChangeType.NotChanged) ? importedZone.ExistingZones.Select(x => x.EED).VRMinimumDate() : null;
+                importedZone.EED = (importedZone.ChangeType == ZoneChangeType.NotChanged) ? importedZone.ExistingZones.Select(x => x.EED).VRMaximumDate() : null;
             }
         }
 
-        private IEnumerable<ExistingZone> PrepareNotImportedZones(IEnumerable<ExistingZone> existingZones, HashSet<string> importedZoneNamesHashSet)
+        private IEnumerable<NotImportedZone> PrepareNotImportedZones(IEnumerable<ExistingZone> existingZones, HashSet<string> importedZoneNamesHashSet)
         {
-            List<ExistingZone> notImportedZones = new List<ExistingZone>();
+            Dictionary<string, List<ExistingZone>> notImportedZonesByZoneName = new Dictionary<string, List<ExistingZone>>();
 
             foreach (ExistingZone existingZone in existingZones)
             {
                 string zoneName = existingZone.ZoneEntity.Name;
-                if (existingZone.ChangedZone != null && !importedZoneNamesHashSet.Contains(zoneName, StringComparer.InvariantCultureIgnoreCase))
-                    notImportedZones.Add(existingZone);
+                if (!importedZoneNamesHashSet.Contains(zoneName, StringComparer.InvariantCultureIgnoreCase))
+                {
+                    List<ExistingZone> existingZonesList = null;
+                    if(!notImportedZonesByZoneName.TryGetValue(zoneName, out existingZonesList))
+                    {
+                        existingZonesList = new List<ExistingZone>();
+                        notImportedZonesByZoneName.Add(zoneName, existingZonesList);
+                    }
+                    existingZonesList.Add(existingZone);
+                }
             }
 
-            return notImportedZones;
+            return notImportedZonesByZoneName.MapRecords(NotImportedZoneInfoMapper);
         }
 
+        private NotImportedZone NotImportedZoneInfoMapper(List<ExistingZone> existingZones)
+        {
+            List<ExistingZone> linkedExistingZones = existingZones.GetLinkedEntities();
+
+            NotImportedZone notImportedZone = new NotImportedZone();
+            ExistingZone firstElementInTheList = linkedExistingZones.First();
+            ExistingZone lastElementInTheList = linkedExistingZones.Last();
+
+            notImportedZone.ZoneName = firstElementInTheList.Name;
+            //TODO: get it from foreach activity in the process
+            notImportedZone.CountryId = firstElementInTheList.CountryId;
+            notImportedZone.BED = firstElementInTheList.BED;
+            notImportedZone.EED = lastElementInTheList.EED;
+            notImportedZone.ExistingRate = lastElementInTheList.ExistingRates.LastOrDefault();
+            notImportedZone.HasChanged = linkedExistingZones.Any(x => x.ChangedZone != null);
+
+            return notImportedZone;
+        }
 
         private DateTime GetZoneBED(ImportedZone importedZone)
         {

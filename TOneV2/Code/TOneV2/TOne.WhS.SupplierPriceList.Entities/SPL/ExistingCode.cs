@@ -4,7 +4,7 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
-    public class ExistingCode : Vanrise.Entities.IDateEffectiveSettings, IRuleTarget
+    public class ExistingCode : Vanrise.Entities.IDateEffectiveSettings
     {
         public ExistingZone ParentZone { get; set; }
 
@@ -20,17 +20,6 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         public DateTime? EED
         {
             get { return ChangedCode != null ? ChangedCode.EED : CodeEntity.EED; }
-        }
-
-
-        public object Key
-        {
-            get { return this.CodeEntity.Code; }
-        }
-
-        public string TargetType
-        {
-            get { return "Code"; }
         }
     }
     public class ExistingCodesByCodeValue : Dictionary<string, List<ExistingCode>>

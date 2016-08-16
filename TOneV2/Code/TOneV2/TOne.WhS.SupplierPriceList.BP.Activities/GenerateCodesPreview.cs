@@ -17,7 +17,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<IEnumerable<ImportedCode>> ImportedCodes { get; set; }
 
         [RequiredArgument]
-        public InArgument<IEnumerable<ExistingCode>> NotImportedCodes { get; set; }
+        public InArgument<IEnumerable<NotImportedCode>> NotImportedCodes { get; set; }
 
         [RequiredArgument]
         public InArgument<BaseQueue<IEnumerable<CodePreview>>> PreviewCodeQueue { get; set; }
@@ -25,7 +25,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<ImportedCode> importedCodes = this.ImportedCodes.Get(context);
-            IEnumerable<ExistingCode> notImportedCodes = this.NotImportedCodes.Get(context);
+            IEnumerable<NotImportedCode> notImportedCodes = this.NotImportedCodes.Get(context);
 
             BaseQueue<IEnumerable<CodePreview>> previewCodeQueue = this.PreviewCodeQueue.Get(context);
 
@@ -50,22 +50,20 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             if (notImportedCodes != null)
             {
-                foreach (ExistingCode notImportedCode in notImportedCodes)
+                foreach (NotImportedCode notImportedCode in notImportedCodes)
                 {
                     codePreviewList.Add(new CodePreview()
                     {
-                        Code = notImportedCode.CodeEntity.Code,
-                        ChangeType = CodeChangeType.Deleted,
-                        ZoneName = notImportedCode.ParentZone.ZoneEntity.Name,
+                        Code = notImportedCode.Code,
+                        ChangeType = notImportedCode.HasChanged ? CodeChangeType.Deleted : CodeChangeType.NotChanged,
+                        ZoneName = notImportedCode.ZoneName,
                         BED = notImportedCode.BED,
-                        EED = notImportedCode.ChangedCode.EED
+                        EED = notImportedCode.EED
                     });
                 }
             }
 
             previewCodeQueue.Enqueue(codePreviewList);
-
-
         }
 
 

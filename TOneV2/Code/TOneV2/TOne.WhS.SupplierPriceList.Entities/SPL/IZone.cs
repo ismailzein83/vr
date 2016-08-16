@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
-    public interface IZone : Vanrise.Entities.IDateEffectiveSettings, IRuleTarget
+    public interface IZone : Vanrise.Entities.IDateEffectiveSettings
     {
 
         long ZoneId { get; }

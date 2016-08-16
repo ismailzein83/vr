@@ -26,6 +26,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         public DateTime PriceListDate { get; set; }
 
+        public int CountryId { get; set; }
+
     }
 
     public class ProcessCountryCodesOutput
@@ -65,6 +67,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         [RequiredArgument]
         public InArgument<DateTime> PriceListDate { get; set; }
+
+        [RequiredArgument]
+        public InArgument<int> CountryId { get; set; }
         
         #endregion
 
@@ -111,7 +116,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 ExistingCodes = inputArgument.ExistingCodes,
                 ExistingZones = existingZones,
                 DeletedCodesDate = inputArgument.PriceListDate.Add(splContext.CodeCloseDateOffset),
-                PriceListDate = inputArgument.PriceListDate
+                PriceListDate = inputArgument.PriceListDate,
+                CountryId = inputArgument.CountryId
             };
 
             PriceListCodeManager plCodeManager = new PriceListCodeManager();
@@ -136,7 +142,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 PriceListDate = this.PriceListDate.Get(context),
                 ExistingCodes = this.ExistingCodes.Get(context),
                 ExistingZonesByZoneId = this.ExistingZonesByZoneId.Get(context),
-                ImportedCodes = this.ImportedCodes.Get(context)
+                ImportedCodes = this.ImportedCodes.Get(context),
+                CountryId = this.CountryId.Get(context)
             };
         }
 

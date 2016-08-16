@@ -2,6 +2,7 @@
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
@@ -9,19 +10,23 @@ namespace TOne.WhS.SupplierPriceList.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return target as ExistingZone != null;
+            return target as NotImportedZone != null;
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            IImportSPLContext importSplContext = context.GetExtension<IImportSPLContext>();
+            NotImportedZone notImportedZone = context.Target as NotImportedZone;
 
-            ExistingZone existingZone = context.Target as ExistingZone;
-            return (Vanrise.Common.ExtensionMethods.VRLessThanOrEqual(DateTime.Today.Add(importSplContext.CodeCloseDateOffset), existingZone.ChangedZone.EED));
+            if (!notImportedZone.HasChanged)
+                return true;
+
+            IImportSPLContext importSplContext = context.GetExtension<IImportSPLContext>();
+            return !notImportedZone.EED.VRLessThanOrEqual(DateTime.Today.Add(importSplContext.CodeCloseDateOffset));
         }
+
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has been closed in a period less than system period", (target as ExistingZone).Name);
+            return string.Format("Zone {0} has been closed in a period less than system period", (target as NotImportedZone).ZoneName);
         }
     }
 }

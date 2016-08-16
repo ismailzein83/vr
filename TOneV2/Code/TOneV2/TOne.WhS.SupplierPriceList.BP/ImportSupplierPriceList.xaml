@@ -139,8 +139,8 @@
         </Variable.Default>
       </Variable>
       <Variable x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)" Name="AfterProcessingDataToValidate" />
-      <Variable x:TypeArguments="scg:IEnumerable(twses:ExistingCode)" Name="NotImportedCodes" />
-      <Variable x:TypeArguments="scg:IEnumerable(twses:ExistingZone)" Name="NotImportedZones" />
+      <Variable x:TypeArguments="scg:IEnumerable(twses:NotImportedCode)" Name="NotImportedCodes" />
+      <Variable x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)" Name="NotImportedZones" />
       <Variable x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:ZoneRatePreview))" Name="PreviewZonesRatesQueue">
         <Variable.Default>
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:ZoneRatePreview))">new MemoryQueue&lt;IEnumerable&lt;TOne.WhS.SupplierPriceList.Entities.ZoneRatePreview&gt;&gt;()</mca:CSharpValue>
@@ -437,6 +437,11 @@
                         <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ChangedZone)">ChangedZones</mca:CSharpReference>
                       </OutArgument>
                     </twsba1:ProcessCountryCodes.ChangedZones>
+                    <twsba1:ProcessCountryCodes.CountryId>
+                      <InArgument x:TypeArguments="x:Int32">
+                        <mca:CSharpValue x:TypeArguments="x:Int32">country.CountryId</mca:CSharpValue>
+                      </InArgument>
+                    </twsba1:ProcessCountryCodes.CountryId>
                     <twsba1:ProcessCountryCodes.ExistingCodes>
                       <InArgument x:TypeArguments="scg:IEnumerable(twses:ExistingCode)">
                         <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ExistingCode)">ExistingCodes</mca:CSharpValue>
@@ -534,8 +539,8 @@
                       </InArgument>
                     </twsba1:PrepareZonesForValidation.NewAndExistingZones>
                     <twsba1:PrepareZonesForValidation.NotImportedZones>
-                      <OutArgument x:TypeArguments="scg:IEnumerable(twses:ExistingZone)">
-                        <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ExistingZone)">NotImportedZones</mca:CSharpReference>
+                      <OutArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">
+                        <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">NotImportedZones</mca:CSharpReference>
                       </OutArgument>
                     </twsba1:PrepareZonesForValidation.NotImportedZones>
                   </twsba1:PrepareZonesForValidation>
@@ -551,8 +556,8 @@
                       </InArgument>
                     </twsba1:PrepareCodesForValidation.ImportedCodes>
                     <twsba1:PrepareCodesForValidation.NotImportedCodes>
-                      <OutArgument x:TypeArguments="scg:IEnumerable(twses:ExistingCode)">
-                        <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ExistingCode)">NotImportedCodes</mca:CSharpReference>
+                      <OutArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedCode)">
+                        <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:NotImportedCode)">NotImportedCodes</mca:CSharpReference>
                       </OutArgument>
                     </twsba1:PrepareCodesForValidation.NotImportedCodes>
                   </twsba1:PrepareCodesForValidation>
@@ -560,7 +565,7 @@
                 <vbw:CombineLists x:TypeArguments="vbe:IRuleTarget" sap2010:WorkflowViewState.IdRef="CombineLists`1_4">
                   <vbw:CombineLists.InputLists>
                     <InArgument x:TypeArguments="scg:List(sc:IEnumerable)">
-                      <mca:CSharpValue x:TypeArguments="scg:List(sc:IEnumerable)">new List&lt;System.Collections.IEnumerable&gt;() {country.ImportedZones, NotImportedZones , country.ImportedCodes, NotImportedCodes, ImportedRates };</mca:CSharpValue>
+                      <mca:CSharpValue x:TypeArguments="scg:List(sc:IEnumerable)">new List&lt;System.Collections.IEnumerable&gt;() {country.ImportedZones, country.ImportedCodes, NotImportedCodes, ImportedRates, NotImportedZones };</mca:CSharpValue>
                     </InArgument>
                   </vbw:CombineLists.InputLists>
                   <vbw:CombineLists.OutputList>
@@ -673,8 +678,8 @@
                       </InArgument>
                     </twsba1:GenerateZonesRatesPreview.ImportedZones>
                     <twsba1:GenerateZonesRatesPreview.NotImportedZones>
-                      <InArgument x:TypeArguments="scg:IEnumerable(twses:ExistingZone)">
-                        <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ExistingZone)">NotImportedZones</mca:CSharpValue>
+                      <InArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">
+                        <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">NotImportedZones</mca:CSharpValue>
                       </InArgument>
                     </twsba1:GenerateZonesRatesPreview.NotImportedZones>
                     <twsba1:GenerateZonesRatesPreview.PreviewZonesRatesQueue>
@@ -690,8 +695,8 @@
                       </InArgument>
                     </twsba1:GenerateCodesPreview.ImportedCodes>
                     <twsba1:GenerateCodesPreview.NotImportedCodes>
-                      <InArgument x:TypeArguments="scg:IEnumerable(twses:ExistingCode)">
-                        <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ExistingCode)">NotImportedCodes</mca:CSharpValue>
+                      <InArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedCode)">
+                        <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NotImportedCode)">NotImportedCodes</mca:CSharpValue>
                       </InArgument>
                     </twsba1:GenerateCodesPreview.NotImportedCodes>
                     <twsba1:GenerateCodesPreview.PreviewCodeQueue>
@@ -865,31 +870,31 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="SetImportSPLContext_1" sap:VirtualizedContainerService.HintSize="1004,22" />
-      <sap2010:ViewStateData Id="LoadSupplierPriceListData_1" sap:VirtualizedContainerService.HintSize="1004,22" />
-      <sap2010:ViewStateData Id="CombineLists`1_5" sap:VirtualizedContainerService.HintSize="1004,22" />
-      <sap2010:ViewStateData Id="ExecuteRules_4" sap:VirtualizedContainerService.HintSize="1004,22" />
-      <sap2010:ViewStateData Id="StructureDataByZones_1" sap:VirtualizedContainerService.HintSize="1004,22" />
-      <sap2010:ViewStateData Id="CombineLists`1_1" sap:VirtualizedContainerService.HintSize="1004,22" />
-      <sap2010:ViewStateData Id="ExecuteRules_1" sap:VirtualizedContainerService.HintSize="1004,22" />
+      <sap2010:ViewStateData Id="SetImportSPLContext_1" sap:VirtualizedContainerService.HintSize="2444,22" />
+      <sap2010:ViewStateData Id="LoadSupplierPriceListData_1" sap:VirtualizedContainerService.HintSize="2444,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_5" sap:VirtualizedContainerService.HintSize="2444,22" />
+      <sap2010:ViewStateData Id="ExecuteRules_4" sap:VirtualizedContainerService.HintSize="2444,22" />
+      <sap2010:ViewStateData Id="StructureDataByZones_1" sap:VirtualizedContainerService.HintSize="2444,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_1" sap:VirtualizedContainerService.HintSize="2444,22" />
+      <sap2010:ViewStateData Id="ExecuteRules_1" sap:VirtualizedContainerService.HintSize="2444,22" />
       <sap2010:ViewStateData Id="GetExistingZones_3" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingCodes_3" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingRates_3" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_7" sap:VirtualizedContainerService.HintSize="1004,86" />
-      <sap2010:ViewStateData Id="StructureDataByCountries_3" sap:VirtualizedContainerService.HintSize="1004,22" />
-      <sap2010:ViewStateData Id="CombineLists`1_2" sap:VirtualizedContainerService.HintSize="1004,22" />
-      <sap2010:ViewStateData Id="ExecuteRules_2" sap:VirtualizedContainerService.HintSize="1004,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="1004,22" />
-      <sap2010:ViewStateData Id="ReserveIdForPriceList_3" sap:VirtualizedContainerService.HintSize="1004,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="1004,22" />
-      <sap2010:ViewStateData Id="PrepareExistingZones_3" sap:VirtualizedContainerService.HintSize="576,22" />
+      <sap2010:ViewStateData Id="Parallel_7" sap:VirtualizedContainerService.HintSize="2444,86" />
+      <sap2010:ViewStateData Id="StructureDataByCountries_3" sap:VirtualizedContainerService.HintSize="2444,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_2" sap:VirtualizedContainerService.HintSize="2444,22" />
+      <sap2010:ViewStateData Id="ExecuteRules_2" sap:VirtualizedContainerService.HintSize="2444,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="2444,22" />
+      <sap2010:ViewStateData Id="ReserveIdForPriceList_3" sap:VirtualizedContainerService.HintSize="2444,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="2444,22" />
+      <sap2010:ViewStateData Id="PrepareExistingZones_3" sap:VirtualizedContainerService.HintSize="2016,22" />
       <sap2010:ViewStateData Id="PrepareExistingCodes_3" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareExistingRates_3" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_8" sap:VirtualizedContainerService.HintSize="554,86">
+      <sap2010:ViewStateData Id="Parallel_8" sap:VirtualizedContainerService.HintSize="1994,86">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -899,7 +904,7 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ProcessCountryCodes_3" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="ProcessCountryRates_3" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="554,208">
+      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="1994,208">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -909,17 +914,17 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="PrepareZonesForValidation_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareCodesForValidation_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_12" sap:VirtualizedContainerService.HintSize="554,51">
+      <sap2010:ViewStateData Id="Parallel_12" sap:VirtualizedContainerService.HintSize="1994,86">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CombineLists`1_4" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="ExecuteRules_3" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="ReserveIdsForNewEntities_3" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_4" sap:VirtualizedContainerService.HintSize="1994,22" />
+      <sap2010:ViewStateData Id="ExecuteRules_3" sap:VirtualizedContainerService.HintSize="1994,22" />
+      <sap2010:ViewStateData Id="ReserveIdsForNewEntities_3" sap:VirtualizedContainerService.HintSize="1994,22" />
       <sap2010:ViewStateData Id="EnqueueItem`1_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="EnqueueItem`1_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="EnqueueItem`1_3" sap:VirtualizedContainerService.HintSize="200,40" />
@@ -928,24 +933,7 @@
       <sap2010:ViewStateData Id="EnqueueItem`1_6" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GenerateZonesRatesPreview_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GenerateCodesPreview_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_11" sap:VirtualizedContainerService.HintSize="554,51">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="554,62" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="Sequence_11" sap:VirtualizedContainerService.HintSize="576,990">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="598,1176">
+      <sap2010:ViewStateData Id="Parallel_11" sap:VirtualizedContainerService.HintSize="1994,86">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -953,7 +941,16 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_4" sap:VirtualizedContainerService.HintSize="628,1326">
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="1994,62" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="1994,22" />
+      <sap2010:ViewStateData Id="Sequence_11" sap:VirtualizedContainerService.HintSize="2016,1060">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="2038,1246">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -961,8 +958,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="628,62" />
-      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="650,1552">
+      <sap2010:ViewStateData Id="ForEach`1_4" sap:VirtualizedContainerService.HintSize="2068,1396">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -970,10 +966,19 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="200,1552" />
-      <sap2010:ViewStateData Id="Parallel_10" sap:VirtualizedContainerService.HintSize="1004,1598" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="1004,22" />
-      <sap2010:ViewStateData Id="AssignTask`1_2" sap:VirtualizedContainerService.HintSize="1004,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="2068,62" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="2090,1622">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="200,1622" />
+      <sap2010:ViewStateData Id="Parallel_10" sap:VirtualizedContainerService.HintSize="2444,1668" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="2444,22" />
+      <sap2010:ViewStateData Id="AssignTask`1_2" sap:VirtualizedContainerService.HintSize="2444,22" />
       <sap2010:ViewStateData Id="SyncImportedDataWithDB_3" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_9" sap:VirtualizedContainerService.HintSize="222,208">
@@ -984,15 +989,15 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_7" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="1004,358" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1026,3176">
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="2444,358" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2466,3246">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="1066,3256">
+      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="2506,3326">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="ShouldExpandAll">True</x:Boolean>

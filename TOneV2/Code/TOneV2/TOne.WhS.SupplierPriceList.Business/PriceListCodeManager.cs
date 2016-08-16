@@ -18,7 +18,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             ZonesByName newAndExistingZones = new ZonesByName();
             context.NewAndExistingZones = newAndExistingZones;
-            ProcessCountryCodes(context.SupplierPriceListType, context.ImportedZones, context.ImportedCodes, context.ExistingCodes, newAndExistingZones, context.ExistingZones, context.DeletedCodesDate, context.PriceListDate);
+            ProcessCountryCodes(context.CountryId, context.SupplierPriceListType, context.ImportedZones, context.ImportedCodes, context.ExistingCodes, newAndExistingZones, context.ExistingZones, context.DeletedCodesDate, context.PriceListDate);
             context.NewCodes = context.ImportedCodes.SelectMany(itm => itm.NewCodes);
             context.NewZones = newAndExistingZones.GetNewZones();
             context.ChangedZones = context.ExistingZones.Where(itm => itm.ChangedZone != null).Select(itm => itm.ChangedZone);
@@ -63,7 +63,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             return existingCodesByCodeValue;
         }
 
-        private void ProcessCountryCodes(SupplierPriceListType supplierPriceListType, IEnumerable<ImportedZone> importedZones, IEnumerable<ImportedCode> importedCodes, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones, DateTime codeCloseDate, DateTime priceListDate)
+        private void ProcessCountryCodes(int countryId, SupplierPriceListType supplierPriceListType, IEnumerable<ImportedZone> importedZones, IEnumerable<ImportedCode> importedCodes, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones, DateTime codeCloseDate, DateTime priceListDate)
         {
             ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
             ExistingCodesByCodeValue existingCodesByCodeValue = StructureExistingCodesByCodeValue(existingCodes);
@@ -107,7 +107,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                 }
             }
 
-            IEnumerable<ExistingCode> existingCodesToClose = GetExistingCodesToClose(supplierPriceListType, importedZones, importedCodes, existingCodes);
+            IEnumerable<ExistingCode> existingCodesToClose = GetExistingCodesToClose(countryId, supplierPriceListType, importedZones, importedCodes, existingCodes, existingZonesByName, importedCodeValues);
             CloseNotImportedCodes(existingCodesToClose, importedCodeValues, codeCloseDate);
             CloseZonesWithNoCodes(existingZones);
         }
@@ -236,36 +236,45 @@ namespace TOne.WhS.SupplierPriceList.Business
                 && importedCode.ZoneName == existingCode.ParentZone.ZoneEntity.Name;
         }
 
-        private IEnumerable<ExistingCode> GetExistingCodesToClose(SupplierPriceListType supplierPriceListType, IEnumerable<ImportedZone> importedZones, IEnumerable<ImportedCode> importedCodes, IEnumerable<ExistingCode> existingCodes)
+        private IEnumerable<ExistingCode> GetExistingCodesToClose(int countryId, SupplierPriceListType supplierPriceListType, IEnumerable<ImportedZone> importedZones, IEnumerable<ImportedCode> importedCodes,
+            IEnumerable<ExistingCode> existingCodes, ExistingZonesByName existingZonesByName, HashSet<string> importedCodeValues)
         {
-            IEnumerable<ExistingCode> existingCodesToClose = new List<ExistingCode>();
+            List<ExistingCode> existingCodesToClose = new List<ExistingCode>();
 
             if (importedZones.Count() > 0) // Country is included
             {
-                if (!DoCountryCodeGroupsExistInImportedData(importedCodes) || supplierPriceListType == SupplierPriceListType.RateChange)
+                if (supplierPriceListType == SupplierPriceListType.RateChange || !DoCountryCodeGroupsExistInImportedData(countryId, importedCodes))
                 {
-                    IEnumerable<string> importedCodeValues = importedCodes.MapRecords(x => x.Code);
-                    existingCodesToClose = existingCodes.FindAllRecords(x => importedCodeValues.Contains(x.CodeEntity.Code));
+                    foreach (ImportedZone importedZone in importedZones)
+                    {
+                        List<ExistingZone> existingZones = null;
+                        if(existingZonesByName.TryGetValue(importedZone.ZoneName, out existingZones))
+                        {
+                            foreach (ExistingZone zone in existingZones)
+                                existingCodesToClose.AddRange(zone.ExistingCodes);
+                        }
+                    }
                 }
                 else
-                    existingCodesToClose = existingCodes;
+                {
+                    existingCodesToClose = existingCodes.ToList();
+                }
             }
             else // Country is excluded
             {
                 if (supplierPriceListType == SupplierPriceListType.Full)
-                    existingCodesToClose = existingCodes;
+                    existingCodesToClose = existingCodes.ToList();
             }
 
             return existingCodesToClose;
         }
 
-        private bool DoCountryCodeGroupsExistInImportedData(IEnumerable<ImportedCode> importedCodes)
+        private bool DoCountryCodeGroupsExistInImportedData(int countryId, IEnumerable<ImportedCode> importedCodes)
         {
-            IEnumerable<string> codeGroupCodes = importedCodes.MapRecords(x => x.CodeGroup.Code, x => x.CodeGroup != null).Distinct();
-            
+            IEnumerable<CodeGroup> codeGroupCodes = new CodeGroupManager().GetCountryCodeGroups(countryId);
             foreach (ImportedCode importedCode in importedCodes)
             {
-                if (codeGroupCodes.Contains(importedCode.Code))
+                if (codeGroupCodes.Any(x => x.Code == importedCode.Code))
                     return true;
             }
 

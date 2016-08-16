@@ -54,6 +54,12 @@ namespace TOne.WhS.BusinessEntity.Business
             var codeGroups = GetCachedCodeGroups();
             return codeGroups.GetRecord(codeGroupId);
         }
+
+        public IEnumerable<CodeGroup> GetCountryCodeGroups(int countryId)
+        {
+             return GetCachedCodeGroupsByCountry().GetRecord(countryId);
+        }
+
         public TOne.Entities.InsertOperationOutput<CodeGroupDetail> AddCodeGroup(CodeGroup codeGroup)
         {
             ValidateCodeGroupToAdd(codeGroup);
@@ -295,6 +301,34 @@ namespace TOne.WhS.BusinessEntity.Business
                    return codegroups.ToDictionary(cg => cg.Code, cg => cg);
                });
         }
+
+        private Dictionary<int, List<CodeGroup>> GetCachedCodeGroupsByCountry()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCodeGroupsByCountry",
+               () =>
+               {
+                   Dictionary<int, CodeGroup> cachedCodeGroups = this.GetCachedCodeGroups();
+                   if (cachedCodeGroups.Values == null)
+                       return null;
+
+                   Dictionary<int, List<CodeGroup>> codeGroupsByCountry = new Dictionary<int, List<CodeGroup>>();
+
+                   foreach (CodeGroup cg in cachedCodeGroups.Values)
+                   {
+                       List<CodeGroup> codeGroups = null;
+                       if (!codeGroupsByCountry.TryGetValue(cg.CountryId, out codeGroups))
+                       {
+                           codeGroups = new List<CodeGroup>();
+                           codeGroupsByCountry.Add(cg.CountryId, codeGroups);
+                       }
+
+                       codeGroups.Add(cg);
+                   }
+
+                   return codeGroupsByCountry;                   
+               });
+        }
+
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ICodeGroupDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();

@@ -69,16 +69,6 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         {
             get { return ChangedZone != null ? ChangedZone.EED : ZoneEntity.EED; }
         }
-
-        public object Key
-        {
-            get { return Name; }
-        }
-
-        public string TargetType
-        {
-            get { return "Zone"; }
-        }
     }
 
     public class ExistingZonesByName

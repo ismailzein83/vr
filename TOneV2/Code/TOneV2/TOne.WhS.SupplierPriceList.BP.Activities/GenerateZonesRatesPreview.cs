@@ -20,7 +20,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<IEnumerable<ImportedZone>> ImportedZones { get; set; }
 
         [RequiredArgument]
-        public InArgument<IEnumerable<ExistingZone>> NotImportedZones { get; set; }
+        public InArgument<IEnumerable<NotImportedZone>> NotImportedZones { get; set; }
 
         [RequiredArgument]
         public InArgument<BaseQueue<IEnumerable<ZoneRatePreview>>> PreviewZonesRatesQueue { get; set; }
@@ -29,7 +29,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         {
             BaseQueue<IEnumerable<ZoneRatePreview>> previewZonesRatesQueue = this.PreviewZonesRatesQueue.Get(context);
             IEnumerable<ImportedZone> importedZones = this.ImportedZones.Get(context);
-            IEnumerable<ExistingZone> notImportedZones = this.NotImportedZones.Get(context);
+            IEnumerable<NotImportedZone> notImportedZones = this.NotImportedZones.Get(context);
 
             List<ZoneRatePreview> zonesRatesPreview = new List<ZoneRatePreview>();
 
@@ -60,27 +60,30 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             if (notImportedZones != null)
             {
-
-                foreach (ExistingZone notImportedZone in notImportedZones)
+                foreach (NotImportedZone notImportedZone in notImportedZones)
                 {
                     //If a zone is renamed, do not show it in preview screen as an not imported zone
-                    if(zonesRatesPreview.FindRecord(item => item.RecentZoneName != null && item.RecentZoneName.Equals(notImportedZone.Name, StringComparison.InvariantCultureIgnoreCase)) != null)
+                    if (zonesRatesPreview.FindRecord(item => item.RecentZoneName != null && item.RecentZoneName.Equals(notImportedZone.ZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
                         continue;
 
-                    //Get the changed rate, the one that was closed by this action
-                    ExistingRate closedExistingRate = notImportedZone.ExistingRates.Where(itm => itm.ChangedRate != null).FirstOrDefault();
-                    zonesRatesPreview.Add(new ZoneRatePreview()
+                    ZoneRatePreview zoneRatePreview = new ZoneRatePreview()
                     {
                         CountryId = notImportedZone.CountryId,
-                        ZoneName = notImportedZone.Name,
-                        ChangeTypeZone = ZoneChangeType.Deleted,
+                        ZoneName = notImportedZone.ZoneName,
+                        ChangeTypeZone = notImportedZone.HasChanged ? ZoneChangeType.Deleted : ZoneChangeType.NotChanged,
                         ZoneBED = notImportedZone.BED,
-                        ZoneEED = notImportedZone.ChangedZone.EED,
-                        CurrentRate = closedExistingRate.RateEntity.NormalRate,
-                        CurrentRateBED = closedExistingRate.BED,
-                        CurrentRateEED = closedExistingRate.EED,
-                        ChangeTypeRate = RateChangeType.Deleted
-                    });
+                        ZoneEED = notImportedZone.EED,
+                        ChangeTypeRate = notImportedZone.HasChanged ? RateChangeType.Deleted : RateChangeType.NotChanged
+                    };
+
+                    if (notImportedZone.ExistingRate != null)
+                    {
+                        zoneRatePreview.CurrentRate = notImportedZone.ExistingRate.RateEntity.NormalRate;
+                        zoneRatePreview.CurrentRateBED = notImportedZone.ExistingRate.BED;
+                        zoneRatePreview.CurrentRateEED = notImportedZone.ExistingRate.EED;
+                    }
+
+                    zonesRatesPreview.Add(zoneRatePreview);
                 }
             }
 

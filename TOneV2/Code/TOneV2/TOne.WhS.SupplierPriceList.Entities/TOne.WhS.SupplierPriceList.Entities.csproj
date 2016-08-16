@@ -78,6 +78,8 @@
     <Compile Include="SPL\CodeValidation.cs" />
     <Compile Include="SPL\ExistingCode.cs" />
     <Compile Include="SPL\ExistingRate.cs" />
+    <Compile Include="SPL\NotImportedCode.cs" />
+    <Compile Include="SPL\NotImportedZone.cs" />
     <Compile Include="SPL\ImportedData\ImportedCode.cs" />
     <Compile Include="SPL\ImportedData\ImportedCountry.cs" />
     <Compile Include="SPL\ImportedData\ImportedRate.cs" />

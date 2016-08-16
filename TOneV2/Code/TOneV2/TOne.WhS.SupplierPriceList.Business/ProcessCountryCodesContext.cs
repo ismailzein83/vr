@@ -10,6 +10,8 @@ namespace TOne.WhS.SupplierPriceList.Business
 {
     public class ProcessCountryCodesContext : IProcessCountryCodesContext
     {
+        public int CountryId { get; set; }
+
         public SupplierPriceListType SupplierPriceListType { get; set; }
 
         public IEnumerable<ImportedZone> ImportedZones { get; set; }

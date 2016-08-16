@@ -2,6 +2,9 @@
 using System.Activities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using System.Linq;
+using Vanrise.Entities;
+using TOne.WhS.BusinessEntity.Business;
+using Vanrise.Common;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -15,7 +18,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<IEnumerable<ExistingCode>> ExistingCodes { get; set; }
 
         [RequiredArgument]
-        public OutArgument<IEnumerable<ExistingCode>> NotImportedCodes { get; set; }
+        public OutArgument<IEnumerable<NotImportedCode>> NotImportedCodes { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
@@ -23,24 +26,50 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             IEnumerable<ExistingCode> existingCodes = ExistingCodes.Get(context);
             
             HashSet<string> importedCodesHashSet = new HashSet<string>(importedCodes.Select(item => item.Code));
-            IEnumerable<ExistingCode> notImportedCodes = PrepareNotImportedCodes(existingCodes, importedCodesHashSet);
+            IEnumerable<NotImportedCode> notImportedCodes = PrepareNotImportedCodes(existingCodes, importedCodesHashSet);
 
 
             NotImportedCodes.Set(context, notImportedCodes);
         }
 
 
-        private IEnumerable<ExistingCode> PrepareNotImportedCodes(IEnumerable<ExistingCode> existingCodes, HashSet<string> importedCodes)
+        private IEnumerable<NotImportedCode> PrepareNotImportedCodes(IEnumerable<ExistingCode> existingCodes, HashSet<string> importedCodes)
         {
-            List<ExistingCode> notImportedCodes = new List<ExistingCode>();
+            Dictionary<string, List<ExistingCode>> notImportedCodesByZoneName = new Dictionary<string, List<ExistingCode>>();
 
             foreach (ExistingCode existingCode in existingCodes)
             {
-                if (existingCode.ChangedCode != null &&  !importedCodes.Contains(existingCode.CodeEntity.Code))
-                    notImportedCodes.Add(existingCode);
+                string zoneName = existingCode.ParentZone.Name;
+                if (!importedCodes.Contains(existingCode.CodeEntity.Code))
+                {
+                    List<ExistingCode> existingCodesList = null;
+                    if (!notImportedCodesByZoneName.TryGetValue(zoneName, out existingCodesList))
+                    {
+                        existingCodesList = new List<ExistingCode>();
+                        notImportedCodesByZoneName.Add(zoneName, existingCodesList);
+                    }
+                    existingCodesList.Add(existingCode);
+                }
             }
 
-            return notImportedCodes;
+            return notImportedCodesByZoneName.MapRecords(NotImportedCodeInfoMapper);            
+        }
+
+        private NotImportedCode NotImportedCodeInfoMapper(List<ExistingCode> existingCodes)
+        {
+            List<ExistingCode> linkedExistingCodes = existingCodes.GetLinkedEntities();
+
+            NotImportedCode notImportedCode = new NotImportedCode();
+            ExistingCode firstElementInTheList = linkedExistingCodes.First();
+            ExistingCode lastElementInTheList = linkedExistingCodes.Last();
+
+            notImportedCode.ZoneName = firstElementInTheList.ParentZone.Name;
+            notImportedCode.Code = firstElementInTheList.CodeEntity.Code;
+            notImportedCode.BED = firstElementInTheList.BED;
+            notImportedCode.EED = lastElementInTheList.EED;
+            notImportedCode.HasChanged = linkedExistingCodes.Any(x => x.ChangedCode != null);
+
+            return notImportedCode;
         }
     }
 }

@@ -2,6 +2,7 @@
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
@@ -11,22 +12,22 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ExistingCode != null);
+            return (target as NotImportedCode != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
+            NotImportedCode notImportedCode = context.Target as NotImportedCode;
+            if (!notImportedCode.HasChanged)
+                return true;
+
             IImportSPLContext importSplContext = context.GetExtension<IImportSPLContext>();
-
-            ExistingCode existingCode = context.Target as ExistingCode;
-
-            return (Vanrise.Common.ExtensionMethods.VRLessThanOrEqual(DateTime.Today.Add(importSplContext.CodeCloseDateOffset), existingCode.ChangedCode.EED));
+            return !notImportedCode.EED.VRLessThanOrEqual(DateTime.Today.Add(importSplContext.CodeCloseDateOffset));
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Code {0} has been closed in a period less than system period", (target as ExistingCode).CodeEntity.Code);
-
+            return string.Format("Code {0} has been closed in a period less than system period", (target as NotImportedCode).Code);
         }
     }
 }
