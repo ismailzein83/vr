@@ -9,6 +9,7 @@
         var isEditMode;
 
         var context;
+        var loadingPropertyGrid;
 
         var vrObjectTypeDefinitionId;
         var vrObjectTypeDefinitionEntity;
@@ -41,9 +42,15 @@
                 objectTypeSelectiveReadyDeferred.resolve();
             };
             $scope.scopeModel.onObjectTypeSelectionChanged = function () {
-                if (propertyDirectiveAPI != undefined) {
+                if (propertyDirectiveAPI != undefined ) {
+
                     var payload = {};
                     payload.context = buildContext();
+                    if (loadingPropertyGrid == undefined && vrObjectTypeDefinitionEntity != undefined && vrObjectTypeDefinitionEntity.Settings != undefined) {
+                        loadingPropertyGrid = false;
+                        payload.properties = vrObjectTypeDefinitionEntity.Settings.Properties;
+                    }
+
                     propertyDirectiveAPI.load(payload);
                 }
             }
@@ -132,10 +139,11 @@
                 var propertyDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 propertyDirectiveReadyDeferred.promise.then(function () {
+
                     var payload = {};
                     payload.context = buildContext();
 
-                    if (vrObjectTypeDefinitionEntity != undefined) {
+                    if (vrObjectTypeDefinitionEntity != undefined && vrObjectTypeDefinitionEntity.Settings != undefined) {
                         payload.properties = vrObjectTypeDefinitionEntity.Settings.Properties;
                     }
 
