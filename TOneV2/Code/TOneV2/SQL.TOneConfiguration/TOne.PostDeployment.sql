@@ -696,10 +696,11 @@ as (select * from (values
 (35,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
 (36,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
 (37,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
-(38,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
+(38,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.WarningItemAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":3}}'),
 (39,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
 (40,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
-(41,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}')
+(41,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
+(42,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([BusinessRuleDefinitionId],[Settings]))
 merge	[bp].[BPBusinessRuleAction] as t
@@ -711,10 +712,13 @@ when matched then
 when not matched by target then
 	insert([BusinessRuleDefinitionId],[Settings])
 	values(s.[BusinessRuleDefinitionId],s.[Settings]);
+	
+	
+ 
 
 --[bp].[BPBusinessRuleDefinition]------------------1 to 10000---------------------------------------
 ----------------------------------------------------------------------------------------------------
- set nocount on;
+set nocount on;
 set identity_insert [bp].[BPBusinessRuleDefinition] on;
 ;with cte_data([ID],[Name],[BPDefintionId],[Settings])
 as (select * from (values
@@ -756,10 +760,11 @@ as (select * from (values
 (35,'CP_ValidateAfterProcessing',7,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Can not close pending closed code  Rule","Condition":{"$type":"TOne.WhS.CodePreparation.Business.ClosePendingClosedCodeCondition, TOne.WhS.CodePreparation.Business"},"ActionTypes":[1]}'),
 (36,'CP_ValidateAfterProcessing',7,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Wrong Move Condition Rule","Condition":{"$type":"TOne.WhS.CodePreparation.Business.WrongMoveCondition, TOne.WhS.CodePreparation.Business"},"ActionTypes":[1]}'),
 (37,'CP_ValidateAfterProcessing',7,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Move Code Not Exist And Effective Rule","Condition":{"$type":"TOne.WhS.CodePreparation.Business.MoveCodeNotExistAndEffectiveCondition, TOne.WhS.CodePreparation.Business"},"ActionTypes":[1]}'),
-(38,'RatePlan_ValidateAfterProcessing',8,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Normal rate BED less than Zone valid BED","Condition":{"$type":"TOne.WhS.Sales.Business.BusinessRules.NormalRateBEDLessThanValidBEDCondition, TOne.WhS.Sales.Business"},"ActionTypes":[1]}'),
-(39,'RatePlan_ValidateAfterProcessing',8,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Normal rate EED greater than Zone EED","Condition":{"$type":"TOne.WhS.Sales.Business.BusinessRules.NormalRateEEDGreaterThanZoneEED, TOne.WhS.Sales.Business"},"ActionTypes":[1]}'),
-(40,'RatePlan_ValidateAfterProcessing',8,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Other rate BED less than Zone valid BED","Condition":{"$type":"TOne.WhS.Sales.Business.BusinessRules.OtherRateBEDLessThanValidBEDCondition, TOne.WhS.Sales.Business"},"ActionTypes":[1]}'),
-(41,'RatePlan_ValidateAfterProcessing',8,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Other rate EED greater than Zone valid EED","Condition":{"$type":"TOne.WhS.Sales.Business.BusinessRules.OtherRateEEDGreaterThanValidEEDCondition, TOne.WhS.Sales.Business"},"ActionTypes":[1]}')
+(38,'CP_ValidateAfterProcessing',7,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"New Zone Without Rates Rule","Condition":{"$type":"TOne.WhS.CodePreparation.Business.NewZoneWithNoRatesCondition, TOne.WhS.CodePreparation.Business"},"ActionTypes":[3]}'),
+(39,'RatePlan_ValidateAfterProcessing',8,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Normal rate BED less than Zone valid BED","Condition":{"$type":"TOne.WhS.Sales.Business.BusinessRules.NormalRateBEDLessThanValidBEDCondition, TOne.WhS.Sales.Business"},"ActionTypes":[1]}'),
+(40,'RatePlan_ValidateAfterProcessing',8,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Normal rate EED greater than Zone EED","Condition":{"$type":"TOne.WhS.Sales.Business.BusinessRules.NormalRateEEDGreaterThanZoneEED, TOne.WhS.Sales.Business"},"ActionTypes":[1]}'),
+(41,'RatePlan_ValidateAfterProcessing',8,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Other rate BED less than Zone valid BED","Condition":{"$type":"TOne.WhS.Sales.Business.BusinessRules.OtherRateBEDLessThanValidBEDCondition, TOne.WhS.Sales.Business"},"ActionTypes":[1]}'),
+(42,'RatePlan_ValidateAfterProcessing',8,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Other rate EED greater than Zone valid EED","Condition":{"$type":"TOne.WhS.Sales.Business.BusinessRules.OtherRateEEDGreaterThanValidEEDCondition, TOne.WhS.Sales.Business"},"ActionTypes":[1]}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[BPDefintionId],[Settings]))
 merge	[bp].[BPBusinessRuleDefinition] as t
