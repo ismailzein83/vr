@@ -146,7 +146,7 @@ namespace TOne.WhS.Sales.BP.Activities
             CustomerCountry country = soldCountries.FindRecord(x => x.CountryId == zone.CountryId);
             if (country == null)
                 throw new NullReferenceException("country");
-            return country.StartEffectiveTime;
+            return country.StartEffectiveTime.Date;
         }
 
         #endregion
