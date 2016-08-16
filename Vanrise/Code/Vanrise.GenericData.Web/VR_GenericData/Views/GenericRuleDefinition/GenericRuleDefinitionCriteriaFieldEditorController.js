@@ -149,7 +149,7 @@
                         payload.objects = objectVariables                        
                     }
                     if (criteriaFieldEntity != undefined) {
-                        var property = { valueObjectName: criteriaFieldEntity.ValueObjectName, valuePropertyName: criteriaFieldEntity.ValuePropertyName };
+                        var property = { objectName: criteriaFieldEntity.ValueObjectName, propertyName: criteriaFieldEntity.ValuePropertyName };
                         payload.property = property;
                     }
 

@@ -108,7 +108,7 @@
                             $scope.scopeModel.objects.push(payload.objects[key]);
 
                         if (property != undefined) {
-                            $scope.scopeModel.selectedObject = UtilsService.getItemByVal($scope.scopeModel.objects, property.valueObjectName, 'ObjectName');
+                            $scope.scopeModel.selectedObject = UtilsService.getItemByVal($scope.scopeModel.objects, property.objectName, 'ObjectName');
 
                             //In Case we have deleted the object
                             if ($scope.scopeModel.selectedObject == undefined) {
@@ -166,9 +166,9 @@
                                     $scope.scopeModel.properties.push(properties[i]);
                                 }
 
-                                if (property != undefined && property.valuePropertyName != undefined) {
+                                if (property != undefined && property.propertyName != undefined) {
                                     $scope.scopeModel.selectedProperty =
-                                            UtilsService.getItemByVal($scope.scopeModel.properties, property.valuePropertyName, 'Name');
+                                            UtilsService.getItemByVal($scope.scopeModel.properties, property.propertyName, 'Name');
                                 }
 
                                 propertySelectorLoadDeferred.resolve();

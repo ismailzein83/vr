@@ -245,15 +245,11 @@
     <Content Include="Common\Directives\VRMail\vr-common-mailmessagetemplate-grid.js" />
     <Content Include="Common\Directives\VRMail\vr-common-mailmessagetype-selector.js" />
     <Content Include="Common\Directives\VRMail\vr-common-objecttypeproperty-grid.js" />
-    <Content Include="Common\Directives\VRObjectPropertyVariable\Templates\VRObjectPropertyVariableManagementTemplate.html" />
-    <Content Include="Common\Directives\VRObjectPropertyVariable\vr-common-objectpropertyvariable-management.js" />
     <Content Include="Common\Directives\VRMail\Templates\VRMailMessageTypeGridTemplate.html" />
     <Content Include="Common\Directives\VRMail\vr-common-mailmessagetype-grid.js" />
     <Content Include="Common\Directives\VRObjectProperty\Templates\VRObjectPropertySelector2Template.html" />
     <Content Include="Common\Directives\VRObjectProperty\vr-common-objectproperty-selector2.js" />
     <Content Include="Common\Directives\VRObjectTypePropertyDefinition\Templates\VRObjectPropertySelectiveTemplate.html" />
-    <Content Include="Common\Directives\VRObjectProperty\Templates\VRObjectPropertySelectorTemplate.html" />
-    <Content Include="Common\Directives\VRObjectProperty\vr-common-objectproperty-selector.js" />
     <Content Include="Common\Directives\VRObjectTypePropertyDefinition\vr-common-objectproperty-selective.js" />
     <Content Include="Common\Directives\VRObjectTypeDefinition\Templates\VRObjectTypeDefinitionGridTemplate.html" />
     <Content Include="Common\Directives\VRObjectTypeDefinition\vr-common-objecttypedefinition-grid.js" />
@@ -284,7 +280,6 @@
     <Content Include="Common\Services\APIServices\VRObjectTypeDefinitionAPIService.js" />
     <Content Include="Common\Services\TextManipulationService.js" />
     <Content Include="Common\Services\VRMailMessageTemplateService.js" />
-    <Content Include="Common\Services\VRObjectPropertyVariableService.js" />
     <Content Include="Common\Services\VRMailMessageTypeService.js" />
     <Content Include="Common\Services\APIServices\VRObjectPropertyAPIService.js" />
     <Content Include="Common\Services\APIServices\VRObjectTypeAPIService.js" />
@@ -376,8 +371,6 @@
     <Content Include="Common\Views\VRMail\VRMailMessageTypeEditorController.js" />
     <Content Include="Common\Views\VRMail\VRMailMessageTypeManagement.html" />
     <Content Include="Common\Views\VRMail\VRMailMessageTypeManagementController.js" />
-    <Content Include="Common\Views\VRObjectPropertyVariable\VRObjectPropertyVariableEditor.html" />
-    <Content Include="Common\Views\VRObjectPropertyVariable\VRObjectPropertyVariableEditorController.js" />
     <Content Include="Common\Views\VRObjectTypeDefinition\VRObjectTypeDefinitionEditor.html" />
     <Content Include="Common\Views\VRObjectTypeDefinition\VRObjectTypeDefinitionEditorController.js" />
     <Content Include="Common\Views\VRObjectTypeDefinition\VRObjectTypeDefinitionManagement.html" />

@@ -191,7 +191,7 @@
                 objectTypePropertiesTab.loadDirective = function (objectTypePropertyGridAPI, mailMessageTypeObject) {
                     mailMessageTypeObject.objectTypePropertyGridAPI = objectTypePropertyGridAPI;
                     var objectTypePropertyGridPayload = {
-                        vrObjectTypeDefinitionId: mailMessageTypeObject.VRObjectTypeDefinitionId
+                        objectVariable: mailMessageTypeObject
                     };
                     return mailMessageTypeObject.objectTypePropertyGridAPI.load(objectTypePropertyGridPayload);
                 };

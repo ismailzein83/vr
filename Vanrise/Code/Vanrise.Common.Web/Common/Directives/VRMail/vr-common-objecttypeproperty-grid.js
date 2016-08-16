@@ -20,7 +20,7 @@ app.directive('vrCommonObjecttypepropertyGrid', ['VRCommon_VRObjectTypeDefinitio
         this.initializeController = initializeController;
 
         var gridAPI;
-        var vrObjectTypeDefintionId;
+        var objectVariable;
 
         function initializeController() {
             $scope.scopeModel = {};
@@ -39,9 +39,9 @@ app.directive('vrCommonObjecttypepropertyGrid', ['VRCommon_VRObjectTypeDefinitio
             api.load = function (payload) {
 
                 if (payload != undefined)
-                    vrObjectTypeDefintionId = payload.vrObjectTypeDefinitionId;
+                    objectVariable = payload.objectVariable;
 
-                return VRCommon_VRObjectTypeDefinitionAPIService.GetVRObjectTypeDefinition(vrObjectTypeDefintionId).then(function (response) {
+                return VRCommon_VRObjectTypeDefinitionAPIService.GetVRObjectTypeDefinition(objectVariable.VRObjectTypeDefinitionId).then(function (response) {
 
                     var objectTypeDefinition = response;
                     var properties = objectTypeDefinition.Settings.Properties;
@@ -60,7 +60,7 @@ app.directive('vrCommonObjecttypepropertyGrid', ['VRCommon_VRObjectTypeDefinitio
 
         function extendVariableObject(property) {
 
-            property.ValueExpression = "@Model.Variables[\"" + property.Name + "\"]";
+            property.ValueExpression = "@Model.GetVal(\"" + objectVariable.ObjectName + "\",\"" + property.Name + "\")";
         }
 
         function defineMenuActions() {
