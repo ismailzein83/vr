@@ -41,9 +41,28 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Analytic.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\CustomerInvoiceGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.Invoice.Entities\TOne.WhS.Invoice.Entities.csproj">
+      <Project>{a3474129-600a-44fa-a71c-bc746f104a39}</Project>
+      <Name>TOne.WhS.Invoice.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
