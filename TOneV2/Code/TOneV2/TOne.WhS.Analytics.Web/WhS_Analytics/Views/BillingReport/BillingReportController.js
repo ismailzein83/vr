@@ -50,7 +50,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
         singleCustomerAccountReadyPromiseDeferred.resolve();
     }
     $scope.validateBusinessCaseStatus = function () {
-            if ( $scope.reporttype && $scope.reporttype.ParameterSettings && $scope.reporttype.ParameterSettings.CustomerIdNotOptional == true && UtilsService.diffDays($scope.fromDate, $scope.toDate) < 30) {
+            if ( $scope.reporttype && $scope.reporttype.ParameterSettings && $scope.reporttype.ParameterSettings.CustomerIdNotOptional == true && UtilsService.diffDays($scope.fromDate, $scope.toDate) < 28) {
                 return 'At least you have to choose 28 days.';
             }
             return null;
