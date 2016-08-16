@@ -12,12 +12,12 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class RPRouteDataManager : RoutingDataManager, IRPRouteDataManager
     {
-        static RPRouteDataManager()
-        {
-            RPRouteOptionSupplier dummyRPRouteOptionSupplier = new RPRouteOptionSupplier();
-            RPRouteOption dummyRPRouteOption = new RPRouteOption();
-            RPRouteOptionSupplierZone dummyRPRouteOptionSupplierZone = new RPRouteOptionSupplierZone();
-        }
+        //static RPRouteDataManager()
+        //{
+        //    RPRouteOptionSupplier dummyRPRouteOptionSupplier = new RPRouteOptionSupplier();
+        //    RPRouteOption dummyRPRouteOption = new RPRouteOption();
+        //    RPRouteOptionSupplierZone dummyRPRouteOptionSupplierZone = new RPRouteOptionSupplierZone();
+        //}
 
         readonly string[] columns = { "RoutingProductId", "SaleZoneId", "ExecutedRuleId", "OptionsDetailsBySupplier", "OptionsByPolicy", "IsBlocked" };
         public void ApplyProductRouteForDB(object preparedProductRoute)
@@ -47,8 +47,8 @@ namespace TOne.WhS.Routing.Data.SQL
 
         public void WriteRecordToStream(Entities.RPRoute record, object dbApplyStream)
         {
-            string optionsDetailsBySupplier = Convert.ToBase64String(Vanrise.Common.ProtoBufSerializer.Serialize<Dictionary<int, RPRouteOptionSupplier>>(record.OptionsDetailsBySupplier));
-            string rpOptionsByPolicy = Convert.ToBase64String(Vanrise.Common.ProtoBufSerializer.Serialize<Dictionary<int, IEnumerable<RPRouteOption>>>(record.RPOptionsByPolicy));
+            string optionsDetailsBySupplier = Vanrise.Common.Serializer.Serialize(record.OptionsDetailsBySupplier, true);
+            string rpOptionsByPolicy = Vanrise.Common.Serializer.Serialize(record.RPOptionsByPolicy, true);
 
 
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
@@ -99,16 +99,16 @@ namespace TOne.WhS.Routing.Data.SQL
         public Dictionary<int, IEnumerable<RPRouteOption>> GetRouteOptions(int routingProductId, long saleZoneId)
         {
             object routeOptionsSerialized = ExecuteScalarText(query_GetRouteOptions, (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@RoutingProductId", routingProductId));
-                    cmd.Parameters.Add(new SqlParameter("@SaleZoneId", saleZoneId));
-                }
+            {
+                cmd.Parameters.Add(new SqlParameter("@RoutingProductId", routingProductId));
+                cmd.Parameters.Add(new SqlParameter("@SaleZoneId", saleZoneId));
+            }
             );
 
             if (routeOptionsSerialized == null)
                 return null;
 
-            return Vanrise.Common.ProtoBufSerializer.Deserialize<Dictionary<int, IEnumerable<RPRouteOption>>>(Convert.FromBase64String(routeOptionsSerialized.ToString()));
+            return Vanrise.Common.Serializer.Deserialize<Dictionary<int, IEnumerable<RPRouteOption>>>(routeOptionsSerialized.ToString());
         }
 
         public Dictionary<int, RPRouteOptionSupplier> GetRouteOptionSuppliers(int routingProductId, long saleZoneId)
@@ -123,7 +123,7 @@ namespace TOne.WhS.Routing.Data.SQL
             if (routeOptionSuppliersSerialized == null)
                 return null;
 
-            return Vanrise.Common.ProtoBufSerializer.Deserialize<Dictionary<int, RPRouteOptionSupplier>>(Convert.FromBase64String(routeOptionSuppliersSerialized.ToString()));
+            return Vanrise.Common.Serializer.Deserialize<Dictionary<int, RPRouteOptionSupplier>>(routeOptionSuppliersSerialized.ToString());
         }
 
         public void FinalizeProductRoute(Action<string> trackStep)
@@ -157,8 +157,8 @@ namespace TOne.WhS.Routing.Data.SQL
                 SaleZoneId = (long)reader["SaleZoneId"],
                 IsBlocked = (bool)reader["IsBlocked"],
                 ExecutedRuleId = (int)reader["ExecutedRuleId"],
-                OptionsDetailsBySupplier = reader["OptionsDetailsBySupplier"]  != DBNull.Value ? Vanrise.Common.ProtoBufSerializer.Deserialize<Dictionary<int, RPRouteOptionSupplier>>(Convert.FromBase64String(reader["OptionsDetailsBySupplier"] as string)) : null,
-                RPOptionsByPolicy = reader["OptionsByPolicy"] != DBNull.Value ? Vanrise.Common.ProtoBufSerializer.Deserialize<Dictionary<int, IEnumerable<RPRouteOption>>>(Convert.FromBase64String(reader["OptionsByPolicy"] as string)) : null
+                OptionsDetailsBySupplier = reader["OptionsDetailsBySupplier"] != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, RPRouteOptionSupplier>>(reader["OptionsDetailsBySupplier"].ToString()) : null,
+                RPOptionsByPolicy = reader["OptionsByPolicy"] != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, IEnumerable<RPRouteOption>>>(reader["OptionsByPolicy"].ToString()) : null
             };
         }
 
