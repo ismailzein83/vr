@@ -5,9 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Retail.BusinessEntity.Data;
+using Retail.BusinessEntity.Entities.RecurringPeriod;
 using Retail.BusinessEntity.Entities.Status;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.Common.Business;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -73,6 +75,11 @@ namespace Retail.BusinessEntity.Business
             }
             initialCharge = 0;
             return false;
+        }
+        public IEnumerable<RecurringPeriodConfig> GetRecurringPeriodExtensionConfigs()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<RecurringPeriodConfig>(RecurringPeriodConfig.EXTENSION_TYPE);
         }
 
         public List<EntityStatusChargeInfo> GetStatusChargeInfos(int entityTypeId)
