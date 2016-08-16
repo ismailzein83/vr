@@ -39,8 +39,6 @@
         var editPermissionReadyDeferred = UtilsService.createPromiseDeferred();
 
 
-
-
         loadParameters();
         defineScope();
         load();
@@ -389,6 +387,7 @@
             return context;
         }
         function buildGenericRuleDefinitionObjectFromScope() {
+
             return {
                 GenericRuleDefinitionId: genericRuleDefinitionId,
                 Name: $scope.scopeModel.name,

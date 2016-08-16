@@ -53,9 +53,9 @@
 
             $scope.scopeModel.save = function () {
                 if (isEditMode)
-                    return updateCriteriaField();
+                    return update();
                 else
-                    return insertCriteriaField();
+                    return insert();
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
@@ -146,11 +146,11 @@
                     var payload = {};
 
                     if (objectVariables != undefined) {
-                        payload.objectVariables = objectVariables                        
+                        payload.objects = objectVariables                        
                     }
                     if (criteriaFieldEntity != undefined) {
-                        var objectProperty = { objectName: criteriaFieldEntity.ValueObjectName, propertyEvaluator: criteriaFieldEntity.ValueEvaluator };
-                        payload.objectProperty = objectProperty;
+                        var property = { valueObjectName: criteriaFieldEntity.ValueObjectName, valuePropertyName: criteriaFieldEntity.ValuePropertyName };
+                        payload.property = property;
                     }
 
                     VRUIUtilsService.callDirectiveLoad(objectPropertySelectorAPI, payload, objectPropertySelectorLoadDeferred);
@@ -160,14 +160,14 @@
             }
         }
 
-        function insertCriteriaField() {
+        function insert() {
             var criteriaFieldObject = buildCriteriaFieldObjectFromScope();
             if ($scope.onGenericRuleDefinitionCriteriaFieldAdded != undefined && typeof ($scope.onGenericRuleDefinitionCriteriaFieldAdded) == 'function') {
                 $scope.onGenericRuleDefinitionCriteriaFieldAdded(criteriaFieldObject);
             }
             $scope.modalContext.closeModal();
         }
-        function updateCriteriaField() {
+        function update() {
             var criteriaFieldObject = buildCriteriaFieldObjectFromScope();
             if ($scope.onGenericRuleDefinitionCriteriaFieldUpdated != undefined && typeof ($scope.onGenericRuleDefinitionCriteriaFieldUpdated) == 'function') {
                 $scope.onGenericRuleDefinitionCriteriaFieldUpdated(criteriaFieldObject);
@@ -177,10 +177,10 @@
 
         function buildCriteriaFieldObjectFromScope() {
 
-            var objectProperty = objectPropertySelectorAPI.getData();
-            if (objectProperty != undefined) {
-                var valueObjectName = objectProperty.objectName;
-                var valueEvaluator = objectProperty.propertyEvaluator;
+            var property = objectPropertySelectorAPI.getData();
+            if (property != undefined) {
+                var valueObjectName = property.valueObjectName;
+                var valuePropertyName = property.valuePropertyName;
             }
 
             return {
@@ -191,7 +191,7 @@
                 RuleStructureBehaviorType: $scope.scopeModel.selectedBehaviorType.value,
                 ShowInBasicSearch: $scope.scopeModel.showInBasicSearch,
                 ValueObjectName: valueObjectName,
-                ValueEvaluator: valueEvaluator
+                ValuePropertyName: valuePropertyName
             };
         }
     }

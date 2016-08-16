@@ -141,6 +141,7 @@
                             Priority: priority,
                             ShowInBasicSearch: dataItem.ShowInBasicSearch,
                             ValueObjectName: dataItem.ValueObjectName,
+                            ValuePropertyName: dataItem.ValuePropertyName,
                             ValueEvaluator: dataItem.ValueEvaluator
                         };
                     }
