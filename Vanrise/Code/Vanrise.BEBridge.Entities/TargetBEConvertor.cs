@@ -13,6 +13,8 @@ namespace Vanrise.BEBridge.Entities
         public abstract void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context);
 
         public abstract void MergeTargetBEs(ITargetBEConvertorMergeTargetBEsContext context);
+
+        public virtual bool CompareBeforeUpdate { get { return true; } }
     }
 
     public interface ITargetBEConvertorConvertSourceBEsContext

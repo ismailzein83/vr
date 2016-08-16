@@ -17,7 +17,18 @@ namespace Vanrise.BEBridge.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             BEReceiveDefinitionManager manager = new BEReceiveDefinitionManager();
-            BEReceiveDefinition.Set(context, manager.GetBEReceiveDefinition(BEReceiveDefinitionId.Get(context)));
+            BEReceiveDefinition beRecieveDefinition = manager.GetBEReceiveDefinition(BEReceiveDefinitionId.Get(context));
+            if (beRecieveDefinition == null)
+                throw new NullReferenceException("beRecieveDefinition");
+            if (beRecieveDefinition.Settings == null)
+                throw new NullReferenceException("beRecieveDefinition.Settings");
+            if (beRecieveDefinition.Settings.SourceBEReader == null)
+                throw new NullReferenceException("beRecieveDefinition.Settings.SourceBEReader");
+            if (beRecieveDefinition.Settings.TargetBEConvertor == null)
+                throw new NullReferenceException("beRecieveDefinition.Settings.TargetBEConvertor");
+            if (beRecieveDefinition.Settings.TargetBESynchronizer == null)
+                throw new NullReferenceException("beRecieveDefinition.Settings.TargetBESynchronizer");
+            BEReceiveDefinition.Set(context, beRecieveDefinition);
         }
     }
 }

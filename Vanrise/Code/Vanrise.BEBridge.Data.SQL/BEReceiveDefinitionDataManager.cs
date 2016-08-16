@@ -46,6 +46,6 @@ namespace Vanrise.BEBridge.Data.SQL
         }
 
         #endregion
-              
+
     }
 }

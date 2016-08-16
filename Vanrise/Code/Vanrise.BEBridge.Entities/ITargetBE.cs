@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace Vanrise.BEBridge.Entities
 {
+    public class TargetBEBatch
+    {
+        public IEnumerable<ITargetBE> TargetBEs { get; set; }
+    }
+
     public interface ITargetBE
     {
         object TargetBEId { get; }

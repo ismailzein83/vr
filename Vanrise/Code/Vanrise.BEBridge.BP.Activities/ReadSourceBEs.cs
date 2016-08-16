@@ -5,6 +5,7 @@ using System.Text;
 using System.Activities;
 using Vanrise.BEBridge.Entities;
 using Vanrise.BusinessProcess;
+using Vanrise.Queueing;
 
 namespace Vanrise.BEBridge.BP.Activities
 {
@@ -13,26 +14,43 @@ namespace Vanrise.BEBridge.BP.Activities
     {
         public SourceBEReader SourceReader { get; set; }
 
-        public SourceBEBatch SourceBatch { get; set; }
+        public BaseQueue<SourceBatches> SourceBatches { get; set; }
     }
 
-    public sealed class ReadSourceBEs : CodeActivity
+    public sealed class ReadSourceBEs : DependentAsyncActivity<ReadSourceBEsInput>
     {
         [RequiredArgument]
         public InArgument<SourceBEReader> SourceReader { get; set; }
         [RequiredArgument]
-        public InOutArgument<SourceBEBatch> SourceBatch { get; set; }
+        public InOutArgument<BaseQueue<SourceBatches>> SourceBatches { get; set; }
 
-        protected override void Execute(CodeActivityContext context)
+        protected override void DoWork(ReadSourceBEsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             Action<SourceBEBatch, SourceBEBatchRetrievedContext> onSourceBEBatchRetrieved = (sourceBEBatch, sourceRetrievedContext) =>
             {
-                SourceBatch.Set(context, sourceBEBatch);
+                inputArgument.SourceBatches.Enqueue(new SourceBatches() { SorceBEBatches = new List<SourceBEBatch> { sourceBEBatch } });
             };
             SourceBEReaderRetrieveUpdatedBEsContext sourceBEReaderContext = new SourceBEReaderRetrieveUpdatedBEsContext(onSourceBEBatchRetrieved);
-            SourceReader.Get(context).RetrieveUpdatedBEs(sourceBEReaderContext);
-
+            inputArgument.SourceReader.RetrieveUpdatedBEs(sourceBEReaderContext);
         }
+
+        protected override ReadSourceBEsInput GetInputArgument2(AsyncCodeActivityContext context)
+        {
+            return new ReadSourceBEsInput
+            {
+                SourceBatches = this.SourceBatches.Get(context),
+                SourceReader = this.SourceReader.Get(context)
+            };
+        }
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.SourceBatches.Get(context) == null)
+                this.SourceBatches.Set(context, new MemoryQueue<SourceBatches>());
+            base.OnBeforeExecute(context, handle);
+        }
+
+        #region Context Implementations
 
         private class SourceBEReaderRetrieveUpdatedBEsContext : ISourceBEReaderRetrieveUpdatedBEsContext
         {
@@ -50,7 +68,8 @@ namespace Vanrise.BEBridge.BP.Activities
             }
         }
 
+        #endregion
+
     }
-
-
+    
 }
