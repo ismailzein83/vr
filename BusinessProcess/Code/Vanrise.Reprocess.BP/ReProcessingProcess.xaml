@@ -38,8 +38,11 @@
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
       <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
       <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
       <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
@@ -49,16 +52,13 @@
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.Entities</AssemblyReference>
-      <AssemblyReference>PresentationFramework</AssemblyReference>
-      <AssemblyReference>PresentationCore</AssemblyReference>
-      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
-      <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP</AssemblyReference>
     </sco:Collection>
@@ -402,7 +402,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sUUIDlgMOAgEBRjNGNgIBA0czRzYCAQJLBVEgAwH7A1IFZyQDAdoDaAVzDgMByQN0BfoBFwMB6AH7AQWGAiQDAdcBhwIFkgIOAwHGAZMCBY0DFwIBDo4DBZQDIAIBBE4LToUBAwH9A0tgS4ABAwH8A2QLZFcDAfMDVQtVXQMB6wNfC19ZAwHjA1oLWnIDAdsDcAtwXAMB0gNrC2tgAwHKA3cLd3EDAcEDfgn4ARQDAekBgwILgwJjAwHgAf4BC/4BcgMB2AGPAguPAncDAc8BigILigJnAwHHAZYCC5YCigEDAb4BnQIJiwMUAgEPkQMLkQOFAQIBBo4DYI4DgAECAQWEAQuPASYDAagDkAELogEcAwGOA6MBC64BFAMB9QKvAQv3ARADAeoBoQILrAImAwGpAa0CC7gCJgMBlAG5AgvEAiYCAX/FAguKAxACARCMARGMAYsBAwG1A4cBEYcBkQEDAakDkwERmgEgAwGcA58BEZ8BhAEDAZADkAF8kAGCAQMBjwOrARGrAWQDAYIDpgERpgFqAwH2ArIBEbIBsQEDAesBtgEPwQEqAwHcAsQBD/UBGgMB9wGpAhGpAosBAwG0AaQCEaQClgEDAaoBsAIRsAJgAwGfAbUCEbUCfAMBlQHBAhHBAosBAwGKAbwCEbwClwEDAYAByAIRyAJmAgERzAIPiAMhAgEbvgEVvgGJAQMB6QK5ARW5AaYBAwHdAsUBEdABGgMBwwLRARHcARoDAaoC3QER6AEaAwGRAukBEfQBLAMB+AHPAhXPAn8CAXXWAhOGAx4CARzNARfNAbABAwHQAsgBF8gBkgEDAcQC2QEX2QF7AwG3AtQBF9QBawMBqwLlARflAXUDAZ4C4AEX4AFrAwGSAvEBF/EBkQEDAYUC7AEX7AGuAgMB+QHcAhXnAjACAVjoAhX5AiYCATr6AhWFAzACAR3kAhvkApUBAgFn3wIb3wK4AQIBWesCG/ECIAIBSvYCG/YCjgECATzoAoYB6AKMAQIBO4IDG4IDlQECASz9Ahv9ArsBAgEe</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sUUIDlgMOAgEBRjNGNgIBA0czRzYCAQJLBVEgAwH7A1IFZyQDAdoDaAVzDgMByQN0BfoBFwMB6AH7AQWGAiQDAdcBhwIFkgIOAwHGAZMCBY0DFwIBDo4DBZQDIAIBBE4LToUBAwH9A0tgS4ABAwH8A2QLZFcDAfMDVQtVXQMB6wNfC19ZAwHjA1oLWnIDAdsDcAtwXAMB0gNrC2tgAwHKA3cLd3EDAcEDfgn4ARQDAekBgwILgwJjAwHgAf4BC/4BcgMB2AGPAguPAncDAc8BigILigJnAwHHAZYCC5YCigEDAb4BnQIJiwMUAgEPkQMLkQOFAQIBBo4DYI4DgAECAQWEAQuPASYDAagDkAELogEcAwGOA6MBC64BFAMB9QKvAQv3ARADAeoBoQILrAImAwGpAa0CC7gCJgMBlAG5AgvEAiYCAX/FAguKAxACARCMARGMAYsBAwG1A4cBEYcBkQEDAakDkwERmgEgAwGcA58BEZ8BhAEDAZADkAF8kAGCAQMBjwOrARGrAWQDAYIDpgERpgFqAwH2ArIBEbIBsQEDAesBtgEPwQEqAwHcAsQBD/UBGgMB9wGpAhGpAosBAwG0AaQCEaQClgEDAaoBsAIRsAJgAwGfAbUCEbUCfAMBlQHBAhHBAosBAwGKAbwCEbwC3AEDAYAByAIRyAJmAgERzAIPiAMhAgEbvgEVvgGJAQMB6QK5ARW5AaYBAwHdAsUBEdABGgMBwwLRARHcARoDAaoC3QER6AEaAwGRAukBEfQBLAMB+AHPAhXPAn8CAXXWAhOGAx4CARzNARfNAbABAwHQAsgBF8gBkgEDAcQC2QEX2QF7AwG3AtQBF9QBawMBqwLlARflAXUDAZ4C4AEX4AFrAwGSAvEBF/EBkQEDAYUC7AEX7AGuAgMB+QHcAhXnAjACAVjoAhX5AiYCATr6AhWFAzACAR3kAhvkApUBAgFn3wIb3wK4AQIBWesCG/ECIAIBSvYCG/YCjgECATzoAoYB6AKMAQIBO4IDG4IDlQECASz9Ahv9ArsBAgEe</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

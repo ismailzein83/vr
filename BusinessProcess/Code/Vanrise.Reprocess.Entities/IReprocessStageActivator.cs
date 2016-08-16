@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
+using Vanrise.Entities;
 using Vanrise.Queueing;
 
 namespace Vanrise.Reprocess.Entities
@@ -51,6 +52,10 @@ namespace Vanrise.Reprocess.Entities
         string CurrentStageName { get; }
 
         DateTime BatchStart { get; }
+
+        void WriteTrackingMessage(LogEntryType severity, string messageFormat);
+
+        void DoWhilePreviousRunning(AsyncActivityStatus previousActivityStatus, Action actionToDo);
     }
 
     public interface IReprocessStageActivatorPreparingContext
