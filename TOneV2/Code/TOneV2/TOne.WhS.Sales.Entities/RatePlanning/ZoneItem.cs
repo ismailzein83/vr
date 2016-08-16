@@ -20,7 +20,9 @@ namespace TOne.WhS.Sales.Entities
         public Decimal? CurrentRate { get; set; }
         public DateTime? CurrentRateBED { get; set; }
         public DateTime? CurrentRateEED { get; set; }
+        public DateTime? CurrentRateNewEED { get; set; }
         public bool? IsCurrentRateEditable { get; set; }
+        public Dictionary<int, OtherRate> CurrentOtherRates { get; set; }
         public Decimal? NewRate
         {
             get
@@ -52,9 +54,7 @@ namespace TOne.WhS.Sales.Entities
                 return null;
             }
         }
-        public DateTime? RateChangeEED { get; set; }
         public decimal? CalculatedRate { get; set; }
-        public Dictionary<int, decimal> CurrentOtherRates { get; set; }
         #endregion
 
         #region Routing Product Properties
@@ -75,5 +75,13 @@ namespace TOne.WhS.Sales.Entities
         public IEnumerable<RPRouteOptionDetail> RouteOptions { get; set; }
         public List<decimal?> Costs { get; set; }
         #endregion
+    }
+
+    public class OtherRate
+    {
+        public int RateTypeId { get; set; }
+        public decimal Rate { get; set; }
+        public DateTime BED { get; set; }
+        public DateTime? EED { get; set; }
     }
 }

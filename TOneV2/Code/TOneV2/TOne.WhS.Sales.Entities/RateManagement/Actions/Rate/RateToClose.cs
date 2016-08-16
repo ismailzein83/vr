@@ -8,6 +8,8 @@ namespace TOne.WhS.Sales.Entities
 {
     public class RateToClose
     {
+        public long ZoneId { get; set; }
+
         public string ZoneName { get; set; }
 
         public int? RateTypeId { get; set; }

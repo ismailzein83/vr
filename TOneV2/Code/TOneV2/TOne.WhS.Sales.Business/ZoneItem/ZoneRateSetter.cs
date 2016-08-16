@@ -50,11 +50,18 @@ namespace TOne.WhS.Sales.Business
                 zoneItem.CurrentRateEED = rate.Rate.EED;
                 zoneItem.IsCurrentRateEditable = (rate.Source == _ownerType);
 
-                if (rate.RatesByRateType != null)
+                if (rate.RatesByRateType.Count > 0)
                 {
-                    zoneItem.CurrentOtherRates = new Dictionary<int, decimal>();
+                    zoneItem.CurrentOtherRates = new Dictionary<int, OtherRate>();
                     foreach (KeyValuePair<int, SaleRate> kvp in rate.RatesByRateType)
-                        zoneItem.CurrentOtherRates.Add(kvp.Key, kvp.Value.NormalRate);
+                    {
+                        zoneItem.CurrentOtherRates.Add(kvp.Key, new OtherRate()
+                        {
+                            Rate = kvp.Value.NormalRate,
+                            BED = kvp.Value.BED,
+                            EED = kvp.Value.EED
+                        });
+                    }
                 }
             }
 
@@ -67,7 +74,7 @@ namespace TOne.WhS.Sales.Business
             
             DraftRateToClose rateChange = _rateChanges.FindRecord(itm => itm.RateId == zoneItem.CurrentRateId); // What if currentRateId = null?
             if (rateChange != null)
-                zoneItem.RateChangeEED = rateChange.EED;
+                zoneItem.CurrentRateNewEED = rateChange.EED;
         }
     }
 }

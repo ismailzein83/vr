@@ -12,7 +12,7 @@ namespace TOne.WhS.Sales.Data
     {
         long ProcessInstanceId { set; }
 
-        IEnumerable<RatePreview> GetRatePreviews(RatePlanPreviewQuery query);
+        IEnumerable<RatePreview> GetRatePreviews(RatePreviewQuery query);
 
         void ApplyRatePreviewsToDB(IEnumerable<RatePreview> ratePreviews);
     }

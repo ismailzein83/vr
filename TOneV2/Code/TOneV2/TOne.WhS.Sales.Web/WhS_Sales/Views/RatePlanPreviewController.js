@@ -113,7 +113,8 @@
 
             ratePreviewGridReadyDeferred.promise.then(function () {
                 var ratePreviewGridPayload = {
-                    ProcessInstanceId: processInstanceId
+                    ProcessInstanceId: processInstanceId,
+                    ZoneName: null
                 };
                 VRUIUtilsService.callDirectiveLoad(ratePreviewGridAPI, ratePreviewGridPayload, ratePreviewGridLoadDeferred);
             });

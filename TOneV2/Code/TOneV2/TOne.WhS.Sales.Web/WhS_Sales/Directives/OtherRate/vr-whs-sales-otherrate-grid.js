@@ -1,10 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService", "VRCommon_RateTypeAPIService",
-function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService) {
-
-    var directiveDefinitionObject = {
-
+app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService", "VRCommon_RateTypeAPIService", 'WhS_Sales_RatePlanUtilsService', function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService, WhS_Sales_RatePlanUtilsService) {
+    return {
         restrict: "E",
         scope: {
             onReady: "="
@@ -20,7 +17,6 @@ function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService) {
 
         },
         templateUrl: "/Client/Modules/WhS_Sales/Directives/OtherRate/Templates/OtherRateGridTemplate.html"
-
     };
 
     function RateTypeGrid($scope, ctrl, $attrs) {
@@ -29,6 +25,7 @@ function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService) {
 
         var gridAPI;
         var zoneItem;
+        var settings;
 
         function initializeController() {
 
@@ -40,19 +37,19 @@ function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService) {
             };
 
             $scope.areOtherRatesEditable = function () {
-                if (zoneItem == undefined)
-                    return false;
                 return (zoneItem.CurrentRate != null || zoneItem.NewRate != null);
             };
 
-            $scope.onValueChanged = function () {
-                if (zoneItem != undefined)
-                    zoneItem.IsDirty = true;
+            $scope.onNewRateChanged = function (otherRate)
+            {
+                zoneItem.IsDirty = true;
+                WhS_Sales_RatePlanUtilsService.onNewRateChanged(otherRate, settings);
             };
 
-            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return VRCommon_RateTypeAPIService.GetFilteredRateTypes(dataRetrievalInput).then(function (response) {
-
+            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady)
+            {
+                return VRCommon_RateTypeAPIService.GetFilteredRateTypes(dataRetrievalInput).then(function (response)
+                {
                     if (response != null && response.Data != null)
                     {
                         for (var i = 0; i < response.Data.length; i++)
@@ -60,8 +57,17 @@ function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService) {
                             var otherRate = response.Data[i];
 
                             if (zoneItem.CurrentOtherRates != null)
-                                otherRate.currentRate = zoneItem.CurrentOtherRates[otherRate.Entity.RateTypeId];
+                            {
+                                var currentOtherRate = zoneItem.CurrentOtherRates[otherRate.Entity.RateTypeId];
 
+                                if (currentOtherRate != undefined)
+                                {
+                                    otherRate.CurrentRate = currentOtherRate.Rate;
+                                    otherRate.CurrentRateBED = currentOtherRate.BED;
+                                    otherRate.CurrentRateEED = currentOtherRate.EED;
+                                }
+                            }
+                            
                             if (zoneItem.NewRates != null)
                             {
                                 var newOtherRate = UtilsService.getItemByVal(zoneItem.NewRates, otherRate.Entity.RateTypeId, 'RateTypeId');
@@ -69,7 +75,9 @@ function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService) {
                                 if (newOtherRate != null)
                                 {
                                     zoneItem.IsDirty = true;
-                                    otherRate.newRate = newOtherRate.NormalRate;
+                                    otherRate.NewRate = newOtherRate.NormalRate;
+                                    otherRate.NewRateBED = newOtherRate.BED;
+                                    otherRate.NewRateEED = newOtherRate.EED;
                                 }
                             }
                         }
@@ -88,6 +96,7 @@ function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService) {
 
             api.loadGrid = function (query) {
                 zoneItem = query.zoneItem;
+                settings = query.settings;
                 return gridAPI.retrieveData(query);
             };
 
@@ -95,28 +104,18 @@ function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService) {
                 gridAPI.itemAdded(rateType);
             };
 
-            api.applyChanges = function (zoneChanges) {
+            api.applyChanges = function (zoneChanges)
+            {
                 if (!$scope.areOtherRatesEditable())
                     return;
+                
+                var isNormalRateClosed = (zoneItem.IsCurrentRateEditable === true && compareDates(zoneItem.currentRateEED, zoneItem.CurrentRateEED) != 0);
 
-                var otherRateBED;
-                var otherRateEED;
-                var isRateClosed = (zoneItem.IsCurrentRateEditable === true && compareDates(zoneItem.currentRateBED, zoneItem.CurrentRateBED) == 0);
-
-                if (zoneItem.NewRate != null) {
-                    otherRateBED = zoneItem.NewRateBED;
-                    otherRateEED = zoneItem.NewRateEED;
-                }
-                else {
-                    otherRateBED = zoneItem.CurrentRateBED;
-                    otherRateEED = zoneItem.CurrentRateEED;
-                }
-
-                // Add new rates
-                for (var i = 0; i < $scope.otherRates.length; i++) {
+                for (var i = 0; i < $scope.otherRates.length; i++)
+                {
                     var otherRate = $scope.otherRates[i];
 
-                    if (otherRate.newRate != null) {
+                    if (otherRate.NewRate != null) {
                         if (zoneChanges.NewRates == null)
                             zoneChanges.NewRates = [];
 
@@ -124,21 +123,37 @@ function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService) {
                         {
                             ZoneId: zoneItem.ZoneId,
                             RateTypeId: otherRate.Entity.RateTypeId,
-                            NormalRate: otherRate.newRate,
-                            BED: otherRateBED,
-                            EED: otherRateEED
+                            NormalRate: otherRate.NewRate,
+                            BED: otherRate.NewRateBED,
+                            EED: otherRate.NewRateEED
                         });
                     }
-                    else if (isRateClosed && otherRate.currentRate != null)
+                    else if (otherRate.CurrentRateNewEED != null) // => otherRate.currentRate != null
+                    {
+                        if (zoneChanges.ClosedRates == null)
+                            zoneChanges.ClosedRates = [];
+
+                        zoneChanges.ClosedRates.push({
+                            RateTypeId: otherRate.Entity.RateTypeId,
+                            EED: otherRate.CurrentRateNewEED
+                        });
+                    }
+                    else if (isNormalRateClosed && otherRate.CurrentRate != null)
                     {
                         zoneChanges.ClosedRates.push({
                             RateTypeId: otherRate.Entity.RateTypeId,
-                            EED: otherRateEED
+                            EED: zoneItem.CurrentRateEED
                         });
                     }
                 }
 
-                function compareDates(date1, date2) {
+                function compareDates(date1, date2)
+                {
+                    if (!date1 && !date2)
+                        return 0;
+                    if (!date2)
+                        return 2;
+
                     var d1 = new Date(date1);
                     var d2 = new Date(date2);
 
@@ -170,9 +185,5 @@ function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService) {
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
-
     }
-
-    return directiveDefinitionObject;
-
 }]);

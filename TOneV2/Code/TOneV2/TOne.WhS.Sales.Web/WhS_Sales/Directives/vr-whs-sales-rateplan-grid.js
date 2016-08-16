@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "VRValidationService", "VRCommon_RateTypeAPIService",
-    function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService, VRCommon_RateTypeAPIService) {
+app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "VRValidationService", "VRCommon_RateTypeAPIService", 'WhS_Sales_RatePlanUtilsService', function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService, VRCommon_RateTypeAPIService, WhS_Sales_RatePlanUtilsService)
+{
         return {
             restrict: "E",
             scope: {
@@ -39,6 +39,16 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 $scope.loadMoreData = function () {
                     return loadZoneItems();
                 };
+
+                $scope.onNewRateChanged = function (dataItem)
+                {
+                    dataItem.IsDirty = true;
+                    var settings = {
+                        increasedRateDayOffset: increasedRateDayOffset,
+                        decreasedRateDayOffset: decreasedRateDayOffset
+                    };
+                    WhS_Sales_RatePlanUtilsService.onNewRateChanged(dataItem, settings);
+                };
             }
 
             function getGridDrillDownDefinitions() {
@@ -73,7 +83,13 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     title: "Other Rates",
                     directive: "vr-whs-sales-otherrate-grid",
                     loadDirective: function (rateTypeGridAPI, zoneItem) {
-                        var query = { zoneItem: zoneItem };
+                        var query = {
+                            zoneItem: zoneItem,
+                            settings: {
+                                increasedRateDayOffset: increasedRateDayOffset,
+                                decreasedRateDayOffset: decreasedRateDayOffset
+                            }
+                        };
                         return rateTypeGridAPI.loadGrid(query);
                     }
                 }];
@@ -185,37 +201,20 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         if (zoneItem.NewRateEED == null)
                             zoneItem.NewRateEED = zoneItem.ZoneEED;
                     }
+                    else if (zoneItem.CurrentRate != null)
+                    {
+                        var rateEED = zoneItem.CurrentRateEED;
+
+                        if (zoneItem.CurrentRateNewEED != null) {
+                            zoneItem.IsDirty = true;
+                            rateEED = zoneItem.CurrentRateNewEED;
+                        }
+
+                        zoneItem.CurrentRateEED = (rateEED != null && compareDates(rateEED, zoneItem.ZoneEED) == 2) ? rateEED : zoneItem.ZoneEED;
+                    }
                     else if (zoneItem.CurrentRate != null && zoneItem.CurrentRateEED == null) {
                         zoneItem.CurrentRateEED = zoneItem.ZoneEED;
                     }
-
-                    zoneItem.setNewRateBED = function () {
-                        zoneItem.IsDirty = true;
-
-                        if (zoneItem.NewRate) {
-                            zoneItem.showNewRateBED = true;
-                            zoneItem.showNewRateEED = true;
-                            zoneItem.CurrentRateEED = zoneItem.currentRateEED;
-
-                            var date = new Date();
-
-                            zoneItem.NewRateBED = (zoneItem.CurrentRate == null || Number(zoneItem.NewRate) > zoneItem.CurrentRate) ?
-                                getNowPlusDays(increasedRateDayOffset) : getNowPlusDays(decreasedRateDayOffset);
-                        }
-                        else {
-                            zoneItem.NewRateBED = null;
-                            zoneItem.NewRateEED = null;
-                            zoneItem.showNewRateBED = false;
-                            zoneItem.showNewRateEED = false;
-                        }
-
-                        if (zoneItem.NewRateEED == null)
-                            zoneItem.NewRateEED = zoneItem.ZoneEED;
-
-                        function getNowPlusDays(days) {
-                            return new Date(new Date().setDate(new Date().getDate() + days));
-                        }
-                    };
 
                     zoneItem.validateNewRate = function (zoneItem) {
                         if (zoneItem.CurrentRate) {
@@ -337,7 +336,13 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     function validateTimeRange(date1, date2) {
                         return VRValidationService.validateTimeRange(date1, date2);
                     }
-                    function compareDates(date1, date2) {
+                    function compareDates(date1, date2)
+                    {
+                        if (!date1 && !date2)
+                            return 0;
+                        if (!date2)
+                            return 2;
+
                         var d1 = new Date(date1);
                         var d2 = new Date(date2);
 
@@ -421,7 +426,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             RateId: zoneItem.CurrentRateId,
                             EED: zoneItem.CurrentRateEED
                         };
-                        zoneChanges.RateChange = rateToClose;
                         zoneChanges.ClosedRates = [rateToClose];
                     }
 

@@ -10,4 +10,9 @@ namespace TOne.WhS.Sales.Entities
     {
         public long ProcessInstanceId { get; set; }
     }
+
+    public class RatePreviewQuery : RatePlanPreviewQuery
+    {
+        public string ZoneName { get; set; }
+    }
 }

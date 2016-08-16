@@ -23,7 +23,7 @@ namespace TOne.WhS.Sales.Web.Controllers
 
         [HttpPost]
         [Route("GetFilteredRatePreviews")]
-        public object GetFilteredRatePreviews(Vanrise.Entities.DataRetrievalInput<RatePlanPreviewQuery> input)
+        public object GetFilteredRatePreviews(Vanrise.Entities.DataRetrievalInput<RatePreviewQuery> input)
         {
             var manager = new RatePreviewManager();
             return GetWebResponse(input, manager.GetFilteredRatePreviews(input));

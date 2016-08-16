@@ -92,7 +92,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     customerZones.Countries.Add(new CustomerCountry()
                     {
-                        CountryId = country.CountryId
+                        CountryId = country.CountryId,
+                        StartEffectiveTime = country.StartEffectiveTime
                     });
                 }
             }

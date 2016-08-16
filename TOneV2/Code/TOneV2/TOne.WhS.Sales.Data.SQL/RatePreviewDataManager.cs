@@ -15,7 +15,7 @@ namespace TOne.WhS.Sales.Data.SQL
     {
         #region Fields / Properties
 
-        readonly string[] columns = { "ZoneName", "ProcessInstanceID", "CurrentRate", "IsCurrentRateInherited", "NewRate", "ChangeType", "EffectiveOn", "EffectiveUntil" };
+        readonly string[] columns = { "ZoneName", "ProcessInstanceID", "RateTypeID", "CurrentRate", "IsCurrentRateInherited", "NewRate", "ChangeType", "EffectiveOn", "EffectiveUntil" };
 
         private long _processInstanceId;
 
@@ -41,9 +41,9 @@ namespace TOne.WhS.Sales.Data.SQL
 
         #region Public Methods
 
-        public IEnumerable<RatePreview> GetRatePreviews(RatePlanPreviewQuery query)
+        public IEnumerable<RatePreview> GetRatePreviews(RatePreviewQuery query)
         {
-            return GetItemsSP("TOneWhS_Sales.sp_SaleRate_GetPreviews", RatePreviewMapper, query.ProcessInstanceId);
+            return GetItemsSP("TOneWhS_Sales.sp_SaleRate_GetPreviews", RatePreviewMapper, query.ProcessInstanceId, query.ZoneName);
         }
 
         public void ApplyRatePreviewsToDB(IEnumerable<RatePreview> ratePreviews)
@@ -77,9 +77,10 @@ namespace TOne.WhS.Sales.Data.SQL
 
             streamForBulkInsert.WriteRecord
             (
-                "{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",
+                "{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}",
                 record.ZoneName,
                 _processInstanceId,
+                record.RateTypeId,
                 record.CurrentRate,
                 isCurrentRateInherited,
                 record.NewRate,
@@ -113,6 +114,7 @@ namespace TOne.WhS.Sales.Data.SQL
             return new RatePreview()
             {
                 ZoneName = reader["ZoneName"] as string,
+                RateTypeId = GetReaderValue<int?>(reader, "RateTypeID"),
                 CurrentRate = GetReaderValue<decimal?>(reader, "CurrentRate"),
                 IsCurrentRateInherited = GetReaderValue<bool?>(reader, "IsCurrentRateInherited"),
                 NewRate = GetReaderValue<decimal?>(reader, "NewRate"),

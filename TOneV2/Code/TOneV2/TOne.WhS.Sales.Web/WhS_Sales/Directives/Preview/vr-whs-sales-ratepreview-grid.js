@@ -22,6 +22,7 @@ app.directive('vrWhsSalesRatepreviewGrid', ['WhS_Sales_RatePlanPreviewAPIService
         this.initializeController = initializeController;
 
         var gridAPI;
+        var processInstanceId;
 
         function initializeController()
         {
@@ -37,11 +38,8 @@ app.directive('vrWhsSalesRatepreviewGrid', ['WhS_Sales_RatePlanPreviewAPIService
             $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_Sales_RatePlanPreviewAPIService.GetFilteredRatePreviews(dataRetrievalInput).then(function (response) {
                     if (response != null && response.Data != null) {
-                        for (var i = 0; i < response.Data.length; i++) {
-                            var dataItem = response.Data[i];
-                            if (dataItem.Entity.IsCurrentRateInherited === true)
-                                dataItem.Entity.CurrentRate += ' (Inherited)';
-                        }
+                        for (var i = 0; i < response.Data.length; i++)
+                            extendDataItem(response.Data[i]);
                     }
                     onResponseReady(response);
                 }).catch(function (error) {
@@ -54,11 +52,27 @@ app.directive('vrWhsSalesRatepreviewGrid', ['WhS_Sales_RatePlanPreviewAPIService
             var api = {};
 
             api.load = function (query) {
+                ctrl.isNormalRateGrid = (query.ZoneName == null);
+                processInstanceId = query.ProcessInstanceId;
                 return gridAPI.retrieveData(query);
             };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
+        }
+
+        function extendDataItem(dataItem)
+        {
+            if (dataItem.Entity.IsCurrentRateInherited === true)
+                dataItem.Entity.CurrentRate += ' (Inherited)';
+
+            dataItem.onGridReady = function (api) {
+                var query = {
+                    ProcessInstanceId: processInstanceId,
+                    ZoneName: dataItem.Entity.ZoneName
+                };
+                api.load(query);
+            };
         }
     }
 }]);

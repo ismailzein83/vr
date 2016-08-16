@@ -20,5 +20,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class CustomerCountry
     {
         public int CountryId { get; set; }
+
+        public DateTime StartEffectiveTime { get; set; }
     }
 }

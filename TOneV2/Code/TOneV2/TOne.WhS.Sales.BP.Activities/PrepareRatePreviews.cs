@@ -92,56 +92,61 @@ namespace TOne.WhS.Sales.BP.Activities
             var ratePreviews = new List<RatePreview>();
             var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(minimumDate));
             var customerSellingProductManager = new CustomerSellingProductManager();
+            var saleZoneManager = new SaleZoneManager();
 
-            foreach (RateToChange rateToChange in ratesToChange)
+            RateStateByZone stateByZone = StructureRateStateByZone(ratesToChange, ratesToClose);
+
+            foreach (KeyValuePair<long, RateStateData> kvp in stateByZone)
             {
-                var ratePreview = new RatePreview()
-                {
-                    ZoneName = rateToChange.ZoneName,
-                    NewRate = rateToChange.NormalRate,
-                    ChangeType = rateToChange.ChangeType,
-                    EffectiveOn = rateToChange.BED,
-                    EffectiveUntil = rateToChange.EED
-                };
+                bool normalRateExists = false;
 
-                // Set the properties of the current rate
-
-                if (ownerType == SalePriceListOwnerType.SellingProduct)
+                foreach (RateToChange rateToChange in kvp.Value.RatesToChange)
                 {
-                    SaleEntityZoneRate currentRate = rateLocator.GetSellingProductZoneRate(ownerId, rateToChange.ZoneId);
-                    if (currentRate != null)
+                    if (!rateToChange.RateTypeId.HasValue)
+                        normalRateExists = true;
+
+                    var ratePreview = new RatePreview()
                     {
-                        ratePreview.CurrentRate = GetRateValue(rateToChange.RateTypeId, currentRate);
-                        ratePreview.IsCurrentRateInherited = false;
-                    }
-                }
-                else if (ownerType == SalePriceListOwnerType.Customer)
-                {
-                    int? sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(ownerId, rateToChange.BED, false);
-                    if (!sellingProductId.HasValue)
-                        throw new NullReferenceException("sellingProductId");
+                        ZoneName = rateToChange.ZoneName,
+                        RateTypeId = rateToChange.RateTypeId,
+                        NewRate = rateToChange.NormalRate,
+                        ChangeType = rateToChange.ChangeType,
+                        EffectiveOn = rateToChange.BED,
+                        EffectiveUntil = rateToChange.EED
+                    };
 
-                    SaleEntityZoneRate currentRate = rateLocator.GetCustomerZoneRate(ownerId, sellingProductId.Value, rateToChange.ZoneId);
-                    if (currentRate != null)
-                    {
-                        ratePreview.CurrentRate = GetRateValue(rateToChange.RateTypeId, currentRate);
-                        ratePreview.IsCurrentRateInherited = (currentRate.Source != SalePriceListOwnerType.Customer);
-                    }
+                    SetCurrentRateProperties(ratePreview, ownerType, ownerId, rateToChange.RateTypeId, rateLocator, kvp.Key, customerSellingProductManager, rateToChange.BED);
+                    ratePreviews.Add(ratePreview);
                 }
 
-                ratePreviews.Add(ratePreview);
-            }
-
-            foreach (RateToClose rateToClose in ratesToClose)
-            {
-                ratePreviews.Add(new RatePreview()
+                foreach (RateToClose rateToClose in ratesToClose)
                 {
-                    ZoneName = rateToClose.ZoneName,
-                    CurrentRate = rateToClose.Rate,
-                    IsCurrentRateInherited = false, // The user can't close an inherited rate
-                    ChangeType = RateChangeType.Deleted,
-                    EffectiveOn = rateToClose.CloseEffectiveDate
-                });
+                    if (!rateToClose.RateTypeId.HasValue)
+                        normalRateExists = true;
+
+                    ratePreviews.Add(new RatePreview()
+                    {
+                        ZoneName = rateToClose.ZoneName,
+                        RateTypeId = rateToClose.RateTypeId,
+                        CurrentRate = rateToClose.Rate,
+                        IsCurrentRateInherited = false, // The user can't close an inherited rate
+                        ChangeType = RateChangeType.Deleted,
+                        EffectiveOn = rateToClose.CloseEffectiveDate
+                    });
+                }
+
+                if (!normalRateExists)
+                {
+                    var normalRatePreview = new RatePreview()
+                    {
+                        ZoneName = saleZoneManager.GetSaleZoneName(kvp.Key),
+                        RateTypeId = null,
+                        ChangeType = RateChangeType.NotChanged
+                    };
+
+                    SetCurrentRateProperties(normalRatePreview, ownerType, ownerId, null, rateLocator, kvp.Key, customerSellingProductManager, DateTime.Now);
+                    ratePreviews.Add(normalRatePreview);
+                }
             }
 
             return new PrepareRatePreviewsOutput()
@@ -157,24 +162,95 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #region Private Methods
 
+        private RateStateByZone StructureRateStateByZone(IEnumerable<RateToChange> ratesToChange, IEnumerable<RateToClose> ratesToClose)
+        {
+            var stateByZone = new RateStateByZone();
+            RateStateData stateData;
 
-        private decimal GetRateValue(int? rateTypeId, SaleEntityZoneRate rate)
+            foreach (RateToChange rateToChange in ratesToChange)
+            {
+                if (!stateByZone.TryGetValue(rateToChange.ZoneId, out stateData))
+                {
+                    stateData = new RateStateData();
+                    stateData.RatesToChange = new List<RateToChange>();
+                    stateData.RatesToClose = new List<RateToClose>();
+                    stateByZone.Add(rateToChange.ZoneId, stateData);
+                }
+                stateData.RatesToChange.Add(rateToChange);
+            }
+
+            foreach (RateToClose rateToClose in ratesToClose)
+            {
+                if (!stateByZone.TryGetValue(rateToClose.ZoneId, out stateData))
+                {
+                    stateData = new RateStateData();
+                    stateData.RatesToChange = new List<RateToChange>();
+                    stateData.RatesToClose = new List<RateToClose>();
+                    stateByZone.Add(rateToClose.ZoneId, stateData);
+                }
+                stateData.RatesToClose.Add(rateToClose);
+            }
+
+            return stateByZone;
+        }
+
+        private void SetCurrentRateProperties(RatePreview ratePreview, SalePriceListOwnerType ownerType, int ownerId, int? rateTypeId, SaleEntityZoneRateLocator rateLocator, long zoneId, CustomerSellingProductManager customerSellingProductManager, DateTime effectiveOn)
+        {
+            if (ownerType == SalePriceListOwnerType.SellingProduct)
+            {
+                SaleEntityZoneRate currentRate = rateLocator.GetSellingProductZoneRate(ownerId, zoneId);
+
+                if (currentRate != null)
+                {
+                    ratePreview.CurrentRate = GetRateValue(rateTypeId, currentRate);
+                    ratePreview.IsCurrentRateInherited = false;
+                }
+            }
+            else if (ownerType == SalePriceListOwnerType.Customer)
+            {
+                int? sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(ownerId, effectiveOn, false);
+                if (!sellingProductId.HasValue)
+                    throw new NullReferenceException("sellingProductId");
+
+                SaleEntityZoneRate currentRate = rateLocator.GetCustomerZoneRate(ownerId, sellingProductId.Value, zoneId);
+                if (currentRate != null)
+                {
+                    ratePreview.CurrentRate = GetRateValue(rateTypeId, currentRate);
+                    ratePreview.IsCurrentRateInherited = (currentRate.Source != SalePriceListOwnerType.Customer);
+                }
+            }
+        }
+
+        private decimal? GetRateValue(int? rateTypeId, SaleEntityZoneRate rate)
         {
             if (!rateTypeId.HasValue)
-                return rate.Rate.NormalRate;
-            
-            if (rate.RatesByRateType == null)
-                throw new NullReferenceException("currentRate.RatesByRateType");
-            
-            SaleRate otherRate;
-            rate.RatesByRateType.TryGetValue(rateTypeId.Value, out otherRate);
+                return rate.Rate.NormalRate; // The rate locator ensures that rate.Rate != null
 
-            if (otherRate == null)
-                throw new NullReferenceException("otherRate");
+            if (rate.RatesByRateType != null)
+            {
+                SaleRate otherRate;
+                if (rate.RatesByRateType.TryGetValue(rateTypeId.Value, out otherRate))
+                    return otherRate.NormalRate;
+            }
 
-            return otherRate.NormalRate;
+            return null;
         }
         
+        #endregion
+
+        #region Private Classes
+
+        private class RateStateByZone : Dictionary<long, RateStateData>
+        {
+
+        }
+
+        private class RateStateData
+        {
+            public List<RateToChange> RatesToChange { get; set; }
+            public List<RateToClose> RatesToClose { get; set; }
+        }
+
         #endregion
     }
 }

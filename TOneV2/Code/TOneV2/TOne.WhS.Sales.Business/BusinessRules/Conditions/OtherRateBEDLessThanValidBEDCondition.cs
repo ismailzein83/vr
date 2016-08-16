@@ -13,7 +13,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
     {
         public override string GetMessage(IRuleTarget target)
         {
-            return String.Format("OtherRate.BED < Zone.ValidBED");
+            return String.Format("Cannot add an other rate with BED < valid BED of zone {0}", (target as DataByZone).ZoneName);
         }
 
         public override bool ShouldValidate(IRuleTarget target)
@@ -35,7 +35,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                     {
                         beginEffectiveDates = new List<DateTime?>() { zone.BED, zone.SoldOn, zone.CurrentRate.Rate.BED };
 
-                        if (otherRateToChange.BED >= beginEffectiveDates.VRMaximumDate())
+                        if (otherRateToChange.BED >= UtilitiesManager.GetMaxDate(beginEffectiveDates).Value)
                             continue;
                     }
 
@@ -43,9 +43,11 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                     {
                         beginEffectiveDates = new List<DateTime?>() { zone.BED, zone.SoldOn, zone.NormalRateToChange.BED };
 
-                        if (otherRateToChange.BED < beginEffectiveDates.VRMaximumDate())
-                            return false;
+                        if (otherRateToChange.BED >= UtilitiesManager.GetMaxDate(beginEffectiveDates).Value)
+                            continue;
                     }
+
+                    return false;
                 }
             }
 

@@ -11,6 +11,8 @@ namespace TOne.WhS.Sales.Entities
     {
         public string ZoneName { get; set; }
 
+        public int? RateTypeId { get; set; }
+
         public decimal? CurrentRate { get; set; }
 
         public bool? IsCurrentRateInherited { get; set; }
@@ -27,6 +29,8 @@ namespace TOne.WhS.Sales.Entities
     public class RatePreviewDetail
     {
         public RatePreview Entity { get; set; }
+
+        public string RateTypeName { get; set; }
 
         public string ChangeTypeDescription { get; set; }
     }

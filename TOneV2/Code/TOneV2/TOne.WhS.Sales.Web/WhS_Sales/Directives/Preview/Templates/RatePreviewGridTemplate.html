@@ -3,10 +3,14 @@
              pagingtype="'PagingOnScroll'"
              on-ready="scopeModel.onGridReady"
              menuactions="scopeModel.menuActions">
-    <vr-datagridcolumn headertext="'Zone'" field="'Entity.ZoneName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Zone'" field="'Entity.ZoneName'" type="'Text'" ng-show="ctrl.isNormalRateGrid"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Rate Type'" field="'RateTypeName'" type="'Text'" ng-show="!ctrl.isNormalRateGrid"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Current Rate'" field="'Entity.CurrentRate'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'New Rate'" field="'Entity.NewRate'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Change Type'" field="'ChangeTypeDescription'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Effective On'" field="'Entity.EffectiveOn'" type="'Date'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Effective Until'" field="'Entity.EffectiveUntil'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow ng-if="ctrl.isNormalRateGrid">
+        <vr-whs-sales-ratepreview-grid on-ready="dataItem.onGridReady"></vr-whs-sales-ratepreview-grid>
+    </vr-datagridexpandablerow>
 </vr-datagrid>

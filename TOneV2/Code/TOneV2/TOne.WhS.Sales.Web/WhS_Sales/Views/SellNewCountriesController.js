@@ -94,14 +94,17 @@
             });
         }
 
-        function buildCutomerZonesObjFromScope() {
+        function buildCutomerZonesObjFromScope()
+        {
+            var startEffectiveTime = UtilsService.getDateFromDateTime(new Date());
+
             return {
                 CustomerId: customerId,
-                Countries: getSelectedCountries(),
-                StartEffectiveTime: new Date()
+                Countries: getSelectedCountries(startEffectiveTime),
+                StartEffectiveTime: startEffectiveTime
             };
         }
-        function getSelectedCountries() {
+        function getSelectedCountries(startEffectiveTime) {
             if ($scope.countries.length == 0)
                 return null;
 
@@ -112,7 +115,8 @@
 
                 if (country.isSelected) {
                     selectedCountries.push({
-                        CountryId: country.CountryId
+                        CountryId: country.CountryId,
+                        StartEffectiveTime: startEffectiveTime
                     });
                 }
             }

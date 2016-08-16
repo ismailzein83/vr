@@ -160,7 +160,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 {
                     ratesToChange.Add(new RateToChange()
                     {
-                        ZoneId = newRate.ZoneId,
+                        ZoneId = zoneChanges.ZoneId,
                         ZoneName = saleZoneManager.GetSaleZoneName(zoneChanges.ZoneId),
                         RateTypeId = newRate.RateTypeId,
                         NormalRate = newRate.NormalRate,
@@ -171,12 +171,14 @@ namespace TOne.WhS.Sales.BP.Activities
                     minDate = Vanrise.Common.Utilities.Min(minDate, newRate.BED);
                 }
             }
-            else if (zoneChanges.ClosedRates != null)
+            
+            if (zoneChanges.ClosedRates != null)
             {
                 foreach (DraftRateToClose closedRate in zoneChanges.ClosedRates)
                 {
                     ratesToClose.Add(new RateToClose()
                     {
+                        ZoneId = zoneChanges.ZoneId,
                         ZoneName = saleZoneManager.GetSaleZoneName(zoneChanges.ZoneId),
                         RateTypeId = closedRate.RateTypeId,
                         CloseEffectiveDate = closedRate.EED

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.Sales.Entities;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Business.BusinessRules
 {
@@ -12,7 +13,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
     {
         public override string GetMessage(IRuleTarget target)
         {
-            return String.Format("NormalRate.EED > Zone.EED");
+            return String.Format("Cannot add a normal rate with EED > EED of zone {0}", (target as DataByZone).ZoneName);
         }
 
         public override bool ShouldValidate(IRuleTarget target)
@@ -26,12 +27,12 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (zone.NormalRateToChange != null)
             {
-                if (zone.NormalRateToChange.EED > zone.EED)
+                if (zone.EED.HasValue && zone.NormalRateToChange.EED > zone.EED.Value)
                     return false;
             }
             else if (zone.NormalRateToClose != null)
             {
-                if (zone.NormalRateToClose.CloseEffectiveDate > zone.EED)
+                if (zone.EED.HasValue && zone.NormalRateToClose.CloseEffectiveDate > zone.EED.Value)
                     return false;
             }
 

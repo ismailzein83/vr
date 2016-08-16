@@ -13,7 +13,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
     {
         public override string GetMessage(IRuleTarget target)
         {
-            return String.Format("OtherRate.EED > Zone.ValidEED");
+            return String.Format("Cannot add an other rate with EED > valid EED of zone {0}", (target as DataByZone).ZoneName);
         }
 
         public override bool ShouldValidate(IRuleTarget target)
@@ -34,18 +34,22 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                     if (zone.CurrentRate != null && zone.CurrentRate.Rate != null)
                     {
                         endEffectiveDates = new List<DateTime?>() { zone.EED, zone.CurrentRate.Rate.EED };
+                        DateTime? validEED = UtilitiesManager.GetMinDate(endEffectiveDates);
 
-                        if (otherRateToChange.EED < endEffectiveDates.VRMinimumDate())
+                        if (!validEED.HasValue || otherRateToChange.EED <= validEED.Value)
                             continue;
                     }
 
                     if (zone.NormalRateToChange != null)
                     {
                         endEffectiveDates = new List<DateTime?>() { zone.EED, zone.NormalRateToChange.EED };
+                        DateTime? validEED = UtilitiesManager.GetMinDate(endEffectiveDates);
 
-                        if (otherRateToChange.EED > endEffectiveDates.VRMinimumDate())
-                            return false;
+                        if (!validEED.HasValue || otherRateToChange.EED <= validEED.Value)
+                            continue;
                     }
+
+                    return false;
                 }
             }
 
@@ -56,18 +60,22 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                     if (zone.CurrentRate != null && zone.CurrentRate.Rate != null)
                     {
                         endEffectiveDates = new List<DateTime?>() { zone.EED, zone.CurrentRate.Rate.EED };
+                        DateTime? validEED = UtilitiesManager.GetMinDate(endEffectiveDates);
 
-                        if (otherRateToClose.CloseEffectiveDate < endEffectiveDates.VRMinimumDate())
+                        if (!validEED.HasValue || otherRateToClose.CloseEffectiveDate <= validEED.Value)
                             continue;
                     }
 
                     if (zone.NormalRateToChange != null)
                     {
                         endEffectiveDates = new List<DateTime?>() { zone.EED, zone.NormalRateToChange.EED };
+                        DateTime? validEED = UtilitiesManager.GetMinDate(endEffectiveDates);
 
-                        if (otherRateToClose.CloseEffectiveDate > endEffectiveDates.VRMinimumDate())
-                            return false;
+                        if (!validEED.HasValue || otherRateToClose.CloseEffectiveDate <= validEED.Value)
+                            continue;
                     }
+
+                    return false;
                 }
             }
 

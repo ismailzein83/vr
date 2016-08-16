@@ -99,6 +99,7 @@
     <Compile Include="SellingRuleManager.cs" />
     <Compile Include="SellingRules\FixedRule.cs" />
     <Compile Include="SellingRules\MarginRule.cs" />
+    <Compile Include="UtilitiesManager.cs" />
     <Compile Include="ZoneItem\ZoneRateSetter.cs" />
     <Compile Include="ZoneItem\ZoneRouteOptionSetter.cs" />
     <Compile Include="ZoneItem\ZoneRoutingProductSetter.cs" />
