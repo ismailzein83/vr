@@ -76,7 +76,7 @@ function (WhS_CP_CodePreparationPreviewAPIService, WhS_CP_ZoneChangeTypeEnum, VR
         function getDirectiveTabs() {
             var directiveTabs = [];
 
-            var directiveTab = {
+            var codesTab = {
                 title: "Codes",
                 directive: "vr-cp-codepreview-grid",
                 loadDirective: function (directiveAPI, zoneDataItem) {
@@ -92,7 +92,23 @@ function (WhS_CP_CodePreparationPreviewAPIService, WhS_CP_ZoneChangeTypeEnum, VR
                 }
             };
 
-            directiveTabs.push(directiveTab);
+            var ratesTab = {
+                title: "Rates",
+                directive: "vr-cp-ratepreview-grid",
+                loadDirective: function (directiveAPI, zoneDataItem) {
+                    zoneDataItem.rateGridAPI = directiveAPI;
+
+                    var rateGridPayload = {
+                        ProcessInstanceId: processInstanceId,
+                        ZoneName: zoneDataItem.ZoneName
+                    };
+
+                    return zoneDataItem.rateGridAPI.load(rateGridPayload);
+                }
+            };
+
+            directiveTabs.push(codesTab);
+            directiveTabs.push(ratesTab);
 
             return directiveTabs;
         }

@@ -1,11 +1,13 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.CodePreparation.BP.ApplyEntitiesToDBProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities"
  xmlns:twce="clr-namespace:TOne.WhS.CodePreparation.Entities;assembly=TOne.WhS.CodePreparation.Entities"
  xmlns:twcep="clr-namespace:TOne.WhS.CodePreparation.Entities.Processing;assembly=TOne.WhS.CodePreparation.Entities"
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
@@ -22,6 +24,7 @@
     <x:Property Name="PreviewZonesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(twce:ZonePreview)))" />
     <x:Property Name="PreviewCodesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(twce:CodePreview)))" />
     <x:Property Name="NewRatesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(twce:AddedRate)))" />
+    <x:Property Name="PreviewRatesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(twce:RatePreview)))" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>TOne.WhS.CodePreparation.BP.ApplyEntitiesToDBProcess_1</sap2010:WorkflowViewState.IdRef>
@@ -62,6 +65,7 @@
       <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.CodePreparation.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.CodePreparation.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.CodePreparation.Business</AssemblyReference>
       <AssemblyReference>TOne.WhS.CodePreparation.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.CodePreparation.BP</AssemblyReference>
@@ -85,8 +89,10 @@
       <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PreparedPreviewCodesStatus" />
       <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="PreparedNewRatesQueue" />
       <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PreparedNewRatesStatus" />
+      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="PreparedPreviewRatesQueue" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PreparedPreviewRatesStatus" />
     </Parallel.Variables>
-    <twcba:PrepareNewZonesForApply sap2010:WorkflowViewState.IdRef="PrepareNewZonesForApply_1" xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities" xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger" xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities">
+    <twcba:PrepareNewZonesForApply sap2010:WorkflowViewState.IdRef="PrepareNewZonesForApply_1">
       <twcba:PrepareNewZonesForApply.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcep:AddedZone))">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcep:AddedZone))">NewZonesQueue</mca:CSharpValue>
@@ -113,7 +119,7 @@
         </OutArgument>
       </twcba:PrepareNewZonesForApply.Status>
     </twcba:PrepareNewZonesForApply>
-    <twcba:ApplyNewZonesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNewZonesToDB_1" xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities" xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger" xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities">
+    <twcba:ApplyNewZonesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNewZonesToDB_1">
       <twcba:ApplyNewZonesToDB.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">preparedNewZonesQueue</mca:CSharpValue>
@@ -130,7 +136,7 @@
         </InArgument>
       </twcba:ApplyNewZonesToDB.SellingNumberPlanId>
     </twcba:ApplyNewZonesToDB>
-    <twcba:PrepareNewCodesForApply sap2010:WorkflowViewState.IdRef="PrepareNewCodesForApply_1" xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities" xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger" xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities">
+    <twcba:PrepareNewCodesForApply sap2010:WorkflowViewState.IdRef="PrepareNewCodesForApply_1">
       <twcba:PrepareNewCodesForApply.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcep:AddedCode))">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcep:AddedCode))">NewCodesQueue</mca:CSharpValue>
@@ -152,7 +158,7 @@
         </OutArgument>
       </twcba:PrepareNewCodesForApply.Status>
     </twcba:PrepareNewCodesForApply>
-    <twcba:ApplyNewCodesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNewCodesToDB_1" xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities" xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger" xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities">
+    <twcba:ApplyNewCodesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNewCodesToDB_1">
       <twcba:ApplyNewCodesToDB.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">preparedNewCodesQueue</mca:CSharpValue>
@@ -164,7 +170,7 @@
         </InArgument>
       </twcba:ApplyNewCodesToDB.PreviousActivityStatus>
     </twcba:ApplyNewCodesToDB>
-    <twcba:PrepareNewRatesForApply sap2010:WorkflowViewState.IdRef="PrepareNewRatesForApply_1" xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities" xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger" xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities">
+    <twcba:PrepareNewRatesForApply sap2010:WorkflowViewState.IdRef="PrepareNewRatesForApply_1">
       <twcba:PrepareNewRatesForApply.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twce:AddedRate))">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twce:AddedRate))">NewRatesQueue</mca:CSharpValue>
@@ -186,7 +192,7 @@
         </OutArgument>
       </twcba:PrepareNewRatesForApply.Status>
     </twcba:PrepareNewRatesForApply>
-    <twcba:ApplyNewRatesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNewRatesToDB_1" xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities" xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger" xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities">
+    <twcba:ApplyNewRatesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNewRatesToDB_1">
       <twcba:ApplyNewRatesToDB.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">PreparedNewRatesQueue</mca:CSharpValue>
@@ -198,7 +204,7 @@
         </InArgument>
       </twcba:ApplyNewRatesToDB.PreviousActivityStatus>
     </twcba:ApplyNewRatesToDB>
-    <twcba:PrepareChangedZonesForApply sap2010:WorkflowViewState.IdRef="PrepareChangedZonesForApply_1" xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities" xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger" xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities">
+    <twcba:PrepareChangedZonesForApply sap2010:WorkflowViewState.IdRef="PrepareChangedZonesForApply_1">
       <twcba:PrepareChangedZonesForApply.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcep:ChangedZone))">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcep:ChangedZone))">ChangedZonesQueue</mca:CSharpValue>
@@ -220,7 +226,7 @@
         </OutArgument>
       </twcba:PrepareChangedZonesForApply.Status>
     </twcba:PrepareChangedZonesForApply>
-    <twcba:ApplyChangedZonesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedZonesToDB_1" xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities" xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger" xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities">
+    <twcba:ApplyChangedZonesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedZonesToDB_1">
       <twcba:ApplyChangedZonesToDB.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">preparedChangedZonesQueue</mca:CSharpValue>
@@ -232,7 +238,7 @@
         </InArgument>
       </twcba:ApplyChangedZonesToDB.PreviousActivityStatus>
     </twcba:ApplyChangedZonesToDB>
-    <twcba:PrepareChangedCodesForApply sap2010:WorkflowViewState.IdRef="PrepareChangedCodesForApply_1" xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities" xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger" xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities">
+    <twcba:PrepareChangedCodesForApply sap2010:WorkflowViewState.IdRef="PrepareChangedCodesForApply_1">
       <twcba:PrepareChangedCodesForApply.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcep:ChangedCode))">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcep:ChangedCode))">ChangedCodesQueue</mca:CSharpValue>
@@ -254,7 +260,7 @@
         </OutArgument>
       </twcba:PrepareChangedCodesForApply.Status>
     </twcba:PrepareChangedCodesForApply>
-    <twcba:ApplyChangedCodesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedCodesToDB_1" xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities" xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger" xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities">
+    <twcba:ApplyChangedCodesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedCodesToDB_1">
       <twcba:ApplyChangedCodesToDB.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">preparedChangedCodesQueue</mca:CSharpValue>
@@ -266,7 +272,7 @@
         </InArgument>
       </twcba:ApplyChangedCodesToDB.PreviousActivityStatus>
     </twcba:ApplyChangedCodesToDB>
-    <twcba:PrepareChangedRatesForApply sap2010:WorkflowViewState.IdRef="PrepareChangedRatesForApply_1" xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities" xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger" xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities">
+    <twcba:PrepareChangedRatesForApply sap2010:WorkflowViewState.IdRef="PrepareChangedRatesForApply_1">
       <twcba:PrepareChangedRatesForApply.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcep:ChangedRate))">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcep:ChangedRate))">ChangedRatesQueue</mca:CSharpValue>
@@ -288,7 +294,7 @@
         </OutArgument>
       </twcba:PrepareChangedRatesForApply.Status>
     </twcba:PrepareChangedRatesForApply>
-    <twcba:ApplyChangedRatesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedRatesToDB_1" xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities" xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger" xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities">
+    <twcba:ApplyChangedRatesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedRatesToDB_1">
       <twcba:ApplyChangedRatesToDB.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">preparedChangedRatesQueue</mca:CSharpValue>
@@ -300,7 +306,7 @@
         </InArgument>
       </twcba:ApplyChangedRatesToDB.PreviousActivityStatus>
     </twcba:ApplyChangedRatesToDB>
-    <twcba:PreparePreviewZonesForDBApply sap2010:WorkflowViewState.IdRef="PreparePreviewZonesForDBApply_1" xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities" xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger" xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities">
+    <twcba:PreparePreviewZonesForDBApply sap2010:WorkflowViewState.IdRef="PreparePreviewZonesForDBApply_1">
       <twcba:PreparePreviewZonesForDBApply.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twce:ZonePreview))">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twce:ZonePreview))">PreviewZonesQueue</mca:CSharpValue>
@@ -322,7 +328,7 @@
         </OutArgument>
       </twcba:PreparePreviewZonesForDBApply.Status>
     </twcba:PreparePreviewZonesForDBApply>
-    <twcba:ApplyPreviewZonesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyPreviewZonesToDB_1" xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities" xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger" xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities">
+    <twcba:ApplyPreviewZonesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyPreviewZonesToDB_1">
       <twcba:ApplyPreviewZonesToDB.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">PreparedPreviewZonesQueue</mca:CSharpValue>
@@ -334,7 +340,7 @@
         </InArgument>
       </twcba:ApplyPreviewZonesToDB.PreviousActivityStatus>
     </twcba:ApplyPreviewZonesToDB>
-    <twcba:PreparePreviewCodesForDBApply sap2010:WorkflowViewState.IdRef="PreparePreviewCodesForDBApply_1" xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities" xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger" xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities">
+    <twcba:PreparePreviewCodesForDBApply sap2010:WorkflowViewState.IdRef="PreparePreviewCodesForDBApply_1">
       <twcba:PreparePreviewCodesForDBApply.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twce:CodePreview))">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twce:CodePreview))">PreviewCodesQueue</mca:CSharpValue>
@@ -356,7 +362,7 @@
         </OutArgument>
       </twcba:PreparePreviewCodesForDBApply.Status>
     </twcba:PreparePreviewCodesForDBApply>
-    <twcba:ApplyPreviewCodesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyPreviewCodesToDB_1" xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities" xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger" xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities">
+    <twcba:ApplyPreviewCodesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyPreviewCodesToDB_1">
       <twcba:ApplyPreviewCodesToDB.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">PreparedPreviewCodesQueue</mca:CSharpValue>
@@ -368,44 +374,64 @@
         </InArgument>
       </twcba:ApplyPreviewCodesToDB.PreviousActivityStatus>
     </twcba:ApplyPreviewCodesToDB>
-    <sads:DebugSymbol.Symbol>d15DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxTdWJQcm9jZXNzXEFwcGx5RW50aXRpZXNUb0RCUHJvY2Vzcy54YW1sAUYD9AIOAgEB</sads:DebugSymbol.Symbol>
+    <twcba:PreparePreviewRatesForDBApply sap2010:WorkflowViewState.IdRef="PreparePreviewRatesForDBApply_1">
+      <twcba:PreparePreviewRatesForDBApply.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twce:RatePreview))">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twce:RatePreview))">PreviewRatesQueue</mca:CSharpValue>
+        </InArgument>
+      </twcba:PreparePreviewRatesForDBApply.InputQueue>
+      <twcba:PreparePreviewRatesForDBApply.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">PreparedPreviewRatesQueue</mca:CSharpReference>
+        </InOutArgument>
+      </twcba:PreparePreviewRatesForDBApply.OutputQueue>
+      <twcba:PreparePreviewRatesForDBApply.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">CodePreparationMainProcessStatus</mca:CSharpValue>
+        </InArgument>
+      </twcba:PreparePreviewRatesForDBApply.PreviousActivityStatus>
+      <twcba:PreparePreviewRatesForDBApply.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">PreparedPreviewRatesStatus</mca:CSharpReference>
+        </OutArgument>
+      </twcba:PreparePreviewRatesForDBApply.Status>
+    </twcba:PreparePreviewRatesForDBApply>
+    <twcba:ApplyPreviewRatesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyPreviewRatesToDB_1">
+      <twcba:ApplyPreviewRatesToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">PreparedPreviewRatesQueue</mca:CSharpValue>
+        </InArgument>
+      </twcba:ApplyPreviewRatesToDB.InputQueue>
+      <twcba:ApplyPreviewRatesToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">PreparedPreviewRatesStatus</mca:CSharpValue>
+        </InArgument>
+      </twcba:ApplyPreviewRatesToDB.PreviousActivityStatus>
+    </twcba:ApplyPreviewRatesToDB>
+    <sads:DebugSymbol.Symbol>d15DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxTdWJQcm9jZXNzXEFwcGx5RW50aXRpZXNUb0RCUHJvY2Vzcy54YW1sS0oDnAMOAgEBXwV5JQMBjQx6BYoBHwMBsguLAQWgASUDAbkKoQEFrAEfAwH8Ca0BBcIBJQMBgwnDAQXOAR8DAcYIzwEF5AEpAwHNB+UBBfABIwMBkAfxAQWGAikDAZcGhwIFkgIjAwHaBZMCBagCKQMB4QSpAgW0AiMDAaQEtQIFygIrAwGrA8sCBdYCIwMB7gLXAgXsAisDAfUB7QIF+AIjAwG4AfkCBY4DKwIBP48DBZoDIwIBAmwLbHcDAYYNYgtifAMB6AxxC3FbAwHKDHYLdnQDAawMZwtndAMBjgyCAQuCAWwDAe8LfQt9bAMB0QuHAQuHAVsDAbMLmAELmAF3AwGUC44BC44BfAMB9gqdAQudAXQDAdgKkwELkwF0AwG6CqkBC6kBbAMBmwqkAQukAWwDAf0JugELugF3AwHeCbABC7ABewMBwAm/AQu/AXUDAaIJtQELtQF0AwGECcsBC8sBbQMB5QjGAQvGAWwDAccI3AEL3AF3AwGoCNIBC9IBggEDAYoI4QEL4QF4AwHsB9cBC9cBeAMBzgftAQvtAXADAa8H6AEL6AFwAwGRB/4BC/4BdwMB8gb0AQv0AYIBAwHUBoMCC4MCeAMBtgb5AQv5AXgDAZgGjwILjwJwAwH5BYoCC4oCcAMB2wWgAgugAncDAbwFlgILlgKCAQMBngWlAgulAnkDAYAFmwILmwJ4AwHiBLECC7ECcQMBwwSsAgusAnADAaUEwgILwgJ3AwGGBLgCC7gCgQEDAegDxwILxwJ5AwHKA70CC70CeAMBrAPTAgvTAnEDAY0DzgILzgJwAwHvAuQCC+QCdwMB0ALaAgvaAoEBAwGyAukCC+kCeQMBlALfAgvfAngDAfYB9QIL9QJxAwHXAfACC/ACcAMBuQGGAwuGA3cDAZoB/AIL/AKBAQIBfIsDC4sDeQIBXoEDC4EDeAIBQJcDC5cDcQIBIZIDC5IDcAIBAw==</sads:DebugSymbol.Symbol>
   </Parallel>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="PrepareNewZonesForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ErrorActivity_1" sap:VirtualizedContainerService.HintSize="353,55" />
       <sap2010:ViewStateData Id="ApplyNewZonesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ErrorActivity_2" sap:VirtualizedContainerService.HintSize="353,55" />
       <sap2010:ViewStateData Id="PrepareNewCodesForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ErrorActivity_3" sap:VirtualizedContainerService.HintSize="353,55" />
       <sap2010:ViewStateData Id="ApplyNewCodesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ErrorActivity_4" sap:VirtualizedContainerService.HintSize="353,55" />
       <sap2010:ViewStateData Id="PrepareNewRatesForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ErrorActivity_5" sap:VirtualizedContainerService.HintSize="353,55" />
       <sap2010:ViewStateData Id="ApplyNewRatesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ErrorActivity_6" sap:VirtualizedContainerService.HintSize="353,55" />
       <sap2010:ViewStateData Id="PrepareChangedZonesForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ErrorActivity_7" sap:VirtualizedContainerService.HintSize="353,55" />
       <sap2010:ViewStateData Id="ApplyChangedZonesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ErrorActivity_8" sap:VirtualizedContainerService.HintSize="353,55" />
       <sap2010:ViewStateData Id="PrepareChangedCodesForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ErrorActivity_9" sap:VirtualizedContainerService.HintSize="353,55" />
       <sap2010:ViewStateData Id="ApplyChangedCodesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ErrorActivity_10" sap:VirtualizedContainerService.HintSize="353,55" />
       <sap2010:ViewStateData Id="PrepareChangedRatesForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ErrorActivity_11" sap:VirtualizedContainerService.HintSize="353,55" />
       <sap2010:ViewStateData Id="ApplyChangedRatesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ErrorActivity_12" sap:VirtualizedContainerService.HintSize="353,55" />
       <sap2010:ViewStateData Id="PreparePreviewZonesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ErrorActivity_13" sap:VirtualizedContainerService.HintSize="353,55" />
       <sap2010:ViewStateData Id="ApplyPreviewZonesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ErrorActivity_14" sap:VirtualizedContainerService.HintSize="353,55" />
       <sap2010:ViewStateData Id="PreparePreviewCodesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ErrorActivity_15" sap:VirtualizedContainerService.HintSize="353,55" />
       <sap2010:ViewStateData Id="ApplyPreviewCodesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ErrorActivity_16" sap:VirtualizedContainerService.HintSize="353,55" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="6362,101" />
-      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="6402,181" />
+      <sap2010:ViewStateData Id="PreparePreviewRatesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyPreviewRatesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="4394,86" />
+      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="4434,166" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

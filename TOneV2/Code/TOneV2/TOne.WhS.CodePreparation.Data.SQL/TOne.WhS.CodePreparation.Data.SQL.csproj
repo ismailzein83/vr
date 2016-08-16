@@ -70,6 +70,7 @@
     <Compile Include="NewSaleCodeDataManager.cs" />
     <Compile Include="NewSaleZoneDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SaleRatePreviewDataManager.cs" />
     <Compile Include="SaleCodePreviewDataManager.cs" />
     <Compile Include="SaleZonePreviewDataManager.cs" />
     <Compile Include="SaleCountryPreviewDataManager.cs" />

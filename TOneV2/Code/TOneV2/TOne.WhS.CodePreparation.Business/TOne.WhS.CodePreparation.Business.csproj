@@ -90,6 +90,7 @@
     <Compile Include="BusinessRules\Conditions\ValidateCodesZones\InvalidStatusCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountries\SameCodeInDifferentZoneCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\SameCodeInSameZoneCondition.cs" />
+    <Compile Include="RatePreviewManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CPSaleCodeManager.cs" />
     <Compile Include="CPSaleZoneManager.cs" />

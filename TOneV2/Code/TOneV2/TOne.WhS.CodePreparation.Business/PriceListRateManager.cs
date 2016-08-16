@@ -69,7 +69,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         private void GetMatchedExistingZonesByFixedZones(ZoneToProcess zoneToProcess, List<ExistingZone> fixedExistingZones, List<ExistingZone> matchedExistingZones)
         {
-            if (fixedExistingZones != null)
+            if (fixedExistingZones.Count() > 0)
             {
                 GetMatchedExistingZones(zoneToProcess.CodesToAdd, fixedExistingZones, matchedExistingZones);
             }
@@ -85,7 +85,6 @@ namespace TOne.WhS.CodePreparation.Business
             else if (fixedExistingZones.Count() > 0)
                 GenerateNewRatesAndPriceListsBySellingProducts(matchedExistingZones, zoneToProcess, salePriceListsToAdd, effectiveDate, existingRatesByOwner, saleAreaSettingsData, sellingNumberPlanId);
         }
-
         private void GenerateNewRatesAndPriceListsByMatchedZones(List<ExistingZone> matchedExistingZones, ZoneToProcess zoneToProcess,
             SalePriceListsByOwner salePriceListsToAdd, DateTime effectiveDate, ExistingRatesByOwner existingRatesByOwner)
         {
@@ -213,6 +212,11 @@ namespace TOne.WhS.CodePreparation.Business
                         matchedExistingZones.Add(existingZone);
                 }
             }
+
+            //Fill matchedZones by Fixed or Mobile zones when there is no matched zones.
+            if (matchedExistingZones.Count() == 0)
+                matchedExistingZones.AddRange(existingZones);
+
         }
 
         private SaleZoneTypeEnum GetSaleZoneType(string zoneName, SaleAreaSettingsData saleAreaSettingsData)

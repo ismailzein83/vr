@@ -13,8 +13,8 @@
         function GetFilteredCodePreview(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, controllerName, "GetFilteredCodePreview"), input);
         }
-        function GetFilteredRatePreview(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, controllerName, "GetFilteredRatePreview"), input);
+        function GetFilteredRatesPreview(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, controllerName, "GetFilteredRatesPreview"), input);
         }
 
         function GetFilteredCountryPreview(input) {
@@ -25,7 +25,7 @@
         return ({
             GetFilteredZonePreview: GetFilteredZonePreview,
             GetFilteredCodePreview: GetFilteredCodePreview,
-            GetFilteredRatePreview: GetFilteredRatePreview,
+            GetFilteredRatesPreview: GetFilteredRatesPreview,
             GetFilteredCountryPreview: GetFilteredCountryPreview
         });
     }

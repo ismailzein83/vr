@@ -16,6 +16,8 @@ namespace TOne.WhS.CodePreparation.Business
             ZonesByName newAndExistingZones = new ZonesByName();
             Dictionary<string, List<ExistingZone>> closedExistingZones;
 
+            List<ExistingCode> notChangedCodes = new List<ExistingCode>();
+            context.NotChangedCodes = notChangedCodes;
             context.NewAndExistingZones = newAndExistingZones;
             
             HashSet<string> codesToAddHashSet;
@@ -31,7 +33,7 @@ namespace TOne.WhS.CodePreparation.Business
             context.ChangedZones = context.ExistingZones.Where(itm => itm.ChangedZone != null).Select(itm => itm.ChangedZone);
             context.ChangedCodes = context.ExistingCodes.Where(itm => itm.ChangedCode != null).Select(itm => itm.ChangedCode);
 
-            PrepareNotChangedCodes(context.ExistingCodes, codesToAddHashSet, codesToMoveHashSet, codesToCloseHashSet, context.NotChangedCodes);
+            PrepareNotChangedCodes(context.ExistingCodes, codesToAddHashSet, codesToMoveHashSet, codesToCloseHashSet, notChangedCodes);
         }
         private void ProcessCountryCodes(IEnumerable<CodeToAdd> codesToAdd, IEnumerable<CodeToMove> codesToMove, IEnumerable<CodeToClose> codesToClose, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones,
             IEnumerable<ExistingZone> existingZones, out Dictionary<string, List<ExistingZone>> closedExistingZones, out HashSet<string> codesToAddHashSet, out HashSet<string> codesToMoveHashSet, out HashSet<string> codesToCloseHashSet)
@@ -149,16 +151,14 @@ namespace TOne.WhS.CodePreparation.Business
             }
         }
        
-        private void PrepareNotChangedCodes(IEnumerable<ExistingCode> existingCodes, HashSet<string> codesToAddHashSet, HashSet<string> codesToMoveHashSet, HashSet<string> codesToCloseHashSet, IEnumerable<ExistingCode> notChangedCodes)
+        private void PrepareNotChangedCodes(IEnumerable<ExistingCode> existingCodes, HashSet<string> codesToAddHashSet, HashSet<string> codesToMoveHashSet, HashSet<string> codesToCloseHashSet, List<ExistingCode> notChangedCodes)
         {
-            List<ExistingCode> notChangedCodesList = new List<ExistingCode>();
             foreach (ExistingCode existingCode in existingCodes)
             {
                 if (!(codesToAddHashSet.Contains(existingCode.CodeEntity.Code) || codesToMoveHashSet.Contains(existingCode.CodeEntity.Code)
                     || codesToCloseHashSet.Contains(existingCode.CodeEntity.Code)))
-                    notChangedCodesList.Add(existingCode);
+                    notChangedCodes.Add(existingCode);
             }
-            notChangedCodes = notChangedCodesList;
         }
         private ExistingZonesByName StructureExistingZonesByName(IEnumerable<ExistingZone> existingZones)
         {

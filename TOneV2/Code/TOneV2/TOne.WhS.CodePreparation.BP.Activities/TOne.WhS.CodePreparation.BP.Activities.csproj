@@ -92,14 +92,17 @@
     <Compile Include="ApplyNewRatesToDB.cs" />
     <Compile Include="ApplyNewCodesToDB.cs" />
     <Compile Include="ApplyNewZonesToDB.cs" />
+    <Compile Include="ApplyPreviewRatesToDB.cs" />
     <Compile Include="ApplyPreviewCodesToDB.cs" />
     <Compile Include="ApplyPreviewZonesToDB.cs" />
+    <Compile Include="GenerateRatesPreview.cs" />
     <Compile Include="GenerateCodesPreview.cs" />
     <Compile Include="GenerateZonesPreview.cs" />
     <Compile Include="GetExisitngRates.cs" />
     <Compile Include="PrepareChangedRatesForApply.cs" />
     <Compile Include="PrepareExistingRates.cs" />
     <Compile Include="PrepareNewRatesForApply.cs" />
+    <Compile Include="PreparePreviewRatesForDBApply.cs" />
     <Compile Include="PreparePreviewCodesForDBApply.cs" />
     <Compile Include="PreparePreviewZonesForDBApply.cs" />
     <Compile Include="PrepareZonesInfo.cs" />

@@ -19,6 +19,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
 
         }
 
+        readonly string[] _columns = { "ID", "ProcessInstanceID", "ZoneID", "PriceListID", "NormalRate", "BED", "EED" };
         public long ProcessInstanceId
         {
             set
@@ -35,6 +36,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             streamForBulkInsert.Close();
             return new StreamBulkInsertInfo
             {
+                ColumnNames = _columns,
                 TableName = "TOneWhS_BE.CP_SaleRate_New",
                 Stream = streamForBulkInsert,
                 TabLock = false,
@@ -53,12 +55,11 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         public void WriteRecordToStream(AddedRate record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}",
                         record.RateId,
                        _processInstanceID,
                        record.AddedZone.ZoneId,
                        record.PriceListToAdd.PriceListId,
-                       record.PriceListToAdd.CurrencyId,
                        record.NoramlRate,
                        record.BED,
                        record.EED);

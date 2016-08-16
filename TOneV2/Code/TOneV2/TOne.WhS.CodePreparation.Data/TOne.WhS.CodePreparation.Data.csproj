@@ -67,6 +67,7 @@
     <Compile Include="INewSaleRateDataManager.cs" />
     <Compile Include="INewSaleCodeDataManager.cs" />
     <Compile Include="INewSaleZoneDataManager.cs" />
+    <Compile Include="ISaleRatePreviewDataManager.cs" />
     <Compile Include="ISaleZonePreviewDataManager.cs" />
     <Compile Include="ISaleCodePreviewDataManager.cs" />
     <Compile Include="ISaleCountryPreviewDataManager.cs" />

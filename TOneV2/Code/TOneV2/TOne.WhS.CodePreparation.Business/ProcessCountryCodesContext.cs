@@ -31,6 +31,6 @@ namespace TOne.WhS.CodePreparation.Business
 
         public Dictionary<string,List<ExistingZone>> ClosedExistingZones { get; set; }
 
-        public IEnumerable<ExistingCode> NotChangedCodes { get; set; }
+        public List<ExistingCode> NotChangedCodes { get; set; }
     }
 }
