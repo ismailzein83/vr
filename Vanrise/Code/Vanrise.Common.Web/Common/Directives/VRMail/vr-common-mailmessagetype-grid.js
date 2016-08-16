@@ -62,15 +62,18 @@ app.directive('vrCommonMailmessagetypeGrid', ['VRCommon_VRMailMessageTypeAPIServ
                 $scope.scopeModel.menuActions.push({
                     name: 'Edit',
                     clicked: editMailMessageType,
+                    haspermission: hasEditMailMessageTypePermission
                 });
             }
-
             function editMailMessageType(mailMessageTypeItem) {
                 var onMailMessageTypeUpdated = function (updatedMailMessageType) {
                     gridAPI.itemUpdated(updatedMailMessageType);
                 };
 
                 VRCommon_VRMailMessageTypeService.editMailMessageType(mailMessageTypeItem.Entity.VRMailMessageTypeId, onMailMessageTypeUpdated);
+            }
+            function hasEditMailMessageTypePermission() {
+                return VRCommon_VRMailMessageTypeAPIService.HasEditMailMessageTypePermission();
             }
         }
     }]);

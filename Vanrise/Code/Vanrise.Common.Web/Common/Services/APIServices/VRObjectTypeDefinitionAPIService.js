@@ -2,9 +2,9 @@
 (function (appControllers) {
 
     "use strict";
-    VRObjectTypeDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig'];
+    VRObjectTypeDefinitionAPIService.$inject = ['BaseAPIService', 'SecurityService', 'UtilsService', 'VRCommon_ModuleConfig'];
 
-    function VRObjectTypeDefinitionAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig) {
+    function VRObjectTypeDefinitionAPIService(BaseAPIService, SecurityService, UtilsService, VRCommon_ModuleConfig) {
 
         var controllerName = "VRObjectTypeDefinition";
 
@@ -31,6 +31,14 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRObjectTypeDefinitionsInfo"), {filter:filter}, {useCache:true});
         }
 
+        function HasAddVRObjectTypeDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['AddVRObjectTypeDefinition']));
+        }
+
+        function HasEditVRObjectTypeDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['UpdateVRObjectTypeDefinition']));
+        }
+
 
         return ({
             GetFilteredVRObjectTypeDefinitions: GetFilteredVRObjectTypeDefinitions,
@@ -38,6 +46,8 @@
             AddVRObjectTypeDefinition: AddVRObjectTypeDefinition,
             UpdateVRObjectTypeDefinition: UpdateVRObjectTypeDefinition,
             GetVRObjectTypeDefinitionsInfo: GetVRObjectTypeDefinitionsInfo,
+            HasAddVRObjectTypeDefinitionPermission: HasAddVRObjectTypeDefinitionPermission,
+            HasEditVRObjectTypeDefinitionPermission: HasEditVRObjectTypeDefinitionPermission
         });
     }
 

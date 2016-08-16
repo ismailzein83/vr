@@ -3,9 +3,9 @@
 
     "use strict";
 
-    VRMailMessageTemplateAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig'];
+    VRMailMessageTemplateAPIService.$inject = ['BaseAPIService', 'UtilsService', 'SecurityService', 'VRCommon_ModuleConfig'];
 
-    function VRMailMessageTemplateAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig) {
+    function VRMailMessageTemplateAPIService(BaseAPIService, UtilsService, SecurityService, VRCommon_ModuleConfig) {
 
         var controllerName = "VRMailMessageTemplate";
 
@@ -28,11 +28,21 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'UpdateMailMessageTemplate'), vrMailMessageTemplateItem);
         }
 
+        function HasAddMailMessageTemplatePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['AddMailMessageTemplate']));
+        }
+
+        function HasEditMailMessageTemplatePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['UpdateMailMessageTemplate']));
+        }
+
         return ({
             GetFilteredMailMessageTemplates: GetFilteredMailMessageTemplates,
             GetMailMessageTemplate: GetMailMessageTemplate,
             AddMailMessageTemplate: AddMailMessageTemplate,
-            UpdateMailMessageTemplate: UpdateMailMessageTemplate
+            UpdateMailMessageTemplate: UpdateMailMessageTemplate,
+            HasAddMailMessageTemplatePermission: HasAddMailMessageTemplatePermission,
+            HasEditMailMessageTemplatePermission: HasEditMailMessageTemplatePermission
         });
     }
 

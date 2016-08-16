@@ -14,7 +14,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
-                    <vr-button type="Add" formname="formFilter" data-onclick="scopeModel.add"></vr-button>
+                    <vr-button type="Add" formname="formFilter" data-onclick="scopeModel.add" haspermission="scopeModel.hasAddVRObjectTypeDefinitionPermission"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>

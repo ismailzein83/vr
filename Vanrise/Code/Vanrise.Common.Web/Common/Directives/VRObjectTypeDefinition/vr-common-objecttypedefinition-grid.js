@@ -42,7 +42,6 @@ app.directive('vrCommonObjecttypedefinitionGrid', ['VRCommon_VRObjectTypeDefinit
 
                 defineMenuActions();
             }
-
             function defineAPI() {
                 var api = {};
 
@@ -62,9 +61,9 @@ app.directive('vrCommonObjecttypedefinitionGrid', ['VRCommon_VRObjectTypeDefinit
                 $scope.scopeModel.menuActions.push({
                     name: 'Edit',
                     clicked: editVRObjectTypeDefinition,
+                    haspermission: hasEditVRObjectTypeDefinitionPermission
                 });
             }
-
             function editVRObjectTypeDefinition(vrObjectTypeDefinitionItem) {
                 var onVRObjectTypeDefinitionUpdated = function (updatedVRObjectTypeDefinition) {
                     gridAPI.itemUpdated(updatedVRObjectTypeDefinition);
@@ -72,5 +71,9 @@ app.directive('vrCommonObjecttypedefinitionGrid', ['VRCommon_VRObjectTypeDefinit
 
                 VRCommon_VRObjectTypeDefinitionService.editVRObjectTypeDefinition(vrObjectTypeDefinitionItem.Entity.VRObjectTypeDefinitionId, onVRObjectTypeDefinitionUpdated);
             }
+            function hasEditVRObjectTypeDefinitionPermission() {
+                return VRCommon_VRObjectTypeDefinitionAPIService.HasEditVRObjectTypeDefinitionPermission();
+            }
+
         }
     }]);

@@ -3,9 +3,9 @@
 
     "use strict";
 
-    VRMailMessageTypeAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig'];
+    VRMailMessageTypeAPIService.$inject = ['BaseAPIService', 'UtilsService', 'SecurityService', 'VRCommon_ModuleConfig'];
 
-    function VRMailMessageTypeAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig) {
+    function VRMailMessageTypeAPIService(BaseAPIService, UtilsService, SecurityService, VRCommon_ModuleConfig) {
 
         var controllerName = "VRMailMessageType";
 
@@ -34,12 +34,22 @@
             });
         }
 
+        function HasAddMailMessageTypePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['AddMailMessageType']));
+        }
+
+        function HasEditMailMessageTypePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['UpdateMailMessageType']));
+        }
+
         return ({
             GetFilteredMailMessageTypes: GetFilteredMailMessageTypes,
             GetMailMessageType: GetMailMessageType,
             AddMailMessageType: AddMailMessageType,
             UpdateMailMessageType: UpdateMailMessageType,
-            GetMailMessageTypesInfo: GetMailMessageTypesInfo
+            GetMailMessageTypesInfo: GetMailMessageTypesInfo,
+            HasAddMailMessageTypePermission: HasAddMailMessageTypePermission,
+            HasEditMailMessageTypePermission: HasEditMailMessageTypePermission
         });
     }
 

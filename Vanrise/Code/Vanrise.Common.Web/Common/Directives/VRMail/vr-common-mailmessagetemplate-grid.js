@@ -62,9 +62,9 @@ app.directive('vrCommonMailmessagetemplateGrid', ['VRCommon_VRMailMessageTemplat
                 $scope.scopeModel.menuActions.push({
                     name: 'Edit',
                     clicked: editMailMessageTemplate,
+                    haspermission: hasEditMailMessageTemplatePermission
                 });
             }
-
             function editMailMessageTemplate(mailMessageTemplateItem) {
                 var onMailMessageTemplateUpdated = function (updatedMailMessageTemplate) {
                     gridAPI.itemUpdated(updatedMailMessageTemplate);
@@ -72,5 +72,9 @@ app.directive('vrCommonMailmessagetemplateGrid', ['VRCommon_VRMailMessageTemplat
 
                 VRCommon_VRMailMessageTemplateService.editMailMessageTemplate(mailMessageTemplateItem.Entity.VRMailMessageTemplateId, onMailMessageTemplateUpdated);
             }
+            function hasEditMailMessageTemplatePermission() {
+                return VRCommon_VRMailMessageTemplateAPIService.HasEditMailMessageTemplatePermission();
+            }
+
         }
     }]);

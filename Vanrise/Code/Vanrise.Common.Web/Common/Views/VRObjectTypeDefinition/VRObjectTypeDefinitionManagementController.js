@@ -2,9 +2,9 @@
 
     "use strict";
 
-    VRObjectTypeDefinitionManagementController.$inject = ['$scope', 'VRCommon_VRObjectTypeDefinitionService', 'UtilsService', 'VRUIUtilsService'];
+    VRObjectTypeDefinitionManagementController.$inject = ['$scope', 'VRCommon_VRObjectTypeDefinitionAPIService', 'VRCommon_VRObjectTypeDefinitionService', 'UtilsService', 'VRUIUtilsService'];
 
-    function VRObjectTypeDefinitionManagementController($scope, VRCommon_VRObjectTypeDefinitionService, UtilsService, VRUIUtilsService) {
+    function VRObjectTypeDefinitionManagementController($scope, VRCommon_VRObjectTypeDefinitionAPIService, VRCommon_VRObjectTypeDefinitionService, UtilsService, VRUIUtilsService) {
 
         var gridAPI;
 
@@ -24,6 +24,10 @@
                     gridAPI.onVRObjectTypeDefinitionAdded(addedVRObjectTypeDefinition);
                 }
                 VRCommon_VRObjectTypeDefinitionService.addVRObjectTypeDefinition(onVRObjectTypeDefinitionAdded);
+            };
+
+            $scope.scopeModel.hasAddVRObjectTypeDefinitionPermission = function () {
+                return VRCommon_VRObjectTypeDefinitionAPIService.HasAddVRObjectTypeDefinitionPermission();
             };
 
             $scope.scopeModel.onGridReady = function (api) {

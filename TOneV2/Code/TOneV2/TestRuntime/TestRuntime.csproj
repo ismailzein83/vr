@@ -539,6 +539,7 @@
     <Compile Include="DSMappers.cs" />
     <Compile Include="ExecutionFlows\AllFlows.cs" />
     <Compile Include="Tasks\ABaghdadiTask.cs" />
+    <Compile Include="Tasks\AliAtouiTask.cs" />
     <Compile Include="Tasks\AliBalloukTask.cs" />
     <Compile Include="Tasks\AnthonyTask.cs" />
     <Compile Include="Tasks\HaSSanTask.cs" />
