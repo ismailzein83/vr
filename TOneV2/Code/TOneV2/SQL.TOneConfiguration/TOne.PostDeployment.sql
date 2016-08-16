@@ -150,13 +150,16 @@ as (select * from (values
 
 (12109,'Switch Connectivity','Switch Connectivity','#/view/WhS_BusinessEntity/Views/SwitchConnectivity/SwitchConnectivityManagement',101,'WhS_BE/SwitchConnectivity/GetFilteredSwitchConnectivities',null,null,null,0,5),
 
-(12110,'Traffic Monitor','Traffic Monitor',null,1214,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":30,"TypeId":4}',202,1),
-(12111,'Traffic By Period','Traffic By Period',null,1214,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":35,"TypeId":4}',202,5),
-(12112,'CDRs','CDRs',null,1214,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":37,"TypeId":13}',202,10),
-(12113,'Traffic Summary','Traffic Summary',null,1203,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":33,"TypeId":4}',202,1),
+(12110,'Live Monitor','Live Monitor',null,1214,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":40,"TypeId":5}',202,1),
+(12111,'Traffic Monitor','Traffic Monitor',null,1214,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":30,"TypeId":4}',202,5),
+(12112,'Traffic By Period','Traffic By Period',null,1214,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":35,"TypeId":4}',202,10),
 (12214,'Repeated Numbers','Repeated Numbers','#/view/WhS_Analytics/Views/RepeatedNumber/RepeatedNumber',1214,'WhS_Analytics/RepeatedNumber/GetAllFilteredRepeatedNumbers',null,null,null,0,15),
 (12215,'Blocked Attempts','Blocked Attempts','#/view/WhS_Analytics/Views/TrafficAnalysis/BlockedAttempts',1214,'WhS_Analytics/BlockedAttempts/GetBlockedAttemptsData',null,null,null,0,20),
-(12216,'Release Code Statistics','Release Code Statistics','#/view/WhS_Analytics/Views/TrafficAnalysis/ReleaseCodeStatistics',1214,'WhS_Analytics/ReleaseCode/GetAllFilteredReleaseCodes',null,null,null,0,7)
+(12216,'Release Code Statistics','Release Code Statistics','#/view/WhS_Analytics/Views/TrafficAnalysis/ReleaseCodeStatistics',1214,'WhS_Analytics/ReleaseCode/GetAllFilteredReleaseCodes',null,null,null,0,25),
+(12117,'CDRs','CDRs',null,1214,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":37,"TypeId":13}',202,30),
+
+(12113,'Traffic Summary','Traffic Summary',null,1203,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":33,"TypeId":4}',202,1)
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
