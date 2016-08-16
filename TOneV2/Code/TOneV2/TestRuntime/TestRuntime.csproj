@@ -430,6 +430,9 @@
     <Reference Include="Vanrise.Integration.Web">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
     </Reference>
@@ -718,6 +721,10 @@
     <ProjectReference Include="..\TOne.WhS.DBSync.Entities\TOne.WhS.DBSync.Entities.csproj">
       <Project>{9e22928e-0cf2-459d-979f-3551145ad291}</Project>
       <Name>TOne.WhS.DBSync.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Invoice.Business\TOne.WhS.Invoice.Business.csproj">
+      <Project>{3751a44f-a40a-4e0e-a86e-5665664ce616}</Project>
+      <Name>TOne.WhS.Invoice.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.BP.Activities\TOne.WhS.RouteSync.BP.Activities.csproj">
       <Project>{6af7a0ad-f82d-4b4c-9085-0fe891b78863}</Project>

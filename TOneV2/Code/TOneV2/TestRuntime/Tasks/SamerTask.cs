@@ -7,10 +7,12 @@ using TestRuntime.ExecutionFlows;
 using TOne.WhS.CDRProcessing.Entities;
 using TOne.WhS.CDRProcessing.QueueActivators;
 using TOne.WhS.CodePreparation.BP.Arguments;
+using TOne.WhS.Invoice.Business.Extensions;
 using Vanrise.Analytic.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.GenericData.MainExtensions.DataRecordFields;
+using Vanrise.Invoice.Entities;
 using Vanrise.Queueing;
 using Vanrise.Queueing.Entities;
 using Vanrise.Runtime;
@@ -42,8 +44,17 @@ namespace TestRuntime.Tasks
             //var tree1 = Vanrise.Common.Serializer.Serialize("test");
 
 
+            //InvoiceTypeSettings settings = new InvoiceTypeSettings
+            //{
+            //    InvoiceGenerator = new CustomerInvoiceGenerator(),
+            //    UISettings = new InvoiceTypeUISettings
+            //    {
+            //        PartnerSelector = "vr-whs-be-customer-selector",
+            //    },
+            //    InvoiceDetailsRecordTypeId = 0
+            //};
 
-
+            //var obj = Vanrise.Common.Serializer.Serialize(settings);
             //AnalyticDimensionConfig AnalyticDimensionConfig = new AnalyticDimensionConfig()
             //{
             //    FieldType = new FieldTextType(),
