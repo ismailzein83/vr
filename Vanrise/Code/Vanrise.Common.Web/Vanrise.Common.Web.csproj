@@ -247,8 +247,8 @@
     <Content Include="Common\Directives\VRMail\vr-common-objecttypeproperty-grid.js" />
     <Content Include="Common\Directives\VRMail\Templates\VRMailMessageTypeGridTemplate.html" />
     <Content Include="Common\Directives\VRMail\vr-common-mailmessagetype-grid.js" />
-    <Content Include="Common\Directives\VRObjectProperty\Templates\VRObjectPropertySelector2Template.html" />
-    <Content Include="Common\Directives\VRObjectProperty\vr-common-objectproperty-selector2.js" />
+    <Content Include="Common\Directives\VRObjectProperty\Templates\VRObjectPropertySelectorTemplate.html" />
+    <Content Include="Common\Directives\VRObjectProperty\vr-common-objectproperty-selector.js" />
     <Content Include="Common\Directives\VRObjectTypePropertyDefinition\Templates\VRObjectPropertySelectiveTemplate.html" />
     <Content Include="Common\Directives\VRObjectTypePropertyDefinition\vr-common-objectproperty-selective.js" />
     <Content Include="Common\Directives\VRObjectTypeDefinition\Templates\VRObjectTypeDefinitionGridTemplate.html" />

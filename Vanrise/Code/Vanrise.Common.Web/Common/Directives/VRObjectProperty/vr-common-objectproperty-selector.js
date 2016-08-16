@@ -21,7 +21,7 @@
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: '/Client/Modules/Common/Directives/VRObjectProperty/Templates/VRObjectPropertySelector2Template.html'
+            templateUrl: '/Client/Modules/Common/Directives/VRObjectProperty/Templates/VRObjectPropertySelectorTemplate.html'
         };
 
         function PropertySelector($scope, ctrl, $attrs) {
@@ -181,6 +181,6 @@
         }
     }
 
-    app.directive('vrCommonObjectpropertySelector2', VRPropertySelector);
+    app.directive('vrCommonObjectpropertySelector', VRPropertySelector);
 
 })(app);

@@ -55,7 +55,7 @@
 
             $scope.scopeModel.showObjectTypeProperty = function () {
                
-                return $scope.scopeModel.name != undefined && $scope.scopeModel.name != null && objectTypeSelectiveAPI.getData() != null && objectTypeSelectiveIsLoaded(objectTypeSelectiveAPI.getData());
+                return objectTypeSelectiveAPI.getData() != undefined && objectTypeSelectiveIsLoaded(objectTypeSelectiveAPI.getData());
             }
 
             $scope.scopeModel.save = function () {
