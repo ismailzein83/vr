@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Retail.BusinessEntity.Entities;
 using Vanrise.BEBridge.Entities;
+using Vanrise.Common;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -15,10 +16,11 @@ namespace Retail.BusinessEntity.Business
             if (context.TargetBE == null)
                 throw new NullReferenceException("context.TargetBE");
             AccountManager accountManager = new AccountManager();
+            long accountId;
             foreach (var targetAccount in context.TargetBE)
             {
                 SourceAccountData accountData = targetAccount as SourceAccountData;
-                accountManager.AddAccount(accountData.Account);
+                accountManager.TryAddAccount(accountData.Account, out accountId);
             }
         }
 
@@ -30,7 +32,7 @@ namespace Retail.BusinessEntity.Business
             {
                 context.TargetBE = new SourceAccountData
                 {
-                    Account = account
+                    Account = Serializer.Deserialize<Account>(Serializer.Serialize(account))
                 };
                 return true;
             }
@@ -56,7 +58,7 @@ namespace Retail.BusinessEntity.Business
                     TypeId = accountData.Account.TypeId,
                     SourceId = accountData.Account.SourceId
                 };
-                accountManager.UpdateAccount(editAccount);
+                accountManager.TryUpdateAccount(editAccount);
             }
         }
     }

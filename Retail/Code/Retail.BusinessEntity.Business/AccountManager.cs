@@ -85,26 +85,13 @@ namespace Retail.BusinessEntity.Business
 
         public Vanrise.Entities.InsertOperationOutput<AccountDetail> AddAccount(Account account)
         {
-            ValidateAccountToAdd(account);
-
-            var accountTypeManager = new AccountTypeManager();
-            var accountType = accountTypeManager.GetAccountType(account.TypeId);
-            if (accountType == null)
-                throw new NullReferenceException("AccountType is null");
-            if (accountType.Settings == null)
-                throw new NullReferenceException("AccountType settings is null");
-
-            account.StatusId = accountType.Settings.InitialStatusId;
-
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AccountDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
+            long accountId;
 
-            IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
-            long accountId = -1;
-
-            if (dataManager.Insert(account, out accountId))
+            if (TryAddAccount(account, out accountId))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
@@ -117,6 +104,24 @@ namespace Retail.BusinessEntity.Business
             }
 
             return insertOperationOutput;
+        }
+        internal bool TryAddAccount(Account account, out long accountId)
+        {
+            ValidateAccountToAdd(account);
+
+            var accountTypeManager = new AccountTypeManager();
+            var accountType = accountTypeManager.GetAccountType(account.TypeId);
+            if (accountType == null)
+                throw new NullReferenceException("AccountType is null");
+            if (accountType.Settings == null)
+                throw new NullReferenceException("AccountType settings is null");
+
+            account.StatusId = accountType.Settings.InitialStatusId;
+
+
+            IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
+
+            return dataManager.Insert(account, out accountId);
         }
 
         public bool UpdateStatus(long accountId, Guid statusId)
@@ -132,17 +137,14 @@ namespace Retail.BusinessEntity.Business
 
         public Vanrise.Entities.UpdateOperationOutput<AccountDetail> UpdateAccount(AccountToEdit account)
         {
-            long? parentId;
-            ValidateAccountToEdit(account, out parentId);
 
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
 
-            if (dataManager.Update(account, parentId))
+            if (TryUpdateAccount(account))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
@@ -154,6 +156,16 @@ namespace Retail.BusinessEntity.Business
             }
 
             return updateOperationOutput;
+        }
+
+        internal bool TryUpdateAccount(AccountToEdit account)
+        {
+            long? parentId;
+            ValidateAccountToEdit(account, out parentId);
+
+            IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
+
+            return dataManager.Update(account, parentId);
         }
 
         public bool HasAccountPayment(long accountId, bool getInherited, out IAccountPayment accountPayment)
