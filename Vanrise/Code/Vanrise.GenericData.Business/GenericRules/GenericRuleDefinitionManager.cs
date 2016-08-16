@@ -31,6 +31,11 @@ namespace Vanrise.GenericData.Business
             return cachedGenericRuleDefinitions.FindRecord((genericRuleDefinition) => genericRuleDefinition.GenericRuleDefinitionId == genericRuleDefinitionId);
         }
 
+        public IEnumerable<GenericRuleDefinition> GetGenericRulesDefinitons()
+        {
+            return this.GetCachedGenericRuleDefinitions().Values;
+        }
+
         public Vanrise.Entities.InsertOperationOutput<GenericRuleDefinition> AddGenericRuleDefinition(GenericRuleDefinition genericRuleDefinition)
         {
             InsertOperationOutput<GenericRuleDefinition> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<GenericRuleDefinition>();
