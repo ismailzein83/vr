@@ -1,11 +1,12 @@
 ﻿
-CREATE PROCEDURE [reprocess].[sp_StagingSummaryRecord_Delete] 
+CREATE PROCEDURE [reprocess].[sp_StagingSummaryRecord_GetRecords] 
 	@ProcessInstanceId bigint,
 	@StageName nvarchar(255),
 	@BatchStart DateTime
 
 AS
 BEGIN
-	Delete reprocess.StagingSummaryRecord  from reprocess.StagingSummaryRecord WITH (NOLOCK)
+	SELECT [ProcessInstanceId], [StageName], [BatchStart], [Data]
+    from reprocess.StagingSummaryRecord with(nolock)
     where ProcessInstanceId = @ProcessInstanceId and StageName = @StageName and BatchStart = @BatchStart
 END

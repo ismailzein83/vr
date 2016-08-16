@@ -152,7 +152,8 @@ set identity_insert [bp].[BPDefinition] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (-1,'Vanrise.Reprocess.BP.Arguments.ReProcessingProcessInput','Reprocess','Vanrise.Reprocess.BP.ReProcessingProcess, Vanrise.Reprocess.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false,"ManualExecEditor":"reprocess-reprocessprocess","HasBusinessRules":false,"HasChildProcesses":true}'),
-(-2,'Vanrise.Reprocess.BP.Arguments.ReProcessingSubProcessInput','Reprocess By Range','Vanrise.Reprocess.BP.ReProcessingSubProcess, Vanrise.Reprocess.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false,"NotVisibleInManagementScreen":true}')
+(-2,'Vanrise.Reprocess.BP.Arguments.ReProcessingSubProcessInput','Reprocess By Range','Vanrise.Reprocess.BP.ReProcessingSubProcess, Vanrise.Reprocess.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false,"NotVisibleInManagementScreen":true}'),
+(-3,'Vanrise.Reprocess.BP.Arguments.ReProcessingFinalizeProcessInput','Finalize By Range','Vanrise.Reprocess.BP.ReProcessingFinalizeProcess, Vanrise.Reprocess.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false,"NotVisibleInManagementScreen":true}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[FQTN],[Config]))
 merge	[bp].[BPDefinition] as t

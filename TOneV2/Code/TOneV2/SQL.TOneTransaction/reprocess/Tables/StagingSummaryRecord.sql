@@ -1,4 +1,4 @@
-﻿CREATE TABLE [reprocess].[StagingSummaryRecord] (
+CREATE TABLE [reprocess].[StagingSummaryRecord] (
     [ProcessInstanceId] BIGINT         NOT NULL,
     [StageName]         NVARCHAR (255) NOT NULL,
     [BatchStart]        DATETIME       NOT NULL,
@@ -8,9 +8,9 @@
 
 
 
+
+
 GO
-CREATE CLUSTERED INDEX [IX_StagingSummaryRecord_ProcessId_StageName]
-    ON [reprocess].[StagingSummaryRecord]([ProcessInstanceId] ASC, [StageName] ASC);
-
-
+CREATE CLUSTERED INDEX [IX_StagingSummaryRecord_ProcessId_StageName_BatchStart]
+    ON [reprocess].[StagingSummaryRecord]([ProcessInstanceId] ASC, [StageName] ASC, [BatchStart] ASC);
 

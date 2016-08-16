@@ -234,9 +234,10 @@
     <Build Include="queue\Stored Procedures\sp_QueueActivatorInstance_Delete.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetStatusByID.sql" />
     <Build Include="reprocess\Tables\StagingSummaryRecord.sql" />
-    <Build Include="reprocess\Stored Procedures\sp_StagingSummaryRecord_GetAll.sql" />
     <Build Include="reprocess\Stored Procedures\sp_StagingSummaryRecord_Delete.sql" />
     <Build Include="Security\reprocess.sql" />
+    <Build Include="reprocess\Stored Procedures\sp_StagingSummaryRecord_GetStageRecordInfo.sql" />
+    <Build Include="reprocess\Stored Procedures\sp_StagingSummaryRecord_GetRecords.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
