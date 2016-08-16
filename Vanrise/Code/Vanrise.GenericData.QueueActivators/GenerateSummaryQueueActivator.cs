@@ -123,25 +123,26 @@ namespace Vanrise.GenericData.QueueActivators
             if (recordStorageDataManager == null)
                 throw new NullReferenceException(String.Format("recordStorageDataManager. ID '{0}'", transformationManager.SummaryTransformationDefinition.DataRecordStorageId));
 
-            Queueing.MemoryQueue<Object> queueLoadedBatches = new Queueing.MemoryQueue<object>();
+            Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches = new Queueing.MemoryQueue<GenericSummaryRecordBatch>();
             AsyncActivityStatus loadBatchStatus = new AsyncActivityStatus();
             StartLoadingBatches(context, queueLoadedBatches, loadBatchStatus);
 
-            Queueing.MemoryQueue<Object> queuePreparedBatches = new Queueing.MemoryQueue<object>();
+            Queueing.MemoryQueue<List<GenericSummaryRecordBatch>> queuePreparedBatches = new Queueing.MemoryQueue<List<GenericSummaryRecordBatch>>();
             AsyncActivityStatus prepareBatchStatus = new AsyncActivityStatus();
             StartPreparingBatches(context, queueLoadedBatches, loadBatchStatus, queuePreparedBatches, prepareBatchStatus);
 
-            StartInsertingBatches(transformationManager, recordStorageDataManager, queuePreparedBatches, prepareBatchStatus);
+            StartInsertingBatches(context, transformationManager, recordStorageDataManager, queuePreparedBatches, prepareBatchStatus);
         }
 
-        private static void StartLoadingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, Queueing.MemoryQueue<Object> queueLoadedBatches, AsyncActivityStatus loadBatchStatus)
+        private static void StartLoadingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches, AsyncActivityStatus loadBatchStatus)
         {
             Task loadDataTask = new Task(() =>
             {
                 IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
                 try
                 {
-                    dataManager.GetStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, (stagingSummaryRecord) =>
+                    context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Start Loading Batches");
+                    dataManager.GetStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, context.BatchStart, (stagingSummaryRecord) =>
                     {
                         GenericSummaryRecordBatch genericSummaryRecordBatch = new GenericSummaryRecordBatch();
                         genericSummaryRecordBatch = genericSummaryRecordBatch.Deserialize<GenericSummaryRecordBatch>(stagingSummaryRecord.Data);
@@ -150,14 +151,15 @@ namespace Vanrise.GenericData.QueueActivators
                 }
                 finally
                 {
-                    dataManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName);
+                    dataManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, context.BatchStart);
                     loadBatchStatus.IsComplete = true;
+                    context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finish Loading Batches");
                 }
             });
             loadDataTask.Start();
         }
 
-        private static void StartPreparingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, Queueing.MemoryQueue<Object> queueLoadedBatches, AsyncActivityStatus loadBatchStatus, Queueing.MemoryQueue<Object> queuePreparedBatches, AsyncActivityStatus prepareBatchStatus)
+        private static void StartPreparingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches, AsyncActivityStatus loadBatchStatus, Queueing.MemoryQueue<List<GenericSummaryRecordBatch>> queuePreparedBatches, AsyncActivityStatus prepareBatchStatus)
         {
             List<GenericSummaryRecordBatch> batches = null;
             DateTime batchStart = default(DateTime);
@@ -166,27 +168,31 @@ namespace Vanrise.GenericData.QueueActivators
             {
                 try
                 {
-                    bool hasItem = false;
-                    do
+                    context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Start Preparing Batches");
+                    context.DoWhilePreviousRunning(loadBatchStatus, () =>
                     {
-                        hasItem = queueLoadedBatches.TryDequeue((item) =>
+                        bool hasItem = false;
+                        do
                         {
-                            GenericSummaryRecordBatch genericSummaryRecordBatch = item as GenericSummaryRecordBatch;
-                            if (genericSummaryRecordBatch == null)
-                                throw new Exception(String.Format("item should be of type 'GenericSummaryRecordBatch' and not of type '{0}'", item.GetType()));
-
-                            if (genericSummaryRecordBatch.BatchStart != batchStart)
+                            hasItem = queueLoadedBatches.TryDequeue((item) =>
                             {
-                                if (batches != null)
+                                GenericSummaryRecordBatch genericSummaryRecordBatch = item as GenericSummaryRecordBatch;
+                                if (genericSummaryRecordBatch == null)
+                                    throw new Exception(String.Format("item should be of type 'GenericSummaryRecordBatch' and not of type '{0}'", item.GetType()));
+
+                                if (genericSummaryRecordBatch.BatchStart != batchStart)
                                 {
-                                    queuePreparedBatches.Enqueue(batches);
+                                    if (batches != null)
+                                    {
+                                        queuePreparedBatches.Enqueue(batches);
+                                    }
+                                    batches = new List<GenericSummaryRecordBatch>();
                                 }
-                                batches = new List<GenericSummaryRecordBatch>();
-                            }
-                            batches.Add(genericSummaryRecordBatch);
-                            batchStart = genericSummaryRecordBatch.BatchStart;
-                        });
-                    } while (!loadBatchStatus.IsComplete || hasItem);
+                                batches.Add(genericSummaryRecordBatch);
+                                batchStart = genericSummaryRecordBatch.BatchStart;
+                            });
+                        } while (!loadBatchStatus.IsComplete || hasItem);
+                    });
                 }
                 finally
                 {
@@ -194,35 +200,40 @@ namespace Vanrise.GenericData.QueueActivators
                         queuePreparedBatches.Enqueue(batches);
 
                     prepareBatchStatus.IsComplete = true;
+                    context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finish Preparing Batches");
                 }
             });
             prepareDataTask.Start();
         }
 
-        private static void StartInsertingBatches(GenericSummaryTransformationManager transformationManager, IDataRecordDataManager recordStorageDataManager, Queueing.MemoryQueue<Object> queuePreparedBatches, AsyncActivityStatus prepareBatchStatus)
+        private static void StartInsertingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, GenericSummaryTransformationManager transformationManager, IDataRecordDataManager recordStorageDataManager, Queueing.MemoryQueue<List<GenericSummaryRecordBatch>> queuePreparedBatches, AsyncActivityStatus prepareBatchStatus)
         {
+            context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Start Inserting Batches");
             IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
-
             bool hasItem = false;
-            do
+            context.DoWhilePreviousRunning(prepareBatchStatus, () =>
             {
-                hasItem = queuePreparedBatches.TryDequeue((item) =>
+                do
                 {
-                    List<GenericSummaryRecordBatch> genericSummaryRecordBatchList = item as List<GenericSummaryRecordBatch>;
-                    if (genericSummaryRecordBatchList == null)
-                        throw new Exception(String.Format("item should be of type 'List<GenericSummaryRecordBatch>' and not of type '{0}'", item.GetType()));
+                    hasItem = queuePreparedBatches.TryDequeue((item) =>
+                    {
+                        List<GenericSummaryRecordBatch> genericSummaryRecordBatchList = item as List<GenericSummaryRecordBatch>;
+                        if (genericSummaryRecordBatchList == null)
+                            throw new Exception(String.Format("item should be of type 'List<GenericSummaryRecordBatch>' and not of type '{0}'", item.GetType()));
 
-                    DateTime batchStart = genericSummaryRecordBatchList[0].BatchStart;
-                    recordStorageDataManager.DeleteRecords(batchStart);
+                        DateTime batchStart = genericSummaryRecordBatchList[0].BatchStart;
+                        recordStorageDataManager.DeleteRecords(batchStart);
 
-                    Dictionary<string, SummaryItemInProcess<GenericSummaryItem>> _existingSummaryBatches = new Dictionary<string, SummaryItemInProcess<GenericSummaryItem>>();
+                        Dictionary<string, SummaryItemInProcess<GenericSummaryItem>> _existingSummaryBatches = new Dictionary<string, SummaryItemInProcess<GenericSummaryItem>>();
 
-                    foreach (GenericSummaryRecordBatch genericSummaryRecordBatch in genericSummaryRecordBatchList)
-                        transformationManager.UpdateExistingFromNew(_existingSummaryBatches, genericSummaryRecordBatch);
+                        foreach (GenericSummaryRecordBatch genericSummaryRecordBatch in genericSummaryRecordBatchList)
+                            transformationManager.UpdateExistingFromNew(_existingSummaryBatches, genericSummaryRecordBatch);
 
-                    transformationManager.SaveSummaryBatchToDB(_existingSummaryBatches.Values);
-                });
-            } while (!prepareBatchStatus.IsComplete || hasItem);
+                        transformationManager.SaveSummaryBatchToDB(_existingSummaryBatches.Values);
+                    });
+                } while (!prepareBatchStatus.IsComplete || hasItem);
+            });
+            context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finish Inserting Batches");
         }
 
         List<string> Reprocess.Entities.IReprocessStageActivator.GetOutputStages(List<string> stageNames)

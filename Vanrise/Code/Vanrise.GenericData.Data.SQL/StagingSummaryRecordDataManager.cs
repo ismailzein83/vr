@@ -26,9 +26,9 @@ namespace Vanrise.GenericData.Data.SQL
             return GetItemsSP("reprocess.sp_StagingSummaryRecord_GetStageRecordInfo", StageRecordInfoMapper, processInstanceId, stageName);
         }
 
-        public void GetStagingSummaryRecords(long processInstanceId, string stageName, Action<StagingSummaryRecord> onItemLoaded)
+        public void GetStagingSummaryRecords(long processInstanceId, string stageName, DateTime batchStart, Action<StagingSummaryRecord> onItemLoaded)
         {
-            ExecuteReaderSP("reprocess.sp_StagingSummaryRecord_GetAll",
+            ExecuteReaderSP("reprocess.sp_StagingSummaryRecord_GetRecords",
                (reader) =>
                {
                    while (reader.Read())
@@ -36,14 +36,14 @@ namespace Vanrise.GenericData.Data.SQL
                        StagingSummaryRecord instance = StagingSummaryRecordMapper(reader);
                        onItemLoaded(instance);
                    }
-               }, processInstanceId, stageName);
+               }, processInstanceId, stageName, batchStart);
 
             //return GetItemsSP("reprocess.sp_StagingSummaryRecord_GetAll", StagingSummaryRecordMapper, processInstanceId, stageName);
         }
 
-        public void DeleteStagingSummaryRecords(long processInstanceId, string stageName)
+        public void DeleteStagingSummaryRecords(long processInstanceId, string stageName, DateTime batchStart)
         {
-            ExecuteNonQuerySP("reprocess.sp_StagingSummaryRecord_Delete", processInstanceId, stageName);
+            ExecuteNonQuerySP("reprocess.sp_StagingSummaryRecord_Delete", processInstanceId, stageName, batchStart);
         }
 
         public object InitialiazeStreamForDBApply()
