@@ -4,8 +4,8 @@
     </vr-columns>
     <vr-columns width="fullrow">
         <vr-datagrid datasource="ctrl.requiredPermissions" menuactions="ctrl.requiredPermissionGridMenuActions" ondeleterow="ctrl.removeRequiredPermission" norowhighlightonclick="true" hidegridmenu>
-            <vr-datagridcolumn headertext="'Entity Name'" field="'EntityName'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Permission Options'" >{{dataItem.PermissionOptions.join(',')}}</vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Entity'" field="'EntityName'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Permission'" >{{dataItem.PermissionOptions.join(',')}}</vr-datagridcolumn>
         </vr-datagrid>
     </vr-columns>
  
