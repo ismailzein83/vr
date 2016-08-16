@@ -261,7 +261,7 @@ as (select * from (values
 (3325,'WhS_Sales_SaleRate','Sale Rate',201,0,'["View"]'),
 (3326,'WhS_BE_SaleZone','Sale Zone',201,0,'["View"]'),
 
-(3338,'Whs_Supplier_Rules','Rules',1201,0,'["View","Add","Edit"]'),
+(3338,'Whs_Purchase_Rules','Rules',1201,0,'["View","Add","Edit"]'),
 (3340,'WhS_BE_SupplierCode','Supplier Code',1201,0,'["View"]'),
 (3341,'WhS_BE_SupplierRate','Supplier Rate',1201,0,'["View"]'),
 (3342,'WhS_BE_SupplierZone','Supplier Zone',1201,0,'["View"]'),
@@ -269,8 +269,7 @@ as (select * from (values
 (3343,'Whs_BE_RoutingProduct','Routing Product',1203,0,'["View","Add","Edit","Delete"]'),
 (3344,'Whs_BE_ZoneServiceConfig','Zone Service Configuration',201,0,'["View","Add","Edit"]'),
 
-(3339,'Whs_Sale_Rules','Rules',1206,0,'["View","Add","Edit"]'),
-(3345,'WhS_Sales_SellingRules','Selling Rules',1206,0,'["View","Add","Edit","Delete"]'),
+(3339,'Whs_Sales_Rules','Rules',1206,0,'["View","Add","Edit"]'),
 (3350,'WhS_Sales_SalePriceList','Sale Price List',1206,0,'["View"]'),
 (3351,'WhS_BE_CustomerSellingProduct','Customer Selling Product',1206,0,'["View"]'),
 (3352,'WhS_BE_SellingProduct','Selling Product',1206,0,'["View"]'),
@@ -304,7 +303,8 @@ as (select * from (values
 (3303,'WhS_Analytics_BillingReport','Billing Report',1204,0,'["View"]'),
 (3306,'WhS_Analytics_RepeatedNumber','Repeated Number',1205,0,'["View"]'),
 (3307,'WhS_Analytics_BlockedAttempts','BlockedAttempts',1205,0,'["View"]'),
-(3308,'WhS_Analytics_ReleaseCode','Release Code',1205,0,'["View"]')
+(3308,'WhS_Analytics_ReleaseCode','Release Code',1205,0,'["View"]'),
+(3345,'WhS_Sales_SellingRules','Selling Rules',1206,0,'["View","Add","Edit","Delete"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -517,14 +517,6 @@ as (select * from (values
 ('WhS_Sales/RatePlan/CheckIfDraftExists',null),
 ('WhS_Sales/RatePlan/DeleteDraft',null),
 
-('WhS_Sales/SellingRule/GetFilteredSellingRules','WhS_Sales_SellingRules: View'),
-('WhS_Sales/SellingRule/GetRule',null),
-('WhS_Sales/SellingRule/AddRule','WhS_Sales_SellingRules: Add'),
-('WhS_Sales/SellingRule/UpdateRule','WhS_Sales_SellingRules: Edit'),
-('WhS_Sales/SellingRule/DeleteRule','WhS_Sales_SellingRules: Delete'),
-('WhS_Sales/SellingRule/GetCodeCriteriaGroupTemplates',null),
-('WhS_Sales/SellingRule/GetSellingRuleSettingsTemplates',null),
-
 ('WhS_BE/SupplierPricelist/GetFilteredSupplierPricelist','WhS_BE_SupplierPricelist: View'),
 
 ('WhS_SupPL/SupplierPriceList/DownloadSupplierPriceListTemplate','WhS_BE_SupplierPricelist: DownloadTemplate'),
@@ -561,6 +553,27 @@ when matched then
 when not matched by target then
 	insert([Name],[RequiredPermissions])
 	values(s.[Name],s.[RequiredPermissions]);
+
+--[sec].[SystemAction]----------------------to be deleted--------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([Name],[RequiredPermissions])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('WhS_Sales/SellingRule/GetFilteredSellingRules','WhS_Sales_SellingRules: View'),
+('WhS_Sales/SellingRule/GetRule',null),
+('WhS_Sales/SellingRule/AddRule','WhS_Sales_SellingRules: Add'),
+('WhS_Sales/SellingRule/UpdateRule','WhS_Sales_SellingRules: Edit'),
+('WhS_Sales/SellingRule/DeleteRule','WhS_Sales_SellingRules: Delete'),
+('WhS_Sales/SellingRule/GetCodeCriteriaGroupTemplates',null),
+('WhS_Sales/SellingRule/GetSellingRuleSettingsTemplates',null)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Name],[RequiredPermissions]))
+merge	[sec].[SystemAction] as t
+using	cte_data as s
+on		1=1 and t.[Name] = s.[Name]
+when matched then
+	delete;
 
 --[bp].[BPTaskType]-------------------------1 to 10000----------------------------------------------
 ----------------------------------------------------------------------------------------------------
