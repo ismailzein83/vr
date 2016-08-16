@@ -65,7 +65,7 @@ namespace Retail.BusinessEntity.Business
         private static IEnumerable<GenericRuleDefinition> GetAccountMappingRuleDefinitions()
         {
             GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
-            return ruleDefinitionManager.GetCachedGenericRuleDefinitions().FindAllRecords(ruleDefinition => AccountMappingRuleDefinitionFilter.IsAccountIdentificationRuleDefinition(ruleDefinition));
+            return ruleDefinitionManager.GetGenericRulesDefinitons().FindAllRecords(ruleDefinition => AccountMappingRuleDefinitionFilter.IsAccountIdentificationRuleDefinition(ruleDefinition));
         }
 
         #endregion
