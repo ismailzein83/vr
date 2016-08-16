@@ -2,9 +2,9 @@
 
     "use strict";
 
-    genericInvoiceEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService','VR_Invoice_InvoiceTypeService'];
+    genericInvoiceEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService', 'VR_Invoice_InvoiceAPIService'];
 
-    function genericInvoiceEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeService) {
+    function genericInvoiceEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService, VR_Invoice_InvoiceAPIService) {
         var invoiceTypeId;
         $scope.invoiceTypeEntity;
         var partnerSelectorAPI;
@@ -56,7 +56,7 @@
             $scope.title = "Generate Invoice";
         }
         function getInvoiceType() {
-            return VR_Invoice_InvoiceTypeService.GetInvoiceType(invoiceTypeId).then(function (response) {
+            return VR_Invoice_InvoiceTypeAPIService.GetInvoiceType(invoiceTypeId).then(function (response) {
                 $scope.invoiceTypeEntity = response;
             });
         }
@@ -70,14 +70,27 @@
         }
         function loadStaticData() {
         }
-        function buildTextManipulationObjFromScope() {
+        function buildInvoiceObjFromScope() {
             var obj = {
+                InvoiceTypeId: invoiceTypeId,
+                PartnerId: partnerSelectorAPI.getSelectedIds(),
+                FromDate: $scope.fromDate,
+                ToDate: $scope.toDate
             };
             return obj;
         }
         function generateInvoice() {
+            var incvoiceObject = buildInvoiceObjFromScope();
+            return VR_Invoice_InvoiceAPIService.GenerateInvoice(incvoiceObject)
+           .then(function (response) {
+               $scope.modalContext.closeModal();
+           })
+           .catch(function (error) {
+               VRNotificationService.notifyException(error, $scope);
+           }).finally(function () {
+               $scope.scopeModal.isLoading = false;
+           });
         }
-
     }
 
     appControllers.controller('VR_Invoice_GenericInvoiceEditorController', genericInvoiceEditorController);

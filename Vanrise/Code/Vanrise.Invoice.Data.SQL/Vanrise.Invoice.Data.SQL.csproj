@@ -36,6 +36,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InvoiceDataManager.cs" />
+    <Compile Include="InvoiceItemDataManager.cs" />
     <Compile Include="InvoiceTypeDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -58,6 +61,10 @@
     <ProjectReference Include="..\Vanrise.Data\Vanrise.Data.csproj">
       <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
       <Name>Vanrise.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Invoice.Data\Vanrise.Invoice.Data.csproj">
       <Project>{3d178003-f8bb-4d06-acde-ddd1fe4c5b62}</Project>

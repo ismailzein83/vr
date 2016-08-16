@@ -3,15 +3,79 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
+using Vanrise.Invoice.Data;
 using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.Business
 {
     public class InvoiceManager
     {
+
+        #region Public Methods
+        public IDataRetrievalResult<InvoiceDetail> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input)
+        {
+            return null;
+            //IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            //Func<Entities.Invoice, bool> filterExpression = (itemObject) =>
+            //     (true);
+            //return BigDataManager.Instance.RetrieveData(input, new InvoiceRequestHandler(dataManager));
+        }
         public void GenerateInvoice(GenerateInvoiceInput createInvoiceInput)
         {
+            InvoiceTypeManager manager = new InvoiceTypeManager();
+            var invoiceType = manager.GetInvoiceType(createInvoiceInput.InvoiceTypeId);
 
+            InvoiceGenerationContext context = new InvoiceGenerationContext
+            {
+                CustomSectionPayload = createInvoiceInput.CustomSectionPayload,
+                FromDate = createInvoiceInput.FromDate,
+                PartnerId = createInvoiceInput.PartnerId,
+                ToDate = createInvoiceInput.ToDate
+            };
+            invoiceType.Settings.InvoiceGenerator.GenerateInvoice(context);
+
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            dataManager.SaveInvoices(createInvoiceInput,context.Invoice);
         }
+        #endregion
+
+
+        #region Mappers
+
+        public InvoiceDetail InvoiceDetailMapper(Entities.Invoice invoice)
+        {
+            InvoiceDetail invoiceDetail = new InvoiceDetail();
+            invoiceDetail.Entity = invoice;
+            return invoiceDetail;
+        }
+
+        #endregion
+
+
+        #region Private Classes
+
+        //private class InvoiceRequestHandler : BigDataRequestHandler<InvoiceQuery, Entities.Invoice, Entities.InvoiceDetail>
+        //{
+        //    IInvoiceDataManager _dataManager;
+        //    public InvoiceRequestHandler(IInvoiceDataManager dataManager)
+        //    {
+        //        _dataManager = dataManager;
+        //    }
+        //    public override InvoiceDetail EntityDetailMapper(Entities.Invoice entity)
+        //    {
+        //        return new InvoiceDetail{
+        //            Entity = entity
+        //        };
+        //    }
+
+        //    //public override IEnumerable<InvoiceDetail> RetrieveAllData(DataRetrievalInput<InvoiceQuery> input)
+        //    //{
+        //    //    return _dataManager.GetInvoices(input);
+        //    //}
+        //}
+        #endregion
     }
 }

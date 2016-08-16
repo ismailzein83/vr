@@ -47,5 +47,5 @@ namespace Vanrise.Invoice.Business
               });
         }
         #endregion
-    }
+    } 
 }

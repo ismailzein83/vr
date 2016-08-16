@@ -120,10 +120,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\InvoiceTypeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Invoice.Business\Vanrise.Invoice.Business.csproj">
       <Project>{3fc94003-b550-4f8d-b31e-0d389dccc801}</Project>
       <Name>Vanrise.Invoice.Business</Name>
@@ -137,11 +142,12 @@
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="VR_Invoice\Directives\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="VR_Invoice\Constants\ModuleConfig.js" />
+    <Content Include="VR_Invoice\Directives\Invoice\Templates\InvoiceGridTemplate.html" />
+    <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-grid.js" />
+    <Content Include="VR_Invoice\Services\APIServices\InvoiceAPIService.js" />
     <Content Include="VR_Invoice\Services\APIServices\InvoiceTypeAPIService.js" />
     <Content Include="VR_Invoice\Services\GenericInvoiceService.js" />
     <Content Include="VR_Invoice\Views\GenerateInvoiceEditor.html" />

@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    invoiceTypeService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Invoice_ModuleConfig', 'SecurityService'];
+    invoiceTypeAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Invoice_ModuleConfig', 'SecurityService'];
 
-    function invoiceTypeService(BaseAPIService, UtilsService, VR_Invoice_ModuleConfig, SecurityService) {
+    function invoiceTypeAPIService(BaseAPIService, UtilsService, VR_Invoice_ModuleConfig, SecurityService) {
 
         var controllerName = 'InvoiceType';
 
@@ -18,6 +18,6 @@
         });
     }
 
-    appControllers.service('VR_Invoice_InvoiceTypeService', invoiceTypeService);
+    appControllers.service('VR_Invoice_InvoiceTypeAPIService', invoiceTypeAPIService);
 
 })(appControllers);

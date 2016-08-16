@@ -2,13 +2,15 @@
 
     "use strict";
 
-    genericInvoiceManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService','VRNavigationService','VR_Invoice_GenericInvoiceService','VR_Invoice_InvoiceTypeService'];
+    genericInvoiceManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VR_Invoice_GenericInvoiceService', 'VR_Invoice_InvoiceTypeAPIService'];
 
-    function genericInvoiceManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VR_Invoice_GenericInvoiceService, VR_Invoice_InvoiceTypeService) {
+    function genericInvoiceManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VR_Invoice_GenericInvoiceService, VR_Invoice_InvoiceTypeAPIService) {
         var invoiceTypeId;
         $scope.invoiceTypeEntity;
         var partnerSelectorAPI;
         var partnerSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var gridAPI
         loadParameters();
         defineScope();
         load();
@@ -23,13 +25,17 @@
 
         function defineScope() {
 
+            $scope.onGridReady = function (api) {
+                gridAPI = api;
+            };
             $scope.onPartnerSelectorReady = function(api)
             {
                 partnerSelectorAPI = api;
                 partnerSelectorReadyDeferred.resolve();
             }
-
             $scope.searchClicked = function () {
+                return gridAPI.loadGrid(getFilterObject());
+
             };
             $scope.generateInvoice = generateInvoice;
         }
@@ -44,7 +50,13 @@
             });
            
         }
-
+        function getFilterObject() {
+            var filter = {
+                mainGridColumns: $scope.invoiceTypeEntity.Settings.UISettings.MainGridColumns,
+                query: {}
+            };
+            return filter;
+        }
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([loadPartnerSelectorDirective])
                .catch(function (error) {
@@ -56,7 +68,7 @@
         }
         function getInvoiceType()
         {
-           return VR_Invoice_InvoiceTypeService.GetInvoiceType(invoiceTypeId).then(function (response) {
+            return VR_Invoice_InvoiceTypeAPIService.GetInvoiceType(invoiceTypeId).then(function (response) {
                $scope.invoiceTypeEntity = response;
             });
         }
