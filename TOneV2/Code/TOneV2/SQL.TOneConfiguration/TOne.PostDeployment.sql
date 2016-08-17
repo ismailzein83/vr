@@ -136,7 +136,7 @@ as (select * from (values
 (12034,'Extra Charge Pricing','Extra Charge Pricing Rules',null,1209,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":178}',101,3),
 (12035,'Tariff Pricing','Tariff Pricing Rules',null,1209,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":179}',101,4),
 
-(12026,'Routing Products','Routing Products','#/view/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductManagement',1210,null,null,null,null,0,4),
+(12026,'Routing Products','Routing Products','#/view/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductManagement',1210,'WhS_BE/RoutingProduct/GetFilteredRoutingProducts',null,null,null,0,4),
 (12027,'Product Cost','Product Cost','#/view/WhS_Routing/Views/RPRoute/RPRouteManagement',1210,'WhS_Routing/RPRoute/GetFilteredRPRoutes',null,null,null,0,5),
 (12028,'Customer Routes','Customer Routes','#/view/WhS_Routing/Views/CustomerRoute/CustomerRouteManagement',1210,'WhS_Routing/CustomerRoute/GetFilteredCustomerRoutes',null,null,null,0,3),
 (12029,'Route Rules','Route Rules','#/view/WhS_Routing/Views/RouteRule/RouteRuleManagement',1211,'WhS_Routing/RouteRule/GetFilteredRouteRules',null,null,null,0,2),
@@ -284,7 +284,10 @@ as (select * from (values
 (3400,'VR_AccountManager','VR_AccountManager',1202,0,'["View", "AssignCarriers", "UpdateLinkedOrgChart","GetAssignedCarrierDetails","GetLinkedOrgChartId"]'),
 
 (3450,'WhS_Routing_RoutingRule','Routing Rule',1203,0,'["View","Add","Edit","Delete"]'),
-(3451,'WhS_Routing_RPRoutes','RPRoutes',1203,0,'["View"]')
+(3451,'WhS_Routing_ProductCost','Product Cost',1203,0,'["View"]'),
+(3452,'WhS_Routing_RouteOptionRule','Route Option Rule',1203,0,'["View","Add","Edit"]'),
+(3453,'WhS_Routing_CustomerRoute','Customer Route',1203,0,'["View"]')
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -428,7 +431,7 @@ as (select * from (values
 ('WhS_BE/CustomerZone/GetCountriesToSell',null),
 ('WhS_BE/CustomerZone/AddCustomerZones',null),
 
-('WhS_BE/RoutingProduct/GetFilteredRoutingProducts',null),
+('WhS_BE/RoutingProduct/GetFilteredRoutingProducts','Whs_BE_RoutingProduct: View'),
 ('WhS_BE/RoutingProduct/AddRoutingProduct',null),
 ('WhS_BE/RoutingProduct/GetRoutingProductsInfoBySellingNumberPlan',null),
 ('WhS_BE/RoutingProduct/GetRoutingProductInfo',null),
@@ -484,9 +487,9 @@ as (select * from (values
 ('WhS_CodePrep/CodePreparation/CloseZone',null),
 ('WhS_CodePrep/CodePreparation/RenameZone',null),
 
-('WhS_Routing/CustomerRoute/GetFilteredCustomerRoutes',null),
+('WhS_Routing/CustomerRoute/GetFilteredCustomerRoutes','WhS_Routing_CustomerRoute: View'),
 
-('WhS_Routing/RouteRule/AddRule',null),
+('WhS_Routing/RouteRule/AddRule','WhS_Routing_RoutingRule: Add'),
 ('WhS_Routing/RouteRule/GetFilteredRouteRules','WhS_Routing_RoutingRule: View'),
 ('WhS_Routing/RouteRule/GetRule',null),
 ('WhS_Routing/RouteRule/UpdateRule','WhS_Routing_RoutingRule: Edit'),
@@ -501,10 +504,17 @@ as (select * from (values
 
 ('WhS_Routing/RoutingDatabase/GetRoutingDatabaseInfo',null),
 
+('WhS_Routing/RPRoute/GetFilteredRPRoutes','WhS_Routing_ProductCost: View'),
 ('WhS_Routing/RPRoute/GetRPRouteOptionSupplier',null),
 ('WhS_Routing/RPRoute/GetPoliciesOptionTemplates',null),
 ('WhS_Routing/RPRoute/GetFilteredRPRouteOptions',null),
-('WhS_Routing/RPRoute/GetFilteredRPRoutes','WhS_Routing_RPRoutes: View'),
+
+('WhS_Routing/RouteOptionRule/AddRule','WhS_Routing_RouteOptionRule: Add'),
+('WhS_Routing/RouteOptionRule/GetFilteredRouteOptionRules','WhS_Routing_RouteOptionRule: View'),
+('WhS_Routing/RouteOptionRule/GetRule',null),
+('WhS_Routing/RouteOptionRule/UpdateRule','WhS_Routing_RouteOptionRule: Edit'),
+('WhS_Routing/RouteOptionRule/DeleteRule',null),
+('WhS_Routing/RouteOptionRule/GetRouteOptionRuleSettingsTemplates',null),
 
 ('WhS_Sales/RatePlan/ValidateCustomer',null),
 ('WhS_Sales/RatePlan/GetZoneLetters',null),
@@ -528,13 +538,6 @@ as (select * from (values
 ('WhS_SupPL/SupplierPriceListPreview/GetFilteredZonePreview',null),
 ('WhS_SupPL/SupplierPriceListPreview/GetFilteredCodePreview',null),
 ('WhS_SupPL/SupplierPriceListPreview/GetFilteredRatePreview',null),
-
-('WhS_Routing/RouteOptionRule/AddRule',null),
-('WhS_Routing/RouteOptionRule/GetFilteredRouteOptionRules',null),
-('WhS_Routing/RouteOptionRule/GetRule',null),
-('WhS_Routing/RouteOptionRule/UpdateRule',null),
-('WhS_Routing/RouteOptionRule/DeleteRule',null),
-('WhS_Routing/RouteOptionRule/GetRouteOptionRuleSettingsTemplates',null),
 
 ('WhS_Analytics/VariationReport/GetFilteredVariationReportRecords','BillingStatistic: View'),
 ('WhS_Analytics/ReportDefinition/GetAllRDLCReportDefinition','BillingStatistic: View'),
