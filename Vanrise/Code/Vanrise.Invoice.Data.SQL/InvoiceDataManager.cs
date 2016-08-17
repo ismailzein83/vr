@@ -16,7 +16,7 @@ namespace Vanrise.Invoice.Data.SQL
         
         #region ctor
         public InvoiceDataManager()
-            : base(GetConnectionStringName("InvoiceTypeDBConnStringKey", "InvoiceTypeDBConnString"))
+            : base(GetConnectionStringName("InvoiceDBConnStringKey", "InvoiceDBConnString"))
         {
 
         }

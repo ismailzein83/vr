@@ -15,7 +15,7 @@ namespace Vanrise.Invoice.Data.SQL
         #region ctor
         const string LiveBalance_TABLENAME = "InvoiceItemTable";
         public InvoiceItemDataManager()
-            : base(GetConnectionStringName("InvoiceTypeDBConnStringKey", "InvoiceTypeDBConnString"))
+            : base(GetConnectionStringName("InvoiceDBConnStringKey", "InvoiceDBConnString"))
         {
 
         }
