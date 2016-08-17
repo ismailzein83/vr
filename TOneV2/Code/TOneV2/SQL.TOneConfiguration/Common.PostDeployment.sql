@@ -79,7 +79,8 @@ set identity_insert [sec].[BusinessEntityModule] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (201,'Business Entities',1,0),
-(202,'Lookups',201,0)
+(202,'Lookups',201,0),
+(203,'System',2,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[ParentId],[BreakInheritance]))
 merge	[sec].[BusinessEntityModule] as t
@@ -101,17 +102,17 @@ set identity_insert [sec].[BusinessEntity] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (301,'VRCommon_Country','Country',202,0,'["View", "Add", "Edit", "Download Template", "Upload", "Add City"]'),
-(302,'VRCommon_LogAttribute','Logs',2,0,'["View"]'),
-(303,'VRCommon_EmailTemplates','Email Templates',2,0,'["View", "Edit"]'),
-(304,'VRCommon_Settings','Settings',2,0,'["View", "Edit"]'),
 (305,'VRCommon_City','City',202,0,'["View","Add","Edit"]'),
 (306,'VRCommon_Currency','Currency',202,0,'["View"]'),
 (307,'VRCommon_CurrencyExchangeRate','Currency Exchange Rate',202,0,'["View"]'),
 (308,'VRCommon_RateType','Rate Type',202,0,'["View"]'),
 
-(330,'VRCommon_VRObjectTypeDefinition','Object Type Definition',2,0,'["View","Add","Edit"]'),
-(331,'VRCommon_VRMailMessageType','Mail Message Type',2,0,'["View","Add","Edit"]'),
-(332,'VRCommon_VRMailMessageTemplate','Mail Message Template',2,0,'["View","Add","Edit"]')
+(302,'VRCommon_LogAttribute','Logs',203,0,'["View"]'),
+(303,'VRCommon_EmailTemplates','Email Templates',203,0,'["View", "Edit"]'),
+(304,'VRCommon_Settings','Settings',203,0,'["View", "Edit"]'),
+(330,'VRCommon_VRObjectTypeDefinition','Object Type Definition',203,0,'["View","Add","Edit"]'),
+(331,'VRCommon_VRMailMessageType','Mail Message Type',203,0,'["View","Add","Edit"]'),
+(332,'VRCommon_VRMailMessageTemplate','Mail Message Template',203,0,'["View","Add","Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t

@@ -69,7 +69,7 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1201,'VR_Runtime_SchedulerTask','Scheduler Task',2,0,'["View", "Add", "Edit", "ViewMyTask"]')
+(1201,'VR_Runtime_SchedulerTask','Scheduler Task',203,0,'["View", "Add", "Edit", "ViewMyTask"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
