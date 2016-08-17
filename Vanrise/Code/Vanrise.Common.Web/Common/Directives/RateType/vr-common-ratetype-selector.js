@@ -72,11 +72,12 @@ app.directive('vrCommonRatetypeSelector', ['VRCommon_RateTypeAPIService', 'VRCom
         if (attrs.ismultipleselection != undefined)
             multipleselection = "ismultipleselection"
 
-        return ' <vr-select ' + multipleselection + ' customvalidate="ctrl.customvalidate" datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="RateTypeId"'
+        return ' <vr-select ' + multipleselection + ' customvalidate="ctrl.customvalidate"  on-ready="ctrl.onSelectorReady"  datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="RateTypeId"'
                + 'entityname="RateType" ' + ' label="' + label + '" ' + addCliked + ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>';
 
     }
     function rateTypeCtor(ctrl, $scope, VRCommon_RateTypeAPIService, $attrs) {
+        var selectorApi;
 
         function initializeController() {
             ctrl.addNewRateType = function () {
@@ -89,8 +90,10 @@ app.directive('vrCommonRatetypeSelector', ['VRCommon_RateTypeAPIService', 'VRCom
                 };
                 VRCommon_RateTypeService.addRateType(onRateTypeAdded);
             }
-
-            defineAPI();
+            ctrl.onSelectorReady = function (api) {
+                selectorApi = api;
+                defineAPI();
+            }
         }
 
         function defineAPI() {
@@ -107,6 +110,7 @@ app.directive('vrCommonRatetypeSelector', ['VRCommon_RateTypeAPIService', 'VRCom
                 }
 
                 return VRCommon_RateTypeAPIService.GetAllRateTypes().then(function (response) {
+                    selectorApi.clearDataSource();
                     angular.forEach(response, function (item) {
                         ctrl.datasource.push(item);
 
