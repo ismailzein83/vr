@@ -11,11 +11,6 @@ BEGIN
 	SET NOCOUNT ON;
 
     SELECT  
-	   sc.[ID]
-      ,sc.[Code]
-      ,sc.[ZoneID]
-      ,sc.[CodeGroupID]
-      ,sc.[BED]
-      ,sc.[EED]
-      from TOneWhS_BE.SaleCode sc
+	   sc.[ID],sc.[Code],sc.[ZoneID],sc.[CodeGroupID],sc.[BED],sc.[EED]
+      from TOneWhS_BE.SaleCode sc  with(nolock)
 END

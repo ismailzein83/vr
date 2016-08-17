@@ -1,4 +1,4 @@
-﻿create PROCEDURE [VR_AccountBalance].[sp_BillingTransaction_Update]
+﻿create PROCEDURE [VR_AccountBalance].[sp_BillingTransaction_SetBalanceUpdated]
 	@BillingTransactionIDs varchar(max)
 AS
 BEGIN

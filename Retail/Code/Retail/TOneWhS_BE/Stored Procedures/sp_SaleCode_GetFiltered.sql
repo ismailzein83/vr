@@ -1,4 +1,4 @@
-﻿Create PROCEDURE [TOneWhS_BE].[sp_SaleCode_GetFiltered]
+﻿CREATE PROCEDURE [TOneWhS_BE].[sp_SaleCode_GetFiltered]
 	@EffectiveOn dateTime = null,
 	@Code varchar(20),
 	@SellingNumberPlanID int ,
@@ -21,14 +21,14 @@ BEGIN
 			  ,sc.[BED]
 			  ,sc.[EED]
 			FROM 
-			TOneWhS_BE.SaleCode sc 
-			join  TOneWhS_BE.SaleZone sz on  sc.ZoneID = sz.ID   
+			TOneWhS_BE.SaleCode sc  with(nolock)
+			join  TOneWhS_BE.SaleZone sz with(nolock) on  sc.ZoneID = sz.ID   
             WHERE 
                 (@EffectiveOn is null or sc.BED < = @EffectiveOn)
-            and (@EffectiveOn is null or sc.EED is null or sc.EED  > @EffectiveOn)
-            and (@Code IS NULL OR sc.Code LIKE @Code + '%')
-            and (@SellingNumberPlanID is null or @SellingNumberPlanID = sz.SellingNumberPlanID)
-            and (@ZonesIDs  is null or sc.ZoneID in (select ZoneID from @ZonesIDsTable))
+				and (@EffectiveOn is null or sc.EED is null or sc.EED  > @EffectiveOn)
+				and (@Code IS NULL OR sc.Code LIKE @Code + '%')
+				and (@SellingNumberPlanID is null or @SellingNumberPlanID = sz.SellingNumberPlanID)
+				and (@ZonesIDs  is null or sc.ZoneID in (select ZoneID from @ZonesIDsTable))
 		END
 	SET NOCOUNT OFF
 END

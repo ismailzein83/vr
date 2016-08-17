@@ -3,9 +3,10 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [Retail].[sp_ServiceType_GetAll]
+CREATE PROCEDURE [VR_AccountBalance].[sp_BalanceClosingPeriod_GetLastClosingPeriod]
+
 AS
 BEGIN
-	SELECT ID, Name, Title, Settings
-	FROM Retail.ServiceType  with(nolock)
+	SELECT  Top (1) ID,ClosingTime
+	FROM	[VR_AccountBalance].BalanceClosingPeriod  with(nolock) order by ID desc
 END

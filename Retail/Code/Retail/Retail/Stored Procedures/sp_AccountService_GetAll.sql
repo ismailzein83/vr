@@ -7,5 +7,5 @@ CREATE PROCEDURE [Retail].[sp_AccountService_GetAll]
 AS
 BEGIN
 	SELECT ID, AccountId, ServiceTypeID,ServiceChargingPolicyID, Settings,StatusID
-	FROM Retail.AccountService
+	FROM Retail.AccountService  with(nolock)
 END

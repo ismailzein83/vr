@@ -7,5 +7,5 @@ CREATE PROCEDURE [Retail].[sp_Switch_GetAll]
 AS
 BEGIN
 	SELECT ID, Name,Settings, CreatedTime
-	FROM [Retail_BE].[Switch]
+	FROM [Retail_BE].[Switch]  with(nolock)
 END

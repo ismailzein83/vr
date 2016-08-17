@@ -174,7 +174,6 @@
     <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_GetById.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_GetAccountsInfo.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransactionType_GetAll.sql" />
-    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_Update.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_Insert.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetFiltered.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetBalanceNotUpdated.sql" />
@@ -187,5 +186,26 @@
     <Build Include="Retail\Stored Procedures\sp_StatusChargingSet_Insert.sql" />
     <Build Include="Retail\Stored Procedures\sp_StatusChargingSet_GetAll.sql" />
     <Build Include="VR_AccountBalance\User Defined Types\LiveBalanceTableType.sql" />
+    <Build Include="VR_AccountBalance\Tables\AlertRuleThresholdAction.sql" />
+    <Build Include="VR_AccountBalance\Tables\AlertRuleActionExecution.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_UpdateBalanceThreshold.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_UpdateBalance.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_UpdateAlertRule.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_GetBalancesForAlert.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_GetAll.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_UpdateClosingPeriodId.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_SetBalanceUpdated.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_InsertFromLiveBalance.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BalanceHistory_InsertFromLiveBalance.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BalanceClosingPeriod_Insert.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BalanceClosingPeriod_GetLastClosingPeriod.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AlertRuleThresholdAction_AddOrUpdate.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AlertRuleActionExecution_Insert.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AlertRuleActionExecution_GetExpiredActions.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AlertRuleActionExecution_Delete.sql" />
+    <Build Include="Retail\Stored Procedures\sp_StatusChargingSet_Update.sql" />
+    <Build Include="VR_AccountBalance\User Defined Types\LiveBalanceThresholdTableType.sql" />
+    <Build Include="VR_AccountBalance\User Defined Types\LiveBalanceAlertRuleTableType.sql" />
+    <Build Include="VR_AccountBalance\User Defined Types\AlertRuleThresholdActionsTableType.sql" />
   </ItemGroup>
 </Project>

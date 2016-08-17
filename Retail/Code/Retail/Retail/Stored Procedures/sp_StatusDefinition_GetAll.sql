@@ -2,5 +2,5 @@
 AS
 BEGIN
 	SELECT ID, Name, Settings, EntityType
-	FROM Retail_BE.StatusDefinition
+	FROM Retail_BE.StatusDefinition  with(nolock)
 END

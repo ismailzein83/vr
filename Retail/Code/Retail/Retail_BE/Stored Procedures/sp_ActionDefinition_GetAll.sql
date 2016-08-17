@@ -7,5 +7,5 @@ CREATE PROCEDURE [Retail_BE].[sp_ActionDefinition_GetAll]
 AS
 BEGIN
 	SELECT ID, Name,  Settings,EntityType
-	FROM Retail_BE.ActionDefinition
+	FROM Retail_BE.ActionDefinition  with(nolock)
 END

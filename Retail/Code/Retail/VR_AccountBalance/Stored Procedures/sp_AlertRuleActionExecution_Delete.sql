@@ -3,9 +3,10 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [Retail].[sp_ServiceType_GetAll]
+create PROCEDURE VR_AccountBalance.sp_AlertRuleActionExecution_Delete
+	@ID bigint 
 AS
 BEGIN
-	SELECT ID, Name, Title, Settings
-	FROM Retail.ServiceType  with(nolock)
+		DELETE FROM VR_AccountBalance.AlertRuleActionExecution
+        WHERE ID = @Id 
 END

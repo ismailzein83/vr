@@ -6,10 +6,13 @@
     [CurrentBalance]        DECIMAL (20, 6) NOT NULL,
     [CurrentAlertThreshold] DECIMAL (20, 6) NULL,
     [NextAlertThreshold]    DECIMAL (20, 6) NULL,
-    [AlertRuleID]           BIGINT          NULL,
+    [AlertRuleID]           INT             NULL,
+    [ThresholdActionIndex]  INT             NULL,
     [timestamp]             ROWVERSION      NULL,
     CONSTRAINT [PK_LiveBalance] PRIMARY KEY CLUSTERED ([AccountID] ASC)
 );
+
+
 
 
 

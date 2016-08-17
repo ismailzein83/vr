@@ -3,9 +3,9 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [VR_AccountBalance].[sp_LiveBalance_GetAccountsInfo]
+CREATE PROCEDURE [VR_AccountBalance].[sp_LiveBalance_GetAccountsInfo]
 AS
 BEGIN
 	SELECT AccountID, CurrencyID
-	FROM VR_AccountBalance.LiveBalance
+	FROM VR_AccountBalance.LiveBalance  with(nolock)
 END

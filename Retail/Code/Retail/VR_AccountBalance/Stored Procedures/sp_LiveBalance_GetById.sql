@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [VR_AccountBalance].[sp_LiveBalance_GetById]
+CREATE PROCEDURE [VR_AccountBalance].[sp_LiveBalance_GetById]
 	-- Add the parameters for the stored procedure here
 	@AccountID bigint
 AS
@@ -12,15 +12,8 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 /****** Script for SelectTopNRows command from SSMS  ******/
-	SELECT  AccountID,
-			CurrencyID,
-			InitialBalance,
-			UsageBalance,
-			CurrentBalance,
-			CurrentAlertThreshold,
-			NextAlertThreshold,
-			AlertRuleID
-	FROM	[VR_AccountBalance].LiveBalance lb
-	WHERE AccountID = @AccountID
+	SELECT  AccountID,CurrencyID,InitialBalance,UsageBalance,CurrentBalance,CurrentAlertThreshold,NextAlertThreshold,AlertRuleID,ThresholdActionIndex
+	FROM	[VR_AccountBalance].LiveBalance lb  with(nolock)
+	WHERE	AccountID = @AccountID
         
 END

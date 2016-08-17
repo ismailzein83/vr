@@ -13,9 +13,6 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT [ID]
-     , [Name]
-,[CountryId] 
-      
-      FROM Retail.Zone
+	SELECT [ID], [Name],[CountryId] 
+    FROM Retail.Zone with(nolock)
 END
