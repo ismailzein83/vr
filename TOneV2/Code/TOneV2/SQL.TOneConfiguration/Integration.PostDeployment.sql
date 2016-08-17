@@ -82,8 +82,8 @@ set identity_insert [sec].[BusinessEntity] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (901,'VR_Integration_DataSource','Data Source',401,0,'["View","Add","Edit","Delete"]'),
-(902,'VR_Integration_DataSourceImportedBatch','Imported Batches',401,0,'["View"]'),
-(903,'VR_Integration_DataSourceLog','Log',401,0,'["View"]')
+(902,'VR_Integration_DataSource_ImportedBatch','Imported Batches',401,0,'["View"]'),
+(903,'VR_Integration_DataSource_Log','Log',401,0,'["View"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -113,8 +113,8 @@ as (select * from (values
 ('VR_Integration/DataSource/AddDataSource','VR_Integration_DataSource: Add'),
 ('VR_Integration/DataSource/UpdateDataSource','VR_Integration_DataSource: Edit'),
 ('VR_Integration/DataSource/DeleteDataSource','VR_Integration_DataSource: Delete'),
-('VR_Integration/DataSourceImportedBatch/GetFilteredDataSourceImportedBatches','VR_Integration_DataSourceImportedBatch: View'),
-('VR_Integration/DataSourceLog/GetFilteredDataSourceLogs','VR_Integration_DataSourceLog: View')
+('VR_Integration/DataSourceImportedBatch/GetFilteredDataSourceImportedBatches','VR_Integration_DataSource_ImportedBatch: View'),
+('VR_Integration/DataSourceLog/GetFilteredDataSourceLogs','VR_Integration_DataSource_Log: View')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
