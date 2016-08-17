@@ -36,6 +36,10 @@ namespace Vanrise.BEBridge.BP.Activities
             List<ITargetBE> targetsToInsert = new List<ITargetBE>();
             List<ITargetBE> targetsToUpdate = new List<ITargetBE>();
             int batchCount = 50;
+            int totalUpdateBatchConverted = 0;
+            int totalInsertBatchConverted = 0;
+            int totalUpdateTargets = 0;
+            int totalInsertTargets = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -53,6 +57,7 @@ namespace Vanrise.BEBridge.BP.Activities
                             targetBEConvertorContext.SourceBEBatch = sourceBatch;
                             inputArgument.TargetConverter.ConvertSourceBEs(targetBEConvertorContext);
                             List<ITargetBE> targetBEs = targetBEConvertorContext.TargetBEs;
+                            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Targer BEs count {0}.", targetBEs.Count);
                             foreach (ITargetBE targetBE in targetBEs)
                             {
                                 targetContext.SourceBEId = targetBE.SourceBEId;
@@ -69,14 +74,28 @@ namespace Vanrise.BEBridge.BP.Activities
                                     }
                                     else
                                         targetsToUpdate.Add(mergeContext.FinalBE);
+
+                                    totalUpdateTargets++;
                                 }
                                 else
+                                {
                                     targetsToInsert.Add(targetBE);
+                                    totalInsertTargets++;
+                                }
                             }
                             if (targetsToInsert.Count >= batchCount)
+                            {
                                 UpdateTargetBEList(inputArgument.TargetBEsToInsert, targetsToInsert);
+                                totalInsertBatchConverted++;
+                            }
                             if (targetsToUpdate.Count >= batchCount)
+                            {
                                 UpdateTargetBEList(inputArgument.TargetBEsToUpdate, targetsToUpdate);
+                                totalUpdateBatchConverted++;
+                            }
+
+                            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Insert Batches converted, {1} Insert Targets", totalInsertBatchConverted, totalInsertTargets);
+                            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Update Batches converted, {1} Update Targets", totalUpdateBatchConverted, totalInsertTargets);
                         }
 
                     });

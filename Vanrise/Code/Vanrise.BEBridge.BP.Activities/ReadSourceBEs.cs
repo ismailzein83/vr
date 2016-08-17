@@ -28,6 +28,7 @@ namespace Vanrise.BEBridge.BP.Activities
         {
             Action<SourceBEBatch, SourceBEBatchRetrievedContext> onSourceBEBatchRetrieved = (sourceBEBatch, sourceRetrievedContext) =>
             {
+                handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Source BE file {0} read.", sourceBEBatch.BatchName);
                 inputArgument.SourceBatches.Enqueue(new SourceBatches() { SorceBEBatches = new List<SourceBEBatch> { sourceBEBatch } });
             };
             SourceBEReaderRetrieveUpdatedBEsContext sourceBEReaderContext = new SourceBEReaderRetrieveUpdatedBEsContext(onSourceBEBatchRetrieved);
@@ -71,5 +72,5 @@ namespace Vanrise.BEBridge.BP.Activities
         #endregion
 
     }
-    
+
 }

@@ -34,12 +34,14 @@ namespace Vanrise.BEBridge.BP.Activities
                         TargetSynchronizerInsertContext context = new TargetSynchronizerInsertContext();
                         context.TargetBE = targetsToInsert.TargetBEs.ToList();
                         inputArgument.TargetBESynchronizer.InsertBEs(context);
+                        handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Targets Inserted", context.TargetBE.Count);
                     });
                     hasItem = inputArgument.TargerBEsToUpdate.TryDequeue((targetsToUpdate) =>
                     {
                         TargetSynchronizerUpdateContext context = new TargetSynchronizerUpdateContext();
                         context.TargetBE = targetsToUpdate.TargetBEs.ToList();
                         inputArgument.TargetBESynchronizer.UpdateBEs(context);
+                        handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Targets Updated", context.TargetBE.Count);
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });

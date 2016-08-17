@@ -12,6 +12,8 @@
  xmlns:vbba="clr-namespace:Vanrise.BEBridge.BP.Arguments;assembly=Vanrise.BEBridge.BP.Arguments"
  xmlns:vbba1="clr-namespace:Vanrise.BEBridge.BP.Activities;assembly=Vanrise.BEBridge.BP.Activities"
  xmlns:vbe="clr-namespace:Vanrise.BEBridge.Entities;assembly=Vanrise.BEBridge.Entities"
+ xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
+ xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
  xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
@@ -47,13 +49,15 @@
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.MainExtensions</AssemblyReference>
-      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
@@ -91,6 +95,19 @@
               </InArgument>
             </vbba1:GetBEReceiveDefinition.BEReceiveDefinitionId>
           </vbba1:GetBEReceiveDefinition>
+          <vbw:WriteTrackingMessage>
+            <vbw:WriteTrackingMessage.Message>
+              <InArgument x:TypeArguments="x:String">
+                <mca:CSharpValue x:TypeArguments="x:String">string.Format("BE Bridge Process Started for BE Recieve Definition {0}, Id {1}.", beRecieveDefinition.Name, beRecieveDefinition.BEReceiveDefinitionId)</mca:CSharpValue>
+              </InArgument>
+            </vbw:WriteTrackingMessage.Message>
+            <vbw:WriteTrackingMessage.Severity>
+              <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+                <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+              </InArgument>
+            </vbw:WriteTrackingMessage.Severity>
+            <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_1</sap2010:WorkflowViewState.IdRef>
+          </vbw:WriteTrackingMessage>
           <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
             <Parallel.Variables>
               <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="readSourceBEsStatus" />
@@ -152,7 +169,7 @@
                 </InArgument>
               </vbba1:ConvertSourceToTargetBEs.TargetConverter>
             </vbba1:ConvertSourceToTargetBEs>
-            <vbba1:UpdateTargetBEs Status="{x:Null}">
+            <vbba1:UpdateTargetBEs Status="{x:Null}" sap2010:WorkflowViewState.IdRef="UpdateTargetBEs_1">
               <vbba1:UpdateTargetBEs.PreviousActivityStatus>
                 <InArgument x:TypeArguments="vb:AsyncActivityStatus">
                   <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">convertSourceToTargetStatus</mca:CSharpValue>
@@ -173,37 +190,37 @@
                   <mca:CSharpValue x:TypeArguments="vbe:TargetBESynchronizer">beRecieveDefinition.Settings.TargetBESynchronizer</mca:CSharpValue>
                 </InArgument>
               </vbba1:UpdateTargetBEs.TargetBESynchronizer>
-              <sap2010:WorkflowViewState.IdRef>UpdateTargetBEs_1</sap2010:WorkflowViewState.IdRef>
             </vbba1:UpdateTargetBEs>
           </Parallel>
         </Sequence>
       </ActivityAction>
     </ForEach>
-    <sads:DebugSymbol.Symbol>dzxDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQkVCcmlkZ2UuQlBcQkVCcmlkZ2VQcm9jZXNzLnhhbWwZPAO3AQ4CAQFEBbUBDwIBAkcLR3QDAdEBTgmzARQCAQNSC10qAwG+AV4LsgEWAgEEVRFVeQMByAFaEVpgAwG/AWUNdSMDAZYBdg2aAS4CATqbAQ2xASUCAQVtE22GAQMBsQFyE3J6AwGkAWgTaIABAwGXAZIBE5IBhAEDAYkBjQETjQGEAQIBfIgBE4gBkgECAW95E3lyAgFigwETgwGCAQIBVZcBE5cBjAECAUh+E354AgE7rQETrQGSAQIBLZ4BE54BegIBIKgBE6gBhAECAROjAROjAYQBAgEG</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dzxDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQkVCcmlkZ2UuQlBcQkVCcmlkZ2VQcm9jZXNzLnhhbWwcQAPHAQ4CAQFIBcUBDwIBAksLS3QDAeQBUgnDARQCAQNWC2EqAwHRAWILbiYDAb4BbwvCARYCAQRZEVl5AwHbAV4RXmADAdIBahFqiwEDAcgBZRFl5QEDAb8Bdg2GASMDAZYBhwENqwEuAgE6rAENwQElAgEFfhN+hgEDAbEBgwETgwF6AwGkAXkTeYABAwGXAaMBE6MBhAEDAYkBngETngGEAQIBfJkBE5kBkgECAW+KAROKAXICAWKUAROUAYIBAgFVqAETqAGMAQIBSI8BE48BeAIBO74BE74BkgECAS2vAROvAXoCASC5ARO5AYQBAgETtAETtAGEAQIBBg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="GetBEReceiveDefinition_1" sap:VirtualizedContainerService.HintSize="794,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="794,22" />
       <sap2010:ViewStateData Id="ReadSourceBEs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ConvertSourceToTargetBEs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="UpdateTargetBEs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="816,272">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="816,334">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="846,422" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="868,546">
+      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="846,484" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="868,608">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.BEBridge.BP.BEBridgeProcess_1" sap:VirtualizedContainerService.HintSize="908,626" />
+      <sap2010:ViewStateData Id="Vanrise.BEBridge.BP.BEBridgeProcess_1" sap:VirtualizedContainerService.HintSize="908,688" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
