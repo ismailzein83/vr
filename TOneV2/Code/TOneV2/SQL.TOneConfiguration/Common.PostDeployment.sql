@@ -43,8 +43,22 @@ as (select * from (values
 ('VRCommon/RateType/GetFilteredRateTypes','VRCommon_RateType: View'),
 
 ('VRCommon/Currency/GetFilteredCurrencies','VRCommon_Currency: View'),
-('VRCommon/CurrencyExchangeRate/GetFilteredExchangeRateCurrencies','VRCommon_CurrencyExchangeRate: View')
+('VRCommon/CurrencyExchangeRate/GetFilteredExchangeRateCurrencies','VRCommon_CurrencyExchangeRate: View'),
 
+('VRCommon/VRObjectTypeDefinition/GetFilteredVRObjectTypeDefinitions','VRCommon_VRObjectTypeDefinition: View'),
+('VRCommon/VRObjectTypeDefinition/GetVRObjectTypeDefinition',null),
+('VRCommon/VRObjectTypeDefinition/AddVRObjectTypeDefinition','VRCommon_VRObjectTypeDefinition: Add'),
+('VRCommon/VRObjectTypeDefinition/UpdateVRObjectTypeDefinition','VRCommon_VRObjectTypeDefinition: Edit'),
+('VRCommon/VRObjectTypeDefinition/GetVRObjectTypeDefinitionsInfo',null),
+('VRCommon/VRMailMessageType/GetFilteredMailMessageTypes','VRCommon_VRMailMessageType: View'),
+('VRCommon/VRMailMessageType/GetMailMessageType',null),
+('VRCommon/VRMailMessageType/AddMailMessageType','VRCommon_VRMailMessageType: Add'),
+('VRCommon/VRMailMessageType/UpdateMailMessageType','VRCommon_VRMailMessageType: Edit'),
+('VRCommon/VRMailMessageType/GetMailMessageTypesInfo',null),
+('VRCommon/VRMailMessageTemplate/GetFilteredMailMessageTemplates','VRCommon_VRMailMessageTemplate: View'),
+('VRCommon/VRMailMessageTemplate/GetMailMessageTemplate',null),
+('VRCommon/VRMailMessageTemplate/AddMailMessageTemplate','VRCommon_VRMailMessageTemplate: Add'),
+('VRCommon/VRMailMessageTemplate/UpdateMailMessageTemplate','VRCommon_VRMailMessageTemplate: Edit')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
@@ -93,8 +107,11 @@ as (select * from (values
 (305,'VRCommon_City','City',202,0,'["View","Add","Edit"]'),
 (306,'VRCommon_Currency','Currency',202,0,'["View"]'),
 (307,'VRCommon_CurrencyExchangeRate','Currency Exchange Rate',202,0,'["View"]'),
-(308,'VRCommon_RateType','Rate Type',202,0,'["View"]')
+(308,'VRCommon_RateType','Rate Type',202,0,'["View"]'),
 
+(330,'VRCommon_VRObjectTypeDefinition','Object Type Definition',2,0,'["View","Add","Edit"]'),
+(331,'VRCommon_VRMailMessageType','Mail Message Type',2,0,'["View","Add","Edit"]'),
+(332,'VRCommon_VRMailMessageTemplate','Mail Message Template',2,0,'["View","Add","Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -142,9 +159,14 @@ as (select * from (values
 (1003,'Currencies','Currencies','#/view/Common/Views/Currency/CurrencyManagement',102,'VRCommon/Currency/GetFilteredCurrencies',null,null,null,0,15),
 (1004,'Currency Exchange Rates','Currency Exchange Rates','#/view/Common/Views/CurrencyExchangeRate/CurrencyExchangeRateManagement',102,'VRCommon/CurrencyExchangeRate/GetFilteredExchangeRateCurrencies',null,null,null,0,20),
 (1005,'Rate Types','Rate Types','#/view/Common/Views/RateType/RateTypeManagement',102,'VRCommon/RateType/GetFilteredRateTypes',null,null,null,0,25),
+
 (1007,'Event Logs','Event Logs','#/view/Common/Views/MasterLog/MasterLogManagement',3,'VRCommon/LogAttribute/GetFilteredLoggers',null,null,null,0,15),
 (1008,'Email Templates','Email Templates','#/view/Common/Views/EmailTemplate/EmailTemplateManagement',3,'VRCommon/EmailTemplate/GetFilteredEmailTemplates',null,null,null,0,9),
-(1009,'Settings','Settings','#/view/Common/Views/Settings/SettingsManagement',3,'VRCommon/Settings/GetFilteredSettings',null,null,null,0,10)
+(1009,'Settings','Settings','#/view/Common/Views/Settings/SettingsManagement',3,'VRCommon/Settings/GetFilteredSettings',null,null,null,0,10),
+
+(1020,'Mail Message Types','Mail Message Types','#/view/Common/Views/VRMail/VRMailMessageTypeManagement',3,'VRCommon/VRMailMessageType/GetFilteredMailMessageTypes',null,null,null,0,10),
+(1021,'Mail Message Templates','Mail Message Templates','#/view/Common/Views/VRMail/VRMailMessageTemplateManagement',3,'VRCommon/VRMailMessageTemplate/GetFilteredMailMessageTemplates',null,null,null,0,9),
+(1022,'Object Type Definitions','Object Type Definitions','#/view/Common/Views/VRObjectTypeDefinition/VRObjectTypeDefinitionManagement',3,'VRCommon/VRObjectTypeDefinition/GetFilteredVRObjectTypeDefinitions',null,null,null,0,11)
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
