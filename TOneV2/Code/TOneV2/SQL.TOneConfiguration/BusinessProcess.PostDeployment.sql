@@ -85,7 +85,7 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1501,'BusinessProcess_BP_BPDefinition','Management',601,0,'["View"]'),
 (1502,'BusinessProcess_BP_BPTask','BPTask',601,0,'["View"]'),
-(1503,'BusinessProcess_BP_BPInstance','BPInstance',601,0,'["Log","Monitor"]'),
+(1503,'BusinessProcess_BP_BPInstance_Log','BPInstance Tracking',601,0,'["View","Monitor"]'),
 (1504,'BusinessProcess_BP_BusinessRuleSet','Business Rule Set',601,0,'["View", "Add", "Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
@@ -110,9 +110,9 @@ as (select * from (values
 ('BusinessProcess_BP/BPDefinition/GetBPDefinitionsInfo',null),
 ('BusinessProcess_BP/BPDefinition/GetBPDefintion',null),
 ('BusinessProcess_BP/BPDefinition/GetDefinitions',null),
-('BusinessProcess_BP/BPInstance/GetUpdated','BusinessProcess_BP_BPInstance: Monitor'),
+('BusinessProcess_BP/BPInstance/GetUpdated','BusinessProcess_BP_BPInstance_Log: Monitor'),
 ('BusinessProcess_BP/BPInstance/GetBeforeId',null),
-('BusinessProcess_BP/BPInstance/GetFilteredBPInstances','BusinessProcess_BP_BPInstance: Log'),
+('BusinessProcess_BP/BPInstance/GetFilteredBPInstances','BusinessProcess_BP_BPInstance_Log: View'),
 ('BusinessProcess_BP/BPInstance/GetBPInstance',null),
 ('BusinessProcess_BP/BPInstance/CreateNewProcess',null),
 ('BusinessProcess_BP/BPInstanceTracking/GetFilteredBPInstanceTracking',null),
