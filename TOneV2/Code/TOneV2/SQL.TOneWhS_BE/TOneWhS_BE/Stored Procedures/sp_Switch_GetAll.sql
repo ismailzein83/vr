@@ -6,6 +6,7 @@ BEGIN
 	SET NOCOUNT ON;
 	SELECT	s.ID,
 			s.Name,
-			s.Settings
+			s.Settings,
+			s.sourceid
 	FROM	[TOneWhS_BE].Switch  as s WITH(NOLOCK) 
 END

@@ -11,7 +11,8 @@ BEGIN
 		ca.CustomerSettings,
 		ca.SupplierSettings,
 		ca.SellingNumberPlanID,
-		ca.CarrierAccountSettings
+		ca.CarrierAccountSettings,
+		ca.sourceid
 	FROM TOneWhS_BE.CarrierAccount ca
 	SET NOCOUNT OFF
 END

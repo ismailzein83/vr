@@ -6,13 +6,15 @@
     [ZoneChangeType]    INT             NOT NULL,
     [ZoneBED]           DATETIME        NOT NULL,
     [ZoneEED]           DATETIME        NULL,
-    [CurrentRate]       DECIMAL (20, 8) NULL,
-    [CurrentRateBED]    DATETIME        NULL,
-    [CurrentRateEED]    DATETIME        NULL,
+    [SystemRate]        DECIMAL (20, 8) NULL,
+    [SystemRateBED]     DATETIME        NULL,
+    [SystemRateEED]     DATETIME        NULL,
     [ImportedRate]      DECIMAL (20, 8) NULL,
     [ImportedRateBED]   DATETIME        NULL,
     [RateChangeType]    INT             NOT NULL
 );
+
+
 
 
 
