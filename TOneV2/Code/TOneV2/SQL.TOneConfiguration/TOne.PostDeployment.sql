@@ -111,7 +111,7 @@ as (select * from (values
 (12004,'Carrier Profiles','Carrier Profiles','#/view/WhS_BusinessEntity/Views/CarrierAccount/CarrierProfileManagement',1201,'WhS_BE/CarrierProfile/GetFilteredCarrierProfiles',null,null,null,0,2),
 (12005,'Carrier Accounts','Carrier Accounts','#/view/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountManagement',1201,'WhS_BE/CarrierAccount/GetFilteredCarrierAccounts',null,null,null,0,3),
 (12006,'Account Manager','Account Manager','#/view/WhS_BusinessEntity/Views/AccountManager/AccountManagerManagement',1202,'WhS_BE/AccountManager/GetFilteredAssignedCarriers',null,null,null,0,2),
-(12009,'Rate Plan','Rate Plan','#/view/Whs_Sales/Views/RatePlan',1204,null,null,null,null,0,4),
+(12009,'Rate Plan','Rate Plan','#/view/Whs_Sales/Views/RatePlan',1204,'WhS_Sales/RatePlan/GetRatePlanSettingsData',null,null,null,0,4),
 (12010,'Numbering Plan','Numbering Plan Management','#/view/WhS_CodePreparation/Views/CodePreparationManagement',1204,'WhS_CodePrep/CodePreparation/CheckCodePreparationState',null,null,null,0,5),
 (12011,'Sale Pricelists','Sale Pricelists','#/view/Whs_BusinessEntity/views/SalePriceList/SalePriceList',1205,'WhS_BE/SalePricelist/GetFilteredSalePriceLists',null,null,null,0,8),
 (12012,'Sale Zones','Sale Zones','#/view/WhS_BusinessEntity/Views/SaleZone/SaleZoneManagement',1205,'WhS_BE/SaleZone/GetFilteredSaleZones',null,null,null,0,5),
@@ -125,7 +125,7 @@ as (select * from (values
 (12019,'Extra Charge Pricing','Extra Charge Pricing Rules',null,1206,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":181}',101,3),
 (12025,'Tariff Pricing','Tariff Pricing Rules',null,1206,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":182}',101,4),
 
-(12020,'Import Supplier Pricelist','Import Supplier Pricelist','#/view/WhS_SupplierPriceList/Views/SupplierPriceList',1207,'WhS_SupPL/SupplierPriceList/DownloadSupplierPriceListTemplate',null,null,null,0,4),
+(12020,'Import Supplier Pricelist','Import Supplier Pricelist','#/view/WhS_SupplierPriceList/Views/SupplierPriceList',1207,'WhS_SupPL/SupplierPriceListTemplate/GetSupplierPriceListTemplateBySupplierId',null,null,null,0,4),
 
 (12021,'Supplier Zones','Supplier Zones','#/view/WhS_BusinessEntity/Views/SupplierZone/SupplierZoneManagement',1208,'WhS_BE/SupplierZone/GetFilteredSupplierZones',null,null,null,0,3),
 (12022,'Supplier Codes','Supplier Codes','#/view/WhS_BusinessEntity/Views/SupplierCode/SupplierCodeManagement',1208,'WhS_BE/SupplierCode/GetFilteredSupplierCodes',null,null,null,0,4),
@@ -279,6 +279,7 @@ as (select * from (values
 (3352,'WhS_BE_SellingProduct','Selling Product',1206,0,'["View"]'),
 (3353,'WhS_BE_SellingNumberPlan','Selling Number Plan',1206,0,'["View"]'),
 (3354,'WhS_Sales_NumberingPlan','Numbering Plan',1206,0,'["View"]'),
+(3355,'WhS_Sales_RatePlan','Rate Plan',1206,0,'["View"]'),
 
 (3400,'VR_AccountManager','VR_AccountManager',1202,0,'["View", "AssignCarriers", "UpdateLinkedOrgChart","GetAssignedCarrierDetails","GetLinkedOrgChartId"]'),
 
@@ -522,8 +523,8 @@ as (select * from (values
 ('WhS_Sales/RatePlan/DeleteDraft',null),
 
 ('WhS_BE/SupplierPricelist/GetFilteredSupplierPricelist','WhS_BE_SupplierPricelist: View'),
+('WhS_SupPL/SupplierPriceListTemplate/GetSupplierPriceListTemplateBySupplierId','WhS_BE_SupplierPricelist: View'),
 
-('WhS_SupPL/SupplierPriceList/DownloadSupplierPriceListTemplate','WhS_BE_SupplierPricelist: DownloadTemplate'),
 ('WhS_SupPL/SupplierPriceListPreview/GetFilteredZonePreview',null),
 ('WhS_SupPL/SupplierPriceListPreview/GetFilteredCodePreview',null),
 ('WhS_SupPL/SupplierPriceListPreview/GetFilteredRatePreview',null),
@@ -545,7 +546,8 @@ as (select * from (values
 ('WhS_BE/SwitchConnectivity/GetFilteredSwitchConnectivities','WhS_BE_SwitchConnectivity: View'),
 ('WhS_BE/SwitchConnectivity/GetSwitchConnectivity','WhS_BE_SwitchConnectivity: View'),
 ('WhS_BE/SwitchConnectivity/AddSwitchConnectivity','WhS_BE_SwitchConnectivity: Add'),
-('WhS_BE/SwitchConnectivity/UpdateSwitchConnectivity','WhS_BE_SwitchConnectivity: Edit')
+('WhS_BE/SwitchConnectivity/UpdateSwitchConnectivity','WhS_BE_SwitchConnectivity: Edit'),
+('WhS_Sales/RatePlan/GetRatePlanSettingsData','WhS_Sales_RatePlan: View')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
