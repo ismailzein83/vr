@@ -250,7 +250,7 @@ as (select * from (values
 (3304,'BillingStatistic','Billing Statistic',1204,0,'["View"]'),
 (3310,'BillingCDR','Billing CDR',1204,0,'["View"]'),
 
-(3305,'WhS_BE_SwitchConnectivity','Switch Connectivity',2,0,'["View", "Add", "Edit"]'),
+(3305,'WhS_BE_SwitchConnectivity','Switch Connectivity',201,0,'["View", "Add", "Edit"]'),
 
 (3309,'TrafficStatistic','Traffic Statistic',1205,0,'["View"]'),
 (3311,'RawCDR','Raw CDR',1205,0,'["View"]'),
