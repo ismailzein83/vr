@@ -60,7 +60,7 @@ set identity_insert [sec].[BusinessEntityModule] on;
 ;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(201,'Integration',1,0)
+(401,'Integration',1,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[ParentId],[BreakInheritance]))
 merge	[sec].[BusinessEntityModule] as t
@@ -81,9 +81,9 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(901,'VR_Integration_DataSource','Data Source',201,0,'["View","Add","Edit","Delete"]'),
-(902,'VR_Integration_DataSourceImportedBatch','Imported Batches',201,0,'["View"]'),
-(903,'VR_Integration_DataSourceLog','Log',201,0,'["View"]')
+(901,'VR_Integration_DataSource','Data Source',401,0,'["View","Add","Edit","Delete"]'),
+(902,'VR_Integration_DataSourceImportedBatch','Imported Batches',401,0,'["View"]'),
+(903,'VR_Integration_DataSourceLog','Log',401,0,'["View"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
