@@ -106,6 +106,7 @@
     <Compile Include="SourceDataManger\SourceCurrencyDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCurrencyExchangeRateDataManager.cs" />
     <Compile Include="SourceDataManger\SourceSwitchDataManager.cs" />
+    <Compile Include="SwitchMigration\SwtichMigrationDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
