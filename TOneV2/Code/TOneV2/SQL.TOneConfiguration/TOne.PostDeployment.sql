@@ -82,9 +82,10 @@ as (select * from (values
 (1212,'CDR Process',null				,1,null,35,0),
 (1214,'Traffic Analysis',null			,null,'/images/menu-icons/NOC.png',70,1),
 (1215,'Billing',null					,null,'/images/menu-icons/billing.png',80,0),
-(1216,'Reports',null					,1215,null,1,0),
+(1216,'Reports',null					,1215,null,5,0),
 (1217,'Prepaid-Postpaid',null			,null,'/images/menu-icons/post paid - pre paid.png',90,0),
-(1218,'Plugins',null					,null,'/images/menu-icons/plug.png',110,0)
+(1218,'Plugins',null					,null,'/images/menu-icons/plug.png',110,0),
+(1230,'Invoices',null					,1215,null,1,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -146,7 +147,8 @@ as (select * from (values
 (12032,'Normalization Rules','Normalization Rules',null,1212,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":186}',101,2),
 
 (12040,'Variation','Variation','#/view/WhS_Analytics/Views/VariationReport/VariationReport',1216,'WhS_Analytics/VariationReport/GetFilteredVariationReportRecords',null,null,null,0,1),
-(12041,'Billing Report','Billing Report','#/view/WhS_Analytics/Views/BillingReport/BillingReport',1215,'WhS_Analytics/ReportDefinition/GetAllRDLCReportDefinition',null,null,null,0,4),
+(12041,'Billing Report','Billing Report','#/view/WhS_Analytics/Views/BillingReport/BillingReport',1215,'WhS_Analytics/ReportDefinition/GetAllRDLCReportDefinition',null,null,null,0,10),
+(12042,'Customer Invoice','Customer Invoice Management',null,1230,null,null,null,'{"$type":"Vanrise.Invoice.Entities.InvoiceViewSettings, Vanrise.Invoice.Entities","InvoiceTypeId":"b2f4a71e-41fb-42bc-93e3-309a8ad54331"}',401,5),
 
 (12109,'Switch Connectivity','Switch Connectivity','#/view/WhS_BusinessEntity/Views/SwitchConnectivity/SwitchConnectivityManagement',101,'WhS_BE/SwitchConnectivity/GetFilteredSwitchConnectivities',null,null,null,0,5),
 (12110,'Switch Release Code','Switch Release Code','#/viewwithparams/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityManagement/{"businessEntityDefinitionId":"24"}',101,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":24}',0,6),
