@@ -46,7 +46,7 @@
                 loadAllControls();
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.scopeModel.isLoading = false;
+                $scope.isLoadingFilters = false;
             });
            
         }
