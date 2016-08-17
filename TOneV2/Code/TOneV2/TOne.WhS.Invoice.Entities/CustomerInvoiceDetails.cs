@@ -11,5 +11,10 @@ namespace TOne.WhS.Invoice.Entities
         public int TotalNumberOfCalls { get; set; }
         public Double SaleAmount { get; set; }
         public decimal Duration { get; set; }
+        public CustomerInvoiceDetails() { }
+        public IEnumerable<CustomerInvoiceDetails> GetCustomerInvoiceDetailsRDLCSchema()
+        {
+            return null;
+        }
     }
 }

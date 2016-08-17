@@ -62,7 +62,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                     MeasureValue calls;
                     analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
-                    customerInvoiceDetails.TotalNumberOfCalls = Convert.ToInt32(calls.Value ?? 0.0);
+                    customerInvoiceDetails.TotalNumberOfCalls += Convert.ToInt32(calls.Value ?? 0.0);
                     CustomerInvoiceItemDetails customerInvoiceItemDetails = new Entities.CustomerInvoiceItemDetails()
                     {
                         Duration = Convert.ToDecimal(saleDuration.Value ?? 0.0),

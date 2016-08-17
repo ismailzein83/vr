@@ -13,6 +13,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.GenericData.MainExtensions.DataRecordFields;
 using Vanrise.Invoice.Entities;
+using Vanrise.Invoice.MainExtensions;
 using Vanrise.Queueing;
 using Vanrise.Queueing.Entities;
 using Vanrise.Runtime;
@@ -44,17 +45,86 @@ namespace TestRuntime.Tasks
             //var tree1 = Vanrise.Common.Serializer.Serialize("test");
 
 
-            //InvoiceTypeSettings settings = new InvoiceTypeSettings
-            //{
-            //    InvoiceGenerator = new CustomerInvoiceGenerator(),
-            //    UISettings = new InvoiceTypeUISettings
-            //    {
-            //        PartnerSelector = "vr-whs-be-customer-selector",
-            //    },
-            //    InvoiceDetailsRecordTypeId = 0
-            //};
+            InvoiceTypeSettings settings = new InvoiceTypeSettings
+            {
+                InvoiceGenerator = new CustomerInvoiceGenerator(),
+                UISettings = new InvoiceTypeUISettings
+                {
+                    PartnerSelector = "vr-whs-be-customer-selector",
+                    MainGridColumns = new List<InvoiceUIGridColumn>
+                    {
+                        new InvoiceUIGridColumn 
+                        {
+                            CustomFieldName = null ,
+                            Field = InvoiceField.Partner ,
+                            Header = "Partner"
+                        },
+                        new InvoiceUIGridColumn
+                        {
+                            CustomFieldName = null ,
+                            Field = InvoiceField.FromDate ,
+                            Header = "From Date"
+                        },
+                        new InvoiceUIGridColumn 
+                        {
+                            CustomFieldName = null ,
+                            Field = InvoiceField.ToDate ,
+                            Header = "To Date"
+                        },
+                        new InvoiceUIGridColumn
+                        {
+                            CustomFieldName = "SaleAmount" ,
+                            Field = InvoiceField.CustomField ,
+                            Header = "Amount"
+                        },
+                        new InvoiceUIGridColumn
+                        {
+                            CustomFieldName = "TotalNumberOfCalls" ,
+                            Field = InvoiceField.CustomField ,
+                            Header = "Calls"
+                        },
+                        new InvoiceUIGridColumn
+                        {
+                            CustomFieldName = "Duration" ,
+                            Field = InvoiceField.CustomField ,
+                            Header = "Duration"
+                        }
+                    },
+                    SubSections = new List<InvoiceUISubSection>
+                    {
+                        new InvoiceUISubSection 
+                        {
+                            SectionTitle = "Customer Invoice Items",
+                            Directive = "whs-invoice-invoiceitem-customer"
+                        }
+                    },
+                    InvoiceGridActions = new List<InvoiceGridAction>
+                    {
+                        new InvoiceGridAction
+                        {
+                            ActionTypeName = "Download",
+                            Settings =  new OpenRDLCReportAction
+                            {
+                                DataSources = new List<RDLCReportDataSource>
+                                {
+                                    new RDLCReportDataSource
+                                    {
+                                        DataSourceName = "CustomerInvoiceItems",
+                                        Settings = new ItemSetNameSettings 
+                                        {
+                                            ItemSetNames = new List<string>{"Customer"}
+                                        }
+                                    }
+                                },
+                                ReportURL ="~/Client/Modules/WhS_Invoice/Reports/CustomerInvoiceReport.rdlc"
+                            }
+                        }
+                    }
+                },
+                InvoiceDetailsRecordTypeId = 0  
+            };
 
-            //var obj = Vanrise.Common.Serializer.Serialize(settings);
+            var obj = Vanrise.Common.Serializer.Serialize(settings);
             //AnalyticDimensionConfig AnalyticDimensionConfig = new AnalyticDimensionConfig()
             //{
             //    FieldType = new FieldTextType(),

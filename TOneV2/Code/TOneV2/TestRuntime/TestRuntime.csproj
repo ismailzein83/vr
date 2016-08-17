@@ -433,6 +433,9 @@
     <Reference Include="Vanrise.Invoice.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.MainExtensions">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
     </Reference>
