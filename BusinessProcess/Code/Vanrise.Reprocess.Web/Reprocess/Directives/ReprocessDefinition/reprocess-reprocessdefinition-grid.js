@@ -62,7 +62,11 @@ app.directive('reprocessReprocessdefinitionGrid', ['Reprocess_ReprocessDefinitio
                 $scope.scopeModel.menuActions.push({
                     name: 'Edit',
                     clicked: editReprocessDefinition,
+                    haspermission: hasEditReprocessDefinitionPermission
                 });
+            }
+            function hasEditReprocessDefinitionPermission() {
+                  return Reprocess_ReprocessDefinitionAPIService.HasUpdateReprocessDefinitionPermission();
             }
 
             function editReprocessDefinition(reprocessDefinitionItem) {

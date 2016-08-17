@@ -2,9 +2,9 @@
 (function (appControllers) {
 
     "use strict";
-    ReprocessDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Reprocess_ModuleConfig'];
+    ReprocessDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Reprocess_ModuleConfig', 'SecurityService'];
 
-    function ReprocessDefinitionAPIService(BaseAPIService, UtilsService, Reprocess_ModuleConfig) {
+    function ReprocessDefinitionAPIService(BaseAPIService, UtilsService, Reprocess_ModuleConfig, SecurityService) {
 
         var controllerName = "ReprocessDefinition";
 
@@ -28,17 +28,22 @@
         function AddReprocessDefinition(reprocessDefinitionItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(Reprocess_ModuleConfig.moduleName, controllerName, 'AddReprocessDefinition'), reprocessDefinitionItem);
         }
-
+        function HasAddReprocessDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Reprocess_ModuleConfig.moduleName, controllerName, ['AddReprocessDefinition']));
+        }
         function UpdateReprocessDefinition(reprocessDefinitionItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(Reprocess_ModuleConfig.moduleName, controllerName, 'UpdateReprocessDefinition'), reprocessDefinitionItem);
         }
-
-
+        function HasUpdateReprocessDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Reprocess_ModuleConfig.moduleName, controllerName, ['UpdateReprocessDefinition']));
+        }
         return ({
             GetFilteredReprocessDefinitions: GetFilteredReprocessDefinitions,
             GetReprocessDefinition: GetReprocessDefinition,
             AddReprocessDefinition: AddReprocessDefinition,
+            HasAddReprocessDefinitionPermission:HasAddReprocessDefinitionPermission,
             UpdateReprocessDefinition: UpdateReprocessDefinition,
+            HasUpdateReprocessDefinitionPermission:HasUpdateReprocessDefinitionPermission,
             GetReprocessDefinitionsInfo: GetReprocessDefinitionsInfo
         });
     }
