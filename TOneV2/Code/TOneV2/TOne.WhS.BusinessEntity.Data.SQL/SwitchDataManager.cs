@@ -62,6 +62,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 SwitchId = (int)reader["ID"],
                 Name = reader["Name"] as string,
+                SourceId = reader["SourceID"] as string,
                 Settings = Serializer.Deserialize<SwitchSettings>(reader["Settings"] as string)
             };
             return whsSwitch;
