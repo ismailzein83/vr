@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
-  <contractRef ref="http://212.58.13.50:88/drksmsservice/drksmsservice.asmx?wsdl" docRef="http://212.58.13.50:88/drksmsservice/drksmsservice.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
-  <soap address="http://212.58.13.50:88/drksmsservice/drksmsservice.asmx" xmlns:q1="DRKSMSService" binding="q1:DRKSMSServiceSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
-  <soap address="http://212.58.13.50:88/drksmsservice/drksmsservice.asmx" xmlns:q2="DRKSMSService" binding="q2:DRKSMSServiceSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
-</discovery>

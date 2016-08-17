@@ -28,5 +28,18 @@ namespace TOne.WhS.Analytics.Entities.BillingReport.RoutingAnalysis
         public string AVGCostFormatted { get; set; }
         public double AVGSale { get; set; }
         public string AVGSaleFormatted { get; set; }
+
+         /// <summary>
+        /// DO NOT REMOVE
+        /// the purpose of this method is to set the schema in the RDLC file
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        public RoutingAnalysisFormatted() { }
+        public IEnumerable<RoutingAnalysisFormatted> GetRoutingAnalysisFormattedRDLCSchema()
+        {
+            return null;
+        }
+
     }
 }
