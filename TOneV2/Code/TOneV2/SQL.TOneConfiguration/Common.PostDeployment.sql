@@ -29,7 +29,7 @@ as (select * from (values
 ('VRCommon/City/GetFilteredCities','VRCommon_City: View'),
 ('VRCommon/City/UpdateCity','VRCommon_City: Edit'),
 
-('VRCommon/LogAttribute/GetFilteredLoggers','VRCommon_LogAttribute: View'),
+('VRCommon/LogAttribute/GetFilteredLoggers','VRCommon_System_Log: View'),
 
 ('VRCommon/EmailTemplate/GetFilteredEmailTemplates','VRCommon_EmailTemplates:View'),
 ('VRCommon/EmailTemplate/UpdateEmailTemplate','VRCommon_EmailTemplates:Edit'),
@@ -107,7 +107,7 @@ as (select * from (values
 (307,'VRCommon_CurrencyExchangeRate','Currency Exchange Rate',202,0,'["View"]'),
 (308,'VRCommon_RateType','Rate Type',202,0,'["View"]'),
 
-(302,'VRCommon_LogAttribute','Logs',203,0,'["View"]'),
+(302,'VRCommon_System_Log','Logs',203,0,'["View"]'),
 (303,'VRCommon_EmailTemplates','Email Templates',203,0,'["View", "Edit"]'),
 (304,'VRCommon_Settings','Settings',203,0,'["View", "Edit"]'),
 (330,'VRCommon_VRObjectTypeDefinition','Object Type Definition',203,0,'["View","Add","Edit"]'),
