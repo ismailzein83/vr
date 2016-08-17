@@ -12,9 +12,12 @@ namespace TOne.WhS.Routing.Entities
         Minutes = 0,
         Hours = 1
     }
+
     public class RouteSettingsData : SettingData
     {
         public RouteDatabasesToKeep RouteDatabasesToKeep { get; set; }
+
+        public PrepareCodePrefixes PrepareCodePrefixes { get; set; }
     }
 
     public class RouteDatabasesToKeep
@@ -35,5 +38,12 @@ namespace TOne.WhS.Routing.Entities
         public int MaximumEstimatedExecutionTime { get; set; }
 
         public TimeUnit TimeUnit { get; set; }
+    }
+
+    public class PrepareCodePrefixes
+    {
+        public int MaxPrefixLength { get; set; }
+
+        public int Threshold { get; set; }
     }
 }

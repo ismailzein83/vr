@@ -22,26 +22,37 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
         };
 
         function settingEditorCtor(ctrl, $scope, $attrs) {
+            this.initializeController = initializeController;
+
             var customerRouteDatabaseConfigurationAPI;
             var customerRouteDatabaseConfigurationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var productRouteDatabaseConfigurationAPI;
             var productRouteDatabaseConfigurationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            $scope.onCustomerRouteDatabaseConfigurationReady = function (api) {
+            var prepareCodePrefixesConfigurationAPI;
+            var prepareCodePrefixesConfigurationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
+            $scope.scopeModel = {};
+
+            $scope.scopeModel.onCustomerRouteDatabaseConfigurationReady = function (api) {
                 customerRouteDatabaseConfigurationAPI = api;
                 customerRouteDatabaseConfigurationReadyPromiseDeferred.resolve();
             }
-
-            $scope.onProductRouteDatabaseConfigurationReady = function (api) {
+            $scope.scopeModel.onProductRouteDatabaseConfigurationReady = function (api) {
                 productRouteDatabaseConfigurationAPI = api;
                 productRouteDatabaseConfigurationReadyPromiseDeferred.resolve();
             }
+            $scope.scopeModel.onPrepareCodePrefixesConfigurationReady = function (api) {
+                prepareCodePrefixesConfigurationAPI = api;
+                prepareCodePrefixesConfigurationReadyPromiseDeferred.resolve();
+            }
+
 
             function initializeController() {
                 defineAPI();
             }
-
             function defineAPI() {
                 var api = {};
 
@@ -49,31 +60,39 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                     var promises = [];
                     var customerRoutePayload;
                     var productRoutePayload;
-
+                    var prepareCodePrefixesPayload;
 
                     if (payload != undefined && payload.data != undefined) {
                         customerRoutePayload = payload.data.RouteDatabasesToKeep.CustomerRouteConfiguration;
                         productRoutePayload = payload.data.RouteDatabasesToKeep.ProductRouteConfiguration;
+                        prepareCodePrefixesPayload = payload.data.PrepareCodePrefixes;
                     }
 
-                    var customerRouteDatabaseConfigurationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    productRouteDatabaseConfigurationReadyPromiseDeferred.promise
+                    //Loading Customer Route Database Configuration
+                    var customerRouteDatabaseConfigurationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    customerRouteDatabaseConfigurationReadyPromiseDeferred.promise
                         .then(function () {
                             VRUIUtilsService.callDirectiveLoad(customerRouteDatabaseConfigurationAPI, customerRoutePayload, customerRouteDatabaseConfigurationLoadPromiseDeferred);
                         });
-
                     promises.push(customerRouteDatabaseConfigurationLoadPromiseDeferred.promise);
 
-
+                    //Loading Product Route Database Configuration
                     var productRouteDatabaseConfigurationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
                     productRouteDatabaseConfigurationReadyPromiseDeferred.promise
                         .then(function () {
                             VRUIUtilsService.callDirectiveLoad(productRouteDatabaseConfigurationAPI, productRoutePayload, productRouteDatabaseConfigurationLoadPromiseDeferred);
                         });
-
                     promises.push(productRouteDatabaseConfigurationLoadPromiseDeferred.promise);
+
+                    //Loading Prepare Code Prefixes Configuration
+                    var prepareCodePrefixesConfigurationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    prepareCodePrefixesConfigurationReadyPromiseDeferred.promise
+                        .then(function () {
+                            VRUIUtilsService.callDirectiveLoad(prepareCodePrefixesConfigurationAPI, prepareCodePrefixesPayload, prepareCodePrefixesConfigurationLoadPromiseDeferred);
+                        });
+                    promises.push(prepareCodePrefixesConfigurationLoadPromiseDeferred.promise);
+
 
                     return UtilsService.waitMultiplePromises(promises);
                 }
@@ -82,18 +101,19 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                     var routeDatabasesToKeep = { CustomerRouteConfiguration: {}, ProductRouteConfiguration: {} };
                     routeDatabasesToKeep.CustomerRouteConfiguration = customerRouteDatabaseConfigurationAPI.getData();
                     routeDatabasesToKeep.ProductRouteConfiguration = productRouteDatabaseConfigurationAPI.getData();
+
+                    var prepareCodePrefixes = prepareCodePrefixesConfigurationAPI.getData();
+
                     return {
                         $type: "TOne.WhS.Routing.Entities.RouteSettingsData, TOne.WhS.Routing.Entities",
-                        RouteDatabasesToKeep: routeDatabasesToKeep
+                        RouteDatabasesToKeep: routeDatabasesToKeep,
+                        PrepareCodePrefixes: prepareCodePrefixes
                     };
                 }
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
-            this.initializeController = initializeController;
-
         }
         return directiveDefinitionObject;
     }]);

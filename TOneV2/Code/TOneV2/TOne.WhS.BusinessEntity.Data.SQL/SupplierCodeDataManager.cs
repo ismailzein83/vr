@@ -48,10 +48,20 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@GetParentCodes", getParentCodes));
             });
         }
+        
         public IEnumerable<CodePrefixInfo> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetDistinctCodePrefixes", CodePrefixMapper, prefixLength, effectiveOn, isFuture);
         }
+        public IEnumerable<CodePrefixInfo> GetSpecificCodeByPrefixes(int prefixLength, IEnumerable<string> codePrefixes, DateTime? effectiveOn, bool isFuture) 
+        {
+            string _codePrefixes = null;
+            if (codePrefixes != null && codePrefixes.Count() > 0)
+                _codePrefixes = string.Join<string>(",", codePrefixes);
+
+            return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetSpecificCodePrefixes", CodePrefixMapper, prefixLength, _codePrefixes, effectiveOn, isFuture);    
+        }
+        
 
         public IEnumerable<SupplierCode> GetFilteredSupplierCodes(SupplierCodeQuery query)
         {

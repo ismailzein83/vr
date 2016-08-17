@@ -67,10 +67,21 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByCodePrefix", SaleCodeMapper, codePrefix, effectiveOn, isFuture, getChildCodes, getParentCodes);
         }
+
         public IEnumerable<CodePrefixInfo> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetDistinctCodePrefixes", CodePrefixMapper, prefixLength, effectiveOn, isFuture);
         }
+
+        public IEnumerable<CodePrefixInfo> GetSpecificCodeByPrefixes(int prefixLength, IEnumerable<string> codePrefixes, DateTime? effectiveOn, bool isFuture)
+        {
+            string _codePrefixes = null;
+            if (codePrefixes != null && codePrefixes.Count() > 0)
+                _codePrefixes = string.Join<string>(",", codePrefixes);
+
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetSpecificCodePrefixes", CodePrefixMapper, prefixLength, _codePrefixes, effectiveOn, isFuture);
+        }
+
         public bool AreZonesUpdated(ref object lastReceivedDataInfo)
         {
             return IsDataUpdated("TOneWhS_BE.SaleCode", ref lastReceivedDataInfo);
