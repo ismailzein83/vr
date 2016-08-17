@@ -1,6 +1,6 @@
 ﻿
-app.service('VRCommon_DataSourceLogService', ['VRCommon_MasterLogService',
-    function (VRCommon_MasterLogService) {
+app.service('VRCommon_DataSourceLogService', ['VRCommon_MasterLogService','VR_Integration_DataSourceLogAPIService',
+    function (VRCommon_MasterLogService, VR_Integration_DataSourceLogAPIService) {
         var drillDownDefinitions = [];
         return ({           
             registerLogToMaster: registerLogToMaster
@@ -12,6 +12,9 @@ app.service('VRCommon_DataSourceLogService', ['VRCommon_MasterLogService',
                 title: "Data Source",
                 rank: 2,
                 directive: "vr-integration-log-search",
+                hasPermission: function () {
+                    return VR_Integration_DataSourceLogAPIService.HasViewFilteredDataSourcePermission();
+                },
                 loadDirective: function (directiveAPI) {
                     return directiveAPI.load();
                 }

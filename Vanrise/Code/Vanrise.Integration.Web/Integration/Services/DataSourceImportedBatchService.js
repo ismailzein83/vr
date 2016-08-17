@@ -1,6 +1,6 @@
 ﻿
-app.service('VRCommon_DataSourceImportedBatchService', ['VRCommon_MasterLogService',
-    function (VRCommon_MasterLogService) {
+app.service('VRCommon_DataSourceImportedBatchService', ['VRCommon_MasterLogService','VR_Integration_DataSourceImportedBatchAPIService',
+    function (VRCommon_MasterLogService, VR_Integration_DataSourceImportedBatchAPIService) {
         var drillDownDefinitions = [];
         return ({           
             registerLogToMaster: registerLogToMaster
@@ -13,6 +13,9 @@ app.service('VRCommon_DataSourceImportedBatchService', ['VRCommon_MasterLogServi
                 rank: 3,
                 hide:true,
                 directive: "vr-integration-importedbatch-search",
+                hasPermission: function (){
+                    return VR_Integration_DataSourceImportedBatchAPIService.HasViewImportedBatchesPermission();
+                },
                 loadDirective: function (directiveAPI) {
                     return directiveAPI.load();
                 }
