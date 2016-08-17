@@ -37,7 +37,7 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(18001,'Deals Analysis','Deals Analysis Management','#/view/WhS_BusinessEntity/Views/Deal/DealAnalysisManagement',1701,'',null,null,null,0,1),
+(18001,'Deals Analysis','Deals Analysis Management','#/view/WhS_BusinessEntity/Views/Deal/DealAnalysisManagement',1701,'WhS_BE/Deal/GetFilteredDeals',null,null,null,0,1),
 (18002,'Deals Management','Deals Management','#/view/WhS_BusinessEntity/Views/Deal/DealManagement',1701,'WhS_BE/Deal/GetFilteredDeals',null,null,null,0,2),
 
 (18003,'Bilateral Agreement','Bilateral Agreement','#/view/WhS_BusinessEntity/Views/Deal/DealManagement',1701,'WhS_BE/Deal/GetFilteredDeals',null,null,null,0,3),
