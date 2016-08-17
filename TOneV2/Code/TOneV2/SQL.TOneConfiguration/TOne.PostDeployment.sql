@@ -121,9 +121,9 @@ as (select * from (values
 (12016,'Customer Selling Product','Customer Selling Product','#/view/WhS_BusinessEntity/Views/SellingProduct/CustomerSellingProductManagement',1205,'WhS_BE/CustomerSellingProduct/GetFilteredCustomerSellingProducts',null,null,null,0,4),
 (12017,'Selling Number Plans','Selling Number Plans','#/view/WhS_BusinessEntity/Views/SellingNumberPlan/SellingNumberPlanManagement',1205,'WhS_BE/SellingNumberPlan/GetFilteredSellingNumberPlans',null,null,null,0,2),
 
-(12018,'Sale Rate Type Pricing Rule','Sale Rate Type Pricing Rule',null,1206,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":180}',101,2),
-(12019,'Sale Extra Charge Pricing Rules','Sale Extra Charge Pricing Rules',null,1206,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":181}',101,3),
-(12025,'Sale Tariff Pricing Rules','Sale Tariff Pricing Rules',null,1206,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":182}',101,4),
+(12018,'Rate Type Pricing','Rate Type Pricing Rule',null,1206,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":180}',101,2),
+(12019,'Extra Charge Pricing','Extra Charge Pricing Rules',null,1206,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":181}',101,3),
+(12025,'Tariff Pricing','Tariff Pricing Rules',null,1206,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":182}',101,4),
 
 (12020,'Import Supplier Pricelist','Import Supplier Pricelist','#/view/WhS_SupplierPriceList/Views/SupplierPriceList',1207,'WhS_SupPL/SupplierPriceList/DownloadSupplierPriceListTemplate',null,null,null,0,4),
 
@@ -132,9 +132,9 @@ as (select * from (values
 (12023,'Supplier Rates','Supplier Rates','#/view/WhS_BusinessEntity/Views/SupplierRate/SupplierRateManagement',1208,'WhS_BE/SupplierRate/GetFilteredSupplierRates',null,null,null,0,5),
 (12024,'Supplier Pricelists','Supplier Pricelists','#/view/WhS_BusinessEntity/Views/SupplierPricelist/SupplierPricelist',1208,'WhS_BE/SupplierPricelist/GetFilteredSupplierPricelist',null,null,null,0,6),
 
-(12033,'Supplier Rate Type Pricing Rules','Supplier Rate Type Pricing Rules',null,1209,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":177}',101,2),
-(12034,'Supplier Extra Charge Pricing Rules','Supplier Extra Charge Pricing Rules',null,1209,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":178}',101,3),
-(12035,'Supplier Tariff Pricing Rules','Supplier Tariff Pricing Rules',null,1209,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":179}',101,4),
+(12033,'Rate Type Pricing','Rate Type Pricing Rules',null,1209,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":177}',101,2),
+(12034,'Extra Charge Pricing','Extra Charge Pricing Rules',null,1209,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":178}',101,3),
+(12035,'Tariff Pricing','Tariff Pricing Rules',null,1209,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":179}',101,4),
 
 (12026,'Routing Products','Routing Products','#/view/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductManagement',1210,null,null,null,null,0,4),
 (12027,'Product Cost','Product Cost','#/view/WhS_Routing/Views/RPRoute/RPRouteManagement',1210,'WhS_Routing/RPRoute/GetFilteredRPRoutes',null,null,null,0,5),
