@@ -22,15 +22,16 @@ namespace Vanrise.Invoice.Data.SQL
         }
         #endregion
 
-
         #region Public Methods
-        public List<Entities.InvoiceDetail> GetInvoices(DataRetrievalInput<InvoiceQuery> input)
+
+        public Entities.Invoice GetInvoice(long invoiceId)
         {
-
-            return null;
-           // return GetItemsSP("VR_Invoice.sp_Invoice_GetAll", InvoiceMapper);
+            return GetItemSP("VR_Invoice.sp_Invoice_Get", InvoiceMapper, invoiceId);
         }
-
+        public IEnumerable<Entities.Invoice> GetGetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input)
+        {
+            return GetItemsSP("VR_Invoice.sp_Invoice_GetFiltered", InvoiceMapper, input.Query.PartnerId, input.Query.FromTime, input.Query.ToTime);
+        }
         public void SaveInvoices(Entities.GenerateInvoiceInput createInvoiceInput, Entities.GeneratedInvoice invoice)
         {
             var options = new TransactionOptions
@@ -49,7 +50,6 @@ namespace Vanrise.Invoice.Data.SQL
                 scope.Complete();
             }
         }
-
         public bool AreInvoicesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("VR_Invoice.Invoice", ref updateHandle);
@@ -61,14 +61,14 @@ namespace Vanrise.Invoice.Data.SQL
         {
             Entities.Invoice invoice = new Entities.Invoice
             {
-                //Details = GetReaderValue<Guid>(reader,"ID"),
-                //FromDate = Vanrise.Common.Serializer.Deserialize<>(reader["Settings"] as string),
-                //InvoiceId =,
-                //InvoiceTypeId=,
-                //IssueDate=,
-                //PartnerId=,
-                //SerialNumber=,
-                //ToDate=,
+                Details = Vanrise.Common.Serializer.Deserialize(reader["Details"] as string),
+                FromDate = GetReaderValue<DateTime>(reader,"FromDate"),
+                InvoiceId = GetReaderValue<long>(reader,"ID"),
+                InvoiceTypeId=GetReaderValue<Guid>(reader,"InvoiceTypeId"),
+                IssueDate = GetReaderValue<DateTime>(reader, "IssueDate"),
+                PartnerId=  reader["PartnerId"] as string,
+                SerialNumber= reader["SerialNumber"] as string,
+                ToDate=  GetReaderValue<DateTime>(reader,"ToDate"),
             };
             return invoice;
         }

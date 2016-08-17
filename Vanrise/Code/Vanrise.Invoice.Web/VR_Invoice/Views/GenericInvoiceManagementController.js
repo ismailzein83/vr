@@ -2,9 +2,9 @@
 
     "use strict";
 
-    genericInvoiceManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VR_Invoice_GenericInvoiceService', 'VR_Invoice_InvoiceTypeAPIService'];
+    genericInvoiceManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VR_Invoice_InvoiceService', 'VR_Invoice_InvoiceTypeAPIService'];
 
-    function genericInvoiceManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VR_Invoice_GenericInvoiceService, VR_Invoice_InvoiceTypeAPIService) {
+    function genericInvoiceManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VR_Invoice_InvoiceService, VR_Invoice_InvoiceTypeAPIService) {
         var invoiceTypeId;
         $scope.invoiceTypeEntity;
         var partnerSelectorAPI;
@@ -53,7 +53,13 @@
         function getFilterObject() {
             var filter = {
                 mainGridColumns: $scope.invoiceTypeEntity.Settings.UISettings.MainGridColumns,
-                query: {}
+                subSections: $scope.invoiceTypeEntity.Settings.UISettings.SubSections,
+                invoiceGridActions: $scope.invoiceTypeEntity.Settings.UISettings.InvoiceGridActions,
+                query: {
+                    FromTime: $scope.fromDate,
+                    ToTime: $scope.toDate,
+                    PartnerId: partnerSelectorAPI.getSelectedIds()
+                }
             };
             return filter;
         }
@@ -76,7 +82,7 @@
             var onGenerateInvoice = function (invoice) {
             };
 
-            VR_Invoice_GenericInvoiceService.generateInvoice(onGenerateInvoice, invoiceTypeId);
+            VR_Invoice_InvoiceService.generateInvoice(onGenerateInvoice, invoiceTypeId);
         }
         function loadPartnerSelectorDirective() {
             var partnerSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();

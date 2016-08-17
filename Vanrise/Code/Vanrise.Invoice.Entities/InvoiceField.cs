@@ -9,13 +9,12 @@ namespace Vanrise.Invoice.Entities
     public enum InvoiceField
     {
         CustomField = 0,
-        Partner = 1,
-        InvoiceGenerator = 2,
+        InvoiceId =1,
+        Partner = 2,
         SerialNumber = 3,
         FromDate = 4,
         ToDate = 5,
         IssueDate = 6,
         DueDate = 7,
-        CreationDate = 8
     }
 }

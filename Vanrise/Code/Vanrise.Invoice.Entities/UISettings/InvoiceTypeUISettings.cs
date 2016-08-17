@@ -12,6 +12,7 @@ namespace Vanrise.Invoice.Entities
 
         public List<InvoiceUIGridColumn> MainGridColumns { get; set; }
 
+        public List<InvoiceGridAction> InvoiceGridActions { get; set; }
         public List<InvoiceUISubSection> SubSections { get; set; }
 
         public string GenerationCustomSectionDirective { get; set; }

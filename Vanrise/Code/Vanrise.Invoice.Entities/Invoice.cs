@@ -25,5 +25,13 @@ namespace Vanrise.Invoice.Entities
         public DateTime DueDate { get; set; }
 
         public dynamic Details { get; set; }
+
+        public Invoice() { }
+        public IEnumerable<Invoice> GetInvoiceRDLCSchema()
+        {
+            return null;
+        }
     }
+
+         
 }

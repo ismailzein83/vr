@@ -17,11 +17,13 @@ namespace Vanrise.Invoice.Business
         #region Public Methods
         public IDataRetrievalResult<InvoiceDetail> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input)
         {
-            return null;
-            //IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            //Func<Entities.Invoice, bool> filterExpression = (itemObject) =>
-            //     (true);
-            //return BigDataManager.Instance.RetrieveData(input, new InvoiceRequestHandler(dataManager));
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            return BigDataManager.Instance.RetrieveData(input, new InvoiceRequestHandler(dataManager));
+        }
+        public Entities.Invoice GetInvoice(long invoiceId)
+        {
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            return dataManager.GetInvoice(invoiceId);
         }
         public void GenerateInvoice(GenerateInvoiceInput createInvoiceInput)
         {
@@ -57,25 +59,26 @@ namespace Vanrise.Invoice.Business
 
         #region Private Classes
 
-        //private class InvoiceRequestHandler : BigDataRequestHandler<InvoiceQuery, Entities.Invoice, Entities.InvoiceDetail>
-        //{
-        //    IInvoiceDataManager _dataManager;
-        //    public InvoiceRequestHandler(IInvoiceDataManager dataManager)
-        //    {
-        //        _dataManager = dataManager;
-        //    }
-        //    public override InvoiceDetail EntityDetailMapper(Entities.Invoice entity)
-        //    {
-        //        return new InvoiceDetail{
-        //            Entity = entity
-        //        };
-        //    }
+        private class InvoiceRequestHandler : BigDataRequestHandler<InvoiceQuery, Entities.Invoice, Entities.InvoiceDetail>
+        {
+            IInvoiceDataManager _dataManager;
+            public InvoiceRequestHandler(IInvoiceDataManager dataManager)
+            {
+                _dataManager = dataManager;
+            }
+            public override InvoiceDetail EntityDetailMapper(Entities.Invoice entity)
+            {
+                return new InvoiceDetail
+                {
+                    Entity = entity
+                };
+            }
 
-        //    //public override IEnumerable<InvoiceDetail> RetrieveAllData(DataRetrievalInput<InvoiceQuery> input)
-        //    //{
-        //    //    return _dataManager.GetInvoices(input);
-        //    //}
-        //}
+            public override IEnumerable<Entities.Invoice> RetrieveAllData(DataRetrievalInput<InvoiceQuery> input)
+            {
+                return _dataManager.GetGetFilteredInvoices(input);
+            }
+        }
         #endregion
     }
 }

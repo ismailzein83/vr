@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="IDataManager.cs" />
     <Compile Include="IInvoiceDataManager.cs" />
+    <Compile Include="IInvoiceItemDataManager.cs" />
     <Compile Include="IInvoiceTypeDataManager.cs" />
     <Compile Include="InvoiceDataManagerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

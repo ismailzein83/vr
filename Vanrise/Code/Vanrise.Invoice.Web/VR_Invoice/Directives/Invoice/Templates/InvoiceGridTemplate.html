@@ -4,14 +4,10 @@
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
              idfield="Entity.InvoiceId">
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.InvoiceId'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Invoice Type'" field="'Entity.InvoiceTypeId'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Partner Id'" field="'Entity.PartnerId'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Serial Number'" field="'Entity.SerialNumber'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'From Date'" field="'Entity.FromDate'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'To Date'" field="'Entity.ToDate'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Issue Date'" field="'Entity.IssueDate'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Due Date'" field="'Entity.DueDate'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn ng-repeat="field in gridFields" headertext="field.header" field="field.field" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Invoice Id'" type="'Text'" field="'Entity.InvoiceId'"></vr-datagridcolumn>
+    <vr-datagridcolumn ng-repeat="field in gridFields" headertext="field.header" field="field.field" type="field.type"></vr-datagridcolumn>
+    
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
 </vr-datagrid>
-

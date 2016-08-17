@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3FC94003-B550-4F8D-B31E-0D389DCCC801}</ProjectGuid>
+    <ProjectGuid>{68596558-5D2B-4459-ACA6-0F4F98CB08F9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Vanrise.Invoice.Business</RootNamespace>
-    <AssemblyName>Vanrise.Invoice.Business</AssemblyName>
+    <RootNamespace>Vanrise.Invoice.MainExtensions</RootNamespace>
+    <AssemblyName>Vanrise.Invoice.MainExtensions</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -43,33 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Context\InvoiceGenerationContext.cs" />
-    <Compile Include="Context\RDLCReportDataSourceSettingsContext.cs" />
-    <Compile Include="InvoiceItemManager.cs" />
-    <Compile Include="InvoiceManager.cs" />
-    <Compile Include="InvoiceTypeManager.cs" />
+    <Compile Include="ItemSetNameSettings.cs" />
+    <Compile Include="OpenRDLCReportAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Vanrise.Caching\Vanrise.Caching.csproj">
-      <Project>{c00d0633-b945-4edb-8348-5c91aaac19c7}</Project>
-      <Name>Vanrise.Caching</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">
-      <Project>{571a68ec-2d45-4b5c-9e75-bb6fb7c0d7b7}</Project>
-      <Name>Vanrise.Common.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
-      <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
-      <Name>Vanrise.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
-      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
-      <Name>Vanrise.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Invoice.Data\Vanrise.Invoice.Data.csproj">
-      <Project>{3d178003-f8bb-4d06-acde-ddd1fe4c5b62}</Project>
-      <Name>Vanrise.Invoice.Data</Name>
+    <ProjectReference Include="..\Vanrise.Invoice.Business\Vanrise.Invoice.Business.csproj">
+      <Project>{3fc94003-b550-4f8d-b31e-0d389dccc801}</Project>
+      <Name>Vanrise.Invoice.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Invoice.Entities\Vanrise.Invoice.Entities.csproj">
       <Project>{af8043ce-bc7c-445a-8c02-af023f5bdd68}</Project>

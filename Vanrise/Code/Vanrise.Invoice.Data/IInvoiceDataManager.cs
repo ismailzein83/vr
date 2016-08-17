@@ -10,8 +10,8 @@ namespace Vanrise.Invoice.Data
 {
     public interface IInvoiceDataManager:IDataManager
     {
-        List<Entities.InvoiceDetail> GetInvoices(DataRetrievalInput<InvoiceQuery> input);
+        IEnumerable<Entities.Invoice> GetGetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input);
         void SaveInvoices(GenerateInvoiceInput createInvoiceInput, GeneratedInvoice invoice);
-        bool AreInvoicesUpdated(ref object updateHandle);
+        Entities.Invoice GetInvoice(long invoiceId);
     }
 }
