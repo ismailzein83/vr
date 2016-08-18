@@ -17,7 +17,7 @@ namespace TOne.WhS.Routing.Entities
     {
         public RouteDatabasesToKeep RouteDatabasesToKeep { get; set; }
 
-        public PrepareCodePrefixes PrepareCodePrefixes { get; set; }
+        public SubProcessSettings SubProcessSettings { get; set; }
     }
 
     public class RouteDatabasesToKeep
@@ -40,10 +40,10 @@ namespace TOne.WhS.Routing.Entities
         public TimeUnit TimeUnit { get; set; }
     }
 
-    public class PrepareCodePrefixes
+    public class SubProcessSettings
     {
-        public int MaxPrefixLength { get; set; }
+        public int CodeRangeCountThreshold { get; set; }
 
-        public int Threshold { get; set; }
+        public int MaxCodePrefixLength { get; set; }
     }
 }

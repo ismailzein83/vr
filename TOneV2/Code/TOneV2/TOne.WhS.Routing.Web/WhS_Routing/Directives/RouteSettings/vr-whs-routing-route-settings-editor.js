@@ -30,8 +30,8 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
             var productRouteDatabaseConfigurationAPI;
             var productRouteDatabaseConfigurationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var prepareCodePrefixesConfigurationAPI;
-            var prepareCodePrefixesConfigurationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var subProcessSettingsAPI;
+            var subProcessSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
 
             $scope.scopeModel = {};
@@ -44,9 +44,9 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                 productRouteDatabaseConfigurationAPI = api;
                 productRouteDatabaseConfigurationReadyPromiseDeferred.resolve();
             }
-            $scope.scopeModel.onPrepareCodePrefixesConfigurationReady = function (api) {
-                prepareCodePrefixesConfigurationAPI = api;
-                prepareCodePrefixesConfigurationReadyPromiseDeferred.resolve();
+            $scope.scopeModel.onSubProcessSettingsReady = function (api) {
+                subProcessSettingsAPI = api;
+                subProcessSettingsReadyPromiseDeferred.resolve();
             }
 
 
@@ -60,12 +60,12 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                     var promises = [];
                     var customerRoutePayload;
                     var productRoutePayload;
-                    var prepareCodePrefixesPayload;
+                    var subProcessSettingsPayload;
 
                     if (payload != undefined && payload.data != undefined) {
                         customerRoutePayload = payload.data.RouteDatabasesToKeep.CustomerRouteConfiguration;
                         productRoutePayload = payload.data.RouteDatabasesToKeep.ProductRouteConfiguration;
-                        prepareCodePrefixesPayload = payload.data.PrepareCodePrefixes;
+                        subProcessSettingsPayload = payload.data.SubProcessSettings;
                     }
 
 
@@ -85,13 +85,13 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                         });
                     promises.push(productRouteDatabaseConfigurationLoadPromiseDeferred.promise);
 
-                    //Loading Prepare Code Prefixes Configuration
-                    var prepareCodePrefixesConfigurationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    prepareCodePrefixesConfigurationReadyPromiseDeferred.promise
+                    //Loading Sub Process Settings
+                    var subProcessSettingsConfigurationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    subProcessSettingsReadyPromiseDeferred.promise
                         .then(function () {
-                            VRUIUtilsService.callDirectiveLoad(prepareCodePrefixesConfigurationAPI, prepareCodePrefixesPayload, prepareCodePrefixesConfigurationLoadPromiseDeferred);
+                            VRUIUtilsService.callDirectiveLoad(subProcessSettingsAPI, subProcessSettingsPayload, subProcessSettingsConfigurationLoadPromiseDeferred);
                         });
-                    promises.push(prepareCodePrefixesConfigurationLoadPromiseDeferred.promise);
+                    promises.push(subProcessSettingsConfigurationLoadPromiseDeferred.promise);
 
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -102,12 +102,12 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                     routeDatabasesToKeep.CustomerRouteConfiguration = customerRouteDatabaseConfigurationAPI.getData();
                     routeDatabasesToKeep.ProductRouteConfiguration = productRouteDatabaseConfigurationAPI.getData();
 
-                    var prepareCodePrefixes = prepareCodePrefixesConfigurationAPI.getData();
+                    var subProcessSettings = subProcessSettingsAPI.getData();
 
                     return {
                         $type: "TOne.WhS.Routing.Entities.RouteSettingsData, TOne.WhS.Routing.Entities",
                         RouteDatabasesToKeep: routeDatabasesToKeep,
-                        PrepareCodePrefixes: prepareCodePrefixes
+                        SubProcessSettings: subProcessSettings
                     };
                 }
 

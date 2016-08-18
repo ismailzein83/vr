@@ -15,19 +15,36 @@ using Vanrise.Common;
 namespace TOne.WhS.Runtime.Tasks
 {
     public class AliAtouiTask : ITask
-    {
+    {   
+        #region Public Methods 
         public void Execute()
         {
             PrepareCodePrefixes pcp = new PrepareCodePrefixes();
-            pcp.PCP_Main();
+            IEnumerable<CodePrefixInfo> codePrefixesResult = pcp.PCP_Main();
+
+            DisplayList(codePrefixesResult);
+            
+            Console.ReadLine();
         }
+        #endregion
+
+
+        #region Private Methods
+        void DisplayList(IEnumerable<CodePrefixInfo> codePrefixes)
+        {
+            foreach (CodePrefixInfo item in codePrefixes)
+                Console.WriteLine(item.CodePrefix + "   " + item.Count);
+
+            Console.WriteLine("\n");
+        }
+        #endregion
     }
 
 
     public class PrepareCodePrefixes
     {
         #region Public Method
-        public void PCP_Main()
+        public IEnumerable<CodePrefixInfo> PCP_Main()
         {
             Console.WriteLine("Ali Atoui");
 
@@ -38,8 +55,8 @@ namespace TOne.WhS.Runtime.Tasks
             //Initializint Settings
             SettingManager settingManager = new SettingManager();
             RouteSettingsData settings = settingManager.GetSetting<RouteSettingsData>(Routing.Business.Constants.RouteSettings);
-            int maxPrefixLength = settings.PrepareCodePrefixes.MaxPrefixLength;
-            int threshold = settings.PrepareCodePrefixes.Threshold;
+            int threshold = settings.SubProcessSettings.CodeRangeCountThreshold;
+            int maxPrefixLength = settings.SubProcessSettings.MaxCodePrefixLength;
             int prefixLength = 1;
             DateTime? effectiveOn = DateTime.Now;
             bool isFuture = false;
@@ -54,6 +71,9 @@ namespace TOne.WhS.Runtime.Tasks
             AddCodePrefixes(saleCodePrefixes, pendingCodePrefixes);
 
             DisplayDictionary(pendingCodePrefixes);
+
+            if (maxPrefixLength == 1)
+                return pendingCodePrefixes.Values.OrderByDescending(x => x.Count);
 
             CheckThreshold(pendingCodePrefixes, codePrefixes, threshold);
 
@@ -73,13 +93,15 @@ namespace TOne.WhS.Runtime.Tasks
                 CheckThreshold(pendingCodePrefixes, codePrefixes, threshold);
             }
 
+            if (pendingCodePrefixes.Count > 0 && prefixLength >= maxPrefixLength)
+            {
+                foreach (KeyValuePair<string, CodePrefixInfo> item in pendingCodePrefixes)
+                    codePrefixes.Add(item.Key, item.Value);
+            }
+
             DisplayDictionary(codePrefixes);
 
-            IEnumerable<CodePrefixInfo> codePrefixesResult = codePrefixes.Values.OrderByDescending(x => x.Count);
-
-            DisplayList(codePrefixesResult);
-
-            Console.ReadLine();
+            return codePrefixes.Values.OrderByDescending(x => x.Count);
         }
         #endregion
 
@@ -131,13 +153,6 @@ namespace TOne.WhS.Runtime.Tasks
             Console.WriteLine("\n");
         }
 
-        void DisplayList(IEnumerable<CodePrefixInfo> codePrefixes)
-        {
-            foreach (CodePrefixInfo item in codePrefixes)
-                Console.WriteLine(item.CodePrefix + "   " + item.Count);
-
-            Console.WriteLine("\n");
-        }
         #endregion
     }
 }

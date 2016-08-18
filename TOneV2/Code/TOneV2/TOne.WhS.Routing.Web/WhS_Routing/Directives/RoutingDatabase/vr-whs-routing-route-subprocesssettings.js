@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsRoutingRoutePreparecodeprefixesConfiguration', ['UtilsService', 'WhS_Routing_TimeSettingsTypeEnum',
+app.directive('vrWhsRoutingRouteSubprocesssettings', ['UtilsService', 'WhS_Routing_TimeSettingsTypeEnum',
 function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
 
     var directiveDefinitionObject = {
@@ -11,7 +11,7 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
         controller: function ($scope, $element, $attrs) {
 
             var ctrl = this;
-            var ctor = new prepareCodePrefixesConfigurationCtor(ctrl, $scope, $attrs);
+            var ctor = new subProcessSettingsCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
         controllerAs: 'ctrl',
@@ -19,11 +19,11 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_Routing/Directives/RoutingDatabase/Templates/PrepareCodePrefixesTemplate.html"
+        templateUrl: "/Client/Modules/WhS_Routing/Directives/RoutingDatabase/Templates/SubProcessSettingsTemplate.html"
     };
 
 
-    function prepareCodePrefixesConfigurationCtor(ctrl, $scope, $attrs) {
+    function subProcessSettingsCtor(ctrl, $scope, $attrs) {
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -36,16 +36,16 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
             api.load = function (payload) {
 
                 if (payload != undefined) {
-                    ctrl.maxPrefixLength = payload.MaxPrefixLength;
-                    ctrl.threshold = payload.Threshold;
+                    ctrl.codeRangeCountThreshold = payload.CodeRangeCountThreshold;
+                    ctrl.maximumCodePrefixLength = payload.MaxCodePrefixLength;
                 }
             }
 
             api.getData = function () {
                 var obj = {
-                    $type: "TOne.WhS.Routing.Entities.PrepareCodePrefixes, TOne.WhS.Routing.Entities",
-                    MaxPrefixLength: ctrl.maxPrefixLength,
-                    Threshold: ctrl.threshold,
+                    $type: "TOne.WhS.Routing.Entities.SubProcessSettings, TOne.WhS.Routing.Entities",
+                    CodeRangeCountThreshold: ctrl.codeRangeCountThreshold,
+                    MaxCodePrefixLength: ctrl.maximumCodePrefixLength,
                 }
                 return obj;
             }
