@@ -10,77 +10,74 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.Runtime.Tasks
 {
     public class AliAtouiTask : ITask
     {
-        #region Variables
-        //Dictionaries
-        Dictionary<string, CodePrefixInfo> codePrefixes = new Dictionary<string, CodePrefixInfo>();
-        Dictionary<string, CodePrefixInfo> pendingCodePrefixes = new Dictionary<string, CodePrefixInfo>();
-
-        //Settings
-        int prefixLength;
-        int maxPrefixLength;
-        int threshold;
-        DateTime? effectiveOn;
-        bool isFuture;
-
-        //Temporary Variables
-        long validNumberPrefix;
-        CodePrefixInfo temp_CodePrefixInfo;
-        Dictionary<string, CodePrefixInfo> temp_PendingCodePrefixes;
-        IEnumerable<string> temp_IEnumerableString;
-        #endregion
-
-
-        #region Public Method
         public void Execute()
         {
+            PrepareCodePrefixes pcp = new PrepareCodePrefixes();
+            pcp.PCP_Main();
+        }
+    }
+
+
+    public class PrepareCodePrefixes
+    {
+        #region Public Method
+        public void PCP_Main()
+        {
             Console.WriteLine("Ali Atoui");
+
+            //Dictionaries
+            Dictionary<string, CodePrefixInfo> codePrefixes = new Dictionary<string, CodePrefixInfo>();
+            Dictionary<string, CodePrefixInfo> pendingCodePrefixes = new Dictionary<string, CodePrefixInfo>();
 
             //Initializint Settings
             SettingManager settingManager = new SettingManager();
             RouteSettingsData settings = settingManager.GetSetting<RouteSettingsData>(Routing.Business.Constants.RouteSettings);
-            prefixLength = 1;
-            maxPrefixLength = settings.PrepareCodePrefixes.MaxPrefixLength;
-            threshold = settings.PrepareCodePrefixes.Threshold;
-            effectiveOn = DateTime.Now;
-            isFuture = false;
+            int maxPrefixLength = settings.PrepareCodePrefixes.MaxPrefixLength;
+            int threshold = settings.PrepareCodePrefixes.Threshold;
+            int prefixLength = 1;
+            DateTime? effectiveOn = DateTime.Now;
+            bool isFuture = false;
 
 
             SupplierCodeManager supplierCodeManager = new SupplierCodeManager();
-            IEnumerable<CodePrefixInfo> supplierCodePrefixes = supplierCodeManager.GetDistinctCodeByPrefixes_ByAA(prefixLength, effectiveOn, isFuture);
-            AddSupplierCodePrefixes(supplierCodePrefixes);
+            IEnumerable<CodePrefixInfo> supplierCodePrefixes = supplierCodeManager.GetDistinctCodeByPrefixes(prefixLength, effectiveOn, isFuture);
+            AddCodePrefixes(supplierCodePrefixes, pendingCodePrefixes);
 
             SaleCodeManager saleCodeManager = new SaleCodeManager();
             IEnumerable<CodePrefixInfo> saleCodePrefixes = saleCodeManager.GetDistinctCodeByPrefixes(prefixLength, effectiveOn, isFuture);
-            AddSaleCodePrefixes(saleCodePrefixes);
+            AddCodePrefixes(saleCodePrefixes, pendingCodePrefixes);
 
             DisplayDictionary(pendingCodePrefixes);
 
-            temp_PendingCodePrefixes = new Dictionary<string, CodePrefixInfo>(pendingCodePrefixes);
-            CheckThreshold(temp_PendingCodePrefixes);
+            CheckThreshold(pendingCodePrefixes, codePrefixes, threshold);
 
             while (pendingCodePrefixes.Count > 0 && prefixLength < maxPrefixLength)
             {
                 prefixLength++;
 
-                temp_IEnumerableString = pendingCodePrefixes.Keys;
+                IEnumerable<string> _pendingCodePrefixes = pendingCodePrefixes.Keys;
                 pendingCodePrefixes = new Dictionary<string, CodePrefixInfo>();
 
-                supplierCodePrefixes = supplierCodeManager.GetSpecificCodeByPrefixes_ByAA(prefixLength, temp_IEnumerableString, effectiveOn, isFuture);
-                AddSupplierCodePrefixes(supplierCodePrefixes);
+                supplierCodePrefixes = supplierCodeManager.GetSpecificCodeByPrefixes(prefixLength, _pendingCodePrefixes, effectiveOn, isFuture);
+                AddCodePrefixes(supplierCodePrefixes, pendingCodePrefixes);
 
-                saleCodePrefixes = saleCodeManager.GetSpecificCodeByPrefixes_ByAA(prefixLength, temp_IEnumerableString, effectiveOn, isFuture);
-                AddSaleCodePrefixes(saleCodePrefixes);
+                saleCodePrefixes = saleCodeManager.GetSpecificCodeByPrefixes(prefixLength, _pendingCodePrefixes, effectiveOn, isFuture);
+                AddCodePrefixes(saleCodePrefixes, pendingCodePrefixes);
 
-                temp_PendingCodePrefixes = new Dictionary<string, CodePrefixInfo>(pendingCodePrefixes);
-                CheckThreshold(temp_PendingCodePrefixes);
+                CheckThreshold(pendingCodePrefixes, codePrefixes, threshold);
             }
 
             DisplayDictionary(codePrefixes);
+
+            IEnumerable<CodePrefixInfo> codePrefixesResult = codePrefixes.Values.OrderByDescending(x => x.Count);
+
+            DisplayList(codePrefixesResult);
 
             Console.ReadLine();
         }
@@ -88,30 +85,20 @@ namespace TOne.WhS.Runtime.Tasks
 
 
         #region Private Methods
-        void AddSupplierCodePrefixes(IEnumerable<CodePrefixInfo> supplierCodePrefixes)
-        {
-            if (supplierCodePrefixes != null)
-            {
-                foreach (CodePrefixInfo item in supplierCodePrefixes)
-                    if (long.TryParse(item.CodePrefix, out validNumberPrefix))
-                    {
-                        pendingCodePrefixes.Add(item.CodePrefix, item);
-                    }
-                //else
-                //    context.WriteTrackingMessage(LogEntryType.Warning, "Invalid Supplier Code Prefix: {0}", item.CodePrefix);
-            }
-        }
 
-        void AddSaleCodePrefixes(IEnumerable<CodePrefixInfo> saleCodePrefixes)
+        void AddCodePrefixes(IEnumerable<CodePrefixInfo> codePrefixes, Dictionary<string, CodePrefixInfo> pendingCodePrefixes)
         {
-            if (saleCodePrefixes != null)
+            long _validNumberPrefix;
+            CodePrefixInfo _codePrefixInfo;
+
+            if (codePrefixes != null)
             {
-                foreach (CodePrefixInfo item in saleCodePrefixes)
-                    if (long.TryParse(item.CodePrefix, out validNumberPrefix))
+                foreach (CodePrefixInfo item in codePrefixes)
+                    if (long.TryParse(item.CodePrefix, out _validNumberPrefix))
                     {
-                        if (pendingCodePrefixes.TryGetValue(item.CodePrefix, out temp_CodePrefixInfo))
+                        if (pendingCodePrefixes.TryGetValue(item.CodePrefix, out _codePrefixInfo))
                         {
-                            temp_CodePrefixInfo.Count += item.Count;
+                            _codePrefixInfo.Count += item.Count;
                         }
                         else
                         {
@@ -123,8 +110,9 @@ namespace TOne.WhS.Runtime.Tasks
             }
         }
 
-        void CheckThreshold(Dictionary<string, CodePrefixInfo> temp_PendingCodePrefixes)
+        void CheckThreshold(Dictionary<string, CodePrefixInfo> pendingCodePrefixes, Dictionary<string, CodePrefixInfo> codePrefixes, int threshold)
         {
+            Dictionary<string, CodePrefixInfo> temp_PendingCodePrefixes = new Dictionary<string, CodePrefixInfo>(pendingCodePrefixes);
             foreach (KeyValuePair<string, CodePrefixInfo> item in temp_PendingCodePrefixes)
                 if (item.Value.Count <= threshold)
                 {
@@ -138,6 +126,14 @@ namespace TOne.WhS.Runtime.Tasks
             IEnumerable<CodePrefixInfo> _list = codePrefixes.Values.OrderBy(x => x.CodePrefix);
 
             foreach (CodePrefixInfo item in _list)
+                Console.WriteLine(item.CodePrefix + "   " + item.Count);
+
+            Console.WriteLine("\n");
+        }
+
+        void DisplayList(IEnumerable<CodePrefixInfo> codePrefixes)
+        {
+            foreach (CodePrefixInfo item in codePrefixes)
                 Console.WriteLine(item.CodePrefix + "   " + item.Count);
 
             Console.WriteLine("\n");

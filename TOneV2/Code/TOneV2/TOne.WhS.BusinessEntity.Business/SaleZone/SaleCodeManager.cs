@@ -68,7 +68,7 @@ namespace TOne.WhS.BusinessEntity.Business
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
             return dataManager.GetDistinctCodeByPrefixes(prefixLength, effectiveOn, isFuture);
         }
-        public IEnumerable<CodePrefixInfo> GetSpecificCodeByPrefixes_ByAA(int prefixLength, IEnumerable<string> codePrefixes, DateTime? effectiveOn, bool isFuture)
+        public IEnumerable<CodePrefixInfo> GetSpecificCodeByPrefixes(int prefixLength, IEnumerable<string> codePrefixes, DateTime? effectiveOn, bool isFuture)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
             return dataManager.GetSpecificCodeByPrefixes(prefixLength, codePrefixes, effectiveOn, isFuture);
