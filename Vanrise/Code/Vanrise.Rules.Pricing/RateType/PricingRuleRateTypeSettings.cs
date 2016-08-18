@@ -12,36 +12,27 @@ namespace Vanrise.Rules.Pricing
 
         public void ApplyRateTypeRule(IPricingRuleRateTypeContext context)
         {
-           if (context.RatesByRateType != null && context.RatesByRateType.Count > 0)
+            if (context.RateTypes == null || context.RateTypes.Count == 0)
+
+                return;
+
+            PricingRuleRateTypeItemContext itemContext = new PricingRuleRateTypeItemContext
             {
-                bool isRateFound = false;
+                RateTypes = context.RateTypes,
+                TargetTime = context.TargetTime
+            };
 
-                PricingRuleRateTypeItemContext itemContext = new PricingRuleRateTypeItemContext
-                {
-                    NormalRate = context.NormalRate,
-                    RatesByRateType = context.RatesByRateType,
-                    TargetTime = context.TargetTime
-                };
+            foreach (var rateTypeItem in this.Items)
+            {
+                if (!rateTypeItem.Evaluate(itemContext))
+                    continue;
 
-                foreach (var rateTypeItem in this.Items)
-                {
-                    if (rateTypeItem.Evaluate(itemContext))
-                    {
-                        Decimal rateToUse;
-                        if (context.RatesByRateType.TryGetValue(rateTypeItem.RateTypeId, out rateToUse))
-                        {
-                            isRateFound = true;
-                            context.EffectiveRate = rateToUse;
-                            context.RateTypeId = rateTypeItem.RateTypeId;
-                            break;
-                        }
-                    }
-                }
-                if (!isRateFound)
-                    context.EffectiveRate = context.NormalRate;
+                if (!context.RateTypes.Contains(rateTypeItem.RateTypeId))
+                    continue;
+
+                context.RateTypeId = rateTypeItem.RateTypeId;
+                break;
             }
-            else
-               context.EffectiveRate = context.NormalRate;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Vanrise.GenericData.Transformation
         public DataTransformationCodeGenerationContext(DataTransformationDefinition dataTransformationDefinition)
         {
             _dataTransformationDefinition = dataTransformationDefinition;
-            
+
         }
 
         StringBuilder _globalMembersBuilder;
@@ -39,10 +39,10 @@ namespace Vanrise.GenericData.Transformation
 
         void IDataTransformationCodeGenerationContext.AddCodeToCurrentInstanceExecutionBlock(string codeLineTemplate, params object[] placeholders)
         {
-            if (placeholders != null && placeholders.Length>0)
-             _instanceExecutionBlockBuilder.AppendFormat(codeLineTemplate, placeholders);
+            if (placeholders != null && placeholders.Length > 0)
+                _instanceExecutionBlockBuilder.AppendFormat(codeLineTemplate, placeholders);
             else
-             _instanceExecutionBlockBuilder.Append(codeLineTemplate);
+                _instanceExecutionBlockBuilder.Append(codeLineTemplate);
             _instanceExecutionBlockBuilder.AppendLine();
         }
 
@@ -73,11 +73,11 @@ namespace Vanrise.GenericData.Transformation
             string classDefinition = BuildClassDefinition(out fullTypeName);
 
             CSharpCompilationOutput compilationOutput;
-            if(!CSharpCompiler.TryCompileClass(classDefinition, out compilationOutput))
+            if (!CSharpCompiler.TryCompileClass(classDefinition, out compilationOutput))
             {
                 runtimeType = null;
-                errorMessages = compilationOutput.ErrorMessages;                
-                return false;               
+                errorMessages = compilationOutput.ErrorMessages;
+                return false;
             }
             var executorType = compilationOutput.OutputAssembly.GetType(fullTypeName);
             if (executorType == null)
@@ -90,15 +90,18 @@ namespace Vanrise.GenericData.Transformation
             return true;
         }
 
-       
+
 
         private string BuildClassDefinition(out string fullTypeName)
-        {           
+        {
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             foreach (var recordType in _dataTransformationDefinition.RecordTypes)
             {
                 if (recordType.IsArray)
-                    (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public List<dynamic> {0} = new List<dynamic>();", recordType.RecordName));
+                {
+                    string dataRecordRuntimeType = !String.IsNullOrEmpty(recordType.FullTypeName) ? recordType.FullTypeName : "dynamic";
+                    (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public List<{0}> {1} = new List<{0}>();", dataRecordRuntimeType, recordType.RecordName));
+                }
                 else
                 {
                     string dataRecordRuntimeType;
@@ -119,6 +122,7 @@ namespace Vanrise.GenericData.Transformation
                 using System.Collections.Generic;
                 using System.IO;
                 using System.Data;
+                using System.Linq;
 
                 namespace #NAMESPACE#
                 {
@@ -137,13 +141,13 @@ namespace Vanrise.GenericData.Transformation
             classDefinitionBuilder.Replace("#EXECUTORBASE#", typeof(IDataTransformationExecutor).FullName);
             classDefinitionBuilder.Replace("#GLOBALMEMBERS#", _globalMembersBuilder.ToString());
             classDefinitionBuilder.Replace("#EXECUTIONCODE#", _instanceExecutionBlockBuilder.ToString());
-            
+
             string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.GenericData.Transformation.Runtime");
             string className = "DataTransformationExecutor";
             classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
             classDefinitionBuilder.Replace("#CLASSNAME#", className);
             fullTypeName = String.Format("{0}.{1}", classNamespace, className);
-            
+
             return classDefinitionBuilder.ToString();
         }
     }

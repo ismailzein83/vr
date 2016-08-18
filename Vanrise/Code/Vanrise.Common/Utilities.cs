@@ -198,10 +198,10 @@ namespace Vanrise.Common
             return s_exposedConnectionStringNames.Contains(connectionStringName);
         }
 
-        
+
         public static string GetDateTimeFormat(Vanrise.Entities.DateTimeType dateTimeType)
         {
-            switch(dateTimeType)
+            switch (dateTimeType)
             {
                 case Vanrise.Entities.DateTimeType.LongDateTime: return "yyyy-MM-dd HH:mm:ss";
                 case Vanrise.Entities.DateTimeType.DateTime: return "yyyy-MM-dd HH:mm";
@@ -209,10 +209,17 @@ namespace Vanrise.Common
                 default: throw new NotSupportedException(String.Format("dateTimeType '{0}'", dateTimeType));
             }
         }
+
+        public static List<T> GetDictionaryKeys<T, Q>(Dictionary<T, Q> dict)
+        {
+            if (dict == null || dict.Count == 0)
+                return null;
+            return dict.Keys.ToList();
+        }
     }
-   
+
     public interface IPropValueReader
     {
         Object GetPropertyValue(dynamic target);
-    }
+    }        
 }

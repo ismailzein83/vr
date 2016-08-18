@@ -8,13 +8,9 @@ namespace Vanrise.Rules.Pricing
 {
     public interface IPricingRuleRateTypeContext : IRuleExecutionContext
     {
-        Decimal NormalRate { get; }
-
-        Dictionary<int, Decimal> RatesByRateType { get; }
+        List<int> RateTypes { get; }
 
         DateTime? TargetTime { get; }
-
-        Decimal EffectiveRate { set; }
 
         int? RateTypeId { set; }
     }

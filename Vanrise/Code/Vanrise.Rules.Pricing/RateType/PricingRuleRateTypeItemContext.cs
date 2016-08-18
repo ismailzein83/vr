@@ -8,22 +8,8 @@ namespace Vanrise.Rules.Pricing
 {
     public class PricingRuleRateTypeItemContext : IPricingRuleRateTypeItemContext
     {
-        public decimal NormalRate
-        {
-            get;
-            set;
-        }
+        public DateTime? TargetTime { get; set; }
 
-        public Dictionary<int, decimal> RatesByRateType
-        {
-            get;
-            set;
-        }
-
-        public DateTime? TargetTime
-        {
-            get;
-            set;
-        }
+        public List<int> RateTypes { get; set; }
     }
 }

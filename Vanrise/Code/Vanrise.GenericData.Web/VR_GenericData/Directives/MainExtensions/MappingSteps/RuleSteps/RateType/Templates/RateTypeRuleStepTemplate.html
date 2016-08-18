@@ -1,15 +1,10 @@
-﻿
-<vr-genericdata-datatransformation-rulestep-common on-ready="onRuleStepCommonReady"></vr-genericdata-datatransformation-rulestep-common>
+﻿<vr-genericdata-datatransformation-rulestep-common on-ready="onRuleStepCommonReady"></vr-genericdata-datatransformation-rulestep-common>
 
 <vr-row>
     <vr-columns width="fullrow">
         <vr-section title="Settings">
-            <vr-genericdata-expressionbuilder on-ready="onNormalRateDirectiveReady" label="Normal Rate" isrequired="true"></vr-genericdata-expressionbuilder>
-            <vr-genericdata-expressionbuilder on-ready="onRatesByRateTypeDirectiveReady" label="Rates By Rate Type" isrequired="true"></vr-genericdata-expressionbuilder>
-            <vr-genericdata-expressionbuilder on-ready="onEffectiveRateDirectiveReady" label="Effective Rate" isrequired="true"></vr-genericdata-expressionbuilder>
-            <vr-genericdata-expressionbuilder on-ready="onRateTypeIdDirectiveReady" label="Rate Type Id" ></vr-genericdata-expressionbuilder>
-
+            <vr-genericdata-expressionbuilder on-ready="onRateTypesDirectiveReady" label="Rate Types"></vr-genericdata-expressionbuilder>
+            <vr-genericdata-expressionbuilder on-ready="onRateTypeIdDirectiveReady" label="Rate Type Id" isrequired="true"></vr-genericdata-expressionbuilder>
         </vr-section>
     </vr-columns>
-
 </vr-row>

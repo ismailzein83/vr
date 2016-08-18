@@ -23,19 +23,15 @@ namespace Vanrise.GenericData.Pricing
 
         void ApplyRateTypeRule(IPricingRuleRateTypeContext context, Func<RateTypeRule> getMatchRule, GenericRuleTarget target)
         {
-            bool rateTypeApplied = false;
-            if (context.RatesByRateType != null && context.RatesByRateType.Count > 0 && !target.IsEffectiveInFuture)
+            if (!target.IsEffectiveInFuture)
             {
                 var rateTypePricingRule = getMatchRule();
                 if (rateTypePricingRule != null)
                 {
                     rateTypePricingRule.Settings.ApplyRateTypeRule(context);
                     context.Rule = rateTypePricingRule;
-                    rateTypeApplied = true;
                 }
             }
-            if (!rateTypeApplied)
-                context.EffectiveRate = context.NormalRate;
         }
     }
 }

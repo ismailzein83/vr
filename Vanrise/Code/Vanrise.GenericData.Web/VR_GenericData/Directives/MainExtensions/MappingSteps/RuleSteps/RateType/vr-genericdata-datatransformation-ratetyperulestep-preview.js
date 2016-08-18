@@ -53,14 +53,10 @@ app.directive('vrGenericdataDatatransformationRatetyperulestepPreview', ['UtilsS
                     ctrl.ruleFieldsMappings.length = 0;
                     if (payload != undefined) {
                         if (payload.stepDetails != undefined) {
-                            stepObj.normalRate = payload.stepDetails.NormalRate;
-                            stepObj.ratesByRateType = payload.stepDetails.RatesByRateType;
-                            stepObj.effectiveRate = payload.stepDetails.EffectiveRate;
+                            stepObj.rateTypes = payload.stepDetails.RateTypes;
                             stepObj.rateTypeId = payload.stepDetails.RateTypeId;
 
-                            ctrl.normalRate = payload.stepDetails.NormalRate;
-                            ctrl.ratesByRateType = payload.stepDetails.RatesByRateType;
-                            ctrl.effectiveRate = payload.stepDetails.EffectiveRate;
+                            ctrl.rateTypes = payload.stepDetails.RateTypes;
                             ctrl.rateTypeId = payload.stepDetails.RateTypeId;
                         }
 
@@ -87,14 +83,10 @@ app.directive('vrGenericdataDatatransformationRatetyperulestepPreview', ['UtilsS
                     if (commonDirectiveAPI != undefined)
                         commonDirectiveAPI.applyChanges(changes);
 
-                    stepObj.normalRate = changes.NormalRate;
-                    stepObj.ratesByRateType = changes.RatesByRateType;
-                    stepObj.effectiveRate = changes.EffectiveRate;
+                    stepObj.rateTypes = changes.RateTypes;
                     stepObj.rateTypeId = changes.RateTypeId;
 
-                    ctrl.normalRate = changes.NormalRate;
-                    ctrl.ratesByRateType = changes.RatesByRateType;
-                    ctrl.effectiveRate = changes.EffectiveRate;
+                    ctrl.rateTypes = changes.RateTypes;
                     ctrl.rateTypeId = changes.RateTypeId;
                 }
 
@@ -110,9 +102,7 @@ app.directive('vrGenericdataDatatransformationRatetyperulestepPreview', ['UtilsS
                 api.getData = function () {
                     var stepDetails = commonDirectiveAPI.getData();
                     if (stepDetails != undefined) {
-                        stepDetails.NormalRate = stepObj.normalRate;
-                        stepDetails.RatesByRateType = stepObj.ratesByRateType;
-                        stepDetails.EffectiveRate = stepObj.effectiveRate;
+                        stepDetails.RateTypes = stepObj.rateTypes;
                         stepDetails.RateTypeId = stepObj.rateTypeId;
                     }
                     return stepDetails;
@@ -123,15 +113,9 @@ app.directive('vrGenericdataDatatransformationRatetyperulestepPreview', ['UtilsS
             }
 
             function checkValidation() {
-               
-                if (ctrl.normalRate == undefined) {
-                    return "Missing normal rate mapping.";
-                }
-                if (ctrl.ratesByRateType == undefined) {
-                    return "Missing rates by rate type mapping.";
-                }
-                if (ctrl.effectiveRate == undefined) {
-                    return "Missing effective rate mapping.";
+              
+                if (ctrl.rateTypeId == undefined) {
+                    return "Missing Rate Type ID.";
                 }
                 return null;
             }
