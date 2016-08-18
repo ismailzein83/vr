@@ -224,7 +224,11 @@ namespace TOne.WhS.Sales.BP.Activities
         private decimal? GetRateValue(int? rateTypeId, SaleEntityZoneRate rate)
         {
             if (!rateTypeId.HasValue)
-                return rate.Rate.NormalRate; // The rate locator ensures that rate.Rate != null
+            {
+                if (rate.Rate != null)
+                    return rate.Rate.NormalRate;
+                return null;
+            }
 
             if (rate.RatesByRateType != null)
             {

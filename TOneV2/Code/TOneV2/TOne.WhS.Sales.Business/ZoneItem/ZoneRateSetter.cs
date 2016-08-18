@@ -44,11 +44,14 @@ namespace TOne.WhS.Sales.Business
 
             if (rate != null)
             {
-                zoneItem.CurrentRateId = rate.Rate.SaleRateId;
-                zoneItem.CurrentRate = rate.Rate.NormalRate;
-                zoneItem.CurrentRateBED = rate.Rate.BED;
-                zoneItem.CurrentRateEED = rate.Rate.EED;
-                zoneItem.IsCurrentRateEditable = (rate.Source == _ownerType);
+                if (rate.Rate != null)
+                {
+                    zoneItem.CurrentRateId = rate.Rate.SaleRateId;
+                    zoneItem.CurrentRate = rate.Rate.NormalRate;
+                    zoneItem.CurrentRateBED = rate.Rate.BED;
+                    zoneItem.CurrentRateEED = rate.Rate.EED;
+                    zoneItem.IsCurrentRateEditable = (rate.Source == _ownerType);
+                }
 
                 if (rate.RatesByRateType.Count > 0)
                 {

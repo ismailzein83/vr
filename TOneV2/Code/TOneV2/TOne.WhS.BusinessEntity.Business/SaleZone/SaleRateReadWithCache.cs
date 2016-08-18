@@ -11,44 +11,58 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleRateReadWithCache : ISaleRateReader
     {
-        private DateTime effectiveOn { get; set; }
+        #region Fields / Constructors
+
+        private DateTime _effectiveOn;
+
         public SaleRateReadWithCache(DateTime effectiveOn)
         {
-            this.effectiveOn = effectiveOn;
+            this._effectiveOn = effectiveOn;
         }
+
+        #endregion
+
+        #region Public Methods
 
         public SaleRatesByZone GetZoneRates(Entities.SalePriceListOwnerType ownerType, int ownerId)
         {
             return GetCachedSaleRates(ownerType, ownerId);
         }
-        SaleRatesByZone GetCachedSaleRates(Entities.SalePriceListOwnerType ownerType, int ownerId)
+
+        #endregion
+
+        #region Private Methods
+
+        private SaleRatesByZone GetCachedSaleRates(Entities.SalePriceListOwnerType ownerType, int ownerId)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>().GetOrCreateObject(String.Format("GetSaleRates_{0}_{1}_{2:MM/dd/yy}", ownerType, ownerId, effectiveOn.Date),
-               () =>
-               {
-                   ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
-                   List<SaleRate> saleRates = dataManager.GetEffectiveSaleRates(ownerType, ownerId, this.effectiveOn);
-                   SaleRatesByZone saleRatesByZone = new SaleRatesByZone();
-                   if (saleRates != null)
-                   {
-                       IEnumerable<SaleRate> normalRates = saleRates.FindAllRecords(x => !x.RateTypeId.HasValue);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>().GetOrCreateObject(String.Format("GetSaleRates_{0}_{1}_{2:MM/dd/yy}", ownerType, ownerId, _effectiveOn.Date), () =>
+            {
+                ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+                List<SaleRate> saleRates = dataManager.GetEffectiveSaleRates(ownerType, ownerId, this._effectiveOn);
 
-                       foreach (SaleRate normalRate in normalRates)
-                       {
-                           // TODO: Consider removing this check as there should be only 1 effective normal rate per zone
-                           if (!saleRatesByZone.ContainsKey(normalRate.ZoneId))
-                           {
-                               var saleRatePriceList = new SaleRatePriceList() { Rate = normalRate };
+                SaleRatesByZone saleRatesByZone = new SaleRatesByZone();
 
-                               IEnumerable<SaleRate> otherRates = saleRates.FindAllRecords(x => x.RateTypeId.HasValue && x.ZoneId == normalRate.ZoneId);
-                               saleRatePriceList.RatesByRateType = otherRates.ToDictionary(x => x.RateTypeId.Value);
+                foreach (SaleRate saleRate in saleRates)
+                {
+                    SaleRatePriceList saleRatePriceList;
 
-                               saleRatesByZone.Add(normalRate.ZoneId, saleRatePriceList);
-                           }
-                       }
-                   }
-                   return saleRatesByZone;
-               });
+                    if (!saleRatesByZone.TryGetValue(saleRate.ZoneId, out saleRatePriceList))
+                    {
+                        saleRatePriceList = new SaleRatePriceList();
+                        saleRatePriceList.RatesByRateType = new Dictionary<int, SaleRate>();
+                        saleRatesByZone.Add(saleRate.ZoneId, saleRatePriceList);
+                    }
+
+                    if (saleRate.RateTypeId.HasValue)
+                        saleRatePriceList.RatesByRateType.Add(saleRate.RateTypeId.Value, saleRate);
+                    else
+                        saleRatePriceList.Rate = saleRate;
+                }
+
+                return saleRatesByZone;
+            });
         }
+
+        #endregion
     }
 }
