@@ -50,12 +50,18 @@ namespace TOne.WhS.BusinessEntity.Business
             SaleRatePriceList saleRatePriceList;
             if (zoneRates != null && zoneRates.TryGetValue(saleZoneId, out saleRatePriceList))
             {
-                return new SaleEntityZoneRate
+                var zoneRate = new SaleEntityZoneRate
                 {
                     Source = ownerType,
                     Rate = saleRatePriceList.Rate,
                     RatesByRateType = saleRatePriceList.RatesByRateType
                 };
+
+                zoneRate.SourcesByRateType = new Dictionary<int, SalePriceListOwnerType>();
+                foreach (KeyValuePair<int, SaleRate> kvp in zoneRate.RatesByRateType)
+                    zoneRate.SourcesByRateType.Add(kvp.Key, ownerType);
+
+                return zoneRate;
             }
             return null;
         }
@@ -64,8 +70,21 @@ namespace TOne.WhS.BusinessEntity.Business
             if (customerZoneRate != null && sellingProductZoneRate != null)
             {
                 var zoneRate = new SaleEntityZoneRate();
-                
-                zoneRate.Rate = (customerZoneRate.Rate != null) ? customerZoneRate.Rate : sellingProductZoneRate.Rate;
+
+                if (customerZoneRate.Rate != null)
+                {
+                    zoneRate.Rate = customerZoneRate.Rate;
+                    zoneRate.Source = customerZoneRate.Source;
+                }
+                else if (sellingProductZoneRate.Rate == null)
+                    throw new NullReferenceException("sellingProductZoneRate.Rate");
+                else
+                {
+                    zoneRate.Rate = sellingProductZoneRate.Rate;
+                    zoneRate.Source = sellingProductZoneRate.Source;
+                }
+
+                zoneRate.SourcesByRateType = new Dictionary<int, SalePriceListOwnerType>();
 
                 IEnumerable<SaleRate> customerOtherRates = new List<SaleRate>();
                 IEnumerable<int> customerRateTypeIds = new List<int>();
@@ -74,13 +93,19 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     customerOtherRates = customerZoneRate.RatesByRateType.Values;
                     customerRateTypeIds = customerZoneRate.RatesByRateType.MapRecords(x => x.Key);
+                    foreach (int customerRateTypeId in customerRateTypeIds)
+                        zoneRate.SourcesByRateType.Add(customerRateTypeId, customerZoneRate.Source);
                 }
 
                 IEnumerable<SaleRate> sellingProductOtherRates = new List<SaleRate>();
                 if (sellingProductZoneRate.RatesByRateType != null)
-                    sellingProductOtherRates = sellingProductZoneRate.RatesByRateType.Values;
+                {
+                    sellingProductOtherRates = sellingProductZoneRate.RatesByRateType.Values.FindAllRecords(x => !customerRateTypeIds.Contains(x.RateTypeId.Value));
+                    foreach (SaleRate sellingProductOtherRate in sellingProductOtherRates)
+                        zoneRate.SourcesByRateType.Add(sellingProductOtherRate.RateTypeId.Value, sellingProductZoneRate.Source);
+                }
 
-                var zoneOtherRates = customerOtherRates.Union(sellingProductOtherRates.FindAllRecords(x => !customerRateTypeIds.Contains(x.RateTypeId.Value)));
+                var zoneOtherRates = customerOtherRates.Union(sellingProductOtherRates);
                 zoneRate.RatesByRateType = zoneOtherRates.ToDictionary(x => x.RateTypeId.Value);
 
                 mergedZoneRate = zoneRate;
