@@ -93,11 +93,9 @@ namespace TOne.WhS.Runtime.Tasks
                 CheckThreshold(pendingCodePrefixes, codePrefixes, threshold);
             }
 
-            if (pendingCodePrefixes.Count > 0 && prefixLength >= maxPrefixLength)
-            {
+            if (pendingCodePrefixes.Count > 0)
                 foreach (KeyValuePair<string, CodePrefixInfo> item in pendingCodePrefixes)
                     codePrefixes.Add(item.Key, item.Value);
-            }
 
             DisplayDictionary(codePrefixes);
 
