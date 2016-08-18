@@ -95,16 +95,7 @@ namespace TOne.WhS.CodePreparation.Business
                 foreach (ExistingRate existingRate in existingZone.ExistingRates)
                 {
                     SalePriceList salePriceList = salePriceListManager.GetPriceList(existingRate.RateEntity.PriceListId);
-
-                    List<ExistingRate> matchedExistingRates;
-                    if (existingRatesByOwner.TryGetValue((int)salePriceList.OwnerType, salePriceList.OwnerId, out matchedExistingRates))
-                        matchedExistingRates.Add(existingRate);
-                    else
-                    {
-                        matchedExistingRates = new List<ExistingRate>();
-                        matchedExistingRates.Add(existingRate);
-                        existingRatesByOwner.Add((int)salePriceList.OwnerType, salePriceList.OwnerId, matchedExistingRates);
-                    }
+                    existingRatesByOwner.TryAddValue((int)salePriceList.OwnerType, salePriceList.OwnerId, existingRate);
                 }
             }
 
@@ -221,13 +212,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         private SaleZoneTypeEnum GetSaleZoneType(string zoneName, SaleAreaSettingsData saleAreaSettingsData)
         {
-            if (saleAreaSettingsData == null)
-                return SaleZoneTypeEnum.Fixed;
-
-            if (saleAreaSettingsData.FixedKeywords.Select(item => item.ToLower()).Any(zoneName.ToLower().Contains))
-                return SaleZoneTypeEnum.Fixed;
-
-            if (saleAreaSettingsData.MobileKeywords.Select(item => item.ToLower()).Any(zoneName.ToLower().Contains))
+            if (saleAreaSettingsData != null && saleAreaSettingsData.MobileKeywords.Select(item => item.ToLower()).Any(zoneName.ToLower().Contains))
                 return SaleZoneTypeEnum.Mobile;
 
             return SaleZoneTypeEnum.Fixed;

@@ -17,10 +17,16 @@ namespace TOne.WhS.CodePreparation.Entities
             _existingRatesByOwner = new Dictionary<string, List<ExistingRate>>();
         }
 
-        public void Add(int ownertype, int ownerId, List<ExistingRate> values)
+        public void TryAddValue(int ownertype, int ownerId, ExistingRate value)
         {
             string owner = string.Join<int>(",", new List<int>() { ownertype, ownerId });
-            _existingRatesByOwner.Add(owner, values);
+            List<ExistingRate> matchedExistingRates;
+            if (!this.TryGetValue(ownertype, ownerId, out matchedExistingRates))
+            {
+                matchedExistingRates = new List<ExistingRate>();
+                this._existingRatesByOwner.Add(owner, matchedExistingRates);
+            }
+            matchedExistingRates.Add(value);
         }
 
         public bool TryGetValue(int ownertype, int ownerId, out List<ExistingRate> value)
