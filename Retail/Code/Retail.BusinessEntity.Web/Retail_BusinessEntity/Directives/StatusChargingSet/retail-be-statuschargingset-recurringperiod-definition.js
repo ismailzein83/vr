@@ -75,7 +75,7 @@
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.extensionConfigs.push(response[i]);
                                 }
-                                if (partDefinitionSettings != undefined)
+                                if (recurringPeriodSettings != undefined)
                                     $scope.selectedExtensionConfig = utilsService.getItemByVal($scope.extensionConfigs, recurringPeriodSettings.ConfigId, 'ExtensionConfigurationId');
                                 else if ($scope.extensionConfigs.length > 0)
                                     $scope.selectedExtensionConfig = $scope.extensionConfigs[0];
