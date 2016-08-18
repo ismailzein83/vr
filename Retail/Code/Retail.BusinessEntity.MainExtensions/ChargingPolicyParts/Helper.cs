@@ -40,15 +40,15 @@ namespace Retail.BusinessEntity.MainExtensions.ChargingPolicyParts
         {
             return new Vanrise.GenericData.Pricing.RateTypeRuleContext
             {
-                NormalRate = voiceRateTypeContext.NormalRate,
-                RatesByRateType = voiceRateTypeContext.RatesByRateType,
+                //NormalRate = voiceRateTypeContext.NormalRate,
+                //RatesByRateType = voiceRateTypeContext.RatesByRateType,
                 TargetTime = voiceRateTypeContext.TargetTime
             };
         }
 
         internal static void UpdateVoiceRateTypeContext(IChargingPolicyRateTypeContext voiceRateTypeContext, Vanrise.GenericData.Pricing.RateTypeRuleContext rateTypeRuleContext)
         {
-            voiceRateTypeContext.EffectiveRate = rateTypeRuleContext.EffectiveRate;
+            //voiceRateTypeContext.EffectiveRate = rateTypeRuleContext.EffectiveRate;
             voiceRateTypeContext.RateTypeId = rateTypeRuleContext.RateTypeId;
         }
 
