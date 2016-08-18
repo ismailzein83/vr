@@ -232,10 +232,12 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-generic.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-financial.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-activation.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-personalinfo.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-residentialprofile.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeCompanyProfilePartDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeFinancialPartDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeGenericPartDefinitionTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypePersonalInfoPartDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeResidentialProfilePartDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeActivationPartDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-companyprofile.js" />

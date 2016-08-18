@@ -34,7 +34,7 @@ app.directive('retailBeAccounttypePartRuntimePersonalinfo', ["UtilsService", "VR
                 countryReadyPromiseDeferred.resolve();
             }
 
-            $scope.scopeModel.onCityyDirectiveReady = function (api) {
+            $scope.scopeModel.onCityDirectiveReady = function (api) {
                 cityDirectiveAPI = api;
                 cityReadyPromiseDeferred.resolve();
             }

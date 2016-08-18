@@ -4,8 +4,7 @@
 
     AccountEditorController.$inject = ['$scope', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountTypeAPIService', 'Retail_BE_AccountPartDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function AccountEditorController($scope, Retail_BE_AccountAPIService, Retail_BE_AccountTypeAPIService, Retail_BE_AccountPartDefinitionAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService)
-    {
+    function AccountEditorController($scope, Retail_BE_AccountAPIService, Retail_BE_AccountTypeAPIService, Retail_BE_AccountPartDefinitionAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
         var isEditMode;
         var accountId;
         var accountEntity;
@@ -25,20 +24,17 @@
         defineScope();
         load();
 
-        function loadParameters()
-        {
+        function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
-            if (parameters != undefined)
-            {
+            if (parameters != undefined) {
                 accountId = parameters.accountId;
                 parentAccountId = parameters.parentAccountId;
             }
 
             isEditMode = (accountId != undefined);
         }
-        function defineScope()
-        {
+        function defineScope() {
             $scope.scopeModel = {};
 
             $scope.scopeModel.notRequiredParts = [];
@@ -48,8 +44,7 @@
                 accountTypeSelectorReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onAccountTypeSelectionChanged = function ()
-            {
+            $scope.scopeModel.onAccountTypeSelectionChanged = function () {
                 var selectedId = accountTypeSelectorAPI.getSelectedIds();
                 if (selectedId == undefined)
                     return;
@@ -70,13 +65,11 @@
                 requiredPartsDirectiveReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.save = function ()
-            {
+            $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateAccount() : insertAccount();
             };
 
-            $scope.scopeModel.hasSaveAccountPermission = function ()
-            {
+            $scope.scopeModel.hasSaveAccountPermission = function () {
                 return (isEditMode) ? Retail_BE_AccountAPIService.HasUpdateAccountPermission() : Retail_BE_AccountAPIService.HasAddAccountPermission();
             };
 
@@ -84,12 +77,10 @@
                 $scope.modalContext.closeModal()
             };
         }
-        function load()
-        {
+        function load() {
             $scope.scopeModel.isLoading = true;
 
-            if (isEditMode)
-            {
+            if (isEditMode) {
                 getAccount().then(function () {
                     loadAllControls().finally(function () {
                         accountEntity = undefined;
@@ -116,8 +107,7 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
-        function setTitle()
-        {
+        function setTitle() {
             var title;
             if (isEditMode) {
                 var accountName = (accountEntity != undefined) ? accountEntity.Name : undefined;
@@ -137,14 +127,12 @@
                 $scope.title = title;
             }
         }
-        function loadStaticData()
-        {
+        function loadStaticData() {
             if (accountEntity == undefined)
                 return;
             $scope.scopeModel.name = accountEntity.Name;
         }
-        function loadAccountTypeSelectorWithRuntime()
-        {
+        function loadAccountTypeSelectorWithRuntime() {
             var promises = [];
 
             var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -161,15 +149,15 @@
 
             accountTypeSelectorReadyDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, accountTypeSelectorPayload, accountTypeSelectorLoadDeferred);
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
             });
 
-            if (accountEntity != undefined)
-            {
+            if (accountEntity != undefined) {
                 var runtimeLoadDeferred = UtilsService.createPromiseDeferred();
                 promises.push(runtimeLoadDeferred.promise);
 
-                accountTypeSelectedDeferred.promise.then(function ()
-                {
+                accountTypeSelectedDeferred.promise.then(function () {
                     accountTypeSelectedDeferred = undefined;
 
                     loadRuntime().then(function () {
@@ -182,8 +170,7 @@
 
             return UtilsService.waitMultiplePromises(promises);
         }
-        function loadRuntime()
-        {
+        function loadRuntime() {
             var promises = [];
             var accountTypeId = accountTypeSelectorAPI.getSelectedIds();
 
@@ -199,10 +186,8 @@
             var requiredPartDefinitions = [];
             $scope.scopeModel.notRequiredParts.length = 0;
 
-            UtilsService.waitMultiplePromises([getAccountEditorRuntimePromise, loadAccountPartDefinitionExtensionConfigsPromise]).then(function ()
-            {
-                if (accountEditorRuntime != undefined && accountEditorRuntime.Parts != null)
-                {
+            UtilsService.waitMultiplePromises([getAccountEditorRuntimePromise, loadAccountPartDefinitionExtensionConfigsPromise]).then(function () {
+                if (accountEditorRuntime != undefined && accountEditorRuntime.Parts != null) {
                     for (var i = 0; i < accountEditorRuntime.Parts.length; i++) {
                         var part = accountEditorRuntime.Parts[i];
                         if (part.IsRequired) {
@@ -237,12 +222,10 @@
                     }
                 });
             }
-            function loadRequiredPartsDirective()
-            {
+            function loadRequiredPartsDirective() {
                 var requiredPartsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                requiredPartsDirectiveReadyDeferred.promise.then(function ()
-                {
+                requiredPartsDirectiveReadyDeferred.promise.then(function () {
                     var requiredPartsDirectivePayload = {};
                     requiredPartsDirectivePayload.context = {};
                     requiredPartsDirectivePayload.context.getPartDefinitionRuntimeEditor = getPartDefinitionRuntimeEditor;
@@ -256,8 +239,7 @@
 
                 return requiredPartsDirectiveLoadDeferred.promise;
             }
-            function loadNotRequiredParts()
-            {
+            function loadNotRequiredParts() {
                 var loadPromises = [];
                 for (var i = 0; i < $scope.scopeModel.notRequiredParts.length; i++) {
                     var notRequiredPart = $scope.scopeModel.notRequiredParts[i];
@@ -266,8 +248,7 @@
                 }
                 return UtilsService.waitMultiplePromises(loadPromises);
             }
-            function buildNotRequiredPart(partDefinition)
-            {
+            function buildNotRequiredPart(partDefinition) {
                 var notRequiredPart = {};
 
                 notRequiredPart.definition = partDefinition;
@@ -288,13 +269,12 @@
                         notRequiredPart.isLoading = false;
                     });
                 };
-                
+
                 notRequiredPart.directiveLoadDeferred.promise;
 
                 return notRequiredPart;
             }
-            function isNotRequiredPartSelected(partDefinitionId)
-            {
+            function isNotRequiredPartSelected(partDefinitionId) {
                 if (accountEntity == undefined || accountEntity.Settings == null || accountEntity.Settings.Parts == null)
                     return false;
                 return (accountEntity.Settings.Parts[partDefinitionId] != null);
@@ -307,16 +287,13 @@
             return (partExtensionConfig != undefined) ? partExtensionConfig.RuntimeEditor : null;
         }
 
-        function insertAccount()
-        {
+        function insertAccount() {
             $scope.scopeModel.isLoading = true;
 
             var accountObj = buildAccountObjFromScope();
 
-            return Retail_BE_AccountAPIService.AddAccount(accountObj).then(function (response)
-            {
-                if (VRNotificationService.notifyOnItemAdded('Account', response, 'Name'))
-                {
+            return Retail_BE_AccountAPIService.AddAccount(accountObj).then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded('Account', response, 'Name')) {
                     if ($scope.onAccountAdded != undefined)
                         $scope.onAccountAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -327,16 +304,13 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
-        function updateAccount()
-        {
+        function updateAccount() {
             $scope.scopeModel.isLoading = true;
 
             var accountObj = buildAccountObjFromScope();
 
-            return Retail_BE_AccountAPIService.UpdateAccount(accountObj).then(function (response)
-            {
-                if (VRNotificationService.notifyOnItemUpdated('Account', response, 'Name'))
-                {
+            return Retail_BE_AccountAPIService.UpdateAccount(accountObj).then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated('Account', response, 'Name')) {
                     if ($scope.onAccountUpdated != undefined) {
                         $scope.onAccountUpdated(response.UpdatedObject);
                     }
@@ -348,8 +322,7 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
-        function buildAccountObjFromScope()
-        {
+        function buildAccountObjFromScope() {
             var obj = {
                 AccountId: accountId,
                 Name: $scope.scopeModel.name,
@@ -361,17 +334,15 @@
 
             if (!isEditMode) {
                 obj.ParentAccountId = parentAccountId;
-            } 
+            }
 
             return obj;
         }
-        function buildAccountParts()
-        {
+        function buildAccountParts() {
             var accountParts = {};
 
             var requiredParts = requiredPartsDirectiveAPI.getData();
-            if (requiredParts != undefined)
-            {
+            if (requiredParts != undefined) {
                 for (var key in requiredParts)
                     accountParts[key] = requiredParts[key];
             }
@@ -384,7 +355,7 @@
                     accountParts[key] = { Settings: partSettings };
                 }
             }
-            
+
             return accountParts;
         }
     }

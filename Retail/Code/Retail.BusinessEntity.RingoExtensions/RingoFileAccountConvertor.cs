@@ -90,6 +90,17 @@ namespace Retail.BusinessEntity.RingoExtensions
             FillPersonalInfoPart(accountData, accountRecords);
             FillResidentialProfilePart(accountData, accountRecords);
             FillActivationPart(accountData, accountRecords);
+            FillFinancialPart(accountData, accountRecords);
+        }
+
+        void FillFinancialPart(SourceAccountData accountData, string[] accountRecords)
+        {
+            accountData.Account.Settings.Parts.Add(AccountPartFinancial.ExtensionConfigId, new AccountPart
+            {
+                Settings = new AccountPartFinancial
+                {
+                }
+            });
         }
 
         void FillActivationPart(SourceAccountData accountData, string[] accountRecords)

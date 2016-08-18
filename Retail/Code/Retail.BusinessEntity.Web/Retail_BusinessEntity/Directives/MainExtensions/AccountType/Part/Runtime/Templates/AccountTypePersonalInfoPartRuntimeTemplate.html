@@ -10,17 +10,19 @@
         <vr-columns width="1/2row">
             <vr-textbox value="scopeModel.gender" label="Gender"></vr-textbox>
         </vr-columns>
+        <vr-columns width="1/2row">
+            <span>
+                <vr-datetimepicker label="Birth Date" type="date" value="scopeModel.dob"></vr-datetimepicker>
+            </span>
+        </vr-columns>
     </vr-row>
 
     <vr-row removeline>
         <span>
-            <vr-datetimepicker type="date" value="scopeModel.dob"></vr-datetimepicker>
+            <vr-common-country-selector selectedvalues="scopeModel.country" normal-col-num="6" onselectionchanged="scopeModel.onCountrySelectionChanged" on-ready="scopeModel.onCountryDirectiveReady" isrequired></vr-common-country-selector>
         </span>
         <span>
-            <vr-common-country-selector selectedvalues="scopeModel.country" normal-col-num="6" onselectionchanged="scopeModel.onCountrySelectionChanged" on-ready="    scopeModel.onCountryDirectiveReady" isrequired></vr-common-country-selector>
-        </span>
-        <span vr-loader="scopeModel.isLoadingCities">
-            <vr-common-city-selector normal-col-num="6" on-ready="scopeModel.onCityyDirectiveReady"></vr-common-city-selector>
+            <vr-common-city-selector normal-col-num="6" on-ready="scopeModel.onCityDirectiveReady"></vr-common-city-selector>
         </span>
 
     </vr-row>
