@@ -92,6 +92,19 @@ namespace TOne.WhS.BusinessEntity.Business
             return this.GetType();
         }
 
+        public int GetCurrencyId(SupplierRate supplierRate)
+        {
+            if (supplierRate == null)
+                throw new ArgumentNullException("supplierRate");
+            if (supplierRate.CurrencyId.HasValue)
+                return supplierRate.CurrencyId.Value;
+            var supplierPriceListManager = new SupplierPriceListManager();
+            SupplierPriceList supplierPriceList = supplierPriceListManager.GetPriceList(supplierRate.PriceListId);
+            if (supplierPriceList == null)
+                throw new NullReferenceException(String.Format("supplierPriceList (Id: {0}) does not exist for supplierRate (Id: {1})", supplierRate.SupplierRateId, supplierPriceList.PriceListId));
+            return supplierPriceList.CurrencyId;
+        }
+
         #endregion
 
         #region Private Members

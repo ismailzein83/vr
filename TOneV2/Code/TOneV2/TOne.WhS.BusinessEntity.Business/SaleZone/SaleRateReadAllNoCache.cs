@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleRateReadAllNoCache : ISaleRateReader
     {
-       
+
         #region ctor/Local Variables
         SaleRatesByOwner _allSaleRatesByOwner;
         ISaleRateDataManager _saleRateDataManager;
@@ -53,11 +54,31 @@ namespace TOne.WhS.BusinessEntity.Business
                     saleRateByZone = new SaleRatesByZone();
                     saleRatesByOwner.Add(saleRatePriceList.PriceList.OwnerId, saleRateByZone);
                 }
-                if (!saleRateByZone.ContainsKey(saleRate.ZoneId))
-                {
-                    saleRateByZone.Add(saleRate.ZoneId, saleRatePriceList);
-                }
 
+                SaleRatePriceList saleRatePriceListItem;
+                if (saleRateByZone.TryGetValue(saleRate.ZoneId, out saleRatePriceListItem))
+                {
+                    if (saleRate.RateTypeId.HasValue)
+                    {
+                        if (saleRatePriceListItem.RatesByRateType == null)
+                            saleRatePriceListItem.RatesByRateType = new Dictionary<int, SaleRate>();
+                        saleRatePriceListItem.RatesByRateType.Add(saleRate.RateTypeId.Value, saleRate);
+                    }
+                    else
+                        saleRatePriceListItem.Rate = saleRate;
+                }
+                else
+                {
+                    saleRatePriceListItem = saleRatePriceList;
+                    if (saleRate.RateTypeId.HasValue)
+                    {
+                        saleRatePriceListItem.RatesByRateType = new Dictionary<int, SaleRate>();
+                        saleRatePriceListItem.RatesByRateType.Add(saleRate.RateTypeId.Value, saleRate);
+                    }
+                    else
+                        saleRatePriceListItem.Rate = saleRate;
+                    saleRateByZone.Add(saleRate.ZoneId, saleRatePriceListItem);
+                }
             }
             return result;
         }
@@ -66,13 +87,12 @@ namespace TOne.WhS.BusinessEntity.Business
             SalePriceList priceList = _salePriceListManager.GetPriceList(saleRate.PriceListId);
             SaleRatePriceList saleRatePriceList = new SaleRatePriceList()
             {
-                PriceList = priceList,
-                Rate = saleRate
+                PriceList = priceList
             };
             return saleRatePriceList;
         }
         #endregion
 
-       
+
     }
 }

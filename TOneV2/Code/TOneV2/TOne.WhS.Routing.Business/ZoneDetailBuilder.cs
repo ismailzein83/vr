@@ -50,21 +50,20 @@ namespace TOne.WhS.Routing.Business
 
                     if (customerZoneRate != null)
                     {
-                        var saleRateManager = new SaleRateManager();
-                        int currencyId = saleRateManager.GetCurrencyId(customerZoneRate.Rate);
+                       
 
                         var output = dataTransformer.ExecuteDataTransformation(data.RouteRuleDataTransformation.CustomerTransformationId, (context) =>
                         {
                             context.SetRecordValue("CustomerId", customerInfo.CustomerId);
                             context.SetRecordValue("SaleZoneId", customerZone.SaleZoneId);
-                            context.SetRecordValue("SaleCurrencyId", currencyId);
-                            context.SetRecordValue("NormalRate", customerZoneRate.Rate.NormalRate);
-                            context.SetRecordValue("OtherRates", customerZoneRate.Rate.OtherRates);
+                            context.SetRecordValue("NormalRate", customerZoneRate.Rate);
+                            context.SetRecordValue("OtherRates", customerZoneRate.RatesByRateType);
                             context.SetRecordValue("EffectiveDate", effectiveOn);
                             context.SetRecordValue("IsEffectiveInFuture", isEffectiveInFuture);
                         });
 
                         decimal rateValue = output.GetRecordValue("EffectiveRate");
+                        int currencyId = output.GetRecordValue("SaleCurrencyId");
 
                         rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrency.CurrencyId, effectiveDate), 8);
                         var customerZoneRoutingProduct = customerZoneRoutingProductLocator.GetCustomerZoneRoutingProduct(customerInfo.CustomerId, customerSellingProduct.SellingProductId, customerZone.SaleZoneId);
@@ -112,20 +111,18 @@ namespace TOne.WhS.Routing.Business
                 foreach (var supplierRate in supplierRates)
                 {
                     var priceList = supplierPriceListManager.GetPriceList(supplierRate.PriceListId);
-                    int currencyId = supplierRate.CurrencyId.HasValue ? supplierRate.CurrencyId.Value : priceList.CurrencyId;
 
                     var output = dataTransformer.ExecuteDataTransformation(data.RouteRuleDataTransformation.SupplierTransformationId, (context) =>
                     {
                         context.SetRecordValue("SupplierId", priceList.SupplierId);
                         context.SetRecordValue("SupplierZoneId", supplierRate.ZoneId);
-                        context.SetRecordValue("SupplierCurrencyId", currencyId);
-                        context.SetRecordValue("NormalRate", supplierRate.NormalRate);
-                        context.SetRecordValue("OtherRates", supplierRate.OtherRates);
+                        context.SetRecordValue("NormalRate", supplierRate);
                         context.SetRecordValue("EffectiveDate", effectiveOn);
                         context.SetRecordValue("IsEffectiveInFuture", isEffectiveInFuture);
                     });
 
                     decimal rateValue = output.GetRecordValue("EffectiveRate");
+                    int currencyId = output.GetRecordValue("SupplierCurrencyId");
                     rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrency.CurrencyId, effectiveDate), 8);
 
                     SupplierZoneDetail supplierZoneDetail = new SupplierZoneDetail
