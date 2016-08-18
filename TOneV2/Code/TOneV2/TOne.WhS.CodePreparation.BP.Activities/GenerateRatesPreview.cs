@@ -52,22 +52,30 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 }
 
                 List<ExistingZone> connectedExistingZones = zoneToProcess.ExistingZones.GetConnectedEntities(DateTime.Today);
-                List<ExistingRate> existingRates = new List<ExistingRate>();
-
-                existingRates.AddRange(connectedExistingZones.SelectMany(item => item.ExistingRates).OrderBy(itm => itm.BED));
-                ExistingRate SystemRate = existingRates.GetSystemRate<ExistingRate>(DateTime.Today);
-
-                SalePriceList salePriceList = salePriceListManager.GetPriceList(SystemRate.RateEntity.PriceListId);
-
-                ratesPreview.Add(new RatePreview()
+              
+                if (connectedExistingZones != null)
                 {
-                    ZoneName = zoneToProcess.ZoneName,
-                    OnwerType = salePriceList.OwnerType,
-                    OwnerId = salePriceList.OwnerId,
-                    Rate = SystemRate.RateEntity.NormalRate,
-                    BED = SystemRate.BED,
-                    EED = SystemRate.EED
-                });
+                    List<ExistingRate> existingRates = new List<ExistingRate>();
+                    existingRates.AddRange(connectedExistingZones.SelectMany(item => item.ExistingRates));
+                    ExistingRate SystemRate = existingRates.GetSystemRate<ExistingRate>(DateTime.Today);
+
+                    if (SystemRate != null)
+                    {
+                        SalePriceList salePriceList = salePriceListManager.GetPriceList(SystemRate.RateEntity.PriceListId);
+
+                        ratesPreview.Add(new RatePreview()
+                        {
+                            ZoneName = zoneToProcess.ZoneName,
+                            OnwerType = salePriceList.OwnerType,
+                            OwnerId = salePriceList.OwnerId,
+                            Rate = SystemRate.RateEntity.NormalRate,
+                            BED = SystemRate.BED,
+                            EED = SystemRate.EED
+                        });
+
+                    }
+                }
+
 
             }
 

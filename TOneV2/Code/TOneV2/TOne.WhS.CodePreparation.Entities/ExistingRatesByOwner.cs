@@ -48,8 +48,8 @@ namespace TOne.WhS.CodePreparation.Entities
             string[] owner = key.Split(',');
             return new Owner()
             {
-                OwnerId = int.Parse(owner[0]),
-                OwnerType = (SalePriceListOwnerType) int.Parse(owner[1])
+                OwnerId = int.Parse(owner[1]),
+                OwnerType = (SalePriceListOwnerType) int.Parse(owner[0])
             };
         }
 
