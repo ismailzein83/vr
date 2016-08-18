@@ -99,6 +99,7 @@
     <Compile Include="Carriers\CarrierProfile\CarrierProfileQuery.cs" />
     <Compile Include="Carriers\CarrierProfile\CarrierProfile.cs" />
     <Compile Include="Carriers\Supplier\SupplierFilterSettings.cs" />
+    <Compile Include="ChangedEntity.cs" />
     <Compile Include="CodeCriteria\CodeCriteria.cs" />
     <Compile Include="CodeCriteria\ICodeCriteriaGroupContext.cs" />
     <Compile Include="CodeCriteria\CodeCriteriaGroupSettings.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Enumerations.cs" />
     <Compile Include="IBusinessEntity.cs" />
     <Compile Include="ICode.cs" />
+    <Compile Include="IExistingEntity.cs" />
     <Compile Include="IRate.cs" />
     <Compile Include="PricingRules\RuleTypes\RateType\IPricingRuleRateTypeItemContext.cs" />
     <Compile Include="PricingRules\RuleTypes\RateType\PricingRuleRateTypeItemSettings.cs" />

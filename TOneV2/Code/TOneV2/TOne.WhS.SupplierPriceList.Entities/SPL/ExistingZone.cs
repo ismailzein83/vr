@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
-    public class ExistingZone : IZone
+    public class ExistingZone : IZone, IExistingEntity
     {
         public BusinessEntity.Entities.SupplierZone ZoneEntity { get; set; }
 
@@ -44,6 +45,14 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         }
 
         public ChangedZone ChangedZone { get; set; }
+
+        public IChangedEntity ChangedEntity
+        {
+            get
+            {
+                return this.ChangedZone;
+            }
+        }
 
         public long ZoneId
         {

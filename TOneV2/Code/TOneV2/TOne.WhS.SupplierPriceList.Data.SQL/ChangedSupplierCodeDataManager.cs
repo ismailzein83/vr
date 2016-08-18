@@ -54,7 +54,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}",
-                       record.CodeId,
+                       record.EntityId,
                        _processInstanceID,
                        record.EED);
         }

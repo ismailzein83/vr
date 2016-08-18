@@ -115,7 +115,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                                 {
                                     existingRate.ChangedRate = new ChangedRate
                                     {
-                                        RateId = existingRate.RateEntity.SupplierRateId
+                                        EntityId = existingRate.RateEntity.SupplierRateId
                                     };
                                 }
                                 DateTime rateBED = existingRate.RateEntity.BED;
@@ -148,7 +148,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                         {
                             existingRate.ChangedRate = new ChangedRate
                             {
-                                RateId = existingRate.RateEntity.SupplierRateId,
+                                EntityId = existingRate.RateEntity.SupplierRateId,
                                 EED = importedRate.EED.Value 
                             };
                             importedRate.ChangedExistingRates.Add(existingRate);
@@ -160,7 +160,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                         DateTime existingRateEED = Utilities.Max(importedRate.BED, existingRate.BED);
                         existingRate.ChangedRate = new ChangedRate
                         {
-                            RateId = existingRate.RateEntity.SupplierRateId,
+                            EntityId = existingRate.RateEntity.SupplierRateId,
                             EED = existingRateEED
                         };
                         importedRate.ChangedExistingRates.Add(existingRate);

@@ -133,7 +133,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                         {
                             existingCode.ChangedCode = new ChangedCode
                                 {
-                                    CodeId = existingCode.CodeEntity.SupplierCodeId,
+                                    EntityId = existingCode.CodeEntity.SupplierCodeId,
                                     EED = importedCode.EED.Value
                                 };
                             importedCode.ChangedExistingCodes.Add(existingCode);
@@ -144,7 +144,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                     DateTime existingCodeEed = Utilities.Max(importedCode.BED, existingCode.BED);
                     existingCode.ChangedCode = new ChangedCode
                     {
-                        CodeId = existingCode.CodeEntity.SupplierCodeId,
+                        EntityId = existingCode.CodeEntity.SupplierCodeId,
                         EED = existingCodeEed
                     };
                     importedCode.ChangedExistingCodes.Add(existingCode);
@@ -294,7 +294,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                         //Only in this case closing has a meaning, otherwise no need to close the code
                         existingCode.ChangedCode = new ChangedCode
                         {
-                            CodeId = existingCode.CodeEntity.SupplierCodeId,
+                            EntityId = existingCode.CodeEntity.SupplierCodeId,
                             EED = closureDate.Value
                         };
                     }
@@ -350,7 +350,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                     {
                         existingZone.ChangedZone = new ChangedZone
                         {
-                            ZoneId = existingZone.ZoneId,
+                            EntityId = existingZone.ZoneId,
                             EED = maxCodeEED.Value
                         };
                     }
