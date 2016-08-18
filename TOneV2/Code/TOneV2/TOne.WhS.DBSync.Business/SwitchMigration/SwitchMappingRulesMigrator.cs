@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Entities;
+using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
@@ -14,6 +16,7 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
 {
     public class SwitchMappingRulesMigrator
     {
+        public static SwitchLogger Logger { get; set; }
         private string ConnectionString { get; set; }
         private List<SwitchMappingRules> SwitchMappingRules { get; set; }
         private Dictionary<string, CarrierAccount> CarrierAccounts { get; set; }
@@ -21,6 +24,15 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
         public SwitchMappingRulesMigrator(string connectionString)
         {
             ConnectionString = connectionString;
+            Logger = new SwitchLogger
+            {
+                InfoMessage = new StringBuilder(),
+                WarningMessage = new StringBuilder(),
+                InParsedMappingFailedCount = 0,
+                InParsedMappingSuccededCount = 0,
+                OutParsedMappingFailedCount = 0,
+                OutParsedMappingSuccededCount = 0
+            };
         }
         public List<SwitchMappingRules> LoadSwitches()
         {
@@ -44,11 +56,16 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
                 ? switchDictionnary[context.SwitchId]
                 : null;
 
-            if (currentSwitch == null) return;
+            if (currentSwitch == null)
+            {
+                Logger.Success = false;
+                Logger.InfoMessage.AppendLine("No matching Switch exists");
+                return;
+            }
 
             switch (context.Parser)
             {
-                case "Teles":
+                case "TOne.WhS.DBSync.Business.TelesSwitchParser":
                     TelesSwitchParser telesSwitchParser = new TelesSwitchParser(currentSwitch.Configuration);
                     telesSwitchParser.GetParsedMappings(out inParsedMappings, out outParsedMappings);
                     break;
@@ -67,7 +84,7 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             return carrierAccountManager.GetAllCarriers().Where(it => it.SourceId != null).ToDictionary(it => it.SourceId, it => it);
         }
-        private object AddGenericRule(GenericRule rule)
+        private InsertOperationOutput<GenericRuleDetail> AddGenericRule(GenericRule rule)
         {
             GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
             GenericRuleDefinition ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(176);
@@ -82,37 +99,65 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
         }
         private void MigrateToToneV2(List<InParsedMapping> inParsedMappings, List<OutParsedMapping> outParsedMappings, DateTime date, string switchId)
         {
-            Dictionary<string, CarrierAccount> carrierAccounts = GetAllCarriers();
-            Dictionary<string, Switch> switches = GetSwitches();
-            int currentSwitchId = switches.ContainsKey(switchId) ? switches[switchId].SwitchId : 0;
-            #region customer
-            foreach (var elt in inParsedMappings)
+            try
             {
-                if (elt.InTrunk.Values.Count() == 0)
-                    continue;
-                MappingRule rule = GetRule(elt.CustomerId, elt.InTrunk, currentSwitchId, date, 1);
-                AddGenericRule(rule);
-            }
-            #endregion
 
-            #region supplier
-            foreach (var elt in outParsedMappings)
+                CarrierAccounts = GetAllCarriers();
+                Dictionary<string, Switch> switches = GetSwitches();
+                int currentSwitchId;
+                if (switches.ContainsKey(switchId)) currentSwitchId = switches[switchId].SwitchId;
+                else
+                {
+                    Logger.Success = false;
+                    Logger.InfoMessage.AppendLine("No matching Switch exists");
+                    return;
+                }
+                #region customer
+                foreach (var elt in inParsedMappings)
+                {
+                    if (!elt.InTrunk.Values.Any())
+                        continue;
+                    MappingRule rule = GetRule(elt.CustomerId, elt.InTrunk, currentSwitchId, date, 1);
+                    if (rule == null) continue;
+                    var output = AddGenericRule(rule);
+                    if (output.Result == InsertOperationResult.Succeeded) Logger.InParsedMappingSuccededCount++;
+                    if (output.Result == InsertOperationResult.Failed) Logger.InParsedMappingFailedCount++;
+                }
+                #endregion
+
+                #region supplier
+                foreach (var elt in outParsedMappings)
+                {
+                    if (!elt.OutTrunk.Values.Any())
+                        continue;
+                    MappingRule rule = GetRule(elt.SupplierId, elt.OutTrunk, currentSwitchId, date, 2);
+                    if (rule == null) continue;
+                    var output = AddGenericRule(rule);
+                    if (output.Result == InsertOperationResult.Succeeded) Logger.OutParsedMappingSuccededCount++;
+                    if (output.Result == InsertOperationResult.Failed) Logger.OutParsedMappingFailedCount++;
+                }
+                #endregion
+
+            }
+            catch (Exception exc)
             {
-                if (elt.OutTrunk.Values.Count() == 0)
-                    continue;
-                MappingRule rule = GetRule(elt.SupplierId, elt.OutTrunk, currentSwitchId, date, 2);
-                AddGenericRule(rule);
+                Logger.InfoMessage.AppendLine(exc.StackTrace);
             }
-            #endregion
-
         }
         private MappingRule GetRule(string carrierId, StaticValues trunk, int currentSwitchId, DateTime date, int carrierType)
         {
+            int carrierAccountId;
+            if (CarrierAccounts.ContainsKey(carrierId)) carrierAccountId = CarrierAccounts[carrierId].CarrierAccountId;
+            else
+            {
+                Logger.WarningMessage.AppendLine(string.Format("Carrier ID {0} does not have any matching in ToneV2", carrierId));
+                return null;
+            }
             MappingRule rule = new MappingRule
             {
                 Settings = new MappingRuleSettings
                 {
-                    Value = CarrierAccounts.ContainsKey(carrierId) ? CarrierAccounts[carrierId].CarrierAccountId : 0
+                    Value = carrierAccountId
                 },
                 DefinitionId = 176,
                 Criteria = new GenericRuleCriteria
@@ -120,7 +165,7 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
                     FieldsValues = new Dictionary<string, GenericRuleCriteriaFieldValues>()
                 },
                 RuleId = 0,
-                Description = "Switch Migration - Teles Swicth",
+                Description = "Switch Migration",
                 BeginEffectiveTime = date
 
             };
@@ -134,6 +179,7 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
             };
             rule.Criteria.FieldsValues["Trunk"] = trunk;
             return rule;
+
         }
         #endregion
     }
