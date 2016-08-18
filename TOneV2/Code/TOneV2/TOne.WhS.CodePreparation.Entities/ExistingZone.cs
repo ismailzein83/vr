@@ -3,15 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.CodePreparation.Entities.Processing
 {
-    public class ExistingZone : IZone , IRuleTarget
+    public class ExistingZone : IZone, IExistingEntity, IRuleTarget
     {
         public BusinessEntity.Entities.SaleZone ZoneEntity { get; set; }
 
         public ChangedZone ChangedZone { get; set; }
+
+        public IChangedEntity ChangedEntity
+        {
+            get { return this.ChangedZone; }
+        }
 
         public long ZoneId
         {

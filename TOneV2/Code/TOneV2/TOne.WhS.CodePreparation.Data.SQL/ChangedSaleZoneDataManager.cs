@@ -34,7 +34,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}",
-                       record.ZoneId,
+                       record.EntityId,
                        _processInstanceID,
                        record.EED);
         }

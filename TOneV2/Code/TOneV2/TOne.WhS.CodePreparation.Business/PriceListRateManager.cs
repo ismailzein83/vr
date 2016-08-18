@@ -236,7 +236,7 @@ namespace TOne.WhS.CodePreparation.Business
                                 {
                                     existingRate.ChangedRate = new ChangedRate
                                     {
-                                        RateId = existingRate.RateEntity.SaleRateId
+                                        EntityId = existingRate.RateEntity.SaleRateId
                                     };
                                 }
                                 DateTime rateBED = existingRate.RateEntity.BED;
