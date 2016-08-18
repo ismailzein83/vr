@@ -112,8 +112,8 @@ namespace TOne.WhS.Runtime.Tasks
 
         void CheckThreshold(Dictionary<string, CodePrefixInfo> pendingCodePrefixes, Dictionary<string, CodePrefixInfo> codePrefixes, int threshold)
         {
-            Dictionary<string, CodePrefixInfo> temp_PendingCodePrefixes = new Dictionary<string, CodePrefixInfo>(pendingCodePrefixes);
-            foreach (KeyValuePair<string, CodePrefixInfo> item in temp_PendingCodePrefixes)
+            Dictionary<string, CodePrefixInfo> _pendingCodePrefixes = new Dictionary<string, CodePrefixInfo>(pendingCodePrefixes);
+            foreach (KeyValuePair<string, CodePrefixInfo> item in _pendingCodePrefixes)
                 if (item.Value.Count <= threshold)
                 {
                     codePrefixes.Add(item.Key, item.Value);
