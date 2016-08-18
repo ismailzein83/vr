@@ -152,7 +152,5 @@ namespace Vanrise.Reprocess.Business
             };
         }
         #endregion
-
-
     }
 }

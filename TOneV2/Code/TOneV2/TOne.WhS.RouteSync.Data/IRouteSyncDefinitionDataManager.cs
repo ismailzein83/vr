@@ -12,5 +12,9 @@ namespace TOne.WhS.RouteSync.Data
         List<RouteSyncDefinition> GetRouteSyncDefinitions();
 
         bool AreRouteSyncDefinitionsUpdated(ref object updateHandle);
+
+        bool Insert(RouteSyncDefinition routeSyncDefinitionItem, out int insertedId);
+
+        bool Update(RouteSyncDefinition routeSyncDefinitionItem);
     }
 }

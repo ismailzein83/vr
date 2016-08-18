@@ -46,7 +46,6 @@ namespace Vanrise.Reprocess.Data.SQL
             return (affectedRecords > 0);
         }
 
-
         public bool Update(ReprocessDefinition ReprocessDefinitionItem)
         {
             string serializedSettings = ReprocessDefinitionItem.Settings != null ? Vanrise.Common.Serializer.Serialize(ReprocessDefinitionItem.Settings) : null;

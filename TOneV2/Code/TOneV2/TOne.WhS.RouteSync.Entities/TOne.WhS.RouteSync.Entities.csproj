@@ -60,6 +60,9 @@
     <Compile Include="RouteEntities\ConvertedRouteBatch.cs" />
     <Compile Include="RouteEntities\RouteBatch.cs" />
     <Compile Include="RouteReader\RouteReaderConfig.cs" />
+    <Compile Include="RouteSyncDefinitionDetail.cs" />
+    <Compile Include="RouteSyncDefinitionInfo.cs" />
+    <Compile Include="RouteSyncDefinitionQuery.cs" />
     <Compile Include="RouteSyncTechnicalSettings.cs" />
     <Compile Include="Switch\SwitchInfoGetter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

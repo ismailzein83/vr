@@ -12,12 +12,41 @@ namespace TOne.WhS.RouteSync.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "RouteSyncDefinition")]
     public class RouteSyncDefinitionController : BaseAPIController
     {
+        RouteSyncDefinitionManager _manager = new RouteSyncDefinitionManager();
+
+        [HttpPost]
+        [Route("GetFilteredRouteSyncDefinitions")]
+        public object GetFilteredRouteSyncDefinitions(Vanrise.Entities.DataRetrievalInput<RouteSyncDefinitionQuery> input)
+        {
+            return GetWebResponse(input, _manager.GetFilteredRouteSyncDefinitions(input));
+        }
+
+        [HttpGet]
+        [Route("GetRouteSyncDefinition")]
+        public RouteSyncDefinition GetRouteSyncDefinition(int RouteSyncDefinitionId)
+        {
+            return _manager.GetRouteSyncDefinitionById(RouteSyncDefinitionId);
+        }
+
+        [HttpPost]
+        [Route("AddRouteSyncDefinition")]
+        public Vanrise.Entities.InsertOperationOutput<RouteSyncDefinitionDetail> AddRouteSyncDefinition(RouteSyncDefinition RouteSyncDefinitionItem)
+        {
+            return _manager.AddRouteSyncDefinition(RouteSyncDefinitionItem);
+        }
+
+        [HttpPost]
+        [Route("UpdateRouteSyncDefinition")]
+        public Vanrise.Entities.UpdateOperationOutput<RouteSyncDefinitionDetail> UpdateRouteSyncDefinition(RouteSyncDefinition RouteSyncDefinitionItem)
+        {
+            return _manager.UpdateRouteSyncDefinition(RouteSyncDefinitionItem);
+        }
+
         [HttpGet]
         [Route("GetRouteSyncDefinitionsInfo")]
         public IEnumerable<RouteSyncDefinitionInfo> GetRouteSyncDefinitionsInfo()
         {
-            RouteSyncDefinitionManager manager = new RouteSyncDefinitionManager();
-            return manager.GetRouteSyncDefinitionsInfo();
+            return _manager.GetRouteSyncDefinitionsInfo();
         }
     }
 }
