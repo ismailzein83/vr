@@ -266,6 +266,7 @@ as (select * from (values
 (3324,'WhS_Sales_SaleCode','Sale Codes',201,0,'["View"]'),
 (3325,'WhS_Sales_SaleRate','Sale Rate',201,0,'["View"]'),
 (3326,'WhS_BE_SaleZone','Sale Zone',201,0,'["View"]'),
+(3327,'WhS_BE_Generic','Generic Business Entities',201,0,'["View", "Add", "Edit"]'),
 
 (3338,'Whs_Purchase_Rules','Rules',1201,0,'["View","Add","Edit"]'),
 (3340,'WhS_BE_SupplierCode','Supplier Code',1201,0,'["View"]'),
