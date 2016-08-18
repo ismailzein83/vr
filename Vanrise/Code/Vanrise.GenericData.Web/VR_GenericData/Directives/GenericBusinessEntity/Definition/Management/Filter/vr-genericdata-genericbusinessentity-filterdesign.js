@@ -49,6 +49,7 @@ app.directive('vrGenericdataGenericbusinessentityFilterdesign', ['UtilsService',
                 api.load = function (payload) {
                     if (payload != undefined) {
                         ctrl.fields.length = 0;
+                        ctrl.selectedFields.length = 0;
                         for (var i = 0; i < payload.recordTypeFields.length; i++) {
                             var field = payload.recordTypeFields[i];
                             ctrl.fields.push({ fieldPath: field.Name, fieldTitle: field.Name });

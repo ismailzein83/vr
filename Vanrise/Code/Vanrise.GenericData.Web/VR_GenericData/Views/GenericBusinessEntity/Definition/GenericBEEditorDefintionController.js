@@ -33,6 +33,7 @@
         var editPermissionAPI;
         var editPermissionReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var recordTypeSelectedPromiseDeferred;
 
         var menuItems;
         var treeAPI;
@@ -72,19 +73,25 @@
                 var selectedDataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
 
                 if (selectedDataRecordTypeId != undefined) {
-                    getDataRecordType(selectedDataRecordTypeId).then(function () {
-                        var payload = { recordTypeFields: recordTypeEntity.Fields };
-                        var setLoader = function (value) { $scope.isLoading = value; };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, genericEditorDesignAPI, payload, setLoader, genericEditorDesignReadyPromiseDeferred);
+                    if (recordTypeSelectedPromiseDeferred != undefined)
+                        recordTypeSelectedPromiseDeferred.resolve();
+                    else
+                    {
+                        getDataRecordType(selectedDataRecordTypeId).then(function () {
+                            var payload = { recordTypeFields: recordTypeEntity.Fields };
+                            var setLoader = function (value) { $scope.isLoading = value; };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, genericEditorDesignAPI, payload, setLoader);
 
-                        var payloadGrid = { recordTypeFields: recordTypeEntity.Fields };
-                        var setLoaderGrid = function (value) { $scope.isLoading = value; };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridFieldsDirectiveAPI, payloadGrid, setLoaderGrid, gridFieldsDesignReadyPromiseDeferred);
+                            var payloadGrid = { recordTypeFields: recordTypeEntity.Fields };
+                            var setLoaderGrid = function (value) { $scope.isLoading = value; };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridFieldsDirectiveAPI, payloadGrid, setLoaderGrid);
 
-                        var payloadFilter = { recordTypeFields: recordTypeEntity.Fields };
-                        var setLoaderFilter = function (value) { $scope.isLoading = value; };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterFieldsDirectiveAPI, payloadFilter, setLoaderFilter, filterFieldsDesignReadyPromiseDeferred);
-                    });
+                            var payloadFilter = { recordTypeFields: recordTypeEntity.Fields };
+                            var setLoaderFilter = function (value) { $scope.isLoading = value; };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterFieldsDirectiveAPI, payloadFilter, setLoaderFilter);
+                            recordTypeSelectedPromiseDeferred = undefined;
+                        });
+                    }
                 }
             }
 
@@ -145,6 +152,7 @@
             if (isEditMode) {
                 getEntities().then(function () {
                     getDataRecordType(businessEntityDefinitionEntity.Settings.DataRecordTypeId).then(function () {
+                        recordTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                         loadAllControls();
                     }).catch(function () {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -188,43 +196,57 @@
                     }
                 }
                 function loadEditorDesignSection() {
-                    var loadGenericEditorDesignPromiseDeferred = UtilsService.createPromiseDeferred();
+                    if (businessEntityDefinitionEntity != undefined)
+                    {
+                        var loadGenericEditorDesignPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    genericEditorDesignReadyPromiseDeferred.promise
-                        .then(function () {
-                            var directivePayload = (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined && recordTypeEntity != undefined) ? { sections: businessEntityDefinitionEntity.Settings.EditorDesign.Sections, recordTypeFields: recordTypeEntity.Fields } : undefined
-                            genericEditorDesignReadyPromiseDeferred = undefined;
-                            VRUIUtilsService.callDirectiveLoad(genericEditorDesignAPI, directivePayload, loadGenericEditorDesignPromiseDeferred);
-                        });
+                        UtilsService.waitMultiplePromises([genericEditorDesignReadyPromiseDeferred.promise, recordTypeSelectedPromiseDeferred.promise])
 
-                    return loadGenericEditorDesignPromiseDeferred.promise;
+                            .then(function () {
+                                recordTypeSelectedPromiseDeferred = undefined;
 
+                                var directivePayload = (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined && recordTypeEntity != undefined) ?
+                                {
+                                    sections: businessEntityDefinitionEntity.Settings.EditorDesign.Sections,
+                                    recordTypeFields: recordTypeEntity.Fields
+                                } : undefined;
+                                genericEditorDesignReadyPromiseDeferred = undefined;
+                                VRUIUtilsService.callDirectiveLoad(genericEditorDesignAPI, directivePayload, loadGenericEditorDesignPromiseDeferred);
+                            });
+
+                        return loadGenericEditorDesignPromiseDeferred.promise;
+                    }
                 }
                 function loadGridDesignSection() {
-                    var loadGridDesignPromiseDeferred = UtilsService.createPromiseDeferred();
+                    if (businessEntityDefinitionEntity != undefined) {
+                        var loadGridDesignPromiseDeferred = UtilsService.createPromiseDeferred();
+                        UtilsService.waitMultiplePromises([gridFieldsDesignReadyPromiseDeferred.promise, recordTypeSelectedPromiseDeferred.promise])
 
-                    gridFieldsDesignReadyPromiseDeferred.promise
-                        .then(function () {
-                            var directivePayload = (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings.ManagementDesign != undefined && recordTypeEntity != undefined) ? { selectedColumns: businessEntityDefinitionEntity.Settings.ManagementDesign.GridDesign.Columns, recordTypeFields: recordTypeEntity.Fields } : undefined
-                            gridFieldsDesignReadyPromiseDeferred = undefined;
-                            VRUIUtilsService.callDirectiveLoad(gridFieldsDirectiveAPI, directivePayload, loadGridDesignPromiseDeferred);
-                        });
+                            .then(function () {
+                                recordTypeSelectedPromiseDeferred = undefined;
 
-                    return loadGridDesignPromiseDeferred.promise;
+                                var directivePayload = (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings.ManagementDesign != undefined && recordTypeEntity != undefined) ? { selectedColumns: businessEntityDefinitionEntity.Settings.ManagementDesign.GridDesign.Columns, recordTypeFields: recordTypeEntity.Fields } : undefined
+                                gridFieldsDesignReadyPromiseDeferred = undefined;
+                                VRUIUtilsService.callDirectiveLoad(gridFieldsDirectiveAPI, directivePayload, loadGridDesignPromiseDeferred);
+                            });
 
+                        return loadGridDesignPromiseDeferred.promise;
+                    }
                 }
                 function loadFilterDesignSection() {
-                    var loadFilterDesignPromiseDeferred = UtilsService.createPromiseDeferred();
+                    if (businessEntityDefinitionEntity != undefined) {
+                        var loadFilterDesignPromiseDeferred = UtilsService.createPromiseDeferred();
+                        UtilsService.waitMultiplePromises([filterFieldsDesignReadyPromiseDeferred.promise, recordTypeSelectedPromiseDeferred.promise])
 
-                    filterFieldsDesignReadyPromiseDeferred.promise
-                        .then(function () {
-                            var directivePayload = (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined && recordTypeEntity != undefined) ? { selectedFields: businessEntityDefinitionEntity.Settings.ManagementDesign.FilterDesign.Fields, recordTypeFields: recordTypeEntity.Fields } : undefined
-                            filterFieldsDesignReadyPromiseDeferred = undefined;
-                            VRUIUtilsService.callDirectiveLoad(filterFieldsDirectiveAPI, directivePayload, loadFilterDesignPromiseDeferred);
-                        });
+                            .then(function () {
+                                recordTypeSelectedPromiseDeferred = undefined;
+                                var directivePayload = (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined && recordTypeEntity != undefined) ? { selectedFields: businessEntityDefinitionEntity.Settings.ManagementDesign.FilterDesign.Fields, recordTypeFields: recordTypeEntity.Fields } : undefined
+                                filterFieldsDesignReadyPromiseDeferred = undefined;
+                                VRUIUtilsService.callDirectiveLoad(filterFieldsDirectiveAPI, directivePayload, loadFilterDesignPromiseDeferred);
+                            });
 
-                    return loadFilterDesignPromiseDeferred.promise;
-
+                        return loadFilterDesignPromiseDeferred.promise;
+                    }
                 }
                 function loadDataRecordTypeSelector() {
                     var loadDataRecordTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
