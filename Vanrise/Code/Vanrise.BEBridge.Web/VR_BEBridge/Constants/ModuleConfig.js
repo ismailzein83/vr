@@ -1,3 +1,3 @@
-﻿app.constant('VR_Bridge_ModuleConfig', {
-    moduleName: "VR_Bridge"
+﻿app.constant('VR_BEBridge_ModuleConfig', {
+    moduleName: "VR_BEBridge"
 });

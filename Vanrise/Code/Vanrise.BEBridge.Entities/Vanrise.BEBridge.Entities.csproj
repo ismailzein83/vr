@@ -43,8 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BEReceiveDefinition.cs" />
-    <Compile Include="BEReceiveDefinitionSettings.cs" />
+    <Compile Include="BEReceiveDefinition\BEReceiveDefinition.cs" />
+    <Compile Include="BEReceiveDefinition\BEReceiveDefinitionInfo.cs" />
+    <Compile Include="BEReceiveDefinition\BEReceiveDefinitionSettings.cs" />
     <Compile Include="ITargetBE.cs" />
     <Compile Include="SourceBEs\FileSourceBatch.cs" />
     <Compile Include="TargetBEConvertor.cs" />

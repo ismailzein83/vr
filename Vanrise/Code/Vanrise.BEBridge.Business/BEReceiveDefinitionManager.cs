@@ -16,7 +16,11 @@ namespace Vanrise.BEBridge.Business
         {
             var allBEReceiveDefinitions = GetCachedBEReceiveDefinitions();
             return allBEReceiveDefinitions.GetRecord(id);
+        }
 
+        public IEnumerable<BEReceiveDefinitionInfo> GetBEReceiveDefinitionsInfo()
+        {
+            return GetCachedBEReceiveDefinitions().MapRecords(BEReceiveDefinitionInfoMapper);
         }
 
         #endregion
@@ -31,6 +35,15 @@ namespace Vanrise.BEBridge.Business
                    IEnumerable<BEReceiveDefinition> carrierAccounts = dataManager.GetBEReceiveDefinitions();
                    return carrierAccounts.ToDictionary(kvp => kvp.BEReceiveDefinitionId, kvp => kvp);
                });
+        }
+
+        BEReceiveDefinitionInfo BEReceiveDefinitionInfoMapper(BEReceiveDefinition beDefinition)
+        {
+            return new BEReceiveDefinitionInfo
+            {
+                Id = beDefinition.BEReceiveDefinitionId,
+                Name = beDefinition.Name
+            };
         }
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager

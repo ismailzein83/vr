@@ -121,9 +121,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BERecieveDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.BEBridge.Business\Vanrise.BEBridge.Business.csproj">
+      <Project>{3bb5b698-9767-49c7-b9cc-5b1418870a8a}</Project>
+      <Name>Vanrise.BEBridge.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.BEBridge.Data.SQL\Vanrise.BEBridge.Data.SQL.csproj">
+      <Project>{62ea9ef9-12ff-4e59-a556-fa5ada77ae92}</Project>
+      <Name>Vanrise.BEBridge.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.BEBridge.Data\Vanrise.BEBridge.Data.csproj">
+      <Project>{a79af111-5831-41c7-bac8-e31fb96c3a0f}</Project>
+      <Name>Vanrise.BEBridge.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.BEBridge.Entities\Vanrise.BEBridge.Entities.csproj">
+      <Project>{9e370ac3-9718-4e10-ab12-b71605880d67}</Project>
+      <Name>Vanrise.BEBridge.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.BEBridge.MainExtensions\Vanrise.BEBridge.MainExtensions.csproj">
+      <Project>{b5a56148-0dd1-4bc5-9357-72d289c6f863}</Project>
+      <Name>Vanrise.BEBridge.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
@@ -131,11 +152,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_BEBridge\Constants\ModuleConfig.js" />
+    <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\vr-bebridge-berecievedefinition-selector.js" />
+    <Content Include="VR_BEBridge\Directives\ProcessInput\Normal\Templates\BEBridgeProcessManualTemplate.html" />
+    <Content Include="VR_BEBridge\Directives\ProcessInput\Normal\vr-bebridge-process-manual.js" />
+    <Content Include="VR_BEBridge\Directives\ProcessInput\Scheduled\Templates\BEBridgeProcessScheduledTemplate.html" />
+    <Content Include="VR_BEBridge\Directives\ProcessInput\Scheduled\vr-bebridge-process-scheduled.js" />
+    <Content Include="VR_BEBridge\Services\APIServices\BERecieveDefinitionAPIService.js" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="VR_BEBridge\Directives\" />
-    <Folder Include="VR_BEBridge\Services\APIServices\" />
+    <Folder Include="VR_BEBridge\Directives\BEReceiveDefinition\Templates\" />
     <Folder Include="VR_BEBridge\Views\" />
   </ItemGroup>
   <PropertyGroup>
