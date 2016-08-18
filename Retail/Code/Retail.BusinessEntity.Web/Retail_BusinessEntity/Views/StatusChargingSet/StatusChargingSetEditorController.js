@@ -56,7 +56,6 @@
                         for (var j = 0; j < $scope.scopeModel.items.length; j++) {
                             var tempItem = $scope.scopeModel.items[j];
                             if (tempItem != undefined) {
-                                
                                 SetRecuringPeriodDefinitions(tempItem);
                             }
                         }
@@ -79,14 +78,10 @@
 
 
         function SetRecuringPeriodDefinitions(tempItem) {
-
             tempItem.chargingSetPeriodDefinitionDirectiveReady = function (api) {
                 tempItem.APItemp = api;
                 api.load();
             }
-      
-
-
         }
         function load() {
             $scope.scopeModel.isLoading = true;
