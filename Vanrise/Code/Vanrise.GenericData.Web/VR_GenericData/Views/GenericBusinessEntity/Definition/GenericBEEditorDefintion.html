@@ -53,6 +53,30 @@
                        <vr-genericdata-genericbusinessentity-filterdesign on-ready="scopeModal.onFilterFieldDesignReady"></vr-genericdata-genericbusinessentity-filterdesign>
                     </vr-row>
                 </vr-tab>
+                <vr-tab header="'Security'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-section title="View">
+                                <vr-sec-requiredpermission-grid on-ready="scopeModal.onViewRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-section title="Add">
+                                <vr-sec-requiredpermission-grid on-ready="scopeModal.onAddRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-section title="Edit">
+                                <vr-sec-requiredpermission-grid on-ready="scopeModal.onEditRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+
             </vr-tabs>
         </vr-form>
     </vr-modalbody>

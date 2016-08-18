@@ -2,9 +2,9 @@
     
     'use strict';
 
-    GenericBusinessEntityManagementController.$inject = ['$scope', 'VR_GenericData_GenericUIRuntimeAPIService', 'VR_GenericData_GenericBusinessEntityService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    GenericBusinessEntityManagementController.$inject = ['$scope', 'VR_GenericData_GenericUIRuntimeAPIService', 'VR_GenericData_GenericBusinessEntityService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityAPIService'];
 
-    function GenericBusinessEntityManagementController($scope, VR_GenericData_GenericUIRuntimeAPIService, VR_GenericData_GenericBusinessEntityService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function GenericBusinessEntityManagementController($scope, VR_GenericData_GenericUIRuntimeAPIService, VR_GenericData_GenericBusinessEntityService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_GenericData_GenericBusinessEntityAPIService) {
 
         var definitionId;
 
@@ -38,7 +38,9 @@
                 gridDirectiveAPI = api;
                 gridDirectiveReadyDeferred.resolve();
             };
-
+            $scope.hasAddBusinessEntityPermission = function () {
+                return VR_GenericData_GenericBusinessEntityAPIService.DoesUserHaveAddAccess(definitionId);
+            }
             $scope.search = function () {
                 return gridDirectiveAPI.load(getGridDirectivePayload(true));
             };

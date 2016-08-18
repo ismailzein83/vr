@@ -11,7 +11,9 @@
             GetFilteredGenericBusinessEntities: GetFilteredGenericBusinessEntities,
             GetGenericBusinessEntity: GetGenericBusinessEntity,
             AddGenericBusinessEntity: AddGenericBusinessEntity,
+            DoesUserHaveAddAccess:DoesUserHaveAddAccess,
             UpdateGenericBusinessEntity: UpdateGenericBusinessEntity,
+            DoesUserHaveEditAccess: DoesUserHaveEditAccess,
             GetGenericBusinessEntityInfo: GetGenericBusinessEntityInfo,
             GetBusinessEntityTitle: GetBusinessEntityTitle,
             DeleteGenericBusinessEntity: DeleteGenericBusinessEntity
@@ -36,9 +38,20 @@
         function AddGenericBusinessEntity(genericBusinessEntity) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'AddGenericBusinessEntity'), genericBusinessEntity);
         }
-
+        function DoesUserHaveAddAccess(businessEntityDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'DoesUserHaveAddAccess'), {
+                businessEntityDefinitionId: businessEntityDefinitionId
+            });
+        }
         function UpdateGenericBusinessEntity(genericBusinessEntity) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'UpdateGenericBusinessEntity'), genericBusinessEntity);
+        }
+        function DoesUserHaveEditAccess(businessEntityDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'DoesUserHaveEditAccess'), {
+                businessEntityDefinitionId: businessEntityDefinitionId
+            }, {
+                useCache: true
+            });
         }
 
         function GetBusinessEntityTitle(businessEntityDefinitionId, genericBussinessEntityId) {

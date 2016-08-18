@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public interface IGenericBusinessEntityManager : IBusinessManager
+    public interface IBusinessEntityDefinitionManager : IBusinessManager
     {
-        int GetDataRecordTypeId(int businessEntityDefinitionId);
-
+        bool DoesUserHaveViewAccess(int userId, int businessEntityDefinitionId);
     }
 }

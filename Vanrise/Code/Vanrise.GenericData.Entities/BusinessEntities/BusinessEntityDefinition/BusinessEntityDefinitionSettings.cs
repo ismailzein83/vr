@@ -16,5 +16,7 @@ namespace Vanrise.GenericData.Entities
         public virtual string DefinitionEditor { get; set; }
 
         public virtual string IdType { get; set; }
+        public GenericRuleDefinitionSecurity Security { get; set; }
+
     }
 }

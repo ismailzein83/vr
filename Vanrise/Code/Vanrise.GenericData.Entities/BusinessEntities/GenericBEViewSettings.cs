@@ -14,5 +14,11 @@ namespace Vanrise.GenericData.Entities
         {
             return String.Format("#/viewwithparams/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityManagement/{{\"businessEntityDefinitionId\":\"{0}\"}}", this.BusinessEntityDefinitionId);
         }
+
+        public override bool DoesUserHaveAccess(Security.Entities.IViewUserAccessContext context)
+        {
+
+            return BusinessManagerFactory.GetManager<IBusinessEntityDefinitionManager>().DoesUserHaveViewAccess(context.UserId, this.BusinessEntityDefinitionId);
+        }
     }
 }

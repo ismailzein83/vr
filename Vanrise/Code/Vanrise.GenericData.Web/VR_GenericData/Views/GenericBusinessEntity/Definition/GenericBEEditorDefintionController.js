@@ -24,6 +24,15 @@
         var filterFieldsDirectiveAPI;
         var filterFieldsDesignReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var viewPermissionAPI;
+        var viewPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var addPermissionAPI;
+        var addPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var editPermissionAPI;
+        var editPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
 
         var menuItems;
         var treeAPI;
@@ -83,7 +92,18 @@
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyPromiseDeferred.resolve();
             }
-
+            $scope.scopeModal.onViewRequiredPermissionReady = function (api) {
+                viewPermissionAPI = api;
+                viewPermissionReadyDeferred.resolve();
+            }
+            $scope.scopeModal.onAddRequiredPermissionReady = function (api) {
+                addPermissionAPI = api;
+                addPermissionReadyDeferred.resolve();
+            }
+            $scope.scopeModal.onEditRequiredPermissionReady = function (api) {
+                editPermissionAPI = api;
+                editPermissionReadyDeferred.resolve();
+            }
             $scope.scopeModal.SaveGenericBEEditor = function () {
                 if (isEditMode) {
                     return update();
@@ -142,7 +162,7 @@
             }
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadEditorDesignSection, setTitle, loadDataRecordTypeSelector, loadGridDesignSection, loadFilterDesignSection, loadTree]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadEditorDesignSection, setTitle, loadDataRecordTypeSelector, loadGridDesignSection, loadFilterDesignSection, loadTree, loadViewRequiredPermission, loadAddRequiredPermission, loadEditRequiredPermission]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModal.isLoading = false;
@@ -248,6 +268,58 @@
                     }
                 }
 
+                function loadViewRequiredPermission() {
+                    var viewPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    viewPermissionReadyDeferred.promise.then(function () {
+                        var payload;
+
+                        if (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings!=undefined  && businessEntityDefinitionEntity.Settings.Security != undefined && businessEntityDefinitionEntity.Settings.Security.ViewRequiredPermission != null) {
+                            payload = {
+                                data: businessEntityDefinitionEntity.Settings.Security.ViewRequiredPermission
+                            };
+                        }
+
+                        VRUIUtilsService.callDirectiveLoad(viewPermissionAPI, payload, viewPermissionLoadDeferred);
+                    });
+
+                    return viewPermissionLoadDeferred.promise;
+                }
+                function loadAddRequiredPermission() {
+                    var addPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    addPermissionReadyDeferred.promise.then(function () {
+                        var payload;
+
+                        if (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined && businessEntityDefinitionEntity.Settings.Security != undefined && businessEntityDefinitionEntity.Settings.Security.AddRequiredPermission != null) {
+                            payload = {
+                                data: businessEntityDefinitionEntity.Settings.Security.AddRequiredPermission
+                            };
+                        }
+
+                        VRUIUtilsService.callDirectiveLoad(addPermissionAPI, payload, addPermissionLoadDeferred);
+                    });
+
+                    return addPermissionLoadDeferred.promise;
+                }
+                function loadEditRequiredPermission() {
+                    var editPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    editPermissionReadyDeferred.promise.then(function () {
+                        var payload;
+
+                        if (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined && businessEntityDefinitionEntity.Settings.Security != undefined && businessEntityDefinitionEntity.Settings.Security.EditRequiredPermission != null) {
+                            payload = {
+                                data: businessEntityDefinitionEntity.Settings.Security.EditRequiredPermission
+                            };
+                        }
+
+                        VRUIUtilsService.callDirectiveLoad(editPermissionAPI, payload, editPermissionLoadDeferred);
+                    });
+
+                    return editPermissionLoadDeferred.promise;
+              }
+
 
             }
 
@@ -285,13 +357,18 @@
                 ManagementDesign: {
                     GridDesign:gridFieldsDirectiveAPI.getData(),
                     FilterDesign:filterFieldsDirectiveAPI.getData()
+                },
+                Security: {
+                    ViewRequiredPermission: viewPermissionAPI.getData(),
+                    AddRequiredPermission:  addPermissionAPI.getData(),
+                    EditRequiredPermission: editPermissionAPI.getData()
                 }
             };
             var bEdefinition = {
                 BusinessEntityDefinitionId :businessEntityDefinitionId,
                 Name: $scope.scopeModal.businessEntityName,
                 Title: $scope.scopeModal.businessEntityTitle,
-                Settings:genericBEDefinitionSettings
+                Settings: genericBEDefinitionSettings
             };
             return bEdefinition;
         }

@@ -68,13 +68,14 @@
             function setMenuActions() {
                 ctrl.menuActions = [{
                     name: 'Edit',
-                    clicked: editGenericBusinessEntity
-                }, {
-                    name: 'Delete',
-                    clicked: deleteGenericBusinessEntity
+                    clicked: editGenericBusinessEntity,
+                    haspermission: hasEditGenericBEPermission
                 }];
             }
 
+            function hasEditGenericBEPermission(genericBusinessEntity) {
+                return VR_GenericData_GenericBusinessEntityAPIService.DoesUserHaveEditAccess(genericBusinessEntity.Entity.BusinessEntityDefinitionId);
+            }
             function editGenericBusinessEntity(genericBusinessEntity) {
                 var onGenericBusinessEntityUpdated = function (updatedGenericBusinessEntity) {
                     gridAPI.itemUpdated(updatedGenericBusinessEntity);
