@@ -53,13 +53,14 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
---(1214,'Business Intelligence',null,null,'/images/menu-icons/busines intel.png',6,1),
---(1502,'Configuration Rules',null,101,null,6,1),
---(1503,'Subscriber Management',null,101,null,4,1),
---(1504,'Tariff Management',null,101,null,5,1),
---(1505,'Network Elements',null,101,null,2,0),
---(1506,'Billing',null,null,'/images/menu-icons/billing.png',4,0),
-(1507,'Reports',null,null,'/images/menu-icons/NOC.png',5,null)
+(1214,'Business Intelligence',null,null,'/images/menu-icons/busines intel.png',6,1),
+(1502,'Configuration Rules',null,101,null,6,1),
+(1503,'Subscriber Management',null,101,null,4,1),
+(1504,'Tariff Management',null,101,null,5,1),
+(1505,'Network Elements',null,101,null,2,0),
+(1506,'Billing',null,null,'/images/menu-icons/billing.png',4,0),
+(1507,'Reports',null,null,'/images/menu-icons/NOC.png',5,0),
+(1508,'Entities Definition',null,1,null,55,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -80,33 +81,41 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
---(7005,'Accounts','Accounts Management','#/view/Retail_BusinessEntity/Views/Account/AccountManagement',1503,'Retail_BE/Account/GetFilteredAccounts',null,null,null,0,2),
---(7008,'Packages','Packages Management','#/view/Retail_BusinessEntity/Views/Package/PackageManagement',1504,'Retail_BE/Package/GetFilteredPackages',null,null,null,0,3),
---(7010,'Charging Policies','Charging Policies Management','#/view/Retail_BusinessEntity/Views/ChargingPolicy/ChargingPolicyManagement',1504,'Retail_BE/ChargingPolicy/GetFilteredChargingPolicies',null,null,null,0,2),
---(12002,'Code Groups','Code Groups','#/view/WhS_BusinessEntity/Views/CodeGroup/CodeGroupManagement',102,'WhS_BE/CodeGroup/GetFilteredCodeGroups',null,null,null,0,6),
---(12012,'Sale Zones','Sale Zones','#/view/WhS_BusinessEntity/Views/SaleZone/SaleZoneManagement',102,'WhS_BE/SaleZone/GetFilteredSaleZones',null,null,null,0,9),
---(12013,'Sale Codes','Sale Codes','#/view/WhS_BusinessEntity/Views/SaleCode/SaleCodeManagement',102,'WhS_BE/SaleCode/GetFilteredSaleCodes',null,null,null,0,10),
---(12017,'Selling Number Plans','Selling Number Plans','#/view/WhS_BusinessEntity/Views/SellingNumberPlan/SellingNumberPlanManagement',102,'WhS_BE/SellingNumberPlan/GetFilteredSellingNumberPlans',null,null,null,0,8),
---(15001,'Tables','Analytic Table Management','#/view/Analytic/Views/GenericAnalytic/Definition/AnalyticTableManagement',1501,null,null,null,null,0,2),
---(15002,'Reports','Analytic Report Management','#/view/Analytic/Views/GenericAnalytic/Definition/AnalyticReportManagement',1501,null,null,null,null,0,3),
---(15003,'Voice Subscriber Identification','Voice Subscriber Identification',null,1502,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":1}',101,3),
---(15004,'Service Types','Service Type Management','#/view/Retail_BusinessEntity/Views/ServiceType/ServiceTypeManagement',3,null,null,null,null,0,8),
---(15006,'Data Subscriber Identification','Data Subscriber Identification',null,1502,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":3}',101,4),
-(15007,'EDR Log','EDR Log',null,1507,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":1,"TypeId":13}',202,2)
---(15010,'Service Levels','Service Levels',null,102,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":21}',0,2),
---(15011,'Off-Net Traffic Types','Off-Net Traffic Types',null,102,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":22}',0,4),
---(15019,'Event Log','Event Log',null,1507,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":2,"TypeId":13}',202,3),
---(15020,'Areas','Areas',null,102,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":23}',0,13),
---(15021,'Interconnect Operators','Interconnect Operators',null,102,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":24}',0,3),
---(15022,'Overall Dashboard','Overall Dashboard',null,1214,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":3,"TypeId":4}',202,2),
---(15023,'Switches','Switches','#/view/Retail_BusinessEntity/Views/Switch/SwitchManagement',1505,'',null,null,null,0,3),
---(15024,'Service Level Identification','Service Level Identification',null,1502,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":13}',101,2),
---(15025,'NAS Devices','NAS Devices',null,1505,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":25}',0,2),
---(15026,'Billing Transactions','Billing Transactions','#/viewwithparams/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityManagement/{"businessEntityDefinitionId":"26"}',1506,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":26}',0,4),
---(15027,'Invoices','Invoices',null,1506,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":27}',0,5),
---(15028,'Account Balance','Account Balance',null,1506,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":28}',0,2),
---(15029,'Billing Actions','Billing Actions',null,1506,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":29}',0,3),
---(15030,'Voice Dashboard','Voice Dashboard',null,1214,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":4,"TypeId":4}',202,3)
+(7005,'Accounts','Accounts','#/view/Retail_BusinessEntity/Views/Account/AccountManagement',1503,'Retail_BE/Account/GetFilteredAccounts',null,null,null,0,2),
+(7008,'Packages','Packages Management','#/view/Retail_BusinessEntity/Views/Package/PackageManagement',1504,'Retail_BE/Package/GetFilteredPackages',null,null,null,0,3),
+(7010,'Charging Policies','Charging Policies Management','#/view/Retail_BusinessEntity/Views/ChargingPolicy/ChargingPolicyManagement',1504,'Retail_BE/ChargingPolicy/GetFilteredChargingPolicies',null,null,null,0,2),
+(12002,'Code Groups','Code Groups','#/view/WhS_BusinessEntity/Views/CodeGroup/CodeGroupManagement',102,'WhS_BE/CodeGroup/GetFilteredCodeGroups',null,null,null,0,6),
+(12012,'Sale Zones','Sale Zones','#/view/WhS_BusinessEntity/Views/SaleZone/SaleZoneManagement',102,'WhS_BE/SaleZone/GetFilteredSaleZones',null,null,null,0,8),
+(12013,'Sale Codes','Sale Codes','#/view/WhS_BusinessEntity/Views/SaleCode/SaleCodeManagement',102,'WhS_BE/SaleCode/GetFilteredSaleCodes',null,null,null,0,9),
+(12017,'Selling Number Plans','Selling Number Plans','#/view/WhS_BusinessEntity/Views/SellingNumberPlan/SellingNumberPlanManagement',102,'WhS_BE/SellingNumberPlan/GetFilteredSellingNumberPlans',null,null,null,0,7),
+(15001,'Tables','Analytic Table Management','#/view/Analytic/Views/GenericAnalytic/Definition/AnalyticTableManagement',1501,'VR_Analytic/AnalyticTable/GetFilteredAnalyticTables',null,null,null,0,2),
+(15002,'Reports','Analytic Report Management','#/view/Analytic/Views/GenericAnalytic/Definition/AnalyticReportManagement',1501,'VR_Analytic/AnalyticReport/GetFilteredAnalyticReports',null,null,null,0,3),
+(15003,'Voice Subscriber Identification','Voice Subscriber Identification',null,1502,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":1}',101,3),
+(15004,'Service Types','Service Type Management','#/view/Retail_BusinessEntity/Views/ServiceType/ServiceTypeManagement',1508,null,null,null,null,0,5),
+(15006,'Data Subscriber Identification','Data Subscriber Identification',null,1502,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":3}',101,4),
+(15007,'EDR Log','EDR Log',null,1507,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":1,"TypeId":13}',202,2),
+(15010,'Service Levels','Service Levels',null,102,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":21}',0,2),
+(15011,'Off-Net Traffic Types','Off-Net Traffic Types',null,102,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":22}',0,4),
+(15019,'Event Log','Event Log',null,1507,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":2,"TypeId":13}',202,3),
+(15020,'Areas','Areas',null,102,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":23}',0,11),
+(15021,'Interconnect Operators','Interconnect Operators',null,102,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":24}',0,3),
+(15022,'Overall Dashboard','Overall Dashboard',null,1214,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":3,"TypeId":4}',202,2),
+(15023,'Switches','Switches','#/view/Retail_BusinessEntity/Views/Switch/SwitchManagement',1505,'',null,null,null,0,3),
+(15024,'Service Level Identification','Service Level Identification',null,1502,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":13}',101,2),
+(15025,'NAS Devices','NAS Devices',null,1505,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":25}',0,2),
+(15026,'Billing Transactions','Billing Transactions','#/viewwithparams/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityManagement/{"businessEntityDefinitionId":"26"}',1506,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":26}',0,4),
+(15027,'Invoices','Invoices',null,1506,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":27}',0,5),
+(15028,'Account Balance','Account Balance',null,1506,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":28}',0,2),
+(15029,'Billing Actions','Billing Actions',null,1506,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":29}',0,3),
+(15030,'Voice Dashboard','Voice Dashboard',null,1214,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":4,"TypeId":4}',202,3),
+(15031,'Account Types','Account Types','#/view/Retail_BusinessEntity/Views/AccountType/AccountTypeManagement',1508,null,null,null,null,0,4),
+(15032,'Tenants','Tenants','#/view/Security/Views/Tenant/TenantManagement',2,'VR_Sec/Tenants/GetFilteredTenants',null,null,null,0,5),
+(15033,'Account Parts','Account Parts','#/view/Retail_BusinessEntity/Views/AccountPartDefinition/AccountPartDefinitionManagement',1508,null,null,null,null,0,7),
+(15035,'Status Definitions','Status Definitions','#/view/Retail_BusinessEntity/Views/Status/StatusDefinitionManagement',1508,null,null,null,null,0,6),
+(15036,'Action Definitions','Action Definitions','#/view/Retail_BusinessEntity/Views/Action/Definition/ActionDefinitionManagement',1508,null,null,null,null,0,8),
+(15042,'Style Definitions','Style Definitions','#/view/Common/Views/StyleDefinition/StyleDefinitionManagement',1508,null,null,null,null,0,9),
+(15043,'Balance Alert Rule','Balance Alert Rule',null,101,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":14}',101,4),
+(15045,'Credit Classes','Credit Classes','#/view/Retail_BusinessEntity/Views/CreditClass/CreditClassManagement',101,null,null,null,null,0,3)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
