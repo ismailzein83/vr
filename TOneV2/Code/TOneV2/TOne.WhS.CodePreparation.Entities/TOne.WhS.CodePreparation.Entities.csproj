@@ -68,6 +68,7 @@
     <Compile Include="NewData\CodeToAdd.cs" />
     <Compile Include="NewData\CodeToClose.cs" />
     <Compile Include="NewData\CodeToMove.cs" />
+    <Compile Include="NewZoneRateEntity.cs" />
     <Compile Include="Owner.cs" />
     <Compile Include="PreviewData\NotImportedCode.cs" />
     <Compile Include="PreviewData\NotImportedZone.cs" />

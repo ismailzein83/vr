@@ -35,20 +35,38 @@ namespace TOne.WhS.CodePreparation.Entities
             return _existingRatesByOwner.TryGetValue(owner, out value);
         }
 
-        public IEnumerable<Owner> GetOwners()
+        public Dictionary<string, List<ExistingRate>>.Enumerator GetEnumerator()
         {
-            List<Owner> owners = new List<Owner>();
-            foreach (string key in _existingRatesByOwner.Keys)
-            {
-                string[] owner = key.Split(',');
-                owners.Add(new Owner()
-                {
-                    OwnerType = int.Parse(owner[0]),
-                    OwnerId = int.Parse(owner[1])
-                });
-            }
-            return owners;
+            return this._existingRatesByOwner.GetEnumerator();
         }
+
+        public Owner GetOwner(string key)
+        {
+            if (key == null)
+                throw new NullReferenceException("key");
+
+            string[] owner = key.Split(',');
+            return new Owner()
+            {
+                OwnerId = int.Parse(owner[0]),
+                OwnerType = (SalePriceListOwnerType) int.Parse(owner[1])
+            };
+        }
+
+        //public IEnumerable<Owner> GetOwners()
+        //{
+        //    List<Owner> owners = new List<Owner>();
+        //    foreach (string key in _existingRatesByOwner.Keys)
+        //    {
+        //        string[] owner = key.Split(',');
+        //        owners.Add(new Owner()
+        //        {
+        //            OwnerType = int.Parse(owner[0]),
+        //            OwnerId = int.Parse(owner[1])
+        //        });
+        //    }
+        //    return owners;
+        //}
    
     }
 }

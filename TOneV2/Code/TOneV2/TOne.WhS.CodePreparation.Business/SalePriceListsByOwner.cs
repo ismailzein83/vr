@@ -19,9 +19,9 @@ namespace TOne.WhS.CodePreparation.Business
         }
         public PriceListToAdd TryAddValue(PriceListToAdd salePriceList)
         {
+            string owner = string.Join<int>(",", new List<int>() { (int)salePriceList.OwnerType, salePriceList.OwnerId });
             lock (_salePriceListsByOwner)
             {
-                string owner = string.Join<int>(",", new List<int>() { (int)salePriceList.OwnerType, salePriceList.OwnerId });
                 PriceListToAdd priceList;
                 if(this._salePriceListsByOwner.TryGetValue(owner , out priceList))
                 {

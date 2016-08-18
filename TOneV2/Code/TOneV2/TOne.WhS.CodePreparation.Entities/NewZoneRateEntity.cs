@@ -7,9 +7,14 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.CodePreparation.Entities
 {
-    public class Owner
+    public class NewZoneRateEntity
     {
-        public SalePriceListOwnerType OwnerType { get; set; }
         public int OwnerId { get; set; }
+
+        public SalePriceListOwnerType OwnerType { get; set; }
+
+        public decimal Rate { get; set; }
+
+        public int CurrencyId { get; set; }
     }
 }
