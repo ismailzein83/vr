@@ -51,6 +51,16 @@ namespace TOne.WhS.RouteSync.BP.Activities
             int totalBatchesConverted = 0;
             long totalRoutesConverted = 0;
             var switchInProcess = inputArgument.SwitchInProcess;
+
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                bool hasItem = false;
+                do
+                {
+
+                } while (!ShouldStop(handle) && hasItem);
+            });
+
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;

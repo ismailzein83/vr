@@ -21,6 +21,8 @@ namespace TOne.WhS.RouteSync.BP.Activities
         {
             RouteSyncDefinitionManager routeSyncDefinitionManager = new RouteSyncDefinitionManager();
             RouteSyncDefinition routeSyncDefinition = routeSyncDefinitionManager.GetRouteSyncDefinitionById(RouteSyncDefinitionId.Get(context));
+            if (routeSyncDefinition == null)
+                throw new NullReferenceException("routeSyncDefinition");
             RouteSyncDefinition.Set(context, routeSyncDefinition);
         }
     }

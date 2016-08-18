@@ -160,10 +160,11 @@
     <Content Include="WhS_RouteSync\Services\APIServices\SwitchRouteSynchronizerAPIService.js" />
     <Content Include="WhS_RouteSync\Services\RouteSyncDefinitionService.js" />
     <Content Include="WhS_RouteSync\Services\SwitchRouteSynchronizerService.js" />
+    <Content Include="WhS_RouteSync\Views\RouteSyncDefinition\RouteSyncDefinitionEditor.html" />
+    <Content Include="WhS_RouteSync\Views\RouteSyncDefinition\RouteSyncDefinitionEditorController.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="WhS_RouteSync\Directives\RouteSyncDefinition\Templates\" />
-    <Folder Include="WhS_RouteSync\Views\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Business\TOne.WhS.RouteSync.Business.csproj">

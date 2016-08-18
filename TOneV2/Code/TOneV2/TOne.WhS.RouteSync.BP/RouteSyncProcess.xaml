@@ -14,6 +14,7 @@
  xmlns:twre="clr-namespace:TOne.WhS.RouteSync.Entities;assembly=TOne.WhS.RouteSync.Entities"
  xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
+ xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(twrba:RouteSyncProcessInput)" />
@@ -30,6 +31,7 @@
       <x:String>TOne.WhS.RouteSync.BP.Arguments</x:String>
       <x:String>TOne.WhS.RouteSync.Entities</x:String>
       <x:String>TOne.WhS.RouteSync.BP.Activities</x:String>
+      <x:String>Vanrise.BusinessProcess.Entities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -52,6 +54,7 @@
       <AssemblyReference>TOne.WhS.RouteSync.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.RouteSync.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.RouteSync.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
@@ -199,6 +202,9 @@
                 <DelegateInArgument x:TypeArguments="twre:RouteRangeInfo" Name="routeRange" />
               </ActivityAction.Argument>
               <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+                <Sequence.Variables>
+                  <Variable x:TypeArguments="vbe:ProcessCompletedEventPayload" Name="subProcessEventPayload" />
+                </Sequence.Variables>
                 <vbw:RunProcess ProcessCompletedEventPayload="{x:Null}" ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
                   <vbw:RunProcess.Input>
                     <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
@@ -212,6 +218,54 @@
                     </InArgument>
                   </vbw:RunProcess.Input>
                 </vbw:RunProcess>
+                <If sap2010:WorkflowViewState.IdRef="If_2">
+                  <If.Condition>
+                    <InArgument x:TypeArguments="x:Boolean">
+                      <mca:CSharpValue x:TypeArguments="x:Boolean">subProcessEventPayload.ProcessStatus != Vanrise.BusinessProcess.Entities.BPInstanceStatus.Completed</mca:CSharpValue>
+                    </InArgument>
+                  </If.Condition>
+                  <If.Then>
+                    <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1">
+                      <TerminateWorkflow.Reason>
+                        <InArgument x:TypeArguments="x:String">
+                          <mca:CSharpValue x:TypeArguments="x:String" xml:space="preserve">String.Format("Processing code prfix '{0}' for customer {1} failed due to error: {2}", routeRange.CodePrefix, routeRange.CustomerId, 
+subProcessEventPayload.LastProcessMessage)</mca:CSharpValue>
+                        </InArgument>
+                      </TerminateWorkflow.Reason>
+                    </TerminateWorkflow>
+                  </If.Then>
+                  <If.Else>
+                    <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
+                      <Sequence.Variables>
+                        <Variable x:TypeArguments="x:Int32" Name="subProcessCompleted" />
+                      </Sequence.Variables>
+                      <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="x:Int32">
+                            <mca:CSharpReference x:TypeArguments="x:Int32">subProcessCompleted</mca:CSharpReference>
+                          </OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="x:Int32">
+                            <mca:CSharpValue x:TypeArguments="x:Int32">subProcessCompleted+1</mca:CSharpValue>
+                          </InArgument>
+                        </Assign.Value>
+                      </Assign>
+                      <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1">
+                        <vbw:WriteTrackingMessage.Message>
+                          <InArgument x:TypeArguments="x:String">
+                            <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Code Prefix '{0}' group for customer {1} completed. {2} groups remaining", routeRange.CodePrefix, routeRange.CustomerId, (routeReadRanges.Count() - subProcessCompleted))</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:WriteTrackingMessage.Message>
+                        <vbw:WriteTrackingMessage.Severity>
+                          <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+                            <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:WriteTrackingMessage.Severity>
+                      </vbw:WriteTrackingMessage>
+                    </Sequence>
+                  </If.Else>
+                </If>
               </Sequence>
             </ActivityAction>
           </ParallelForEach>
@@ -264,39 +318,59 @@
         </Sequence>
       </ActivityAction>
     </ParallelForEach>
-    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRlU3luYy5CUFxSb3V0ZVN5bmNQcm9jZXNzLnhhbWwxOgOMAg4CAQFCC0KCAQIBAkYFRmMDAeIBRwVSJQMB0wFTBV4aAwHEAV8FbyEDAa4BcAWnARcCAWOoAQXrAQoCASvsAQWKAhcCAQlGQ0ZgAwHjAUoLSnQDAdsBTwtPYwMB1AFbC1tqAwHMAVYLVnkDAcUBZwtndQMBvQFsC2x5AwG2AWILYnoDAa8BcwtzaQMBpwF6CaUBFAIBZKsBC6sBZQIBLK8BCdoBFAIBPN0BCekBFAIBM+8BC+8BeQIBJPYBCYgCFAIBCn4LiQEUAwGUAYoBC5oBLgIBeJsBC6QBHQIBZbMBC74BMwIBUr8BC9kBHQIBPd4BC+gBLAIBNPcBC4cCLAIBC4YBEYYBnQEDAZ4BgQERgQF0AwGVAY0BEY0BlwEDAYsBlwERlwFgAwGCAZIBEZIBeAIBeaIBD6IBfQIBb54BEZ4BbAIBZrYBEbYB5gECAVu7ARG7AXECAVPCARHCAXoCAUrJAQ/XARoCAT7hARHlASACATX6ARH6AY8BAgEchAIRhAJsAgEU/wER/wF4AgEMygER1gEiAgE/zQEX0wEgAgFBygGqAcoBsAECAUA=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRlU3luYy5CUFxSb3V0ZVN5bmNQcm9jZXNzLnhhbWw8PQPCAg4CAQFFC0WCAQIBAkkFSWMDAagCSgVVJQMBmQJWBWEaAwGKAmIFciEDAfQBcwWqARcDAakBqwEFoQIKAgErogIFwAIXAgEJSUNJYAMBqQJNC010AwGhAlILUmMDAZoCXgteagMBkgJZC1l5AwGLAmoLanUDAYMCbwtveQMB/AFlC2V6AwH1AXYLdmkDAe0BfQmoARQDAaoBrgELrgFlAgEssgEJkAIUAgE8kwIJnwIUAgEzpQILpQJ5AgEkrAIJvgIUAgEKgQELjAEUAwHaAY0BC50BLgMBvgGeAQunAR0DAasBtgELwQEzAwGYAcIBC48CHQIBPZQCC54CLAIBNK0CC70CLAIBC4kBEYkBnQEDAeQBhAERhAF0AwHbAZABEZABlwEDAdEBmgERmgFgAwHIAZUBEZUBeAMBvwGlAQ+lAX0DAbUBoQERoQFsAwGsAbkBEbkB5gEDAaEBvgERvgFxAwGZAcUBEcUBegMBkAHMAQ+NAhoCAT6XAhGbAiACATWwAhGwAo8BAgEcugIRugJsAgEUtQIRtQJ4AgEM0AER3AEiAwGEAd0BEYwCFgIBP9MBF9kBIAMBhgHQAaoB0AGwAQMBhQHgARfgAbkBAgFA5AEV6wEpAgF57gEVigIgAgFK5wEb6AE9AgF68gEX/QEgAgFi/gEXiQIyAgFL+gEd+gFvAgFu9QEd9QF1AgFjhgIdhgKXAQIBV4ECHYECngICAUw=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="556,62" />
-      <sap2010:ViewStateData Id="GetRouteSyncDefinition_1" sap:VirtualizedContainerService.HintSize="556,22" />
-      <sap2010:ViewStateData Id="GetSwitches_1" sap:VirtualizedContainerService.HintSize="556,22" />
-      <sap2010:ViewStateData Id="GetRouteReadRanges_1" sap:VirtualizedContainerService.HintSize="556,22" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="211,62" />
+      <sap2010:ViewStateData Id="GetRouteSyncDefinition_1" sap:VirtualizedContainerService.HintSize="211,22" />
+      <sap2010:ViewStateData Id="GetSwitches_1" sap:VirtualizedContainerService.HintSize="211,22" />
+      <sap2010:ViewStateData Id="GetRouteReadRanges_1" sap:VirtualizedContainerService.HintSize="211,22" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
       <sap2010:ViewStateData Id="InitializeSwitchRouteSync_1" sap:VirtualizedContainerService.HintSize="242,22" />
       <sap2010:ViewStateData Id="AddToCollection`1_1" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="264,310">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="211,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="SaveSwitchesInitializationData_1" sap:VirtualizedContainerService.HintSize="541,22" />
+      <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="489,22" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="264,248">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="556,460" />
-      <sap2010:ViewStateData Id="SaveSwitchesInitializationData_1" sap:VirtualizedContainerService.HintSize="287,22" />
-      <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,146">
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="489,398" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="511,584">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="287,296" />
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="309,482">
+      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="541,734" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="200,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
@@ -308,7 +382,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="556,632" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="211,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="FinalizeSwitchRouteSync_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="222,146">
         <sap:WorkflowViewStateService.ViewState>
@@ -317,15 +398,22 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_3" sap:VirtualizedContainerService.HintSize="556,296" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="578,1880">
+      <sap2010:ViewStateData Id="ParallelForEach`1_3" sap:VirtualizedContainerService.HintSize="211,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="233,645">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.RouteSync.BP.RouteSyncProcess_1" sap:VirtualizedContainerService.HintSize="618,1960" />
+      <sap2010:ViewStateData Id="TOne.WhS.RouteSync.BP.RouteSyncProcess_1" sap:VirtualizedContainerService.HintSize="273,725" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
