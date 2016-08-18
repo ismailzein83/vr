@@ -5,6 +5,7 @@ using System.Linq;
 using Vanrise.Entities;
 using TOne.WhS.BusinessEntity.Business;
 using Vanrise.Common;
+using System;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -24,7 +25,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         {
             IEnumerable<ImportedCode> importedCodes = ImportedCodes.Get(context);
             IEnumerable<ExistingCode> existingCodes = ExistingCodes.Get(context);
-            
+
             HashSet<string> importedCodesHashSet = new HashSet<string>(importedCodes.Select(item => item.Code));
             IEnumerable<NotImportedCode> notImportedCodes = PrepareNotImportedCodes(existingCodes, importedCodesHashSet);
 
@@ -35,29 +36,22 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         private IEnumerable<NotImportedCode> PrepareNotImportedCodes(IEnumerable<ExistingCode> existingCodes, HashSet<string> importedCodes)
         {
-            Dictionary<string, List<ExistingCode>> notImportedCodesByZoneName = new Dictionary<string, List<ExistingCode>>();
+            Dictionary<string, List<ExistingCode>> notImportedCodesByCodeValue = new Dictionary<string, List<ExistingCode>>();
 
-            foreach (ExistingCode existingCode in existingCodes)
+            ExistingCodesByCodeValue existingCodesByCodeValue = StructureExistingCodesByCodeValue(existingCodes);
+
+            foreach (KeyValuePair<string, List<ExistingCode>> item in existingCodesByCodeValue)
             {
-                string zoneName = existingCode.ParentZone.Name;
-                if (!importedCodes.Contains(existingCode.CodeEntity.Code))
-                {
-                    List<ExistingCode> existingCodesList = null;
-                    if (!notImportedCodesByZoneName.TryGetValue(zoneName, out existingCodesList))
-                    {
-                        existingCodesList = new List<ExistingCode>();
-                        notImportedCodesByZoneName.Add(zoneName, existingCodesList);
-                    }
-                    existingCodesList.Add(existingCode);
-                }
+                if (!importedCodes.Contains(item.Key))
+                    notImportedCodesByCodeValue.Add(item.Key, item.Value);
             }
 
-            return notImportedCodesByZoneName.MapRecords(NotImportedCodeInfoMapper);            
+            return notImportedCodesByCodeValue.MapRecords(NotImportedCodeInfoMapper);
         }
 
         private NotImportedCode NotImportedCodeInfoMapper(List<ExistingCode> existingCodes)
         {
-            List<ExistingCode> linkedExistingCodes = existingCodes.GetLinkedEntities();
+            List<ExistingCode> linkedExistingCodes = existingCodes.GetConnectedEntities(DateTime.Today);
 
             NotImportedCode notImportedCode = new NotImportedCode();
             ExistingCode firstElementInTheList = linkedExistingCodes.First();
@@ -70,6 +64,25 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             notImportedCode.HasChanged = linkedExistingCodes.Any(x => x.ChangedCode != null);
 
             return notImportedCode;
+        }
+
+        private ExistingCodesByCodeValue StructureExistingCodesByCodeValue(IEnumerable<ExistingCode> existingCodes)
+        {
+            ExistingCodesByCodeValue existingCodesByCodeValue = new ExistingCodesByCodeValue();
+            List<ExistingCode> existingCodesList = null;
+
+            foreach (ExistingCode item in existingCodes)
+            {
+                if (!existingCodesByCodeValue.TryGetValue(item.CodeEntity.Code, out existingCodesList))
+                {
+                    existingCodesList = new List<ExistingCode>();
+                    existingCodesByCodeValue.Add(item.CodeEntity.Code, existingCodesList);
+                }
+
+                existingCodesList.Add(item);
+            }
+
+            return existingCodesByCodeValue;
         }
     }
 }

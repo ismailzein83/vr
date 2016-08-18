@@ -84,21 +84,32 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         private NotImportedZone NotImportedZoneInfoMapper(List<ExistingZone> existingZones)
         {
-            List<ExistingZone> linkedExistingZones = existingZones.GetLinkedEntities();
+            List<ExistingZone> linkedExistingZones = existingZones.GetConnectedEntities(DateTime.Today);
 
             NotImportedZone notImportedZone = new NotImportedZone();
             ExistingZone firstElementInTheList = linkedExistingZones.First();
             ExistingZone lastElementInTheList = linkedExistingZones.Last();
+
+            List<ExistingRate> existingRates = GetExistingRatesByLinkedExistingZones(linkedExistingZones);
 
             notImportedZone.ZoneName = firstElementInTheList.Name;
             //TODO: get it from foreach activity in the process
             notImportedZone.CountryId = firstElementInTheList.CountryId;
             notImportedZone.BED = firstElementInTheList.BED;
             notImportedZone.EED = lastElementInTheList.EED;
-            notImportedZone.ExistingRate = lastElementInTheList.ExistingRates.LastOrDefault();
+            notImportedZone.ExistingRate =firstElementInTheList.BED <= DateTime.Today.Date ? existingRates.GetSystemRate<ExistingRate>(DateTime.Today) : existingRates.FirstOrDefault();
             notImportedZone.HasChanged = linkedExistingZones.Any(x => x.ChangedZone != null);
 
             return notImportedZone;
+        }
+
+        private List<ExistingRate> GetExistingRatesByLinkedExistingZones(List<ExistingZone> linkedExistingZones)
+        {
+            List<ExistingRate> existingRates = new List<ExistingRate>();
+
+            existingRates.AddRange(linkedExistingZones.SelectMany(item => item.ExistingRates).OrderBy(itm => itm.BED));
+            
+            return existingRates;
         }
 
         private DateTime GetZoneBED(ImportedZone importedZone)

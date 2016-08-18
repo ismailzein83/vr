@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.CodePreparation.Business;
+using TOne.WhS.CodePreparation.Entities;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.BusinessProcess;
 
@@ -41,7 +42,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         public Dictionary<string, List<ExistingZone>> ClosedExistingZones { get; set; }
 
-        public IEnumerable<ExistingCode> NotChangedCodes { get; set; }
+        public IEnumerable<NotImportedCode> NotImportedCodes { get; set; }
     }
 
     public sealed class ProcessCountryCodes : BaseAsyncActivity<ProcessCountryCodesInput, ProcessCountryCodesOutput>
@@ -80,7 +81,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public OutArgument<Dictionary<string, List<ExistingZone>>> ClosedExistingZones { get; set; }
 
         [RequiredArgument]
-        public OutArgument<IEnumerable<ExistingCode>> NotChangedCodes { get; set; }
+        public OutArgument<IEnumerable<NotImportedCode>> NotImportedCodes { get; set; }
 
 
         protected override ProcessCountryCodesInput GetInputArgument(AsyncCodeActivityContext context)
@@ -122,7 +123,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 NewCodes = processCountryCodesContext.NewCodes,
                 ChangedCodes = processCountryCodesContext.ChangedCodes,
                 ClosedExistingZones = processCountryCodesContext.ClosedExistingZones,
-                NotChangedCodes = processCountryCodesContext.NotChangedCodes
+                NotImportedCodes = processCountryCodesContext.NotImportedCodes
             };
         }
 
@@ -134,7 +135,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             this.NewCodes.Set(context, result.NewCodes);
             this.ChangedCodes.Set(context, result.ChangedCodes);
             this.ClosedExistingZones.Set(context, result.ClosedExistingZones);
-            this.NotChangedCodes.Set(context, result.NotChangedCodes);
+            this.NotImportedCodes.Set(context, result.NotImportedCodes);
         }
     }
 }

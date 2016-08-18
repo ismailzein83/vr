@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.CodePreparation.Entities;
 using TOne.WhS.CodePreparation.Entities.Processing;
 
 namespace TOne.WhS.CodePreparation.Business
@@ -31,6 +32,6 @@ namespace TOne.WhS.CodePreparation.Business
 
         public Dictionary<string,List<ExistingZone>> ClosedExistingZones { get; set; }
 
-        public List<ExistingCode> NotChangedCodes { get; set; }
+        public IEnumerable<NotImportedCode> NotImportedCodes { get; set; }
     }
 }

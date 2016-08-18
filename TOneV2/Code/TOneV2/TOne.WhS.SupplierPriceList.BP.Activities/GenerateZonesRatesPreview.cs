@@ -9,6 +9,7 @@ using TOne.WhS.SupplierPriceList.Business;
 using Vanrise.Queueing;
 using Vanrise.Common;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.BusinessEntity.Business;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -47,11 +48,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         ChangeTypeZone = importedZone.ChangeType,
                         ZoneBED = importedZone.BED,
                         ZoneEED = importedZone.EED,
-                        CurrentRate = GetCurrentRate(importedZone),
+                        SystemRate = GetSystemRate(importedZone),
                         ImportedRate = decimal.Round(importedRateFirst.NormalRate, 8),
                         ImportedRateBED = importedRateFirst.BED,
-                        CurrentRateBED = GetCurrentRateBED(importedZone),
-                        CurrentRateEED = GetCurrentRateEED(importedZone),
+                        SystemRateBED = GetSystemRateBED(importedZone),
+                        SystemRateEED = GetSystemRateEED(importedZone),
                         ChangeTypeRate = GetRateChangeType(importedZone)
                     });
                 }
@@ -78,9 +79,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
                     if (notImportedZone.ExistingRate != null)
                     {
-                        zoneRatePreview.CurrentRate = notImportedZone.ExistingRate.RateEntity.NormalRate;
-                        zoneRatePreview.CurrentRateBED = notImportedZone.ExistingRate.BED;
-                        zoneRatePreview.CurrentRateEED = notImportedZone.ExistingRate.EED;
+                        zoneRatePreview.SystemRate = notImportedZone.ExistingRate.RateEntity.NormalRate;
+                        zoneRatePreview.SystemRateBED = notImportedZone.ExistingRate.BED;
+                        zoneRatePreview.SystemRateEED = notImportedZone.ExistingRate.EED;
                     }
 
                     zonesRatesPreview.Add(zoneRatePreview);
@@ -97,21 +98,21 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         }
 
 
-        private decimal? GetCurrentRate(ImportedZone importedZone)
+        private decimal? GetSystemRate(ImportedZone importedZone)
         {
             ExistingRate recentExistingRate = GetRecentExistingRate(importedZone);
             return recentExistingRate != null ? (decimal?)recentExistingRate.RateEntity.NormalRate : null;
         }
 
 
-        private DateTime? GetCurrentRateBED(ImportedZone importedZone)
+        private DateTime? GetSystemRateBED(ImportedZone importedZone)
         {
             ExistingRate recentExistingRate = GetRecentExistingRate(importedZone);
             return recentExistingRate != null ? (DateTime?)recentExistingRate.BED : null;
         }
 
 
-        private DateTime? GetCurrentRateEED(ImportedZone importedZone)
+        private DateTime? GetSystemRateEED(ImportedZone importedZone)
         {
             ExistingRate recentExistingRate = GetRecentExistingRate(importedZone);
             return recentExistingRate != null ? (DateTime?)recentExistingRate.RateEntity.EED : null;
@@ -124,7 +125,21 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         private ExistingRate GetRecentExistingRate(ImportedZone importedZone)
         {
-            return GetImportedRate(importedZone).ProcessInfo.RecentExistingRate;
+            ExistingRate recentExistingRate = GetImportedRate(importedZone).ProcessInfo.RecentExistingRate;
+            
+            if (recentExistingRate == null)
+            {
+                List<ExistingZone> connectedExistingZones = importedZone.ExistingZones.GetConnectedEntities(DateTime.Today);
+                if (connectedExistingZones != null)
+                {
+                    List<ExistingRate> existingRates = new List<ExistingRate>();
+
+                    existingRates.AddRange(connectedExistingZones.SelectMany(item => item.ExistingRates).OrderBy(itm => itm.BED));
+                    recentExistingRate = existingRates.GetSystemRate<ExistingRate>(DateTime.Today);
+                }
+            }
+
+            return recentExistingRate;
         }
 
         private ImportedRate GetImportedRate(ImportedZone importedZone)

@@ -28,7 +28,7 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
 
         IEnumerable<ChangedZone> ChangedZones { set; }
 
-        List<ExistingCode> NotChangedCodes { get; set; }
+        IEnumerable<NotImportedCode> NotImportedCodes { get; set; }
 
         Dictionary<string, List<ExistingZone>> ClosedExistingZones { get; set; }
     }

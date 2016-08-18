@@ -23,7 +23,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<IEnumerable<CodeToClose>> CodesToClose { get; set; }
 
         [RequiredArgument]
-        public InArgument<IEnumerable<ExistingCode>> NotChangedCodes { get; set; }
+        public InArgument<IEnumerable<NotImportedCode>> NotImportedCodes { get; set; }
 
         [RequiredArgument]
         public InArgument<BaseQueue<IEnumerable<CodePreview>>> PreviewCodeQueue { get; set; }
@@ -34,7 +34,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             IEnumerable<CodeToMove> codesToMove = this.CodesToMove.Get(context);
             IEnumerable<CodeToClose> codesToClose = this.CodesToClose.Get(context);
 
-            IEnumerable<ExistingCode> notChangedCodes = this.NotChangedCodes.Get(context);
+            IEnumerable<NotImportedCode> notImportedCodes = this.NotImportedCodes.Get(context);
 
             BaseQueue<IEnumerable<CodePreview>> previewCodeQueue = this.PreviewCodeQueue.Get(context);
 
@@ -87,17 +87,17 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             }
 
 
-            if (notChangedCodes != null)
+            if (notImportedCodes != null)
             {
-                foreach (ExistingCode notChangedCode in notChangedCodes)
+                foreach (NotImportedCode notImportedCode in notImportedCodes)
                 {
                     codePreviewList.Add(new CodePreview()
                     {
-                        Code = notChangedCode.CodeEntity.Code,
+                        Code = notImportedCode.Code,
                         ChangeType = CodeChangeType.NotChanged,
-                        ZoneName = notChangedCode.ParentZone.ZoneEntity.Name,
-                        BED = notChangedCode.BED,
-                        EED = notChangedCode.CodeEntity.EED
+                        ZoneName = notImportedCode.ZoneName,
+                        BED = notImportedCode.BED,
+                        EED = notImportedCode.EED
                     });
                 }
             }

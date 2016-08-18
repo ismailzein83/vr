@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.CodePreparation.Entities;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.BusinessProcess;
+using TOne.WhS.BusinessEntity.Business;
 using Vanrise.Common;
 
 namespace TOne.WhS.CodePreparation.Business
@@ -16,16 +18,16 @@ namespace TOne.WhS.CodePreparation.Business
             ZonesByName newAndExistingZones = new ZonesByName();
             Dictionary<string, List<ExistingZone>> closedExistingZones;
 
-            List<ExistingCode> notChangedCodes = new List<ExistingCode>();
-            context.NotChangedCodes = notChangedCodes;
+            ExistingCodesByCodeValue existingCodesByCodeValue = new ExistingCodesByCodeValue();
+
             context.NewAndExistingZones = newAndExistingZones;
             
             HashSet<string> codesToAddHashSet;
             HashSet<string> codesToMoveHashSet;
             HashSet<string> codesToCloseHashSet;
 
-            ProcessCountryCodes(context.CodesToAdd, context.CodesToMove, context.CodesToClose, context.ExistingCodes, newAndExistingZones, context.ExistingZones, out closedExistingZones,
-                out codesToAddHashSet, out codesToMoveHashSet, out codesToCloseHashSet);
+            ProcessCountryCodes(context.CodesToAdd, context.CodesToMove, context.CodesToClose, context.ExistingCodes, newAndExistingZones, context.ExistingZones,existingCodesByCodeValue,
+                out closedExistingZones, out codesToAddHashSet, out codesToMoveHashSet, out codesToCloseHashSet);
 
             context.ClosedExistingZones = closedExistingZones;
             context.NewCodes = context.CodesToAdd.SelectMany(itm => itm.AddedCodes).Union(context.CodesToMove.SelectMany(itm => itm.AddedCodes));
@@ -33,13 +35,14 @@ namespace TOne.WhS.CodePreparation.Business
             context.ChangedZones = context.ExistingZones.Where(itm => itm.ChangedZone != null).Select(itm => itm.ChangedZone);
             context.ChangedCodes = context.ExistingCodes.Where(itm => itm.ChangedCode != null).Select(itm => itm.ChangedCode);
 
-            PrepareNotChangedCodes(context.ExistingCodes, codesToAddHashSet, codesToMoveHashSet, codesToCloseHashSet, notChangedCodes);
+           context.NotImportedCodes = PrepareNotImportedCodes(existingCodesByCodeValue, codesToAddHashSet, codesToMoveHashSet, codesToCloseHashSet);
         }
+
         private void ProcessCountryCodes(IEnumerable<CodeToAdd> codesToAdd, IEnumerable<CodeToMove> codesToMove, IEnumerable<CodeToClose> codesToClose, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones,
-            IEnumerable<ExistingZone> existingZones, out Dictionary<string, List<ExistingZone>> closedExistingZones, out HashSet<string> codesToAddHashSet, out HashSet<string> codesToMoveHashSet, out HashSet<string> codesToCloseHashSet)
+            IEnumerable<ExistingZone> existingZones,ExistingCodesByCodeValue existingCodesByCodeValue, out Dictionary<string, List<ExistingZone>> closedExistingZones, out HashSet<string> codesToAddHashSet, out HashSet<string> codesToMoveHashSet, out HashSet<string> codesToCloseHashSet)
         {
             ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
-            ExistingCodesByCodeValue existingCodesByCodeValue = StructureExistingCodesByCodeValue(existingCodes);
+            StructureExistingCodesByCodeValue(existingCodesByCodeValue, existingCodes);
 
             codesToAddHashSet = new HashSet<string>();
             codesToMoveHashSet = new HashSet<string>();
@@ -132,7 +135,7 @@ namespace TOne.WhS.CodePreparation.Business
                     {
                         existingZone.ChangedZone = new ChangedZone
                         {
-                            ZoneId = existingZone.ZoneId,
+                            EntityId = existingZone.ZoneId,
                             EED = maxCodeEED.Value
                         };
 
@@ -150,16 +153,38 @@ namespace TOne.WhS.CodePreparation.Business
                 }
             }
         }
-       
-        private void PrepareNotChangedCodes(IEnumerable<ExistingCode> existingCodes, HashSet<string> codesToAddHashSet, HashSet<string> codesToMoveHashSet, HashSet<string> codesToCloseHashSet, List<ExistingCode> notChangedCodes)
+
+        private IEnumerable<NotImportedCode> PrepareNotImportedCodes(ExistingCodesByCodeValue existingCodesByCodeValue, HashSet<string> codesToAddHashSet, HashSet<string> codesToMoveHashSet, HashSet<string> codesToCloseHashSet)
         {
-            foreach (ExistingCode existingCode in existingCodes)
+            Dictionary<string, List<ExistingCode>> notImportedCodesByCodeValue = new Dictionary<string, List<ExistingCode>>();
+
+            foreach (KeyValuePair<string, List<ExistingCode>> item in existingCodesByCodeValue)
             {
-                if (!(codesToAddHashSet.Contains(existingCode.CodeEntity.Code) || codesToMoveHashSet.Contains(existingCode.CodeEntity.Code)
-                    || codesToCloseHashSet.Contains(existingCode.CodeEntity.Code)))
-                    notChangedCodes.Add(existingCode);
+                string currentCode = item.Key;
+                if (!(codesToAddHashSet.Contains(currentCode) || codesToMoveHashSet.Contains(currentCode) || codesToCloseHashSet.Contains(currentCode)))
+                    notImportedCodesByCodeValue.Add(currentCode, item.Value);
             }
+
+            return notImportedCodesByCodeValue.MapRecords(NotImportedCodeInfoMapper);
         }
+
+        private NotImportedCode NotImportedCodeInfoMapper(List<ExistingCode> existingCodes)
+        {
+            List<ExistingCode> linkedExistingCodes = existingCodes.GetConnectedEntities(DateTime.Today);
+
+            NotImportedCode notImportedCode = new NotImportedCode();
+            ExistingCode firstElementInTheList = linkedExistingCodes.First();
+            ExistingCode lastElementInTheList = linkedExistingCodes.Last();
+
+            notImportedCode.ZoneName = firstElementInTheList.ParentZone.Name;
+            notImportedCode.Code = firstElementInTheList.CodeEntity.Code;
+            notImportedCode.BED = firstElementInTheList.BED;
+            notImportedCode.EED = lastElementInTheList.EED;
+            notImportedCode.HasChanged = linkedExistingCodes.Any(x => x.ChangedCode != null);
+
+            return notImportedCode;
+        }
+
         private ExistingZonesByName StructureExistingZonesByName(IEnumerable<ExistingZone> existingZones)
         {
             ExistingZonesByName existingZonesByName = new ExistingZonesByName();
@@ -178,9 +203,8 @@ namespace TOne.WhS.CodePreparation.Business
 
             return existingZonesByName;
         }
-        private ExistingCodesByCodeValue StructureExistingCodesByCodeValue(IEnumerable<ExistingCode> existingCodes)
+        private void StructureExistingCodesByCodeValue(ExistingCodesByCodeValue existingCodesByCodeValue, IEnumerable<ExistingCode> existingCodes)
         {
-            ExistingCodesByCodeValue existingCodesByCodeValue = new ExistingCodesByCodeValue();
             List<ExistingCode> existingCodesList = null;
 
             foreach (ExistingCode item in existingCodes)
@@ -193,8 +217,6 @@ namespace TOne.WhS.CodePreparation.Business
 
                 existingCodesList.Add(item);
             }
-
-            return existingCodesByCodeValue;
         }
         private void CloseExistingOverlapedCodes(CodeToAdd codeToAdd, List<ExistingCode> matchExistingCodes)
         {
@@ -205,7 +227,7 @@ namespace TOne.WhS.CodePreparation.Business
                     DateTime existingCodeEED = Utilities.Max(codeToAdd.BED, existingCode.BED);
                     existingCode.ChangedCode = new ChangedCode
                     {
-                        CodeId = existingCode.CodeEntity.SaleCodeId,
+                        EntityId = existingCode.CodeEntity.SaleCodeId,
                         EED = existingCodeEED
                     };
                     codeToAdd.ChangedExistingCodes.Add(existingCode);
@@ -224,7 +246,7 @@ namespace TOne.WhS.CodePreparation.Business
                     DateTime existingCodeEED = Utilities.Max(codeToMove.BED, existingCode.BED);
                     existingCode.ChangedCode = new ChangedCode
                     {
-                        CodeId = existingCode.CodeEntity.SaleCodeId,
+                        EntityId = existingCode.CodeEntity.SaleCodeId,
                         EED = existingCodeEED
                     };
                     codeToMove.ChangedExistingCodes.Add(existingCode);
@@ -241,7 +263,7 @@ namespace TOne.WhS.CodePreparation.Business
                         codeToClose.HasOverlapedCodesInOtherZone = true;
                     existingCode.ChangedCode = new ChangedCode
                     {
-                        CodeId = existingCode.CodeEntity.SaleCodeId,
+                        EntityId = existingCode.CodeEntity.SaleCodeId,
                         EED = Utilities.Max(codeToClose.CloseEffectiveDate, existingCode.BED)
                     };
                     codeToClose.ChangedExistingCodes.Add(existingCode);

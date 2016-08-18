@@ -36,9 +36,9 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public ZoneChangeType ChangeTypeZone { get; set; }
         public DateTime ZoneBED { get; set; }
         public DateTime? ZoneEED { get; set; }
-        public decimal? CurrentRate { get; set; }
-        public DateTime? CurrentRateBED { get; set; }
-        public DateTime? CurrentRateEED { get; set; }
+        public decimal? SystemRate { get; set; }
+        public DateTime? SystemRateBED { get; set; }
+        public DateTime? SystemRateEED { get; set; }
         public decimal? ImportedRate { get; set; }
         public DateTime? ImportedRateBED { get; set; }
         public RateChangeType ChangeTypeRate { get; set; }
@@ -53,9 +53,9 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public ZoneChangeType ChangeTypeZone { get; set; }
         public DateTime ZoneBED { get; set; }
         public DateTime? ZoneEED { get; set; }
-        public decimal? CurrentRate { get; set; }
-        public DateTime? CurrentRateBED { get; set; }
-        public DateTime? CurrentRateEED { get; set; }
+        public decimal? SystemRate { get; set; }
+        public DateTime? SystemRateBED { get; set; }
+        public DateTime? SystemRateEED { get; set; }
         public decimal? ImportedRate { get; set; }
         public DateTime? ImportedRateBED { get; set; }
         public RateChangeType ChangeTypeRate { get; set; }

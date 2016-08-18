@@ -19,7 +19,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<IEnumerable<ZoneToProcess>> ZonesToProcess { get; set; }
 
         [RequiredArgument]
-        public InArgument<IEnumerable<ExistingZone>> NotChangedZones { get; set; }
+        public InArgument<IEnumerable<NotImportedZone>> NotImportedZones { get; set; }
 
         [RequiredArgument]
         public InArgument<Dictionary<string, List<ExistingZone>>> ClosedExistingZones { get; set; }
@@ -31,7 +31,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         {
             BaseQueue<IEnumerable<ZonePreview>> previewZonesQueue = this.PreviewZonesQueue.Get(context);
             IEnumerable<ZoneToProcess> zonesToProcess = this.ZonesToProcess.Get(context);
-            IEnumerable<ExistingZone> notChangedZones = this.NotChangedZones.Get(context);
+            IEnumerable<NotImportedZone> notImportedZones = this.NotImportedZones.Get(context);
             Dictionary<string, List<ExistingZone>> closedExistingZones = ClosedExistingZones.Get(context);
 
             List<ZonePreview> zonesPreview = new List<ZonePreview>();
@@ -54,29 +54,30 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             }
 
 
-            if (notChangedZones != null)
+            if (notImportedZones != null)
             {
 
-                foreach (ExistingZone notImportedZone in notChangedZones)
+                foreach (NotImportedZone notImportedZone in notImportedZones)
                 {
                     //If a zone is renamed, do not show it in preview screen as an not imported zone
-                    if (zonesPreview.FindRecord(item => item.RecentZoneName != null && item.RecentZoneName.Equals(notImportedZone.Name, StringComparison.InvariantCultureIgnoreCase)) != null)
+                    if (zonesPreview.FindRecord(item => item.RecentZoneName != null && item.RecentZoneName.Equals(notImportedZone.ZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
                         continue;
 
                     //If a zone is deleted by moving all its codes, do not show it as not changed
                     List<ExistingZone> matchedClosedZones;
-                    if (closedExistingZones.TryGetValue(notImportedZone.ZoneEntity.Name, out matchedClosedZones))
+                    if (closedExistingZones.TryGetValue(notImportedZone.ZoneName, out matchedClosedZones))
                         continue;
 
                     zonesPreview.Add(new ZonePreview()
                     {
                         CountryId = notImportedZone.CountryId,
-                        ZoneName = notImportedZone.Name,
+                        ZoneName = notImportedZone.ZoneName,
                         ChangeTypeZone = ZoneChangeType.NotChanged,
                         ZoneBED = notImportedZone.BED,
                         ZoneEED = notImportedZone.EED
                     });
                 }
+
             }
 
 

@@ -7,6 +7,7 @@ using Vanrise.Common;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using TOne.WhS.CodePreparation.Entities;
 using Vanrise.BusinessProcess;
+using TOne.WhS.BusinessEntity.Business;
 
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
@@ -26,7 +27,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
     }
     public class ProcessCountryZonesOutput
     {
-        public IEnumerable<ExistingZone> NotChangedZones { get; set; }
+        public IEnumerable<NotImportedZone> NotImportedZones { get; set; }
     }
 
     public sealed class ProcessCountryZones : BaseAsyncActivity<ProcessCountryZonesInput, ProcessCountryZonesOutput>
@@ -47,7 +48,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<Dictionary<string,List<ExistingZone>>> ClosedExistingZones { get; set; }
 
         [RequiredArgument]
-        public OutArgument<IEnumerable<ExistingZone>> NotChangedZones { get; set; }
+        public OutArgument<IEnumerable<NotImportedZone>> NotImportedZones { get; set; }
 
         protected override ProcessCountryZonesOutput DoWorkWithResult(ProcessCountryZonesInput inputArgument, AsyncActivityHandle handle)
         {
@@ -57,11 +58,11 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             UpdateImportedZonesInfo(inputArgument.ZonesToProcess, inputArgument.NewAndExistingZones, inputArgument.ExistingZones, zonesToProcessNamesHashSet, existingCodeByZoneName, inputArgument.ClosedExistingZones);
 
-            IEnumerable<ExistingZone> notChangedZones = PrepareNotChangedZones(inputArgument.ExistingZones, zonesToProcessNamesHashSet);
+            IEnumerable<NotImportedZone> notImportedZones = PrepareNotImportedZones(inputArgument.ExistingZones, zonesToProcessNamesHashSet);
 
             return new ProcessCountryZonesOutput()
             {
-                NotChangedZones = notChangedZones
+                NotImportedZones = notImportedZones
             };
         }
 
@@ -79,7 +80,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, ProcessCountryZonesOutput result)
         {
-            this.NotChangedZones.Set(context, result.NotChangedZones);
+            this.NotImportedZones.Set(context, result.NotImportedZones);
         }
 
         #region Private Methods
@@ -107,20 +108,58 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             }
         }
 
-        private IEnumerable<ExistingZone> PrepareNotChangedZones(IEnumerable<ExistingZone> existingZones, HashSet<string> zonesToProcessNamesHashSet)
+        private IEnumerable<NotImportedZone> PrepareNotImportedZones(IEnumerable<ExistingZone> existingZones, HashSet<string> importedZoneNamesHashSet)
         {
-            List<ExistingZone> notImportedZones = new List<ExistingZone>();
+            Dictionary<string, List<ExistingZone>> notImportedZonesByZoneName = new Dictionary<string, List<ExistingZone>>();
 
             foreach (ExistingZone existingZone in existingZones)
             {
                 string zoneName = existingZone.ZoneEntity.Name;
-                if (!zonesToProcessNamesHashSet.Contains(zoneName, StringComparer.InvariantCultureIgnoreCase))
-                    notImportedZones.Add(existingZone);
+                if (!importedZoneNamesHashSet.Contains(zoneName, StringComparer.InvariantCultureIgnoreCase))
+                {
+                    List<ExistingZone> existingZonesList = null;
+                    if (!notImportedZonesByZoneName.TryGetValue(zoneName, out existingZonesList))
+                    {
+                        existingZonesList = new List<ExistingZone>();
+                        notImportedZonesByZoneName.Add(zoneName, existingZonesList);
+                    }
+                    existingZonesList.Add(existingZone);
+                }
             }
 
-            return notImportedZones;
+            return notImportedZonesByZoneName.MapRecords(NotImportedZoneInfoMapper);
         }
 
+
+        private NotImportedZone NotImportedZoneInfoMapper(List<ExistingZone> existingZones)
+        {
+            List<ExistingZone> linkedExistingZones = existingZones.GetConnectedEntities(DateTime.Today);
+
+            NotImportedZone notImportedZone = new NotImportedZone();
+            ExistingZone firstElementInTheList = linkedExistingZones.First();
+            ExistingZone lastElementInTheList = linkedExistingZones.Last();
+
+            List<ExistingRate> existingRates = GetExistingRatesByLinkedExistingZones(linkedExistingZones);
+
+            notImportedZone.ZoneName = firstElementInTheList.Name;
+            //TODO: get it from foreach activity in the process
+            notImportedZone.CountryId = firstElementInTheList.CountryId;
+            notImportedZone.BED = firstElementInTheList.BED;
+            notImportedZone.EED = lastElementInTheList.EED;
+            notImportedZone.ExistingRate = firstElementInTheList.BED <= DateTime.Today.Date ? existingRates.GetSystemRate<ExistingRate>(DateTime.Today) : existingRates.FirstOrDefault();
+            notImportedZone.HasChanged = linkedExistingZones.Any(x => x.ChangedZone != null);
+
+            return notImportedZone;
+        }
+
+        private List<ExistingRate> GetExistingRatesByLinkedExistingZones(List<ExistingZone> linkedExistingZones)
+        {
+            List<ExistingRate> existingRates = new List<ExistingRate>();
+
+            existingRates.AddRange(linkedExistingZones.SelectMany(item => item.ExistingRates).OrderBy(itm => itm.BED));
+
+            return existingRates;
+        }
 
         private DateTime GetZoneBED(ZoneToProcess zoneToProcess)
         {

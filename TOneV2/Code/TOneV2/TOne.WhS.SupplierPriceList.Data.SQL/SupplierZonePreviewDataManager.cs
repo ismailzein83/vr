@@ -14,7 +14,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 {
     public class SupplierZonePreviewDataManager : BaseTOneDataManager, ISupplierZonePreviewDataManager
     {
-        readonly string[] _columns = { "ProcessInstanceID", "CountryID", "ZoneName", "RecentZoneName", "ZoneChangeType", "ZoneBED", "ZoneEED", "CurrentRate", "CurrentRateBED", "CurrentRateEED", "ImportedRate", "ImportedRateBED", "RateChangeType" };
+        readonly string[] _columns = { "ProcessInstanceID", "CountryID", "ZoneName", "RecentZoneName", "ZoneChangeType", "ZoneBED", "ZoneEED", "SystemRate", "SystemRateBED", "SystemRateEED", "ImportedRate", "ImportedRateBED", "RateChangeType" };
         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
         static SupplierZonePreviewDataManager()
         {
@@ -66,9 +66,9 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                 (int)record.ChangeTypeZone,
                 record.ZoneBED,
                 record.ZoneEED,
-                record.CurrentRate,
-                record.CurrentRateBED,
-                record.CurrentRateEED,
+                record.SystemRate,
+                record.SystemRateBED,
+                record.SystemRateEED,
                 record.ImportedRate,
                 record.ImportedRateBED,
                 (int)record.ChangeTypeRate);
@@ -98,9 +98,9 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                 ChangeTypeZone = (ZoneChangeType)GetReaderValue<int>(reader, "ZoneChangeType"),
                 ZoneBED = GetReaderValue<DateTime>(reader, "ZoneBED"),
                 ZoneEED = GetReaderValue<DateTime?>(reader, "ZoneEED"),
-                CurrentRate = GetReaderValue<decimal?>(reader, "CurrentRate"),
-                CurrentRateBED = GetReaderValue<DateTime?>(reader, "CurrentRateBED"),
-                CurrentRateEED = GetReaderValue<DateTime?>(reader, "CurrentRateEED"),
+                SystemRate = GetReaderValue<decimal?>(reader, "SystemRate"),
+                SystemRateBED = GetReaderValue<DateTime?>(reader, "SystemRateBED"),
+                SystemRateEED = GetReaderValue<DateTime?>(reader, "SystemRateEED"),
                 ImportedRate = GetReaderValue<decimal?>(reader, "ImportedRate"),
                 ImportedRateBED = GetReaderValue<DateTime?>(reader, "ImportedRateBED"),
                 ChangeTypeRate = (RateChangeType)GetReaderValue<int>(reader, "RateChangeType"),

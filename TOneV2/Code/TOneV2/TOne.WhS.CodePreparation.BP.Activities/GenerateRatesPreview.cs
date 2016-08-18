@@ -17,9 +17,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
     {
         [RequiredArgument]
         public InArgument<IEnumerable<ZoneToProcess>> ZonesToProcess { get; set; }
-       
+
         [RequiredArgument]
-        public InArgument<IEnumerable<ExistingZone>> NotChangedZones { get; set; }
+        public InArgument<IEnumerable<NotImportedZone>> NotImportedZones { get; set; }
 
         [RequiredArgument]
         public InArgument<BaseQueue<IEnumerable<RatePreview>>> PreviewRatesQueue { get; set; }
@@ -28,7 +28,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         {
             IEnumerable<ZoneToProcess> zonesToProcess = this.ZonesToProcess.Get(context);
 
-            IEnumerable<ExistingZone> NotChangedZones = this.NotChangedZones.Get(context);
+            IEnumerable<NotImportedZone> notImportedZones = this.NotImportedZones.Get(context);
 
             BaseQueue<IEnumerable<RatePreview>> previewRatesQueue = this.PreviewRatesQueue.Get(context);
 
@@ -51,49 +51,50 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     });
                 }
 
-                foreach (ExistingZone existingZone in zoneToProcess.ExistingZones)
-                {
-                    foreach (ExistingRate existingRate in existingZone.ExistingRates)
-                    {
-                        
-                        SalePriceList salePriceList = salePriceListManager.GetPriceList(existingRate.RateEntity.PriceListId);
+                List<ExistingZone> connectedExistingZones = zoneToProcess.ExistingZones.GetConnectedEntities(DateTime.Today);
+                List<ExistingRate> existingRates = new List<ExistingRate>();
 
-                        ratesPreview.Add(new RatePreview()
-                        {
-                            ZoneName = zoneToProcess.ZoneName,
-                            OnwerType = salePriceList.OwnerType,
-                            OwnerId = salePriceList.OwnerId,
-                            Rate = existingRate.RateEntity.NormalRate,
-                            BED = existingRate.BED,
-                            EED = existingRate.EED
-                        });
-                    }
-                }
+                existingRates.AddRange(connectedExistingZones.SelectMany(item => item.ExistingRates).OrderBy(itm => itm.BED));
+                ExistingRate SystemRate = existingRates.GetSystemRate<ExistingRate>(DateTime.Today);
+
+                SalePriceList salePriceList = salePriceListManager.GetPriceList(SystemRate.RateEntity.PriceListId);
+
+                ratesPreview.Add(new RatePreview()
+                {
+                    ZoneName = zoneToProcess.ZoneName,
+                    OnwerType = salePriceList.OwnerType,
+                    OwnerId = salePriceList.OwnerId,
+                    Rate = SystemRate.RateEntity.NormalRate,
+                    BED = SystemRate.BED,
+                    EED = SystemRate.EED
+                });
+
             }
 
 
-            foreach (ExistingZone notChangedZone in NotChangedZones)
+            foreach (NotImportedZone notImportedZone in notImportedZones)
             {
-                foreach (ExistingRate existingRate in notChangedZone.ExistingRates)
+                if (notImportedZone.ExistingRate != null)
                 {
-                    SalePriceList salePriceList = salePriceListManager.GetPriceList(existingRate.RateEntity.PriceListId);
-
+                    SalePriceList salePriceList = salePriceListManager.GetPriceList(notImportedZone.ExistingRate.RateEntity.PriceListId);
                     ratesPreview.Add(new RatePreview()
                     {
-                        ZoneName = notChangedZone.Name,
+                        ZoneName = notImportedZone.ZoneName,
                         OnwerType = salePriceList.OwnerType,
                         OwnerId = salePriceList.OwnerId,
-                        Rate = existingRate.RateEntity.NormalRate,
-                        BED = existingRate.BED,
-                        EED = existingRate.EED
+                        Rate = notImportedZone.ExistingRate.RateEntity.NormalRate,
+                        BED = notImportedZone.ExistingRate.RateEntity.BED,
+                        EED = notImportedZone.ExistingRate.RateEntity.EED
                     });
                 }
+
             }
+
 
 
             previewRatesQueue.Enqueue(ratesPreview);
-        }
 
+        }
 
         private DateTime GetZoneBED(IEnumerable<AddedRate> addedRates)
         {
