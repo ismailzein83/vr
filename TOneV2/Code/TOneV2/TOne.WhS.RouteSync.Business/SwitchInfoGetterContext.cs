@@ -15,4 +15,8 @@ namespace TOne.WhS.RouteSync.Business
             set;
         }
     }
+
+    public class SwitchInfoGetterAllContext : ISwitchInfoGetterAllContext
+    {
+    }
 }

@@ -16,5 +16,13 @@ namespace TOne.WhS.RouteSync.Business
                 throw new NullReferenceException("switchInfoGetter");
             return switchIds.Select(switchId => switchInfoGetter.GetSwitchInfo(new SwitchInfoGetterContext { SwitchId = switchId })).ToList();
         }
+
+        public List<SwitchInfo> GetAllSwitches()
+        {
+            var switchInfoGetter = new ConfigurationManager().GetSwitchInfoGetter();
+            if (switchInfoGetter == null)
+                throw new NullReferenceException("switchInfoGetter");
+            return switchInfoGetter.GetAllSwitchInfo(new SwitchInfoGetterAllContext());
+        }
     }
 }
