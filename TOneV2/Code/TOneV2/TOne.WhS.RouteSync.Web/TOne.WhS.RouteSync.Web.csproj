@@ -152,6 +152,8 @@
     <Content Include="WhS_RouteSync\Directives\ProcessInput\Scheduled\whs-routesync-process-scheduled.js" />
     <Content Include="WhS_RouteSync\Directives\RadiusDataManagers\Templates\RadiusDataManagersTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\RadiusDataManagers\whs-routesync-radiusdatamanagers-settings.js" />
+    <Content Include="WhS_RouteSync\Directives\RouteSyncDefinition\Templates\RouteSyncDefinitionGridTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\RouteSyncDefinition\whs-routesync-routesyncdefinition-grid.js" />
     <Content Include="WhS_RouteSync\Directives\RouteSyncDefinition\whs-routesync-routesyncdefinition-selector.js" />
     <Content Include="WhS_RouteSync\Directives\SwitchRouteSynchronizer\Templates\SwitchRouteSynchronizerTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\SwitchRouteSynchronizer\whs-routesync-switchroutesynchronizer-settings.js" />
@@ -162,10 +164,10 @@
     <Content Include="WhS_RouteSync\Services\SwitchRouteSynchronizerService.js" />
     <Content Include="WhS_RouteSync\Views\RouteSyncDefinition\RouteSyncDefinitionEditor.html" />
     <Content Include="WhS_RouteSync\Views\RouteSyncDefinition\RouteSyncDefinitionEditorController.js" />
+    <Content Include="WhS_RouteSync\Views\RouteSyncDefinition\RouteSyncDefinitionManagement.html" />
+    <Content Include="WhS_RouteSync\Views\RouteSyncDefinition\RouteSyncDefinitionManagementController.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="WhS_RouteSync\Directives\RouteSyncDefinition\Templates\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Business\TOne.WhS.RouteSync.Business.csproj">
       <Project>{31466bbd-3579-4033-b991-12d044564a32}</Project>

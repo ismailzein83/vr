@@ -87,7 +87,7 @@ namespace TOne.WhS.RouteSync.Business
             return GetCachedRouteSyncDefinitions().MapRecords(RouteSyncDefinitionInfoMapper).OrderBy(d => d.Name);
         }
         #endregion
-
+         
 
         #region Private Classes
         class CacheManager : Vanrise.Caching.BaseCacheManager

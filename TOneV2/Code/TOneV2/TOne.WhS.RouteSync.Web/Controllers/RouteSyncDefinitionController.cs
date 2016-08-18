@@ -9,7 +9,7 @@ using Vanrise.Web.Base;
 
 namespace TOne.WhS.RouteSync.Web.Controllers
 {
-    [RoutePrefix(Constants.ROUTE_PREFIX + "RouteSyncDefinition")]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "RouteSyncDefinition")] 
     public class RouteSyncDefinitionController : BaseAPIController
     {
         RouteSyncDefinitionManager _manager = new RouteSyncDefinitionManager();

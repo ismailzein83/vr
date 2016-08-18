@@ -23,7 +23,7 @@ namespace TOne.WhS.RouteSync.Data.SQL
         public List<RouteSyncDefinition> GetRouteSyncDefinitions()
         {
             return GetItemsSP("[TOneWhS_RouteSync].[sp_RouteSyncDefinition_GetAll]", RouteSyncDefinitionMapper);
-        }
+        } 
 
         public bool AreRouteSyncDefinitionsUpdated(ref object updateHandle)
         {
