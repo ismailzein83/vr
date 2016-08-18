@@ -4,17 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleEntityZoneRateLocator
     {
-        #region ctor/Local Variables
+        #region Fields
+
         ISaleRateReader _reader;
         SalePriceListManager _salePriceListManager;
+        
         #endregion
 
         #region Public Methods
+
         public SaleEntityZoneRateLocator(ISaleRateReader reader)
         {
             _reader = reader;
@@ -22,41 +26,73 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long saleZoneId)
         {
-            SaleEntityZoneRate customerZoneRate;
-            if (!HasRate(SalePriceListOwnerType.Customer, customerId, saleZoneId, out customerZoneRate))
-                HasRate(SalePriceListOwnerType.SellingProduct, sellingProductId, saleZoneId, out customerZoneRate);
-            return customerZoneRate;
+            var mergedZoneRate = new SaleEntityZoneRate();
+
+            SaleEntityZoneRate customerZoneRate = GetZoneRate(SalePriceListOwnerType.Customer, customerId, saleZoneId);
+            SaleEntityZoneRate sellingProductZoneRate = GetZoneRate(SalePriceListOwnerType.SellingProduct, sellingProductId, saleZoneId);
+
+            MergeZoneRates(customerZoneRate, sellingProductZoneRate, out mergedZoneRate);
+
+            return mergedZoneRate;
         }
         public SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long saleZoneId)
         {
-            SaleEntityZoneRate customerZoneRate;
-            HasRate(SalePriceListOwnerType.SellingProduct, sellingProductId, saleZoneId, out customerZoneRate);
-            return customerZoneRate;
+            return GetZoneRate(SalePriceListOwnerType.SellingProduct, sellingProductId, saleZoneId);
         }
+        
         #endregion
 
         #region Private Members
-        private bool HasRate(SalePriceListOwnerType ownerType, int ownerId, long saleZoneId, out SaleEntityZoneRate saleEntityZoneRate)
+
+        private SaleEntityZoneRate GetZoneRate(SalePriceListOwnerType ownerType, int ownerId, long saleZoneId)
         {
-            var zoneRates = _reader.GetZoneRates(ownerType, ownerId);
+            SaleRatesByZone zoneRates = _reader.GetZoneRates(ownerType, ownerId);
             SaleRatePriceList saleRatePriceList;
             if (zoneRates != null && zoneRates.TryGetValue(saleZoneId, out saleRatePriceList))
             {
-                saleEntityZoneRate = new SaleEntityZoneRate
+                return new SaleEntityZoneRate
                 {
                     Source = ownerType,
                     Rate = saleRatePriceList.Rate,
                     RatesByRateType = saleRatePriceList.RatesByRateType
                 };
-                return true;
             }
-            else
-            {
-                saleEntityZoneRate = null;
-                return false;
-            }
+            return null;
         }
+        private void MergeZoneRates(SaleEntityZoneRate customerZoneRate, SaleEntityZoneRate sellingProductZoneRate, out SaleEntityZoneRate mergedZoneRate)
+        {
+            if (customerZoneRate != null && sellingProductZoneRate != null)
+            {
+                var zoneRate = new SaleEntityZoneRate();
+                
+                zoneRate.Rate = (customerZoneRate.Rate != null) ? customerZoneRate.Rate : sellingProductZoneRate.Rate;
+
+                IEnumerable<SaleRate> customerOtherRates = new List<SaleRate>();
+                IEnumerable<int> customerRateTypeIds = new List<int>();
+
+                if (customerZoneRate.RatesByRateType != null)
+                {
+                    customerOtherRates = customerZoneRate.RatesByRateType.Values;
+                    customerRateTypeIds = customerZoneRate.RatesByRateType.MapRecords(x => x.Key);
+                }
+
+                IEnumerable<SaleRate> sellingProductOtherRates = new List<SaleRate>();
+                if (sellingProductZoneRate.RatesByRateType != null)
+                    sellingProductOtherRates = sellingProductZoneRate.RatesByRateType.Values;
+
+                var zoneOtherRates = customerOtherRates.Union(sellingProductOtherRates.FindAllRecords(x => !customerRateTypeIds.Contains(x.RateTypeId.Value)));
+                zoneRate.RatesByRateType = zoneOtherRates.ToDictionary(x => x.RateTypeId.Value);
+
+                mergedZoneRate = zoneRate;
+            }
+            else if (customerZoneRate != null)
+                mergedZoneRate = customerZoneRate;
+            else if (sellingProductZoneRate != null)
+                mergedZoneRate = sellingProductZoneRate;
+            else
+                mergedZoneRate = null;
+        }
+
         #endregion
-     
     }
 }
