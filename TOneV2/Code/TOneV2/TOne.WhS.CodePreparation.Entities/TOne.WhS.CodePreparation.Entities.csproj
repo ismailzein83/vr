@@ -69,6 +69,8 @@
     <Compile Include="NewData\CodeToClose.cs" />
     <Compile Include="NewData\CodeToMove.cs" />
     <Compile Include="Owner.cs" />
+    <Compile Include="PreviewData\NotImportedCode.cs" />
+    <Compile Include="PreviewData\NotImportedZone.cs" />
     <Compile Include="PreviewData\RatePreview.cs" />
     <Compile Include="PreviewData\CodePreview.cs" />
     <Compile Include="PreviewData\CountryPreview.cs" />
