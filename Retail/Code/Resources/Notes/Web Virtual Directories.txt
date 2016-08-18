@@ -19,3 +19,4 @@ Retail_Data				C:\TFS\Retail\Code\Retail.Data.Web\Retail_Data
 BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
 VR_AccountBalance		C:\TFS\Vanrise\Code\Vanrise.AccountBalance.Web\VR_AccountBalance
 VR_Notification			C:\TFS\Vanrise\Code\Vanrise.Notification.Web\VR_Notification
+VR_BEBridge				C:\TFS\Vanrise\Code\Vanrise.BEBridge.Web\VR_BEBridge
