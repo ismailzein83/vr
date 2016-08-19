@@ -30,5 +30,3 @@ BEGIN
 		group by LEFT(Code, @PrefixLength)
 	SET NOCOUNT OFF;
 END
-
---[TOneWhS_BE].[sp_SupplierCode_GetSpecificCodePrefixes_ByAA]  3,'2,3','2016-08-17 11:35:19.650','0'

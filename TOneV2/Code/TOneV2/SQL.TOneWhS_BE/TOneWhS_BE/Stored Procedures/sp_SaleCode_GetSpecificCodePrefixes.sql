@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-Create PROCEDURE [TOneWhS_BE].[sp_SaleCode_GetSpecificCodePrefixes]
+CREATE PROCEDURE [TOneWhS_BE].[sp_SaleCode_GetSpecificCodePrefixes]
 	@PrefixLength int,
 	@CodePrefixes varchar(max),
 	@EffectiveOn DATETIME,
@@ -30,5 +30,3 @@ BEGIN
 		group by LEFT(Code, @PrefixLength);
 	SET NOCOUNT OFF;
 END
-
---[TOneWhS_BE].[sp_SaleCode_GetSpecificCodePrefixes_ByAA]  2,'2,3','2016-08-17 11:35:19.650','0'

@@ -15,7 +15,7 @@ BEGIN
 	
 	select R.ZoneName , R.OwnerType , R.OwnerID , R.Rate , R.BED , R.EED
 	from TOneWhs_CP.SaleRate_Preview as R
-	Where (@ZoneName is null or R.ZoneName = @ZoneName)
+	Where (@ZoneName is null or R.ZoneName = @ZoneName) and R.ProcessInstanceID = @ProcessInstanceId
 			
 	
 	SET NOCOUNT OFF

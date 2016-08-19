@@ -19,6 +19,7 @@ BEGIN
 			OR
 			(@IsFuture = 1 AND (BED > GETDATE() OR EED IS NULL))
 		)
-		group by LEFT(Code, @PrefixLength);
+		group by LEFT(Code, @PrefixLength)
+		order by codeCount desc;
 	SET NOCOUNT OFF;
 END
