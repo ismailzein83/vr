@@ -232,7 +232,7 @@
                     $scope.scopeModal.address = carrierProfileEntity.Settings.Address;
                     $scope.scopeModal.postalCode = carrierProfileEntity.Settings.PostalCode;
                     $scope.scopeModal.town = carrierProfileEntity.Settings.Town;
-
+                    $scope.scopeModal.customerByProfile = carrierProfileEntity.Settings.CustomerByProfile;
                     if (carrierProfileEntity.Settings.CompanyLogo > 0)
                         $scope.scopeModal.companyLogo = {
                             fileId: carrierProfileEntity.Settings.CompanyLogo
@@ -312,7 +312,9 @@
                     Town: $scope.scopeModal.town,
                     CompanyLogo: ($scope.scopeModal.companyLogo != null) ? $scope.scopeModal.companyLogo.fileId : 0,
                     PhoneNumbers: UtilsService.getPropValuesFromArray($scope.scopeModal.phoneNumbers, "phoneNumber"),
-                    Faxes: UtilsService.getPropValuesFromArray($scope.scopeModal.faxes, "fax")
+                    Faxes: UtilsService.getPropValuesFromArray($scope.scopeModal.faxes, "fax"),
+                    CustomerByProfile :$scope.scopeModal.customerByProfile
+
                 }
             };
 
