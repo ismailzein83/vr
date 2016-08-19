@@ -216,7 +216,8 @@ namespace TOne.WhS.Sales.BP.Activities
                 if (currentRate != null)
                 {
                     ratePreview.CurrentRate = GetRateValue(rateTypeId, currentRate);
-                    ratePreview.IsCurrentRateInherited = (currentRate.Source != SalePriceListOwnerType.Customer);
+                    SalePriceListOwnerType currentRateSource = GetRateSource(currentRate, rateTypeId);
+                    ratePreview.IsCurrentRateInherited = (currentRateSource != SalePriceListOwnerType.Customer);
                 }
             }
         }
@@ -239,7 +240,19 @@ namespace TOne.WhS.Sales.BP.Activities
 
             return null;
         }
-        
+
+        private SalePriceListOwnerType GetRateSource(SaleEntityZoneRate zoneRate, int? rateTypeId)
+        {
+            SalePriceListOwnerType rateSource;
+
+            if (rateTypeId.HasValue)
+                zoneRate.SourcesByRateType.TryGetValue(rateTypeId.Value, out rateSource);
+            else
+                rateSource = zoneRate.Source;
+
+            return rateSource;
+        }
+
         #endregion
 
         #region Private Classes

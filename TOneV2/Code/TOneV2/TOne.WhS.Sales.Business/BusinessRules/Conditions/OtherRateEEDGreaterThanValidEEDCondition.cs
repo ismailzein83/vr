@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
@@ -13,7 +14,8 @@ namespace TOne.WhS.Sales.Business.BusinessRules
     {
         public override string GetMessage(IRuleTarget target)
         {
-            return String.Format("Cannot add an other rate with EED > valid EED of zone {0}", (target as DataByZone).ZoneName);
+            DataByZone zone = (target as DataByZone);
+            return String.Format("EED of the normal rate of zone {0} must be less than or equal to EED ({1}) of the zone", zone.ZoneName, zone.EED);
         }
 
         public override bool ShouldValidate(IRuleTarget target)
@@ -26,6 +28,24 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             var zone = context.Target as DataByZone;
 
             List<DateTime?> endEffectiveDates;
+
+            if (zone.NormalRateToClose != null && zone.CurrentRate != null && zone.CurrentRate.RatesByRateType != null)
+            {
+                IEnumerable<SaleRate> otherRates = zone.CurrentRate.RatesByRateType.Values;
+                    
+                foreach (SaleRate otherRate in otherRates)
+                {
+                    bool isOtherRateChangedOrClosed =
+                        (zone.OtherRatesToChange != null && zone.OtherRatesToChange.Any(x => x.RateTypeId.Value == otherRate.RateTypeId.Value)) ||
+                        (zone.OtherRatesToClose != null && zone.OtherRatesToClose.Any(x => x.RateTypeId.Value == otherRate.RateTypeId.Value));
+
+                    if (isOtherRateChangedOrClosed)
+                        continue; // Changed and closed other rates are validated below
+
+                    if (!otherRate.EED.HasValue || otherRate.EED.Value > zone.NormalRateToClose.CloseEffectiveDate)
+                        return false;
+                }
+            }
 
             if (zone.OtherRatesToChange != null)
             {

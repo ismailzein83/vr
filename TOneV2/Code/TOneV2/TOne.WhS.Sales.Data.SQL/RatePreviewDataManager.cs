@@ -118,8 +118,8 @@ namespace TOne.WhS.Sales.Data.SQL
                 CurrentRate = GetReaderValue<decimal?>(reader, "CurrentRate"),
                 IsCurrentRateInherited = GetReaderValue<bool?>(reader, "IsCurrentRateInherited"),
                 NewRate = GetReaderValue<decimal?>(reader, "NewRate"),
-                ChangeType = (RateChangeType)reader["ChangeType"], //GetRateChangeType(reader["ChangeType"]), // Is this a good practice?
-                EffectiveOn = (DateTime)reader["EffectiveOn"],
+                ChangeType = (RateChangeType)reader["ChangeType"],
+                EffectiveOn = GetReaderValue<DateTime?>(reader, "EffectiveOn"),
                 EffectiveUntil = GetReaderValue<DateTime?>(reader, "EffectiveUntil")
             };
         }

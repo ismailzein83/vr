@@ -90,38 +90,35 @@ function (UtilsService, VRUIUtilsService) {
                 return selectorLoadDeferred.promise;
             };
 
-            api.applyChanges = function (zoneItemChanges) {
-                if (zoneItem.IsDirty) {
-                    setNewRoutingProduct(zoneItemChanges);
-                    setRoutingProductChange(zoneItemChanges);
-                }
+            api.applyChanges = function () {
+                setNewRoutingProduct()
+                setRoutingProductChange();
             };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
 
-        function setNewRoutingProduct(zoneItemChanges) {
-            zoneItemChanges.NewRoutingProduct = null;
+        function setNewRoutingProduct()
+        {
             var selectedId = selectorAPI.getSelectedIds();
 
-            if (selectedId && selectedId != -1) {
-                zoneItemChanges.NewRoutingProduct = {
-                    ZoneId: zoneItemChanges.ZoneId,
-                    ZoneRoutingProductId: selectedId,
-                    BED: UtilsService.getDateFromDateTime(new Date()),
-                    EED: null
-                };
+            if (selectedId && selectedId != -1)
+            {
+                zoneItem.NewRoutingProductId = selectedId;
+                zoneItem.NewRoutingProductBED = UtilsService.getDateFromDateTime(new Date());
+                zoneItem.NewRoutingProductEED = null;
+            }
+            else {
+                zoneItem.NewRoutingProductId = null;
+                zoneItem.NewRoutingProductBED = null;
+                zoneItem.NewRoutingProductEED = null;
             }
         }
-        function setRoutingProductChange(zoneItemChanges) {
+        function setRoutingProductChange()
+        {
             var selectedId = selectorAPI.getSelectedIds();
-
-            zoneItemChanges.RoutingProductChange = (selectedId && selectedId == -1) ? {
-                ZoneId: zoneItem.ZoneId,
-                ZoneRoutingProductId: zoneItem.CurrentRoutingProductId,
-                EED: UtilsService.getDateFromDateTime(new Date())
-            } : null;
+            zoneItem.RoutingProductChangeEED = (selectedId && selectedId == -1) ? UtilsService.getDateFromDateTime(new Date()) : null;
         }
     }
 }]);

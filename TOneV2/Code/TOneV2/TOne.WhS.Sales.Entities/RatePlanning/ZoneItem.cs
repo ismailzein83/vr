@@ -54,6 +54,7 @@ namespace TOne.WhS.Sales.Entities
                 return null;
             }
         }
+        public IEnumerable<DraftRateToClose> ClosedRates { get; set; }
         public decimal? CalculatedRate { get; set; }
         #endregion
 

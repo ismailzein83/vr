@@ -12,8 +12,6 @@ namespace TOne.WhS.Sales.Entities
         //TODO: to remove later if there is no need to, the replacement is zone name
         public long ZoneId { get; set; }
 
-        public string ZoneName { get; set; }
-
         public int? RateTypeId { get; set; }
         
         public Decimal NormalRate { get; set; }

@@ -13,7 +13,8 @@ namespace TOne.WhS.Sales.Business.BusinessRules
     {
         public override string GetMessage(IRuleTarget target)
         {
-            return String.Format("Cannot add a normal rate with BED < valid BED of zone {0}", (target as DataByZone).ZoneName);
+            DataByZone zone = (target as DataByZone);
+            return String.Format("BED ({0}) of the normal rate of zone {1} must be greater than or equal to BED ({2}) of the zone", zone.NormalRateToChange.BED, zone.ZoneName, zone.BED);
         }
 
         public override bool ShouldValidate(IRuleTarget target)
@@ -27,6 +28,9 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (zone.NormalRateToChange != null)
             {
+                if (zone.NormalRateToChange.BED == default(DateTime))
+                    return false;
+
                 var beginEffectiveDates = new List<DateTime?>() { zone.BED, zone.SoldOn };
 
                 if (zone.NormalRateToChange.BED < UtilitiesManager.GetMaxDate(beginEffectiveDates).Value)

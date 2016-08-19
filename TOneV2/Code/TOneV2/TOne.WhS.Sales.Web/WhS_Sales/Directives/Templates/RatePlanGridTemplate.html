@@ -17,7 +17,7 @@
             <vr-datagridcolumn headertext="'Current Rate'" field="'CurrentRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Calculated Rate'" field="'CalculatedRate'" type="'Number'" numberprecision="'LongPrecision'" ng-show="rateCalculationMethod" isfielddynamic="true" disablesorting></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'New Rate'" disablesorting>
-                <vr-textbox type="number" tonextinput value="dataItem.NewRate" minvalue="0" customvalidate="dataItem.validateNewRate(dataItem)" onblurtextbox="viewScope.onNewRateChanged(dataItem)"></vr-textbox>
+                <vr-textbox type="number" tonextinput value="dataItem.NewRate" minvalue="0" customvalidate="dataItem.validateNewRate()" onblurtextbox="viewScope.onNewRateChanged(dataItem)"></vr-textbox>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'BED'" disablesorting>
                 <span vr-disabled="true">

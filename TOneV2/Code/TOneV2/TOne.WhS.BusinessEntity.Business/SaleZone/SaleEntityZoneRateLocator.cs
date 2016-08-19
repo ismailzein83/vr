@@ -26,14 +26,9 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long saleZoneId)
         {
-            var mergedZoneRate = new SaleEntityZoneRate();
-
             SaleEntityZoneRate customerZoneRate = GetZoneRate(SalePriceListOwnerType.Customer, customerId, saleZoneId);
             SaleEntityZoneRate sellingProductZoneRate = GetZoneRate(SalePriceListOwnerType.SellingProduct, sellingProductId, saleZoneId);
-
-            MergeZoneRates(customerZoneRate, sellingProductZoneRate, out mergedZoneRate);
-
-            return mergedZoneRate;
+            return GetMergedZoneRate(customerZoneRate, sellingProductZoneRate);
         }
         public SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long saleZoneId)
         {
@@ -68,8 +63,10 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return null;
         }
-        private void MergeZoneRates(SaleEntityZoneRate customerZoneRate, SaleEntityZoneRate sellingProductZoneRate, out SaleEntityZoneRate mergedZoneRate)
+        private SaleEntityZoneRate GetMergedZoneRate(SaleEntityZoneRate customerZoneRate, SaleEntityZoneRate sellingProductZoneRate)
         {
+            SaleEntityZoneRate mergedZoneRate;
+
             if (customerZoneRate != null && sellingProductZoneRate != null)
             {
                 var zoneRate = new SaleEntityZoneRate();
@@ -79,8 +76,6 @@ namespace TOne.WhS.BusinessEntity.Business
                     zoneRate.Rate = customerZoneRate.Rate;
                     zoneRate.Source = customerZoneRate.Source;
                 }
-                else if (sellingProductZoneRate.Rate == null)
-                    throw new NullReferenceException("sellingProductZoneRate.Rate");
                 else
                 {
                     zoneRate.Rate = sellingProductZoneRate.Rate;
@@ -95,7 +90,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (customerZoneRate.RatesByRateType != null)
                 {
                     customerOtherRates = customerZoneRate.RatesByRateType.Values;
-                    customerRateTypeIds = customerZoneRate.RatesByRateType.MapRecords(x => x.Key);
+                    customerRateTypeIds = customerZoneRate.RatesByRateType.Keys;
                     foreach (int customerRateTypeId in customerRateTypeIds)
                         zoneRate.SourcesByRateType.Add(customerRateTypeId, customerZoneRate.Source);
                 }
@@ -119,6 +114,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 mergedZoneRate = sellingProductZoneRate;
             else
                 mergedZoneRate = null;
+
+            return mergedZoneRate;
         }
 
         #endregion

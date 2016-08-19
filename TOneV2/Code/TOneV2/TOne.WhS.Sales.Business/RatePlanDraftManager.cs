@@ -37,7 +37,7 @@ namespace TOne.WhS.Sales.Business
         }
 
         #region Save Draft
-            
+
         public void SaveDraft(SalePriceListOwnerType ownerType, int ownerId, Changes newChanges)
         {
             var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
@@ -66,24 +66,11 @@ namespace TOne.WhS.Sales.Business
         {
             return Merge(existingZoneChanges, newZoneChanges, () =>
             {
-                foreach (ZoneChanges newChanges in newZoneChanges)
+                foreach (ZoneChanges existingZoneDraft in existingZoneChanges)
                 {
-                    ZoneChanges existingChanges = existingZoneChanges.FindRecord(x => x.ZoneId == newChanges.ZoneId);
-
-                    if (existingChanges != null)
-                    {
-                        // Routing product changes are already updated
-                        newChanges.NewRates = MergeNewRates(existingChanges.NewRates, newChanges.NewRates);
-                        newChanges.ClosedRates = MergeClosedRates(existingChanges.ClosedRates, newChanges.ClosedRates);
-                    }
+                    if (!newZoneChanges.Any(x => x.ZoneId == existingZoneDraft.ZoneId))
+                        newZoneChanges.Add(existingZoneDraft);
                 }
-
-                foreach (ZoneChanges existingChanges in existingZoneChanges)
-                {
-                    if (!newZoneChanges.Any(x => x.ZoneId == existingChanges.ZoneId))
-                        newZoneChanges.Add(existingChanges);
-                }
-
                 return newZoneChanges;
             });
         }

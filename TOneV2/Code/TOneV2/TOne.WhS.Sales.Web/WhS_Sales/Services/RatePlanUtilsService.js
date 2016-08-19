@@ -2,12 +2,14 @@
 
     'use strict';
 
-    RatePlanUtilsService.$inject = [];
+    RatePlanUtilsService.$inject = ['UtilsService'];
 
-    function RatePlanUtilsService()
+    function RatePlanUtilsService(UtilsService)
     {
         return {
-            onNewRateChanged: onNewRateChanged
+            onNewRateChanged: onNewRateChanged,
+            validateNewRate:validateNewRate,
+            validateNewRateDates: validateNewRateDates
         };
 
         function onNewRateChanged(dataItem, settings)
@@ -29,6 +31,28 @@
         }
         function getNowPlusDays(days) {
             return new Date(new Date().setDate(new Date().getDate() + days));
+        }
+
+        function validateNewRate(dataItem) {
+            if (dataItem.CurrentRate != null && Number(dataItem.CurrentRate) == Number(dataItem.NewRate))
+                return 'New Rate = Current Rate';
+            return null;
+        }
+        function validateNewRateDates(dataItem)
+        {
+            var zoneBED = new Date(dataItem.ZoneBED);
+            var zoneEED = (dataItem.ZoneEED != null) ? new Date(dataItem.ZoneEED) : null;
+
+            var newRateBED = new Date(dataItem.NewRateBED);
+            var newRateEED = (dataItem.NewRateEED != null) ? new Date(dataItem.NewRateEED) : null;
+
+            if (newRateBED < zoneBED)
+                return 'Min BED: ' + UtilsService.getShortDate(zoneBED);
+
+            if (zoneEED != null && (newRateEED == null || newRateEED > zoneEED))
+                return 'Max EED: ' + UtilsService.getShortDate(zoneEED);
+
+            return UtilsService.validateDates(newRateBED, newRateEED);
         }
     }
 

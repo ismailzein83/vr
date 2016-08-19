@@ -13,7 +13,16 @@ namespace TOne.WhS.Sales.Business.BusinessRules
     {
         public override string GetMessage(IRuleTarget target)
         {
-            return String.Format("Cannot add a normal rate with EED > EED of zone {0}", (target as DataByZone).ZoneName);
+            DataByZone zone = (target as DataByZone);
+            
+            string normalRateEEDString = "NULL";
+            if (zone.NormalRateToChange != null)
+                if (zone.NormalRateToChange.EED.HasValue)
+                    normalRateEEDString = zone.NormalRateToChange.EED.Value.ToShortDateString();
+            else if (zone.NormalRateToClose != null)
+                    normalRateEEDString = zone.NormalRateToClose.CloseEffectiveDate.ToShortDateString();
+
+            return String.Format("EED ({0}) of the normal rate of zone {1} must be less than or equal to EED ({2}) of the zone", normalRateEEDString, zone.ZoneName, zone.EED);
         }
 
         public override bool ShouldValidate(IRuleTarget target)

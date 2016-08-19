@@ -13,7 +13,8 @@ namespace TOne.WhS.Sales.Business.BusinessRules
     {
         public override string GetMessage(IRuleTarget target)
         {
-            return String.Format("Cannot add an other rate with BED < valid BED of zone {0}", (target as DataByZone).ZoneName);
+            DataByZone zone = (target as DataByZone);
+            return String.Format("BED of the other rate of zone {0} must be greater than or equal to BED ({1}) of the zone", zone.ZoneName, zone.BED);
         }
 
         public override bool ShouldValidate(IRuleTarget target)
@@ -31,6 +32,9 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
                 foreach (RateToChange otherRateToChange in zone.OtherRatesToChange)
                 {
+                    if (otherRateToChange.BED == default(DateTime))
+                        return false;
+
                     if (zone.CurrentRate != null && zone.CurrentRate.Rate != null)
                     {
                         beginEffectiveDates = new List<DateTime?>() { zone.BED, zone.SoldOn, zone.CurrentRate.Rate.BED };

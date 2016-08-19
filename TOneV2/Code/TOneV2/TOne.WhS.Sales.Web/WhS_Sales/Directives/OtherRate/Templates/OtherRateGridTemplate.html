@@ -1,5 +1,5 @@
 ﻿<vr-row>
-    <vr-columns width="1/2row">
+    <vr-columns width="3/4row">
         <vr-datagrid datasource="otherRates"
                      on-ready="onGridReady"
                      dataretrievalfunction="dataRetrievalFunction"
@@ -8,12 +8,13 @@
                      idfield="Entity.RateTypeId">
             <vr-datagridcolumn headertext="'Rate Type'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Current Rate'" field="'CurrentRate'" type="'Number'"></vr-datagridcolumn>
-            
+
             <vr-datagridcolumn headertext="'New Rate'" disablesorting>
                 <span vr-disabled="!viewScope.areOtherRatesEditable()">
                     <vr-textbox type="number"
                                 value="dataItem.NewRate"
                                 onblurtextbox="viewScope.onNewRateChanged(dataItem)"
+                                customvalidate="viewScope.validateNewRate(dataItem)"
                                 minvalue="0"
                                 tonextinput>
                     </vr-textbox>
@@ -22,14 +23,16 @@
 
             <vr-datagridcolumn headertext="'BED'">
                 <span vr-disabled="!viewScope.areOtherRatesEditable()">
-                    <vr-datetimepicker type="date" value="dataItem.CurrentRateBED" ng-hide="dataItem.NewRate != null"></vr-datetimepicker>
-                    <vr-datetimepicker type="date" value="dataItem.NewRateBED" ng-show="dataItem.NewRate != null"></vr-datetimepicker>
+                    <span vr-disabled="dataItem.CurrentRate != null">
+                        <vr-datetimepicker type="date" value="dataItem.CurrentRateBED" ng-hide="dataItem.NewRate != null"></vr-datetimepicker>
+                    </span>
+                    <vr-datetimepicker type="date" value="dataItem.NewRateBED" customvalidate="viewScope.validateNewRateDates(dataItem)" ng-show="dataItem.NewRate != null" isrequired="dataItem.NewRate != null">
                 </span>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'EED'">
                 <span vr-disabled="!viewScope.areOtherRatesEditable()">
-                    <vr-datetimepicker type="date" value="dataItem.CurrentRateEED" ng-hide="dataItem.NewRate != null"></vr-datetimepicker>
-                    <vr-datetimepicker type="date" value="dataItem.NewRateEED" ng-show="dataItem.NewRate != null"></vr-datetimepicker>
+                    <vr-datetimepicker type="date" value="dataItem.CurrentRateNewEED" onvaluechanged="viewScope.onCurrentRateNewEEDChanged()" ng-hide="dataItem.NewRate != null"></vr-datetimepicker>
+                    <vr-datetimepicker type="date" value="dataItem.NewRateEED" customvalidate="viewScope.validateNewRateDates(dataItem)" ng-show="dataItem.NewRate != null"></vr-datetimepicker>
                 </span>
             </vr-datagridcolumn>
         </vr-datagrid>

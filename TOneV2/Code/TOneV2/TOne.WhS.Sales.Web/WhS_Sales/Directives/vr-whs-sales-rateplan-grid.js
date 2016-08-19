@@ -216,13 +216,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         zoneItem.CurrentRateEED = zoneItem.ZoneEED;
                     }
 
-                    zoneItem.validateNewRate = function (zoneItem) {
-                        if (zoneItem.CurrentRate) {
-                            if (Number(zoneItem.CurrentRate) === Number(zoneItem.NewRate)) {
-                                return "New rate must be higher or lower than the current rate";
-                            }
-                        }
-                        return null;
+                    zoneItem.validateNewRate = function () {
+                        return WhS_Sales_RatePlanUtilsService.validateNewRate(zoneItem);
                     };
 
                     zoneItem.onCurrentRateEEDChanged = function (zoneItem) {
@@ -321,16 +316,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     };
 
                     zoneItem.validateNewRateDates = function () {
-                        var errorMessage = validateTimeRange(zoneItem.NewRateBED, zoneItem.NewRateEED);
-                        if (errorMessage != null)
-                            return errorMessage;
-
-                        if (compareDates(zoneItem.NewRateBED, zoneItem.ZoneBED) == 2)
-                            return 'BED of new rate < BED of zone';
-                        if (zoneItem.ZoneEED != null && compareDates(zoneItem.NewRateEED, zoneItem.ZoneEED) == 1)
-                            return 'EED of new rate > EED of zone';
-
-                        return null;
+                        return WhS_Sales_RatePlanUtilsService.validateNewRateDates(zoneItem);
                     };
 
                     function validateTimeRange(date1, date2) {
@@ -389,7 +375,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             function applyChanges(zoneChanges, zoneItem) {
                 if (zoneItem.IsDirty) {
                     var zoneItemChanges = {
-                        ZoneId: zoneItem.ZoneId
+                        ZoneId: zoneItem.ZoneId,
+                        ZoneName: zoneItem.ZoneName
                     };
 
                     setDraftRateToChange(zoneItemChanges, zoneItem);
@@ -401,6 +388,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         if (item.directiveAPI && item.directiveAPI.applyChanges)
                             item.directiveAPI.applyChanges(zoneItemChanges);
                     }
+
+                    applyRoutingProductChanges();
+                    applyOtherRateChanges();
 
                     zoneChanges.push(zoneItemChanges);
                 }
@@ -423,6 +413,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                     if (zoneItem.IsCurrentRateEditable && !compareDates(zoneItem.CurrentRateEED, zoneItem.currentRateEED)) {
                         var rateToClose = {
+                            ZoneId: zoneItem.ZoneId,
                             RateId: zoneItem.CurrentRateId,
                             EED: zoneItem.CurrentRateEED
                         };
@@ -441,6 +432,51 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             return true;
                         else
                             return false;
+                    }
+                }
+
+                function applyRoutingProductChanges()
+                {
+                    if (zoneItem.NewRoutingProductId != null)
+                    {
+                        zoneItemChanges.NewRoutingProduct = {
+                            ZoneId: zoneItemChanges.ZoneId,
+                            ZoneRoutingProductId: zoneItem.NewRoutingProductId,
+                            BED: zoneItem.NewRoutingProductBED,
+                            EED: zoneItem.NewRoutingProductEED
+                        };
+                    }
+                    else if (zoneItem.RoutingProductChangeEED != null)
+                    {
+                        zoneItemChanges.RoutingProductChange = {
+                            ZoneId: zoneItem.ZoneId,
+                            ZoneRoutingProductId: zoneItem.CurrentRoutingProductId,
+                            EED: zoneItem.RoutingProductChangeEED
+                        };
+                    }
+                }
+                function applyOtherRateChanges()
+                {
+                    if (zoneItem.NewRates != null)
+                    {
+                        if (zoneItemChanges.NewRates == null)
+                            zoneItemChanges.NewRates = [];
+
+                        for (var i = 0; i < zoneItem.NewRates.length; i++) {
+                            if (zoneItem.NewRates[i].RateTypeId != null)
+                                zoneItemChanges.NewRates.push(zoneItem.NewRates[i]);
+                        }
+                    }
+
+                    if (zoneItem.ClosedRates != null)
+                    {
+                        if (zoneItemChanges.ClosedRates == null)
+                            zoneItemChanges.ClosedRates = [];
+
+                        for (var i = 0; i < zoneItem.ClosedRates.length; i++) {
+                            if (zoneItem.ClosedRates[i].RateTypeId != null)
+                                zoneItemChanges.ClosedRates.push(zoneItem.ClosedRates[i]);
+                        }
                     }
                 }
             }

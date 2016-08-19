@@ -135,12 +135,10 @@ namespace TOne.WhS.Sales.BP.Activities
             if (zoneChangesList == null)
                 return;
 
-            var saleZoneManager = new SaleZoneManager();
-
             foreach (ZoneChanges zoneChanges in zoneChangesList)
             {
-                SetZoneRateActions(ref ratesToChange, ref ratesToClose, zoneChanges, saleZoneManager, currencyId, ref minDate);
-                SetZoneRoutingProductActions(ref saleZoneRoutingProductsToAdd, ref saleZoneRoutingProductsToClose, zoneChanges, saleZoneManager, ref minDate);
+                SetZoneRateActions(ref ratesToChange, ref ratesToClose, zoneChanges, currencyId, ref minDate);
+                SetZoneRoutingProductActions(ref saleZoneRoutingProductsToAdd, ref saleZoneRoutingProductsToClose, zoneChanges, ref minDate);
             }
         }
 
@@ -149,7 +147,6 @@ namespace TOne.WhS.Sales.BP.Activities
             ref List<RateToChange> ratesToChange,
             ref List<RateToClose> ratesToClose,
             ZoneChanges zoneChanges,
-            SaleZoneManager saleZoneManager,
             int currencyId,
             ref DateTime minDate
         )
@@ -161,7 +158,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     ratesToChange.Add(new RateToChange()
                     {
                         ZoneId = zoneChanges.ZoneId,
-                        ZoneName = saleZoneManager.GetSaleZoneName(zoneChanges.ZoneId),
+                        ZoneName = zoneChanges.ZoneName,
                         RateTypeId = newRate.RateTypeId,
                         NormalRate = newRate.NormalRate,
                         CurrencyId = currencyId,
@@ -179,7 +176,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     ratesToClose.Add(new RateToClose()
                     {
                         ZoneId = zoneChanges.ZoneId,
-                        ZoneName = saleZoneManager.GetSaleZoneName(zoneChanges.ZoneId),
+                        ZoneName = zoneChanges.ZoneName,
                         RateTypeId = closedRate.RateTypeId,
                         CloseEffectiveDate = closedRate.EED
                     });
@@ -193,7 +190,6 @@ namespace TOne.WhS.Sales.BP.Activities
             ref List<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd,
             ref List<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose,
             ZoneChanges zoneChanges,
-            SaleZoneManager saleZoneManager,
             ref DateTime minDate
         )
         {
@@ -202,7 +198,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 saleZoneRoutingProductsToAdd.Add(new SaleZoneRoutingProductToAdd()
                 {
                     ZoneId = zoneChanges.NewRoutingProduct.ZoneId,
-                    ZoneName = saleZoneManager.GetSaleZoneName(zoneChanges.NewRoutingProduct.ZoneId),
+                    ZoneName = zoneChanges.ZoneName,
                     ZoneRoutingProductId = zoneChanges.NewRoutingProduct.ZoneRoutingProductId,
                     BED = zoneChanges.NewRoutingProduct.BED,
                     EED = zoneChanges.NewRoutingProduct.EED
@@ -214,7 +210,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 saleZoneRoutingProductsToClose.Add(new SaleZoneRoutingProductToClose()
                 {
                     ZoneId = zoneChanges.RoutingProductChange.ZoneId,
-                    ZoneName = saleZoneManager.GetSaleZoneName(zoneChanges.RoutingProductChange.ZoneId),
+                    ZoneName = zoneChanges.ZoneName,
                     CloseEffectiveDate = zoneChanges.RoutingProductChange.EED
                 });
                 minDate = Vanrise.Common.Utilities.Min(minDate, zoneChanges.RoutingProductChange.EED);
