@@ -39,6 +39,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft , width:100 })
         }
         else {
+            $(tooltip).removeClass('tooltip-error-right');
             $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft })
         }
 

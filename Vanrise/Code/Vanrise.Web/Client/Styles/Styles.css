@@ -804,6 +804,7 @@ loader .outer-loader {
 .tooltip-error {
     padding: 5px;
     margin: 5px;
+    min-width: 80px;
     position: absolute;
     top: 0px;
     left: 100%;
