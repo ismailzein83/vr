@@ -19,9 +19,7 @@ IF (@TimestampAfter IS NULL)
       ,[WorkflowInstanceID]
       ,[InputArgument]
       ,[ExecutionStatus]
-      ,[LockedByProcessID]
       ,[LastMessage]
-      ,[RetryCount]
 	   ,EntityID
       ,[CreatedTime]
       ,[StatusUpdatedTime]
@@ -47,9 +45,7 @@ IF (@TimestampAfter IS NULL)
       ,[WorkflowInstanceID]
       ,[InputArgument]
       ,[ExecutionStatus]
-      ,[LockedByProcessID]
       ,[LastMessage]
-      ,[RetryCount]
 	  ,EntityID
       ,[CreatedTime]
       ,[StatusUpdatedTime]

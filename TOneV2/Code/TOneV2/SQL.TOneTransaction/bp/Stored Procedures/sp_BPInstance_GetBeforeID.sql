@@ -17,9 +17,7 @@ BEGIN
       ,[WorkflowInstanceID]
       ,[InputArgument]
       ,[ExecutionStatus]
-      ,[LockedByProcessID]
       ,[LastMessage]
-      ,[RetryCount]
 	  ,EntityID
       ,[CreatedTime]
       ,[StatusUpdatedTime]

@@ -2,8 +2,7 @@
 	@DefinitionID int,
 	@Statuses varchar(max),
 	@NbOrRows int,
-	@CurrentRuntimeProcessID int,
-	@RunningProcessIDs varchar(max)
+	@ServiceInstanceID uniqueidentifier
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -12,10 +11,6 @@ BEGIN
 	INSERT INTO @StatusesTable ([Status])
 	SELECT Convert(int, ParsedString) FROM bp.[ParseStringList](@Statuses)
 	
-	DECLARE @RunningProcessIDsTable TABLE (ID int)
-	INSERT INTO @RunningProcessIDsTable (ID)
-	SELECT Convert(int, ParsedString) FROM bp.[ParseStringList](@RunningProcessIDs)
-
     SELECT TOP(@NbOrRows) bp.[ID]
 	  ,[Title]
       ,[ParentID]
@@ -23,9 +18,7 @@ BEGIN
       ,[WorkflowInstanceID]
       ,[InputArgument]
       ,[ExecutionStatus]
-      ,[LockedByProcessID]
       ,[LastMessage]
-      ,[RetryCount]
 	   ,EntityID
       ,[CreatedTime]
       ,[StatusUpdatedTime]      
@@ -34,6 +27,6 @@ BEGIN
 	JOIN @StatusesTable statuses ON bp.ExecutionStatus = statuses.[Status]
 	WHERE
 	[DefinitionID] = @DefinitionID
-	AND (LockedByProcessID IS NULL OR LockedByProcessID NOT IN (SELECT ID FROM @RunningProcessIDsTable))
+	AND ServiceInstanceID = @ServiceInstanceID
 	ORDER BY bp.[ID]
 END

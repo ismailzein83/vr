@@ -63,6 +63,7 @@ namespace TestRuntime
             //Vanrise.Queueing.PersistentQueueFactory.Default.CreateQueueIfNotExists<TOne.CDR.Entities.CDRBatch>(0, "testCDRQueue");
             //var queue = Vanrise.Queueing.PersistentQueueFactory.Default.GetQueue("testCDRQueue");
 
+            BPRegulatorRuntimeService bpRegulatorService = new BPRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
             QueueActivationRuntimeService queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
@@ -75,11 +76,13 @@ namespace TestRuntime
             Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             var runtimeServices = new List<RuntimeService>();
             runtimeServices.Add(transactionLockRuntimeService);
-            runtimeServices.Add(queueRegulatorService);
-            runtimeServices.Add(queueActivationService);
-            runtimeServices.Add(summaryQueueActivationService);
+            //runtimeServices.Add(queueRegulatorService);
+            //runtimeServices.Add(queueActivationService);
+            //runtimeServices.Add(summaryQueueActivationService);
 
-            //runtimeServices.Add(bpService);
+            runtimeServices.Add(bpRegulatorService);
+
+            runtimeServices.Add(bpService);
 
             //runtimeServices.Add(schedulerService);
             //runtimeServices.Add(dsRuntimeService);

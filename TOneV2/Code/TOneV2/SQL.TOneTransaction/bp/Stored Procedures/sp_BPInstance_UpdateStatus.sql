@@ -7,8 +7,7 @@ CREATE PROCEDURE [bp].[sp_BPInstance_UpdateStatus]
 	@ID bigint,
 	@ExecutionStatus int,
 	@Message nvarchar(max),
-	@RetryCount int
-	
+	@WorkflowInstanceID uniqueidentifier
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -18,6 +17,6 @@ BEGIN
     SET	ExecutionStatus = @ExecutionStatus,
 		StatusUpdatedTime = GETDATE(),
 		LastMessage = ISNULL(@Message, LastMessage),
-		RetryCount = ISNULL(@RetryCount, RetryCount)
+		WorkflowInstanceID = ISNULL(@WorkflowInstanceID, WorkflowInstanceID)
 	WHERE ID = @ID
 END

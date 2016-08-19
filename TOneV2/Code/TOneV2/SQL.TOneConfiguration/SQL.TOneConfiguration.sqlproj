@@ -103,6 +103,9 @@
     <Folder Include="reprocess\Stored Procedures\" />
     <Folder Include="VRNotification\" />
     <Folder Include="VRNotification\Tables\" />
+    <Folder Include="VR_BEBridge\" />
+    <Folder Include="VR_BEBridge\Tables\" />
+    <Folder Include="VR_BEBridge\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -380,6 +383,9 @@
     <Build Include="common\Stored Procedures\sp_MailMessageTemplate_Insert.sql" />
     <Build Include="common\Stored Procedures\sp_MailMessageTemplate_GetAll.sql" />
     <Build Include="Security\VRNotification.sql" />
+    <Build Include="VR_BEBridge\Tables\BEReceiveDefinition.sql" />
+    <Build Include="VR_BEBridge\Stored Procedures\sp_BEReceiveDefinition_GetAll.sql" />
+    <Build Include="Security\VR_BEBridge.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

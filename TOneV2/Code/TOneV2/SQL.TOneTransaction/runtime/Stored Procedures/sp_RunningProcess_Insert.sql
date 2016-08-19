@@ -3,27 +3,28 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE runtime.sp_RunningProcess_Insert
+CREATE PROCEDURE [runtime].[sp_RunningProcess_Insert]
 	@ProcessName nvarchar(1000),
-	@MachineName nvarchar(1000)
+	@MachineName nvarchar(1000),
+	@AdditionalInfo nvarchar(max)
 AS
 BEGIN
 	INSERT INTO [runtime].[RunningProcess]
            ([ProcessName]
            ,[MachineName]
            ,[StartedTime]
-           ,[LastHeartBeatTime])
+           ,AdditionalInfo)
      VALUES
            (@ProcessName
            ,@MachineName
            ,GETDATE()
-           ,GETDATE())
+           ,@AdditionalInfo)
            
      SELECT [ID]
       ,[ProcessName]
       ,[MachineName]
       ,[StartedTime]
-      ,[LastHeartBeatTime]
+      ,AdditionalInfo
 	 FROM [runtime].[RunningProcess]
 	 WHERE ID = @@identity
 END

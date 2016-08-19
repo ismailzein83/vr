@@ -3,19 +3,20 @@
     [Title]              NVARCHAR (1000)  NULL,
     [ParentID]           BIGINT           NULL,
     [DefinitionID]       INT              NOT NULL,
+    [ServiceInstanceID]  UNIQUEIDENTIFIER NULL,
     [InitiatorUserId]    INT              NOT NULL,
     [WorkflowInstanceID] UNIQUEIDENTIFIER NULL,
     [InputArgument]      NVARCHAR (MAX)   NULL,
     [ExecutionStatus]    INT              NOT NULL,
-    [LockedByProcessID]  INT              NULL,
     [LastMessage]        NVARCHAR (MAX)   NULL,
-    [RetryCount]         INT              NULL,
     [EntityId]           VARCHAR (50)     NULL,
     [CreatedTime]        DATETIME         CONSTRAINT [DF_BPInstance_CreatedTime] DEFAULT (getdate()) NULL,
     [StatusUpdatedTime]  DATETIME         NULL,
     [timestamp]          ROWVERSION       NULL,
     CONSTRAINT [PK_BPInstance_1] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
@@ -48,6 +49,5 @@ CREATE NONCLUSTERED INDEX [IX_BPInstance_ExecutionStatus]
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_BPInstance_LockedByProcessID]
-    ON [bp].[BPInstance]([LockedByProcessID] ASC);
+
 

@@ -95,6 +95,8 @@
     <Folder Include="reprocess\" />
     <Folder Include="reprocess\Tables\" />
     <Folder Include="reprocess\Stored Procedures\" />
+    <Folder Include="VRNotification\" />
+    <Folder Include="VRNotification\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="runtime\Tables\RunningProcess.sql" />
@@ -106,9 +108,6 @@
     <Build Include="bp\Tables\BPEvent.sql" />
     <Build Include="bp\Tables\LKUP_ExecutionStatus.sql" />
     <Build Include="bp\Views\vw_BPInstance.sql" />
-    <Build Include="runtime\Stored Procedures\sp_RunningProcess_UpdateHeartBeat.sql" />
-    <Build Include="runtime\Stored Procedures\sp_RunningProcess_DeleteOld.sql" />
-    <Build Include="runtime\Stored Procedures\sp_RunningProcess_GetByHeartBeat.sql" />
     <Build Include="runtime\Stored Procedures\sp_RunningProcess_Insert.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueSubscription_Insert.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueInstance_UpdateName.sql" />
@@ -128,8 +127,6 @@
     <Build Include="Security\bp.sql" />
     <Build Include="queue\User Defined Types\IDIntType.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetByID.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_UnLock.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_TryLockAndUpdateWorkflowInstanceID.sql" />
     <Build Include="bp\User Defined Types\IDIntType.sql" />
     <Build Include="bp\User Defined Types\IDBigIntType.sql" />
     <Build Include="bp\Functions\ParseStringList.sql" />
@@ -181,8 +178,6 @@
     <Build Include="integration\Stored Procedures\sp_DataSourceRuntimeInstance_DeleteBySource.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetUpdated.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetBeforeID.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_SetRunningStatusTerminated.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_SetChildrenStatusesTerminated.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetPendingsByDefinitionId.sql" />
     <Build Include="bp\Stored Procedures\sp_BPEvent_GetByInstanceIDs.sql" />
     <Build Include="bp\Stored Procedures\sp_BPEvent_GetByDefinitionID.sql" />
@@ -232,12 +227,25 @@
     <Build Include="queue\Stored Procedures\sp_QueueActivatorInstance_Insert.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueActivatorInstance_GetAll.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueActivatorInstance_Delete.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_GetStatusByID.sql" />
     <Build Include="reprocess\Tables\StagingSummaryRecord.sql" />
     <Build Include="reprocess\Stored Procedures\sp_StagingSummaryRecord_Delete.sql" />
     <Build Include="Security\reprocess.sql" />
     <Build Include="reprocess\Stored Procedures\sp_StagingSummaryRecord_GetStageRecordInfo.sql" />
     <Build Include="reprocess\Stored Procedures\sp_StagingSummaryRecord_GetRecords.sql" />
+    <Build Include="runtime\Tables\ServiceInstance.sql" />
+    <Build Include="runtime\Tables\RuntimeManager.sql" />
+    <Build Include="VRNotification\Tables\VRAlertRuleExecution.sql" />
+    <Build Include="runtime\Stored Procedures\sp_ServiceInstance_Insert.sql" />
+    <Build Include="runtime\Stored Procedures\sp_ServiceInstance_GetByType.sql" />
+    <Build Include="runtime\Stored Procedures\sp_ServiceInstance_Delete.sql" />
+    <Build Include="runtime\Stored Procedures\sp_RuntimeManager_TryUpdateHeartBeat.sql" />
+    <Build Include="runtime\Stored Procedures\sp_RuntimeManager_GetServiceURL.sql" />
+    <Build Include="runtime\Stored Procedures\sp_RunningProcess_IsExists.sql" />
+    <Build Include="runtime\Stored Procedures\sp_RunningProcess_GetAll.sql" />
+    <Build Include="runtime\Stored Procedures\sp_RunningProcess_Delete.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_UpdateServiceInstanceID.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_GetPendingsInfo.sql" />
+    <Build Include="Security\VRNotification.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
