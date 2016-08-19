@@ -8,16 +8,19 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
 {
     public class RateToAdd
     {
-        public RateToAdd()
-        {
-            AddedRates = new List<AddedRate>();
-        }
         public string ZoneName { get; set; }
 
         public PriceListToAdd PriceListToAdd { get; set; }
 
         public decimal Rate { get; set; }
 
-        public List<AddedRate> AddedRates { get; set; }
+        private List<AddedRate> _addedRate = new List<AddedRate>();
+
+        public List<AddedRate> AddedRates
+        {
+            get {
+                return this._addedRate;
+            }
+        }
     }
 }

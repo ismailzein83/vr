@@ -22,7 +22,11 @@ namespace TOne.WhS.CodePreparation.Business
             if (zonesByType[SaleZoneTypeEnum.Fixed].Count() == 0)
                 return null;
 
-            IEnumerable<ExistingZone> matchedZones = base.GetMatchedExistingZones(codes, zonesByType[SaleZoneTypeEnum.Fixed]);
+            List<ExistingZone> matchedZones = base.GetMatchedExistingZones(codes, zonesByType[SaleZoneTypeEnum.Fixed]);
+
+            if (matchedZones.Count() == 0)
+                matchedZones.AddRange(zonesByType[SaleZoneTypeEnum.Fixed]);
+
             return base.GetHighestRatesFromZoneMatchesSaleEntities(matchedZones);
         }
     }

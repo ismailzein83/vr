@@ -34,7 +34,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         public abstract IEnumerable<NewZoneRateEntity> GetRates(IEnumerable<CodeToAdd> codes, Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType);
 
-        protected IEnumerable<ExistingZone> GetMatchedExistingZones(IEnumerable<CodeToAdd> codes, IEnumerable<ExistingZone> existingZones)
+        protected List<ExistingZone> GetMatchedExistingZones(IEnumerable<CodeToAdd> codes, IEnumerable<ExistingZone> existingZones)
         {
             List<SaleCode> saleCodes = new List<SaleCode>();
 
@@ -56,10 +56,6 @@ namespace TOne.WhS.CodePreparation.Business
                         matchedExistingZones.Add(existingZone);
                 }
             }
-
-            //Fill matchedZones by Fixed or Mobile zones when there is no matched zones.
-            if (matchedExistingZones.Count() == 0)
-                matchedExistingZones.AddRange(existingZones);
 
             return matchedExistingZones;
         }

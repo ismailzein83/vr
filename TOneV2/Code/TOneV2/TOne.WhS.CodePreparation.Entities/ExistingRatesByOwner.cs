@@ -49,24 +49,8 @@ namespace TOne.WhS.CodePreparation.Entities
             return new Owner()
             {
                 OwnerId = int.Parse(owner[1]),
-                OwnerType = (SalePriceListOwnerType) int.Parse(owner[0])
+                OwnerType = (SalePriceListOwnerType)int.Parse(owner[0])
             };
-        }
-
-        //public IEnumerable<Owner> GetOwners()
-        //{
-        //    List<Owner> owners = new List<Owner>();
-        //    foreach (string key in _existingRatesByOwner.Keys)
-        //    {
-        //        string[] owner = key.Split(',');
-        //        owners.Add(new Owner()
-        //        {
-        //            OwnerType = int.Parse(owner[0]),
-        //            OwnerId = int.Parse(owner[1])
-        //        });
-        //    }
-        //    return owners;
-        //}
-   
+        }   
     }
 }

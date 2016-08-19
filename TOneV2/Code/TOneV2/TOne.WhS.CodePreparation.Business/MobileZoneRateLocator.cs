@@ -30,7 +30,11 @@ namespace TOne.WhS.CodePreparation.Business
             }
             else
             {
-                IEnumerable<ExistingZone> matchedZones = base.GetMatchedExistingZones(codes, zonesByType[SaleZoneTypeEnum.Mobile]);
+                List<ExistingZone> matchedZones = base.GetMatchedExistingZones(codes, zonesByType[SaleZoneTypeEnum.Mobile]);
+
+                if (matchedZones.Count == 0)
+                    matchedZones.AddRange(zonesByType[SaleZoneTypeEnum.Mobile]);
+
                 return base.GetHighestRatesFromZoneMatchesSaleEntities(matchedZones);
             }
         }
