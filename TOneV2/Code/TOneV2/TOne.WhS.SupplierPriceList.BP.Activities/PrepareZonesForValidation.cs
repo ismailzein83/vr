@@ -48,12 +48,12 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 List<IZone> matchedZones;
                 newAndExistingZones.TryGetValue(importedZone.ZoneName, out matchedZones);
 
-                if(matchedZones != null)
+                if (matchedZones != null)
                     importedZone.NewZones.AddRange(matchedZones.Where(itm => itm is NewZone).Select(itm => itm as NewZone).ToList());
 
                 IEnumerable<ExistingZone> matchedExistingZones = existingZones.FindAllRecords(item => item.ZoneEntity.Name.Equals(importedZone.ZoneName, StringComparison.InvariantCultureIgnoreCase));
                 importedZone.ExistingZones.AddRange(matchedExistingZones);
-                
+
                 importedZone.ChangeType = GetZoneChangeType(importedZone, existingZones, importedZoneNamesHashSet);
                 importedZone.BED = GetZoneBED(importedZone);
                 importedZone.EED = (importedZone.ChangeType == ZoneChangeType.NotChanged) ? importedZone.ExistingZones.Select(x => x.EED).VRMaximumDate() : null;
@@ -70,7 +70,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 if (!importedZoneNamesHashSet.Contains(zoneName, StringComparer.InvariantCultureIgnoreCase))
                 {
                     List<ExistingZone> existingZonesList = null;
-                    if(!notImportedZonesByZoneName.TryGetValue(zoneName, out existingZonesList))
+                    if (!notImportedZonesByZoneName.TryGetValue(zoneName, out existingZonesList))
                     {
                         existingZonesList = new List<ExistingZone>();
                         notImportedZonesByZoneName.Add(zoneName, existingZonesList);
@@ -97,7 +97,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             notImportedZone.CountryId = firstElementInTheList.CountryId;
             notImportedZone.BED = firstElementInTheList.BED;
             notImportedZone.EED = lastElementInTheList.EED;
-            notImportedZone.ExistingRate =firstElementInTheList.BED <= DateTime.Today.Date ? existingRates.GetSystemRate<ExistingRate>(DateTime.Today) : existingRates.FirstOrDefault();
+            notImportedZone.ExistingRate = existingRates.LastOrDefault();
             notImportedZone.HasChanged = linkedExistingZones.Any(x => x.ChangedZone != null);
 
             return notImportedZone;
@@ -108,31 +108,27 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             List<ExistingRate> existingRates = new List<ExistingRate>();
 
             existingRates.AddRange(linkedExistingZones.SelectMany(item => item.ExistingRates).OrderBy(itm => itm.BED));
-            
+
             return existingRates;
         }
 
         private DateTime GetZoneBED(ImportedZone importedZone)
         {
-            List<DateTime?> minDates = new List<DateTime?>();
-            
             if (importedZone.NewZones.Count() > 0)
-                minDates.Add(importedZone.NewZones.Min(item => item.BED));
+                return importedZone.NewZones.Min(item => item.BED);
 
-            if (importedZone.ExistingZones.Count() > 0)
-                minDates.Add(importedZone.ExistingZones.Min(item => item.BED));
-
-            return minDates.VRMinimumDate().Value;          
+            List<ExistingZone> connectedExistingZones = importedZone.ExistingZones.GetConnectedEntities(DateTime.Today);
+            return connectedExistingZones.First().BED;
         }
 
         private ZoneChangeType GetZoneChangeType(ImportedZone importedZone, IEnumerable<ExistingZone> existingZones, HashSet<string> importedZoneNamesHashSet)
         {
-            if(importedZone.ExistingZones.Count == 0 && importedZone.ImportedCodes.Any(itm => itm.ChangeType == CodeChangeType.Moved))
+            if (importedZone.ExistingZones.Count == 0 && importedZone.ImportedCodes.Any(itm => itm.ChangeType == CodeChangeType.Moved))
             {
                 //This zone can be a considered as renamed but with specific conditions, first let us take the zone name of the first moved code as original zone name
                 IEnumerable<ImportedCode> allMovedCodes = importedZone.ImportedCodes.Where(itm => itm.ChangeType == CodeChangeType.Moved);
                 string originalZoneName = allMovedCodes.First().ProcessInfo.RecentZoneName;
-                
+
                 //if all moved codes are coming from the same origine & this original zone name does not exist anymore in imported zones list
                 //then consider this as a renamed zone, otherwise the zone is considered as a new zone
                 if (allMovedCodes.All(itm => itm.ProcessInfo.RecentZoneName == originalZoneName) && !importedZoneNamesHashSet.Contains(originalZoneName, StringComparer.InvariantCultureIgnoreCase))

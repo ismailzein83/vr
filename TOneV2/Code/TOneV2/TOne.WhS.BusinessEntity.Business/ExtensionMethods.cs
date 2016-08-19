@@ -33,14 +33,17 @@ namespace TOne.WhS.BusinessEntity.Business
             }
 
             List<int> overlappedIndices = new List<int>();
-            
+
             if (currentElementIndex != -1)
                 overlappedIndices.Add(currentElementIndex);
 
             if (currentElementIndex == -1)
             {
-                overlappedIndices.Add(entities.FindIndex(item => item.BED >= effectiveOn));
-                overlappedIndices.Add(entities.FindLastIndex(item => item.BED < effectiveOn));
+                int indexToTheRight = entities.FindIndex(item => item.BED >= effectiveOn);
+                if (indexToTheRight != -1)
+                    overlappedIndices.Add(indexToTheRight);
+                else
+                    overlappedIndices.Add(entities.FindLastIndex(item => item.BED < effectiveOn));
 
             }
 
@@ -61,31 +64,12 @@ namespace TOne.WhS.BusinessEntity.Business
                 currentElementIndex = overlappedIndices.First();
 
 
-
+            connectedEntities.AddRange(GetConnectedEntitiesToTheLeft(entities.GetRange(0, currentElementIndex + 1)));
             connectedEntities.Add(entities[currentElementIndex]);
             connectedEntities.AddRange(GetConnectedEntitiesToTheRight(entities.GetRange(currentElementIndex, entities.Count() - currentElementIndex)));
-            connectedEntities.AddRange(GetConnectedEntitiesToTheLeft(entities.GetRange(0, currentElementIndex + 1)));
+
 
             return connectedEntities;
-        }
-
-
-        public static T GetSystemRate<T>(this List<T> entities, DateTime effectiveOn) where T : IDateEffectiveSettings
-        {
-            if (entities == null || entities.Count == 0)
-                return default(T);
-
-            T systemRate = default(T);
-
-            for (int i = 0; i < entities.Count(); i++)
-            {
-                var currentElement = entities[i];
-
-                if (currentElement.BED <= effectiveOn && Vanrise.Common.ExtensionMethods.VRGreaterThan(currentElement.EED, effectiveOn))
-                    return currentElement;
-            }
-
-            return systemRate;
         }
 
         private static List<T> GetConnectedEntitiesToTheRight<T>(List<T> entities) where T : IDateEffectiveSettings

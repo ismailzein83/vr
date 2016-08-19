@@ -57,7 +57,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 {
                     List<ExistingRate> existingRates = new List<ExistingRate>();
                     existingRates.AddRange(connectedExistingZones.SelectMany(item => item.ExistingRates));
-                    ExistingRate SystemRate = existingRates.GetSystemRate<ExistingRate>(DateTime.Today);
+                    ExistingRate SystemRate = existingRates.LastOrDefault();
 
                     if (SystemRate != null)
                     {

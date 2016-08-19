@@ -146,7 +146,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             notImportedZone.CountryId = firstElementInTheList.CountryId;
             notImportedZone.BED = firstElementInTheList.BED;
             notImportedZone.EED = lastElementInTheList.EED;
-            notImportedZone.ExistingRate = firstElementInTheList.BED <= DateTime.Today.Date ? existingRates.GetSystemRate<ExistingRate>(DateTime.Today) : existingRates.FirstOrDefault();
+            notImportedZone.ExistingRate = existingRates.LastOrDefault();
             notImportedZone.HasChanged = linkedExistingZones.Any(x => x.ChangedZone != null);
 
             return notImportedZone;
