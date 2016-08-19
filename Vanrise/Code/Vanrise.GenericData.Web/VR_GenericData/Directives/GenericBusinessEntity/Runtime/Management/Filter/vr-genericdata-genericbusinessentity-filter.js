@@ -48,11 +48,14 @@
                         loadFieldTypeConfigsPromise.then(function () {
                             var filterLoadPromises = [];
                             var filterFields = payload.runtimeFilter.Fields;
-
+                         
                             for (var i = 0; i < filterFields.length; i++) {
                                 var filter = getFilter(filterFields[i]);
-                                filterLoadPromises.push(filter.directiveLoadDeferred.promise);
-                                ctrl.filters.push(filter);
+                                if (filter != undefined)
+                                {
+                                    filterLoadPromises.push(filter.directiveLoadDeferred.promise);
+                                    ctrl.filters.push(filter);
+                                }
                             }
                             
                             UtilsService.waitMultiplePromises(filterLoadPromises).then(function () {
@@ -80,12 +83,11 @@
                     }
                     function getFilter(filterField) {
                         var filter;
-
                         var fieldTypeConfig = UtilsService.getItemByVal(fieldTypeConfigs, filterField.FieldType.ConfigId, 'DataRecordFieldTypeConfigId');
                         if (fieldTypeConfig == undefined || fieldTypeConfig.FilterEditor == undefined) {
                             return filter;
                         }
-                        
+                    
                         filter = {};
                         filter.fieldPath = filterField.FieldPath;
 
