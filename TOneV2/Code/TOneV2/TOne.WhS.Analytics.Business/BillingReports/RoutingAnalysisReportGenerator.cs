@@ -21,7 +21,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 Query = new AnalyticQuery
                 {
                     DimensionFields = new List<string> { "SaleZone", "Supplier" },
-                    MeasureFields = new List<string> { "SaleDuration", "CostNet", "SaleNet", "Profit" },
+                    MeasureFields = new List<string> { "DurationNet", "CostNet", "SaleNet", "Profit" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
@@ -65,9 +65,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     ToTime = parameters.ToTime,
                     CurrencyId = parameters.CurrencyId,
                     ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>(),
-                    OrderType = AnalyticQueryOrderType.ByAllMeasures
-                }
+                    Filters = new List<DimensionFilter>()
+                },
+                SortByColumnName = "DimensionValues[0].Name"
             };
             if (!String.IsNullOrEmpty(parameters.ZonesId))
             {
@@ -104,9 +104,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     if (supplierValue != null)
                         routingAnalysis.Supplier = supplierValue.Name;
 
-                    MeasureValue saleDuration;
-                    analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
-                    routingAnalysis.Duration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
+                    MeasureValue duration;
+                    analyticRecord.MeasureValues.TryGetValue("DurationNet", out duration);
+                    routingAnalysis.Duration = Convert.ToDecimal(duration.Value ?? 0.0);
                     routingAnalysis.DurationFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.Duration);
 
                     MeasureValue saleNet;
@@ -128,7 +128,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     routingAnalysis.AVGCost = (routingAnalysis.Duration == 0 || routingAnalysis.CostNet == 0)
                         ? 0
-                        : (routingAnalysis.SaleNet / (double)routingAnalysis.Duration);
+                        : (routingAnalysis.CostNet / (double)routingAnalysis.Duration);
                     routingAnalysis.AVGCostFormatted = routingAnalysis.AVGCost == 0
                         ? "0"
                         : ReportHelpers.FormatNormalNumberDigit(routingAnalysis.AVGCost);
@@ -155,9 +155,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             parameters.TotalCost = TotalSale;
             parameters.TotalProfit = TotalProfit;
 
-            start = DateTime.Now;
             result = analyticManager.GetFilteredRecords(trafficDataRetrievalInput) as AnalyticSummaryBigResult<AnalyticRecord>;
-            spent = DateTime.Now.Subtract(start);
+
             if (result != null)
                 foreach (var analyticRecord in result.Data)
                 {
