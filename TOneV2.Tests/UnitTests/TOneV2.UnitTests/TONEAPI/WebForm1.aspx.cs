@@ -375,13 +375,13 @@ namespace TONEAPI
         protected void Button2_Click(object sender, EventArgs e)
         {
             login();
-            GUIcountry();
-            GUICities();
-            codegroup();
+           GUIcountry();
+           GUICities();
+           codegroup();
             currencies();
-            ratetypes();
-            carrierprofile();
-            carrieraccount();
+           ratetypes();
+           carrierprofile();
+           carrieraccount();
             bindgrid();
         }
 
@@ -391,9 +391,12 @@ namespace TONEAPI
         {
             connect con = new connect();
 
-            ChromeDriver driver = new ChromeDriver();
+
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--start-maximized");
+            ChromeDriver driver = new ChromeDriver(options);
             driver.Navigate().GoToUrl("http://192.168.110.195:8104");
-            System.Threading.Thread.Sleep(1000);
+             System.Threading.Thread.Sleep(1000);
             // Login
             try
             {
@@ -401,12 +404,12 @@ namespace TONEAPI
                 driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("1");
 
                 driver.FindElement(By.CssSelector("body > div > div > div > div > div > vr-form > div > vr-validation-group > div:nth-child(3) > div > vr-button > div > button")).Click();
-                System.Threading.Thread.Sleep(1500);
+                 System.Threading.Thread.Sleep(1000);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Success','login in success',getdate(),'GUI'");
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
                 driver.Close();
             }
             // go to look ups 
@@ -414,21 +417,21 @@ namespace TONEAPI
             {
                 driver.FindElement(By.XPath(gotomenu("BusinessEntities"))).Click();
                 //driver.FindElement(By.XPath("//*[@id=\"accordion\"]/div[3]/div[1]/span/span[2]")).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
 
 
                 driver.FindElement(By.CssSelector("#collapse-101 > div > div:nth-child(1) > div > div")).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
 
                 driver.FindElement(By.XPath("//*[@id=\"collapse-101\"]/div/div[1]/div/ul/li[1]/a")).Click();
-                System.Threading.Thread.Sleep(2000);
+              
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to Countries','Success','navigation success',getdate(),'GUI'");
                 //con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to Countries','Success','navigation success',getdate(),'GUI'");
             }
 
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to Countries','Fail','navigation failure',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to Countries','Fail','navigation failure exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
                 driver.Close();
             }
             // search if zone exists
@@ -439,7 +442,7 @@ namespace TONEAPI
                 var element2 = driver.FindElement(By.XPath("//div[starts-with(@title, 'Afghanistan')]"));
                 string x = element.Text.ToString();
                 var count = driver.FindElement(By.XPath("//*[@id=\"page-content-wrapper\"]/div/div/div/vr-panel/div/div/vr-form/div/vr-validation-group/vr-row[2]/div/vr-columns/div/vr-common-country-grid/vr-datagrid/vr-datagridrows/div[3]/div"));
-                if (count.Text.Equals("Total count (284)"))
+                if (count.Text.Equals("Total count (262)"))
                 {
                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries count','Success','navigation success',getdate(),'GUI'");
 
@@ -452,9 +455,9 @@ namespace TONEAPI
 
                 }
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries count in correct','Success','navigation success',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries count in correct','Success','navigation success exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
 
             }
             try
@@ -462,8 +465,9 @@ namespace TONEAPI
                 // search for a specific zone
                 driver.FindElement(By.CssSelector("#mainInput")).SendKeys("Calgary");
                 driver.FindElement(By.CssSelector("#page-content-wrapper > div > div > div > vr-panel > div > div > vr-form > div > vr-validation-group > vr-row:nth-child(2) > div > vr-actionbar > div > div:nth-child(2) > div > div > div > vr-button:nth-child(1) > div > button")).Click();
+                 System.Threading.Thread.Sleep(1000);
                 var elementg = driver.FindElement(By.XPath("//*[@id=\"rowSection1\"]/div[1]/div[2]/div/div[2]/div/div/div/span"));
-                System.Threading.Thread.Sleep(1100);
+                 System.Threading.Thread.Sleep(1000);
                 if (elementg.Text.Equals("Calgary"))
                 {
                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries search','Success','search success',getdate(),'GUI'");
@@ -475,14 +479,14 @@ namespace TONEAPI
                 }
                 //  string currentHandle = driver.CurrentWindowHandle;
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries search','Fail','search failed no item found',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries search','Fail','search failed no item foundexception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
             }
             try
             {
                 driver.FindElement(By.XPath("//*[@id=\"page-content-wrapper\"]/div/div/div/vr-panel/div/div/vr-form/div/vr-validation-group/vr-row[1]/div/vr-actionbar/div/div[2]/div/div/div/vr-button[2]/div/button")).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
 
 
 
@@ -509,7 +513,9 @@ namespace TONEAPI
                 var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
                 var textinput = modaldiag.FindElement(By.CssSelector("#mainInput"));
                 textinput.SendKeys("Calgary");
+                 System.Threading.Thread.Sleep(1000);
                 var textsave = modaldiag.FindElement(By.CssSelector("body > div.modal.ng-scope.top.am-fade-and-scale > div > div > div:nth-child(2) > div:nth-child(2) > div > vr-actionbar > div > div:nth-child(2) > div > div > div > vr-button:nth-child(1) > div > button"));
+                 System.Threading.Thread.Sleep(1000);
                 textsave.Click();
                 // driver.FindElement(By.XPath("[@class,'modal-dialog'][@id='mainInput']")).SendKeys("Calgary");
                 driver.FindElement(By.XPath("/html/body/div[4]/div/div/div[2]/div[2]/div/vr-actionbar/div/div[2]/div/div/div/vr-button[1]/div/button")).Click();
@@ -517,10 +523,10 @@ namespace TONEAPI
                 driver.Close();
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries add','Success','adding country success',getdate(),'GUI'");
             }
-            catch
+            catch(Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries add','Fail','adding country failure',getdate(),'GUI'");
-
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries add','Fail','adding country failure exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
+                driver.Close();
             }
 
         }
@@ -529,9 +535,12 @@ namespace TONEAPI
         {
             connect con = new connect();
 
-            ChromeDriver driver = new ChromeDriver();
+
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--start-maximized");
+            ChromeDriver driver = new ChromeDriver(options);
             driver.Navigate().GoToUrl("http://192.168.110.195:8104");
-            System.Threading.Thread.Sleep(1000);
+             System.Threading.Thread.Sleep(1000);
             // Login
             try
             {
@@ -539,49 +548,50 @@ namespace TONEAPI
                 driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("1");
 
                 driver.FindElement(By.CssSelector("body > div > div > div > div > div > vr-form > div > vr-validation-group > div:nth-child(3) > div > vr-button > div > button")).Click();
-                System.Threading.Thread.Sleep(1500);
+                 System.Threading.Thread.Sleep(1000);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Success','login in success',getdate(),'GUI'");
             }
-            catch
+            catch(Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
                 driver.Close();
             }
             // go to look ups 
             try
             {
                 driver.FindElement(By.XPath("//*[@id=\"accordion\"]/div[3]/div[1]/span/span[2]")).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
 
                 driver.FindElement(By.CssSelector("#collapse-101 > div > div:nth-child(1) > div > div")).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
 
                // driver.FindElement(By.XPath("//*[@id=\"collapse-101\"]/div/div[1]/div/ul/li[1]/a")).Click();
                  driver.FindElement(By.XPath("//*[@id=\"collapse-101\"]/div/div[1]/div/ul/li[2]/a")).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to lookups','Success','navigation success',getdate(),'GUI'");
             }
 
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to lookups','Fail','navigation failure',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to lookups','Fail','navigation failure exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
                 driver.Close();
             }
             // search if zone exists
             try
             {
                 var element = driver.FindElement(By.XPath("//*[@id=\"rowSection1\"]/div[1]/div/div/div[2]/div/div/div/span"));
+                 System.Threading.Thread.Sleep(1000);
                 var element2 = driver.FindElement(By.XPath("//div[starts-with(@title, 'Albania Fixed')]"));
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','City found','Success','Find city success',getdate(),'GUI'");
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','City not found','Fail','Find city Fail',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','City not found','Fail','Find city Fail exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
 
             }
             
             try { 
-            var count = driver.FindElement(By.XPath("//*[@id=\"page-content-wrapper\"]/div/div/div/vr-panel/div/div/vr-form/div/vr-validation-group/vr-row[2]/div/vr-columns/div/vr-common-country-grid/vr-datagrid/vr-datagridrows/div[3]/div"));
+            var count = driver.FindElement(By.XPath("//*[@id=\"page-content-wrapper\"]/div/div/div/vr-panel/div/div/vr-form/div/vr-validation-group/vr-row[2]/div/vr-columns/div/vr-common-city-grid/vr-datagrid/vr-datagridrows/div[3]/div"));
             if (count.Text.Equals("Total count (284)"))
             {
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities count','Success','navigation success',getdate(),'GUI'");
@@ -595,16 +605,17 @@ namespace TONEAPI
 
             }
                 }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities count in correct','Success','navigation success',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities count in correct','Success','navigation success exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
             }
             // search for a specific zone
             try
             {
                 driver.FindElement(By.CssSelector("#mainInput")).SendKeys("leban");
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.CssSelector("#page-content-wrapper > div > div > div > vr-panel > div > div > vr-form > div > vr-validation-group > vr-row:nth-child(2) > div > vr-actionbar > div > div:nth-child(2) > div > div > div > vr-button:nth-child(1) > div > button")).Click();
+                 System.Threading.Thread.Sleep(1000);
                 var elementg = driver.FindElement(By.XPath("//*[@id=\"rowSection1\"]/div[1]/div/div/div[2]/div/div/div/span"));
 
                 if (elementg.Text.Equals("Lebanon-Mobile Alfa"))
@@ -618,15 +629,15 @@ namespace TONEAPI
                 }
                 //  string currentHandle = driver.CurrentWindowHandle;
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities search','Fail','search failed no item found',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities search','Fail','search failed no item found exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
 
             }
             try
             {
                 driver.FindElement(By.XPath("//*[@id=\"page-content-wrapper\"]/div/div/div/vr-panel/div/div/vr-form/div/vr-validation-group/vr-row[1]/div/vr-actionbar/div/div[2]/div/div/div/vr-button[2]/div/button")).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
 
 
 
@@ -651,30 +662,36 @@ namespace TONEAPI
 
                 // add a new zone
                 var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
+                 System.Threading.Thread.Sleep(1000);
                 var textinput = modaldiag.FindElement(By.CssSelector("#mainInput"));
+                 System.Threading.Thread.Sleep(1000);
                 textinput.SendKeys("Albania New");
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 var textsave = modaldiag.FindElement(By.CssSelector("body > div.modal.ng-scope.top.am-fade-and-scale > div > div > div:nth-child(2) > div:nth-child(2) > div > vr-actionbar > div > div:nth-child(2) > div > div > div > vr-button:nth-child(1) > div > button"));
+                 System.Threading.Thread.Sleep(1000);
                 textsave.Click();
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 var count = modaldiag.FindElement(By.CssSelector("body > div.modal.ng-scope.top.am-fade-and-scale > div > div > div:nth-child(2) > div:nth-child(2) > vr-modalbody > div > vr-form > div > vr-validation-group > vr-row > div > span > vr-columns > div > vr-common-country-selector > vr-columns > div > vr-select > div > div > vr-validator > div > div:nth-child(1) > div > button"));
+                 System.Threading.Thread.Sleep(1000);
                 count.Click();
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 // driver.FindElement(By.XPath("[@class,'modal-dialog'][@id='mainInput']")).SendKeys("Calgary");
                 //driver.FindElement(By.XPath("/html/body/div[4]/div/div/div[2]/div[2]/div/vr-actionbar/div/div[2]/div/div/div/vr-button[1]/div/button")).Click();
-                var selelement = modaldiag.FindElement(By.XPath("/html/body/div[4]/div/div/div[2]/div[2]/vr-modalbody/div/vr-form/div/vr-validation-group/vr-row/div/span/vr-columns/div/vr-common-country-selector/vr-columns/div/vr-select/div/div/vr-validator/div/div[1]/div/ul/li/div/div[2]/div[3]"));
-
+                var selelement = modaldiag.FindElement(By.CssSelector("body > div.modal.ng-scope.top.am-fade-and-scale > div > div > div:nth-child(2) > div:nth-child(2) > vr-modalbody > div > vr-form > div > vr-validation-group > vr-row > div > span > vr-columns > div > vr-common-country-selector > vr-columns > div > vr-select > div > div > vr-validator > div > div:nth-child(1) > div > ul > li > div > div.vr-select-height > a:nth-child(2)"));
+                 System.Threading.Thread.Sleep(1000);
                 selelement.Click();
+                 System.Threading.Thread.Sleep(1000);
                 var save = modaldiag.FindElement(By.CssSelector("body > div.modal.ng-scope.top.am-fade-and-scale > div > div > div:nth-child(2) > div:nth-child(2) > div > vr-actionbar > div > div:nth-child(2) > div > div > div > vr-button:nth-child(1) > div > button"));
+                 System.Threading.Thread.Sleep(1000);
                 save.Click();
                 
 
                 driver.Close();
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities add','Success','adding Cities success',getdate(),'GUI'");
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities add','Fail','adding Cities failure',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities add','Fail','adding Cities failure exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
 
             }
 
@@ -686,8 +703,11 @@ namespace TONEAPI
             connect con = new connect();
             try
             {
-               
-                ChromeDriver driver = new ChromeDriver();
+
+
+                ChromeOptions options = new ChromeOptions();
+                options.AddArgument("--start-maximized");
+                ChromeDriver driver = new ChromeDriver(options);
                 string x = "";
                 driver.Navigate().GoToUrl("http://192.168.110.195:8104");
                 driver.FindElement(By.CssSelector("#mainInput")).SendKeys("admin@vanrise.com");
@@ -746,9 +766,12 @@ namespace TONEAPI
 
             connect con = new connect();
 
-            ChromeDriver driver = new ChromeDriver();
+
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--start-maximized");
+            ChromeDriver driver = new ChromeDriver(options);
             driver.Navigate().GoToUrl("http://192.168.110.195:8104");
-            System.Threading.Thread.Sleep(1000);
+             System.Threading.Thread.Sleep(1000);
             // Login
             try
             {
@@ -756,30 +779,30 @@ namespace TONEAPI
                 driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("1");
 
                 driver.FindElement(By.CssSelector("body > div > div > div > div > div > vr-form > div > vr-validation-group > div:nth-child(3) > div > vr-button > div > button")).Click();
-                System.Threading.Thread.Sleep(1500);
+                 System.Threading.Thread.Sleep(1000);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Success','login in success',getdate(),'GUI'");
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
                 driver.Close();
             }
             // go to look ups 
             try
             {
                 driver.FindElement(By.XPath(gotomenu("BusinessEntities"))).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("Lookups"))).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("Codegroups"))).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','navigate to CodeGroup','Success','navigation success',getdate(),'GUI'");
                 //con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to Countries','Success','navigation success',getdate(),'GUI'");
             }
 
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','navigate to CodeGroup','Fail','navigation failure',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','navigate to CodeGroup','Fail','navigation failure exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
                 //driver.Close();
             }
             // search if zone exists
@@ -803,18 +826,20 @@ namespace TONEAPI
 
                 }
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup count in correct','Success','navigation success',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup count in correct','Success','navigation success exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
 
             }
             try
             {
                 // search for a specific zone
                 driver.FindElement(By.CssSelector("#mainInput")).SendKeys("961");
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.CssSelector(gotomenu("codegroupsearchitem"))).Click();
+                 System.Threading.Thread.Sleep(1000);
                 var elementg = driver.FindElement(By.XPath(gotomenu("codegroupgetitem")));
-                System.Threading.Thread.Sleep(1100);
+                 System.Threading.Thread.Sleep(1000);
                 if (elementg.Text.Equals("Lebanon"))
                 {
                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup search','Success','search success',getdate(),'GUI'");
@@ -826,30 +851,34 @@ namespace TONEAPI
                 }
                 //  string currentHandle = driver.CurrentWindowHandle;
             }
-            catch
+            catch ( Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup search','Fail','search failed no item found',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup search','Fail','search failed no item found exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
             }
             try
             {
                 driver.FindElement(By.XPath(gotomenu("codegroupaddpopup"))).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
 
                 // add a new zone
                 var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
+                 System.Threading.Thread.Sleep(1000);
                 var textinput = modaldiag.FindElement(By.CssSelector("#mainInput"));
                 textinput.SendKeys("93222");
+                 System.Threading.Thread.Sleep(1000);
                 var textsave = modaldiag.FindElement(By.CssSelector(gotomenu("codegroupaddcountrydropdown")));
                 textsave.Click();
                 // driver.FindElement(By.XPath("[@class,'modal-dialog'][@id='mainInput']")).SendKeys("Calgary");
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("codegroupaddcountryclickcontrol"))).Click();
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("codegroupaddsavebutton"))).Click();
                // driver.Close();
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup add','Success','adding CodeGroup success',getdate(),'GUI'");
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup add','Fail','adding CodeGroup failure',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup add','Fail','adding CodeGroup failure exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
               //  driver.Close();
             }
 
@@ -858,17 +887,22 @@ namespace TONEAPI
                 //edit code group
 
                 driver.FindElement(By.XPath(gotomenu("codegroupeditpressgrid"))).Click();
-                System.Threading.Thread.Sleep(2000);
+
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("codegrouoeditpopup"))).Click();
+                 System.Threading.Thread.Sleep(1000);
                 var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
+                 System.Threading.Thread.Sleep(1000);
                 var textinput = modaldiag.FindElement(By.CssSelector("#mainInput"));
+                 System.Threading.Thread.Sleep(1000);
                 var savebutton = modaldiag.FindElement(By.XPath(gotomenu("codegroupeditpopupsave")));
+                 System.Threading.Thread.Sleep(1000);
                 savebutton.Click();
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup add','Success','adding CodeGroup Success',getdate(),'GUI'");
             }
-            catch
+            catch(Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup Edit','Fail','Editing CodeGroup failure',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup Edit','Fail','Editing CodeGroup failure exception:" + Ex.ToString().Replace('"',' ') .Replace('"',' ') + "',getdate(),'GUI'");
             }
             driver.Close();
 
@@ -880,9 +914,12 @@ namespace TONEAPI
         {
             connect con = new connect();
 
-            ChromeDriver driver = new ChromeDriver();
+
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--start-maximized");
+            ChromeDriver driver = new ChromeDriver(options);
             driver.Navigate().GoToUrl("http://192.168.110.195:8104");
-            System.Threading.Thread.Sleep(1000);
+             System.Threading.Thread.Sleep(1000);
             // Login
             try
             {
@@ -890,30 +927,30 @@ namespace TONEAPI
                 driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("1");
 
                 driver.FindElement(By.CssSelector("body > div > div > div > div > div > vr-form > div > vr-validation-group > div:nth-child(3) > div > vr-button > div > button")).Click();
-                System.Threading.Thread.Sleep(3000);
+                 System.Threading.Thread.Sleep(1000);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Success','login in success',getdate(),'GUI'");
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
                 driver.Close();
             }
             // go to look ups 
             try
             {
                 driver.FindElement(By.XPath(gotomenu("BusinessEntities"))).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("Lookups"))).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("Currencies"))).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Currencies','navigate to Currencies','Success','navigation success',getdate(),'GUI'");
                 //con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to Countries','Success','navigation success',getdate(),'GUI'");
             }
 
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Currencies','navigate to Currencies','Fail','navigation failure',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Currencies','navigate to Currencies','Fail','navigation failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
                 //driver.Close();
             }
             // check data is retrieved ok and count 
@@ -949,14 +986,14 @@ namespace TONEAPI
                         con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Currencies','Currencies search  by name ','Fail','Data Validation',getdate(),'GUI'");
                     }
                 }
-                catch
+                catch (Exception Ex)
                 {
-                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Currencies','Currencies search by name','Fail','Currency not found',getdate(),'GUI'");
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Currencies','Currencies search by name','Fail','Currency not found exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
                 }
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Currencies','Currencies search  by name','Fail','Data Validation',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Currencies','Currencies search  by name','Fail','Data Validation exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
             }
             
 
@@ -992,16 +1029,16 @@ namespace TONEAPI
                 }
 
 
-                catch
+                catch (Exception Ex)
                 {
-                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Currencies','Failed to get Currencies USD','Fail','Fail Seaching Currency',getdate(),'GUI'");
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Currencies','Failed to get Currencies USD','Fail','Fail Seaching Currency exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
 
                 }
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Currencies','Failed to get Currencies USD','Fail','Fail Seaching Currency',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Currencies','Failed to get Currencies USD','Fail','Fail Seaching Currency exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
             }
             // add
 
@@ -1009,17 +1046,20 @@ namespace TONEAPI
             try
             {
                 driver.FindElement(By.XPath(gotomenu("Currenciesadd"))).Click();
+                 System.Threading.Thread.Sleep(1000);
                 var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
+                 System.Threading.Thread.Sleep(1000);
                 var mainfilter = modaldiag.FindElements(By.XPath("//*[@id=\"mainInput\"]")).ToList();
+                 System.Threading.Thread.Sleep(1000);
                 mainfilter[2].SendKeys("Nabil National Currency");
                 mainfilter[3].SendKeys("NAB");
                 modaldiag.FindElement(By.XPath("Currenciessavebutton")).Click();
 
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Currencies','save new Currencies','success','success: adding new Currency',getdate(),'GUI'");
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Currencies','Failed to save new Currencies','Fail','Fail adding new Currency',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Currencies','Failed to save new Currencies','Fail','Fail adding new Currency exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
             }
             driver.Close();
@@ -1029,9 +1069,12 @@ namespace TONEAPI
         {
                    connect con = new connect();
 
-            ChromeDriver driver = new ChromeDriver();
+
+                   ChromeOptions options = new ChromeOptions();
+                   options.AddArgument("--start-maximized");
+                   ChromeDriver driver = new ChromeDriver(options);
             driver.Navigate().GoToUrl("http://192.168.110.195:8104");
-            System.Threading.Thread.Sleep(1000);
+             System.Threading.Thread.Sleep(1000);
             // Login
             try
             {
@@ -1039,30 +1082,30 @@ namespace TONEAPI
                 driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("1");
 
                 driver.FindElement(By.CssSelector("body > div > div > div > div > div > vr-form > div > vr-validation-group > div:nth-child(3) > div > vr-button > div > button")).Click();
-                System.Threading.Thread.Sleep(1500);
+                 System.Threading.Thread.Sleep(1000);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Success','login in success',getdate(),'GUI'");
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
                 driver.Close();
             }
             // go to look ups 
             try
             {
                 driver.FindElement(By.XPath(gotomenu("BusinessEntities"))).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("Lookups"))).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("ratetypes"))).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'ratetypes','navigate to ratetypes','Success','navigation success',getdate(),'GUI'");
                 //con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to Countries','Success','navigation success',getdate(),'GUI'");
             }
 
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'ratetypes','navigate to ratetypes','Fail','navigation failure',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'ratetypes','navigate to ratetypes','Fail','navigation failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
                 //driver.Close();
             }
             // search if zone exists
@@ -1086,17 +1129,17 @@ namespace TONEAPI
 
                 }
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'ratetypes','ratetypes count in correct','Success','navigation success',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'ratetypes','ratetypes count in correct','Success','navigation success exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
             }
             //search
             driver.FindElement(By.CssSelector("#mainInput")).SendKeys("On-net");
             driver.FindElement(By.CssSelector(gotomenu("ratetypeseachbutton"))).Click();
-            System.Threading.Thread.Sleep(1000);
+             System.Threading.Thread.Sleep(1000);
             var elementg = driver.FindElement(By.XPath(gotomenu("ratetypegriditem")));
-            System.Threading.Thread.Sleep(1500);
+             System.Threading.Thread.Sleep(1000);
             if (elementg.Text.Equals("On-net"))
             {
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'ratetypes','ratetypes search','Success','search success',getdate(),'GUI'");
@@ -1118,9 +1161,9 @@ namespace TONEAPI
 
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'ratetypes','save new ratetypes','success','success: adding new ratetypes',getdate(),'GUI'");
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'ratetypes','Failed to save new ratetypes','Fail','Fail adding new ratetypes',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'ratetypes','Failed to save new ratetypes','Fail','Fail adding new ratetypes exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
             }
             driver.Close();
@@ -1131,9 +1174,12 @@ namespace TONEAPI
          {
              connect con = new connect();
 
-             ChromeDriver driver = new ChromeDriver();
+
+             ChromeOptions options = new ChromeOptions();
+             options.AddArgument("--start-maximized");
+             ChromeDriver driver = new ChromeDriver(options);
              driver.Navigate().GoToUrl("http://192.168.110.195:8104");
-             System.Threading.Thread.Sleep(1000);
+              System.Threading.Thread.Sleep(1000);
              // Login
              try
              {
@@ -1141,30 +1187,30 @@ namespace TONEAPI
                  driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("1");
 
                  driver.FindElement(By.CssSelector("body > div > div > div > div > div > vr-form > div > vr-validation-group > div:nth-child(3) > div > vr-button > div > button")).Click();
-                 System.Threading.Thread.Sleep(1500);
+                  System.Threading.Thread.Sleep(1000);
                  con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Success','login in success',getdate(),'GUI'");
              }
-             catch
+             catch (Exception Ex)
              {
-                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure',getdate(),'GUI'");
+                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
                  driver.Close();
              }
              // go to look ups 
              try
              {
                  driver.FindElement(By.XPath(gotomenu("BusinessEntities"))).Click();
-                 System.Threading.Thread.Sleep(2000);
+                  System.Threading.Thread.Sleep(1000);
                  driver.FindElement(By.XPath(gotomenu("Carriers"))).Click();
-                 System.Threading.Thread.Sleep(2000);
+                  System.Threading.Thread.Sleep(1000);
                  driver.FindElement(By.XPath(gotomenu("carrierprofile"))).Click();
-                 System.Threading.Thread.Sleep(2000);
+                  System.Threading.Thread.Sleep(1000);
                  con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','navigate to carrier profile','Success','navigation success',getdate(),'GUI'");
                  //con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to Countries','Success','navigation success',getdate(),'GUI'");
              }
 
-             catch
+             catch (Exception Ex)
              {
-                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','navigate to carrier profile','Fail','navigation failure',getdate(),'GUI'");
+                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','navigate to carrier profile','Fail','navigation failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
                  //driver.Close();
              }
              // search if zone exists
@@ -1188,20 +1234,20 @@ namespace TONEAPI
 
                  }
              }
-             catch
+             catch (Exception Ex)
              {
-                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile count in correct','Success','validation failure',getdate(),'GUI'");
+                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile count in correct','Success','validation failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
              }
              //search by name 
              try
              {
-                 driver.FindElement(By.CssSelector("#mainInput")).SendKeys("TATA");
+                 driver.FindElement(By.CssSelector("#mainInput")).SendKeys("Spactron");
                  driver.FindElement(By.CssSelector(gotomenu("carrierprofilesearchbutton"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                  System.Threading.Thread.Sleep(1000);
                  var elementg = driver.FindElement(By.XPath(gotomenu("carrierprofilenamegriditem")));
-                 System.Threading.Thread.Sleep(1500);
-                 if (elementg.Text.Equals("TATA"))
+                  System.Threading.Thread.Sleep(1000);
+                 if (elementg.Text.Equals("Spactron"))
                  {
                      con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search','Success','search success',getdate(),'GUI'");
 
@@ -1211,9 +1257,9 @@ namespace TONEAPI
                      con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search','Fail','search failed no item found',getdate(),'GUI'");
                  }
              }
-             catch
+             catch (Exception Ex)
              {
-                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search','Fail','search failed - page error',getdate(),'GUI'");
+                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search','Fail','search failed - page error exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
              }
 
@@ -1224,12 +1270,12 @@ namespace TONEAPI
 
                  var profilefilter = driver.FindElements(By.XPath(gotomenu("carrierprofilesearchtextbox"))).ToList();
                  profilefilter[0].Clear();
-                 profilefilter[1].SendKeys("TATA Communications");
+                 profilefilter[1].SendKeys("Spactron");
                  driver.FindElement(By.CssSelector(gotomenu("carrierprofilesearchbutton"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                  System.Threading.Thread.Sleep(1000);
                  var elementprof = driver.FindElement(By.XPath(gotomenu("carrierprofilenamegriditem")));
-                 System.Threading.Thread.Sleep(1500);
-                 if (elementprof.Text.Equals("TATA"))
+                  System.Threading.Thread.Sleep(1000);
+                 if (elementprof.Text.Equals("Spactron"))
                  {
                      con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search by company','Success','search success',getdate(),'GUI'");
 
@@ -1240,9 +1286,9 @@ namespace TONEAPI
                  }
 
              }
-             catch
+             catch (Exception Ex)
              {
-                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search  by company','Fail','search failed - page error',getdate(),'GUI'");
+                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search  by company','Fail','search failed - page error exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
              }
              // search by country
@@ -1255,14 +1301,14 @@ namespace TONEAPI
                  profilefilter[1].Clear();
 
                  driver.FindElement(By.XPath(gotomenu("carrierprofilesearchcombo"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                  System.Threading.Thread.Sleep(1000);
                  driver.FindElement(By.XPath(gotomenu("carrierprofileselectcountry"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                  System.Threading.Thread.Sleep(1000);
                  driver.FindElement(By.CssSelector(gotomenu("carrierprofilesearchbutton"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                  System.Threading.Thread.Sleep(1000);
                  var elementprof = driver.FindElement(By.XPath(gotomenu("carrierprofilenamegriditem")));
-                 System.Threading.Thread.Sleep(1500);
-                 if (elementprof.Text.Equals("Bankai"))
+                  System.Threading.Thread.Sleep(1000);
+                 if (elementprof.Text.Equals("arbinet"))
                  {
                      con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search by country','Success','search success',getdate(),'GUI'");
 
@@ -1273,9 +1319,9 @@ namespace TONEAPI
                  }
 
              }
-             catch
+             catch (Exception Ex)
              {
-                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search  by country','Fail','search failed - page error',getdate(),'GUI'");
+                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search  by country','Fail','search failed - page error exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
              }
             // reset filter start with grid validation
@@ -1287,23 +1333,23 @@ namespace TONEAPI
                 profilefilter[1].Clear();
                 
                 driver.FindElement(By.XPath(gotomenu("carrierprofilesearchcombo"))).Click();
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("carrierprofilecleardropdown"))).Click();
 
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.CssSelector(gotomenu("carrierprofilesearchbutton"))).Click();
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
 
                 try
 
                 {
                     var gridgrids = driver.FindElements(By.CssSelector(gotomenu("carrierprofilegriddrildownaccount"))).ToList();
                     gridgrids[3].Click();
-                    System.Threading.Thread.Sleep(1000);
+                     System.Threading.Thread.Sleep(1000);
                     var gridgrids2 = driver.FindElements(By.CssSelector(gotomenu("carrierprofilegriddrildownaccount"))).ToList();
                   
                     gridgrids2[4].Click();
-                    System.Threading.Thread.Sleep(1000);
+                     System.Threading.Thread.Sleep(1000);
                  //  driver.FindElement(By.CssSelector(gotomenu("carrierprofilegriddrildownaccount"))).Click();
                     
                     var grid3 = driver.FindElements(By.CssSelector("#rowSection1 > div:nth-child(1) > div > div > div:nth-child(2) > div > div > div > span")).ToList();
@@ -1327,12 +1373,12 @@ namespace TONEAPI
                         con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile assigned product date','Fail','wrong prouct date',getdate(),'GUI'");
                     }
                 }
-                catch
+                catch (Exception Ex)
                 {
 
                 }
             }
-            catch
+            catch (Exception Ex)
             {
 
             }
@@ -1341,7 +1387,7 @@ namespace TONEAPI
              try
              {
                  driver.FindElement(By.XPath(gotomenu("carrierprofileadd"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                  System.Threading.Thread.Sleep(1000);
                  var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
                  var profileelements = modaldiag.FindElements(By.XPath(gotomenu("carrierprofileadditems"))).ToList();
                  profileelements[0].SendKeys("ZTEL");
@@ -1358,7 +1404,7 @@ namespace TONEAPI
        
    
                  modaldiag.FindElement(By.XPath(gotomenu("carrierprofileaddtab"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                  System.Threading.Thread.Sleep(1000);
                  var tab = modaldiag.FindElements(By.XPath(gotomenu("carrierprofileadditems"))).ToList();
         
                  tab[25].SendKeys("test@test.com");
@@ -1382,9 +1428,9 @@ namespace TONEAPI
 
                  con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','save new carrier profile','success','success: adding new carrier profile',getdate(),'GUI'");
              }
-             catch
+             catch (Exception Ex)
              {
-                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','Failed to save new carrier profile','Fail','Fail adding new carrier profile',getdate(),'GUI'");
+                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','Failed to save new carrier profile','Fail','Fail adding new carrier profile exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
              }
              driver.Close();
@@ -1394,9 +1440,13 @@ namespace TONEAPI
         {
             connect con = new connect();
 
-            ChromeDriver driver = new ChromeDriver();
+            
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--start-maximized");
+            ChromeDriver driver = new ChromeDriver(options);
             driver.Navigate().GoToUrl("http://192.168.110.195:8104");
-            System.Threading.Thread.Sleep(1000);
+           
+             System.Threading.Thread.Sleep(1000);
             // Login
             try
             {
@@ -1404,31 +1454,31 @@ namespace TONEAPI
                 driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("1");
 
                 driver.FindElement(By.CssSelector("body > div > div > div > div > div > vr-form > div > vr-validation-group > div:nth-child(3) > div > vr-button > div > button")).Click();
-                System.Threading.Thread.Sleep(1500);
+                 System.Threading.Thread.Sleep(1000);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Success','login in success',getdate(),'GUI'");
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
                 driver.Close();
             }
             // go to look ups 
             try
             {
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("BusinessEntities"))).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("Carriers"))).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("carrieraccount"))).Click();
-                System.Threading.Thread.Sleep(2000);
+                 System.Threading.Thread.Sleep(1000);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','navigate to carrier account','Success','navigation success',getdate(),'GUI'");
                 //con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to Countries','Success','navigation success',getdate(),'GUI'");
             }
 
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','navigate to carrier account','Fail','navigation failure',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','navigate to carrier account','Fail','navigation failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
                 //driver.Close();
             }
             // search if zone exists
@@ -1452,9 +1502,9 @@ namespace TONEAPI
 
                 }
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account count in correct','Fail','validation failure',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account count in correct','Fail','validation failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
             }
             //search by name 
@@ -1462,9 +1512,9 @@ namespace TONEAPI
             {
                 driver.FindElement(By.CssSelector("#mainInput")).SendKeys("spactron");
                 driver.FindElement(By.CssSelector(gotomenu("carrieraccountsearchbutton"))).Click();
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 var elementg = driver.FindElement(By.XPath(gotomenu("carrieraccountnamegriditem")));
-                System.Threading.Thread.Sleep(1500);
+                 System.Threading.Thread.Sleep(1000);
                 if (elementg.Text.ToLower().Equals("spactron"))
                 {
                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account search','Success','search success',getdate(),'GUI'");
@@ -1475,9 +1525,9 @@ namespace TONEAPI
                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account search','Fail','search failed no item found',getdate(),'GUI'");
                 }
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account search','Fail','search failed - page error',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account search','Fail','search failed - page error exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
             }
 
@@ -1489,13 +1539,13 @@ namespace TONEAPI
                 var profilefilter = driver.FindElements(By.XPath(gotomenu("carrierprofilesearchtextbox"))).ToList();
                 profilefilter[0].Clear();
                 driver.FindElement(By.XPath(gotomenu("carrieraccountsearchcombo"))).Click();
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("carrieraccountselectprofile"))).Click();
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.CssSelector(gotomenu("carrieraccountsearchbutton"))).Click();
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 var elementprof = driver.FindElement(By.XPath(gotomenu("carrieraccountnamegriditem")));
-                System.Threading.Thread.Sleep(1500);
+                 System.Threading.Thread.Sleep(1000);
                 if (elementprof.Text.ToLower().Equals("arbinet"))
                 {
                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account search by profile','Success','search success',getdate(),'GUI'");
@@ -1507,9 +1557,9 @@ namespace TONEAPI
                 }
 
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account search  by profile','Fail','search failed - page error',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account search  by profile','Fail','search failed - page error exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
             }
             // search by country
@@ -1521,17 +1571,17 @@ namespace TONEAPI
                 profilefilter[0].Clear();
                // profilefilter[1].Clear();
                 driver.FindElement(By.XPath(gotomenu("carrieraccountsearchcombo"))).Click();
-                System.Threading.Thread.Sleep(1500);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("carrieraccountclearprofile"))).Click();
-                System.Threading.Thread.Sleep(1500);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("carrieraccountstatuscombo"))).Click();
-                System.Threading.Thread.Sleep(1500);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("carrieraccountactivedropdown"))).Click();
-                System.Threading.Thread.Sleep(1500);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.CssSelector(gotomenu("carrieraccountsearchbutton"))).Click();
-                System.Threading.Thread.Sleep(1500);
+                 System.Threading.Thread.Sleep(1000);
                 var elementprof = driver.FindElement(By.XPath(gotomenu("carrieraccountnamegriditem")));
-                System.Threading.Thread.Sleep(1500);
+                 System.Threading.Thread.Sleep(1000);
                 if (elementprof.Text.Equals("Blocked Account"))
                 {
                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account search by status','Success','search success',getdate(),'GUI'");
@@ -1543,9 +1593,9 @@ namespace TONEAPI
                 }
 
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account search  by status','Fail','search failed - page error',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account search  by status','Fail','search failed - page error exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
             }
           
@@ -1558,19 +1608,19 @@ namespace TONEAPI
                 //driver.FindElement(By.XPath(gotomenu("carrieraccountsearchcombo"))).Click();
                 //System.Threading.Thread.Sleep(1000);
                 //driver.FindElement(By.XPath(gotomenu("carrieraccountclearprofile"))).Click();
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("carrieraccountstatuscombo"))).Click();
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("carrieraccountclearstatus"))).Click();
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("carrieraccounttype"))).Click();
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("carrieraccountexchangetype"))).Click();
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.CssSelector(gotomenu("carrieraccountsearchbutton"))).Click();
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 var elementprof = driver.FindElement(By.XPath(gotomenu("carrieraccountnamegriditem")));
-                System.Threading.Thread.Sleep(1500);
+                 System.Threading.Thread.Sleep(1000);
                 if (elementprof.Text.Equals("VoiceKings"))
                 {
                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account search by type','Success','search success',getdate(),'GUI'");
@@ -1582,9 +1632,9 @@ namespace TONEAPI
                 }
 
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account search  by type','Fail','search failed - page error',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account search  by type','Fail','search failed - page error exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
             }
             // reset filter start with grid validation
@@ -1596,51 +1646,51 @@ namespace TONEAPI
                 profilefilter[1].Clear();
 
                 driver.FindElement(By.XPath(gotomenu("carrierprofilesearchcombo"))).Click();
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.XPath(gotomenu("carrierprofilecleardropdown"))).Click();
 
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 driver.FindElement(By.CssSelector(gotomenu("carrierprofilesearchbutton"))).Click();
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
 
                 try
                 {
                     var gridgrids = driver.FindElements(By.CssSelector(gotomenu("carrierprofilegriddrildownaccount"))).ToList();
                     gridgrids[3].Click();
-                    System.Threading.Thread.Sleep(1000);
+                     System.Threading.Thread.Sleep(1000);
                     var gridgrids2 = driver.FindElements(By.CssSelector(gotomenu("carrierprofilegriddrildownaccount"))).ToList();
 
                     gridgrids2[4].Click();
-                    System.Threading.Thread.Sleep(1000);
+                     System.Threading.Thread.Sleep(1000);
                     //  driver.FindElement(By.CssSelector(gotomenu("carrierprofilegriddrildownaccount"))).Click();
 
                     var grid3 = driver.FindElements(By.CssSelector("#rowSection1 > div:nth-child(1) > div > div > div:nth-child(2) > div > div > div > span")).ToList();
                     var product = grid3[5];
                     if (product.Text.Equals("WholeSale"))
                     {
-                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile assigned product','Success','correct prouct',getdate(),'GUI'");
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account assigned product','Success','correct prouct',getdate(),'GUI'");
                     }
                     else
                     {
-                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile assigned product','Fail','wrong prouct',getdate(),'GUI'");
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account assigned product','Fail','wrong prouct',getdate(),'GUI'");
                     }
                     var grid4 = driver.FindElements(By.CssSelector("#rowSection1 > div:nth-child(1) > div > div > div:nth-child(3) > div > div > div > span")).ToList();
                     var productdate = grid4[5];
                     if (productdate.Text.Equals("2016-07-01"))
                     {
-                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile assigned product date','Success','correct prouct date',getdate(),'GUI'");
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account assigned product date','Success','correct prouct date',getdate(),'GUI'");
                     }
                     else
                     {
-                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile assigned product date','Fail','wrong prouct date',getdate(),'GUI'");
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account assigned product date','Fail','wrong prouct date',getdate(),'GUI'");
                     }
                 }
-                catch
+                catch (Exception Ex)
                 {
 
                 }
             }
-            catch
+            catch (Exception Ex)
             {
 
             }
@@ -1649,7 +1699,7 @@ namespace TONEAPI
             try
             {
                 driver.FindElement(By.XPath(gotomenu("carrierprofileadd"))).Click();
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
                 var profileelements = modaldiag.FindElements(By.XPath(gotomenu("carrierprofileadditems"))).ToList();
                 profileelements[0].SendKeys("ZTEL");
@@ -1666,7 +1716,7 @@ namespace TONEAPI
 
 
                 modaldiag.FindElement(By.XPath(gotomenu("carrierprofileaddtab"))).Click();
-                System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(1000);
                 var tab = modaldiag.FindElements(By.XPath(gotomenu("carrierprofileadditems"))).ToList();
 
                 tab[25].SendKeys("test@test.com");
@@ -1688,11 +1738,11 @@ namespace TONEAPI
 
 
 
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','save new carrier profile','success','success: adding new carrier profile',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','save new carrier account','success','success: adding new carrier account',getdate(),'GUI'");
             }
-            catch
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','Failed to save new carrier profile','Fail','Fail adding new carrier profile',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','Failed to save new carrier account','Fail','Fail adding new carrier account exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
             }
             driver.Close();
