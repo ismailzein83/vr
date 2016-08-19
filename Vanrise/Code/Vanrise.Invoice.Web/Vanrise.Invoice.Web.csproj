@@ -163,6 +163,12 @@
   <ItemGroup>
     <Content Include="VR_Invoice\Constants\InvoiceFieldEnum.js" />
     <Content Include="VR_Invoice\Constants\ModuleConfig.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\Templates\InvoiceTypeGridTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\Templates\MainGridColumnsManagement.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\Templates\SubSectionsManagement.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-grid.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-maingridcolumns.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-subsections.js" />
     <Content Include="VR_Invoice\Directives\Invoice\Templates\InvoiceGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-grid.js" />
     <Content Include="VR_Invoice\ModuleInitialization.js" />
@@ -171,10 +177,19 @@
     <Content Include="VR_Invoice\Services\APIServices\InvoiceItemAPISevice.js" />
     <Content Include="VR_Invoice\Services\APIServices\InvoiceTypeAPIService.js" />
     <Content Include="VR_Invoice\Services\InvoiceService.js" />
+    <Content Include="VR_Invoice\Services\InvoiceTypeService.js" />
     <Content Include="VR_Invoice\Views\GenerateInvoiceEditor.html" />
     <Content Include="VR_Invoice\Views\GenerateInvoiceEditorController.js" />
     <Content Include="VR_Invoice\Views\GenericInvoiceManagement.html" />
     <Content Include="VR_Invoice\Views\GenericInvoiceManagementController.js" />
+    <Content Include="VR_Invoice\Views\InvoiceTypeEditor.html" />
+    <Content Include="VR_Invoice\Views\InvoiceTypeEditorController.js" />
+    <Content Include="VR_Invoice\Views\InvoiceTypeManagement.html" />
+    <Content Include="VR_Invoice\Views\InvoiceTypeManagementController.js" />
+    <Content Include="VR_Invoice\Views\MainGridColumnsEditor.html" />
+    <Content Include="VR_Invoice\Views\MainGridColumnsEditorController.js" />
+    <Content Include="VR_Invoice\Views\SubSectionEditor.html" />
+    <Content Include="VR_Invoice\Views\SubSectionEditorController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

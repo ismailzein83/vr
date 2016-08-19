@@ -13,8 +13,13 @@
             });
         }
 
+        function GetFilteredInvoiceTypes(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetFilteredInvoiceTypes"), input);
+        }
+
         return ({
             GetInvoiceType: GetInvoiceType,
+            GetFilteredInvoiceTypes: GetFilteredInvoiceTypes
         });
     }
 

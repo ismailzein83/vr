@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Invoice.Data;
 using Vanrise.Invoice.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 namespace Vanrise.Invoice.Business
 {
     public class InvoiceTypeManager
@@ -17,7 +18,15 @@ namespace Vanrise.Invoice.Business
             var invoiceTypes = GetCachedInvoiceTypes();
             return invoiceTypes.GetRecord(invoiceTypeId);
         }
+        public IDataRetrievalResult<InvoiceTypeDetail> GetFilteredInvoiceTypes(DataRetrievalInput<InvoiceTypeQuery> input)
+        {
+            var allItems = GetCachedInvoiceTypes();
 
+            Func<InvoiceType, bool> filterExpression = (itemObject) =>
+                 (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()));
+
+            return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, InvoiceTypeDetailMapper));
+        }
         #endregion
 
         #region Private Classes
@@ -47,5 +56,16 @@ namespace Vanrise.Invoice.Business
               });
         }
         #endregion
+     
+        #region Mappers
+
+        private InvoiceTypeDetail InvoiceTypeDetailMapper(InvoiceType invoiceTypeObject)
+        {
+            InvoiceTypeDetail invoiceTypeDetail = new InvoiceTypeDetail();
+            invoiceTypeDetail.Entity = invoiceTypeObject;
+            return invoiceTypeDetail;
+        }
+        #endregion
+
     } 
 }

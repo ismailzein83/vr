@@ -47,6 +47,8 @@
     <Compile Include="GeneratedInvoice\GeneratedInvoice.cs" />
     <Compile Include="GeneratedInvoice\GeneratedInvoiceItem.cs" />
     <Compile Include="GeneratedInvoice\GeneratedInvoiceItemSet.cs" />
+    <Compile Include="InvoiceType\InvoiceTypeDetail.cs" />
+    <Compile Include="InvoiceType\InvoiceTypeQuery.cs" />
     <Compile Include="InvoiceType\UISettings\IRDLCReportParameterValueContext.cs" />
     <Compile Include="InvoiceType\UISettings\RDLCReportParameterValue.cs" />
     <Compile Include="Invoice\Invoice.cs" />
