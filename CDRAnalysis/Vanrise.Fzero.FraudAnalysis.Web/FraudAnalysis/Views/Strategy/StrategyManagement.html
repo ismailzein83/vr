@@ -13,7 +13,15 @@
                 <vr-columns width="normal">
                     <vr-textbox value="name" label="Strategy Name"></vr-textbox>
                 </vr-columns>
-                <vr-timerange on-ready="onTimeRangeDirectiveReady" type="'date'" from="fromDate" to="toDate" width="normal" isrequired="false" hideperiodsection></vr-timerange>
+
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="Creatd From" typeof="'dateTime'" value="fromDate" ></vr-datetimepicker>
+                </vr-columns>
+               
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="To" typeof="'dateTime'" value="toDate"></vr-datetimepicker>
+                </vr-columns>
+
                 <vr-columns width="normal">
                     <vr-textbox value="description" label="Description" ng-show="advancedSelected"></vr-textbox>
                 </vr-columns>

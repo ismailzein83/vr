@@ -5,9 +5,6 @@
     StrategyManagementController.$inject = ['$scope', 'CDRAnalysis_FA_StrategyService', 'CDRAnalysis_FA_KindEnum', 'CDRAnalysis_FA_StatusEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRValidationService', "StrategyAPIService", "PeriodEnum"];
 
     function StrategyManagementController($scope, CDRAnalysis_FA_StrategyService, CDRAnalysis_FA_KindEnum, CDRAnalysis_FA_StatusEnum, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService, StrategyAPIService, PeriodEnum) {
-        var timeRangeDirectiveAPI;
-        var timeRangeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
         var periodSelectorAPI;
         var periodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -23,13 +20,6 @@
         function defineScope() {
             $scope.fromDate = new Date(new Date().setHours(0, 0, 0, 0));
             $scope.toDate;
-
-            $scope.onTimeRangeDirectiveReady = function (api) {
-                timeRangeDirectiveAPI = api;
-                timeRangeReadyPromiseDeferred.resolve();
-            }
-
-
 
             $scope.hasAddStrategyPermission = function () {
                 return StrategyAPIService.HasAddStrategyPermission();
@@ -76,7 +66,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadStaticSelectors, loadTimeRangeDirective, loadUserSelector, loadPeriodSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadStaticSelectors, loadUserSelector, loadPeriodSelector]).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -88,16 +78,6 @@
 
                 $scope.statuses = UtilsService.getArrayEnum(CDRAnalysis_FA_StatusEnum);
                 $scope.selectedStatuses = [];
-            }
-
-            function loadTimeRangeDirective() {
-                var timeRangeDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-                timeRangeDirectiveReadyDeferred.promise.then(function () {
-                    VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, undefined, timeRangeDirectiveLoadDeferred);
-                });
-
-                return timeRangeDirectiveLoadDeferred.promise;
             }
 
             function loadUserSelector() {

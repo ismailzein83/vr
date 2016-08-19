@@ -9,8 +9,7 @@
         var userSelectorAPI;
         var userSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var timeRangeDirectiveAPI;
-        var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        
 
         defineScope();
         load();
@@ -20,10 +19,7 @@
             $scope.fromDate = new Date(new Date().setHours(0, 0, 0, 0));
             $scope.toDate;
 
-            $scope.onTimeRangeDirectiveReady = function (api) {
-                timeRangeDirectiveAPI = api;
-                timeRangeReadyPromiseDeferred.resolve();
-            }
+           
 
             $scope.searchClicked = function () {
                 return gridAPI.loadGrid(getQuery());
@@ -60,7 +56,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadStaticSelectors, loadUserSelector, loadTimeRangeSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadStaticSelectors, loadUserSelector]).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -83,13 +79,7 @@
 
         }
 
-        function loadTimeRangeSelector() {
-            var timeRangeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-            timeRangeReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, undefined, timeRangeLoadPromiseDeferred);
-            });
-            return timeRangeLoadPromiseDeferred.promise;
-        }
+       
 
         function getQuery() {
             var query = {

@@ -12,7 +12,13 @@
             </vr-row>
 
             <vr-row removeline>
-                <vr-timerange on-ready="onTimeRangeDirectiveReady" type="dateTime" width="normal" from="fromDate" to="toDate" hideperiodsection></vr-timerange>
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="Valid Till From" typeof="'dateTime'" value="fromDate"></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="To" typeof="'dateTime'" value="toDate"></vr-datetimepicker>
+                </vr-columns>
 
                 <vr-columns width="normal">
                     <vr-textbox value="accountNumber" label="Account Number"></vr-textbox>
