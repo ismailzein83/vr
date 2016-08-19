@@ -27,7 +27,7 @@ namespace TOne.WhS.Analytics.Business
             _saleZoneManager = new SaleZoneManager();
         }
 
-        public List<BusinessCaseStatus> GetBusinessCaseStatusDurationAmount(BusinessCaseStatusQuery query, bool isSale)
+        private List<BusinessCaseStatus> GetBusinessCaseStatusDurationAmount(BusinessCaseStatusQuery query, bool isSale)
         {
             AnalyticManager analyticManager = new AnalyticManager();
 
@@ -46,13 +46,29 @@ namespace TOne.WhS.Analytics.Business
                 },
                 SortByColumnName = "DimensionValues[0].Name"
             };
-
+            List<object> listCustomers = new List<object>
+            {
+                query.customerId
+            };
+            listCustomers.Add(query.customerId);
             if (isSale)
             {
+                DimensionFilter dimensionFilter = new DimensionFilter()
+                {
+                    Dimension = "Customer",
+                    FilterValues = listCustomers
+                };
+                analyticQuery.Query.Filters.Add(dimensionFilter);
                 analyticQuery.Query.MeasureFields.Add("CostNet");
             }
             else
             {
+                DimensionFilter dimensionFilter = new DimensionFilter()
+                {
+                    Dimension = "Supplier",
+                    FilterValues = listCustomers
+                };
+                analyticQuery.Query.Filters.Add(dimensionFilter);
                 analyticQuery.Query.MeasureFields.Add("SaleNet");
             }
 
@@ -85,14 +101,16 @@ namespace TOne.WhS.Analytics.Business
                 }
             return listBusinessCaseStatus;
         }
-        public List<BusinessCaseStatus> GetBusinessCaseStatus(BusinessCaseStatusQuery query, bool isSale, bool isAmount)
+        private List<BusinessCaseStatus> GetBusinessCaseStatus(BusinessCaseStatusQuery query, bool isSale, bool isAmount)
         {
             List<BusinessCaseStatus> listBusinessCaseStatus = _datamanager.GetBusinessCaseStatus(query.fromDate, query.toDate, query.customerId, query.topDestination, isSale, isAmount, query.currencyId);
             for (int i = 0; i < listBusinessCaseStatus.Count; i++)
             {
                 listBusinessCaseStatus[i].Zone = _saleZoneManager.GetSaleZoneName(listBusinessCaseStatus[i].ZoneId);
             }
-            return listBusinessCaseStatus;
+            List<BusinessCaseStatus> sortedList = listBusinessCaseStatus.OrderByDescending(o => o.Durations).ToList();
+
+            return sortedList;
         }
 
         public ExcelResult ExportCarrierProfile(BusinessCaseStatusQuery businessCaseStatusQuery)
@@ -188,6 +206,9 @@ namespace TOne.WhS.Analytics.Business
                 chart.Legend.Height = 600;
                 chart.Title.Font.IsBold = true;
                 chart.Title.Text = chartTitle;
+                chart.Title.TextHorizontalAlignment = TextAlignmentType.Right;
+                chart.Title.X = 2000;
+                chart.Title.Y = 100;
             }
         }
 
@@ -207,8 +228,9 @@ namespace TOne.WhS.Analytics.Business
 
                 worksheet.Cells.SetColumnWidth(0, 4);
                 List<string> lstZones = listBusinessCaseStatus.Select(x => x.Zone).Distinct().ToList<string>();
+                int listZonesCount = lstZones.Count;
                 int maxZoneLenght = 0;
-                for (int i = 0; i < lstZones.Count; i++)
+                for (int i = 0; i < listZonesCount; i++)
                 {
                     if (lstZones[i].Length > maxZoneLenght)
                         maxZoneLenght = lstZones[i].Length;
@@ -229,7 +251,7 @@ namespace TOne.WhS.Analytics.Business
                 if (numberOfMonths == 1)
                     worksheet.Cells.SetColumnWidth(1, 50);
 
-                for (int k = 0; k < lstZones.Count; k++)
+                for (int k = 0; k < listZonesCount; k++)
                 {
                     irow++;
                     int valueIndex = 1;
@@ -258,10 +280,12 @@ namespace TOne.WhS.Analytics.Business
                 int chartIndex = worksheet.Charts.Add(Aspose.Cells.Charts.ChartType.Column, topDestination + 3, 1, (int)(topDestination * 2.5), numberOfMonths + 2);
                 Aspose.Cells.Charts.Chart chart = worksheet.Charts[chartIndex];
 
+                int seriesCount = 0;
+                seriesCount = (listZonesCount < topDestination) ? listZonesCount : topDestination;
 
-                chart.NSeries.Add("C3:" + colName + (topDestination + 2), false);
+                chart.NSeries.Add("C3:" + colName + (seriesCount + 2), false);
                 chart.NSeries.CategoryData = "C2:" + colName + "2";
-                for (int i = 0; i < lstZones.Count; i++)
+                for (int i = 0; i < listZonesCount; i++)
                 {
                     chart.NSeries[i].Name = lstZones[i];
                 }
@@ -269,6 +293,13 @@ namespace TOne.WhS.Analytics.Business
                 chart.Legend.Position = Aspose.Cells.Charts.LegendPositionType.Left;
                 chart.Title.Font.IsBold = true;
                 chart.Title.Text = chartTitle;
+                chart.Title.TextHorizontalAlignment = TextAlignmentType.Right;
+                chart.Title.X = 2000;
+                chart.Title.Y = 100;
+                if ((35 * listZonesCount) > 200)
+                    chart.ChartObject.Height = (35*listZonesCount);
+                else
+                    chart.ChartObject.Height = 200;
             }
         }
         private string GetExcelColumnName(int columnNumber)
