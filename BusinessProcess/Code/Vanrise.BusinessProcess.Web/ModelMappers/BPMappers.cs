@@ -15,7 +15,6 @@ namespace Vanrise.BusinessProcess.Web.ModelMappers
                 DefinitionID = ins.DefinitionID,
                 WorkflowInstanceID = ins.WorkflowInstanceID,
                 Status = ins.Status,
-                RetryCount = ins.RetryCount,
                 InputArgument = ins.InputArgument,
                 LastMessage = ins.LastMessage,
                 CreatedTime = ins.CreatedTime,

@@ -20,7 +20,6 @@ namespace Vanrise.BusinessProcess.Entities
     public class BPConfiguration
     {
         public int? MaxConcurrentWorkflows { get; set; }
-        public bool RetryOnProcessFailed { get; set; }
         public string Url { get; set; }
         public string ScheduleTemplateURL { get; set; }
         public string ManualExecEditor { get; set; }

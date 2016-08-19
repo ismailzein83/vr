@@ -13,8 +13,6 @@ namespace Vanrise.BusinessProcess.Entities
         New = 0,
         [BPInstanceStatus(TrackingSeverity = LogEntryType.Information, IsClosed = false)]
         Running = 10,
-        [BPInstanceStatus(TrackingSeverity = LogEntryType.Error, IsClosed = false)]
-        ProcessFailed = 20,
         [BPInstanceStatus(TrackingSeverity = LogEntryType.Information, IsClosed = true)]
         Completed = 50,
         [BPInstanceStatus(TrackingSeverity = LogEntryType.Error, IsClosed = true)]

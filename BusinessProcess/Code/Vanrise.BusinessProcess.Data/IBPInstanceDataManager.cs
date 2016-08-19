@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Entities;
 
@@ -10,22 +11,16 @@ namespace Vanrise.BusinessProcess.Data
         List<BPInstance> GetBeforeId(BPInstanceBeforeIdInput input);
         BigResult<BPInstanceDetail> GetFilteredBPInstances(DataRetrievalInput<BPInstanceQuery> input);
 
-        List<BPInstance> GetPendingInstances(int definitionId, IEnumerable<BPInstanceStatus> acceptableBPStatuses, int maxCounts, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds);
+        List<BPInstance> GetPendingInstances(int definitionId, IEnumerable<BPInstanceStatus> acceptableBPStatuses, int maxCounts, Guid serviceInstanceId);
 
-        bool TryLockProcessInstance(long processInstanceId, System.Guid workflowInstanceId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds, IEnumerable<BPInstanceStatus> acceptableBPStatuses);
+        List<BPPendingInstanceInfo> GetPendingInstancesInfo(IEnumerable<BPInstanceStatus> statuses);
 
-        void UnlockProcessInstance(long processInstanceId, int currentRuntimeProcessId);
-
-        void UpdateInstanceStatus(long processInstanceId, BPInstanceStatus status, string message, int retryCount);
-
-        void SetRunningStatusTerminated(BPInstanceStatus bPInstanceStatus, IEnumerable<int> runningRuntimeProcessesIds);
-
-        //void SetChildrenStatusesTerminated(IEnumerable<BPInstanceStatus> enumerable, IEnumerable<int> runningRuntimeProcessesIds);
+        void UpdateInstanceStatus(long processInstanceId, BPInstanceStatus status, string message, Guid? workflowInstanceId);
 
         BPInstance GetBPInstance(long bpInstanceId);
 
-        bool TryGetBPInstanceStatus(long bpInstanceId, out BPInstanceStatus instanceStatus);
+        long InsertInstance(string processTitle, long? parentId, int definitionID, object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId,string entityId);
 
-        long InsertInstance(string processTitle, long? parentId, int definitionID, object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId,string entityId);       
+        void SetServiceInstancesOfBPInstances(List<BPPendingInstanceInfo> pendingInstancesToUpdate);
     }
 }

@@ -53,12 +53,6 @@ namespace Vanrise.BusinessProcess.Business
             return dataManager.GetBPInstance(bpInstanceId);
         }
 
-        public bool TryGetBPInstanceStatus(long bpInstanceId, out BPInstanceStatus instanceStatus)
-        {
-            IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
-            return dataManager.TryGetBPInstanceStatus(bpInstanceId, out instanceStatus);
-        }
-
         public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput)
         {
             if (createProcessInput == null)

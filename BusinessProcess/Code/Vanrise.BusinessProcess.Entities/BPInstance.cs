@@ -16,7 +16,6 @@ namespace Vanrise.BusinessProcess.Entities
         public int DefinitionID { get; set; }
         public Guid? WorkflowInstanceID { get; set; }
         public BPInstanceStatus Status { get; set; }
-        public int RetryCount { get; set; }
         public BaseProcessInputArgument InputArgument { get; set; }
         public string LastMessage { get; set; }
         public DateTime CreatedTime { get; set; }

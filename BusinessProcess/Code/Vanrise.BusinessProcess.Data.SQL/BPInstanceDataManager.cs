@@ -67,37 +67,20 @@ namespace Vanrise.BusinessProcess.Data.SQL
             }, BPInstanceDetailMapper, _mapper);
         }
 
-
-        public List<BPInstance> GetPendingInstances(int definitionId, IEnumerable<BPInstanceStatus> acceptableBPStatuses, int maxCounts, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds)
+        public List<BPInstance> GetPendingInstances(int definitionId, IEnumerable<BPInstanceStatus> acceptableBPStatuses, int maxCounts, Guid serviceInstanceId)
         {
-            return GetItemsSP("[bp].[sp_BPInstance_GetPendingsByDefinitionId]", BPInstanceMapper, definitionId, String.Join(",", acceptableBPStatuses.Select(itm => (int)itm)), maxCounts, currentRuntimeProcessId, string.Join(",", runningRuntimeProcessesIds));
+            return GetItemsSP("[bp].[sp_BPInstance_GetPendingsByDefinitionId]", BPInstanceMapper, definitionId, String.Join(",", acceptableBPStatuses.Select(itm => (int)itm)), maxCounts, serviceInstanceId);
         }
 
-        public bool TryLockProcessInstance(long processInstanceId, Guid workflowInstanceId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds, IEnumerable<BPInstanceStatus> acceptableBPStatuses)
+        public List<BPPendingInstanceInfo> GetPendingInstancesInfo(IEnumerable<BPInstanceStatus> statuses)
         {
-            Object isLocked = ExecuteScalarSP("[bp].[sp_BPInstance_TryLockAndUpdateWorkflowInstanceID]", processInstanceId, workflowInstanceId, currentRuntimeProcessId, string.Join(",", runningRuntimeProcessesIds), String.Join(",", acceptableBPStatuses.Select(itm => (int)itm)));
-            return isLocked != null && (bool)isLocked;
+            return GetItemsSP("[bp].[sp_BPInstance_GetPendingsInfo]", BPPendingInstanceInfoMapper, String.Join(",", statuses.Select(itm => (int)itm)));
         }
 
-        public void UnlockProcessInstance(long processInstanceId, int currentRuntimeProcessId)
+        public void UpdateInstanceStatus(long processInstanceId, BPInstanceStatus status, string message, Guid? workflowInstanceId)
         {
-            ExecuteNonQuerySP("[bp].[sp_BPInstance_UnLock]", processInstanceId, currentRuntimeProcessId);
+            ExecuteNonQuerySP("bp.sp_BPInstance_UpdateStatus", processInstanceId, (int)status, message, workflowInstanceId);
         }
-
-        public void UpdateInstanceStatus(long processInstanceId, BPInstanceStatus status, string message, int retryCount)
-        {
-            ExecuteNonQuerySP("bp.sp_BPInstance_UpdateStatus", processInstanceId, (int)status, message, ToDBNullIfDefault(retryCount));
-        }
-
-        public void SetRunningStatusTerminated(BPInstanceStatus bPInstanceStatus, IEnumerable<int> runningRuntimeProcessesIds)
-        {
-            ExecuteNonQuerySP("[bp].[sp_BPInstance_SetRunningStatusTerminated]", (int)BPInstanceStatus.Terminated, (int)bPInstanceStatus, String.Join(",", runningRuntimeProcessesIds));
-        }
-
-        //public void SetChildrenStatusesTerminated(IEnumerable<BPInstanceStatus> openStatuses, IEnumerable<int> runningRuntimeProcessesIds)
-        //{
-        //    ExecuteNonQuerySP("[bp].[sp_BPInstance_SetChildrenStatusesTerminated]", (int)BPInstanceStatus.Terminated, String.Join(",", openStatuses.Select(itm => (int)itm)), String.Join(",", runningRuntimeProcessesIds));
-        //}
 
         public BPInstance GetBPInstance(long bpInstanceId)
         {
@@ -125,7 +108,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 DefinitionID = (int)reader["DefinitionID"],
                 WorkflowInstanceID = GetReaderValue<Guid?>(reader, "WorkflowInstanceID"),
                 Status = (BPInstanceStatus)reader["ExecutionStatus"],
-                RetryCount = GetReaderValue<int>(reader, "RetryCount"),
                 LastMessage = reader["LastMessage"] as string,
                 CreatedTime = (DateTime)reader["CreatedTime"],
                 StatusUpdatedTime = GetReaderValue<DateTime?>(reader, "StatusUpdatedTime"),
@@ -140,6 +122,20 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return instance;
         }
 
+        private BPPendingInstanceInfo BPPendingInstanceInfoMapper(IDataReader reader)
+        {
+            BPPendingInstanceInfo instance = new BPPendingInstanceInfo
+            {
+                BPDefinitionId = (int)reader["DefinitionID"],
+                ProcessInstanceId = (long)reader["ID"],
+                ParentProcessInstanceId = GetReaderValue<long?>(reader, "ParentID"),
+                Status = (BPInstanceStatus)reader["ExecutionStatus"],
+                ServiceInstanceId = GetReaderValue<Guid?>(reader, "ServiceInstanceID")
+            };
+
+            return instance;
+        }
+
         private BPInstanceDetail BPInstanceDetailMapper(IDataReader reader)
         {
             return new BPInstanceDetail()
@@ -148,20 +144,14 @@ namespace Vanrise.BusinessProcess.Data.SQL
             };
         }
         #endregion
-
-
-        public bool TryGetBPInstanceStatus(long bpInstanceId, out BPInstanceStatus instanceStatus)
+        
+        public void SetServiceInstancesOfBPInstances(List<BPPendingInstanceInfo> pendingInstancesToUpdate)
         {
-            object statusValue = ExecuteScalarSP("[bp].[sp_BPInstance_GetStatusByID]", bpInstanceId);
-            if (statusValue != null)
+            foreach (var pendingInstance in pendingInstancesToUpdate)
             {
-                instanceStatus = (BPInstanceStatus)statusValue;
-                return true;
-            }
-            else
-            {
-                instanceStatus = default(BPInstanceStatus);
-                return false;
+                if (!pendingInstance.ServiceInstanceId.HasValue)
+                    throw new NullReferenceException(String.Format("pendingInstance.ServiceInstanceId. ProcessInstanceId '{0}'", pendingInstance.ProcessInstanceId));
+                ExecuteNonQuerySP("[bp].[sp_BPInstance_UpdateServiceInstanceID]", pendingInstance.ProcessInstanceId, pendingInstance.ServiceInstanceId.Value);
             }
         }
     }

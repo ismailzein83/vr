@@ -62,6 +62,7 @@
     <Compile Include="BPDefinitionQuery.cs" />
     <Compile Include="BPEvent.cs" />
     <Compile Include="BPInstance.cs" />
+    <Compile Include="BPPendingInstanceInfo.cs" />
     <Compile Include="BPTrackingBeforeIdInput.cs" />
     <Compile Include="BPInstanceDetail.cs" />
     <Compile Include="BPInstanceQuery.cs" />
