@@ -33,31 +33,32 @@
             this.btnMigrate = new System.Windows.Forms.Button();
             this.dateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.LblInfo = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // CBCurrentSwitches
             // 
             this.CBCurrentSwitches.FormattingEnabled = true;
-            this.CBCurrentSwitches.Location = new System.Drawing.Point(25, 36);
+            this.CBCurrentSwitches.Location = new System.Drawing.Point(12, 36);
             this.CBCurrentSwitches.Name = "CBCurrentSwitches";
-            this.CBCurrentSwitches.Size = new System.Drawing.Size(121, 21);
+            this.CBCurrentSwitches.Size = new System.Drawing.Size(200, 21);
             this.CBCurrentSwitches.TabIndex = 0;
             this.CBCurrentSwitches.Text = "Select Switch";
             // 
             // CBParser
             // 
             this.CBParser.FormattingEnabled = true;
-            this.CBParser.Location = new System.Drawing.Point(173, 36);
+            this.CBParser.Location = new System.Drawing.Point(235, 36);
             this.CBParser.Name = "CBParser";
-            this.CBParser.Size = new System.Drawing.Size(121, 21);
+            this.CBParser.Size = new System.Drawing.Size(177, 21);
             this.CBParser.TabIndex = 1;
             this.CBParser.Text = "Select Parser";
             // 
             // btnMigrate
             // 
-            this.btnMigrate.Location = new System.Drawing.Point(254, 128);
+            this.btnMigrate.Location = new System.Drawing.Point(235, 100);
             this.btnMigrate.Name = "btnMigrate";
-            this.btnMigrate.Size = new System.Drawing.Size(80, 23);
+            this.btnMigrate.Size = new System.Drawing.Size(177, 23);
             this.btnMigrate.TabIndex = 3;
             this.btnMigrate.Text = "Migrate";
             this.btnMigrate.UseVisualStyleBackColor = true;
@@ -65,7 +66,7 @@
             // 
             // dateTimePicker
             // 
-            this.dateTimePicker.Location = new System.Drawing.Point(25, 131);
+            this.dateTimePicker.Location = new System.Drawing.Point(12, 99);
             this.dateTimePicker.Name = "dateTimePicker";
             this.dateTimePicker.Size = new System.Drawing.Size(200, 20);
             this.dateTimePicker.TabIndex = 4;
@@ -78,18 +79,28 @@
             this.LblInfo.Size = new System.Drawing.Size(0, 13);
             this.LblInfo.TabIndex = 5;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 83);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(133, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Select Rule Effective Date";
+            // 
             // MigrationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(349, 295);
+            this.ClientSize = new System.Drawing.Size(436, 191);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.LblInfo);
             this.Controls.Add(this.dateTimePicker);
             this.Controls.Add(this.btnMigrate);
             this.Controls.Add(this.CBParser);
             this.Controls.Add(this.CBCurrentSwitches);
             this.Name = "MigrationForm";
-            this.Text = "Form1";
+            this.Text = "TOne Sync App";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -102,6 +113,7 @@
         private System.Windows.Forms.Button btnMigrate;
         private System.Windows.Forms.DateTimePicker dateTimePicker;
         private System.Windows.Forms.Label LblInfo;
+        private System.Windows.Forms.Label label1;
     }
 }
 
