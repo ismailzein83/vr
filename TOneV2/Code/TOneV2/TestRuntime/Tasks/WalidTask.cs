@@ -100,7 +100,7 @@ namespace TestRuntime.Tasks
 
 
             DBSyncTaskActionArgument taskActionArgument = new DBSyncTaskActionArgument();
-            taskActionArgument.ConnectionString = "Server=192.168.110.195;Database=QADB;User ID=sa;Password=QAP@ssw0rd;";
+            taskActionArgument.ConnectionString = "Server=192.168.110.195;Database=NetTalkFidaa;User ID=sa;Password=QAP@ssw0rd;";
             taskActionArgument.DefaultSellingNumberPlanId = 16;
             taskActionArgument.SellingProductId = 14;
             taskActionArgument.OffPeakRateTypeId = 13;
