@@ -12,6 +12,7 @@ namespace TONEAPI.ClassCode
 
         public string getcities( string token)
         {
+            connect con = new connect();
 
             string endPoint = "http://192.168.110.195:8585" + "/api/VRCommon/City/GetFilteredCities";
 
@@ -31,8 +32,8 @@ namespace TONEAPI.ClassCode
                 var objResponse1 =
                             JsonConvert.DeserializeObject < jasonresp > (city);
                 result = result + "Success: get city   \n";
- 
-                connect con = new connect();
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Get Cities','Success','Get cities',getdate(),'API'");
+         
                 DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='city' and httpmethod='GET'");
                 string query = "";
                 foreach (DataRow _r in ds.Tables[0].Rows)
@@ -59,6 +60,7 @@ namespace TONEAPI.ClassCode
                                if (LC.Count == ff.Count)
                                {
                                    result = result + " Success :  City count correct  \n|";
+                                   con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities count','Success','cities count correct',getdate(),'API'");
                                }
 
 
@@ -73,8 +75,15 @@ namespace TONEAPI.ClassCode
                                        correctcountry = false;
                                }
                                if (correctcountry)
+                               {
                                    result = result + " Success : Cities equal Cities in DB  \n|";
-   
+                                   con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities count','Success','cities count = DB count',getdate(),'API'");
+                               }
+                               else
+                               {
+
+                                   con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities count','Fail','cities count != DB count',getdate(),'API'");
+                               }
                  
 
             }
@@ -83,6 +92,7 @@ namespace TONEAPI.ClassCode
             {
 
                 result = result + "Failed: get cities  \n|";
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities count','Fail','failure getting cities',getdate(),'API'");
             }
 
             return result;
@@ -95,6 +105,7 @@ namespace TONEAPI.ClassCode
 
         public String Addcity(String _PostData, String _Token)
         {
+            connect con = new connect();
             string endPoint = "http://192.168.110.195:8585" + "/api/VRCommon/City/AddCity";
             string raddcountry;
 
@@ -103,6 +114,7 @@ namespace TONEAPI.ClassCode
             client.PostData = _PostData;
             client.ContentType = "application/json;charset=UTF-8";
             raddcountry =  client.MakeRequested(_PostData, _Token);
+            con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities ADD','Success','Success adding new city',getdate(),'API'");
             return raddcountry; 
         
          

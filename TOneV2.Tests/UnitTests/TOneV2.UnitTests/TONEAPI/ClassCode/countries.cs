@@ -13,6 +13,7 @@ namespace TONEAPI.ClassCode
     {
         public string getcountires(RestClient rs, Uri ur, string token)
         {
+            connect con = new connect();
             string country = rs.Getresposnse(ur, token);
             string result = "";
             try
@@ -20,8 +21,8 @@ namespace TONEAPI.ClassCode
                 var objResponse1 =
                             JsonConvert.DeserializeObject<List<Countryclass>>(country);
                 result = result + "Success: get Countries  \n|";
-
-                connect con = new connect();
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','Get Countries','Success','Get Countries',getdate(),'API'");
+               
                 DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='country' and httpmethod='GET'");
                 string query = "";
                 foreach (DataRow _r in ds.Tables[0].Rows)
@@ -47,6 +48,7 @@ namespace TONEAPI.ClassCode
                 if (LC.Count == ff.Count)
                 {
                     result = result + " Success :  Countries count correct  \n|";
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','Countries count','Success','countries count correct',getdate(),'API'");
                 }
 
 
@@ -61,6 +63,7 @@ namespace TONEAPI.ClassCode
                         correctcountry = false;
                 }
                 if (correctcountry)
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','Countries count','Success','countries count = DB Count',getdate(),'API'");
                     result = result + " Success : Countries equal countries in DB  \n|";
 
             }
@@ -69,6 +72,7 @@ namespace TONEAPI.ClassCode
             {
 
                 result = result + "Failed: get countries  \n|";
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','Get Countries','Fail','Fail Get Countries',getdate(),'API'");
             }
 
             return result;
@@ -78,6 +82,7 @@ namespace TONEAPI.ClassCode
 
         public string createcountry(RestClient rs, Uri ur, string token, string data)
         {
+            connect con = new connect();
             //   string endPoint = @"http://192.168.110.195:8585/api/VRCommon/Country/AddCountry";
             //RestClient  client = new RestClient(endpoint: endPoint,
             //                          method: HttpVerb.POST,
@@ -92,9 +97,9 @@ namespace TONEAPI.ClassCode
             string result = rs.MakeRequests("", token);
 
 
+           
+            con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','create Country','success','" + result + "',getdate(),'API'");
             return result;
-
-
 
         }
 

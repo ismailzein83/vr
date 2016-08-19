@@ -31,14 +31,39 @@
         <br />
         <hr />
         <br />
+        <asp:GridView ID="GridView1" runat="server" CellPadding="4" ForeColor="#333333" GridLines="None" Height="290px" Width="1665px">
+            <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
+            <EditRowStyle BackColor="#999999" />
+            <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
+            <HeaderStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
+            <PagerStyle BackColor="#284775" ForeColor="White" HorizontalAlign="Center" />
+            <RowStyle BackColor="#F7F6F3" ForeColor="#333333" />
+            <SelectedRowStyle BackColor="#E2DED6" Font-Bold="True" ForeColor="#333333" />
+            <SortedAscendingCellStyle BackColor="#E9E7E2" />
+            <SortedAscendingHeaderStyle BackColor="#506C8C" />
+            <SortedDescendingCellStyle BackColor="#FFFDF8" />
+            <SortedDescendingHeaderStyle BackColor="#6F8DAE" />
+        </asp:GridView>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
         <asp:Label ID="Modules" runat="server" style="text-align: center; font-weight: 700" Text="Modules" Width="428px"></asp:Label>
         <asp:Label ID="Label5" runat="server" style="text-align: center; font-weight: 700" Text=" Successful" Width="428px"></asp:Label>
         <asp:Label ID="Label6" runat="server" style="text-align: center; font-weight: 700" Text="Failed" Width="428px"></asp:Label>
     
     </div>
-        <asp:TextBox ID="TextBox4" runat="server" BackColor="#A5C3DE" Height="600px" TextMode="MultiLine" Width="420px"></asp:TextBox>
+        <asp:TextBox ID="TextBox4" runat="server" BackColor="#A5C3DE" Height="600px" TextMode="MultiLine" Width="420px" style="color: #FFFFFF; background-color: #5D7B9D"></asp:TextBox>
         <asp:TextBox ID="TextBox5" runat="server" BackColor="White" Height="600px" TextMode="MultiLine" Width="420px"></asp:TextBox>
-        <asp:TextBox ID="TextBox6" runat="server" BackColor="#FF6666" Height="600px" TextMode="MultiLine" Width="420px"></asp:TextBox>
+        <asp:TextBox ID="TextBox6" runat="server" BackColor="#FF6666" Height="600px" TextMode="MultiLine" Width="420px" style="color: #FFFFFF; background-color: #4D6082"></asp:TextBox>
     </form>
 </body>
 </html>

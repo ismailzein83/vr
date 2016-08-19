@@ -40,6 +40,7 @@ namespace TONEAPI.ClassCode
 
         public string getfiltercarriers(RestClient rs, Uri ur, string token, string param)
         {
+            connect con = new connect();
             string results = "";
 
             string endPoint = "http://192.168.110.195:8585" + "/api/WhS_BE/CarrierAccount/GetCarrierAccountInfo";
@@ -55,9 +56,9 @@ namespace TONEAPI.ClassCode
             {
                 var objResponse1 =
                             JsonConvert.DeserializeObject<List<Carrierfiltered>>(account);
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'SupplierCode','Supplier Code','success','Supplier code page : get countries',getdate(),'API'");
                 results = results + "Success: get Countries for page supplier zone \n|";
 
-                connect con = new connect();
 
 
                 DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='SupplierCodes' and httpmethod='GET'");
@@ -83,11 +84,15 @@ namespace TONEAPI.ClassCode
                 // check 1 
                 if (LC.Count == ff.Count)
                 {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'SupplierCode','Supplier Code','success','Supplier code page :Carrier count correct',getdate(),'API'");
                     results = results + " Success :  Supplier Codes - Carrier count correct  \n|";
                 }
                 else
+                {
+                    
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'SupplierCode','Supplier Code','Fail','Supplier code page :Carrier count incorrect',getdate(),'API'");
                     results = results + " Success :  Supplier Codes - Carrier count in correct  \n|";
-
+                }
                 bool correctcountry = false;
                 foreach (Carrierfiltered c in LC)
                 {
@@ -99,15 +104,17 @@ namespace TONEAPI.ClassCode
                         correctcountry = false;
                 }
                 if (correctcountry)
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'SupplierCode','Supplier Code','success','Supplier code page :Carrier equal carriers in DB ',getdate(),'API'");
                     results = results + " Success : Supplier Codes - Carrier equal carriers in DB  \n|";
-
+                }
 
                 //   results = results + "Success: get carrieraccounts for page Supplier zones  \n|";
 
             }
             catch
             {
-
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'SupplierCode','Supplier Code','Fail','get carrieraccounts for page Supplier Codes  ',getdate(),'API'");
                 results = results + "Failed: get carrieraccounts for page Supplier Codes  \n|";
             }
             return results;
@@ -115,6 +122,7 @@ namespace TONEAPI.ClassCode
 
         public string getsupplierCodes(RestClient rs, Uri ur, string token, string param)
         {
+            connect con = new connect();
             string endPoint = "http://192.168.110.195:8585" + "/api/WhS_BE/SupplierCode/GetFilteredSupplierCodes";
 
 
@@ -150,7 +158,7 @@ namespace TONEAPI.ClassCode
                 }).ToList();
 
 
-                connect con = new connect();
+               
                 DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='SupplierCodes' and httpmethod='POST'");
                 string query = "";
                 foreach (DataRow _r in ds.Tables[0].Rows)
@@ -193,11 +201,14 @@ namespace TONEAPI.ClassCode
 
                 if (LC.Count == ct.Count)
                 {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'SupplierCode','Supplier Code','success','Supplier code page :browsing ',getdate(),'API'");
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'SupplierCode','Supplier Code','success','Supplier code page :Code count is correct ',getdate(),'API'");
                     result = result + "Success: Supplier Code Page   \n";
                     result = result + "Success:Supplier Code Page Zone count correct \n|";
                 }
                 else
                 {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'SupplierCode','Supplier Code','Fail','Supplier code page :Code count in correct',getdate(),'API'");
                     result = result + "Success:Supplier Code Page Zone count in correct    \n|";
                 }
 
@@ -212,13 +223,18 @@ namespace TONEAPI.ClassCode
                         correctaccount = false;
                 }
                 if (correctaccount)
+                {
                     result = result + " Success : Supplier Code Page codes are retrieved correctly \n|";
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'SupplierCode','Supplier Code','success','Supplier code page :codes are retrieved correctly ',getdate(),'API'");
 
+
+                }
 
 
             }
             catch
             {
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'SupplierCode','Supplier Code','Fail','Supplier code page :Code Data Validation \',getdate(),'API'");
                 return "Failed : Supplier Zone Code Zones count wrong  \n  Failed: Supplier Code Page Zones Data Validation \n|";
             }
             return result;

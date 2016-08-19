@@ -52,6 +52,7 @@ namespace TONEAPI.ClassCode
             string parameters = "{\"Query\":{},\"SortByColumnName\":\"Entity.CarrierProfileId\",\"IsSortDescending\":false,\"ResultKey\":null,\"DataRetrievalResultType\":0,\"FromRow\":1,\"ToRow\":40}";
             string account = client.MakeRequested(parameters, token);
             string result = "";
+            connect con = new connect();
             try
             {
 
@@ -75,7 +76,7 @@ namespace TONEAPI.ClassCode
                 // string name = CPsettings.Company.ToString();
 
 
-                connect con = new connect();
+             
                 DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='Carrieraccount' and httpmethod='POST'");
                 string query = "";
                 foreach (DataRow _r in ds.Tables[0].Rows)
@@ -97,12 +98,15 @@ namespace TONEAPI.ClassCode
 
                 if (LC.Count == ct.Count)
                 {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Carrier Account','Get Carrier Account','Success','Success:Get Carrier Account',getdate(),'API'");
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Carrier Account','Carrier Account count/validation','Success','Success: Carrier Account Data Validation',getdate(),'API'");
                     result = result + "Success: get Carrier Accounts  \n";
                     result = result + "Success: Carrier Accounts count correct \n|";
                 }
                 else
                 {
                     result = result + "Success:  Carrier Accounts count wrong   \n|";
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Carrier Account','Carrier Account count/validation','Fail','Fail: Carrier Account Data Validation',getdate(),'API'");
                 }
 
                 bool correctaccount = false;
@@ -117,6 +121,7 @@ namespace TONEAPI.ClassCode
                 }
                 if (correctaccount)
                     result = result + " Success : CarrierAccount are retrieved correctly \n|";
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Carrier Account','Carrier Account Data','Success','Success: Carrier Account Data retrived correctly',getdate(),'API'");
 
 
 
@@ -124,11 +129,13 @@ namespace TONEAPI.ClassCode
             catch
             {
                 return "Failed :  Carrier Account count wrong  \n  Failed: Carrier Account Data Validation \n|";
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Carrier Account','Carrier Account Data','Fail','Fail getting Carrier Account Data ',getdate(),'API'");
             }
             return result; 
         }
           public string createaccount(RestClient rs, Uri ur, string token, string data)
         {
+            connect con = new connect();
             string EndPoint = @"http://192.168.110.195:8585/api/WhS_BE/CarrierAccount/AddCarrierAccount";
             var client = new RestClient(endpoint: EndPoint,
                               method: HttpVerb.POST);
@@ -140,7 +147,7 @@ namespace TONEAPI.ClassCode
             string paramter = data;
             string result = client.MakeRequested(paramter, token);
 
-
+            con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Carrier Account','add  Carrier Account','Success','Success: Carrier Account created " + result + "',getdate(),'API'");
 
             return result;
    

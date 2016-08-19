@@ -12,6 +12,8 @@ namespace TONEAPI.ClassCode
 
         public string GetSellingNunmberPlan(string _Token, string _api, string _postData)
         {
+            connect con = new connect();
+
             string endPoint = "http://192.168.110.195:8585" + _api;
             string RgetNumberPlan;
 
@@ -29,9 +31,9 @@ namespace TONEAPI.ClassCode
                             JsonConvert.DeserializeObject<SellingNumberPlan>(RgetNumberPlan);
                 result = result + "Success: get  SellingNumberPlan   \n";
 
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'SellingNumberPlan','get SellingNumberPlan','success',' Success getting SellingNumberPlan',getdate(),'API'");
 
-
-                connect con = new connect();
+              
                 DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='SellingNumberPlan' and httpmethod='Post'");
                 string query = "";
                 foreach (DataRow _r in ds.Tables[0].Rows)
@@ -57,6 +59,7 @@ namespace TONEAPI.ClassCode
                 if (LC.Count == ff.Count)
                 {
                     result = result + " Success :  SellingNumberingPlanCount count correct  \n|";
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'SellingNumberPlan','count SellingNumberPlan ','success',' Selling NumberPlan count is correct',getdate(),'API'");
                 }
 
 
@@ -71,15 +74,17 @@ namespace TONEAPI.ClassCode
                         correctcountry = false;
                 }
                 if (correctcountry)
+                {
                     result = result + " Success : Selling NumberPlan equal SellingNumberPlan in DB  \n|";
-
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'SellingNumberPlan','compare SellingNumberPlan to db','success',' Selling NumberPlan equal SellingNumberPlan in DB',getdate(),'API'");
+                }
 
 
             }
 
             catch
             {
-
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'SellingNumberPlan','get SellingNumberPlan','Fail','Failure getting SellingNumberPlan',getdate(),'API'");
                 result = result + "Failed: get SellingNumberPlan  \n|";
             }
 

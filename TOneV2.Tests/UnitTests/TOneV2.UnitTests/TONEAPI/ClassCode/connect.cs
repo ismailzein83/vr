@@ -49,5 +49,41 @@ namespace TONEAPI
 
 
         }
+
+
+        public DataSet getdatatesting(string Query)
+        {
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=ToneV2testing;User ID=sa;Password=QAP@ssw0rd");
+
+            SqlDataAdapter da = new SqlDataAdapter();
+            myConn.Open();
+            DataSet ds1 = new DataSet();
+            string sQueryString1 = "";
+            sQueryString1 = Query;
+            da.SelectCommand = new SqlCommand(sQueryString1, myConn);
+            da.Fill(ds1, "table");
+            myConn.Close();
+            return ds1;
+
+
+
+        }
+        public void updatedata(string Query)
+        {
+
+            using (SqlConnection openCon = new SqlConnection("Server=192.168.110.195;Database=ToneV2testing;User ID=sa;Password=QAP@ssw0rd"))
+             {
+              string saveStaff = Query;
+
+                      using(SqlCommand querySaveStaff = new SqlCommand(saveStaff))
+                       {
+                         querySaveStaff.Connection=openCon;
+       
+                         openCon.Open();
+                         querySaveStaff.ExecuteNonQuery();
+                         openCon.Close();
+                       }
+             }
+        }
     }
 }

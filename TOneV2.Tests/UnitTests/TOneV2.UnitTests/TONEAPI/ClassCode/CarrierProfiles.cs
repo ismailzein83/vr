@@ -77,6 +77,7 @@ namespace TONEAPI.ClassCode
         }
         public string getprofiles(RestClient rs, Uri ur, string token)
         {
+            connect con = new connect();
 
             string endPoint = "http://192.168.110.195:8585" + "/api/WhS_BE/CarrierProfile/GetFilteredCarrierProfiles ";
 
@@ -99,6 +100,11 @@ namespace TONEAPI.ClassCode
                 string name = CPsettings.Company.ToString();
                 result = result + "Success: get Carrier Profiles  \n|";
 
+              
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Carrier Profile','Get carrier profile','Success','get Carrier Profiles',getdate(),'API'");
+
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Carrier Profile','Carrier profile count/validation','Success','Success: Carrier Profile Data Validation',getdate(),'API'");
+
                 return "Success :  Carrier Profile count correct  \n  Success: Carrier Profile Data Validation \n|";
             }
             catch
@@ -110,6 +116,7 @@ namespace TONEAPI.ClassCode
 
         public string createprofile(RestClient rs, Uri ur, string token, string data)
         {
+            connect con = new connect();
             string EndPoint = @"http://192.168.110.195:8585/api/WhS_BE/CarrierProfile/AddCarrierProfile";
             var client = new RestClient(endpoint: EndPoint,
                               method: HttpVerb.POST);
@@ -122,7 +129,7 @@ namespace TONEAPI.ClassCode
             string result = client.MakeRequested(paramter, token);
 
 
-
+            con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Carrier Profile','Create Carrier profile','Success','Success:Create Carrier Profile',getdate(),'API'");
             return result;
    
         }

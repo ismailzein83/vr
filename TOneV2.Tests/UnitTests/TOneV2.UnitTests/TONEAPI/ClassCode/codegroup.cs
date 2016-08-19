@@ -12,6 +12,7 @@ namespace TONEAPI.ClassCode
 
         public string getcodegroup( string token)
         {
+            connect con = new connect();
 
             string endPoint = "http://192.168.110.195:8585" + "/api/WhS_BE/CodeGroup/GetFilteredCodeGroups";
 
@@ -32,7 +33,7 @@ namespace TONEAPI.ClassCode
                             JsonConvert.DeserializeObject < jasonrespCG > (codegroups);
                 result = result + "Success: get codegroup  \n";
 
-                connect con = new connect();
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','Get CodeGroup','success','Success getting code group',getdate(),'API'");
                 DataSet ds = con.getdata("SELECT   [validatequery]  FROM [TONEV2TESTAPI].[dbo].[testtable]  where unittype='codeGroup' and httpmethod='GET'");
                 string query = "";
                 foreach (DataRow _r in ds.Tables[0].Rows)
@@ -59,6 +60,7 @@ namespace TONEAPI.ClassCode
                                if (LC.Count == ff.Count)
                                {
                                    result = result + " Success :  codegroup count correct  \n|";
+                                   con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','Code group count','success',' code group count is correct',getdate(),'API'");
                                }
 
 
@@ -73,8 +75,10 @@ namespace TONEAPI.ClassCode
                                        correctcodegroup  = false;
                                }
                                if (correctcodegroup)
+                               {
                                    result = result + " Success : CodeGroup equal CodeGroup in DB  \n|";
-   
+                                   con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','Code group compare to DB','success',' code group equal to DB ',getdate(),'API'");
+                               }
                  
 
             }
@@ -83,6 +87,7 @@ namespace TONEAPI.ClassCode
             {
 
                 result = result + "Failed: get CodeGroup  \n|";
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','Code group count','Fail','Fail getting code groups',getdate(),'API'");
             }
 
             return result;
@@ -95,6 +100,7 @@ namespace TONEAPI.ClassCode
 
         public String Addcodegroup(String _PostData, String _Token)
         {
+            connect con = new connect();
             string endPoint = "http://192.168.110.195:8585" + "/api/WhS_BE/CodeGroup/AddCodeGroup";
             string raddcountry;
 
@@ -103,6 +109,7 @@ namespace TONEAPI.ClassCode
             client.PostData = _PostData;
             client.ContentType = "application/json;charset=UTF-8";
             raddcountry =  client.MakeRequested(_PostData, _Token);
+            con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','Code group create','success','success:code group create',getdate(),'API'");
             return raddcountry; 
         
          
