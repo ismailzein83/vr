@@ -802,8 +802,6 @@ loader .outer-loader {
 }
 
 .tooltip-error {
-    display: block;
-    width:100px;
     padding: 5px;
     margin: 5px;
     position: absolute;

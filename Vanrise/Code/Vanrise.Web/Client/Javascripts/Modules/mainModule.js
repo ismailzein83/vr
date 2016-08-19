@@ -36,8 +36,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         if (innerWidth - elleft  < 100) {
             elleft = elleft - (100 + $(self).width() + 10);
             $(tooltip).addClass('tooltip-error-right');
-            $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft })
-
+            $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft , width:100 })
         }
         else {
             $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft })
