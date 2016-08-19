@@ -74,7 +74,7 @@
             // LblInfo
             // 
             this.LblInfo.AutoSize = true;
-            this.LblInfo.Location = new System.Drawing.Point(31, 182);
+            this.LblInfo.Location = new System.Drawing.Point(17, 128);
             this.LblInfo.Name = "LblInfo";
             this.LblInfo.Size = new System.Drawing.Size(0, 13);
             this.LblInfo.TabIndex = 5;
@@ -92,7 +92,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(436, 191);
+            this.ClientSize = new System.Drawing.Size(436, 210);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.LblInfo);
             this.Controls.Add(this.dateTimePicker);
