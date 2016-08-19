@@ -27,6 +27,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Public Methods
         
+        public IEnumerable<CarrierAccount> GetCarriersByProfileId(int carrierProfileId,bool getCustomers, bool getSuppliers)
+        {
+            if (getCustomers)
+                return GetAllCustomers().Where(x => x.CarrierProfileId == carrierProfileId);
+            if(getSuppliers)
+                return GetAllSuppliers().Where(x => x.CarrierProfileId == carrierProfileId);
+            return null;
+        }
         public Vanrise.Entities.IDataRetrievalResult<CarrierAccountDetail> GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
         {
             CarrierProfileManager carrierProfileManager = new CarrierProfileManager();

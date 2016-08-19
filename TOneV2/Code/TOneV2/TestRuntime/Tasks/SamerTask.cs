@@ -7,6 +7,7 @@ using TestRuntime.ExecutionFlows;
 using TOne.WhS.CDRProcessing.Entities;
 using TOne.WhS.CDRProcessing.QueueActivators;
 using TOne.WhS.CodePreparation.BP.Arguments;
+using TOne.WhS.Invoice.Business;
 using TOne.WhS.Invoice.Business.Extensions;
 using Vanrise.Analytic.Entities;
 using Vanrise.BusinessProcess;
@@ -51,6 +52,7 @@ namespace TestRuntime.Tasks
                 UISettings = new InvoiceTypeUISettings
                 {
                     PartnerSelector = "vr-whs-be-customer-selector",
+                    PartnerManagerFQTN = new CarrierPartnerManager(),
                     MainGridColumns = new List<InvoiceUIGridColumn>
                     {
                         new InvoiceUIGridColumn 
@@ -116,7 +118,67 @@ namespace TestRuntime.Tasks
                                         }
                                     }
                                 },
-                                ReportURL ="~/Client/Modules/WhS_Invoice/Reports/CustomerInvoiceReport.rdlc"
+                                ReportURL ="~/Client/Modules/WhS_Invoice/Reports/CustomerInvoiceReport.rdlc",
+                                Parameters = new List<RDLCReportParameter>
+                                {
+                                    new RDLCReportParameter 
+                                    {
+                                        IsVisible = true,
+                                        ParameterName ="FromDate",
+                                        Value = new FieldRDLReportParameterValue 
+                                        {
+                                            Field = InvoiceField.FromDate
+                                        }
+                                    },
+                                    new RDLCReportParameter 
+                                    {
+                                        IsVisible = true,
+                                        ParameterName ="ToDate",
+                                        Value = new FieldRDLReportParameterValue 
+                                        {
+                                            Field = InvoiceField.ToDate
+                                        }
+                                    },
+                                    new RDLCReportParameter 
+                                    {
+                                        IsVisible = true,
+                                        ParameterName ="SaleAmount",
+                                        Value = new FieldRDLReportParameterValue 
+                                        {
+                                            Field = InvoiceField.CustomField,
+                                            FieldName ="SaleAmount"
+                                        }
+                                    },
+                                    new RDLCReportParameter 
+                                    {
+                                        IsVisible = true,
+                                        ParameterName ="TotalNumberOfCalls",
+                                        Value = new FieldRDLReportParameterValue 
+                                        {
+                                            Field = InvoiceField.CustomField,
+                                            FieldName ="TotalNumberOfCalls"
+                                        }
+                                    },
+                                    new RDLCReportParameter 
+                                    {
+                                        IsVisible = true,
+                                        ParameterName ="Duration",
+                                        Value = new FieldRDLReportParameterValue 
+                                        {
+                                            Field = InvoiceField.CustomField,
+                                            FieldName ="Duration"
+                                        }
+                                    }, new RDLCReportParameter 
+                                    {
+                                        IsVisible = true,
+                                        ParameterName ="Title",
+                                        Value = new CustomFieldRDLReportParameterValue
+                                        {
+                                            FieldValue = "Customer Invoice"
+                                        }
+                                    },
+                                    
+                                }
                             }
                         }
                     }

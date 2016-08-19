@@ -34,10 +34,20 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 SortByColumnName = "DimensionValues[0].Name"
             };
 
+            string[] partner = context.PartnerId.Split('_');
+            string dimentionName = null;
+            if(partner[0].Equals("Profile"))
+            {
+                dimentionName = "CustomerProfile";
+            }
+            else if (partner[0].Equals("Account"))
+            {
+                dimentionName = "Customer";
+            }
             DimensionFilter dimensionFilter = new DimensionFilter()
             {
-                Dimension = "Customer",
-                FilterValues = new List<object> {context.PartnerId}
+                Dimension = dimentionName,
+                FilterValues = new List<object> { partner[1]}
             };
             analyticQuery.Query.Filters.Add(dimensionFilter);
 

@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="CustomerInvoiceDetails.cs" />
     <Compile Include="CustomerInvoiceItemDetails.cs" />
+    <Compile Include="InvoiceCarrier.cs" />
+    <Compile Include="InvoiceCarrierFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

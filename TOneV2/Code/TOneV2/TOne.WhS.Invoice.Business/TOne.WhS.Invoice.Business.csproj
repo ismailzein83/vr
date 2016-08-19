@@ -50,15 +50,29 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Invoice.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CarrierPartnerManager.cs" />
     <Compile Include="Extensions\CustomerInvoiceGenerator.cs" />
+    <Compile Include="InvoiceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
+      <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
+      <Name>TOne.WhS.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
+      <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
+      <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Invoice.Entities\TOne.WhS.Invoice.Entities.csproj">
       <Project>{a3474129-600a-44fa-a71c-bc746f104a39}</Project>
       <Name>TOne.WhS.Invoice.Entities</Name>

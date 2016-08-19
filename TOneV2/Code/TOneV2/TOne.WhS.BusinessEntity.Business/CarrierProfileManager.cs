@@ -100,7 +100,10 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return GetCarrierProfileName(Convert.ToInt32(context.EntityId));
         }
-
+        public IEnumerable<CarrierProfile> GetCarrierProfiles()
+        {
+            return GetCachedCarrierProfiles().Values;
+        }
         #endregion
 
         #region Validation Methods
