@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -15,27 +16,14 @@ namespace Vanrise.Runtime
     {
         static RunningProcessManager()
         {
-            _dataManager = RuntimeDataManagerFactory.GetDataManager<IRunningProcessDataManager>();
-            s_Timer = new Timer(5000);
-            s_Timer.Elapsed += s_Timer_Elapsed;
-            s_Timer.Enabled = true;
+            _dataManager = RuntimeDataManagerFactory.GetDataManager<IRunningProcessDataManager>();           
+            s_Timer = new Timer(7000);
+            s_Timer.Elapsed += s_Timer_Elapsed;            
         }
+
+        static string _runtimeManagerServiceURL;
 
         static void s_Timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            try
-            {
-                UpdateHeartBeat();
-            }
-            catch (Exception ex)
-            {
-                LoggerFactory.GetExceptionLogger().WriteException(ex);
-            }
-            lock (s_lockObj)
-                s_isRunning = false;
-        }
-
-        private static void UpdateHeartBeat()
         {
             lock (s_lockObj)
             {
@@ -43,40 +31,46 @@ namespace Vanrise.Runtime
                     return;
                 s_isRunning = true;
             }
-
-            if (_currentProcess == null)
-                InitializeCurrentProcessIfNotInitialized();
-            else
+            try
             {
-                DateTime heartBeatTime;
-                if(!_dataManager.UpdateHeartBeat(_currentProcess.ProcessId, out heartBeatTime))
+                if (_currentProcess == null)
+                    InitializeCurrentProcessIfNotInitialized();
+                else
                 {
-                    var processInfo = _dataManager.InsertProcessInfo(System.Diagnostics.Process.GetCurrentProcess().ProcessName, Environment.MachineName);
-                    heartBeatTime = processInfo.LastHeartBeatTime;
-                    lock(s_lockObj)
+                    try
                     {
-                        if (_currentProcess == null)
-                            _currentProcess = processInfo;
-                        else
+                        if (_runtimeManagerServiceURL == null)
+                            _runtimeManagerServiceURL = RuntimeDataManagerFactory.GetDataManager<IRuntimeManagerDataManager>().GetRuntimeManagerServiceURL();
+                        if (_runtimeManagerServiceURL == null)
+                            throw new NullReferenceException("_runtimeManagerServiceURL");
+
+                        HeartBeatResponse hpResponse = null;
+                        Common.ServiceClientFactory.CreateTCPServiceClient<IRuntimeManagerWCFService>(_runtimeManagerServiceURL, (client) =>
+                            {
+                                hpResponse = client.UpdateHeartBeat(new HeartBeatRequest
+                                    {
+                                        RunningProcessId = CurrentProcess.ProcessId
+                                    });
+                            });
+                        if (hpResponse == null || hpResponse.Result != HeartBeatResult.Succeeded)
                         {
-                            _currentProcess.ProcessId = processInfo.ProcessId;
-                            _currentProcess.StartedTime = processInfo.StartedTime;                            
+                            Environment.Exit(0);
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        LoggerFactory.GetExceptionLogger().WriteException(ex);
+                        _runtimeManagerServiceURL = null;
+                    }
                 }
-                _currentProcess.LastHeartBeatTime = heartBeatTime;
+
+                if (s_FreezedTransactionLocks.Count > 0 || s_queueFreezedTransactionLocks.Count > 0)
+                    SaveFreezedTransactionLocks();
             }
-
-            if (s_FreezedTransactionLocks.Count > 0 || s_queueFreezedTransactionLocks.Count > 0)
-                SaveFreezedTransactionLocks();
-
-            //delete timed out processes
-            if ((DateTime.Now - s_lastCleanTime).TotalMinutes > 2)
+            catch (Exception ex)
             {
-                _dataManager.DeleteTimedOutProcesses(new TimeSpan(0, 2, 0));
-                s_lastCleanTime = DateTime.Now;
+                LoggerFactory.GetExceptionLogger().WriteException(ex);
             }
-
             lock (s_lockObj)
                 s_isRunning = false;
         }
@@ -98,7 +92,7 @@ namespace Vanrise.Runtime
         static RunningProcessInfo _currentProcess;
         static IRunningProcessDataManager _dataManager;
         static Timer s_Timer;
-        static DateTime s_lastCleanTime;
+        static ServiceHost s_serviceHost;
 
         public static RunningProcessInfo CurrentProcess
         {
@@ -119,42 +113,101 @@ namespace Vanrise.Runtime
                 if (_currentProcess == null)
                 {
                     LoggerFactory.GetLogger().WriteInformation("Registering Runtime Host...");
-                    _currentProcess = _dataManager.InsertProcessInfo(System.Diagnostics.Process.GetCurrentProcess().ProcessName, Environment.MachineName);
+                    string serviceURL;
+                    s_serviceHost = ServiceHostManager.Current.CreateAndOpenTCPServiceHost(typeof(InterRuntimeWCFService), typeof(IInterRuntimeWCFService), OnServiceHostCreated, OnServiceHostRemoved, out serviceURL);
+                    RunningProcessAdditionalInfo additionalInfo = new RunningProcessAdditionalInfo
+                    {
+                        TCPServiceURL = serviceURL
+                    };
+                    _currentProcess = _dataManager.InsertProcessInfo(System.Diagnostics.Process.GetCurrentProcess().ProcessName, Environment.MachineName, additionalInfo);
+                    s_Timer.Enabled = true;
                     System.Threading.Thread.Sleep(3000);
                     LoggerFactory.GetLogger().WriteInformation("Runtime Host registered");
                 }
             }
         }
 
-        public List<RunningProcessInfo> GetRunningProcesses(TimeSpan? heartBeatReceivedWithin = null)
+        #region WCF Host Events
+
+        static void OnServiceHostCreated(ServiceHost serviceHost)
         {
-            UpdateHeartBeat();
-            return _dataManager.GetRunningProcesses(heartBeatReceivedWithin);
+            serviceHost.Opening += serviceHost_Opening;
+            serviceHost.Opened += serviceHost_Opened;
+            serviceHost.Closing += serviceHost_Closing;
+            serviceHost.Closed += serviceHost_Closed;
         }
 
-        static List<RunningProcessInfo> s_runningProcesses;
-        static DateTime s_RunningProcessesRetrievedTime;
+        static void OnServiceHostRemoved(ServiceHost serviceHost)
+        {
+            serviceHost.Opening -= serviceHost_Opening;
+            serviceHost.Opened -= serviceHost_Opened;
+            serviceHost.Closing -= serviceHost_Closing;
+            serviceHost.Closed -= serviceHost_Closed;
+        }
+
+        static void serviceHost_Opening(object sender, EventArgs e)
+        {
+            LoggerFactory.GetLogger().WriteInformation("InterRuntimeWCFService Service is opening..");
+        }
+
+        static void serviceHost_Opened(object sender, EventArgs e)
+        {
+            LoggerFactory.GetLogger().WriteInformation("InterRuntimeWCFService Service opened");
+        }
+
+        static void serviceHost_Closed(object sender, EventArgs e)
+        {
+            LoggerFactory.GetLogger().WriteInformation("InterRuntimeWCFService Service closed");
+        }
+
+        static void serviceHost_Closing(object sender, EventArgs e)
+        {
+            LoggerFactory.GetLogger().WriteInformation("InterRuntimeWCFService is closing..");
+        }
+
+        #endregion
+
+        public Dictionary<int, RunningProcessInfo> GetAllRunningProcesses()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllRunningProcesses",
+               () =>
+               {
+                   IRunningProcessDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<IRunningProcessDataManager>();
+                   return dataManager.GetRunningProcesses().ToDictionary(itm => itm.ProcessId, itm => itm);
+               });
+        }
+
+        public List<RunningProcessInfo> GetRunningProcesses()
+        {
+            return GetAllRunningProcesses().Values.ToList();
+        }
 
         public List<RunningProcessInfo> GetCachedRunningProcesses()
         {
-            return GetCachedRunningProcesses(new TimeSpan(0, 0, 2));
+            return GetRunningProcesses();
         }
 
         public List<RunningProcessInfo> GetCachedRunningProcesses(TimeSpan maxCacheTime)
         {
-            maxCacheTime = new TimeSpan(0, 0, 2);
-            if ((DateTime.Now - s_RunningProcessesRetrievedTime) > maxCacheTime)
+            return GetRunningProcesses();
+        }
+
+        internal string GetProcessTCPServiceURL(int processId)
+        {
+            var allProcesses = GetAllRunningProcesses();
+            RunningProcessInfo runningProcessInfo = allProcesses.GetRecord(processId);
+            if(runningProcessInfo == null && processId > allProcesses.Keys.Max())//the processId might be a new process
             {
-                lock (s_lockObj)
-                {
-                    if ((DateTime.Now - s_RunningProcessesRetrievedTime) > maxCacheTime)
-                    {
-                        s_runningProcesses = GetRunningProcesses();
-                        s_RunningProcessesRetrievedTime = DateTime.Now;
-                    }
-                }
+                Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                runningProcessInfo = GetAllRunningProcesses().GetRecord(processId);
             }
-            return s_runningProcesses;
+            if (runningProcessInfo == null)
+                throw new NullReferenceException(String.Format("runningProcessInfo '{0}'", processId));
+            if (runningProcessInfo.AdditionalInfo == null)
+                throw new NullReferenceException(String.Format("runningProcessInfo.AdditionalInfo '{0}'", processId));
+            if (runningProcessInfo.AdditionalInfo.TCPServiceURL == null)
+                throw new NullReferenceException(String.Format("runningProcessInfo.AdditionalInfo.TCPServiceURL '{0}'", processId));
+            return runningProcessInfo.AdditionalInfo.TCPServiceURL;
         }
 
         RunningProcessInfo IRunningProcessManager.CurrentProcess
@@ -167,5 +220,20 @@ namespace Vanrise.Runtime
         {
             s_queueFreezedTransactionLocks.Enqueue(transactionLockItem.LockItemUniqueId);
         }
+
+        #region Private Classes
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IRunningProcessDataManager _dataManager = RuntimeDataManagerFactory.GetDataManager<IRunningProcessDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreRunningProcessesUpdated(ref _updateHandle);
+            }
+        }
+
+        #endregion
     }
 }

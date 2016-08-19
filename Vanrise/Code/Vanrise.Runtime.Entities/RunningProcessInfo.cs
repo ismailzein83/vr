@@ -16,6 +16,11 @@ namespace Vanrise.Runtime.Entities
 
         public DateTime StartedTime { get; set; }
 
-        public DateTime LastHeartBeatTime { get; set; }
+        public RunningProcessAdditionalInfo AdditionalInfo { get; set; }
+    }
+
+    public class RunningProcessAdditionalInfo
+    {
+        public string TCPServiceURL { get; set; }
     }
 }

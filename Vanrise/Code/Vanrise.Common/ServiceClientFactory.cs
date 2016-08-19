@@ -38,7 +38,14 @@ namespace Vanrise.Common
             }
             finally
             {
-                (client as IDisposable).Dispose();
+                try
+                {
+                    (client as IDisposable).Dispose();
+                }
+                catch
+                {
+
+                }
             }
             return true;
         }
@@ -54,7 +61,14 @@ namespace Vanrise.Common
             }
             finally
             {
-                (client as IDisposable).Dispose();
+                try
+                {
+                    (client as IDisposable).Dispose();
+                }
+                catch
+                {
+
+                }
             }
         }
 
@@ -73,7 +87,7 @@ namespace Vanrise.Common
             binding.CloseTimeout = TimeSpan.FromMinutes(5);
             binding.SendTimeout = TimeSpan.FromMinutes(5);
             binding.ReceiveTimeout = TimeSpan.FromMinutes(5);
-
+            
             ChannelFactory<T> channelFactory = new ChannelFactory<T>(binding, new EndpointAddress(serviceURL));
             IChannel channel = channelFactory.CreateChannel() as IChannel;
             return channel;

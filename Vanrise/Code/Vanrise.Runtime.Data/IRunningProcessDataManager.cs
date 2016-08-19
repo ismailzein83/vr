@@ -9,12 +9,14 @@ namespace Vanrise.Runtime.Data
 {
     public interface IRunningProcessDataManager : IDataManager
     {
-        RunningProcessInfo InsertProcessInfo(string processName, string machineName);       
+        RunningProcessInfo InsertProcessInfo(string processName, string machineName, RunningProcessAdditionalInfo additionalInfo);       
 
-        bool UpdateHeartBeat(int processId, out DateTime heartBeatTime);
+        bool AreRunningProcessesUpdated(ref object _updateHandle);
 
-        void DeleteTimedOutProcesses(TimeSpan heartBeatReceivedBefore);
+        List<RunningProcessInfo> GetRunningProcesses();
 
-        List<RunningProcessInfo> GetRunningProcesses(TimeSpan? heartBeatReceivedWithin);        
+        void DeleteRunningProcess(int runningProcessId);
+
+        bool IsExists(int runningProcessId);
     }
 }

@@ -48,6 +48,9 @@
     <Compile Include="FreezedTransactionLock.cs" />
     <Compile Include="IRunningProcessManager.cs" />
     <Compile Include="ISchedulerTaskFilter.cs" />
+    <Compile Include="InterRuntimeServiceRequest.cs" />
+    <Compile Include="RuntimeFactory.cs" />
+    <Compile Include="ServiceInstance.cs" />
     <Compile Include="TransactionLockingDetails.cs" />
     <Compile Include="TransactionLockItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

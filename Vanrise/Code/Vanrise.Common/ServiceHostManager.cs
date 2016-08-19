@@ -60,6 +60,9 @@ namespace Vanrise.Common
                         _servicePortNumber = random.Next(_wcfPortRangeStart, _wcfPortRangeEnd).ToString();
                     serviceUrl = String.Format("net.tcp://{0}:{1}/{2}", Environment.MachineName, _servicePortNumber, serviceType.Name);
                     serviceHost = new ServiceHost(serviceType);
+                    serviceHost.Description.Behaviors.Remove(typeof(ServiceDebugBehavior));
+                    serviceHost.Description.Behaviors.Add(new ServiceDebugBehavior() { IncludeExceptionDetailInFaults = true });
+
                     try
                     {
                         var endPoint = AddTCPEndPoint(serviceHost, contractType, serviceUrl);
@@ -69,11 +72,11 @@ namespace Vanrise.Common
                         LoggerFactory.GetLogger().WriteInformation("Service URL registered successfully '{0}'", serviceUrl);
                         break;
                     }
-                    catch
+                    catch(Exception ex)
                     {
                         if (onServiceHostRemoved != null)
                             onServiceHostRemoved(serviceHost);
-                        LoggerFactory.GetLogger().WriteWarning("Could not register Service '{0}'", serviceUrl);
+                        LoggerFactory.GetLogger().WriteWarning("Could not register Service '{0}'. Error: {1}", serviceUrl, ex);
                         if (i == (_wcfServiceHostingRetries - 1))//last iteration
                             throw;
                     }

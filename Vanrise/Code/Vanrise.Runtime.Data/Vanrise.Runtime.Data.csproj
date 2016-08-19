@@ -47,10 +47,12 @@
     <Compile Include="IFreezedTransactionLockDataManager.cs" />
     <Compile Include="ILockServiceDataManager.cs" />
     <Compile Include="IRunningProcessDataManager.cs" />
+    <Compile Include="IRuntimeManagerDataManager.cs" />
     <Compile Include="ISchedulerTaskActionTypeDataManager.cs" />
     <Compile Include="ISchedulerTaskStateDataManager.cs" />
     <Compile Include="ISchedulerTaskDataManager.cs" />
     <Compile Include="ISchedulerTaskTriggerTypeDataManager.cs" />
+    <Compile Include="IServiceInstanceDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuntimeDataManagerFactory.cs" />
   </ItemGroup>

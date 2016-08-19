@@ -17,48 +17,46 @@ namespace Vanrise.Runtime.Data.SQL
         {
         }
 
-        public Entities.RunningProcessInfo InsertProcessInfo(string processName, string machineName)
+        public Entities.RunningProcessInfo InsertProcessInfo(string processName, string machineName, RunningProcessAdditionalInfo additionalInfo)
         {
-            return GetItemSP("runtime.sp_RunningProcess_Insert", RunningProcessInfoMapper, processName, machineName);
+            return GetItemSP("runtime.sp_RunningProcess_Insert", RunningProcessInfoMapper, processName, machineName, additionalInfo != null ? Common.Serializer.Serialize(additionalInfo) : null);
+        }
+        
+        public bool AreRunningProcessesUpdated(ref object _updateHandle)
+        {
+            return base.IsDataUpdated("[runtime].[RunningProcess]", ref _updateHandle);
         }
 
-        public bool UpdateHeartBeat(int processId, out DateTime heartBeatTime)
+        public List<RunningProcessInfo> GetRunningProcesses()
         {
-            object obj;
-            if (ExecuteNonQuerySP("runtime.sp_RunningProcess_UpdateHeartBeat", out obj, processId) > 0)
-            {
-                heartBeatTime = (DateTime)obj;
-                return true;
-            }
-            else
-            {
-                heartBeatTime = default(DateTime);
-                return false;
-            }
+            return GetItemsSP("[runtime].[sp_RunningProcess_GetAll]", RunningProcessInfoMapper);
         }
 
-        public void DeleteTimedOutProcesses(TimeSpan heartBeatReceivedBefore)
+        public void DeleteRunningProcess(int runningProcessId)
         {
-            ExecuteNonQuerySP("runtime.sp_RunningProcess_DeleteOld", heartBeatReceivedBefore.TotalSeconds);
+            ExecuteNonQuerySP("[runtime].[sp_RunningProcess_Delete]", runningProcessId);
         }
 
-        public List<Entities.RunningProcessInfo> GetRunningProcesses(TimeSpan? heartBeatReceivedWithin)
+        public bool IsExists(int runningProcessId)
         {
-            return GetItemsSP("runtime.sp_RunningProcess_GetByHeartBeat", RunningProcessInfoMapper, heartBeatReceivedWithin != null ? (object)heartBeatReceivedWithin.Value.TotalSeconds : DBNull.Value);
+            return ExecuteScalarSP("[runtime].[sp_RunningProcess_IsExists]", runningProcessId) != null;
         }
 
         #region Private Methods
 
         private RunningProcessInfo RunningProcessInfoMapper(IDataReader reader)
         {
-            return new RunningProcessInfo
+            var runningProcessInfo = new RunningProcessInfo
             {
                 ProcessId = (int)reader["ID"],
                 ProcessName = reader["ProcessName"] as string,
                 MachineName = reader["MachineName"] as string,
-                StartedTime = (DateTime)reader["StartedTime"],
-                LastHeartBeatTime = (DateTime)reader["LastHeartBeatTime"],
+                StartedTime = (DateTime)reader["StartedTime"]
             };
+            string serializedAdditionInfo = reader["AdditionalInfo"] as string;
+            if (serializedAdditionInfo != null)
+                runningProcessInfo.AdditionalInfo = Common.Serializer.Deserialize(serializedAdditionInfo) as RunningProcessAdditionalInfo;
+            return runningProcessInfo;
         }
 
         #endregion
