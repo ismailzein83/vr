@@ -802,7 +802,8 @@ loader .outer-loader {
 }
 
 .tooltip-error {
-    display: inline;
+    display: block;
+    width:100px;
     padding: 5px;
     margin: 5px;
     position: absolute;
@@ -814,8 +815,6 @@ loader .outer-loader {
     border: 1px solid transparent;
     border-radius: 4px;
     font-size: 10px;
-    width: auto;
-    min-width: 100px;
     -webkit-opacity: 0.25;
     -webkit-transition: all 3s ease;
     -moz-transition: all 3s ease;
@@ -830,6 +829,21 @@ loader .outer-loader {
 
 .tooltip-error:after, .tooltip-error:before {
     right: 100%;
+    top: 33%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.tooltip-error-right:before , .tooltip-error-right:after{
+    right: auto !important;
+    left:100%;
+    border-color: transparent !important;
+    border-left-color: #D5AB88 !important;
+    margin-left: 0px !important;
     top: 33%;
     border: solid transparent;
     content: " ";

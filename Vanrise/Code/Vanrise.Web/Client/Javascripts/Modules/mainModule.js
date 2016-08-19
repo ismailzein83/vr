@@ -30,8 +30,19 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         var topVar = ($(self).parents('.dropdown-container2').length > 0) ? (selfHeight / 3) - 5 : (selfHeight / 3);
         var selfWidth = $(self).width();
         var selfOffset = $(self).offset();
+        var elleft = selfOffset.left - $(window).scrollLeft() + $(self).width() ;
+        var left = 0;
         var tooltip = self.parent().find('.tooltip-error');
-        $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: selfOffset.left + selfWidth  })
+        if (innerWidth - elleft  < 100) {
+            elleft = elleft - (100 + $(self).width() + 10);
+            $(tooltip).addClass('tooltip-error-right');
+            $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft })
+
+        }
+        else {
+            $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft })
+        }
+
         e.stopPropagation();
     };
     

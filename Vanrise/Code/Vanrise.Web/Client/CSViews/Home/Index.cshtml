@@ -70,7 +70,7 @@
     </div>
     <div id="wrapper" ng-style="toogled==true?{'padding-left':'210px'}:{'padding-left':'25px'}">
         <!-- Sidebar -->
-        <div id="sidebar-wrapper" ng-style="toogled==true?{'width':'225px'}:{'width':'0px'}">
+        <div id="sidebar-wrapper" style="overflow-x:hidden;" ng-style="toogled==true?{'width':'225px'}:{'width':'0px'}">
 
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" ng-show="toogled==true" ng-mouseout="mouseout()" ng-mouseover="mouseover()">
                 <div class="panel panel-default toggle-panel ">
