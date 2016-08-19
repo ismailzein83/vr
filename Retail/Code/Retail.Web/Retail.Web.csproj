@@ -625,6 +625,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\Retail.pubxml" />
+    <None Include="Web.config.excluded">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.config.Debug.excluded">
+      <DependentUpon>Web.config.excluded</DependentUpon>
+    </None>
+    <None Include="Web.config.Release.excluded">
+      <DependentUpon>Web.config.excluded</DependentUpon>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
