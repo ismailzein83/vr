@@ -21,6 +21,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             List<T> connectedEntities = new List<T>();
             int currentElementIndex = -1;
+
             for (int i = 0; i < entities.Count(); i++)
             {
                 var currentElement = entities[i];
@@ -30,15 +31,17 @@ namespace TOne.WhS.BusinessEntity.Business
                     break;
                 }
             }
-           
+
             List<int> overlappedIndices = new List<int>();
-            overlappedIndices.Add(currentElementIndex);
             
+            if (currentElementIndex != -1)
+                overlappedIndices.Add(currentElementIndex);
+
             if (currentElementIndex == -1)
             {
                 overlappedIndices.Add(entities.FindIndex(item => item.BED >= effectiveOn));
                 overlappedIndices.Add(entities.FindLastIndex(item => item.BED < effectiveOn));
-              
+
             }
 
             List<int> changedEntitiesIndices = new List<int>();
@@ -48,15 +51,20 @@ namespace TOne.WhS.BusinessEntity.Business
                     changedEntitiesIndices.Add(i);
             }
 
-            int? overlappedIndex = changedEntitiesIndices.Intersect<int>(overlappedIndices).FirstOrDefault();
-           
-            if (!overlappedIndex.HasValue)
-                overlappedIndex = changedEntitiesIndices.Last();
+
+            if (changedEntitiesIndices.Count > 0)
+            {
+                IEnumerable<int> intersectIndices = changedEntitiesIndices.Intersect<int>(overlappedIndices);
+                currentElementIndex = intersectIndices.Count() == 0 ? changedEntitiesIndices.Last() : intersectIndices.First();
+            }
+            else
+                currentElementIndex = overlappedIndices.First();
 
 
-            connectedEntities.Add(entities[overlappedIndex.Value]);
-            connectedEntities.AddRange(GetConnectedEntitiesToTheRight(entities.GetRange(overlappedIndex.Value, entities.Count() - overlappedIndex.Value)));
-            connectedEntities.AddRange(GetConnectedEntitiesToTheLeft(entities.GetRange(0, overlappedIndex.Value + 1)));
+
+            connectedEntities.Add(entities[currentElementIndex]);
+            connectedEntities.AddRange(GetConnectedEntitiesToTheRight(entities.GetRange(currentElementIndex, entities.Count() - currentElementIndex)));
+            connectedEntities.AddRange(GetConnectedEntitiesToTheLeft(entities.GetRange(0, currentElementIndex + 1)));
 
             return connectedEntities;
         }
