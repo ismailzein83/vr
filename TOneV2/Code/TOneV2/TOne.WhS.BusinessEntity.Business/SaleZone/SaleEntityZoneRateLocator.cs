@@ -58,8 +58,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 };
 
                 zoneRate.SourcesByRateType = new Dictionary<int, SalePriceListOwnerType>();
-                foreach (KeyValuePair<int, SaleRate> kvp in zoneRate.RatesByRateType)
-                    zoneRate.SourcesByRateType.Add(kvp.Key, ownerType);
+                if (zoneRate.RatesByRateType != null)
+                {
+                    foreach (KeyValuePair<int, SaleRate> kvp in zoneRate.RatesByRateType)
+                        zoneRate.SourcesByRateType.Add(kvp.Key, ownerType);
+                }
 
                 return zoneRate;
             }
