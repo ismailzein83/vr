@@ -14,6 +14,9 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public Dictionary<int, SaleRate> RatesByRateType { get; set; }
 
+        // TODO: Remove this property and create a class to represent normal and other rates with their sources
+        public Dictionary<int, SalePriceListOwnerType> SourcesByRateType { get; set; }
+
         public int EffectiveCurrencyId
         {
             get
