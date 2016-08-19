@@ -168,7 +168,6 @@ namespace Vanrise.Runtime
         {
             Parallel.ForEach(processesIdsToPing, (runningProcessId) =>
             {
-                Console.WriteLine("Pinging Process '{0}'", runningProcessId);
                 int retryCount = 0;
                 while (retryCount < s_pingRunningProcessMaxRetryCount)
                 {
@@ -176,22 +175,15 @@ namespace Vanrise.Runtime
                     {
                         if (!TryPing(runningProcessId))
                         {
-                            Console.WriteLine("Process '{0}' is not Pingeable", runningProcessId);
                             DeleteRunningProcess(runningProcessId);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Process '{0}' is Pingeable", runningProcessId);
                         }
                         break;
                     }
                     catch
                     {
                         retryCount++;
-                        Console.WriteLine("Error occurred while pinging Process '{0}'. Retry Count: '{1}'", runningProcessId, retryCount);
                         if (retryCount >= s_pingRunningProcessMaxRetryCount)
                         {
-                            Console.WriteLine("Process '{0}' is not Pingeable", runningProcessId);
                             DeleteRunningProcess(runningProcessId);
                             break;                       
                         }
@@ -216,7 +208,6 @@ namespace Vanrise.Runtime
 
         private void DeleteRunningProcess(int runningProcessId)
         {
-            Console.WriteLine("Deleting Process '{0}'", runningProcessId);
             IRunningProcessDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<IRunningProcessDataManager>();
             dataManager.DeleteRunningProcess(runningProcessId);
             ProcessHeartBeatManager.Current.SetProcessNotAvailable(runningProcessId);
