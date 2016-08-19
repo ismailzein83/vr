@@ -179,18 +179,14 @@
               </InArgument>
             </If.Condition>
             <If.Then>
-              <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5">
-                <vbw:WriteTrackingMessage.Message>
+              <TerminateWorkflow>
+                <TerminateWorkflow.Reason>
                   <InArgument x:TypeArguments="x:String">
-                    <mca:CSharpValue x:TypeArguments="x:String">string.Format("Error while processing Range From {0}, To {1}.", item.From, item.To)</mca:CSharpValue>
+                    <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Range From {0}, To {1} failed due to error: {2}", item.From,item.To, subProcessEventPayload.LastProcessMessage)</mca:CSharpValue>
                   </InArgument>
-                </vbw:WriteTrackingMessage.Message>
-                <vbw:WriteTrackingMessage.Severity>
-                  <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
-                    <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Error</mca:CSharpValue>
-                  </InArgument>
-                </vbw:WriteTrackingMessage.Severity>
-              </vbw:WriteTrackingMessage>
+                </TerminateWorkflow.Reason>
+                <sap2010:WorkflowViewState.IdRef>TerminateWorkflow_1</sap2010:WorkflowViewState.IdRef>
+              </TerminateWorkflow>
             </If.Then>
             <If.Else>
               <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
@@ -402,7 +398,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sUUIDlgMOAgEBRjNGNgIBA0czRzYCAQJLBVEgAwH7A1IFZyQDAdoDaAVzDgMByQN0BfoBFwMB6AH7AQWGAiQDAdcBhwIFkgIOAwHGAZMCBY0DFwIBDo4DBZQDIAIBBE4LToUBAwH9A0tgS4ABAwH8A2QLZFcDAfMDVQtVXQMB6wNfC19ZAwHjA1oLWnIDAdsDcAtwXAMB0gNrC2tgAwHKA3cLd3EDAcEDfgn4ARQDAekBgwILgwJjAwHgAf4BC/4BcgMB2AGPAguPAncDAc8BigILigJnAwHHAZYCC5YCigEDAb4BnQIJiwMUAgEPkQMLkQOFAQIBBo4DYI4DgAECAQWEAQuPASYDAagDkAELogEcAwGOA6MBC64BFAMB9QKvAQv3ARADAeoBoQILrAImAwGpAa0CC7gCJgMBlAG5AgvEAiYCAX/FAguKAxACARCMARGMAYsBAwG1A4cBEYcBkQEDAakDkwERmgEgAwGcA58BEZ8BhAEDAZADkAF8kAGCAQMBjwOrARGrAWQDAYIDpgERpgFqAwH2ArIBEbIBsQEDAesBtgEPwQEqAwHcAsQBD/UBGgMB9wGpAhGpAosBAwG0AaQCEaQClgEDAaoBsAIRsAJgAwGfAbUCEbUCfAMBlQHBAhHBAosBAwGKAbwCEbwC3AEDAYAByAIRyAJmAgERzAIPiAMhAgEbvgEVvgGJAQMB6QK5ARW5AaYBAwHdAsUBEdABGgMBwwLRARHcARoDAaoC3QER6AEaAwGRAukBEfQBLAMB+AHPAhXPAn8CAXXWAhOGAx4CARzNARfNAbABAwHQAsgBF8gBkgEDAcQC2QEX2QF7AwG3AtQBF9QBawMBqwLlARflAXUDAZ4C4AEX4AFrAwGSAvEBF/EBkQEDAYUC7AEX7AGuAgMB+QHcAhXnAjACAVjoAhX5AiYCATr6AhWFAzACAR3kAhvkApUBAgFn3wIb3wK4AQIBWesCG/ECIAIBSvYCG/YCjgECATzoAoYB6AKMAQIBO4IDG4IDlQECASz9Ahv9ArsBAgEe</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sUEIDkgMOAgEBRjNGNgIBA0czRzYCAQJLBVEgAwHvA1IFZyQDAc4DaAVzDgMBvQN0BfYBFwMB6AH3AQWCAiQDAdcBgwIFjgIOAwHGAY8CBYkDFwIBDooDBZADIAIBBE4LToUBAwHxA0tgS4ABAwHwA2QLZFcDAecDVQtVXQMB3wNfC19ZAwHXA1oLWnIDAc8DcAtwXAMBxgNrC2tgAwG+A3cLd3EDAbUDfgn0ARQDAekB/wEL/wFjAwHgAfoBC/oBcgMB2AGLAguLAncDAc8BhgILhgJnAwHHAZICC5ICigEDAb4BmQIJhwMUAgEPjQMLjQOFAQIBBooDYIoDgAECAQWEAQuPASYDAZwDkAELogEcAwGCA6MBC64BFAMB6QKvAQvzARADAeoBnQILqAImAwGpAakCC7QCJgMBlAG1AgvAAiYCAX/BAguGAxACARCMARGMAYsBAwGpA4cBEYcBkQEDAZ0DkwERmgEgAwGQA58BEZ8BhAEDAYQDkAF8kAGCAQMBgwOrARGrAWQDAfYCpgERpgFqAwHqArIBEbIBsQEDAesBtgEPvQEjAwHcAsABD/EBGgMB9wGlAhGlAosBAwG0AaACEaAClgEDAaoBrAIRrAJgAwGfAbECEbECfAMBlQG9AhG9AosBAwGKAbgCEbgClwEDAYABxAIRxAJmAgERyAIPhAMhAgEbuQEVuQHcAQMB3QLBARHMARoDAcMCzQER2AEaAwGqAtkBEeQBGgMBkQLlARHwASwDAfgBywIVywJ/AgF10gITggMeAgEcyQEXyQGwAQMB0ALEARfEAZIBAwHEAtUBF9UBewMBtwLQARfQAWsDAasC4QEX4QF1AwGeAtwBF9wBawMBkgLtARftAZEBAwGFAugBF+gBrgIDAfkB2AIV4wIwAgFY5AIV9QImAgE69gIVgQMwAgEd4AIb4AKVAQIBZ9sCG9sCuAECAVnnAhvtAiACAUryAhvyAo4BAgE85AKGAeQCjAECATv+Ahv+ApUBAgEs+QIb+QK7AQIBHg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -412,7 +408,7 @@
       <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="489,62" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,62" />
       <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="242,62" />
       <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="242,62" />
