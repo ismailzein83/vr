@@ -141,7 +141,7 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
             }
             catch (Exception exc)
             {
-                Logger.InfoMessage.AppendLine(exc.StackTrace.ToString());
+                Logger.InfoMessage.AppendLine(exc.ToString());
             }
         }
         private MappingRule GetRule(string carrierId, StaticValues trunk, int currentSwitchId, DateTime date, int carrierType)
