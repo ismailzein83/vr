@@ -64,6 +64,19 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
             });
         }
+
+        public List<SaleRate> GetEffectiveSaleRateByOwner(IEnumerable<RoutingCustomerInfoDetails> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            DataTable saleRateOwners = BuildRoutingOwnerInfoTable(customerInfos);
+            return GetItemsSPCmd("[TOneWhS_BE].[sp_SaleRate_GetEffectiveByOwner]", SaleRateMapper, (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@SaleRateOwner", SqlDbType.Structured);
+                dtPrm.Value = saleRateOwners;
+                cmd.Parameters.Add(dtPrm);
+                cmd.Parameters.Add(new SqlParameter("@EffectiveTime", effectiveOn));
+                cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
+            });
+        }
         public bool AreSaleRatesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.SaleRate", ref updateHandle);
@@ -72,6 +85,33 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             string zoneIdsParameter = string.Join(",", zoneIds);
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetExistingByZoneIDs", SaleRateMapper, ownerType, ownerId, zoneIdsParameter, minEED);
+        }
+
+        internal static DataTable BuildRoutingOwnerInfoTable(IEnumerable<RoutingCustomerInfoDetails> customerInfos)
+        {
+            DataTable dtRoutingInfos = GetRoutingOwnerInfoTable();
+            dtRoutingInfos.BeginLoadData();
+            foreach (var c in customerInfos)
+            {
+                DataRow drCustomer = dtRoutingInfos.NewRow();
+                drCustomer["OwnerId"] = c.CustomerId;
+                drCustomer["OwnerTpe"] = (int)SalePriceListOwnerType.Customer;
+                dtRoutingInfos.Rows.Add(drCustomer);
+
+                DataRow drSP = dtRoutingInfos.NewRow();
+                drSP["OwnerId"] = c.SellingProductId;
+                drSP["OwnerTpe"] = (int)SalePriceListOwnerType.SellingProduct;
+                dtRoutingInfos.Rows.Add(drSP);
+            }
+            dtRoutingInfos.EndLoadData();
+            return dtRoutingInfos;
+        }
+        private static DataTable GetRoutingOwnerInfoTable()
+        {
+            DataTable dtRoutingInfos = new DataTable();
+            dtRoutingInfos.Columns.Add("OwnerId", typeof(Int32));
+            dtRoutingInfos.Columns.Add("OwnerTpe", typeof(Int32));
+            return dtRoutingInfos;
         }
         #endregion
 

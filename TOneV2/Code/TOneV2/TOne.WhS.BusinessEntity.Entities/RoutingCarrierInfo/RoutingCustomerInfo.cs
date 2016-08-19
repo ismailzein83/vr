@@ -10,4 +10,11 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public int CustomerId { get; set; }
     }
+
+    public class RoutingCustomerInfoDetails
+    {
+        public int CustomerId { get; set; }
+
+        public int SellingProductId { get; set; }
+    }
 }

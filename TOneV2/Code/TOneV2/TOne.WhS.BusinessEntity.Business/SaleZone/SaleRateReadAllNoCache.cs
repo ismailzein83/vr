@@ -19,7 +19,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Public Methods
-        public SaleRateReadAllNoCache(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
+        public SaleRateReadAllNoCache(IEnumerable<RoutingCustomerInfoDetails> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             _saleRateDataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
             _salePriceListManager = new SalePriceListManager();
@@ -35,14 +35,14 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Members
-        private SaleRatesByOwner GetAllSaleRatesByOwner(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
+        private SaleRatesByOwner GetAllSaleRatesByOwner(IEnumerable<RoutingCustomerInfoDetails> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             SaleRatesByOwner result = new SaleRatesByOwner();
             SaleRatesByZone saleRateByZone;
             result.SaleRatesByCustomer = new Dictionary<int, SaleRatesByZone>();
             result.SaleRatesByProduct = new Dictionary<int, SaleRatesByZone>();
 
-            IEnumerable<SaleRate> saleRates = _saleRateDataManager.GetEffectiveSaleRateByCustomers(customerInfos, effectiveOn, isEffectiveInFuture);
+            IEnumerable<SaleRate> saleRates = _saleRateDataManager.GetEffectiveSaleRateByOwner(customerInfos, effectiveOn, isEffectiveInFuture);
 
             foreach (SaleRate saleRate in saleRates)
             {

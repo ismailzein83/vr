@@ -18,11 +18,31 @@ namespace TOne.WhS.Routing.Business
 
         public void BuildCustomerZoneDetails(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture, Action<CustomerZoneDetail> onCustomerZoneDetailAvailable)
         {
+            if (customerInfos == null)
+                return;
+            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
+            List<RoutingCustomerInfoDetails> customerInfoDetails = new List<RoutingCustomerInfoDetails>();
+
+            foreach (RoutingCustomerInfo customerInfo in customerInfos)
+            {
+                CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerInfo.CustomerId, effectiveOn, isEffectiveInFuture);
+                if (customerSellingProduct == null)
+                    continue;
+
+                RoutingCustomerInfoDetails item = new RoutingCustomerInfoDetails()
+                {
+                    CustomerId = customerInfo.CustomerId,
+                    SellingProductId = customerSellingProduct.CustomerSellingProductId
+                };
+
+                customerInfoDetails.Add(item);
+            }
+
             SaleEntityZoneRoutingProductLocator customerZoneRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(customerInfos, effectiveOn, isEffectiveInFuture));
-            SaleEntityZoneRateLocator customerZoneRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(customerInfos, effectiveOn, isEffectiveInFuture));
+            SaleEntityZoneRateLocator customerZoneRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(customerInfoDetails, effectiveOn, isEffectiveInFuture));
 
             CustomerZoneManager customerZoneManager = new CustomerZoneManager();
-            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
+
 
             Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
 
@@ -34,24 +54,18 @@ namespace TOne.WhS.Routing.Business
 
             DataTransformer dataTransformer = new DataTransformer();
 
-            foreach (RoutingCustomerInfo customerInfo in customerInfos)
+            foreach (RoutingCustomerInfoDetails customerInfo in customerInfoDetails)
             {
                 var customerSaleZones = customerZoneManager.GetCustomerSaleZones(customerInfo.CustomerId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now, isEffectiveInFuture);
                 if (customerSaleZones == null)
                     continue;
 
-                CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerInfo.CustomerId, effectiveOn, isEffectiveInFuture);
-                if (customerSellingProduct == null)
-                    continue;
-
                 foreach (var customerZone in customerSaleZones)
                 {
-                    SaleEntityZoneRate customerZoneRate = customerZoneRateLocator.GetCustomerZoneRate(customerInfo.CustomerId, customerSellingProduct.SellingProductId, customerZone.SaleZoneId);
+                    SaleEntityZoneRate customerZoneRate = customerZoneRateLocator.GetCustomerZoneRate(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
 
-                    if (customerZoneRate != null)
+                    if (customerZoneRate != null && customerZoneRate.Rate != null)
                     {
-                       
-
                         var output = dataTransformer.ExecuteDataTransformation(data.RouteRuleDataTransformation.CustomerTransformationId, (context) =>
                         {
                             context.SetRecordValue("CustomerId", customerInfo.CustomerId);
@@ -66,14 +80,14 @@ namespace TOne.WhS.Routing.Business
                         int currencyId = output.GetRecordValue("SaleCurrencyId");
 
                         rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrency.CurrencyId, effectiveDate), 8);
-                        var customerZoneRoutingProduct = customerZoneRoutingProductLocator.GetCustomerZoneRoutingProduct(customerInfo.CustomerId, customerSellingProduct.SellingProductId, customerZone.SaleZoneId);
+                        var customerZoneRoutingProduct = customerZoneRoutingProductLocator.GetCustomerZoneRoutingProduct(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
 
                         CustomerZoneDetail customerZoneDetail = new CustomerZoneDetail
                         {
                             CustomerId = customerInfo.CustomerId,
                             RoutingProductId = customerZoneRoutingProduct != null ? customerZoneRoutingProduct.RoutingProductId : 0,
                             RoutingProductSource = customerZoneRoutingProduct != null ? customerZoneRoutingProduct.Source : default(SaleEntityZoneRoutingProductSource),
-                            SellingProductId = customerSellingProduct.SellingProductId,
+                            SellingProductId = customerInfo.SellingProductId,
                             SaleZoneId = customerZone.SaleZoneId,
                             EffectiveRateValue = rateValue,
                             RateSource = customerZoneRate.Source
