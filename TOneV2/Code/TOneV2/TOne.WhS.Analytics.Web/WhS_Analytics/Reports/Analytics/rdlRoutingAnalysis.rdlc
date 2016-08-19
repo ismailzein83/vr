@@ -224,6 +224,7 @@
                           </Style>
                         </Textbox>
                         <ColSpan>7</ColSpan>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />
@@ -1197,7 +1198,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -1895,12 +1895,7 @@
                   </Group>
                   <SortExpressions>
                     <SortExpression>
-                      <Value>=Sum(Fields!Duration.Value)</Value>
-                      <Direction>Descending</Direction>
-                    </SortExpression>
-                    <SortExpression>
-                      <Value>=Fields!Duration.Value</Value>
-                      <Direction>Descending</Direction>
+                      <Value>=Fields!SaleZone.Value</Value>
                     </SortExpression>
                   </SortExpressions>
                   <TablixMembers>
