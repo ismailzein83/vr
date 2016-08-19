@@ -2512,6 +2512,9 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),Parameters!Digit.Value)</Val
                       </Visibility>
                       <DataElementOutput>NoOutput</DataElementOutput>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2927,6 +2930,9 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),Parameters!Digit.Value)</Val
                       </Visibility>
                       <DataElementOutput>NoOutput</DataElementOutput>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -3170,7 +3176,11 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),Parameters!Digit.Value)</Val
             <TablixMember />
             <TablixMember />
             <TablixMember />
-            <TablixMember />
+            <TablixMember>
+              <Visibility>
+                <Hidden>=IIf(Parameters!IsCommission.Value = "False" , true , false)</Hidden>
+              </Visibility>
+            </TablixMember>
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>

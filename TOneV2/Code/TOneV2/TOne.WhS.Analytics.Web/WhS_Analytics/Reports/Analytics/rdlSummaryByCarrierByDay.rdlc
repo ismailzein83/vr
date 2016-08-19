@@ -715,7 +715,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -1099,6 +1098,27 @@
                         <Color>DarkRed</Color>
                       </Style>
                     </TextRun>
+                    <TextRun>
+                      <Value> (</Value>
+                      <Style>
+                        <FontSize>18pt</FontSize>
+                        <Color>DarkRed</Color>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=IIf(Parameters!IsCost.Value = "true" , "Cost" ,"Sale")</Value>
+                      <Style>
+                        <FontSize>18pt</FontSize>
+                        <Color>DarkRed</Color>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>)</Value>
+                      <Style>
+                        <FontSize>18pt</FontSize>
+                        <Color>DarkRed</Color>
+                      </Style>
+                    </TextRun>
                   </TextRuns>
                   <Style>
                     <TextAlign>Center</TextAlign>
@@ -1106,9 +1126,9 @@
                 </Paragraph>
               </Paragraphs>
               <Top>0.38194in</Top>
-              <Left>1.625in</Left>
+              <Left>1.03125in</Left>
               <Height>0.375in</Height>
-              <Width>4.62499in</Width>
+              <Width>5.32707in</Width>
               <ZIndex>2</ZIndex>
               <Style>
                 <PaddingLeft>2pt</PaddingLeft>
@@ -1204,9 +1224,9 @@
                 </Paragraph>
               </Paragraphs>
               <Top>0.75in</Top>
-              <Left>6.375in</Left>
+              <Left>6.5in</Left>
               <Height>0.25in</Height>
-              <Width>0.74999in</Width>
+              <Width>0.62499in</Width>
               <ZIndex>6</ZIndex>
               <Style>
                 <PaddingLeft>2pt</PaddingLeft>
@@ -1235,9 +1255,9 @@
                 </Paragraph>
               </Paragraphs>
               <Top>1in</Top>
-              <Left>6.375in</Left>
+              <Left>6.5in</Left>
               <Height>0.25in</Height>
-              <Width>0.74999in</Width>
+              <Width>0.62499in</Width>
               <ZIndex>7</ZIndex>
               <Style>
                 <PaddingLeft>2pt</PaddingLeft>
@@ -1500,6 +1520,10 @@
     </ReportParameter>
     <ReportParameter Name="Digit">
       <DataType>Integer</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="IsCost">
+      <DataType>Boolean</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>

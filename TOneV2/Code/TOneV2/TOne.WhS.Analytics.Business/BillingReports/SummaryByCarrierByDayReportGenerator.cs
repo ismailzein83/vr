@@ -138,6 +138,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
             list.Add("DigitRate", new RdlcParameter { Value = ReportHelpers.GetLongNumberDigit(), IsVisible = true });
             list.Add("Digit", new RdlcParameter { Value = ReportHelpers.GetNormalNumberDigit(), IsVisible = true });
+            list.Add("IsCost", new RdlcParameter { Value = parameters.IsCost.ToString(), IsVisible = true });
 
             list.Add("PageBreak", new RdlcParameter { Value = parameters.PageBreak.ToString(), IsVisible = true });
 

@@ -658,7 +658,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -793,6 +792,27 @@
               <TextRuns>
                 <TextRun>
                   <Value>=Parameters!Title.Value</Value>
+                  <Style>
+                    <FontSize>18pt</FontSize>
+                    <Color>DarkRed</Color>
+                  </Style>
+                </TextRun>
+                <TextRun>
+                  <Value> (</Value>
+                  <Style>
+                    <FontSize>18pt</FontSize>
+                    <Color>DarkRed</Color>
+                  </Style>
+                </TextRun>
+                <TextRun>
+                  <Value>=IIf(Parameters!IsCost.Value = "true" , "Cost" ,"Sale")</Value>
+                  <Style>
+                    <FontSize>18pt</FontSize>
+                    <Color>DarkRed</Color>
+                  </Style>
+                </TextRun>
+                <TextRun>
+                  <Value>)</Value>
                   <Style>
                     <FontSize>18pt</FontSize>
                     <Color>DarkRed</Color>
@@ -1277,6 +1297,10 @@
     </ReportParameter>
     <ReportParameter Name="Digit">
       <DataType>Integer</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="IsCost">
+      <DataType>Boolean</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>

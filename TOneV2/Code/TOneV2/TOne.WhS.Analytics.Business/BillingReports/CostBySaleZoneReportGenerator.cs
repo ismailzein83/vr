@@ -22,7 +22,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 Query = new AnalyticQuery()
                 {
                     DimensionFields = new List<string> { "SaleZone" },
-                    MeasureFields = new List<string>() { "AverageCost", "CostDuration" },
+                    MeasureFields = new List<string>() { "AverageCost", "SaleDuration" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
@@ -75,9 +75,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     costBySaleZone.AvgCostFormatted = costBySaleZone.AvgCost == 0 ? "" : (costBySaleZone.AvgCost.HasValue) ?
                         ReportHelpers.FormatLongNumberDigit(costBySaleZone.AvgCost) : "0.00000";
 
-                    MeasureValue costDuration;
-                    analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
-                    costBySaleZone.AvgDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
+                    MeasureValue saleDuration;
+                    analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
+                    costBySaleZone.AvgDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
                     costBySaleZone.AvgDurationFormatted = ReportHelpers.FormatNormalNumberDigit(costBySaleZone.AvgDuration);
 
                     listCostBySaleZone.Add(costBySaleZone);
