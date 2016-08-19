@@ -11,11 +11,17 @@ namespace Vanrise.Invoice.MainExtensions
     {
         public string ReportURL { get; set; }
         public List<RDLCReportDataSource> DataSources { get; set; }
+        public List<RDLCReportParameter> Parameters { get; set; }
     }
     public class RDLCReportDataSource
     {
         public string DataSourceName { get; set; }
         public RDLCReportDataSourceSettings  Settings { get; set; }
     }
-    
+    public class RDLCReportParameter
+    {
+        public string ParameterName { get; set; }
+        public RDLCReportParameterValue Value { get; set; }
+        public bool IsVisible { get; set; }
+    }
 }

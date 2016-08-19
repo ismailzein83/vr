@@ -9,7 +9,7 @@ namespace Vanrise.Invoice.Entities
     public class InvoiceTypeUISettings
     {
         public string PartnerSelector { get; set; }
-
+        public IPartnerManager PartnerManagerFQTN { get; set; }
         public List<InvoiceUIGridColumn> MainGridColumns { get; set; }
 
         public List<InvoiceGridAction> InvoiceGridActions { get; set; }

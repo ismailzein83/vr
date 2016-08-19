@@ -44,7 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\InvoiceGenerationContext.cs" />
+    <Compile Include="Context\PartnerManagerContext.cs" />
     <Compile Include="Context\RDLCReportDataSourceSettingsContext.cs" />
+    <Compile Include="Context\RDLCReportParameterValueContext.cs" />
     <Compile Include="InvoiceItemManager.cs" />
     <Compile Include="InvoiceManager.cs" />
     <Compile Include="InvoiceTypeManager.cs" />

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Data;
 using Vanrise.Invoice.Entities;
 
@@ -68,12 +69,23 @@ namespace Vanrise.Invoice.Business
             }
             public override InvoiceDetail EntityDetailMapper(Entities.Invoice entity)
             {
+                InvoiceTypeManager manager = new InvoiceTypeManager();
+                var invoiceType = manager.GetInvoiceType(entity.InvoiceTypeId);
+                string partnerName = null;
+                if(invoiceType != null && invoiceType.Settings !=null && invoiceType.Settings.UISettings != null && invoiceType.Settings.UISettings.PartnerManagerFQTN != null)
+                {
+                    PartnerManagerContext context = new PartnerManagerContext
+                    {
+                         PartnerId = entity.PartnerId
+                    };
+                    partnerName = invoiceType.Settings.UISettings.PartnerManagerFQTN.GetPartnerName(context);
+                }
                 return new InvoiceDetail
                 {
-                    Entity = entity
+                    Entity = entity,
+                    PartnerName = partnerName
                 };
             }
-
             public override IEnumerable<Entities.Invoice> RetrieveAllData(DataRetrievalInput<InvoiceQuery> input)
             {
                 return _dataManager.GetGetFilteredInvoices(input);

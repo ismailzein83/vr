@@ -35,27 +35,36 @@ namespace Vanrise.Invoice.Web.VR_Invoice.Reports
                         break;
                     }
                 }
-                if(openRDLCReportAction !=null)
+                if (openRDLCReportAction != null )
                 {
-                    ReportViewer1.LocalReport.DataSources.Clear();
-                    InvoiceItemManager manager = new InvoiceItemManager();
-                    RDLCReportDataSourceSettingsContext context = new RDLCReportDataSourceSettingsContext();
-                    context.InvoiceId = invoiceId;
-                    foreach(var dataSource in openRDLCReportAction.DataSources)
-                    {
-                        var items = dataSource.Settings.GetDataSourceItems(context);
-                        ReportDataSource ds = new ReportDataSource(dataSource.DataSourceName, items);
-                        ReportViewer1.LocalReport.DataSources.Add(ds);
-                    }
                     ReportViewer1.ProcessingMode = ProcessingMode.Local;
                     ReportViewer1.LocalReport.ReportPath = Server.MapPath(openRDLCReportAction.ReportURL);
+                    if(openRDLCReportAction.DataSources != null)
+                    {
+                        ReportViewer1.LocalReport.DataSources.Clear();
+                        InvoiceItemManager manager = new InvoiceItemManager();
+                        RDLCReportDataSourceSettingsContext context = new RDLCReportDataSourceSettingsContext();
+                        context.InvoiceId = invoiceId;
+                        foreach (var dataSource in openRDLCReportAction.DataSources)
+                        {
+                            var items = dataSource.Settings.GetDataSourceItems(context);
+                            ReportDataSource ds = new ReportDataSource(dataSource.DataSourceName, items);
+                            ReportViewer1.LocalReport.DataSources.Add(ds);
+                        }
+                    }
+                    if (openRDLCReportAction.Parameters != null)
+                    {
+                        List<ReportParameter> invoiceReportParameters = new List<ReportParameter>();
+                        RDLCReportParameterValueContext paramterContext = new RDLCReportParameterValueContext{
+                            Invoice = invoice
+                        };
+                        foreach(var parameter in openRDLCReportAction.Parameters)
+                        {
+                            invoiceReportParameters.Add(new ReportParameter(parameter.ParameterName, parameter.Value.Evaluate(paramterContext).ToString(), parameter.IsVisible));
+                        }
+                        ReportViewer1.LocalReport.SetParameters(invoiceReportParameters.ToArray());
+                    }
                 }
-                //List<ReportParameter> customerInvoiceReportParameters = new List<ReportParameter>();
-                ////foreach (var p in GetRdlcReportParameters(invoice))
-                ////{
-                ////    customerInvoiceReportParameters.Add(new ReportParameter(p.Key, p.Value.Value, p.Value.IsVisible));
-                ////}
-                //ReportViewer1.LocalReport.SetParameters(customerInvoiceReportParameters.ToArray());
             }
         }
         protected override void Render(HtmlTextWriter writer)

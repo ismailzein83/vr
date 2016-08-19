@@ -73,7 +73,7 @@
         function buildInvoiceObjFromScope() {
             var obj = {
                 InvoiceTypeId: invoiceTypeId,
-                PartnerId: partnerSelectorAPI.getSelectedIds(),
+                PartnerId:partnerSelectorAPI.getSelectedIds(),
                 FromDate: $scope.fromDate,
                 ToDate: $scope.toDate
             };

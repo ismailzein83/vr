@@ -76,6 +76,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
 
             function buildGridFields(mainGridColumns)
             {
+              
                 $scope.gridFields = [];
                 if (mainGridColumns != undefined) {
                     for (var i = 0; i < mainGridColumns.length ; i++) {
@@ -92,7 +93,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                                 type = VR_Invoice_InvoiceFieldEnum.InvoiceId.type;
                                 break;
                             case VR_Invoice_InvoiceFieldEnum.Partner.value:
-                                field = "Entity." + VR_Invoice_InvoiceFieldEnum.Partner.fieldName;
+                                field = VR_Invoice_InvoiceFieldEnum.Partner.fieldName;
                                 type = VR_Invoice_InvoiceFieldEnum.Partner.type;
                                 break;
                             case VR_Invoice_InvoiceFieldEnum.SerialNumber.value:
