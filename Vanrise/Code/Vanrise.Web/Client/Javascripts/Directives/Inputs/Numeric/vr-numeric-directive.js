@@ -23,6 +23,12 @@
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 ctrl.validate = function () {
+                    if (ctrl.maxValue != undefined && parseFloat(ctrl.value) > ctrl.maxValue) {
+                        return "value should be less than or equal to " + ctrl.maxValue;
+                    }
+                    if (ctrl.minValue != undefined && parseFloat(ctrl.value) < ctrl.minValue) {
+                        return "value should be greater than or equal to " + ctrl.minValue;
+                    }
                     return VRValidationService.validate(ctrl.value, $scope, $attrs);
                 };
             },
@@ -54,12 +60,12 @@
                                     ctrl.value = oldValue;
                                 if (arr.length === 0) return;
                                 if (arr.length === 1 && (arr[0] == '-')) return;
-                                if (ctrl.maxValue != undefined && parseFloat(newValue) > ctrl.maxValue) {
-                                    ctrl.value = oldValue;
-                                }
-                                if (ctrl.minValue != undefined && parseFloat(newValue) < ctrl.minValue) {
-                                    ctrl.value = oldValue;
-                                }
+                                //if (ctrl.maxValue != undefined && parseFloat(newValue) > ctrl.maxValue) {
+                                //    ctrl.value = oldValue;
+                                //}
+                                //if (ctrl.minValue != undefined && parseFloat(newValue) < ctrl.minValue) {
+                                //    ctrl.value = oldValue;
+                                //}
                                 if (isNaN(newValue)) {
                                     ctrl.value = oldValue;
                                 }
@@ -71,7 +77,7 @@
                                 }
                             }
                         });
-
+                       
                         ctrl.notifyUserChange = function () {
                             isUserChange = true;
                         };
