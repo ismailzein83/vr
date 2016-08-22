@@ -27,7 +27,8 @@ namespace Retail.Web
                 "~/Client/Modules/BusinessProcess", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/VR_AccountBalance", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/VR_Notification", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/VR_BEBridge", "*.js", true));
+                "~/Client/Modules/VR_BEBridge", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/WhS_Routing", "*.js", true));
         }
     }
 }

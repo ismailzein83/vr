@@ -92,6 +92,22 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TOne.WhS.Routing.Business">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\TOne.WhS.Routing.Business\bin\Debug\TOne.WhS.Routing.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.Routing.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.Routing.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.Routing.Data.SQL">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.Routing.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.Routing.Entities">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.Routing.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.Routing.Web">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.Routing.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.AccountBalance.BP">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.BP.dll</HintPath>
     </Reference>
@@ -399,7 +415,9 @@
     <Compile Include="Tasks\SamerTask.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MainForm.resx">

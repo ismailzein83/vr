@@ -363,5 +363,47 @@ namespace Retail.Runtime.Mappers
             LogVerbose("Finished");
             return result;
         }
+        public Vanrise.Integration.Entities.MappingOutput ImportingRingoEventEDR_File()
+        {
+            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
+            var ringoSmsEDRs = new List<dynamic>();
+
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type ringoMessageEDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("RingoEventEDR");
+
+            DateTime creationDate = default(DateTime);
+            var currentItemCount = 5;
+            System.IO.StreamReader sr = ImportedData.StreamReader;
+            while (!sr.EndOfStream)
+            {
+                string currentLine = sr.ReadLine();
+                if (string.IsNullOrEmpty(currentLine))
+                    continue;
+
+                string[] rowData = currentLine.Split(';');
+
+
+                //if (rowData.Length != currentItemCount)
+                //continue;
+
+                dynamic edr = Activator.CreateInstance(ringoMessageEDRRuntimeType) as dynamic;
+                edr.MSISDN = rowData[0];
+                edr.EventIdMvno = int.Parse(rowData[1]);
+                edr.EventId = int.Parse(rowData[2]);
+                edr.CreatedDate = DateTime.Now;
+                edr.Event = rowData[3];
+                edr.Parameters = rowData[4];
+
+                ringoSmsEDRs.Add(edr);
+            }
+
+            var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(ringoSmsEDRs, "#RECORDSCOUNT# of Raw EDRs");
+            mappedBatches.Add("Ringo Event EDR Storage Stage", batch);
+
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+            return result;
+        }
+
     }
 }

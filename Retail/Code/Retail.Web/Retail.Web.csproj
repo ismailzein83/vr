@@ -156,6 +156,22 @@
     <Reference Include="TOne.WhS.BusinessEntity.Web">
       <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Web.dll</HintPath>
     </Reference>
+    <Reference Include="TOne.WhS.Routing.Business">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\TOne.WhS.Routing.Business\bin\Debug\TOne.WhS.Routing.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.Routing.Data">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.Routing.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.Routing.Data.SQL">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.Routing.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.Routing.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.Routing.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.Routing.Web">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.Routing.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.AccountBalance.BP">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.BP.dll</HintPath>
     </Reference>
