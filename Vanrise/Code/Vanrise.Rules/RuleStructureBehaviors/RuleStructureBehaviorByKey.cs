@@ -13,7 +13,7 @@ namespace Vanrise.Rules.RuleStructureBehaviors
         public override IEnumerable<RuleNode> StructureRules(IEnumerable<BaseRule> rules, out List<BaseRule> notMatchedRules)
         {
             notMatchedRules = new List<BaseRule>();
-            foreach(var rule in rules)
+            foreach (var rule in rules)
             {
                 IEnumerable<T> keys;
                 GetKeysFromRule(rule, out keys);
@@ -31,14 +31,16 @@ namespace Vanrise.Rules.RuleStructureBehaviors
             return _ruleNodesByKey.Values;
         }
 
-        public override RuleNode GetMatchedNode(object target)
+        public override List<RuleNode> GetMatchedNodes(object target)
         {
             T key;
-            if(TryGetKeyFromTarget(target, out key))
+            if (TryGetKeyFromTarget(target, out key))
             {
                 RuleNode ruleNode;
                 if (_ruleNodesByKey.TryGetValue(key, out ruleNode))
-                    return ruleNode;
+                {
+                    return new List<RuleNode>() { ruleNode };
+                }
             }
             return null;
         }

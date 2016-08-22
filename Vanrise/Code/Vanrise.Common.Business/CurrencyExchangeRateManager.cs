@@ -20,7 +20,7 @@ namespace Vanrise.Common.Business
         }
         public Decimal ConvertValueToCurrency(decimal value, int currencyId, DateTime effectiveOn)
         {
-            if (currencyId == new CurrencyManager().GetSystemCurrencyId())
+            if (currencyId == new ConfigManager().GetSystemCurrencyId())
                 return value;
             else
             {
@@ -41,7 +41,7 @@ namespace Vanrise.Common.Business
                 CurrencyExchangeRate fromExchangeRate;
                 CurrencyExchangeRate toExchangeRate;
 
-                if (fromCurrencyId == new CurrencyManager().GetSystemCurrencyId())
+                if (fromCurrencyId == new ConfigManager().GetSystemCurrencyId())
                     fromExchangeRate = new CurrencyExchangeRate() { Rate = 1 };
                 else
                     fromExchangeRate = GetEffectiveExchangeRate(fromCurrencyId, effectiveOn);
@@ -50,7 +50,7 @@ namespace Vanrise.Common.Business
                     throw new NullReferenceException(string.Format("fromExchangeRate: currency Id:{0}, Effective On: {1}", fromCurrencyId, effectiveOn.ToString()));
 
 
-                if (toCurrencyId == new CurrencyManager().GetSystemCurrencyId())
+                if (toCurrencyId == new ConfigManager().GetSystemCurrencyId())
                     toExchangeRate = new CurrencyExchangeRate() { Rate = 1 };
                 else
                     toExchangeRate = GetEffectiveExchangeRate(toCurrencyId, effectiveOn);

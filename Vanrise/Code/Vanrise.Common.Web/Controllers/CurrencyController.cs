@@ -47,7 +47,7 @@ namespace Vanrise.Common.Web.Controllers
        [Route("GetSystemCurrencyId")]
        public int GetSystemCurrencyId()
        {
-           CurrencyManager manager = new CurrencyManager();
+           ConfigManager manager = new ConfigManager();
            return manager.GetSystemCurrencyId();
        }
 

@@ -9,20 +9,10 @@ namespace Vanrise.Common.Business
 {
     public class EmailTemplateManager
     {
-        public EmailSettingData GetSystemEmail()
-        {
-            SettingManager settingManager = new SettingManager();
-            var emailSettings = settingManager.GetSetting<EmailSettingData>(Constants.EmailSettingType);
-
-            if (emailSettings == null)
-                throw new NullReferenceException("EmailSettingData");
-
-            return emailSettings;
-        }
-
         public void SendEmail(string receiver, string content, string subject)
         {
-            EmailSettingData emailSettingData = GetSystemEmail();
+            ConfigManager configManager = new ConfigManager();
+            EmailSettingData emailSettingData = configManager.GetSystemEmail();
 
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress(emailSettingData.SenderEmail);

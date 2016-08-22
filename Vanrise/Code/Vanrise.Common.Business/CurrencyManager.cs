@@ -36,7 +36,8 @@ namespace Vanrise.Common.Business
 
         public Currency GetSystemCurrency()
         {
-            var systemCurrencyId = GetSystemCurrencyId();
+            ConfigManager configManager = new ConfigManager();
+            var systemCurrencyId = configManager.GetSystemCurrencyId();
             var systemCurrency = GetCurrency(systemCurrencyId);
             if (systemCurrency == null)
                 throw new NullReferenceException(String.Format("systemCurrency ID: '{0}'", systemCurrencyId));
@@ -44,14 +45,7 @@ namespace Vanrise.Common.Business
             return systemCurrency;
         }
 
-        public int GetSystemCurrencyId()
-        {
-            SettingManager settingManager = new SettingManager();
-            CurrencySettingData currencyData = settingManager.GetSetting<CurrencySettingData>(Constants.BaseCurrencySettingType);
-            if (currencyData == null)
-                throw new NullReferenceException("CurrencySettingData");
-            return currencyData.CurrencyId;
-        }
+
 
         public string GetCurrencyName(int currencyId)
         {
@@ -141,7 +135,7 @@ namespace Vanrise.Common.Business
 
             currencDetail.Entity = currency;
 
-            CurrencyManager manager = new CurrencyManager();
+            ConfigManager manager = new ConfigManager();
             if (currency.CurrencyId == manager.GetSystemCurrencyId())
                 currencDetail.IsMain = true;
 

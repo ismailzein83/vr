@@ -56,20 +56,32 @@ namespace Vanrise.Rules
         BaseRule GetMatchRule(RuleNode parentNode, BaseRuleTarget target)
         {
             if (parentNode.Behavior == null)//last node in the tree
-                return GetFirstMatchRuleFromNode(parentNode, target);
-
-            RuleNode matchChildNode = parentNode.Behavior.GetMatchedNode(target);
-            if (matchChildNode != null)
-                return GetMatchRule(matchChildNode, target);
-            else if (parentNode.UnMatchedRulesNode != null)
-                return GetMatchRule(parentNode.UnMatchedRulesNode, target);
-            var node = parentNode;
-            while (node.ParentNode != null)//not root node
             {
-                if (!node.IsUnMatchedRulesNode && node.ParentNode.UnMatchedRulesNode != null)
-                    return GetMatchRule(node.ParentNode.UnMatchedRulesNode, target);
-                node = node.ParentNode;
+                var matchRule = GetFirstMatchRuleFromNode(parentNode, target);
+                if (matchRule != null)
+                    return matchRule;
             }
+            else
+            {
+                List<RuleNode> matchChildNodes = parentNode.Behavior.GetMatchedNodes(target);
+                if (matchChildNodes != null)
+                {
+                    foreach (RuleNode matchChildNode in matchChildNodes)
+                    {
+                        var matchRule = GetMatchRule(matchChildNode, target);
+                        if (matchRule != null)
+                            return matchRule;
+                    }
+                }
+
+                if (parentNode.UnMatchedRulesNode != null)
+                {
+                    var matchRule = GetMatchRule(parentNode.UnMatchedRulesNode, target);
+                    if (matchRule != null)
+                        return matchRule;
+                }
+            }
+
             return null;
         }
 
@@ -80,12 +92,6 @@ namespace Vanrise.Rules
                 if (!IsRuleMatched(rule, target))
                     continue;
                 return rule;
-            }
-            while (node.ParentNode != null)//not root node
-            {
-                if (!node.IsUnMatchedRulesNode && node.ParentNode.UnMatchedRulesNode != null)
-                    return GetMatchRule(node.ParentNode.UnMatchedRulesNode, target);
-                node = node.ParentNode;
             }
             return null;
         }

@@ -49,7 +49,7 @@ namespace Vanrise.Rules.RuleStructureBehaviors
             return _ruleNodesByPrefixes.Values;
         }
 
-        public override RuleNode GetMatchedNode(object target)
+        public override List<RuleNode> GetMatchedNodes(object target)
         {
             string valueToCompare;
             if (TryGetValueToCompareFromTarget(target, out valueToCompare) && valueToCompare != null)
@@ -59,7 +59,7 @@ namespace Vanrise.Rules.RuleStructureBehaviors
                 while (prefix.Length >= _minPrefixLength)
                 {
                     if (_ruleNodesByPrefixes.TryGetValue(prefix, out ruleNode))
-                        return ruleNode;
+                        return new List<RuleNode>() { ruleNode };
                     prefix = prefix.Substring(0, prefix.Length - 1);
                 }
             }
