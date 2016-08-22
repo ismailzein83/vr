@@ -14,7 +14,15 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         public object GetFilteredBPDefinitions(Vanrise.Entities.DataRetrievalInput<BPDefinitionQuery> input)
         {
             BPDefinitionManager manager = new BPDefinitionManager();
-            return GetWebResponse(input, manager.GetFilteredBPDefinitions(input));
+            return GetWebResponse(input, manager.GetFilteredBPDefinitions(input, Security.Entities.ContextFactory.GetContext().GetLoggedInUserId()));
+        }
+
+        [HttpPost]
+        [Route("GetFilteredBPDefinitionsForTechnical")]
+        public object GetFilteredBPDefinitionsForTechnical(Vanrise.Entities.DataRetrievalInput<BPDefinitionQuery> input)
+        {
+            BPDefinitionManager manager = new BPDefinitionManager();
+            return GetWebResponse(input, manager.GetFilteredBPDefinitions(input, null));
         }
 
         [HttpGet]

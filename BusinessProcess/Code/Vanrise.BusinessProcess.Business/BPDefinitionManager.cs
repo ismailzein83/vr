@@ -20,7 +20,7 @@ namespace Vanrise.BusinessProcess.Business
                 return null;
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<BPDefinitionDetail> GetFilteredBPDefinitions(Vanrise.Entities.DataRetrievalInput<BPDefinitionQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<BPDefinitionDetail> GetFilteredBPDefinitions(Vanrise.Entities.DataRetrievalInput<BPDefinitionQuery> input, int? viewableByUserId = null)
         {
             var allBPDefinitions = GetCachedBPDefinitions();
 
