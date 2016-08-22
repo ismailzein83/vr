@@ -15,33 +15,50 @@
     <section name="vanriseRuntime" type="Vanrise.Runtime.Configuration.RuntimeConfig, Vanrise.Runtime" />
     <section name="vanriseLogging" type="Vanrise.Common.LoggingConfiguration.LoggingConfig, Vanrise.Common" />
   </configSections>
+  
+  <!-- Vanrise Runtime is configured as per client resources (mainly CPU \ RAM Memory) -->
   <vanriseRuntime>
     <runtimeServiceGroups>
-      <runtimeServiceGroup name="group1" nbOfRuntimeInstances="1">
-        <runtimeServices>
-          <runtimeService name="Business Process Service" type="Vanrise.BusinessProcess.BusinessProcessService, Vanrise.BusinessProcess" interval="00:00:02"></runtimeService>
-        </runtimeServices>
-      </runtimeServiceGroup>
+      <!-- Used for scheduling services for data sources, workflow. nbOfRuntimeInstances recommended to be equal to 1 or 2.-->
       <runtimeServiceGroup name="group2" nbOfRuntimeInstances="1">
         <runtimeServices>
           <runtimeService name="Scheduler Service" type="Vanrise.Runtime.SchedulerService, Vanrise.Runtime" interval="00:00:02"></runtimeService>
+          <runtimeService name="Transaction Lock Service" type="Vanrise.Runtime.TransactionLockRuntimeService, Vanrise.Runtime" interval="00:00:02"></runtimeService>
         </runtimeServices>
       </runtimeServiceGroup>
+      <!-- Regulator service manages Business Process service. nbOfRuntimeInstances Keep it 1-->
+      <runtimeServiceGroup name="groupA" nbOfRuntimeInstances="1">
+        <runtimeServices>
+          <runtimeService name="Business Process Regulator Service" type="Vanrise.BusinessProcess.BPRegulatorRuntimeService, Vanrise.BusinessProcess" interval="00:00:01"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
+      <!-- Used for Business Process (Reprocess, Route build, Product Cost Generation, etc...). nbOfRuntimeInstances depended on available resources.-->
+      <runtimeServiceGroup name="group1" nbOfRuntimeInstances="20">
+        <runtimeServices>
+          <runtimeService name="Business Process Service" type="Vanrise.BusinessProcess.BusinessProcessService, Vanrise.BusinessProcess" interval="00:00:01"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
+      <!-- Regulator service manages Queue activation service. nbOfRuntimeInstances Keep it 1-->
       <runtimeServiceGroup name="group3" nbOfRuntimeInstances="1">
         <runtimeServices>
-          <runtimeService name="Queue Activation Service" type="Vanrise.Queueing.QueueActivationService, Vanrise.Queueing" interval="00:00:02"></runtimeService>
-          <runtimeService name="Queue Activation Service 2" type="Vanrise.Queueing.QueueActivationService, Vanrise.Queueing" interval="00:00:02"></runtimeService>
-          <runtimeService name="Queue Activation Service 3" type="Vanrise.Queueing.QueueActivationService, Vanrise.Queueing" interval="00:00:02"></runtimeService>
-          <runtimeService name="Queue Activation Service 2" type="Vanrise.Queueing.QueueActivationService, Vanrise.Queueing" interval="00:00:02"></runtimeService>
+          <runtimeService name="Queue Regulator Service" type="Vanrise.Queueing.QueueRegulatorRuntimeService, Vanrise.Queueing" interval="00:00:01"></runtimeService>
         </runtimeServices>
       </runtimeServiceGroup>
-      <runtimeServiceGroup name="group4" nbOfRuntimeInstances="1">
+      <!-- Related to processing batches from queues and saving them to database such as Main - Invalid - Failed tables. nbOfRuntimeInstances depended on available resources.-->
+      <runtimeServiceGroup name="group4" nbOfRuntimeInstances="20">
+        <runtimeServices>
+          <runtimeService name="Queue Activation Service" type="Vanrise.Queueing.QueueActivationRuntimeService, Vanrise.Queueing" interval="00:00:00.100"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
+      <!-- Related to Data sources such CDR Import process. nbOfRuntimeInstances should be equal to "Number Of Parallel Readers" configured in Data source management page.-->
+      <runtimeServiceGroup name="group6" nbOfRuntimeInstances="3">
         <runtimeServices>
           <runtimeService name="Data Source Runtime Service" type="Vanrise.Integration.Business.DataSourceRuntimeService, Vanrise.Integration.Business" interval="00:00:02"></runtimeService>
         </runtimeServices>
       </runtimeServiceGroup>
     </runtimeServiceGroups>
   </vanriseRuntime>
+  
   <vanriseLogging maxLogLevel="Information">
     <loggers>
       <logger name="SQLLogger" type="Vanrise.Logging.SQL.SQLLogger, Vanrise.Logging.SQL">
@@ -57,27 +74,19 @@
     </exceptionLoggers>
   </vanriseLogging>
   <connectionStrings>
-
-    <add name="MainDBConnString" connectionString="Server=192.168.110.185;Database=Mediation_Dev;User ID=development;Password=dev!123" />
-    <add name="ConfigurationDBConnString" connectionString="Data Source=192.168.110.185;Initial Catalog=Mediation_Dev_Configuration;User ID=development; Password=dev!123" />
-    <add name="Mediation_GenericConfig_DBConnString" connectionString="Data Source=192.168.110.185;Initial Catalog=Mediation_Dev_Configuration;User ID=development; Password=dev!123;" providerName="System.Data.SqlClient" />
-    <add name="Mediation_GenericRecord_DBConnString" connectionString="Data Source=192.168.110.185;Initial Catalog=Mediation_Dev;User ID=development; Password=dev!123;" providerName="System.Data.SqlClient" />
-    <add name="LogDBConnString" connectionString="Initial Catalog=Mediation_Dev_Logging;Data Source=.;User ID=sa; Password=p@ssw0rd" />
-    <add name="TransactionDBConnString" connectionString="Data Source=.;Initial Catalog=Mediation_Dev_Transaction;User ID=sa; Password=p@ssw0rd" />
-    <add name="QueueItemDBConnString" connectionString="Data Source=.;Initial Catalog=Mediation_Dev_Queueing;User ID=sa; Password=p@ssw0rd" />
+    <add name="Mediation_GenericConfig_DBConnString" connectionString="Server=localhost;Database=Mediation_Configuration;User ID=sa;Password= " />
+    <add name="Mediation_GenericRecord_DBConnString" connectionString="Server=localhost;Database=Mediation_Configuration;User ID=sa;Password= " />
     
-    <!--<add name="ConfigurationDBConnString" connectionString="Data Source=.;Database=Mediation_Online_Configuration;User ID=Mediation_Online_User; Password=Mediation_Online_User" />
-    <add name="Mediation_GenericConfig_DBConnString" connectionString="Data Source=192.168.110.185;Initial Catalog=Mediation_Online_Configuration;User ID=Mediation_Online_User; Password=Mediation_Online_User" providerName="System.Data.SqlClient" />
-    <add name="Mediation_GenericRecord_DBConnString" connectionString="Data Source=192.168.110.185;Initial Catalog=Mediation_Dev;User ID=Mediation_Online_User; Password=Mediation_Online_User" providerName="System.Data.SqlClient" />
-    <add name="LogDBConnString" connectionString="Initial Catalog=Mediation_Online_Logging;Data Source=192.168.110.185;User ID=Mediation_Online_User; Password=Mediation_Online_User" />
-    <add name="TransactionDBConnString" connectionString="Data Source=192.168.110.185;Initial Catalog=Mediation_Online_Transaction;User ID=Mediation_Online_User; Password=Mediation_Online_User" />
-    <add name="QueueItemDBConnString" connectionString="Data Source=192.168.110.185;Initial Catalog=Mediation_Online_Queueing;User ID=Mediation_Online_User; Password=Mediation_Online_User" />
-    <add name="MainDBConnString" connectionString="" />-->
+    <add name="QueueItemDBConnString" connectionString="Server=localhost;Database=Mediation_Queueing;User ID=sa;Password= "/>
+    <add name="TransactionDBConnString" connectionString="Server=localhost;Database=Mediation_Transaction;User ID=sa;Password= "/>
+    <add name="LogDBConnString" connectionString="Server=localhost;Database=Mediation_Logging;User ID=sa;Password= "/>
+    
+    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=Mediation_Configuration;User ID=sa;Password= "/>
+    <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>
 
   <!-- BEGIN CUSTOMER VARYING SECTION -->
   <appSettings>
-    <add key="TABS License" value="BF-2F-B4-CD-36-CB-1D-4B-8F-55-1C-F4-99-CD-1B-E8::==QMwkDM5EDMyYjM4ADNxAjM:kVGdwlncj5WR09mT"/>
     <add key="Mediation_GenericRecord_DBConnStringKey" value="Mediation_GenericRecord_DBConnString"/>
     <add key="Mediation_GenericConfig_DBConnStringKey" value="Mediation_GenericRecord_DBConnString"/>
     <add key="RuntimeConnStringKey" value="TransactionDBConnString"/>
