@@ -109,6 +109,7 @@
 
             function loadObjectPropertySelector(objectTypeConfigId) {
 
+                console.log(objectTypeConfigId);
                 var objectPropertySelectorLoadDeferred = UtilsService.createPromiseDeferred();
                 loadObjectTypeConfigs().then(function () {
                     getObjectPropertySelectorTemplateConfigs(objectTypeConfigId).then(function () {
@@ -120,6 +121,8 @@
             }
             function loadObjectTypeConfigs() {
                 return VRCommon_VRObjectTypeAPIService.GetObjectTypeExtensionConfigs().then(function (response) {
+
+                    console.log(response);
                     if (response != null) {
                         objectTypeConfigs = [];
                         for (var i = 0; i < response.length; i++) {
@@ -132,8 +135,9 @@
 
                 var propertyEvaluatorExtensionType;
                 for (var index = 0; index < objectTypeConfigs.length ; index++)
-                    if (objectTypeConfigs[index].ExtensionConfigurationId == objectTypeConfigId)
+                    if (objectTypeConfigs[index].ExtensionConfigurationId == objectTypeConfigId) {
                         propertyEvaluatorExtensionType = objectTypeConfigs[index].PropertyEvaluatorExtensionType;
+                    }
 
                 return VRCommon_VRObjectPropertyAPIService.GetObjectPropertyExtensionConfigs(propertyEvaluatorExtensionType)
                                         .then(function (response) {

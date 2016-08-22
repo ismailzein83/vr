@@ -45,12 +45,14 @@
                     selectorAPI = api;
                     defineAPI();
                 };
-                //$scope.scopeModel.onObjectTypeSelectionChanged = function () {
-                //    if (ctrl.onObjecttypeselectionchanged != null && typeof (ctrl.onObjecttypeselectionchanged) == "function")
-                //    ctrl.onObjecttypeselectionchanged();
-                //}
-                $scope.scopeModel.onObjectTypeSelectionChanged = ctrl.onselectionchanged;
+                $scope.scopeModel.onObjectTypeSelectionChanged = function () {
 
+                    if ($scope.scopeModel.selectedTemplateConfig != undefined && context != undefined)
+                        context.canDefineProperties(true);
+
+                    if (ctrl.onselectionchanged != null && typeof (ctrl.onselectionchanged) == "function")
+                        ctrl.onselectionchanged();
+                }
 
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
@@ -96,7 +98,7 @@
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
                                 if (objectType != undefined && objectType.ConfigId != undefined) {
-                                    $scope.scopeModel.selectedTemplateConfig =
+                                   $scope.scopeModel.selectedTemplateConfig =
                                         UtilsService.getItemByVal($scope.scopeModel.templateConfigs, objectType.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }

@@ -11,7 +11,8 @@
                 onReady: "=",
                 normalColNum: '@',
                 label: '@',
-                customvalidate: '='
+                customvalidate: '=',
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -132,7 +133,7 @@
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
-                            + ' isrequired="true"'
+                            + ' isrequired="ctrl.isrequired"'
                             + ' label="Route Reader"'
                             + ' hideremoveicon>'
                         + '</vr-select>'

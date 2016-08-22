@@ -15,7 +15,7 @@
                     </vr-tab>
 
                     <vr-tab header="'Properties'">
-                        <vr-common-objecttypepropertydefinition-management on-ready="scopeModel.onPropertyDirectiveReady" ng-show="scopeModel.showPropertiesTab" normal-col-num="4"></vr-common-objecttypepropertydefinition-management>
+                        <vr-common-objecttypepropertydefinition-management on-ready="scopeModel.onPropertyDirectiveReady" ng-show="scopeModel.canDefineProperties" normal-col-num="4"></vr-common-objecttypepropertydefinition-management>
                     </vr-tab>
                 </vr-form>
             </vr-tabs>
@@ -29,7 +29,3 @@
         </vr-actionbar>
     </div>
 </div>
-
-<!-- ng-show="scopeModel.showPropertiesTab" -->
-
-

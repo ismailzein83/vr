@@ -36,15 +36,14 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.showPropertiesTab = true;
 
             $scope.scopeModel.onObjectTypeSelectiveReady = function (api) {
                 objectTypeSelectiveAPI = api;
                 objectTypeSelectiveReadyDeferred.resolve();
             };
             $scope.scopeModel.onObjectTypeSelectionChanged = function () {
-                if (propertyDirectiveAPI != undefined)
-                {
+                if (propertyDirectiveAPI != undefined) {
+
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoading = value
                     };
@@ -187,8 +186,8 @@
         }
         function buildObjectTypeContext() {
             var context = {
-                showPropertiesTab: function (showPropertiesTab) {
-                    $scope.scopeModel.showPropertiesTab = showPropertiesTab;
+                canDefineProperties: function (canDefineProperties) {
+                    $scope.scopeModel.canDefineProperties = canDefineProperties;
                 }
             }
 

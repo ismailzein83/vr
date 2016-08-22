@@ -23,8 +23,8 @@
         function DataRecordObjectType($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-            var context;
             var selectorAPI;
+            var context;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -37,7 +37,7 @@
                 $scope.scopeModel.onDataRecordObjectTypeSelectionChanged = function () {
                     var selectIds = selectorAPI.getSelectedIds();
                     if (selectIds != undefined) {
-                        context.showPropertiesTab(true);
+                        context.canDefineProperties(true);
                     }
                 }
             }
@@ -50,7 +50,7 @@
                     if (payload != undefined) {
                         context = payload.context;
 
-                        context.showPropertiesTab(false);
+                        context.canDefineProperties(false);
                     }
 
                     if (payload != undefined && payload.objectType != undefined) {
