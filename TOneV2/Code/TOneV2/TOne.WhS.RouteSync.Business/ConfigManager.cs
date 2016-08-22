@@ -7,7 +7,7 @@ using TOne.WhS.RouteSync.Entities;
 
 namespace TOne.WhS.RouteSync.Business
 {
-    public class ConfigurationManager
+    public class ConfigManager
     {
         public SwitchInfoGetter GetSwitchInfoGetter()
         {

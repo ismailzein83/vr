@@ -11,7 +11,7 @@ namespace TOne.WhS.RouteSync.Business
     {
         public List<SwitchInfo> GetSwitches(IEnumerable<string> switchIds)
         {
-            var switchInfoGetter = new ConfigurationManager().GetSwitchInfoGetter();
+            var switchInfoGetter = new ConfigManager().GetSwitchInfoGetter();
             if (switchInfoGetter == null)
                 throw new NullReferenceException("switchInfoGetter");
             return switchIds.Select(switchId => switchInfoGetter.GetSwitchInfo(new SwitchInfoGetterContext { SwitchId = switchId })).ToList();
@@ -19,7 +19,7 @@ namespace TOne.WhS.RouteSync.Business
 
         public List<SwitchInfo> GetAllSwitches()
         {
-            var switchInfoGetter = new ConfigurationManager().GetSwitchInfoGetter();
+            var switchInfoGetter = new ConfigManager().GetSwitchInfoGetter();
             if (switchInfoGetter == null)
                 throw new NullReferenceException("switchInfoGetter");
             return switchInfoGetter.GetAllSwitchInfo(new SwitchInfoGetterAllContext());
