@@ -393,6 +393,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\Mediation.pubxml" />
+    <None Include="Web.config.exclude" />
+    <None Include="Web.config.Debug.exclude">
+      <DependentUpon>Web.config.exclude</DependentUpon>
+    </None>
+    <None Include="Web.config.Release.exclude">
+      <DependentUpon>Web.config.exclude</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
