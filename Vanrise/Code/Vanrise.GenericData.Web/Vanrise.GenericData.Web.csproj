@@ -300,7 +300,7 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\SummaryBatchTimeIntervalRange\Templates\SummaryBatchStartIdentificationSelector.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\SummaryBatchTimeIntervalRange\vr-genericdata-summarytransformation-timeinterval-selector.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\SummaryBatchTimeIntervalRange\vr-genericdata-summarytransformation-summarybatchstartidentification-selector.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\Templates\VRDaraRecordObjectTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\Templates\VRDataRecordObjectTypeTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\vr_genericdata_datarecordobjecttype.js" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorStoreBatchTemplate.html" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorGenerateSummaryTemplate.html" />

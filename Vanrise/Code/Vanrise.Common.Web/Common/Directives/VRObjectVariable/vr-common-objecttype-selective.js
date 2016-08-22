@@ -9,7 +9,7 @@
             restrict: "E",
             scope: {
                 onReady: "=",
-                onObjecttypeselectionchanged: "=",
+                onselectionchanged: "=",
                 normalColNum: '@',
                 label: '@',
                 customvalidate: '=',
@@ -28,6 +28,8 @@
         function ObjectTypeSelective($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var context;
+
             var selectorAPI;
 
             var directiveAPI;
@@ -43,17 +45,22 @@
                     selectorAPI = api;
                     defineAPI();
                 };
-                $scope.scopeModel.onObjectTypeSelectionChanged = function () {
-                    if (ctrl.onObjecttypeselectionchanged != null && typeof (ctrl.onObjecttypeselectionchanged) == "function")
-                    ctrl.onObjecttypeselectionchanged();
-                }
+                //$scope.scopeModel.onObjectTypeSelectionChanged = function () {
+                //    if (ctrl.onObjecttypeselectionchanged != null && typeof (ctrl.onObjecttypeselectionchanged) == "function")
+                //    ctrl.onObjecttypeselectionchanged();
+                //}
+                $scope.scopeModel.onObjectTypeSelectionChanged = ctrl.onselectionchanged;
+
 
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
+                    directivePayload = {};
+                    directivePayload.context = context;
+
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
             }
             function defineAPI() {
@@ -64,6 +71,10 @@
 
                     var promises = [];
                     var objectType;
+
+                    if (payload.context != undefined) {
+                        context = payload.context;
+                    }
 
                     if (payload != undefined && payload.objectType != undefined) {
                         objectType = payload.objectType;
@@ -97,9 +108,11 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload;
+
+                            var directivePayload = {};
+                            directivePayload.context = context;
                             if (objectType != undefined) {
-                                directivePayload = { objectType: objectType }
+                                directivePayload.objectType = objectType;
                             }
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });

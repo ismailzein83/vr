@@ -17,12 +17,13 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/VRObjectTypes/Templates/VRDaraRecordObjectTypeTemplate.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/VRObjectTypes/Templates/VRDataRecordObjectTypeTemplate.html"
 
         };
         function DataRecordObjectType($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var context;
             var selectorAPI;
 
             function initializeController() {
@@ -31,14 +32,26 @@
                 $scope.scopeModel.onDataRecordObjectTypeSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
-                }  
-            }
+                }
 
+                $scope.scopeModel.onDataRecordObjectTypeSelectionChanged = function () {
+                    var selectIds = selectorAPI.getSelectedIds();
+                    if (selectIds != undefined) {
+                        context.showPropertiesTab(true);
+                    }
+                }
+            }
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
                     var selectorPayload;
+
+                    if (payload != undefined) {
+                        context = payload.context;
+
+                        context.showPropertiesTab(false);
+                    }
 
                     if (payload != undefined && payload.objectType != undefined) {
                         selectorPayload = { selectedIds: payload.objectType.RecordTypeId };

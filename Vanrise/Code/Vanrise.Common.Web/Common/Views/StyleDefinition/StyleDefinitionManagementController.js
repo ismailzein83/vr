@@ -19,7 +19,6 @@
                 var query = buildGridQuery();
                 return gridAPI.load(query);
             };
-
             $scope.scopeModel.add = function () {
                 var onStyleDefinitionAdded = function (addedStyleDefinition) {
                     gridAPI.onStyleDefinitionAdded(addedStyleDefinition);

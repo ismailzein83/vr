@@ -9,13 +9,13 @@
                             </vr-columns>
                         </vr-row>
                         <vr-row>
-                            <vr-common-objecttype-selective on-ready="scopeModel.onObjectTypeSelectiveReady" on-objecttypeselectionchanged="scopeModel.onObjectTypeSelectionChanged"
+                            <vr-common-objecttype-selective on-ready="scopeModel.onObjectTypeSelectiveReady" onselectionchanged="scopeModel.onObjectTypeSelectionChanged"
                                                             normal-col-num="6" isrequired="true"></vr-common-objecttype-selective>
                         </vr-row>
                     </vr-tab>
 
                     <vr-tab header="'Properties'">
-                        <vr-common-objecttypepropertydefinition-management on-ready="scopeModel.onPropertyDirectiveReady" ng-show="scopeModel.showObjectTypeProperty()" normal-col-num="4"></vr-common-objecttypepropertydefinition-management>
+                        <vr-common-objecttypepropertydefinition-management on-ready="scopeModel.onPropertyDirectiveReady" ng-show="scopeModel.showPropertiesTab" normal-col-num="4"></vr-common-objecttypepropertydefinition-management>
                     </vr-tab>
                 </vr-form>
             </vr-tabs>
@@ -29,3 +29,7 @@
         </vr-actionbar>
     </div>
 </div>
+
+<!-- ng-show="scopeModel.showPropertiesTab" -->
+
+

@@ -9,7 +9,6 @@
         var isEditMode;
 
         var context;
-        var loadingPropertyGrid;
 
         var vrObjectTypeDefinitionId;
         var vrObjectTypeDefinitionEntity;
@@ -19,6 +18,7 @@
 
         var propertyDirectiveAPI;
         var propertyDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
 
         loadParameters();
         defineScope();
@@ -36,22 +36,21 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.showPropertiesTab = true;
 
             $scope.scopeModel.onObjectTypeSelectiveReady = function (api) {
                 objectTypeSelectiveAPI = api;
                 objectTypeSelectiveReadyDeferred.resolve();
             };
             $scope.scopeModel.onObjectTypeSelectionChanged = function () {
-                if (propertyDirectiveAPI != undefined ) {
-
+                if (propertyDirectiveAPI != undefined)
+                {
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isLoading = value
+                    };
                     var payload = {};
-                    payload.context = buildContext();
-                    if (loadingPropertyGrid == undefined && vrObjectTypeDefinitionEntity != undefined && vrObjectTypeDefinitionEntity.Settings != undefined) {
-                        loadingPropertyGrid = false;
-                        payload.properties = vrObjectTypeDefinitionEntity.Settings.Properties;
-                    }
-
-                    propertyDirectiveAPI.load(payload);
+                    payload.context = buildPropertyContext();
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, propertyDirectiveAPI, payload, setLoader);
                 }
             }
 
@@ -59,11 +58,6 @@
                 propertyDirectiveAPI = api;
                 propertyDirectiveReadyDeferred.resolve();
             };
-
-            $scope.scopeModel.showObjectTypeProperty = function () {
-               
-                return objectTypeSelectiveAPI.getData() != undefined && objectTypeSelectiveIsLoaded(objectTypeSelectiveAPI.getData());
-            }
 
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
@@ -79,10 +73,9 @@
         }
         function load() {
             $scope.scopeModel.isLoading = true;
-
             if (isEditMode) {
-                GetVRObjectTypeDefinition().then(function () {
-                    loadAllControls();
+                getVRObjectTypeDefinition().then(function () {
+                        loadAllControls();
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.scopeModel.isLoading = false;
@@ -93,17 +86,22 @@
             }
         }
 
-
-        function GetVRObjectTypeDefinition() {
+        function getVRObjectTypeDefinition() {
             return VRCommon_VRObjectTypeDefinitionAPIService.GetVRObjectTypeDefinition(vrObjectTypeDefinitionId).then(function (response) {
                 vrObjectTypeDefinitionEntity = response;
             });
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadObjectTypeSelective, loadPropertyDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadObjectTypeSelective]).then(function () {
+                loadPropertyDirective().then(function () {
+                    $scope.scopeModel.isLoading = false;
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.scopeModel.isLoading = false;
+                });
+            }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
 
@@ -123,26 +121,22 @@
             }
             function loadObjectTypeSelective() {
                 var objectTypeSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
                 objectTypeSelectiveReadyDeferred.promise.then(function () {
-                    var payload;
+                    var payload = {};
+                    payload.context = buildObjectTypeContext();
                     if (vrObjectTypeDefinitionEntity != undefined) {
-                        payload = { objectType: vrObjectTypeDefinitionEntity.Settings.ObjectType };
+                        payload.objectType = vrObjectTypeDefinitionEntity.Settings.ObjectType;
                     }
-
                     VRUIUtilsService.callDirectiveLoad(objectTypeSelectiveAPI, payload, objectTypeSelectiveLoadDeferred);
                 });
-
                 return objectTypeSelectiveLoadDeferred.promise;
             }
             function loadPropertyDirective() {
                 var propertyDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 propertyDirectiveReadyDeferred.promise.then(function () {
-
                     var payload = {};
-                    payload.context = buildContext();
-
+                    payload.context = buildPropertyContext();
                     if (vrObjectTypeDefinitionEntity != undefined && vrObjectTypeDefinitionEntity.Settings != undefined) {
                         payload.properties = vrObjectTypeDefinitionEntity.Settings.Properties;
                     }
@@ -184,17 +178,18 @@
             });
         }
 
-        function objectTypeSelectiveIsLoaded(objectType) {
-            for (var key in objectType) 
-                if (key != "$type" && key != "ConfigId")
-                    return objectType[key] != undefined;     
-        }
-
-        function buildContext() {
-            var hideButton;
-
+        function buildPropertyContext() {
             var context = {
                 getObjectType: function () { return objectTypeSelectiveAPI.getData(); }
+            }
+
+            return context;
+        }
+        function buildObjectTypeContext() {
+            var context = {
+                showPropertiesTab: function (showPropertiesTab) {
+                    $scope.scopeModel.showPropertiesTab = showPropertiesTab;
+                }
             }
 
             return context;

@@ -31,7 +31,6 @@
             this.initializeController = initializeController;
 
             var gridAPI;
-
             var context;
 
             function initializeController() {
@@ -48,7 +47,7 @@
                     };
                     VRCommon_VRObjectTypePropertyDefinitionService.addObjectTypePropertyDefinition(ctrl.objectTypePropertyDefinitions, context, onObjectTypePropertyDefinitionAdded);
                 };
-                ctrl.onDeleteObjectTypeProperty = function (objectTypePropertyDefinition) {
+                ctrl.onDeleteObjectTypePropertyDefinition = function (objectTypePropertyDefinition) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
                         if (confirmed) {
                             var index = UtilsService.getItemIndexByVal(ctrl.objectTypePropertyDefinitions, objectTypePropertyDefinition.Name, 'Name');
