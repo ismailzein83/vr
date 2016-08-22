@@ -415,6 +415,9 @@
     <Compile Include="Tasks\SamerTask.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config.excluded">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
