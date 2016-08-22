@@ -641,14 +641,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\Retail.pubxml" />
-    <None Include="Web.config.excluded">
+    <None Include="Web.config.exclude">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Web.config.Debug.excluded">
-      <DependentUpon>Web.config.excluded</DependentUpon>
+    <None Include="Web.config.Debug.exclude">
+      <DependentUpon>Web.config.exclude</DependentUpon>
     </None>
-    <None Include="Web.config.Release.excluded">
-      <DependentUpon>Web.config.excluded</DependentUpon>
+    <None Include="Web.config.Release.exclude">
+      <DependentUpon>Web.config.exclude</DependentUpon>
     </None>
   </ItemGroup>
   <PropertyGroup>
