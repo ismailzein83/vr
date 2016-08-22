@@ -22,13 +22,14 @@
     </exceptionLoggers>
   </vanriseLogging>
   <connectionStrings>
-    <add name="ConfigurationDBConnString" connectionString="Server=192.168.110.185;Database=XBooster_Dev_Configuration;User ID=development;Password=dev!123;" />
-    <add name="XBoosterDBConnString" connectionString="Data Source=192.168.110.185;Initial Catalog=XBooster_Dev;User ID=development;Password=dev!123;" providerName="System.Data.SqlClient" />
-    
-    <add name="LogDBConnString" connectionString="Initial Catalog=XBooster_Dev_Logging;Data Source=.;User ID=sa; Password=p@ssw0rd" />
-    <add name="TransactionDBConnString" connectionString="Data Source=.;Initial Catalog=XBooster_Dev_Transaction;User ID=sa; Password=p@ssw0rd" />
-    
-    <add name="CDRComparisonOutputDBConnString" connectionString="Server=192.168.110.185;Database=XBooster_Dev_CDRComparisonOutput;User ID=development;Password=dev!123;" />
+    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=XBooster_Configuration;User ID=sa;Password= "/>
+    <add name="XBoosterDBConnString" connectionString="Server=localhost;Database=XBooster_Configuration;User ID=sa;Password= " />
+    <add name="CDRComparisonOutputDBConnString" connectionString="Server=localhost;Database=XBooster_CDRComparisonOutput;User ID=sa;Password= " />
+
+    <add name="TransactionDBConnString" connectionString="Server=localhost;Database=XBooster_Transaction;User ID=sa;Password= "/>
+    <add name="LogDBConnString" connectionString="Server=localhost;Database=XBooster_Logging;User ID=sa;Password= "/>
+
+    <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>
   <appSettings>
     <add key="webpages:Version" value="2.0.0.0" />

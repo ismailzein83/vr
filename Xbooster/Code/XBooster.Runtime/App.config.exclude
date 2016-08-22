@@ -5,11 +5,25 @@
     <section name="vanriseLogging" type="Vanrise.Common.LoggingConfiguration.LoggingConfig, Vanrise.Common" />
   </configSections>
 
+  <!-- Vanrise Runtime is configured as per client resources (mainly CPU \ RAM Memory) -->
   <vanriseRuntime>
     <runtimeServiceGroups>
-      <runtimeServiceGroup name="group2" nbOfRuntimeInstances="3">
+      <!-- Used for scheduling services for data sources, workflow. nbOfRuntimeInstances recommended to be equal to 1 or 2.-->
+      <runtimeServiceGroup name="group2" nbOfRuntimeInstances="1">
         <runtimeServices>
-          <runtimeService name="Business Process Service" type="Vanrise.BusinessProcess.BusinessProcessService, Vanrise.BusinessProcess" interval="00:00:02"></runtimeService>
+          <runtimeService name="Transaction Lock Service" type="Vanrise.Runtime.TransactionLockRuntimeService, Vanrise.Runtime" interval="00:00:02"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
+      <!-- Regulator service manages Business Process service. nbOfRuntimeInstances Keep it 1-->
+      <runtimeServiceGroup name="groupA" nbOfRuntimeInstances="1">
+        <runtimeServices>
+          <runtimeService name="Business Process Regulator Service" type="Vanrise.BusinessProcess.BPRegulatorRuntimeService, Vanrise.BusinessProcess" interval="00:00:01"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
+      <!-- Used for Business Process (Reprocess, Route build, Product Cost Generation, etc...). nbOfRuntimeInstances depended on available resources.-->
+      <runtimeServiceGroup name="group1" nbOfRuntimeInstances="5">
+        <runtimeServices>
+          <runtimeService name="Business Process Service" type="Vanrise.BusinessProcess.BusinessProcessService, Vanrise.BusinessProcess" interval="00:00:01"></runtimeService>
         </runtimeServices>
       </runtimeServiceGroup>
     </runtimeServiceGroups>
@@ -29,14 +43,14 @@
     </exceptionLoggers>
   </vanriseLogging>
   <connectionStrings>
-    <add name="ConfigurationDBConnString" connectionString="Server=192.168.110.185;Database=XBooster_Dev_Configuration;User ID=development;Password=dev!123;" />
-    <add name="XBoosterDBConnString" connectionString="Data Source=192.168.110.185;Initial Catalog=XBooster_Dev;User ID=development;Password=dev!123;" providerName="System.Data.SqlClient" />
+    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=XBooster_Configuration;User ID=sa;Password= "/>
+    <add name="XBoosterDBConnString" connectionString="Server=localhost;Database=XBooster_Configuration;User ID=sa;Password= " />
+    <add name="CDRComparisonOutputDBConnString" connectionString="Server=localhost;Database=XBooster_CDRComparisonOutput;User ID=sa;Password= " />
 
-    <add name="LogDBConnString" connectionString="Initial Catalog=XBooster_Dev_Logging;Data Source=.;User ID=sa; Password=p@ssw0rd" />
-    <add name="TransactionDBConnString" connectionString="Data Source=.;Initial Catalog=XBooster_Dev_Transaction;User ID=sa; Password=p@ssw0rd" />
-
-    <add name="CDRComparisonOutputDBConnString" connectionString="Server=192.168.110.185;Database=XBooster_Dev_CDRComparisonOutput;User ID=development;Password=dev!123;" />
+    <add name="TransactionDBConnString" connectionString="Server=localhost;Database=XBooster_Transaction;User ID=sa;Password= "/>
+    <add name="LogDBConnString" connectionString="Server=localhost;Database=XBooster_Logging;User ID=sa;Password= "/>
     
+    <add name="MainDBConnString" connectionString=""/>    
   </connectionStrings>
   <appSettings>   
 
@@ -51,7 +65,7 @@
     <add key="CDRComparisonOutputDBConnStringKey" value="CDRComparisonOutputDBConnString"/>
     <add key="VRFile_CDRComparison_FileCDRSource_DBConnStringKey" value="CDRComparisonOutputDBConnString"/>
     
-    <add key="IsRuntimeService" value="false"/>
+    <add key="IsRuntimeService" value="true"/>
   </appSettings>
 
   <startup>
