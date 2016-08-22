@@ -11,6 +11,8 @@ namespace Vanrise.Invoice.Data
     {
         List<InvoiceType> GetInvoiceTypes();
         bool AreInvoiceTypesUpdated(ref object updateHandle);
+        bool InsertInvoiceType(InvoiceType invoiceType);
+        bool UpdateInvoiceType(InvoiceType invoiceType);
 
     }
 }

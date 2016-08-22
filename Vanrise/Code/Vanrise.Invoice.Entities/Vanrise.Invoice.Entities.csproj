@@ -47,9 +47,13 @@
     <Compile Include="GeneratedInvoice\GeneratedInvoice.cs" />
     <Compile Include="GeneratedInvoice\GeneratedInvoiceItem.cs" />
     <Compile Include="GeneratedInvoice\GeneratedInvoiceItemSet.cs" />
+    <Compile Include="InvoiceType\InvoiceGeneratorConfig.cs" />
+    <Compile Include="InvoiceType\InvoiceGridActionSettingsConfig.cs" />
     <Compile Include="InvoiceType\InvoiceTypeDetail.cs" />
     <Compile Include="InvoiceType\InvoiceTypeQuery.cs" />
+    <Compile Include="InvoiceType\RDLCDataSourceSettingsConfig.cs" />
     <Compile Include="InvoiceType\UISettings\IRDLCReportParameterValueContext.cs" />
+    <Compile Include="InvoiceType\UISettings\RDLCParameterSettingsConfig.cs" />
     <Compile Include="InvoiceType\UISettings\RDLCReportParameterValue.cs" />
     <Compile Include="Invoice\Invoice.cs" />
     <Compile Include="Invoice\InvoiceDetail.cs" />
@@ -72,6 +76,10 @@
     <Compile Include="InvoiceType\UISettings\InvoiceUISubSection.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>

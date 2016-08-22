@@ -8,7 +8,7 @@ using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.MainExtensions
 {
-    public class ItemSetNameSettings : RDLCReportDataSourceSettings
+    public class RDLCItemsDataSourceSettings : RDLCReportDataSourceSettings
     {
         public List<string> ItemSetNames { get; set; }
         public override IEnumerable<dynamic> GetDataSourceItems(IRDLCReportDataSourceSettingsContext context)

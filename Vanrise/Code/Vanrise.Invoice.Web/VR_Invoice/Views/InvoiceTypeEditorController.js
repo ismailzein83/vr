@@ -18,6 +18,12 @@
         var subSectionsAPI;
         var subSectionsSectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var invoiceGeneratorAPI;
+        var invoiceGeneratorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var invoiceGridActionsAPI;
+        var invoiceGridActionsSectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
         loadParameters();
         load();
@@ -38,12 +44,19 @@
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyPromiseDeferred.resolve();
             }
-
+            $scope.scopeModel.onInvoiceGeneratorReady = function (api)
+            {
+                invoiceGeneratorAPI = api;
+                invoiceGeneratorReadyPromiseDeferred.resolve();
+            }
             $scope.scopeModel.onMainGridColumnsReady = function (api) {
                 mainGridColumnsAPI = api;
                 mainGridColumnsSectionReadyPromiseDeferred.resolve();
             }
-
+            $scope.scopeModel.onInvoiceGridActionsReady = function (api) {
+                invoiceGridActionsAPI = api;
+                invoiceGridActionsSectionReadyPromiseDeferred.resolve();
+            }
             $scope.scopeModel.onSubSectionsReady = function (api) {
                 subSectionsAPI = api;
                 subSectionsSectionReadyPromiseDeferred.resolve();
@@ -82,7 +95,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGeneratorDirective, loadInvoiceGridActionsSection])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -107,9 +120,9 @@
         function loadStaticData() {
             if(invoiceTypeEntity != undefined)
             {
-                console.log(invoiceTypeEntity);
                 $scope.scopeModel.name = invoiceTypeEntity.Name;
                 $scope.scopeModel.partnerSelector = invoiceTypeEntity.Settings.UISettings.PartnerSelector;
+                $scope.scopeModel.partnerManagerFQTN = UtilsService.serializetoJson(invoiceTypeEntity.Settings.UISettings.PartnerManagerFQTN);
             }
         }
 
@@ -118,22 +131,49 @@
                 InvoiceTypeId: invoiceTypeId,
                 Name: $scope.scopeModel.name,
                 Settings: {
+                    InvoiceDetailsRecordTypeId:dataRecordTypeSelectorAPI.getSelectedIds(),
                     UISettings: {
-                        PartnerSelector : $scope.scopeModel.partnerSelector
-                    }
+                        PartnerSelector: $scope.scopeModel.partnerSelector,
+                        MainGridColumns: mainGridColumnsAPI.getData(),
+                        SubSections: subSectionsAPI.getData(),
+                        InvoiceGridActions : invoiceGridActionsAPI.getData(),
+                        PartnerManagerFQTN: UtilsService.parseStringToJson($scope.scopeModel.partnerManagerFQTN)
+                    },
+                    InvoiceGenerator: invoiceGeneratorAPI.getData()
                 }
             };
             return obj;
+        }
+
+        function loadInvoiceGridActionsSection() {
+            var invoiceGridActionsSectionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            invoiceGridActionsSectionReadyPromiseDeferred.promise.then(function () {
+                var invoiceGridActionsPayload = invoiceTypeEntity != undefined ? { invoiceGridActions: invoiceTypeEntity.Settings.UISettings.InvoiceGridActions } : undefined;
+                VRUIUtilsService.callDirectiveLoad(invoiceGridActionsAPI, invoiceGridActionsPayload, invoiceGridActionsSectionLoadPromiseDeferred);
+            });
+            return invoiceGridActionsSectionLoadPromiseDeferred.promise;
         }
 
         function loadDataRecordTypeSelector() {
             var dataRecordTypeSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             dataRecordTypeSelectorReadyPromiseDeferred.promise.then(function () {
-                var dataRecordTypePayload = invoiceTypeEntity != undefined ? invoiceTypeEntity.Settings.InvoiceDetailsRecordTypeId : undefined;
+                var dataRecordTypePayload = invoiceTypeEntity != undefined ? { selectedIds: invoiceTypeEntity.Settings.InvoiceDetailsRecordTypeId }: undefined;
                 VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, dataRecordTypePayload, dataRecordTypeSelectorLoadPromiseDeferred);
             });
             return dataRecordTypeSelectorLoadPromiseDeferred.promise;
+        }
+
+        function loadInvoiceGeneratorDirective() {
+            console.log(invoiceTypeEntity);
+            var invoiceGeneratorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            invoiceGeneratorReadyPromiseDeferred.promise.then(function () {
+                var invoiceGeneratorPayload = invoiceTypeEntity != undefined ? { invoiceGeneratorEntity: invoiceTypeEntity.Settings.InvoiceGenerator } : undefined;
+                VRUIUtilsService.callDirectiveLoad(invoiceGeneratorAPI, invoiceGeneratorPayload, invoiceGeneratorLoadPromiseDeferred);
+            });
+            return invoiceGeneratorLoadPromiseDeferred.promise;
         }
 
         function loadMainGridColumnsSection() {

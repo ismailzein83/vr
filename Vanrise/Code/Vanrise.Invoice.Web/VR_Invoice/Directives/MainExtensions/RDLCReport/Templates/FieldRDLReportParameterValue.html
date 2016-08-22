@@ -1,0 +1,14 @@
+﻿<vr-row>
+        <vr-columns width="1/2row">
+            <vr-select datasource="scopeModel.invoiceFields"
+                       datatextfield="description"
+                       datavaluefield="value"
+                       selectedvalues="scopeModel.selectedInvoiceField"
+                       isrequired="true"
+                       label="Field">
+            </vr-select>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.fieldName" label="Field Name" isrequired="scopeModel.isCustomFieldRequired()" ng-show="scopeModel.isCustomFieldRequired()"></vr-textbox>
+    </vr-columns>
+</vr-row>

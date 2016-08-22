@@ -1,0 +1,10 @@
+﻿<vr-button type="Add" data-onclick="ctrl.addParameter" standalone></vr-button>
+
+<vr-validator validate="ctrl.isValid()">
+    <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                 on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeParameter" hidegridmenu>
+        <vr-datagridcolumn headertext="'Parameter Name'" field="'Entity.ParameterName'" widthfactor="10" disablesorting></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Visible'" field="'Entity.IsVisible'" widthfactor="10" disablesorting></vr-datagridcolumn>
+
+    </vr-datagrid>
+</vr-validator>

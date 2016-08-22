@@ -613,6 +613,11 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         return angular.toJson(obj);
     }
 
+    function parseStringToJson(jsonString)
+    {
+       return angular.fromJson(jsonString);
+    }
+
     function generateJSVariableName() {
         return 'dyn_' + replaceAll(guid(), '-', '');
     }
@@ -797,8 +802,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         getUploadedFileName: getUploadedFileName,
         getDateFromDateTime: getDateFromDateTime,
         round: round,
-        diffDays: diffDays
-        
+        diffDays: diffDays,
+        parseStringToJson: parseStringToJson
     });
 
 }]);

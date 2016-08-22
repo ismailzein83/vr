@@ -12,6 +12,7 @@ namespace Vanrise.Invoice.Entities
     }
     public interface IPartnerManagerContext
     {
+
         string  PartnerId { get;}
     }
 }

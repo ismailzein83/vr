@@ -29,6 +29,26 @@ namespace Vanrise.Invoice.Data.SQL
         {
             return base.IsDataUpdated("VR_Invoice.InvoiceType", ref updateHandle);
         }
+
+        public bool InsertInvoiceType(InvoiceType invoiceType)
+        {
+            string serializedObj = null;
+            if(invoiceType.Settings != null)
+                serializedObj =  Vanrise.Common.Serializer.Serialize(invoiceType.Settings);
+
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceType_Insert", invoiceType.InvoiceTypeId, invoiceType.Name, serializedObj);
+            return (affectedRows > -1);
+        }
+        public bool UpdateInvoiceType(InvoiceType invoiceType)
+        {
+            string serializedObj = null;
+            if (invoiceType.Settings != null)
+                serializedObj = Vanrise.Common.Serializer.Serialize(invoiceType.Settings);
+
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceType_Update", invoiceType.InvoiceTypeId, invoiceType.Name, serializedObj);
+            return (affectedRows > -1 );
+        }
+
         #endregion
         
         #region Mappers
