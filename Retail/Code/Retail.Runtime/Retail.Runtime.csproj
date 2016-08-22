@@ -92,8 +92,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TOne.WhS.Routing.Business">
-      <HintPath>..\..\..\TOneV2\Code\TOneV2\TOne.WhS.Routing.Business\bin\Debug\TOne.WhS.Routing.Business.dll</HintPath>
+    <Reference Include="TOne.WhS.BusinessEntity.Data.SQL">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.Routing.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.Routing.Business.dll</HintPath>
     </Reference>
     <Reference Include="TOne.WhS.Routing.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -415,10 +419,10 @@
     <Compile Include="Tasks\SamerTask.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config.exclude">
+    <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="App.config">
+    <None Include="App.config.exclude">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
