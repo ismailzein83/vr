@@ -4,10 +4,13 @@ using System.Linq;
 using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
+using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.BusinessProcess.Business
 {
-    public class BPDefinitionManager
+    public class BPDefinitionManager : IBPDefinitionManager
     {
         #region public methods
 
@@ -32,6 +35,9 @@ namespace Vanrise.BusinessProcess.Business
                 if (!string.IsNullOrEmpty(input.Query.Title) && !prod.Title.ToLower().Contains(input.Query.Title.ToLower()))
                     return false;
 
+                if (viewableByUserId != null && !DoesUserHaveViewAccess((int)viewableByUserId,prod))
+                    return false;
+
                 return true;
             };
 
@@ -42,17 +48,41 @@ namespace Vanrise.BusinessProcess.Business
         {
             var bpDefinitions = GetCachedBPDefinitions();
 
-            if (filter != null)
+            Func<BPDefinition, bool> filterExpression = (prod) =>
             {
-                Func<BPDefinition, bool> filterExpression = (x) => (true);
-                return bpDefinitions.FindAllRecords(filterExpression).MapRecords(BPDefinitionInfoMapper);
+               
+                if (!DoesUserHaveViewAccess(SecurityContext.Current.GetLoggedInUserId(), prod))
+                    return false;
+
+                return true;
+            };
+
+            return bpDefinitions.FindAllRecords(filterExpression).MapRecords(BPDefinitionInfoMapper);
+            
+        }
+
+        public UpdateOperationOutput<BPDefinitionDetail> UpdateBPDefinition(BPDefinition bPDefinition)
+        {
+            IBPDefinitionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionDataManager>();
+            bool updateActionSucc = dataManager.UpdateBPDefinition(bPDefinition);
+            UpdateOperationOutput<BPDefinitionDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<BPDefinitionDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = BPDefinitionDetailMapper(bPDefinition);
             }
             else
             {
-                return bpDefinitions.MapRecords(BPDefinitionInfoMapper);
+                updateOperationOutput.Result = UpdateOperationResult.SameExists;
             }
-        }
 
+            return updateOperationOutput;
+        }
         public BPDefinition GetBPDefinition(int definitionId)
         {
             return GetCachedBPDefinitions().GetRecord(definitionId);
@@ -61,10 +91,33 @@ namespace Vanrise.BusinessProcess.Business
         {
             return GetBPDefinitions().FirstOrDefault(itm => itm.Name == processName);
         }
-
+        public bool DoesUserHaveViewAccess(int userId)
+        {
+            var allPB = GetCachedBPDefinitions().Select(x=>x.Value);
+            foreach (var bp in allPB)
+            {
+                if (DoesUserHaveViewAccess(userId, bp))
+                    return true;
+            }
+            return false;
+        }
         #endregion
 
         #region private methods
+
+        private bool DoesUserHaveViewAccess(int userId, BPDefinition bPDefinition)
+        {
+            SecurityManager secManager = new SecurityManager();
+            if (bPDefinition.Configuration.Security != null && bPDefinition.Configuration.Security.View != null && !DoesUserHaveBPPermission( userId , bPDefinition.Configuration.Security.View))
+                return false;
+            return true;
+        }
+
+        private bool DoesUserHaveBPPermission(int userId, RequiredPermissionSettings permission)
+        {
+            SecurityManager secManager = new SecurityManager();
+            return secManager.IsAllowed(permission, userId);
+        }
         private Dictionary<int, BPDefinition> GetCachedBPDefinitions()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetBPDefinitions",
@@ -89,6 +142,8 @@ namespace Vanrise.BusinessProcess.Business
         #endregion
 
         #region mapper
+
+       
         private BPDefinitionDetail BPDefinitionDetailMapper(BPDefinition bpDefinition)
         {
             if (bpDefinition == null)

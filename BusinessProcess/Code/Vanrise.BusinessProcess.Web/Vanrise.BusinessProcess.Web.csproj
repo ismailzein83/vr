@@ -185,8 +185,10 @@
     <Content Include="BusinessProcess\Directives\BPBusinessRuleSet\bp-business-rule-set-selector.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleSet\Templates\BPBusinessRuleSetDetailTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleSet\Templates\BPBusinessRuleSetGridTemplate.html" />
+    <Content Include="BusinessProcess\Directives\BPDefinition\bp-technical-definition-management-grid.js" />
     <Content Include="BusinessProcess\Directives\BPDefinition\bp-definition-management-grid.js" />
     <Content Include="BusinessProcess\Directives\BPDefinition\bp-definition-selector.js" />
+    <Content Include="BusinessProcess\Directives\BPDefinition\Templates\BPTechnicalDefinitionGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPDefinition\Templates\BPDefinitionGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-tracking-monitor.js" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-tracking-history.js" />
@@ -224,7 +226,11 @@
     <Content Include="BusinessProcess\Views\BPBusinessRule\BPBusinessRuleSetManagementController.js" />
     <Content Include="BusinessProcess\Views\BPBusinessRule\BPBusinessRuleSetEditor.html" />
     <Content Include="BusinessProcess\Views\BPBusinessRule\BPBusinessRuleSetEditorController.js" />
+    <Content Include="BusinessProcess\Views\BPDefinition\BPTechnicalDefinitionEditor.html" />
+    <Content Include="BusinessProcess\Views\BPDefinition\BPTechnicalDefinitionEditorController.js" />
+    <Content Include="BusinessProcess\Views\BPDefinition\BPTechnicalDefinitionManagement.html" />
     <Content Include="BusinessProcess\Views\BPDefinition\BPDefinitionManagement.html" />
+    <Content Include="BusinessProcess\Views\BPDefinition\BPTechnicalDefinitionManagementController.js" />
     <Content Include="BusinessProcess\Views\BPDefinition\BPDefinitionManagementController.js" />
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceHistory.html" />
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceHistoryController.js" />

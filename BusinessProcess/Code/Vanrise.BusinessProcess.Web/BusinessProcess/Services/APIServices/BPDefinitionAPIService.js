@@ -8,7 +8,9 @@
         function GetFilteredBPDefinitions(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPDefinition", "GetFilteredBPDefinitions"), input);
         }
-
+        function GetFilteredBPDefinitionsForTechnical(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPDefinition", "GetFilteredBPDefinitionsForTechnical"), input);
+        }
 
         function GetBPDefinitionsInfo(serializedFilter) {
             return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPDefinition", "GetBPDefinitionsInfo"), {
@@ -25,12 +27,16 @@
         function GetBPDefinitions() {
             return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPDefinition", "GetDefinitions"));
         }
-
+        function UpdateBPDefinition(BPDefinition) {
+            return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPDefinition", 'UpdateBPDefinition'), BPDefinition);
+        }
         return ({
             GetFilteredBPDefinitions: GetFilteredBPDefinitions,
+            GetFilteredBPDefinitionsForTechnical:GetFilteredBPDefinitionsForTechnical,
             GetBPDefinitionsInfo: GetBPDefinitionsInfo,
             GetBPDefintion: GetBPDefintion,
-            GetBPDefinitions: GetBPDefinitions
+            GetBPDefinitions: GetBPDefinitions,
+            UpdateBPDefinition:UpdateBPDefinition
         });
     }
 

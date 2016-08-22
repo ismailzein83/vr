@@ -20,6 +20,12 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemsSP("bp.sp_BPDefinition_GetAll", BPDefinitionMapper);
         }
 
+        public bool UpdateBPDefinition(BPDefinition bPDefinition)
+        {
+            int recordesEffected = ExecuteNonQuerySP("[bp].[sp_BPDefinition_Update]", bPDefinition.BPDefinitionID, bPDefinition.Title, Vanrise.Common.Serializer.Serialize(bPDefinition.Configuration));
+            return (recordesEffected > 0);
+        }
+
         public bool AreBPDefinitionsUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("[bp].[BPDefinition]", ref updateHandle);

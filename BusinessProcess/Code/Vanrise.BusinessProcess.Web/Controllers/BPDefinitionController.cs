@@ -25,6 +25,13 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredBPDefinitions(input, null));
         }
 
+        [HttpPost]
+        [Route("UpdateBPDefinition")]
+        public Vanrise.Entities.UpdateOperationOutput<BPDefinitionDetail> UpdateBPDefinition(BPDefinition bPDefinition)
+        {
+            BPDefinitionManager manager = new BPDefinitionManager();
+            return manager.UpdateBPDefinition(bPDefinition);
+        }
         [HttpGet]
         [Route("GetBPDefinitionsInfo")]
         public IEnumerable<BPDefinitionInfo> GetBPDefinitionsInfo(string serializedFilter)

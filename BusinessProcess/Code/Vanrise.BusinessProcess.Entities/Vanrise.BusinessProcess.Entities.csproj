@@ -52,6 +52,9 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseProcessInputArgument.cs" />
@@ -73,6 +76,10 @@
     <Compile Include="BPTrackingUpdateOutput.cs" />
     <Compile Include="BPInstanceUpdateOutput.cs" />
     <Compile Include="BPTrackingMessageDetail.cs" />
+    <Compile Include="BPViewSettings.cs" />
+    <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
+    <Compile Include="BusinessManagers\IBPDefinitionManager.cs" />
+    <Compile Include="BusinessManagers\IBusinessManager.cs" />
     <Compile Include="BusinessRules\BPBusinessRuleAction.cs" />
     <Compile Include="BusinessRules\BPBusinessRuleActionConfig.cs" />
     <Compile Include="BusinessRules\BPBusinessRuleDefinitionDetail.cs" />

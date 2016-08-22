@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.BusinessProcess.Entities
 {
@@ -28,5 +29,14 @@ namespace Vanrise.BusinessProcess.Entities
         public bool HasChildProcesses { get; set; }
         public bool HasBusinessRules { get; set; }
         public bool NotVisibleInManagementScreen { get; set; }
+        public BPDefinitionSecurity Security { get; set; }
+    }
+
+    public class BPDefinitionSecurity
+    {
+        public RequiredPermissionSettings View { get; set; }
+        public RequiredPermissionSettings StartNewInstance { get; set; }
+        public RequiredPermissionSettings ScheduleTask { get; set; }
+
     }
 }
