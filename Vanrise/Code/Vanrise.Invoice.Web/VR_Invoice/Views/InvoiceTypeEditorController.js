@@ -100,7 +100,7 @@
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
-                  $scope.isLoading = false;
+                  $scope.scopeModel.isLoading = false;
               });
         }
 

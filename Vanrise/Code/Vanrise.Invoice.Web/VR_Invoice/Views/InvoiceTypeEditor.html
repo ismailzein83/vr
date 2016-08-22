@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="VR_Invoice_InvoiceTypeEditorController" vr-loader="isLoading" width="'50%'">
+﻿<div vr-modalcontent ng-controller="VR_Invoice_InvoiceTypeEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
     <vr-modalbody>
         <vr-form name="formInvoiceTypeEditor">
             <vr-tabs>
@@ -23,22 +23,22 @@
                     </vr-row>
                     <vr-invoicetype-invoicegenerator on-ready="scopeModel.onInvoiceGeneratorReady" normal-col-num="4" isrequired="true"></vr-invoicetype-invoicegenerator>
                 </vr-tab>
-              
-                  <vr-tab header="'Grid Settings'">
-                      <vr-section title="Grid Columns">
-                          <vr-row removeline>
-                              <vr-columns width="fullrow">
-                                  <vr-invoicetype-maingridcolumns on-ready="scopeModel.onMainGridColumnsReady"></vr-invoicetype-maingridcolumns>
-                              </vr-columns>
-                          </vr-row>
-                      </vr-section>
-                      <vr-section title="Grid Actions">
-                          <vr-row removeline>
-                              <vr-columns width="fullrow">
-                                  <vr-invoicetype-invoicegridactions on-ready="scopeModel.onInvoiceGridActionsReady"></vr-invoicetype-invoicegridactions>
-                              </vr-columns>
-                          </vr-row>
-                      </vr-section>
+
+                <vr-tab header="'Grid Settings'">
+                    <vr-section title="Grid Columns">
+                        <vr-row removeline>
+                            <vr-columns width="fullrow">
+                                <vr-invoicetype-maingridcolumns on-ready="scopeModel.onMainGridColumnsReady"></vr-invoicetype-maingridcolumns>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-section>
+                    <vr-section title="Grid Actions">
+                        <vr-row removeline>
+                            <vr-columns width="fullrow">
+                                <vr-invoicetype-invoicegridactions on-ready="scopeModel.onInvoiceGridActionsReady"></vr-invoicetype-invoicegridactions>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-section>
                 </vr-tab>
                 <vr-tab header="'Sub Sections Settings'">
                     <vr-row removeline>
