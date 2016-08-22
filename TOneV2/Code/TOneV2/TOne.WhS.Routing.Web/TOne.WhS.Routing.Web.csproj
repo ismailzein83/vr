@@ -165,6 +165,7 @@
     <Content Include="WhS_Routing\Constant\TimeSettingsTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RoutingProcessTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RoutingSaleZoneRangeOptions.js" />
+    <Content Include="WhS_Routing\Constant\TOneRouteRangeType.js" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\Templates\CustomerRouteDetailTemplate.html" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\Templates\CustomerRouteGridTemplate.html" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\vr-whs-routing-customerroute-details.js" />
@@ -193,6 +194,8 @@
     <Content Include="WhS_Routing\Directives\Extensions\SupplierZoneToRPOptionPolicies\vr-whs-routing-policy-rate-average.js" />
     <Content Include="WhS_Routing\Directives\Extensions\SupplierZoneToRPOptionPolicies\vr-whs-routing-policy-rate-highest.js" />
     <Content Include="WhS_Routing\Directives\Extensions\SupplierZoneToRPOptionPolicies\vr-whs-routing-policy-rate-lowest.js" />
+    <Content Include="WhS_Routing\Directives\MainExtensions\RouteReader\Templates\RouteSyncReaderTemplate.html" />
+    <Content Include="WhS_Routing\Directives\MainExtensions\RouteReader\vr-whs-routing-routesyncreader.js" />
     <Content Include="WhS_Routing\Directives\ProcessInput\Templates\BuildRouteProcessTemplate.html" />
     <Content Include="WhS_Routing\Directives\ProcessInput\Templates\BuildRoutesByCodePrefixTemplate.html" />
     <Content Include="WhS_Routing\Directives\ProcessInput\Templates\RPBuildProductRoutesProcessTemplate.html" />
