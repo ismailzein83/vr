@@ -106,6 +106,11 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
                 }
             }
 
+            var today = new Date();
+            var importedRateBED = new Date(Date.parse(dataItem.ImportedRateBED));
+            if (importedRateBED > today)
+                dataItem.ImportedRate += ' ( Future )';
+
             switch (dataItem.ChangeTypeZone) {
 
                 case WhS_SupPL_ZoneChangeTypeEnum.New.value:

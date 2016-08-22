@@ -53,6 +53,11 @@ function (WhS_CP_CodePreparationPreviewAPIService, WhS_CP_CodeChangeTypeEnum, VR
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_CP_CodePreparationPreviewAPIService.GetFilteredRatesPreview(dataRetrievalInput)
                     .then(function (response) {
+                        if (response && response.Data) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                mapDataNeeded(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -60,6 +65,13 @@ function (WhS_CP_CodePreparationPreviewAPIService, WhS_CP_CodeChangeTypeEnum, VR
                     });
             };
 
+        }
+
+        function mapDataNeeded(dataItem) {
+            var today = new Date();
+            var bED = new Date(Date.parse(dataItem.Entity.BED));
+            if (bED > today)
+                dataItem.Entity.Rate += ' ( Future )';
         }
 
     }
