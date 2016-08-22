@@ -162,6 +162,8 @@
     <Content Include="WhS_Invoice\Directives\CutomerInvoiceItem\whs-invoice-invoiceitem-customer.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceCarrier\whs-invoice-carrier-customer-selector.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceCarrier\whs-invoice-carrier-selector.js" />
+    <Content Include="WhS_Invoice\Directives\MainExtensions\CustomerInvoice\Templates\CustomerInvoiceGeneratorTemplate.html" />
+    <Content Include="WhS_Invoice\Directives\MainExtensions\CustomerInvoice\whs-invoice-invoicetype-customerinvoicegenerator.js" />
     <Content Include="WhS_Invoice\ModuleInitialization.js" />
     <Content Include="WhS_Invoice\Services\APIServices\InvoiceAPIService.js" />
   </ItemGroup>

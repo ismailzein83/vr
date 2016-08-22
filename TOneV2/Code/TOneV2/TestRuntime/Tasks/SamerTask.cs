@@ -112,7 +112,7 @@ namespace TestRuntime.Tasks
                                     new RDLCReportDataSource
                                     {
                                         DataSourceName = "CustomerInvoiceItems",
-                                        Settings = new ItemSetNameSettings 
+                                        Settings = new RDLCItemsDataSourceSettings 
                                         {
                                             ItemSetNames = new List<string>{"Customer"}
                                         }
