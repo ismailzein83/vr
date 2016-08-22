@@ -32,7 +32,7 @@ namespace TOne.WhS.Routing.Business
                 RoutingCustomerInfoDetails item = new RoutingCustomerInfoDetails()
                 {
                     CustomerId = customerInfo.CustomerId,
-                    SellingProductId = customerSellingProduct.CustomerSellingProductId
+                    SellingProductId = customerSellingProduct.SellingProductId
                 };
 
                 customerInfoDetails.Add(item);
@@ -48,9 +48,11 @@ namespace TOne.WhS.Routing.Business
 
             DateTime effectiveDate = effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now;
 
-            SettingManager settingManager = new SettingManager();
-            RouteTechnicalSettingData data = settingManager.GetSetting<RouteTechnicalSettingData>(Constants.RouteTechnicalSettings);
-            CurrencySettingData systemCurrency = settingManager.GetSetting<CurrencySettingData>(Vanrise.Common.Business.Constants.BaseCurrencySettingType);
+            Vanrise.Common.Business.ConfigManager commonConfigManager = new Vanrise.Common.Business.ConfigManager();
+            int systemCurrencyId = commonConfigManager.GetSystemCurrencyId();
+            
+            TOne.WhS.Routing.Business.ConfigManager routingConfigManager = new TOne.WhS.Routing.Business.ConfigManager();
+            int customerTransformationId = routingConfigManager.GetCustomerTransformationId();
 
             DataTransformer dataTransformer = new DataTransformer();
 
@@ -66,7 +68,7 @@ namespace TOne.WhS.Routing.Business
 
                     if (customerZoneRate != null && customerZoneRate.Rate != null)
                     {
-                        var output = dataTransformer.ExecuteDataTransformation(data.RouteRuleDataTransformation.CustomerTransformationId, (context) =>
+                        var output = dataTransformer.ExecuteDataTransformation(customerTransformationId, (context) =>
                         {
                             context.SetRecordValue("CustomerId", customerInfo.CustomerId);
                             context.SetRecordValue("SaleZoneId", customerZone.SaleZoneId);
@@ -79,7 +81,7 @@ namespace TOne.WhS.Routing.Business
                         decimal rateValue = output.GetRecordValue("EffectiveRate");
                         int currencyId = output.GetRecordValue("SaleCurrencyId");
 
-                        rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrency.CurrencyId, effectiveDate), 8);
+                        rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, effectiveDate), 8);
                         var customerZoneRoutingProduct = customerZoneRoutingProductLocator.GetCustomerZoneRoutingProduct(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
 
                         CustomerZoneDetail customerZoneDetail = new CustomerZoneDetail
@@ -112,9 +114,11 @@ namespace TOne.WhS.Routing.Business
 
             if (supplierRates != null)
             {
-                SettingManager settingManager = new SettingManager();
-                RouteTechnicalSettingData data = settingManager.GetSetting<RouteTechnicalSettingData>(Constants.RouteTechnicalSettings);
-                CurrencySettingData systemCurrency = settingManager.GetSetting<CurrencySettingData>(Vanrise.Common.Business.Constants.BaseCurrencySettingType);
+                Vanrise.Common.Business.ConfigManager commonConfigManager = new Vanrise.Common.Business.ConfigManager();
+                int systemCurrencyId = commonConfigManager.GetSystemCurrencyId();
+
+                TOne.WhS.Routing.Business.ConfigManager routingConfigManager = new TOne.WhS.Routing.Business.ConfigManager();
+                int supplierTransformationId = routingConfigManager.GetSupplierTransformationId();
 
                 DataTransformer dataTransformer = new DataTransformer();
 
@@ -126,7 +130,7 @@ namespace TOne.WhS.Routing.Business
                 {
                     var priceList = supplierPriceListManager.GetPriceList(supplierRate.PriceListId);
 
-                    var output = dataTransformer.ExecuteDataTransformation(data.RouteRuleDataTransformation.SupplierTransformationId, (context) =>
+                    var output = dataTransformer.ExecuteDataTransformation(supplierTransformationId, (context) =>
                     {
                         context.SetRecordValue("SupplierId", priceList.SupplierId);
                         context.SetRecordValue("SupplierZoneId", supplierRate.ZoneId);
@@ -137,7 +141,7 @@ namespace TOne.WhS.Routing.Business
 
                     decimal rateValue = output.GetRecordValue("EffectiveRate");
                     int currencyId = output.GetRecordValue("SupplierCurrencyId");
-                    rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrency.CurrencyId, effectiveDate), 8);
+                    rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, effectiveDate), 8);
 
                     SupplierZoneDetail supplierZoneDetail = new SupplierZoneDetail
                     {

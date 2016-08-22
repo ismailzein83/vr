@@ -13,12 +13,12 @@ namespace TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors
         RuleBehaviorByCodeAsPrefix _ruleBehaviorByCodeAsPrefix = new RuleBehaviorByCodeAsPrefix();
 
         public override IEnumerable<Vanrise.Rules.RuleNode> StructureRules(IEnumerable<Vanrise.Rules.BaseRule> rules, out List<Vanrise.Rules.BaseRule> notMatchRules)
-        {            
+        {
             List<Vanrise.Rules.BaseRule> notMatchRules1;
             var nodes1 = _ruleBehaviorByCodeAsKey.StructureRules(rules, out notMatchRules1);
             List<Vanrise.Rules.BaseRule> notMatchRules2;
             var nodes2 = _ruleBehaviorByCodeAsPrefix.StructureRules(rules, out notMatchRules2);
-           
+
             List<Vanrise.Rules.RuleNode> allNodes = new List<Vanrise.Rules.RuleNode>();
             if (nodes1 != null)
                 allNodes.AddRange(nodes1);
@@ -29,19 +29,25 @@ namespace TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors
                 notMatchRules = null;
             else
                 notMatchRules = notMatchRules1.Intersect(notMatchRules2).ToList();
-           
+
             return allNodes;
         }
 
-        public override Vanrise.Rules.RuleNode GetMatchedNode(object target)
+        public override List<Vanrise.Rules.RuleNode> GetMatchedNodes(object target)
         {
-            Vanrise.Rules.RuleNode matchedRule = null;
-            matchedRule = _ruleBehaviorByCodeAsKey.GetMatchedNode(target);
-            if (matchedRule == null)
-                matchedRule = _ruleBehaviorByCodeAsPrefix.GetMatchedNode(target);
-            return matchedRule;
+            List<Vanrise.Rules.RuleNode> matchedRules = new List<Vanrise.Rules.RuleNode>();
+            
+            List<Vanrise.Rules.RuleNode> matchedRulesByKey = _ruleBehaviorByCodeAsKey.GetMatchedNodes(target);
+            if (matchedRulesByKey != null)
+                matchedRules.AddRange(matchedRulesByKey);
+
+            List<Vanrise.Rules.RuleNode> matchedRulesByPrefix = _ruleBehaviorByCodeAsPrefix.GetMatchedNodes(target);
+            if (matchedRulesByPrefix != null)
+                matchedRules.AddRange(matchedRulesByPrefix);
+
+            return matchedRules.Count > 0 ? matchedRules : null;
         }
-        
+
         public override Vanrise.Rules.BaseRuleStructureBehavior CreateNewBehaviorObject()
         {
             return new RuleBehaviorByCode();

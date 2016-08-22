@@ -83,7 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountManagerManager.cs" />
-    <Compile Include="ConfigurationManager.cs" />
+    <Compile Include="ConfigManager.cs" />
     <Compile Include="CarrierAccounts\CustomerGroupContext.cs" />
     <Compile Include="CarrierAccounts\SupplierGroupContext.cs" />
     <Compile Include="CarrierAccounts\SuppliersWithZonesGroupContext.cs" />

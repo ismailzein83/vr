@@ -9,7 +9,7 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class ConfigurationManager
+    public class ConfigManager
     {
         public int GetOffPeakRateTypeId()
         {
