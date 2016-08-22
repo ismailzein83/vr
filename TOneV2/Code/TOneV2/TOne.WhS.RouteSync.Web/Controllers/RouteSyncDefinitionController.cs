@@ -9,7 +9,8 @@ using Vanrise.Web.Base;
 
 namespace TOne.WhS.RouteSync.Web.Controllers
 {
-    [RoutePrefix(Constants.ROUTE_PREFIX + "RouteSyncDefinition")] 
+    [RoutePrefix(Constants.ROUTE_PREFIX + "RouteSyncDefinition")]
+    [JSONWithTypeAttribute]
     public class RouteSyncDefinitionController : BaseAPIController
     {
         RouteSyncDefinitionManager _manager = new RouteSyncDefinitionManager();
@@ -40,6 +41,13 @@ namespace TOne.WhS.RouteSync.Web.Controllers
         public Vanrise.Entities.UpdateOperationOutput<RouteSyncDefinitionDetail> UpdateRouteSyncDefinition(RouteSyncDefinition RouteSyncDefinitionItem)
         {
             return _manager.UpdateRouteSyncDefinition(RouteSyncDefinitionItem);
+        }
+
+        [HttpGet]
+        [Route("GetRouteReaderExtensionConfigs")]
+        public IEnumerable<RouteReaderConfig> GetRouteReaderExtensionConfigs()
+        {
+            return _manager.GetRouteReaderExtensionConfigs();
         }
 
         [HttpGet]

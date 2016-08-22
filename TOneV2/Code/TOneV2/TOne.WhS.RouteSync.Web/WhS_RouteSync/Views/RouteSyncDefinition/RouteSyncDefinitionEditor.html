@@ -1,1 +1,31 @@
-﻿ 
+﻿<div vr-modalcontent ng-controller="WhS_RouteSync_RouteSyncDefinitionEditorController" width="'40%'" vr-loader="scopemodel.isloading">
+    <vr-modalbody>
+        <vr-form name="formRouteSyncDefinitionEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox label="Name" value="scopeModel.name" isrequired></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <whs-routesync-switch-selector on-ready="scopeModel.onSwitchSelectorReady" isrequired="true" ismultipleselection></whs-routesync-switch-selector>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <whs-routesync-routereader-selective on-ready="scopeModel.onRouteReaderSelectiveReady" isrequired></whs-routesync-routereader-selective>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formRouteSyncDefinitionEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div> 

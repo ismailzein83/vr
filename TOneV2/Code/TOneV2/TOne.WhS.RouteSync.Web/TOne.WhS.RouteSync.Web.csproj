@@ -137,6 +137,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\RouteSyncDefinitionController.cs" />
     <Compile Include="Controllers\RadiusDataManagerSettingsController.cs" />
+    <Compile Include="Controllers\SwitchController.cs" />
     <Compile Include="Controllers\SwitchRouteSynchronizerController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -153,12 +154,15 @@
     <Content Include="WhS_RouteSync\Directives\RadiusDataManagers\Templates\RadiusDataManagersTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\RadiusDataManagers\whs-routesync-radiusdatamanagers-settings.js" />
     <Content Include="WhS_RouteSync\Directives\RouteSyncDefinition\Templates\RouteSyncDefinitionGridTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\RouteSyncDefinition\whs-routesync-routereader-selective.js" />
     <Content Include="WhS_RouteSync\Directives\RouteSyncDefinition\whs-routesync-routesyncdefinition-grid.js" />
     <Content Include="WhS_RouteSync\Directives\RouteSyncDefinition\whs-routesync-routesyncdefinition-selector.js" />
     <Content Include="WhS_RouteSync\Directives\SwitchRouteSynchronizer\Templates\SwitchRouteSynchronizerTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\SwitchRouteSynchronizer\whs-routesync-switchroutesynchronizer-settings.js" />
+    <Content Include="WhS_RouteSync\Directives\Switch\whs-routesync-switch-selector.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\RouteSyncDefinitionAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\RadiusDataManagerSettingAPIService.js" />
+    <Content Include="WhS_RouteSync\Services\APIServices\SwitchAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\SwitchRouteSynchronizerAPIService.js" />
     <Content Include="WhS_RouteSync\Services\RouteSyncDefinitionService.js" />
     <Content Include="WhS_RouteSync\Services\SwitchRouteSynchronizerService.js" />
@@ -167,7 +171,9 @@
     <Content Include="WhS_RouteSync\Views\RouteSyncDefinition\RouteSyncDefinitionManagement.html" />
     <Content Include="WhS_RouteSync\Views\RouteSyncDefinition\RouteSyncDefinitionManagementController.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="WhS_RouteSync\Directives\Switch\Templates\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Business\TOne.WhS.RouteSync.Business.csproj">
       <Project>{31466bbd-3579-4033-b991-12d044564a32}</Project>

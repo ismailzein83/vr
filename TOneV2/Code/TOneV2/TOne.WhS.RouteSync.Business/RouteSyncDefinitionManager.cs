@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.RouteSync.Data;
 using TOne.WhS.RouteSync.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace TOne.WhS.RouteSync.Business
@@ -80,6 +81,12 @@ namespace TOne.WhS.RouteSync.Business
             var allRouteSyncDefinitions = GetCachedRouteSyncDefinitions();
             Func<RouteSyncDefinition, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRouteSyncDefinitions.ToBigResult(input, filterExpression, RouteSyncDefinitionDetailMapper));
+        }
+
+        public IEnumerable<RouteReaderConfig> GetRouteReaderExtensionConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<RouteReaderConfig>(RouteReaderConfig.EXTENSION_TYPE);
         }
 
         public IEnumerable<RouteSyncDefinitionInfo> GetRouteSyncDefinitionsInfo()
