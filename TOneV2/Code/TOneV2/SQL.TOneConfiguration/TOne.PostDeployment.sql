@@ -384,7 +384,7 @@ as (select * from (values
 ('WhS_BE/CarrierAccount/GetFilteredCarrierAccounts','WhS_BE_CarrierAccount: View'),
 ('WhS_BE/CarrierAccount/UpdateCarrierAccount','WhS_BE_CarrierAccount: Edit'),
 ('WhS_BE/CarrierAccount/AddCarrierAccount','WhS_BE_CarrierAccount: Add'),
-('WhS_BE/CarrierAccount/GetCarrierAccountCurrency',null),
+('WhS_BE/CarrierAccount/GetCarrierAccountCurrencyId',null),
 ('WhS_BE/CarrierAccount/GetCarrierAccount',null),
 ('WhS_BE/CarrierAccount/GetCarrierAccountInfo',null),
 ('WhS_BE/CarrierAccount/GetSupplierGroupTemplates',null),
@@ -578,6 +578,7 @@ as (select * from (values
 ('WhS_Sales/SellingRule/UpdateRule','WhS_Sales_SellingRules: Edit'),
 ('WhS_Sales/SellingRule/DeleteRule','WhS_Sales_SellingRules: Delete'),
 ('WhS_Sales/SellingRule/GetCodeCriteriaGroupTemplates',null),
+('WhS_BE/CarrierAccount/GetCarrierAccountCurrency',null),
 ('WhS_Sales/SellingRule/GetSellingRuleSettingsTemplates',null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
