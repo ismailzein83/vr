@@ -16,8 +16,8 @@ namespace Vanrise.GenericData.MainExtensions.VRObjectTypes
             if (dataRecordObjectType == null)
                 throw new NullReferenceException("dataRecordObjectType");
             int dataRecordTypeId = dataRecordObjectType.RecordTypeId;
-
-            return context.Object[this.FieldName];
+            return Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(context.Object);
+            
         }
     }
 }
