@@ -448,6 +448,13 @@
     </Content>
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <None Include="Web.config.exclude" />
+    <None Include="Web.config.Debug.exclude">
+      <DependentUpon>Web.config.exclude</DependentUpon>
+    </None>
+    <None Include="Web.config.Release.exclude">
+      <DependentUpon>Web.config.exclude</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web\Vanrise.Web.csproj">

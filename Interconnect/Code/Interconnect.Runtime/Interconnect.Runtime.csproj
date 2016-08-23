@@ -276,6 +276,7 @@
     <Compile Include="Tasks\IsmailTask.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config.exclude" />
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
