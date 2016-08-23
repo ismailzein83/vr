@@ -33,31 +33,17 @@ app.directive('whsRoutesyncTechnicalsettingsEditor', ['UtilsService', 'VRUIUtils
                 var api = {};
 
                 api.load = function (payload) {
-                    //var promises = [];
-                    //var switchInfoGetter;
-
-                    console.log(payload);
-
                     if (payload != undefined && payload.data != undefined) {
-                        //console.log(payload.data.SwitchInfoGetter);
-                        //console.log(JSON.stringify(payload.data.SwitchInfoGetter));
-
-                        $scope.scopeModel.switchInfoGetter = payload.data;
+                        $scope.scopeModel.switchInfoGetter = JSON.stringify(payload.data.SwitchInfoGetter);
                     }
                 }
 
                 api.getData = function () {
-
                     var data = {
-                        $type: "TOne.WhS.RouteSync.Entities.RouteSyncTechnicalSettings, TOne.WhS.Routing.Entities",
-                        SwitchInfoGetter: {
-                            $type: "TOne.WhS.BusinessEntity.Business.RouteSyncSwitchGetter, TOne.WhS.BusinessEntity.Business",
-                        }
+                        $type: "TOne.WhS.RouteSync.Entities.RouteSyncTechnicalSettings, TOne.WhS.RouteSync.Entities",
+                        SwitchInfoGetter: UtilsService.parseStringToJson($scope.scopeModel.switchInfoGetter)
                     };
-                    console.log(UtilsService.serializetoJson(data));
-
-                    return UtilsService.serializetoJson(data);
-                    //return data;    
+                    return data;    
                 }
 
                 if (ctrl.onReady != null)
