@@ -386,6 +386,7 @@
     <Build Include="VR_BEBridge\Tables\BEReceiveDefinition.sql" />
     <Build Include="VR_BEBridge\Stored Procedures\sp_BEReceiveDefinition_GetAll.sql" />
     <Build Include="Security\VR_BEBridge.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPDefinition_Update.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
