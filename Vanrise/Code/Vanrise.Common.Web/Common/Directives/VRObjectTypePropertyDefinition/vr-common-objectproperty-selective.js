@@ -109,7 +109,6 @@
 
             function loadObjectPropertySelector(objectTypeConfigId) {
 
-                console.log(objectTypeConfigId);
                 var objectPropertySelectorLoadDeferred = UtilsService.createPromiseDeferred();
                 loadObjectTypeConfigs().then(function () {
                     getObjectPropertySelectorTemplateConfigs(objectTypeConfigId).then(function () {
@@ -122,7 +121,6 @@
             function loadObjectTypeConfigs() {
                 return VRCommon_VRObjectTypeAPIService.GetObjectTypeExtensionConfigs().then(function (response) {
 
-                    console.log(response);
                     if (response != null) {
                         objectTypeConfigs = [];
                         for (var i = 0; i < response.length; i++) {

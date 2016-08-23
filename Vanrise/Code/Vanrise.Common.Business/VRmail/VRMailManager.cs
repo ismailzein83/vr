@@ -18,8 +18,10 @@ namespace Vanrise.Common.Business
         private void SendMail(VRMailMessageTemplate mailMessageTemplate, Dictionary<string, dynamic> objects)
         {
             var mailMessageType = GetMailMessageType(mailMessageTemplate.VRMailMessageTypeId);
+
             Dictionary<string, dynamic> variableValuesObj = new VRObjectManager().EvaluateVariables(mailMessageTemplate.Settings.Variables, objects, mailMessageType.Settings.Objects);
-            var mailContext = new VRMailContext { Variables = variableValuesObj };
+
+            var mailContext = new VRMailContext { ObjectVariables = variableValuesObj };
             string to = EvaluateExpression(mailMessageTemplate.Settings.To, mailContext);
             string cc = EvaluateExpression(mailMessageTemplate.Settings.CC, mailContext);
             string subject = EvaluateExpression(mailMessageTemplate.Settings.Subject, mailContext);
@@ -36,7 +38,6 @@ namespace Vanrise.Common.Business
             {
                 objectVariables.Add(objectVaribale.Key, GetObjectTypeDefinitions(objectVaribale.Value.VRObjectTypeDefinitionId));
             }
-
 
             //Dictionary<string, dynamic> variableValuesObj = new VRObjectManager().EvaluateVariables(mailMessageTemplate.Settings.Variables, objects, mailMessageType.Settings.Objects);
             //var mailContext = new VRMailContext { Variables = variableValuesObj };
@@ -94,6 +95,11 @@ namespace Vanrise.Common.Business
 
     public class VRMailContext
     {
-        public Dictionary<string, dynamic> Variables { get; set; }
+        public Dictionary<string, dynamic> ObjectVariables { get; set; }
+
+        public void GetVal()
+        {
+ 
+        }
     }
 }

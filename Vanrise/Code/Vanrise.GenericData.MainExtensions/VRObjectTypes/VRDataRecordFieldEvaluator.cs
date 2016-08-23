@@ -10,14 +10,15 @@ namespace Vanrise.GenericData.MainExtensions.VRObjectTypes
     public class VRDataRecordFieldEvaluator : VRObjectPropertyEvaluator
     {
         public string FieldName { get; set; }
+
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)
         {
             VRDataRecordObjectType dataRecordObjectType = context.ObjectType as VRDataRecordObjectType;
             if (dataRecordObjectType == null)
                 throw new NullReferenceException("dataRecordObjectType");
             int dataRecordTypeId = dataRecordObjectType.RecordTypeId;
-            return Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(context.Object);
-            
+
+            return Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(context.Object);           
         }
     }
 }

@@ -23,12 +23,29 @@ namespace TOne.WhS.Runtime.Tasks
             //IEnumerable<CodePrefixInfo> codePrefixesResult = pcp.PrepareCodePrefixes_Main();
             //DisplayList(codePrefixesResult);
 
-            VRMailMessageTemplateTask mail = new VRMailMessageTemplateTask();
-            mail.VRMailMessageTemplate_Main();
+            Console.WriteLine("Ali Atoui: VRMailMessageTemplate");
+
+            Guid guid = new Guid("E487B8FB-398B-4CEC-AB12-0229AAF01A90");
+            //VRMailMessageTemplateManager vrMailMessageTemplateManager = new VRMailMessageTemplateManager();
+            //VRMailMessageTemplate vrMailMessageTemplate = vrMailMessageTemplateManager.GetMailMessageTemplate(guid);
+            //VRMailMessageTypeManager vrMailMessageTypeManager = new VRMailMessageTypeManager();
+            //VRMailMessageType vrMailMessageType = vrMailMessageTypeManager.GetMailMessageType(vrMailMessageTemplate.VRMailMessageTypeId);
+
+            //Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+            //foreach (var objectVaribale in vrMailMessageType.Settings.Objects)
+            //    objects.Add(objectVaribale.Key, objectVaribale.Value);
+
+            Carrier carrier = new Carrier() { Id = 100, CustomerId = 101 };
+
+            Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+            objects.Add("Carrier", carrier);
+
+            VRMailManager vrMailManager = new VRMailManager();
+            vrMailManager.SendMail(guid, objects);
+
             Console.ReadLine();
         }
         #endregion
-
 
         #region Private Methods
         void DisplayList(IEnumerable<CodePrefixInfo> codePrefixes)
@@ -42,27 +59,20 @@ namespace TOne.WhS.Runtime.Tasks
     }
 
 
+    public class Carrier
+    {
+        public int Id {get; set;}
+
+        public int CustomerId { get; set; }
+    }
+
+
+
     public class VRMailMessageTemplateTask
     {
         #region Public Method
         public void VRMailMessageTemplate_Main()
         {
-            Console.WriteLine("Ali Atoui: VRMailMessageTemplate");
-
-            Guid guid = new Guid("E487B8FB-398B-4CEC-AB12-0229AAF01A90");
-            //VRMailMessageTemplateManager vrMailMessageTemplateManager = new VRMailMessageTemplateManager();
-            //VRMailMessageTemplate vrMailMessageTemplate = vrMailMessageTemplateManager.GetMailMessageTemplate(guid);
-            //VRMailMessageTypeManager vrMailMessageTypeManager = new VRMailMessageTypeManager();
-            //VRMailMessageType vrMailMessageType = vrMailMessageTypeManager.GetMailMessageType(vrMailMessageTemplate.VRMailMessageTypeId);
-
-            //Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-            //foreach (var objectVaribale in vrMailMessageType.Settings.Objects)
-            //    objects.Add(objectVaribale.Key, objectVaribale.Value);
-
-            VRMailManager vrMailManager = new VRMailManager();
-            vrMailManager.SendMail(guid);
-
-            Console.ReadLine();
 
         }
         #endregion
