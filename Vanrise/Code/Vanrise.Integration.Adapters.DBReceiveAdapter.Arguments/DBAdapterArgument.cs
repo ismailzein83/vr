@@ -28,5 +28,7 @@ namespace Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments
                 return this.NumberOfParallelReader;
             }
         }
+
+        public int CommandTimeoutInSeconds { get; set; }
     }
 }

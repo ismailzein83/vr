@@ -32,7 +32,7 @@ function (UtilsService) {
 
         function initializeController() {
             $scope.lastImportedId = 0;
-
+            $scope.cmdTimeoutInSec = 600;
             $scope.validateTimeOffset = function (value) {
 
                 if (value == undefined) return null;
@@ -75,7 +75,8 @@ function (UtilsService) {
                     ConnectionString: $scope.connectionString,
                     Query: $scope.query,
                     IdentifierColumnName: $scope.identifierColumnName,
-                    NumberOfParallelReader: $scope.numberOfParallelReader
+                    NumberOfParallelReader: $scope.numberOfParallelReader,
+                    CommandTimeoutInSeconds: $scope.cmdTimeoutInSec
                 };
                 if ($scope.isTimeRange)
                     obj.TimeOffset = $scope.timeOffSet;
@@ -92,10 +93,11 @@ function (UtilsService) {
 
 
             api.load = function (payload) {
-
+                
                 if (payload != undefined) {
                     var argumentData = payload.adapterArgument;
                     if (argumentData != undefined) {
+                        $scope.cmdTimeoutInSec = argumentData.CommandTimeoutInSeconds;
                         $scope.connectionString = argumentData.ConnectionString;
                         $scope.query = argumentData.Query;
                         $scope.identifierColumnName = argumentData.IdentifierColumnName;

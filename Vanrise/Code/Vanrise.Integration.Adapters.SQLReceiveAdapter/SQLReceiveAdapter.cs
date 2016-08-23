@@ -42,6 +42,7 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
                 connection.Open();
 
                 var command = new SqlCommand(queryWithNoTop, connection);
+                command.CommandTimeout = dbAdapterArgument.CommandTimeoutInSeconds != default(int) ? dbAdapterArgument.CommandTimeoutInSeconds : 600;
                 DefineParameters(command, dbAdapterArgument);
 
                 do
