@@ -9,5 +9,9 @@ namespace Vanrise.BusinessProcess.Entities
     public class BPDefinitionDetail
     {
         public BPDefinition Entity { get; set; }
+
+        public bool StartNewInstanceAccess { get; set; }
+
+        public bool ScheduleTaskAccess { get; set; }
     }
 }

@@ -35,13 +35,13 @@ namespace Vanrise.BusinessProcess.Business
                 if (!string.IsNullOrEmpty(input.Query.Title) && !prod.Title.ToLower().Contains(input.Query.Title.ToLower()))
                     return false;
 
-                if (viewableByUserId != null && !DoesUserHaveViewAccess((int)viewableByUserId,prod))
+                if (viewableByUserId.HasValue && !DoesUserHaveViewAccess((int)viewableByUserId,prod))
                     return false;
 
                 return true;
             };
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allBPDefinitions.ToBigResult(input, filterExpression, BPDefinitionDetailMapper));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allBPDefinitions.ToBigResult(input, filterExpression, (bpDefinition) => { return BPDefinitionDetailMapper(bpDefinition, viewableByUserId); }));
         }
 
         public IEnumerable<BPDefinitionInfo> GetBPDefinitionsInfo(BPDefinitionInfoFilter filter)
@@ -101,18 +101,24 @@ namespace Vanrise.BusinessProcess.Business
             }
             return false;
         }
+        public bool DoesUserHaveStartNewInstanceAccess(int userId,string bPDefinitionName)
+        {
+            var bPDefinition = GetDefinition(bPDefinitionName);
+            if (bPDefinition.Configuration.Security != null && bPDefinition.Configuration.Security.StartNewInstance != null && !DoesUserHaveBPPermission(userId, bPDefinition.Configuration.Security.StartNewInstance))
+                return false;
+            return true;
+        }
         #endregion
 
         #region private methods
 
         private bool DoesUserHaveViewAccess(int userId, BPDefinition bPDefinition)
         {
-            SecurityManager secManager = new SecurityManager();
             if (bPDefinition.Configuration.Security != null && bPDefinition.Configuration.Security.View != null && !DoesUserHaveBPPermission( userId , bPDefinition.Configuration.Security.View))
                 return false;
             return true;
         }
-
+        
         private bool DoesUserHaveBPPermission(int userId, RequiredPermissionSettings permission)
         {
             SecurityManager secManager = new SecurityManager();
@@ -143,16 +149,25 @@ namespace Vanrise.BusinessProcess.Business
 
         #region mapper
 
-       
-        private BPDefinitionDetail BPDefinitionDetailMapper(BPDefinition bpDefinition)
+        private BPDefinitionDetail BPDefinitionDetailMapper(BPDefinition bpDefinition , int? userID = null)
         {
             if (bpDefinition == null)
                 return null;
 
-            return new BPDefinitionDetail()
+            BPDefinitionDetail bpDefinitionDetail = new BPDefinitionDetail()
             {
                 Entity = bpDefinition,
             };
+            bpDefinitionDetail.ScheduleTaskAccess = true;
+            bpDefinitionDetail.StartNewInstanceAccess = true;
+            if (userID.HasValue)
+            {
+               
+                bpDefinitionDetail.ScheduleTaskAccess = bpDefinition.Configuration.Security !=null ? DoesUserHaveBPPermission((int)userID, bpDefinition.Configuration.Security.ScheduleTask) : true;
+                bpDefinitionDetail.StartNewInstanceAccess = bpDefinition.Configuration.Security !=null ?  DoesUserHaveBPPermission((int)userID, bpDefinition.Configuration.Security.StartNewInstance) : true;
+
+            }
+            return bpDefinitionDetail;
         }
 
         private BPDefinitionInfo BPDefinitionInfoMapper(BPDefinition bpDefinition)
@@ -166,6 +181,8 @@ namespace Vanrise.BusinessProcess.Business
                 Name = bpDefinition.Title
             };
         }
+
+    
         #endregion
     }
 }

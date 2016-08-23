@@ -12,6 +12,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "BPInstance")]
     public class BPInstanceController : BaseAPIController
     {
+        BPDefinitionManager _bpManager = new BPDefinitionManager();
         [HttpPost]
         [Route("GetUpdated")]
         public BPInstanceUpdateOutput GetUpdated(BPInstanceUpdateInput input)
@@ -47,11 +48,16 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
         [HttpPost]
         [Route("CreateNewProcess")]
-        public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput)
+        public object CreateNewProcess(CreateProcessInput createProcessInput)
         {
+            if (!_bpManager.DoesUserHaveStartNewInstanceAccess(Security.Entities.ContextFactory.GetContext().GetLoggedInUserId(),createProcessInput.InputArguments.ProcessName))
+                return GetUnauthorizedResponse();
+
             BPInstanceManager manager = new BPInstanceManager();
             createProcessInput.InputArguments.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             return manager.CreateNewProcess(createProcessInput);
         }
+       
+
     }
 }

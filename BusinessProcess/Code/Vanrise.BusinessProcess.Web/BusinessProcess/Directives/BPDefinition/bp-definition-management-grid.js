@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("businessprocessBpDefinitionManagementGrid", ["UtilsService", "VRNotificationService", "BusinessProcess_BPDefinitionAPIService", "BusinessProcess_BPInstanceService", "VRUIUtilsService","BusinessProcess_BPSchedulerTaskService",
-function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPIService, BusinessProcess_BPInstanceService, VRUIUtilsService, BusinessProcess_BPSchedulerTaskService) {
+app.directive("businessprocessBpDefinitionManagementGrid", ["UtilsService","VRNotificationService", "BusinessProcess_BPDefinitionAPIService", "BusinessProcess_BPInstanceAPIService", "BusinessProcess_BPInstanceService", "VRUIUtilsService", "BusinessProcess_BPSchedulerTaskService",
+function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPIService, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, VRUIUtilsService, BusinessProcess_BPSchedulerTaskService) {
 
     var directiveDefinitionObject = {
 
@@ -116,30 +116,50 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
 
         }
 
+        function attachPromis(dataItem) {
+            
+        }
 
+
+        
+       
+       
         function defineMenuActions() {
-            var startNewInstanceMenu = {
-                name: "Start New Instance", clicked: startNewInstance
-            };
-            var schedualTaskMenu = {
-                name: "Schedule a Task", clicked: scheduleTask
-            }
+           
 
             $scope.gridMenuActions = function (dataItem) {
+                var startNewInstanceMenu = {
+                    name: "Start New Instance",
+                    clicked: startNewInstance,
+                    haspermission: hasStartNewInstancePermission
+                };
+                var schedualTaskMenu = {
+                    name: "Schedule a Task",
+                    clicked: scheduleTask,
+                    haspermission: hasScheduleTaskPermission
+                };
                 var menuActions = [];
-                if (dataItem.Entity.Configuration.ManualExecEditor != undefined && dataItem.Entity.Configuration.ManualExecEditor != "")
-                {
+                if (dataItem.Entity.Configuration.ManualExecEditor != undefined && dataItem.Entity.Configuration.ManualExecEditor != "") {
                     menuActions.push(startNewInstanceMenu);
                 }
-                if (dataItem.Entity.Configuration.ScheduledExecEditor != undefined && dataItem.Entity.Configuration.ScheduledExecEditor != "")
-                {
+                if (dataItem.Entity.Configuration.ScheduledExecEditor != undefined && dataItem.Entity.Configuration.ScheduledExecEditor != "") {
                     menuActions.push(schedualTaskMenu);
                 }
                 return menuActions;
             };
-            
-        }
 
+        }
+        function hasScheduleTaskPermission(bpDefinitionObj) {
+            var actionPromise = UtilsService.createPromiseDeferred();
+            actionPromise.resolve(bpDefinitionObj.ScheduleTaskAccess);
+            return actionPromise.promise;
+
+        }
+        function hasStartNewInstancePermission(bpDefinitionObj) {
+            var actionPromise = UtilsService.createPromiseDeferred();
+            actionPromise.resolve(bpDefinitionObj.StartNewInstanceAccess);
+            return actionPromise.promise;
+        }
         function startNewInstance(bpDefinitionObj) {
             var onProcessInputCreated = function (processInstanceId) {
                 BusinessProcess_BPInstanceService.openProcessTracking(processInstanceId);
