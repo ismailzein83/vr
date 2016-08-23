@@ -374,5 +374,7 @@
     <Build Include="TOneWhS_RouteSync\Stored Procedures\sp_RouteSyncDefinition_Insert.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetEffectiveByOwner.sql" />
     <Build Include="TOneWhS_BE\User Defined Types\RoutingOwnerInfo.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceType_Update.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceType_Insert.sql" />
   </ItemGroup>
 </Project>
