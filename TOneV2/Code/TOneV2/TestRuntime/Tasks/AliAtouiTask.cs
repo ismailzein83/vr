@@ -12,7 +12,7 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Common;
 
-namespace TOne.WhS.Runtime.Tasks
+namespace TOne.WhS.Runtime.Tasks 
 {
     public class AliAtouiTask : ITask
     {   

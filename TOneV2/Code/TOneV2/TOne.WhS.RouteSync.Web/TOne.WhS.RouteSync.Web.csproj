@@ -157,6 +157,8 @@
     <Content Include="WhS_RouteSync\Directives\RouteSyncDefinition\whs-routesync-routereader-selective.js" />
     <Content Include="WhS_RouteSync\Directives\RouteSyncDefinition\whs-routesync-routesyncdefinition-grid.js" />
     <Content Include="WhS_RouteSync\Directives\RouteSyncDefinition\whs-routesync-routesyncdefinition-selector.js" />
+    <Content Include="WhS_RouteSync\Directives\RouteSyncTechnicalSettings\Templates\RouteSyncTechnicalSettingsTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\RouteSyncTechnicalSettings\whs-routesync-technicalsettings-editor.js" />
     <Content Include="WhS_RouteSync\Directives\SwitchRouteSynchronizer\Templates\SwitchRouteSynchronizerTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\SwitchRouteSynchronizer\whs-routesync-switchroutesynchronizer-settings.js" />
     <Content Include="WhS_RouteSync\Directives\Switch\whs-routesync-switch-selector.js" />
