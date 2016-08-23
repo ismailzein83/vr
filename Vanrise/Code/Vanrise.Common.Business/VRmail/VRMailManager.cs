@@ -15,16 +15,6 @@ namespace Vanrise.Common.Business
             SendMail(mailMessageTemplate, objects);
         }
 
-        private VRMailMessageTemplate GetMailMessageTemplate(Guid mailMessageTemplateId)
-        {
-            VRMailMessageTemplate mailMessageTemplate = new VRMailMessageTemplateManager().GetMailMessageTemplate(mailMessageTemplateId);
-            if (mailMessageTemplate == null)
-                throw new NullReferenceException(String.Format("mailMessageTemplate '{0}'", mailMessageTemplateId));
-            if (mailMessageTemplate.Settings == null)
-                throw new NullReferenceException(String.Format("mailMessageTemplate.Settings '{0}'", mailMessageTemplateId));
-            return mailMessageTemplate;
-        }
-
         private void SendMail(VRMailMessageTemplate mailMessageTemplate, Dictionary<string, dynamic> objects)
         {
             var mailMessageType = GetMailMessageType(mailMessageTemplate.VRMailMessageTypeId);
@@ -36,9 +26,34 @@ namespace Vanrise.Common.Business
             string body = EvaluateExpression(mailMessageTemplate.Settings.Body, mailContext);
         }
 
-        private static string EvaluateExpression(VRExpression expression, VRMailContext mailContext)
+        public void SendMail(Guid mailMessageTemplateId)
         {
-            return RazorEngine.Razor.Parse<VRMailContext>(expression.ExpressionString, mailContext);
+            var mailMessageTemplate = GetMailMessageTemplate(mailMessageTemplateId);
+            var mailMessageType = GetMailMessageType(mailMessageTemplate.VRMailMessageTypeId);
+
+            Dictionary<string, VRObjectTypeDefinition> objectVariables = new Dictionary<string, VRObjectTypeDefinition>();
+            foreach (var objectVaribale in mailMessageType.Settings.Objects)
+            {
+                objectVariables.Add(objectVaribale.Key, GetObjectTypeDefinitions(objectVaribale.Value.VRObjectTypeDefinitionId));
+            }
+
+
+            //Dictionary<string, dynamic> variableValuesObj = new VRObjectManager().EvaluateVariables(mailMessageTemplate.Settings.Variables, objects, mailMessageType.Settings.Objects);
+            //var mailContext = new VRMailContext { Variables = variableValuesObj };
+            //string to = EvaluateExpression(mailMessageTemplate.Settings.To, mailContext);
+            //string cc = EvaluateExpression(mailMessageTemplate.Settings.CC, mailContext);
+            //string subject = EvaluateExpression(mailMessageTemplate.Settings.Subject, mailContext);
+            //string body = EvaluateExpression(mailMessageTemplate.Settings.Body, mailContext);
+        }
+
+        private VRMailMessageTemplate GetMailMessageTemplate(Guid mailMessageTemplateId)
+        {
+            VRMailMessageTemplate mailMessageTemplate = new VRMailMessageTemplateManager().GetMailMessageTemplate(mailMessageTemplateId);
+            if (mailMessageTemplate == null)
+                throw new NullReferenceException(String.Format("mailMessageTemplate '{0}'", mailMessageTemplateId));
+            if (mailMessageTemplate.Settings == null)
+                throw new NullReferenceException(String.Format("mailMessageTemplate.Settings '{0}'", mailMessageTemplateId));
+            return mailMessageTemplate;
         }
 
         private VRMailMessageType GetMailMessageType(Guid mailMessageTypeId)
@@ -51,6 +66,22 @@ namespace Vanrise.Common.Business
             if (mailMessageType.Settings.Objects == null)
                 throw new NullReferenceException(String.Format("mailMessageType.Settings.Objects '{0}'", mailMessageTypeId));
             return mailMessageType;
+        }
+
+        private VRObjectTypeDefinition GetObjectTypeDefinitions(Guid objectTypeDefinitionId)
+        {
+            VRObjectTypeDefinition objectTypeDefinition = new VRObjectTypeDefinitionManager().GetVRObjectTypeDefinition(objectTypeDefinitionId);
+            if (objectTypeDefinition == null)
+                throw new NullReferenceException(String.Format("objectTypeDefinition '{0}'", objectTypeDefinitionId));
+            if (objectTypeDefinition.Settings == null)
+                throw new NullReferenceException(String.Format("objectTypeDefinition.Settings '{0}'", objectTypeDefinitionId));
+            return objectTypeDefinition;
+        }
+
+
+        private static string EvaluateExpression(VRExpression expression, VRMailContext mailContext)
+        {
+            return RazorEngine.Razor.Parse<VRMailContext>(expression.ExpressionString, mailContext);
         }
 
         public void SendMail(VRMailMessage mailMessage)

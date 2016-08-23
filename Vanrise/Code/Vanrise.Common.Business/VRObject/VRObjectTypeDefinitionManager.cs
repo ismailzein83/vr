@@ -7,7 +7,7 @@ using Vanrise.Common.Data;
 using Vanrise.Entities;
 using Vanrise.Entities;
 
-namespace Vanrise.Common.Business.VRObject
+namespace Vanrise.Common.Business
 {
     public class VRObjectTypeDefinitionManager
     {

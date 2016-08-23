@@ -19,11 +19,12 @@ namespace TOne.WhS.Runtime.Tasks
         #region Public Methods 
         public void Execute()
         {
-            PrepareCodePrefixes pcp = new PrepareCodePrefixes();
-            IEnumerable<CodePrefixInfo> codePrefixesResult = pcp.PCP_Main();
+            //PrepareCodePrefixesTask pcp = new PrepareCodePrefixesTask();
+            //IEnumerable<CodePrefixInfo> codePrefixesResult = pcp.PrepareCodePrefixes_Main();
+            //DisplayList(codePrefixesResult);
 
-            DisplayList(codePrefixesResult);
-            
+            VRMailMessageTemplateTask mail = new VRMailMessageTemplateTask();
+            mail.VRMailMessageTemplate_Main();
             Console.ReadLine();
         }
         #endregion
@@ -41,12 +42,43 @@ namespace TOne.WhS.Runtime.Tasks
     }
 
 
-    public class PrepareCodePrefixes
+    public class VRMailMessageTemplateTask
     {
         #region Public Method
-        public IEnumerable<CodePrefixInfo> PCP_Main()
+        public void VRMailMessageTemplate_Main()
         {
-            Console.WriteLine("Ali Atoui");
+            Console.WriteLine("Ali Atoui: VRMailMessageTemplate");
+
+            Guid guid = new Guid("E487B8FB-398B-4CEC-AB12-0229AAF01A90");
+            //VRMailMessageTemplateManager vrMailMessageTemplateManager = new VRMailMessageTemplateManager();
+            //VRMailMessageTemplate vrMailMessageTemplate = vrMailMessageTemplateManager.GetMailMessageTemplate(guid);
+            //VRMailMessageTypeManager vrMailMessageTypeManager = new VRMailMessageTypeManager();
+            //VRMailMessageType vrMailMessageType = vrMailMessageTypeManager.GetMailMessageType(vrMailMessageTemplate.VRMailMessageTypeId);
+
+            //Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+            //foreach (var objectVaribale in vrMailMessageType.Settings.Objects)
+            //    objects.Add(objectVaribale.Key, objectVaribale.Value);
+
+            VRMailManager vrMailManager = new VRMailManager();
+            vrMailManager.SendMail(guid);
+
+            Console.ReadLine();
+
+        }
+        #endregion
+
+
+        #region Private Methods
+
+        #endregion
+    }
+
+    public class PrepareCodePrefixesTask
+    {
+        #region Public Method
+        public IEnumerable<CodePrefixInfo> PrepareCodePrefixes_Main()
+        {
+            Console.WriteLine("Ali Atoui: PrepareCodePrefixes");
 
             //Dictionaries
             Dictionary<string, CodePrefixInfo> codePrefixes = new Dictionary<string, CodePrefixInfo>();
