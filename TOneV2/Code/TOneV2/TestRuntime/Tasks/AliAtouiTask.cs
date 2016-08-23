@@ -25,7 +25,6 @@ namespace TOne.WhS.Runtime.Tasks
 
             Console.WriteLine("Ali Atoui: VRMailMessageTemplate");
 
-            Guid guid = new Guid("E487B8FB-398B-4CEC-AB12-0229AAF01A90");
             //VRMailMessageTemplateManager vrMailMessageTemplateManager = new VRMailMessageTemplateManager();
             //VRMailMessageTemplate vrMailMessageTemplate = vrMailMessageTemplateManager.GetMailMessageTemplate(guid);
             //VRMailMessageTypeManager vrMailMessageTypeManager = new VRMailMessageTypeManager();
@@ -35,16 +34,17 @@ namespace TOne.WhS.Runtime.Tasks
             //foreach (var objectVaribale in vrMailMessageType.Settings.Objects)
             //    objects.Add(objectVaribale.Key, objectVaribale.Value);
 
+            Guid guid = new Guid("E487B8FB-398B-4CEC-AB12-0229AAF01A90");
             Carrier carrier = new Carrier() { Id = 100, CustomerId = 101 };
 
             Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-            objects.Add("Carrier", carrier);
+            objects.Add("Carrier-ON", carrier);
 
             VRMailManager vrMailManager = new VRMailManager();
             vrMailManager.SendMail(guid, objects);
 
             Console.ReadLine();
-        }
+        }   
         #endregion
 
         #region Private Methods

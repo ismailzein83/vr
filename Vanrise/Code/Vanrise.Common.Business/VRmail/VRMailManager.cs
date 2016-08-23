@@ -19,32 +19,13 @@ namespace Vanrise.Common.Business
         {
             var mailMessageType = GetMailMessageType(mailMessageTemplate.VRMailMessageTypeId);
 
-            Dictionary<string, dynamic> variableValuesObj = new VRObjectManager().EvaluateVariables(mailMessageTemplate.Settings.Variables, objects, mailMessageType.Settings.Objects);
+            //Dictionary<string, dynamic> variableValuesObj = new VRObjectManager().EvaluateVariables(mailMessageTemplate.Settings.Variables, objects, mailMessageType.Settings.Objects);
 
-            var mailContext = new VRMailContext { ObjectVariables = variableValuesObj };
+            var mailContext = new VRMailContext(mailMessageType, objects);
             string to = EvaluateExpression(mailMessageTemplate.Settings.To, mailContext);
             string cc = EvaluateExpression(mailMessageTemplate.Settings.CC, mailContext);
             string subject = EvaluateExpression(mailMessageTemplate.Settings.Subject, mailContext);
             string body = EvaluateExpression(mailMessageTemplate.Settings.Body, mailContext);
-        }
-
-        public void SendMail(Guid mailMessageTemplateId)
-        {
-            var mailMessageTemplate = GetMailMessageTemplate(mailMessageTemplateId);
-            var mailMessageType = GetMailMessageType(mailMessageTemplate.VRMailMessageTypeId);
-
-            Dictionary<string, VRObjectTypeDefinition> objectVariables = new Dictionary<string, VRObjectTypeDefinition>();
-            foreach (var objectVaribale in mailMessageType.Settings.Objects)
-            {
-                objectVariables.Add(objectVaribale.Key, GetObjectTypeDefinitions(objectVaribale.Value.VRObjectTypeDefinitionId));
-            }
-
-            //Dictionary<string, dynamic> variableValuesObj = new VRObjectManager().EvaluateVariables(mailMessageTemplate.Settings.Variables, objects, mailMessageType.Settings.Objects);
-            //var mailContext = new VRMailContext { Variables = variableValuesObj };
-            //string to = EvaluateExpression(mailMessageTemplate.Settings.To, mailContext);
-            //string cc = EvaluateExpression(mailMessageTemplate.Settings.CC, mailContext);
-            //string subject = EvaluateExpression(mailMessageTemplate.Settings.Subject, mailContext);
-            //string body = EvaluateExpression(mailMessageTemplate.Settings.Body, mailContext);
         }
 
         private VRMailMessageTemplate GetMailMessageTemplate(Guid mailMessageTemplateId)
@@ -69,16 +50,6 @@ namespace Vanrise.Common.Business
             return mailMessageType;
         }
 
-        private VRObjectTypeDefinition GetObjectTypeDefinitions(Guid objectTypeDefinitionId)
-        {
-            VRObjectTypeDefinition objectTypeDefinition = new VRObjectTypeDefinitionManager().GetVRObjectTypeDefinition(objectTypeDefinitionId);
-            if (objectTypeDefinition == null)
-                throw new NullReferenceException(String.Format("objectTypeDefinition '{0}'", objectTypeDefinitionId));
-            if (objectTypeDefinition.Settings == null)
-                throw new NullReferenceException(String.Format("objectTypeDefinition.Settings '{0}'", objectTypeDefinitionId));
-            return objectTypeDefinition;
-        }
-
 
         private static string EvaluateExpression(VRExpression expression, VRMailContext mailContext)
         {
@@ -92,14 +63,74 @@ namespace Vanrise.Common.Business
     }
 
     
-
     public class VRMailContext
     {
-        public Dictionary<string, dynamic> ObjectVariables { get; set; }
+        //public Dictionary<string, dynamic> ObjectVariables { get; set; }
 
-        public void GetVal()
+        Dictionary<string, dynamic> objects;
+        VRMailMessageType mailMessageType;
+        Dictionary<string, VRObjectVariable> objectVariables = new Dictionary<string, VRObjectVariable>();
+        //List<VRObjectTypeDefinition> objectTypeDefinitions = new List<VRObjectTypeDefinition>();
+
+        public VRMailContext(VRMailMessageType mailMessageType, Dictionary<string, dynamic> objects) 
         {
- 
+            this.mailMessageType = mailMessageType;
+            this.objects = objects;
+
+            objectVariables = mailMessageType.Settings.Objects;
+
+            //foreach (var objectVaribale in mailMessageType.Settings.Objects)
+            //{
+            //    objectTypeDefinitions.Add(GetObjectTypeDefinitions(objectVaribale.Value.VRObjectTypeDefinitionId));
+            //}
+        }
+
+        public dynamic GetVal(string objectName, string propertyName)
+        {
+            dynamic obj;
+            //VRObjectType objectType;
+
+            VRObjectTypePropertyDefinition objectTypePropertyDefinition;
+
+            GetObjectAndType(objectName, propertyName, out obj, out objectTypePropertyDefinition);
+
+            var propertyEvaluatorContext = new VRObjectPropertyEvaluatorContext
+            {
+                Object = obj,
+                ObjectType = null
+            };
+
+            dynamic variableValue = objectTypePropertyDefinition.PropertyEvaluator.GetPropertyValue(propertyEvaluatorContext);
+
+            return variableValue;
+        }
+
+        private void GetObjectAndType(string objectName, string propertyName, out dynamic obj, out VRObjectTypePropertyDefinition objectTypePropertyDefinition)
+        {
+            objectTypePropertyDefinition = null;
+
+            VRObjectVariable objectVariable;
+            if (objects.TryGetValue(objectName, out obj) && objectVariables.TryGetValue(objectName, out objectVariable))
+            {
+                VRObjectTypeDefinition objectTypeDefinition = GetObjectTypeDefinition(objectVariable.VRObjectTypeDefinitionId);
+
+                foreach (var property in objectTypeDefinition.Settings.Properties)
+                    if (property.Name == propertyName){
+                        objectTypePropertyDefinition = property;
+                        break;
+                    }
+            }
+        }
+
+        private VRObjectTypeDefinition GetObjectTypeDefinition(Guid objectTypeDefinitionId)
+        {
+            VRObjectTypeDefinition objectTypeDefinition = new VRObjectTypeDefinitionManager().GetVRObjectTypeDefinition(objectTypeDefinitionId);
+            if (objectTypeDefinition == null)
+                throw new NullReferenceException(String.Format("objectTypeDefinition '{0}'", objectTypeDefinitionId));
+            if (objectTypeDefinition.Settings == null)
+                throw new NullReferenceException(String.Format("objectTypeDefinition.Settings '{0}'", objectTypeDefinitionId));
+
+            return objectTypeDefinition;
         }
     }
 }
