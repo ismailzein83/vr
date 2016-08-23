@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <configSections>
+    <section name="vanriseRuntime" type="Vanrise.Runtime.Configuration.RuntimeConfig, Vanrise.Runtime"/>
+    <section name="vanriseLogging" type="Vanrise.Common.LoggingConfiguration.LoggingConfig, Vanrise.Common" />
+  </configSections>
+  <startup>
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
+  </startup>
+
+  <!-- Vanrise Runtime is configured as per client resources (mainly CPU \ RAM Memory) -->
+  <vanriseRuntime>
+    <runtimeServiceGroups>
+      <!-- Used for scheduling services for data sources, workflow. nbOfRuntimeInstances recommended to be equal to 1 or 2.-->
+      <runtimeServiceGroup name="group2" nbOfRuntimeInstances="1">
+        <runtimeServices>
+          <runtimeService name="Scheduler Service" type="Vanrise.Runtime.SchedulerService, Vanrise.Runtime" interval="00:00:02"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
+    </runtimeServiceGroups>
+  </vanriseRuntime>
+  
+  <vanriseLogging maxLogLevel="Information">
+    <loggers>
+      <logger name="SQLLogger" type="Vanrise.Logging.SQL.SQLLogger, Vanrise.Logging.SQL">
+        <parameters>
+          <parameter name="ConnectionStringKey" value="LogDBConnString" />
+        </parameters>
+      </logger>
+      <logger name="ConsoleLogger"  type="Vanrise.Common.ConsoleLogger, Vanrise.Common"></logger>
+    </loggers>
+    <exceptionLoggers>
+      <exceptionLogger name="ConsoleExceptionLogger"  type="Vanrise.Common.ConsoleExceptionLogger, Vanrise.Common"></exceptionLogger>
+      <exceptionLogger name="DefaultExceptionLogger"  type="Vanrise.Common.DefaultExceptionLogger, Vanrise.Common"></exceptionLogger>
+    </exceptionLoggers>
+  </vanriseLogging>
+
+  <connectionStrings>
+    <add name="ProtalConnectionString" connectionString="Server=localhost;Database=CarrierPortal_Configuration;User ID=sa;Password= " />
+
+    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=CarrierPortal_Configuration;User ID=sa;Password= "/>
+    <add name="TransactionDBConnString" connectionString="Server=localhost;Database=CarrierPortal_Transaction;User ID=sa;Password= "/>
+    <add name="LogDBConnString" connectionString="Server=localhost;Database=CarrierPortal_Logging;User ID=sa;Password= "/>
+    <add name="MainDBConnString" connectionString=""/>   
+  </connectionStrings>
+  <appSettings>
+    <add key="webpages:Version" value="2.0.0.0" />
+    <add key="webpages:Enabled" value="false" />
+    <add key="PreserveLoginUrl" value="true" />
+    <add key="ClientValidationEnabled" value="true" />
+    <add key="UnobtrusiveJavaScriptEnabled" value="true" />
+    <add key="SecurityDBConnStringKey" value="ConfigurationDBConnString" />
+    <add key="CP_DBConnStringKey" value="ProtalConnectionString" />
+    <add key="RuntimeConnStringKey" value="TransactionDBConnString"/>
+    <add key="IsRuntimeService" value="false"/>
+  </appSettings>
+</configuration>

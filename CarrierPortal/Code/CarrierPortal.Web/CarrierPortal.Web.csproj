@@ -310,6 +310,13 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <None Include="Web.config.exclude" />
+    <None Include="Web.config.Debug.exclude">
+      <DependentUpon>Web.config.exclude</DependentUpon>
+    </None>
+    <None Include="Web.config.Release.exclude">
+      <DependentUpon>Web.config.exclude</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

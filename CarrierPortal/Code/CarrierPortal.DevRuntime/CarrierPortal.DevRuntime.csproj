@@ -165,6 +165,9 @@
     <Compile Include="UploadPriceList.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config.exclude">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
