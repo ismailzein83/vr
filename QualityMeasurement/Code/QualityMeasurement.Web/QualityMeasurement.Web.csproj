@@ -324,6 +324,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\QualityMeasurement.pubxml" />
+    <None Include="Web.config.exclude" />
+    <None Include="Web.config.Debug.exclude">
+      <DependentUpon>Web.config.exclude</DependentUpon>
+    </None>
+    <None Include="Web.config.Release.exclude">
+      <DependentUpon>Web.config.exclude</DependentUpon>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
