@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <configSections>
+    <section name="vanriseRuntime" type="Vanrise.Runtime.Configuration.RuntimeConfig, Vanrise.Runtime" />
+    <section name="vanriseLogging" type="Vanrise.Common.LoggingConfiguration.LoggingConfig, Vanrise.Common" />
+  </configSections>
+  <startup>
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
+  </startup>
+
+  <!-- Vanrise Runtime is configured as per client resources (mainly CPU \ RAM Memory) -->
+  <vanriseRuntime>
+    <runtimeServiceGroups>
+      <!-- Used for scheduling services for data sources, workflow. nbOfRuntimeInstances recommended to be equal to 1 or 2.-->
+      <runtimeServiceGroup name="group2" nbOfRuntimeInstances="1">
+        <runtimeServices>
+          <runtimeService name="Scheduler Service" type="Vanrise.Runtime.SchedulerService, Vanrise.Runtime" interval="00:00:02"></runtimeService>
+          <runtimeService name="Transaction Lock Service" type="Vanrise.Runtime.TransactionLockRuntimeService, Vanrise.Runtime" interval="00:00:02"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
+      <!-- Regulator service manages Business Process service. nbOfRuntimeInstances Keep it 1-->
+      <runtimeServiceGroup name="groupA" nbOfRuntimeInstances="1">
+        <runtimeServices>
+          <runtimeService name="Business Process Regulator Service" type="Vanrise.BusinessProcess.BPRegulatorRuntimeService, Vanrise.BusinessProcess" interval="00:00:01"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
+      <!-- Used for Business Process (Reprocess, Route build, Product Cost Generation, etc...). nbOfRuntimeInstances depended on available resources.-->
+      <runtimeServiceGroup name="group1" nbOfRuntimeInstances="20">
+        <runtimeServices>
+          <runtimeService name="Business Process Service" type="Vanrise.BusinessProcess.BusinessProcessService, Vanrise.BusinessProcess" interval="00:00:01"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
+      <!-- Regulator service manages Queue activation service. nbOfRuntimeInstances Keep it 1-->
+      <runtimeServiceGroup name="group3" nbOfRuntimeInstances="1">
+        <runtimeServices>
+          <runtimeService name="Queue Regulator Service" type="Vanrise.Queueing.QueueRegulatorRuntimeService, Vanrise.Queueing" interval="00:00:01"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
+      <!-- Related to processing batches from queues and saving them to database such as Main - Invalid - Failed tables. nbOfRuntimeInstances depended on available resources.-->
+      <runtimeServiceGroup name="group4" nbOfRuntimeInstances="20">
+        <runtimeServices>
+          <runtimeService name="Queue Activation Service" type="Vanrise.Queueing.QueueActivationRuntimeService, Vanrise.Queueing" interval="00:00:00.100"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
+      <!-- Related to Data sources such CDR Import process. nbOfRuntimeInstances should be equal to "Number Of Parallel Readers" configured in Data source management page.-->
+      <runtimeServiceGroup name="group6" nbOfRuntimeInstances="3">
+        <runtimeServices>
+          <runtimeService name="Data Source Runtime Service" type="Vanrise.Integration.Business.DataSourceRuntimeService, Vanrise.Integration.Business" interval="00:00:02"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
+    </runtimeServiceGroups>
+  </vanriseRuntime>
+  
+  <connectionStrings>
+    <add name="CDRDBConnectionString" connectionString="Data Source=localhost;Initial Catalog=CDRAnalysis_Configuration;User ID=sa;Password= "/>
+    <add name="DWSDBConnString"      connectionString="Data Source=localhost;Initial Catalog=CDRAnalysisDW;User ID=sa;Password= " />
+    <add name="FraudAnalysis_CDRConnStringTemplateKey" connectionString="Initial Catalog=CDRAnalysis_CDR_{0};Data Source=localhost;User ID=sa;Password= "/>
+    
+    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=CDRAnalysis_Configuration;User ID=sa;Password= "/>
+    <add name="QueueItemDBConnString" connectionString="Server=localhost;Database=CDRAnalysis_Queueing;User ID=sa;Password= "/>
+    <add name="TransactionDBConnString" connectionString="Server=localhost;Database=CDRAnalysis_Transaction;User ID=sa;Password= "/>
+    <add name="LogDBConnString" connectionString="Server=localhost;Database=CDRAnalysis_Logging;User ID=sa;Password= "/>
+    <add name="MainDBConnString" connectionString=""/>    
+  </connectionStrings>
+
+  <appSettings>
+    <add key="OperatorType" value="1" />    <!--  1 =Mobile ,  2 = PSTN -->
+    <add key="RulesDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="SecurityDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="DWFactBatchSize" value="100000" />
+    <add key="RuntimeConnStringKey" value="TransactionDBConnString"/>
+    <add key="BusinessProcessDBConnStringKey" value="TransactionDBConnString"/>
+    <add key="QueueDBConnStringKey" value="TransactionDBConnString"/>
+    <add key="QueueItemDBConnStringKey" value="QueueDBConnString"/>
+    <add key="BusinessProcessTrackingDBConnStringKey" value="LogDBConnString"/>
+    <add key="AddBusinessProcessConsoleTracking" value="true"/>
+    <add key="IntegrationConnStringKey" value="TransactionDBConnString"/>
+    <add key="BCPDonotDeleteFiles" value="false"/>    <!--this should be always false at production. could be only set to true for troubleshooting-->
+    <add key="BCPTempFilesDirectory" value="C:\BCPFiles" />
+    <add key="VanriseCache_CleanMemoryThreshold" value="999999999999999"/>    
+    <add key="FraudAnalysis_CDRNormalPrefixLength" value="10"/>
+    <add key="BusinessProcessConfigDBConnStringKey" value="ConfigurationDBConnString"/>
+
+    <add key="IsRuntimeService" value="true"/>
+  </appSettings>
+
+  <vanriseLogging maxLogLevel="Information">
+    <loggers>
+      <logger name="SQLLogger" type="Vanrise.Logging.SQL.SQLLogger, Vanrise.Logging.SQL">
+        <parameters>
+          <parameter name="ConnectionStringKey" value="LogDBConnString" />
+        </parameters>
+      </logger>
+      <logger name="ConsoleLogger"  type="Vanrise.Common.ConsoleLogger, Vanrise.Common"></logger>
+    </loggers>
+    <exceptionLoggers>
+      <exceptionLogger name="ConsoleExceptionLogger"  type="Vanrise.Common.ConsoleExceptionLogger, Vanrise.Common"></exceptionLogger>
+      <exceptionLogger name="DefaultExceptionLogger"  type="Vanrise.Common.DefaultExceptionLogger, Vanrise.Common"></exceptionLogger>
+    </exceptionLoggers>
+  </vanriseLogging>
+
+</configuration>

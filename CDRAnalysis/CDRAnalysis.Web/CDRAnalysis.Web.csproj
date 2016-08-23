@@ -461,6 +461,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\CDRAnalysis.Web.pubxml" />
+    <None Include="Web.config.exclude">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.config.Debug.exclude">
+      <DependentUpon>Web.config.exclude</DependentUpon>
+    </None>
+    <None Include="Web.config.Release.exclude">
+      <DependentUpon>Web.config.exclude</DependentUpon>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
