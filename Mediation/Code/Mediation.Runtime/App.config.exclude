@@ -33,7 +33,7 @@
         </runtimeServices>
       </runtimeServiceGroup>
       <!-- Used for Business Process (Reprocess, Route build, Product Cost Generation, etc...). nbOfRuntimeInstances depended on available resources.-->
-      <runtimeServiceGroup name="group1" nbOfRuntimeInstances="20">
+      <runtimeServiceGroup name="group1" nbOfRuntimeInstances="5">
         <runtimeServices>
           <runtimeService name="Business Process Service" type="Vanrise.BusinessProcess.BusinessProcessService, Vanrise.BusinessProcess" interval="00:00:01"></runtimeService>
         </runtimeServices>
@@ -45,7 +45,7 @@
         </runtimeServices>
       </runtimeServiceGroup>
       <!-- Related to processing batches from queues and saving them to database such as Main - Invalid - Failed tables. nbOfRuntimeInstances depended on available resources.-->
-      <runtimeServiceGroup name="group4" nbOfRuntimeInstances="20">
+      <runtimeServiceGroup name="group4" nbOfRuntimeInstances="5">
         <runtimeServices>
           <runtimeService name="Queue Activation Service" type="Vanrise.Queueing.QueueActivationRuntimeService, Vanrise.Queueing" interval="00:00:00.100"></runtimeService>
         </runtimeServices>
