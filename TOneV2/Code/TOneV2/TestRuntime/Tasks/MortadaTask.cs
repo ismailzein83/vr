@@ -20,6 +20,9 @@ namespace TestRuntime.Tasks
             System.Threading.ThreadPool.SetMaxThreads(10000, 10000);
 
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            BPRegulatorRuntimeService regulatorRuntimeService = new BPRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            TransactionLockRuntimeService transactionLockRuntimeService = new Vanrise.Runtime.TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            SchedulerService SchedulerService = new Vanrise.Runtime.SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
             //QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
             //SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 5) };
 
@@ -27,6 +30,9 @@ namespace TestRuntime.Tasks
             //runtimeServices.Add(queueActivationService);
 
             runtimeServices.Add(bpService);
+            runtimeServices.Add(regulatorRuntimeService);
+            runtimeServices.Add(transactionLockRuntimeService);
+            runtimeServices.Add(SchedulerService);
 
             //runtimeServices.Add(schedulerService);
 
