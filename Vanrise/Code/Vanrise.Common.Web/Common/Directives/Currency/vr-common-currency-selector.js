@@ -9,7 +9,7 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
                 ismultipleselection: "@",
                 onselectionchanged: '=',
                 selectedvalues: '=',
-                isrequired: "@",
+                isrequired: "=",
                 onselectitem: "=",
                 ondeselectitem: "=",
                 isdisabled: "=",
@@ -65,16 +65,12 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
                 multipleselection = "ismultipleselection";
             }
 
-            var required = "";
-            if (attrs.isrequired != undefined)
-                required = "isrequired";
             var addCliked = '';
             if (attrs.showaddbutton != undefined)
                 addCliked = 'onaddclicked="addNewCurrency"';
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="Symbol" datavaluefield="CurrencyId" '
-            + required + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Currency" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon"></vr-select>'
+                + '<vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="Symbol" datavaluefield="CurrencyId" label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Currency" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" isrequired="ctrl.isrequired"></vr-select>'
                + '</div>'
         }
 
