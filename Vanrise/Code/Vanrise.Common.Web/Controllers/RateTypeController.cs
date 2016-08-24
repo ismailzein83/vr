@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
-using Vanrise.Business;
+using Vanrise.Common.Business; 
 using Vanrise.Common.Web;
 using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace Vanrise.Web.Controllers
 {
-    [RoutePrefix(Constants.ROUTE_PREFIX + "RateType")]
+    [RoutePrefix(Vanrise.Common.Web.Constants.ROUTE_PREFIX + "RateType")]
     public class RateTypeController : BaseAPIController
     {
         [HttpPost]

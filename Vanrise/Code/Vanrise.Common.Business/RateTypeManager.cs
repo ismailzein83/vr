@@ -9,7 +9,7 @@ using Vanrise.Common.Data;
 using Vanrise.Data;
 using Vanrise.Entities;
 
-namespace Vanrise.Business
+namespace Vanrise.Common.Business
 {
     public class RateTypeManager
     {
