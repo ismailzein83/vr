@@ -18,6 +18,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
         public ListMapping NormalRateListMapping { get; set; }
         public string  DateTimeFormat { get; set; }
         public List<OtherRateListMapping> OtherRateListMapping { get; set; }
+        public List<FlaggedServiceListMapping> FlaggedServiceListMapping { get; set; }
         public CodeLayout CodeLayout { get; set; }
         public char Delimiter { get; set; }
         public bool HasCodeRange { get; set; }
@@ -36,11 +37,18 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
             excelConversionSettings.ListMappings = new List<ListMapping>();
             excelConversionSettings.ListMappings.Add(this.CodeListMapping);
             excelConversionSettings.ListMappings.Add(this.NormalRateListMapping);
-            if(this.OtherRateListMapping != null)
+            if (this.OtherRateListMapping != null)
             {
-                foreach(var list in this.OtherRateListMapping )
+                foreach (var list in this.OtherRateListMapping)
                 {
                     excelConversionSettings.ListMappings.Add(list.RateListMapping);
+                }
+            }
+            if (this.FlaggedServiceListMapping != null)
+            {
+                foreach (var list in this.FlaggedServiceListMapping)
+                {
+                    excelConversionSettings.ListMappings.Add(list.ServiceListMapping);
                 }
             }
             ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(context.InputFileId, excelConversionSettings, true, this.IsCommaDecimalSeparator);
@@ -57,6 +65,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                 PriceListCodes = BuildPriceListCodes(convertedExcel),
                 PriceListRates = BuildPriceListRates(convertedExcel),
                 PriceListOtherRates = BuildPriceListOtherRates(convertedExcel),
+                PriceListServices =  BuildPriceListFlaggedServices(convertedExcel)
             };
         }
         private List<PriceListCode> BuildPriceListCodes(ConvertedExcel convertedExcel)
@@ -267,6 +276,46 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
             }
             return otherRatesByRateType;
         }
+
+        private List<PriceListZoneService> BuildPriceListFlaggedServices(ConvertedExcel convertedExcel)
+        {
+            List<PriceListZoneService> priceListZoneServices = null;
+
+            if (this.FlaggedServiceListMapping != null)
+            {
+                priceListZoneServices = new List<PriceListZoneService>();
+                foreach (var list in this.FlaggedServiceListMapping)
+                {
+                    ConvertedExcelList flaggedServiceConvertedExcelList;
+                    if (convertedExcel.Lists.TryGetValue(list.ServiceListMapping.ListName, out flaggedServiceConvertedExcelList))
+                    {
+                        foreach (var obj in flaggedServiceConvertedExcelList.Records)
+                        {
+                            ConvertedExcelField zoneField;
+                            ConvertedExcelField serviceEffectiveDateField;
+                            DateTime? result = null;
+                            if (obj.Fields.TryGetValue("EffectiveDate", out serviceEffectiveDateField))
+                            {
+                                if (serviceEffectiveDateField.FieldValue != null)
+                                    result = (DateTime)serviceEffectiveDateField.FieldValue;
+                            };
+                            if (obj.Fields.TryGetValue("Zone", out zoneField))
+                            {
+                                PriceListZoneService priceListZoneService = new PriceListZoneService
+                                {
+                                    ZoneName = zoneField.FieldValue != null ? zoneField.FieldValue.ToString() : null,
+                                    FlaggedServiceId = list.FlaggedServiceId,
+                                    EffectiveDate = result
+                                };
+                                priceListZoneServices.Add(priceListZoneService);
+                            }
+                        }
+                    }
+                }
+            }
+            return priceListZoneServices;
+        }
+
         #endregion
 
     }

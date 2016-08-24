@@ -120,7 +120,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             }
             if (convertedPriceList.PriceListOtherRates != null)
             {
-                RateTypeManager rateTypeManager = new RateTypeManager();
+                Vanrise.Common.Business.RateTypeManager rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
 
                 foreach (var otherRates in convertedPriceList.PriceListOtherRates)
                 {
@@ -128,6 +128,11 @@ namespace TOne.WhS.SupplierPriceList.Business
                     ExportExcelSheet exportExcelSheet = ConvertPriceListRatesToExcelSheet(otherRates.Value, rateType.Name);
                     exportExcelSheets.Add(exportExcelSheet);
                 }
+            }
+            if (convertedPriceList.PriceListServices != null)
+            {
+                ExportExcelSheet exportExcelSheet = ConvertPriceListServicesToExcelSheet(convertedPriceList.PriceListServices);
+                exportExcelSheets.Add(exportExcelSheet);
             }
             return manager.ExportExcel(exportExcelSheets);
         }
@@ -222,6 +227,33 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             }
              
+            return exportExcelSheet;
+        }
+
+        private ExportExcelSheet ConvertPriceListServicesToExcelSheet(List<PriceListZoneService> priceListZoneServices)
+        {
+            ExportExcelSheet exportExcelSheet = null;
+            if (priceListZoneServices.Count > 0)
+            {
+                List<ExportExcelHeaderCell> exportExcelHeaderCell = new List<ExportExcelHeaderCell>(){
+                        new ExportExcelHeaderCell{ Title = "Zone" },
+                        new ExportExcelHeaderCell{ Title = string.Format("Services") },
+                        new ExportExcelHeaderCell{ Title = "Effective Date" ,CellType = ExcelCellType.DateTime ,DateTimeType = DateTimeType.DateTime}
+                    };
+                exportExcelSheet = CreateExcelSheet(string.Format("Services"), exportExcelHeaderCell);
+                foreach (var priceListZoneService in priceListZoneServices)
+                {
+                    exportExcelSheet.Rows.Add(new ExportExcelRow
+                    {
+                        Cells = new List<ExportExcelCell>(){
+                            new ExportExcelCell{ Value = priceListZoneService.ZoneName},
+                            new ExportExcelCell{ Value = priceListZoneService.FlaggedServiceId },
+                            new ExportExcelCell{ Value = priceListZoneService.EffectiveDate}
+                        }
+                    });
+                }
+
+            }
             return exportExcelSheet;
         }
 

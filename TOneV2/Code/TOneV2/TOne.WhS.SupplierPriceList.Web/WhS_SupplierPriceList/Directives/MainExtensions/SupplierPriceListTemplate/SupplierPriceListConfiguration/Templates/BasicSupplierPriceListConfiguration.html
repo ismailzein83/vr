@@ -2,6 +2,9 @@
     <vr-columns width="1/2row">
         <vr-common-ratetype-selector on-ready="scopeModel.onRateTypeSelectorReady" label="Rate Types" ismultipleselection onselectitem="    scopeModel.onSelectRateType" ondeselectitem="scopeModel.onDeselectRateType" "></vr-common-ratetype-selector>
     </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-whs-be-flaggedservice-selector on-ready="scopeModel.onFlaggedServiceSelectorReady" label="Flagged Services" ismultipleselection onselectitem="    scopeModel.onSelectFlaggedService" ondeselectitem="    scopeModel.onDeselectFlaggedService" "></vr-whs-be-flaggedservice-selector>
+    </vr-columns>
 </vr-row>
 <vr-tabs >
     <vr-tab header="'Codes'" tabobject="scopeModel.codeTabObject">
@@ -10,8 +13,19 @@
     <vr-tab header="'Normal Rates'">
         <vr-excelconversion-listmapping on-ready="scopeModel.onRateListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
     </vr-tab>
-    <vr-tab ng-repeat="rate in scopeModel.rateTypesSelected" header="'{{rate.Name}}'">
-        <vr-excelconversion-listmapping on-ready="rate.onRateListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
+    <vr-tab header="'Other Rates'">
+        <vr-tabs>
+            <vr-tab ng-repeat="rate in scopeModel.rateTypesSelected" header="'{{rate.Name}}'">
+                <vr-excelconversion-listmapping on-ready="rate.onRateListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
+            </vr-tab>
+        </vr-tabs>
+    </vr-tab>
+    <vr-tab header="'Services'">
+        <vr-tabs>
+            <vr-tab ng-repeat="service in scopeModel.servicesSelected" header="'{{service.Name}}'">
+                <vr-excelconversion-listmapping on-ready="service.onServiceListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
+            </vr-tab>
+        </vr-tabs>
     </vr-tab>
 </vr-tabs>
 <vr-row>

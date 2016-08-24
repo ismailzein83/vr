@@ -23,7 +23,7 @@ namespace TOne.WhS.Sales.Business
 
         private class RatePreviewRequestHandler : BigDataRequestHandler<RatePreviewQuery, RatePreview, RatePreviewDetail>
         {
-            Vanrise.Business.RateTypeManager _rateTypeManager = new Vanrise.Business.RateTypeManager();
+            Vanrise.Common.Business.RateTypeManager _rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
 
             public override RatePreviewDetail EntityDetailMapper(RatePreview entity)
             {

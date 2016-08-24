@@ -62,9 +62,11 @@
     <Compile Include="PreviewData\SPLPreviewQuery.cs" />
     <Compile Include="PreviewData\CountryPreview.cs" />
     <Compile Include="PreviewData\ZonePreview.cs" />
+    <Compile Include="PriceListTemplate\FlaggedServiceListMapping.cs" />
     <Compile Include="PriceListTemplate\OtherRateListMapping.cs" />
     <Compile Include="PriceListTemplate\PriceListCode.cs" />
     <Compile Include="PriceListTemplate\PriceListRate.cs" />
+    <Compile Include="PriceListTemplate\PriceListZoneService.cs" />
     <Compile Include="PriceListTemplate\SupplierPriceListSettings.cs" />
     <Compile Include="PriceListTemplate\ConvertedPriceList.cs" />
     <Compile Include="PriceListTemplate\SupplierPriceListInput.cs" />

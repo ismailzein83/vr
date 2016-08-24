@@ -34,6 +34,9 @@
             var rateTypeAPI;
             var rateTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var flaggedServiceAPI;
+            var flaggedServiceReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var context;
             var configDetails;
             $scope.intPutFieldMappings;
@@ -52,9 +55,12 @@
                     rateTypeAPI = api;
                     rateTypeReadyPromiseDeferred.resolve();
                 }
-
+                $scope.scopeModel.onFlaggedServiceSelectorReady = function (api) {
+                    flaggedServiceAPI = api;
+                    flaggedServiceReadyPromiseDeferred.resolve();
+                }
                 $scope.scopeModel.rateTypesSelected = [];
-
+                $scope.scopeModel.servicesSelected = [];
                 $scope.scopeModel.onSelectRateType = function (item)
                 {
                     var rateTypeTabe = {
@@ -77,10 +83,37 @@
                 }
                 $scope.scopeModel.onDeselectRateType = function (item) {
 
-                    $scope.scopeModel.codeTabObject.isSelected = true;
+                  //  $scope.scopeModel.codeTabObject.isSelected = true;
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.rateTypesSelected, item.RateTypeId, "RateTypeId");
                     $scope.scopeModel.rateTypesSelected.splice(index,1);
                 }
+
+                $scope.scopeModel.onSelectFlaggedService = function (item) {
+                    var serviceTabe = {
+                        Name: item.Name,
+                        FlaggedServiceId: item.FlaggedServiceId,
+                        onServiceListMappingReady: function (api) {
+                            serviceTabe.flaggedServiceAPI = api;
+                            var payload = {
+                                context: getContext(),
+                                fieldMappings: [{ FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }],
+                                listName: item.Name,
+                            };
+                            var setLoader = function (value) {
+                                $scope.scopeModel.isLoadingSupplierPriceListTemplate = value;
+                            };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, serviceTabe.flaggedServiceAPI, payload, setLoader);
+                        }
+                    }
+                    $scope.scopeModel.servicesSelected.push(serviceTabe);
+                }
+                $scope.scopeModel.onDeselectFlaggedService = function (item) {
+                  //  $scope.scopeModel.codeTabObject.isSelected = true;
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.servicesSelected, item.FlaggedServiceId, "FlaggedServiceId");
+                    $scope.scopeModel.servicesSelected.splice(index, 1);
+                }
+
+
                 $scope.scopeModel.hideNormalRate = false;
                 $scope.scopeModel.codeLayouts = UtilsService.getArrayEnum(WhS_SupPL_CodeLayoutEnum);
                 $scope.scopeModel.dateTimeFormat = "yyyy/MM/dd";
@@ -158,9 +191,11 @@
                             $scope.scopeModel.isCommaDecimalSeparator = configDetails.IsCommaDecimalSeparator;
                             $scope.scopeModel.selectedCodeLayout = UtilsService.getItemByVal($scope.scopeModel.codeLayouts, configDetails.CodeLayout, "value");
                             loadOtherRateListMapping(promises);
+                            loadFlaggedServiceListMapping(promises)
                         }
                     }
                     promises.push(loadRateTypeSelector());
+                    promises.push(loadFlaggedServiceSelector());
                     promises.push(loadRateListMapping());
                     promises.push(loadCodeListMapping());
 
@@ -186,6 +221,27 @@
                         });
 
                         return loadRateTypePromiseDeferred.promise;
+                    }
+
+                    function loadFlaggedServiceSelector() {
+                        var loadFlaggedServicePromiseDeferred = UtilsService.createPromiseDeferred();
+                        flaggedServiceReadyPromiseDeferred.promise.then(function () {
+                            var payload;
+                            console.log(configDetails);
+                            if (configDetails != undefined && configDetails.FlaggedServiceListMapping != undefined) {
+                                var flaggedServicesIds = [];
+                                for (var i = 0; i < configDetails.FlaggedServiceListMapping.length; i++) {
+                                    var flaggedService = configDetails.FlaggedServiceListMapping[i];
+                                    flaggedServicesIds.push(flaggedService.FlaggedServiceId);
+                                }
+                                payload = {
+                                    selectedIds: flaggedServicesIds
+                                };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(flaggedServiceAPI, payload, loadFlaggedServicePromiseDeferred);
+                        });
+
+                        return loadFlaggedServicePromiseDeferred.promise;
                     }
 
                     function loadRateListMapping() {
@@ -238,6 +294,21 @@
                             }
                         }
                     }
+
+                    function loadFlaggedServiceListMapping(promises) {
+                        if (configDetails != undefined && configDetails.FlaggedServiceListMapping != undefined) {
+                            for (var i = 0; i < configDetails.FlaggedServiceListMapping.length; i++) {
+                                var flaggedService = configDetails.FlaggedServiceListMapping[i];
+                                var flaggedServiceTab = {
+                                    readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                }
+                                promises.push(flaggedServiceTab.loadPromiseDeferred.promise);
+                                addFlaggedServiceAPIExtension(flaggedServiceTab, flaggedService);
+                            }
+                        }
+                    }
+
                 };
                 api.getData = getData;
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -258,11 +329,25 @@
                                 });
                         }
                     }
+
+                    var flaggedServiceListMapping = [];
+                    if ($scope.scopeModel.servicesSelected.length > 0)
+                    {
+                        for (var i = 0; i < $scope.scopeModel.servicesSelected.length; i++) {
+                            var flaggedServiceSelected = $scope.scopeModel.servicesSelected[i];
+                            flaggedServiceListMapping.push(
+                                {
+                                    FlaggedServiceId: flaggedServiceSelected.FlaggedServiceId,
+                                    ServiceListMapping: flaggedServiceSelected.flaggedServiceAPI.getData()
+                                });
+                        }
+                    }
                     var basicConfiguration = {
                         $type: "TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings.BasicSupplierPriceListSettings,TOne.WhS.SupplierPriceList.MainExtensions",
                         CodeListMapping: listCodeMapping,
                         NormalRateListMapping: listNormalRateMapping,
-                        OtherRateListMapping:otherRatesListMappings,
+                        OtherRateListMapping: otherRatesListMappings,
+                        FlaggedServiceListMapping: flaggedServiceListMapping,
                         DateTimeFormat: $scope.scopeModel.dateTimeFormat,
                         CodeLayout: $scope.scopeModel.selectedCodeLayout != undefined ? $scope.scopeModel.selectedCodeLayout.value : undefined,
                         HasCodeRange: $scope.scopeModel.hasCodeRange,
@@ -300,6 +385,27 @@
                     VRUIUtilsService.callDirectiveLoad(rateType.rateListAPI, payload, rateType.loadPromiseDeferred)
                 });
                 $scope.scopeModel.rateTypesSelected.push(rateType);
+            }
+
+            function addFlaggedServiceAPIExtension(flaggedService, payloadFlaggedService) {
+                flaggedService.Name = payloadFlaggedService.ServiceListMapping.ListName;
+                flaggedService.FlaggedServiceId = payloadFlaggedService.FlaggedServiceId;
+                flaggedService.onServiceListMappingReady = function (api) {
+                    flaggedService.flaggedServiceAPI = api;
+                    flaggedService.readyPromiseDeferred.resolve();
+                }
+                flaggedService.readyPromiseDeferred.promise.then(function () {
+                    var payload = {
+                        context: getContext(),
+                        fieldMappings: [{ FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }],
+                        listName: flaggedService.Name,
+                    };
+                    if (payloadFlaggedService != undefined && payloadFlaggedService.ServiceListMapping) {
+                        payload.listMappingData = payloadFlaggedService.ServiceListMapping;
+                    }
+                    VRUIUtilsService.callDirectiveLoad(flaggedService.flaggedServiceAPI, payload, flaggedService.loadPromiseDeferred)
+                });
+                $scope.scopeModel.servicesSelected.push(flaggedService);
             }
             function getContext() {
 

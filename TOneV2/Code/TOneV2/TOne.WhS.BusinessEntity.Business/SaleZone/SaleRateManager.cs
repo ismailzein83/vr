@@ -144,7 +144,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             private SaleZoneManager _saleZoneManager = new SaleZoneManager();
             private CurrencyManager _currencyManager = new CurrencyManager();
-            private Vanrise.Business.RateTypeManager _rateTypeManager = new Vanrise.Business.RateTypeManager();
+            private Vanrise.Common.Business.RateTypeManager _rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
             private CurrencyExchangeRateManager _currencyExchangeRateManager = new CurrencyExchangeRateManager();
             private SaleRateManager _saleRateManager = new SaleRateManager();
 

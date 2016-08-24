@@ -231,6 +231,7 @@
     <Content Include="WhS_BusinessEntity\Directives\Deal\vr-whs-be-dealbuying-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Deal\vr-whs-be-dealselling-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Deal\vr-whs-be-deal-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\FlaggedService\vr-whs-be-flaggedservice-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\Templates\CustomerGroupTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\vr-whs-be-customergroup.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\PricingRules\RateTypeSettings\Templates\PricingRuleDaysOfWeekRateTypeTemplate.html" />
