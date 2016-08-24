@@ -12,20 +12,18 @@
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Charges'">
-                    <vr-section ng-repeat="item in scopeModel.items" title="{{item.StatusName}}">
+                    <vr-section ng-repeat="item in scopeModel.sectionItems" title="{{item.StatusName}}" vr-loader="item.isLoadingDirective">
                         <vr-row>
                             <vr-columns width="1/2row" ng-if="item.HasInitialCharge">
                                 <vr-textbox label="Initial Charge" value="item.InitialCharge" isrequired="true"></vr-textbox>
                             </vr-columns>
-                            <vr-columns width="1/2row" ng-if="item.HasRecurringCharge">
-                                <vr-textbox label="Recurring Charge" value="item.RecurringCharge" isrequired="true"></vr-textbox>
-                            </vr-columns>
                         </vr-row>
                         <vr-row>
-                            <vr-columns width="1/2row" ng-if="item.HasInitialCharge">
-                                <retail-be-statuschargingset-recurringperiod-definition on-ready="item.chargingSetPeriodDefinitionDirectiveReady" normal-col-num="3"></retail-be-statuschargingset-recurringperiod-definition>
+                            <vr-columns width="1/2row" ng-if="item.HasRecurringCharge">
+                                <retail-be-statuschargingset-recurringperiod-definition on-ready="item.onChargingSetPeriodDefinitionDirectiveReady" normal-col-num="3"></retail-be-statuschargingset-recurringperiod-definition>
                             </vr-columns>
                         </vr-row>
+                    </vr-section>
                 </vr-tab>
             </vr-tabs>
         </vr-form>

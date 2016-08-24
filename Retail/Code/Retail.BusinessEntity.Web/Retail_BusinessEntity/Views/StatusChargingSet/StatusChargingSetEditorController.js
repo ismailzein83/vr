@@ -13,7 +13,7 @@
         var chargingSetPeriodDefinitionAPI;
         var chargingSetPeriodDefinitionReadyDeferred = utilsService.createPromiseDeferred();
 
-
+        var entityTypeSelectedReadyDeferred;
         loadParameters();
         defineScope();
         load();
@@ -25,69 +25,68 @@
             }
             isEditMode = (statusChargingSetId != undefined);
         }
+
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.items = [];
-
-            $scope.scopeModel.chargingSetPeriodDefinitionDirectiveReady = function (api) {
+            $scope.scopeModel.sectionItems = [];
+            $scope.scopeModel.chargingSetPeriodDefinitionDirectiveReady = function(api) {
                 chargingSetPeriodDefinitionAPI = api;
                 chargingSetPeriodDefinitionReadyDeferred.resolve();
             }
-            $scope.scopeModel.save = function () {
+            $scope.scopeModel.save = function() {
                 if (isEditMode) {
                     return update();
-                }
-                else {
+                } else {
                     return insert();
                 }
             };
-            $scope.scopeModel.close = function () {
+            $scope.scopeModel.close = function() {
                 $scope.modalContext.closeModal();
             };
-            $scope.scopeModel.onEntityTypeSelectorReady = function (api) {
+            $scope.scopeModel.onEntityTypeSelectorReady = function(api) {
                 entityTypeAPI = api;
                 entityTypeSelectorReadyDeferred.resolve();
             }
             $scope.scopeModel.onEntityTypeSelectionChanged = function () {
-                var selectedEntityType = entityTypeAPI.getSelectedIds();
-                if (selectedEntityType != undefined) {
-                    retailBeStatusChargingSetApiService.GetStatusChargeInfos(selectedEntityType).then(function (response) {
-                        $scope.scopeModel.items = response;
-                        for (var j = 0; j < $scope.scopeModel.items.length; j++) {
-                            var tempItem = $scope.scopeModel.items[j];
-                            if (tempItem != undefined) {
-                                SetRecuringPeriodDefinitions(tempItem);
+                if (entityTypeSelectedReadyDeferred == undefined) {
+                    var selectedEntityType = entityTypeAPI.getSelectedIds();
+                    if (selectedEntityType != undefined) {
+                        $scope.scopeModel.sectionItems.length = 0;
+                        getStatusChargeInfos(selectedEntityType).then(function () {
+                            for (var j = 0; j < $scope.scopeModel.items.length; j++) {
+                                var tempItem = $scope.scopeModel.items[j];
+                                addApiToSectionItemObj(tempItem);
                             }
-                        }
-                        if (statusChargingEntity != undefined && statusChargingEntity.Settings != undefined && statusChargingEntity.Settings.StatusCharges != undefined) {
-                            for (var i = 0; i < statusChargingEntity.Settings.StatusCharges.length; i++) {
-                                var currentStatusChargingEntity = statusChargingEntity.Settings.StatusCharges[i];
-                                for (var j = 0; j < $scope.scopeModel.items.length; j++) {
-                                    var currentItem = $scope.scopeModel.items[j];
-                                    if (currentStatusChargingEntity.StatusDefinitionId == currentItem.StatusDefinitionId) {
-                                        currentItem.InitialCharge = currentStatusChargingEntity.InitialCharge;
-                                        currentItem.RecurringCharge = currentStatusChargingEntity.RecurringCharge;
-                                    }
-                                }
-                            }
-                        }
-                    });
+                        });
+                    }
                 }
             }
         }
 
-
-        function SetRecuringPeriodDefinitions(tempItem) {
-            tempItem.chargingSetPeriodDefinitionDirectiveReady = function (api) {
-                tempItem.APItemp = api;
-                api.load();
-            }
+        function addApiToSectionItemObj(tempItem) {
+            var sectionItem = {
+                StatusName: tempItem.StatusName,
+                HasInitialCharge: tempItem.HasInitialCharge,
+                HasRecurringCharge: tempItem.HasRecurringCharge,
+                StatusDefinitionId: tempItem.StatusDefinitionId
+            };
+            sectionItem.onChargingSetPeriodDefinitionDirectiveReady = function (api) {
+                sectionItem.directiveAPI = api;
+                var setLoader = function (value) { sectionItem.isLoadingDirective = value };
+                vruiUtilsService.callDirectiveLoadOrResolvePromise($scope, sectionItem.directiveAPI, undefined, setLoader);
+            };
+            $scope.scopeModel.sectionItems.push(sectionItem);
         }
+
         function load() {
             $scope.scopeModel.isLoading = true;
             if (isEditMode) {
-                GetStatusChargingSet().then(function () {
-                    loadAllControls();
+                getStatusChargingSet().then(function () {
+                    entityTypeSelectedReadyDeferred = utilsService.createPromiseDeferred();
+                    getStatusChargeInfos(statusChargingEntity.Settings.EntityType).then(function () {
+                        loadAllControls();
+                    });
                 }).catch(function (error) {
                     vrNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.scopeModel.isLoading = false;
@@ -111,12 +110,12 @@
         function buildStatusChargingSetObjFromScope() {
             var i;
             var statusCharges = [];
-            for (i = 0; i < $scope.scopeModel.items.length; i++) {
-                var item = $scope.scopeModel.items[i];
+            for (i = 0; i < $scope.scopeModel.sectionItems.length; i++) {
+                var item = $scope.scopeModel.sectionItems[i];
                 var statusCharge = {
                     InitialCharge: item.HasInitialCharge ? item.InitialCharge : 0,
-                    RecurringCharge: item.RecurringCharge ? item.RecurringCharge : 0,
-                    StatusDefinitionId: item.StatusDefinitionId
+                    StatusDefinitionId: item.StatusDefinitionId,
+                    RecurringPeriodSettings: item.directiveAPI.getData()
                 }
                 statusCharges.push(statusCharge);
             }
@@ -183,14 +182,72 @@
         }
 
         function loadAllControls() {
-            return utilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadEntityTypeSelector]).catch(function (error) {
+            return utilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadEntityTypeSelector, loadStatusCharges]).then(function() {
+                entityTypeSelectedReadyDeferred = undefined;
+            }).catch(function (error) {
                 vrNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
         }
 
-        function GetStatusChargingSet() {
+        function loadStatusCharges() {
+            if (statusChargingEntity == undefined)
+                return;
+            var promises = [];
+            if (statusChargingEntity != undefined && statusChargingEntity.Settings != undefined && statusChargingEntity.Settings.StatusCharges != undefined) {
+                for (var i = 0; i < statusChargingEntity.Settings.StatusCharges.length; i++) {
+                    var currentStatusChargingEntity = statusChargingEntity.Settings.StatusCharges[i];
+                    for (var j = 0; j < $scope.scopeModel.items.length; j++) {
+                        var currentItem = $scope.scopeModel.items[j];
+                        if (currentStatusChargingEntity.StatusDefinitionId == currentItem.StatusDefinitionId) {
+                            var sectionItem = {
+                                payload: currentStatusChargingEntity,
+                                entityStatusChargeInfo:currentItem,
+                                readyPromiseDeferred: utilsService.createPromiseDeferred(),
+                                loadPromiseDeferred: utilsService.createPromiseDeferred(),
+                            }
+                            promises.push(sectionItem.loadPromiseDeferred.promise);
+                            AddAPIToSectionItem(sectionItem);
+
+                          //  currentItem.InitialCharge = currentStatusChargingEntity.InitialCharge;
+
+                        }
+                    }
+                }
+            }
+            return utilsService.waitMultiplePromises(promises);
+        }
+
+        function getStatusChargeInfos(selectedEntityType) {
+           return retailBeStatusChargingSetApiService.GetStatusChargeInfos(selectedEntityType).then(function(response) {
+                $scope.scopeModel.items = response;
+            });
+        }
+
+        function AddAPIToSectionItem(sectionItemObj)
+        {
+            var sectionItem = {
+                StatusName: sectionItemObj.entityStatusChargeInfo.StatusName,
+                InitialCharge: sectionItemObj.payload.InitialCharge,
+                HasInitialCharge: sectionItemObj.entityStatusChargeInfo.HasInitialCharge,
+                HasRecurringCharge: sectionItemObj.entityStatusChargeInfo.HasRecurringCharge,
+                StatusDefinitionId: sectionItemObj.payload.StatusDefinitionId
+            };
+            var sectionItemPayload = { RecurringPeriodSettings: sectionItemObj.payload.RecurringPeriodSettings };
+
+            sectionItem.onChargingSetPeriodDefinitionDirectiveReady = function (api) {
+                sectionItem.directiveAPI = api;
+                sectionItemObj.readyPromiseDeferred.resolve();
+            };
+
+            sectionItemObj.readyPromiseDeferred.promise
+                .then(function () {
+                    vruiUtilsService.callDirectiveLoad(sectionItem.directiveAPI, sectionItemPayload, sectionItemObj.loadPromiseDeferred);
+                });
+            $scope.scopeModel.sectionItems.push(sectionItem);
+        }
+        function getStatusChargingSet() {
             return retailBeStatusChargingSetApiService.GetStatusChargingSet(statusChargingSetId).then(function (response) {
                 statusChargingEntity = response;
             });
