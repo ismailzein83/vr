@@ -94,7 +94,7 @@ namespace TOne.WhS.Sales.Business
                     BED = effectiveOn
                 };
 
-                ZoneChanges zoneItemChanges = new ZoneChanges() { ZoneId = zoneItem.ZoneId, NewRates = new List<DraftRateToChange>() { newRate } };
+                ZoneChanges zoneItemChanges = new ZoneChanges() { ZoneId = zoneItem.ZoneId, ZoneName = zoneItem.ZoneName, NewRates = new List<DraftRateToChange>() { newRate } };
                 zoneChanges.Add(zoneItemChanges);
             }
 
