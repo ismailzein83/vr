@@ -68,10 +68,16 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
             $scope.gridMenuActions = function () {
                 var menuActions = [{
                     name: "Edit",
-                    clicked: edit
+                    clicked: edit,
+                    haspermission: hasUpdateBPDefinitionPermission
+
                 }];
                 return menuActions;
             };
+        }
+
+        function hasUpdateBPDefinitionPermission() {
+            return BusinessProcess_BPDefinitionAPIService.HasUpdateBPDefinitionPermission();
         }
         function edit(dataItem) {
             var onBPDefinitionUpdated = function (updatedBPDefinition) {

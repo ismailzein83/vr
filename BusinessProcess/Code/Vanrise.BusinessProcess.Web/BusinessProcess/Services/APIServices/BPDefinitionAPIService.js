@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    BusinessProcess_BPDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'BusinessProcess_BP_ModuleConfig'];
+    BusinessProcess_BPDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'BusinessProcess_BP_ModuleConfig', 'SecurityService'];
 
-    function BusinessProcess_BPDefinitionAPIService(BaseAPIService, UtilsService, BusinessProcess_BP_ModuleConfig) {
+    function BusinessProcess_BPDefinitionAPIService(BaseAPIService, UtilsService, BusinessProcess_BP_ModuleConfig, SecurityService) {
 
         function GetFilteredBPDefinitions(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPDefinition", "GetFilteredBPDefinitions"), input);
@@ -30,13 +30,18 @@
         function UpdateBPDefinition(BPDefinition) {
             return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPDefinition", 'UpdateBPDefinition'), BPDefinition);
         }
+
+        function HasUpdateBPDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(BusinessProcess_BP_ModuleConfig.moduleName, "BPDefinition", ['UpdateBPDefinition']));
+        }
         return ({
             GetFilteredBPDefinitions: GetFilteredBPDefinitions,
             GetFilteredBPDefinitionsForTechnical:GetFilteredBPDefinitionsForTechnical,
             GetBPDefinitionsInfo: GetBPDefinitionsInfo,
             GetBPDefintion: GetBPDefintion,
             GetBPDefinitions: GetBPDefinitions,
-            UpdateBPDefinition:UpdateBPDefinition
+            UpdateBPDefinition: UpdateBPDefinition,
+            HasUpdateBPDefinitionPermission: HasUpdateBPDefinitionPermission
         });
     }
 
