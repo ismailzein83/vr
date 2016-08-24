@@ -35,6 +35,20 @@ app.directive('vrTabs', ['MultiTranscludeService', function (MultiTranscludeServ
             api.removeAllTabs = function () {
                 ctrl.tabs.length = 0;
             }
+            api.setTabSelected=function(index)
+            {
+                setTimeout(function () {
+                    var tab = ctrl.tabs[index];
+                    if (tab != undefined)
+                        tab.isSelected = true;
+                });
+            }
+            api.setLastTabSelected = function()
+            {
+                setTimeout(function () {
+                    ctrl.tabs[ctrl.tabs.length - 1].isSelected = true;
+                });
+            }
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         },
