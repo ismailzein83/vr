@@ -19,7 +19,7 @@ namespace Vanrise.Entities
     {
         public VRObjectType ObjectType { get; set; }
 
-        public List<VRObjectTypePropertyDefinition> Properties { get; set; }
+        public Dictionary<string, VRObjectTypePropertyDefinition> Properties { get; set; }
     }
 
     public class VRObjectTypePropertyDefinition

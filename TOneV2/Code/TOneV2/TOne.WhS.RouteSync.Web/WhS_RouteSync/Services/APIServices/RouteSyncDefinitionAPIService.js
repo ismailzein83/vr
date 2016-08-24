@@ -33,6 +33,14 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_RouteSync_ModuleConfig.moduleName, controllerName, "GetRouteSyncDefinitionsInfo"));
         }
 
+        function HasAddRouteSyncDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_RouteSync_ModuleConfig.moduleName, controllerName, ['AddRouteSyncDefinition']));
+        }
+
+        function HasEditRouteSyncDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_RouteSync_ModuleConfig.moduleName, controllerName, ['UpdateRouteSyncDefinition']));
+        }
+
 
         return ({
             GetFilteredRouteSyncDefinitions: GetFilteredRouteSyncDefinitions,
@@ -40,7 +48,9 @@
             AddRouteSyncDefinition: AddRouteSyncDefinition,
             UpdateRouteSyncDefinition: UpdateRouteSyncDefinition,
             GetRouteReaderExtensionConfigs: GetRouteReaderExtensionConfigs,
-            GetRouteSyncDefinitionsInfo: GetRouteSyncDefinitionsInfo
+            GetRouteSyncDefinitionsInfo: GetRouteSyncDefinitionsInfo,
+            HasAddRouteSyncDefinitionPermission: HasAddRouteSyncDefinitionPermission,
+            HasEditRouteSyncDefinitionPermission: HasEditRouteSyncDefinitionPermission
         });
     }
 

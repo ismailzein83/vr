@@ -61,6 +61,7 @@ app.directive('whsRoutesyncRoutesyncdefinitionGrid', ['WhS_RouteSync_RouteSyncDe
                 $scope.scopeModel.menuActions.push({
                     name: 'Edit',
                     clicked: editRouteSyncDefinition,
+                    haspermission: hasEditRouteSyncDefinitionPermission
                 });
             }
 
@@ -70,6 +71,9 @@ app.directive('whsRoutesyncRoutesyncdefinitionGrid', ['WhS_RouteSync_RouteSyncDe
                 };
 
                 WhS_RouteSync_RouteSyncDefinitionService.editRouteSyncDefinition(routeSyncDefinitionItem.Entity.RouteSyncDefinitionId, onRouteSyncDefinitionUpdated);
+            }
+            function hasEditRouteSyncDefinitionPermission() {
+                return WhS_RouteSync_RouteSyncDefinitionAPIService.HasEditRouteSyncDefinitionPermission();
             }
         }
     }]);

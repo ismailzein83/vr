@@ -46,11 +46,13 @@ app.directive('vrCommonObjecttypepropertyGrid', ['VRCommon_VRObjectTypeDefinitio
                     var objectTypeDefinition = response;
                     var properties = objectTypeDefinition.Settings.Properties;
                     var property;
-                    for (var i = 0; i < properties.length; i++) {
-                        property = properties[i];
-                        extendVariableObject(property);
-                        $scope.scopeModel.objectTypeProperties.push(property);
-                    }
+
+                    for (var key in properties) 
+                        if (key != "$type") {
+                            property = properties[key];
+                            extendVariableObject(property);
+                            $scope.scopeModel.objectTypeProperties.push(property);
+                        }          
                 });
             };
 

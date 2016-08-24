@@ -64,6 +64,7 @@ app.directive('vrCommonObjecttypedefinitionSelector', ['VRCommon_VRObjectTypeDef
 
                     return VRCommon_VRObjectTypeDefinitionAPIService.GetVRObjectTypeDefinitionsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                         selectorAPI.clearDataSource();
+
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);

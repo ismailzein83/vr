@@ -65,60 +65,55 @@ namespace Vanrise.Common.Business
     
     public class VRMailContext
     {
-        //public Dictionary<string, dynamic> ObjectVariables { get; set; }
-
         Dictionary<string, dynamic> objects;
-        VRMailMessageType mailMessageType;
         Dictionary<string, VRObjectVariable> objectVariables = new Dictionary<string, VRObjectVariable>();
-        //List<VRObjectTypeDefinition> objectTypeDefinitions = new List<VRObjectTypeDefinition>();
 
         public VRMailContext(VRMailMessageType mailMessageType, Dictionary<string, dynamic> objects) 
         {
-            this.mailMessageType = mailMessageType;
             this.objects = objects;
-
-            objectVariables = mailMessageType.Settings.Objects;
-
-            //foreach (var objectVaribale in mailMessageType.Settings.Objects)
-            //{
-            //    objectTypeDefinitions.Add(GetObjectTypeDefinitions(objectVaribale.Value.VRObjectTypeDefinitionId));
-            //}
+            this.objectVariables = mailMessageType.Settings.Objects;
         }
 
         public dynamic GetVal(string objectName, string propertyName)
         {
             dynamic obj;
-            //VRObjectType objectType;
-
+            VRObjectType objectType;
             VRObjectTypePropertyDefinition objectTypePropertyDefinition;
+            dynamic variableValue = null;
 
-            GetObjectAndType(objectName, propertyName, out obj, out objectTypePropertyDefinition);
+            GetObjectAndType(objectName, propertyName, out obj, out objectType, out objectTypePropertyDefinition);
 
             var propertyEvaluatorContext = new VRObjectPropertyEvaluatorContext
             {
                 Object = obj,
-                ObjectType = null
+                ObjectType = objectType
             };
-
-            dynamic variableValue = objectTypePropertyDefinition.PropertyEvaluator.GetPropertyValue(propertyEvaluatorContext);
+            
+            if(objectTypePropertyDefinition != null)
+                variableValue = objectTypePropertyDefinition.PropertyEvaluator.GetPropertyValue(propertyEvaluatorContext);
 
             return variableValue;
         }
 
-        private void GetObjectAndType(string objectName, string propertyName, out dynamic obj, out VRObjectTypePropertyDefinition objectTypePropertyDefinition)
+        private void GetObjectAndType(string objectName, string propertyName, out dynamic obj, out VRObjectType objectType, out VRObjectTypePropertyDefinition objectTypePropertyDefinition)
         {
+            objectType = null;
             objectTypePropertyDefinition = null;
+            VRObjectVariable objectVariable = null;
 
-            VRObjectVariable objectVariable;
-            if (objects.TryGetValue(objectName, out obj) && objectVariables.TryGetValue(objectName, out objectVariable))
-            {
+            if (objects.TryGetValue(objectName, out obj) && objectVariables.TryGetValue(objectName, out objectVariable)) {
                 VRObjectTypeDefinition objectTypeDefinition = GetObjectTypeDefinition(objectVariable.VRObjectTypeDefinitionId);
+                if (objectTypeDefinition != null)
+                    objectType = objectTypeDefinition.Settings.ObjectType;
 
-                foreach (var property in objectTypeDefinition.Settings.Properties)
-                    if (property.Name == propertyName){
-                        objectTypePropertyDefinition = property;
-                        break;
-                    }
+                if (!objectTypeDefinition.Settings.Properties.TryGetValue(propertyName, out objectTypePropertyDefinition))
+                    throw new NullReferenceException(String.Format("objectTypePropertyDefinition '{0}'", objectVariable.VRObjectTypeDefinitionId)); 
+            }
+            else {
+                if(obj == null)
+                    throw new NullReferenceException(String.Format("obj '{0}'", objectName));
+                if (objectVariable == null)
+                    throw new NullReferenceException(String.Format("objectVariable '{0}'", objectName));
             }
         }
 

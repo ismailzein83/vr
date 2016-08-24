@@ -83,10 +83,12 @@
                             var objectTypeDefinition = response;
                             var properties = objectTypeDefinition.Settings.Properties;
 
-                            for (var i = 0; i < properties.length; i++) {
-                                $scope.scopeModel.properties.push(properties[i]);
+                            for (var key in properties) {
+                                if (key != "$type") {
+                                    var property = properties[key];
+                                    $scope.scopeModel.properties.push(property);
+                                }
                             }
-
                             $scope.scopeModel.isPropertySelectorLoading = false;
                         }
                     });
@@ -158,21 +160,25 @@
                 onObjectSelectionChangedDeferred.promise.then(function () {
                     onObjectSelectionChangedDeferred = undefined;
                     VRCommon_VRObjectTypeDefinitionAPIService.GetVRObjectTypeDefinition(vrObjectTypeDefinitionId).then(function (response) {
-                            if (response != null) {
-                                var objectTypeDefinition = response;
-                                var properties = objectTypeDefinition.Settings.Properties;
 
-                                for (var i = 0; i < properties.length; i++) {
-                                    $scope.scopeModel.properties.push(properties[i]);
+                        if (response != null) {
+                            var objectTypeDefinition = response;
+                            var properties = objectTypeDefinition.Settings.Properties;
+
+                            for (var key in properties) {
+                                if (key != "$type") {
+                                    var _property = properties[key];
+                                    $scope.scopeModel.properties.push(_property);
                                 }
-
-                                if (property != undefined && property.propertyName != undefined) {
-                                    $scope.scopeModel.selectedProperty =
-                                            UtilsService.getItemByVal($scope.scopeModel.properties, property.propertyName, 'Name');
-                                }
-
-                                propertySelectorLoadDeferred.resolve();
                             }
+
+                            if (property != undefined && property.propertyName != undefined) {
+                                $scope.scopeModel.selectedProperty =
+                                        UtilsService.getItemByVal($scope.scopeModel.properties, property.propertyName, 'Name');
+                            }
+
+                            propertySelectorLoadDeferred.resolve();
+                        }
                     });
                 });
 

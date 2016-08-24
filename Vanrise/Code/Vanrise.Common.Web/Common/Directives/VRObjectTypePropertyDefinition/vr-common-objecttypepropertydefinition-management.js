@@ -69,19 +69,22 @@
                         context = payload.context;
 
                     if (payload != undefined && payload.properties != undefined) {
-                        for (var i = 0; i < payload.properties.length; i++) {
-                            var property = payload.properties[i];
-                            ctrl.objectTypePropertyDefinitions.push(property);
-                        }
+                        for (var index in payload.properties) 
+                            if (index != "$type") {
+                                var property = payload.properties[index];
+                                ctrl.objectTypePropertyDefinitions.push(property);
+                            }          
                     }
                 };
 
                 api.getData = function () {
 
                     if (ctrl.objectTypePropertyDefinitions.length > 0) {
-                        var properties = [];
-                        for (var i = 0; i < ctrl.objectTypePropertyDefinitions.length; i++)
-                            properties.push(ctrl.objectTypePropertyDefinitions[i]);
+                        var properties = {};
+                        for (var i = 0; i < ctrl.objectTypePropertyDefinitions.length; i++) {
+                            var objectTypePropertyDefinition = ctrl.objectTypePropertyDefinitions[i];
+                            properties[objectTypePropertyDefinition.Name] = objectTypePropertyDefinition;
+                        }
                     }
 
                     return properties;

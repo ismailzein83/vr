@@ -2,9 +2,9 @@
 
     "use strict";
 
-    RouteSyncDefinitionManagementController.$inject = ['$scope', 'WhS_RouteSync_RouteSyncDefinitionService', 'UtilsService', 'VRUIUtilsService'];
+    RouteSyncDefinitionManagementController.$inject = ['$scope', 'WhS_RouteSync_RouteSyncDefinitionAPIService', 'WhS_RouteSync_RouteSyncDefinitionService', 'UtilsService', 'VRUIUtilsService'];
 
-    function RouteSyncDefinitionManagementController($scope, WhS_RouteSync_RouteSyncDefinitionService, UtilsService, VRUIUtilsService) {
+    function RouteSyncDefinitionManagementController($scope, WhS_RouteSync_RouteSyncDefinitionAPIService, WhS_RouteSync_RouteSyncDefinitionService, UtilsService, VRUIUtilsService) {
 
         var gridAPI;
 
@@ -23,6 +23,10 @@
                     gridAPI.onRouteSyncDefinitionAdded(addedRouteSyncDefinition);
                 }
                 WhS_RouteSync_RouteSyncDefinitionService.addRouteSyncDefinition(onRouteSyncDefinitionAdded);
+            };
+
+            $scope.scopeModel.hasAddRouteSyncDefinitionPermission = function () {
+                return WhS_RouteSync_RouteSyncDefinitionAPIService.HasAddRouteSyncDefinitionPermission();
             };
 
             $scope.scopeModel.onGridReady = function (api) {

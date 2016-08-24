@@ -64,6 +64,7 @@ app.directive('vrCommonObjecttypedefinitionGrid', ['VRCommon_VRObjectTypeDefinit
                     haspermission: hasEditVRObjectTypeDefinitionPermission
                 });
             }
+
             function editVRObjectTypeDefinition(vrObjectTypeDefinitionItem) {
                 var onVRObjectTypeDefinitionUpdated = function (updatedVRObjectTypeDefinition) {
                     gridAPI.itemUpdated(updatedVRObjectTypeDefinition);
