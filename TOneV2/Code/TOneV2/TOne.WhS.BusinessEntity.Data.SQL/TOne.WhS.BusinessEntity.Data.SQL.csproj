@@ -67,7 +67,6 @@
     <Compile Include="CustomerZoneDataManager.cs" />
     <Compile Include="DealProgressDataManager.cs" />
     <Compile Include="DealDataManager.cs" />
-    <Compile Include="RateTypeDataManager.cs" />
     <Compile Include="SaleEntityRoutingProductDataManager.cs" />
     <Compile Include="SalePriceListDataManager.cs" />
     <Compile Include="SellingProductDataManager.cs" />

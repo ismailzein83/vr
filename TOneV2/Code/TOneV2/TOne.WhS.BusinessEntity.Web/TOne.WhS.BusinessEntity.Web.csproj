@@ -152,7 +152,6 @@
     <Compile Include="Controllers\CarrierProfileController.cs" />
     <Compile Include="Controllers\CustomerSellingProductController.cs" />
     <Compile Include="Controllers\CustomerZoneController.cs" />
-    <Compile Include="Controllers\RateTypeController.cs" />
     <Compile Include="Controllers\SaleCodeController.cs" />
     <Compile Include="Controllers\SaleRateController.cs" />
     <Compile Include="Controllers\SellingProductController.cs" />
@@ -256,9 +255,6 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\TransformationSteps\SupplierZoneRateStep\Templates\SupplierZoneRateStepTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\TransformationSteps\SupplierZoneRateStep\vr-whs-be-datatransformation-supplierzonerate-preview.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\TransformationSteps\SupplierZoneRateStep\vr-whs-be-datatransformation-supplierzonerate.js" />
-    <Content Include="WhS_BusinessEntity\Directives\RateType\Templates\RateTypeGridTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Directives\RateType\vr-whs-be-rate-type-grid.js" />
-    <Content Include="WhS_BusinessEntity\Directives\RateType\vr-whs-be-ratetype-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\Templates\RoutingProductGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\vr-whs-be-routingproduct-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleAreaSettings\Templates\SaleAreaSettingsTemplate.html" />
@@ -369,7 +365,6 @@
     <Content Include="WhS_BusinessEntity\Services\SupplierRateService.js" />
     <Content Include="WhS_BusinessEntity\Services\SupplierZoneService.js" />
     <Content Include="WhS_BusinessEntity\Services\PurchasePricingRuleService.js" />
-    <Content Include="WhS_BusinessEntity\Services\RateTypeService.js" />
     <Content Include="WhS_BusinessEntity\Services\SalePricingRuleService.js" />
     <Content Include="WhS_BusinessEntity\Services\CarrierProfileService.js" />
     <Content Include="WhS_BusinessEntity\Services\CarrierAccountService.js" />
@@ -380,7 +375,6 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\AccountManagerAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CodeGroupAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\ZoneServiceConfigAPIService.js" />
-    <Content Include="WhS_BusinessEntity\Services\APIServices\RateTypeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CustomerZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CarrierAccountAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CarrierProfileAPIService.js" />
@@ -436,10 +430,6 @@
     <Content Include="WhS_BusinessEntity\Views\Deal\DealSellingEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\Deal\DealSellingEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\Deal\DealSellingGridTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeEditorController.js" />
-    <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeEditor.html" />
-    <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeManagement.html" />
-    <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SaleCode\SaleCodeManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SaleCode\SaleCodeManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePricelist.html" />

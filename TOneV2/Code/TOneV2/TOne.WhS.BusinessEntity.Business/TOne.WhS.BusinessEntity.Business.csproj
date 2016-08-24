@@ -99,7 +99,6 @@
     <Compile Include="DealManager.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="PricingRules\PricingRuleRateTypeItemContext.cs" />
-    <Compile Include="RateTypeManager.cs" />
     <Compile Include="RoutingProducts\SaleEntityRoutingProductManager.cs" />
     <Compile Include="RoutingProducts\SaleEntityZoneRoutingProductLocator.cs" />
     <Compile Include="RoutingProducts\ISaleEntityRoutingProductReader.cs" />
