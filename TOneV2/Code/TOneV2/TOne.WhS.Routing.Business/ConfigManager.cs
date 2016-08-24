@@ -7,6 +7,16 @@ namespace TOne.WhS.Routing.Business
     public class ConfigManager
     {
         #region public methods
+        public SubProcessSettings GetSubProcessSettings()
+        {
+            RouteSettingsData routeSettingsData = GetRouteSettingData();
+
+            if (routeSettingsData.SubProcessSettings == null)
+                throw new NullReferenceException("routeSettingsData.SubProcessSettings");
+
+            return routeSettingsData.SubProcessSettings;
+        }
+
         public int GetSupplierTransformationId()
         {
             RouteRuleDataTransformation routeRuleDataTransformation = GetRouteRuleDataTransformation();
@@ -65,7 +75,6 @@ namespace TOne.WhS.Routing.Business
             return routeTechnicalSettingData;
         }
 
-
         private RouteDatabasesToKeep GetRouteDatabasesToKeep()
         {
             RouteSettingsData routeSettingsData = GetRouteSettingData();
@@ -74,8 +83,8 @@ namespace TOne.WhS.Routing.Business
                 throw new NullReferenceException("routeSettingsData.RouteDatabasesToKeep");
 
             return routeSettingsData.RouteDatabasesToKeep;
-
         }
+
         private RouteSettingsData GetRouteSettingData()
         {
             SettingManager settingManager = new SettingManager();

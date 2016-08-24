@@ -84,6 +84,7 @@
     <Compile Include="BuildCodeMatches.cs" />
     <Compile Include="BuildCustomerRoutes.cs" />
     <Compile Include="CreateRoutingDatabase.cs" />
+    <Compile Include="LoadRoutingSettings.cs" />
     <Compile Include="DropOldRoutingDatabases.cs" />
     <Compile Include="FinalizeProductRouteDatabase.cs" />
     <Compile Include="GenerateCustomerZoneDetails.cs" />

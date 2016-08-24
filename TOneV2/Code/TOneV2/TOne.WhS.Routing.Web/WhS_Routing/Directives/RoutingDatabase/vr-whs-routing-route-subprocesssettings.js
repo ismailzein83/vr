@@ -38,6 +38,7 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
                 if (payload != undefined) {
                     ctrl.codeRangeCountThreshold = payload.CodeRangeCountThreshold;
                     ctrl.maximumCodePrefixLength = payload.MaxCodePrefixLength;
+                    ctrl.customerGroupSize = payload.CustomerGroupSize;
                 }
             }
 
@@ -46,6 +47,7 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
                     $type: "TOne.WhS.Routing.Entities.SubProcessSettings, TOne.WhS.Routing.Entities",
                     CodeRangeCountThreshold: ctrl.codeRangeCountThreshold,
                     MaxCodePrefixLength: ctrl.maximumCodePrefixLength,
+                    CustomerGroupSize: ctrl.customerGroupSize
                 }
                 return obj;
             }

@@ -53,6 +53,9 @@
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
@@ -74,15 +77,10 @@
       <Sequence DisplayName="Sequence_SaleCodes" sap2010:WorkflowViewState.IdRef="Sequence_1">
         <twrba1:GetSaleCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSaleCodes_1">
           <twrba1:GetSaleCodes.CodePrefix>
-            <InArgument x:TypeArguments="x:String">
-              <mca:CSharpValue x:TypeArguments="x:String">Input.CodePrefix</mca:CSharpValue>
+            <InArgument x:TypeArguments="twre:CodePrefix">
+              <mca:CSharpValue x:TypeArguments="twre:CodePrefix">Input.CodePrefix</mca:CSharpValue>
             </InArgument>
           </twrba1:GetSaleCodes.CodePrefix>
-          <twrba1:GetSaleCodes.CodePrefixLength>
-            <InArgument x:TypeArguments="x:Int32">
-              <mca:CSharpValue x:TypeArguments="x:Int32">Input.CodePrefixLength</mca:CSharpValue>
-            </InArgument>
-          </twrba1:GetSaleCodes.CodePrefixLength>
           <twrba1:GetSaleCodes.EffectiveOn>
             <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
               <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveOn</mca:CSharpValue>
@@ -113,15 +111,10 @@
         </twrba1:GetActiveSupplierInfos>
         <twrba1:GetSupplierCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSupplierCodes_1">
           <twrba1:GetSupplierCodes.CodePrefix>
-            <InArgument x:TypeArguments="x:String">
-              <mca:CSharpValue x:TypeArguments="x:String">Input.CodePrefix</mca:CSharpValue>
+            <InArgument x:TypeArguments="twre:CodePrefix">
+              <mca:CSharpValue x:TypeArguments="twre:CodePrefix">Input.CodePrefix</mca:CSharpValue>
             </InArgument>
           </twrba1:GetSupplierCodes.CodePrefix>
-          <twrba1:GetSupplierCodes.CodePrefixLength>
-            <InArgument x:TypeArguments="x:Int32">
-              <mca:CSharpValue x:TypeArguments="x:Int32">Input.CodePrefixLength</mca:CSharpValue>
-            </InArgument>
-          </twrba1:GetSupplierCodes.CodePrefixLength>
           <twrba1:GetSupplierCodes.EffectiveOn>
             <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
               <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveOn</mca:CSharpValue>
@@ -175,7 +168,7 @@
       <twrba1:BuildCodeMatches OutputQueueForCustomerRoutes="{x:Null}" sap2010:WorkflowViewState.IdRef="BuildCodeMatches_1" IsCustomerRoutesProcess="False">
         <twrba1:BuildCodeMatches.CodePrefix>
           <InArgument x:TypeArguments="x:String">
-            <mca:CSharpValue x:TypeArguments="x:String">Input.CodePrefix</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="x:String">Input.CodePrefix.Code</mca:CSharpValue>
           </InArgument>
         </twrba1:BuildCodeMatches.CodePrefix>
         <twrba1:BuildCodeMatches.OutputQueue_1>
@@ -288,7 +281,7 @@
         </twrba1:ApplyCodesToCodeSaleZoneTable.RoutingDatabaseId>
       </twrba1:ApplyCodesToCodeSaleZoneTable>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d1FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBCdWlsZENvZGVNYXRjaGVzQnlDb2RlUHJlZml4LnhhbWwzQwOkAg4CAQFJBaQBEAMBhQKlAQWiAhACAQJKB2YSAwHGAmcHowESAwGGAq8BB9MBIQMBrwHUAQfpASsCAX7qAQf/ASwCAU2AAgeQAiUCASiRAgehAi4CAQNLCWUfAwHHAmsJcSkDAb8CcgmRASMDAZoCkgEJogEpAwGHArwBDbwBjgEDAfkBwQENwQFqAwHtAbcBDbcBgwEDAeEBsgENsgFbAwHVAcYBDcYBdwMByQHLAQ3LAXIDAb0BrwGVAa8BnAEDAbwB0AEN0AFzAwGwAeEBDeEBbwMBowHXAQ3XAXsDAZcB5gEN5gF5AwGLAdwBDdwBeQIBf/cBDfcBcQIBcu0BDe0BhgECAWb8AQ38AXoCAVryAQ3yAX4CAU6IAg2IAnECAUGDAg2DAnECATWNAg2NAmECASmZAg2ZAnICARyUAg2UAnYCARCeAg2eAmECAQRYD1hsAwHcAlMPU2IDAdcCYg9idAMB0gJOD05dAwHNAl0PXVwDAcgCbg9uiAEDAcACfw9/bAMBuQJ6D3piAwGzAnUPdV0DAa0CjgEPjgGAAQMBpwKJAQ+JAXwDAaEChAEPhAFcAwGbApUBD5UBYwMBlAKaAQ+aAXQDAY4CnwEPnwF9AwGIAg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBCdWlsZENvZGVNYXRjaGVzQnlDb2RlUHJlZml4LnhhbWwxRgOdAg4CAQFMBZ0BEAMBhQKeAQWbAhACAQJNB2QSAwHAAmUHnAESAwGGAqgBB8wBIQMBrwHNAQfiASsCAX7jAQf4ASwCAU35AQeJAiUCASiKAgeaAi4CAQNOCWMfAwHBAmkJbykDAbkCcAmKASMDAZoCiwEJmwEpAwGHArUBDbUBjgEDAfkBugENugFqAwHtAbABDbABgwEDAeEBqwENqwFgAwHVAb8BDb8BdwMByQHEAQ3EAXIDAb0BqAGVAagBnAEDAbwByQENyQFzAwGwAdoBDdoBbwMBowHQAQ3QAXsDAZcB3wEN3wF5AwGLAdUBDdUBeQIBf/ABDfABcQIBcuYBDeYBhgECAWb1AQ31AXoCAVrrAQ3rAX4CAU6BAg2BAnECAUH8AQ38AXECATWGAg2GAmECASmSAg2SAnICARyNAg2NAnYCARCXAg2XAmECAQRWD1ZsAwHRAmAPYHQDAcwCUQ9RZAMBxwJbD1tcAwHCAmwPbIgBAwG6AngPeGwDAbMCcw9zZAMBrQKHAQ+HAYABAwGnAoIBD4IBfAMBoQJ9D31cAwGbAo4BD44BYwMBlAKTAQ+TAXQDAY4CmAEPmAF9AwGIAg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

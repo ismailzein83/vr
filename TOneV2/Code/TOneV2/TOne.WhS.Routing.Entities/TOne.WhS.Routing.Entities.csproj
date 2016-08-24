@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="CodeMatches.cs" />
     <Compile Include="CodeMatchesBatch.cs" />
+    <Compile Include="CodePrefix.cs" />
     <Compile Include="CodeSaleZone.cs" />
     <Compile Include="IRPRouteRuleExecutionContext.cs" />
     <Compile Include="ISupplierZoneToRPOptionPolicyExecutionContext.cs" />

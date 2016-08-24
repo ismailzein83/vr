@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.BP.Arguments
@@ -12,8 +8,6 @@ namespace TOne.WhS.Routing.BP.Arguments
         public DateTime? EffectiveTime { get; set; }
 
         public bool IsFuture { get; set; }
-
-        public int CodePrefixLength { get; set; }
         public RoutingDatabaseType RoutingDatabaseType { get; set; }
         public RoutingProcessType RoutingProcessType { get; set; }
         public bool DivideProcessIntoSubProcesses { get; set; }

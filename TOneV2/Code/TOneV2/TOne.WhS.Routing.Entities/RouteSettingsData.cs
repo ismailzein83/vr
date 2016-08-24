@@ -45,5 +45,7 @@ namespace TOne.WhS.Routing.Entities
         public int CodeRangeCountThreshold { get; set; }
 
         public int MaxCodePrefixLength { get; set; }
+
+        public int CustomerGroupSize { get; set; }
     }
 }

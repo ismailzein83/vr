@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsRoutingRpbuildproduct", [ 'WhS_Routing_RPRouteAPIService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Routing_RoutingDatabaseTypeEnum', 'WhS_Routing_RoutingProcessTypeEnum', 'WhS_Routing_CodePrefixOptions', 'WhS_Routing_SaleZoneRangeOptions',
-    function (WhS_Routing_RPRouteAPIService, VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RoutingDatabaseTypeEnum, WhS_Routing_RoutingProcessTypeEnum, WhS_Routing_CodePrefixOptions, WhS_Routing_SaleZoneRangeOptions) {
+app.directive("vrWhsRoutingRpbuildproduct", [ 'WhS_Routing_RPRouteAPIService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Routing_RoutingDatabaseTypeEnum', 'WhS_Routing_RoutingProcessTypeEnum',  'WhS_Routing_SaleZoneRangeOptions',
+    function (WhS_Routing_RPRouteAPIService, VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RoutingDatabaseTypeEnum, WhS_Routing_RoutingProcessTypeEnum, WhS_Routing_SaleZoneRangeOptions) {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -85,7 +85,6 @@ app.directive("vrWhsRoutingRpbuildproduct", [ 'WhS_Routing_RPRouteAPIService', '
                         IsFuture: $scope.isFuture,
                         RoutingDatabaseType: $scope.selectedRoutingDatabaseType.value,
                         RoutingProcessType: WhS_Routing_RoutingProcessTypeEnum.RoutingProductRoute.value,
-                        CodePrefixLength: $scope.selectedCodePrefixOption,
                         SaleZoneRange: $scope.selectedSaleZoneRange,
                         SupplierZoneRPOptionPolicies: GetSelectedSupplierPolicies()
                     }
@@ -97,9 +96,6 @@ app.directive("vrWhsRoutingRpbuildproduct", [ 'WhS_Routing_RPRouteAPIService', '
 
                 $scope.routingDatabaseTypes = UtilsService.getArrayEnum(WhS_Routing_RoutingDatabaseTypeEnum);
                 $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', WhS_Routing_RoutingDatabaseTypeEnum.Current.value);
-
-                $scope.codePrefixOptions = WhS_Routing_CodePrefixOptions;
-                $scope.selectedCodePrefixOption = WhS_Routing_CodePrefixOptions[0];
 
                 $scope.saleZoneRangeOptions = WhS_Routing_SaleZoneRangeOptions;
                 $scope.selectedSaleZoneRange = WhS_Routing_SaleZoneRangeOptions[5];

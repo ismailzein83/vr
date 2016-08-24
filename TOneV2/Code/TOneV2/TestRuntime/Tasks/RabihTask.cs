@@ -72,7 +72,7 @@ namespace TestRuntime
                 {
                     EffectiveOn = DateTime.Now,
                     RoutingDatabaseType = TOne.WhS.Routing.Entities.RoutingDatabaseType.Current,
-                    CodePrefixLength = 1,
+                    //CodePrefixLength = 1,
                     IsFuture = false,
                     SaleZoneRange = 1000,
                     SupplierZoneRPOptionPolicies = new List<SupplierZoneToRPOptionPolicy>() { new SupplierZoneToRPOptionHighestRatePolicy() { ConfigId = 27, IsDefault = true }, new SupplierZoneToRPOptionLowestRatePolicy() { ConfigId = 29 } },
@@ -88,7 +88,7 @@ namespace TestRuntime
             {
                 InputArguments = new TOne.WhS.Routing.BP.Arguments.RoutingProcessInput
                 {
-                    CodePrefixLength = 2,
+                    //CodePrefixLength = 2,
                     EffectiveTime = DateTime.Now,
                     RoutingDatabaseType = RoutingDatabaseType.Current,
                     RoutingProcessType = RoutingProcessType.CustomerRoute,

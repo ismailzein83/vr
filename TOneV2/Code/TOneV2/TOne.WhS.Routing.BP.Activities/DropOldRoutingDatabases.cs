@@ -35,7 +35,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
                 foreach (var db in routingdatabases)
                 {
-                    if (!excludedDatabaseIds.Contains(db.ID) || (!db.IsReady && (now - db.CreatedTime).TotalSeconds > maximumExecutionTimeInSeconds))
+                    if ((db.IsReady && !excludedDatabaseIds.Contains(db.ID)) || (!db.IsReady && (now - db.CreatedTime).TotalSeconds > maximumExecutionTimeInSeconds))
                     {
                         try
                         {

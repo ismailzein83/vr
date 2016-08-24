@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.BusinessProcess;
 using TOne.WhS.BusinessEntity.Business;
 using Vanrise.Entities;
+using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -15,7 +14,7 @@ namespace TOne.WhS.Routing.BP.Activities
     {
         public int CodePrefixLength { get; set; }
 
-        public string CodePrefix { get; set; }
+        public CodePrefix CodePrefix { get; set; }
 
         public DateTime? EffectiveOn { get; set; }
 
@@ -32,10 +31,7 @@ namespace TOne.WhS.Routing.BP.Activities
     public sealed class GetSupplierCodes : BaseAsyncActivity<GetSupplierCodesInput, GetSupplierCodesOutput>
     {
         [RequiredArgument]
-        public InArgument<int> CodePrefixLength { get; set; }
-
-        [RequiredArgument]
-        public InArgument<String> CodePrefix { get; set; }
+        public InArgument<CodePrefix> CodePrefix { get; set; }
 
         [RequiredArgument]
         public InArgument<DateTime?> EffectiveOn { get; set; }
@@ -52,9 +48,9 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override GetSupplierCodesOutput DoWorkWithResult(GetSupplierCodesInput inputArgument, AsyncActivityHandle handle)
         {
             SupplierCodeManager manager = new SupplierCodeManager();
-            bool getChildCodes = (inputArgument.CodePrefixLength == inputArgument.CodePrefix.Length);
+            bool getChildCodes = !inputArgument.CodePrefix.IsCodeDivided;
             IEnumerable<SupplierCode> supplierCodes = 
-                manager.GetActiveSupplierCodesByPrefix(inputArgument.CodePrefix, inputArgument.EffectiveOn, inputArgument.IsFuture, getChildCodes, true, inputArgument.SupplierInfo);
+                manager.GetActiveSupplierCodesByPrefix(inputArgument.CodePrefix.Code, inputArgument.EffectiveOn, inputArgument.IsFuture, getChildCodes, true, inputArgument.SupplierInfo);
 
             return new GetSupplierCodesOutput
             {
@@ -66,7 +62,6 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             return new GetSupplierCodesInput
             {
-                CodePrefixLength = this.CodePrefixLength.Get(context),
                 CodePrefix = this.CodePrefix.Get(context),
                 EffectiveOn = this.EffectiveOn.Get(context),
                 IsFuture = this.IsFuture.Get(context),

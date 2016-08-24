@@ -64,7 +64,7 @@ namespace TestRuntime.Tasks
                 {
                     EffectiveOn = DateTime.Now,
                     RoutingDatabaseType = TOne.WhS.Routing.Entities.RoutingDatabaseType.Current,
-                    CodePrefixLength = 1,
+                    //CodePrefixLength = 1,
                     IsFuture = false,
                     SaleZoneRange = 1000,
                     SupplierZoneRPOptionPolicies = new List<SupplierZoneToRPOptionPolicy>() { 
