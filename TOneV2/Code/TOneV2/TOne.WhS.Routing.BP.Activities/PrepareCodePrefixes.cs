@@ -84,7 +84,8 @@ namespace TOne.WhS.Routing.BP.Activities
                 distinctCodePrefixes.Add(new CodePrefix()
                 {
                     Code = i.CodePrefix,
-                    IsCodeDivided = codesDivided.Contains(i.CodePrefix)
+                    IsCodeDivided = codesDivided.Contains(i.CodePrefix),
+                    CodeCount = i.Count
                 }));
 
             this.DistinctCodePrefixes.Set(context, distinctCodePrefixes);

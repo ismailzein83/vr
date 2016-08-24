@@ -162,13 +162,12 @@
         </twrba1:PrepareCodePrefixes.IsFuture>
       </twrba1:PrepareCodePrefixes>
     </Parallel>
-    <twrba1:LoadRoutingSettings>
+    <twrba1:LoadRoutingSettings sap2010:WorkflowViewState.IdRef="LoadRoutingSettings_1">
       <twrba1:LoadRoutingSettings.CustomerGroupSize>
         <OutArgument x:TypeArguments="x:Int32">
           <mca:CSharpReference x:TypeArguments="x:Int32">customerGroupSize</mca:CSharpReference>
         </OutArgument>
       </twrba1:LoadRoutingSettings.CustomerGroupSize>
-      <sap2010:WorkflowViewState.IdRef>LoadRoutingSettings_1</sap2010:WorkflowViewState.IdRef>
     </twrba1:LoadRoutingSettings>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Sequence DisplayName="CustomerZoneDetails_Sequence" sap2010:WorkflowViewState.IdRef="Sequence_6">
@@ -340,7 +339,7 @@
     <ParallelForEach x:TypeArguments="twre:CodePrefix" DisplayName="ParallelForEach&lt;CodePrefix&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_3">
       <ParallelForEach.Values>
         <InArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">DistinctCodePrefixes</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">DistinctCodePrefixes.Reverse()</mca:CSharpValue>
         </InArgument>
       </ParallelForEach.Values>
       <ActivityAction x:TypeArguments="twre:CodePrefix">
@@ -398,7 +397,7 @@
                 <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1">
                   <vbw:WriteTrackingMessage.Message>
                     <InArgument x:TypeArguments="x:String">
-                      <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Code Prefix '{0}' group completed. {1} groups remaining", codePrefix.Code, (DistinctCodePrefixes.Count() - subProcessByPrefixCompleted))</mca:CSharpValue>
+                      <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Code Prefix '{0}' group completed (Codes Count:{1}). {2} groups remaining", codePrefix.Code,codePrefix.CodeCount, (DistinctCodePrefixes.Count() - subProcessByPrefixCompleted))</mca:CSharpValue>
                     </InArgument>
                   </vbw:WriteTrackingMessage.Message>
                   <vbw:WriteTrackingMessage.Severity>
@@ -446,7 +445,7 @@
         </InArgument>
       </twrba1:DropOldRoutingDatabases.ProcessType>
     </twrba1:DropOldRoutingDatabases>
-    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUm91dGluZ1Byb2Nlc3MueGFtbFxIA8IDDgIBAU0LTacBAgEPUgtSpwECAQNaM1o2AgECXQVhEQMBrgViBXwkAwHxBH0FgwEgAwHjBIQBBaQBEAMBowSlAQWsASIDAZYErQEFzAIQAwHnAc0CBdMCIAMB2QHUAgWfAxcCAVygAwWmAyACAU6nAwWtAywCAUGuAwW0AyYCATS1AwXAAyYCARtfCV97AwGvBXQLdHADAaIFagtqagMBlgVlC2VhAwGKBXkLeXIDAf4EbwtvcAMB8gSAAQuAAYUBAwHlBH1gfXQDAeQEhQEHiwEnAwHWBIwBB5IBJwMByQSTAQejASQDAaQEqAELqAFhAwGXBK4BB6sCEgMBmQKsAgfLAisDAegB0AIL0AKFAQMB2wHNAmDNArgBAwHaAdcCC9cCdQMBzQHeAgmdAxQCAV2jAwujA4UBAgFQoANgoAOEAQIBT6oDC6oDWQIBQrEDC7EDWQIBNbgDC7gDcgIBKL0DC70DcAIBHIgBDYgBiAEDAdcEjwENjwGHAQMBygSWAQ2WAX8DAb0EmwENmwFsAwGxBKABDaABWgMBpQSvAQm/ASMDAfEDwAEJqgIbAwGaAq8CDa8CbAMBjQK5Ag25AlsDAYECvgINvgJ/AwH1AbQCDbQCWgMB6QHfAgvwAhwDAbEB8QILnAMQAgFesgEPsgFdAwGKBLcBD7cBiwEDAf4DvAEPvAGEAQMB8gPDAQ/DAYoBAwHlA8oBDagCGAMBmwLiAhHoAiADAcAB7QIR7QKEAQMBswHfAnzfAoIBAwGyAfQCEfQCswECAV/4Ag/+AiMDAaMBgQMPmgMaAgFs0AEP2wEYAwHEA9wBD+cBGAMBowPoAQ/7ASADAYED/AEPpwIUAwGcAvsCFfsCzgEDAaQBggMRjQMaAwGIAY4DEZkDLAIBbdgBFdgBiAEDAdUD0wEV0wFnAwHFA+QBFeQBiAEDAbQD3wEV3wFnAwGkA+sBFfMBIAMBkwP4ARX4AZABAwGDA+gBgAHoAYYBAwGCA/8BFf8BvQEDAZ0CgwITiQInAwHwAowCE6UCHgMBrQKKAxeKA3MDAZYBhQMXhQN3AwGJAZYDF5YDkQECAXuRAxeRA/cBAgFuhgIZhgKEAgMB8QKNAhWYAh4DAc8CmQIVpAIwAwGuApUCG5UCdwMB4AKQAhuQAnsDAdACoQIboQKVAQMBvwKcAhucAqoCAwGvAg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUm91dGluZ1Byb2Nlc3MueGFtbFxIA8EDDgIBAU0LTacBAgEPUgtSpwECAQNaM1o2AgECXQVhEQMBrgViBXwkAwHxBH0FgwEgAwHjBIQBBaQBEAMBowSlAQWrASIDAZYErAEFywIQAwHnAcwCBdICIAMB2QHTAgWeAxcCAVyfAwWlAyACAU6mAwWsAywCAUGtAwWzAyYCATS0AwW/AyYCARtfCV97AwGvBXQLdHADAaIFagtqagMBlgVlC2VhAwGKBXkLeXIDAf4EbwtvcAMB8gSAAQuAAYUBAwHlBH1gfXQDAeQEhQEHiwEnAwHWBIwBB5IBJwMByQSTAQejASQDAaQEqAELqAFhAwGXBK0BB6oCEgMBmQKrAgfKAisDAegBzwILzwKFAQMB2wHMAmDMArgBAwHaAdYCC9YCfwMBzQHdAgmcAxQCAV2iAwuiA4UBAgFQnwNgnwOEAQIBT6kDC6kDWQIBQrADC7ADWQIBNbcDC7cDcgIBKLwDC7wDcAIBHIgBDYgBiAEDAdcEjwENjwGHAQMBygSWAQ2WAX8DAb0EmwENmwFsAwGxBKABDaABWgMBpQSuAQm+ASMDAfEDvwEJqQIbAwGaAq4CDa4CbAMBjQK4Ag24AlsDAYECvQINvQJ/AwH1AbMCDbMCWgMB6QHeAgvvAhwDAbEB8AILmwMQAgFesQEPsQFdAwGKBLYBD7YBiwEDAf4DuwEPuwGEAQMB8gPCAQ/CAYoBAwHlA8kBDacCGAMBmwLhAhHnAiADAcAB7AIR7AKEAQMBswHeAnzeAoIBAwGyAfMCEfMCswECAV/3Ag/9AiMDAaMBgAMPmQMaAgFszwEP2gEYAwHEA9sBD+YBGAMBowPnAQ/6ASADAYED+wEPpgIUAwGcAvoCFfoCzgEDAaQBgQMRjAMaAwGIAY0DEZgDLAIBbdcBFdcBiAEDAdUD0gEV0gFnAwHFA+MBFeMBiAEDAbQD3gEV3gFnAwGkA+oBFfIBIAMBkwP3ARX3AZABAwGDA+cBgAHnAYYBAwGCA/4BFf4BvQEDAZ0CggITiAInAwHwAosCE6QCHgMBrQKJAxeJA3MDAZYBhAMXhAN3AwGJAZUDF5UDkQECAXuQAxeQA54CAgFuhQIZhQKEAgMB8QKMAhWXAh4DAc8CmAIVowIwAwGuApQCG5QCdwMB4AKPAhuPAnsDAdACoAIboAKVAQMBvwKbAhubAqoCAwGvAg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

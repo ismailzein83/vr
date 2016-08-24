@@ -189,7 +189,7 @@
     <ParallelForEach x:TypeArguments="twre:CodePrefix" DisplayName="ParallelForEach_BuildCodeMatches" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_4">
       <ParallelForEach.Values>
         <InArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">codePrefixes</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">codePrefixes.Reverse()</mca:CSharpValue>
         </InArgument>
       </ParallelForEach.Values>
       <ActivityAction x:TypeArguments="twre:CodePrefix">
@@ -249,7 +249,7 @@
                 <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1">
                   <vbw:WriteTrackingMessage.Message>
                     <InArgument x:TypeArguments="x:String">
-                      <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Code Prefix '{0}' group completed. {1} groups remaining", codePrefix.Code, (codePrefixes.Count() - subProcessByPrefixCompleted))</mca:CSharpValue>
+                      <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Code Prefix '{0}' group completed (Codes Count:{1}). {2} groups remaining", codePrefix.Code, codePrefix.CodeCount, (codePrefixes.Count() - subProcessByPrefixCompleted))</mca:CSharpValue>
                     </InArgument>
                   </vbw:WriteTrackingMessage.Message>
                   <vbw:WriteTrackingMessage.Severity>
@@ -420,7 +420,7 @@
         </InArgument>
       </twrba1:DropOldRoutingDatabases.ProcessType>
     </twrba1:DropOldRoutingDatabases>
-    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sVUoDqAMOAgEBVAtUrQECAQRXM1c2AgEDWDNYNgIBAloFdCQDAZIEdQV7IAMBhQR8BZUBEAMB1gOWAQW1ASkDAakDtgEFvAEgAwGcA70BBYoCFwMBoAKLAgWbAiUDAf4BnAIFrAIfAwHcAa0CBbMCIAMBzwG0AgWFAxcCAUuGAwWMAyACAT6NAwWTAysCATKUAwWaAyYCASabAwWmAyYCAQ9sC2xwAwG/BGILYmgDAbQEXQtdYQMBqQRxC3FyAwGeBGcLZ44BAwGTBHgLeIUBAwGHBHVgdXQDAYYEfQeDAScDAfkDhAEHlAEkAwHXA5kBC5kBaAMBywOjAQujAVkDAcADqAELqAF2AwG1A54BC54BWAMBqgO5AQu5AYUBAwGeA7YBYLYBpwEDAZ0DwAELwAFtAwGRA8cBCYgCFAMBoQKTAguTAlgDAZUCjgILjgJoAwGKApgCC5gCZQMB/wGfAgufAlsDAfMBpAILpAJyAwHoAakCC6kCXQMB3QGwAguwAoUBAwHRAa0CYK0CoQEDAdABtwILtwJ4AwHEAb4CCYMDFAIBTIkDC4kDhQECAUCGA2CGA4YBAgE/kAMLkANZAgEzlwMLlwNZAgEnngMLngNyAgEbowMLowNwAgEQgAENgAGAAQMB+gOHAQ2HAXcDAe4DjAENjAFqAwHjA5EBDZEBWgMB2APLAQvbARwDAfUC3AELhwIQAwGiAsMCC9YCHAMBpgHXAguCAxACAU3OARHTASADAYQD2AER2AGEAQMB9wLLAXzLAYIBAwH2At8BEd8BkQEDAaMC4wEP6QEjAwHnAuwBD4UCGgMBsALGAhHOAiADAbYB0wIR0wKLAQMBqAHDAnzDAoIBAwGnAdoCEdoCmQECAU7eAg/kAiMDAZcB5wIPgAMaAgFc5gEV5gHOAQMB6ALtARH4ARoDAcwC+QERhAIsAwGxAuECFeECgAIDAZgB6AIR8wIaAgF69AIR/wIsAgFd9QEX9QFzAwHaAvABF/ABdwMBzQKBAheBApEBAwG/AvwBF/wB7wEDAbIC8AIX8AJ3AwGJAesCF+sCewIBe/wCF/wCkQECAWz3Ahf3ApcCAgFe</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sVUoDqAMOAgEBVAtUrQECAQRXM1c2AgEDWDNYNgIBAloFdCQDAZIEdQV7IAMBhQR8BZUBEAMB1gOWAQW1ASkDAakDtgEFvAEgAwGcA70BBYoCFwMBoAKLAgWbAiUDAf4BnAIFrAIfAwHcAa0CBbMCIAMBzwG0AgWFAxcCAUuGAwWMAyACAT6NAwWTAysCATKUAwWaAyYCASabAwWmAyYCAQ9sC2xwAwG/BGILYmgDAbQEXQtdYQMBqQRxC3FyAwGeBGcLZ44BAwGTBHgLeIUBAwGHBHVgdXQDAYYEfQeDAScDAfkDhAEHlAEkAwHXA5kBC5kBaAMBywOjAQujAVkDAcADqAELqAF2AwG1A54BC54BWAMBqgO5AQu5AYUBAwGeA7YBYLYBpwEDAZ0DwAELwAF3AwGRA8cBCYgCFAMBoQKTAguTAlgDAZUCjgILjgJoAwGKApgCC5gCZQMB/wGfAgufAlsDAfMBpAILpAJyAwHoAakCC6kCXQMB3QGwAguwAoUBAwHRAa0CYK0CoQEDAdABtwILtwJ4AwHEAb4CCYMDFAIBTIkDC4kDhQECAUCGA2CGA4YBAgE/kAMLkANZAgEzlwMLlwNZAgEnngMLngNyAgEbowMLowNwAgEQgAENgAGAAQMB+gOHAQ2HAXcDAe4DjAENjAFqAwHjA5EBDZEBWgMB2APLAQvbARwDAfUC3AELhwIQAwGiAsMCC9YCHAMBpgHXAguCAxACAU3OARHTASADAYQD2AER2AGEAQMB9wLLAXzLAYIBAwH2At8BEd8BkQEDAaMC4wEP6QEjAwHnAuwBD4UCGgMBsALGAhHOAiADAbYB0wIR0wKLAQMBqAHDAnzDAoIBAwGnAdoCEdoCmQECAU7eAg/kAiMDAZcB5wIPgAMaAgFc5gEV5gHOAQMB6ALtARH4ARoDAcwC+QERhAIsAwGxAuECFeECgAIDAZgB6AIR8wIaAgF69AIR/wIsAgFd9QEX9QFzAwHaAvABF/ABdwMBzQKBAheBApEBAwG/AvwBF/wBlwIDAbIC8AIX8AJ3AwGJAesCF+sCewIBe/wCF/wCkQECAWz3Ahf3ApcCAgFe</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

@@ -11,5 +11,7 @@ namespace TOne.WhS.Routing.Entities
         public string Code { get; set; }
 
         public bool IsCodeDivided { get; set; }
+
+        public int CodeCount { get; set; }
     }
 }
