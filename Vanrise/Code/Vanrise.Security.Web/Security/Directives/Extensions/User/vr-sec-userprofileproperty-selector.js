@@ -21,7 +21,7 @@
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: '/Client/Modules/Security/Directives/Extensions/User/Templates/UserProfileTemplate.html'
+            templateUrl: '/Client/Modules/Security/Directives/Extensions/User/Templates/UserProfilePropertySelectorTemplate.html'
         };
 
         function PropertySelector($scope, ctrl, $attrs) {
