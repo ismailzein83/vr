@@ -4,7 +4,7 @@
            title="{{routeOption.title}}"
            ng-repeat="routeOption in ctrl.routeOptions"
            ng-click="ctrl.viewSupplier(routeOption)">
-            {{routeOption.Entity.SupplierRate | number: 4}}
+            {{routeOption.SupplierRate | number: 4}}
         </a>
     </vr-label>
 </div>

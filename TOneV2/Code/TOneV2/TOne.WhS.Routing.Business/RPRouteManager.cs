@@ -15,16 +15,28 @@ namespace TOne.WhS.Routing.Business
 {
     public class RPRouteManager
     {
+        #region Fields
+
         CarrierAccountManager _carrierAccountManager;
         RoutingProductManager _routingProductManager;
         SaleZoneManager _saleZoneManager;
+        CurrencyExchangeRateManager _currencyExchangeRateManager;
+
+        #endregion
+
+        #region Constructors
 
         public RPRouteManager()
         {
             _carrierAccountManager = new CarrierAccountManager();
             _routingProductManager = new RoutingProductManager();
             _saleZoneManager = new SaleZoneManager();
+            _currencyExchangeRateManager = new CurrencyExchangeRateManager();
         }
+
+        #endregion
+
+        #region Public Methods
 
         public Vanrise.Entities.IDataRetrievalResult<RPRouteDetail> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<RPRouteQuery> input)
         {
@@ -37,7 +49,7 @@ namespace TOne.WhS.Routing.Business
             {
                 ResultKey = rpRouteResult.ResultKey,
                 TotalCount = rpRouteResult.TotalCount,
-                Data = rpRouteResult.Data.MapRecords(x => RPRouteDetailMapper(x, input.Query.PolicyConfigId, input.Query.NumberOfOptions))
+                Data = rpRouteResult.Data.MapRecords(x => RPRouteDetailMapper(x, input.Query.PolicyConfigId, input.Query.NumberOfOptions, null))
             };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult);
@@ -45,14 +57,24 @@ namespace TOne.WhS.Routing.Business
 
         public IEnumerable<RPRouteDetail> GetRPRoutes(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones)
         {
+            return GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, null);
+        }
+
+        public IEnumerable<RPRouteDetail> GetRPRoutes(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, int? currencyId)
+        {
             IRPRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
             dataManager.RoutingDatabase = GetLatestRoutingDatabase(routingDatabaseId);
 
             IEnumerable<RPRoute> rpRoutes = dataManager.GetRPRoutes(rpZones);
-            return rpRoutes.MapRecords(x => RPRouteDetailMapper(x, policyConfigId, numberOfOptions));
+            return rpRoutes.MapRecords(x => RPRouteDetailMapper(x, policyConfigId, numberOfOptions, currencyId));
         }
 
         public RPRouteOptionSupplierDetail GetRPRouteOptionSupplier(int routingDatabaseId, int routingProductId, long saleZoneId, int supplierId)
+        {
+            return GetRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, supplierId, null);
+        }
+
+        public RPRouteOptionSupplierDetail GetRPRouteOptionSupplier(int routingDatabaseId, int routingProductId, long saleZoneId, int supplierId, int? currencyId)
         {
             IRPRouteDataManager routeManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
@@ -69,7 +91,7 @@ namespace TOne.WhS.Routing.Business
             return new RPRouteOptionSupplierDetail()
             {
                 SupplierName = carrierAccountManager.GetCarrierAccountName(supplierId),
-                SupplierZones = dicRouteOptionSuppliers[supplierId].SupplierZones.MapRecords(RPRouteOptionSupplierZoneDetailMapper)
+                SupplierZones = dicRouteOptionSuppliers[supplierId].SupplierZones.MapRecords(x => RPRouteOptionSupplierZoneDetailMapper(x, currencyId))
             };
         }
 
@@ -83,7 +105,7 @@ namespace TOne.WhS.Routing.Business
                 return null;
 
             IEnumerable<RPRouteOption> routeOptionsByPolicy = allOptions[input.Query.PolicyOptionConfigId];
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult<RPRouteOptionDetail>(input, routeOptionsByPolicy.ToBigResult(input, null, RPRouteOptionMapper));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult<RPRouteOptionDetail>(input, routeOptionsByPolicy.ToBigResult(input, null, x => RPRouteOptionMapper(x, null)));
         }
 
         public IEnumerable<RPRouteOptionPolicySetting> GetPoliciesOptionTemplates(RPRouteOptionPolicyFilter filter)
@@ -102,7 +124,7 @@ namespace TOne.WhS.Routing.Business
             Func<RPRouteOptionPolicySetting, bool> filterExpression = (itm) => selectedPolicyIds.Contains(itm.ExtensionConfigurationId);
 
             IEnumerable<RPRouteOptionPolicySetting> cachedFilteredConfigs = cachedConfigs.FindAllRecords(filterExpression);
-            
+
             if (cachedFilteredConfigs == null || cachedFilteredConfigs.Count() == 0)
                 throw new NullReferenceException("cachedFilteredConfigs");
 
@@ -112,11 +134,12 @@ namespace TOne.WhS.Routing.Business
             bool isDefaultPolicySet = false;
             foreach (RPRouteOptionPolicySetting config in cachedFilteredConfigs)
             {
-                RPRouteOptionPolicySetting item = new RPRouteOptionPolicySetting() { 
+                RPRouteOptionPolicySetting item = new RPRouteOptionPolicySetting()
+                {
                     BehaviorFQTN = config.BehaviorFQTN,
                     Editor = config.Editor,
                     ExtensionConfigurationId = config.ExtensionConfigurationId,
-                    IsDefault= config.IsDefault,
+                    IsDefault = config.IsDefault,
                     Name = config.Name,
                     Title = config.Title
                 };
@@ -134,6 +157,8 @@ namespace TOne.WhS.Routing.Business
 
             return filteredConfigs.OrderBy(x => x.Title);
         }
+
+        #endregion
 
         #region Private Members
 
@@ -153,7 +178,7 @@ namespace TOne.WhS.Routing.Business
             return productRoutingDatabases.First();
         }
 
-        private RPRouteDetail RPRouteDetailMapper(RPRoute rpRoute, int policyConfigId, int numberOfOptions)
+        private RPRouteDetail RPRouteDetailMapper(RPRoute rpRoute, int policyConfigId, int numberOfOptions, int? currencyId)
         {
             return new RPRouteDetail()
             {
@@ -162,42 +187,52 @@ namespace TOne.WhS.Routing.Business
                 RoutingProductName = _routingProductManager.GetRoutingProductName(rpRoute.RoutingProductId),
                 SaleZoneName = _saleZoneManager.GetSaleZoneName(rpRoute.SaleZoneId),
                 IsBlocked = rpRoute.IsBlocked,
-                RouteOptionsDetails = this.GetRouteOptionDetails(rpRoute.RPOptionsByPolicy, policyConfigId, numberOfOptions),
+                RouteOptionsDetails = this.GetRouteOptionDetails(rpRoute.RPOptionsByPolicy, policyConfigId, numberOfOptions, currencyId),
                 ExecutedRuleId = rpRoute.ExecutedRuleId
             };
         }
 
-        private RPRouteOptionDetail RPRouteOptionMapper(RPRouteOption routeOption)
+        private RPRouteOptionDetail RPRouteOptionMapper(RPRouteOption routeOption, int? currencyId)
         {
             if (routeOption == null)
                 return null;
 
-            return new RPRouteOptionDetail()
+            var routeOptionDetail = new RPRouteOptionDetail()
             {
                 Entity = routeOption,
-                SupplierName = _carrierAccountManager.GetCarrierAccountName(routeOption.SupplierId)
+                SupplierName = _carrierAccountManager.GetCarrierAccountName(routeOption.SupplierId),
             };
+
+            if (currencyId.HasValue)
+                routeOptionDetail.SupplierRate = GetRateConvertedToCurrency(routeOption.SupplierRate, currencyId.Value, DateTime.Now);
+
+            return routeOptionDetail;
         }
 
-        private RPRouteOptionSupplierZoneDetail RPRouteOptionSupplierZoneDetailMapper(RPRouteOptionSupplierZone rpRouteOptionSupplierZone)
+        private RPRouteOptionSupplierZoneDetail RPRouteOptionSupplierZoneDetailMapper(RPRouteOptionSupplierZone rpRouteOptionSupplierZone, int? currencyId)
         {
             SupplierZoneManager manager = new SupplierZoneManager();
             SupplierZone supplierZone = manager.GetSupplierZone(rpRouteOptionSupplierZone.SupplierZoneId);
 
-            return new RPRouteOptionSupplierZoneDetail()
+            var detailEntity = new RPRouteOptionSupplierZoneDetail()
             {
                 Entity = rpRouteOptionSupplierZone,
-                SupplierZoneName = supplierZone != null ? supplierZone.Name : null
+                SupplierZoneName = supplierZone != null ? supplierZone.Name : null,
             };
+
+            if (currencyId.HasValue)
+                detailEntity.SupplierRate = GetRateConvertedToCurrency(rpRouteOptionSupplierZone.SupplierRate, currencyId.Value, DateTime.Now);
+
+            return detailEntity;
         }
 
-        private IEnumerable<RPRouteOptionDetail> GetRouteOptionDetails(Dictionary<int, IEnumerable<RPRouteOption>> dicRouteOptions, int policyConfigId, int numberOfOptions)
+        private IEnumerable<RPRouteOptionDetail> GetRouteOptionDetails(Dictionary<int, IEnumerable<RPRouteOption>> dicRouteOptions, int policyConfigId, int numberOfOptions, int? currencyId)
         {
             if (dicRouteOptions == null || !dicRouteOptions.ContainsKey(policyConfigId))
                 return null;
 
             IEnumerable<RPRouteOption> routeOptionDetails = dicRouteOptions[policyConfigId].Take(numberOfOptions);
-            return routeOptionDetails.MapRecords(RPRouteOptionMapper);
+            return routeOptionDetails.MapRecords(x => RPRouteOptionMapper(x, currencyId));
         }
 
         private IEnumerable<int> GetRoutingDatabasePolicyIds(int routingDbId, out int defaultPolicyId)
@@ -218,6 +253,11 @@ namespace TOne.WhS.Routing.Business
 
             defaultPolicyId = rpRoutingDbInfo.DefaultPolicyId;
             return rpRoutingDbInfo.SelectedPoliciesIds;
+        }
+
+        private decimal GetRateConvertedToCurrency(decimal rate, int currencyId, DateTime effectiveOn)
+        {
+            return _currencyExchangeRateManager.ConvertValueToCurrency(rate, currencyId, effectiveOn);
         }
 
         #endregion

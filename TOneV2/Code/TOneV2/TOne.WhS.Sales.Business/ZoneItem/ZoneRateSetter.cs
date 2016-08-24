@@ -7,20 +7,33 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.Sales.Business
 {
     public class ZoneRateSetter
     {
-        SalePriceListOwnerType _ownerType;
-        int _ownerId;
-        int? _sellingProductId;
-        DateTime _effectiveOn;
+        #region Fields
 
-        IEnumerable<DraftRateToChange> _newRates;
-        IEnumerable<DraftRateToClose> _rateChanges;
+        private SalePriceListOwnerType _ownerType;
+        private int _ownerId;
+        private int? _sellingProductId;
+        private DateTime _effectiveOn;
 
-        public ZoneRateSetter(SalePriceListOwnerType ownerType, int ownerId, int? sellingProductId, DateTime effectiveOn, Changes changes)
+        private IEnumerable<DraftRateToChange> _newRates;
+        private IEnumerable<DraftRateToClose> _rateChanges;
+
+        private int _targetCurrencyId;
+
+        private SaleEntityZoneRateLocator _rateLocator;
+        private CurrencyExchangeRateManager _currencyExchangeRateManager;
+        private SaleRateManager _saleRateManager;
+        
+        #endregion
+
+        #region Public Methods
+
+        public ZoneRateSetter(SalePriceListOwnerType ownerType, int ownerId, int? sellingProductId, DateTime effectiveOn, Changes changes, int targetCurrencyId)
         {
             _ownerType = ownerType;
             _ownerId = ownerId;
@@ -32,22 +45,26 @@ namespace TOne.WhS.Sales.Business
                 _newRates = changes.ZoneChanges.Where(x => x.NewRates != null).SelectMany(x => x.NewRates);
                 _rateChanges = changes.ZoneChanges.Where(x => x.ClosedRates != null).SelectMany(x => x.ClosedRates);
             }
+
+            _targetCurrencyId = targetCurrencyId;
+
+            _rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(_effectiveOn));
+            _currencyExchangeRateManager = new CurrencyExchangeRateManager();
+            _saleRateManager = new SaleRateManager();
         }
 
         public void SetZoneRate(ZoneItem zoneItem)
         {
-            SaleEntityZoneRateLocator rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(_effectiveOn));
-
             SaleEntityZoneRate rate = (_ownerType == SalePriceListOwnerType.SellingProduct) ?
-                rateLocator.GetSellingProductZoneRate(_ownerId, zoneItem.ZoneId) :
-                rateLocator.GetCustomerZoneRate(_ownerId, (int)_sellingProductId, zoneItem.ZoneId);
+                _rateLocator.GetSellingProductZoneRate(_ownerId, zoneItem.ZoneId) :
+                _rateLocator.GetCustomerZoneRate(_ownerId, (int)_sellingProductId, zoneItem.ZoneId);
 
             if (rate != null)
             {
                 if (rate.Rate != null)
                 {
                     zoneItem.CurrentRateId = rate.Rate.SaleRateId;
-                    zoneItem.CurrentRate = rate.Rate.NormalRate;
+                    zoneItem.CurrentRate = GetConvertedRate(rate.Rate);
                     zoneItem.CurrentRateBED = rate.Rate.BED;
                     zoneItem.CurrentRateEED = rate.Rate.EED;
                     zoneItem.IsCurrentRateEditable = (rate.Source == _ownerType);
@@ -60,7 +77,7 @@ namespace TOne.WhS.Sales.Business
                     {
                         zoneItem.CurrentOtherRates.Add(kvp.Key, new OtherRate()
                         {
-                            Rate = kvp.Value.NormalRate,
+                            Rate = GetConvertedRate(kvp.Value),
                             BED = kvp.Value.BED,
                             EED = kvp.Value.EED
                         });
@@ -70,8 +87,12 @@ namespace TOne.WhS.Sales.Business
 
             SetZoneRateChanges(zoneItem);
         }
+        
+        #endregion
 
-        void SetZoneRateChanges(ZoneItem zoneItem)
+        #region Private Methods
+
+        private void SetZoneRateChanges(ZoneItem zoneItem)
         {
             zoneItem.NewRates = _newRates.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
             zoneItem.ClosedRates = _rateChanges.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
@@ -80,5 +101,12 @@ namespace TOne.WhS.Sales.Business
             if (rateChange != null)
                 zoneItem.CurrentRateNewEED = rateChange.EED;
         }
+
+        private decimal GetConvertedRate(SaleRate saleRate)
+        {
+            return _currencyExchangeRateManager.ConvertValueToCurrency(saleRate.NormalRate, _saleRateManager.GetCurrencyId(saleRate), _targetCurrencyId, _effectiveOn);
+        }
+        
+        #endregion
     }
 }

@@ -45,6 +45,12 @@
                     <vr-columns colnum="2">
                         <vr-textbox type="number" label="Number of Options" value="numberOfOptions" minvalue="1" isrequired></vr-textbox>
                     </vr-columns>
+                    <vr-columns width="normal" ng-show="showCarrierAccountSelector">
+                        <vr-common-currency-selector on-ready="onCurrencySelectorReady"
+                                                     onselectionchanged="onCurrencyChanged"
+                                                     isrequired="showCarrierAccountSelector">
+                        </vr-common-currency-selector>
+                    </vr-columns>
                 </vr-validation-group>
             </vr-row>
         </div>

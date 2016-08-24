@@ -41,9 +41,9 @@ namespace TOne.WhS.Sales.Business
                     {
                         if (recentExistingRate != null)
                         {
-                            if (rateToChange.NormalRate > recentExistingRate.RateEntity.NormalRate)
+                            if (rateToChange.NormalRate > recentExistingRate.Rate)
                                 rateToChange.ChangeType = RateChangeType.Increase;
-                            else if (rateToChange.NormalRate < recentExistingRate.RateEntity.NormalRate)
+                            else if (rateToChange.NormalRate < recentExistingRate.Rate)
                                 rateToChange.ChangeType = RateChangeType.Decrease;
 
                             rateToChange.RecentExistingRate = recentExistingRate;
@@ -202,8 +202,6 @@ namespace TOne.WhS.Sales.Business
         {
             foreach (var existingRate in matchExistingRates.OrderBy(x => x.BED))
             {
-                rateToClose.Rate = existingRate.RateEntity.NormalRate; // rateToClose.Rate is displayed in the preview page
-
                 if (existingRate.EED.VRGreaterThan(rateToClose.CloseEffectiveDate))
                 {
                     existingRate.ChangedRate = new ChangedRate

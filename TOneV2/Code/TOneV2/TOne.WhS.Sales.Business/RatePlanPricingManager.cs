@@ -21,12 +21,12 @@ namespace TOne.WhS.Sales.Business
             int? sellingNumberPlanId = ratePlanManager.GetSellingNumberPlanId(input.OwnerType, input.OwnerId);
             int? sellingProductId = ratePlanManager.GetSellingProductId(input.OwnerType, input.OwnerId, input.EffectiveOn, false);
 
-            ApplyCalculatedRates(input.OwnerType, input.OwnerId, (int)sellingNumberPlanId, (int)sellingProductId, input.EffectiveOn, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, input.CostCalculationMethods, input.SelectedCostCalculationMethodConfigId, input.RateCalculationMethod);
+            ApplyCalculatedRates(input.OwnerType, input.OwnerId, (int)sellingNumberPlanId, (int)sellingProductId, input.EffectiveOn, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, input.CostCalculationMethods, input.SelectedCostCalculationMethodConfigId, input.RateCalculationMethod, input.CurrencyId);
         }
 
-        public void ApplyCalculatedRates(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, int policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, int selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod)
+        public void ApplyCalculatedRates(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, int policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, int selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
         {
-            IEnumerable<ZoneItem> zoneItems = GetZoneItemsWithCalculatedRate(ownerType, ownerId, sellingNumberPlanId, sellingProductId, effectiveOn, routingDatabaseId, policyConfigId, numberOfOptions, costCalculationMethods, selectedCostCalculationMethodConfigId, rateCalculationMethod);
+            IEnumerable<ZoneItem> zoneItems = GetZoneItemsWithCalculatedRate(ownerType, ownerId, sellingNumberPlanId, sellingProductId, effectiveOn, routingDatabaseId, policyConfigId, numberOfOptions, costCalculationMethods, selectedCostCalculationMethodConfigId, rateCalculationMethod, currencyId);
 
             if (zoneItems == null)
                 return;
@@ -40,7 +40,7 @@ namespace TOne.WhS.Sales.Business
             draftManager.SaveDraft(ownerType, ownerId, newChanges);
         }
 
-        private IEnumerable<ZoneItem> GetZoneItemsWithCalculatedRate(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, int policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, int selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod)
+        private IEnumerable<ZoneItem> GetZoneItemsWithCalculatedRate(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, int policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, int selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
         {
             // Get the sale zones of the owner
             RatePlanZoneManager ratePlanZoneManager = new RatePlanZoneManager();
@@ -74,7 +74,7 @@ namespace TOne.WhS.Sales.Business
 
             // Set the route options, calculate the costs, and calculate the rate for all zone items
             IEnumerable<RPZone> rpZones = zoneItems.MapRecords(itm => new RPZone() { RoutingProductId = itm.EffectiveRoutingProductId, SaleZoneId = itm.ZoneId });
-            ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, costCalculationMethods, selectedCostCalculationMethodConfigId, rateCalculationMethod);
+            ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, costCalculationMethods, selectedCostCalculationMethodConfigId, rateCalculationMethod, currencyId);
 
             routeOptionSetter.SetZoneRouteOptionProperties(zoneItems);
             return zoneItems.FindAllRecords(itm => itm.CalculatedRate != null);

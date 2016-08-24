@@ -136,41 +136,60 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
-        #region Private Mappers
-
-        private SaleRateDetail SaleRateDetailMapper(SaleRate saleRate)
-        {
-            SaleZoneManager saleZoneManager = new SaleZoneManager();
-            CurrencyManager currencyManager = new CurrencyManager();
-            var rateTypeManager = new Vanrise.Business.RateTypeManager();
-
-            int currencyId = GetCurrencyId(saleRate);
-
-            SaleRateDetail saleRateDetail = new SaleRateDetail();
-            saleRateDetail.Entity = saleRate;
-            saleRateDetail.ZoneName = saleZoneManager.GetSaleZoneName(saleRate.ZoneId);
-            saleRateDetail.CurrencyName = currencyManager.GetCurrencySymbol(currencyId);
-            if (saleRate.RateTypeId.HasValue)
-                saleRateDetail.RateTypeName = rateTypeManager.GetRateTypeName(saleRate.RateTypeId.Value);
-            return saleRateDetail;
-        }
-
-        #endregion
-
         #region Private Classes
 
         private class SaleRateRequestHandler : BigDataRequestHandler<SaleRateQuery, SaleRate, SaleRateDetail>
         {
-            public override SaleRateDetail EntityDetailMapper(SaleRate entity)
-            {
-                SaleRateManager manager = new SaleRateManager();
-                return manager.SaleRateDetailMapper(entity);
-            }
+            #region Fields
+
+            private SaleZoneManager _saleZoneManager = new SaleZoneManager();
+            private CurrencyManager _currencyManager = new CurrencyManager();
+            private Vanrise.Business.RateTypeManager _rateTypeManager = new Vanrise.Business.RateTypeManager();
+            private CurrencyExchangeRateManager _currencyExchangeRateManager = new CurrencyExchangeRateManager();
+            private SaleRateManager _saleRateManager = new SaleRateManager();
+
+            #endregion
 
             public override IEnumerable<SaleRate> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SaleRateQuery> input)
             {
                 ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
                 return dataManager.GetFilteredSaleRates(input.Query);
+            }
+
+            protected override BigResult<SaleRateDetail> AllRecordsToBigResult(DataRetrievalInput<SaleRateQuery> input, IEnumerable<SaleRate> allRecords)
+            {
+                return allRecords.ToBigResult(input, null, x => ConvertRateToCurrency(EntityDetailMapper(x), input.Query.CurrencyId));
+            }
+
+            public override SaleRateDetail EntityDetailMapper(SaleRate entity)
+            {
+                SaleRateDetail saleRateDetail = new SaleRateDetail();
+
+                saleRateDetail.Entity = entity;
+                saleRateDetail.ZoneName = _saleZoneManager.GetSaleZoneName(entity.ZoneId);
+                
+                if (entity.RateTypeId.HasValue)
+                    saleRateDetail.RateTypeName = _rateTypeManager.GetRateTypeName(entity.RateTypeId.Value);
+                
+                return saleRateDetail;
+            }
+
+            private SaleRateDetail ConvertRateToCurrency(SaleRateDetail saleRateDetail, int? targetCurrencyId)
+            {
+                int currencyId = _saleRateManager.GetCurrencyId(saleRateDetail.Entity);
+
+                if (targetCurrencyId.HasValue)
+                {
+                    saleRateDetail.Rate = _currencyExchangeRateManager.ConvertValueToCurrency(saleRateDetail.Entity.NormalRate, currencyId, targetCurrencyId.Value, DateTime.Now);
+                    saleRateDetail.CurrencyName = _currencyManager.GetCurrencySymbol(targetCurrencyId.Value);
+                }
+                else
+                {
+                    saleRateDetail.Rate = saleRateDetail.Entity.NormalRate;
+                    saleRateDetail.CurrencyName = _currencyManager.GetCurrencySymbol(currencyId);
+                }
+
+                return saleRateDetail;
             }
         }
 

@@ -13,7 +13,6 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "CarrierAccount")]
     public class WhSBE_CarrierAccountController : BaseAPIController
     {
-
         [HttpPost]
         [Route("GetFilteredCarrierAccounts")]
         public object GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
@@ -30,17 +29,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.GetCarrierAccount(carrierAccountId);
         }
 
-        
-
         [HttpGet]
-        [Route("GetCarrierAccountCurrency")]
-        public int GetCarrierAccountCurrency(int carrierAccountId)
+        [Route("GetCarrierAccountCurrencyId")]
+        public int GetCarrierAccountCurrencyId(int carrierAccountId)
         {
-            CarrierAccountManager manager = new CarrierAccountManager();
-            var result= manager.GetCarrierAccount(carrierAccountId);
-            return result.CarrierAccountSettings.CurrencyId;
+            var manager = new CarrierAccountManager();
+            return manager.GetCarrierAccountCurrencyId(carrierAccountId);
         }
-
 
         [HttpGet]
         [Route("GetCarrierAccountInfo")]
@@ -67,7 +62,6 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.GetCustomerGroupTemplates();
         }
 
-
         [HttpPost]
         [Route("AddCarrierAccount")]
         public TOne.Entities.InsertOperationOutput<CarrierAccountDetail> AddCarrierAccount(CarrierAccount carrierAccount)
@@ -76,7 +70,6 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.AddCarrierAccount(carrierAccount);
         }
 
-
         [HttpPost]
         [Route("UpdateCarrierAccount")]
         public TOne.Entities.UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccountToEdit carrierAccount)
@@ -84,6 +77,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CarrierAccountManager manager = new CarrierAccountManager();
             return manager.UpdateCarrierAccount(carrierAccount);
         }
+        
         [HttpGet]
         [Route("GetSuppliersWithZonesGroupsTemplates")]
         public List<TemplateConfig> GetSuppliersWithZonesGroupsTemplates()

@@ -14,8 +14,6 @@ namespace TOne.WhS.Sales.Entities
 
         public int? RateTypeId { get; set; }
 
-        public decimal Rate { get; set; }
-
         public DateTime CloseEffectiveDate { get; set; }
 
         List<ExistingRate> _changedExistingRates = new List<ExistingRate>();

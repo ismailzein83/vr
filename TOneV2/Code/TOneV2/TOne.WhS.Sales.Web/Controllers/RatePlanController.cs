@@ -112,5 +112,21 @@ namespace TOne.WhS.Sales.Web.Controllers
         {
             return _manager.GetRatePlanSettingsData();
         }
+
+        [HttpGet]
+        [Route("GetDraftCurrencyId")]
+        public int? GetDraftCurrencyId(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            var manager = new RatePlanDraftManager();
+            return manager.GetDraftCurrencyId(ownerType, ownerId);
+        }
+
+        [HttpGet]
+        [Route("DeleteChangedRates")]
+        public void DeleteChangedRates(SalePriceListOwnerType ownerType, int ownerId, int newCurrencyId)
+        {
+            var manager = new RatePlanDraftManager();
+            manager.DeleteChangedRates(ownerType, ownerId, newCurrencyId);
+        }
     }
 }

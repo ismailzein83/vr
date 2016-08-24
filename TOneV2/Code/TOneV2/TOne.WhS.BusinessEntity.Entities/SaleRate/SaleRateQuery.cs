@@ -18,5 +18,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int? SellingNumberPlanId { get; set; }
 
+        public int? CurrencyId { get; set; }
     }
 }

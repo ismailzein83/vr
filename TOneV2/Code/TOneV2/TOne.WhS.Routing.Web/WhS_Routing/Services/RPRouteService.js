@@ -9,14 +9,15 @@
             viewRPRouteOptionSupplier: viewRPRouteOptionSupplier
         });
 
-        function viewRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, supplierId) {
+        function viewRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, supplierId, currencyId) {
             var parameters = {
                 RoutingDatabaseId: routingDatabaseId,
                 RoutingProductId: routingProductId,
                 SaleZoneId: saleZoneId,
-                SupplierId: supplierId
+                SupplierId: supplierId,
+                CurrencyId: currencyId
             };
-
+            
             VRModalService.showModal("/Client/Modules/WhS_Routing/Views/RPRoute/RPRouteOptionSupplier.html", parameters, null);
         }
     }

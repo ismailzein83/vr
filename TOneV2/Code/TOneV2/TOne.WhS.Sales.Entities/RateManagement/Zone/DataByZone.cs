@@ -14,7 +14,7 @@ namespace TOne.WhS.Sales.Entities
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
         public DateTime? SoldOn { get; set; }
-        public SaleEntityZoneRate CurrentRate { get; set; }
+        public ZoneRateGroup ZoneRateGroup { get; set; }
         public RateToChange NormalRateToChange { get; set; }
         public List<RateToChange> OtherRatesToChange { get; set; }
         public RateToClose NormalRateToClose { get; set; }
@@ -35,5 +35,20 @@ namespace TOne.WhS.Sales.Entities
         }
 
         #endregion
+    }
+
+    public class ZoneRateGroup
+    {
+        public ZoneRate NormalRate { get; set; }
+        public Dictionary<int, ZoneRate> OtherRatesByType { get; set; }
+    }
+
+    public class ZoneRate
+    {
+        public SalePriceListOwnerType Source { get; set; }
+        public int? RateTypeId { get; set; }
+        public decimal Rate { get; set; }
+        public DateTime BED { get; set; }
+        public DateTime? EED { get; set; }
     }
 }

@@ -54,7 +54,7 @@
                     if (selectedCarrierAccountId != undefined) {
                         $scope.scopeModel.isLoadingCurrencySelector = true;
                         $scope.scopeModel.inPutFile = undefined;
-                        WhS_BE_CarrierAccountAPIService.GetCarrierAccountCurrency(selectedCarrierAccountId).then(function (currencyId) {
+                        WhS_BE_CarrierAccountAPIService.GetCarrierAccountCurrencyId(selectedCarrierAccountId).then(function (currencyId) {
                             currencyDirectiveAPI.selectedCurrency(currencyId);
                             $scope.scopeModel.isLoadingCurrencySelector = false;
                         });

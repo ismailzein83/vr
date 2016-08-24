@@ -29,11 +29,11 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             List<DateTime?> endEffectiveDates;
 
-            if (zone.NormalRateToClose != null && zone.CurrentRate != null && zone.CurrentRate.RatesByRateType != null)
+            if (zone.NormalRateToClose != null && zone.ZoneRateGroup != null && zone.ZoneRateGroup.OtherRatesByType != null)
             {
-                IEnumerable<SaleRate> otherRates = zone.CurrentRate.RatesByRateType.Values;
-                    
-                foreach (SaleRate otherRate in otherRates)
+                IEnumerable<ZoneRate> otherRates = zone.ZoneRateGroup.OtherRatesByType.Values;
+
+                foreach (ZoneRate otherRate in otherRates)
                 {
                     bool isOtherRateChangedOrClosed =
                         (zone.OtherRatesToChange != null && zone.OtherRatesToChange.Any(x => x.RateTypeId.Value == otherRate.RateTypeId.Value)) ||
@@ -51,9 +51,9 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             {
                 foreach (RateToChange otherRateToChange in zone.OtherRatesToChange)
                 {
-                    if (zone.CurrentRate != null && zone.CurrentRate.Rate != null)
+                    if (zone.ZoneRateGroup != null && zone.ZoneRateGroup.NormalRate != null)
                     {
-                        endEffectiveDates = new List<DateTime?>() { zone.EED, zone.CurrentRate.Rate.EED };
+                        endEffectiveDates = new List<DateTime?>() { zone.EED, zone.ZoneRateGroup.NormalRate.EED };
                         DateTime? validEED = UtilitiesManager.GetMinDate(endEffectiveDates);
 
                         if (!validEED.HasValue || otherRateToChange.EED <= validEED.Value)
@@ -77,9 +77,9 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             {
                 foreach (RateToClose otherRateToClose in zone.OtherRatesToClose)
                 {
-                    if (zone.CurrentRate != null && zone.CurrentRate.Rate != null)
+                    if (zone.ZoneRateGroup != null && zone.ZoneRateGroup.NormalRate != null)
                     {
-                        endEffectiveDates = new List<DateTime?>() { zone.EED, zone.CurrentRate.Rate.EED };
+                        endEffectiveDates = new List<DateTime?>() { zone.EED, zone.ZoneRateGroup.NormalRate.EED };
                         DateTime? validEED = UtilitiesManager.GetMinDate(endEffectiveDates);
 
                         if (!validEED.HasValue || otherRateToClose.CloseEffectiveDate <= validEED.Value)

@@ -70,6 +70,21 @@
         function GetRatePlanSettingsData() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetRatePlanSettingsData"));
         }
+        
+        function GetDraftCurrencyId(ownerType, ownerId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetDraftCurrencyId"), {
+                ownerType: ownerType,
+                ownerId: ownerId
+            });
+        }
+        
+        function DeleteChangedRates(ownerType, ownerId, newCurrencyId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "DeleteChangedRates"), {
+                ownerType: ownerType,
+                ownerId: ownerId,
+                newCurrencyId: newCurrencyId
+            });
+        }
 
         return ({
             ValidateCustomer: ValidateCustomer,
@@ -83,7 +98,9 @@
             ApplyCalculatedRates: ApplyCalculatedRates,
             CheckIfDraftExists: CheckIfDraftExists,
             DeleteDraft: DeleteDraft,
-            GetRatePlanSettingsData: GetRatePlanSettingsData
+            GetRatePlanSettingsData: GetRatePlanSettingsData,
+            GetDraftCurrencyId: GetDraftCurrencyId,
+            DeleteChangedRates: DeleteChangedRates
         });
 
     }

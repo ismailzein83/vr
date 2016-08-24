@@ -278,7 +278,17 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return totalNominalCapacity;
         }
-        
+
+        public int GetCarrierAccountCurrencyId(int carrierAccountId)
+        {
+            CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
+            if (carrierAccount == null)
+                throw new NullReferenceException("carrierAccount");
+            if (carrierAccount.CarrierAccountSettings == null)
+                throw new NullReferenceException("carrierAccount.CarrierAccountSettings");
+            return carrierAccount.CarrierAccountSettings.CurrencyId;
+        }
+
         #endregion
 
         #region ICarrierAccountManager Memebers

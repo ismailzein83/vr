@@ -35,9 +35,9 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                     if (otherRateToChange.BED == default(DateTime))
                         return false;
 
-                    if (zone.CurrentRate != null && zone.CurrentRate.Rate != null)
+                    if (zone.ZoneRateGroup != null && zone.ZoneRateGroup.NormalRate != null)
                     {
-                        beginEffectiveDates = new List<DateTime?>() { zone.BED, zone.SoldOn, zone.CurrentRate.Rate.BED };
+                        beginEffectiveDates = new List<DateTime?>() { zone.BED, zone.SoldOn, zone.ZoneRateGroup.NormalRate.BED };
 
                         if (otherRateToChange.BED >= UtilitiesManager.GetMaxDate(beginEffectiveDates).Value)
                             continue;

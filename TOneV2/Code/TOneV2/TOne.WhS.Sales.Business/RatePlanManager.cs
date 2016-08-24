@@ -166,7 +166,7 @@ namespace TOne.WhS.Sales.Business
                 if (input.Filter.OwnerType == SalePriceListOwnerType.Customer)
                     customerId = input.Filter.OwnerId;
 
-                ZoneRateSetter rateSetter = new ZoneRateSetter(input.Filter.OwnerType, input.Filter.OwnerId, sellingProductId, DateTime.Now, changes);
+                ZoneRateSetter rateSetter = new ZoneRateSetter(input.Filter.OwnerType, input.Filter.OwnerId, sellingProductId, DateTime.Now, changes, input.CurrencyId);
                 ZoneRoutingProductSetter routingProductSetter = new ZoneRoutingProductSetter((int)sellingProductId, customerId, DateTime.Now, changes);
 
                 foreach (SaleZone zone in zones)
@@ -186,7 +186,7 @@ namespace TOne.WhS.Sales.Business
                 }
 
                 IEnumerable<RPZone> rpZones = zoneItems.MapRecords(itm => new RPZone() { RoutingProductId = itm.EffectiveRoutingProductId, SaleZoneId = itm.ZoneId });
-                ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.Filter.RoutingDatabaseId, input.Filter.PolicyConfigId, input.Filter.NumberOfOptions, rpZones, input.Filter.CostCalculationMethods, input.Filter.CostCalculationMethodConfigId, input.Filter.RateCalculationMethod);
+                ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.Filter.RoutingDatabaseId, input.Filter.PolicyConfigId, input.Filter.NumberOfOptions, rpZones, input.Filter.CostCalculationMethods, input.Filter.CostCalculationMethodConfigId, input.Filter.RateCalculationMethod, input.CurrencyId);
                 routeOptionSetter.SetZoneRouteOptionProperties(zoneItems);
             }
 
@@ -206,7 +206,7 @@ namespace TOne.WhS.Sales.Business
             int? sellingProductId = GetSellingProductId(input.OwnerType, input.OwnerId, DateTime.Now, false);
             Changes changes = _dataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
 
-            ZoneRateSetter rateSetter = new ZoneRateSetter(input.OwnerType, input.OwnerId, sellingProductId, DateTime.Now, changes);
+            ZoneRateSetter rateSetter = new ZoneRateSetter(input.OwnerType, input.OwnerId, sellingProductId, DateTime.Now, changes, input.CurrencyId);
             rateSetter.SetZoneRate(zoneItem);
 
             if (sellingProductId == null)
@@ -220,7 +220,7 @@ namespace TOne.WhS.Sales.Business
             routingProductSetter.SetZoneRoutingProduct(zoneItem);
 
             RPZone rpZone = new RPZone() { RoutingProductId = zoneItem.EffectiveRoutingProductId, SaleZoneId = zoneItem.ZoneId };
-            ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, new List<RPZone>() { rpZone }, input.CostCalculationMethods, input.RateCalculationCostColumnConfigId, input.RateCalculationMethod);
+            ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, new List<RPZone>() { rpZone }, input.CostCalculationMethods, input.RateCalculationCostColumnConfigId, input.RateCalculationMethod, input.CurrencyId);
             routeOptionSetter.SetZoneRouteOptionProperties(new List<ZoneItem>() { zoneItem });
 
             return zoneItem;

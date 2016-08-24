@@ -55,6 +55,7 @@ namespace TOne.WhS.Sales.Business
             {
                 Changes allChanges = new Changes();
 
+                allChanges.CurrencyId = newChanges.CurrencyId;
                 allChanges.DefaultChanges = newChanges.DefaultChanges == null ? existingChanges.DefaultChanges : newChanges.DefaultChanges;
                 allChanges.ZoneChanges = MergeZoneChanges(existingChanges.ZoneChanges, newChanges.ZoneChanges);
 
@@ -172,6 +173,32 @@ namespace TOne.WhS.Sales.Business
         {
             var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
             return ratePlanDataManager.CancelRatePlanChanges(ownerType, ownerId);
+        }
+
+        public int? GetDraftCurrencyId(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            Changes draft = GetDraft(ownerType, ownerId);
+            if (draft != null)
+                return draft.CurrencyId;
+            return null;
+        }
+
+        public void DeleteChangedRates(SalePriceListOwnerType ownerType, int ownerId, int newCurrencyId)
+        {
+            Changes draft = GetDraft(ownerType, ownerId);
+            
+            if (draft != null)
+            {
+                draft.CurrencyId = newCurrencyId;
+                
+                if (draft.ZoneChanges != null)
+                {
+                    foreach (ZoneChanges zoneDraft in draft.ZoneChanges)
+                        zoneDraft.NewRates = null;
+                }
+
+                SaveDraft(ownerType, ownerId, draft);
+            }
         }
     }
 }

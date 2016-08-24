@@ -13,15 +13,15 @@ namespace TOne.WhS.Sales.Business
 {
     public class ZoneRouteOptionSetter
     {
-        public IEnumerable<RPRouteDetail> _routes;
-        public List<CostCalculationMethod> _costCalculationMethods;
-        public int? _rateCalculationCostColumnConfigId;
-        public RateCalculationMethod _rateCalculationMethod;
+        private IEnumerable<RPRouteDetail> _routes;
+        private List<CostCalculationMethod> _costCalculationMethods;
+        private int? _rateCalculationCostColumnConfigId;
+        private RateCalculationMethod _rateCalculationMethod;
 
-        public ZoneRouteOptionSetter(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, int? rateCalculationCostColumnConfigId, RateCalculationMethod rateCalculationMethod)
+        public ZoneRouteOptionSetter(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, int? rateCalculationCostColumnConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
         {
             RPRouteManager rpRouteManager = new RPRouteManager();
-            _routes = rpRouteManager.GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones);
+            _routes = rpRouteManager.GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, currencyId);
             _costCalculationMethods = costCalculationMethods;
             _rateCalculationCostColumnConfigId = rateCalculationCostColumnConfigId;
             _rateCalculationMethod = rateCalculationMethod;

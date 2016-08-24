@@ -10,6 +10,7 @@
         var saleZoneId;
         var supplierId;
         var routingDatabaseId;
+        var currencyId;
 
         loadParameters();
         defineScope();
@@ -23,6 +24,7 @@
                 routingProductId = parameters.RoutingProductId;
                 saleZoneId = parameters.SaleZoneId;
                 supplierId = parameters.SupplierId;
+                currencyId = parameters.CurrencyId;
             }
         }
 
@@ -32,7 +34,7 @@
             $scope.onGridReady = function (api) {
                 $scope.isLoading = true;
 
-                WhS_Routing_RPRouteAPIService.GetRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, supplierId).then(function (response) {
+                WhS_Routing_RPRouteAPIService.GetRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, supplierId, currencyId).then(function (response) {
                     if (response) {
                         $scope.title = "Supplier: " + response.SupplierName;
 
