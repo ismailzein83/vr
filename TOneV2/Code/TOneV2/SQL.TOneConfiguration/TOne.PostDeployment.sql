@@ -225,7 +225,10 @@ as (select * from (values
 (1203,'Routing',1,0),
 (1204,'Billing',1,0),
 (1205,'Traffic',1,0),
-(1206,'Sales',1,0)
+(1206,'Sales',1,0),
+(1207,'Routing',602,0),
+(1208,'Sales',602,0),
+(1209,'Purchase',602,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[ParentId],[BreakInheritance]))
 merge	[sec].[BusinessEntityModule] as t
@@ -238,7 +241,6 @@ when not matched by target then
 	insert([Id],[Name],[ParentId],[BreakInheritance])
 	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
 set identity_insert [sec].[BusinessEntityModule] off;
-
 
 --[sec].[BusinessEntity]-------------------3301 to 3600-------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
@@ -289,8 +291,15 @@ as (select * from (values
 (3450,'WhS_Routing_RoutingRule','Routing Rule',1203,0,'["View","Add","Edit","Delete"]'),
 (3451,'WhS_Routing_ProductCost','Product Cost',1203,0,'["View"]'),
 (3452,'WhS_Routing_RouteOptionRule','Route Option Rule',1203,0,'["View","Add","Edit"]'),
-(3453,'WhS_Routing_CustomerRoute','Customer Route',1203,0,'["View"]')
+(3453,'WhS_Routing_CustomerRoute','Customer Route',1203,0,'["View"]'),
 
+(3454,'BusinessProcess_BP_Route_Build','Route Build',1207,0,'["View", "StartInstance", "ScheduleTask"]'),
+(3455,'BusinessProcess_BP_Product_Cost_Generation','Product Cost Generation',1207,0,'["View", "StartInstance", "ScheduleTask"]'),
+(3456,'BusinessProcess_BP_Route_Sync','Route Sync',1207,0,'["View", "StartInstance", "ScheduleTask"]'),
+(3457,'BusinessProcess_BP_Reprocess','Reprocess',401,0,'["View", "StartInstance", "ScheduleTask"]'),
+(3458,'BusinessProcess_BP_Import_Supplier_PriceList','Import Supplier PriceList',1209,0,'["View", "StartInstance", "ScheduleTask"]'),
+(3459,'BusinessProcess_BP_Numbering_Plan','Numbering Plan',1209,0,'["View", "StartInstance", "ScheduleTask"]'),
+(3460,'BusinessProcess_BP_Rate_Plan','Rate Plan',1208,0,'["View", "StartInstance", "ScheduleTask"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -1316,7 +1325,7 @@ set identity_insert [common].[setting] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (101,'Routing Technical','WhS_Routing_RouteTechnicalSettings','Wholesale Routing','{"Editor":"vr-whs-routing-route-technical-settings-editor"}','{"$type":"TOne.WhS.Routing.Entities.RouteTechnicalSettingData, TOne.WhS.Routing.Entities","RouteRuleDataTransformation":{"$type":"TOne.WhS.Routing.Entities.RouteRuleDataTransformation, TOne.WhS.Routing.Entities","CustomerTransformationId":40,"SupplierTransformationId":39}}',1),
-(102,'Routing','WhS_Routing_RouteSettings','Wholesale Routing','{"Editor":"vr-whs-routing-route-settings-editor"}','{"$type":"TOne.WhS.Routing.Entities.RouteSettingsData, TOne.WhS.Routing.Entities","RouteDatabasesToKeep":{"$type":"TOne.WhS.Routing.Entities.RouteDatabasesToKeep, TOne.WhS.Routing.Entities","CustomerRouteConfiguration":{"$type":"TOne.WhS.Routing.Entities.RouteDatabaseConfiguration, TOne.WhS.Routing.Entities","CurrentDBToKeep":3,"FutureDBToKeep":1,"MaximumEstimatedExecutionTime":2,"TimeUnit":1},"ProductRouteConfiguration":{"$type":"TOne.WhS.Routing.Entities.RouteDatabaseConfiguration, TOne.WhS.Routing.Entities","CurrentDBToKeep":3,"FutureDBToKeep":1,"MaximumEstimatedExecutionTime":2,"TimeUnit":1}},"SubProcessSettings":{"$type":"TOne.WhS.Routing.Entities.SubProcessSettings, TOne.WhS.Routing.Entities","CodeRangeCountThreshold":10000,"MaxCodePrefixLength":4}}',0),
+(102,'Routing','WhS_Routing_RouteSettings','Wholesale Routing','{"Editor":"vr-whs-routing-route-settings-editor"}','{"$type":"TOne.WhS.Routing.Entities.RouteSettingsData, TOne.WhS.Routing.Entities","RouteDatabasesToKeep":{"$type":"TOne.WhS.Routing.Entities.RouteDatabasesToKeep, TOne.WhS.Routing.Entities","CustomerRouteConfiguration":{"$type":"TOne.WhS.Routing.Entities.RouteDatabaseConfiguration, TOne.WhS.Routing.Entities","CurrentDBToKeep":3,"FutureDBToKeep":1,"MaximumEstimatedExecutionTime":2,"TimeUnit":1},"ProductRouteConfiguration":{"$type":"TOne.WhS.Routing.Entities.RouteDatabaseConfiguration, TOne.WhS.Routing.Entities","CurrentDBToKeep":3,"FutureDBToKeep":1,"MaximumEstimatedExecutionTime":2,"TimeUnit":1}},"SubProcessSettings":{"$type":"TOne.WhS.Routing.Entities.SubProcessSettings, TOne.WhS.Routing.Entities","CodeRangeCountThreshold":10000,"MaxCodePrefixLength":4,"CustomerGroupSize":10}}',0),
 (103,'Business Enity Technical','WhS_BE_TechnicalSettings','Business Entities','{"Editor":"vr-whs-be-technical-settings-editor"}','{"$type":"TOne.WhS.BusinessEntity.Entities.BusinessEntityTechnicalSettingsData, TOne.WhS.BusinessEntity.Entities","RateTypeConfiguration":{"$type":"TOne.WhS.BusinessEntity.Entities.RateTypeConfiguration, TOne.WhS.BusinessEntity.Entities","OffPeakRateTypeId":-2,"WeekendRateTypeId":-3,"HolidayRateTypeId":-1}}',1),
 (104,'Route Sync','WhS_RouteSync_Settings','Route Sync','{"Editor":""}','{"$type":"TOne.WhS.BusinessEntity.Business.RouteSyncSwitchGetter, TOne.WhS.BusinessEntity.Business"}',1),
 (105,'Numbering Plan','WhS.CodePreparation','Business Entities','{"Editor":"vr-cp-settings-editor"}','{"$type":"TOne.WhS.CodePreparation.Entities.CPSettingsData, TOne.WhS.CodePreparation.Entities","EffectiveDateOffset":7}',0),
