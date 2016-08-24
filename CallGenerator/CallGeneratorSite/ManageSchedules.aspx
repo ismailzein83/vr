@@ -85,8 +85,8 @@
 <%--                        </div>--%>
                         <div class="control-group">
                             <label class="control-label span6">From<span class="required">*</span></label>
-                            <div class="input-append date form_advance_datetime span6" data-date="2012-12-21T15:25:00Z">
-                                <input onchange='saveSchedule()' id="txtStartDate" type="text" value="" placeholder="From" runat="server" readonly class="m-wrap span8"/>
+                            <div class="input-append date form_advance_datetime span6" style="margin-left: 0px;"  data-date="2012-12-21T15:25:00Z">
+                                <input onchange='saveSchedule()' id="txtStartDate" style="width: calc(100% - 56px);" type="text" value="" placeholder="From" runat="server" readonly class="m-wrap span8"/>
                                 <span class="add-on"><i class="icon-remove"></i></span>
                                 <span class="add-on"><i class="icon-calendar"></i></span>
                             </div>
@@ -96,8 +96,8 @@
                         
                         <div class="control-group">
                             <label class="control-label span6">To<span class="required">*</span></label>
-                            <div class="input-append date form_advance_datetime span6" data-date="2012-12-21T15:25:00Z">
-                                <input onchange='saveSchedule()' id="txtEndDate" type="text" value="" placeholder="To" runat="server" readonly class="m-wrap span8"/>
+                            <div class="input-append date form_advance_datetime span6"  style="margin-left: 0px;" data-date="2012-12-21T15:25:00Z">
+                                <input onchange='saveSchedule()' id="txtEndDate" type="text" value="" placeholder="To" style="width: calc(100% - 56px);" runat="server" readonly class="m-wrap span8"/>
                                 <span class="add-on"><i class="icon-remove"></i></span>
                                 <span class="add-on"><i class="icon-calendar"></i></span>
                             </div>
