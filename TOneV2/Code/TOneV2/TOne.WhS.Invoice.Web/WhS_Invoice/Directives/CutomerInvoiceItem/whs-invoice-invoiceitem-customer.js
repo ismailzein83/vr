@@ -43,7 +43,7 @@ app.directive("whsInvoiceInvoiceitemCustomer", ["UtilsService", "VRNotificationS
                         directiveAPI.load = function (query) {
                             if (query == undefined)
                                 query = {};
-                            query.ItemSetName = "Customer";
+                            query.ItemSetName = "SaleZone";
                             return gridAPI.retrieveData(query);
                         }
                         return directiveAPI;
