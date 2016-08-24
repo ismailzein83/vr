@@ -126,15 +126,15 @@
                 };
 
                 api.getData = function () {
-                    var data;
 
-                    if ($scope.scopeModel.selectedTemplateConfig != undefined && directiveAPI != undefined) {
-                        
+                    var data = {};
+
+                    if (directiveAPI != undefined) 
                         data = directiveAPI.getData();
-                        if (data != undefined) {
-                            data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
-                        }
-                    }
+                    
+                    if ($scope.scopeModel.selectedTemplateConfig != undefined)
+                        data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
+
                     return data;
                 };
 

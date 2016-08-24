@@ -37,7 +37,7 @@
                 $scope.scopeModel.datasource = [];
                 $scope.scopeModel.selectedvalues;
 
-                $scope.scopeModel.onObjectSelectorReady = function (api) {
+                $scope.scopeModel.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
                 };
@@ -53,6 +53,8 @@
                         userProfileProperty = payload.userProfileProperty;
 
                     $scope.scopeModel.datasource = UtilsService.getArrayEnum(VR_Sec_UserProfilePropertyEnum); //UtilsService.getEnum(VR_Sec_UserProfilePropertyEnum, propertyFilter, valueFilter)
+
+                    console.log($scope.scopeModel.datasource);
 
                     if(userProfileProperty) {
                         $scope.scopeModel.selectedvalues = UtilsService.getEnum(VR_Sec_UserProfilePropertyEnum, 'value', userProfileProperty)
@@ -93,6 +95,6 @@
         }
     }
 
-    app.directive('vrCommonO', VRPropertySelector);
+    app.directive('vrSecUserprofilepropertySelector', VRPropertySelector);
 
 })(app);
