@@ -39,10 +39,23 @@
 
             var context;
             var configDetails;
+
+            var rateTabsAPI;
+            var serviceTabsAPI;
+
             $scope.intPutFieldMappings;
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.onRateTabsReady = function (api)
+                {
+                    rateTabsAPI = api;
+                    rateTabsAPI.setTabSelected(0);
 
+                }
+                $scope.scopeModel.onServiceTabsReady = function (api) {
+                    serviceTabsAPI = api;
+                    serviceTabsAPI.setTabSelected(0);
+                }
                 $scope.scopeModel.validate = function () {
                     if ($scope.scopeModel.delimiterValue == $scope.scopeModel.rangeSeparator) {
 
@@ -80,12 +93,13 @@
                         }
                     }
                     $scope.scopeModel.rateTypesSelected.push(rateTypeTabe);
+                    rateTabsAPI.setTabSelected($scope.scopeModel.rateTypesSelected.length-1);
+
                 }
                 $scope.scopeModel.onDeselectRateType = function (item) {
-
-                  //  $scope.scopeModel.codeTabObject.isSelected = true;
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.rateTypesSelected, item.RateTypeId, "RateTypeId");
-                    $scope.scopeModel.rateTypesSelected.splice(index,1);
+                    $scope.scopeModel.rateTypesSelected.splice(index, 1);
+                    rateTabsAPI.setTabSelected($scope.scopeModel.rateTypesSelected.length - 1);
                 }
 
                 $scope.scopeModel.onSelectFlaggedService = function (item) {
@@ -106,11 +120,15 @@
                         }
                     }
                     $scope.scopeModel.servicesSelected.push(serviceTabe);
+                    serviceTabsAPI.setTabSelected($scope.scopeModel.servicesSelected.length-1);
+
                 }
                 $scope.scopeModel.onDeselectFlaggedService = function (item) {
                   //  $scope.scopeModel.codeTabObject.isSelected = true;
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.servicesSelected, item.FlaggedServiceId, "FlaggedServiceId");
                     $scope.scopeModel.servicesSelected.splice(index, 1);
+                    serviceTabsAPI.setTabSelected($scope.scopeModel.servicesSelected.length-1);
+
                 }
 
 
@@ -178,7 +196,8 @@
                 var api = {};
 
                 api.load = function (payload) {
-        
+                    $scope.scopeModel.rateTypesSelected.length = 0;
+                    $scope.scopeModel.servicesSelected.length = 0;
                     var promises = [];
                     if (payload != undefined) {
                         context = payload.context;
@@ -198,7 +217,13 @@
                     promises.push(loadFlaggedServiceSelector());
                     promises.push(loadRateListMapping());
                     promises.push(loadCodeListMapping());
-
+                    if (rateTabsAPI != undefined)
+                    {
+                        rateTabsAPI.setTabSelected(0);
+                    }
+                    if (serviceTabsAPI != undefined) {
+                        serviceTabsAPI.setTabSelected(0);
+                    }
                     return UtilsService.waitMultiplePromises(promises);
 
                     function loadRateTypeSelector() {
@@ -227,7 +252,6 @@
                         var loadFlaggedServicePromiseDeferred = UtilsService.createPromiseDeferred();
                         flaggedServiceReadyPromiseDeferred.promise.then(function () {
                             var payload;
-                            console.log(configDetails);
                             if (configDetails != undefined && configDetails.FlaggedServiceListMapping != undefined) {
                                 var flaggedServicesIds = [];
                                 for (var i = 0; i < configDetails.FlaggedServiceListMapping.length; i++) {

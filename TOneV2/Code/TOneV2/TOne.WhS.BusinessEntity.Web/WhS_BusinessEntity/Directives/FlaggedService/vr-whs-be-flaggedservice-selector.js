@@ -14,7 +14,6 @@ function (UtilsService, VRUIUtilsService) {
             normalColNum: '@',
             onselectitem: "=",
             ondeselectitem: "=",
-
         },
         controller: function ($scope, $element, $attrs) {
 
@@ -54,15 +53,17 @@ function (UtilsService, VRUIUtilsService) {
         }
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-            + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="FlaggedServiceId" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" vr-disabled="ctrl.isdisabled"></vr-select>'
+            + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="FlaggedServiceId" on-ready="ctrl.onSelectorReady"  isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" vr-disabled="ctrl.isdisabled"></vr-select>'
            + '</vr-columns>';
     }
 
     function dealCtor(ctrl, $scope, $attrs) {
-
+        var selectorApi;
         function initializeController() {
-
-            defineAPI();
+            ctrl.onSelectorReady = function (api) {
+                selectorApi = api;
+                defineAPI();
+            }
         }
 
         function defineAPI() {
@@ -71,7 +72,8 @@ function (UtilsService, VRUIUtilsService) {
                 return VRUIUtilsService.getIdSelectedIds('FlaggedServiceId', $attrs, ctrl);
             }
             api.load = function (payload) {
-
+                selectorApi.clearDataSource();
+                ctrl.datasource.length = 0;
                 var selectedIds;
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
