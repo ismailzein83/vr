@@ -270,7 +270,7 @@ as (select * from (values
 (3326,'WhS_BE_SaleZone','Sale Zone',201,0,'["View"]'),
 (3327,'WhS_BE_Generic','Generic Business Entities',201,0,'["View", "Add", "Edit"]'),
 
-(3338,'Whs_Purchase_Rules','Rules',1201,0,'["View","Add","Edit"]'),
+(3338,'Whs_Purchase_Rules','Purchase Rules',403,0,'["View","Add","Edit"]'),
 (3340,'WhS_BE_SupplierCode','Supplier Code',1201,0,'["View"]'),
 (3341,'WhS_BE_SupplierRate','Supplier Rate',1201,0,'["View"]'),
 (3342,'WhS_BE_SupplierZone','Supplier Zone',1201,0,'["View"]'),
@@ -278,7 +278,7 @@ as (select * from (values
 (3343,'Whs_BE_RoutingProduct','Routing Product',1203,0,'["View","Add","Edit","Delete"]'),
 (3344,'Whs_BE_ZoneServiceConfig','Zone Service Configuration',201,0,'["View","Add","Edit"]'),
 
-(3339,'Whs_Sales_Rules','Rules',1206,0,'["View","Add","Edit"]'),
+(3339,'Whs_Sales_Rules','Sale Rules',403,0,'["View","Add","Edit"]'),
 (3350,'WhS_Sales_SalePriceList','Sale Price List',1206,0,'["View"]'),
 (3351,'WhS_BE_CustomerSellingProduct','Customer Selling Product',1206,0,'["View"]'),
 (3352,'WhS_BE_SellingProduct','Selling Product',1206,0,'["View"]'),
@@ -296,7 +296,7 @@ as (select * from (values
 (3454,'BusinessProcess_BP_Route_Build','Route Build',1207,0,'["View", "StartInstance", "ScheduleTask"]'),
 (3455,'BusinessProcess_BP_Product_Cost_Generation','Product Cost Generation',1207,0,'["View", "StartInstance", "ScheduleTask"]'),
 (3456,'BusinessProcess_BP_Route_Sync','Route Sync',1207,0,'["View", "StartInstance", "ScheduleTask"]'),
-(3457,'BusinessProcess_BP_Reprocess','Reprocess',401,0,'["View", "StartInstance", "ScheduleTask"]'),
+(3457,'BusinessProcess_BP_Reprocess','Reprocess',404,0,'["View", "StartInstance", "ScheduleTask"]'),
 (3458,'BusinessProcess_BP_Import_Supplier_PriceList','Import Supplier PriceList',1209,0,'["View", "StartInstance", "ScheduleTask"]'),
 (3459,'BusinessProcess_BP_Numbering_Plan','Numbering Plan',1209,0,'["View", "StartInstance", "ScheduleTask"]'),
 (3460,'BusinessProcess_BP_Rate_Plan','Rate Plan',1208,0,'["View", "StartInstance", "ScheduleTask"]')
