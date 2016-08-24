@@ -67,10 +67,15 @@
     <Compile Include="CodeSaleZone.cs" />
     <Compile Include="IRPRouteRuleExecutionContext.cs" />
     <Compile Include="ISupplierZoneToRPOptionPolicyExecutionContext.cs" />
-    <Compile Include="RouteTechnicalSettingData.cs" />
-    <Compile Include="RouteSettingsData.cs" />
+    <Compile Include="Settings\RouteBuildConfiguration.cs" />
+    <Compile Include="Settings\RouteDatabaseConfiguration.cs" />
+    <Compile Include="Settings\RouteDatabasesToKeep.cs" />
+    <Compile Include="Settings\RouteRuleDataTransformation.cs" />
+    <Compile Include="Settings\RouteTechnicalSettingData.cs" />
+    <Compile Include="Settings\RouteSettingsData.cs" />
     <Compile Include="RPRouteOptionPolicyFilter.cs" />
     <Compile Include="RPRouteOptionPolicySetting.cs" />
+    <Compile Include="Settings\SubProcessSettings.cs" />
     <Compile Include="TrafficStatsMeasure\TrafficStatsMeasure.cs" />
     <Compile Include="RouteOptionRules\RouteOptionRuleDetail.cs" />
     <Compile Include="RouteOptionRules\RouteOptionRuleQuery.cs" />

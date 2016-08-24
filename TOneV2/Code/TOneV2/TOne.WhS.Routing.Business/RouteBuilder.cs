@@ -173,8 +173,9 @@ namespace TOne.WhS.Routing.Business
         private T ExecuteRule<T>(string routeCode, SaleCodeMatch saleCodeMatch, CustomerZoneDetail customerZoneDetail, List<SupplierCodeMatchWithRate> supplierCodeMatches, SupplierCodeMatchWithRateBySupplier supplierCodeMatchBySupplier, RouteRuleTarget routeRuleTarget, RouteRule routeRule)
             where T : BaseRoute
         {
+            ConfigManager configManager = new ConfigManager();
             SaleEntityRouteRuleExecutionContext routeRuleExecutionContext = new SaleEntityRouteRuleExecutionContext(routeRule);
-            routeRuleExecutionContext.NumberOfOptions = 5;
+            routeRuleExecutionContext.NumberOfOptions = configManager.GetRouteBuildNumberOfOptions();
             routeRuleExecutionContext.SupplierCodeMatches = supplierCodeMatches;
             routeRuleExecutionContext.SupplierCodeMatchBySupplier = supplierCodeMatchBySupplier;
 

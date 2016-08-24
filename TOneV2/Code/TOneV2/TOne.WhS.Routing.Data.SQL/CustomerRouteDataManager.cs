@@ -120,7 +120,7 @@ namespace TOne.WhS.Routing.Data.SQL
                           CustomerID ASC
                     )";
             ExecuteNonQueryText(query, null);
-            trackStep("Finishing create Index on CustomerRoute table (CustomerId).");
+            trackStep("Finished create Index on CustomerRoute table (CustomerId).");
 
             trackStep("Starting create Index on CustomerRoute table (Code).");
             query = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_Code] ON dbo.CustomerRoute
@@ -128,7 +128,7 @@ namespace TOne.WhS.Routing.Data.SQL
                           Code ASC
                     )";
             ExecuteNonQueryText(query, null);
-            trackStep("Finishing create Index on CustomerRoute table (Code).");
+            trackStep("Finished create Index on CustomerRoute table (Code).");
 
             trackStep("Starting create Index on CustomerRoute table (SaleZoneId).");
             query = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_SaleZone] ON dbo.CustomerRoute
@@ -136,7 +136,7 @@ namespace TOne.WhS.Routing.Data.SQL
                           SaleZoneId ASC
                     )";
             ExecuteNonQueryText(query, null);
-            trackStep("Finishing create Index on CustomerRoute table (SaleZoneId).");
+            trackStep("Finished create Index on CustomerRoute table (SaleZoneId).");
         }
 
 

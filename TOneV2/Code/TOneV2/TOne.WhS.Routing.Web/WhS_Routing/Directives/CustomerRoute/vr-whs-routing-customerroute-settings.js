@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsRoutingRouteSubprocesssettings', ['UtilsService', 'WhS_Routing_TimeSettingsTypeEnum',
+app.directive('vrWhsRoutingCustomerrouteSettings', ['UtilsService', 'WhS_Routing_TimeSettingsTypeEnum',
 function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
 
     var directiveDefinitionObject = {
@@ -11,7 +11,7 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
         controller: function ($scope, $element, $attrs) {
 
             var ctrl = this;
-            var ctor = new subProcessSettingsCtor(ctrl, $scope, $attrs);
+            var ctor = new settingsCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
         controllerAs: 'ctrl',
@@ -19,11 +19,11 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_Routing/Directives/RoutingDatabase/Templates/SubProcessSettingsTemplate.html"
+        templateUrl: "/Client/Modules/WhS_Routing/Directives/CustomerRoute/Templates/CustomerRouteSettingsTemplate.html"
     };
 
 
-    function subProcessSettingsCtor(ctrl, $scope, $attrs) {
+    function settingsCtor(ctrl, $scope, $attrs) {
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -36,18 +36,14 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
             api.load = function (payload) {
 
                 if (payload != undefined) {
-                    ctrl.codeRangeCountThreshold = payload.CodeRangeCountThreshold;
-                    ctrl.maximumCodePrefixLength = payload.MaxCodePrefixLength;
-                    ctrl.customerGroupSize = payload.CustomerGroupSize;
+                    ctrl.numberOfOptions = payload.NumberOfOptions;
                 }
             }
 
             api.getData = function () {
                 var obj = {
-                    $type: "TOne.WhS.Routing.Entities.SubProcessSettings, TOne.WhS.Routing.Entities",
-                    CodeRangeCountThreshold: ctrl.codeRangeCountThreshold,
-                    MaxCodePrefixLength: ctrl.maximumCodePrefixLength,
-                    CustomerGroupSize: ctrl.customerGroupSize
+                    $type: "TOne.WhS.Routing.Entities.RouteBuildConfiguration, TOne.WhS.Routing.Entities",
+                    NumberOfOptions: ctrl.numberOfOptions
                 }
                 return obj;
             }

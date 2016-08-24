@@ -137,7 +137,7 @@ namespace TOne.WhS.Routing.Data.SQL
                           SaleZoneId ASC
                     )";
             ExecuteNonQueryText(query, null);
-            trackStep("Finishing create Clustered Index on ProductRoute table (RoutingProductId and SaleZoneId).");
+            trackStep("Finished create Clustered Index on ProductRoute table (RoutingProductId and SaleZoneId).");
 
             trackStep("Starting create Index on ProductRoute table (SaleZoneId).");
             query = @"CREATE NONCLUSTERED INDEX [IX_ProductRoute_SaleZoneId] ON dbo.ProductRoute
@@ -145,7 +145,7 @@ namespace TOne.WhS.Routing.Data.SQL
                           SaleZoneId ASC
                     )";
             ExecuteNonQueryText(query, null);
-            trackStep("Finishing create Index on ProductRoute table (SaleZoneId).");
+            trackStep("Finished create Index on ProductRoute table (SaleZoneId).");
         }
         #region Private
 

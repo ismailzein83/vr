@@ -167,8 +167,10 @@
     <Content Include="WhS_Routing\Constant\TOneRouteRangeType.js" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\Templates\CustomerRouteDetailTemplate.html" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\Templates\CustomerRouteGridTemplate.html" />
+    <Content Include="WhS_Routing\Directives\CustomerRoute\Templates\CustomerRouteSettingsTemplate.html" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\vr-whs-routing-customerroute-details.js" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\vr-whs-routing-customerroute-grid.js" />
+    <Content Include="WhS_Routing\Directives\CustomerRoute\vr-whs-routing-customerroute-settings.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteOptionRuleSettings\vr-whs-routing-routeoptionrulesettings-block.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\RateDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\RouteRuleFilterDirective.html" />
@@ -201,8 +203,8 @@
     <Content Include="WhS_Routing\Directives\ProcessInput\vr-whs-routing-buildrouteprocess.js" />
     <Content Include="WhS_Routing\Directives\ProcessInput\vr-whs-routing-rpbuildproduct.js" />
     <Content Include="WhS_Routing\Directives\ProcessInput\vr-whs-routing-buildbycodeprefix.js" />
-    <Content Include="WhS_Routing\Directives\RoutingDatabase\Templates\SubProcessSettingsTemplate.html" />
-    <Content Include="WhS_Routing\Directives\RoutingDatabase\vr-whs-routing-route-subprocesssettings.js" />
+    <Content Include="WhS_Routing\Directives\RouteSettings\Templates\SubProcessSettingsTemplate.html" />
+    <Content Include="WhS_Routing\Directives\RouteSettings\vr-whs-routing-route-subprocesssettings.js" />
     <Content Include="WhS_Routing\Directives\RouteTechnicalSettings\Templates\RouteTechnicalSettingsTemplate.html" />
     <Content Include="WhS_Routing\Directives\RouteTechnicalSettings\vr-whs-routing-route-technical-settings-editor.js" />
     <Content Include="WhS_Routing\Directives\RouteOptionRule\Templates\RouteOptionRuleGridTemplate.html" />

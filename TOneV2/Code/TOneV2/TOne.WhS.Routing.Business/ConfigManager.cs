@@ -7,6 +7,12 @@ namespace TOne.WhS.Routing.Business
     public class ConfigManager
     {
         #region public methods
+        public int GetRouteBuildNumberOfOptions()
+        {
+            RouteBuildConfiguration routeBuildConfiguration = GetRouteBuildConfiguration();
+            return routeBuildConfiguration.NumberOfOptions;
+        }
+
         public SubProcessSettings GetSubProcessSettings()
         {
             RouteSettingsData routeSettingsData = GetRouteSettingData();
@@ -73,6 +79,16 @@ namespace TOne.WhS.Routing.Business
                 throw new NullReferenceException("routeTechnicalSettingData");
 
             return routeTechnicalSettingData;
+        }
+
+        private RouteBuildConfiguration GetRouteBuildConfiguration()
+        {
+            RouteSettingsData routeSettingsData = GetRouteSettingData();
+
+            if (routeSettingsData.RouteBuildConfiguration == null)
+                throw new NullReferenceException("routeSettingsData.RouteBuildConfiguration");
+
+            return routeSettingsData.RouteBuildConfiguration;
         }
 
         private RouteDatabasesToKeep GetRouteDatabasesToKeep()
