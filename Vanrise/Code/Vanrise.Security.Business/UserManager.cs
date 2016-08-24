@@ -24,6 +24,7 @@ namespace Vanrise.Security.Business
             if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["TempPasswordValidity"], out s_tempPasswordValidity))
                 s_tempPasswordValidity = new TimeSpan(1, 0, 0);
         }
+
         #region Public Methods
 
         public IDataRetrievalResult<UserDetail> GetFilteredUsers(DataRetrievalInput<UserQuery> input)

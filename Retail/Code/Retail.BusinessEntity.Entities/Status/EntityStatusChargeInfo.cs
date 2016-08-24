@@ -19,7 +19,7 @@ namespace Retail.BusinessEntity.Entities
 
         public string StatusName { get; set; }
 
-        public bool HasInitialCharge { get; set; }
+        public bool HasInitialCharge { get; set; } 
 
         public bool HasRecurringCharge { get; set; }
     }

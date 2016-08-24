@@ -120,6 +120,7 @@
     <Content Include="Security\Constants\MenuTypeEnum.js" />
     <Content Include="Security\Constants\ModuleConfig.js" />
     <Content Include="Security\Constants\PermissionFlagEnum.js" />
+    <Content Include="Security\Constants\UserProfilePropertyEnum.js" />
     <Content Include="Security\Constants\ViewTypeEnum.js" />
     <Content Include="Security\Constants\WidgetSectionEnum.js" />
     <Content Include="Security\Directives\BusinessEntity\Templates\BusinessEntityGridTemplate.html" />
@@ -129,6 +130,8 @@
     <Content Include="Security\Directives\DynamicPage\vr-sec-dynamicpage-grid.js" />
     <Content Include="Security\Directives\DynamicPage\vr-sec-dynamicpageviewer.js" />
     <Content Include="Security\Directives\Extensions\Group\vr-sec-group-static.js" />
+    <Content Include="Security\Directives\Extensions\User\Templates\UserProfilePropertySelectorTemplate.html" />
+    <Content Include="Security\Directives\Extensions\User\vr-sec-userprofileproperty-selector.js" />
     <Content Include="Security\Directives\Group\Templates\GroupGrid.html" />
     <Content Include="Security\Directives\Group\vr-sec-group-grid.js" />
     <Content Include="Security\Directives\Group\vr-sec-group-selector.js" />

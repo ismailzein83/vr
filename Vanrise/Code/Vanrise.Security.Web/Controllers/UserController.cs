@@ -15,6 +15,7 @@ namespace Vanrise.Security.Web.Controllers
     public class UsersController : Vanrise.Web.Base.BaseAPIController
     {
         private UserManager _manager = new UserManager();
+
         public UsersController()
         {
             this._manager = new UserManager();
@@ -115,6 +116,7 @@ namespace Vanrise.Security.Web.Controllers
     {
         public string Email { get; set; }
     }
+
     public class ResetPasswordInput
     {
         public int UserId { get; set; }
