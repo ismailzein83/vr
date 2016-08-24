@@ -1610,21 +1610,6 @@
   <ItemGroup>
     <Content Include="Client\CSViews\Security\Payment.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Web.config.exclude">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Web.config.Debug.exclude">
-      <DependentUpon>Web.config.exclude</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Web.config.Release.exclude">
-      <DependentUpon>Web.config.exclude</DependentUpon>
-    </None>
-  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
