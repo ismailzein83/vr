@@ -318,7 +318,9 @@
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-service.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\Templates\PackageGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\Templates\ServiceGridEditorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringPeriod\retail-be-recurringperiod-weekly.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringPeriod\retail-be-recurringperiod-monthly.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringPeriod\Templates\WeeklyPeriodTemplate .html" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringPeriod\Templates\MonthlyPeriodTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-ruledefinition-editor.js" />

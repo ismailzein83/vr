@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeRecurringperiodMonthly', ['VRNotificationService',
+app.directive('retailBeRecurringperiodWeekly', ['VRNotificationService',
     function (vrNotificationService) {
         return {
             restrict: 'E',
@@ -9,15 +9,15 @@ app.directive('retailBeRecurringperiodMonthly', ['VRNotificationService',
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var recurringPeriod = new RecurringPeriodMonthly($scope, ctrl, $attrs);
+                var recurringPeriod = new RecurringPeriodWeekly($scope, ctrl, $attrs);
                 recurringPeriod.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/RecurringPeriod/Templates/MonthlyPeriodTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/RecurringPeriod/Templates/WeeklyPeriodTemplate .html'
         };
 
-        function RecurringPeriodMonthly($scope, ctrl, $attrs) {
+        function RecurringPeriodWeekly($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -28,13 +28,13 @@ app.directive('retailBeRecurringperiodMonthly', ['VRNotificationService',
                 var api = {};
                 api.load = function (payload) {
                     if (payload != undefined) {
-                        $scope.scopeModel.DayOfMonth = payload.DayOfMonth;
+                        $scope.scopeModel.DayOfWeek = payload.DayOfWeek;
                     }
                 };
                 api.getData = function () {
                     return {
-                        $type: "Retail.BusinessEntity.MainExtensions.RecurringPeriods.MonthlyRecurringPeriodSettings, Retail.BusinessEntity.MainExtensions",
-                        DayOfMonth: $scope.scopeModel.DayOfMonth
+                        $type: "Retail.BusinessEntity.MainExtensions.RecurringPeriods.WeeklyRecurringPeriodSettings, Retail.BusinessEntity.MainExtensions",
+                        DayOfWeek: $scope.scopeModel.DayOfWeek
                     };
                 };
                 if (ctrl.onReady != null)

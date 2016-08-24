@@ -25,7 +25,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         }
         [HttpPost]
         [Route("AddStatusChargingSet")]
-        public InsertOperationOutput<StatusChargingSet> AddStatusChargingSet(StatusChargingSet statusChargingSetItem)
+        public InsertOperationOutput<StatusChargingSetDetail> AddStatusChargingSet(StatusChargingSet statusChargingSetItem)
         {
             return _manager.AddStatusChargingSet(statusChargingSetItem);
         }
