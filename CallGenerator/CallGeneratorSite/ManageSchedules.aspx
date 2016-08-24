@@ -21,6 +21,8 @@
             $('#<%=HdnId.ClientID %>').val('');
             $('#<%=txtName.ClientID %>').val('');
             $('#txtDate').val('');
+            $('#txtStartDate').val('');
+            $('#txtEndDate').val('');
             $('#txtTime').val('');
             $('#<%=HdTable.ClientID %>').val('');
             $('#chkEnabled').prop('checked', false).change()
@@ -56,7 +58,7 @@
                 <div class="portlet-title">
                     <div class="caption"><i class="icon-bell"></i>Schedule</div>
                     <div class="tools">
-                        <asp:Button ID="btnSave" class="btn blue btn-large" runat="server" Text="Save" OnClick="btnSave_Click" OnClientClick="return getSchedules();" />
+                        <asp:Button ID="btnSave" class="btn blue btn-large" runat="server" Text="Save" OnClick="btnSave_Click" OnClientClick="return saveSchedule();" />
                         <button class="btn " onclick="cancel();">Cancel</button>
                         <%-- <a href="javascript:;" class="collapse"></a>
                         <a href="#portlet-config" data-toggle="modal" class="config"></a>
@@ -66,60 +68,71 @@
                 </div>
                 <div class="portlet-body" style="display: block;">
                     <div class="span6">
-
-                        <div class="form-horizontal span12">
+                        
+                       <%-- <div class="form-horizontal span6">--%>
                             <div class="alert alert-error hide">
                                 <button class="close" data-dismiss="alert"></button>
                                 You have some form errors. Please check below.
                             </div>
                             <asp:HiddenField ID="HdnId" runat="server" />
 
-                            <div class="control-group">
-                                <label class="control-label span3">Name<span class="required">*</span></label>
-                                <div class="controls">
+                            <div class="">
+                                <label class="span6">Name<span class="required">*</span></label>
+                                <div class="">
                                     <asp:TextBox ID="txtName" class="span6 m-wrap valStringR" data-required="1" runat="server"></asp:TextBox>
                                 </div>
                             </div>
-
-                            <div class="control-group">
-                                <label class="control-label span3">Date<span class="required">*</span></label>
-                                <div class="controls">
-                                    <div class="input-prepend">
-                                        <span class="add-on"><i class="icon-calendar"></i></span>
-                                        <input id="txtDate" runat="server" type="text" class="m-wrap date-range span12 valStringR" data-required="1" readonly>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label span3">Occurs Every<span class="required">*</span></label>
-                                <div class="controls">
-                                    <asp:TextBox ID="txtTime" onkeypress='return isNumber(event)' class="span6 m-wrap valDigits2" data-required="1" runat="server"></asp:TextBox>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label span3">Sip<span class="required">*</span></label>
-                                <div class="controls">
-                                    <select id="selectSip"  class="span6 m-wrap" tabindex="1">
-                                        <asp:Repeater ID="rptSipAccounts" runat="server">
-                                            <ItemTemplate>
-                                                <option value='<%# Eval("Id") %>'><%# Eval("Username") %></option>
-                                            </ItemTemplate>
-                                        </asp:Repeater>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label span3">Enabled<span class="required">*</span></label>
-                                <div class="controls">
-                                    <div class="success-toggle-button">
-									    <input id="chkEnabled" runat="server" type="checkbox" class="toggle"  />
-									</div>
-                                </div>
+<%--                        </div>--%>
+                        <div class="control-group">
+                            <label class="control-label span6">From<span class="required">*</span></label>
+                            <div class="input-append date form_advance_datetime span6" data-date="2012-12-21T15:25:00Z">
+                                <input onchange='saveSchedule()' id="txtStartDate" type="text" value="" placeholder="From" runat="server" readonly class="m-wrap span8"/>
+                                <span class="add-on"><i class="icon-remove"></i></span>
+                                <span class="add-on"><i class="icon-calendar"></i></span>
                             </div>
                         </div>
+
+                            
+                        
+                        <div class="control-group">
+                            <label class="control-label span6">To<span class="required">*</span></label>
+                            <div class="input-append date form_advance_datetime span6" data-date="2012-12-21T15:25:00Z">
+                                <input onchange='saveSchedule()' id="txtEndDate" type="text" value="" placeholder="To" runat="server" readonly class="m-wrap span8"/>
+                                <span class="add-on"><i class="icon-remove"></i></span>
+                                <span class="add-on"><i class="icon-calendar"></i></span>
+                            </div>
+                        </div>
+
+
+                        <div class="">
+                            <label class="span6">Occurs Every<span class="required">*</span></label>
+                            <div class="controls">
+                                <asp:TextBox ID="txtTime" onkeypress='return isNumber(event)' class="span6 m-wrap valDigits2" data-required="1" runat="server"></asp:TextBox>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label span6">Sip<span class="required">*</span></label>
+                            <div class="controls">
+                                <select id="selectSip"  class="span6 m-wrap" tabindex="1">
+                                    <asp:Repeater ID="rptSipAccounts" runat="server">
+                                        <ItemTemplate>
+                                            <option value='<%# Eval("Id") %>'><%# Eval("Username") %></option>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label span6">Enabled<span class="required">*</span></label>
+                            <div class="controls">
+                                <div class="success-toggle-button">
+									<input id="chkEnabled" runat="server" type="checkbox" class="toggle"  />
+								</div>
+                            </div>
+                        </div>
+                    </div>
                     </div>
                     <div class="span6">
                         <asp:HiddenField ID="HdTable" runat="server" />
@@ -237,10 +250,10 @@
                                             <asp:Label ID="Label6" runat="server" Text='<%# Eval("SipAccount.UserName") %>'></asp:Label>
                                         </td>
                                         <td>
-                                            <asp:Label ID="Label1" runat="server" Text='<%# Eval("StartDate") == null ? " " : Eval("StartDate", "{0:dd/MM/yyyy}") %>'></asp:Label>
+                                            <asp:Label ID="Label1" runat="server" Text='<%# Eval("StartDate") == null ? " " : Eval("StartDate", "{0:dd/MM/yyyy - HH:mm}") %>'></asp:Label>
                                         </td>
                                         <td>
-                                            <asp:Label ID="Label2" runat="server" Text='<%#  Eval("EndDate") == null ? " " : Eval("EndDate", "{0:dd/MM/yyyy}") %>'></asp:Label>
+                                            <asp:Label ID="Label2" runat="server" Text='<%#  Eval("EndDate") == null ? " " : Eval("EndDate", "{0:dd/MM/yyyy - HH:mm}") %>'></asp:Label>
                                         </td>
                                         <td>
                                             <asp:Label ID="Label3" runat="server" Text='<%# Eval("OccursEvery") %>'></asp:Label>
@@ -253,7 +266,7 @@
                                              <span class='label <%# ((bool)Eval("IsEnabled")) == true ? "label-success" : "label-important" %> '><asp:Label ID="Label7" runat="server" Text='<%# ((bool)Eval("IsEnabled")) == true ? "Enabled" : "Disabled" %> '></asp:Label></span>
                                         </td>
                                         <td class="center">
-                                            <a href="#" onclick='editRow(<%# Eval("Id") %> ,<%# "\"" + Eval("DisplayName") + "\"" %> , <%# "\"" + Eval("OccursEvery") + "\""  %> , <%# "\"" + Eval("SipAccount.Id") + "\""  %>  , <%#  "\"" +  ((DateTime)Eval("StartDate")).ToString("dd-MM-yyyy") +"\""%> ,<%#  "\"" + ((DateTime)Eval("EndDate")).ToString("dd-MM-yyyy") + "\"" %> , <%# "\"" + Eval("TestGroupId")  + "\""  %> ,  <%# "\"" + Eval("IsEnabled")  + "\""  %> )'>Edit</a>
+                                            <a href="#" onclick='editRow(<%# Eval("Id") %> ,<%# "\"" + Eval("DisplayName") + "\"" %> , <%# "\"" + Eval("OccursEvery") + "\""  %> , <%# "\"" + Eval("SipAccount.Id") + "\""  %>  , <%#  "\"" +  ((DateTime)Eval("StartDate")).ToString("dd-MM-yyyy HH:mm") +"\""%> ,<%#  "\"" + ((DateTime)Eval("EndDate")).ToString("dd-MM-yyyy HH:mm") + "\"" %> , <%# "\"" + Eval("TestGroupId")  + "\""  %> ,  <%# "\"" + Eval("IsEnabled")  + "\""  %> )'>Edit</a>
                                         </td>
                                         <td class="center">
                                             <asp:LinkButton class="delete" ID="lnkDelete" OnClientClick="return confirm('Are you sure you want to delete?');"
@@ -394,6 +407,18 @@
             });
         }
 
+        var handleDatetimePicker = function () {
+            $(".form_advance_datetime").datetimepicker({
+                isRTL: App.isRTL(),
+                format: "dd mm yyyy hh:ii",
+                autoclose: true,
+                todayBtn: true,
+                startDate: "2016-01-01 00:00",
+                pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
+                minuteStep: 10
+            });
+
+        }
 
         var handleDateRangePickers = function () {
             if (!jQuery().daterangepicker) {
@@ -463,6 +488,38 @@
             });
         }
 
+
+        var saveSchedule = function () {
+            var fromDate = $('#<%= txtStartDate.ClientID %>').val();
+            if (fromDate == "") {
+                alert("From date is required");
+                return false;
+            }
+
+            var toDate = $('#<%= txtEndDate.ClientID %>').val();
+            if (toDate == "") {
+                alert("End date is required");
+                return false;
+            }
+
+            if (fromDate != "" && toDate != "") {
+                
+                var from = fromDate.split(" ");
+                var hour = from[3].split(":");
+                var strtDt = new Date(from[2], from[1], from[0], hour[0], hour[1], 00);
+
+                var from2 = toDate.split(" ");
+                var hour2 = from2[3].split(":");
+                var endDt = new Date(from2[2], from2[1], from2[0], hour2[0], hour2[1], 00);
+
+                if (strtDt > endDt) {
+                    alert("End date is less then start date");
+                    return false;
+                }
+            }
+            return true;
+        }
+
         $(".deleteRow").live('click', function (event) {
             var id = $(this).parent().parent().children("td:first").html();
             var number = $(this).parent().parent().children("td").eq(1).html();
@@ -502,9 +559,11 @@
             $('#<%=HdnId.ClientID %>').val('');
             $('#<%=txtName.ClientID %>').val('');
             $('#txtDate').val('');
+            $('#txtStartDate').val('');
+            $('#txtEndDate').val('');
             $('#txtTime').val('');
             $('#<%=HdTable.ClientID %>').val('');
-            $('#chkEnabled').prop('checked', false).change()
+            $('#chkEnabled').prop('checked', false).change();
             clearValidationMsg();
             
         }
@@ -519,18 +578,17 @@
 
             var editRow = function (id, name, TimeFrequency, sipAccId, startDate, endDate, GroupId, IsEnabled) {
                 $('#<%=HiddenFieldSelectGroup.ClientID %>').val(GroupId);
-                console.log(sipAccId + " aa " + GroupId);
                 emptyFields();
                 $('#<%=HdnId.ClientID %>').val(id);
                 $('#<%=txtName.ClientID %>').val(name);
                 $('#<%=txtTime.ClientID %>').val(TimeFrequency);
-                console.log(IsEnabled);
                 if (IsEnabled == "True")
-                    $('#chkEnabled').prop('checked', true).change()
+                    $('#chkEnabled').prop('checked', true).change();
                 else
-                    $('#chkEnabled').prop('checked', false).change()
+                    $('#chkEnabled').prop('checked', false).change();
 
-                $('#<%=txtDate.ClientID %>').val(startDate + " to " + endDate);
+                $('#<%=txtStartDate.ClientID %>').val(startDate);
+                $('#<%=txtEndDate.ClientID %>').val(endDate);
                 $('.date-range').setDate();
 
                 $("#selectSip").val(sipAccId);
@@ -572,6 +630,7 @@
                 handleValidation2();
                 handleToggleButtons();
                 handleDateRangePickers();
+                handleDatetimePicker();
 
                 $('#selectGroup').on('change', function () {
                     $("#myTable > tbody").find("tr").remove();

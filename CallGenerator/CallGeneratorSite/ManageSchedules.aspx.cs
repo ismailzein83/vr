@@ -107,7 +107,7 @@ public partial class ManageSchedules : BasePage
 
     protected void btnSave_Click(object sender, EventArgs e)
     {
-        if (String.IsNullOrEmpty(txtName.Text) || String.IsNullOrEmpty(txtTime.Text) || String.IsNullOrEmpty(txtDate.Value))
+        if (String.IsNullOrEmpty(txtName.Text) || String.IsNullOrEmpty(txtTime.Text) || String.IsNullOrEmpty(txtStartDate.Value) || String.IsNullOrEmpty(txtEndDate.Value))
         {
             return;
         }
@@ -137,7 +137,7 @@ public partial class ManageSchedules : BasePage
                 return;
             }
         }
-        //List<ScheduleOperator> lstOperators = new List<ScheduleOperator>();
+        
         //int hour = 0;
         //Int32.TryParse(txtTime.Text.Substring(0, 2).ToString(), out hour);
 
@@ -151,26 +151,38 @@ public partial class ManageSchedules : BasePage
         //DateTime d = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minutes, 0);
 
         int fromday = 0;
-        Int32.TryParse(txtDate.Value.Substring(0, 2).ToString(), out fromday);
+        Int32.TryParse(txtStartDate.Value.Substring(0, 2).ToString(), out fromday);
 
         int frommonth = 0;
-        Int32.TryParse(txtDate.Value.Substring(3, 2).ToString(), out frommonth);
+        Int32.TryParse(txtStartDate.Value.Substring(3, 2).ToString(), out frommonth);
 
         int fromyear = 0;
-        Int32.TryParse(txtDate.Value.Substring(6, 4).ToString(), out fromyear);
+        Int32.TryParse(txtStartDate.Value.Substring(6, 4).ToString(), out fromyear);
 
-        DateTime fromdate = new DateTime(fromyear, frommonth, fromday, 0, 0, 0);
+        int fromHour = 0;
+        Int32.TryParse(txtStartDate.Value.Substring(11, 2).ToString(), out fromHour);
+
+        int fromMinutes = 0;
+        Int32.TryParse(txtStartDate.Value.Substring(14, 2).ToString(), out fromMinutes);
+
+        DateTime fromdate = new DateTime(fromyear, frommonth, fromday, fromHour, fromMinutes, 0);
 
         int today = 0;
-        Int32.TryParse(txtDate.Value.Substring(14, 2).ToString(), out today);
+        Int32.TryParse(txtEndDate.Value.Substring(0, 2).ToString(), out today);
 
         int tomonth = 0;
-        Int32.TryParse(txtDate.Value.Substring(17, 2).ToString(), out tomonth);
+        Int32.TryParse(txtEndDate.Value.Substring(3, 2).ToString(), out tomonth);
 
         int toyear = 0;
-        Int32.TryParse(txtDate.Value.Substring(20, 4).ToString(), out toyear);
+        Int32.TryParse(txtEndDate.Value.Substring(6, 4).ToString(), out toyear);
 
-        DateTime todate = new DateTime(toyear, tomonth, today, 0, 0, 0);
+        int toHour = 0;
+        Int32.TryParse(txtEndDate.Value.Substring(11, 2).ToString(), out toHour);
+
+        int toMinutes = 0;
+        Int32.TryParse(txtEndDate.Value.Substring(14, 2).ToString(), out toMinutes);
+
+        DateTime todate = new DateTime(toyear, tomonth, today, toHour, toMinutes, 0);
 
 
         int ratio = 0;
