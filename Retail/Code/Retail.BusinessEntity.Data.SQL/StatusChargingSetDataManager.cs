@@ -17,10 +17,13 @@ namespace Retail.BusinessEntity.Data.SQL
         {
             return GetItemsSP("Retail.sp_StatusChargingSet_GetAll", StatusChargingSetsnMapper);
         }
-        public bool Insert(StatusChargingSet statusChargingSetItem)
+        public bool Insert(StatusChargingSet statusChargingSetItem, out int insertedId)
         {
             string serializedSettings = statusChargingSetItem.Settings != null ? Serializer.Serialize(statusChargingSetItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Retail.sp_StatusChargingSet_Insert", statusChargingSetItem.Name, serializedSettings);
+
+            object insertedID;
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_StatusChargingSet_Insert",out insertedID, statusChargingSetItem.Name, serializedSettings);
+            insertedId = (int) insertedID;
             return affectedRecords > 0;
         }
         public bool Update(StatusChargingSet statusChargingSet)
