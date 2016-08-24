@@ -13,6 +13,6 @@ namespace Vanrise.Invoice.Entities
     }
     public interface IRDLCReportDataSourceSettingsContext
     {
-        long InvoiceId { get;}
+        IInvoiceActionContext InvoiceActionContext { get;}
     }
 }

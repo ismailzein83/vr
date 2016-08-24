@@ -14,13 +14,14 @@ namespace Vanrise.Invoice.MainExtensions
         public override IEnumerable<dynamic> GetDataSourceItems(IRDLCReportDataSourceSettingsContext context)
         {
             InvoiceItemManager invoiceItemManager = new InvoiceItemManager();
-            var invoiceItems = invoiceItemManager.GetInvoiceItemsByItemSetNames(context.InvoiceId, this.ItemSetNames);
+            var invoiceItems = context.InvoiceActionContext.GetInvoiceItems(this.ItemSetNames);// invoiceItemManager.GetInvoiceItemsByItemSetNames(context.InvoiceId, this.ItemSetNames);
             List<dynamic> invoiceItemsDetails = new List<dynamic>();
             foreach(var invoiceItem in invoiceItems)
             {
                 invoiceItemsDetails.Add(invoiceItem.Details);
             }
             return invoiceItemsDetails;
+           
         }
     }
 }

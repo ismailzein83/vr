@@ -9,6 +9,7 @@ using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Caching;
+using Vanrise.GenericData.Business;
 namespace Vanrise.Invoice.Business
 {
     public class InvoiceTypeManager
@@ -19,6 +20,38 @@ namespace Vanrise.Invoice.Business
         {
             var invoiceTypes = GetCachedInvoiceTypes();
             return invoiceTypes.GetRecord(invoiceTypeId);
+        }
+        public InvoiceTypeRuntime GetInvoiceTypeRuntime(Guid invoiceTypeId)
+        {
+            var invoiceTypes = GetCachedInvoiceTypes();
+            var invoiceType =  invoiceTypes.GetRecord(invoiceTypeId);
+            InvoiceTypeRuntime invoiceTypeRuntime = new InvoiceTypeRuntime();
+            invoiceTypeRuntime.InvoiceType = invoiceType;
+            invoiceTypeRuntime.MainGridRuntimeColumns = new List<InvoiceUIGridColumnRunTime>();
+
+            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
+            var recordType = dataRecordTypeManager.GetDataRecordType(invoiceType.Settings.InvoiceDetailsRecordTypeId);
+            if (recordType == null)
+                throw new NullReferenceException(String.Format("Record Type {0} Not Found.", invoiceType.Settings.InvoiceDetailsRecordTypeId));
+            foreach(var gridColumn in invoiceType.Settings.UISettings.MainGridColumns)
+            {
+                GridColumnAttribute attribute = null;
+                if(gridColumn.CustomFieldName != null)
+                {
+                      var fieldType = recordType.Fields.FirstOrDefault(x=>x.Name == gridColumn.CustomFieldName);
+                      if (fieldType != null)
+                        attribute = fieldType.Type.GetGridColumnAttribute();
+                }
+
+                invoiceTypeRuntime.MainGridRuntimeColumns.Add(new InvoiceUIGridColumnRunTime
+                {
+                    CustomFieldName = gridColumn.CustomFieldName,
+                    Attribute = attribute,
+                    Field = gridColumn.Field,
+                    Header = gridColumn.Header
+                });
+            }
+            return invoiceTypeRuntime;
         }
         public IEnumerable<InvoiceGeneratorConfig> GetInvoiceGeneratorConfigs()
         {

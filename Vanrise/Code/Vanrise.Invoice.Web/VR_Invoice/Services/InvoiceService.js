@@ -1,6 +1,6 @@
 ﻿
-app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService',
-    function (VRModalService, SecurityService) {
+app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','UtilsService',
+    function (VRModalService, SecurityService, UtilsService) {
 
         var actionTypes = [];
         function registerActionType(actionType) {
@@ -33,11 +33,18 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService',
         }
 
         function registerInvoiceRDLCReport() {
+            
             var actionType = {
                 ActionTypeName: "Download",
                 actionMethod: function (payload) {
+
+                    var context = {
+                        $type: "Vanrise.Invoice.Business.PhysicalInvoiceActionContext,Vanrise.Invoice.Business",
+                        InvoiceId: payload.invoice.Entity.InvoiceId
+                    };
+
                     var paramsurl = "";
-                    paramsurl += "invoiceId=" + payload.invoice.Entity.InvoiceId;
+                    paramsurl += "invoiceActionContext=" + UtilsService.serializetoJson(context);
                     paramsurl += "&actionTypeName=" + "Download";
                     paramsurl += "&Auth-Token=" + encodeURIComponent(SecurityService.getUserToken());
                     window.open("Client/Modules/VR_Invoice/Reports/InvoiceReport.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1");

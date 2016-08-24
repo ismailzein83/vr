@@ -9,6 +9,6 @@ namespace Vanrise.Invoice.Business.Context
 {
     public class RDLCReportDataSourceSettingsContext : IRDLCReportDataSourceSettingsContext
     {
-        public long InvoiceId { get; set; }
+        public IInvoiceActionContext InvoiceActionContext { get; set; }
     }
 }

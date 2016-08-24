@@ -21,8 +21,13 @@ namespace Vanrise.Invoice.Web.Controllers
         public InvoiceType GetInvoiceType(Guid invoiceTypeId)
         {
             return _manager.GetInvoiceType(invoiceTypeId);
+        }      
+        [HttpGet]
+        [Route("GetInvoiceTypeRuntime")]
+        public InvoiceTypeRuntime GetInvoiceTypeRuntime(Guid invoiceTypeId)
+        {
+            return _manager.GetInvoiceTypeRuntime(invoiceTypeId);
         }
-
         [HttpPost]
         [Route("GetFilteredInvoiceTypes")]
         public object GetFilteredInvoiceTypes(Vanrise.Entities.DataRetrievalInput<InvoiceTypeQuery> input)

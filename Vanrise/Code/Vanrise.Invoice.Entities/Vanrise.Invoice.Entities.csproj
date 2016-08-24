@@ -47,10 +47,12 @@
     <Compile Include="GeneratedInvoice\GeneratedInvoice.cs" />
     <Compile Include="GeneratedInvoice\GeneratedInvoiceItem.cs" />
     <Compile Include="GeneratedInvoice\GeneratedInvoiceItemSet.cs" />
+    <Compile Include="InvoiceType\IInvoiceActionContext.cs" />
     <Compile Include="InvoiceType\InvoiceGeneratorConfig.cs" />
     <Compile Include="InvoiceType\InvoiceGridActionSettingsConfig.cs" />
     <Compile Include="InvoiceType\InvoiceTypeDetail.cs" />
     <Compile Include="InvoiceType\InvoiceTypeQuery.cs" />
+    <Compile Include="InvoiceType\InvoiceTypeRuntime.cs" />
     <Compile Include="InvoiceType\RDLCDataSourceSettingsConfig.cs" />
     <Compile Include="InvoiceType\UISettings\IRDLCReportParameterValueContext.cs" />
     <Compile Include="InvoiceType\UISettings\RDLCParameterSettingsConfig.cs" />

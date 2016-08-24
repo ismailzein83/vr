@@ -291,7 +291,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Generate Invoice',
                     class: "glyphicon glyphicon-retweet"
                 }
-                
+            case 'Preview':
+                return {
+                    text: 'Preview',
+                    class: "glyphicon glyphicon-eye-open"
+                }
         } 
     }
 }]);

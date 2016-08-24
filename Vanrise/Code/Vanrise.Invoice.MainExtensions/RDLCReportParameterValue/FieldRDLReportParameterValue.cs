@@ -22,7 +22,7 @@ namespace Vanrise.Invoice.MainExtensions
                 case Entities.InvoiceField.Partner: return context.Invoice.PartnerId;
                 case Entities.InvoiceField.SerialNumber: return context.Invoice.SerialNumber;
                 case Entities.InvoiceField.ToDate: return context.Invoice.ToDate;
-                case Entities.InvoiceField.CustomField: return Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(context.Invoice.Details); 
+                case Entities.InvoiceField.CustomField: return context.Invoice.Details!=null? Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(context.Invoice.Details):null; 
             }
             return null;
         }

@@ -42,7 +42,7 @@
 
         function load() {
             $scope.isLoadingFilters = true;
-            getInvoiceType().then(function () {
+            getInvoiceTypeRuntime().then(function () {
                 loadAllControls();
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -52,9 +52,9 @@
         }
         function getFilterObject() {
             var filter = {
-                mainGridColumns: $scope.invoiceTypeEntity.Settings.UISettings.MainGridColumns,
-                subSections: $scope.invoiceTypeEntity.Settings.UISettings.SubSections,
-                invoiceGridActions: $scope.invoiceTypeEntity.Settings.UISettings.InvoiceGridActions,
+                mainGridColumns: $scope.invoiceTypeEntity.MainGridRuntimeColumns,
+                subSections: $scope.invoiceTypeEntity.InvoiceType.Settings.UISettings.SubSections,
+                invoiceGridActions: $scope.invoiceTypeEntity.InvoiceType.Settings.UISettings.InvoiceGridActions,
                 query: {
                     FromTime: $scope.fromDate,
                     ToTime: $scope.toDate,
@@ -72,12 +72,13 @@
                   $scope.isLoadingFilters = false;
               });
         }
-        function getInvoiceType()
+        function getInvoiceTypeRuntime()
         {
-            return VR_Invoice_InvoiceTypeAPIService.GetInvoiceType(invoiceTypeId).then(function (response) {
+            return VR_Invoice_InvoiceTypeAPIService.GetInvoiceTypeRuntime(invoiceTypeId).then(function (response) {
                $scope.invoiceTypeEntity = response;
             });
         }
+
         function generateInvoice() {
             var onGenerateInvoice = function (invoice) {
             };

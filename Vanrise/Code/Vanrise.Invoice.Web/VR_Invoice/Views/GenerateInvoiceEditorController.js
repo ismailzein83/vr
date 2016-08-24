@@ -26,6 +26,23 @@
                 partnerSelectorReadyDeferred.resolve();
             }
 
+            $scope.preview = function()
+            {
+                var context = {
+                    $type: "Vanrise.Invoice.Business.PreviewInvoiceActionContext,Vanrise.Invoice.Business",
+                    InvoiceTypeId: invoiceTypeId,
+                    PartnerId: partnerSelectorAPI.getSelectedIds(),
+                    FromDate:$scope.fromDate,
+                    ToDate:$scope.toDate
+                };
+
+                var paramsurl = "";
+                paramsurl += "invoiceActionContext=" + UtilsService.serializetoJson(context);
+                paramsurl += "&actionTypeName=" + "Download";
+              //  paramsurl += "&Auth-Token=" + encodeURIComponent(SecurityService.getUserToken());
+                window.open("Client/Modules/VR_Invoice/Reports/InvoiceReport.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1");
+            }
+
             $scope.generateInvoice = function () {
                 return generateInvoice();
             };

@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="Context\InvoiceGenerationContext.cs" />
     <Compile Include="Context\PartnerManagerContext.cs" />
+    <Compile Include="Context\PhysicalInvoiceActionContext.cs" />
+    <Compile Include="Context\PreviewInvoiceActionContext.cs" />
     <Compile Include="Context\RDLCReportDataSourceSettingsContext.cs" />
     <Compile Include="Context\RDLCReportParameterValueContext.cs" />
     <Compile Include="InvoiceItemManager.cs" />
@@ -68,6 +70,14 @@
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Business\Vanrise.GenericData.Business.csproj">
+      <Project>{e196c862-be33-49dd-9e0d-2948fb289861}</Project>
+      <Name>Vanrise.GenericData.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
+      <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
+      <Name>Vanrise.GenericData.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Invoice.Data\Vanrise.Invoice.Data.csproj">
       <Project>{3d178003-f8bb-4d06-acde-ddd1fe4c5b62}</Project>

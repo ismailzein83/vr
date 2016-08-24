@@ -83,41 +83,48 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                         var mainGridColumn = mainGridColumns[i];
                         var field;
                         var type;
+                        var attribute = {
+                            type: undefined,
+                            numberprecision: undefined,
+                        };
                         switch (mainGridColumn.Field) {
                             case VR_Invoice_InvoiceFieldEnum.CustomField.value:
                                 field = field = "Entity." + VR_Invoice_InvoiceFieldEnum.CustomField.fieldName + "." + mainGridColumn.CustomFieldName;
-                                type = VR_Invoice_InvoiceFieldEnum.CustomField.type;
+                                attribute = {
+                                    type: mainGridColumn.Attribute.Type,
+                                    numberprecision: mainGridColumn.Attribute.NumberPrecision
+                                };
                                 break;
                             case VR_Invoice_InvoiceFieldEnum.InvoiceId.value:
                                 field = field = "Entity." + VR_Invoice_InvoiceFieldEnum.InvoiceId.fieldName;
-                                type = VR_Invoice_InvoiceFieldEnum.InvoiceId.type;
+                                attribute.type = VR_Invoice_InvoiceFieldEnum.InvoiceId.type;
                                 break;
                             case VR_Invoice_InvoiceFieldEnum.Partner.value:
                                 field = VR_Invoice_InvoiceFieldEnum.Partner.fieldName;
-                                type = VR_Invoice_InvoiceFieldEnum.Partner.type;
+                                attribute.type = VR_Invoice_InvoiceFieldEnum.Partner.type;
                                 break;
                             case VR_Invoice_InvoiceFieldEnum.SerialNumber.value:
                                 field = "Entity." + VR_Invoice_InvoiceFieldEnum.SerialNumber.fieldName;
-                                type = VR_Invoice_InvoiceFieldEnum.SerialNumber.type;
+                                attribute.type = VR_Invoice_InvoiceFieldEnum.SerialNumber.type;
                                 break;
                             case VR_Invoice_InvoiceFieldEnum.FromDate.value:
                                 field = "Entity." + VR_Invoice_InvoiceFieldEnum.FromDate.fieldName;
-                                type = VR_Invoice_InvoiceFieldEnum.FromDate.type;
+                                attribute.type = VR_Invoice_InvoiceFieldEnum.FromDate.type;
                                 break;
                             case VR_Invoice_InvoiceFieldEnum.ToDate.value:
                                 field = "Entity." + VR_Invoice_InvoiceFieldEnum.ToDate.fieldName;
-                                type = VR_Invoice_InvoiceFieldEnum.ToDate.type;
+                                attribute.type = VR_Invoice_InvoiceFieldEnum.ToDate.type;
                                 break;
                             case VR_Invoice_InvoiceFieldEnum.IssueDate.value:
                                 field = "Entity." + VR_Invoice_InvoiceFieldEnum.IssueDate.fieldName;
-                                type = VR_Invoice_InvoiceFieldEnum.IssueDate.type;
+                                attribute.type = VR_Invoice_InvoiceFieldEnum.IssueDate.type;
                                 break;
                             case VR_Invoice_InvoiceFieldEnum.DueDate.value:
                                 field = "Entity." + VR_Invoice_InvoiceFieldEnum.DueDate.fieldName;
-                                type = VR_Invoice_InvoiceFieldEnum.DueDate.type;
+                                attribute.type = VR_Invoice_InvoiceFieldEnum.DueDate.type;
                                 break;
                         }
-                        $scope.gridFields.push({ header: mainGridColumn.Header, field: field, type: type });
+                        $scope.gridFields.push({ header: mainGridColumn.Header, field: field, type: attribute.type, numberprecision: attribute.numberprecision });
                     }
                 }
             }

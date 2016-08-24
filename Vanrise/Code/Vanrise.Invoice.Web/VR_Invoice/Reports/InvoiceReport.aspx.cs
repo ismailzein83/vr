@@ -18,12 +18,12 @@ namespace Vanrise.Invoice.Web.VR_Invoice.Reports
         {
             if (!IsPostBack)
             {
-                long invoiceId = Convert.ToInt32(Request.QueryString["invoiceId"]);
+                IInvoiceActionContext invoiceActionContext = Vanrise.Common.Serializer.Deserialize<IInvoiceActionContext>(Request.QueryString["invoiceActionContext"]);
+              
                 string actionTypeName = Request.QueryString["actionTypeName"];
                 InvoiceManager invoiceManager = new InvoiceManager();
 
-                var invoice = invoiceManager.GetInvoice(invoiceId);
-
+                var invoice = invoiceActionContext.GetInvoice;
                 InvoiceTypeManager invoiceTypeManager = new Business.InvoiceTypeManager();
                 var invoiceType = invoiceTypeManager.GetInvoiceType(invoice.InvoiceTypeId);
                 OpenRDLCReportAction openRDLCReportAction = null;
@@ -44,7 +44,7 @@ namespace Vanrise.Invoice.Web.VR_Invoice.Reports
                         ReportViewer1.LocalReport.DataSources.Clear();
                         InvoiceItemManager manager = new InvoiceItemManager();
                         RDLCReportDataSourceSettingsContext context = new RDLCReportDataSourceSettingsContext();
-                        context.InvoiceId = invoiceId;
+                        context.InvoiceActionContext = invoiceActionContext;
                         foreach (var dataSource in openRDLCReportAction.DataSources)
                         {
                             var items = dataSource.Settings.GetDataSourceItems(context);
@@ -60,7 +60,9 @@ namespace Vanrise.Invoice.Web.VR_Invoice.Reports
                         };
                         foreach(var parameter in openRDLCReportAction.Parameters)
                         {
-                            invoiceReportParameters.Add(new ReportParameter(parameter.ParameterName, parameter.Value.Evaluate(paramterContext).ToString(), parameter.IsVisible));
+                            var parameterValue = parameter.Value.Evaluate(paramterContext);
+                            if(parameterValue != null)
+                            invoiceReportParameters.Add(new ReportParameter(parameter.ParameterName,parameterValue.ToString(), parameter.IsVisible));
                         }
                         ReportViewer1.LocalReport.SetParameters(invoiceReportParameters.ToArray());
                     }

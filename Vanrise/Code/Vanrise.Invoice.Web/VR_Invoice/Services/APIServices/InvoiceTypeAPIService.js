@@ -12,7 +12,12 @@
                 invoiceTypeId: invoiceTypeId
             });
         }
-
+        function GetInvoiceTypeRuntime(invoiceTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceTypeRuntime"), {
+                invoiceTypeId: invoiceTypeId
+            });
+        }
+        
         function GetFilteredInvoiceTypes(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetFilteredInvoiceTypes"), input);
         }
@@ -46,7 +51,8 @@
             GetRDLCDataSourceSettingsConfigs: GetRDLCDataSourceSettingsConfigs,
             GetRDLCParameterSettingsConfigs: GetRDLCParameterSettingsConfigs,
             AddInvoiceType: AddInvoiceType,
-            UpdateInvoiceType: UpdateInvoiceType
+            UpdateInvoiceType: UpdateInvoiceType,
+            GetInvoiceTypeRuntime: GetInvoiceTypeRuntime
         });
     }
 
