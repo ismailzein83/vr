@@ -15,7 +15,7 @@ namespace Vanrise.Reprocess.BP.Activities
         public InArgument<ReprocessStage> Stage { get; set; }
 
         [RequiredArgument]
-        public OutArgument<List<StageRecordInfo>> StageRecordInfos { get; set; }
+        public OutArgument<IEnumerable<StageRecordInfo>> StageRecordInfos { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {

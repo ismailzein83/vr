@@ -18,7 +18,7 @@ namespace Vanrise.Reprocess.BP.Activities
         public InArgument<ChunkTime> ChunkTime { get; set; }
 
         [RequiredArgument]
-        public OutArgument<List<DateTimeRange>> DateTimeRanges { get; set; }
+        public OutArgument<IEnumerable<DateTimeRange>> DateTimeRanges { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
@@ -47,8 +47,8 @@ namespace Vanrise.Reprocess.BP.Activities
 
                 dateTimeRanges.Add(new DateTimeRange() { From = startDate, To = endDate });
             }
-            dateTimeRanges = dateTimeRanges.OrderBy(itm => itm.From).ToList();
-            this.DateTimeRanges.Set(context, dateTimeRanges);
+
+            this.DateTimeRanges.Set(context, dateTimeRanges.OrderBy(itm => itm.From));
         }
     }
 }
