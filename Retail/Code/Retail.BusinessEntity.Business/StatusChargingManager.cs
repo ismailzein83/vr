@@ -42,16 +42,29 @@ namespace Retail.BusinessEntity.Business
             }
             return updateOperationOutput;
         }
-        public InsertOperationOutput<StatusChargingSet> AddStatusChargingSet(StatusChargingSet statusChargingSetItem)
+        public InsertOperationOutput<StatusChargingSetDetail> AddStatusChargingSet(StatusChargingSet statusChargingSetItem)
         {
-            var insertOperationOutput = new InsertOperationOutput<StatusChargingSet>
+            var insertOperationOutput = new InsertOperationOutput<StatusChargingSetDetail>
             {
                 Result = InsertOperationResult.Failed,
                 InsertedObject = null
             };
 
             IStatusChargingSetDataManager dataManager = BEDataManagerFactory.GetDataManager<IStatusChargingSetDataManager>();
-            insertOperationOutput.Result = dataManager.Insert(statusChargingSetItem) ? InsertOperationResult.Succeeded : InsertOperationResult.SameExists;
+            int insertedId = -1;
+            if (dataManager.Insert(statusChargingSetItem, out insertedId))
+            {
+                statusChargingSetItem.StatusChargingSetId = insertedId;
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = InsertOperationResult.Succeeded;
+                insertOperationOutput.InsertedObject = StatusChargingSetDetailMapper(GetChargingSet(statusChargingSetItem.StatusChargingSetId)); ;
+            }
+            else
+            {
+                insertOperationOutput.Result = InsertOperationResult.SameExists;
+
+            }
+
             return insertOperationOutput;
         }
         public IDataRetrievalResult<StatusChargingSetDetail> GetFilteredStatusChargingSet(DataRetrievalInput<StatusChargingSetQuery> input)
