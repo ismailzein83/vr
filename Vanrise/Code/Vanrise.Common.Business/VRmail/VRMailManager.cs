@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
@@ -26,6 +27,8 @@ namespace Vanrise.Common.Business
             string cc = EvaluateExpression(mailMessageTemplate.Settings.CC, mailContext);
             string subject = EvaluateExpression(mailMessageTemplate.Settings.Subject, mailContext);
             string body = EvaluateExpression(mailMessageTemplate.Settings.Body, mailContext);
+
+            SendMail(to, cc, subject, body);
         }
 
         private VRMailMessageTemplate GetMailMessageTemplate(Guid mailMessageTemplateId)
@@ -60,9 +63,32 @@ namespace Vanrise.Common.Business
         {
             
         }
+
+        public void SendMail(string to, string cc, string subject, string body)
+        {
+            ConfigManager configManager = new ConfigManager();
+            EmailSettingData emailSettingData = configManager.GetSystemEmail();
+
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.From = new MailAddress(emailSettingData.SenderEmail);
+            mailMessage.To.Add(new MailAddress(to));
+            mailMessage.Subject = subject;
+            mailMessage.Body = body;
+            mailMessage.IsBodyHtml = true;
+
+            SmtpClient client = new SmtpClient();
+            client.Port = emailSettingData.Port;
+            client.Host = emailSettingData.Host;
+            client.Timeout = emailSettingData.Timeout;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.UseDefaultCredentials = false;
+            client.Credentials = new System.Net.NetworkCredential(emailSettingData.SenderEmail, emailSettingData.SenderPassword);
+            client.EnableSsl = true;
+
+            client.Send(mailMessage);
+        }
     }
 
-    
     public class VRMailContext
     {
         Dictionary<string, dynamic> objects;

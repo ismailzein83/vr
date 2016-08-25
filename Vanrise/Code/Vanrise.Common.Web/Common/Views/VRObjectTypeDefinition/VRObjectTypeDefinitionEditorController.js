@@ -185,12 +185,12 @@
             return context;
         }
         function buildObjectTypeContext() {
+
             var context = {
                 canDefineProperties: function (canDefineProperties) {
                     $scope.scopeModel.canDefineProperties = canDefineProperties;
                 }
             }
-
             return context;
         }
         function buildVRObjectTypeDefinitionObjFromScope() {

@@ -25,11 +25,13 @@ namespace TOne.WhS.Runtime.Tasks
 
             Console.WriteLine("Ali Atoui: VRMailMessageTemplate");
 
-            Guid guid = new Guid("ACD089BE-E897-4D5F-A711-740005231AF8");
+            Guid guid = new Guid("E21CD125-61F0-4091-A03E-200CFE33F6E3");
             Carrier carrier = new Carrier() { Id = 100, CustomerId = 101 };
+            User user = new User() { Email = "aatoui@vanrise.com", Name = "Ali Atoui" };
 
             Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
             objects.Add("Carrier-ON", carrier);
+            objects.Add("AliAtoui-ON", user);
 
             VRMailManager vrMailManager = new VRMailManager();
             vrMailManager.SendMail(guid, objects);
@@ -57,7 +59,11 @@ namespace TOne.WhS.Runtime.Tasks
         public int CustomerId { get; set; }
     }
 
-
+    public class User 
+    {
+        public string Email { get; set; }
+        public string Name { get; set; }
+    }
 
     public class VRMailMessageTemplateTask
     {

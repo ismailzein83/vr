@@ -127,14 +127,14 @@
 
                 api.getData = function () {
 
-                    var data = {};
-
-                    if (directiveAPI != undefined) 
+                    var data;
+                    if (directiveAPI != undefined && $scope.scopeModel.selectedTemplateConfig != undefined) {
+                        
                         data = directiveAPI.getData();
+                        if(data != undefined)
+                            data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
+                    }
                     
-                    if ($scope.scopeModel.selectedTemplateConfig != undefined)
-                        data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
-
                     return data;
                 };
 

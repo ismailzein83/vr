@@ -21,7 +21,7 @@
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: '/Client/Modules/Common/Directives/VRObjectTypePropertyDefinition/Templates/VRObjectPropertySelectiveTemplate.html'
+            templateUrl: '/Client/Modules/Common/Directives/VRObjectTypePropertyDefinition/Templates/VRObjectPropertyEvaluatorSelectiveTemplate.html'
         };
 
         function ObjectPropertySelector($scope, ctrl, $attrs) {
