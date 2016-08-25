@@ -20,3 +20,4 @@ BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\Busine
 VR_AccountBalance		C:\TFS\Vanrise\Code\Vanrise.AccountBalance.Web\VR_AccountBalance
 VR_Notification			C:\TFS\Vanrise\Code\Vanrise.Notification.Web\VR_Notification
 VR_BEBridge				C:\TFS\Vanrise\Code\Vanrise.BEBridge.Web\VR_BEBridge
+WhS_Routing				C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Routing.Web\WhS_Routing
