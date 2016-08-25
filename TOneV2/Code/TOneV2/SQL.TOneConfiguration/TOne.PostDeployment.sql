@@ -220,12 +220,13 @@ set identity_insert [sec].[BusinessEntityModule] on;
 ;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1201,'Purchase',1,0),
-(1202,'Account Manager',1,0),
-(1203,'Routing',1,0),
-(1204,'Billing',1,0),
-(1205,'Traffic',1,0),
-(1206,'Sale',1,0),
+(1201,'Sale',1,0),
+(1202,'Purchase',1,0),
+(1203,'Account Manager',1,0),
+(1204,'Routing',1,0),
+(1205,'Billing',1,0),
+(1206,'Traffic',1,0),
+
 (1207,'Routing',602,0),
 (1208,'Sale',602,0),
 (1209,'Purchase',602,0)
@@ -249,20 +250,21 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(3301,'WhS_BE_SupplierPricelist','Supplier PriceList',1201,0,'["View"]'),
+(3301,'WhS_BE_SupplierPricelist','Supplier PriceList',1202,0,'["View"]'),
 
-(3304,'BillingStatistic','Billing Statistic',1204,0,'["View"]'),
-(3310,'BillingCDR','Billing CDR',1204,0,'["View"]'),
+(3304,'BillingStatistic','Billing Statistic',1205,0,'["View"]'),
+(3310,'BillingCDR','Billing CDR',1205,0,'["View"]'),
 
 (3305,'WhS_BE_SwitchConnectivity','Switch Connectivity',201,0,'["View", "Add", "Edit"]'),
 
-(3309,'TrafficStatistic','Traffic Statistic',1205,0,'["View"]'),
-(3311,'RawCDR','Raw CDR',1205,0,'["View"]'),
-(3312,'FailedCDR','Failed CDR',1205,0,'["View"]'),
-(3313,'InvalidCDR','Invalid CDR',1205,0,'["View"]'),
+(3309,'TrafficStatistic','Traffic Statistic',1206,0,'["View"]'),
+(3311,'RawCDR','Raw CDR',1206,0,'["View"]'),
+(3312,'FailedCDR','Failed CDR',1206,0,'["View"]'),
+(3313,'InvalidCDR','Invalid CDR',1206,0,'["View"]'),
 
 (3320,'WhS_BE_CarrierAccount','Carrier Account',201,0,'["View", "Add", "Edit", "Delete"]'),
 (3321,'WhS_BE_CarrierProfile','Carrier Profile',201,0,'["View"]'),
+
 (3322,'WhS_BE_CodeGroup','Code Group',201,0,'["View"]'),
 (3323,'WhS_BE_Switch','Switches',201,0,'["View", "Add", "Edit", "Delete"]'),
 (3324,'WhS_Sales_SaleCode','Sale Codes',201,0,'["View"]'),
@@ -271,27 +273,28 @@ as (select * from (values
 (3327,'WhS_BE_Generic','Generic Business Entities',201,0,'["View", "Add", "Edit"]'),
 
 (3338,'Whs_Purchase_Rules','Purchase Rules',403,0,'["View","Add","Edit"]'),
-(3340,'WhS_BE_SupplierCode','Supplier Code',1201,0,'["View"]'),
-(3341,'WhS_BE_SupplierRate','Supplier Rate',1201,0,'["View"]'),
-(3342,'WhS_BE_SupplierZone','Supplier Zone',1201,0,'["View"]'),
 
-(3343,'Whs_BE_RoutingProduct','Routing Product',1203,0,'["View","Add","Edit","Delete"]'),
+(3340,'WhS_BE_SupplierCode','Supplier Code',201,0,'["View"]'),
+(3341,'WhS_BE_SupplierRate','Supplier Rate',201,0,'["View"]'),
+(3342,'WhS_BE_SupplierZone','Supplier Zone',201,0,'["View"]'),
+
+(3343,'Whs_BE_RoutingProduct','Routing Product',1204,0,'["View","Add","Edit","Delete"]'),
 (3344,'Whs_BE_ZoneServiceConfig','Zone Service Configuration',201,0,'["View","Add","Edit"]'),
 
 (3339,'Whs_Sales_Rules','Sale Rules',403,0,'["View","Add","Edit"]'),
-(3350,'WhS_Sales_SalePriceList','Sale Price List',1206,0,'["View"]'),
-(3351,'WhS_BE_CustomerSellingProduct','Customer Selling Product',1206,0,'["View"]'),
-(3352,'WhS_BE_SellingProduct','Selling Product',1206,0,'["View"]'),
-(3353,'WhS_BE_SellingNumberPlan','Selling Number Plan',1206,0,'["View"]'),
-(3354,'WhS_Sales_NumberingPlan','Numbering Plan',1206,0,'["View"]'),
-(3355,'WhS_Sales_RatePlan','Rate Plan',1206,0,'["View"]'),
+(3350,'WhS_Sales_SalePriceList','Sale Price List',1201,0,'["View"]'),
+(3351,'WhS_BE_CustomerSellingProduct','Customer Selling Product',1201,0,'["View"]'),
+(3352,'WhS_BE_SellingProduct','Selling Product',1201,0,'["View"]'),
+(3353,'WhS_BE_SellingNumberPlan','Selling Number Plan',1201,0,'["View"]'),
+(3354,'WhS_Sales_NumberingPlan','Numbering Plan',1201,0,'["View"]'),
+(3355,'WhS_Sales_RatePlan','Rate Plan',1201,0,'["View"]'),
 
-(3400,'VR_AccountManager','VR_AccountManager',1202,0,'["View", "AssignCarriers", "UpdateLinkedOrgChart","GetAssignedCarrierDetails","GetLinkedOrgChartId"]'),
+(3400,'VR_AccountManager','VR_AccountManager',1203,0,'["View", "AssignCarriers", "UpdateLinkedOrgChart","GetAssignedCarrierDetails","GetLinkedOrgChartId"]'),
 
-(3450,'WhS_Routing_RoutingRule','Routing Rule',1203,0,'["View","Add","Edit","Delete"]'),
-(3451,'WhS_Routing_ProductCost','Product Cost',1203,0,'["View"]'),
-(3452,'WhS_Routing_RouteOptionRule','Route Option Rule',1203,0,'["View","Add","Edit"]'),
-(3453,'WhS_Routing_CustomerRoute','Customer Route',1203,0,'["View"]'),
+(3450,'WhS_Routing_RoutingRule','Routing Rule',1204,0,'["View","Add","Edit","Delete"]'),
+(3451,'WhS_Routing_ProductCost','Product Cost',1204,0,'["View"]'),
+(3452,'WhS_Routing_RouteOptionRule','Route Option Rule',1204,0,'["View","Add","Edit"]'),
+(3453,'WhS_Routing_CustomerRoute','Customer Route',1204,0,'["View"]'),
 
 (3454,'BusinessProcess_BP_Route_Build','Route Build',1207,0,'["View", "StartInstance", "ScheduleTask"]'),
 (3455,'BusinessProcess_BP_Product_Cost_Generation','Product Cost Generation',1207,0,'["View", "StartInstance", "ScheduleTask"]'),
@@ -312,7 +315,6 @@ when not matched by target then
 	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
-
 
 --[sec].[BusinessEntity]-------------------delet action-------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
