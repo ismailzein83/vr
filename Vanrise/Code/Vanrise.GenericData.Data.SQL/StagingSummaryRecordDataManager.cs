@@ -21,7 +21,7 @@ namespace Vanrise.GenericData.Data.SQL
         }
 
         #region Public Methods
-        public List<StageRecordInfo> GetStageRecordInfo(long processInstanceId, string stageName)
+        public List<Vanrise.Reprocess.Entities.BatchRecord> GetStageRecordInfo(long processInstanceId, string stageName)
         {
             return GetItemsSP("reprocess.sp_StagingSummaryRecord_GetStageRecordInfo", StageRecordInfoMapper, processInstanceId, stageName);
         }
@@ -91,7 +91,7 @@ namespace Vanrise.GenericData.Data.SQL
             };
         }
 
-        private StageRecordInfo StageRecordInfoMapper(IDataReader reader)
+        private Vanrise.Reprocess.Entities.BatchRecord StageRecordInfoMapper(IDataReader reader)
         {
             return new StageRecordInfo()
             {

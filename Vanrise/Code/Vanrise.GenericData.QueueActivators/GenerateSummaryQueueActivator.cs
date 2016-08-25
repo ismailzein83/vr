@@ -116,6 +116,10 @@ namespace Vanrise.GenericData.QueueActivators
 
         void Reprocess.Entities.IReprocessStageActivator.FinalizeStage(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
         {
+            StageRecordInfo stageRecordInfo = context.BatchRecord as StageRecordInfo;
+            if (stageRecordInfo == null)
+                throw new Exception(String.Format("context.BatchRecord should be of type 'StageRecordInfo' and not of type '{0}'", context.BatchRecord.GetType()));
+
             DataRecordStorageManager _dataRecordStorageManager = new DataRecordStorageManager();
             var transformationManager = new GenericSummaryTransformationManager() { SummaryTransformationDefinitionId = this.SummaryTransformationDefinitionId };
 
@@ -125,7 +129,7 @@ namespace Vanrise.GenericData.QueueActivators
 
             Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches = new Queueing.MemoryQueue<GenericSummaryRecordBatch>();
             AsyncActivityStatus loadBatchStatus = new AsyncActivityStatus();
-            StartLoadingBatches(context, queueLoadedBatches, loadBatchStatus);
+            StartLoadingBatches(context, queueLoadedBatches, loadBatchStatus, stageRecordInfo);
 
             Queueing.MemoryQueue<List<GenericSummaryRecordBatch>> queuePreparedBatches = new Queueing.MemoryQueue<List<GenericSummaryRecordBatch>>();
             AsyncActivityStatus prepareBatchStatus = new AsyncActivityStatus();
@@ -134,7 +138,7 @@ namespace Vanrise.GenericData.QueueActivators
             StartInsertingBatches(context, transformationManager, recordStorageDataManager, queuePreparedBatches, prepareBatchStatus);
         }
 
-        private static void StartLoadingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches, AsyncActivityStatus loadBatchStatus)
+        private static void StartLoadingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches, AsyncActivityStatus loadBatchStatus, StageRecordInfo stageRecordInfo)
         {
             Task loadDataTask = new Task(() =>
             {
@@ -142,7 +146,7 @@ namespace Vanrise.GenericData.QueueActivators
                 try
                 {
                     context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Start Loading Batches");
-                    dataManager.GetStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, context.BatchStart, (stagingSummaryRecord) =>
+                    dataManager.GetStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, stageRecordInfo.BatchStart, (stagingSummaryRecord) =>
                     {
                         GenericSummaryRecordBatch genericSummaryRecordBatch = new GenericSummaryRecordBatch();
                         genericSummaryRecordBatch = genericSummaryRecordBatch.Deserialize<GenericSummaryRecordBatch>(stagingSummaryRecord.Data);
@@ -151,7 +155,7 @@ namespace Vanrise.GenericData.QueueActivators
                 }
                 finally
                 {
-                    dataManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, context.BatchStart);
+                    dataManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, stageRecordInfo.BatchStart);
                     loadBatchStatus.IsComplete = true;
                     context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finish Loading Batches");
                 }
@@ -247,7 +251,7 @@ namespace Vanrise.GenericData.QueueActivators
         }
 
 
-        public List<Reprocess.Entities.StageRecordInfo> GetStageRecordInfo(Reprocess.Entities.IReprocessStageActivatorPreparingContext context)
+        public List<Reprocess.Entities.BatchRecord> GetStageBatchRecords(Reprocess.Entities.IReprocessStageActivatorPreparingContext context)
         {
             IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
             return dataManager.GetStageRecordInfo(context.ProcessInstanceId, context.CurrentStageName);

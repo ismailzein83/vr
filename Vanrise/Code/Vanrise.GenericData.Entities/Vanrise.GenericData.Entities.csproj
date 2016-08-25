@@ -45,6 +45,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Reprocess.Entities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinitionDetail.cs" />
@@ -175,6 +178,7 @@
     <Compile Include="DataRecordVanriseType.cs" />
     <Compile Include="RecordFilter\RecordFilterFieldInfo.cs" />
     <Compile Include="RecordFilter\RecordFilterGroupExpressionInput.cs" />
+    <Compile Include="StagingSummary\StageRecordInfo.cs" />
     <Compile Include="StagingSummary\StagingSummaryRecord.cs" />
     <Compile Include="SummaryTransformation\SummaryTransformationDefinitionQuery.cs" />
     <Compile Include="SummaryTransformation\SummaryTransformationDefinitionInfoFilter.cs" />
