@@ -74,7 +74,7 @@ namespace Vanrise.Common.Business
             mailMessage.To.Add(new MailAddress(to));
             mailMessage.Subject = subject;
             mailMessage.Body = body;
-            mailMessage.IsBodyHtml = true;
+            mailMessage.IsBodyHtml = false;
 
             SmtpClient client = new SmtpClient();
             client.Port = emailSettingData.Port;
@@ -86,9 +86,6 @@ namespace Vanrise.Common.Business
             client.EnableSsl = true;
 
             client.Send(mailMessage);
-
-            //dynamic var = null;
-            //var.Value = "ali";
         }
     }
 

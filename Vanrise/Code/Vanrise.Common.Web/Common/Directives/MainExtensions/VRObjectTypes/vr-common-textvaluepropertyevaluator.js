@@ -31,29 +31,19 @@
 
             function initializeController() {
 
-                $scope.scopeModel = {};
-
-                //$scope.scopeModel.userFields = UtilsService.getArrayEnum(VR_Sec_TextValuePropertyEnum);
-
-                //$scope.scopeModel.onSelectorReady = function (api) {
-                //    selectorAPI = api;
-                //    defineAPI();
-                //};
+                defineAPI();
             }
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
 
-                    //if (payload != undefined && payload.objectPropertyEvaluator != undefined)
-                    //    $scope.scopeModel.selectedUserField = UtilsService.getItemByVal($scope.scopeModel.userFields, payload.objectPropertyEvaluator.UserField, "value");
                 };
 
                 api.getData = function () {
 
                     var data = {
-                        $type: "Vanrise.Security.MainExtensions.VRObjectTypes.TextValuePropertyEvaluator, Vanrise.Security.MainExtensions",
-                        TextField: "Value"
+                        $type: "Vanrise.Common.MainExtensions.VRObjectTypes.TextValuePropertyEvaluator, Vanrise.Common.MainExtensions",
                     }
                     return data;
                 };

@@ -36,7 +36,7 @@
 
                 api.getData = function () {
                     var data = {
-                        $type: "Vanrise.Common.MainExtensions.VRObjectTypes.TextObjectType, Vanrise.Security.MainExtensions",
+                        $type: "Vanrise.Common.MainExtensions.VRObjectTypes.TextObjectType, Vanrise.Common.MainExtensions",
                     }
                     return data;
                 }

@@ -158,11 +158,18 @@ namespace Vanrise.Security.Business
                 insertActionSucc = dataManager.AddUser(userObject, encryptedPassword, out userId);
                 if (insertActionSucc)
                 {
-                    EmailTemplateManager emailTemplateManager = new EmailTemplateManager();
-                    EmailTemplate template = emailTemplateManager.GeEmailTemplateByType(Constants.NewPasswordType);
-                    PasswordEmailContext context = new PasswordEmailContext() { Name = userObject.Name, Password = pwd };
+                    //EmailTemplateManager emailTemplateManager = new EmailTemplateManager();
+                    //EmailTemplate template = emailTemplateManager.GeEmailTemplateByType(Constants.NewPasswordType);
+                    //PasswordEmailContext context = new PasswordEmailContext() { Name = userObject.Name, Password = pwd };
+                    //emailTemplateManager.SendEmail(userObject.Email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
 
-                    emailTemplateManager.SendEmail(userObject.Email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
+                    Guid guid = new Guid("D9B56FC2-EB3E-4340-8918-159A281B95BC");
+                    Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+                    objects.Add("AliAtoui-ON", userObject);
+                    objects.Add("Password-ON", pwd);
+
+                    VRMailManager vrMailManager = new VRMailManager();
+                    vrMailManager.SendMail(guid, objects);
                 }
             }
 
@@ -259,6 +266,23 @@ namespace Vanrise.Security.Business
 
                 IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
                 updateActionSucc = dataManager.ResetPassword(userId, HashingUtility.ComputeHash(password, "", null));
+                if (updateActionSucc)
+                {
+                    //EmailTemplateManager emailTemplateManager = new EmailTemplateManager();
+                    //EmailTemplate template = emailTemplateManager.GeEmailTemplateByType(Constants.ForgotPasswordType);
+                    //PasswordEmailContext context = new PasswordEmailContext() { Name = user.Name, Password = pwd };
+                    //emailTemplateManager.SendEmail(email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
+
+                    User user = GetUserbyId(userId);
+
+                    Guid guid = new Guid("10264FE7-99D5-4F6A-8E8C-44A0702F392E");
+                    Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+                    objects.Add("AliAtoui-ON", user);
+                    objects.Add("Password-ON", password);
+
+                    VRMailManager vrMailManager = new VRMailManager();
+                    vrMailManager.SendMail(guid, objects);
+                }
             }
 
             if (updateActionSucc)
@@ -312,11 +336,18 @@ namespace Vanrise.Security.Business
                 updateActionSucc = dataManager.UpdateTempPasswordByEmail(email, HashingUtility.ComputeHash(pwd, "", null), DateTime.Now.Add(s_tempPasswordValidity));
                 if (updateActionSucc)
                 {
-                    EmailTemplateManager emailTemplateManager = new EmailTemplateManager();
-                    EmailTemplate template = emailTemplateManager.GeEmailTemplateByType(Constants.ForgotPasswordType);
-                    PasswordEmailContext context = new PasswordEmailContext() { Name = user.Name, Password = pwd };
+                    //EmailTemplateManager emailTemplateManager = new EmailTemplateManager();
+                    //EmailTemplate template = emailTemplateManager.GeEmailTemplateByType(Constants.ForgotPasswordType);
+                    //PasswordEmailContext context = new PasswordEmailContext() { Name = user.Name, Password = pwd };
+                    //emailTemplateManager.SendEmail(email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
 
-                    emailTemplateManager.SendEmail(email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
+                    Guid guid = new Guid("E21CD125-61F0-4091-A03E-200CFE33F6E3");
+                    Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+                    objects.Add("AliAtoui-ON", user);
+                    objects.Add("Password-ON", pwd);
+
+                    VRMailManager vrMailManager = new VRMailManager();
+                    vrMailManager.SendMail(guid, objects);
                 }
             }
 

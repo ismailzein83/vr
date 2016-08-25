@@ -19,24 +19,12 @@ namespace TOne.WhS.Runtime.Tasks
         #region Public Methods 
         public void Execute()
         {
-            //PrepareCodePrefixesTask pcp = new PrepareCodePrefixesTask();
-            //IEnumerable<CodePrefixInfo> codePrefixesResult = pcp.PrepareCodePrefixes_Main();
-            //DisplayList(codePrefixesResult);
+            PrepareCodePrefixesTask prepareCodePrefixesTask = new PrepareCodePrefixesTask();
+            IEnumerable<CodePrefixInfo> codePrefixesResult = prepareCodePrefixesTask.PrepareCodePrefixes_Main();
+            DisplayList(codePrefixesResult);
 
-            Console.WriteLine("Ali Atoui: VRMailMessageTemplate");
-
-            Guid guid = new Guid("E21CD125-61F0-4091-A03E-200CFE33F6E3");
-            Carrier carrier = new Carrier() { Id = 100, CustomerId = 101 };
-            User user = new User() { Email = "aatoui@vanrise.com", Name = "Ali Atoui" };
-
-            Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-            objects.Add("Carrier-ON", carrier);
-            objects.Add("AliAtoui-ON", user);
-
-            VRMailManager vrMailManager = new VRMailManager();
-            vrMailManager.SendMail(guid, objects);
-
-            Console.ReadLine();
+            VRMailMessageTemplateTask vrMailMessageTemplateTask = new VRMailMessageTemplateTask();
+            vrMailMessageTemplateTask.VRMailMessageTemplate_Main();
         }   
         #endregion
 
@@ -71,7 +59,20 @@ namespace TOne.WhS.Runtime.Tasks
         #region Public Method
         public void VRMailMessageTemplate_Main()
         {
+            Console.WriteLine("Ali Atoui: VRMailMessageTemplate");
 
+            Guid guid = new Guid("E21CD125-61F0-4091-A03E-200CFE33F6E3");
+            Carrier carrier = new Carrier() { Id = 100, CustomerId = 101 };
+            User user = new User() { Email = "aatoui@vanrise.com", Name = "Ali Atoui" };
+
+            Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+            objects.Add("Carrier-ON", carrier);
+            objects.Add("AliAtoui-ON", user);
+
+            VRMailManager vrMailManager = new VRMailManager();
+            vrMailManager.SendMail(guid, objects);
+
+            Console.ReadLine();
         }
         #endregion
 
