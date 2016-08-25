@@ -75,7 +75,7 @@ namespace Vanrise.BusinessProcess
                         if(!pendingInstancesInfo.Any(pendingInstance => pendingInstance.ProcessInstanceId == parentProcessInstanceId) 
                             || terminatedPendingInstances.Any(pendingInstance => pendingInstance.ProcessInstanceId == parentProcessInstanceId))
                         {
-                            SuspendPendingInstance(pendingInstanceInfo, pendingInstancesInfo, terminatedPendingInstances, false);
+                            SuspendPendingInstance(pendingInstanceInfo, pendingInstancesInfo, terminatedPendingInstances, false, "Parent Process is not running anymore");
                         }
                     }
                 }
@@ -138,10 +138,11 @@ namespace Vanrise.BusinessProcess
             });
         }
 
-        private void SuspendPendingInstance(BPPendingInstanceInfo pendingInstanceInfo, List<BPPendingInstanceInfo> pendingInstancesInfo, List<BPPendingInstanceInfo> terminatedPendingInstances, bool notifyParentIfAny)
+        private void SuspendPendingInstance(BPPendingInstanceInfo pendingInstanceInfo, List<BPPendingInstanceInfo> pendingInstancesInfo, List<BPPendingInstanceInfo> terminatedPendingInstances, bool notifyParentIfAny, string errorMessage = null)
         {
-            string terminatedMessage = "Runtime is no longer available";
-            BPDefinitionInitiator.UpdateProcessStatus(pendingInstanceInfo.ProcessInstanceId, pendingInstanceInfo.ParentProcessInstanceId, BPInstanceStatus.Suspended, terminatedMessage, null);
+            if (errorMessage == null)
+                errorMessage = "Runtime is no longer available";
+            BPDefinitionInitiator.UpdateProcessStatus(pendingInstanceInfo.ProcessInstanceId, pendingInstanceInfo.ParentProcessInstanceId, BPInstanceStatus.Suspended, errorMessage, null);
             terminatedPendingInstances.Add(pendingInstanceInfo);
             if (pendingInstanceInfo.ParentProcessInstanceId.HasValue)
             {
@@ -149,7 +150,7 @@ namespace Vanrise.BusinessProcess
                 if (parentInstanceInfo != null && parentInstanceInfo.Status == BPInstanceStatus.Running && !terminatedPendingInstances.Contains(parentInstanceInfo))
                 {
                     BPDefinitionInitiator.NotifyParentBPChildCompleted(pendingInstanceInfo.ProcessInstanceId, pendingInstanceInfo.ParentProcessInstanceId.Value,
-                        BPInstanceStatus.Suspended, terminatedMessage, null);
+                        BPInstanceStatus.Suspended, errorMessage, null);
                 }
             }
         }
