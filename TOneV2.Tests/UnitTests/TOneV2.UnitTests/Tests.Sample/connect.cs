@@ -17,9 +17,35 @@ namespace Tests.Sample
     class connect
     {
 
+
+        public List<CodeGroup> getcodegroup(string query)
+        {
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemov2;User ID=sa;Password=QAP@ssw0rd");
+            var ddd = new List<CodeGroup>();
+            SqlDataAdapter da = new SqlDataAdapter();
+            myConn.Open();
+            DataSet ds1 = new DataSet();
+            string sQueryString1 = "";
+            sQueryString1 = query;
+            da.SelectCommand = new SqlCommand(sQueryString1, myConn);
+            da.Fill(ds1, "table");
+            myConn.Close();
+
+
+
+            return ds1.Tables[0].AsEnumerable().Select(row => new CodeGroup
+            {
+                CodeGroupId = row.Field<int>("id"),
+                CountryId = row.Field<int>("CountryId"),
+                Code = row.Field<string>("Code")
+               
+            }).ToList();
+
+
+        }
         public List<SupplierZone> getzonedata(string query)
         {
-             SqlConnection myConn = new SqlConnection("Server=192.168.110.190;Database=mvtsprodemo;User ID=sa;Password=qc@qa");
+             SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
             var ddd = new List<SupplierZone>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -37,14 +63,15 @@ namespace Tests.Sample
                 SupplierId = row.Field<int>("supplierid"),
                 SupplierZoneId = row.Field<int>("zoneid"),
                 BED = row.Field<DateTime>("bed"),
-                EED = row.Field<DateTime?>("eed")
+                EED = row.Field<DateTime?>("eed"),
+                CountryId = row.Field<int>("countryid")
             }).ToList();
 
           
         }
         public List<SupplierCode> getcodedata(string query)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.190;Database=mvtsprodemo;User ID=sa;Password=qc@qa");
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
             var ddd = new List<SupplierCode>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -72,7 +99,7 @@ namespace Tests.Sample
 
         public List<SupplierRate> getratedata(string query)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.190;Database=mvtsprodemo;User ID=sa;Password=qc@qa");
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
             var ddd = new List<SupplierRate>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -103,7 +130,7 @@ namespace Tests.Sample
 
         public List<SupplierZone> getresultzonedata(string query)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.190;Database=mvtsprodemo;User ID=sa;Password=qc@qa");
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
             var ddd = new List<SupplierZone>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -129,7 +156,7 @@ namespace Tests.Sample
 
         public List<SupplierCode> getresultcodedata(string query)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.190;Database=mvtsprodemo;User ID=sa;Password=qc@qa");
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
             var ddd = new List<SupplierCode>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -154,7 +181,7 @@ namespace Tests.Sample
         }
         public List<SupplierRate> getresultratedata(string query)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.190;Database=mvtsprodemo;User ID=sa;Password=qc@qa");
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
             var ddd = new List<SupplierRate>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -180,7 +207,7 @@ namespace Tests.Sample
 
         public List<ImportedRate> getnewrate(string query)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.190;Database=mvtsprodemo;User ID=sa;Password=qc@qa");
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
             var ddd = new List<ImportedRate>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -205,7 +232,7 @@ namespace Tests.Sample
         }
         public List<ImportedCode> getnewcode(string query)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.190;Database=mvtsprodemo;User ID=sa;Password=qc@qa");
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
             var ddd = new List<ImportedCode>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -231,7 +258,7 @@ namespace Tests.Sample
 
         public DataSet getdata(string Query)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.190;Database=mvtsprodemo;User ID=sa;Password=qc@qa");
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
 
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
