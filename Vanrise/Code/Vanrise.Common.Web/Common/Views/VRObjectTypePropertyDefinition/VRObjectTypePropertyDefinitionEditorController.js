@@ -85,7 +85,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadObjectPropertySelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadObjectPropertySelective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -104,7 +104,7 @@
                 $scope.scopeModel.propertyName = propertyEntity.Name;
                 $scope.scopeModel.description = propertyEntity.Description;
             }
-            function loadObjectPropertySelector() {
+            function loadObjectPropertySelective() {
                 var objectPropertySelectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 objectPropertySelectiveReadyDeferred.promise.then(function () {

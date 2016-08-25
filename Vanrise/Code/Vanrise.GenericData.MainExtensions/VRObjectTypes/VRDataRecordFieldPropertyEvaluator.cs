@@ -7,7 +7,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.GenericData.MainExtensions.VRObjectTypes
 {
-    public class VRDataRecordFieldEvaluator : VRObjectPropertyEvaluator
+    public class VRDataRecordFieldPropertyEvaluator : VRObjectPropertyEvaluator
     {
         public string FieldName { get; set; }
 

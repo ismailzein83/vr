@@ -35,9 +35,9 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined && payload.valueEvaluator != undefined)
+                    if (payload != undefined && payload.objectPropertyEvaluator != undefined)
                     {
-                        $scope.scopeModel.selectedFinancialRetailAccount = UtilsService.getItemByVal($scope.scopeModel.financialRetailAccount, payload.valueEvaluator.FinancialField, "value");
+                        $scope.scopeModel.selectedFinancialRetailAccount = UtilsService.getItemByVal($scope.scopeModel.financialRetailAccount, payload.objectPropertyEvaluator.FinancialField, "value");
                     }
                 };
 

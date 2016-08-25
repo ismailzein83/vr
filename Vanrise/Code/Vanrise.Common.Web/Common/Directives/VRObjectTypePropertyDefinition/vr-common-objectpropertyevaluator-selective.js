@@ -82,7 +82,7 @@
                         promises.push(loadObjectPropertySelectorPromise);
                     }
 
-                    //Loading DirrectiveWrapper               
+                    //Loading DirectiveWrapper               
                     if (objectPropertyEvaluator != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
@@ -161,7 +161,7 @@
 
                     var directivePayload = {};
                     directivePayload.objectType = objectType;
-                    directivePayload.valueEvaluator = objectPropertyEvaluator;
+                    directivePayload.objectPropertyEvaluator = objectPropertyEvaluator;
 
                     VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                 });
@@ -171,6 +171,6 @@
         }
     }
 
-    app.directive('vrCommonObjectpropertySelective', VRObjectPropertySelector);
+    app.directive('vrCommonObjectpropertyevaluatorSelective', VRObjectPropertySelector);
 
 })(app);

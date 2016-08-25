@@ -129,9 +129,9 @@
     <Content Include="Security\Directives\DynamicPage\Templates\DynamicPagesGrid.html" />
     <Content Include="Security\Directives\DynamicPage\vr-sec-dynamicpage-grid.js" />
     <Content Include="Security\Directives\DynamicPage\vr-sec-dynamicpageviewer.js" />
-    <Content Include="Security\Directives\Extensions\Group\vr-sec-group-static.js" />
-    <Content Include="Security\Directives\Extensions\User\Templates\UserProfilePropertySelectorTemplate.html" />
-    <Content Include="Security\Directives\Extensions\User\vr-sec-userprofileproperty-selector.js" />
+    <Content Include="Security\Directives\MainExtensions\Group\vr-sec-group-static.js" />
+    <Content Include="Security\Directives\MainExtensions\User\Templates\UserProfilePropertySelectorTemplate.html" />
+    <Content Include="Security\Directives\MainExtensions\User\vr-sec-userprofileproperty-selector.js" />
     <Content Include="Security\Directives\Group\Templates\GroupGrid.html" />
     <Content Include="Security\Directives\Group\vr-sec-group-grid.js" />
     <Content Include="Security\Directives\Group\vr-sec-group-selector.js" />
