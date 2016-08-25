@@ -1,1 +1,14 @@
-﻿
+﻿<vr-row>
+    <vr-columns width="1/3row">
+        <vr-textbox label="Itemset Name" value="ctrl.itemsetName" customvalidate="ctrl.disableAddItem()"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row" withemptyline>
+        <vr-button type="Add" data-onclick="ctrl.addItem" standalone vr-disabled="ctrl.disableAddButton"></vr-button>
+    </vr-columns>
+    <vr-columns width="fullrow">
+        <vr-datalist maxitemsperrow="4" datasource="ctrl.listItems" autoremoveitem="true">
+            {{dataItem}}
+        </vr-datalist>
+    </vr-columns>
+
+</vr-row>

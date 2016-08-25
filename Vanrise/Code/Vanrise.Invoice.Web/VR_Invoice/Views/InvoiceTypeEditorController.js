@@ -166,7 +166,6 @@
         }
 
         function loadInvoiceGeneratorDirective() {
-            console.log(invoiceTypeEntity);
             var invoiceGeneratorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             invoiceGeneratorReadyPromiseDeferred.promise.then(function () {
