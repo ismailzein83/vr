@@ -37,6 +37,8 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 
         [RequiredArgument]
         public InArgument<List<BaseQueue<DAProfCalcOutputRecordBatch>>> OutputQueues { get; set; }
+
+        public InArgument<IDAProfCalcOutputRecordProcessor> OutputRecordProcessor { get; set; }
         
         protected override ExecuteRecordProfilingOutput DoWorkWithResult(ExecuteRecordProfilingInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {

@@ -8,7 +8,7 @@ namespace Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputD
 {
     public class MergingProfiledOutputSettings: DAProfCalcOutputSettings
     {
-        public override Guid DefinitionTypeId
+        public override Guid ItemDefinitionTypeId
         {
             get { return new Guid("9086F241-2680-48CF-A1BD-B8538FF03801"); }
         }

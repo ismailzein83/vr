@@ -57,6 +57,7 @@
     </Compile>
     <Compile Include="City\CityInfoFilter.cs" />
     <Compile Include="City\CityQuery.cs" />
+    <Compile Include="DateTimeRange.cs" />
     <Compile Include="DateTimeType.cs" />
     <Compile Include="TextManipulation\ITextManipulationActionContext.cs" />
     <Compile Include="TextManipulation\ITextManipulationContext.cs" />

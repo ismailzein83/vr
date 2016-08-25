@@ -114,6 +114,7 @@
     <Compile Include="DataAnalysis\ProfilingAndCalculation\DAProfCalcAggregationField.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\DAProfCalcCalculationField.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\DAProfCalcGroupingField.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\IDAProfCalcOutputRecordProcessor.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Output\DAProfCalcOutputRecord.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\DAProfCalcOutputSettings.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\DAProfCalcSettings.cs" />

@@ -1,16 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B9F55273-1461-42D9-ACB3-0D253B2AF449}</ProjectGuid>
-    <ProjectTypeGuids>{32f31d43-81cc-4c15-9de6-3fc5453562b6};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{74BCFDD5-6F60-4976-A31C-712BECCC2787}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Vanrise.Analytic.BP.Activities</RootNamespace>
-    <AssemblyName>Vanrise.Analytic.BP.Activities</AssemblyName>
+    <RootNamespace>Vanrise.Analytic.BP.Arguments</RootNamespace>
+    <AssemblyName>Vanrise.Analytic.BP.Arguments</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -36,48 +34,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
-    <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Activities" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Vanrise.BusinessProcess">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Queueing">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DAProfCalc\ProfilingDGHandler.cs" />
-    <Compile Include="DAProfCalc\ExecuteProfiledMerging.cs" />
-    <Compile Include="DAProfCalc\ExecuteRecordProfiling.cs" />
-    <Compile Include="DAProfCalc\GenerateVRAlertEvents.cs" />
-    <Compile Include="DAProfCalc\ProfilingDGItem.cs" />
+    <Compile Include="DAProfCalcForRangeProcessInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Analytic.Entities\Vanrise.Analytic.Entities.csproj">
       <Project>{bf85d7b4-84c2-441b-bca0-b42fe2619ae9}</Project>
       <Name>Vanrise.Analytic.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">
-      <Project>{571a68ec-2d45-4b5c-9e75-bb6fb7c0d7b7}</Project>
-      <Name>Vanrise.Common.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
-      <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
-      <Name>Vanrise.GenericData.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Notification.Entities\Vanrise.Notification.Entities.csproj">
-      <Project>{f58cc66a-3bc4-49ed-9143-d1abb031c242}</Project>
-      <Name>Vanrise.Notification.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

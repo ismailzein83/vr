@@ -125,11 +125,11 @@ namespace Vanrise.Common.Business.SummaryTransformation
 
         protected abstract void GetRawItemBatchTimeRange(T rawItem, out DateTime batchStart);
 
-        protected abstract string GetSummaryItemKey(Q summaryItem);
+        public abstract string GetSummaryItemKey(Q summaryItem);
 
         protected abstract Q CreateSummaryItemFromRawItem(T item);
 
-        protected abstract void UpdateSummaryItemFromSummaryItem(Q existingItem, Q newItem);
+        public abstract void UpdateSummaryItemFromSummaryItem(Q existingItem, Q newItem);
 
         protected abstract void UpdateItemsInDB(List<Q> itemsToUpdate);
 

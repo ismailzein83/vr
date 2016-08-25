@@ -8,6 +8,6 @@ namespace Vanrise.Analytic.Entities
 {
     public abstract class DataAnalysisItemDefinitionSettings
     {
-        public abstract Guid DefinitionTypeId { get; }
+        public abstract Guid ItemDefinitionTypeId { get; }
     }
 }

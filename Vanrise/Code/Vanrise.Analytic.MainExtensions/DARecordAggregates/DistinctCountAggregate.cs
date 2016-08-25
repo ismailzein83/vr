@@ -42,6 +42,16 @@ namespace Vanrise.Analytic.MainExtensions.DARecordAggregates
         {
             return (context.State as DistinctCountAggregateState).DistinctItems.Count;
         }
+
+        public override void UpdateExistingFromNew(IDARecordAggregateUpdateExistingFromNewContext context)
+        {
+            DistinctCountAggregateState existingDistinctCountAggregateState = context.ExistingState as DistinctCountAggregateState;
+            DistinctCountAggregateState newDistinctCountAggregateState = context.NewState as DistinctCountAggregateState;
+            foreach(var itm in newDistinctCountAggregateState.DistinctItems)
+            {
+                existingDistinctCountAggregateState.DistinctItems.Add(itm);
+            }
+        }
     }
 
     public class DistinctCountAggregateState : DARecordAggregateState

@@ -40,6 +40,11 @@ namespace Vanrise.Analytic.MainExtensions.DARecordAggregates
         {
             return (context.State as SumAggregateState).Sum;
         }
+
+        public override void UpdateExistingFromNew(IDARecordAggregateUpdateExistingFromNewContext context)
+        {
+            (context.ExistingState as SumAggregateState).Sum += (context.NewState as SumAggregateState).Sum;
+        }
     }
 
     public class SumAggregateState : DARecordAggregateState

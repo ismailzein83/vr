@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Runtime.Data;
 using Vanrise.Runtime.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.Runtime
 {
@@ -26,15 +27,25 @@ namespace Vanrise.Runtime
             return serviceInstance;
         }
 
+        public ServiceInstance GetServiceInstance(Guid serviceType, Guid serviceInstanceId)
+        {
+            return GetServicesDictionary(serviceType).GetRecord(serviceInstanceId);
+        }
+
         public List<ServiceInstance> GetServices(Guid serviceType)
         {
-            string cacheName = String.Format("GetAllServices_{0}", serviceType);
+            return GetServicesDictionary(serviceType).Values.ToList();
+        }
+
+        public Dictionary<Guid,ServiceInstance> GetServicesDictionary(Guid serviceType)
+        {
+            string cacheName = String.Format("GetServicesDictionary_{0}", serviceType);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
                 serviceType,
                 () =>
                 {
                     var dataManager = RuntimeDataManagerFactory.GetDataManager<IServiceInstanceDataManager>();
-                    return dataManager.GetServices(serviceType);
+                    return dataManager.GetServices(serviceType).ToDictionary(itm => itm.ServiceInstanceId, itm => itm);
                 });
         }
 

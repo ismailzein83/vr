@@ -216,6 +216,18 @@ namespace Vanrise.Common
                 return null;
             return dict.Keys.ToList();
         }
+        
+        public static T DeserializeAndValidate<T>(string serialized) where T : class
+        {
+            if (serialized == null)
+                throw new ArgumentNullException("serializedItems");
+            Object deserializedAsObject = Serializer.Deserialize(serialized);
+            T deserialized = deserializedAsObject as T;
+            if (deserialized == null)
+                throw new Exception(String.Format("handler is not of type {0}. it is of type '{1}'", typeof(T).FullName, deserializedAsObject.ToString()));
+            return deserialized;
+        }
+
     }
 
     public interface IPropValueReader

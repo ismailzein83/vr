@@ -15,6 +15,8 @@ namespace Vanrise.Analytic.Entities
 
         public abstract void Evaluate(IDARecordAggregateEvaluationContext context);
 
+        public abstract void UpdateExistingFromNew(IDARecordAggregateUpdateExistingFromNewContext context);
+
         public abstract dynamic GetResult(IDARecordAggregateGetResultContext context);
     }
 
@@ -34,6 +36,13 @@ namespace Vanrise.Analytic.Entities
         dynamic Record { get; }
 
         DARecordAggregateState State { get; }
+    }
+    
+    public interface IDARecordAggregateUpdateExistingFromNewContext
+    {
+        DARecordAggregateState ExistingState { get; }
+
+        DARecordAggregateState NewState { get; }
     }
 
     public interface IDARecordAggregateGetResultContext

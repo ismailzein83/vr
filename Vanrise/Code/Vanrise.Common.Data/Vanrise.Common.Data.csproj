@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="CommonDataManagerFactory.cs" />
     <Compile Include="IBigDataServiceDataManager.cs" />
+    <Compile Include="IDataGroupingAnalysisInfoDataManager.cs" />
     <Compile Include="IStyleDefinitionDataManager.cs" />
     <Compile Include="ICurrencyExchangeRateWithEEDDataManager.cs" />
     <Compile Include="ISettingDataManager.cs" />

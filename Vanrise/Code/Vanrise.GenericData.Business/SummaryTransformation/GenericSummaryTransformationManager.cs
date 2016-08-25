@@ -107,7 +107,7 @@ namespace Vanrise.GenericData.Business
             batchRangeRetrieval.GetRawItemBatchTimeRange(rawItem, this.GenericSummaryTransformer.GetRawItemTime(rawItem), out batchStart);
         }
 
-        protected override string GetSummaryItemKey(GenericSummaryItem summaryItem)
+        public override string GetSummaryItemKey(GenericSummaryItem summaryItem)
         {
             return this.GenericSummaryTransformer.GetItemKeyFromSummaryItem(summaryItem.DataRecord);
         }
@@ -144,7 +144,7 @@ namespace Vanrise.GenericData.Business
             };
         }
 
-        protected override void UpdateSummaryItemFromSummaryItem(GenericSummaryItem existingItem, GenericSummaryItem newItem)
+        public override void UpdateSummaryItemFromSummaryItem(GenericSummaryItem existingItem, GenericSummaryItem newItem)
         {
             var existingFromNewSummarySettings = this.SummaryTransformationDefinition.UpdateExistingSummaryFromNewSettings;
             if (existingFromNewSummarySettings == null)
@@ -164,13 +164,19 @@ namespace Vanrise.GenericData.Business
                 List<dynamic> dataRecords = new List<dynamic>();
                 foreach (var itm in summaryItems)
                 {
-                    this.GenericSummaryTransformer.SetSummaryItemFieldsToDataRecord(itm);
-                    dataRecords.Add(itm.DataRecord);
+                    var dataRecord = GetDataRecordFromSummaryItem(itm);
+                    dataRecords.Add(dataRecord);
                 }
                 return dataRecords;
             }
             else
                 return null;
+        }
+
+        public dynamic GetDataRecordFromSummaryItem(GenericSummaryItem summaryItem)
+        {
+            this.GenericSummaryTransformer.SetSummaryItemFieldsToDataRecord(summaryItem);
+            return summaryItem.DataRecord;
         }
 
         public List<GenericSummaryItem> GetSummaryItemsFromDataRecords(IEnumerable<dynamic> dataRecords)
@@ -180,17 +186,23 @@ namespace Vanrise.GenericData.Business
                 List<GenericSummaryItem> genericSummaryItems = new List<GenericSummaryItem>();
                 foreach (var dr in dataRecords)
                 {
-                    var summaryItem = new GenericSummaryItem
-                    {
-                        DataRecord = dr
-                    };
-                    this.GenericSummaryTransformer.SetDataRecordFieldsToSummaryItem(summaryItem);
+                    var summaryItem = GetSummaryItemFromDataRecord(dr);
                     genericSummaryItems.Add(summaryItem);
                 }
                 return genericSummaryItems;
             }
             else
                 return null;
+        }
+
+        public GenericSummaryItem GetSummaryItemFromDataRecord(dynamic dr)
+        {
+            var summaryItem = new GenericSummaryItem
+            {
+                DataRecord = dr
+            };
+            this.GenericSummaryTransformer.SetDataRecordFieldsToSummaryItem(summaryItem);
+            return summaryItem;
         }
     }
 }

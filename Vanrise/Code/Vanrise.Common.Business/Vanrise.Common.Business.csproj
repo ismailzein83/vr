@@ -69,6 +69,16 @@
     <Compile Include="BigData\BigDataWCFService.cs" />
     <Compile Include="BigData\IBigDataRequest.cs" />
     <Compile Include="CityManager.cs" />
+    <Compile Include="DataGrouping\DataGroupingAnalysisInfoManager.cs" />
+    <Compile Include="DataGrouping\Distribution\DataGroupingDistributor.cs" />
+    <Compile Include="DataGrouping\Distribution\DataGroupingDistributorRuntimeService.cs" />
+    <Compile Include="DataGrouping\Execution\DataGroupingExecutor.cs" />
+    <Compile Include="DataGrouping\Execution\DataGroupingExecutorRuntimeService.cs" />
+    <Compile Include="DataGrouping\DataGroupingHandler.cs" />
+    <Compile Include="DataGrouping\DataGroupingItem.cs" />
+    <Compile Include="DataGrouping\DistributedDataGrouper.cs" />
+    <Compile Include="DataGrouping\Distribution\IDataGroupingDistributorWCFService.cs" />
+    <Compile Include="DataGrouping\Execution\IDataGroupingExecutorWCFService.cs" />
     <Compile Include="GenericParameterManager.cs" />
     <Compile Include="TextManipulationContext\TextManipulationActionContext.cs" />
     <Compile Include="TextManipulationManager.cs" />

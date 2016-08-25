@@ -49,8 +49,15 @@ namespace Vanrise.Common
 
         public ServiceHost CreateAndOpenTCPServiceHost(Type serviceType, Type contractType, Action<ServiceHost> onServiceHostCreated, Action<ServiceHost> onServiceHostRemoved, out string serviceUrl)
         {
+            string portNumber;
+            return CreateAndOpenTCPServiceHost(serviceType, contractType, out portNumber, onServiceHostCreated, onServiceHostRemoved, out serviceUrl);
+        }
+
+        public ServiceHost CreateAndOpenTCPServiceHost(Type serviceType, Type contractType, out string portNumber, Action<ServiceHost> onServiceHostCreated, Action<ServiceHost> onServiceHostRemoved, out string serviceUrl)
+        {
             serviceUrl = null;
             ServiceHost serviceHost = null;
+            portNumber = null;
             lock (this)
             {
                 var random = new Random();
@@ -58,32 +65,55 @@ namespace Vanrise.Common
                 {
                     if (String.IsNullOrEmpty(_servicePortNumber) || i > 0)
                         _servicePortNumber = random.Next(_wcfPortRangeStart, _wcfPortRangeEnd).ToString();
-                    serviceUrl = String.Format("net.tcp://{0}:{1}/{2}", Environment.MachineName, _servicePortNumber, serviceType.Name);
-                    serviceHost = new ServiceHost(serviceType);
-                    serviceHost.Description.Behaviors.Remove(typeof(ServiceDebugBehavior));
-                    serviceHost.Description.Behaviors.Add(new ServiceDebugBehavior() { IncludeExceptionDetailInFaults = true });
-
-                    try
-                    {
-                        var endPoint = AddTCPEndPoint(serviceHost, contractType, serviceUrl);
-                        if (onServiceHostCreated != null)
-                            onServiceHostCreated(serviceHost);
-                        serviceHost.Open();
-                        LoggerFactory.GetLogger().WriteInformation("Service URL registered successfully '{0}'", serviceUrl);
+                    bool rethrowIfError = (i == (_wcfServiceHostingRetries - 1));//last iteration
+                    serviceHost = CreateAndOpenTCPServiceHost(serviceType, contractType, _servicePortNumber, rethrowIfError, onServiceHostCreated, onServiceHostRemoved, out serviceUrl);
+                    portNumber = _servicePortNumber;
+                    if (serviceHost != null)
                         break;
-                    }
-                    catch(Exception ex)
-                    {
-                        if (onServiceHostRemoved != null)
-                            onServiceHostRemoved(serviceHost);
-                        LoggerFactory.GetLogger().WriteWarning("Could not register Service '{0}'. Error: {1}", serviceUrl, ex);
-                        if (i == (_wcfServiceHostingRetries - 1))//last iteration
-                            throw;
-                    }
                 }
             }
             return serviceHost;
         }
+
+        public ServiceHost CreateAndOpenTCPServiceHost(Type serviceType, Type contractType, string portNumber, Action<ServiceHost> onServiceHostCreated, Action<ServiceHost> onServiceHostRemoved, out string serviceUrl)
+        {
+            return CreateAndOpenTCPServiceHost(serviceType, contractType, portNumber, true, onServiceHostCreated, onServiceHostRemoved, out serviceUrl);
+        }
+
+        private ServiceHost CreateAndOpenTCPServiceHost(Type serviceType, Type contractType, string portNumber, bool rethrowIfError, Action<ServiceHost> onServiceHostCreated, Action<ServiceHost> onServiceHostRemoved, out string serviceUrl)
+        {
+            serviceUrl = BuildTCPServiceURL(serviceType, portNumber);
+            ServiceHost serviceHost = new ServiceHost(serviceType);
+            serviceHost.Description.Behaviors.Remove(typeof(ServiceDebugBehavior));
+            serviceHost.Description.Behaviors.Add(new ServiceDebugBehavior() { IncludeExceptionDetailInFaults = true });
+
+            try
+            {
+                var endPoint = AddTCPEndPoint(serviceHost, contractType, serviceUrl);
+                if (onServiceHostCreated != null)
+                    onServiceHostCreated(serviceHost);
+                serviceHost.Open();
+                LoggerFactory.GetLogger().WriteInformation("Service URL registered successfully '{0}'", serviceUrl);
+
+            }
+            catch (Exception ex)
+            {
+                if (onServiceHostRemoved != null)
+                    onServiceHostRemoved(serviceHost);
+                serviceHost = null;
+                LoggerFactory.GetLogger().WriteWarning("Could not register Service '{0}'. Error: {1}", serviceUrl, ex);
+                if (rethrowIfError)
+                    throw;
+            }
+
+            return serviceHost;
+        }
+
+        public static string BuildTCPServiceURL(Type serviceType, string portNumber)
+        {
+            return String.Format("net.tcp://{0}:{1}/{2}", Environment.MachineName, portNumber, serviceType.Name);
+        }
+
 
         private ServiceEndpoint AddTCPEndPoint(ServiceHost serviceHost, Type contractType, string serviceUrl)
         {

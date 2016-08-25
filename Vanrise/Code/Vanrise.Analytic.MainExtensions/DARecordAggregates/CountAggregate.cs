@@ -36,6 +36,11 @@ namespace Vanrise.Analytic.MainExtensions.DARecordAggregates
         {
             return (context.State as CountAggregateState).Count;
         }
+
+        public override void UpdateExistingFromNew(IDARecordAggregateUpdateExistingFromNewContext context)
+        {
+            (context.ExistingState as CountAggregateState).Count += (context.NewState as CountAggregateState).Count;
+        }
     }
 
     public class CountAggregateState : DARecordAggregateState
