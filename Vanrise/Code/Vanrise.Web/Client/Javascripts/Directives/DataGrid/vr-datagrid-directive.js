@@ -9,6 +9,7 @@
                 datasource: '=',
                 onReady: '=',
                 getrowstyle: '=',
+                isdynamicrowstyle: '@',
                 maxheight: '@',
                 hideheader: '=',
                 noverticallines: '@',
@@ -534,6 +535,22 @@
                     }
                 };
 
+                ctrl.getRowCSSClass = function(dataItem)
+                {
+                    if (ctrl.isdynamicrowstyle)
+                        return getRowCSSClass(dataItem);
+                    else
+                        return dataItem.CssClass;
+                }
+
+                function getRowCSSClass(dataItem) {
+                    if (ctrl.getrowstyle != undefined && typeof (ctrl.getrowstyle) == 'function') {
+                        var object = ctrl.getrowstyle(dataItem);
+                        if (object != null)
+                            return object.CssClass;
+                    }                    
+                }
+
                 scope.$watchCollection('ctrl.datasource', onDataSourceChanged);
                 scope.$watchCollection('ctrl.updateItems', onDataSourceChanged);
 
@@ -544,12 +561,7 @@
                             for (var j = 0; j < ctrl.columnDefs.length; j++) {
                                 var colDef = ctrl.columnDefs[j];
                                 filldataItemColumnValues(dataItem, colDef);
-                                if (ctrl.getrowstyle != undefined && typeof (ctrl.getrowstyle) == 'function') {
-                                    var object = ctrl.getrowstyle(dataItem);
-                                    if (object!=null)
-                                      dataItem.CssClass = object.CssClass;
-                                }
-                                    
+                                dataItem.CssClass = getRowCSSClass(dataItem);                                    
                             }
                             dataItem.isColumnValuesFilled = true;
                         }
