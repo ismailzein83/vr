@@ -8,12 +8,12 @@ using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.Common;
 using TOne.WhS.SupplierPriceList.Business;
 using System.Data;
+using TOne.WhS.BusinessEntity.Data;
+using TOne.WhS.SupplierPriceList.Entities;
 namespace Tests.Sample
 {
     [TestClass]
     public class UnitTest1
-
-
     {
 
         private Dictionary<long, ExistingZone> GetExistingZones(List<SupplierZone> supplierZonesEntities)
@@ -101,18 +101,18 @@ namespace Tests.Sample
             {
                 AccountType = CarrierAccountType.Supplier,
                 CarrierAccountId = 1,
-                Name = "Supplier 1"
+                NameSuffix = "Supplier 1"
             };
 
             List<SupplierZone> z = new List<SupplierZone>();
             List<SupplierCode> c = new List<SupplierCode>();
             List<SupplierRate> r = new List<SupplierRate>();
             connect con = new connect();
-            z = con.getzonedata("select zonename,supplierid,zoneid,bed,eed from zonecases where testcase='" + usercase + "'");
-            c = con.getcodedata("SELECT [codeid]      ,[code]      ,[zoneid]      ,[BED]      ,[EED]  FROM [Codecases]");
-            r = con.getratedata("SELECT [zoneid]      ,[rate]      ,[currencyid]      ,[rateid]      ,[bed]      ,[eed]  FROM [ratecases]");
-           
-            SupplierPriceList priceList = new SupplierPriceList()
+            z = con.getzonedata("select zonename,supplierid,zoneid,bed,eed,countryid from zonecases where testcase='" + usercase + "'");
+            c = con.getcodedata("SELECT [codeid]      ,[code]      ,[zoneid]      ,[BED]      ,[EED]  FROM [Codecases]  where testcase='" + usercase + "'");
+            r = con.getratedata("SELECT [zoneid]      ,[rate]      ,[currencyid]      ,[rateid]      ,[bed]      ,[eed]  FROM [ratecases] where testcase='" + usercase + "'");
+
+            TOne.WhS.BusinessEntity.Entities.SupplierPriceList priceList = new TOne.WhS.BusinessEntity.Entities.SupplierPriceList()
             {
                 CurrencyId = 1,
                 PriceListId = 1,
@@ -132,7 +132,7 @@ namespace Tests.Sample
 
         private bool process_pricelist_testcase(string testcase)
         {
-           
+            ObjectFactory.AddExplicitImplementation<ICodeGroupDataManager, CodeGroupDataManager>();
             MocData data = GetMocDatadatabase(testcase);
             //  MocData data = GetMocData();
             Dictionary<long, ExistingZone> existingZonesByZoneId = this.GetExistingZones(data.SupplierZones);
@@ -143,10 +143,23 @@ namespace Tests.Sample
             //List<ImportedRate> importedRates = this.GetImportedRate();
             connect con = new connect();
 
-            List<ImportedCode> importedCodes = con.getnewcode("SELECT [zonename]      ,[code]      ,[rate]      ,[bed]      ,[service]      ,[otherrate],currency  FROM [MVTSProDemo].[dbo].[importeddatacases] where testcase='" + testcase + "'");
-            List<ImportedRate> importedRates = con.getnewrate("SELECT distinct [zonename]   ,[rate]      ,[bed]      ,[service]      ,[otherrate],currency  FROM [MVTSProDemo].[dbo].[importeddatacases] where testcase='" + testcase + "'");
+            List<ImportedCode> importedCodes = con.getnewcode("SELECT [zonename]      ,[code]      ,[rate]      ,[bed]      ,[service]      ,[otherrate],currency  FROM [importeddatacases] where testcase='" + testcase + "'");
+            List<ImportedRate> importedRates = con.getnewrate("SELECT distinct [zonename]   ,[rate]      ,[bed]      ,[service]      ,[otherrate],currency  FROM [importeddatacases] where testcase='" + testcase + "'");
+            IEnumerable<ImportedZone> importedZones = this.StructureDataByZones(importedCodes, importedRates);
+
+
+            SupplierPriceListType pricelisttype = new SupplierPriceListType();
+            pricelisttype = 0;
+            
+
+             //RateChange = 0,
+             //    Country = 1,
+             //        Full = 2,
             ProcessCountryCodesContext processCodeContext = new ProcessCountryCodesContext()
             {
+                CountryId = 1,
+                SupplierPriceListType =0,
+                ImportedZones = importedZones,
                 ImportedCodes = importedCodes,
                 ExistingZones = existingZonesByZoneId.Values,
                 ExistingCodes = existingCodes,
@@ -155,8 +168,9 @@ namespace Tests.Sample
 
 
             PriceListCodeManager manager = new PriceListCodeManager();
-            manager._codeGroupsMocData = data.CodeGroups;
+            //manager._codeGroupsMocData = data.CodeGroups;
             manager.ProcessCountryCodes(processCodeContext);
+            
 
             ProcessCountryRatesContext processRateContext = new ProcessCountryRatesContext()
             {
@@ -254,15 +268,15 @@ namespace Tests.Sample
             List<SupplierZone> resultzonechanged = con.getresultzonedata("SELECT [zoneid] ,[zonename]  ,[bed] ,[eed] FROM [resultzone] where zoneid >0 and testcase='" + testcase + "'");
             if (resultzonechanged.Count < 1)
             {
-                newzone = true;
+                changedzone = true;
             }
             else
             {
                 foreach (SupplierZone z in resultzonechanged)
                 {
-                    if (zonesChanges.Any(zone => zone.ZoneId == z.SupplierZoneId && zone.EED == z.EED))
+                    if (zonesChanges.Any(zone => zone.EntityId == z.SupplierZoneId && zone.EED == z.EED))
                     {
-                        newzone = true;
+                        changedzone = true;
                     }
                 }
             }
@@ -278,7 +292,7 @@ namespace Tests.Sample
             {
                 foreach (SupplierCode z in resultcodechanged)
                 {
-                    if (codesChanged.Any(code => code.CodeId == z.SupplierCodeId && code.EED == z.EED))
+                    if (codesChanged.Any(code => code.EntityId == z.SupplierCodeId && code.EED == z.EED))
                     {
                         changedcode = true;
                     }
@@ -296,10 +310,11 @@ namespace Tests.Sample
             {
                 foreach (SupplierRate z in resultratechanged)
                 {
-                    if (changedrates.Any(rate => rate.RateId == z.SupplierRateId && rate.EED == z.EED))
+                    if (changedrates.Any(rate => rate.EntityId == z.SupplierRateId && rate.EED == z.EED))
                     {
                         changedrate = true;
                     }
+                    changedrate = false;
                 }
             }
             /// other tests
@@ -320,13 +335,139 @@ namespace Tests.Sample
 
         }
 
-         [TestMethod]
-        public void Pricelist_test_cases()
+        [TestMethod]
+        public void Pricelist_test_cases1()
         {
             Assert.IsTrue(process_pricelist_testcase("testcase1"));
-             //  Zone Lebanon fixed should be closed  - its not mentioned in closed zones
-             // codes eed are set to datetime, while it should be set to date with time 00:00:00
-             // RAte for Zone lebanon fixed should be also closed , its not mentioned in changed zones
+            //  Zone Lebanon fixed should be closed  - its not mentioned in closed zones
+            // codes eed are set to datetime, while it should be set to date with time 00:00:00
+            // RAte for Zone lebanon fixed should be also closed , its not mentioned in changed zones
+        }
+        [TestMethod]
+        public void Pricelist_test_cases2()
+        {
+            Assert.IsTrue(process_pricelist_testcase("testcase2"));
+            //  Zone Lebanon fixed should be closed  - its not mentioned in closed zones
+            // codes eed are set to datetime, while it should be set to date with time 00:00:00
+            // RAte for Zone lebanon fixed should be also closed , its not mentioned in changed zones
+        }
+        [TestMethod]
+        public void Pricelist_test_cases3()
+        {
+            Assert.IsTrue(process_pricelist_testcase("testcase3"));
+            //  Zone Lebanon fixed should be closed  - its not mentioned in closed zones
+            // codes eed are set to datetime, while it should be set to date with time 00:00:00
+            // RAte for Zone lebanon fixed should be also closed , its not mentioned in changed zones
+        }
+        [TestMethod]
+        public void Pricelist_test_cases4()
+        {
+            Assert.IsTrue(process_pricelist_testcase("testcase4"));
+            //  Zone Lebanon fixed should be closed  - its not mentioned in closed zones
+            // codes eed are set to datetime, while it should be set to date with time 00:00:00
+            // RAte for Zone lebanon fixed should be also closed , its not mentioned in changed zones
+        }
+        [TestMethod]
+        public void Pricelist_test_cases5()
+        {
+            Assert.IsTrue(process_pricelist_testcase("testcase5"));
+            //  Zone Lebanon fixed should be closed  - its not mentioned in closed zones
+            // codes eed are set to datetime, while it should be set to date with time 00:00:00
+            // RAte for Zone lebanon fixed should be also closed , its not mentioned in changed zones
+        }
+        [TestMethod]
+        public void Pricelist_test_cases6()
+        {
+            Assert.IsTrue(process_pricelist_testcase("testcase6"));
+            //  Zone Lebanon fixed should be closed  - its not mentioned in closed zones
+            // codes eed are set to datetime, while it should be set to date with time 00:00:00
+            // RAte for Zone lebanon fixed should be also closed , its not mentioned in changed zones
+        }
+        [TestMethod]
+        public void Pricelist_test_cases7()
+        {
+            Assert.IsTrue(process_pricelist_testcase("testcase7"));
+            //  Zone Lebanon fixed should be closed  - its not mentioned in closed zones
+            // codes eed are set to datetime, while it should be set to date with time 00:00:00
+            // RAte for Zone lebanon fixed should be also closed , its not mentioned in changed zones
+        }
+        [TestMethod]
+        public void Pricelist_test_cases8()
+        {
+            Assert.IsTrue(process_pricelist_testcase("testcase8"));
+            //  Zone Lebanon fixed should be closed  - its not mentioned in closed zones
+            // codes eed are set to datetime, while it should be set to date with time 00:00:00
+            // RAte for Zone lebanon fixed should be also closed , its not mentioned in changed zones
+        }
+        [TestMethod]
+        public void Pricelist_test_cases9()
+        {
+            Assert.IsTrue(process_pricelist_testcase("testcase9"));
+            //  Zone Lebanon fixed should be closed  - its not mentioned in closed zones
+            // codes eed are set to datetime, while it should be set to date with time 00:00:00
+            // RAte for Zone lebanon fixed should be also closed , its not mentioned in changed zones
+        }
+        [TestMethod]
+        public void Pricelist_test_cases10()
+        {
+            Assert.IsTrue(process_pricelist_testcase("testcase10"));
+            //  Zone Lebanon fixed should be closed  - its not mentioned in closed zones
+            // codes eed are set to datetime, while it should be set to date with time 00:00:00
+            // RAte for Zone lebanon fixed should be also closed , its not mentioned in changed zones
+        }
+        [TestMethod]
+        public void Pricelist_test_cases11()
+        {
+            Assert.IsTrue(process_pricelist_testcase("testcase11"));
+            //  Zone Lebanon fixed should be closed  - its not mentioned in closed zones
+            // codes eed are set to datetime, while it should be set to date with time 00:00:00
+            // RAte for Zone lebanon fixed should be also closed , its not mentioned in changed zones
+        }
+        [TestMethod]
+        public void Pricelist_test_cases12()
+        {
+            Assert.IsTrue(process_pricelist_testcase("testcase12"));
+            //  Zone Lebanon fixed should be closed  - its not mentioned in closed zones
+            // codes eed are set to datetime, while it should be set to date with time 00:00:00
+            // RAte for Zone lebanon fixed should be also closed , its not mentioned in changed zones
+
+
+        }
+
+        private IEnumerable<ImportedZone> StructureDataByZones(List<ImportedCode> importedCodes, List<ImportedRate> importedRates)
+        {
+            Dictionary<string, ImportedZone> importedZonesByZoneName = new Dictionary<string, ImportedZone>(StringComparer.InvariantCultureIgnoreCase);
+            ImportedZone importedZone;
+
+            foreach (ImportedCode code in importedCodes)
+            {
+
+                if (!importedZonesByZoneName.TryGetValue(code.ZoneName, out importedZone))
+                {
+                    importedZone = new ImportedZone();
+                    importedZone.ZoneName = code.ZoneName;
+                    importedZonesByZoneName.Add(code.ZoneName, importedZone);
+                }
+
+                importedZone.ImportedCodes.Add(code);
+            }
+
+            foreach (ImportedRate rate in importedRates)
+            {
+                if (!importedZonesByZoneName.TryGetValue(rate.ZoneName, out importedZone))
+                {
+                    //This case will happen if a zone only exists in imported rates list
+                    //adding it to the dictionary is for validation purpose (business rule)
+                    if (importedZone == null)
+                        importedZone = new ImportedZone();
+
+                    importedZonesByZoneName.Add(rate.ZoneName, importedZone);
+                }
+
+                importedZone.ImportedRates.Add(rate);
+            }
+
+            return importedZonesByZoneName.Values;
         }
     }
 }
