@@ -165,10 +165,10 @@ as (select * from (values
 (1008,'Email Templates','Email Templates','#/view/Common/Views/EmailTemplate/EmailTemplateManagement',3,'VRCommon/EmailTemplate/GetFilteredEmailTemplates',null,null,null,0,9),
 (1009,'Settings','Settings','#/view/Common/Views/Settings/SettingsManagement',3,'VRCommon/Settings/GetFilteredSettings',null,null,null,0,10),
 
-(1020,'Mail Message Types','Mail Message Types','#/view/Common/Views/VRMail/VRMailMessageTypeManagement',3,'VRCommon/VRMailMessageType/GetFilteredMailMessageTypes',null,null,null,0,10),
-(1021,'Mail Message Templates','Mail Message Templates','#/view/Common/Views/VRMail/VRMailMessageTemplateManagement',3,'VRCommon/VRMailMessageTemplate/GetFilteredMailMessageTemplates',null,null,null,0,9),
-(1022,'Object Type Definitions','Object Type Definitions','#/view/Common/Views/VRObjectTypeDefinition/VRObjectTypeDefinitionManagement',3,'VRCommon/VRObjectTypeDefinition/GetFilteredVRObjectTypeDefinitions',null,null,null,0,11)
+(1020,'Object Type Definitions','Object Type Definitions','#/view/Common/Views/VRObjectTypeDefinition/VRObjectTypeDefinitionManagement',-100,'VRCommon/VRObjectTypeDefinition/GetFilteredVRObjectTypeDefinitions',null,null,null,0,55),
+(1021,'Mail Message Types','Mail Message Types','#/view/Common/Views/VRMail/VRMailMessageTypeManagement',-100,'VRCommon/VRMailMessageType/GetFilteredMailMessageTypes',null,null,null,0,60),
 
+(1022,'Mail Templates','Mail Templates','#/view/Common/Views/VRMail/VRMailMessageTemplateManagement',3,'VRCommon/VRMailMessageTemplate/GetFilteredMailMessageTemplates',null,null,null,0,9)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
