@@ -62,8 +62,7 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (401,'CDR processing',2,0),
 (402,'Datasource',401,0),
-(403,'Configuration rules',401,0),
-(404,'Reprocess',401,0)
+(403,'Configuration rules',401,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[ParentId],[BreakInheritance]))
 merge	[sec].[BusinessEntityModule] as t

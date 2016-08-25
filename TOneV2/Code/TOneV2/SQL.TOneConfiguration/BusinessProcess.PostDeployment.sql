@@ -65,7 +65,8 @@ set identity_insert [sec].[BusinessEntityModule] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (601,'Business Process',2,0),
-(602,'WorkFlows',601,0)
+(602,'WorkFlows',601,0),
+(603,'Business Process',-1,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[ParentId],[BreakInheritance]))
 merge	[sec].[BusinessEntityModule] as t
@@ -90,7 +91,7 @@ as (select * from (values
 (1502,'BusinessProcess_BP_BPTask','BPTask',601,0,'["View"]'),
 (1503,'BusinessProcess_BP_BPInstance_Log','BPInstance Tracking',601,0,'["View","Monitor"]'),
 (1504,'BusinessProcess_BP_BusinessRuleSet','Business Rule Set',601,0,'["View", "Add", "Edit"]'),
-(1505,'BusinessProcess_BP_BPTechnicalDefinition','BP Technical Definition',601,0,'["View", "Edit"]')
+(1505,'BusinessProcess_BP_BPTechnicalDefinition','BP Technical Definition',603,0,'["View", "Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t

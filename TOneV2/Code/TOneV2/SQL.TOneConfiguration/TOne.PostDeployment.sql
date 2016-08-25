@@ -296,7 +296,7 @@ as (select * from (values
 (3454,'BusinessProcess_BP_Route_Build','Route Build',1207,0,'["View", "StartInstance", "ScheduleTask"]'),
 (3455,'BusinessProcess_BP_Product_Cost_Generation','Product Cost Generation',1207,0,'["View", "StartInstance", "ScheduleTask"]'),
 (3456,'BusinessProcess_BP_Route_Sync','Route Sync',1207,0,'["View", "StartInstance", "ScheduleTask"]'),
-(3457,'BusinessProcess_BP_Reprocess','Reprocess',404,0,'["View", "StartInstance", "ScheduleTask"]'),
+(3457,'BusinessProcess_BP_Reprocess','Reprocess',1601,0,'["View", "StartInstance", "ScheduleTask"]'),
 (3458,'BusinessProcess_BP_Import_Supplier_PriceList','Import Supplier PriceList',1209,0,'["View", "StartInstance", "ScheduleTask"]'),
 (3459,'BusinessProcess_BP_Numbering_Plan','Numbering Plan',1209,0,'["View", "StartInstance", "ScheduleTask"]'),
 (3460,'BusinessProcess_BP_Rate_Plan','Rate Plan',1208,0,'["View", "StartInstance", "ScheduleTask"]')

@@ -52,6 +52,29 @@ when not matched by target then
 	insert([Name],[RequiredPermissions])
 	values(s.[Name],s.[RequiredPermissions]);
 
+--[sec].[BusinessEntityModule]-------------1601 to 1700---------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [sec].[BusinessEntityModule] on;
+;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1601,'Reprocess',401,0),
+(1602,'CDR processing',-1,0),
+(1603,'Reprocess',1602,0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[ParentId],[BreakInheritance]))
+merge	[sec].[BusinessEntityModule] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]
+when not matched by target then
+	insert([Id],[Name],[ParentId],[BreakInheritance])
+	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
+set identity_insert [sec].[BusinessEntityModule] off;
+
 --[sec].[BusinessEntity]------------------4801 to 5100----------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------
 set nocount on;
@@ -59,7 +82,7 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(4801,'Reprocess_ReprocessDefinition','Reprocess Definition',601,0,'["View","Add","Edit"]')
+(4801,'Reprocess_ReprocessDefinition','Reprocess Definition',1603,0,'["View","Add","Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
