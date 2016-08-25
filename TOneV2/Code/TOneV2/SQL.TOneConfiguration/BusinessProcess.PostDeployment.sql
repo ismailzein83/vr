@@ -38,7 +38,7 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(6001,'Management','Management','#/view/BusinessProcess/Views/BPDefinition/BPDefinitionManagement',601,null,null,null,'{"$type":"Vanrise.BusinessProcess.Entities.BPViewSettings, Vanrise.BusinessProcess.Entities"}',0,2),
+(6001,'Management','Management','#/view/BusinessProcess/Views/BPDefinition/BPDefinitionManagement',601,null,null,null,'{"$type":"Vanrise.BusinessProcess.Entities.BPViewSettings, Vanrise.BusinessProcess.Entities"}',0,1),
 (6002,'Monitor','Monitor','#/view/BusinessProcess/Views/BPInstance/BPInstanceMonitor',601,'BusinessProcess_BP/BPInstance/GetUpdated',null,null,null,0,2),
 (6003,'Log','Log History','#/view/BusinessProcess/Views/BPInstance/BPInstanceHistory',601,'BusinessProcess_BP/BPInstance/GetFilteredBPInstances',null,null,null,0,3),
 (6004,'My Tasks','Tasks','#/view/BusinessProcess/Views/BPTask/BPTaskMonitor',601,'BusinessProcess_BP/BPTask/GetMyUpdatedTasks',null,null,null,0,4),
