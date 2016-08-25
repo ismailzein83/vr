@@ -15,7 +15,7 @@ namespace Vanrise.Reprocess.BP.Activities
 
         public string StageName { get; set; }
 
-        public DateTime BatchStart { get; set; }
+        public BatchRecord BatchRecord { get; set; }
 
         public long CurrentProcessId { get; set; }
     }
@@ -33,7 +33,7 @@ namespace Vanrise.Reprocess.BP.Activities
         public InArgument<string> StageName { get; set; }
 
         [RequiredArgument]
-        public InArgument<DateTime> BatchStart { get; set; }
+        public InArgument<BatchRecord> BatchRecord { get; set; }
 
         protected override FinalizeStageInput GetInputArgument2(AsyncCodeActivityContext context)
         {
@@ -41,14 +41,14 @@ namespace Vanrise.Reprocess.BP.Activities
             {
                 StageActivator = this.StageActivator.Get(context),
                 StageName = this.StageName.Get(context),
-                BatchStart = this.BatchStart.Get(context),
+                BatchRecord = this.BatchRecord.Get(context),
                 CurrentProcessId = context.GetSharedInstanceData().InstanceInfo.ParentProcessID.HasValue ? context.GetSharedInstanceData().InstanceInfo.ParentProcessID.Value : context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID
             };
         }
 
         protected override FinalizeStageOutput DoWorkWithResult(FinalizeStageInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            var executionContext = new ReprocessStageActivatorFinalizingContext(inputArgument.StageName, inputArgument.CurrentProcessId, inputArgument.BatchStart,
+            var executionContext = new ReprocessStageActivatorFinalizingContext(inputArgument.StageName, inputArgument.CurrentProcessId, inputArgument.BatchRecord,
                 (logEntryType, message) =>
                 {
                     handle.SharedInstanceData.WriteTrackingMessage(logEntryType, message, null);
@@ -67,16 +67,16 @@ namespace Vanrise.Reprocess.BP.Activities
         {
             string _currentStageName;
             long _processInstanceId;
-            DateTime _batchStart;
+            BatchRecord _batchRecord;
             Action<LogEntryType, string> _writeTrackingMessage;
             Action<AsyncActivityStatus, Action> _doWhilePreviousRunningAction;
 
-            public ReprocessStageActivatorFinalizingContext(string currentStageName, long processInstanceId, DateTime batchStart, Action<LogEntryType, string> writeTrackingMessage,
+            public ReprocessStageActivatorFinalizingContext(string currentStageName, long processInstanceId, BatchRecord batchRecord, Action<LogEntryType, string> writeTrackingMessage,
                 Action<AsyncActivityStatus, Action> doWhilePreviousRunningAction)
             {
                 _currentStageName = currentStageName;
                 _processInstanceId = processInstanceId;
-                _batchStart = batchStart;
+                _batchRecord = batchRecord;
                 _writeTrackingMessage = writeTrackingMessage;
                 _doWhilePreviousRunningAction = doWhilePreviousRunningAction;
             }
@@ -91,11 +91,6 @@ namespace Vanrise.Reprocess.BP.Activities
                 get { return _currentStageName; }
             }
 
-            public DateTime BatchStart
-            {
-                get { return _batchStart; }
-            }
-
             public void WriteTrackingMessage(LogEntryType severity, string messageFormat)
             {
                 _writeTrackingMessage(severity, messageFormat);
@@ -104,6 +99,12 @@ namespace Vanrise.Reprocess.BP.Activities
             public void DoWhilePreviousRunning(AsyncActivityStatus previousActivityStatus, Action actionToDo)
             {
                 _doWhilePreviousRunningAction(previousActivityStatus, actionToDo);
+            }
+
+
+            public BatchRecord BatchRecord
+            {
+                get { return _batchRecord; }
             }
         }
     }

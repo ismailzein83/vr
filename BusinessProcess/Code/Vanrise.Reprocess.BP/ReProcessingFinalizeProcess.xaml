@@ -2,7 +2,6 @@
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
- xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
@@ -32,8 +31,11 @@
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
       <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
       <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
       <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
@@ -43,16 +45,13 @@
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.Entities</AssemblyReference>
-      <AssemblyReference>PresentationFramework</AssemblyReference>
-      <AssemblyReference>PresentationCore</AssemblyReference>
-      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
-      <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP</AssemblyReference>
     </sco:Collection>
@@ -103,12 +102,12 @@
         </InArgument>
       </vrba1:GetStageActivator.StageName>
     </vrba1:GetStageActivator>
-    <vrba1:FinalizeStage sap2010:WorkflowViewState.IdRef="FinalizeStage_1">
-      <vrba1:FinalizeStage.BatchStart>
-        <InArgument x:TypeArguments="s:DateTime">
-          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.BatchStart</mca:CSharpValue>
+    <vrba1:FinalizeStage PreviousActivityStatus="{x:Null}" Status="{x:Null}">
+      <vrba1:FinalizeStage.BatchRecord>
+        <InArgument x:TypeArguments="vre:BatchRecord">
+          <mca:CSharpValue x:TypeArguments="vre:BatchRecord">Input.BatchRecord</mca:CSharpValue>
         </InArgument>
-      </vrba1:FinalizeStage.BatchStart>
+      </vrba1:FinalizeStage.BatchRecord>
       <vrba1:FinalizeStage.StageActivator>
         <InArgument x:TypeArguments="vre:IReprocessStageActivator">
           <mca:CSharpValue x:TypeArguments="vre:IReprocessStageActivator">StageActivator</mca:CSharpValue>
@@ -119,23 +118,26 @@
           <mca:CSharpValue x:TypeArguments="x:String">Input.StageName</mca:CSharpValue>
         </InArgument>
       </vrba1:FinalizeStage.StageName>
+      <sap2010:WorkflowViewState.IdRef>FinalizeStage_2</sap2010:WorkflowViewState.IdRef>
     </vrba1:FinalizeStage>
-    <sads:DebugSymbol.Symbol>d1FDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nRmluYWxpemVQcm9jZXNzLnhhbWwPPAN8DgIBAUEFTA4CAS1NBVgkAgEiWQVpHwIBEmoFehsCAQJJC0mOAQIBM0QLRHUCAS5VC1VjAgEoUAtQcwIBI2YLZlgCAR1hC2FzAgEYXAtcawIBE20LbVsCAQ13C3dYAgEIcgtyawIBAw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1FDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nRmluYWxpemVQcm9jZXNzLnhhbWwPOwONAQ4CAQFABUsOAgEuTAVXJAIBI1gFaB8CARNpBXobAgEDSAtIjgECATRDC0N1AgEvVAtUYwIBKU8LT3MCASRlC2VYAgEeYAtgcwIBGVsLW2sCARR2C3ZYAgEObAtsYQIBCXELcWsCAQQ=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
-      <sap2010:ViewStateData Id="GetReprocessDefinition_1" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="GetStageActivator_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="353,62" />
+      <sap2010:ViewStateData Id="GetReprocessDefinition_1" sap:VirtualizedContainerService.HintSize="353,22" />
+      <sap2010:ViewStateData Id="GetStageActivator_1" sap:VirtualizedContainerService.HintSize="353,22" />
+      <sap2010:ViewStateData Id="FinalizeStage_2" sap:VirtualizedContainerService.HintSize="353,22" />
       <sap2010:ViewStateData Id="FinalizeStage_1" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="264,372">
+      <sap2010:ViewStateData Id="ErrorActivity_1" sap:VirtualizedContainerService.HintSize="353,55" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="375,467">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Reprocess.BP.ReProcessingFinalizeProcess_1" sap:VirtualizedContainerService.HintSize="304,452" />
+      <sap2010:ViewStateData Id="Vanrise.Reprocess.BP.ReProcessingFinalizeProcess_1" sap:VirtualizedContainerService.HintSize="415,547" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

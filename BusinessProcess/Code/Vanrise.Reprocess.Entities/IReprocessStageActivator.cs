@@ -19,7 +19,7 @@ namespace Vanrise.Reprocess.Entities
 
         void FinalizeStage(IReprocessStageActivatorFinalizingContext context);
 
-        List<StageRecordInfo> GetStageRecordInfo(IReprocessStageActivatorPreparingContext context);
+        List<BatchRecord> GetStageBatchRecords(IReprocessStageActivatorPreparingContext context);
     }
 
     public interface IReprocessStageActivatorExecutionContext
@@ -51,7 +51,7 @@ namespace Vanrise.Reprocess.Entities
 
         string CurrentStageName { get; }
 
-        DateTime BatchStart { get; }
+        BatchRecord BatchRecord { get; }
 
         void WriteTrackingMessage(LogEntryType severity, string messageFormat);
 
@@ -65,8 +65,8 @@ namespace Vanrise.Reprocess.Entities
         string CurrentStageName { get; }
     }
 
-    public class StageRecordInfo
+    public abstract class BatchRecord
     {
-        public DateTime BatchStart { get; set; }
+        public abstract string GetBatchTitle();
     }
 }

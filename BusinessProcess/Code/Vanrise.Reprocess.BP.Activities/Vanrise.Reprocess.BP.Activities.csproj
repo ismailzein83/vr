@@ -78,7 +78,7 @@
   <ItemGroup>
     <Compile Include="EvaluateStagesStatus.cs" />
     <Compile Include="GetStageActivator.cs" />
-    <Compile Include="GetStageRecordInfo.cs" />
+    <Compile Include="GetStageBatchRecords.cs" />
     <Compile Include="FinalizeStage.cs" />
     <Compile Include="ExecuteStage.cs" />
     <Compile Include="GenerateDateTimeRanges.cs" />

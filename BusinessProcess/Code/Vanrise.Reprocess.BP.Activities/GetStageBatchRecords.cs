@@ -9,13 +9,13 @@ using Vanrise.Entities;
 
 namespace Vanrise.Reprocess.BP.Activities
 {
-    public sealed class GetStageRecordInfo : CodeActivity
+    public sealed class GetStageBatchRecords : CodeActivity
     {
         [RequiredArgument]
         public InArgument<ReprocessStage> Stage { get; set; }
 
         [RequiredArgument]
-        public OutArgument<IEnumerable<StageRecordInfo>> StageRecordInfos { get; set; }
+        public OutArgument<IEnumerable<BatchRecord>> StageBatchRecords { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
@@ -24,8 +24,8 @@ namespace Vanrise.Reprocess.BP.Activities
             context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, string.Format("{0} Preparation is started.", stage.StageName), null);
             var executionContext = new ReprocessStageActivatorPreparingContext(stage.StageName, context.GetSharedInstanceData().InstanceInfo.ParentProcessID.HasValue ? context.GetSharedInstanceData().InstanceInfo.ParentProcessID.Value : context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID);
 
-            List<StageRecordInfo> data = stage.Activator.GetStageRecordInfo(executionContext);
-            this.StageRecordInfos.Set(context, data);
+            List<BatchRecord> data = stage.Activator.GetStageBatchRecords(executionContext);
+            this.StageBatchRecords.Set(context, data);
 
             context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, string.Format("{0} Preparation is done.", this.Stage.Get(context).StageName), null);
         }
