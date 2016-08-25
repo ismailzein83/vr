@@ -16,7 +16,7 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(19001,'Reprocess Definition','Reprocess Definition','#/view/Reprocess/Views/ReprocessDefinition/ReprocessDefinitionManagement',-100,'Reprocess/ReprocessDefinition/GetFilteredReprocessDefinitions',null,null,null,0,30)
+(19001,'Reprocess Definition','Reprocess Definition','#/view/Reprocess/Views/ReprocessDefinition/ReprocessDefinitionManagement',-100,'Reprocess/ReprocessDefinition/GetFilteredReprocessDefinitions',null,null,null,0,40)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
