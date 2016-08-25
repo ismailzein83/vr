@@ -140,7 +140,8 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'Root',null,0),
 (2,'Administration',1,0),
-(3,'Security',2,0)
+(3,'Security',2,0),
+(-1,'System Configuration',1,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[ParentId],[BreakInheritance]))
 merge	[sec].[BusinessEntityModule] as t
