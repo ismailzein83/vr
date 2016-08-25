@@ -229,6 +229,10 @@
     <Content Include="Common\Directives\MainExtensions\TextManipulation\vr-common-textmanipulationsettings-addprefix.js" />
     <Content Include="Common\Directives\MainExtensions\TextManipulation\vr-common-textmanipulationsettings-replacestring.js" />
     <Content Include="Common\Directives\MainExtensions\TextManipulation\vr-common-textmanipulationsettings-substring.js" />
+    <Content Include="Common\Directives\MainExtensions\VRObjectTypes\Templates\TextObjectTypeTemplate.html" />
+    <Content Include="Common\Directives\MainExtensions\VRObjectTypes\Templates\TextValuePropertyEvaluatorTemplate.html" />
+    <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-textobjecttype.js" />
+    <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-textvaluepropertyevaluator.js" />
     <Content Include="Common\Directives\RateType\Templates\RateTypeGridTemplate.html" />
     <Content Include="Common\Directives\RateType\vr-common-ratetype-grid.js" />
     <Content Include="Common\Directives\RateType\vr-common-ratetype-selector.js" />

@@ -17,7 +17,6 @@ namespace Vanrise.Security.MainExtensions.VRObjectTypes
         {
             return Vanrise.Common.Utilities.GetPropValueReader(this.UserField.ToString()).GetPropertyValue(context.Object);                   
         }
-
     }
 }
 

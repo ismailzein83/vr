@@ -2,9 +2,9 @@
 
     'use strict';
 
-    UserObjectType.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
+    TextObjectType.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
 
-    function UserObjectType(UtilsService, VRUIUtilsService, VRNotificationService) {
+    function TextObjectType(UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
@@ -12,15 +12,15 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var userObjectTypeSecurity = new UserObjectTypeSecurity($scope, ctrl, $attrs);
-                userObjectTypeSecurity.initializeController();
+                var vrTextObjectType = new VRTextObjectType($scope, ctrl, $attrs);
+                vrTextObjectType.initializeController();
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Security/Directives/MainExtensions/VRObjectTypes/Templates/UserObjectTypeTemplate.html"
+            templateUrl: "/Client/Modules/Common/Directives/MainExtensions/VRObjectTypes/Templates/TextObjectTypeTemplate.html"
 
         };
-        function UserObjectTypeSecurity($scope, ctrl, $attrs) {
+        function VRTextObjectType($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -36,7 +36,7 @@
 
                 api.getData = function () {
                     var data = {
-                        $type: "Vanrise.Security.MainExtensions.VRObjectTypes.UserObjectType, Vanrise.Security.MainExtensions",
+                        $type: "Vanrise.Common.MainExtensions.VRObjectTypes.TextObjectType, Vanrise.Security.MainExtensions",
                     }
                     return data;
                 }
@@ -48,6 +48,6 @@
         }
     }
 
-    app.directive('vrSecUserobjecttype', UserObjectType);
+    app.directive('vrCommonTextobjecttype', TextObjectType);
 
 })(app);

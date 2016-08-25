@@ -131,9 +131,9 @@
     <Content Include="Security\Directives\DynamicPage\vr-sec-dynamicpageviewer.js" />
     <Content Include="Security\Directives\MainExtensions\Group\vr-sec-group-static.js" />
     <Content Include="Security\Directives\MainExtensions\VRObjectTypes\Templates\UserObjectTypeTemplate.html" />
-    <Content Include="Security\Directives\MainExtensions\VRObjectTypes\Templates\UserProfilePropertyTemplate.html" />
+    <Content Include="Security\Directives\MainExtensions\VRObjectTypes\Templates\UserProfilePropertyEvaluatorTemplate.html" />
     <Content Include="Security\Directives\MainExtensions\VRObjectTypes\vr-sec-userobjecttype.js" />
-    <Content Include="Security\Directives\MainExtensions\VRObjectTypes\vr-sec-userprofileproperty.js" />
+    <Content Include="Security\Directives\MainExtensions\VRObjectTypes\vr-sec-userprofilepropertyevaluator.js" />
     <Content Include="Security\Directives\Group\Templates\GroupGrid.html" />
     <Content Include="Security\Directives\Group\vr-sec-group-grid.js" />
     <Content Include="Security\Directives\Group\vr-sec-group-selector.js" />

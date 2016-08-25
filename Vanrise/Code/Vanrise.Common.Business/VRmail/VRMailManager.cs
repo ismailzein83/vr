@@ -86,6 +86,9 @@ namespace Vanrise.Common.Business
             client.EnableSsl = true;
 
             client.Send(mailMessage);
+
+            //dynamic var = null;
+            //var.Value = "ali";
         }
     }
 

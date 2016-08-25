@@ -2,9 +2,9 @@
 
     'use strict';
 
-    UserProfileProperty.$inject = ['VR_Sec_UserProfilePropertyEnum', 'UtilsService', 'VRUIUtilsService'];
+    UserProfilePropertyEvaluator.$inject = ['VR_Sec_UserProfilePropertyEnum', 'UtilsService', 'VRUIUtilsService'];
 
-    function UserProfileProperty(VR_Sec_UserProfilePropertyEnum, UtilsService, VRUIUtilsService) {
+    function UserProfilePropertyEvaluator(VR_Sec_UserProfilePropertyEnum, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -16,15 +16,15 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var userProfilePropertySecurity = new UserProfilePropertySecurity($scope, ctrl, $attrs);
-                userProfilePropertySecurity.initializeController();
+                var userProfilePropertyEvaluatorSecurity = new UserProfilePropertyEvaluatorSecurity($scope, ctrl, $attrs);
+                userProfilePropertyEvaluatorSecurity.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: '/Client/Modules/Security/Directives/MainExtensions/VRObjectTypes/Templates/UserProfilePropertyTemplate.html'
+            templateUrl: '/Client/Modules/Security/Directives/MainExtensions/VRObjectTypes/Templates/UserProfilePropertyEvaluatorTemplate.html'
         };
 
-        function UserProfilePropertySecurity($scope, ctrl, $attrs) {
+        function UserProfilePropertyEvaluatorSecurity($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
@@ -66,6 +66,6 @@
         }
     }
 
-    app.directive('vrSecUserprofileproperty', UserProfileProperty);
+    app.directive('vrSecUserprofilepropertyevaluator', UserProfilePropertyEvaluator);
 
 })(app);

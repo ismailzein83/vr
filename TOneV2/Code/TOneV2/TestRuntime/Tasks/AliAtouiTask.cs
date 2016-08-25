@@ -65,6 +65,7 @@ namespace TOne.WhS.Runtime.Tasks
         public string Name { get; set; }
     }
 
+
     public class VRMailMessageTemplateTask
     {
         #region Public Method

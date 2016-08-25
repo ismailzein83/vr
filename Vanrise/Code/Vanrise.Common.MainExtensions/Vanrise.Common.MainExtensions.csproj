@@ -68,6 +68,8 @@
     <Compile Include="TextManipulationAction\AddPrefixActionSettings.cs" />
     <Compile Include="TextManipulationAction\ReplaceStringActionSettings.cs" />
     <Compile Include="TextManipulationAction\SubstringActionSettings.cs" />
+    <Compile Include="VRObjectTypes\TextObjectType.cs" />
+    <Compile Include="VRObjectTypes\TextValuePropertyEvaluator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">

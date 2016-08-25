@@ -301,6 +301,7 @@ namespace Vanrise.Security.Business
             {
                 UserManager userManager = new UserManager();
                 var user = userManager.GetUserbyEmail(email);
+
                 if (user == null)
                     return new UpdateOperationOutput<object>() { Result = UpdateOperationResult.Failed };
 
