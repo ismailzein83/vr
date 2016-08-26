@@ -9,6 +9,6 @@ namespace Vanrise.Security.Entities
 {
     public class SecuritySettings : SettingData
     {
-        public MailMessageTemplateSettings mailMessageTemplateSettings { get; set; }
+        public MailMessageTemplateSettings MailMessageTemplateSettings { get; set; }
     }
 }
