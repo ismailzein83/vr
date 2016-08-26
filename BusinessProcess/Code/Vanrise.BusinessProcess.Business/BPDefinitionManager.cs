@@ -93,7 +93,7 @@ namespace Vanrise.BusinessProcess.Business
         }
         public bool DoesUserHaveViewAccess(int userId)
         {
-            var allPB = GetCachedBPDefinitions().Select(x=>x.Value);
+            var allPB = GetCachedBPDefinitions().Select(x=>x.Value).Where(x=>!x.Configuration.NotVisibleInManagementScreen);
             foreach (var bp in allPB)
             {
                 if (DoesUserHaveViewAccess(userId, bp))
