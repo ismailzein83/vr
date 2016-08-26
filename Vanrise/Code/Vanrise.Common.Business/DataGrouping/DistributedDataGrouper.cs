@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,14 @@ namespace Vanrise.Common.Business
 
         string _dataAnalysisUniqueName;
         DataGroupingHandler _groupingHandler;
+
+        static int s_distributeBatchSize;
+
+        static DistributedDataGrouper()
+        {
+            if (!int.TryParse(ConfigurationManager.AppSettings["DistributedDataGrouper_DistributeBatchSize"], out s_distributeBatchSize))
+                s_distributeBatchSize = 500;
+        }
 
         public DistributedDataGrouper(string dataAnalysisUniqueName, DataGroupingHandler groupingHandler)
         {
@@ -35,6 +44,22 @@ namespace Vanrise.Common.Business
         #region Public Methods
 
         public void DistributeGroupingItems(List<IDataGroupingItem> items)
+        {
+            int itemsCount = items.Count;
+            if (itemsCount <= s_distributeBatchSize)
+                DistributeGroupingItems_Private(items);
+            else
+            {                
+                for (int i = 0; i < itemsCount; i += s_distributeBatchSize)
+                {
+                    int start = i;
+                    int countToGet = Math.Min(s_distributeBatchSize, itemsCount - i);
+                    DistributeGroupingItems_Private(items.GetRange(start, countToGet).ToList());
+                }
+            }
+        }
+
+        private void DistributeGroupingItems_Private(List<IDataGroupingItem> items)
         {
             List<DataGroupingDistributionInfo> distributionInfos = null;
             Dictionary<string, IDataGroupingItem> itemsByKeys = items.ToDictionary(itm => _groupingHandler.GetItemGroupingKey(new DataGroupingHandlerGetItemGroupingKeyContext { Item = itm }), itm => itm);
@@ -85,7 +110,7 @@ namespace Vanrise.Common.Business
 
         private void GetExecutorClient(Guid executorServiceInstanceId, Action<IDataGroupingExecutorWCFService> onClientReady)
         {
-            var executorServiceInstance = new ServiceInstanceManager().GetServiceInstance(DataGroupingExecutorRuntimeService.s_dataGroupingExecutorServiceInstanceType, executorServiceInstanceId);
+            var executorServiceInstance = new RuntimeServiceInstanceManager().GetServiceInstance(DataGroupingExecutorRuntimeService.SERVICE_TYPE_UNIQUE_NAME, executorServiceInstanceId);
             if (executorServiceInstance == null)
                 throw new NullReferenceException(String.Format("executorServiceInstance '{0}'", executorServiceInstanceId));
             DataGroupingExecutorServiceInstanceInfo executorServiceInstanceInfo = executorServiceInstance.InstanceInfo as DataGroupingExecutorServiceInstanceInfo;
@@ -99,17 +124,17 @@ namespace Vanrise.Common.Business
         {
             IDataGroupingAnalysisInfoDataManager dataManagerAnalysisInfo = CommonDataManagerFactory.GetDataManager<IDataGroupingAnalysisInfoDataManager>();
             Guid distributorServiceInstanceId;
-            ServiceInstance distributorServiceInstance = null;
-            var serviceInstanceManager = new ServiceInstanceManager();
+            RuntimeServiceInstance distributorServiceInstance = null;
+            var serviceInstanceManager = new RuntimeServiceInstanceManager();
             if (dataManagerAnalysisInfo.TryGetAssignedServiceInstanceId(_dataAnalysisUniqueName, out distributorServiceInstanceId))
-                distributorServiceInstance = serviceInstanceManager.GetServiceInstance(DataGroupingDistributorRuntimeService.s_dataGroupingDistributorServiceInstanceType, distributorServiceInstanceId);
+                distributorServiceInstance = serviceInstanceManager.GetServiceInstance(DataGroupingDistributorRuntimeService.SERVICE_TYPE_UNIQUE_NAME, distributorServiceInstanceId);
             else
             {
-                Dictionary<Guid, ServiceInstance> distributorProcessServiceInstances = serviceInstanceManager.GetServicesDictionary(DataGroupingDistributorRuntimeService.s_dataGroupingDistributorServiceInstanceType);
+                Dictionary<Guid, RuntimeServiceInstance> distributorProcessServiceInstances = serviceInstanceManager.GetServicesDictionary(DataGroupingDistributorRuntimeService.SERVICE_TYPE_UNIQUE_NAME);
                 if (distributorProcessServiceInstances == null || distributorProcessServiceInstances.Count == 0)
                     throw new NullReferenceException("distributorProcessServiceInstances");
                 Dictionary<Guid, int> dataAnalysisCountByServiceInstanceId = dataManagerAnalysisInfo.GetDataAnalysisCountByServiceInstanceId();
-                ServiceInstance firstUnassignedDistributor = distributorProcessServiceInstances.Values.FirstOrDefault(itm => !dataAnalysisCountByServiceInstanceId.ContainsKey(itm.ServiceInstanceId));
+                RuntimeServiceInstance firstUnassignedDistributor = distributorProcessServiceInstances.Values.FirstOrDefault(itm => !dataAnalysisCountByServiceInstanceId.ContainsKey(itm.ServiceInstanceId));
                 if (firstUnassignedDistributor != null)
                     distributorServiceInstanceId = firstUnassignedDistributor.ServiceInstanceId;
                 else

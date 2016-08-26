@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Runtime
 {
@@ -14,6 +15,20 @@ namespace Vanrise.Runtime
         public TimeSpan Interval { get; set; }
 
         public RuntimeStatus Status { get; internal set; }
+
+        public virtual string ServiceTypeUniqueName
+        {
+            get
+            {
+                return this.GetType().AssemblyQualifiedName;
+            }
+        }
+
+        public RuntimeServiceInstance ServiceInstance
+        {
+            get;
+            internal set;
+        }
 
         public bool IsExecuting { get; private set; }
         
@@ -52,12 +67,12 @@ namespace Vanrise.Runtime
 
         protected abstract void Execute();
 
-        internal protected virtual void OnStarted()
+        internal protected virtual void OnStarted(IRuntimeServiceStartContext context)
         {
             _logger.WriteInformation("{0} Runtime Service Started", this.GetType().Name);
         }
 
-        internal protected virtual void OnStopped()
+        internal protected virtual void OnStopped(IRuntimeServiceStopContext context)
         {
             _logger.WriteInformation("{0} Runtime Service Stopped", this.GetType().Name);
         }
@@ -71,5 +86,25 @@ namespace Vanrise.Runtime
         {
 
         }
+    }
+
+    public interface IRuntimeServiceStartContext
+    {
+        ServiceInstanceInfo ServiceInstanceInfo { set; }
+    }
+
+    internal class RuntimeServiceStartContext : IRuntimeServiceStartContext
+    {
+        public ServiceInstanceInfo ServiceInstanceInfo
+        {
+            set;
+            get;
+        }
+    }
+
+
+    public interface IRuntimeServiceStopContext
+    {
+
     }
 }

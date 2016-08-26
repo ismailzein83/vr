@@ -7,6 +7,7 @@ using System.ServiceModel.Description;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Data;
+using Vanrise.Runtime;
 
 namespace Vanrise.Common.Business
 {
@@ -36,7 +37,7 @@ namespace Vanrise.Common.Business
         }
 
 
-        protected override void OnStarted()
+        protected override void OnStarted(IRuntimeServiceStartContext context)
         {
             BigDataManager.Instance._isBigDataHost = true;
             var random = new Random();
@@ -66,7 +67,7 @@ namespace Vanrise.Common.Business
             }
             if (!_dataManager.Insert(serviceUrl, Vanrise.Runtime.RunningProcessManager.CurrentProcess.ProcessId, out _bigDataServiceId))
                 throw new Exception("Could not insert BigDataService into database");
-            base.OnStarted();
+            base.OnStarted(context);
         }
 
         private void CreateServiceHost(string serviceUrl)
@@ -81,13 +82,13 @@ namespace Vanrise.Common.Business
             _serviceHost.Open();
         }
 
-        protected override void OnStopped()
+        protected override void OnStopped(IRuntimeServiceStopContext context)
         {
             if(_serviceHost != null && _serviceHost.State == CommunicationState.Opened)
             {
                 _serviceHost.Close();
             }
-            base.OnStopped();
+            base.OnStopped(context);
         }
 
         private ServiceEndpoint AddTCPEndPoint(ServiceHost serviceHost, string serviceUrl)

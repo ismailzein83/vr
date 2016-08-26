@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Runtime.Entities
 {
-    public class ServiceInstance
+    public class RuntimeServiceInstance
     {
         public Guid ServiceInstanceId { get; set; }
 
-        public Guid ServiceType { get; set; }
+        public int ServiceTypeId { get; set; }
 
         public int ProcessId { get; set; }
 

@@ -25,7 +25,7 @@ namespace Vanrise.Runtime
             if (!int.TryParse(ConfigurationManager.AppSettings["Runtime_HostingRuntimeManagerWCFServiceMaxRetryCount"], out s_hostingRuntimeManagerWCFServiceMaxRetryCount))
                 s_hostingRuntimeManagerWCFServiceMaxRetryCount = 10;
             if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["Runtime_RunningProcessHeartBeatTimeout"], out s_RunningProcessHeartBeatTimeout))
-                s_RunningProcessHeartBeatTimeout = TimeSpan.FromSeconds(40);
+                s_RunningProcessHeartBeatTimeout = TimeSpan.FromSeconds(80);
             if (!int.TryParse(ConfigurationManager.AppSettings["Runtime_PingRunningProcessMaxRetryCount"], out s_pingRunningProcessMaxRetryCount))
                 s_pingRunningProcessMaxRetryCount = 3;
             if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["Runtime_PingRunningProcessRetryOffset"], out s_pingRunningProcessRetryOffset))
@@ -119,6 +119,7 @@ namespace Vanrise.Runtime
                     ProcessHeartBeatManager.s_current = new ProcessHeartBeatManager(runningProcessesIds);
                 }
                 PingRunningProcesses(runningProcessesIds);
+                new RuntimeServiceInstanceManager().DeleteNonRunningServices();
             }
             else
             {

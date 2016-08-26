@@ -11,13 +11,24 @@ namespace Vanrise.Common.Business
 {
     public class DataGroupingExecutorRuntimeService : RuntimeService
     {
-        internal static Guid s_dataGroupingExecutorServiceInstanceType = new Guid("C6D320B9-39F1-4E32-AFB3-81B15A81EFC5");
+        internal const string SERVICE_TYPE_UNIQUE_NAME = "VR_Common_DataGroupingExecutorRuntimeService";
 
-        protected override void OnStarted()
+        public override string ServiceTypeUniqueName
+        {
+            get
+            {
+                return SERVICE_TYPE_UNIQUE_NAME;
+            }
+        }
+         
+        protected override void OnStarted(IRuntimeServiceStartContext context)
         {
             HostServiceIfNeeded();
-            RegisterServiceInstance();
-            base.OnStarted();
+            context.ServiceInstanceInfo = new DataGroupingExecutorServiceInstanceInfo
+            {
+                TCPServiceURL = s_serviceURL
+            };
+            base.OnStarted(context);
         }
 
         static ServiceHost s_serviceHost;
@@ -73,15 +84,6 @@ namespace Vanrise.Common.Business
         }
 
         #endregion
-
-        ServiceInstance _serviceInstance;
-        private void RegisterServiceInstance()
-        {
-            _serviceInstance = new ServiceInstanceManager().RegisterServiceInstance(s_dataGroupingExecutorServiceInstanceType, new DataGroupingExecutorServiceInstanceInfo
-            {
-                TCPServiceURL = s_serviceURL
-            });
-        }
 
         protected override void Execute()
         {

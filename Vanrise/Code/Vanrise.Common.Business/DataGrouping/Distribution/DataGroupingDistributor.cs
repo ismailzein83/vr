@@ -96,9 +96,9 @@ namespace Vanrise.Common.Business
             return dataAnalysisItem.ExecutorsInfo.Where(itm => itm.ItemsCount > 0).Select(itm => itm.ExecutorServiceInstanceId).ToList();
         }
 
-        private List<ServiceInstance> GetExecutorServiceInstances()
+        private List<RuntimeServiceInstance> GetExecutorServiceInstances()
         {
-            var executorServices = new ServiceInstanceManager().GetServices(DataGroupingExecutorRuntimeService.s_dataGroupingExecutorServiceInstanceType);
+            var executorServices = new RuntimeServiceInstanceManager().GetServices(DataGroupingExecutorRuntimeService.SERVICE_TYPE_UNIQUE_NAME);
             if (executorServices == null || executorServices.Count == 0)
                 throw new NullReferenceException("executorServices");
             return executorServices;

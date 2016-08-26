@@ -147,9 +147,12 @@ namespace Vanrise.Runtime
             _logger.WriteInformation("Starting Host...");
             if (_services != null)
             {
+                RuntimeServiceInstanceManager serviceInstanceManager = new RuntimeServiceInstanceManager();
                 foreach (var service in _services)
                 {
-                    service.OnStarted();
+                    RuntimeServiceStartContext startContext = new RuntimeServiceStartContext();
+                    service.OnStarted(startContext);
+                    service.ServiceInstance = serviceInstanceManager.RegisterServiceInstance(service.ServiceTypeUniqueName, startContext.ServiceInstanceInfo);
                     service.Status = RuntimeStatus.Started;
                 }
             }
@@ -170,7 +173,7 @@ namespace Vanrise.Runtime
             {
                 while (service.IsExecuting)
                     System.Threading.Thread.Sleep(1000);
-                service.OnStopped();
+                service.OnStopped(null);
                 service.Status = RuntimeStatus.Stopped;
                 service.Dispose();
             }

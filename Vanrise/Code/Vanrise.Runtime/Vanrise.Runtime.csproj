@@ -63,7 +63,7 @@
     <Compile Include="RuntimeService.cs" />
     <Compile Include="SchedulerService.cs" />
     <Compile Include="SchedulerTaskCheckProgressContext.cs" />
-    <Compile Include="ServiceInstanceManager.cs" />
+    <Compile Include="RuntimeServiceInstanceManager.cs" />
     <Compile Include="TransactionLock\ITransactionLockHandler.cs" />
     <Compile Include="TransactionLock\ITransactionLockWCFService.cs" />
     <Compile Include="TransactionLock\LocalTransactionLockHandler.cs" />

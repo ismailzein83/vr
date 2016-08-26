@@ -76,6 +76,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
+    <Compile Include="BusinessManagers\IBusinessManager.cs" />
+    <Compile Include="BusinessManagers\ITypeManager.cs" />
     <Compile Include="DataRetrieval\ConvertResultToExcelDataContext.cs" />
     <Compile Include="DataRetrieval\ExcelManager.cs" />
     <Compile Include="PasswordGenerator.cs" />

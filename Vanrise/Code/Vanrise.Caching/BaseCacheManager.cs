@@ -73,133 +73,133 @@ namespace Vanrise.Caching
         }
     }
 
-    public abstract class BaseTenantCacheManager : BaseCacheManager<int>
-    {
-        private int GetCurrentTenantId()
-        {
-            throw new NotImplementedException();
-        }
+    //public abstract class BaseTenantCacheManager : BaseCacheManager<int>
+    //{
+    //    private int GetCurrentTenantId()
+    //    {
+    //        throw new NotImplementedException();
+    //    }
 
-        #region Public Methods
+    //    #region Public Methods
 
-        public virtual T GetOrCreateObjectInCurrentTenant<T>(string cacheName, Func<T> createObject)
-        {
-            return base.GetOrCreateObject(cacheName, GetCurrentTenantId(), createObject);
-        }
+    //    public virtual T GetOrCreateObjectInCurrentTenant<T>(string cacheName, Func<T> createObject)
+    //    {
+    //        return base.GetOrCreateObject(cacheName, GetCurrentTenantId(), createObject);
+    //    }
 
-        public virtual void RemoveObjectFromCacheInCurrentTenant(string cacheName)
-        {
-            base.RemoveObjectFromCache(cacheName, GetCurrentTenantId());
-        }
+    //    public virtual void RemoveObjectFromCacheInCurrentTenant(string cacheName)
+    //    {
+    //        base.RemoveObjectFromCache(cacheName, GetCurrentTenantId());
+    //    }
 
-        public virtual bool IsCacheExpiredInCurrentTenant(ref DateTime? lastCheckTime)
-        {
-            return base.IsCacheExpired(GetCurrentTenantId(), ref lastCheckTime);
-        }
+    //    public virtual bool IsCacheExpiredInCurrentTenant(ref DateTime? lastCheckTime)
+    //    {
+    //        return base.IsCacheExpired(GetCurrentTenantId(), ref lastCheckTime);
+    //    }
 
-        public virtual void SetCacheExpiredInCurrentTenant()
-        {
-            base.SetCacheExpired(GetCurrentTenantId());
-        }
+    //    public virtual void SetCacheExpiredInCurrentTenant()
+    //    {
+    //        base.SetCacheExpired(GetCurrentTenantId());
+    //    }
 
-        #endregion
-    }
+    //    #endregion
+    //}
 
-    public struct TenantParamType <T>
-    {
-        public int TenantId { get; set; }
+    //public struct TenantParamType <T>
+    //{
+    //    public int TenantId { get; set; }
 
-        public T Param { get; set; }
-    }
+    //    public T Param { get; set; }
+    //}
 
-    public abstract class BaseTenantCacheManager<T> : BaseCacheManager<TenantParamType<T>>
-    {
-        TenantParamType<T> GetTenantParam(int tenantId, T prm)
-        {
-            return new TenantParamType<T>
-            {
-                TenantId = tenantId,
-                Param = prm
-            };
-        }
+    //public abstract class BaseTenantCacheManager<T> : BaseCacheManager<TenantParamType<T>>
+    //{
+    //    TenantParamType<T> GetTenantParam(int tenantId, T prm)
+    //    {
+    //        return new TenantParamType<T>
+    //        {
+    //            TenantId = tenantId,
+    //            Param = prm
+    //        };
+    //    }
 
-        private int GetCurrentTenantId()
-        {
-            throw new NotImplementedException();
-        }
+    //    private int GetCurrentTenantId()
+    //    {
+    //        throw new NotImplementedException();
+    //    }
 
-        #region Public Methods
+    //    #region Public Methods
 
-        public virtual T GetOrCreateObject(string cacheName, int tenantId, T parameter, Func<T> createObject)
-        {
-            return base.GetOrCreateObject(cacheName, GetTenantParam(tenantId, parameter), createObject);
-        }
+    //    public virtual T GetOrCreateObject(string cacheName, int tenantId, T parameter, Func<T> createObject)
+    //    {
+    //        return base.GetOrCreateObject(cacheName, GetTenantParam(tenantId, parameter), createObject);
+    //    }
 
-        public virtual T GetOrCreateObjectInCurrentTenant(string cacheName, T parameter, Func<T> createObject)
-        {
-            return this.GetOrCreateObject(cacheName, GetCurrentTenantId(), parameter, createObject);
-        }
+    //    public virtual T GetOrCreateObjectInCurrentTenant(string cacheName, T parameter, Func<T> createObject)
+    //    {
+    //        return this.GetOrCreateObject(cacheName, GetCurrentTenantId(), parameter, createObject);
+    //    }
 
-        public virtual void RemoveObjectFromCache(string cacheName, int tenantId, T parameter)
-        {
-            base.RemoveObjectFromCache(cacheName, GetTenantParam(tenantId, parameter));
-        }
+    //    public virtual void RemoveObjectFromCache(string cacheName, int tenantId, T parameter)
+    //    {
+    //        base.RemoveObjectFromCache(cacheName, GetTenantParam(tenantId, parameter));
+    //    }
 
-        public virtual void RemoveObjectFromCacheInCurrentTenant(string cacheName, T parameter)
-        {
-            this.RemoveObjectFromCache(cacheName, GetCurrentTenantId(), parameter);
-        }
+    //    public virtual void RemoveObjectFromCacheInCurrentTenant(string cacheName, T parameter)
+    //    {
+    //        this.RemoveObjectFromCache(cacheName, GetCurrentTenantId(), parameter);
+    //    }
 
-        public virtual bool IsCacheExpired(int tenantId, T parameter, ref DateTime? lastCheckTime)
-        {
-            return base.IsCacheExpired(GetTenantParam(tenantId, parameter), ref lastCheckTime);
-        }
+    //    public virtual bool IsCacheExpired(int tenantId, T parameter, ref DateTime? lastCheckTime)
+    //    {
+    //        return base.IsCacheExpired(GetTenantParam(tenantId, parameter), ref lastCheckTime);
+    //    }
 
-        public virtual bool IsCacheExpiredInCurrentTenant(T parameter, ref DateTime? lastCheckTime)
-        {
-            return this.IsCacheExpired(GetCurrentTenantId(), parameter, ref lastCheckTime);
-        }
+    //    public virtual bool IsCacheExpiredInCurrentTenant(T parameter, ref DateTime? lastCheckTime)
+    //    {
+    //        return this.IsCacheExpired(GetCurrentTenantId(), parameter, ref lastCheckTime);
+    //    }
 
-        public virtual void SetCacheExpired(int tenantId, T parameter)
-        {
-            base.SetCacheExpired(GetTenantParam(tenantId, parameter));
-        }
+    //    public virtual void SetCacheExpired(int tenantId, T parameter)
+    //    {
+    //        base.SetCacheExpired(GetTenantParam(tenantId, parameter));
+    //    }
 
-        public virtual void SetCacheExpiredInCurrentTenant(T parameter)
-        {
-            this.SetCacheExpired(GetCurrentTenantId(), parameter);
-        }
+    //    public virtual void SetCacheExpiredInCurrentTenant(T parameter)
+    //    {
+    //        this.SetCacheExpired(GetCurrentTenantId(), parameter);
+    //    }
 
 
-        #endregion
+    //    #endregion
 
-        #region Overridable
+    //    #region Overridable
 
-        protected virtual bool TryGetObjectFromCache(string cacheName, int tenantId, T parameter, out CachedObject cachedObject)
-        {
-            return base.TryGetObjectFromCache(cacheName, GetTenantParam(tenantId, parameter), out cachedObject);
-        }
+    //    protected virtual bool TryGetObjectFromCache(string cacheName, int tenantId, T parameter, out CachedObject cachedObject)
+    //    {
+    //        return base.TryGetObjectFromCache(cacheName, GetTenantParam(tenantId, parameter), out cachedObject);
+    //    }
 
-        protected virtual void AddObjectToCache(string cacheName, int tenantId, T parameter, CachedObject cachedObject)
-        {
-            base.AddObjectToCache(cacheName, GetTenantParam(tenantId, parameter), cachedObject);
-        }
+    //    protected virtual void AddObjectToCache(string cacheName, int tenantId, T parameter, CachedObject cachedObject)
+    //    {
+    //        base.AddObjectToCache(cacheName, GetTenantParam(tenantId, parameter), cachedObject);
+    //    }
 
-        protected virtual ConcurrentDictionary<string, CachedObject> GetCacheDictionary(int tenantId, T parameter)
-        {
-            return base.GetCacheDictionary(GetTenantParam(tenantId, parameter));
-        }
+    //    protected virtual ConcurrentDictionary<string, CachedObject> GetCacheDictionary(int tenantId, T parameter)
+    //    {
+    //        return base.GetCacheDictionary(GetTenantParam(tenantId, parameter));
+    //    }
 
-        protected virtual object GetCacheNameLockObject(string cacheName, int tenantId, T parameter)
-        {
-            return base.GetCacheNameLockObject(cacheName, GetTenantParam(tenantId, parameter));
-        }
+    //    protected virtual object GetCacheNameLockObject(string cacheName, int tenantId, T parameter)
+    //    {
+    //        return base.GetCacheNameLockObject(cacheName, GetTenantParam(tenantId, parameter));
+    //    }
 
-        protected virtual bool ShouldSetCacheExpired(int tenantId, T parameter)
-        {
-            return base.ShouldSetCacheExpired(GetTenantParam(tenantId, parameter));
-        }
+    //    protected virtual bool ShouldSetCacheExpired(int tenantId, T parameter)
+    //    {
+    //        return base.ShouldSetCacheExpired(GetTenantParam(tenantId, parameter));
+    //    }
 
-        #endregion
-    }
+    //    #endregion
+    //}
 }

@@ -228,7 +228,7 @@ namespace Vanrise.Runtime
             IRunningProcessDataManager _dataManager = RuntimeDataManagerFactory.GetDataManager<IRunningProcessDataManager>();
             object _updateHandle;
 
-            protected override bool ShouldSetCacheExpired(object parameter)
+            protected override bool ShouldSetCacheExpired()
             {
                 return _dataManager.AreRunningProcessesUpdated(ref _updateHandle);
             }

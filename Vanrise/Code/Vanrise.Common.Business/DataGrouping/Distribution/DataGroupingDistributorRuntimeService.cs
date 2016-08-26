@@ -11,13 +11,24 @@ namespace Vanrise.Common.Business
 {
     public class DataGroupingDistributorRuntimeService : RuntimeService
     {
-        internal static Guid s_dataGroupingDistributorServiceInstanceType = new Guid("1EE15131-82BF-46F8-9A54-39E47E797B74");
+        internal const string SERVICE_TYPE_UNIQUE_NAME = "VR_Common_DataGroupingDistributorRuntimeService";
 
-        protected override void OnStarted()
+        public override string ServiceTypeUniqueName
+        {
+            get
+            {
+                return SERVICE_TYPE_UNIQUE_NAME;
+            }
+        }
+
+        protected override void OnStarted(IRuntimeServiceStartContext context)
         {
             HostServiceIfNeeded();
-            RegisterServiceInstance();
-            base.OnStarted();
+            context.ServiceInstanceInfo = new DataGroupingDistributorServiceInstanceInfo
+            {
+                TCPServiceURL = s_serviceURL
+            };
+            base.OnStarted(context);
         }
 
         static ServiceHost s_serviceHost;
@@ -73,23 +84,8 @@ namespace Vanrise.Common.Business
 
         #endregion
 
-        ServiceInstance _serviceInstance;
-        private void RegisterServiceInstance()
-        {
-            _serviceInstance = new ServiceInstanceManager().RegisterServiceInstance(s_dataGroupingDistributorServiceInstanceType, new DataGroupingDistributorServiceInstanceInfo
-            {
-                TCPServiceURL = s_serviceURL
-            });
-        }
-
         protected override void Execute()
-        {
-            TransactionLocker.Instance.TryLock("DataGroupingDistributorRuntimeService_Execute", () =>
-                {
-                    var serviceInstanceManager = new ServiceInstanceManager();
-                    serviceInstanceManager.DeleteNonRunningServices(s_dataGroupingDistributorServiceInstanceType);
-                    serviceInstanceManager.DeleteNonRunningServices(DataGroupingExecutorRuntimeService.s_dataGroupingExecutorServiceInstanceType);
-                });
+        {            
         }
     }
 

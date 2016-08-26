@@ -9,7 +9,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
 {
-    public class TypeManager
+    public class TypeManager : ITypeManager
     {
         #region Singleton
 
@@ -22,11 +22,6 @@ namespace Vanrise.Common.Business
             }
         }
 
-        private TypeManager()
-        {
-
-        }
-        
         #endregion
 
         static ConcurrentDictionary<string, int> s_typesIds = new ConcurrentDictionary<string, int>();
@@ -41,8 +36,10 @@ namespace Vanrise.Common.Business
             return GetTypeId(vanriseType.UniqueTypeName);
         }
 
-        private int GetTypeId(string typeUniqueName)
-        {            
+        public int GetTypeId(string typeUniqueName)
+        {
+            if (typeUniqueName == null)
+                throw new ArgumentNullException("typeUniqueName");
             int ruleTypeId;
             if (!s_typesIds.TryGetValue(typeUniqueName, out ruleTypeId))
             {
