@@ -163,13 +163,14 @@ namespace Vanrise.Security.Business
                     //PasswordEmailContext context = new PasswordEmailContext() { Name = userObject.Name, Password = pwd };
                     //emailTemplateManager.SendEmail(userObject.Email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
 
-                    Guid guid = new Guid("D9B56FC2-EB3E-4340-8918-159A281B95BC");
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
                     objects.Add("User", userObject);
                     objects.Add("Password", pwd);
 
+                    MailMessageTemplateSettings mailMessageTemplateSettings = new ConfigManager().GetMailMessageTemplateSettings();
+
                     VRMailManager vrMailManager = new VRMailManager();
-                    vrMailManager.SendMail(guid, objects);
+                    vrMailManager.SendMail(mailMessageTemplateSettings.NewUserId, objects);
                 }
             }
 
@@ -275,13 +276,14 @@ namespace Vanrise.Security.Business
 
                     User user = GetUserbyId(userId);
 
-                    Guid guid = new Guid("10264FE7-99D5-4F6A-8E8C-44A0702F392E");
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
                     objects.Add("User", user);
                     objects.Add("Password", password);
 
+                    MailMessageTemplateSettings mailMessageTemplateSettings = new ConfigManager().GetMailMessageTemplateSettings();
+
                     VRMailManager vrMailManager = new VRMailManager();
-                    vrMailManager.SendMail(guid, objects);
+                    vrMailManager.SendMail(mailMessageTemplateSettings.ResetPasswordId, objects);
                 }
             }
 
@@ -341,13 +343,14 @@ namespace Vanrise.Security.Business
                     //PasswordEmailContext context = new PasswordEmailContext() { Name = user.Name, Password = pwd };
                     //emailTemplateManager.SendEmail(email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
 
-                    Guid guid = new Guid("E21CD125-61F0-4091-A03E-200CFE33F6E3");
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
                     objects.Add("User", user);
                     objects.Add("Password", pwd);
 
+                    MailMessageTemplateSettings mailMessageTemplateSettings = new ConfigManager().GetMailMessageTemplateSettings();
+
                     VRMailManager vrMailManager = new VRMailManager();
-                    vrMailManager.SendMail(guid, objects);
+                    vrMailManager.SendMail(mailMessageTemplateSettings.ForgotPasswordId, objects);
                 }
             }
 
