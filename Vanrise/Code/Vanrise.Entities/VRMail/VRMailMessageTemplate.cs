@@ -19,8 +19,6 @@ namespace Vanrise.Entities
 
     public class VRMailMessageTemplateSettings
     {
-        public List<VRObjectPropertyVariable> Variables { get; set; }
-
         public VRExpression To { get; set; }
 
         public VRExpression CC { get; set; }

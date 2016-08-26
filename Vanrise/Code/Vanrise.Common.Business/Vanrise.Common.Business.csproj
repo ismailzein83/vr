@@ -107,6 +107,7 @@
     <Compile Include="SummaryTransformation\SummaryTransformationManager.cs" />
     <Compile Include="TemplateConfigManager.cs" />
     <Compile Include="TypeManager.cs" />
+    <Compile Include="VRObject\VRObjectEvaluator.cs" />
     <Compile Include="VRObject\VRObjectPropertyEvaluatorManager.cs" />
     <Compile Include="VRObject\VRObjectTypeDefinitionManager.cs" />
     <Compile Include="VRObject\VRObjectTypeManager.cs" />
