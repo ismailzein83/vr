@@ -63,6 +63,12 @@
           <runtimeService name="Data Source Runtime Service" type="Vanrise.Integration.Business.DataSourceRuntimeService, Vanrise.Integration.Business" interval="00:00:02"></runtimeService>
         </runtimeServices>
       </runtimeServiceGroup>
+      <!-- Used to cache Data Result in Memory in order to handle Paging and sorting on the UI grids. nbOfRuntimeInstances depended on available resources.-->
+      <runtimeServiceGroup name="group7" nbOfRuntimeInstances="3">
+        <runtimeServices>
+          <runtimeService name="Big Data Runtime Service" type="Vanrise.Common.Business.BigDataRuntimeService, Vanrise.Common.Business" interval="00:00:02"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
     </runtimeServiceGroups>
   </vanriseRuntime>
 
