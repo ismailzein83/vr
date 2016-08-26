@@ -189,10 +189,10 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Administration','Administration',null,'/images/menu-icons/admin.png',1,0),
+(1,'Administration','Administration',null,'/Client/images/menu-icons/admin.png',1,0),
 (2,'Security',null,1,null,2,0),
 (3,'System',null,1,null,1,0),
-(-100,'System Configuration','System Configuration',null,'/images/menu-icons/Administration.png',0,0)
+(-100,'System Configuration','System Configuration',null,'/Client/images/menu-icons/Administration.png',0,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t

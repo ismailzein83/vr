@@ -40,7 +40,7 @@ set identity_insert [sec].[Module] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1301,'Dynamic Management',null,1,null,45,0),
-(1302,'Business Intelligence',null,null,'/images/menu-icons/busines intel.png',100,1)
+(1302,'Business Intelligence',null,null,'/Client/images/menu-icons/busines intel.png',100,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t

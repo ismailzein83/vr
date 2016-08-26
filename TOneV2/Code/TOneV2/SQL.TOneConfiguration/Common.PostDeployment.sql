@@ -133,7 +133,7 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(101,'Business Entities','Business Entities',null,'/images/menu-icons/Business Entities.png',2,0),
+(101,'Business Entities','Business Entities',null,'/Client/images/menu-icons/Business Entities.png',2,0),
 (102,'Lookups','Lookups',101,null,1,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
