@@ -167,10 +167,10 @@ namespace Vanrise.Security.Business
                     objects.Add("User", userObject);
                     objects.Add("Password", pwd);
 
-                    MailMessageTemplateSettings mailMessageTemplateSettings = new ConfigManager().GetMailMessageTemplateSettings();
+                    Guid newUserId = new ConfigManager().GetNewUserId();
 
                     VRMailManager vrMailManager = new VRMailManager();
-                    vrMailManager.SendMail(mailMessageTemplateSettings.NewUserId, objects);
+                    vrMailManager.SendMail(newUserId, objects);
                 }
             }
 
@@ -280,10 +280,10 @@ namespace Vanrise.Security.Business
                     objects.Add("User", user);
                     objects.Add("Password", password);
 
-                    MailMessageTemplateSettings mailMessageTemplateSettings = new ConfigManager().GetMailMessageTemplateSettings();
+                    Guid resetPasswordId = new ConfigManager().GetResetPasswordId();
 
                     VRMailManager vrMailManager = new VRMailManager();
-                    vrMailManager.SendMail(mailMessageTemplateSettings.ResetPasswordId, objects);
+                    vrMailManager.SendMail(resetPasswordId, objects);
                 }
             }
 
@@ -347,10 +347,10 @@ namespace Vanrise.Security.Business
                     objects.Add("User", user);
                     objects.Add("Password", pwd);
 
-                    MailMessageTemplateSettings mailMessageTemplateSettings = new ConfigManager().GetMailMessageTemplateSettings();
+                    Guid forgotPasswordId = new ConfigManager().GetForgotPasswordId();
 
                     VRMailManager vrMailManager = new VRMailManager();
-                    vrMailManager.SendMail(mailMessageTemplateSettings.ForgotPasswordId, objects);
+                    vrMailManager.SendMail(forgotPasswordId, objects);
                 }
             }
 

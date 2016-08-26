@@ -11,7 +11,44 @@ namespace Vanrise.Security.Business
     public class ConfigManager
     {
         #region Public Methods
-        public MailMessageTemplateSettings GetMailMessageTemplateSettings()
+        public Guid GetNewUserId()
+        {
+            MailMessageTemplateSettings mailMessageTemplateSettings = GetMailMessageTemplateSettings();
+
+            Guid newUserId = mailMessageTemplateSettings.NewUserId;
+
+            if (newUserId == null)
+                throw new NullReferenceException("settingManager.MailMessageTemplateSettings.NewUserId NullReferenceException");
+
+            return newUserId;
+        }
+        public Guid GetResetPasswordId()
+        {
+            MailMessageTemplateSettings mailMessageTemplateSettings = GetMailMessageTemplateSettings();
+
+            Guid resetPasswordId = mailMessageTemplateSettings.ResetPasswordId;
+
+            if (resetPasswordId == null)
+                throw new NullReferenceException("settingManager.MailMessageTemplateSettings.resetPasswordId NullReferenceException");
+
+            return resetPasswordId;
+        }
+        public Guid GetForgotPasswordId()
+        {
+            MailMessageTemplateSettings mailMessageTemplateSettings = GetMailMessageTemplateSettings();
+
+            Guid forgotPasswordId = mailMessageTemplateSettings.ForgotPasswordId;
+
+            if (forgotPasswordId == null)
+                throw new NullReferenceException("settingManager.MailMessageTemplateSettings.forgotPasswordId NullReferenceException");
+
+            return forgotPasswordId;
+        }
+        #endregion
+
+
+        #region Private Methods
+        private MailMessageTemplateSettings GetMailMessageTemplateSettings()
         {
             MailMessageTemplateSettings mailMessageTemplateSettings = GetSecuritySettings().MailMessageTemplateSettings;
 
@@ -20,10 +57,6 @@ namespace Vanrise.Security.Business
 
             return mailMessageTemplateSettings;
         }
-        #endregion
-
-
-        #region Private Methods
         private SecuritySettings GetSecuritySettings()
         {
             SettingManager settingManager = new SettingManager();
