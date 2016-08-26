@@ -140,6 +140,8 @@
     <Content Include="Security\Directives\RequiredPermission\Templates\RequiredPermissionTemplate.html" />
     <Content Include="Security\Directives\RequiredPermission\vr-sec-permissionoptions-selector.js" />
     <Content Include="Security\Directives\RequiredPermission\vr-sec-requiredpermission-grid.js" />
+    <Content Include="Security\Directives\Settings\Templates\SecuritySettingsTemplate.html" />
+    <Content Include="Security\Directives\Settings\vr-sec-settings-editor.js" />
     <Content Include="Security\Directives\Tenant\Templates\TenantsGrid.html" />
     <Content Include="Security\Directives\Tenant\vr-sec-tenant-grid.js" />
     <Content Include="Security\Directives\Tenant\vr-sec-tenant-selector.js" />

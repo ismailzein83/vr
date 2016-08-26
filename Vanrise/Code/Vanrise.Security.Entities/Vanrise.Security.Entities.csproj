@@ -85,6 +85,8 @@
     <Compile Include="Group\Group.cs" />
     <Compile Include="Group\GroupDetail.cs" />
     <Compile Include="RequiredPermissionSettings.cs" />
+    <Compile Include="Settings\MailMessageTemplateSettings.cs" />
+    <Compile Include="Settings\SecuritySettings.cs" />
     <Compile Include="SystemAction\SystemAction.cs" />
     <Compile Include="Tenant\Tenant.cs" />
     <Compile Include="Tenant\TenantDetail.cs" />
@@ -123,6 +125,7 @@
       <Name>Vanrise.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
