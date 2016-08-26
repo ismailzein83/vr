@@ -18,11 +18,18 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             ZonesByName newAndExistingZones = new ZonesByName();
             context.NewAndExistingZones = newAndExistingZones;
-            ProcessCountryCodes(context.CountryId, context.SupplierPriceListType, context.ImportedZones, context.ImportedCodes, context.ExistingCodes, newAndExistingZones, context.ExistingZones, context.DeletedCodesDate, context.PriceListDate);
+
+            HashSet<string> importedCodesHashSet;
+            ExistingCodesByCodeValue existingCodesByCodeValue = new ExistingCodesByCodeValue();
+
+            ProcessCountryCodes(context.CountryId, context.SupplierPriceListType, context.ImportedZones, context.ImportedCodes, context.ExistingCodes, newAndExistingZones, context.ExistingZones, context.DeletedCodesDate,
+                context.PriceListDate, existingCodesByCodeValue, out importedCodesHashSet);
             context.NewCodes = context.ImportedCodes.SelectMany(itm => itm.NewCodes);
             context.NewZones = newAndExistingZones.GetNewZones();
             context.ChangedZones = context.ExistingZones.Where(itm => itm.ChangedZone != null).Select(itm => itm.ChangedZone);
             context.ChangedCodes = context.ExistingCodes.Where(itm => itm.ChangedCode != null).Select(itm => itm.ChangedCode);
+
+            context.NotImportedCodes = PrepareNotImportedCodes(existingCodesByCodeValue, importedCodesHashSet);
         }
 
         private ExistingZonesByName StructureExistingZonesByName(IEnumerable<ExistingZone> existingZones)
@@ -44,9 +51,8 @@ namespace TOne.WhS.SupplierPriceList.Business
             return existingZonesByName;
         }
 
-        private ExistingCodesByCodeValue StructureExistingCodesByCodeValue(IEnumerable<ExistingCode> existingCodes)
+        private ExistingCodesByCodeValue StructureExistingCodesByCodeValue(ExistingCodesByCodeValue existingCodesByCodeValue, IEnumerable<ExistingCode> existingCodes)
         {
-            ExistingCodesByCodeValue existingCodesByCodeValue = new ExistingCodesByCodeValue();
             List<ExistingCode> existingCodesList = null;
 
             foreach (ExistingCode item in existingCodes)
@@ -63,10 +69,11 @@ namespace TOne.WhS.SupplierPriceList.Business
             return existingCodesByCodeValue;
         }
 
-        private void ProcessCountryCodes(int countryId, SupplierPriceListType supplierPriceListType, IEnumerable<ImportedZone> importedZones, IEnumerable<ImportedCode> importedCodes, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones, DateTime codeCloseDate, DateTime priceListDate)
+        private void ProcessCountryCodes(int countryId, SupplierPriceListType supplierPriceListType, IEnumerable<ImportedZone> importedZones, IEnumerable<ImportedCode> importedCodes, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones,
+            DateTime codeCloseDate, DateTime priceListDate, ExistingCodesByCodeValue existingCodesByCodeValue, out HashSet<string> importedCodesHashSet)
         {
             ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
-            ExistingCodesByCodeValue existingCodesByCodeValue = StructureExistingCodesByCodeValue(existingCodes);
+            StructureExistingCodesByCodeValue(existingCodesByCodeValue, existingCodes);
             HashSet<string> importedCodeValues = new HashSet<string>();
             foreach (var importedCode in importedCodes.OrderBy(code => code.BED))
             {
@@ -107,9 +114,42 @@ namespace TOne.WhS.SupplierPriceList.Business
                 }
             }
 
+            importedCodesHashSet = new HashSet<string>(importedCodeValues);
+
             IEnumerable<ExistingCode> existingCodesToClose = GetExistingCodesToClose(countryId, supplierPriceListType, importedZones, importedCodes, existingCodes, existingZonesByName, importedCodeValues);
             CloseNotImportedCodes(existingCodesToClose, importedCodeValues, codeCloseDate);
             CloseZonesWithNoCodes(existingZones);
+            
+        }
+
+        private IEnumerable<NotImportedCode> PrepareNotImportedCodes(ExistingCodesByCodeValue existingCodesByCodeValue, HashSet<string> importedCodes)
+        {
+            Dictionary<string, List<ExistingCode>> notImportedCodesByCodeValue = new Dictionary<string, List<ExistingCode>>();
+
+            foreach (KeyValuePair<string, List<ExistingCode>> item in existingCodesByCodeValue)
+            {
+                if (!importedCodes.Contains(item.Key))
+                    notImportedCodesByCodeValue.Add(item.Key, item.Value);
+            }
+
+            return notImportedCodesByCodeValue.MapRecords(NotImportedCodeInfoMapper);
+        }
+
+        private NotImportedCode NotImportedCodeInfoMapper(List<ExistingCode> existingCodes)
+        {
+            List<ExistingCode> linkedExistingCodes = existingCodes.GetConnectedEntities(DateTime.Today);
+
+            NotImportedCode notImportedCode = new NotImportedCode();
+            ExistingCode firstElementInTheList = linkedExistingCodes.First();
+            ExistingCode lastElementInTheList = linkedExistingCodes.Last();
+
+            notImportedCode.ZoneName = firstElementInTheList.ParentZone.Name;
+            notImportedCode.Code = firstElementInTheList.CodeEntity.Code;
+            notImportedCode.BED = firstElementInTheList.BED;
+            notImportedCode.EED = lastElementInTheList.EED;
+            notImportedCode.HasChanged = linkedExistingCodes.Any(x => x.ChangedCode != null);
+
+            return notImportedCode;
         }
 
         private void CloseExistingOverlapedCodes(ImportedCode importedCode, List<ExistingCode> matchExistingCodes, out bool shouldNotAddCode, out string recentCodeZoneName)

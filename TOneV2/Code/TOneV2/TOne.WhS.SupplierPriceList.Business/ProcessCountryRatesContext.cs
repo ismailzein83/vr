@@ -10,15 +10,15 @@ namespace TOne.WhS.SupplierPriceList.Business
     public class ProcessCountryRatesContext : IProcessCountryRatesContext
     {
 
-        public IEnumerable<ImportedRate> ImportedRates { get; set; }
+        public IEnumerable<ImportedZone> ImportedZones { get; set; }
 
-        public IEnumerable<ExistingRate> ExistingRates { get; set; }
+        public Dictionary<string, ExistingRateGroup> ExistingRatesGroupsByZoneName  { get; set; }
 
         public IEnumerable<ExistingZone> ExistingZones { get; set; }
 
         public ZonesByName NewAndExistingZones { get; set; }
 
-
+        public DateTime PriceListDate { get; set; }
         public IEnumerable<NewRate> NewRates { get; set; }
 
         public IEnumerable<ChangedRate> ChangedRates { get; set; }

@@ -10,17 +10,40 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
     public class ImportedZone : IRuleTarget
     {
-        public ImportedZone()
-        {
-            this.ImportedCodes = new List<ImportedCode>();
-            this.ImportedRates = new List<ImportedRate>();
-        }
-
         public string ZoneName { get; set; }
 
-        public List<ImportedCode> ImportedCodes { get; set; }
+        private List<ImportedCode> _importedCodes = new List<ImportedCode>();
 
-        public List<ImportedRate> ImportedRates { get; set; }
+        public List<ImportedCode> ImportedCodes
+        {
+            get
+            {
+                return this._importedCodes;
+            }
+        }
+
+        public ImportedRate NormalRate { get; set; }
+
+        private Dictionary<int, ImportedRate> _otherRates = new Dictionary<int, ImportedRate>();
+
+        public Dictionary<int, ImportedRate> OtherRates
+        {
+            get
+            {
+                return this._otherRates;
+            }
+        }
+
+
+        private List<NotImportedRate> _notImportedRates = new List<NotImportedRate>();
+
+        public List<NotImportedRate> NotImportedRates
+        {
+            get
+            {
+                return this._notImportedRates;
+            }
+        }
 
         private List<NewZone> _newZones = new List<NewZone>();
 

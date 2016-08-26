@@ -15,19 +15,19 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ImportedZone != null);
+            return (target as ImportedDataByZone != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ImportedZone importedZone = context.Target as ImportedZone;
+            ImportedDataByZone importedZone = context.Target as ImportedDataByZone;
             return !(importedZone.ImportedCodes.Count() == 0);
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            ImportedZone importedZone = target as ImportedZone;
-            string zoneName = importedZone.ImportedRates.First().ZoneName;
+            ImportedDataByZone importedDateByZone = target as ImportedDataByZone;
+            string zoneName = importedDateByZone.ImportedRates.First().ZoneName;
             return string.Format("Zone {0} has no codes", zoneName);
         }
 

@@ -9,13 +9,15 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
     public interface IProcessCountryRatesContext
     {
-        IEnumerable<ImportedRate> ImportedRates { get; }
+        IEnumerable<ImportedZone> ImportedZones { get; }
 
-        IEnumerable<ExistingRate> ExistingRates { get; }
+        Dictionary<string, ExistingRateGroup> ExistingRatesGroupsByZoneName { get; }
 
         IEnumerable<ExistingZone> ExistingZones { get; }
 
         ZonesByName NewAndExistingZones { get; }
+
+        DateTime PriceListDate { get; set; }
 
         IEnumerable<NewRate> NewRates { set; }
 

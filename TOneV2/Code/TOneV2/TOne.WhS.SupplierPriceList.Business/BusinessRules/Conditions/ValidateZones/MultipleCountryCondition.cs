@@ -15,12 +15,12 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ImportedZone != null);
+            return (target as ImportedDataByZone != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ImportedZone zone = context.Target as ImportedZone;
+            ImportedDataByZone zone = context.Target as ImportedDataByZone;
 
             bool result = true;
 
@@ -40,7 +40,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has multiple codes that belong to different countries", (target as ImportedZone).ZoneName);
+            return string.Format("Zone {0} has multiple codes that belong to different countries", (target as ImportedDataByZone).ZoneName);
         }
 
     }

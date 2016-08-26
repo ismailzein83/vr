@@ -114,10 +114,12 @@
     <Compile Include="PrepareNewZonesForDBApply.cs" />
     <Compile Include="ProcessCountryCodes.cs" />
     <Compile Include="ProcessCountryRates.cs" />
+    <Compile Include="ProcessCountryZones.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReserveIdForPriceList.cs" />
     <Compile Include="ReserveIdsForNewEntities.cs" />
     <Compile Include="SetImportSPLContext.cs" />
+    <Compile Include="StructureImportedZones.cs" />
     <Compile Include="StructureDataByZones.cs" />
     <Compile Include="StructureDataByCountries.cs" />
     <Compile Include="SyncImportedDataWithDB.cs" />

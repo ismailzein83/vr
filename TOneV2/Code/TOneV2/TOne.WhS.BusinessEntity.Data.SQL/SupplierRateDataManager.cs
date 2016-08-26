@@ -85,8 +85,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                     reader["OtherRates"] as string != null
                         ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string)
                         : null,
-                SupplierRateId = (long) reader["ID"],
-                ZoneId = (long) reader["ZoneID"],
+                RateTypeId = GetReaderValue<int?>(reader, "RateTypeID"),
+                SupplierRateId = (long)reader["ID"],
+                ZoneId = (long)reader["ZoneID"],
                 PriceListId = GetReaderValue<int>(reader, "PriceListID"),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),

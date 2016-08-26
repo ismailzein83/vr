@@ -15,13 +15,13 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ImportedZone != null);
+            return (target as ImportedDataByZone != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            
-            ImportedZone zone = context.Target as ImportedZone;
+
+            ImportedDataByZone zone = context.Target as ImportedDataByZone;
 
             foreach (var importedCode in zone.ImportedCodes)
             {
@@ -34,7 +34,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has one or more same code",(target as ImportedZone).ZoneName);
+            return string.Format("Zone {0} has one or more same code", (target as ImportedDataByZone).ZoneName);
         }
 
     }

@@ -17,6 +17,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public Dictionary<int, decimal> OtherRates { get; set; }
 
+        public int? RateTypeId { get; set; }
+
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }

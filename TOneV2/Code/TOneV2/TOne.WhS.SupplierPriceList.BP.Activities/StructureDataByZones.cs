@@ -17,45 +17,45 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<IEnumerable<ImportedRate>> ImportedRates { get; set; }
 
         [RequiredArgument]
-        public OutArgument<IEnumerable<ImportedZone>> ImportedZones { get; set; }
+        public OutArgument<IEnumerable<ImportedDataByZone>> ImportedDataByZone { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<ImportedCode> importedCodesList = this.ImportedCodes.Get(context);
             IEnumerable<ImportedRate> importedRatesList = this.ImportedRates.Get(context);
 
-            Dictionary<string, ImportedZone> importedZonesByZoneName = new Dictionary<string, ImportedZone>(StringComparer.InvariantCultureIgnoreCase);
-            ImportedZone importedZone;
+            Dictionary<string, ImportedDataByZone> importedDataByZoneName = new Dictionary<string, ImportedDataByZone>(StringComparer.InvariantCultureIgnoreCase);
+            ImportedDataByZone importedDataByZone;
 
             foreach (ImportedCode code in importedCodesList)
             {
-              
-                if(!importedZonesByZoneName.TryGetValue(code.ZoneName, out importedZone))
+
+                if (!importedDataByZoneName.TryGetValue(code.ZoneName, out importedDataByZone))
                 {
-                    importedZone = new ImportedZone();
-                    importedZone.ZoneName = code.ZoneName;
-                    importedZonesByZoneName.Add(code.ZoneName, importedZone);
+                    importedDataByZone = new ImportedDataByZone();
+                    importedDataByZone.ZoneName = code.ZoneName;
+                    importedDataByZoneName.Add(code.ZoneName, importedDataByZone);
                 }
 
-                importedZone.ImportedCodes.Add(code);
+                importedDataByZone.ImportedCodes.Add(code);
             }
 
             foreach (ImportedRate rate in importedRatesList)
             {
-                if (!importedZonesByZoneName.TryGetValue(rate.ZoneName, out importedZone))
+                if (!importedDataByZoneName.TryGetValue(rate.ZoneName, out importedDataByZone))
                 {
                     //This case will happen if a zone only exists in imported rates list
                     //adding it to the dictionary is for validation purpose (business rule)
-                    if (importedZone == null)
-                        importedZone = new ImportedZone();
+                    if (importedDataByZone == null)
+                        importedDataByZone = new ImportedDataByZone();
 
-                    importedZonesByZoneName.Add(rate.ZoneName, importedZone);
+                    importedDataByZoneName.Add(rate.ZoneName, importedDataByZone);
                 }
 
-                importedZone.ImportedRates.Add(rate);
+                importedDataByZone.ImportedRates.Add(rate);
             }
 
-            this.ImportedZones.Set(context, importedZonesByZoneName.Values);
+            this.ImportedDataByZone.Set(context, importedDataByZoneName.Values);
         }
     }
 }

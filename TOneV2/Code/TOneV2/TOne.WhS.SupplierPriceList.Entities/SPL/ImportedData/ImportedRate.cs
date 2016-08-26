@@ -20,10 +20,14 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public Decimal NormalRate { get; set; }
 
+        public ExistingRate SystemRate { get; set; }
+
         public Dictionary<int, Decimal> OtherRates { get; set; }
 
         public int? CurrencyId { get; set; }
 
+        public int? RateTypeId { get; set; } 
+         
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }

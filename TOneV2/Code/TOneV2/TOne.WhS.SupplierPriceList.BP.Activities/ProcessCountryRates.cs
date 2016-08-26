@@ -12,13 +12,17 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
     public class ProcessCountryRatesInput
     {
-        public IEnumerable<ImportedRate> ImportedRates { get; set; }
+        public IEnumerable<ImportedZone> ImportedZones { get; set; }
 
-        public IEnumerable<ExistingRate> ExistingRates { get; set; }
+        public Dictionary<string, ExistingRateGroup> ExistingRatesGroupsByZoneName { get; set; }
 
         public Dictionary<long, ExistingZone> ExistingZonesByZoneId { get; set; }
 
         public ZonesByName NewAndExistingZones { get; set; }
+
+        public DateTime PriceListDate { get; set; }
+
+        public IEnumerable<int> ImportedRateTypeIds { get; set; }
 
     }
 
@@ -33,16 +37,22 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
     public sealed class ProcessCountryRates : BaseAsyncActivity<ProcessCountryRatesInput, ProcessCountryRatesOutput>
     {
         [RequiredArgument]
-        public InArgument<IEnumerable<ImportedRate>> ImportedRates { get; set; }
+        public InArgument<IEnumerable<ImportedZone>> ImportedZones { get; set; }
 
         [RequiredArgument]
-        public InArgument<IEnumerable<ExistingRate>> ExistingRates { get; set; }
+        public InArgument<Dictionary<string, ExistingRateGroup>> ExistingRatesGroupsByZoneName { get; set; }
 
         [RequiredArgument]
         public InArgument<Dictionary<long, ExistingZone>> ExistingZonesByZoneId { get; set; }
 
         [RequiredArgument]
         public InArgument<ZonesByName> NewAndExistingZones { get; set; }
+
+        [RequiredArgument]
+        public InArgument<DateTime> PriceListDate { get; set; }
+
+        [RequiredArgument]
+        public InArgument<IEnumerable<int>> ImportedRateTypeIds { get; set; }
 
         [RequiredArgument]
         public OutArgument<IEnumerable<NewRate>> NewRates { get; set; }
@@ -60,14 +70,15 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             ProcessCountryRatesContext processCountryRateContext = new ProcessCountryRatesContext()
             {
-                ImportedRates = inputArgument.ImportedRates,
-                ExistingRates = inputArgument.ExistingRates,
+                ImportedZones = inputArgument.ImportedZones,
+                ExistingRatesGroupsByZoneName = inputArgument.ExistingRatesGroupsByZoneName,
                 ExistingZones = existingZones,
-                NewAndExistingZones = inputArgument.NewAndExistingZones
+                NewAndExistingZones = inputArgument.NewAndExistingZones,
+                PriceListDate = inputArgument.PriceListDate
             };
 
             PriceListRateManager manager = new PriceListRateManager();
-            manager.ProcessCountryRates(processCountryRateContext);
+            manager.ProcessCountryRates(processCountryRateContext, inputArgument.ImportedRateTypeIds);
 
             return new ProcessCountryRatesOutput()
             {
@@ -80,10 +91,12 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         {
             return new ProcessCountryRatesInput()
             {
-                ExistingRates = this.ExistingRates.Get(context),
+                ExistingRatesGroupsByZoneName = this.ExistingRatesGroupsByZoneName.Get(context),
                 ExistingZonesByZoneId = this.ExistingZonesByZoneId.Get(context),
-                ImportedRates = this.ImportedRates.Get(context),
-                NewAndExistingZones = this.NewAndExistingZones.Get(context)
+                ImportedZones = this.ImportedZones.Get(context),
+                NewAndExistingZones = this.NewAndExistingZones.Get(context),
+                ImportedRateTypeIds = this.ImportedRateTypeIds.Get(context),
+                PriceListDate = this.PriceListDate.Get(context)
             };
         }
 

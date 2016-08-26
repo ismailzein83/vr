@@ -1,19 +1,36 @@
-﻿using System.Activities;
-using TOne.WhS.SupplierPriceList.Entities.SPL;
-using System.Linq;
+﻿using System;
 using System.Collections.Generic;
-using System;
-using TOne.WhS.SupplierPriceList.Entities;
-using Vanrise.Entities;
-using TOne.WhS.BusinessEntity.Business;
+using System.Linq;
+using System.Text;
+using System.Activities;
 using Vanrise.Common;
+using Vanrise.BusinessProcess;
+using TOne.WhS.SupplierPriceList.BP.Activities;
+using TOne.WhS.SupplierPriceList.Entities.SPL;
+using TOne.WhS.SupplierPriceList.Entities;
+using TOne.WhS.BusinessEntity.Business;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
 
-    public sealed class PrepareZonesForValidation : CodeActivity
+    public class ProcessCountryZonesInput
     {
+        public IEnumerable<ExistingZone> ExistingZones { get; set; }
 
+        public ZonesByName NewAndExistingZones { get; set; }
+
+        public IEnumerable<ImportedZone> ImportedZones { get; set; }
+
+        public Dictionary<string, List<ExistingZone>> ClosedExistingZones { get; set; }
+
+    }
+    public class ProcessCountryZonesOutput
+    {
+        public IEnumerable<NotImportedZone> NotImportedZones { get; set; }
+    }
+
+    public sealed class ProcessCountryZones : BaseAsyncActivity<ProcessCountryZonesInput, ProcessCountryZonesOutput>
+    {
         [RequiredArgument]
         public InArgument<IEnumerable<ExistingZone>> ExistingZones { get; set; }
 
@@ -23,26 +40,45 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public InArgument<IEnumerable<ImportedZone>> ImportedZones { get; set; }
 
+
         [RequiredArgument]
         public OutArgument<IEnumerable<NotImportedZone>> NotImportedZones { get; set; }
 
-        protected override void Execute(CodeActivityContext context)
+        protected override ProcessCountryZonesOutput DoWorkWithResult(ProcessCountryZonesInput inputArgument, AsyncActivityHandle handle)
         {
-            IEnumerable<ImportedZone> importedZones = ImportedZones.Get(context);
-            ZonesByName newAndExistingZones = NewAndExistingZones.Get(context);
-            IEnumerable<ExistingZone> existingZones = ExistingZones.Get(context);
 
-            HashSet<string> importedZoneNamesHashSet = new HashSet<string>(importedZones.Select(item => item.ZoneName), StringComparer.InvariantCultureIgnoreCase);
+            HashSet<string> importedZoneNamesHashSet = new HashSet<string>(inputArgument.ImportedZones.Select(item => item.ZoneName), StringComparer.InvariantCultureIgnoreCase);
 
-            UpdateImportedZonesInfo(importedZones, newAndExistingZones, existingZones, importedZoneNamesHashSet);
+            UpdateImportedZonesInfo(inputArgument.ImportedZones, inputArgument.NewAndExistingZones, inputArgument.ExistingZones, importedZoneNamesHashSet);
 
-            IEnumerable<NotImportedZone> notImportedZones = PrepareNotImportedZones(existingZones, importedZoneNamesHashSet);
-            NotImportedZones.Set(context, notImportedZones);
+            IEnumerable<NotImportedZone> notImportedZones = PrepareNotImportedZones(inputArgument.ExistingZones, importedZoneNamesHashSet);
+
+            return new ProcessCountryZonesOutput()
+            {
+                NotImportedZones = notImportedZones
+            };
         }
 
+        protected override ProcessCountryZonesInput GetInputArgument(AsyncCodeActivityContext context)
+        {
+            return new ProcessCountryZonesInput()
+            {
+                ExistingZones = this.ExistingZones.Get(context),
+                NewAndExistingZones = this.NewAndExistingZones.Get(context),
+                ImportedZones = this.ImportedZones.Get(context)
+            };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, ProcessCountryZonesOutput result)
+        {
+            this.NotImportedZones.Set(context, result.NotImportedZones);
+        }
+
+        #region Private Methods
 
         private void UpdateImportedZonesInfo(IEnumerable<ImportedZone> importedZones, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones, HashSet<string> importedZoneNamesHashSet)
         {
+           
             foreach (ImportedZone importedZone in importedZones)
             {
                 List<IZone> matchedZones;
@@ -97,7 +133,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             notImportedZone.CountryId = firstElementInTheList.CountryId;
             notImportedZone.BED = firstElementInTheList.BED;
             notImportedZone.EED = lastElementInTheList.EED;
-            notImportedZone.NormalSystemRate = existingRates.LastOrDefault();
+            notImportedZone.NormalSystemRate = existingRates.FindAllRecords(item => !item.RateEntity.RateTypeId.HasValue).LastOrDefault();
             notImportedZone.HasChanged = linkedExistingZones.Any(x => x.ChangedZone != null);
 
             return notImportedZone;
@@ -146,5 +182,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             return ZoneChangeType.NotChanged;
         }
+
+        #endregion
     }
 }

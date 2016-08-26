@@ -42,6 +42,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         public IEnumerable<ChangedCode> ChangedCodes { get; set; }
 
+        public IEnumerable<NotImportedCode> NotImportedCodes { get; set; }
+
     }
 
     #endregion
@@ -89,6 +91,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         [RequiredArgument]
         public OutArgument<IEnumerable<ChangedCode>> ChangedCodes { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<IEnumerable<NotImportedCode>> NotImportedCodes { get; set; }
         
         #endregion
 
@@ -129,7 +134,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 ChangedZones = processCountryCodesContext.ChangedZones,
                 NewAndExistingZones = processCountryCodesContext.NewAndExistingZones,
                 NewCodes = processCountryCodesContext.NewCodes,
-                NewZones = processCountryCodesContext.NewZones
+                NewZones = processCountryCodesContext.NewZones,
+                NotImportedCodes = processCountryCodesContext.NotImportedCodes
             };
         }
 
@@ -154,6 +160,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             this.ChangedZones.Set(context, result.ChangedZones);
             this.NewCodes.Set(context, result.NewCodes);
             this.ChangedCodes.Set(context, result.ChangedCodes);
+            this.NotImportedCodes.Set(context, result.NotImportedCodes);
         }
     }
 }

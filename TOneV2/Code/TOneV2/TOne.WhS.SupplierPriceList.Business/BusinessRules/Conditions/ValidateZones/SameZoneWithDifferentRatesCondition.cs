@@ -15,23 +15,24 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ImportedZone != null);
+            return (target as ImportedDataByZone != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ImportedZone zone = context.Target as ImportedZone;
+            ImportedDataByZone zone = context.Target as ImportedDataByZone;
 
             var distinctImportedRates = from importedRate in zone.ImportedRates
-                                    group importedRate by importedRate.NormalRate into newRates
-                                    select newRates;
+                                        where !importedRate.RateTypeId.HasValue
+                                        group importedRate by importedRate.NormalRate into newRates
+                                        select newRates;
 
             return !(distinctImportedRates.Count() > 1);
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has different rates", (target as ImportedZone).ZoneName);
+            return string.Format("Zone {0} has different rates", (target as ImportedDataByZone).ZoneName);
         }
 
     }

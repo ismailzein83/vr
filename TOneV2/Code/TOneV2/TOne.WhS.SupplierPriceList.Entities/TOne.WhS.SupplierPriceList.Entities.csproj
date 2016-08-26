@@ -82,6 +82,7 @@
     <Compile Include="SPL\ExistingRate.cs" />
     <Compile Include="SPL\ExistingRateGroup.cs" />
     <Compile Include="SPL\ImportedData\ImportedDataByZone.cs" />
+    <Compile Include="SPL\NotImportedRate.cs" />
     <Compile Include="SPL\NotImportedCode.cs" />
     <Compile Include="SPL\NotImportedZone.cs" />
     <Compile Include="SPL\ImportedData\ImportedCode.cs" />

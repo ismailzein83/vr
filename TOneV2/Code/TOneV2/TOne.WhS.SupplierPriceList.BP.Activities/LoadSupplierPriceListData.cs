@@ -29,6 +29,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         [RequiredArgument]
         public OutArgument<IEnumerable<ImportedRate>> ImportedRates { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<IEnumerable<int>> ImportedRateTypeIds { get; set; }
        
         [RequiredArgument]
         public OutArgument<DateTime> MinimumDate { get; set; }
@@ -95,6 +98,30 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 });
             }
 
+            foreach (KeyValuePair<int,List<PriceListRate>> item in convertedPriceList.PriceListOtherRates)
+            {
+                foreach (PriceListRate priceListRate in item.Value)
+                {
+                    if (IsEffectiveDateLessThanMinDate(minimumDate, priceListRate.EffectiveDate))
+                        minimumDate = priceListRate.EffectiveDate.Value;
+
+                    if (priceListRate.Rate == null)
+                        continue;
+
+                    string zoneNameValue = priceListRate.ZoneName != null ? priceListRate.ZoneName.Trim() : null;
+
+                    importedRatesList.Add(new ImportedRate()
+                    {
+                        ZoneName = zoneNameValue,
+                        NormalRate = priceListRate.Rate.Value,
+                        CurrencyId = currencyId,
+                        RateTypeId = item.Key,
+                        BED = (priceListRate.EffectiveDate != null) ? priceListRate.EffectiveDate.Value : DateTime.MinValue,
+                        EED = null,
+                    });
+                }
+            }
+
             #region Imported Rates Validation
 
             //TODO: this logic needs to be removed when handling rates validation is done in business rules. 
@@ -135,6 +162,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             ImportedCodes.Set(context, importedCodesList);
             ImportedRates.Set(context, validatedListofImportedRates);
+            ImportedRateTypeIds.Set(context, convertedPriceList.PriceListOtherRates.Keys);
             MinimumDate.Set(context, minimumDate);
 
             TimeSpan spent = DateTime.Now.Subtract(startReading);

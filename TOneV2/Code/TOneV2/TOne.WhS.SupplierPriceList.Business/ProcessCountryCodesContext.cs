@@ -34,5 +34,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         public IEnumerable<NewZone> NewZones { get; set; }
 
         public IEnumerable<ChangedZone> ChangedZones { get; set; }
+
+        public IEnumerable<NotImportedCode> NotImportedCodes { get; set; }
     }
 }

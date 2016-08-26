@@ -16,6 +16,8 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public Dictionary<int, Decimal> OtherRates { get; set; }
 
+        public int? RateTypeId { get; set; }
+
         public int? CurrencyId { get; set; }
 
         public DateTime BED { get; set; }

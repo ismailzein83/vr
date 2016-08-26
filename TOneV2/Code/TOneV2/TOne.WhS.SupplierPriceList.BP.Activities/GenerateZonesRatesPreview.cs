@@ -39,7 +39,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             {
                 foreach (ImportedZone importedZone in importedZones)
                 {
-                    ImportedRate importedRateFirst = importedZone.ImportedRates.First();
+                    ImportedRate importedRate = importedZone.NormalRate;
                     zonesRatesPreview.Add(new ZoneRatePreview
                     {
                         CountryId = GetCountryId(importedZone),
@@ -49,8 +49,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         ZoneBED = importedZone.BED,
                         ZoneEED = importedZone.EED,
                         SystemRate = GetSystemRate(importedZone),
-                        ImportedRate = decimal.Round(importedRateFirst.NormalRate, 8),
-                        ImportedRateBED = importedRateFirst.BED,
+                        ImportedRate = decimal.Round(importedRate.NormalRate, 8),
+                        ImportedRateBED = importedRate.BED,
                         SystemRateBED = GetSystemRateBED(importedZone),
                         SystemRateEED = GetSystemRateEED(importedZone),
                         ChangeTypeRate = GetRateChangeType(importedZone)
@@ -77,11 +77,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         ChangeTypeRate = notImportedZone.HasChanged ? RateChangeType.Deleted : RateChangeType.NotChanged
                     };
 
-                    if (notImportedZone.ExistingRate != null)
+                    if (notImportedZone.NormalSystemRate != null)
                     {
-                        zoneRatePreview.SystemRate = notImportedZone.ExistingRate.RateEntity.NormalRate;
-                        zoneRatePreview.SystemRateBED = notImportedZone.ExistingRate.BED;
-                        zoneRatePreview.SystemRateEED = notImportedZone.ExistingRate.EED;
+                        zoneRatePreview.SystemRate = notImportedZone.NormalSystemRate.RateEntity.NormalRate;
+                        zoneRatePreview.SystemRateBED = notImportedZone.NormalSystemRate.BED;
+                        zoneRatePreview.SystemRateEED = notImportedZone.NormalSystemRate.EED;
                     }
 
                     zonesRatesPreview.Add(zoneRatePreview);
@@ -145,7 +145,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         private ImportedRate GetImportedRate(ImportedZone importedZone)
         {
             //TODO: change this logic when on import multiple and different rates are allowed
-            return importedZone.ImportedRates.First();
+            return importedZone.NormalRate;
         }
     }
 }

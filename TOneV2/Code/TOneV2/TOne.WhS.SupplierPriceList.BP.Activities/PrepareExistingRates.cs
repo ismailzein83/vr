@@ -6,6 +6,7 @@ using System.Activities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using TOne.WhS.BusinessEntity.Business;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -20,7 +21,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<Dictionary<long, ExistingZone>> ExistingZonesByZoneId { get; set; }
 
         [RequiredArgument]
-        public OutArgument<IEnumerable<ExistingRate>> ExistingRates { get; set; }
+        public OutArgument<Dictionary<string, ExistingRateGroup>> ExistingRatesGroupsByZoneName { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
@@ -28,9 +29,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             Dictionary<long, ExistingZone> existingZonesByZoneId = this.ExistingZonesByZoneId.Get(context);
 
             IEnumerable<ExistingRate> existingRates = existingRateEntities.Where(x => existingZonesByZoneId.ContainsKey(x.ZoneId)).MapRecords(
-                (rateEntity) => ExistingRateMapper(rateEntity, existingZonesByZoneId));
+              (rateEntity) => ExistingRateMapper(rateEntity, existingZonesByZoneId));
 
-            ExistingRates.Set(context, existingRates);
+            Dictionary<string, ExistingRateGroup> existingRatesGroupsByZoneName = StructureExistingRatesByRatesGroups(existingRates);
+
+            ExistingRatesGroupsByZoneName.Set(context, existingRatesGroupsByZoneName);
         }
 
         ExistingRate ExistingRateMapper(SupplierRate rateEntity, Dictionary<long, ExistingZone> existingZonesByZoneId)
@@ -49,5 +52,53 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             existingRate.ParentZone.ExistingRates.Add(existingRate);
             return existingRate;
         }
+        Dictionary<string, ExistingRateGroup> StructureExistingRatesByRatesGroups(IEnumerable<ExistingRate> existingRates)
+        {
+            Dictionary<string, ExistingRateGroup> existingRatesGroupsByZoneName = new Dictionary<string, ExistingRateGroup>();
+            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
+
+            List<ExistingRate> existingOtherRates;
+            ExistingRateGroup existingRateGroup;
+
+            foreach (ExistingRate existingRate in existingRates)
+            {
+                string zoneName = supplierZoneManager.GetSupplierZoneName(existingRate.RateEntity.ZoneId);
+               
+                if (!existingRatesGroupsByZoneName.TryGetValue(zoneName, out existingRateGroup))
+                {
+                    existingRateGroup = new ExistingRateGroup();
+                    existingRateGroup.ZoneName = zoneName;
+
+                    if (existingRate.RateEntity.RateTypeId.HasValue)
+                    {
+                        existingOtherRates = new List<ExistingRate>();
+                        existingOtherRates.Add(existingRate);
+                        existingRateGroup.OtherRates.Add(existingRate.RateEntity.RateTypeId.Value, existingOtherRates);
+                    }
+                    else
+                        existingRateGroup.NormalRates.Add(existingRate);
+
+                    existingRatesGroupsByZoneName.Add(zoneName, existingRateGroup);
+                }
+                else
+                {
+                    if (existingRate.RateEntity.RateTypeId.HasValue)
+                    {
+                        if (existingRateGroup.OtherRates.TryGetValue(existingRate.RateEntity.RateTypeId.Value, out existingOtherRates))
+                            existingOtherRates.Add(existingRate);
+                        else
+                        {
+                            existingOtherRates = new List<ExistingRate>();
+                            existingOtherRates.Add(existingRate);
+                            existingRateGroup.OtherRates.Add(existingRate.RateEntity.RateTypeId.Value, existingOtherRates);
+                        }
+                    }
+                    else
+                        existingRateGroup.NormalRates.Add(existingRate);
+                }
+            }
+            return existingRatesGroupsByZoneName;
+        }
+       
     }
 }
