@@ -282,6 +282,7 @@
     <Content Include="Images\iconheader.ico" />
     <Content Include="Images\login.png" />
     <Content Include="Images\logoonheader.png" />
+    <Content Include="Images\menu-icons\admin.png" />
     <Content Include="Images\menu-icons\Administration.png" />
     <Content Include="Images\menu-icons\Purchase Area.png" />
     <Content Include="Scripts\bootstrap.js" />
