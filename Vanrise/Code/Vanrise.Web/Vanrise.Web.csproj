@@ -168,6 +168,10 @@
     <Content Include="Client\Images\02.png" />
     <Content Include="Client\Images\doruknet-logo.png" />
     <Content Include="Client\Images\false.png" />
+    <Content Include="Client\Images\menu-icons\admin.png" />
+    <Content Include="Client\Images\menu-icons\Administration.png" />
+    <Content Include="Client\Images\menu-icons\busines intel.png" />
+    <Content Include="Client\Images\menu-icons\Business Entities.png" />
     <Content Include="Client\Images\no_image.jpg" />
     <Content Include="Client\Images\loader-mask.gif" />
     <Content Include="Client\Images\log in.png" />
