@@ -28,6 +28,12 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'UpdateMailMessageTemplate'), vrMailMessageTemplateItem);
         }
 
+        function GetMailMessageTemplatesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetMailMessageTemplatesInfo"), {
+                filter: filter
+            });
+        }
+
         function HasAddMailMessageTemplatePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['AddMailMessageTemplate']));
         }
@@ -42,7 +48,8 @@
             AddMailMessageTemplate: AddMailMessageTemplate,
             UpdateMailMessageTemplate: UpdateMailMessageTemplate,
             HasAddMailMessageTemplatePermission: HasAddMailMessageTemplatePermission,
-            HasEditMailMessageTemplatePermission: HasEditMailMessageTemplatePermission
+            HasEditMailMessageTemplatePermission: HasEditMailMessageTemplatePermission,
+            GetMailMessageTemplatesInfo: GetMailMessageTemplatesInfo
         });
     }
 

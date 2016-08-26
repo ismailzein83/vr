@@ -71,6 +71,19 @@ namespace Vanrise.Common.Business
 
             return updateOperationOutput;
         }
+
+        public IEnumerable<VRMailMessageTemplateInfo> GetMailMessageTemplatesInfo(VRMailMessageTemplateFilter filter)
+        {
+            Func<VRMailMessageTemplate, bool> filterExpression = (item) =>
+            {
+                if (filter.VRMailMessageTypeId != item.VRMailMessageTypeId)
+                    return false;
+
+                return true;
+            };
+
+            return this.GetCachedVRMailMessageTemplates().MapRecords(VRMailMessageTemplateInfoMapper, filterExpression).OrderBy(x => x.Name);
+        }
         #endregion
 
         #region Private Classes
@@ -116,6 +129,16 @@ namespace Vanrise.Common.Business
                 VRMailMessageTypeName =  vrMailMessageTypeName
             };
             return vrMailMessageTemplateDetail;
+        }
+
+        public VRMailMessageTemplateInfo VRMailMessageTemplateInfoMapper(VRMailMessageTemplate vrMailMessageTemplate)
+        {
+            VRMailMessageTemplateInfo vrMailMessageTemplateInfo = new VRMailMessageTemplateInfo()
+            {
+                VRMailMessageTemplateId = vrMailMessageTemplate.VRMailMessageTemplateId,
+                Name = vrMailMessageTemplate.Name
+            };
+            return vrMailMessageTemplateInfo;
         }
         #endregion
     }

@@ -68,6 +68,8 @@
     <Compile Include="VRMail\VRMailMessage.cs" />
     <Compile Include="VRMail\VRMailMessageTemplate.cs" />
     <Compile Include="VRMail\VRMailMessageTemplateDetail.cs" />
+    <Compile Include="VRMail\VRMailMessageTemplateFilter.cs" />
+    <Compile Include="VRMail\VRMailMessageTemplateInfo.cs" />
     <Compile Include="VRMail\VRMailMessageTemplateQuery.cs" />
     <Compile Include="VRMail\VRMailMessageType.cs" />
     <Compile Include="StyleDefinition\StyleDefinition.cs" />

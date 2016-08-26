@@ -244,6 +244,7 @@
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-settings.js" />
     <Content Include="Common\Directives\TextManipulation\Templates\TextManiplutaionSettingsDirectiveTemplate.html" />
     <Content Include="Common\Directives\TextManipulation\vr-common-textmanipulationsettings.js" />
+    <Content Include="Common\Directives\VRMail\vr-common-mailmessagetemplate-selector.js" />
     <Content Include="Common\Directives\VRMail\Templates\VRMailMessageTemplateGridTemplate.html" />
     <Content Include="Common\Directives\VRMail\Templates\VRObjectTypePropertyGridTemplate.html" />
     <Content Include="Common\Directives\VRMail\vr-common-mailmessagetemplate-grid.js" />

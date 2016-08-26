@@ -42,5 +42,13 @@ namespace Vanrise.Common.Web.Controllers
         {
             return _manager.UpdateMailMessageTemplate(vrMailMessageTemplateItem);
         }
+
+        [HttpGet]
+        [Route("GetMailMessageTemplatesInfo")]
+        public IEnumerable<VRMailMessageTemplateInfo> GetStyleDefinitionsInfo(string filter = null)
+        {
+            VRMailMessageTemplateFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<VRMailMessageTemplateFilter>(filter) : null;
+            return _manager.GetMailMessageTemplatesInfo(deserializedFilter);
+        }
     }
 }
