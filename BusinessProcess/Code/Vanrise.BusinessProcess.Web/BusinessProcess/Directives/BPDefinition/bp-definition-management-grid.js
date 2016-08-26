@@ -129,7 +129,7 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
 
             $scope.gridMenuActions = function (dataItem) {
                 var startNewInstanceMenu = {
-                    name: "Start New Instance",
+                    name: "Start Instance",
                     clicked: startNewInstance,
                     haspermission: hasStartNewInstancePermission
                 };
