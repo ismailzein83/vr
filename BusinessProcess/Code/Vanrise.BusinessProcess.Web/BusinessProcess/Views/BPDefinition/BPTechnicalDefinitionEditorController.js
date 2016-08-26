@@ -73,7 +73,10 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
             $scope.title = UtilsService.buildTitleForUpdateEditor(businessProcessDefinitionEntity.Title, 'Business Process Editor');
         }
         function loadStaticData() {
+
             $scope.scopeModal.title = businessProcessDefinitionEntity.Title;
+            $scope.scopeModal.MaxConcurrentWorkflows = businessProcessDefinitionEntity.Configuration.MaxConcurrentWorkflows;
+            $scope.scopeModal.NotVisibleInManagementScreen = businessProcessDefinitionEntity.Configuration.NotVisibleInManagementScreen;
         }
 
 
@@ -143,11 +146,14 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
     function buildBPEntityObjFromScope() {
         var obj = businessProcessDefinitionEntity;
         obj.Title = $scope.scopeModal.title;
+        obj.Configuration.MaxConcurrentWorkflows = $scope.scopeModal.MaxConcurrentWorkflows;
+        obj.Configuration.NotVisibleInManagementScreen = $scope.scopeModal.NotVisibleInManagementScreen;
         obj.Configuration.Security = {
             View: viewPermissionAPI.getData(),
             StartNewInstance: startNewInstancePermissionAPI.getData(),
             ScheduleTask: scheduleTaskPermissionAPI.getData()
         }
+        
         return obj;
     }
 
