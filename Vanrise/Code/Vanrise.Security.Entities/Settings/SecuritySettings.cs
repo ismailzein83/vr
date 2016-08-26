@@ -9,6 +9,8 @@ namespace Vanrise.Security.Entities
 {
     public class SecuritySettings : SettingData
     {
+        public const string SETTING_TYPE = "VR_Sec_Settings";
+
         public MailMessageTemplateSettings MailMessageTemplateSettings { get; set; }
     }
 }

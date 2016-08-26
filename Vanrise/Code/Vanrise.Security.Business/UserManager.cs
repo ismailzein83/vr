@@ -165,8 +165,8 @@ namespace Vanrise.Security.Business
 
                     Guid guid = new Guid("D9B56FC2-EB3E-4340-8918-159A281B95BC");
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-                    objects.Add("AliAtoui-ON", userObject);
-                    objects.Add("Password-ON", pwd);
+                    objects.Add("User", userObject);
+                    objects.Add("Password", pwd);
 
                     VRMailManager vrMailManager = new VRMailManager();
                     vrMailManager.SendMail(guid, objects);
@@ -277,8 +277,8 @@ namespace Vanrise.Security.Business
 
                     Guid guid = new Guid("10264FE7-99D5-4F6A-8E8C-44A0702F392E");
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-                    objects.Add("AliAtoui-ON", user);
-                    objects.Add("Password-ON", password);
+                    objects.Add("User", user);
+                    objects.Add("Password", password);
 
                     VRMailManager vrMailManager = new VRMailManager();
                     vrMailManager.SendMail(guid, objects);
@@ -343,8 +343,8 @@ namespace Vanrise.Security.Business
 
                     Guid guid = new Guid("E21CD125-61F0-4091-A03E-200CFE33F6E3");
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-                    objects.Add("AliAtoui-ON", user);
-                    objects.Add("Password-ON", pwd);
+                    objects.Add("User", user);
+                    objects.Add("Password", pwd);
 
                     VRMailManager vrMailManager = new VRMailManager();
                     vrMailManager.SendMail(guid, objects);
