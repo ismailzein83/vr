@@ -25,9 +25,9 @@
     [SumOfPGAD]                   DECIMAL (25)    NULL,
     [UtilizationInSeconds]        DECIMAL (25, 4) NULL,
     [PricedCalls]                 INT             NULL,
-    [SaleNet]                     DECIMAL (20, 8) NULL,
+    [SaleNet]                     DECIMAL (20, 4) NULL,
     [SaleDurationInSeconds]       DECIMAL (20, 4) NULL,
-    [CostNet]                     DECIMAL (20, 8) NULL,
+    [CostNet]                     DECIMAL (20, 4) NULL,
     [CostDurationInSeconds]       DECIMAL (20, 4) NULL,
     [SaleCurrencyId]              INT             NULL,
     [CostCurrencyId]              INT             NULL,
@@ -35,6 +35,8 @@
     [PortOUT]                     VARCHAR (42)    NULL,
     [CustomerProfileId]           INT             NULL,
     [SupplierProfileId]           INT             NULL);
+
+
 
 
 

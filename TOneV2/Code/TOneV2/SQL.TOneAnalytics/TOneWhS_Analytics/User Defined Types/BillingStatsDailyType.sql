@@ -14,18 +14,20 @@
     [LastCallTime]             DATETIME        NULL,
     [MinimumDurationInSeconds] DECIMAL (20, 4) NULL,
     [MaximumDurationInSeconds] DECIMAL (20, 4) NULL,
-    [CostNet]                  DECIMAL (20, 8) NULL,
-    [SaleNet]                  DECIMAL (20, 8) NULL,
+    [CostNet]                  DECIMAL (20, 4) NULL,
+    [SaleNet]                  DECIMAL (20, 4) NULL,
     [SaleDurationInSeconds]    DECIMAL (20, 4) NULL,
     [CostDurationInSeconds]    DECIMAL (20, 4) NULL,
     [SaleRateId]               BIGINT          NULL,
     [CostRateId]               BIGINT          NULL,
     [DurationInSeconds]        DECIMAL (20, 4) NULL,
     [CountryId]                INT             NULL,
-    [CostExtraCharges]         DECIMAL (20, 8) NULL,
-    [SaleExtraCharges]         DECIMAL (20, 8) NULL,
+    [CostExtraCharges]         DECIMAL (20, 4) NULL,
+    [SaleExtraCharges]         DECIMAL (20, 4) NULL,
     [SaleRateTypeId]           INT             NULL,
     [CostRateTypeId]           INT             NULL,
-    [SaleRateValue]            DECIMAL (20, 4) NULL,
-    [CostRateValue]            DECIMAL (20, 4) NULL);
+    [SaleRateValue]            DECIMAL (20, 8) NULL,
+    [CostRateValue]            DECIMAL (20, 8) NULL);
+
+
 

@@ -21,9 +21,9 @@
     [SumOfPGAD]                   DECIMAL (25)    NULL,
     [UtilizationInSeconds]        DECIMAL (25, 4) NULL,
     [PricedCalls]                 INT             NULL,
-    [SaleNet]                     DECIMAL (20, 8) NULL,
+    [SaleNet]                     DECIMAL (20, 4) NULL,
     [SaleDurationInSeconds]       DECIMAL (20, 4) NULL,
-    [CostNet]                     DECIMAL (20, 8) NULL,
+    [CostNet]                     DECIMAL (20, 4) NULL,
     [CostDurationInSeconds]       DECIMAL (20, 4) NULL,
     [SaleCurrencyId]              INT             NULL,
     [CostCurrencyId]              INT             NULL,
@@ -37,6 +37,8 @@
     [SupplierProfileId]           INT             NULL,
     CONSTRAINT [IX_TrafficStats15Min_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 

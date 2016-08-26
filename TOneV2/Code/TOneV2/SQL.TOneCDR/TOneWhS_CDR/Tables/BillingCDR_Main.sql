@@ -1,4 +1,4 @@
-CREATE TABLE [TOneWhS_CDR].[BillingCDR_Main] (
+﻿CREATE TABLE [TOneWhS_CDR].[BillingCDR_Main] (
     [ID]                          BIGINT          IDENTITY (1, 1) NOT NULL,
     [AttemptDateTime]             DATETIME        NOT NULL,
     [AlertDateTime]               DATETIME        NULL,
@@ -19,15 +19,15 @@ CREATE TABLE [TOneWhS_CDR].[BillingCDR_Main] (
     [SIP]                         VARCHAR (100)   NULL,
     [IsRerouted]                  BIT             NULL,
     [SaleRateID]                  BIGINT          NULL,
-    [SaleRateValue]               DECIMAL (20, 4) NULL,
+    [SaleRateValue]               DECIMAL (20, 8) NULL,
     [SaleRateTypeID]              INT             NULL,
-    [SaleNet]                     DECIMAL (20, 8) NULL,
+    [SaleNet]                     DECIMAL (20, 4) NULL,
     [SaleCurrencyId]              INT             NULL,
     [SaleDurationInSeconds]       DECIMAL (20, 4) NULL,
     [CostRateID]                  BIGINT          NULL,
-    [CostRateValue]               DECIMAL (20, 4) NULL,
+    [CostRateValue]               DECIMAL (20, 8) NULL,
     [CostRateTypeID]              INT             NULL,
-    [CostNet]                     DECIMAL (20, 8) NULL,
+    [CostNet]                     DECIMAL (20, 4) NULL,
     [CostCurrencyID]              INT             NULL,
     [CostDurationInSeconds]       DECIMAL (20, 4) NULL,
     [SupplierZoneID]              BIGINT          NULL,
@@ -46,9 +46,11 @@ CREATE TABLE [TOneWhS_CDR].[BillingCDR_Main] (
     [SaleTariffRuleId]            INT             NULL,
     [CostExtraChargeRuleId]       INT             NULL,
     [SaleExtraChargeRuleId]       INT             NULL,
-    [CostExtraChargeValue]        DECIMAL (20, 8) NULL,
-    [SaleExtraChargeValue]        DECIMAL (20, 8) NULL
+    [CostExtraChargeValue]        DECIMAL (20, 4) NULL,
+    [SaleExtraChargeValue]        DECIMAL (20, 4) NULL
 );
+
+
 
 
 

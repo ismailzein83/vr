@@ -24,15 +24,15 @@
     [SIP]                         VARCHAR (100)   NULL,
     [IsRerouted]                  BIT             NULL,
     [SaleRateID]                  BIGINT          NULL,
-    [SaleRateValue]               DECIMAL (20, 4) NULL,
+    [SaleRateValue]               DECIMAL (20, 8) NULL,
     [SaleRateTypeID]              INT             NULL,
-    [SaleNet]                     DECIMAL (20, 8) NULL,
+    [SaleNet]                     DECIMAL (20, 4) NULL,
     [SaleCurrencyId]              INT             NULL,
     [SaleDurationInSeconds]       DECIMAL (20, 4) NULL,
     [CostRateID]                  BIGINT          NULL,
-    [CostRateValue]               DECIMAL (20, 4) NULL,
+    [CostRateValue]               DECIMAL (20, 8) NULL,
     [CostRateTypeID]              INT             NULL,
-    [CostNet]                     DECIMAL (20, 8) NULL,
+    [CostNet]                     DECIMAL (20, 4) NULL,
     [CostCurrencyID]              INT             NULL,
     [CostDurationInSeconds]       DECIMAL (20, 4) NULL,
     [ReleaseCode]                 VARCHAR (50)    NULL,
@@ -45,8 +45,10 @@
     [SaleTariffRuleId]            INT             NULL,
     [CostExtraChargeRuleId]       INT             NULL,
     [SaleExtraChargeRuleId]       INT             NULL,
-    [CostExtraChargeValue]        DECIMAL (20, 8) NULL,
-    [SaleExtraChargeValue]        DECIMAL (20, 8) NULL);
+    [CostExtraChargeValue]        DECIMAL (20, 4) NULL,
+    [SaleExtraChargeValue]        DECIMAL (20, 4) NULL);
+
+
 
 
 
