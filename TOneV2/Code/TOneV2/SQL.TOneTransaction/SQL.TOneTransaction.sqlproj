@@ -180,7 +180,6 @@
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetBeforeID.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetPendingsByDefinitionId.sql" />
     <Build Include="bp\Stored Procedures\sp_BPEvent_GetByInstanceIDs.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPEvent_GetByDefinitionID.sql" />
     <Build Include="runtime\Tables\ScheduleTaskState_1.sql" />
     <Build Include="runtime\Functions\ParseStringList_1.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_Update_1.sql" />
@@ -232,12 +231,8 @@
     <Build Include="Security\reprocess.sql" />
     <Build Include="reprocess\Stored Procedures\sp_StagingSummaryRecord_GetStageRecordInfo.sql" />
     <Build Include="reprocess\Stored Procedures\sp_StagingSummaryRecord_GetRecords.sql" />
-    <Build Include="runtime\Tables\ServiceInstance.sql" />
     <Build Include="runtime\Tables\RuntimeManager.sql" />
     <Build Include="VRNotification\Tables\VRAlertRuleExecution.sql" />
-    <Build Include="runtime\Stored Procedures\sp_ServiceInstance_Insert.sql" />
-    <Build Include="runtime\Stored Procedures\sp_ServiceInstance_GetByType.sql" />
-    <Build Include="runtime\Stored Procedures\sp_ServiceInstance_Delete.sql" />
     <Build Include="runtime\Stored Procedures\sp_RuntimeManager_TryUpdateHeartBeat.sql" />
     <Build Include="runtime\Stored Procedures\sp_RuntimeManager_GetServiceURL.sql" />
     <Build Include="runtime\Stored Procedures\sp_RunningProcess_IsExists.sql" />
@@ -246,6 +241,17 @@
     <Build Include="bp\Stored Procedures\sp_BPInstance_UpdateServiceInstanceID.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetPendingsInfo.sql" />
     <Build Include="Security\VRNotification.sql" />
+    <Build Include="common\Tables\DataGroupingAnalysisInfo.sql" />
+    <Build Include="common\Stored Procedures\sp_DataGroupingAnalysisInfo_TryAssignServiceInstanceIdAndGet.sql" />
+    <Build Include="common\Stored Procedures\sp_DataGroupingAnalysisInfo_GetDistributorServiceInstanceId.sql" />
+    <Build Include="common\Stored Procedures\sp_DataGroupingAnalysisInfo_GetCountByDistributorServiceInstance.sql" />
+    <Build Include="common\Stored Procedures\sp_DataGroupingAnalysisInfo_GetAnalysisNamesByPrefix.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPEvent_GetDistinctProcessInstanceIds.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPEvent_DeleteByProcessInstanceId.sql" />
+    <Build Include="runtime\Tables\RuntimeServiceInstance.sql" />
+    <Build Include="runtime\Stored Procedures\sp_RuntimeServiceInstance_Insert.sql" />
+    <Build Include="runtime\Stored Procedures\sp_RuntimeServiceInstance_GetAll.sql" />
+    <Build Include="runtime\Stored Procedures\sp_RuntimeServiceInstance_Delete.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
