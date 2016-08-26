@@ -349,6 +349,7 @@
     <Content Include="images\login.png" />
     <Content Include="images\logoonheader.png" />
     <Content Include="images\menu-icons\account manager.png" />
+    <Content Include="images\menu-icons\admin.png" />
     <Content Include="images\menu-icons\Administration.png" />
     <Content Include="images\menu-icons\billing.png" />
     <Content Include="images\menu-icons\busines intel.png" />
