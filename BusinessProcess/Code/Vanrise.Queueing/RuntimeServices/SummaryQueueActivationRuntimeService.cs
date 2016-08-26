@@ -11,10 +11,10 @@ namespace Vanrise.Queueing
 {
     public class SummaryQueueActivationRuntimeService : RuntimeService
     {
-        protected override void OnStarted()
+        protected override void OnStarted(IRuntimeServiceStartContext context)
         {
             RegisterActivator();
-            base.OnStarted();
+            base.OnStarted(context);
         }
 
         Guid _activatorId;

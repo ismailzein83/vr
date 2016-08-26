@@ -40,7 +40,6 @@ namespace Vanrise.BusinessProcess
         }
         
         BPDefinitionManager _definitionManager = new BPDefinitionManager();
-        IBPInstanceDataManager _instanceDataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
 
         Dictionary<int, BPDefinitionInitiator> _processDefinitionInitiators;
 
@@ -51,7 +50,6 @@ namespace Vanrise.BusinessProcess
         
         public void ExecutePendings(int bpDefinitionId, Guid serviceInstanceId)
         {
-            //GC.Collect();
             LoadProcessDefinitionInitiators();
             BPDefinitionInitiator bpDefinitionInitiator;
             if (!this._processDefinitionInitiators.TryGetValue(bpDefinitionId, out bpDefinitionInitiator))
@@ -59,41 +57,13 @@ namespace Vanrise.BusinessProcess
             bpDefinitionInitiator.RunPendingProcesses(serviceInstanceId);
         }
 
-        bool _isTriggerPendingEventsRunning;
-
-        internal void TriggerPendingEventsIfIdleAsync()
-        {
-            lock (this)
-            {
-                if (_isTriggerPendingEventsRunning)
-                    return;
-                _isTriggerPendingEventsRunning = true;
-            }
-            Task task = new Task(() =>
-            {
-                try
-                {
-                    TriggerPendingEvents();
-                }
-                finally
-                {
-                    lock (this)
-                    {
-                        _isTriggerPendingEventsRunning = false;
-                    }
-                }
-            });
-            task.Start();
-        }
-        
-        public void TriggerPendingEvents()
+        public void TriggerPendingEvents(int bpDefinitionId, Guid serviceInstanceId)
         {
             LoadProcessDefinitionInitiators();
-            //GC.Collect();
-            foreach(var processInitiator in this._processDefinitionInitiators.Values)
-            {
-                processInitiator.TriggerPendingEvents();
-            }
+            BPDefinitionInitiator bpDefinitionInitiator;
+            if (!this._processDefinitionInitiators.TryGetValue(bpDefinitionId, out bpDefinitionInitiator))
+                throw new NullReferenceException(String.Format("bpDefinitionInitiator. bpDefinitionId '{0}'", bpDefinitionId));
+            bpDefinitionInitiator.TriggerPendingEvents(serviceInstanceId);
         }
 
         #endregion

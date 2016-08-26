@@ -20,35 +20,40 @@ namespace Vanrise.BusinessProcess
 
         BPDefinitionManager _bpDefinitionManager = new BPDefinitionManager();
         IBPInstanceDataManager _bpInstanceDataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
-        ServiceInstanceManager _serviceInstanceManager = new ServiceInstanceManager();
+        IBPEventDataManager _bpEventDataManager = BPDataManagerFactory.GetDataManager<IBPEventDataManager>();
+        RuntimeServiceInstanceManager _serviceInstanceManager = new RuntimeServiceInstanceManager();
 
         protected override void Execute()
         {
             TransactionLocker.Instance.TryLock("BPRegulatorRuntimeService_Execute", () =>
             {
                 var bpServiceInstances = GetRunningServiceInstances();
-                AssignPendingInstancesToServices(bpServiceInstances);
+                List<BPPendingInstanceInfo> runningInstances;
+                AssignPendingInstancesToServices(bpServiceInstances, out runningInstances);
+                if(runningInstances != null && runningInstances.Count > 0)
+                {
+                    CheckAndNotifyPendingBPEvents(bpServiceInstances, runningInstances);
+                }
             });
         }
 
-        private List<Runtime.Entities.ServiceInstance> GetRunningServiceInstances()
+        private List<Runtime.Entities.RuntimeServiceInstance> GetRunningServiceInstances()
         {            
-            _serviceInstanceManager.DeleteNonRunningServices(BusinessProcessService.s_bpServiceInstanceType);
-            return _serviceInstanceManager.GetServices(BusinessProcessService.s_bpServiceInstanceType);
+            return _serviceInstanceManager.GetServices(BusinessProcessService.SERVICE_TYPE_UNIQUE_NAME);
         }
 
         static List<BPInstanceStatus> s_pendingStatuses = new List<BPInstanceStatus> { BPInstanceStatus.New, BPInstanceStatus.Running };
 
-        private void AssignPendingInstancesToServices(List<ServiceInstance> bpServiceInstances)
+        private void AssignPendingInstancesToServices(List<RuntimeServiceInstance> bpServiceInstances, out List<BPPendingInstanceInfo> runningInstances)
         {
             var pendingInstancesInfo = _bpInstanceDataManager.GetPendingInstancesInfo(s_pendingStatuses);
             if (pendingInstancesInfo != null && pendingInstancesInfo.Count > 0)
             {
                 var bpDefinitionsList = _bpDefinitionManager.GetBPDefinitions().ToList();
                 Dictionary<int, BPDefinition> bpDefinitions = bpDefinitionsList.ToDictionary(bpDefinition => bpDefinition.BPDefinitionID, bpDefinition => bpDefinition);
-                Dictionary<Guid, ServiceInstanceInfo> serviceInstancesInfo
+                Dictionary<Guid, ServiceInstanceBPDefinitionInfo> serviceInstancesInfo
                     = bpServiceInstances.ToDictionary(serviceInstance => serviceInstance.ServiceInstanceId,
-                    serviceInstance => new ServiceInstanceInfo
+                    serviceInstance => new ServiceInstanceBPDefinitionInfo
                     {
                         ServiceInstance = serviceInstance,
                         ItemsCountByBPDefinition = BuildItemsCountByBPDefinition(bpDefinitionsList)
@@ -58,7 +63,7 @@ namespace Vanrise.BusinessProcess
                 {
                     if (pendingInstanceInfo.ServiceInstanceId.HasValue)
                     {
-                        ServiceInstanceInfo serviceInstanceInfo;
+                        ServiceInstanceBPDefinitionInfo serviceInstanceInfo;
                         if (serviceInstancesInfo.TryGetValue(pendingInstanceInfo.ServiceInstanceId.Value, out serviceInstanceInfo))
                         {
                             serviceInstanceInfo.TotalItemsCount++;
@@ -69,18 +74,18 @@ namespace Vanrise.BusinessProcess
                             SuspendPendingInstance(pendingInstanceInfo, pendingInstancesInfo, terminatedPendingInstances, true);
                         }
                     }
-                    else if(pendingInstanceInfo.ParentProcessInstanceId.HasValue)
+                    else if (pendingInstanceInfo.ParentProcessInstanceId.HasValue)
                     {
                         long parentProcessInstanceId = pendingInstanceInfo.ParentProcessInstanceId.Value;
-                        if(!pendingInstancesInfo.Any(pendingInstance => pendingInstance.ProcessInstanceId == parentProcessInstanceId) 
+                        if (!pendingInstancesInfo.Any(pendingInstance => pendingInstance.ProcessInstanceId == parentProcessInstanceId)
                             || terminatedPendingInstances.Any(pendingInstance => pendingInstance.ProcessInstanceId == parentProcessInstanceId))
                         {
                             SuspendPendingInstance(pendingInstanceInfo, pendingInstancesInfo, terminatedPendingInstances, false, "Parent Process is not running anymore");
                         }
                     }
                 }
-                
-                List<ServiceInstanceInfo> servicesToAssign = serviceInstancesInfo.Values.Where(itm => itm.TotalItemsCount < s_maxWorkflowsPerServiceInstance).ToList();
+
+                List<ServiceInstanceBPDefinitionInfo> servicesToAssign = serviceInstancesInfo.Values.Where(itm => itm.TotalItemsCount < s_maxWorkflowsPerServiceInstance).ToList();
                 List<BPPendingInstanceInfo> pendingInstancesToUpdate = new List<BPPendingInstanceInfo>();
 
                 foreach (var pendingInstanceInfo in pendingInstancesInfo.Where(itm => !itm.ServiceInstanceId.HasValue && !terminatedPendingInstances.Contains(itm)).OrderBy(itm => itm.ProcessInstanceId))
@@ -113,16 +118,19 @@ namespace Vanrise.BusinessProcess
                     _bpInstanceDataManager.SetServiceInstancesOfBPInstances(pendingInstancesToUpdate);
 
                 NotifyServiceInstances(serviceInstancesInfo);
+                runningInstances = pendingInstancesInfo.Where(itm => !terminatedPendingInstances.Contains(itm) && itm.Status == BPInstanceStatus.Running).ToList();
             }
+            else
+                runningInstances = null;
         }
 
-        private void NotifyServiceInstances(Dictionary<Guid, ServiceInstanceInfo> serviceInstancesInfo)
+        private void NotifyServiceInstances(Dictionary<Guid, ServiceInstanceBPDefinitionInfo> serviceInstancesInfo)
         {
             var interRuntimeServiceManager = new InterRuntimeServiceManager();
 
             Parallel.ForEach(serviceInstancesInfo.Values.Where(itm => itm.TotalItemsCount > 0), (serviceInstanceInfo) =>
             {
-                InterBPServiceRequest request = new InterBPServiceRequest
+                InterBPServicePendingInstancesRequest request = new InterBPServicePendingInstancesRequest
                 {
                     ServiceInstanceId = serviceInstanceInfo.ServiceInstance.ServiceInstanceId,
                     PendingBPDefinitionIds = serviceInstanceInfo.ItemsCountByBPDefinition.Values.Where(bpDefinitionInfo => bpDefinitionInfo.ItemsCount > 0).Select(bpDefinitionInfo => bpDefinitionInfo.BPDefinition.BPDefinitionID).ToList()
@@ -155,6 +163,53 @@ namespace Vanrise.BusinessProcess
             }
         }
 
+        private void CheckAndNotifyPendingBPEvents(List<RuntimeServiceInstance> bpServiceInstances, List<BPPendingInstanceInfo> runningInstances)
+        {            
+            List<long> processInstanceIdsHavingEvents = _bpEventDataManager.GetEventsDistinctProcessInstanceIds();
+            if(processInstanceIdsHavingEvents != null && processInstanceIdsHavingEvents.Count > 0)
+            {
+                Dictionary<Guid, HashSet<int>> bpDefinitionsIdsHavingEventsByServiceInstanceIds = new Dictionary<Guid, HashSet<int>>();
+                foreach(var processInstanceId in processInstanceIdsHavingEvents)
+                {
+                    var matchRunningInstance = runningInstances.FirstOrDefault(itm => itm.ProcessInstanceId == processInstanceId);
+                    if (matchRunningInstance != null)
+                    {
+                        if (matchRunningInstance.ServiceInstanceId.HasValue)
+                        {
+                            bpDefinitionsIdsHavingEventsByServiceInstanceIds.GetOrCreateItem(matchRunningInstance.ServiceInstanceId.Value).Add(matchRunningInstance.BPDefinitionId);
+                        }
+                    }
+                    else
+                        _bpEventDataManager.DeleteProcessInstanceEvents(processInstanceId);
+                }
+
+                if(bpDefinitionsIdsHavingEventsByServiceInstanceIds.Count > 0)
+                {
+                    var interRuntimeServiceManager = new InterRuntimeServiceManager();
+
+                    Parallel.ForEach(bpDefinitionsIdsHavingEventsByServiceInstanceIds, (serviceInstanceInfo) =>
+                    {
+                        InterBPServicePendingEventsRequest request = new InterBPServicePendingEventsRequest
+                        {
+                            ServiceInstanceId = serviceInstanceInfo.Key,
+                            PendingEventsBPDefinitionIds = serviceInstanceInfo.Value.ToList()
+                        };
+                        try
+                        {
+                            var serviceInstance = bpServiceInstances.FirstOrDefault(itm => itm.ServiceInstanceId == serviceInstanceInfo.Key);
+                            if (serviceInstance == null)
+                                throw new NullReferenceException(String.Format("serviceInstance '{0}'", serviceInstanceInfo.Key));
+                            interRuntimeServiceManager.SendRequest(serviceInstance.ProcessId, request);
+                        }
+                        catch (Exception ex)
+                        {
+                            LoggerFactory.GetExceptionLogger().WriteException(ex);
+                        }
+                    });
+                }
+            }
+        }
+
         private BPDefinition FindBPDefinition(Dictionary<int, BPDefinition> bpDefinitions, int bpDefinitionId)
         {
             BPDefinition definition;
@@ -174,9 +229,9 @@ namespace Vanrise.BusinessProcess
 
         #region Private Classes
 
-        private class ServiceInstanceInfo
+        private class ServiceInstanceBPDefinitionInfo
         {
-            public ServiceInstance ServiceInstance { get; set; }
+            public RuntimeServiceInstance ServiceInstance { get; set; }
 
             public int TotalItemsCount { get; set; }
 

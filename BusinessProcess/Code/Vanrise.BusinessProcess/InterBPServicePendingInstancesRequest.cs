@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.BusinessProcess
 {
-    public class InterBPServiceRequest : Vanrise.Runtime.Entities.InterRuntimeServiceRequest<Object>
+    public class InterBPServicePendingInstancesRequest : Vanrise.Runtime.Entities.InterRuntimeServiceRequest<Object>
     {
         public Guid ServiceInstanceId { get; set; }
 

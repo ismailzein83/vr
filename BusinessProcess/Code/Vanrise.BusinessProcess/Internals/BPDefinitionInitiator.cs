@@ -96,33 +96,51 @@ namespace Vanrise.BusinessProcess
             }
         }
 
-        internal void TriggerPendingEvents()
-        {            
-            if (this._definition.Configuration.IsPersistable)
+        bool _isTriggerPendingEventsRunning;
+        internal void TriggerPendingEvents(Guid serviceInstanceId)
+        {
+            if (_isTriggerPendingEventsRunning)
+                return;
+            Task task = new Task(() =>
             {
-                IEnumerable<BPEvent> events = s_eventDataManager.GetDefinitionEvents(this._definitionId);
-                if(events != null)
+                lock(this)
                 {
-                    throw new NotImplementedException();
+                    if (_isTriggerPendingEventsRunning)
+                        return;
+                    _isTriggerPendingEventsRunning = true;
                 }
-            }
-            else
-            {
-                List<long> idledInstancesIds = _runningInstances.Where(itm => itm.Value.IsIdle).Select(itm => itm.Key).ToList();
-                if(idledInstancesIds.Count > 0)
+                try
                 {
-                    IEnumerable<BPEvent> events = s_eventDataManager.GetInstancesEvents(this._definitionId, idledInstancesIds);
-                    if(events != null)
+                    if (this._definition.Configuration.IsPersistable)
                     {
-                        foreach(var evnt in events)
+                        throw new NotImplementedException();
+                    }
+                    else
+                    {
+                        if (_runningInstances.Count > 0)
                         {
-                            TriggerWFEvent(evnt.ProcessInstanceID, evnt.Bookmark, evnt.Payload);
-                            s_eventDataManager.DeleteEvent(evnt.BPEventID);
+                            IEnumerable<BPEvent> events = s_eventDataManager.GetInstancesEvents(_runningInstances.Select(itm => itm.Key).ToList());
+                            if (events != null)
+                            {
+                                foreach (var evnt in events)
+                                {
+                                    TriggerWFEvent(evnt.ProcessInstanceID, evnt.Bookmark, evnt.Payload);
+                                    s_eventDataManager.DeleteEvent(evnt.BPEventID);
+                                }
+                            }
                         }
                     }
                 }
-                
-            }
+                finally
+                {
+                    lock (this)
+                    {
+                        _isTriggerPendingEventsRunning = false;
+                    }
+                }
+            });
+
+            task.Start();
         }
 
         #endregion

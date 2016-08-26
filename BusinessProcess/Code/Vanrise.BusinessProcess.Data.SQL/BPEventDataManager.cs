@@ -18,17 +18,12 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         }
 
-        public IEnumerable<Entities.BPEvent> GetDefinitionEvents(int definitionId)
-        {
-            return GetItemsSP("[bp].[sp_BPEvent_GetByDefinitionID]", BPEventMapper, definitionId);
-        }
-
-        public IEnumerable<Entities.BPEvent> GetInstancesEvents(int definitionId, List<long> instancesIds)
+        public IEnumerable<Entities.BPEvent> GetInstancesEvents(List<long> instancesIds)
         {
             string instanceIdsString = null;
             if (instancesIds != null)
                 instanceIdsString = String.Join(",", instancesIds);
-            return GetItemsSP("[bp].[sp_BPEvent_GetByInstanceIDs]", BPEventMapper, definitionId, instanceIdsString);
+            return GetItemsSP("[bp].[sp_BPEvent_GetByInstanceIDs]", BPEventMapper, instanceIdsString);
         }
 
         public void DeleteEvent(long eventId)
@@ -41,6 +36,17 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return ExecuteNonQuerySP("bp.sp_BPEvent_Insert", processInstanceId, bookmarkName, eventData != null ? Serializer.Serialize(eventData) : null);
         }
 
+
+        public List<long> GetEventsDistinctProcessInstanceIds()
+        {
+            return GetItemsSP("[bp].[sp_BPEvent_GetDistinctProcessInstanceIds]", reader => (long)reader["ProcessInstanceID"]);
+        }
+
+        public void DeleteProcessInstanceEvents(long processInstanceId)
+        {
+            ExecuteNonQuerySP("[bp].[sp_BPEvent_DeleteByProcessInstanceId]", processInstanceId);
+        }
+
         #region Private Methods
 
         BPEvent BPEventMapper(IDataReader reader)
@@ -49,7 +55,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
             {
                 BPEventID = (long)reader["ID"],
                 ProcessInstanceID = (long)reader["ProcessInstanceID"],
-                ProcessDefinitionID = (int)reader["DefinitionID"],
                 Bookmark = reader["Bookmark"] as string
             };
             string payload = reader["Payload"] as string;

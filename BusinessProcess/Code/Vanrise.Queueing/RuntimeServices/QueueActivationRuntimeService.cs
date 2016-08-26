@@ -17,11 +17,11 @@ namespace Vanrise.Queueing
         static Object s_hostServiceLockObject = new object();
         static string s_serviceURL;
 
-        protected override void OnStarted()
+        protected override void OnStarted(IRuntimeServiceStartContext context)
         {
             HostServiceIfNeeded();
             RegisterActivator();
-            base.OnStarted();
+            base.OnStarted(context);
         }
 
         Guid _activatorId;

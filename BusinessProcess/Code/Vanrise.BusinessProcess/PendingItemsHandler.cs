@@ -56,5 +56,35 @@ namespace Vanrise.BusinessProcess
             }
             return qPendingBPDefinitionIds.TryDequeue(out bpDefinitionId);
         }
+
+        Dictionary<Guid, ConcurrentQueue<int>> _qDefinitionsHavingPendingEvents = new Dictionary<Guid, ConcurrentQueue<int>>();
+        internal void SetPendingEventsDefinitionsToProcess(Guid serviceInstanceId, List<int> bpDefinitionIds)
+        {
+            ConcurrentQueue<int> qPendingBPDefinitionIds;
+            List<int> existingPendingDefinitionIds;
+            lock (_qDefinitionsHavingPendingEvents)
+            {
+                qPendingBPDefinitionIds = _qDefinitionsHavingPendingEvents.GetOrCreateItem(serviceInstanceId);
+                existingPendingDefinitionIds = qPendingBPDefinitionIds.ToList();
+            }
+
+            foreach (var definitionId in bpDefinitionIds)
+            {
+                if (!existingPendingDefinitionIds.Contains(definitionId))
+                    qPendingBPDefinitionIds.Enqueue(definitionId);
+            }
+        }
+
+
+        internal bool TryGetPendingEventDefinitionsToProcess(Guid serviceInstanceId, out int bpDefinitionId)
+        {
+            ConcurrentQueue<int> qPendingBPDefinitionIds = null;
+            lock (_qDefinitionsHavingPendingEvents)
+            {
+                qPendingBPDefinitionIds = _qDefinitionsHavingPendingEvents.GetOrCreateItem(serviceInstanceId);
+            }
+            return qPendingBPDefinitionIds.TryDequeue(out bpDefinitionId);
+        }
+
     }
 }

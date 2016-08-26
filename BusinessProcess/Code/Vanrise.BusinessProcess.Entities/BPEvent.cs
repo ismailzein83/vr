@@ -9,7 +9,6 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public long BPEventID { get; set; }
         public long ProcessInstanceID { get; set; }
-        public int ProcessDefinitionID { get; set; }
         public string Bookmark { get; set; }
         public object Payload { get; set; }
     }

@@ -10,27 +10,32 @@ namespace Vanrise.BusinessProcess
 {
     public class BusinessProcessService : RuntimeService
     {
-        internal static Guid s_bpServiceInstanceType = new Guid("658F4B0D-B701-4EBF-A07A-5CE51B3F9DDF");
-        protected override void OnStarted()
+        internal const string SERVICE_TYPE_UNIQUE_NAME = "VR_BusinessProcess_BusinessProcessService";
+
+        public override string ServiceTypeUniqueName
         {
-            RegisterServiceInstance();
-            base.OnStarted();
+            get
+            {
+                return SERVICE_TYPE_UNIQUE_NAME;
+            }
         }
 
-        ServiceInstance _serviceInstance;
-        private void RegisterServiceInstance()
+        protected override void OnStarted(IRuntimeServiceStartContext context)
         {
-            _serviceInstance = new ServiceInstanceManager().RegisterServiceInstance(s_bpServiceInstanceType, new Runtime.Entities.ServiceInstanceInfo());
+            base.OnStarted(context);
         }
 
         protected override void Execute()
         {
             int definitionId;
-            while(PendingItemsHandler.Current.TryGetPendingDefinitionsToProcess(_serviceInstance.ServiceInstanceId, out definitionId))
+            while(PendingItemsHandler.Current.TryGetPendingDefinitionsToProcess(base.ServiceInstance.ServiceInstanceId, out definitionId))
             {
-                BusinessProcessRuntime.Current.ExecutePendings(definitionId, _serviceInstance.ServiceInstanceId);
+                BusinessProcessRuntime.Current.ExecutePendings(definitionId, base.ServiceInstance.ServiceInstanceId);
             }
-            BusinessProcessRuntime.Current.TriggerPendingEventsIfIdleAsync();
+            while (PendingItemsHandler.Current.TryGetPendingEventDefinitionsToProcess(base.ServiceInstance.ServiceInstanceId, out definitionId))
+            {
+                BusinessProcessRuntime.Current.TriggerPendingEvents(definitionId, base.ServiceInstance.ServiceInstanceId);
+            }
         }
     }
 }

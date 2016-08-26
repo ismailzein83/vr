@@ -8,12 +8,14 @@ namespace Vanrise.BusinessProcess.Data
 {
     public interface IBPEventDataManager : IDataManager
     {
-        IEnumerable<Entities.BPEvent> GetDefinitionEvents(int definitionId);
-
-        IEnumerable<Entities.BPEvent> GetInstancesEvents(int definitionId, List<long> instancesIds);
+        IEnumerable<Entities.BPEvent> GetInstancesEvents(List<long> instancesIds);
 
         void DeleteEvent(long eventId);
 
         int InsertEvent(long processInstanceId, string bookmarkName, Object eventData);
+
+        List<long> GetEventsDistinctProcessInstanceIds();
+
+        void DeleteProcessInstanceEvents(long processInstanceId);
     }
 }
