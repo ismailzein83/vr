@@ -11,13 +11,17 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetFilteredZoneServiceConfigs"), input);
         }
 
-        function GetAllZoneServiceConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetAllZoneServiceConfigs"));
+        function GetAllZoneServiceConfigs(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetAllZoneServiceConfigs"),
+                {
+                    serializedFilter: serializedFilter
+                }
+            );
         }
 
-        function GetZoneServiceConfig(serviceFlag) {
+        function GetZoneServiceConfig(zoneServiceConfigId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetZoneServiceConfig"), {
-                serviceFlag: serviceFlag
+                zoneServiceConfigId: zoneServiceConfigId
             });
         }
 

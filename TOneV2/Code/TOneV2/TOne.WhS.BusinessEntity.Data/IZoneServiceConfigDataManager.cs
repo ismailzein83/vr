@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.Data
 
         bool Update(ZoneServiceConfig zoneServiceFlag);
 
-        bool Insert(ZoneServiceConfig zoneServiceFlag);
+        bool Insert(Entities.ZoneServiceConfig zoneServiceFlag, out int insertedId);
 
         bool AreZoneServiceConfigsUpdated(ref object updateHandle);
 

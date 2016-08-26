@@ -243,6 +243,9 @@
     <Compile Include="Switch\SwitchDetail.cs" />
     <Compile Include="Switch\SwitchInfo.cs" />
     <Compile Include="Switch\SwitchQuery.cs" />
+    <Compile Include="ZoneServiceConfig\ZoneServiceConfigFilter.cs" />
+    <Compile Include="ZoneServiceConfig\ZoneServiceConfigInfo.cs" />
+    <Compile Include="ZoneServiceConfig\ZoneServiceConfigDetail.cs" />
     <Compile Include="ZoneServiceConfig\ZoneServiceConfig.cs" />
     <Compile Include="ZoneServiceConfig\ZoneServiceConfigQuery.cs" />
   </ItemGroup>

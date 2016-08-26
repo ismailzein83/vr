@@ -53,11 +53,6 @@ function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIServic
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_ZoneServiceConfigAPIService.GetFilteredZoneServiceConfigs(dataRetrievalInput)
                     .then(function (response) {
-                        if (response && response.Data) {
-                            for (var i = 0; i < response.Data.length; i++) {
-                                setDataItemExtension(response.Data[i]);
-                            }
-                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -67,26 +62,13 @@ function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIServic
             defineMenuActions();
         }
 
-        function setDataItemExtension(dataItem) {
-
-            var extensionObject = {};
-            var query = {
-                ZoneServiceConfigsIds: [dataItem.ServiceFlag],
-            }
-            extensionObject.onGridReady = function (api) {
-                extensionObject.onGridReady = undefined;
-            };
-            dataItem.extensionObject = extensionObject;
-
-        }
-
+       
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
                 clicked: editZoneServiceConfig,
                 haspermission: hasUpdateZoneServiceConfigPermission
-            }
-            ];
+            }];
         }
 
         function hasUpdateZoneServiceConfigPermission() {
@@ -95,11 +77,9 @@ function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIServic
 
         function editZoneServiceConfig(zoneServiceConfigObj) {
             var onZoneServiceConfigUpdated = function (zoneServiceConfigObj) {
-                setDataItemExtension(zoneServiceConfigObj);
                 gridAPI.itemUpdated(zoneServiceConfigObj);
             }
-
-            WhS_BE_ZoneServiceConfigService.editZoneServiceConfig(zoneServiceConfigObj, onZoneServiceConfigUpdated);
+            WhS_BE_ZoneServiceConfigService.editZoneServiceConfig(zoneServiceConfigObj.Entity.ZoneServiceConfigId, onZoneServiceConfigUpdated);
         }
 
     }

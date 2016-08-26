@@ -24,14 +24,21 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("[TOneWhS_BE].[sp_ZoneServiceConfig_GetAll]", ZoneServiceConfigMapper);
         }
-        public bool Insert(Entities.ZoneServiceConfig zoneServiceFlag)
+        public bool Insert(Entities.ZoneServiceConfig zoneServiceFlag ,  out int insertedId)
         {
-            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_ZoneServiceConfig_Insert]", zoneServiceFlag.ServiceFlag, zoneServiceFlag.Name, zoneServiceFlag.Settings);
+            object zoneServiceConfigId;
+
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_ZoneServiceConfig_Insert]",
+                out zoneServiceConfigId,
+                zoneServiceFlag.Symbol, 
+                Vanrise.Common.Serializer.Serialize(zoneServiceFlag.Settings)
+             );
+            insertedId = (int)zoneServiceConfigId;
             return (recordsEffected > 0);
         }
         public bool Update(Entities.ZoneServiceConfig zoneServiceFlag)
         {
-            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_ZoneServiceConfig_Update]", zoneServiceFlag.ServiceFlag, zoneServiceFlag.Name, zoneServiceFlag.Settings);
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_ZoneServiceConfig_Update]", zoneServiceFlag.ZoneServiceConfigId, zoneServiceFlag.Symbol,   Vanrise.Common.Serializer.Serialize(zoneServiceFlag.Settings));
             return (recordsEffected > 0);
         }
         public bool AreZoneServiceConfigsUpdated(ref object updateHandle)
@@ -48,9 +55,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             ZoneServiceConfig zoneServiceConfig = new ZoneServiceConfig();
 
-            zoneServiceConfig.ServiceFlag = (Int16)reader["ServiceFlag"];
-            zoneServiceConfig.Name = reader["Name"] as string;
-            zoneServiceConfig.Settings = reader["Settings"] as string;
+            zoneServiceConfig.ZoneServiceConfigId = (int)reader["ID"];
+            zoneServiceConfig.Symbol = reader["Symbol"] as string;
+            zoneServiceConfig.Settings = Vanrise.Common.Serializer.Deserialize<ServiceConfigSetting>((string)reader["Settings"]);
 
             return zoneServiceConfig;
         }

@@ -1,12 +1,14 @@
 ﻿
 <vr-datagrid datasource="zoneServiceConfigs"
-                on-ready="onGridReady"
-                dataretrievalfunction="dataRetrievalFunction"
-                pagingtype="'PagingOnScroll'"
-                menuactions="gridMenuActions"
-                idfield="ServiceFlag">
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.ZoneServiceConfigId">
 
-    <vr-datagridcolumn headertext="'Service Flag'" field="'ServiceFlag'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Id'" field="'Entity.ZoneServiceConfigId'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Settings'" field="'Settings'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Color'" field="'Entity.Setting.Color'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Parent Name'" field="'ParentName'" type="'Text'"></vr-datagridcolumn>
+
 </vr-datagrid>

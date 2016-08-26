@@ -25,29 +25,31 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetAllZoneServiceConfigs")]
-        public IEnumerable<ZoneServiceConfig> GetAllZoneServiceConfigs()
+        public IEnumerable<ZoneServiceConfigInfo> GetAllZoneServiceConfigs(string serializedFilter)
         {
+            ZoneServiceConfigFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<ZoneServiceConfigFilter>(serializedFilter) : null;
+;
             ZoneServiceConfigManager manager = new ZoneServiceConfigManager();
-            return manager.GetAllZoneServiceConfigs();
+            return manager.GetAllZoneServiceConfigs(filter);
         }
         [HttpGet]
         [Route("GetZoneServiceConfig")]
-        public ZoneServiceConfig GetZoneServiceConfig(Int16 serviceFlag)
+        public ZoneServiceConfig GetZoneServiceConfig(int zoneServiceConfigId)
         {
             ZoneServiceConfigManager manager = new ZoneServiceConfigManager();
-            return manager.GetZoneServiceConfig(serviceFlag);
+            return manager.GetZoneServiceConfig(zoneServiceConfigId);
         }
 
         [HttpPost]
         [Route("AddZoneServiceConfig")]
-        public TOne.Entities.InsertOperationOutput<ZoneServiceConfig> AddZoneServiceConfig(ZoneServiceConfig zoneServiceConfig)
+        public TOne.Entities.InsertOperationOutput<ZoneServiceConfigDetail> AddZoneServiceConfig(ZoneServiceConfig zoneServiceConfig)
         {
             ZoneServiceConfigManager manager = new ZoneServiceConfigManager();
             return manager.AddZoneServiceConfig(zoneServiceConfig);
         }
         [HttpPost]
         [Route("UpdateZoneServiceConfig")]
-        public TOne.Entities.UpdateOperationOutput<ZoneServiceConfig> UpdateZoneServiceConfig(ZoneServiceConfig zoneServiceConfig)
+        public TOne.Entities.UpdateOperationOutput<ZoneServiceConfigDetail> UpdateZoneServiceConfig(ZoneServiceConfig zoneServiceConfig)
         {
             ZoneServiceConfigManager manager = new ZoneServiceConfigManager();
             return manager.UpdateZoneServiceConfig(zoneServiceConfig);

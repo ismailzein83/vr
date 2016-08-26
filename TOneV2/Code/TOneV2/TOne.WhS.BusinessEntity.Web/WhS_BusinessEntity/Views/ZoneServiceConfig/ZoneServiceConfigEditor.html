@@ -2,13 +2,20 @@
     <vr-modalbody>
         <vr-form name="formZoneServiceConfigEditor">
             <vr-row removeline>
-
                 <vr-columns width="1/2row">
-                    <vr-textbox value="serviceFlag" vr-disabled="inedit" label="Service Flag" isrequired></vr-textbox>
+                    <vr-textbox value="name"  label="Name" isrequired></vr-textbox>
                 </vr-columns>
-
                 <vr-columns width="1/2row">
-                    <vr-textbox value="name" label="Name" isrequired></vr-textbox>
+                    <vr-textbox value="symbol" label="Symbol" isrequired></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="color" label="Color" isrequired></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-whs-be-zone-service-config-selector on-ready="onZoneServiceSelectorReady"></vr-whs-be-zone-service-config-selector>
+                </vr-columns>
+                <vr-columns width="fullrow">
+                    <vr-textarea value="description" label="Description"></vr-textarea>
                 </vr-columns>
             </vr-row>
         </vr-form>

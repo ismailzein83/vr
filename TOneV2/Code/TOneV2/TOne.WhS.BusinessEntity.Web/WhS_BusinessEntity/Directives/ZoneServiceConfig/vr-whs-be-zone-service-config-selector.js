@@ -1,92 +1,80 @@
 ﻿'use strict';
-app.directive('vrWhsBeZoneServiceConfigSelector', ['WhS_BE_ZoneServiceConfigAPIService', 'WhS_BE_ZoneServiceConfigService', 'UtilsService', '$compile', function (WhS_BE_ZoneServiceConfigAPIService, WhS_BE_ZoneServiceConfigService, UtilsService, $compile) {
+app.directive('vrWhsBeZoneServiceConfigSelector', [
+    'WhS_BE_ZoneServiceConfigAPIService', 'WhS_BE_ZoneServiceConfigService', 'UtilsService','VRUIUtilsService',
+    function (WhS_BE_ZoneServiceConfigAPIService, WhS_BE_ZoneServiceConfigService, UtilsService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
         scope: {
-            type: "=",
             onReady: '=',
-            label: "@",
             ismultipleselection: "@",
-            hideselectedvaluessection: '@',
             onselectionchanged: '=',
-            isrequired: '@',
-            isdisabled: "=",
-            selectedvalues: "=",
-            showaddbutton: '@'
+            selectedvalues: '=',
+            isrequired: "=",
+            onselectitem: "=",
+            ondeselectitem: "=",
+            hideremoveicon: '@',
+            normalColNum: '@'
         },
         controller: function ($scope, $element, $attrs) {
+        
             var ctrl = this;
+            ctrl.datasource = [];
 
-            $scope.selectedZoneServiceConfigValues;
+            ctrl.selectedvalues;
             if ($attrs.ismultipleselection != undefined)
-                $scope.selectedZoneServiceConfigValues = [];
+                ctrl.selectedvalues = [];
 
             $scope.addNewZoneServiceConfig = function () {
                 var onZoneServiceConfigAdded = function (zoneServiceConfigObj) {
-                    $scope.datasource.length = 0;
-                    return getAllZoneServiceConfigs($scope, WhS_BE_ZoneServiceConfigAPIService).then(function (response) {
-                        if ($attrs.ismultipleselection == undefined)
-                            $scope.selectedZoneServiceConfigValues = UtilsService.getItemByVal($scope.datasource, zoneServiceConfigObj.ServiceFlag, "ServiceFlag");
-                    }).catch(function (error) {
-                    }).finally(function () {
-
-                    });;
+                    ctrl.datasource.push(zoneServiceConfigObj.Entity);
+                    if ($attrs.ismultipleselection != undefined)
+                        ctrl.selectedvalues.push(zoneServiceConfigObj.Entity);
+                    else
+                        ctrl.selectedvalues = zoneServiceConfigObj.Entity;
                 };
                 WhS_BE_ZoneServiceConfigService.addZoneServiceConfig(onZoneServiceConfigAdded);
             }
-            $scope.datasource = [];
-            var beZoneServiceConfig = new BeZoneServiceConfig(ctrl, $scope, WhS_BE_ZoneServiceConfigAPIService, $attrs);
-            beZoneServiceConfig.initializeController();
-            $scope.onselectionchanged = function () {
-                ctrl.selectedvalues = $scope.selectedZoneServiceConfigValues;
-                if (ctrl.onselectionchanged != undefined) {
-                    var onvaluechangedMethod = $scope.$parent.$eval(ctrl.onselectionchanged);
-                    if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                        onvaluechangedMethod();
-                    }
-                }
+            ctrl.haspermission = function () {
+                return WhS_BE_ZoneServiceConfigAPIService.HasAddZoneServiceConfigPermission();
+            };
+            var ctor = new zoneServiceConfigCtor(ctrl, $scope, $attrs);
+            ctor.initializeController();
 
-            }
 
         },
         controllerAs: 'ctrl',
         bindToController: true,
-        link: function preLink($scope, iElement, iAttrs) {
-            var ctrl = $scope.ctrl;
-            $scope.$watch('ctrl.isdisabled', function () {
-                var template = getBeZoneServiceConfigTemplate(iAttrs, ctrl);
-                iElement.html(template);
-                $compile(iElement.contents())($scope);
-            });
+        compile: function (element, attrs) {
+            return {
+                pre: function ($scope, iElem, iAttrs, ctrl) {
+
+                }
+            }
+        },
+        template: function (element, attrs) {
+            return getBeZoneServiceConfigTemplate(attrs);
+        }
+    };
+    function getBeZoneServiceConfigTemplate(attrs) {
+        var multipleselection = "";
+        var label = "Zone Service";
+        if (attrs.ismultipleselection != undefined) {
+            label = "Zone Services";
+            multipleselection = "ismultipleselection";
         }
 
-    };
-    function getBeZoneServiceConfigTemplate(attrs, ctrl) {
-        var label;
-        var disabled = "";
-        if (ctrl.isdisabled)
-            disabled = "vr-disabled='true'"
-
-        var required = "";
-        if (attrs.isrequired != undefined)
-            required = "isrequired";
-
-        var hideselectedvaluessection = "";
-        if (attrs.hideselectedvaluessection != undefined)
-            hideselectedvaluessection = "hideselectedvaluessection";
         var addCliked = '';
         if (attrs.showaddbutton != undefined)
             addCliked = 'onaddclicked="addNewZoneServiceConfig"';
-        if (attrs.ismultipleselection != undefined)
-            return ' <vr-select ismultipleselection datasource="datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="selectedZoneServiceConfigValues" ' + disabled + ' onselectionchanged="onselectionchanged" datatextfield="Name" datavaluefield="ServiceFlag"'
-                   + 'entityname="ZoneServiceConfig" label="ZoneServiceConfig" ' + addCliked + '></vr-select>';
-        else
-            return '<div vr-loader="isLoadingDirective" style="display:inline-block;width:100%">'
-               + ' <vr-select datasource="datasource" selectedvalues="selectedZoneServiceConfigValues" ' + required + ' ' + hideselectedvaluessection + ' onselectionchanged="onselectionchanged"  ' + disabled + ' datatextfield="Name" datavaluefield="ServiceFlag"'
-               + 'entityname="ZoneServiceConfig" label="ZoneServiceConfig" ' + addCliked + '></vr-select></div>';
+
+        var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
+
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select ' + multipleselection + '  datatextfield="Symbol" datavaluefield="ZoneServiceConfigId" isrequired="ctrl.isrequired"'
+            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Zone Service" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"' + hideremoveicon + '></vr-select></vr-columns>'
     }
-    function BeZoneServiceConfig(ctrl, $scope, WhS_BE_ZoneServiceConfigAPIService, $attrs) {
+
+    function zoneServiceConfigCtor(ctrl, $scope, attrs) {
 
         function initializeController() {
             defineAPI();
@@ -95,63 +83,41 @@ app.directive('vrWhsBeZoneServiceConfigSelector', ['WhS_BE_ZoneServiceConfigAPIS
         function defineAPI() {
             var api = {};
 
+            api.load = function (payload) {
 
-            api.getData = function () {
-                return $scope.selectedZoneServiceConfigValues;
-            }
-            api.getDataId = function () {
-                return $scope.selectedZoneServiceConfigValues.ServiceFlag;
-            }
-            api.getIdsData = function () {
-                return getIdsList($scope.selectedZoneServiceConfigValues, "ServiceFlag");
-            }
-            api.setData = function (selectedIds) {
-                if ($attrs.ismultipleselection != undefined) {
-                    for (var i = 0; i < selectedIds.length; i++) {
-                        var selectedZoneServiceConfigValue = UtilsService.getItemByVal($scope.datasource, selectedIds[i], "ServiceFlag");
-                        if (selectedZoneServiceConfigValue != null)
-                            $scope.selectedZoneServiceConfigValues.push(selectedZoneServiceConfigValue);
-                    }
-                } else {
-                    var selectedZoneServiceConfigValue = UtilsService.getItemByVal($scope.datasource, selectedIds, "ServiceFlag");
-                    if (selectedZoneServiceConfigValue != null)
-                        $scope.selectedZoneServiceConfigValues = selectedZoneServiceConfigValue;
+                var selectedIds;
+                var filter;
+                if (payload != undefined) {
+                    selectedIds = payload.selectedIds;
+                    filter = payload.filter;
                 }
-            }
-            function getIdsList(tab, attname) {
-                var list = [];
-                for (var i = 0; i < tab.length ; i++)
-                    list[list.length] = tab[i][attname];
-                return list;
-
-            }
-            api.load = function () {
-
-                return WhS_BE_ZoneServiceConfigAPIService.GetAllZoneServiceConfigs().then(function (response) {
-                    angular.forEach(response, function (itm) {
-                        $scope.datasource.push(itm);
-                    });
-                }).catch(function (error) {
-                }).finally(function () {
-
-                });;
+                var serializedFilter = {};
+                if (filter != undefined)
+                    serializedFilter = UtilsService.serializetoJson(filter);
+                return getAllZoneServiceConfigs(attrs, ctrl, selectedIds, serializedFilter);
             }
 
+            api.getSelectedIds = function () {
+                return VRUIUtilsService.getIdSelectedIds('ZoneServiceConfigId', attrs, ctrl);
+            }
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
 
         this.initializeController = initializeController;
-
     }
 
-    function getAllZoneServiceConfigs($scope, WhS_BE_ZoneServiceConfigAPIService) {
-        return WhS_BE_ZoneServiceConfigAPIService.GetAllZoneServiceConfigs().then(function (response) {
+    function getAllZoneServiceConfigs(attrs, ctrl, selectedIds, serializedFilter) {
+        return WhS_BE_ZoneServiceConfigAPIService.GetAllZoneServiceConfigs(serializedFilter).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.datasource.push(itm);
             });
+            if (selectedIds != undefined) {
+                VRUIUtilsService.setSelectedValues(selectedIds, 'ZoneServiceConfigId', attrs, ctrl);
+            }
         });
     }
+
     return directiveDefinitionObject;
 }]);
 

@@ -12,8 +12,6 @@
 
         function addZoneServiceConfig(onZoneServiceConfigAdded) {
             var settings = {
-                // useModalTemplate: true
-
             };
 
             settings.onScopeReady = function (modalScope) {
@@ -24,16 +22,14 @@
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/ZoneServiceConfig/ZoneServiceConfigEditor.html', parameters, settings);
         }
 
-        function editZoneServiceConfig(obj, onZoneServiceConfigUpdated) {
+        function editZoneServiceConfig(zoneServiceConfigId, onZoneServiceConfigUpdated) {
             var settings = {
-                //useModalTemplate: true
-
             };
             settings.onScopeReady = function (modalScope) {
                 modalScope.onZoneServiceConfigUpdated = onZoneServiceConfigUpdated;
             };
             var parameters = {
-                ServiceFlag: obj.ServiceFlag
+                zoneServiceConfigId: zoneServiceConfigId
             };
 
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/ZoneServiceConfig/ZoneServiceConfigEditor.html', parameters, settings);

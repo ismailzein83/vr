@@ -8,10 +8,23 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class ZoneServiceConfig
     {
-        public Int16 ServiceFlag { get; set; }
+        public int ZoneServiceConfigId { get; set; }
 
+        public string Symbol { get; set; }
+
+        public ServiceConfigSetting Settings { get; set; }
+    }
+
+    public class ServiceConfigSetting
+    {
         public string Name { get; set; }
 
-        public string Settings { get; set; }
+        public string Color { get; set; }
+
+        public int? ParentId { get; set; }
+
+        public string Description { get; set; }
+
+
     }
 }

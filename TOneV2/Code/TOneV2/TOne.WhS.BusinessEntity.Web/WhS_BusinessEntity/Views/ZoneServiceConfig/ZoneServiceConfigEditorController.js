@@ -2,12 +2,15 @@
 
     "use strict";
 
-    zoneServiceConfigEditorController.$inject = ['$scope', 'WhS_BE_ZoneServiceConfigAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
+    zoneServiceConfigEditorController.$inject = ['$scope', 'WhS_BE_ZoneServiceConfigAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
 
-    function zoneServiceConfigEditorController($scope, WhS_BE_ZoneServiceConfigAPIService, UtilsService, VRNotificationService, VRNavigationService) {
+    function zoneServiceConfigEditorController($scope, WhS_BE_ZoneServiceConfigAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
         var isEditMode;
-        var serviceFlag;
+        var zoneServiceConfigId;
         var zoneServiceConfigEntity;
+
+        var zoneServiceAPI;
+        var zoneServiceSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         loadParameters();
@@ -18,9 +21,9 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {
-                serviceFlag = parameters.ServiceFlag;
+                zoneServiceConfigId = parameters.zoneServiceConfigId;
             }
-            $scope.inedit = isEditMode = (serviceFlag != undefined);
+            isEditMode = (zoneServiceConfigId != undefined);
         }
 
         function defineScope() {
@@ -31,7 +34,10 @@
                 else
                     return WhS_BE_ZoneServiceConfigAPIService.HasAddZoneServiceConfigPermission();
             }
-
+            $scope.onZoneServiceSelectorReady = function (api) {
+                zoneServiceAPI = api;
+                zoneServiceSelectorReadyDeferred.resolve();
+            }
             $scope.saveZoneServiceConfig = function () {
                 if (isEditMode) {
                     return updateZoneServiceConfig();
@@ -64,7 +70,7 @@
         }
         
         function getZoneServiceConfig() {
-            return WhS_BE_ZoneServiceConfigAPIService.GetZoneServiceConfig(serviceFlag).then(function (response) {
+            return WhS_BE_ZoneServiceConfigAPIService.GetZoneServiceConfig(zoneServiceConfigId).then(function (response) {
                 zoneServiceConfigEntity = response;
             });
         }
@@ -84,19 +90,34 @@
         function loadStaticControls() {
             if (zoneServiceConfigEntity) {
                 $scope.name = zoneServiceConfigEntity.Name;
-                $scope.serviceFlag = zoneServiceConfigEntity.ServiceFlag;
             }
         }
 
-        function fillScopeFromZoneServiceConfigObj(zoneServiceConfig) {
-            
-        }
+        function loadServiceZoneConfig() {
+            var serviceZoneConfigLoadDeferred = UtilsService.createPromiseDeferred();
 
+            zoneServiceSelectorReadyDeferred.promise.then(function () {
+                var payload;
+
+                if (zoneServiceConfigEntity != undefined && zoneServiceConfigEntity.Settings != undefined && zoneServiceConfigEntity.Settings.ParentId != null) {
+                    payload = {
+                        selectedIds: ParentId,
+                        filter :{
+                            AssinableToServiceId: zoneServiceConfigId
+                        }
+                    };
+                }
+
+                VRUIUtilsService.callDirectiveLoad(zoneServiceAPI, payload, serviceZoneConfigLoadDeferred);
+            });
+
+            return serviceZoneConfigLoadDeferred.promise;
+        }
         function insertZoneServiceConfig() {
             var zoneServiceConfigObject = buildZoneServiceConfigObjFromScope();
             return WhS_BE_ZoneServiceConfigAPIService.AddZoneServiceConfig(zoneServiceConfigObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Zone Service Config", response, "Name or Service Flag")) {
+                if (VRNotificationService.notifyOnItemAdded("Zone Service Config", response, "Symbol or Color")) {
                     if ($scope.onZoneServiceConfigAdded != undefined)
                         $scope.onZoneServiceConfigAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -123,8 +144,15 @@
 
         function buildZoneServiceConfigObjFromScope() {
             var obj = {
-                ServiceFlag: $scope.serviceFlag,
-                Name: $scope.name
+                ZoneServiceConfigId:zoneServiceConfigEntity!=undefined ? zoneServiceConfigEntity.ZoneServiceConfigId:undefined,
+                Symbol: $scope.symbol,
+                Settings: {
+                    $type: "TOne.WhS.BusinessEntity.Entities.ServiceConfigSetting, TOne.WhS.BusinessEntity.Entities",
+                    Name: $scope.name,
+                    Description: $scope.description,
+                    Color: $scope.color,
+                    ParentId: zoneServiceAPI.getSelectedIds()
+                }
             };
             return obj;
         }
