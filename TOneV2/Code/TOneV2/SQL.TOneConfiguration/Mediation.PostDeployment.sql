@@ -32,6 +32,26 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
 
+--[sec].[BusinessEntity]-------------------5101 to 5400-------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [sec].[BusinessEntity] on;
+;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(5101,'BusinessProcess_BP_Mediation','Mediation',602,0,'["View", "StartInstance", "ScheduleTask"]')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
+merge	[sec].[BusinessEntity] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
+when not matched by target then
+	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
+	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
+set identity_insert [sec].[BusinessEntity] off;
 
 --[bp].[BPDefinition]----------------------4001 to 5000------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -40,7 +60,7 @@ set identity_insert [bp].[BPDefinition] on;
 ;with cte_data([ID],[Name],[Title],[FQTN],[Config])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(4001,'Mediation.Generic.BP.Arguments.MediationProcessInput', 'Mediation Process', 'Mediation.Generic.BP.MediationProcess, Mediation.Generic.BP', '{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"ScheduledExecEditor": "mediation-generic-mediationprocess","ManualExecEditor": "mediation-generic-mediationprocess-manual","RetryOnProcessFailed":false}')
+(4001,'Mediation.Generic.BP.Arguments.MediationProcessInput','Mediation','Mediation.Generic.BP.MediationProcess, Mediation.Generic.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"ManualExecEditor":"mediation-generic-mediationprocess-manual","ScheduledExecEditor":"mediation-generic-mediationprocess","IsPersistable":false,"HasChildProcesses":false,"HasBusinessRules":false,"NotVisibleInManagementScreen":false,"Security":{"$type":"Vanrise.BusinessProcess.Entities.BPDefinitionSecurity, Vanrise.BusinessProcess.Entities","View":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":5101,"PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View"]}}]}},"StartNewInstance":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":5101,"PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["StartInstance"]}}]}},"ScheduleTask":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":5101,"PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["ScheduleTask"]}}]}}}}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[FQTN],[Config]))
 merge	[bp].[BPDefinition] as t
