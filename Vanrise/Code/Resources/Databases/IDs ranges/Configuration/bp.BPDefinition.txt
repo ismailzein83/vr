@@ -4,3 +4,4 @@ CDRAnalysis		1001 to 2000
 CarrierPortal	2001 to 3000
 XBooster		3001 to 4000
 Mediation		4001 to 5000
+Retail			5001 to 6000
