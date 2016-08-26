@@ -117,6 +117,7 @@
   <ItemGroup>
     <Content Include="Security\Constants\EntityTypeEnum.js" />
     <Content Include="Security\Constants\HolderTypeEnum.js" />
+    <Content Include="Security\Constants\MailMessageTemplateSettingsEnum.js" />
     <Content Include="Security\Constants\MenuTypeEnum.js" />
     <Content Include="Security\Constants\ModuleConfig.js" />
     <Content Include="Security\Constants\PermissionFlagEnum.js" />

@@ -16,7 +16,7 @@ app.directive('vrCommonMailmessagetemplateSelector', ['VRCommon_VRMailMessageTem
                 hideremoveicon: '@',
                 normalColNum: '@',
                 customvalidate: '=',
-                customlabel: '='
+                customlabel: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
