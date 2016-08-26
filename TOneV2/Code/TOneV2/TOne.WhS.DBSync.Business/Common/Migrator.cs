@@ -46,14 +46,24 @@ namespace TOne.WhS.DBSync.Business
                 var sourceItems = GetSourceItems();
                 if (sourceItems != null)
                 {
-                    List<Q> itemsToAdd = new List<Q>();
-                    foreach (var sourceItem in sourceItems)
+                    List<Q> itemsToAdd = null;
+                    if(IsBuildAllItemsOnce)
                     {
-                        var item = BuildItemFromSource(sourceItem);
-                        if (item != null)
-                            itemsToAdd.Add(item);
+                        itemsToAdd = BuildAllItemsFromSource(sourceItems);
                     }
-                    AddItems(itemsToAdd);
+                    else
+                    {
+                        itemsToAdd = new List<Q>();
+                        foreach (var sourceItem in sourceItems)
+                        {
+                            var item = BuildItemFromSource(sourceItem);
+                            if (item != null)
+                                itemsToAdd.Add(item);
+                        }
+                    }
+
+                    if (itemsToAdd != null)
+                        AddItems(itemsToAdd);
                 }
             }
 
@@ -84,5 +94,20 @@ namespace TOne.WhS.DBSync.Business
         public abstract IEnumerable<T> GetSourceItems();
 
         public abstract Q BuildItemFromSource(T sourceItem);
+
+        public virtual bool IsBuildAllItemsOnce
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+
+        public virtual List<Q> BuildAllItemsFromSource(IEnumerable<T> sourceItems)
+        {
+            return null;
+        }
+
     }
 }
