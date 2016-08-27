@@ -22,5 +22,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         public IEnumerable<NewRate> NewRates { get; set; }
 
         public IEnumerable<ChangedRate> ChangedRates { get; set; }
+
+        public IEnumerable<NotImportedZone> NotImportedZones { get; set; }
     }
 }

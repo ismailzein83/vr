@@ -14,7 +14,7 @@ namespace TOne.WhS.SupplierPriceList.Business
     {
         public void ProcessCountryRates(IProcessCountryRatesContext context, IEnumerable<int> importedRateTypeIds)
         {
-            ProcessCountryRates(context.ImportedZones, context.ExistingRatesGroupsByZoneName, context.NewAndExistingZones, context.ExistingZones, context.PriceListDate, importedRateTypeIds);
+            ProcessCountryRates(context.ImportedZones, context.ExistingRatesGroupsByZoneName, context.NewAndExistingZones, context.ExistingZones, context.PriceListDate, importedRateTypeIds, context.NotImportedZones);
             context.NewRates = context.ImportedZones.SelectMany(item => item.NormalRate.NewRates).Union(context.ImportedZones.SelectMany(itm => itm.OtherRates.SelectMany(x => x.Value.NewRates)));
             context.ChangedRates = context.ExistingZones.SelectMany(item => item.ExistingRates.Where(itm => itm.ChangedRate != null).Select(x => x.ChangedRate));
         }
@@ -40,7 +40,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         }
 
         private void ProcessCountryRates(IEnumerable<ImportedZone> importedZones, Dictionary<string, ExistingRateGroup> existingRatesGroupsByZoneName, ZonesByName newAndExistingZones,
-            IEnumerable<ExistingZone> existingZones, DateTime pricelistDate, IEnumerable<int> importedRateTypeIds)
+            IEnumerable<ExistingZone> existingZones, DateTime pricelistDate, IEnumerable<int> importedRateTypeIds, IEnumerable<NotImportedZone> notImportedZones)
         {
             ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
             foreach (ImportedZone importedZone in importedZones)
@@ -59,8 +59,41 @@ namespace TOne.WhS.SupplierPriceList.Business
                 }
             }
 
-
+            //Make sure that Closing Rates for closed zones must be done before filling other sytem rates of not imported zones
             CloseRatesForClosedZones(existingZones);
+            FillOtherSystemRatesForNotImportedZones(notImportedZones, existingRatesGroupsByZoneName);
+        }
+
+        private void FillOtherSystemRatesForNotImportedZones(IEnumerable<NotImportedZone> notImportedZones, Dictionary<string, ExistingRateGroup> existingRatesGroupsByZoneName)
+        {
+            ExistingRateGroup existingRateGroup;
+
+            foreach (NotImportedZone notImportedZone in notImportedZones)
+            {
+                List<ExistingRate> existingOtherRates = new List<ExistingRate>();
+                if (existingRatesGroupsByZoneName.TryGetValue(notImportedZone.ZoneName, out existingRateGroup))
+                {
+                    foreach (KeyValuePair<int, List<ExistingRate>> item in existingRateGroup.OtherRates)
+                    {
+                        existingOtherRates.AddRange(item.Value);
+                    }
+                }
+
+                notImportedZone.OtherSystemRates.AddRange(existingOtherRates.MapRecords(NotImportedRateMapper));
+            }
+        }
+
+
+        private NotImportedRate NotImportedRateMapper(ExistingRate existingRate)
+        {
+            return new NotImportedRate()
+            {
+                BED = existingRate.BED,
+                EED = existingRate.EED,
+                SystemRate = existingRate.RateEntity.NormalRate,
+                RateTypeId = existingRate.RateEntity.RateTypeId,
+                HasChanged = true
+            };
         }
 
         private void FillNotImportedRates(ImportedZone importedZone, Dictionary<int, List<ExistingRate>> existingOtherRates, IEnumerable<int> importedRateTypeIds)
@@ -167,15 +200,15 @@ namespace TOne.WhS.SupplierPriceList.Business
             return existingOtherRatesToClose;
         }
 
-        private void CloseNotImportedOtherRates(IEnumerable<ExistingRate> existingOtherRates, DateTime codeCloseDate)
+        private void CloseNotImportedOtherRates(IEnumerable<ExistingRate> existingOtherRates, DateTime rateCloseDate)
         {
             foreach (var existingOtherRate in existingOtherRates)
             {
-                //Get max between BED and Close Date to avoid closing a code with EED before BED
-                DateTime? closureDate = Utilities.Max(codeCloseDate, existingOtherRate.BED);
+                //Get max between BED and Close Date to avoid closing a rate with EED before BED
+                DateTime? closureDate = Utilities.Max(rateCloseDate, existingOtherRate.BED);
                 if (!existingOtherRate.RateEntity.EED.HasValue && closureDate.VRLessThan(existingOtherRate.EED))
                 {
-                    //Only in this case closing has a meaning, otherwise no need to close the code
+                    //Only in this case closing has a meaning, otherwise no need to close the rate
                     existingOtherRate.ChangedRate = new ChangedRate
                     {
                         EntityId = existingOtherRate.RateEntity.SupplierRateId,

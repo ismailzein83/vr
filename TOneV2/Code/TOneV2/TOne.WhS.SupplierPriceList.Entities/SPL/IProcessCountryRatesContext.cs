@@ -22,5 +22,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         IEnumerable<NewRate> NewRates { set; }
 
         IEnumerable<ChangedRate> ChangedRates { set; }
+
+        IEnumerable<NotImportedZone> NotImportedZones { get; }
     }
 }

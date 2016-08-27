@@ -61,6 +61,7 @@
     <Compile Include="Enumerations.cs" />
     <Compile Include="PreviewData\SPLPreviewQuery.cs" />
     <Compile Include="PreviewData\CountryPreview.cs" />
+    <Compile Include="PreviewData\OtherRatePreview.cs" />
     <Compile Include="PreviewData\ZonePreview.cs" />
     <Compile Include="PriceListTemplate\FlaggedServiceListMapping.cs" />
     <Compile Include="PriceListTemplate\OtherRateListMapping.cs" />
@@ -86,7 +87,7 @@
     <Compile Include="SPL\NotImportedCode.cs" />
     <Compile Include="SPL\NotImportedZone.cs" />
     <Compile Include="SPL\ImportedData\ImportedCode.cs" />
-    <Compile Include="SPL\ImportedData\ImportedDataByCountry.cs" />
+    <Compile Include="SPL\ImportedData\ImportedCountry.cs" />
     <Compile Include="SPL\ImportedData\ImportedRate.cs" />
     <Compile Include="SPL\ImportedData\ImportedZone.cs" />
     <Compile Include="SPL\IZone.cs" />
@@ -112,7 +113,6 @@
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

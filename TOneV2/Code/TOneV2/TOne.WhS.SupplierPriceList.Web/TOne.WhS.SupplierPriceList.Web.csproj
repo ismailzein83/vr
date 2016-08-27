@@ -168,6 +168,8 @@
     <Content Include="WhS_SupplierPriceList\Directives\CountryPreview\vr-spl-countrypreview-grid.js" />
     <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\SupplierPriceListTemplate\SupplierPriceListConfiguration\Templates\BasicSupplierPriceListConfiguration.html" />
     <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\SupplierPriceListTemplate\SupplierPriceListConfiguration\whs-suppl-supplierpricelistconfiguration-basic.js" />
+    <Content Include="WhS_SupplierPriceList\Directives\OtherRatesPreview\Templates\SupplierPriceListOtherRatesPreviewGridTemplate.html" />
+    <Content Include="WhS_SupplierPriceList\Directives\OtherRatesPreview\vr-spl-otherratespreview-grid.js" />
     <Content Include="WhS_SupplierPriceList\Directives\SupplierPriceListTemplate\SupplierPriceListConfiguration\whs-suppl-supplierpricelistconfiguration-selective.js" />
     <Content Include="WhS_SupplierPriceList\Directives\SupplierPriceListTemplate\SupplierPriceListConfiguration\whs-suppl-supplierpricelisttemplate-selector.js" />
     <Content Include="WhS_SupplierPriceList\Directives\ZonePreview\Templates\SupplierPriceListZonePreviewGridTemplate.html" />

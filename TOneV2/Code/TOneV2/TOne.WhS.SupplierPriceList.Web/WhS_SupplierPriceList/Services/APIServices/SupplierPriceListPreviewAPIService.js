@@ -21,12 +21,16 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, controllerName, "GetFilteredCountryPreview"), input);
         }
 
+        function GetFilteredOtherRatePreview(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, controllerName, "GetFilteredOtherRatePreview"), input);
+        }
         
         return ({
             GetFilteredZonePreview: GetFilteredZonePreview,
             GetFilteredCodePreview: GetFilteredCodePreview,
             GetFilteredRatePreview: GetFilteredRatePreview,
-            GetFilteredCountryPreview: GetFilteredCountryPreview
+            GetFilteredCountryPreview: GetFilteredCountryPreview,
+            GetFilteredOtherRatePreview: GetFilteredOtherRatePreview
         });
     }
 

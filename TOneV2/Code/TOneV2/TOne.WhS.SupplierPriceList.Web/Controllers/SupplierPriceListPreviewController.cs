@@ -44,5 +44,15 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
            return GetWebResponse(input, manager.GetFilteredCodePreview(input));
        }
 
+       [HttpPost]
+       [Route("GetFilteredOtherRatePreview")]
+       public object GetFilteredOtherRatePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
+       {
+           SupplierOtherRatesPreviewManager manager = new SupplierOtherRatesPreviewManager();
+           return GetWebResponse(input, manager.GetFilteredOtherRatesPreview(input));
+       }
+
+       
+
     }
 }

@@ -76,7 +76,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
         function getDirectiveTabs() {
             var directiveTabs = [];
 
-            var directiveTab = {
+            var codeTab = {
                 title: "Codes",
                 directive: "vr-spl-codepreview-grid",
                 loadDirective: function (directiveAPI, zoneDataItem) {
@@ -92,7 +92,24 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
                 }
             };
 
-            directiveTabs.push(directiveTab);
+            var otherRatesTab = {
+                title: "Other Rates",
+                directive: "vr-spl-otherratespreview-grid",
+                loadDirective: function (directiveAPI, zoneDataItem) {
+                    zoneDataItem.otherRatesGridAPI = directiveAPI;
+
+                    var otherRatesGridPayload = {
+                        ProcessInstanceId: processInstanceId,
+                        ZoneName: zoneDataItem.ZoneName,
+                        OnlyModified: onlyModified
+                    };
+
+                    return zoneDataItem.otherRatesGridAPI.load(otherRatesGridPayload);
+                }
+            };
+
+            directiveTabs.push(codeTab);
+            directiveTabs.push(otherRatesTab);
 
             return directiveTabs;
         }
