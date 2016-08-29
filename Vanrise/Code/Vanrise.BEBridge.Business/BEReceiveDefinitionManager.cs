@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.BEBridge.Data;
 using Vanrise.BEBridge.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.BEBridge.Business
 {
@@ -22,7 +23,16 @@ namespace Vanrise.BEBridge.Business
         {
             return GetCachedBEReceiveDefinitions().MapRecords(BEReceiveDefinitionInfoMapper);
         }
-
+        public IDataRetrievalResult<BEReceiveDefinitionDetail> GetFilteredBeReceiveDefinitions(DataRetrievalInput<BEReceiveDefinitionQuery> input)
+        {
+            var receiveDefinitions = GetCachedBEReceiveDefinitions().Values.ToList();
+            Func<BEReceiveDefinition, bool> filterExpression = x => ((input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower())));
+            return DataRetrievalManager.Instance.ProcessResult(input, receiveDefinitions.ToBigResult(input, filterExpression, BeReceiveDefinitionDetailMapper));
+        }
+        public BEReceiveDefinition GetReceiveDefinition(Guid receiveDefinitionId)
+        {
+            return GetCachedBEReceiveDefinitions().GetRecord(receiveDefinitionId);
+        }
         #endregion
 
         #region Private Methods
@@ -57,6 +67,18 @@ namespace Vanrise.BEBridge.Business
             }
         }
 
+        #endregion
+        #region DetailMappers
+
+        public BEReceiveDefinitionDetail BeReceiveDefinitionDetailMapper(BEReceiveDefinition beReceiveDefinition)
+        {
+            BEReceiveDefinitionDetail beReceiveDefinitionDetail = new BEReceiveDefinitionDetail
+            {
+                Entity = beReceiveDefinition,
+                Description = ""
+            };
+            return beReceiveDefinitionDetail;
+        }
         #endregion
     }
 }
