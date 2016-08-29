@@ -46,22 +46,42 @@ namespace Vanrise.Common.Business
             objectTypePropertyDefinition = null;
             VRObjectVariable objectVariable = null;
 
-            if (objects.TryGetValue(objectName, out obj) && objectVariables.TryGetValue(objectName, out objectVariable)) {
-                
+            if (objectVariables.TryGetValue(objectName, out objectVariable))
+            {
                 VRObjectTypeDefinition objectTypeDefinition = GetObjectTypeDefinition(objectVariable.VRObjectTypeDefinitionId);
                 if (objectTypeDefinition != null)
                     objectType = objectTypeDefinition.Settings.ObjectType;
 
                 if (!objectTypeDefinition.Settings.Properties.TryGetValue(propertyName, out objectTypePropertyDefinition))
-                    throw new NullReferenceException(String.Format("objectTypePropertyDefinition '{0}'", objectVariable.VRObjectTypeDefinitionId)); 
-            }
-            else {
-                if(obj == null)
-                    throw new NullReferenceException(String.Format("obj '{0}'", objectName));
+                    throw new NullReferenceException(String.Format("objectTypePropertyDefinition '{0}'", objectVariable.VRObjectTypeDefinitionId));
 
-                if(objectVariable == null)
-                    throw new NullReferenceException(String.Format("objectVariable '{0}'", objectName));
+                //if obj is null GetDefaultValue
+                if (!objects.TryGetValue(objectName, out obj))
+                    obj = objectType.GetDefaultValue();
+                
             }
+            else
+            {
+                throw new NullReferenceException(String.Format("objectVariable '{0}'", objectName));
+            }
+
+
+            //if (objects.TryGetValue(objectName, out obj) && objectVariables.TryGetValue(objectName, out objectVariable)) {
+                
+            //    VRObjectTypeDefinition objectTypeDefinition = GetObjectTypeDefinition(objectVariable.VRObjectTypeDefinitionId);
+            //    if (objectTypeDefinition != null)
+            //        objectType = objectTypeDefinition.Settings.ObjectType;
+
+            //    if (!objectTypeDefinition.Settings.Properties.TryGetValue(propertyName, out objectTypePropertyDefinition))
+            //        throw new NullReferenceException(String.Format("objectTypePropertyDefinition '{0}'", objectVariable.VRObjectTypeDefinitionId)); 
+            //}
+            //else {
+            //    if(obj == null)
+            //        throw new NullReferenceException(String.Format("obj '{0}'", objectName));
+
+            //    if(objectVariable == null)
+            //        throw new NullReferenceException(String.Format("objectVariable '{0}'", objectName));
+            //}
         }
 
         private VRObjectTypeDefinition GetObjectTypeDefinition(Guid objectTypeDefinitionId)

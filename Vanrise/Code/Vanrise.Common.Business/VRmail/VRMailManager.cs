@@ -83,7 +83,7 @@ namespace Vanrise.Common.Business
 
         private static string EvaluateExpression(VRExpression expression, VRMailContext mailContext)
         {
-            return RazorEngine.Razor.Parse<VRMailContext>(expression.ExpressionString, mailContext);
+            return expression.ExpressionString != null ? RazorEngine.Razor.Parse<VRMailContext>(expression.ExpressionString, mailContext) : null;
         }
         #endregion
     }

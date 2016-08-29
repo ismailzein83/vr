@@ -34,7 +34,8 @@ namespace Vanrise.Common.Business
 
         public string GetProductName()
         {
-            ProductInfoTechnicalSettings productInfoTechnicalSettings = new ProductInfoTechnicalSettings();
+            SettingManager settingManager = new SettingManager();
+            ProductInfoTechnicalSettings productInfoTechnicalSettings = settingManager.GetSetting<ProductInfoTechnicalSettings>(ProductInfoTechnicalSettings.SETTING_TYPE);
 
             string productName = productInfoTechnicalSettings.ProductName;
 
@@ -45,7 +46,8 @@ namespace Vanrise.Common.Business
         }
         public string GetProductVersionNumber()
         {
-            ProductInfoTechnicalSettings productInfoTechnicalSettings = new ProductInfoTechnicalSettings();
+            SettingManager settingManager = new SettingManager();
+            ProductInfoTechnicalSettings productInfoTechnicalSettings = settingManager.GetSetting<ProductInfoTechnicalSettings>(ProductInfoTechnicalSettings.SETTING_TYPE);
 
             string versionNumber = productInfoTechnicalSettings.VersionNumber;
 

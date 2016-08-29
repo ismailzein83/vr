@@ -8,6 +8,8 @@ namespace Vanrise.Entities
 {
     public class ProductInfoTechnicalSettings : SettingData
     {
+        public const string SETTING_TYPE = "VR_Common_ProductInfoTechnicalSettings";
+
         public string ProductName { get; set; }
 
         public string VersionNumber { get; set; }
