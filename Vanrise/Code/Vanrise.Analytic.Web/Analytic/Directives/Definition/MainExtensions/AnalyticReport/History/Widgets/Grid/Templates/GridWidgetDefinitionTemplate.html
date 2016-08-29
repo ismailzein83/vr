@@ -20,15 +20,13 @@
                     <vr-datagrid datasource="scopeModel.dimensions" enabledraggablerow="true"
                                     on-ready="onGridReady" ondeleterow="    scopeModel.removeDimension" hidegridmenu norowhighlightonclick="'true'">
                         <vr-datagridcolumn headertext="'Dimension Name'" field="'Name'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Title'" widthfactor="10" disablesorting="true">
+                        <vr-datagridcolumn headertext="'Title'" widthfactor="8" disablesorting="true">
                             <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
-                            <vr-select datatextfield="description" datavaluefield="value" datasource="viewScope.scopeModel.gridWidths"
-                                       selectedvalues="dataItem.SelectedGridWidth" isrequired="true" hideremoveicon>
-                            </vr-select>
+                            <vr-common-gridwidthfactor-selector on-ready="dataItem.onDimensionGridWidthFactorSelectorReady" isrequired="true" hidelabel></vr-common-gridwidthfactor-selector>
                         </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Root Dimension'" widthfactor="4" disablesorting="true">
+                        <vr-datagridcolumn headertext="'Root Dimension'" widthfactor="3" disablesorting="true">
                             <vr-switch value="dataItem.IsRootDimension"></vr-switch>
                         </vr-datagridcolumn>
 
@@ -49,9 +47,7 @@
                             <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
-                            <vr-select datatextfield="description" datavaluefield="value" datasource="viewScope.scopeModel.gridWidths"
-                                       selectedvalues="dataItem.SelectedGridWidth" isrequired="true" hideremoveicon>
-                            </vr-select>
+                            <vr-common-gridwidthfactor-selector on-ready="dataItem.onMeasureGridWidthFactorSelectorReady" isrequired="true" hidelabel></vr-common-gridwidthfactor-selector>
                         </vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-validator>

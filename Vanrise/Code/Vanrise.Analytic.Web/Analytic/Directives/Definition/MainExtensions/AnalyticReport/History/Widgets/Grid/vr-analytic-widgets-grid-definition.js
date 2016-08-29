@@ -2,9 +2,9 @@
 
     'use strict';
 
-    WidgetsGridDefinition.$inject = ["UtilsService", 'VRUIUtilsService','VR_Analytic_AnalyticTypeEnum','VR_Analytic_AnalyticItemConfigAPIService','VR_Analytic_GridWidthEnum'];
+    WidgetsGridDefinition.$inject = ["UtilsService", 'VRUIUtilsService','VR_Analytic_AnalyticTypeEnum','VR_Analytic_AnalyticItemConfigAPIService','VR_Analytic_GridWidthEnum','VRCommon_GridWidthFactorEnum'];
 
-    function WidgetsGridDefinition(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticTypeEnum, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_GridWidthEnum) {
+    function WidgetsGridDefinition(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticTypeEnum, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_GridWidthEnum, VRCommon_GridWidthFactorEnum) {
         return {
             restrict: "E",
             scope: {
@@ -65,8 +65,13 @@
                         AnalyticItemConfigId: dimension.AnalyticItemConfigId,
                         Title: dimension.Title,
                         Name: dimension.Name,
-                        SelectedGridWidth: VR_Analytic_GridWidthEnum.Normal,
                         IsRootDimension: false
+                    };
+                    dataItem.onDimensionGridWidthFactorSelectorReady = function (api) {
+                        dataItem.dimensionGridWidthFactorAPI = api;
+                        var dataItemPayload = { selectedIds: VRCommon_GridWidthFactorEnum.Normal.value };
+                        var setLoader = function (value) { $scope.isLoadingDirective = value };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.dimensionGridWidthFactorAPI, dataItemPayload, setLoader);
                     };
                     $scope.scopeModel.dimensions.push(dataItem);
                 }
@@ -114,6 +119,12 @@
                         Name: measure.Name,
                         SelectedGridWidth: VR_Analytic_GridWidthEnum.Normal,
                     };
+                    dataItem.onMeasureGridWidthFactorSelectorReady = function (api) {
+                        dataItem.measureGridWidthFactorAPI = api;
+                        var dataItemPayload = { selectedIds: VRCommon_GridWidthFactorEnum.Normal.value };
+                        var setLoader = function (value) { $scope.isLoadingDirective = value };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.measureGridWidthFactorAPI, dataItemPayload, setLoader);
+                    };
                     $scope.scopeModel.measures.push(dataItem);
                 }
 
@@ -150,6 +161,7 @@
                 api.load = function (payload) {
                     if (payload != undefined && payload.tableIds != undefined) {
                         tableIds = payload.tableIds;
+                        var promises = [];
                         var selectedDimensionIds;
                         var selectedMeasureIds;
                         if (payload.widgetEntity != undefined) {
@@ -160,12 +172,13 @@
                                 for (var i = 0; i < payload.widgetEntity.Dimensions.length; i++) {
                                     var dimension = payload.widgetEntity.Dimensions[i];
                                     selectedDimensionIds.push(dimension.DimensionName);
-                                    $scope.scopeModel.dimensions.push({
-                                        Name: dimension.DimensionName,
-                                        Title: dimension.Title,
-                                        IsRootDimension: dimension.IsRootDimension,
-                                        SelectedGridWidth: UtilsService.getItemByVal($scope.scopeModel.gridWidths, dimension.Width, "value"),
-                                    });
+                                    var dimensionGridField = {
+                                        payload: dimension,
+                                        readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                    };
+                                    promises.push(dimensionGridField.loadPromiseDeferred.promise);
+                                    addDimensionGridWidthAPI(dimensionGridField);
                                 }
                             }
 
@@ -173,17 +186,19 @@
                             if (payload.widgetEntity.Measures != undefined && payload.widgetEntity.Measures.length > 0) {
                                 for (var i = 0; i < payload.widgetEntity.Measures.length; i++) {
                                     var measure = payload.widgetEntity.Measures[i];
+                                    var measureGridField= {
+                                        payload: measure,
+                                        readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                    };
                                     selectedMeasureIds.push(measure.MeasureName);
-                                    $scope.scopeModel.measures.push({
-                                        Name: measure.MeasureName,
-                                        Title: measure.Title,
-                                        SelectedGridWidth: UtilsService.getItemByVal($scope.scopeModel.gridWidths, measure.Width, "value"),
-                                    });
+                                    promises.push(measureGridField.loadPromiseDeferred.promise);
+                                    addMeasureGridWidthAPI(measureGridField);
                                 }
                             }
                         }
 
-                        var promises = [];
+                        
 
                         var loadDimensionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         dimensionReadyDeferred.promise.then(function () {
@@ -267,7 +282,7 @@
                                 DimensionName: dimension.Name,
                                 Title: dimension.Title,
                                 IsRootDimension: dimension.IsRootDimension,
-                                Width: dimension.SelectedGridWidth.value,
+                                Width: dimension.dimensionGridWidthFactorAPI.getSelectedIds(),
                             });
                         }
                     }
@@ -280,7 +295,7 @@
                             measures.push({
                                 MeasureName: measure.Name,
                                 Title: measure.Title,
-                                Width: measure.SelectedGridWidth.value,
+                                Width: measure.measureGridWidthFactorAPI.getSelectedIds(),
                             });
                         }
                     }
@@ -298,7 +313,44 @@
                 }
 
             }
-
+            function addDimensionGridWidthAPI(gridField)
+            {
+                var dataItemPayload = { selectedIds: VRCommon_GridWidthFactorEnum.Normal.value };
+                var dataItem = {};
+                if (gridField.payload !=undefined) {
+                    dataItem.Name = gridField.payload.DimensionName;
+                    dataItem.Title = gridField.payload.Title;
+                    dataItem.IsRootDimension = gridField.payload.IsRootDimension;
+                    dataItemPayload.selectedIds = gridField.payload.Width;
+                }
+                dataItem.onDimensionGridWidthFactorSelectorReady = function (api) {
+                    dataItem.dimensionGridWidthFactorAPI = api;
+                    gridField.readyPromiseDeferred.resolve();
+                };
+                gridField.readyPromiseDeferred.promise
+                    .then(function () {
+                        VRUIUtilsService.callDirectiveLoad(dataItem.dimensionGridWidthFactorAPI, dataItemPayload, gridField.loadPromiseDeferred);
+                    });
+                $scope.scopeModel.dimensions.push(dataItem);
+            }
+            function addMeasureGridWidthAPI(gridField) {
+                var dataItemPayload = { selectedIds: VRCommon_GridWidthFactorEnum.Normal.value };
+                var dataItem = {};
+                if (gridField.payload != undefined) {
+                    dataItem.Name = gridField.payload.MeasureName;
+                    dataItem.Title = gridField.payload.Title;
+                    dataItemPayload.selectedIds = gridField.payload.Width;
+                }
+                dataItem.onMeasureGridWidthFactorSelectorReady = function (api) {
+                    dataItem.measureGridWidthFactorAPI = api;
+                    gridField.readyPromiseDeferred.resolve();
+                };
+                gridField.readyPromiseDeferred.promise
+                    .then(function () {
+                        VRUIUtilsService.callDirectiveLoad(dataItem.measureGridWidthFactorAPI, dataItemPayload, gridField.loadPromiseDeferred);
+                    });
+                $scope.scopeModel.measures.push(dataItem);
+            }
             function getAllMeasures() {
                 var input = {
                     TableIds: tableIds,
