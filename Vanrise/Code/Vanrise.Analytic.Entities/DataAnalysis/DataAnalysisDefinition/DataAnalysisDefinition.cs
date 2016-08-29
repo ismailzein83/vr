@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Analytic.Entities
 {
-    public class DataAnalysisDefinition
+    public class DataAnalysisDefinition 
     {
         public Guid DataAnalysisDefinitionId { get; set; }
 

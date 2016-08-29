@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.Analytic.Entities
+namespace Vanrise.Analytic.Data.SQL
 {
-    public abstract class DataAnalysisDefinitionSettings 
+    class DataAnalysisDefinitionDataManager
     {
-        public int ConfigId { get; set; }
     }
 }

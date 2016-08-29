@@ -48,6 +48,7 @@
     <Compile Include="IAnalyticDataManager.cs" />
     <Compile Include="IAnalyticItemConfigDataManager.cs" />
     <Compile Include="IAnalyticTableDataManager.cs" />
+    <Compile Include="IDataAnalysisDefinitionDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
