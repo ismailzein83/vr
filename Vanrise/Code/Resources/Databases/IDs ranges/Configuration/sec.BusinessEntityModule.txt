@@ -15,3 +15,6 @@ BI				1301 to 1400
 Analytic		1401 to 1500
 Deals			1501 to 1600
 Reprocess		1601 to 1700
+Retail			1701 to 1800
+VR_AccountBalance	1801 to 1900
+VR_Notification		1901 to 2000
