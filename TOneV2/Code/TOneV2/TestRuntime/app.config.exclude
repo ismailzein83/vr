@@ -140,6 +140,8 @@
     <add key="Queue_NbOfMaxConcurrentActivators_UpdateSummaryQueueActivator" value="30" />
     <add key="Queue_ConsecutiveItemsToProcess" value="5"/>
     <add key="TOneWhS_Analytics_DBConnStringKey" value="TOneAnalyticsDBConnString"/>
+    <add key="RoutingDBDataFileDirectory" value=""/><!--RoutingDBDataFileDirectory key will override the SQL default directory if needed-->
+    <add key="RoutingDBLogFileDirectory" value=""/><!--RoutingDBLogFileDirectory key will override the SQL default directory if needed-->
   </appSettings>
   <system.codedom>
     <compilers>
