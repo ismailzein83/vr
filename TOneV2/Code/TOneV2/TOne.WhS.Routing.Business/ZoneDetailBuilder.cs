@@ -50,7 +50,7 @@ namespace TOne.WhS.Routing.Business
 
             Vanrise.Common.Business.ConfigManager commonConfigManager = new Vanrise.Common.Business.ConfigManager();
             int systemCurrencyId = commonConfigManager.GetSystemCurrencyId();
-            
+
             TOne.WhS.Routing.Business.ConfigManager routingConfigManager = new TOne.WhS.Routing.Business.ConfigManager();
             int customerTransformationId = routingConfigManager.GetCustomerTransformationId();
 
@@ -110,47 +110,57 @@ namespace TOne.WhS.Routing.Business
         public void BuildSupplierZoneDetails(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingSupplierInfo> supplierInfos, Action<SupplierZoneDetail> onSupplierZoneDetailAvailable)
         {
             SupplierRateManager supplierRateManager = new SupplierRateManager();
-            var supplierRates = supplierRateManager.GetRates(effectiveOn, isEffectiveInFuture, supplierInfos);
+            SupplierZoneRateLocator supplierZoneRateLocator = new SupplierZoneRateLocator(new SupplierRateReadAllNoCache(supplierInfos, effectiveOn, isEffectiveInFuture));
 
-            if (supplierRates != null)
+            Vanrise.Common.Business.ConfigManager commonConfigManager = new Vanrise.Common.Business.ConfigManager();
+            int systemCurrencyId = commonConfigManager.GetSystemCurrencyId();
+
+            TOne.WhS.Routing.Business.ConfigManager routingConfigManager = new TOne.WhS.Routing.Business.ConfigManager();
+            int supplierTransformationId = routingConfigManager.GetSupplierTransformationId();
+
+            DataTransformer dataTransformer = new DataTransformer();
+
+            SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
+            Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
+
+            DateTime effectiveDate = effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now;
+
+            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
+            foreach (RoutingSupplierInfo supplierInfo in supplierInfos)
             {
-                Vanrise.Common.Business.ConfigManager commonConfigManager = new Vanrise.Common.Business.ConfigManager();
-                int systemCurrencyId = commonConfigManager.GetSystemCurrencyId();
+                List<SupplierZone> supplierZones = supplierZoneManager.GetSupplierZones(supplierInfo.SupplierId, effectiveDate);
+                if (supplierZones == null)
+                    continue;
 
-                TOne.WhS.Routing.Business.ConfigManager routingConfigManager = new TOne.WhS.Routing.Business.ConfigManager();
-                int supplierTransformationId = routingConfigManager.GetSupplierTransformationId();
-
-                DataTransformer dataTransformer = new DataTransformer();
-
-                SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
-                Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
-
-                DateTime effectiveDate = effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now;
-                foreach (var supplierRate in supplierRates)
+                foreach (var supplierZone in supplierZones)
                 {
-                    var priceList = supplierPriceListManager.GetPriceList(supplierRate.PriceListId);
+                    SupplierZoneRate supplierZoneRate = supplierZoneRateLocator.GetSupplierZoneRate(supplierInfo.SupplierId, supplierZone.SupplierZoneId);
 
-                    var output = dataTransformer.ExecuteDataTransformation(supplierTransformationId, (context) =>
+                    if (supplierZoneRate != null && supplierZoneRate.Rate != null)
                     {
-                        context.SetRecordValue("SupplierId", priceList.SupplierId);
-                        context.SetRecordValue("SupplierZoneId", supplierRate.ZoneId);
-                        context.SetRecordValue("NormalRate", supplierRate);
-                        context.SetRecordValue("EffectiveDate", effectiveOn);
-                        context.SetRecordValue("IsEffectiveInFuture", isEffectiveInFuture);
-                    });
+                        var output = dataTransformer.ExecuteDataTransformation(supplierTransformationId, (context) =>
+                        {
+                            context.SetRecordValue("SupplierId", supplierInfo.SupplierId);
+                            context.SetRecordValue("SupplierZoneId", supplierZone.SupplierZoneId);
+                            context.SetRecordValue("NormalRate", supplierZoneRate.Rate);
+                            context.SetRecordValue("OtherRates", supplierZoneRate.RatesByRateType);
+                            context.SetRecordValue("EffectiveDate", effectiveOn);
+                            context.SetRecordValue("IsEffectiveInFuture", isEffectiveInFuture);
+                        });
 
-                    decimal rateValue = output.GetRecordValue("EffectiveRate");
-                    int currencyId = output.GetRecordValue("SupplierCurrencyId");
-                    rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, effectiveDate), 8);
+                        decimal rateValue = output.GetRecordValue("EffectiveRate");
+                        int currencyId = output.GetRecordValue("SupplierCurrencyId");
+                        rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, effectiveDate), 8);
 
-                    SupplierZoneDetail supplierZoneDetail = new SupplierZoneDetail
-                    {
-                        SupplierId = priceList.SupplierId,
-                        SupplierZoneId = supplierRate.ZoneId,
-                        EffectiveRateValue = rateValue
-                    };
+                        SupplierZoneDetail supplierZoneDetail = new SupplierZoneDetail
+                        {
+                            SupplierId = supplierInfo.SupplierId,
+                            SupplierZoneId = supplierZone.SupplierZoneId,
+                            EffectiveRateValue = rateValue
+                        };
 
-                    onSupplierZoneDetailAvailable(supplierZoneDetail);
+                        onSupplierZoneDetailAvailable(supplierZoneDetail);
+                    }
                 }
             }
         }

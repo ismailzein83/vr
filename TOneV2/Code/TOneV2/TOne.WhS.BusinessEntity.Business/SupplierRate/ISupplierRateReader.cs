@@ -12,7 +12,7 @@ namespace TOne.WhS.BusinessEntity.Business
         SupplierRatesByZone GetSupplierRates(int supplierId);
     }
 
-    public class SupplierRatesByZone : Dictionary<long, SupplierRate>
+    public class SupplierRatesByZone : Dictionary<long, SupplierZoneRate>
     {
 
     }

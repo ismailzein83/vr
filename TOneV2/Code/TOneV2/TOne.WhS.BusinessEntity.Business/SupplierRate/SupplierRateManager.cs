@@ -22,11 +22,11 @@ namespace TOne.WhS.BusinessEntity.Business
             ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
             return dataManager.GetSupplierRates(supplierId, minimumDate);
         }
-        public List<SupplierRate> GetRates(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingSupplierInfo> supplierInfos)
-        {
-            ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
-            return dataManager.GetEffectiveSupplierRatesBySuppliers(effectiveOn, isEffectiveInFuture, supplierInfos);
-        }
+        //public List<SupplierRate> GetRates(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingSupplierInfo> supplierInfos)
+        //{
+        //    ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
+        //    return dataManager.GetEffectiveSupplierRatesBySuppliers(effectiveOn, isEffectiveInFuture, supplierInfos);
+        //}
 
         public SupplierZoneRate GetCachedSupplierZoneRate(int supplierId, long supplierZoneId, DateTime effectiveOn)
         {
@@ -49,9 +49,10 @@ namespace TOne.WhS.BusinessEntity.Business
             SupplierZoneRateLocator supplierZoneRateLocator = new SupplierZoneRateLocator(new SupplierRateReadWithCache(effectiveOn));
 
             SupplierZoneRate supplierZoneRate = supplierZoneRateLocator.GetSupplierZoneRate(supplierId, supplierZoneId);
+            SupplierRateManager supplierRateManager = new SupplierRateManager();
             if (supplierZoneRate != null)
             {
-                int currencyId = supplierZoneRate.Rate.CurrencyId.HasValue ? supplierZoneRate.Rate.CurrencyId.Value : supplierZoneRate.PriceList.CurrencyId;
+                int currencyId = supplierRateManager.GetCurrencyId(supplierZoneRate.Rate);
                 PurchasePricingRuleManager purchasePricingRuleManager = new PurchasePricingRuleManager();
                 PurchasePricingRulesInput purchasePricingRulesInput = new PurchasePricingRulesInput
                 {
