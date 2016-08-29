@@ -24,23 +24,23 @@ namespace Vanrise.Common.Web.Controllers
 
         [HttpGet]
         [Route("GetStyleDefinition")]
-        public StyleDefinition GetStyleDefinition(Guid StyleDefinitionId)
+        public StyleDefinition GetStyleDefinition(Guid styleDefinitionId)
         {
-            return _manager.GetStyleDefinition(StyleDefinitionId);
+            return _manager.GetStyleDefinition(styleDefinitionId);
         }
 
         [HttpPost]
         [Route("AddStyleDefinition")]
-        public Vanrise.Entities.InsertOperationOutput<StyleDefinitionDetail> AddStyleDefinition(StyleDefinition StyleDefinitionItem)
+        public Vanrise.Entities.InsertOperationOutput<StyleDefinitionDetail> AddStyleDefinition(StyleDefinition styleDefinitionItem)
         {
-            return _manager.AddStyleDefinition(StyleDefinitionItem);
+            return _manager.AddStyleDefinition(styleDefinitionItem);
         }
 
         [HttpPost]
         [Route("UpdateStyleDefinition")]
-        public Vanrise.Entities.UpdateOperationOutput<StyleDefinitionDetail> UpdateStyleDefinition(StyleDefinition StyleDefinitionItem)
+        public Vanrise.Entities.UpdateOperationOutput<StyleDefinitionDetail> UpdateStyleDefinition(StyleDefinition styleDefinitionItem)
         {
-            return _manager.UpdateStyleDefinition(StyleDefinitionItem);
+            return _manager.UpdateStyleDefinition(styleDefinitionItem);
         }
 
         [HttpGet]
