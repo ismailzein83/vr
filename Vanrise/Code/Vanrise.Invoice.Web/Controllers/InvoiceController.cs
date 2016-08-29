@@ -13,10 +13,10 @@ namespace Vanrise.Invoice.Web.Controllers
     {
         [HttpPost]
         [Route("GenerateInvoice")]
-        public void GenerateInvoice(GenerateInvoiceInput createInvoiceInput)
+        public Vanrise.Entities.InsertOperationOutput<InvoiceDetail> GenerateInvoice(GenerateInvoiceInput createInvoiceInput)
         {
             InvoiceManager manager = new InvoiceManager();
-            manager.GenerateInvoice(createInvoiceInput);
+            return manager.GenerateInvoice(createInvoiceInput);
         }
         [HttpPost]
         [Route("GetFilteredInvoices")]

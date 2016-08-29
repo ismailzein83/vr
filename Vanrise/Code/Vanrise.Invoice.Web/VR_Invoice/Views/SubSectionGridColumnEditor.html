@@ -1,0 +1,26 @@
+﻿<div vr-modalcontent ng-controller="VR_Invoice_SubSectionGridColumnEditorController" width="'35%'" vr-loader="isLoading">
+    <vr-modalbody maxheight="'700px'">
+        <vr-form name="formSubSectionEditor">
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="header" label="Header" isrequired="true"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="fieldName" label="Field Name" isrequired="true"></vr-textbox>
+                </vr-columns>
+                <vr-common-gridwidthfactor-selector on-ready="onGridWidthFactorSelector" normal-col-num="6" isrequired="true"></vr-common-gridwidthfactor-selector>
+            </vr-row>
+            <vr-row>
+                <vr-genericdata-fieldtype-selective on-ready="onFieldTypeSelectiveReady" ></vr-genericdata-fieldtype-selective>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formSubSectionEditor" data-onclick="save"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

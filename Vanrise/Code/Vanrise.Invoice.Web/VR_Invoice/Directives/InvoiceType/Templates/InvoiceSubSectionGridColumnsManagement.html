@@ -1,0 +1,10 @@
+﻿<vr-button type="Add" data-onclick="ctrl.addGridColumn" standalone></vr-button>
+
+<vr-validator validate="ctrl.isValid()">
+    <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                 on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeColumn" hidegridmenu>
+        <vr-datagridcolumn headertext="'Header'" field="'Entity.Header'" widthfactor="10" disablesorting></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Field Name'" field="'Entity.FieldName'" widthfactor="10" disablesorting></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Width'" field="'Entity.WidthFactor'" widthfactor="10" disablesorting></vr-datagridcolumn>
+    </vr-datagrid>
+</vr-validator>

@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InvoiceUISubSectionSettings\InvoiceItemSubSection.cs" />
     <Compile Include="RDLCReportParameterValue\CustomFieldRDLReportParameterValue.cs" />
     <Compile Include="RDLCReportParameterValue\FieldRDLReportParameterValue.cs" />
     <Compile Include="RDLCReportDataSourceSettings\RDLCItemsDataSourceSettings.cs" />

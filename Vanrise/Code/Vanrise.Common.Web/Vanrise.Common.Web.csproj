@@ -169,6 +169,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Common\Constant\GridWidthFactorEnum.js" />
     <Content Include="Common\Constant\LogEntryTypeEnum.js" />
     <Content Include="Common\Constant\LogAttributeEnum.js" />
     <Content Include="Common\Constant\HourEnum.js" />
@@ -204,6 +205,7 @@
     <Content Include="Common\Directives\GenericDataRecord\Templates\DataRecordFieldGrid.html" />
     <Content Include="Common\Directives\GenericDataRecord\vr-common-datarecordtype-grid.js" />
     <Content Include="Common\Directives\GenericDataRecord\vr-common-datarecordfield-grid.js" />
+    <Content Include="Common\Directives\GridWidthFactor\vr-common-gridwidthfactor-selector.js" />
     <Content Include="Common\Directives\Hour\vr-common-hour-selector.js" />
     <Content Include="Common\Directives\Log\Templates\LogGridTemplate.html" />
     <Content Include="Common\Directives\Log\Templates\LogSearch.html" />

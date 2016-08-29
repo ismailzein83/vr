@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using Vanrise.Entities;
 using Vanrise.Invoice.Business;
 using Vanrise.Invoice.Entities;
 using Vanrise.Web.Base;
@@ -59,6 +60,12 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             return _manager.GetRDLCParameterSettingsConfigs();
         }
+        [HttpGet]
+        [Route("GetInvoiceUISubSectionSettingsConfigs")]
+        public IEnumerable<InvoiceUISubSectionSettingsConfig> GetInvoiceUISubSectionSettingsConfigs()
+        {
+            return _manager.GetInvoiceUISubSectionSettingsConfigs();
+        }
         [HttpPost]
         [Route("AddInvoiceType")]
         public Vanrise.Entities.InsertOperationOutput<InvoiceTypeDetail> AddInvoiceType(InvoiceType invoiceType)
@@ -71,6 +78,19 @@ namespace Vanrise.Invoice.Web.Controllers
         public Vanrise.Entities.UpdateOperationOutput<InvoiceTypeDetail> UpdateInvoiceType(InvoiceType invoiceType)
         {
             return _manager.UpdateInvoiceType(invoiceType);
+        }
+        [HttpPost]
+        [Route("CovertToGridColumnAttribute")]
+        public IEnumerable<GridColumnAttribute> CovertToGridColumnAttribute(CovertToGridColumnAttributeInput input)
+        {
+            return _manager.CovertToGridColumnAttribute(input);
+        }
+        [HttpGet]
+        [Route("GetInvoiceTypesInfo")]
+        public IEnumerable<InvoiceTypeInfo> GetInvoiceTypesInfo(string filter = null)
+        {
+            InvoiceTypeFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<InvoiceTypeFilter>(filter) : null;
+            return _manager.GetInvoiceTypesInfo(serializedFilter);
         }
     }
 }

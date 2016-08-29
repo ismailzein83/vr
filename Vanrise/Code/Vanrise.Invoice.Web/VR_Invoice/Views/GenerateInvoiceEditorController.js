@@ -100,7 +100,11 @@
             var incvoiceObject = buildInvoiceObjFromScope();
             return VR_Invoice_InvoiceAPIService.GenerateInvoice(incvoiceObject)
            .then(function (response) {
-               $scope.modalContext.closeModal();
+               if (VRNotificationService.notifyOnItemAdded("Invoice", response)) {
+                   if ($scope.onGenerateInvoice != undefined)
+                       $scope.onGenerateInvoice(response.InsertedObject);
+                   $scope.modalContext.closeModal();
+               }
            })
            .catch(function (error) {
                VRNotificationService.notifyException(error, $scope);

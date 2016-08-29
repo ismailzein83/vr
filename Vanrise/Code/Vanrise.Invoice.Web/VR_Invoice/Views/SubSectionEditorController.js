@@ -2,14 +2,17 @@
 
     'use strict';
 
-    subSectionEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService'];
+    subSectionEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService','VRUIUtilsService'];
 
-    function subSectionEditorController($scope, VRNavigationService, UtilsService, VRNotificationService) {
+    function subSectionEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var subSections = [];
         var subSectionEntity;
 
         var isEditMode;
+        var invoiceUISubsectionSettingsAPI;
+        var invoiceUISubsectionSettingsReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -25,29 +28,45 @@
         }
 
         function defineScope() {
-           
-            $scope.save = function () {
+            $scope.scopeModel = {};
+            $scope.scopeModel.onInvoiceUISubsectionSettingsReady = function (api)
+            {
+                invoiceUISubsectionSettingsAPI = api;
+                invoiceUISubsectionSettingsReadyDeferred.resolve();
+            }
+            $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateSubSection() : addeSubSection();
             };
-            $scope.close = function () {
+            $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
         }
 
         function load() {
 
-            $scope.isLoading = true;
+            $scope.scopeModel.isLoading = true;
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceUISubsectionSettingsDirective]).then(function () {
 
             }).finally(function () {
-                $scope.isLoading = false;
+                $scope.scopeModel.isLoading = false;
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
         }
+        function loadInvoiceUISubsectionSettingsDirective() {
+            var invoiceUISubsectionSettingsLoadDeferred = UtilsService.createPromiseDeferred();
+            invoiceUISubsectionSettingsReadyDeferred.promise.then(function () {
+                var invoiceUISubsectionSettingsPayload;
+                if (subSectionEntity != undefined)
+                    invoiceUISubsectionSettingsPayload = { invoiceUISubSectionSettingsEntity: subSectionEntity.Settings };
+                VRUIUtilsService.callDirectiveLoad(invoiceUISubsectionSettingsAPI, invoiceUISubsectionSettingsPayload, invoiceUISubsectionSettingsLoadDeferred);
+            });
+            return invoiceUISubsectionSettingsLoadDeferred.promise;
+        }
+
         function setTitle() {
             if (isEditMode && subSectionEntity != undefined)
                 $scope.title = UtilsService.buildTitleForUpdateEditor(subSectionEntity.SectionTitle, 'Sub Section');
@@ -57,15 +76,14 @@
 
         function loadStaticData() {
             if (subSectionEntity != undefined) {
-                $scope.sectionTitle = subSectionEntity.SectionTitle;
-                $scope.directive = subSectionEntity.Directive;
+                $scope.scopeModel.sectionTitle = subSectionEntity.SectionTitle;
             }
         }
 
         function builSubSectionObjFromScope() {
             return {
-                SectionTitle: $scope.sectionTitle,
-                Directive: $scope.directive,
+                SectionTitle: $scope.scopeModel.sectionTitle,
+                Settings: invoiceUISubsectionSettingsAPI.getData()
             };
         }
 

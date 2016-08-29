@@ -73,6 +73,11 @@ namespace Vanrise.Invoice.Business
             var extensionConfiguration = new ExtensionConfigurationManager();
             return extensionConfiguration.GetExtensionConfigurations<RDLCParameterSettingsConfig>(RDLCParameterSettingsConfig.EXTENSION_TYPE);
         }
+        public IEnumerable<InvoiceUISubSectionSettingsConfig> GetInvoiceUISubSectionSettingsConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<InvoiceUISubSectionSettingsConfig>(InvoiceUISubSectionSettingsConfig.EXTENSION_TYPE);
+        }
         public IDataRetrievalResult<InvoiceTypeDetail> GetFilteredInvoiceTypes(DataRetrievalInput<InvoiceTypeQuery> input)
         {
             var allItems = GetCachedInvoiceTypes();
@@ -127,6 +132,38 @@ namespace Vanrise.Invoice.Business
             return updateOperationOutput;
         }
 
+        public IEnumerable<GridColumnAttribute> CovertToGridColumnAttribute(CovertToGridColumnAttributeInput input)
+        {
+            List<GridColumnAttribute> gridColumnAttributes = null;
+            if(input.GridColumns != null)
+            {
+                gridColumnAttributes = new List<GridColumnAttribute>();
+                foreach(var column in input.GridColumns)
+                {
+                    if (column.FieldType == null)
+                        throw new NullReferenceException(string.Format("{0} is not mapped to field type.", column.FieldName));
+                    var gridAttribute = column.FieldType.GetGridColumnAttribute();
+                    gridAttribute.HeaderText = column.Header;
+                    gridAttribute.Field = column.FieldName;
+                    gridColumnAttributes.Add(gridAttribute);
+                }
+            }
+            return gridColumnAttributes;
+
+        }
+
+        public IEnumerable<InvoiceTypeInfo> GetInvoiceTypesInfo(InvoiceTypeFilter filter)
+        {
+            var invoiceTypes = GetCachedInvoiceTypes();
+            if (filter != null)
+            {
+            }
+            return invoiceTypes.MapRecords(InvoiceTypeInfoMapper);
+        }
+
+
+        
+
         #endregion
 
         #region Private Classes
@@ -164,6 +201,14 @@ namespace Vanrise.Invoice.Business
             InvoiceTypeDetail invoiceTypeDetail = new InvoiceTypeDetail();
             invoiceTypeDetail.Entity = invoiceTypeObject;
             return invoiceTypeDetail;
+        }
+        private InvoiceTypeInfo InvoiceTypeInfoMapper(InvoiceType invoiceTypeObject)
+        {
+            return new InvoiceTypeInfo
+            {
+                InvoiceTypeId = invoiceTypeObject.InvoiceTypeId,
+                Name = invoiceTypeObject.Name
+            };
         }
         #endregion
 

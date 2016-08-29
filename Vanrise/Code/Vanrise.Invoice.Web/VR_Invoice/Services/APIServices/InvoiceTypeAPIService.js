@@ -35,14 +35,21 @@
         function GetRDLCParameterSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetRDLCParameterSettingsConfigs"));
         }
-
+        function GetInvoiceUISubSectionSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceUISubSectionSettingsConfigs"));
+        }
         function AddInvoiceType(invoiceType) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "AddInvoiceType"), invoiceType);
         }
         function UpdateInvoiceType(invoiceType) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "UpdateInvoiceType"), invoiceType);
         }
-
+        function CovertToGridColumnAttribute(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "CovertToGridColumnAttribute"), input);
+        }
+        function GetInvoiceTypesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceTypesInfo"), { filter: filter });
+        }
         return ({
             GetInvoiceType: GetInvoiceType,
             GetFilteredInvoiceTypes: GetFilteredInvoiceTypes,
@@ -52,7 +59,10 @@
             GetRDLCParameterSettingsConfigs: GetRDLCParameterSettingsConfigs,
             AddInvoiceType: AddInvoiceType,
             UpdateInvoiceType: UpdateInvoiceType,
-            GetInvoiceTypeRuntime: GetInvoiceTypeRuntime
+            GetInvoiceTypeRuntime: GetInvoiceTypeRuntime,
+            GetInvoiceUISubSectionSettingsConfigs: GetInvoiceUISubSectionSettingsConfigs,
+            CovertToGridColumnAttribute: CovertToGridColumnAttribute,
+            GetInvoiceTypesInfo: GetInvoiceTypesInfo
         });
     }
 

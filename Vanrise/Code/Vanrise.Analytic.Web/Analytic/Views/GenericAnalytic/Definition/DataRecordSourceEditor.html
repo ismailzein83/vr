@@ -39,31 +39,25 @@
 
                     <vr-row removeline>
                         <vr-columns width="1/4row" vr-loader="isRecordTypeFieldsLoading">
-                            <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedFields"
-                                       datavaluefield="FieldName" datatextfield="FieldName" hideremoveicon ismultipleselection>
+                            <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedFields" onselectitem="onSelectedField" ondeselectitem="onDeSelectedField"
+                                       datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection>
                             </vr-select>
                         </vr-columns>
-
                         <vr-columns width="fullrow">
-
                             <vr-validator validate="isFieldGridValid()">
-                                <vr-datagrid datasource="selectedFields" norowhighlightonclick="true"
+                                <vr-datagrid datasource="selectedFieldsGrid" norowhighlightonclick="true"
                                              ondeleterow="removeField" hidegridmenu enabledraggablerow="true">
                                     <vr-datagridcolumn headertext="'Field Name'" widthfactor="5" field="'FieldName'" disablesorting="true"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Field Title'" widthfactor="5" disablesorting="true">
                                         <vr-textbox value="dataItem.FieldTitle" isrequired="true"></vr-textbox>
                                     </vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
-                                        <vr-select datatextfield="description" datavaluefield="value" datasource="viewScope.scopeModel.gridWidths"
-                                                   selectedvalues="dataItem.SelectedGridWidth" isrequired="true" hideremoveicon>
-                                        </vr-select>
+                                        <vr-common-gridwidthfactor-selector on-ready="dataItem.onGridWidthFactorSelectorReady" isrequired="true" hidelabel></vr-common-gridwidthfactor-selector>
                                     </vr-datagridcolumn>
                                 </vr-datagrid>
                             </vr-validator>
-
                         </vr-columns>
                     </vr-row>
-
                 </vr-columns>
             </vr-row>
 
@@ -73,13 +67,12 @@
 
                     <vr-row removeline>
                         <vr-columns width="1/4row" vr-loader="isRecordTypeFieldsLoading">
-                            <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedDetails"
-                                       datavaluefield="FieldName" datatextfield="FieldName" hideremoveicon ismultipleselection>
+                            <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedDetails" onselectitem="onSelectedDetailItem" ondeselectitem="    onDeSelectedDetailItem"
+                                       datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection>
                             </vr-select>
                         </vr-columns>
-
                         <vr-columns width="fullrow">
-                            <vr-datagrid datasource="selectedDetails" norowhighlightonclick="true"
+                            <vr-datagrid datasource="selectedDetailsGrid" norowhighlightonclick="true"
                                          ondeleterow="removeDetail" hidegridmenu enabledraggablerow="true">
                                 <vr-datagridcolumn headertext="'Field Name'" widthfactor="5" field="'FieldName'" disablesorting="true"></vr-datagridcolumn>
                                 <vr-datagridcolumn headertext="'Field Title'" widthfactor="5" disablesorting="true">
@@ -102,13 +95,12 @@
 
                     <vr-row removeline>
                         <vr-columns width="1/4row" vr-loader="isRecordTypeFieldsLoading">
-                            <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedSortColumns"
-                                       datavaluefield="FieldName" datatextfield="FieldName" hideremoveicon ismultipleselection>
+                            <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedSortColumns" onselectitem="onSelectedSortColumn" ondeselectitem="    onDeSelectedSortColumn"
+                                       datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection>
                             </vr-select>
                         </vr-columns>
-
                         <vr-columns width="fullrow">
-                            <vr-datagrid datasource="selectedSortColumns" norowhighlightonclick="true"
+                            <vr-datagrid datasource="selectedSortColumnsGrid" norowhighlightonclick="true"
                                          ondeleterow="removeSortColumn" hidegridmenu enabledraggablerow="true">
                                 <vr-datagridcolumn headertext="'Field Name'" widthfactor="5" field="'FieldName'" disablesorting="true"></vr-datagridcolumn>
                                 <vr-datagridcolumn headertext="'Order Direction'" widthfactor="4" disablesorting="true">

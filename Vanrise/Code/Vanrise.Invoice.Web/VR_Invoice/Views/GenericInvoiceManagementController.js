@@ -81,6 +81,7 @@
 
         function generateInvoice() {
             var onGenerateInvoice = function (invoice) {
+                gridAPI.onGenerateInvoice(invoice);
             };
 
             VR_Invoice_InvoiceService.generateInvoice(onGenerateInvoice, invoiceTypeId);

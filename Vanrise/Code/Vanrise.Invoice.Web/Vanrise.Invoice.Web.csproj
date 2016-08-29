@@ -174,19 +174,27 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\vr-invoicetype-openrdlcreport-datasourcesettings.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\vr-invoicetype-openrdlcreport-parametersettings.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\Templates\InvoiceGridActionsManagement.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\Templates\InvoiceSubSectionGridColumnsManagement.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\Templates\InvoiceTypeGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\Templates\MainGridColumnsManagement.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\Templates\SubSectionsManagement.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-grid.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-gridactionsettings.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-invoicegridactions.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-invoicesubsectiongridcolumns.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-invoiceuisubsectionsettings.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-maingridcolumns.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-selector.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-subsections.js" />
+    <Content Include="VR_Invoice\Directives\Invoice\Templates\SubSectionGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\Templates\InvoiceGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-grid.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-invoicegenerator.js" />
+    <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-subsection-grid.js" />
     <Content Include="VR_Invoice\Directives\MainExtensions\InvoiceGridActions\Templates\OpenRDLCReportActionTemplate.html" />
     <Content Include="VR_Invoice\Directives\MainExtensions\InvoiceGridActions\vr-invoicetype-gridactionsettings-openrdlcreport.js" />
+    <Content Include="VR_Invoice\Directives\MainExtensions\InvoiceUISubSectionSettings\Templates\InvoiceItemSubSectionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\MainExtensions\InvoiceUISubSectionSettings\vr-invoicetype-invoiceuisubsectionsettings-invoiceitem.js" />
     <Content Include="VR_Invoice\Directives\MainExtensions\RDLCReport\Templates\CustomFieldRDLReportParameterValue.html" />
     <Content Include="VR_Invoice\Directives\MainExtensions\RDLCReport\Templates\FieldRDLReportParameterValue.html" />
     <Content Include="VR_Invoice\Directives\MainExtensions\RDLCReport\Templates\RDLCItemsDataSourceSettings.html" />
@@ -200,6 +208,8 @@
     <Content Include="VR_Invoice\Services\APIServices\InvoiceTypeAPIService.js" />
     <Content Include="VR_Invoice\Services\InvoiceService.js" />
     <Content Include="VR_Invoice\Services\InvoiceTypeService.js" />
+    <Content Include="VR_Invoice\Views\InvoiceViewEditor.html" />
+    <Content Include="VR_Invoice\Views\InvoiceViewEditorController.js" />
     <Content Include="VR_Invoice\Views\RDLCDataSourceEditor.html" />
     <Content Include="VR_Invoice\Views\RDLCDataSourceEditorController.js" />
     <Content Include="VR_Invoice\Views\GenerateInvoiceEditor.html" />
@@ -218,6 +228,8 @@
     <Content Include="VR_Invoice\Views\RDLCParameterEditorController.js" />
     <Content Include="VR_Invoice\Views\SubSectionEditor.html" />
     <Content Include="VR_Invoice\Views\SubSectionEditorController.js" />
+    <Content Include="VR_Invoice\Views\SubSectionGridColumnEditor.html" />
+    <Content Include="VR_Invoice\Views\SubSectionGridColumnEditorController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

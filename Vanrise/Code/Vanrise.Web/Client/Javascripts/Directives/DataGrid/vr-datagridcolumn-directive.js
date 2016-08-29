@@ -7,45 +7,68 @@
             element.html('');
             return {
                 pre: function ($scope, iElem, iAttrs, dataGridCtrl) {
-                    var headerText = iAttrs.headertext != undefined ? $scope.$eval(iAttrs.headertext) : undefined;
-                    var disableSorting = iAttrs.disablesorting != undefined ? $scope.$eval(iAttrs.disablesorting) : false;
 
-                    var headerDescription = iAttrs.headerdescription != undefined ? $scope.$eval(iAttrs.headerdescription) : undefined;
-                    var field = iAttrs.field != undefined ? $scope.$eval(iAttrs.field) : undefined;
-                    var isFieldDynamic = iAttrs.isfielddynamic != undefined ? $scope.$eval(iAttrs.isfielddynamic) : undefined;
-                    var summaryField = iAttrs.summaryfield != undefined ? $scope.$eval(iAttrs.summaryfield) : undefined;
-                    var tooltipField = iAttrs.tooltipfield != undefined ? $scope.$eval(iAttrs.tooltipfield) : undefined;
-                    var widthFactor = iAttrs.widthfactor != undefined ? $scope.$eval(iAttrs.widthfactor) : undefined;
-                    var enableHiding = iAttrs.enablehiding != undefined ? $scope.$eval(iAttrs.enablehiding) : undefined;
-                    var isClickable = iAttrs.isclickable != undefined ? $scope.$eval(iAttrs.isclickable) : undefined;
-                    var expendableColumn = iAttrs.expendablecolumn != undefined ? true : undefined;
-                    var onClicked = iAttrs.onclicked != undefined ? $scope.$eval(iAttrs.onclicked) : undefined;
-                    var type = iAttrs.type != undefined ? $scope.$eval(iAttrs.type) : undefined;
-                    var numberPrecision = iAttrs.numberprecision != undefined ? $scope.$eval(iAttrs.numberprecision) : undefined;
-                    var tag = iAttrs.tag != undefined ? $scope.$eval(iAttrs.tag) : undefined;
-                    var onSortChanged = iAttrs.onsortchanged != undefined ? $scope.$eval(iAttrs.onsortchanged) : undefined;
+                    var gridColumnAttribute = iAttrs.columnattributes != undefined ? $scope.$eval(iAttrs.columnattributes) : undefined;
+                   
+                    var col = {};
+                    if (gridColumnAttribute != undefined)
+                    {
+                        col = {
+                            headerText: gridColumnAttribute.HeaderText,
+                            disableSorting: gridColumnAttribute.DisableSorting,
+                            headerDescription: gridColumnAttribute.HeaderDescription,
+                            field: gridColumnAttribute.Field,
+                            isFieldDynamic: gridColumnAttribute.IsFieldDynamic,
+                            widthFactor: gridColumnAttribute.WidthFactor,
+                            isClickable: gridColumnAttribute.IsClickable,
+                            onClicked: gridColumnAttribute.OnClicked,
+                            type: gridColumnAttribute.Type,
+                            numberPrecision: gridColumnAttribute.NumberPrecision,
+                            tag: gridColumnAttribute.Tag,
+                           
+                        };
+                    }
+
+                    if (iAttrs.headertext != undefined)
+                        col.headerText = $scope.$eval(iAttrs.headertext);
+                    if (iAttrs.disablesorting != undefined)
+                        col.disableSorting = $scope.$eval(iAttrs.disablesorting);
+                    else if (col.disableSorting == undefined)
+                        col.disableSorting = false;
+                    if(iAttrs.headerdescription != undefined)
+                        col.headerDescription = $scope.$eval(iAttrs.headerdescription);
+                    if(iAttrs.field != undefined)
+                        col.field = $scope.$eval(iAttrs.field);
+                    if (iAttrs.isfielddynamic != undefined)
+                        col.isFieldDynamic =  $scope.$eval(iAttrs.isfielddynamic);
+                    if(iAttrs.summaryfield != undefined )
+                        col.summaryField = $scope.$eval(iAttrs.summaryfield);
+                    if (iAttrs.tooltipfield != undefined)
+                        col.tooltipField = $scope.$eval(iAttrs.tooltipfield);
+                    if (iAttrs.widthfactor != undefined)
+                        col.widthFactor = $scope.$eval(iAttrs.widthfactor);
+                    if (iAttrs.enablehiding != undefined)
+                        col.enableHiding = $scope.$eval(iAttrs.enablehiding);
+                    if (iAttrs.isclickable != undefined)
+                        col.isClickable = $scope.$eval(iAttrs.isclickable);
+                    if (iAttrs.expendablecolumn != undefined)
+                        col.expendableColumn = true;
+                    if (iAttrs.onclicked != undefined)
+                        col.onClicked = $scope.$eval(iAttrs.onclicked);
+                    if (iAttrs.type != undefined)
+                        col.type = $scope.$eval(iAttrs.type);
+                    if (iAttrs.numberprecision != undefined)
+                        col.numberPrecision = $scope.$eval(iAttrs.numberprecision);
+                    if (iAttrs.tag != undefined)
+                        col.tag = $scope.$eval(iAttrs.tag);
+                    if (iAttrs.onsortchanged != undefined)
+                        col.onSortChanged = $scope.$eval(iAttrs.onsortchanged);
+                   
+                    if (iAttrs.getcolor != undefined)
+                        col.getcolor = $scope.$eval(iAttrs.getcolor);
+                    col.cellTemplate = cellTemplate;
+
                     var columnIndex = iAttrs.columnindex != undefined ? $scope.$eval(iAttrs.columnindex) : undefined;
-                    var getcolor = iAttrs.getcolor != undefined ? $scope.$eval(iAttrs.getcolor) : undefined;
-                    var col = {
-                        headerText: headerText,
-                        disableSorting:disableSorting,
-                        headerDescription:headerDescription,
-                        field: field,
-                        isFieldDynamic: isFieldDynamic,
-                        expendableColumn: expendableColumn,
-                        summaryField: summaryField,
-                        tooltipField: tooltipField,
-                        widthFactor: widthFactor,
-                        enableHiding: enableHiding,
-                        isClickable: isClickable,
-                        onClicked: onClicked,
-                        type: type,
-                        numberPrecision: numberPrecision,
-                        tag: tag,
-                        onSortChanged: onSortChanged,
-                        cellTemplate: cellTemplate,
-                        getcolor: getcolor
-                    };
 
                     var show = iAttrs.ngShow != undefined ? $scope.$eval(iAttrs.ngShow) : true;
 
