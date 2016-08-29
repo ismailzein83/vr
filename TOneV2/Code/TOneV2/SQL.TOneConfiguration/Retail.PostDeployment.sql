@@ -68,7 +68,7 @@ as (select * from (values
 (1505,'Network Elements',null,101,null,2,0),
 (1506,'Billing',null,null,'/images/menu-icons/billing.png',4,0),
 (1507,'Reports',null,null,'/images/menu-icons/NOC.png',5,0),
-(1508,'Entities Definition',null,1,null,55,0)
+(1508,'Entities Definition',null,-1,null,55,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
