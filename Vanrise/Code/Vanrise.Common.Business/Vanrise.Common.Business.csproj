@@ -69,6 +69,7 @@
     <Compile Include="BigData\BigDataWCFService.cs" />
     <Compile Include="BigData\IBigDataRequest.cs" />
     <Compile Include="CityManager.cs" />
+    <Compile Include="ConfigManager.cs" />
     <Compile Include="DataGrouping\DataGroupingAnalysisInfoManager.cs" />
     <Compile Include="DataGrouping\Distribution\DataGroupingDistributor.cs" />
     <Compile Include="DataGrouping\Distribution\DataGroupingDistributorRuntimeService.cs" />

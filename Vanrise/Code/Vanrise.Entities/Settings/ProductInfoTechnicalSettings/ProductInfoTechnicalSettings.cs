@@ -10,6 +10,6 @@ namespace Vanrise.Entities
     {
         public string ProductName { get; set; }
 
-        public float VersionNumber { get; set; }
+        public string VersionNumber { get; set; }
     }
 }
