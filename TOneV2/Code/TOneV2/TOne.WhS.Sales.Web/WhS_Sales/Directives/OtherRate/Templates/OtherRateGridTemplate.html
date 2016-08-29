@@ -21,6 +21,12 @@
                 </span>
             </vr-datagridcolumn>
 
+            <vr-datagridcolumn headertext="'Rate Change Type'">
+                <div style="text-align: left">
+                    <span class="{{'glyphicon ' + dataItem.RateChangeTypeIcon}}" />
+                </div>
+            </vr-datagridcolumn>
+
             <vr-datagridcolumn headertext="'BED'">
                 <span vr-disabled="!viewScope.areOtherRatesEditable()">
                     <span vr-disabled="dataItem.CurrentRate != null">

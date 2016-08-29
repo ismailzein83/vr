@@ -184,7 +184,6 @@
                     if (isConfirmed) {
                         WhS_Sales_RatePlanAPIService.DeleteChangedRates(ownerTypeSelectorAPI.getSelectedIds(), getOwnerId(), selectedId).then(function () {
                             draftCurrencyId = selectedId;
-                            VRNotificationService.showInformation('New rates have been deleted successfully');
                             loadGrid();
                         });
                     }
@@ -431,13 +430,18 @@
 
         function loadRatePlan()
         {
+            $scope.isLoadingRatePlan = true;
             var promises = [];
 
             var ownerTypeValue = ownerTypeSelectorAPI.getSelectedIds();
 
             var isLoadingZoneLetters = true;
+
             var zoneLettersGetPromise = getZoneLetters();
             promises.push(zoneLettersGetPromise);
+
+            var getDraftCurrencyIdPromise = getDraftCurrencyId();
+            promises.push(getDraftCurrencyIdPromise);
 
             var loadGridDeferred = UtilsService.createPromiseDeferred();
             promises.push(loadGridDeferred.promise);
@@ -445,9 +449,9 @@
             var checkIfDraftExistsPromise = checkIfDraftExists();
             promises.push(checkIfDraftExistsPromise);
 
-            zoneLettersGetPromise.then(function () {
-                if ($scope.zoneLetters.length > 0)
-                {
+            UtilsService.waitMultiplePromises([zoneLettersGetPromise, getDraftCurrencyIdPromise]).then(function ()
+            {
+                if ($scope.zoneLetters.length > 0) {
                     $scope.showSaveButton = true;
                     $scope.showSettingsButton = true;
 
@@ -488,13 +492,10 @@
                 }
             });
 
-            if (ownerTypeSelectorAPI.getSelectedIds() == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
-                var getDraftCurrencyIdPromise = getDraftCurrencyId();
-                promises.push(getDraftCurrencyIdPromise);
-            }
-
             return UtilsService.waitMultiplePromises(promises).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoadingRatePlan = false;
             });
 
             function checkIfDraftExists() {
@@ -548,14 +549,22 @@
         }
         function getDraftCurrencyId()
         {
-            return WhS_Sales_RatePlanAPIService.GetDraftCurrencyId(WhS_BE_SalePriceListOwnerTypeEnum.Customer.value, getOwnerId()).then(function (response) {
-                if (response != null) {
-                    draftCurrencyId = response;
-                    currencySelectorAPI.selectedCurrency(response)
-                }
-                if (draftCurrencyId == undefined)
-                    draftCurrencyId = defaultCustomerCurrencyId;
-            });
+            if (ownerTypeSelectorAPI.getSelectedIds() == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value)
+            {
+                return WhS_Sales_RatePlanAPIService.GetDraftCurrencyId(WhS_BE_SalePriceListOwnerTypeEnum.Customer.value, getOwnerId()).then(function (response) {
+                    if (response != null) {
+                        draftCurrencyId = response;
+                        currencySelectorAPI.selectedCurrency(response)
+                    }
+                    if (draftCurrencyId == undefined)
+                        draftCurrencyId = defaultCustomerCurrencyId;
+                });
+            }
+            else {
+                var deferred = UtilsService.createPromiseDeferred();
+                deferred.resolve();
+                return deferred.promise;
+            }
         }
         
         function saveChanges(shouldLoadGrid)

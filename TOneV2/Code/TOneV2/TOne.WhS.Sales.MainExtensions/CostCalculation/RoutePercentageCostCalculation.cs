@@ -19,7 +19,7 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
                 foreach (var option in context.Route.RouteOptionsDetails)
                 {
                     if (option.Entity.Percentage.HasValue)
-                        cost += (option.Entity.SupplierRate * option.Entity.Percentage.Value);
+                        cost += (option.ConvertedSupplierRate * option.Entity.Percentage.Value);
                 }
                 context.Cost = cost / 100;
             }

@@ -11,7 +11,16 @@ app.directive
         "VRValidationService",
         "VRCommon_RateTypeAPIService",
         'WhS_Sales_RatePlanUtilsService',
-        function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService, VRCommon_RateTypeAPIService, WhS_Sales_RatePlanUtilsService)
+        function 
+        (
+            WhS_Sales_RatePlanAPIService,
+            UtilsService,
+            VRUIUtilsService,
+            VRNotificationService,
+            VRValidationService,
+            VRCommon_RateTypeAPIService,
+            WhS_Sales_RatePlanUtilsService
+        )
         {
             return {
                 restrict: "E",
@@ -28,7 +37,8 @@ app.directive
                 templateUrl: "/Client/Modules/WhS_Sales/Directives/Templates/RatePlanGridTemplate.html"
             };
 
-            function RatePlanGrid($scope, ctrl) {
+            function RatePlanGrid($scope, ctrl)
+            {
                 this.initializeController = initializeController;
 
                 var gridAPI;
@@ -58,8 +68,49 @@ app.directive
                             increasedRateDayOffset: increasedRateDayOffset,
                             decreasedRateDayOffset: decreasedRateDayOffset
                         };
-                        WhS_Sales_RatePlanUtilsService.onNewRateChanged(dataItem, settings);
+                        WhS_Sales_RatePlanUtilsService.onNewRateChanged(dataItem, settings, true);
                     };
+
+                    $scope.getRowStyle = function (dataItem)
+                    {
+                        if (dataItem.NewRate) {
+                            if (dataItem.RouteOptions != null) {
+                                var array = []; // Stores the indexes of route options greater than the new rate
+
+                                for (var i = 0; i < dataItem.RouteOptions.length; i++) {
+                                    if (dataItem.RouteOptions[i].SupplierRate > dataItem.NewRate)
+                                        array.push(i);
+                                }
+
+                                if (array.length == dataItem.RouteOptions.length) {
+                                    setColorOfRouteOptions(dataItem.RouteOptions, null);
+                                    return { CssClass: "bg-danger" };
+                                }
+
+                                else if (array.length > 0) {
+                                    for (var i = 0; i < dataItem.RouteOptions.length; i++)
+                                        dataItem.RouteOptions[i].Color = (UtilsService.contains(array, i)) ? 'orange' : null;
+                                }
+
+                                if (dataItem.RouteOptionsAPI != undefined) {
+                                    // Reload the route options directive to refresh the colors
+                                    var routeOptionsDirectivePayload = getRouteOptionsDirectivePayload(dataItem);
+                                    dataItem.RouteOptionsAPI.load(routeOptionsDirectivePayload);
+                                }
+                            }
+                        }
+                        else {
+                            setColorOfRouteOptions(dataItem.RouteOptions, null);
+
+                            if (dataItem.CurrentRate == null)
+                                return { CssClass: "bg-success" };
+                        }
+                    };
+                    function setColorOfRouteOptions(routeOptions, colorValue) {
+                        if (routeOptions != null)
+                            for (var i = 0; i < routeOptions.length; i++)
+                                routeOptions[i].Color = colorValue;
+                    }
                 }
 
                 function getGridDrillDownDefinitions() {
@@ -174,6 +225,8 @@ app.directive
                                 gridDrillDownTabs.setDrillDownExtensionObject(zoneItem);
                                 promises.push(zoneItem.RouteOptionsLoadDeferred.promise);
 
+                                WhS_Sales_RatePlanUtilsService.onNewRateChanged(zoneItem);
+
                                 zoneItems.push(zoneItem);
                             }
 
@@ -198,8 +251,10 @@ app.directive
                         };
                     }
 
-                    function extendZoneItem(zoneItem) {
+                    function extendZoneItem(zoneItem)
+                    {
                         zoneItem.IsDirty = false;
+                        zoneItem.showRateChangeType = true;
 
                         zoneItem.currentRateEED = zoneItem.CurrentRateEED; // Maintains the original value of zoneItem.CurrentRateEED in case the user deletes the new rate
                         setRouteOptionProperties(zoneItem);
@@ -374,17 +429,21 @@ app.directive
 
                             zoneItem.onRouteOptionsReady = function (api) {
                                 zoneItem.RouteOptionsAPI = api;
-                                var payload = {
-                                    RoutingDatabaseId: gridQuery.RoutingDatabaseId,
-                                    RoutingProductId: zoneItem.EffectiveRoutingProductId,
-                                    SaleZoneId: zoneItem.ZoneId,
-                                    RouteOptions: zoneItem.RouteOptions,
-                                    CurrencyId: gridQuery.CurrencyId
-                                };
-                                VRUIUtilsService.callDirectiveLoad(zoneItem.RouteOptionsAPI, payload, zoneItem.RouteOptionsLoadDeferred);
+                                var routeOptionsDirectivePayload = getRouteOptionsDirectivePayload(zoneItem);
+                                VRUIUtilsService.callDirectiveLoad(zoneItem.RouteOptionsAPI, routeOptionsDirectivePayload, zoneItem.RouteOptionsLoadDeferred);
                             };
                         }
                     }
+                }
+
+                function getRouteOptionsDirectivePayload(dataItem) {
+                    return {
+                        RoutingDatabaseId: gridQuery.RoutingDatabaseId,
+                        RoutingProductId: dataItem.EffectiveRoutingProductId,
+                        SaleZoneId: dataItem.ZoneId,
+                        RouteOptions: dataItem.RouteOptions,
+                        CurrencyId: gridQuery.CurrencyId
+                    };
                 }
 
                 function applyChanges(zoneChanges, zoneItem) {

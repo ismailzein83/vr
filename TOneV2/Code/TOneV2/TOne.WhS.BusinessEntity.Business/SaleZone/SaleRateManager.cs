@@ -158,7 +158,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
             protected override BigResult<SaleRateDetail> AllRecordsToBigResult(DataRetrievalInput<SaleRateQuery> input, IEnumerable<SaleRate> allRecords)
             {
-                return allRecords.ToBigResult(input, null, x => ConvertRateToCurrency(EntityDetailMapper(x), input.Query.CurrencyId));
+                DateTime? rateConversionEffectiveDate = null;
+                if (input.Query.CurrencyId.HasValue)
+                    rateConversionEffectiveDate = (input.Query.EffectiveOn.HasValue) ? input.Query.EffectiveOn.Value : DateTime.Now;
+                return allRecords.ToBigResult(input, null, x => ConvertRateToCurrency(EntityDetailMapper(x), input.Query.CurrencyId, rateConversionEffectiveDate));
             }
 
             public override SaleRateDetail EntityDetailMapper(SaleRate entity)
@@ -174,18 +177,18 @@ namespace TOne.WhS.BusinessEntity.Business
                 return saleRateDetail;
             }
 
-            private SaleRateDetail ConvertRateToCurrency(SaleRateDetail saleRateDetail, int? targetCurrencyId)
+            private SaleRateDetail ConvertRateToCurrency(SaleRateDetail saleRateDetail, int? targetCurrencyId, DateTime? rateConversionEffectiveDate)
             {
                 int currencyId = _saleRateManager.GetCurrencyId(saleRateDetail.Entity);
 
-                if (targetCurrencyId.HasValue)
+                if (targetCurrencyId.HasValue) // If true, then rateConversionEffectiveDate != null
                 {
-                    saleRateDetail.Rate = _currencyExchangeRateManager.ConvertValueToCurrency(saleRateDetail.Entity.NormalRate, currencyId, targetCurrencyId.Value, DateTime.Now);
+                    saleRateDetail.ConvertedRate = _currencyExchangeRateManager.ConvertValueToCurrency(saleRateDetail.Entity.NormalRate, currencyId, targetCurrencyId.Value, rateConversionEffectiveDate.Value);
                     saleRateDetail.CurrencyName = _currencyManager.GetCurrencySymbol(targetCurrencyId.Value);
                 }
                 else
                 {
-                    saleRateDetail.Rate = saleRateDetail.Entity.NormalRate;
+                    saleRateDetail.ConvertedRate = saleRateDetail.Entity.NormalRate;
                     saleRateDetail.CurrencyName = _currencyManager.GetCurrencySymbol(currencyId);
                 }
 

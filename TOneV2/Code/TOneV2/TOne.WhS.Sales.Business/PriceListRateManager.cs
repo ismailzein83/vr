@@ -41,9 +41,9 @@ namespace TOne.WhS.Sales.Business
                     {
                         if (recentExistingRate != null)
                         {
-                            if (rateToChange.NormalRate > recentExistingRate.Rate)
+                            if (rateToChange.NormalRate > recentExistingRate.ConvertedRate)
                                 rateToChange.ChangeType = RateChangeType.Increase;
-                            else if (rateToChange.NormalRate < recentExistingRate.Rate)
+                            else if (rateToChange.NormalRate < recentExistingRate.ConvertedRate)
                                 rateToChange.ChangeType = RateChangeType.Decrease;
 
                             rateToChange.RecentExistingRate = recentExistingRate;
@@ -177,7 +177,6 @@ namespace TOne.WhS.Sales.Business
                 RateTypeId = rateToChange.RateTypeId,
                 NormalRate = rateToChange.NormalRate,
                 OtherRates = rateToChange.OtherRates,
-                CurrencyId = rateToChange.CurrencyId,
                 Zone = zone,
                 BED = zone.BED > currentRateBED ? zone.BED : currentRateBED,
                 EED = rateToChange.EED

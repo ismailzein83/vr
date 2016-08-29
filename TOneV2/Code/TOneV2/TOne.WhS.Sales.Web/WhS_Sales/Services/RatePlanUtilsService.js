@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RatePlanUtilsService.$inject = ['UtilsService'];
+    RatePlanUtilsService.$inject = ['UtilsService', 'WhS_BE_RateChangeTypeEnum'];
 
-    function RatePlanUtilsService(UtilsService)
+    function RatePlanUtilsService(UtilsService, WhS_BE_RateChangeTypeEnum)
     {
         return {
             onNewRateChanged: onNewRateChanged,
@@ -12,14 +12,21 @@
             validateNewRateDates: validateNewRateDates
         };
 
-        function onNewRateChanged(dataItem, settings)
+        function onNewRateChanged(dataItem, settings, shouldSetNewRateDates)
+        {
+            if (shouldSetNewRateDates === true)
+                setNewRateDates(dataItem, settings);
+            setRateChangeTypeIcon(dataItem);
+        }
+        function setNewRateDates(dataItem, settings)
         {
             if (dataItem.NewRate) // This check is false when newRate is undefined, null or an empty string
             {
                 dataItem.CurrentRateNewEED = (dataItem.CurrentRateEED != null) ? dataItem.CurrentRateEED : dataItem.ZoneEED;
 
                 dataItem.NewRateBED = (dataItem.CurrentRate == null || Number(dataItem.NewRate) > dataItem.CurrentRate) ?
-                    getNowPlusDays(settings.increasedRateDayOffset) : getNowPlusDays(settings.decreasedRateDayOffset);
+                    getNowPlusDays(settings.increasedRateDayOffset) :
+                    getNowPlusDays(settings.decreasedRateDayOffset);
             }
             else {
                 dataItem.NewRateBED = null;
@@ -31,6 +38,27 @@
         }
         function getNowPlusDays(days) {
             return new Date(new Date().setDate(new Date().getDate() + days));
+        }
+        function setRateChangeTypeIcon(dataItem)
+        {
+            if (dataItem.NewRate) // This check is false when newRate is undefined, null or an empty string
+            {
+                if (dataItem.CurrentRate == null) {
+                    dataItem.RateChangeTypeIcon = null;
+                }
+                else if (Number(dataItem.NewRate) > dataItem.CurrentRate) {
+                    dataItem.RateChangeTypeIcon = 'glyphicon-arrow-up arrow-above';
+                }
+                else if (Number(dataItem.NewRate) < dataItem.CurrentRate) {
+                    dataItem.RateChangeTypeIcon = 'glyphicon-arrow-down arrow-below';
+                }
+                else {
+                    dataItem.RateChangeTypeIcon = null;
+                }
+            }
+            else {
+                dataItem.RateChangeTypeIcon = null;
+            }
         }
 
         function validateNewRate(dataItem) {

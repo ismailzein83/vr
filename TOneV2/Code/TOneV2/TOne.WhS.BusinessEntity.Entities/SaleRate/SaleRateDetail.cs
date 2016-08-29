@@ -12,6 +12,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string ZoneName { get; set; }
         public string CurrencyName { get; set; }
         public string RateTypeName { get; set; }
-        public decimal Rate { get; set; }
+        public decimal ConvertedRate { get; set; }
     }
 }

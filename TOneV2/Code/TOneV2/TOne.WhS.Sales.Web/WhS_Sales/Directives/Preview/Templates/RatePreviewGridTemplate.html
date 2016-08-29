@@ -7,10 +7,12 @@
     <vr-datagridcolumn headertext="'Rate Type'" field="'RateTypeName'" type="'Text'" ng-show="!ctrl.isNormalRateGrid"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Current Rate'" field="'Entity.CurrentRate'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'New Rate'" field="'Entity.NewRate'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Change Type'" field="'ChangeTypeDescription'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Change Type'">
+        <vr-icon icontype="dataItem.RateChangeTypeIconType" iconurl="dataItem.RateChangeTypeIconUrl" tooltip="dataItem.RateChangeTypeIconTooltip"></vr-icon>
+    </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Effective On'" field="'Entity.EffectiveOn'" type="'Date'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Effective Until'" field="'Entity.EffectiveUntil'" type="'Date'"></vr-datagridcolumn>
     <vr-datagridexpandablerow ng-if="ctrl.isNormalRateGrid">
-        <vr-whs-sales-ratepreview-grid on-ready="dataItem.onGridReady"></vr-whs-sales-ratepreview-grid>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>
 </vr-datagrid>

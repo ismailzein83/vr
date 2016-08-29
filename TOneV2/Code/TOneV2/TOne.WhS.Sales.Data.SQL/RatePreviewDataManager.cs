@@ -75,13 +75,8 @@ namespace TOne.WhS.Sales.Data.SQL
             if (record.IsCurrentRateInherited.HasValue)
                 isCurrentRateInherited = (record.IsCurrentRateInherited.Value) ? "1" : "0";
 
-            decimal? currentRate = null;
-            if (record.CurrentRate.HasValue)
-                currentRate = decimal.Round(record.CurrentRate.Value, 8);
-
-            decimal? newRate = null;
-            if (record.NewRate.HasValue)
-                newRate = decimal.Round(record.NewRate.Value, 8);
+            decimal? currentRate = GetRoundedRate(record.CurrentRate);
+            decimal? newRate = GetRoundedRate(record.NewRate);
 
             streamForBulkInsert.WriteRecord
             (
@@ -111,6 +106,13 @@ namespace TOne.WhS.Sales.Data.SQL
                 FieldSeparator = '^',
                 ColumnNames = columns
             };
+        }
+
+        private decimal? GetRoundedRate(decimal? rate)
+        {
+            if (rate.HasValue)
+                return decimal.Round(rate.Value, 8);
+            return null;
         }
 
         #endregion

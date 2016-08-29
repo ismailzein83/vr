@@ -49,6 +49,7 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             return new PrepareRatePreviewsInput()
             {
+                OwnerType = this.OwnerType.Get(context),
                 DataByZone = this.DataByZone.Get(context)
             };
         }

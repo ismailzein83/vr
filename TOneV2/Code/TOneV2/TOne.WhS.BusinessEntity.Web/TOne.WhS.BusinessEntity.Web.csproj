@@ -207,6 +207,7 @@
     <Content Include="WhS_BusinessEntity\Constant\PricingRuleTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\DBTableNameEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PricingTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\RateChangeTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\RoutingProductSaleZoneRelationTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\RoutingProductSupplierRelationTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePriceListOwnerTypeEnum.js" />

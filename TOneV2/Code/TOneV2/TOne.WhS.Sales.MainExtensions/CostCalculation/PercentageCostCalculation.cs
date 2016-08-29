@@ -31,7 +31,7 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
                 {
                     var percentageOption = percentageOptions[currentIndex];
                     if(percentageOption.Percentage.HasValue)
-                        cost += (option.Entity.SupplierRate * percentageOption.Percentage.Value);
+                        cost += (option.ConvertedSupplierRate * percentageOption.Percentage.Value);
                     currentIndex++;
                 }
                 context.Cost = cost / 100;

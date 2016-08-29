@@ -14,7 +14,7 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
             if (context.Route == null)
                 throw new ArgumentNullException("context.Route");
             if (context.Route.RouteOptionsDetails != null && context.Route.RouteOptionsDetails.Count() > 0)
-                context.Cost = context.Route.RouteOptionsDetails.Average(itm => itm.Entity.SupplierRate);
+                context.Cost = context.Route.RouteOptionsDetails.Average(x => x.ConvertedSupplierRate);
         }
     }
 }

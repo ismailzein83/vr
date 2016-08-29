@@ -1,10 +1,8 @@
 ﻿<div class="responsive-container" style="white-space: normal;">
-    <vr-label isvalue breakline>
-        <a style="cursor: pointer; display: inline-block; text-align: center; padding: 0px 10px 0px 0px;"
-           title="{{routeOption.title}}"
-           ng-repeat="routeOption in ctrl.routeOptions"
-           ng-click="ctrl.viewSupplier(routeOption)">
-            {{routeOption.SupplierRate | number: 4}}
-        </a>
-    </vr-label>
+    <a ng-repeat="routeOption in ctrl.routeOptions"
+        style="font-size: 11px; cursor: pointer; display: inline-block; text-align: center; padding: 0px 10px 0px 0px; color: {{routeOption.Color}}"
+        title="{{routeOption.title}}"
+        ng-click="ctrl.viewSupplier(routeOption)">
+        {{routeOption.ConvertedSupplierRate | number: 4}}
+    </a>
 </div>

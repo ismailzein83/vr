@@ -50,7 +50,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
             $scope.onNewRateChanged = function (otherRate)
             {
                 zoneItem.IsDirty = true;
-                WhS_Sales_RatePlanUtilsService.onNewRateChanged(otherRate, settings);
+                WhS_Sales_RatePlanUtilsService.onNewRateChanged(otherRate, settings, true);
             };
 
             $scope.validateNewRate = function (otherRate) {
@@ -110,6 +110,8 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                                     otherRate.CurrentRateNewEED = closedOtherRate.EED;
                                 }
                             }
+
+                            WhS_Sales_RatePlanUtilsService.onNewRateChanged(otherRate);
                         }
                     }
 

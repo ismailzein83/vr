@@ -10,7 +10,7 @@ namespace TOne.WhS.Sales.Entities
     {
         public ExistingZone ParentZone { get; set; }
 
-        public decimal Rate { get; set; }
+        public decimal ConvertedRate { get; set; }
 
         public BusinessEntity.Entities.SaleRate RateEntity { get; set; }
 

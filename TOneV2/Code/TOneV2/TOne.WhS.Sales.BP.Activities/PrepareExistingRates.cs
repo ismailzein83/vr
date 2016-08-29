@@ -62,14 +62,14 @@ namespace TOne.WhS.Sales.BP.Activities
             ExistingZone existingZone;
 
             if (!existingZonesById.TryGetValue(saleRate.ZoneId, out existingZone))
-                throw new NullReferenceException(String.Format("A rate exists for a missing or ineffective zone (Id: {0})", saleRate.ZoneId));
+                throw new NullReferenceException(String.Format("A rate exists for a missing or not effective zone (Id: {0})", saleRate.ZoneId));
 
             decimal convertedRate =
                 currencyExchangeRateManager.ConvertValueToCurrency(saleRate.NormalRate, saleRateManager.GetCurrencyId(saleRate), currencyId, effectiveOn);
 
             return new ExistingRate()
             {
-                Rate = convertedRate,
+                ConvertedRate = convertedRate,
                 RateEntity = saleRate,
                 ParentZone = existingZone
             };

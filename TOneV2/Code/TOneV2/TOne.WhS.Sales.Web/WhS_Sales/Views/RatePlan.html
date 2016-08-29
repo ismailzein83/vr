@@ -11,6 +11,7 @@
                                                          isrequired="true"
                                                          hideremoveicon="true">
                         </vr-whs-sales-ownertype-selector>
+
                         <span ng-show="showSellingProductSelector">
                             <vr-whs-be-sellingproduct-selector on-ready="onSellingProductSelectorReady"
                                                                selectedvalues="selectedSellingProduct"
@@ -20,6 +21,7 @@
                                                                hideremoveicon>
                             </vr-whs-be-sellingproduct-selector>
                         </span>
+                        
                         <span ng-show="showCarrierAccountSelector">
                             <vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountSelectorReady"
                                                                getcustomers
@@ -30,7 +32,15 @@
                                                                hideremoveicon>
                             </vr-whs-be-carrieraccount-selector>
                         </span>
+                    
+                        <vr-columns width="normal" ng-show="showCarrierAccountSelector">
+                            <vr-common-currency-selector on-ready="onCurrencySelectorReady"
+                                                         onselectionchanged="onCurrencyChanged"
+                                                         isrequired="showCarrierAccountSelector">
+                            </vr-common-currency-selector>
+                        </vr-columns>
                     </vr-validation-group>
+
                     <vr-columns colnum="2">
                         <vr-whs-routing-routingdatabase-selector on-ready="onDatabaseSelectorReady"
                                                                  getroutingproductroutes
@@ -39,17 +49,13 @@
                                                                  hideremoveicon>
                         </vr-whs-routing-routingdatabase-selector>
                     </vr-columns>
+                    
                     <vr-columns colnum="2">
                         <vr-whs-routing-rproutepolicy-selector on-ready="onPolicySelectorReady" isrequired></vr-whs-routing-rproutepolicy-selector>
                     </vr-columns>
+                    
                     <vr-columns colnum="2">
                         <vr-textbox type="number" label="Number of Options" value="numberOfOptions" minvalue="1" isrequired></vr-textbox>
-                    </vr-columns>
-                    <vr-columns width="normal" ng-show="showCarrierAccountSelector">
-                        <vr-common-currency-selector on-ready="onCurrencySelectorReady"
-                                                     onselectionchanged="onCurrencyChanged"
-                                                     isrequired="showCarrierAccountSelector">
-                        </vr-common-currency-selector>
                     </vr-columns>
                 </vr-validation-group>
             </vr-row>
@@ -69,23 +75,25 @@
             </vr-actionbar>
         </vr-row>
 
-        <vr-row ng-if="showDefaultItem">
-            <vr-columns width="fullrow">
-                <vr-directivetabs tabitems="defaultItemTabs"></vr-directivetabs>
-            </vr-columns>
-        </vr-row>
+        <div vr-loader="isLoadingRatePlan">
+            <vr-row ng-if="showDefaultItem">
+                <vr-columns width="fullrow">
+                    <vr-directivetabs tabitems="defaultItemTabs"></vr-directivetabs>
+                </vr-columns>
+            </vr-row>
 
-        <vr-row vr-loader="isLoadingZoneLetters" ng-show="showZoneLetters">
-            <vr-columns width="fullrow" ng-if="showZoneLetters">
-                <vr-choices selectedindex="connector.selectedZoneLetterIndex"
-                            onselectionchanged="onZoneLetterSelectionChanged()">
-                    <vr-choice ng-repeat="letter in zoneLetters">{{ letter | uppercase }}</vr-choice>
-                </vr-choices>
-            </vr-columns>
-        </vr-row>
+            <vr-row vr-loader="isLoadingZoneLetters" ng-show="showZoneLetters">
+                <vr-columns width="fullrow" ng-if="showZoneLetters">
+                    <vr-choices selectedindex="connector.selectedZoneLetterIndex"
+                                onselectionchanged="onZoneLetterSelectionChanged()">
+                        <vr-choice ng-repeat="letter in zoneLetters">{{ letter | uppercase }}</vr-choice>
+                    </vr-choices>
+                </vr-columns>
+            </vr-row>
 
-        <div ng-show="showGrid">
-            <vr-whs-sales-rateplan-grid on-ready="onGridReady"></vr-whs-sales-rateplan-grid>
+            <div ng-show="showGrid">
+                <vr-whs-sales-rateplan-grid on-ready="onGridReady"></vr-whs-sales-rateplan-grid>
+            </div>
         </div>
 </vr-form>
 </vr-panel>

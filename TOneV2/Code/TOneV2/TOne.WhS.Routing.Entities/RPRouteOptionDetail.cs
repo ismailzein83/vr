@@ -10,6 +10,6 @@ namespace TOne.WhS.Routing.Entities
     {
         public RPRouteOption Entity { get; set; }
         public string SupplierName { get; set; }
-        public decimal SupplierRate { get; set; }
+        public decimal ConvertedSupplierRate { get; set; }
     }
 }
