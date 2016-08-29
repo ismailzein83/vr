@@ -133,7 +133,9 @@
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-join-editor.js" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-measure-editor.js" />
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\Templates\DataAnalysisDefinitionGridTemplate.html" />
+    <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\Templates\DataAnalysisDefinitionSettingsTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\vr-analytic-dataanalysisdefinition-grid.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\vr-analytic-dataanalysisdefinition-settings.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticDimensionGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticJoinGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticAggregateGridTemplate.html" />
