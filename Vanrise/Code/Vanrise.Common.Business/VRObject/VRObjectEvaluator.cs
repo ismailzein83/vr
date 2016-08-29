@@ -55,7 +55,7 @@ namespace Vanrise.Common.Business
                 if (!objectTypeDefinition.Settings.Properties.TryGetValue(propertyName, out objectTypePropertyDefinition))
                     throw new NullReferenceException(String.Format("objectTypePropertyDefinition '{0}'", objectVariable.VRObjectTypeDefinitionId));
 
-                //if obj is null GetDefaultValue
+                //if object is null GetDefaultValue
                 if (!objects.TryGetValue(objectName, out obj))
                     obj = objectType.GetDefaultValue();
                 
@@ -64,24 +64,6 @@ namespace Vanrise.Common.Business
             {
                 throw new NullReferenceException(String.Format("objectVariable '{0}'", objectName));
             }
-
-
-            //if (objects.TryGetValue(objectName, out obj) && objectVariables.TryGetValue(objectName, out objectVariable)) {
-                
-            //    VRObjectTypeDefinition objectTypeDefinition = GetObjectTypeDefinition(objectVariable.VRObjectTypeDefinitionId);
-            //    if (objectTypeDefinition != null)
-            //        objectType = objectTypeDefinition.Settings.ObjectType;
-
-            //    if (!objectTypeDefinition.Settings.Properties.TryGetValue(propertyName, out objectTypePropertyDefinition))
-            //        throw new NullReferenceException(String.Format("objectTypePropertyDefinition '{0}'", objectVariable.VRObjectTypeDefinitionId)); 
-            //}
-            //else {
-            //    if(obj == null)
-            //        throw new NullReferenceException(String.Format("obj '{0}'", objectName));
-
-            //    if(objectVariable == null)
-            //        throw new NullReferenceException(String.Format("objectVariable '{0}'", objectName));
-            //}
         }
 
         private VRObjectTypeDefinition GetObjectTypeDefinition(Guid objectTypeDefinitionId)
