@@ -142,6 +142,7 @@ as (select * from (values
 (12028,'Customer Routes','Customer Routes','#/view/WhS_Routing/Views/CustomerRoute/CustomerRouteManagement',1210,'WhS_Routing/CustomerRoute/GetFilteredCustomerRoutes',null,null,null,0,3),
 (12029,'Route Rules','Route Rules','#/view/WhS_Routing/Views/RouteRule/RouteRuleManagement',1211,'WhS_Routing/RouteRule/GetFilteredRouteRules',null,null,null,0,2),
 (12030,'Route Options Rules','Route Options Rules','#/view/WhS_Routing/Views/RouteOptionRule/RouteOptionRuleManagement',1211,'WhS_Routing/RouteOptionRule/GetFilteredRouteOptionRules',null,null,null,0,2),
+(12043,'Route Sync Definitions','Route Sync Definitions','#/view/WhS_RouteSync/Views/RouteSyncDefinition/RouteSyncDefinitionManagement',1210,'WhS_RouteSync/RouteSyncDefinition/GetFilteredRouteSyncDefinitions',null,null,null,0,10),
 
 (12031,'Mapping Rules','Mapping Rules',null,1212,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":176}',101,1),
 (12032,'Normalization Rules','Normalization Rules',null,1212,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":186}',101,2),
@@ -384,6 +385,7 @@ as (select * from (values
 (3451,'WhS_Routing_ProductCost','Product Cost',1204,0,'["View"]'),
 (3452,'WhS_Routing_RouteOptionRule','Route Option Rule',1204,0,'["View","Add","Edit"]'),
 (3453,'WhS_Routing_CustomerRoute','Customer Route',1204,0,'["View"]'),
+(4517,'WhS_RouteSync_RouteSyncDefinition','Route Sync Definition',1204,0,'["View","Add","Update"]'),
 
 (3454,'BusinessProcess_BP_Route_Build','Route Build',1207,0,'["View", "StartInstance", "ScheduleTask"]'),
 (3455,'BusinessProcess_BP_Product_Cost_Generation','Product Cost Generation',1207,0,'["View", "StartInstance", "ScheduleTask"]'),
@@ -599,6 +601,13 @@ as (select * from (values
 ('WhS_Routing/RouteOptionRule/UpdateRule','WhS_Routing_RouteOptionRule: Edit'),
 ('WhS_Routing/RouteOptionRule/DeleteRule',null),
 ('WhS_Routing/RouteOptionRule/GetRouteOptionRuleSettingsTemplates',null),
+
+('WhS_RouteSync/RouteSyncDefinition/GetFilteredRouteSyncDefinitions','WhS_RouteSync_RouteSyncDefinition: View'),
+('WhS_RouteSync/RouteSyncDefinition/GetRouteSyncDefinition',null),
+('WhS_RouteSync/RouteSyncDefinition/AddRouteSyncDefinition','WhS_RouteSync_RouteSyncDefinition: Add'),
+('WhS_RouteSync/RouteSyncDefinition/UpdateRouteSyncDefinition','WhS_RouteSync_RouteSyncDefinition: Edit'),
+('WhS_RouteSync/RouteSyncDefinition/GetRouteReaderExtensionConfigs',null),
+('WhS_RouteSync/RouteSyncDefinition/GetRouteSyncDefinitionsInfo',null),
 
 ('WhS_Sales/RatePlan/ValidateCustomer',null),
 ('WhS_Sales/RatePlan/GetZoneLetters',null),
