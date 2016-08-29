@@ -272,25 +272,64 @@ when not matched by target then
 	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
 	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags]);
 
---[common].[EmailTemplate]-----------------------1 to 1000------------------------------------------
+--[common].[VRObjectTypeDefinition]-----------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-set identity_insert [common].[EmailTemplate] on;
-;with cte_data([ID],[Name],[BodyTemplate],[SubjectTemplate],[Type])
+;with cte_data([ID],[Name],[Settings],[CreatedTime])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'New Password','<span>Dear @Model.Name,</span><br/><span>Please find below your new password:</span><br/><span>@Model.Password</span><br/><span><strong>ProductX</strong></span>','ProductX: New Password for user @Model.Name','VR_Sec_NewPassword'),
-(2,'Reset Password','<span>Dear @Model.Name,</span><br/><span>Please find below your new password after reset:</span><br/><span>@Model.Password</span><br/><span><strong>ProductX</strong></span>','ProductX: Reset Password for user @Model.Name','VR_Sec_ResetPassword'),
-(3,'Forgot Password','<span>Dear @Model.Name,</span><br/><span>Please find below your new password after forgot:</span><br/><span>@Model.Password</span><br/><span><strong>ProductX</strong></span>','ProductX: Forgot Password for user @Model.Name','VR_Sec_ForgotPassword')
+('1C93042E-939B-4022-9F13-43C3718EF644','Text','{"$type":"Vanrise.Entities.VRObjectTypeDefinitionSettings, Vanrise.Entities","ObjectType":{"$type":"Vanrise.Common.MainExtensions.VRObjectTypes.TextObjectType, Vanrise.Common.MainExtensions","ConfigId":3009},"Properties":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities]], mscorlib","Value":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Value","Description":"Value","PropertyEvaluator":{"$type":"Vanrise.Common.MainExtensions.VRObjectTypes.TextValuePropertyEvaluator, Vanrise.Common.MainExtensions","ConfigId":3010}}}}','2016-08-25 15:30:09.050'),
+('E3887CC9-1FBB-44D1-B1E3-7A0922400550','User','{"$type":"Vanrise.Entities.VRObjectTypeDefinitionSettings, Vanrise.Entities","ObjectType":{"$type":"Vanrise.Security.MainExtensions.VRObjectTypes.UserObjectType, Vanrise.Security.MainExtensions","ConfigId":3007},"Properties":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities]], mscorlib","Email":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Email","Description":"Email of the User","PropertyEvaluator":{"$type":"Vanrise.Security.MainExtensions.VRObjectTypes.UserProfilePropertyEvaluator, Vanrise.Security.MainExtensions","UserField":0,"ConfigId":3008}},"Name":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Name","Description":"Name of the User","PropertyEvaluator":{"$type":"Vanrise.Security.MainExtensions.VRObjectTypes.UserProfilePropertyEvaluator, Vanrise.Security.MainExtensions","UserField":1,"ConfigId":3008}}}}','2016-08-25 11:37:07.290')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[BodyTemplate],[SubjectTemplate],[Type]))
-merge	[common].[EmailTemplate] as t
+)c([ID],[Name],[Settings],[CreatedTime]))
+merge	[common].[VRObjectTypeDefinition] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Name] = s.[Name],[BodyTemplate] = s.[BodyTemplate],[SubjectTemplate] = s.[SubjectTemplate],[Type] = s.[Type]
+	[Name] = s.[Name],[Settings] = s.[Settings]
 when not matched by target then
-	insert([ID],[Name],[BodyTemplate],[SubjectTemplate],[Type])
-	values(s.[ID],s.[Name],s.[BodyTemplate],s.[SubjectTemplate],s.[Type]);
-set identity_insert [common].[EmailTemplate] off;
+	insert([ID],[Name],[Settings])
+	values(s.[ID],s.[Name],s.[Settings]);
+
+--[common].[MailMessageType]------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Settings],[CreatedTime])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('E14BE7AF-9D4C-490B-AD3B-122229A660C2','New User','{"$type":"Vanrise.Entities.VRMailMessageTypeSettings, Vanrise.Entities","Objects":{"$type":"Vanrise.Entities.VRObjectVariableCollection, Vanrise.Entities","User":{"$type":"Vanrise.Entities.VRObjectVariable, Vanrise.Entities","ObjectName":"User","VRObjectTypeDefinitionId":"e3887cc9-1fbb-44d1-b1e3-7a0922400550"},"Password":{"$type":"Vanrise.Entities.VRObjectVariable, Vanrise.Entities","ObjectName":"Password","VRObjectTypeDefinitionId":"1c93042e-939b-4022-9f13-43c3718ef644"}},"SupportMultipleTemplates":false}','2016-08-25 16:19:36.283'),
+('62671C45-8598-4BA2-9E96-8927B07FCB4D','Forgot Password','{"$type":"Vanrise.Entities.VRMailMessageTypeSettings, Vanrise.Entities","Objects":{"$type":"Vanrise.Entities.VRObjectVariableCollection, Vanrise.Entities","User":{"$type":"Vanrise.Entities.VRObjectVariable, Vanrise.Entities","ObjectName":"User","VRObjectTypeDefinitionId":"e3887cc9-1fbb-44d1-b1e3-7a0922400550"},"Password":{"$type":"Vanrise.Entities.VRObjectVariable, Vanrise.Entities","ObjectName":"Password","VRObjectTypeDefinitionId":"1c93042e-939b-4022-9f13-43c3718ef644"}},"SupportMultipleTemplates":false}','2016-08-25 11:38:30.343'),
+('716A6E2D-7AC5-4A55-AABA-F2A4CFEB46A3','Reset Password','{"$type":"Vanrise.Entities.VRMailMessageTypeSettings, Vanrise.Entities","Objects":{"$type":"Vanrise.Entities.VRObjectVariableCollection, Vanrise.Entities","User":{"$type":"Vanrise.Entities.VRObjectVariable, Vanrise.Entities","ObjectName":"User","VRObjectTypeDefinitionId":"e3887cc9-1fbb-44d1-b1e3-7a0922400550"},"Password":{"$type":"Vanrise.Entities.VRObjectVariable, Vanrise.Entities","ObjectName":"Password","VRObjectTypeDefinitionId":"1c93042e-939b-4022-9f13-43c3718ef644"}},"SupportMultipleTemplates":false}','2016-08-25 17:10:56.517')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Settings],[CreatedTime]))
+merge	[common].[MailMessageType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Settings])
+	values(s.[ID],s.[Name],s.[Settings]);
+
+--[common].[MailMessageTemplate]--------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[MessageTypeID],[Settings],[CreatedTime])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('D9B56FC2-EB3E-4340-8918-159A281B95BC','New User','E14BE7AF-9D4C-490B-AD3B-122229A660C2','{"$type":"Vanrise.Entities.VRMailMessageTemplateSettings, Vanrise.Entities","Variables":{"$type":"System.Collections.Generic.List`1[[Vanrise.Entities.VRObjectPropertyVariable, Vanrise.Entities]], mscorlib","$values":[]},"To":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"@Model.GetVal(\"User\",\"Email\")"},"CC":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities"},"Subject":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"ProductX: New Password for user @Model.GetVal(\"User\",\"Name\")"},"Body":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"Dear  @Model.GetVal(\"User\",\"Name\"),\n\nPlease find below your new password:\n@Model.GetVal(\"Password\",\"Value\")\nProductX"}}','2016-08-25 16:22:40.453'),
+('E21CD125-61F0-4091-A03E-200CFE33F6E3','Forgot Password','62671C45-8598-4BA2-9E96-8927B07FCB4D','{"$type":"Vanrise.Entities.VRMailMessageTemplateSettings, Vanrise.Entities","Variables":{"$type":"System.Collections.Generic.List`1[[Vanrise.Entities.VRObjectPropertyVariable, Vanrise.Entities]], mscorlib","$values":[]},"To":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"@Model.GetVal(\"User\",\"Email\")"},"CC":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities"},"Subject":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"ProductX: Forgot Password for user  @Model.GetVal(\"User\",\"Name\")"},"Body":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"Dear  @Model.GetVal(\"User\",\"Name\"),\n\nPlease find below your new password after forgot:\n@Model.GetVal(\"Password\",\"Value\")\nProductX"}}','2016-08-25 11:41:47.553'),
+('10264FE7-99D5-4F6A-8E8C-44A0702F392E','Reset Password','716A6E2D-7AC5-4A55-AABA-F2A4CFEB46A3','{"$type":"Vanrise.Entities.VRMailMessageTemplateSettings, Vanrise.Entities","Variables":{"$type":"System.Collections.Generic.List`1[[Vanrise.Entities.VRObjectPropertyVariable, Vanrise.Entities]], mscorlib","$values":[]},"To":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"@Model.GetVal(\"User\",\"Email\")"},"CC":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities"},"Subject":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"ProductX: Reset Password for user @Model.GetVal(\"User\",\"Name\")"},"Body":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"Dear  @Model.GetVal(\"User\",\"Name\"),\n\nPlease find below your new password after reset:\n@Model.GetVal(\"Password\",\"Value\")\nProductX"}}','2016-08-25 17:12:17.223')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[MessageTypeID],[Settings],[CreatedTime]))
+merge	[common].[MailMessageTemplate] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[MessageTypeID] = s.[MessageTypeID],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[MessageTypeID],[Settings])
+	values(s.[ID],s.[Name],s.[MessageTypeID],s.[Settings]);
