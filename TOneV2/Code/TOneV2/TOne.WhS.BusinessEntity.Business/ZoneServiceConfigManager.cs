@@ -200,7 +200,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 Entity = zoneServiceConfig
             };
             if(zoneServiceConfig.Settings.ParentId.HasValue){
-                var parentzoneServiceConfig=  GetZoneServiceConfig(zoneServiceConfig.Settings.ParentId.Value);
+                
+                var parentzoneServiceConfig =  GetZoneServiceConfig(zoneServiceConfig.Settings.ParentId.Value);
+                if (parentzoneServiceConfig==null)
+                  throw new DataIntegrityValidationException(String.Format("Parent Zone Service  '{0}' does not exist", (zoneServiceConfig.Settings.ParentId)));
+
                 zoneServiceConfigDetail.ParentName = parentzoneServiceConfig != null ? parentzoneServiceConfig.Settings.Name : null;
             }
             return zoneServiceConfigDetail;

@@ -76,7 +76,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticControls, loadServiceZoneConfig]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticControls, loadServiceZoneConfigSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -84,7 +84,7 @@
         }
 
         function setTitle() {
-            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(zoneServiceConfigEntity ? zoneServiceConfigEntity.Name : null, 'Zone Service Config') : UtilsService.buildTitleForAddEditor('Zone Service Config');
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(zoneServiceConfigEntity ? zoneServiceConfigEntity.Settings.Name : null, 'Zone Service Config') : UtilsService.buildTitleForAddEditor('Zone Service Config');
         }
 
         function loadStaticControls() {
@@ -97,7 +97,7 @@
             $scope.color = zoneServiceConfigEntity.Settings.Color;
         }
 
-        function loadServiceZoneConfig() {
+        function loadServiceZoneConfigSelector() {
             var serviceZoneConfigLoadDeferred = UtilsService.createPromiseDeferred();
 
             zoneServiceSelectorReadyDeferred.promise.then(function () {

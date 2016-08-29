@@ -18,6 +18,8 @@ app.directive('vrWhsBeServicesViewer', [
                 }
                 var ctor = new zoneServicesViewerCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
+
+               
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -28,18 +30,9 @@ app.directive('vrWhsBeServicesViewer', [
                     }
                 }
             },
-            template: function (element, attrs) {
-                return getBeServiceViewerTemplate(attrs);
-            }
+            templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/ZoneServiceConfig/Templates/ZoneServiceViewer.html"
         };
-        function getBeServiceViewerTemplate(attrs) {
-            var template = '<div  style="height: 15px;">'
-                            + '<div ng-repeat="item in ctrl.selectedItems" style="display:inline-block;width:10px;height: 100%;margin: 0px 3px;"  ng-style="{\'background-color\':ctrl.getSelectedItemColor(item)}"></div>'
-                                + '</div>'
-                            + '</div>'
-            return template;
-        }
-
+       
         function zoneServicesViewerCtor(ctrl, $scope, attrs) {
 
             function initializeController() {
@@ -56,11 +49,11 @@ app.directive('vrWhsBeServicesViewer', [
                         selectedIds = payload.selectedIds;
                         service = payload.service;
                     }
-                    if (service != undefined){
+                    if (service != undefined) {
                         ctrl.selectedItems.push(service);
                     }
                     else
-                        getAllZoneServiceConfigs(ctrl, selectedIds)
+                        return getAllZoneServiceConfigs(ctrl, selectedIds);
                 }
 
                 if (ctrl.onReady != null)

@@ -2497,3 +2497,10 @@ div[validationcontainer]{
   left: auto !important;
   right: 7px;
 }
+/*vr-service-viewer*/
+.vr-service-viewer{
+    display:inline-block;
+    width:10px;
+    height: 100%;
+    margin: 0px 3px;
+}
