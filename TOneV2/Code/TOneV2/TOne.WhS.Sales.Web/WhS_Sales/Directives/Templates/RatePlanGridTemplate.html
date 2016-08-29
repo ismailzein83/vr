@@ -34,7 +34,19 @@
                                disablesorting>
             </vr-datagridcolumn>
 
-            <vr-datagridcolumn headertext="'Current Rate'" field="'CurrentRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Current Rate'"
+                               field="'CurrentRate'"
+                               type="'Number'"
+                               numberprecision="'LongPrecision'"                              
+                               disablesorting>
+                <div style="text-align: right">
+                    <vr-label isvalue="true">
+                        <a href="" ng-if="dataItem.FutureNormalRate != null" ng-click="viewScope.onCurrentRateClicked(dataItem)" style="color: purple; text-decoration: underline">{{dataItem.CurrentRate}}</a>
+                        <span ng-if="dataItem.FutureNormalRate == null">{{dataItem.CurrentRate}}</span>
+                    </vr-label>
+                </div>
+            </vr-datagridcolumn>
+
             <vr-datagridcolumn headertext="'Calculated Rate'"
                                field="'CalculatedRate'"
                                type="'Number'"

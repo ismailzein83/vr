@@ -5,12 +5,12 @@
     RatePlanService.$inject = ['VRModalService'];
 
     function RatePlanService(VRModalService) {
-        return ({
+        return {
             sellNewCountries: sellNewCountries,
             editSettings: editSettings,
             editPricingSettings: editPricingSettings,
-            viewChanges: viewChanges
-        });
+            viewFutureNormalRate: viewFutureNormalRate
+        };
 
         function sellNewCountries(customerId, onCountriesSold) {
             var parameters = {
@@ -55,19 +55,16 @@
             VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanPricingSettings.html", parameters, modalSettings);
         }
 
-        function viewChanges(ownerType, ownerId, onRatePlanChangesClose) {
+        function viewFutureNormalRate(zoneName, futureNormalRate)
+        {
             var parameters = {
-                OwnerType: ownerType,
-                OwnerId: ownerId
+                zoneName: zoneName,
+                futureNormalRate: futureNormalRate
             };
 
             var settings = {};
-            settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Rate Plan Changes";
-                modalScope.onRatePlanChangesClose = onRatePlanChangesClose;
-            };
 
-            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanChanges.html", parameters, settings);
+            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/FutureNormalRate.html", parameters, settings);
         }
     }
 

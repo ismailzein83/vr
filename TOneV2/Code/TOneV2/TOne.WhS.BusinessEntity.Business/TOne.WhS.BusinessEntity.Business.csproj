@@ -105,6 +105,7 @@
     <Compile Include="RoutingProducts\SaleEntityRoutingProductCacheManager.cs" />
     <Compile Include="RoutingProducts\SaleEntityRoutingProductReadAllNoCache.cs" />
     <Compile Include="RoutingProducts\SaleEntityRoutingProductReadWithCache.cs" />
+    <Compile Include="SaleZone\FutureSaleRateReadWithCache.cs" />
     <Compile Include="SaleZone\ISaleRateReader.cs" />
     <Compile Include="SaleZone\SaleCodeCacheManager.cs" />
     <Compile Include="SaleZone\SaleRateCacheManager.cs" />

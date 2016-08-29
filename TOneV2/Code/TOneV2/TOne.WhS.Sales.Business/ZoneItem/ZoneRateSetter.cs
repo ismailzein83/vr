@@ -26,6 +26,7 @@ namespace TOne.WhS.Sales.Business
         private int _targetCurrencyId;
 
         private SaleEntityZoneRateLocator _rateLocator;
+        private SaleEntityZoneRateLocator _futureRateLocator;
         private CurrencyExchangeRateManager _currencyExchangeRateManager;
         private SaleRateManager _saleRateManager;
         
@@ -49,6 +50,7 @@ namespace TOne.WhS.Sales.Business
             _targetCurrencyId = targetCurrencyId;
 
             _rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(_effectiveOn));
+            _futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());
             _currencyExchangeRateManager = new CurrencyExchangeRateManager();
             _saleRateManager = new SaleRateManager();
         }
@@ -85,9 +87,28 @@ namespace TOne.WhS.Sales.Business
                 }
             }
 
+            SetZoneFutureNormalRate(zoneItem);
             SetZoneRateChanges(zoneItem);
         }
-        
+
+        private void SetZoneFutureNormalRate(ZoneItem zoneItem)
+        {
+            SaleEntityZoneRate futureRate = (_ownerType == SalePriceListOwnerType.SellingProduct) ?
+                _futureRateLocator.GetSellingProductZoneRate(_ownerId, zoneItem.ZoneId) :
+                _futureRateLocator.GetCustomerZoneRate(_ownerId, (int)_sellingProductId, zoneItem.ZoneId);
+
+            if (futureRate != null && futureRate.Rate != null)
+            {
+                zoneItem.FutureNormalRate = new FutureRate()
+                {
+                    RateTypeId = futureRate.Rate.RateTypeId,
+                    Rate = futureRate.Rate.NormalRate,
+                    BED = futureRate.Rate.BED,
+                    EED = futureRate.Rate.EED
+                };
+            }
+        }
+
         #endregion
 
         #region Private Methods

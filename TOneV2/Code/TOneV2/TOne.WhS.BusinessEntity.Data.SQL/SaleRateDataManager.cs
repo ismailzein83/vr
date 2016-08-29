@@ -113,6 +113,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             dtRoutingInfos.Columns.Add("OwnerTpe", typeof(Int32));
             return dtRoutingInfos;
         }
+
+        public IEnumerable<SaleRate> GetFutureSaleRates(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetFutureByOwner", SaleRateMapper, ownerType, ownerId);
+        }
+
         #endregion
 
         #region Mappers

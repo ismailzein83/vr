@@ -11,6 +11,7 @@ app.directive
         "VRValidationService",
         "VRCommon_RateTypeAPIService",
         'WhS_Sales_RatePlanUtilsService',
+        'WhS_Sales_RatePlanService',
         function 
         (
             WhS_Sales_RatePlanAPIService,
@@ -19,7 +20,8 @@ app.directive
             VRNotificationService,
             VRValidationService,
             VRCommon_RateTypeAPIService,
-            WhS_Sales_RatePlanUtilsService
+            WhS_Sales_RatePlanUtilsService,
+            WhS_Sales_RatePlanService
         )
         {
             return {
@@ -61,6 +63,11 @@ app.directive
                         return loadZoneItems();
                     };
 
+                    $scope.onCurrentRateClicked = function (dataItem)
+                    {
+                        WhS_Sales_RatePlanService.viewFutureNormalRate(dataItem.ZoneName, dataItem.FutureNormalRate);
+                    };
+
                     $scope.onNewRateChanged = function (dataItem)
                     {
                         dataItem.IsDirty = true;
@@ -78,7 +85,7 @@ app.directive
                                 var array = []; // Stores the indexes of route options greater than the new rate
 
                                 for (var i = 0; i < dataItem.RouteOptions.length; i++) {
-                                    if (dataItem.RouteOptions[i].SupplierRate > dataItem.NewRate)
+                                    if (dataItem.RouteOptions[i].ConvertedSupplierRate > dataItem.NewRate)
                                         array.push(i);
                                 }
 
