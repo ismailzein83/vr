@@ -7,8 +7,11 @@ using Vanrise.Entities;
 
 namespace Vanrise.Common.MainExtensions.VRObjectTypes
 {
-    public class TextObjectType : VRObjectType
+    public class ProductObjectType : VRObjectType
     {
-
+        public override dynamic GetDefaultValue()
+        {
+            return null;
+        }
     }
 }
