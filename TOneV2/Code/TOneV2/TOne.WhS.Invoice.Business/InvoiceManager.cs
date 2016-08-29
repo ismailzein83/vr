@@ -17,7 +17,7 @@ namespace TOne.WhS.Invoice.Business
             if (filter == null)
                 throw new NullReferenceException("filter");
             bool getProfiles = false;
-            bool getAccounts = true;
+            bool getAccounts = false;
 
             if(filter.CarrierTypes == null)
             {

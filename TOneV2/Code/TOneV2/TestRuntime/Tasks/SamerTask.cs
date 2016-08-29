@@ -97,7 +97,7 @@ namespace TestRuntime.Tasks
                         new InvoiceUISubSection 
                         {
                             SectionTitle = "Customer Invoice Items",
-                            Directive = "whs-invoice-invoiceitem-customer"
+                            //Directive = "whs-invoice-invoiceitem-customer"
                         }
                     },
                     InvoiceGridActions = new List<InvoiceGridAction>
