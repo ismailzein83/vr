@@ -9,6 +9,7 @@ namespace TOne.WhS.Routing.Entities
 {
     public class RouteRule : Vanrise.Rules.BaseRule, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria
     {
+        public string SourceId { get; set; }
         public RouteRuleCriteria Criteria { get; set; }        
 
         public RouteRuleSettings Settings { get; set; }
