@@ -68,6 +68,9 @@
     <Reference Include="Vanrise.GenericData.MainExtensions">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\DatabaseScripts.cs" />
@@ -78,6 +81,10 @@
     <Compile Include="Common\MigrationContext.cs" />
     <Compile Include="Common\MigrationCredentials.cs" />
     <Compile Include="IDManagerEntity.cs" />
+    <Compile Include="Rules\SourceBaseRule.cs" />
+    <Compile Include="Rules\SourceRule.cs" />
+    <Compile Include="Rules\SourceRouteOverrideRule.cs" />
+    <Compile Include="Rules\SupplierOption.cs" />
     <Compile Include="SourceCarrierSwitchConnectivity.cs" />
     <Compile Include="SourceCustomerSellingProduct.cs" />
     <Compile Include="SourceCarrierAccount.cs" />
@@ -85,6 +92,7 @@
     <Compile Include="SourceCustomerZone.cs" />
     <Compile Include="SourcePriceList.cs" />
     <Compile Include="SourceRate.cs" />
+    <Compile Include="Rules\SourceRouteOptionBlockRule.cs" />
     <Compile Include="SourceZone.cs" />
     <Compile Include="SourceCodeGroup.cs" />
     <Compile Include="SourceCurrencyExchangeRate.cs" />
@@ -98,7 +106,12 @@
     <Compile Include="SwitchMigration\SwitchLogger.cs" />
     <Compile Include="SwitchMigration\SwitchMappingRules.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.Routing.Entities\TOne.WhS.Routing.Entities.csproj">
+      <Project>{b645c1d2-c038-4890-85aa-588fa3c3fc7a}</Project>
+      <Name>TOne.WhS.Routing.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

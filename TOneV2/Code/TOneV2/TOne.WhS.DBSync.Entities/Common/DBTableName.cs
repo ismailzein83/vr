@@ -65,6 +65,9 @@ namespace TOne.WhS.DBSync.Entities
         File,
 
         [Description("SwitchConnectivity")]
-        SwitchConnectivity
+        SwitchConnectivity,
+
+        [Description("Rule")]
+        Rule
     }
 }

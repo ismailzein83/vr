@@ -145,6 +145,9 @@ namespace TOne.WhS.DBSync.Business
                     case DBTableName.SwitchConnectivity:
                         iDBSyncDataManager = new SwitchConnectivityDBSyncDataManager(context.UseTempTables);
                         break;
+                    case DBTableName.Rule:
+                        iDBSyncDataManager = new RulesDBSyncDataManager(context.UseTempTables);
+                        break;
 
                 }
                 AddDBTable(dtTables, table, iDBSyncDataManager.GetConnection(), iDBSyncDataManager.GetSchema(), migrationRequested);
@@ -198,9 +201,9 @@ namespace TOne.WhS.DBSync.Business
 
         private void FinalizeMigration(MigrationContext context, MigrationManager migrationManager)
         {
-                context.WriteInformation("Finalizing Migration Started");
-                migrationManager.FinalizeMigration(context.UseTempTables, _idManagerEntities);
-                context.WriteInformation("Finalizing Migration Ended");
+            context.WriteInformation("Finalizing Migration Started");
+            migrationManager.FinalizeMigration(context.UseTempTables, _idManagerEntities);
+            context.WriteInformation("Finalizing Migration Ended");
         }
 
         private void PrepareBeforeApplyingRecords(MigrationContext context, MigrationManager migrationManager)
@@ -284,6 +287,9 @@ namespace TOne.WhS.DBSync.Business
 
                 case DBTableName.SwitchConnectivity:
                     imgrator = new SwitchConnectivityMigrator(context);
+                    break;
+                case DBTableName.Rule:
+                    imgrator = new RuleMigrator(context);
                     break;
             }
 
