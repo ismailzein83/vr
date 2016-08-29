@@ -76,7 +76,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticControls]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticControls, loadServiceZoneConfig]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -88,9 +88,13 @@
         }
 
         function loadStaticControls() {
-            if (zoneServiceConfigEntity) {
-                $scope.name = zoneServiceConfigEntity.Name;
-            }
+            if (zoneServiceConfigEntity == undefined)
+                return
+
+            $scope.name = zoneServiceConfigEntity.Settings.Name;
+            $scope.symbol = zoneServiceConfigEntity.Symbol;
+            $scope.description = zoneServiceConfigEntity.Settings.Description;
+            $scope.color = zoneServiceConfigEntity.Settings.Color;
         }
 
         function loadServiceZoneConfig() {
@@ -99,15 +103,14 @@
             zoneServiceSelectorReadyDeferred.promise.then(function () {
                 var payload;
 
-                if (zoneServiceConfigEntity != undefined && zoneServiceConfigEntity.Settings != undefined && zoneServiceConfigEntity.Settings.ParentId != null) {
+                if (zoneServiceConfigEntity != undefined && zoneServiceConfigEntity.Settings != undefined ) {
                     payload = {
-                        selectedIds: ParentId,
                         filter :{
                             AssinableToServiceId: zoneServiceConfigId
                         }
                     };
+                    payload.selectedIds = zoneServiceConfigEntity.Settings.ParentId != null ? zoneServiceConfigEntity.Settings.ParentId : undefined;
                 }
-
                 VRUIUtilsService.callDirectiveLoad(zoneServiceAPI, payload, serviceZoneConfigLoadDeferred);
             });
 
@@ -144,7 +147,7 @@
 
         function buildZoneServiceConfigObjFromScope() {
             var obj = {
-                ZoneServiceConfigId:zoneServiceConfigEntity!=undefined ? zoneServiceConfigEntity.ZoneServiceConfigId:undefined,
+                ZoneServiceConfigId: zoneServiceConfigId != undefined ? zoneServiceConfigId : undefined,
                 Symbol: $scope.symbol,
                 Settings: {
                     $type: "TOne.WhS.BusinessEntity.Entities.ServiceConfigSetting, TOne.WhS.BusinessEntity.Entities",

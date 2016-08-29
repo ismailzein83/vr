@@ -15,7 +15,6 @@
             $scope.hasAddZoneServiceConfigPermission = function () {
                 return WhS_BE_ZoneServiceConfigAPIService.HasAddZoneServiceConfigPermission();
             }
-
             $scope.searchClicked = function () {
                 setFilterObject()
                 return gridAPI.loadGrid(filter);

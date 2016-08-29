@@ -332,6 +332,7 @@
     <Content Include="WhS_BusinessEntity\Directives\Switch\vr-whs-be-switch-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\Templates\ZoneServiceConfigGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-services-viewer.js" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-selector.js" />
     <Content Include="WhS_BusinessEntity\Images\Closed.png" />
     <Content Include="WhS_BusinessEntity\Images\Decrease.png" />

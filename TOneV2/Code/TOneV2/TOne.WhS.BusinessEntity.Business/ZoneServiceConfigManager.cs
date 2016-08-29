@@ -82,6 +82,15 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return allZoneServiceConfigs.FindAllRecords(filterExpression).MapRecords(ZoneServiceConfigInfoMapper); 
         }
+
+        public IEnumerable<ZoneServiceConfig> GetAllZoneServices()
+        {
+            var allZoneServiceConfigs = GetCachedZoneServiceConfigs();
+            if (allZoneServiceConfigs == null)
+                return null;
+            return allZoneServiceConfigs.Values;
+        }
+
         public ZoneServiceConfig GetZoneServiceConfig(int ZoneServiceConfigId)
         {
             var allZoneServiceConfigs = GetCachedZoneServiceConfigs();
@@ -92,7 +101,7 @@ namespace TOne.WhS.BusinessEntity.Business
             TOne.Entities.InsertOperationOutput<ZoneServiceConfigDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<ZoneServiceConfigDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            if (GetCachedZoneServiceConfigs().Select(x => x.Value.Settings.Color.ToLower() == zoneServiceConfig.Settings.Color.ToLower()).Count() > 0)
+            if (GetCachedZoneServiceConfigs().FindRecord(x => x.Value.Settings.Color.ToLower() == zoneServiceConfig.Settings.Color.ToLower()).Value != null)
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
                 return insertOperationOutput;
@@ -124,6 +133,11 @@ namespace TOne.WhS.BusinessEntity.Business
             TOne.Entities.UpdateOperationOutput<ZoneServiceConfigDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<ZoneServiceConfigDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            if (GetCachedZoneServiceConfigs().FindRecord(x => x.Value.Settings.Color.ToLower() == zoneServiceConfig.Settings.Color.ToLower() && x.Key!= zoneServiceConfig.ZoneServiceConfigId).Value != null)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                return updateOperationOutput;
+            }
             updateOperationOutput.UpdatedObject = null;
 
             if (updateActionSucc)

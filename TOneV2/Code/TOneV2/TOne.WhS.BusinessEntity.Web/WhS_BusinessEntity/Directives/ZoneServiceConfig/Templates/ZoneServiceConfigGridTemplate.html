@@ -7,8 +7,11 @@
              idfield="Entity.ZoneServiceConfigId">
 
     <vr-datagridcolumn headertext="'Id'" field="'Entity.ZoneServiceConfigId'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Color'" field="'Entity.Setting.Color'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Settings.Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Symbol'" field="'Entity.Symbol'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Color'" field="'Entity.Settings.Color'">
+        <vr-whs-be-services-viewer on-ready="dataItem.onServiceReady"></vr-whs-be-services-viewer>
+    </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Parent Name'" field="'ParentName'" type="'Text'"></vr-datagridcolumn>
 
 </vr-datagrid>

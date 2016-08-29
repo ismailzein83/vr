@@ -30,7 +30,7 @@ function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIServic
 
         function initializeController() {
 
-            $scope.zoneServiceConfigs = [];
+            $scope.zoneServiceConfigs = [];       
             $scope.onGridReady = function (api) {
 
                 gridAPI = api;
@@ -53,16 +53,27 @@ function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIServic
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_ZoneServiceConfigAPIService.GetFilteredZoneServiceConfigs(dataRetrievalInput)
                     .then(function (response) {
+                        if (response && response.Data) {
+                            for (var i = 0 ; i < response.Data.length; i++) {
+                                addReadySericeApi(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     });
             };
+            
             defineMenuActions();
         }
 
-       
+        var addReadySericeApi = function (dataItem) {
+            dataItem.onServiceReady = function (api) {
+                dataItem.ServieApi = api
+                dataItem.ServieApi.load({ service: dataItem.Entity });
+            }
+        }
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
@@ -78,6 +89,7 @@ function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIServic
         function editZoneServiceConfig(zoneServiceConfigObj) {
             var onZoneServiceConfigUpdated = function (zoneServiceConfigObj) {
                 gridAPI.itemUpdated(zoneServiceConfigObj);
+                addReadySericeApi(zoneServiceConfigObj);
             }
             WhS_BE_ZoneServiceConfigService.editZoneServiceConfig(zoneServiceConfigObj.Entity.ZoneServiceConfigId, onZoneServiceConfigUpdated);
         }

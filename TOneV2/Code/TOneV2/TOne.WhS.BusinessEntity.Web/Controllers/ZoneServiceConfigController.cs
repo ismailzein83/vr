@@ -28,9 +28,16 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public IEnumerable<ZoneServiceConfigInfo> GetAllZoneServiceConfigs(string serializedFilter)
         {
             ZoneServiceConfigFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<ZoneServiceConfigFilter>(serializedFilter) : null;
-;
             ZoneServiceConfigManager manager = new ZoneServiceConfigManager();
             return manager.GetAllZoneServiceConfigs(filter);
+        }
+
+        [HttpGet]
+        [Route("GetAllZoneServices")]
+        public IEnumerable<ZoneServiceConfig> GetAllZoneServices()
+        {
+            ZoneServiceConfigManager manager = new ZoneServiceConfigManager();
+            return manager.GetAllZoneServices();
         }
         [HttpGet]
         [Route("GetZoneServiceConfig")]

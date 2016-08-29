@@ -110,7 +110,7 @@ app.directive('vrWhsBeZoneServiceConfigSelector', [
     function getAllZoneServiceConfigs(attrs, ctrl, selectedIds, serializedFilter) {
         return WhS_BE_ZoneServiceConfigAPIService.GetAllZoneServiceConfigs(serializedFilter).then(function (response) {
             angular.forEach(response, function (itm) {
-                $scope.datasource.push(itm);
+                ctrl.datasource.push(itm);
             });
             if (selectedIds != undefined) {
                 VRUIUtilsService.setSelectedValues(selectedIds, 'ZoneServiceConfigId', attrs, ctrl);

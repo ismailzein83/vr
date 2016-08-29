@@ -19,6 +19,10 @@
             );
         }
 
+        function GetAllZoneServices() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetAllZoneServices"), {},{useCache:true});
+        }
+
         function GetZoneServiceConfig(zoneServiceConfigId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetZoneServiceConfig"), {
                 zoneServiceConfigId: zoneServiceConfigId
@@ -45,6 +49,7 @@
         return ({
             GetFilteredZoneServiceConfigs: GetFilteredZoneServiceConfigs,
             GetAllZoneServiceConfigs: GetAllZoneServiceConfigs,
+            GetAllZoneServices:GetAllZoneServices,
             GetZoneServiceConfig: GetZoneServiceConfig,
             UpdateZoneServiceConfig: UpdateZoneServiceConfig,
             AddZoneServiceConfig: AddZoneServiceConfig,
