@@ -58,7 +58,9 @@
     <Compile Include="InvoiceType\InvoiceTypeQuery.cs" />
     <Compile Include="InvoiceType\InvoiceTypeRuntime.cs" />
     <Compile Include="InvoiceType\InvoiceUISubSectionSettingsConfig.cs" />
+    <Compile Include="InvoiceType\IPartnerManagerInfoContext.cs" />
     <Compile Include="InvoiceType\RDLCDataSourceSettingsConfig.cs" />
+    <Compile Include="InvoiceType\UISettings\InvoicePartnerSettingsConfig.cs" />
     <Compile Include="InvoiceType\UISettings\IRDLCReportParameterValueContext.cs" />
     <Compile Include="InvoiceType\UISettings\RDLCParameterSettingsConfig.cs" />
     <Compile Include="InvoiceType\UISettings\RDLCReportParameterValue.cs" />

@@ -73,6 +73,11 @@ namespace Vanrise.Invoice.Business
             var extensionConfiguration = new ExtensionConfigurationManager();
             return extensionConfiguration.GetExtensionConfigurations<RDLCParameterSettingsConfig>(RDLCParameterSettingsConfig.EXTENSION_TYPE);
         }
+        public IEnumerable<InvoicePartnerSettingsConfig> GetInvoicePartnerSettingsConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<InvoicePartnerSettingsConfig>(InvoicePartnerSettingsConfig.EXTENSION_TYPE);
+        }
         public IEnumerable<InvoiceUISubSectionSettingsConfig> GetInvoiceUISubSectionSettingsConfigs()
         {
             var extensionConfiguration = new ExtensionConfigurationManager();
@@ -131,7 +136,6 @@ namespace Vanrise.Invoice.Business
 
             return updateOperationOutput;
         }
-
         public IEnumerable<GridColumnAttribute> CovertToGridColumnAttribute(CovertToGridColumnAttributeInput input)
         {
             List<GridColumnAttribute> gridColumnAttributes = null;
@@ -151,7 +155,6 @@ namespace Vanrise.Invoice.Business
             return gridColumnAttributes;
 
         }
-
         public IEnumerable<InvoiceTypeInfo> GetInvoiceTypesInfo(InvoiceTypeFilter filter)
         {
             var invoiceTypes = GetCachedInvoiceTypes();
@@ -160,9 +163,6 @@ namespace Vanrise.Invoice.Business
             }
             return invoiceTypes.MapRecords(InvoiceTypeInfoMapper);
         }
-
-
-        
 
         #endregion
 

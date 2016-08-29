@@ -92,5 +92,11 @@ namespace Vanrise.Invoice.Web.Controllers
             InvoiceTypeFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<InvoiceTypeFilter>(filter) : null;
             return _manager.GetInvoiceTypesInfo(serializedFilter);
         }
+        [HttpGet]
+        [Route("GetInvoicePartnerSettingsConfigs")]
+        public IEnumerable<InvoicePartnerSettingsConfig> GetInvoicePartnerSettingsConfigs()
+        {
+            return _manager.GetInvoicePartnerSettingsConfigs();
+        }
     }
 }

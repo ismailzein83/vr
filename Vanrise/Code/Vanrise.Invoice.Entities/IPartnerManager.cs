@@ -9,6 +9,7 @@ namespace Vanrise.Invoice.Entities
     public interface IPartnerManager
     {
         string GetPartnerName(IPartnerManagerContext context);
+        dynamic GetPartnerInfo(IPartnerManagerInfoContext context);
     }
     public interface IPartnerManagerContext
     {

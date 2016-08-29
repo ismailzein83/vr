@@ -8,13 +8,17 @@ namespace Vanrise.Invoice.Entities
 {
     public class InvoiceTypeUISettings
     {
-        public string PartnerSelector { get; set; }
-        public IPartnerManager PartnerManagerFQTN { get; set; }
+        public PartnerSettings PartnerSettings { get; set; }
         public List<InvoiceUIGridColumn> MainGridColumns { get; set; }
-
         public List<InvoiceGridAction> InvoiceGridActions { get; set; }
         public List<InvoiceUISubSection> SubSections { get; set; }
 
         public string GenerationCustomSectionDirective { get; set; }
+    }
+    public abstract class PartnerSettings
+    {
+        public int ConfigId { get; set; }
+        public virtual string PartnerSelector { get; set; }
+        public virtual IPartnerManager PartnerManagerFQTN { get; set; }
     }
 }

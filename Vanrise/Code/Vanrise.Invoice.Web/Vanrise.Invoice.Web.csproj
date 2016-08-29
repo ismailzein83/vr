@@ -163,7 +163,6 @@
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="VR_Invoice\Constants\InvoiceFieldEnum.js" />
     <Content Include="VR_Invoice\Constants\ModuleConfig.js" />
@@ -184,6 +183,7 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-invoicesubsectiongridcolumns.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-invoiceuisubsectionsettings.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-maingridcolumns.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-partnersettings.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-selector.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-subsections.js" />
     <Content Include="VR_Invoice\Directives\Invoice\Templates\SubSectionGridTemplate.html" />

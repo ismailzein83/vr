@@ -72,13 +72,13 @@ namespace Vanrise.Invoice.Business
             InvoiceTypeManager manager = new InvoiceTypeManager();
             var invoiceType = manager.GetInvoiceType(invoice.InvoiceTypeId);
             string partnerName = null;
-            if (invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.UISettings != null && invoiceType.Settings.UISettings.PartnerManagerFQTN != null)
+            if (invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.UISettings != null && invoiceType.Settings.UISettings.PartnerSettings.PartnerManagerFQTN != null)
             {
                 PartnerManagerContext context = new PartnerManagerContext
                 {
                     PartnerId = invoice.PartnerId
                 };
-                partnerName = invoiceType.Settings.UISettings.PartnerManagerFQTN.GetPartnerName(context);
+                partnerName = invoiceType.Settings.UISettings.PartnerSettings.PartnerManagerFQTN.GetPartnerName(context);
             }
             return new InvoiceDetail
             {

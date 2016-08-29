@@ -167,6 +167,7 @@
     <Compile Include="VRObject\VRObjectTypeDefinitionInfo.cs" />
     <Compile Include="VRObject\VRObjectTypeDefinitionQuery.cs" />
     <Compile Include="VRObject\VRObjectVariable.cs" />
+    <Compile Include="VRRdlcReportParameter.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

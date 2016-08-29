@@ -24,6 +24,8 @@
         var invoiceGridActionsAPI;
         var invoiceGridActionsSectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var invoicePartnerSettingsAPI;
+        var invoicePartnerSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         loadParameters();
         load();
@@ -34,7 +36,6 @@
                 invoiceTypeId = parameters.invoiceTypeId;
             }
             isEditMode = (invoiceTypeId != undefined);
-
         }
 
         function defineScope() {
@@ -43,6 +44,12 @@
             {
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyPromiseDeferred.resolve();
+            }
+
+            $scope.scopeModel.onInvoicePartnerSettingsReady = function(api)
+            {
+                invoicePartnerSettingsAPI = api;
+                invoicePartnerSettingsReadyPromiseDeferred.resolve();
             }
             $scope.scopeModel.onInvoiceGeneratorReady = function (api)
             {
@@ -95,7 +102,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGeneratorDirective, loadInvoiceGridActionsSection])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGeneratorDirective, loadInvoiceGridActionsSection, loadInvoicePartnerSettingsSection])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -121,8 +128,6 @@
             if(invoiceTypeEntity != undefined)
             {
                 $scope.scopeModel.name = invoiceTypeEntity.Name;
-                $scope.scopeModel.partnerSelector = invoiceTypeEntity.Settings.UISettings.PartnerSelector;
-                $scope.scopeModel.partnerManagerFQTN = UtilsService.serializetoJson(invoiceTypeEntity.Settings.UISettings.PartnerManagerFQTN);
             }
         }
 
@@ -133,16 +138,25 @@
                 Settings: {
                     InvoiceDetailsRecordTypeId:dataRecordTypeSelectorAPI.getSelectedIds(),
                     UISettings: {
-                        PartnerSelector: $scope.scopeModel.partnerSelector,
                         MainGridColumns: mainGridColumnsAPI.getData(),
                         SubSections: subSectionsAPI.getData(),
-                        InvoiceGridActions : invoiceGridActionsAPI.getData(),
-                        PartnerManagerFQTN: UtilsService.parseStringToJson($scope.scopeModel.partnerManagerFQTN)
+                        InvoiceGridActions: invoiceGridActionsAPI.getData(),
+                        PartnerSettings:invoicePartnerSettingsAPI.getData()
                     },
                     InvoiceGenerator: invoiceGeneratorAPI.getData()
                 }
             };
             return obj;
+        }
+
+        function loadInvoicePartnerSettingsSection() {
+            var invoicePartnerSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            invoicePartnerSettingsReadyPromiseDeferred.promise.then(function () {
+                var partnerSettingsPayload = invoiceTypeEntity != undefined ? { partnerSettingsEntity: invoiceTypeEntity.Settings.UISettings.PartnerSettings } : undefined;
+                VRUIUtilsService.callDirectiveLoad(invoicePartnerSettingsAPI, partnerSettingsPayload, invoicePartnerSettingsLoadPromiseDeferred);
+            });
+            return invoicePartnerSettingsLoadPromiseDeferred.promise;
         }
 
         function loadInvoiceGridActionsSection() {

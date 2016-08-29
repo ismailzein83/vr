@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Vanrise.Entities;
 using Vanrise.Invoice.Business;
 using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Entities;
@@ -35,6 +36,7 @@ namespace Vanrise.Invoice.Web.VR_Invoice.Reports
                         break;
                     }
                 }
+                List<ReportParameter> invoiceReportParameters = new List<ReportParameter>();
                 if (openRDLCReportAction != null )
                 {
                     ReportViewer1.ProcessingMode = ProcessingMode.Local;
@@ -54,7 +56,7 @@ namespace Vanrise.Invoice.Web.VR_Invoice.Reports
                     }
                     if (openRDLCReportAction.Parameters != null)
                     {
-                        List<ReportParameter> invoiceReportParameters = new List<ReportParameter>();
+                       
                         RDLCReportParameterValueContext paramterContext = new RDLCReportParameterValueContext{
                             Invoice = invoice
                         };
@@ -64,9 +66,19 @@ namespace Vanrise.Invoice.Web.VR_Invoice.Reports
                             if(parameterValue != null)
                             invoiceReportParameters.Add(new ReportParameter(parameter.ParameterName,parameterValue.ToString(), parameter.IsVisible));
                         }
-                        ReportViewer1.LocalReport.SetParameters(invoiceReportParameters.ToArray());
                     }
                 }
+
+                PartnerManager partnerManager = new PartnerManager();
+                var partnerInfo = partnerManager.GetPartnerInfo(invoice.InvoiceTypeId, invoice.PartnerId, "InvoiceRDLCReport") as Dictionary<string, VRRdlcReportParameter>;
+                if (partnerInfo != null)
+                {
+                    foreach (var par in partnerInfo)
+                    {
+                        invoiceReportParameters.Add(new ReportParameter(par.Key, par.Value.Value, par.Value.IsVisible));
+                    };
+                }
+                ReportViewer1.LocalReport.SetParameters(invoiceReportParameters.ToArray());
             }
         }
         protected override void Render(HtmlTextWriter writer)
