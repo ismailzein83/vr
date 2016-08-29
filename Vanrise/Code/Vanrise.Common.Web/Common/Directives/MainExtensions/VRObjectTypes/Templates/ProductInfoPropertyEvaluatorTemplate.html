@@ -1,9 +1,12 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿
 
-</body>
-</html>
+<vr-columns width="1/2row">
+    <vr-select on-ready="scopeModel.onSelectorReady"
+               datasource="scopeModel.productFields"
+               selectedvalues="scopeModel.selectedProductField"
+               datavaluefield="value"
+               datatextfield="description"
+               label="Product Info"
+               hideremoveicon>
+    </vr-select>
+</vr-columns>
