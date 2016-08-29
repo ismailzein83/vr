@@ -18,3 +18,5 @@ Deals			4501 to 4800
 Reprocess		4801 to 5100
 Mediation		5101 to 5400
 Retail			5401 to 5700
+VR_AccountBalance	5701 to 6000
+VR_Notification		6001 to 6300
