@@ -1,0 +1,9 @@
+﻿<vr-datagrid datasource="scopeModel.receiveDefinitionSet"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             idfield="Entity.BEReceiveDefinitionId"
+             menuactions="scopeModel.menuActions">
+    <vr-datagridcolumn headertext="'ID  '" field="'Entity.BEReceiveDefinitionId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
+</vr-datagrid>

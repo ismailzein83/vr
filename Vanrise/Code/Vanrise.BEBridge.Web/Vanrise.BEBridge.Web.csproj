@@ -145,6 +145,10 @@
       <Project>{b5a56148-0dd1-4bc5-9357-72d289c6f863}</Project>
       <Name>Vanrise.BEBridge.MainExtensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
@@ -152,17 +156,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_BEBridge\Constants\ModuleConfig.js" />
+    <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\Templates\BEReceiveDefinitionGridTemplate.html" />
+    <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\vr-bebridge-bereceivedefinition-grid.js" />
     <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\vr-bebridge-berecievedefinition-selector.js" />
     <Content Include="VR_BEBridge\Directives\ProcessInput\Normal\Templates\BEBridgeProcessManualTemplate.html" />
     <Content Include="VR_BEBridge\Directives\ProcessInput\Normal\vr-bebridge-process-manual.js" />
     <Content Include="VR_BEBridge\Directives\ProcessInput\Scheduled\Templates\BEBridgeProcessScheduledTemplate.html" />
     <Content Include="VR_BEBridge\Directives\ProcessInput\Scheduled\vr-bebridge-process-scheduled.js" />
     <Content Include="VR_BEBridge\Services\APIServices\BERecieveDefinitionAPIService.js" />
+    <Content Include="VR_BEBridge\Services\BEReceiveDefinitionService.js" />
+    <Content Include="VR_BEBridge\Views\BEReceiveDefinition\BEReceiveDefinitionEditor.html" />
+    <Content Include="VR_BEBridge\Views\BEReceiveDefinition\BEReceiveDefinitionManagement.html" />
+    <Content Include="VR_BEBridge\Views\BEReceiveDefinition\BEReceiveDefinitionEditorController.js" />
+    <Content Include="VR_BEBridge\Views\BEReceiveDefinition\BEReceiveDefinitionManagementController.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="VR_BEBridge\Directives\BEReceiveDefinition\Templates\" />
-    <Folder Include="VR_BEBridge\Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
