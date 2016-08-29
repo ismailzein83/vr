@@ -73,6 +73,7 @@
     <Compile Include="Controllers\AnalyticItemConfigController.cs" />
     <Compile Include="Controllers\AnalyticReportController.cs" />
     <Compile Include="Controllers\AnalyticTableController.cs" />
+    <Compile Include="Controllers\DataAnalysisDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
@@ -131,6 +132,8 @@
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-dimension-editor.js" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-join-editor.js" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-measure-editor.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\Templates\DataAnalysisDefinitionGridTemplate.html" />
+    <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\vr-analytic-dataanalysisdefinition-grid.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticDimensionGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticJoinGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticAggregateGridTemplate.html" />
@@ -206,6 +209,8 @@
     <Content Include="Analytic\Services\AnalyticItemConfigService.js" />
     <Content Include="Analytic\Services\AnalyticReportService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticItemActionAPIService.js" />
+    <Content Include="Analytic\Services\APIServices\DataAnalysisDefinitionAPIService.js" />
+    <Content Include="Analytic\Services\DataAnalysisDefinitionService.js" />
     <Content Include="Analytic\Services\RecordSearchService.js" />
     <Content Include="Analytic\Services\AnalyticService.js" />
     <Content Include="Analytic\Services\AnalyticTableService.js" />
@@ -214,6 +219,10 @@
     <Content Include="Analytic\Services\APIServices\AnalyticItemConfigAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticReportAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticTableAPIService.js" />
+    <Content Include="Analytic\Views\DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionEditor.html" />
+    <Content Include="Analytic\Views\DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionEditorController.js" />
+    <Content Include="Analytic\Views\DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionManagement.html" />
+    <Content Include="Analytic\Views\DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionManagementController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticGridWidgetSettings.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticGridWidgetSettingsController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticItemActionEditor.html" />

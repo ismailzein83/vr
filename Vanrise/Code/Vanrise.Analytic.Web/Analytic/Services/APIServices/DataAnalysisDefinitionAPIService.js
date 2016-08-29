@@ -1,0 +1,53 @@
+﻿
+(function (appControllers) {
+
+    "use strict";
+
+    DataAnalysisDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Analytic_ModuleConfig'];
+
+    function DataAnalysisDefinitionAPIService(BaseAPIService, UtilsService, VR_Analytic_ModuleConfig) {
+
+        var controllerName = "DataAnalysisDefinition";
+
+
+        function GetFilteredDataAnalysisDefinitions(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetFilteredDataAnalysisDefinitions'), input);
+        }
+
+        function GetDataAnalysisDefinition(dataAnalysisDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetDataAnalysisDefinition'), {
+                DataAnalysisDefinitionId: dataAnalysisDefinitionId
+            });
+        }
+
+        function AddDataAnalysisDefinition(dataAnalysisDefinitionItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'AddDataAnalysisDefinition'), dataAnalysisDefinitionItem);
+        }
+
+        function UpdateDataAnalysisDefinition(dataAnalysisDefinitionItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'UpdateDataAnalysisDefinition'), dataAnalysisDefinitionItem);
+        }
+
+        //function GetStyleFormatingExtensionConfigs() {
+        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetStyleFormatingExtensionConfigs"));
+        //}
+
+        //function GetDataAnalysisDefinitionsInfo(filter) {
+        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDataAnalysisDefinitionsInfo"), {
+        //        filter: filter
+        //    });
+        //}
+
+
+        return ({
+            GetFilteredDataAnalysisDefinitions: GetFilteredDataAnalysisDefinitions,
+            GetDataAnalysisDefinition: GetDataAnalysisDefinition,
+            AddDataAnalysisDefinition: AddDataAnalysisDefinition,
+            UpdateDataAnalysisDefinition: UpdateDataAnalysisDefinition,
+            //GetStyleFormatingExtensionConfigs: GetStyleFormatingExtensionConfigs,
+            //GetDataAnalysisDefinitionsInfo: GetDataAnalysisDefinitionsInfo
+        });
+    }
+
+    appControllers.service('VR_Analytic_DataAnalysisDefinitionAPIService', DataAnalysisDefinitionAPIService);
+})(appControllers);

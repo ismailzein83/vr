@@ -108,6 +108,8 @@
     <Compile Include="DataAnalysis\DataAnalysisDefinitionItem\DataAnalysisItemDefinition.cs" />
     <Compile Include="DataAnalysis\DataAnalysisDefinitionItem\DataAnalysisItemDefinitionSettings.cs" />
     <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionConfig.cs" />
+    <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionDetail.cs" />
+    <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionQuery.cs" />
     <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionSettings.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleCriteria.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleTypeSettings.cs" />

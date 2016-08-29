@@ -13,18 +13,18 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetFilteredStyleDefinitions'), input);
         }
 
-        function GetStyleDefinition(StyleDefinitionId) {
+        function GetStyleDefinition(styleDefinitionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetStyleDefinition'), {
-                StyleDefinitionId: StyleDefinitionId
+                StyleDefinitionId: styleDefinitionId
             });
         }
 
-        function AddStyleDefinition(StyleDefinitionItem) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'AddStyleDefinition'), StyleDefinitionItem);
+        function AddStyleDefinition(styleDefinitionItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'AddStyleDefinition'), styleDefinitionItem);
         }
 
-        function UpdateStyleDefinition(StyleDefinitionItem) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'UpdateStyleDefinition'), StyleDefinitionItem);
+        function UpdateStyleDefinition(styleDefinitionItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'UpdateStyleDefinition'), styleDefinitionItem);
         }
 
         function GetStyleFormatingExtensionConfigs() {
