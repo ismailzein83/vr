@@ -16,7 +16,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public int? RateTypeId { get; set; }
 
-        public decimal SystemRate { get; set; }
+        public decimal Rate { get; set; }
 
     }
 }

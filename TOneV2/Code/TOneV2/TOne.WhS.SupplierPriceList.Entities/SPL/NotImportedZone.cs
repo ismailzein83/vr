@@ -18,17 +18,17 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         public DateTime? EED { get; set; }
 
 
-        private List<NotImportedRate> _otherSystemRates = new List<NotImportedRate>();
+        private List<NotImportedRate> _otherRates = new List<NotImportedRate>();
 
-        public List<NotImportedRate> OtherSystemRates
+        public List<NotImportedRate> OtherRates
         {
             get
             {
-                return this._otherSystemRates;
+                return this._otherRates;
             }
         }
 
-        public ExistingRate NormalSystemRate { get; set; }
+        public NotImportedRate NormalRate { get; set; }
 
         public bool HasChanged { get; set; }
 

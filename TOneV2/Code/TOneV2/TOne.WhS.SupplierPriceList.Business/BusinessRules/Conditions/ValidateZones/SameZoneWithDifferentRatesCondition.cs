@@ -24,7 +24,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             var distinctImportedRates = from importedRate in zone.ImportedRates
                                         where !importedRate.RateTypeId.HasValue
-                                        group importedRate by importedRate.NormalRate into newRates
+                                        group importedRate by importedRate.Rate into newRates
                                         select newRates;
 
             return !(distinctImportedRates.Count() > 1);

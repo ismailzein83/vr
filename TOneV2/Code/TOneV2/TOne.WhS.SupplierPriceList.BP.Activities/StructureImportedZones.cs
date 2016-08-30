@@ -27,14 +27,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 ImportedZone importedZone = new ImportedZone();
                 importedZone.ZoneName = item.ZoneName;
                 importedZone.ImportedCodes.AddRange(item.ImportedCodes);
-                importedZone.NormalRate = item.ImportedRates.First(itm => !itm.RateTypeId.HasValue);
+                importedZone.ImportedNormalRate = item.ImportedRates.First(itm => !itm.RateTypeId.HasValue);
                 IEnumerable<ImportedRate> importedOtherRates = item.ImportedRates.FindAllRecords(itm => itm.RateTypeId.HasValue);
 
                 foreach (ImportedRate importedRate in importedOtherRates)
                 {
                     ImportedRate matchImportedRate;
-                    if (!importedZone.OtherRates.TryGetValue(importedRate.RateTypeId.Value, out matchImportedRate))
-                        importedZone.OtherRates.Add(importedRate.RateTypeId.Value, importedRate);
+                    if (!importedZone.ImportedOtherRates.TryGetValue(importedRate.RateTypeId.Value, out matchImportedRate))
+                        importedZone.ImportedOtherRates.Add(importedRate.RateTypeId.Value, importedRate);
                 }
 
                 importedZones.Add(importedZone);

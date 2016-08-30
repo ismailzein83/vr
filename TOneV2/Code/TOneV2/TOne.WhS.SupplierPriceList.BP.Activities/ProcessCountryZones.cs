@@ -133,7 +133,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             notImportedZone.CountryId = firstElementInTheList.CountryId;
             notImportedZone.BED = firstElementInTheList.BED;
             notImportedZone.EED = lastElementInTheList.EED;
-            notImportedZone.NormalSystemRate = existingRates.FindAllRecords(item => !item.RateEntity.RateTypeId.HasValue).LastOrDefault();
             notImportedZone.HasChanged = linkedExistingZones.Any(x => x.ChangedZone != null);
 
             return notImportedZone;

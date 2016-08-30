@@ -14,8 +14,6 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public Decimal NormalRate { get; set; }
 
-        public Dictionary<int, Decimal> OtherRates { get; set; }
-
         public int? RateTypeId { get; set; }
 
         public int? CurrencyId { get; set; }

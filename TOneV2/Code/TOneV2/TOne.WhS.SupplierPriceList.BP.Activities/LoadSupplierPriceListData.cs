@@ -91,7 +91,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 importedRatesList.Add(new ImportedRate()
                 {
                     ZoneName = zoneNameValue,
-                    NormalRate = priceListRate.Rate.Value,
+                    Rate = priceListRate.Rate.Value,
                     CurrencyId = currencyId,
                     BED = (priceListRate.EffectiveDate != null) ? priceListRate.EffectiveDate.Value : DateTime.MinValue,
                     EED = null,
@@ -113,7 +113,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     importedRatesList.Add(new ImportedRate()
                     {
                         ZoneName = zoneNameValue,
-                        NormalRate = priceListRate.Rate.Value,
+                        Rate = priceListRate.Rate.Value,
                         CurrencyId = currencyId,
                         RateTypeId = item.Key,
                         BED = (priceListRate.EffectiveDate != null) ? priceListRate.EffectiveDate.Value : DateTime.MinValue,
@@ -147,7 +147,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             foreach (var zoneImportedRates in importedRatesByZoneName.Values)
             {
-                bool allRatesWithSameValue = !zoneImportedRates.Select(item => item.NormalRate)
+                bool allRatesWithSameValue = !zoneImportedRates.Select(item => item.Rate)
                       .Distinct()
                       .Skip(1)
                       .Any();

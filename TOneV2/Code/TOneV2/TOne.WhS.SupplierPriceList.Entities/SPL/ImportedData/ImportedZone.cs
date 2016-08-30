@@ -22,26 +22,26 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
             }
         }
 
-        public ImportedRate NormalRate { get; set; }
+        public ImportedRate ImportedNormalRate { get; set; }
 
-        private Dictionary<int, ImportedRate> _otherRates = new Dictionary<int, ImportedRate>();
+        private Dictionary<int, ImportedRate> _importedOtherRates = new Dictionary<int, ImportedRate>();
 
-        public Dictionary<int, ImportedRate> OtherRates
+        public Dictionary<int, ImportedRate> ImportedOtherRates
         {
             get
             {
-                return this._otherRates;
+                return this._importedOtherRates;
             }
         }
 
 
-        private List<NotImportedRate> _notImportedRates = new List<NotImportedRate>();
+        private List<NotImportedRate> _notImportedOtherRates = new List<NotImportedRate>();
 
-        public List<NotImportedRate> NotImportedRates
+        public List<NotImportedRate> NotImportedOtherRates
         {
             get
             {
-                return this._notImportedRates;
+                return this._notImportedOtherRates;
             }
         }
 

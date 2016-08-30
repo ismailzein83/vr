@@ -54,7 +54,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     foreach (ImportedCode code in zone.ImportedCodes)
                         importedCountry.ImportedCodes.Add(code);
 
-                    importedCountry.ImportedRates.Add(zone.NormalRate);
+                    importedCountry.ImportedRates.Add(zone.ImportedNormalRate);
 
                     importedCountry.ImportedZones.Add(zone);
 

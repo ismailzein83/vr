@@ -18,11 +18,9 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public string ZoneName { get; set; }
 
-        public Decimal NormalRate { get; set; }
+        public Decimal Rate { get; set; }
 
         public ExistingRate SystemRate { get; set; }
-
-        public Dictionary<int, Decimal> OtherRates { get; set; }
 
         public int? CurrencyId { get; set; }
 
