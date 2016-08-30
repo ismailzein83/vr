@@ -71,7 +71,7 @@
         }
         function update() {
             $scope.scopeModel.isLoading = true;
-            return beRecieveDefinitionApiService.UpdateReceiveDefinitiom(buildStatusChargingSetObjFromScope()).then(function (response) {
+            return beRecieveDefinitionApiService.UpdateReceiveDefinition(buildStatusChargingSetObjFromScope()).then(function (response) {
                 if (vrNotificationService.notifyOnItemUpdated('ReceiveDefinition', response, 'Name')) {
                     if ($scope.onReceiveDefinitionUpdated != undefined) {
                         $scope.onReceiveDefinitionUpdated(response.UpdatedObject);

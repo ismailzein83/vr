@@ -14,13 +14,17 @@
         }
         function GetReceiveDefinition(beReceiveDefinitionId) {
             return baseApiService.get(utilsService.getServiceURL(vrBeBridgeModuleConfig.moduleName, controllerName, 'GetReceiveDefinition'), {
-                BEReceiveDefinitionId: beReceiveDefinitionId
+                receiveDefinitionId: beReceiveDefinitionId
             });
+        }
+        function UpdateReceiveDefinition(beReceiveDeinitionItem) {
+            return baseApiService.post(utilsService.getServiceURL(vrBeBridgeModuleConfig.moduleName, controllerName, 'UpdateReceiveDefinition'), beReceiveDeinitionItem);
         }
         return ({
             GetBERecieveDefinitionsInfo: GetBERecieveDefinitionsInfo,
             GetFilteredBeReceiveDefinitions: GetFilteredBeReceiveDefinitions,
-            GetReceiveDefinition: GetReceiveDefinition
+            GetReceiveDefinition: GetReceiveDefinition,
+            UpdateReceiveDefinition: UpdateReceiveDefinition
         });
     }
 

@@ -34,10 +34,10 @@ namespace Vanrise.BEBridge.Web.Controllers
             return _manager.GetReceiveDefinition(receiveDefinitionId);
         }
         [HttpPost]
-        [Route("UpdateRedeciveDefinition")]
-        public UpdateOperationOutput<BEReceiveDefinitionDetail> UpdateRedeciveDefinition(BEReceiveDefinition beReceiveDefinition)
+        [Route("UpdateReceiveDefinition")]
+        public UpdateOperationOutput<BEReceiveDefinitionDetail> UpdateReceiveDefinition(BEReceiveDefinition beReceiveDefinition)
         {
-            return _manager.UpdateRedeciveDefinition(beReceiveDefinition);
+            return _manager.UpdateReceiveDefinition(beReceiveDefinition);
         }
         [HttpPost]
         [Route("AddReceiveDefinition")]
