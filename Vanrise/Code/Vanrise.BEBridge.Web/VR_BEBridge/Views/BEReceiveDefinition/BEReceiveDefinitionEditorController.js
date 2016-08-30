@@ -1,7 +1,7 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    function beReceiveDefinitionEditorController($scope, utilsService, vrNotificationService, vrNavigationService, beRecieveDefinitionApiService) {
+    function beReceiveDefinitionEditorController($scope, utilsService, vrNotificationService, vrNavigationService, vruiUtilsService, beRecieveDefinitionApiService) {
 
         var isEditMode;
         var recevieDefinitionId;
@@ -28,7 +28,7 @@
             }
         }
         function loadAllControls() {
-            return utilsService.waitMultipleAsyncOperations([setTitle]).catch(function (error) {
+            return utilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
                 vrNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -38,6 +38,11 @@
             return beRecieveDefinitionApiService.GetReceiveDefinition(recevieDefinitionId).then(function (response) {
                 receveiveDEfinitionEntity = response;
             });
+        }
+        function loadStaticData() {
+            if (receveiveDEfinitionEntity == undefined)
+                return;
+            $scope.scopeModel.name = receveiveDEfinitionEntity.Name;
         }
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -53,10 +58,56 @@
                 loadAllControls();
             }
         }
+        function buildStatusChargingSetObjFromScope() {
+            var settings = {
+
+            }
+
+            return {
+                BEReceiveDefinitionId: receveiveDEfinitionEntity != undefined ? receveiveDEfinitionEntity.BEReceiveDefinitionId : undefined,
+                Name: $scope.scopeModel.name,
+                // Settings: settings
+            };
+        }
+        function update() {
+            $scope.scopeModel.isLoading = true;
+            return beRecieveDefinitionApiService.UpdateReceiveDefinitiom(buildStatusChargingSetObjFromScope()).then(function (response) {
+                if (vrNotificationService.notifyOnItemUpdated('ReceiveDefinition', response, 'Name')) {
+                    if ($scope.onReceiveDefinitionUpdated != undefined) {
+                        $scope.onReceiveDefinitionUpdated(response.UpdatedObject);
+                    }
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                vrNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+        }
+        function insert() {
+            $scope.scopeModel.isLoading = true;
+            return beRecieveDefinitionApiService.AddReceiveDefinition(buildStatusChargingSetObjFromScope()).then(function (response) {
+                if (vrNotificationService.notifyOnItemAdded('ReceiveDefinition', response, 'Name')) {
+                    if ($scope.onReceiveDefinitionAdded != undefined)
+                        $scope.onReceiveDefinitionAdded(response.InsertedObject);
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                vrNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+        }
+
+
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.save = function () {
-
+                if (isEditMode) {
+                    return update();
+                } else {
+                    return insert();
+                }
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
