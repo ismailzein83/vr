@@ -10,7 +10,13 @@
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Reader'">
-
+                    <vr-bebridge-sourcebereaders-definition on-ready="onSourceReaderDirectiveReady" normal-col-num="3"></vr-bebridge-sourcebereaders-definition>
+                </vr-tab>
+                <vr-tab header="'Synchronizer'">
+                    <vr-bebridge-targetbesynchronizer-definition on-ready="onTargetSynchronizerDirectiveReady" normal-col-num="3"></vr-bebridge-targetbesynchronizer-definition>
+                </vr-tab>
+                <vr-tab header="'Convertor'">
+                    <vr-bebridge-targetbeconvertor-definition on-ready="onTargetConvertorDirectiveReady" normal-col-num="3"></vr-bebridge-targetbeconvertor-definition>
                 </vr-tab>
             </vr-tabs>
         </vr-form>

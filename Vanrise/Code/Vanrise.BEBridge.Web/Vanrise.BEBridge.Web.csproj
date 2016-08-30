@@ -159,10 +159,13 @@
     <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\Templates\BEReceiveDefinitionGridTemplate.html" />
     <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\vr-bebridge-bereceivedefinition-grid.js" />
     <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\vr-bebridge-berecievedefinition-selector.js" />
+    <Content Include="VR_BEBridge\Directives\MainExtensions\TargetBEConvertor\vr-bebridge-targetbeconvertor-definition.js" />
+    <Content Include="VR_BEBridge\Directives\MainExtensions\TargetBESynchronizer\vr-bebridge-targetbesynchronizer-definition.js" />
     <Content Include="VR_BEBridge\Directives\ProcessInput\Normal\Templates\BEBridgeProcessManualTemplate.html" />
     <Content Include="VR_BEBridge\Directives\ProcessInput\Normal\vr-bebridge-process-manual.js" />
     <Content Include="VR_BEBridge\Directives\ProcessInput\Scheduled\Templates\BEBridgeProcessScheduledTemplate.html" />
     <Content Include="VR_BEBridge\Directives\ProcessInput\Scheduled\vr-bebridge-process-scheduled.js" />
+    <Content Include="VR_BEBridge\Directives\MainExtensions\SourceBEReaders\vr-bebridge-sourcebereaders-definition.js" />
     <Content Include="VR_BEBridge\Services\APIServices\BERecieveDefinitionAPIService.js" />
     <Content Include="VR_BEBridge\Services\BEReceiveDefinitionService.js" />
     <Content Include="VR_BEBridge\Views\BEReceiveDefinition\BEReceiveDefinitionEditor.html" />

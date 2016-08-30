@@ -20,11 +20,23 @@
         function UpdateReceiveDefinition(beReceiveDeinitionItem) {
             return baseApiService.post(utilsService.getServiceURL(vrBeBridgeModuleConfig.moduleName, controllerName, 'UpdateReceiveDefinition'), beReceiveDeinitionItem);
         }
+        function GetSourceReaderExtensionConfigs() {
+            return baseApiService.get(utilsService.getServiceURL(vrBeBridgeModuleConfig.moduleName, controllerName, "GetSourceReaderExtensionConfigs"));
+        }
+        function GetTargetSynchronizerExtensionConfigs() {
+            return baseApiService.get(utilsService.getServiceURL(vrBeBridgeModuleConfig.moduleName, controllerName, "GetTargetSynchronizerExtensionConfigs"));
+        }
+        function GetTargetConvertorExtensionConfigs() {
+            return baseApiService.get(utilsService.getServiceURL(vrBeBridgeModuleConfig.moduleName, controllerName, "GetTargetConvertorExtensionConfigs"));
+        }
         return ({
             GetBERecieveDefinitionsInfo: GetBERecieveDefinitionsInfo,
             GetFilteredBeReceiveDefinitions: GetFilteredBeReceiveDefinitions,
             GetReceiveDefinition: GetReceiveDefinition,
-            UpdateReceiveDefinition: UpdateReceiveDefinition
+            UpdateReceiveDefinition: UpdateReceiveDefinition,
+            GetSourceReaderExtensionConfigs: GetSourceReaderExtensionConfigs,
+            GetTargetSynchronizerExtensionConfigs: GetTargetSynchronizerExtensionConfigs,
+            GetTargetConvertorExtensionConfigs: GetTargetConvertorExtensionConfigs
         });
     }
 

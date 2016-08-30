@@ -45,5 +45,23 @@ namespace Vanrise.BEBridge.Web.Controllers
         {
             return _manager.AddReceiveDefinition(beReceiveDefinition);
         }
+        [HttpGet]
+        [Route("GetSourceReaderExtensionConfigs")]
+        public IEnumerable<SourceBeReadersConfig> GetSourceReaderExtensionConfigs()
+        {
+            return _manager.GetSourceReaderExtensionConfigs();
+        }
+        [HttpGet]
+        [Route("GetTargetSynchronizerExtensionConfigs")]
+        public IEnumerable<TargetBESynchronizerConfig> GetTargetSynchronizerExtensionConfigs()
+        {
+            return _manager.GetTargetSynchronizerExtensionConfigs();
+        }
+        [HttpGet]
+        [Route("GetTargetConvertorExtensionConfigs")]
+        public IEnumerable<TargetBEConvertorConfig> GetTargetConvertorExtensionConfigs()
+        {
+            return _manager.GetTargetConvertorExtensionConfigs();
+        }
     }
 }

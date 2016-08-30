@@ -6,6 +6,16 @@
         var isEditMode;
         var recevieDefinitionId;
         var receveiveDEfinitionEntity;
+
+        var targetSynchronizerApi;
+        var targetSynchronizerReadyDeferred = utilsService.createPromiseDeferred();
+
+        var targetConvertorApi;
+        var targetConvertorReadyDeferred = utilsService.createPromiseDeferred();
+
+        var sourceReaderApi;
+        var sourceReaderReadyDeferred = utilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -111,6 +121,18 @@
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
+            };
+            $scope.scopeModel.onTargetSynchronizerDirectiveReady = function (api) {
+                targetSynchronizerApi = api;
+                targetSynchronizerReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onTargetConvertorDirectiveReady = function (api) {
+                targetConvertorApi = api;
+                targetConvertorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onSourceReaderDirectiveReady = function (api) {
+                sourceReaderApi = api;
+                sourceReaderReadyDeferred.resolve();
             };
         }
     }
