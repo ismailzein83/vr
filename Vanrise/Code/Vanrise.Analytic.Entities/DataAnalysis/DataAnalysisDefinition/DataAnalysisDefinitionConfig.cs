@@ -12,16 +12,6 @@ namespace Vanrise.Analytic.Entities
         public const string EXTENSION_TYPE = "Analytic_DataAnalysisDefinitionSettings";
 
         public string Editor { get; set; }
-
-        public List<DataAnalysisItemDefinitionConfig> ItemsConfig { get; set; }
     }
 
-    public class DataAnalysisItemDefinitionConfig
-    {
-        public Guid TypeId { get; set; }
-
-        public string Title { get; set; }
-
-        public string Editor { get; set; }
-    }
 }

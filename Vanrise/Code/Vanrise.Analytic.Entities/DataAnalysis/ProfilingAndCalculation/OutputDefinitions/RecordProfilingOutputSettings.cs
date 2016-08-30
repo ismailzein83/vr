@@ -9,9 +9,10 @@ namespace Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputD
 {
     public class RecordProfilingOutputSettings : DAProfCalcOutputSettings
     {
+        internal static Guid S_ItemDefinitionTypeId = new Guid("39E04643-3C5C-4D11-9D3C-41611C34F7B3"); 
         public override Guid ItemDefinitionTypeId
         {
-            get { return new Guid("39E04643-3C5C-4D11-9D3C-41611C34F7B3"); }
+            get { return S_ItemDefinitionTypeId; }
         }
 
         public RecordFilterGroup RecordFilter { get; set; }

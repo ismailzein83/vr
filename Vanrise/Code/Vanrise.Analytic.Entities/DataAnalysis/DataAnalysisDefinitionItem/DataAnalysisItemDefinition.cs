@@ -12,9 +12,7 @@ namespace Vanrise.Analytic.Entities
 
         public Guid DataAnalysisDefinitionId { get; set; }
 
-        public string Name { get; set; }
-
-        public string Title { get; set; }
+        public string Name { get; set; }      
 
         public DataAnalysisItemDefinitionSettings Settings { get; set; }
     }
