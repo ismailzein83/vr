@@ -135,6 +135,7 @@
     <EmbeddedResource Include="Reports\rptDefaultToOperator.rdlc" />
     <EmbeddedResource Include="Reports\rptToOperator.rdlc" />
     <EmbeddedResource Include="Reports\rptToSyrianOperator.rdlc" />
+    <EmbeddedResource Include="Reports\rptToZainOperatorExcel.rdlc" />
     <EmbeddedResource Include="Reports\rptToZainOperator.rdlc" />
   </ItemGroup>
   <ItemGroup>
