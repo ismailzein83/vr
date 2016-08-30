@@ -1445,3 +1445,31 @@ when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
 set identity_insert [reprocess].[ReprocessDefinition] off;
+
+--[TOneWhS_BE].[ZoneServiceConfig]------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [TOneWhS_BE].[ZoneServiceConfig] on;
+;with cte_data([ID],[Symbol],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'WHS','{"$type":"TOne.WhS.BusinessEntity.Entities.ServiceConfigSetting, TOne.WhS.BusinessEntity.Entities","Name":"Wholesale","Color":"#b6b6b6","Description":"Wholesale Marker"}'),
+(2,'RTL','{"$type":"TOne.WhS.BusinessEntity.Entities.ServiceConfigSetting, TOne.WhS.BusinessEntity.Entities","Name":"Retail","Color":"#0000FF","Description":"Retail Quality"}'),
+(3,'PRM','{"$type":"TOne.WhS.BusinessEntity.Entities.ServiceConfigSetting, TOne.WhS.BusinessEntity.Entities","Name":"Premium","Color":"#FFA500","Description":"Premium Quality"}'),
+(4,'CLI','{"$type":"TOne.WhS.BusinessEntity.Entities.ServiceConfigSetting, TOne.WhS.BusinessEntity.Entities","Name":"CLI","Color":"#FF0000","Description":"CLI Provided Service"}'),
+(5,'DRT','{"$type":"TOne.WhS.BusinessEntity.Entities.ServiceConfigSetting, TOne.WhS.BusinessEntity.Entities","Name":"Direct","Color":"#0f8116","Description":"Direct Connection"}'),
+(6,'TRS','{"$type":"TOne.WhS.BusinessEntity.Entities.ServiceConfigSetting, TOne.WhS.BusinessEntity.Entities","Name":"Transit","Color":"#f2f411","Description":"Transit Connections (Like in Ministries)"}'),
+(7,'VID','{"$type":"TOne.WhS.BusinessEntity.Entities.ServiceConfigSetting, TOne.WhS.BusinessEntity.Entities","Name":"Video","Color":"#92743d","Description":"Video-Able Service"}'),
+(8,'3GM','{"$type":"TOne.WhS.BusinessEntity.Entities.ServiceConfigSetting, TOne.WhS.BusinessEntity.Entities","Name":"3GM Mobile","Color":"#000000","Description":"3rd Generation Mobile"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Symbol],[Settings]))
+merge	[TOneWhS_BE].[ZoneServiceConfig] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Symbol] = s.[Symbol],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Symbol],[Settings])
+	values(s.[ID],s.[Symbol],s.[Settings]);
+set identity_insert [TOneWhS_BE].[ZoneServiceConfig] off;
