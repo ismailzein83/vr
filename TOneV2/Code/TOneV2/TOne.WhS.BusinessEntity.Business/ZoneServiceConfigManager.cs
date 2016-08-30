@@ -106,6 +106,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
                 return insertOperationOutput;
             }
+
             insertOperationOutput.InsertedObject = null;
             int ZoneServiceConfigtId = -1;
 
@@ -129,7 +130,6 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             IZoneServiceConfigDataManager dataManager = BEDataManagerFactory.GetDataManager<IZoneServiceConfigDataManager>();
 
-            bool updateActionSucc = dataManager.Update(zoneServiceConfig);
             TOne.Entities.UpdateOperationOutput<ZoneServiceConfigDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<ZoneServiceConfigDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -138,6 +138,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
                 return updateOperationOutput;
             }
+
+            bool updateActionSucc = dataManager.Update(zoneServiceConfig);
             updateOperationOutput.UpdatedObject = null;
 
             if (updateActionSucc)

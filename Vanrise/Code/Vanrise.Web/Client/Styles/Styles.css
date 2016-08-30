@@ -2500,7 +2500,7 @@ div[validationcontainer]{
 /*vr-service-viewer*/
 .vr-service-viewer{
     display:inline-block;
-    width:7px;
+    width:5px;
     height: 100%;
     margin: 0px 3px;
 }
