@@ -38,7 +38,7 @@
             }
         }
         function loadAllControls() {
-            return utilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+            return utilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTargetAnalysisDefinitions, loadTargetConvertorDefinitions, loadTSourceReaderDefinitions]).catch(function (error) {
                 vrNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -69,14 +69,16 @@
             }
         }
         function buildStatusChargingSetObjFromScope() {
-            var settings = {
-
+            var settings =
+            {
+                SourceBEReader: sourceReaderApi.getData(),
+                TargetBEConvertor: targetConvertorApi.getData(),
+                TargetBESynchronizer: targetSynchronizerApi.getData()
             }
-
             return {
                 BEReceiveDefinitionId: receveiveDEfinitionEntity != undefined ? receveiveDEfinitionEntity.BEReceiveDefinitionId : undefined,
                 Name: $scope.scopeModel.name,
-                // Settings: settings
+                 Settings: settings
             };
         }
         function update() {
@@ -134,6 +136,37 @@
                 sourceReaderApi = api;
                 sourceReaderReadyDeferred.resolve();
             };
+        }
+
+        function loadTargetAnalysisDefinitions() {
+            var loadTargetAnalysisPromiseDeferred = utilsService.createPromiseDeferred();
+            targetSynchronizerReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (receveiveDEfinitionEntity != undefined)
+                    payloadDirective = { Settings: receveiveDEfinitionEntity.Settings.TargetBESynchronizer };
+                vruiUtilsService.callDirectiveLoad(targetSynchronizerApi, payloadDirective, loadTargetAnalysisPromiseDeferred);
+            });
+            return loadTargetAnalysisPromiseDeferred.promise;
+        }
+        function loadTargetConvertorDefinitions() {
+            var loadTargetConvertorPromiseDeferred = utilsService.createPromiseDeferred();
+            targetConvertorReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (receveiveDEfinitionEntity != undefined)
+                    payloadDirective = { Settings: receveiveDEfinitionEntity.Settings.TargetBEConvertor };
+                vruiUtilsService.callDirectiveLoad(targetConvertorApi, payloadDirective, loadTargetConvertorPromiseDeferred);
+            });
+            return loadTargetConvertorPromiseDeferred.promise;
+        }
+        function loadTSourceReaderDefinitions() {
+            var loadSourceReaderPromiseDeferred = utilsService.createPromiseDeferred();
+            sourceReaderReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (receveiveDEfinitionEntity != undefined)
+                    payloadDirective = { Settings: receveiveDEfinitionEntity.Settings.SourceBEReader };
+                vruiUtilsService.callDirectiveLoad(sourceReaderApi, payloadDirective, loadSourceReaderPromiseDeferred);
+            });
+            return loadSourceReaderPromiseDeferred.promise;
         }
     }
 

@@ -3,7 +3,6 @@
     'use strict';
 
     function targetbesynchronizerDefinition(beRecieveDefinitionApiService, utilsService, vruiUtilsService) {
-
         return {
             restrict: "E",
             scope: {
@@ -56,7 +55,6 @@
                 api.load = function (payload) {
                     var promises = [];
                     var settings;
-
                     if (payload != undefined) {
                         settings = payload.Settings;
                     }
@@ -114,9 +112,9 @@
             }
 
             return '<vr-row><vr-columns colnum="{{targetbesynchronizerCtrl.normalColNum * 2}}">'
-                    + '<vr-select on-ready="onSelectorReady" datasource="extensionConfigs" selectedvalues="selectedExtensionConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" ' + label + ' isrequired="targetbesynchronizerCtrl.isrequired" hideremoveicon></vr-select>'
-                + '</vr-columns></vr-row>'
-                + '<vr-row><vr-directivewrapper directive="selectedExtensionConfig.Editor" on-ready="onDirectiveReady" normal-col-num="{{targetbesynchronizerCtrl.normalColNum}}" isrequired="targetbesynchronizerCtrl.isrequired" customvalidate="targetbesynchronizerCtrl.customvalidate"></vr-directivewrapper></vr-row>';
+                   + '<vr-select on-ready="onSelectorReady" datasource="extensionConfigs" selectedvalues="selectedExtensionConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" ' + label + ' isrequired="targetbesynchronizerCtrl.isrequired" hideremoveicon></vr-select>'
+               + '</vr-columns></vr-row>'
+               + '<vr-row><vr-directivewrapper directive="selectedExtensionConfig.Editor" on-ready="onDirectiveReady" normal-col-num="{{targetbesynchronizerCtrl.normalColNum}}" isrequired="targetbesynchronizerCtrl.isrequired" customvalidate="targetbesynchronizerCtrl.customvalidate"></vr-directivewrapper></vr-row>';
         }
     }
 

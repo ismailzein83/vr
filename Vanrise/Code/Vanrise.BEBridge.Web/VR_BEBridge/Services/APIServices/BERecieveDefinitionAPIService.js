@@ -17,6 +17,9 @@
                 receiveDefinitionId: beReceiveDefinitionId
             });
         }
+        function AddReceiveDefinition(beReceiveDeinitionItem) {
+            return baseApiService.post(utilsService.getServiceURL(vrBeBridgeModuleConfig.moduleName, controllerName, 'AddReceiveDefinition'), beReceiveDeinitionItem);
+        }
         function UpdateReceiveDefinition(beReceiveDeinitionItem) {
             return baseApiService.post(utilsService.getServiceURL(vrBeBridgeModuleConfig.moduleName, controllerName, 'UpdateReceiveDefinition'), beReceiveDeinitionItem);
         }
@@ -34,6 +37,7 @@
             GetFilteredBeReceiveDefinitions: GetFilteredBeReceiveDefinitions,
             GetReceiveDefinition: GetReceiveDefinition,
             UpdateReceiveDefinition: UpdateReceiveDefinition,
+            AddReceiveDefinition: AddReceiveDefinition,
             GetSourceReaderExtensionConfigs: GetSourceReaderExtensionConfigs,
             GetTargetSynchronizerExtensionConfigs: GetTargetSynchronizerExtensionConfigs,
             GetTargetConvertorExtensionConfigs: GetTargetConvertorExtensionConfigs
