@@ -12,5 +12,7 @@ namespace Vanrise.BEBridge.Data
         IEnumerable<BEReceiveDefinition> GetBEReceiveDefinitions();
 
         bool AreBEReceiveDefinitionsUpdated(ref object updateHandle);
+        bool Update(BEReceiveDefinition beReceiveDefinition);
+        bool Insert(BEReceiveDefinition statusDefinitionItem);
     }
 }
