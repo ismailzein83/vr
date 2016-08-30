@@ -33,6 +33,46 @@ namespace Vanrise.BEBridge.Business
         {
             return GetCachedBEReceiveDefinitions().GetRecord(receiveDefinitionId);
         }
+        public InsertOperationOutput<BEReceiveDefinitionDetail> AddReceiveDefinition(BEReceiveDefinition beReceiveDefinition)
+        {
+            var insertOperationOutput = new InsertOperationOutput<BEReceiveDefinitionDetail>
+            {
+                Result = InsertOperationResult.Failed,
+                InsertedObject = null
+            };
+            IBEReceiveDefinitionDataManager dataManager = BEBridgeDataManagerFactory.GetDataManager<IBEReceiveDefinitionDataManager>();
+            beReceiveDefinition.BEReceiveDefinitionId = Guid.NewGuid();
+            if (dataManager.Insert(beReceiveDefinition))
+            {
+                Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = InsertOperationResult.Succeeded;
+                insertOperationOutput.InsertedObject = BeReceiveDefinitionDetailMapper(GetBEReceiveDefinition(beReceiveDefinition.BEReceiveDefinitionId)); ;
+            }
+            else
+                insertOperationOutput.Result = InsertOperationResult.SameExists;
+            return insertOperationOutput;
+        }
+        public UpdateOperationOutput<BEReceiveDefinitionDetail> UpdateRedeciveDefinition(BEReceiveDefinition beReceiveDefinition)
+        {
+            var updateOperationOutput = new UpdateOperationOutput<BEReceiveDefinitionDetail>
+            {
+                Result = UpdateOperationResult.Failed,
+                UpdatedObject = null
+            };
+            IBEReceiveDefinitionDataManager dataManager = BEBridgeDataManagerFactory.GetDataManager<IBEReceiveDefinitionDataManager>();
+
+            if (dataManager.Update(beReceiveDefinition))
+            {
+                Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = BeReceiveDefinitionDetailMapper(GetBEReceiveDefinition(beReceiveDefinition.BEReceiveDefinitionId));
+            }
+            else
+            {
+                updateOperationOutput.Result = UpdateOperationResult.SameExists;
+            }
+            return updateOperationOutput;
+        }
         #endregion
 
         #region Private Methods
