@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.BEBridge.Data;
 using Vanrise.BEBridge.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace Vanrise.BEBridge.Business
@@ -52,7 +53,7 @@ namespace Vanrise.BEBridge.Business
                 insertOperationOutput.Result = InsertOperationResult.SameExists;
             return insertOperationOutput;
         }
-        public UpdateOperationOutput<BEReceiveDefinitionDetail> UpdateRedeciveDefinition(BEReceiveDefinition beReceiveDefinition)
+        public UpdateOperationOutput<BEReceiveDefinitionDetail> UpdateReceiveDefinition(BEReceiveDefinition beReceiveDefinition)
         {
             var updateOperationOutput = new UpdateOperationOutput<BEReceiveDefinitionDetail>
             {
@@ -72,6 +73,22 @@ namespace Vanrise.BEBridge.Business
                 updateOperationOutput.Result = UpdateOperationResult.SameExists;
             }
             return updateOperationOutput;
+        }
+
+        public IEnumerable<SourceBeReadersConfig> GetSourceReaderExtensionConfigs()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<SourceBeReadersConfig>(SourceBeReadersConfig.EXTENSION_TYPE);
+        }
+        public IEnumerable<TargetBEConvertorConfig> GetTargetConvertorExtensionConfigs()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<TargetBEConvertorConfig>(TargetBEConvertorConfig.EXTENSION_TYPE);
+        }
+        public IEnumerable<TargetBESynchronizerConfig> GetTargetSynchronizerExtensionConfigs()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<TargetBESynchronizerConfig>(TargetBESynchronizerConfig.EXTENSION_TYPE);
         }
         #endregion
 
