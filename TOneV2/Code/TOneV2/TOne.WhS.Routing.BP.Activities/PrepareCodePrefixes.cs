@@ -10,7 +10,18 @@ using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
-    public sealed class PrepareCodePrefixes : CodeActivity
+    public class PrepareCodePrefixesInput
+    {
+        public DateTime? EffectiveOn { get; set; }
+        public bool IsEffectiveInFuture { get; set; }
+    }
+
+    public class PrepareCodePrefixesOutput
+    {
+        public IEnumerable<CodePrefix> DistinctCodePrefixes { get; set; }
+    }
+
+    public sealed class PrepareCodePrefixes : BaseAsyncActivity<PrepareCodePrefixesInput, PrepareCodePrefixesOutput>
     {
         [RequiredArgument]
         public InArgument<DateTime?> EffectiveOn { get; set; }
@@ -21,8 +32,7 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public OutArgument<IEnumerable<CodePrefix>> DistinctCodePrefixes { get; set; }
 
-
-        protected override void Execute(CodeActivityContext context)
+        protected override PrepareCodePrefixesOutput DoWorkWithResult(PrepareCodePrefixesInput inputArgument, AsyncActivityHandle handle)
         {
             List<CodePrefix> distinctCodePrefixes = new List<CodePrefix>();
             HashSet<string> codesDivided = new HashSet<string>();
@@ -38,16 +48,16 @@ namespace TOne.WhS.Routing.BP.Activities
             int maxPrefixLength = settings.MaxCodePrefixLength;
 
             int prefixLength = 1;
-            DateTime? effectiveOn = this.EffectiveOn.Get(context);
-            bool isFuture = this.IsFuture.Get(context);
+            DateTime? effectiveOn = inputArgument.EffectiveOn;
+            bool isFuture = inputArgument.IsEffectiveInFuture;
 
             SupplierCodeManager supplierCodeManager = new SupplierCodeManager();
             IEnumerable<CodePrefixInfo> supplierCodePrefixes = supplierCodeManager.GetDistinctCodeByPrefixes(prefixLength, effectiveOn, isFuture);
-            AddCodePrefixes(supplierCodePrefixes, pendingCodePrefixes, context);
+            AddCodePrefixes(supplierCodePrefixes, pendingCodePrefixes, handle);
 
             SaleCodeManager saleCodeManager = new SaleCodeManager();
             IEnumerable<CodePrefixInfo> saleCodePrefixes = saleCodeManager.GetDistinctCodeByPrefixes(prefixLength, effectiveOn, isFuture);
-            AddCodePrefixes(saleCodePrefixes, pendingCodePrefixes, context);
+            AddCodePrefixes(saleCodePrefixes, pendingCodePrefixes, handle);
 
             if (maxPrefixLength == 1)
             {
@@ -67,10 +77,10 @@ namespace TOne.WhS.Routing.BP.Activities
                     pendingCodePrefixes = new Dictionary<string, CodePrefixInfo>();
 
                     supplierCodePrefixes = supplierCodeManager.GetSpecificCodeByPrefixes(prefixLength, _pendingCodePrefixes, effectiveOn, isFuture);
-                    AddCodePrefixes(supplierCodePrefixes, pendingCodePrefixes, context);
+                    AddCodePrefixes(supplierCodePrefixes, pendingCodePrefixes, handle);
 
                     saleCodePrefixes = saleCodeManager.GetSpecificCodeByPrefixes(prefixLength, _pendingCodePrefixes, effectiveOn, isFuture);
-                    AddCodePrefixes(saleCodePrefixes, pendingCodePrefixes, context);
+                    AddCodePrefixes(saleCodePrefixes, pendingCodePrefixes, handle);
 
                     CheckThreshold(pendingCodePrefixes, codePrefixes, threshold);
                 }
@@ -88,13 +98,29 @@ namespace TOne.WhS.Routing.BP.Activities
                     CodeCount = i.Count
                 }));
 
-            this.DistinctCodePrefixes.Set(context, distinctCodePrefixes);
+            return new PrepareCodePrefixesOutput()
+            {
+                DistinctCodePrefixes = distinctCodePrefixes
+            };
+        }
+
+        protected override PrepareCodePrefixesInput GetInputArgument(AsyncCodeActivityContext context)
+        {
+            return new PrepareCodePrefixesInput()
+            {
+                EffectiveOn = this.EffectiveOn.Get(context),
+                IsEffectiveInFuture = this.IsFuture.Get(context),
+            };
+        }
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, PrepareCodePrefixesOutput result)
+        {
+            this.DistinctCodePrefixes.Set(context, result.DistinctCodePrefixes);
             context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Preparing Code Prefixes is done", null);
         }
 
         #region Private Methods
 
-        void AddCodePrefixes(IEnumerable<CodePrefixInfo> codePrefixes, Dictionary<string, CodePrefixInfo> pendingCodePrefixes, CodeActivityContext context)
+        void AddCodePrefixes(IEnumerable<CodePrefixInfo> codePrefixes, Dictionary<string, CodePrefixInfo> pendingCodePrefixes, AsyncActivityHandle handle)
         {
             long _validNumberPrefix;
             CodePrefixInfo _codePrefixInfo;
@@ -114,7 +140,7 @@ namespace TOne.WhS.Routing.BP.Activities
                         }
                     }
                     else
-                        context.WriteTrackingMessage(LogEntryType.Warning, "Invalid Sale Code Prefix: {0}", item.CodePrefix);
+                        handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Warning, "Invalid Sale Code Prefix: {0}", item.CodePrefix);
             }
         }
 

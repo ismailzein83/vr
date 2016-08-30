@@ -129,6 +129,7 @@
     <Compile Include="PricingRules\RuleTypes\RateType\PurchasePricingRuleRateTypeTarget.cs" />
     <Compile Include="PricingRules\RuleTypes\RateType\SalePricingRuleRateTypeTarget.cs" />
     <Compile Include="RateType\RateTypeConfiguration.cs" />
+    <Compile Include="RoutingCarrierInfo\RoutingCarrierInfo.cs" />
     <Compile Include="RoutingCarrierInfo\RoutingCustomerInfo.cs" />
     <Compile Include="RoutingCarrierInfo\RoutingSupplierInfo.cs" />
     <Compile Include="RoutingProduct\CustomerZoneRoutingProduct.cs" />

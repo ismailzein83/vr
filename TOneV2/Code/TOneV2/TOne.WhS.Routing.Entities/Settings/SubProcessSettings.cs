@@ -8,5 +8,7 @@ namespace TOne.WhS.Routing.Entities
         public int MaxCodePrefixLength { get; set; }
 
         public int CustomerGroupSize { get; set; }
+
+        public int SupplierGroupSize { get; set; }
     }
 }

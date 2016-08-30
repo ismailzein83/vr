@@ -46,6 +46,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildCarrierZoneDetailsInput.cs" />
+    <Compile Include="BuildSupplierZoneDetailsInput.cs" />
     <Compile Include="BuildCustomerZoneDetailsInput.cs" />
     <Compile Include="BuildRoutesByCodePrefixInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

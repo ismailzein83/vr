@@ -5,9 +5,9 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.Routing.BP.Arguments
 {
-    public class BuildCustomerZoneDetailsInput : BuildCarrierZoneDetailsInput
+    public class BuildSupplierZoneDetailsInput : BuildCarrierZoneDetailsInput
     {
-        public List<RoutingCustomerInfo> CustomerInfos { get; set; }
+        public List<RoutingSupplierInfo> SupplierInfos { get; set; }
 
         public int RoutingDatabaseId { get; set; }
 
