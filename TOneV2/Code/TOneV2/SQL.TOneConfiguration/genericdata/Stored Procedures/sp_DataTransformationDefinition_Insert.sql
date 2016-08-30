@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [genericdata].[sp_DataTransformationDefinition_Insert]
+CREATE PROCEDURE [genericdata].[sp_DataTransformationDefinition_Insert]
 	@Name nvarchar(255),
 	@Title nvarchar(255),
 	@Details VARCHAR(MAX),
@@ -14,6 +14,6 @@ IF NOT EXISTS(SELECT 1 FROM genericdata.DataTransformationDefinition WHERE Name 
 	BEGIN
 		INSERT INTO genericdata.DataTransformationDefinition(Name,Title,Details)
 		VALUES (@Name,@Title,@Details)
-		SET @ID = @@IDENTITY 
+		SET @ID = SCOPE_IDENTITY() 
 	END
 END

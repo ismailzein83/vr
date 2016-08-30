@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE genericdata.sp_BELookupRuleDefinition_Insert
+CREATE PROCEDURE [genericdata].[sp_BELookupRuleDefinition_Insert]
 	@Name NVARCHAR(450),
 	@Details NVARCHAR(MAX),
 	@ID INT	OUT
@@ -13,6 +13,6 @@ BEGIN
 	BEGIN
 		INSERT INTO genericdata.BELookupRuleDefinition (Name, Details)
 		VALUES (@Name, @Details)
-		SET @ID = @@IDENTITY
+		SET @ID = SCOPE_IDENTITY()
 	END
 END

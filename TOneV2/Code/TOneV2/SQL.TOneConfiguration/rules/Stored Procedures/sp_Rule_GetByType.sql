@@ -7,12 +7,8 @@ CREATE PROCEDURE [rules].[sp_Rule_GetByType]
 	@TypeID INT
 AS
 BEGIN
-	SELECT r.ID,
-		   r.TypeID,
-		   r.RuleDetails  ,
-		   r.BED,
-		   r.EED
-	FROM [rules].[Rule] r 
-	WHERE r.TypeID=@TypeID
+	SELECT	r.ID,r.TypeID,r.RuleDetails,r.BED,r.EED
+	FROM	[rules].[Rule] r  WITH(NOLOCK) 
+	WHERE	r.TypeID=@TypeID
 
 END

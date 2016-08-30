@@ -11,6 +11,6 @@ IF NOT EXISTS(SELECT 1 FROM Analytic.AnalyticReport WHERE Name = @Name and UserI
 		INSERT INTO Analytic.AnalyticReport(UserID,Name,AccessType, Settings)
 		VALUES (@UserID,@Name,@AccessType, @Settings)
 
-		SET @id = @@IDENTITY
+		SET @id = SCOPE_IDENTITY()
 	END
 END

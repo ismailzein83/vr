@@ -1,4 +1,4 @@
-﻿create PROCEDURE [genericdata].[sp_DataRecordType_GetAll]
+﻿CREATE PROCEDURE [genericdata].[sp_DataRecordType_GetAll]
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -6,9 +6,6 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT [ID]
-      ,[Name]
-      ,ParentID
-      ,Fields
-      FROM genericdata.DataRecordType
+	SELECT	[ID],[Name],ParentID,Fields
+    FROM	[genericdata].DataRecordType WITH(NOLOCK) 
 END

@@ -6,8 +6,6 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT [ID]
-      ,[Name]
-      ,Details
-      FROM genericdata.DataStoreConfig
+	SELECT	[ID],[Name],Details
+    FROM	[genericdata].DataStoreConfig WITH(NOLOCK) 
 END

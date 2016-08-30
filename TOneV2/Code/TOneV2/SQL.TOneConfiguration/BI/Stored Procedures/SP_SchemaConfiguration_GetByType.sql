@@ -2,10 +2,7 @@
 @Type INT
 AS
 BEGIN
-	SELECT	sc.ID,
-			sc.DisplayName,
-			sc.Name,sc.[Type],
-			sc.Configuration 
-	FROM	BI.SchemaConfiguration sc 
-	WHERE sc.[Type]=@Type ORDER BY sc.[Rank]
+	SELECT	sc.ID,sc.DisplayName,sc.Name,sc.[Type],sc.Configuration 
+	FROM	BI.SchemaConfiguration sc  WITH(NOLOCK) 
+	WHERE	sc.[Type]=@Type ORDER BY sc.[Rank]
 END

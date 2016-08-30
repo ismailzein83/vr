@@ -6,7 +6,6 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT [ID]
-      ,Details
-      FROM genericdata.ExtensibleBEItem
+	SELECT	[ID],Details
+    FROM	[genericdata].ExtensibleBEItem WITH(NOLOCK) 
 END

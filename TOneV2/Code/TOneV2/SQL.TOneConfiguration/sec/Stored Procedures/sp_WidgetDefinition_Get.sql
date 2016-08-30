@@ -2,9 +2,6 @@
 
 AS
 BEGIN
-	SELECT	w.ID,
-			w.Name,
-			w.DirectiveName,
-			w.Setting 
-	FROM	sec.WidgetDefinition w
+	SELECT	w.ID,w.Name,w.DirectiveName,w.Setting 
+	FROM	[sec].WidgetDefinition w WITH(NOLOCK) 
 END

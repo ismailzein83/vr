@@ -14,6 +14,6 @@ AS
 BEGIN
 	Insert into [rules].[Rule] (TypeID, RuleDetails,BED,EED)
 	values(@TypeID, @RuleDetails,@BED,@EED)
-	SET @Id = @@IDENTITY
+	SET @Id = SCOPE_IDENTITY()
 
 END

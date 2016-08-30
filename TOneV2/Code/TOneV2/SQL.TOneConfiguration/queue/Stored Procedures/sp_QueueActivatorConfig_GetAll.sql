@@ -1,5 +1,5 @@
 ﻿
-create PROCEDURE [queue].[sp_QueueActivatorConfig_GetAll]
+CREATE PROCEDURE [queue].[sp_QueueActivatorConfig_GetAll]
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -7,8 +7,6 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT [ID]
-		   ,[Name]
-		   ,Details
-      FROM queue.QueueActivatorConfig
+	SELECT	[ID],[Name],Details
+    FROM	[queue].QueueActivatorConfig WITH(NOLOCK) 
 END

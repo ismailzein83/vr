@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE Analytic.sp_AnalyticTable_Insert
+﻿CREATE PROCEDURE [Analytic].[sp_AnalyticTable_Insert]
 	@Name nvarchar(255),
 	@Settings nvarchar(MAX), 
 	@id INT OUT
@@ -9,6 +9,6 @@ IF NOT EXISTS(SELECT 1 FROM Analytic.AnalyticTable WHERE Name = @Name)
 		INSERT INTO Analytic.AnalyticTable(Name, Settings)
 		VALUES (@Name, @Settings)
 
-		SET @id = @@IDENTITY
+		SET @id = SCOPE_IDENTITY()
 	END
 END

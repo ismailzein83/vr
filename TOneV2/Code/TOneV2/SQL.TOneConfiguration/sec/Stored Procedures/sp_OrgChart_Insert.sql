@@ -9,6 +9,6 @@ IF NOT EXISTS(SELECT 1 FROM sec.[OrgChart] WHERE Name = @Name)
 		INSERT INTO sec.[OrgChart] ([Name],[Hierarchy])
 		VALUES (@Name, @Hierarchy)
 		
-		SET @Id = @@IDENTITY
+		SET @Id = SCOPE_IDENTITY()
 	END
 END

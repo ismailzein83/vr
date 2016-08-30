@@ -14,6 +14,6 @@ IF NOT EXISTS(select null from sec.[User] where Email = @Email)
 		Insert into sec.[User] ([Name],[TempPassword],[Email], [Status], [Description], [TenantId]) 
 		values(@Name, @TempPassword, @Email, @Status, @Description, @TenantId)
 		
-		SET @Id = @@IDENTITY
+		SET @Id = SCOPE_IDENTITY()
 	END
 END

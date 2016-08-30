@@ -10,5 +10,5 @@ AS
 BEGIN
 	INSERT INTO genericdata.ExtensibleBEItem(Details)
 	VALUES (@Details)
-	SET @ID = @@IDENTITY 
+	SET @ID = SCOPE_IDENTITY() 
 END

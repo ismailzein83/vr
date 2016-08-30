@@ -1,4 +1,4 @@
-﻿create PROCEDURE genericdata.[sp_DataRecordFieldChoice_Insert]
+﻿CREATE PROCEDURE [genericdata].[sp_DataRecordFieldChoice_Insert]
 	@Name nvarchar(255),
 	@Settings nvarchar(MAX), 
 	@id INT OUT
@@ -9,6 +9,6 @@ IF NOT EXISTS(SELECT 1 FROM genericdata.DataRecordFieldChoice WHERE Name = @Name
 		INSERT INTO genericdata.DataRecordFieldChoice(Name, Settings)
 		VALUES (@Name, @Settings)
 
-		SET @id = @@IDENTITY
+		SET @id = SCOPE_IDENTITY()
 	END
 END

@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [sec].[sp_BusinessEntityModule_Insert]
+CREATE PROCEDURE [sec].[sp_BusinessEntityModule_Insert]
 	-- Add the parameters for the stored procedure here
 	@Name nvarchar(255),
 	@ParentId int,
@@ -19,6 +19,6 @@ IF NOT EXISTS(select 1 from sec.BusinessEntityModule where Name = @Name)
 		INSERT INTO sec.[BusinessEntityModule](Name,ParentId,BreakInheritance) 
 		VALUES (@Name,@ParentId,@BreakInheritance)
 	 -- Insert statements for procedure here
-		SET @Id = @@IDENTITY
+		SET @Id = SCOPE_IDENTITY()
 	END
 END

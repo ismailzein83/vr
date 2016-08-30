@@ -17,6 +17,6 @@ IF NOT EXISTS(select 1 from sec.Widget where Name = @Name or Setting=@Setting)
 	BEGIN	
 		INSERT INTO Widget(WidgetDefinitionId,Name,Title,Setting) 
 		VALUES (@WidgetDefinitionId,@Name,@Title,@Setting)
-		SET @Id = @@IDENTITY
+		SET @Id = SCOPE_IDENTITY()
 	END
 END

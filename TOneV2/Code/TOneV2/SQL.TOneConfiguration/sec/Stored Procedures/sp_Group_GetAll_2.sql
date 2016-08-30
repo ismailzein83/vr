@@ -11,8 +11,6 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT [ID]
-      ,[Name]
-      ,[Description]
-      ,[Settings] from sec.[Group]
+	SELECT	[ID],[Name],[Description],[Settings] 
+	from	[sec].[Group] WITH(NOLOCK) 
 END

@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE LKUPtable_GenerateMergeScript
+﻿CREATE PROCEDURE [dbo].[LKUPtable_GenerateMergeScript]
     (@TableName NVARCHAR(128))
 AS
 --This script will Generate merge statements for data from LKUP tables.
@@ -102,7 +102,7 @@ select @Values = stuff(cast((select ','+ @b + val from @tab for xml path('')) as
 set @output +=  @b+'--'+@TableName+replicate('-', 98-len(@TableName))+@b+replicate('-', 100)+@b;
 set @output +=  'set nocount on;'+@b
 if objectproperty(object_id(@TableName), 'TableHasIdentity') = 1 
-    set @output += 'set identity_insert [dbo].[' + @TableName + '] on;'+@b;
+    set @output += 'set identity_insert ' + @TableName + ' on;'+@b;
 set @output +=  ';with cte_data('+@Cols+')'+@b+'as (select * from (values'+@b+'--'+replicate('/', 98) + @b +@Values+ @b +'--'+replicate('\', 98)+ @b +')c('+@Cols+'))'+@b;
 set @output +=  'merge' + @t + '['+parsename(@TableName, 2)+'].[' + parsename(@TableName, 1) + '] as t' + @b + 'using' + @t + 'cte_data as s'+@b;
 set @output +=  'on' + replicate(@t, 2) + @pCols+@b;
@@ -112,7 +112,7 @@ set @output +=  @t+'insert(' + @Cols + ')'+@b;
 set @output +=  @t+'values(' + @sCols + ')'+@b;
 set @output +=  'when not matched by source then' + @b+@t+ 'delete;'+@b;
 if objectproperty(object_id(@TableName), 'TableHasIdentity') = 1 
-    set @output += 'set identity_insert [dbo].[' + @TableName + '] off;'
+    set @output += 'set identity_insert ' + @TableName + ' off;'
 
 --output the statement as xml (to overcome mgmt studio limitations)
 select s as [output] from (select @output)d(s) for xml path('');

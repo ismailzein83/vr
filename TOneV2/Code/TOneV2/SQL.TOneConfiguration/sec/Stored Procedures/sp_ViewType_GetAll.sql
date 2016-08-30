@@ -5,7 +5,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [sec].[sp_ViewType_GetAll]
+CREATE PROCEDURE [sec].[sp_ViewType_GetAll]
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -13,9 +13,6 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT vt.[Id]
-      ,vt.[Name]
-      ,vt.[Title]
-      ,vt.Details
-      FROM [sec].ViewType vt
+	SELECT	vt.[Id],vt.[Name],vt.[Title],vt.Details
+    FROM	[sec].ViewType vt WITH(NOLOCK) 
 END

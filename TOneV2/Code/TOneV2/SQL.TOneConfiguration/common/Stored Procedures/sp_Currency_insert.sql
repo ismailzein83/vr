@@ -15,6 +15,6 @@ IF NOT EXISTS(SELECT 1 FROM common.[Currency] WHERE Symbol = @Symbol)
 	INSERT INTO common.Currency(Name,Symbol)
 	VALUES (@Name,@Symbol)
 	
-	SET @id = @@IDENTITY
+	SET @id = SCOPE_IDENTITY()
 	END
 END

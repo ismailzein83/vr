@@ -11,5 +11,5 @@ AS
 BEGIN
 	Insert into common.[File] ([Name], [Extension], [Content], [ModuleName], [UserID], [CreatedTime])
 	values(@Name, @Extension, @Content, @ModuleName, @UserID, @CreatedTime)
-	SET @Id = @@IDENTITY
+	SET @Id = SCOPE_IDENTITY()
 END

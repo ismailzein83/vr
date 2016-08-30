@@ -6,6 +6,6 @@
 CREATE PROCEDURE [genericdata].[sp_GenericRuleDefinition_GetAll]
 AS
 BEGIN
-	SELECT ID, Name, Details, CreatedTime
-	FROM genericdata.GenericRuleDefinition
+	SELECT	ID, Name, Details, CreatedTime
+	FROM	[genericdata].GenericRuleDefinition WITH(NOLOCK) 
 END

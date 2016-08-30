@@ -1,4 +1,4 @@
-﻿Create PROCEDURE [reprocess].[sp_ReprocessDefinition_Insert]
+﻿CREATE PROCEDURE [reprocess].[sp_ReprocessDefinition_Insert]
 	@Name Nvarchar(255),
 	@Settings nvarchar(MAX),
 	@Id int out
@@ -9,6 +9,6 @@ IF NOT EXISTS(select 1 from [reprocess].ReprocessDefinition where Name = @Name)
 		Insert into [reprocess].ReprocessDefinition ([Name], [Settings])
 		values(@Name, @Settings)
 		
-		SET @Id = @@IDENTITY
+		SET @Id = SCOPE_IDENTITY()
 	END
 END

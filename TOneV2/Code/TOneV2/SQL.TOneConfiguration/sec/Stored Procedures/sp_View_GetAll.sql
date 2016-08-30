@@ -13,17 +13,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT v.[Id]
-      ,v.[Name]
-      ,v.[Title]
-      ,v.[Url]
-      ,v.[Module]
-      ,v.[ActionNames]
-      ,v.[Audience]
-      ,v.[Type]
-      ,v.[Content]
-      ,v.[Settings]
-      ,v.[Rank]
-      FROM [sec].[View] v
-      ORDER BY v.[Module],v.[Rank]
+	SELECT	v.[Id],v.[Name],v.[Title],v.[Url],v.[Module],v.[ActionNames],v.[Audience],v.[Type],v.[Content],v.[Settings],v.[Rank]
+	FROM	[sec].[View] v WITH(NOLOCK) 
+    ORDER BY v.[Module],v.[Rank]
 END

@@ -15,6 +15,6 @@ IF NOT EXISTS(select 1 from sec.[Group] where Name = @Name)
 		Insert into [sec].[Group] ([Name], [Description],[Settings])
 		values(@Name, @Description ,@Settings)
 		
-		SET @Id = @@IDENTITY
+		SET @Id = SCOPE_IDENTITY()
 	END
 END

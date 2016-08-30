@@ -11,6 +11,6 @@ IF NOT EXISTS(select null from sec.[Module] where Name = @Name and ParentId = @P
 		Insert into sec.[Module] ([Name],ParentId,AllowDynamic)
 		values(@Name,@ParentId, @AllowDynamic)
 		
-		SET @Id = @@IDENTITY
+		SET @Id = SCOPE_IDENTITY()
 	END
 END

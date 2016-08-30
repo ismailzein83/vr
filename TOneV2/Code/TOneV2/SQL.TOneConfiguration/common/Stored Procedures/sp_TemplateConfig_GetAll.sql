@@ -7,11 +7,6 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT [ID]
-      ,[Name]
-      ,[ConfigType]
-      ,Editor
-      ,[BehaviorFQTN]
-      ,Settings
-      from common.TemplateConfig
+	SELECT [ID],[Name],[ConfigType],Editor,[BehaviorFQTN],Settings
+      from [common].TemplateConfig WITH(NOLOCK) 
 END

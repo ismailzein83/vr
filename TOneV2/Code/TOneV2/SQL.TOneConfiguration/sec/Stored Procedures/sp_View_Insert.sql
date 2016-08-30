@@ -24,6 +24,6 @@ IF NOT EXISTS(select 1 from sec.[View] where Name = @PageName)
 		INSERT INTO sec.[View](Name,Title,Url,Module,Audience,[Content], Settings,[Type]) 
 		VALUES (@PageName,@Title,@Url,@Module,@Audience,@Content, @Settings,@Type)
 	 -- Insert statements for procedure here
-		SET @pageID = @@IDENTITY
+		SET @pageID = SCOPE_IDENTITY()
 	END
 END

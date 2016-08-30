@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [common].[sp_DataRecordField_Insert]
+CREATE PROCEDURE [common].[sp_DataRecordField_Insert]
 	@TypeID int,
 	@Details varchar(max),
 	@Id int out
@@ -13,6 +13,6 @@ BEGIN
 	-- interfering with SELECT statements.
 	Insert into [common].DataRecordField ([TypeID],[Details])
 	values(@TypeID, @Details)	
-	SET @Id = @@IDENTITY
+	SET @Id = SCOPE_IDENTITY()
 
 END

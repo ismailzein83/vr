@@ -12,5 +12,5 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT ID, Name, [Description] from sec.[Group] where ID = @GroupId
+	SELECT ID, Name, [Description] from sec.[Group] WITH(NOLOCK)  where ID = @GroupId
 END

@@ -12,5 +12,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT GroupId from sec.UserGroup where UserId = @UserId
+	SELECT	GroupId 
+	from	[sec].UserGroup  WITH(NOLOCK) 
+	where	UserId = @UserId
 END

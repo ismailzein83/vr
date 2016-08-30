@@ -12,5 +12,5 @@ BEGIN
 		Insert into [bp].[BPBusinessRuleSet] (Name, ParentID, Details, BPDefinitionId)
 		SELECT @Name, @ParentId, @Details, @BPDefinitionId WHERE NOT EXISTS (Select Name from [bp].[BPBusinessRuleSet] where Name = @Name)
 	END
-	SET @Id = @@IDENTITY
+	SET @Id = SCOPE_IDENTITY()
 END

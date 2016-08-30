@@ -6,11 +6,6 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT 
-	   [ID]
-      ,[Rate]
-      ,[CurrencyID]
-      ,[ExchangeDate]
-      ,[SourceID]
-      from common.CurrencyExchangeRate
+	SELECT	[ID],[Rate],[CurrencyID],[ExchangeDate],[SourceID]
+    from	[common].CurrencyExchangeRate WITH(NOLOCK) 
 END

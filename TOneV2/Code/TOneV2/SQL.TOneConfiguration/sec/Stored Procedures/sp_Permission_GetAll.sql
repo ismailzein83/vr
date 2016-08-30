@@ -11,13 +11,10 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT perm.[HolderType]
-		,CASE WHEN HolderType = 0 THEN u.Name ELSE r.Name END AS HolderName
-      ,perm.[HolderId]
-      ,perm.[EntityType]
-      ,perm.[EntityId]
-      ,perm.[PermissionFlags]
-    from sec.Permission perm
-	LEFT JOIN sec.[Group] r on r.ID = perm.HolderId
-	LEFT JOIN sec.[User] u on u.ID = perm.HolderId
+	SELECT	perm.[HolderType]
+			,CASE WHEN HolderType = 0 THEN u.Name ELSE r.Name END AS HolderName
+			,perm.[HolderId],perm.[EntityType],perm.[EntityId],perm.[PermissionFlags]
+	from	[sec].Permission perm WITH(NOLOCK) 
+			LEFT JOIN sec.[Group] r WITH(NOLOCK)  on r.ID = perm.HolderId
+			LEFT JOIN sec.[User] u WITH(NOLOCK)  on u.ID = perm.HolderId
 END

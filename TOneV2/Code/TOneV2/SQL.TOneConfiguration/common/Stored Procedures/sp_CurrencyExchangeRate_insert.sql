@@ -14,5 +14,5 @@ BEGIN
 	INSERT INTO common.CurrencyExchangeRate(Rate,CurrencyID,ExchangeDate)
 	VALUES (@Rate,@CurrencyID,@ExchangeDate)
 	
-	SET @id = @@IDENTITY
+	SET @id = SCOPE_IDENTITY()
 END

@@ -12,6 +12,6 @@ IF NOT EXISTS(SELECT 1 FROM Analytic.AnalyticItemConfig WHERE Name = @Name and I
 		INSERT INTO Analytic.AnalyticItemConfig(TableId, ItemType,Name,Title,Config)
 		VALUES (@TableId,@ItemType,@Name,@Title,@Config)
 
-		SET @id = @@IDENTITY
+		SET @id = SCOPE_IDENTITY()
 	END
 END

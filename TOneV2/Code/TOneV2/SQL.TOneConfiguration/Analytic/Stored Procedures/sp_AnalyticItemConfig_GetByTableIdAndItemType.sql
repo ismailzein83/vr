@@ -15,12 +15,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT aic.[ID]
-      ,aic.[TableId]
-      ,aic.[ItemType]
-      ,aic.[Name]
-      ,aic.[Title]
-      ,aic.[Config]
-      FROM [Analytic].[AnalyticItemConfig] aic
-      WHERE TableId = @TableId AND ItemType = @TtemType
+	SELECT	aic.[ID],aic.[TableId],aic.[ItemType],aic.[Name],aic.[Title],aic.[Config]
+    FROM	[Analytic].[AnalyticItemConfig] aic WITH(NOLOCK) 
+    WHERE	TableId = @TableId AND ItemType = @TtemType
 END

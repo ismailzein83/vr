@@ -13,11 +13,6 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT rtr.[ID]
-      ,rtr.[Name]
-      ,rtr.[UserID]
-      ,rtr.AccessType
-      ,rtr.[Settings]
-      
-      FROM [Analytic].AnalyticReport rtr
+	SELECT rtr.[ID],rtr.[Name],rtr.[UserID],rtr.AccessType,rtr.[Settings]
+    FROM [Analytic].AnalyticReport rtr WITH(NOLOCK) 
 END

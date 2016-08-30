@@ -3,7 +3,8 @@
 	@ID int
 AS
 BEGIN
-	Select [TempPassword] FROM sec.[User]
-	WHERE ID = @ID
-	and (TempPasswordValidTill is null or TempPasswordValidTill > GETDATE())
+	Select	[TempPassword] 
+	FROM	[sec].[User] WITH(NOLOCK) 
+	WHERE	ID = @ID
+			and (TempPasswordValidTill is null or TempPasswordValidTill > GETDATE())
 END

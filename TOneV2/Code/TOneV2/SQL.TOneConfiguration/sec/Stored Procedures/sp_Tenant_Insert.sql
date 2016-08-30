@@ -11,6 +11,6 @@ IF NOT EXISTS(select null from sec.[Tenant] where Name = @Name)
 		Insert into sec.[Tenant] ([Name],[Settings],[ParentTenantID])
 		values(@Name, @Settings, @ParentTenantID)
 		
-		SET @Id = @@IDENTITY
+		SET @Id = SCOPE_IDENTITY()
 	END
 END

@@ -16,6 +16,6 @@ BEGIN
 	BEGIN
 		INSERT INTO genericdata.DataRecordStorage (Name, DataRecordTypeID, DataStoreID, Settings, CreatedTime)
 		VALUES (@Name, @DataRecordTypeId, @DataStoreId, @Settings, @CreatedTime)
-		SET @Id = @@IDENTITY
+		SET @Id = SCOPE_IDENTITY()
 	END
 END

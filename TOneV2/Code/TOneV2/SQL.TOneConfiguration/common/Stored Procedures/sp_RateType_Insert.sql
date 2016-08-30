@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE common.sp_RateType_Insert
+CREATE PROCEDURE [common].[sp_RateType_Insert]
 	@Name nvarchar(255),
 	@id INT OUT
 AS
@@ -14,6 +14,6 @@ IF NOT EXISTS(SELECT 1 FROM common.[RateType] WHERE Name = @Name)
 		INSERT INTO common.RateType(Name)
 		VALUES (@Name)
 
-		SET @id = @@IDENTITY
+		SET @id = SCOPE_IDENTITY()
 	END
 END

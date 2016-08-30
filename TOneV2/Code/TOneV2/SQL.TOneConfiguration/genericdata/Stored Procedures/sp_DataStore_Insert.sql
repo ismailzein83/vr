@@ -13,6 +13,6 @@ BEGIN
 	BEGIN
 		INSERT INTO genericdata.DataStore (Name, Settings, CreatedTime)
 		VALUES (@Name, @Settings, GETDATE())
-		SET @Id = @@IDENTITY
+		SET @Id = SCOPE_IDENTITY()
 	END
 END

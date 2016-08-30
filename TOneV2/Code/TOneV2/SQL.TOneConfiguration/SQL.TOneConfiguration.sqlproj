@@ -387,6 +387,13 @@
     <Build Include="VR_BEBridge\Stored Procedures\sp_BEReceiveDefinition_GetAll.sql" />
     <Build Include="Security\VR_BEBridge.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinition_Update.sql" />
+    <Build Include="Analytic\Tables\DataAnalysisItemDefinition.sql" />
+    <Build Include="Analytic\Tables\DataAnalysisDefinition.sql" />
+    <Build Include="VR_BEBridge\Stored Procedures\sp_BEReceiveDefinition_Update.sql" />
+    <Build Include="VR_BEBridge\Stored Procedures\sp_BEReceiveDefinition_Insert.sql" />
+    <Build Include="Analytic\Stored Procedures\sp_DataAnalysisDefinition_Update.sql" />
+    <Build Include="Analytic\Stored Procedures\sp_DataAnalysisDefinition_Insert.sql" />
+    <Build Include="Analytic\Stored Procedures\sp_DataAnalysisDefinition_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

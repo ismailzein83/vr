@@ -10,10 +10,6 @@ AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
-	SELECT	w.Id,
-		    w.WidgetDefinitionId,
-			w.Name AS WidgetName,
-			w.Title,
-			w.Setting
-	FROM	sec.Widget w 
+	SELECT	w.Id,w.WidgetDefinitionId,w.Name AS WidgetName,w.Title,w.Setting
+	FROM	sec.Widget w  WITH(NOLOCK) 
 END

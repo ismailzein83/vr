@@ -11,8 +11,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-   SELECT [UserId]
-		,[GroupId]
-	FROM [sec].[UserGroup]
+	SELECT	[UserId],[GroupId]
+	FROM	[sec].[UserGroup] WITH(NOLOCK) 
 
 END

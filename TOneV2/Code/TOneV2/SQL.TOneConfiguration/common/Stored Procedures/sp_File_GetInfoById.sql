@@ -4,6 +4,6 @@ CREATE PROCEDURE [common].[sp_File_GetInfoById]
 AS
 BEGIN
 	SELECT [Id], [Name], [Extension], [IsUsed], [ModuleName], [UserID], [CreatedTime]
-	FROM [common].[File]
+	FROM [common].[File] WITH(NOLOCK) 
 	WHERE Id = @Id
 END

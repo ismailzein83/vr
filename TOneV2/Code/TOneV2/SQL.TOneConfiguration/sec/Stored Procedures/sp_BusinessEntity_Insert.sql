@@ -21,6 +21,6 @@ IF NOT EXISTS(select 1 from sec.BusinessEntity where Name = @Name)
 		INSERT INTO sec.BusinessEntity(Name,Title,ModuleId,BreakInheritance,PermissionOptions) 
 		VALUES (@Name,@Title,@ModuleId,@BreakInheritance,@PermissionOptions)
 	 -- Insert statements for procedure here
-		SET @Id = @@IDENTITY
+		SET @Id = SCOPE_IDENTITY()
 	END
 END

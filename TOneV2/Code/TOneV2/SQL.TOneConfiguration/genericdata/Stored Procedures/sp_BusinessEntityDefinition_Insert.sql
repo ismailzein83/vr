@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [genericdata].[sp_BusinessEntityDefinition_Insert]
+CREATE PROCEDURE [genericdata].[sp_BusinessEntityDefinition_Insert]
 	-- Add the parameters for the stored procedure here
 	@Name nvarchar(50),
 	@Title nvarchar(50),
@@ -15,6 +15,6 @@ IF NOT EXISTS(select 1 from genericdata.BusinessEntityDefinition where Name = @N
 	BEGIN	
 		INSERT INTO  genericdata.BusinessEntityDefinition(Name,Title,Settings) 
 		VALUES (@Name,@Title,@Settings)
-		SET @Id = @@IDENTITY
+		SET @Id = SCOPE_IDENTITY()
 	END
 END

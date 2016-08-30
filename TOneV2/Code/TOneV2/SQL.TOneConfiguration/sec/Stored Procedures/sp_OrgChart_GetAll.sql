@@ -2,5 +2,5 @@
 AS
 BEGIN
 	SET NOCOUNT ON;
-	SELECT [Id], [Name], [Hierarchy] FROM [sec].[OrgChart]
+	SELECT [Id], [Name], [Hierarchy] FROM [sec].[OrgChart] WITH(NOLOCK) 
 END

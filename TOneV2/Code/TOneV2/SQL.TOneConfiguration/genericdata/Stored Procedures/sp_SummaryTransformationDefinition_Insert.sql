@@ -4,7 +4,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [genericdata].[sp_SummaryTransformationDefinition_Insert] 
+CREATE PROCEDURE [genericdata].[sp_SummaryTransformationDefinition_Insert] 
 	@Name nvarchar(255),
 	@Details VARCHAR(MAX),
 	@ID INT OUT
@@ -14,6 +14,6 @@ IF NOT EXISTS(SELECT 1 FROM genericdata.[SummaryTransformationDefinition] WHERE 
 	BEGIN
 		INSERT INTO genericdata.[SummaryTransformationDefinition](Name,Details,CreatedTime)
 		VALUES (@Name,@Details,GETDATE())
-		SET @ID = @@IDENTITY 
+		SET @ID = SCOPE_IDENTITY() 
 	END
 END

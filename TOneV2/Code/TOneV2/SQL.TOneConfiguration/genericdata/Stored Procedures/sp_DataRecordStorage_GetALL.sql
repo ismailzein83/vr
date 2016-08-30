@@ -6,6 +6,6 @@
 CREATE PROCEDURE [genericdata].[sp_DataRecordStorage_GetALL]
 AS
 BEGIN
-	SELECT ID, Name, DataRecordTypeID, DataStoreID, Settings, [State]
-	FROM genericdata.DataRecordStorage
+	SELECT	ID, Name, DataRecordTypeID, DataStoreID, Settings, [State]
+	FROM	[genericdata].DataRecordStorage WITH(NOLOCK) 
 END

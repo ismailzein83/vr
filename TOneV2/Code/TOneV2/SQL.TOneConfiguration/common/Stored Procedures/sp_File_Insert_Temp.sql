@@ -1,5 +1,5 @@
 ﻿
-Create PROCEDURE [common].[sp_File_Insert_Temp] 
+CREATE PROCEDURE [common].[sp_File_Insert_Temp] 
 	@Name Nvarchar(255),
 	@Extension Nvarchar(50),
 	@Content varbinary(max),
@@ -11,5 +11,5 @@ AS
 BEGIN
 	Insert into common.[File_Temp] ([Name], [Extension], [Content], [ModuleName], [UserID], [CreatedTime])
 	values(@Name, @Extension, @Content, @ModuleName, @UserID, @CreatedTime)
-	SET @Id = @@IDENTITY
+	SET @Id = SCOPE_IDENTITY()
 END
