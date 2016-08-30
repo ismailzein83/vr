@@ -35,22 +35,24 @@ app.directive('vrCommonProductinfotechnicalsettingsEditor', ['UtilsService', 'VR
 
                 api.load = function (payload) {
 
-                    console.log(payload);
-
                     var productInfoTechnicalSettingsPayload;
                     if (payload != undefined && payload.data != undefined) {
                         productInfoTechnicalSettingsPayload = payload.data;
                     }
 
-                    $scope.scopeModel.productName = productInfoTechnicalSettingsPayload.ProductName;
-                    $scope.scopeModel.versionNumber = productInfoTechnicalSettingsPayload.VersionNumber;
+                    if (productInfoTechnicalSettingsPayload != undefined && productInfoTechnicalSettingsPayload.ProductInfo != undefined) {
+                        $scope.scopeModel.productName = productInfoTechnicalSettingsPayload.ProductInfo.ProductName;
+                        $scope.scopeModel.versionNumber = productInfoTechnicalSettingsPayload.ProductInfo.VersionNumber;
+                    }
                 }
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Entities.ProductInfoTechnicalSettings, Vanrise.Entities",
-                        ProductName: $scope.scopeModel.productName,
-                        VersionNumber: $scope.scopeModel.versionNumber
+                        ProductInfo: {
+                            ProductName: $scope.scopeModel.productName,
+                            VersionNumber: $scope.scopeModel.versionNumber
+                        }
                     };
                 }
 

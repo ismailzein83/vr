@@ -237,7 +237,7 @@
     <Content Include="Common\Directives\MainExtensions\VRObjectTypes\Templates\TextObjectTypeTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\VRObjectTypes\Templates\TextValuePropertyEvaluatorTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-productinfopropertyevaluator.js" />
-    <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-productobjecttype.js" />
+    <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-productinfoobjecttype.js" />
     <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-textobjecttype.js" />
     <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-textvaluepropertyevaluator.js" />
     <Content Include="Common\Directives\RateType\Templates\RateTypeGridTemplate.html" />

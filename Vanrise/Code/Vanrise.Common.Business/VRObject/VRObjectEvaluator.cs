@@ -12,10 +12,14 @@ namespace Vanrise.Common.Business
         Dictionary<string, VRObjectVariable> objectVariables = new Dictionary<string, VRObjectVariable>();
         Dictionary<string, dynamic> objects;
 
+        VRObjectTypeDefinitionManager vrObjectTypeDefinitionManager;
+
         public VRObjectEvaluator(VRObjectVariableCollection vrObjectVariableCollection, Dictionary<string, dynamic> objects) 
         {
             this.objectVariables = vrObjectVariableCollection;
             this.objects = objects;
+
+            vrObjectTypeDefinitionManager = new VRObjectTypeDefinitionManager();
         }
 
         public dynamic GetPropertyValue(string objectName, string propertyName)
@@ -52,6 +56,9 @@ namespace Vanrise.Common.Business
                 if (objectTypeDefinition != null)
                     objectType = objectTypeDefinition.Settings.ObjectType;
 
+                if(objectType == null)
+                    throw new NullReferenceException(String.Format("objectType '{0}'", objectVariable.VRObjectTypeDefinitionId));
+
                 if (!objectTypeDefinition.Settings.Properties.TryGetValue(propertyName, out objectTypePropertyDefinition))
                     throw new NullReferenceException(String.Format("objectTypePropertyDefinition '{0}'", objectVariable.VRObjectTypeDefinitionId));
 
@@ -68,7 +75,7 @@ namespace Vanrise.Common.Business
 
         private VRObjectTypeDefinition GetObjectTypeDefinition(Guid objectTypeDefinitionId)
         {
-            VRObjectTypeDefinition objectTypeDefinition = new VRObjectTypeDefinitionManager().GetVRObjectTypeDefinition(objectTypeDefinitionId);
+            VRObjectTypeDefinition objectTypeDefinition = vrObjectTypeDefinitionManager.GetVRObjectTypeDefinition(objectTypeDefinitionId);
             
             if (objectTypeDefinition == null)
                 throw new NullReferenceException(String.Format("objectTypeDefinition '{0}'", objectTypeDefinitionId));

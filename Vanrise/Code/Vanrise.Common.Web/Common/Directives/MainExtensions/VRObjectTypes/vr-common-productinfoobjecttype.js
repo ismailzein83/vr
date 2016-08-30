@@ -36,7 +36,7 @@
 
                 api.getData = function () {
                     var data = {
-                        $type: "Vanrise.Common.MainExtensions.VRObjectTypes.ProductObjectType, Vanrise.Common.MainExtensions",
+                        $type: "Vanrise.Common.MainExtensions.VRObjectTypes.ProductInfoObjectType, Vanrise.Common.MainExtensions",
                     }
                     return data;
                 }
@@ -48,6 +48,6 @@
         }
     }
 
-    app.directive('vrCommonProductobjecttype', ProductObjectType);
+    app.directive('vrCommonProductinfoobjecttype', ProductObjectType);
 
 })(app);

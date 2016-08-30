@@ -69,7 +69,7 @@
     <Compile Include="TextManipulationAction\ReplaceStringActionSettings.cs" />
     <Compile Include="TextManipulationAction\SubstringActionSettings.cs" />
     <Compile Include="VRObjectTypes\ProductInfoPropertyEvaluator.cs" />
-    <Compile Include="VRObjectTypes\ProductObjectType.cs" />
+    <Compile Include="VRObjectTypes\ProductInfoObjectType.cs" />
     <Compile Include="VRObjectTypes\TextObjectType.cs" />
     <Compile Include="VRObjectTypes\TextValuePropertyEvaluator.cs" />
   </ItemGroup>

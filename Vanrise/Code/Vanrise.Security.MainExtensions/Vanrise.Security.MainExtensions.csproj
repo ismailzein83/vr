@@ -56,6 +56,24 @@
     <Compile Include="VRObjectTypes\UserObjectType.cs" />
     <Compile Include="VRObjectTypes\UserProfilePropertyEvaluator.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Security.Business\Vanrise.Security.Business.csproj">
+      <Project>{98e54996-fad2-40e7-b236-be5a23fa64b1}</Project>
+      <Name>Vanrise.Security.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Data.SQL\Vanrise.Security.Data.SQL.csproj">
+      <Project>{452c1ba6-47e3-4072-be53-4b6fa39d0a74}</Project>
+      <Name>Vanrise.Security.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Data\Vanrise.Security.Data.csproj">
+      <Project>{354e87d0-0442-4e11-8ba4-3d42f00b5853}</Project>
+      <Name>Vanrise.Security.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Entities\Vanrise.Security.Entities.csproj">
+      <Project>{04de17c7-70b4-40a1-84dd-26c91ca228ac}</Project>
+      <Name>Vanrise.Security.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

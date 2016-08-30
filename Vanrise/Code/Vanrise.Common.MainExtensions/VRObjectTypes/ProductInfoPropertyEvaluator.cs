@@ -15,7 +15,19 @@ namespace Vanrise.Common.MainExtensions.VRObjectTypes
 
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)
         {
-            return Vanrise.Common.Utilities.GetPropValueReader(this.ProductField.ToString()).GetPropertyValue(context.Object);
+            ProductInfo productInfo = context.Object as ProductInfo;
+
+            if (productInfo == null)
+                throw new NullReferenceException("productInfo");
+
+            switch (this.ProductField)
+            {
+                case ProductField.ProductName: return productInfo.ProductName;
+
+                case ProductField.VersionNumber: return productInfo.VersionNumber;
+            }
+
+            return null;
         }
     }
 }

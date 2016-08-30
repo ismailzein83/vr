@@ -8,16 +8,15 @@ using Vanrise.Entities;
 
 namespace Vanrise.Common.MainExtensions.VRObjectTypes
 {
-    public class ProductObjectType : VRObjectType
+    public class ProductInfoObjectType : VRObjectType
     {
         public override dynamic GetDefaultValue()
         {
             ProductInfoTechnicalSettings productInfoTechnicalSettings = new ProductInfoTechnicalSettings();
 
-            productInfoTechnicalSettings.ProductName = new ConfigManager().GetProductName();
-            productInfoTechnicalSettings.VersionNumber = new ConfigManager().GetProductVersionNumber();
+            ProductInfo productInfo = new ConfigManager().GetProductInfo();
 
-            return productInfoTechnicalSettings;
+            return productInfo;
         }
     }
 }

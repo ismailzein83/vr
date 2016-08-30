@@ -32,29 +32,17 @@ namespace Vanrise.Common.Business
             return emailSettings;
         }
 
-        public string GetProductName()
+        public ProductInfo GetProductInfo()
         {
             SettingManager settingManager = new SettingManager();
             ProductInfoTechnicalSettings productInfoTechnicalSettings = settingManager.GetSetting<ProductInfoTechnicalSettings>(ProductInfoTechnicalSettings.SETTING_TYPE);
 
-            string productName = productInfoTechnicalSettings.ProductName;
+            ProductInfo productInfo = productInfoTechnicalSettings.ProductInfo;
 
-            if (productName == null)
-                throw new NullReferenceException("ProductInfoTechnicalSettings.ProductName NullReferenceException");
+            if (productInfo == null)
+                throw new NullReferenceException("ProductInfoTechnicalSettings.ProductInfo NullReferenceException");
 
-            return productName;
-        }
-        public string GetProductVersionNumber()
-        {
-            SettingManager settingManager = new SettingManager();
-            ProductInfoTechnicalSettings productInfoTechnicalSettings = settingManager.GetSetting<ProductInfoTechnicalSettings>(ProductInfoTechnicalSettings.SETTING_TYPE);
-
-            string versionNumber = productInfoTechnicalSettings.VersionNumber;
-
-            if (versionNumber == null)
-                throw new NullReferenceException("ProductInfoTechnicalSettings.VersionNumber NullReferenceException");
-
-            return versionNumber;
+            return productInfo;
         }
         #endregion
 

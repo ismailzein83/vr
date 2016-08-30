@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.MainExtensions.VRObjectTypes
 {
@@ -15,7 +16,23 @@ namespace Vanrise.Security.MainExtensions.VRObjectTypes
 
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)
         {
-            return Vanrise.Common.Utilities.GetPropValueReader(this.UserField.ToString()).GetPropertyValue(context.Object);                   
+            User user = context.Object as User;
+
+            if (user == null)
+                throw new NullReferenceException("user");
+
+            switch (this.UserField)
+            {
+                case UserField.Email: return user.Email;
+
+                case UserField.Name: return user.Name;
+
+                case UserField.Description: return user.Description;
+
+                case UserField.Status: return user.Status;
+            }
+
+            return null;
         }
     }
 }

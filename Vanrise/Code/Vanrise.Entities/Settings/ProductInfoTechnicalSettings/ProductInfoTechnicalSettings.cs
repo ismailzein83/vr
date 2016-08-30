@@ -10,8 +10,7 @@ namespace Vanrise.Entities
     {
         public const string SETTING_TYPE = "VR_Common_ProductInfoTechnicalSettings";
 
-        public string ProductName { get; set; }
-
-        public string VersionNumber { get; set; }
+        public ProductInfo ProductInfo { get; set; } 
     }
 }
+ 
