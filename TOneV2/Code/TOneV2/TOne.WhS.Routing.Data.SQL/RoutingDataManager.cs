@@ -109,13 +109,18 @@ namespace TOne.WhS.Routing.Data.SQL
         #region Constants
 
 
-        const string query_SupplierZoneDetailsTable = @"Create Table SupplierZoneDetail(
-                                                        SupplierId int Not Null,
-                                                        SupplierZoneId bigint Not Null,
-                                                        EffectiveRateValue [decimal](20, 8) Not Null
-                                                    )ON [PRIMARY]  
+        const string query_SupplierZoneDetailsTable = @"CREATE TABLE [dbo].[SupplierZoneDetail](
+	                                                    [SupplierId] [int] NOT NULL,
+	                                                    [SupplierZoneId] [bigint] NOT NULL,
+	                                                    [EffectiveRateValue] [decimal](20, 8) NOT NULL
+                                                        ) ON [PRIMARY]
+                                                        GO
+                                                        CREATE CLUSTERED INDEX [IX_SupplierZoneDetail_SupplierZoneId] ON [dbo].[SupplierZoneDetail] 
+                                                        (
+	                                                        [SupplierZoneId] ASC
+                                                        )
+                                                        GO";
 
-                                                    ";
 
         const string query_CustomerZoneDetailTable = @" CREATE TABLE [dbo].[CustomerZoneDetail](
 	                                                    [CustomerId] [int] NOT NULL,
@@ -125,9 +130,15 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [SellingProductId] [int] NULL,
 	                                                    [EffectiveRateValue] [decimal](20, 8) NULL,
 	                                                    [RateSource] [tinyint] NULL
-                                                    ) ON [PRIMARY]
+                                                        ) ON [PRIMARY]
+                                                        GO
+                                                        CREATE CLUSTERED INDEX [IX_CustomerZoneDetail_SaleZoneId] ON [dbo].[CustomerZoneDetail] 
+                                                        (
+	                                                        [SaleZoneId] ASC
+                                                        )
+                                                        GO";
 
-                                                    ";
+
 
         const string query_CodeMatchTable = @"    CREATE TABLE [dbo].[CodeMatch](
 	                                                    [CodePrefix] [varchar](20) NOT NULL,
