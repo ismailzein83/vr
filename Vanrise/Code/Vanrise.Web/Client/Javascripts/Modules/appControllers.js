@@ -77,6 +77,43 @@ appControllers.directive('draggable', function ($document) {
         }
     };
 });
+
+
+appControllers.directive('draggablemodal', function ($document) {
+    "use strict";
+    return function (scope, element) {
+        var startX = 0,
+          startY = 0,
+          x = 0,
+          y = 0;
+        element.parents().find('.modal-header').css({
+            cursor: 'move'
+        });
+        element.parents().find('.modal-header').on('mousedown', function (event) {
+            // Prevent default dragging of selected content
+            event.preventDefault();
+            startX = event.screenX - x;
+            startY = event.screenY - y;
+            $document.on('mousemove', mousemove);
+            $document.on('mouseup', mouseup);
+            scope.$broadcast("start-drag");
+        });
+
+        function mousemove(event) {
+            y = event.screenY - startY;
+            x = event.screenX - startX;
+            element.parents().find('.modal-content').css({
+                top: y + 'px',
+                left: x + 'px'
+            });
+        }
+
+        function mouseup() {
+            $document.unbind('mousemove', mousemove);
+            $document.unbind('mouseup', mouseup);
+        }
+    };
+});
 appControllers.directive('clickOutside', function ($document) {
     "use strict";
     return {
