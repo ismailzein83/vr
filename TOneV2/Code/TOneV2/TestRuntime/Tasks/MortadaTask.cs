@@ -8,6 +8,7 @@ using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Integration.Business;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
 
@@ -19,22 +20,31 @@ namespace TestRuntime.Tasks
         {
             System.Threading.ThreadPool.SetMaxThreads(10000, 10000);
 
-            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
-            BPRegulatorRuntimeService regulatorRuntimeService = new BPRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            TransactionLockRuntimeService transactionLockRuntimeService = new Vanrise.Runtime.TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            SchedulerService SchedulerService = new Vanrise.Runtime.SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
-            //QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
-            //SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 5) };
-
             var runtimeServices = new List<RuntimeService>();
-            //runtimeServices.Add(queueActivationService);
 
-            runtimeServices.Add(bpService);
+            BPRegulatorRuntimeService regulatorRuntimeService = new BPRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(regulatorRuntimeService);
-            runtimeServices.Add(transactionLockRuntimeService);
-            runtimeServices.Add(SchedulerService);
 
-            //runtimeServices.Add(schedulerService);
+            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bpService);
+
+            QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueRegulatorService);
+
+            QueueActivationRuntimeService queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueActivationService);
+
+            SummaryQueueActivationRuntimeService summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(summaryQueueActivationService);
+
+            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(schedulerService);
+
+            TransactionLockRuntimeService transactionLockRuntimeService = new Vanrise.Runtime.TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(transactionLockRuntimeService);
+
+            DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(dsRuntimeService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
