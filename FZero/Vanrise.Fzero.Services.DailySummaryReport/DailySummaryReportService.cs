@@ -41,7 +41,7 @@ namespace Vanrise.Fzero.Services.DailySummaryReport
             //Debugger.Launch(); // launch and attach debugger
 
             // Create a timer with a ten second interval.
-            aTimer = new System.Timers.Timer(86400000);// 1 hours
+            aTimer = new System.Timers.Timer(86400000);// 24 hours
             // Hook up the Elapsed event for the timer.
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
 
