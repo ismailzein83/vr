@@ -15,17 +15,11 @@ BEGIN
 	    DECLARE @ZonesIDsTable TABLE (ZoneID int)
 		INSERT INTO @ZonesIDsTable (ZoneID)
 		select Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@ZonesIDs)
-			SELECT  
-			   sc.[ID]
-			  ,sc.[Code]
-			  ,sc.[ZoneID]
-			  ,sc.[CodeGroupID]
-			  ,sc.[BED]
-			  ,sc.[EED]
+			SELECT	sc.[ID],sc.[Code],sc.[ZoneID],sc.[CodeGroupID],sc.[BED],sc.[EED]
 			INTO #RESULT
 			FROM 
-			TOneWhS_BE.SaleCode sc 
-			join  TOneWhS_BE.SaleZone sz on  sc.ZoneID = sz.ID   
+			[TOneWhS_BE].SaleCode sc WITH(NOLOCK) 
+			inner join  TOneWhS_BE.SaleZone sz WITH(NOLOCK) on  sc.ZoneID = sz.ID   
             WHERE 
                 (@EffectiveOn is null or sc.BED < = @EffectiveOn)
             and (@EffectiveOn is null or sc.EED is null or sc.EED  > @EffectiveOn)

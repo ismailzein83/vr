@@ -12,7 +12,7 @@ BEGIN
       ,[ReadyTime]
       ,[Information]
       ,[Settings]
-  FROM TOneWhS_Routing.[RoutingDatabase]
+  FROM TOneWhS_Routing.[RoutingDatabase] WITH(NOLOCK) 
   WHERE ISNULL(IsDeleted, 0) = 0 and [ProcessType] = @ProcessType
 END
 

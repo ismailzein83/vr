@@ -15,18 +15,19 @@ BEGIN
     DECLARE @CodePrefixesTable TABLE (CodePrefix varchar(20))
     
 	INSERT INTO @CodePrefixesTable (CodePrefix)
-	select ParsedString from [TOneWhS_BE].[ParseStringList](@CodePrefixes)
+	select ParsedString from [TOneWhS_BE].[ParseStringList](@CodePrefixes);
 	
-	SET NOCOUNT ON;		
-		SELECT LEFT(Code, @PrefixLength) as CodePrefix, Sum(1) as codeCount 
-		FROM TOneWhS_BE.SaleCode  sc WITH (NOLOCK)
-		join @CodePrefixesTable cp on cp.CodePrefix = LEFT(sc.Code, @PrefixLength-1)
-		WHERE
-		(
-			(@IsFuture = 0 AND BED <= @EffectiveOn AND (EED > @EffectiveOn OR EED IS NULL))
-			OR
-			(@IsFuture = 1 AND (BED > GETDATE() OR EED IS NULL))
-		)
-		group by LEFT(Code, @PrefixLength);
-	SET NOCOUNT OFF;
+	WITH AllPrefixes_CTE (CodePrefix, CodeCount)
+	AS
+	(
+		SELECT LEFT(Code, @PrefixLength) as CodePrefix, Count(1) as CodeCount 
+		FROM TOneWhS_BE.SaleCode sc WITH (NOLOCK) 
+		WHERE((@IsFuture = 0 AND BED <= @EffectiveOn AND (EED > @EffectiveOn OR EED IS NULL))OR(@IsFuture = 1 AND (BED > GETDATE() OR EED IS NULL)))
+		group by LEFT(Code, @PrefixLength)
+	)
+
+	SELECT allPrefixes.CodePrefix, CodeCount
+    FROM AllPrefixes_CTE allPrefixes
+    join @CodePrefixesTable cp on cp.CodePrefix = LEFT(allPrefixes.CodePrefix, @PrefixLength-1)
+
 END

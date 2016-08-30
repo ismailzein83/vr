@@ -5,9 +5,12 @@
     [CurrencyID]        INT             NULL,
     [NormalRate]        DECIMAL (20, 8) NOT NULL,
     [OtherRates]        VARCHAR (MAX)   NULL,
+    [RateTypeID]        INT             NULL,
     [BED]               DATETIME        NOT NULL,
     [EED]               DATETIME        NULL
 );
+
+
 
 
 

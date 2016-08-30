@@ -7,10 +7,12 @@
     [EED]         DATETIME     NULL,
     [timestamp]   ROWVERSION   NULL,
     [SourceID]    VARCHAR (50) NULL,
-    CONSTRAINT [PK_SaleCode] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_SaleCode_CodeGroup] FOREIGN KEY ([CodeGroupID]) REFERENCES [TOneWhS_BE].[CodeGroup] ([ID]),
-    CONSTRAINT [FK_SaleCode_SaleZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE].[SaleZone] ([ID])
+    CONSTRAINT [FK_SaleCode_SaleZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE].[SaleZone] ([ID]),
+    CONSTRAINT [IX_SaleCode_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 
@@ -24,4 +26,9 @@
 GO
 CREATE NONCLUSTERED INDEX [IX_SaleCode_timestamp]
     ON [TOneWhS_BE].[SaleCode]([timestamp] DESC);
+
+
+GO
+CREATE CLUSTERED INDEX [IX_SaleCode_Code]
+    ON [TOneWhS_BE].[SaleCode]([Code] ASC);
 

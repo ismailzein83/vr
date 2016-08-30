@@ -14,13 +14,9 @@ BEGIN
 		DECLARE @SellingNumberPlanIDsTable TABLE (SellingNumberPlanID int)
 		INSERT INTO @SellingNumberPlanIDsTable (SellingNumberPlanID)
 		select Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@SellingNumberPlanIDs)
-			SELECT
-				  [ID]
-				  ,[Name]
-				  ,SellingNumberPlanID
-				  ,[Settings]
+			SELECT	[ID],[Name],SellingNumberPlanID,[Settings]
 			INTO #RESULT
-			FROM TOneWhS_BE.RoutingProduct                           
+			FROM TOneWhS_BE.RoutingProduct WITH(NOLOCK)                        
             WHERE  
 				(@RoutingProductName is Null or Name = @RoutingProductName)
                 AND (@SellingNumberPlanIDs is Null or SellingNumberPlanID IN (SELECT SellingNumberPlanID FROM @SellingNumberPlanIDsTable))

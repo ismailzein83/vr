@@ -31,15 +31,15 @@ ELSE
 	
 	Insert into TOneWhS_BE.SupplierZone (ID, CountryID, Name, SupplierID, BED, EED)
 	Select sznew.ID, sznew.CountryID, sznew.Name, sznew.SupplierID, sznew.BED, sznew.EED 
-	from TOneWhS_BE.SPL_SupplierZone_New sznew Where sznew.ProcessInstanceID = @ProcessInstanceId AND sznew.SupplierID = @SupplierID 
+	from TOneWhS_BE.SPL_SupplierZone_New sznew WITH(NOLOCK) Where sznew.ProcessInstanceID = @ProcessInstanceId AND sznew.SupplierID = @SupplierID 
 	
 	Insert into TOneWhS_BE.SupplierCode (ID, Code, ZoneID, CodeGroupID, BED, EED)
 	Select scnew.ID, scnew.Code, scnew.ZoneID, scnew.CodeGroupID, scnew.BED, scnew.EED
-	from TOneWhS_BE.SPL_SupplierCode_New scnew Where scnew.ProcessInstanceID = @ProcessInstanceId
+	from TOneWhS_BE.SPL_SupplierCode_New scnew WITH(NOLOCK) Where scnew.ProcessInstanceID = @ProcessInstanceId
 	
-	Insert into TOnewhs_BE.SupplierRate (ID, PriceListID, ZoneID, CurrencyID, NormalRate, OtherRates, BED, EED)
-	Select srnew.ID, @PriceListId, srnew.ZoneID, srnew.CurrencyID, srnew.NormalRate, srnew.OtherRates, srnew.BED, srnew.EED
-	from TOneWhS_BE.SPL_SupplierRate_New srnew Where srnew.ProcessInstanceID = @ProcessInstanceId
+	Insert into TOnewhs_BE.SupplierRate (ID, PriceListID, ZoneID, CurrencyID, NormalRate, OtherRates, RateTypeID,BED, EED)
+	Select srnew.ID, @PriceListId, srnew.ZoneID, srnew.CurrencyID, srnew.NormalRate, srnew.OtherRates, srnew.RateTypeID, srnew.BED, srnew.EED
+	from TOneWhS_BE.SPL_SupplierRate_New srnew WITH(NOLOCK) Where srnew.ProcessInstanceID = @ProcessInstanceId
 	
 	Update ToneWhs_be.SupplierZone
 	Set EED = szchanged.EED

@@ -6,7 +6,7 @@ BEGIN
 	SET NOCOUNT ON;
 	
 	SELECT [ID]
-	FROM [TOneWhS_BE].[SaleZone] sz
+	FROM [TOneWhS_BE].[SaleZone] sz WITH(NOLOCK) 
 	WHERE 
 		(
 			(@IsEffectiveInFuture = 0 AND sz.BED <= @EffectiveOn AND (sz.EED > @EffectiveOn OR sz.EED IS NULL))

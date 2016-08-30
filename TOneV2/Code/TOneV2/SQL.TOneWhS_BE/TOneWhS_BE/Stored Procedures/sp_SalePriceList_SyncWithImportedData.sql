@@ -15,19 +15,19 @@ Begin Try
 	
 	Insert into TOneWhS_BE.SalePriceList (ID, OwnerType, OwnerID, CurrencyID, EffectiveOn)
 	Select	splnew.ID, splnew.OwnerType, splnew.OwnerID, splnew.CurrencyID, splnew.EffectiveOn	
-	from TOneWhS_BE.CP_SalePriceList_New splnew Where splnew.ProcessInstanceID = @ProcessInstanceID 
+	from TOneWhS_BE.CP_SalePriceList_New splnew WITH(NOLOCK) Where splnew.ProcessInstanceID = @ProcessInstanceID 
 	
 	Insert into TOneWhS_BE.SaleZone (ID,SellingNumberPlanID, CountryID, Name, BED, EED)
 	Select sznew.ID,sznew.SellingNumberPlanID, sznew.CountryID, sznew.Name, sznew.BED, sznew.EED 
-	from TOneWhS_BE.CP_SaleZone_New sznew Where sznew.ProcessInstanceID = @ProcessInstanceID AND sznew.SellingNumberPlanID = @SellingNumberPlanId 
+	from TOneWhS_BE.CP_SaleZone_New sznew WITH(NOLOCK) Where sznew.ProcessInstanceID = @ProcessInstanceID AND sznew.SellingNumberPlanID = @SellingNumberPlanId 
 	
 	Insert into TOneWhS_BE.SaleCode (ID, Code, ZoneID, CodeGroupID, BED, EED)
 	Select scnew.ID, scnew.Code, scnew.ZoneID, scnew.CodeGroupID, scnew.BED, scnew.EED
-	from TOneWhS_BE.CP_SaleCode_New scnew Where scnew.ProcessInstanceID = @ProcessInstanceID
+	from TOneWhS_BE.CP_SaleCode_New scnew WITH(NOLOCK) Where scnew.ProcessInstanceID = @ProcessInstanceID
 
 	Insert into TOneWhS_BE.SaleRate (ID, PriceListID, ZoneID, CurrencyID, Rate, BED, EED)
 	select newRate.ID, newRate.PriceListID, newRate.ZoneID, newRate.CurrencyId, newRate.NormalRate, newRate.BED, newRate.EED
-	from TOneWhS_BE.CP_SaleRate_New newRate where newRate.ProcessInstanceID = @ProcessInstanceId
+	from TOneWhS_BE.CP_SaleRate_New newRate WITH(NOLOCK) where newRate.ProcessInstanceID = @ProcessInstanceId
 	
 	Update ToneWhs_be.SaleZone
 	Set EED = szchanged.EED

@@ -17,8 +17,8 @@ BEGIN
 	SET NOCOUNT ON;
 	
 	select C.Code, C.ChangeType, C.RecentZoneName, C.ZoneName, C.BED, C.EED
-	from TOneWhs_CP.SaleCode_Preview as C
-	Join TOneWhS_CP.SaleZone_Preview as Z on C.ZoneName = Z.ZoneName AND Z.ProcessInstanceID= C.ProcessInstanceID
+	from TOneWhs_CP.SaleCode_Preview as C WITH(NOLOCK) 
+	Join TOneWhS_CP.SaleZone_Preview as Z  WITH(NOLOCK) on C.ZoneName = Z.ZoneName AND Z.ProcessInstanceID= C.ProcessInstanceID
 	Where (@ZoneName is null or C.ZoneName = @ZoneName or c.RecentZoneName= @ZoneName) AND (@OnlyModified = 0 or C.ChangeType != 0) And Z.ProcessInstanceID=@ProcessInstanceID
 			
 	

@@ -4,7 +4,7 @@
 -- Description:	SP to get all SaleCodes by Code Group IDs
 
 -- =============================================
-Create PROCEDURE [TOneWhS_BE].[sp_SaleCode_GetByCodeGroupIds]
+CREATE PROCEDURE [TOneWhS_BE].[sp_SaleCode_GetByCodeGroupIds]
 	@CodeGroupIds varchar(max)
 AS
 BEGIN
@@ -13,11 +13,7 @@ DECLARE @CodeGroupIDsTable TABLE (CodeGroupID INT)
 	INSERT INTO @CodeGroupIDsTable (CodeGroupID)
 	SELECT CONVERT(INT, ParsedString) FROM [TOneWhS_BE].[ParseStringList](@CodeGroupIds)
 	
-SELECT  [ID],
-		[Code],
-		[ZoneID],
-		[BED],
-		[EED]
-FROM	[TOneWhS_BE].[SaleCode] sc
-WHERE [CodeGroupID] in (SELECT CodeGroupID FROM @CodeGroupIDsTable)
+SELECT  [ID],[Code],[ZoneID],[BED],[EED]
+FROM	[TOneWhS_BE].[SaleCode] sc WITH(NOLOCK) 
+WHERE	[CodeGroupID] in (SELECT CodeGroupID FROM @CodeGroupIDsTable)
 End

@@ -146,7 +146,6 @@
     <Build Include="Security\TOneWhS_BE.sql" />
     <Build Include="TOneWhS_BE\Tables\SellingProduct.sql" />
     <Build Include="TOneWhS_BE\Tables\SellingNumberPlan.sql" />
-    <Build Include="TOneWhS_BE\Tables\RateType.sql" />
     <Build Include="TOneWhS_BE\Tables\CustomerSellingProduct.sql" />
     <Build Include="TOneWhS_Sales\Tables\RatePlan.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZone_GetAll.sql" />
@@ -235,9 +234,6 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetByCodePrefix.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetAll.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_RoutingProduct_GetBySaleZone.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_RateType_Update.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_RateType_Insert.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_RateType_GetAll.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_CustomerSellingProduct_Update.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_AccountManager_GetAll.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_AccountManager_AssignCarriers.sql" />
@@ -376,5 +372,8 @@
     <Build Include="TOneWhS_BE\User Defined Types\RoutingOwnerInfo.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceType_Update.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceType_Insert.sql" />
+    <Build Include="TOneWhS_SPL\Tables\SupplierOtherRate_Preview.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierOtherRate_Preview_GetFiltered.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetFutureByOwner.sql" />
   </ItemGroup>
 </Project>

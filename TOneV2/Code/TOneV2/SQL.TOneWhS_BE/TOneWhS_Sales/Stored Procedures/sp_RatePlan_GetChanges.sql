@@ -10,6 +10,6 @@ CREATE PROCEDURE [TOneWhS_Sales].[sp_RatePlan_GetChanges]
 AS
 BEGIN
 	SELECT [Changes]
-	FROM TOneWhS_Sales.RatePlan
+	FROM TOneWhS_Sales.RatePlan WITH(NOLOCK) 
 	WHERE OwnerType = @OwnerType AND OwnerID = @OwnerID AND [Status] = @Status
 END

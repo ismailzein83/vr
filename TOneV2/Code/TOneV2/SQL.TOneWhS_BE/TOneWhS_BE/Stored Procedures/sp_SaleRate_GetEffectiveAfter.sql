@@ -13,16 +13,9 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-	SELECT  sr.[ID]
-		  ,sr.RateTypeID
-		  ,sr.Rate
-		  ,sr.OtherRates
-		  ,sr.PriceListID
-		  ,sr.ZoneID
-		  ,sr.BED
-		  ,sr.EED
-		  ,sr.Change
-	  FROM [TOneWhS_BE].SaleRate sr INNER JOIN [TOneWhS_BE].SaleZone sz ON sr.ZoneID=sz.ID 
-	  Where  (sr.EED is null or sr.EED > @Effective)
+SELECT  sr.[ID],sr.RateTypeID,sr.Rate,sr.OtherRates,sr.PriceListID,sr.ZoneID,sr.BED,sr.EED,sr.Change
+FROM	[TOneWhS_BE].SaleRate sr WITH(NOLOCK) 
+		INNER JOIN [TOneWhS_BE].SaleZone sz WITH(NOLOCK) ON sr.ZoneID=sz.ID 
+Where	(sr.EED is null or sr.EED > @Effective)
 		and sz.SellingNumberPlanID=@SellingNumberPlan
 END

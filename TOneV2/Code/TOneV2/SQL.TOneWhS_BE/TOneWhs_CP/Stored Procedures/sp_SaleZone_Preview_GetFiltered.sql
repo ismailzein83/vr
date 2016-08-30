@@ -23,8 +23,8 @@ BEGIN
 	,SUM(Case When C.ChangeType = 3 AND Z.ZoneChangeType != 2 AND z.ZoneChangeType != 5 AND C.ZoneName = Z.ZoneName Then 1 else 0 END) as CodesMovedTo
 	,SUM(Case When C.ChangeType = 3 AND Z.ZoneChangeType != 2 AND z.ZoneChangeType != 5 AND C.RecentZoneName = Z.ZoneName Then 1 else 0 END) as CodesMovedFrom
 	
-	from TOneWhS_CP.SaleZone_Preview as Z
-	join TOneWhs_CP.SaleCode_Preview as C on Z.ZoneName = C.ZoneName OR Z.ZoneName = C.RecentZoneName
+	from TOneWhS_CP.SaleZone_Preview as Z WITH(NOLOCK) 
+	join TOneWhs_CP.SaleCode_Preview as C  WITH(NOLOCK) on Z.ZoneName = C.ZoneName OR Z.ZoneName = C.RecentZoneName
 	
 	Where (@CountryID is null or Z.CountryID = @CountryID) AND (@OnlyModified = 0 or C.ChangeType != 0) And Z.ProcessInstanceID=@ProcessInstanceID and c.ProcessInstanceID=@ProcessInstanceID
 

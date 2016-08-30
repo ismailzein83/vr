@@ -3,11 +3,9 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE VR_Invoice.sp_InvoiceType_GetAll
+CREATE PROCEDURE [VR_Invoice].[sp_InvoiceType_GetAll]
 AS
 BEGIN
-	SELECT ID,
-		Name,
-		Settings
-	FROM VR_Invoice.InvoiceType
+	SELECT	ID,Name,Settings
+	FROM	VR_Invoice.InvoiceType WITH(NOLOCK) 
 END

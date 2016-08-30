@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [TOneWhS_BE].[sp_SalePriceList_GetAll]
+CREATE PROCEDURE [TOneWhS_BE].[sp_SalePriceList_GetAll]
 
 AS
 BEGIN
@@ -11,10 +11,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    SELECT [ID]
-      ,[OwnerID]
-      ,[OwnerType] 
-      ,[CurrencyID]
-      from TOneWhS_BE.SalePriceList
+SELECT	[ID],[OwnerID],[OwnerType] ,[CurrencyID]
+from	[TOneWhS_BE].SalePriceList WITH(NOLOCK) 
 
 END

@@ -9,7 +9,7 @@ BEGIN
 	SET NOCOUNT ON;
 	
 	SELECT ID, CustomerID, Details, BED
-	FROM TOneWhS_BE.CustomerZone
+	FROM TOneWhS_BE.CustomerZone WITH(NOLOCK) 
 	
 	SET NOCOUNT OFF;
 END

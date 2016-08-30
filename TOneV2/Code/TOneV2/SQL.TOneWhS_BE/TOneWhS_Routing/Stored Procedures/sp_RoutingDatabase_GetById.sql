@@ -2,17 +2,8 @@
 @RoutingDatabaseId int
 AS
 BEGIN
-	SELECT [ID]
-      ,[Title]
-      ,[Type]
-      ,[ProcessType]
-      ,[EffectiveTime]
-      ,[IsReady]
-      ,[CreatedTime]
-      ,[ReadyTime]
-      ,[Information]
-      ,[Settings]
-  FROM TOneWhS_Routing.[RoutingDatabase]
+SELECT [ID],[Title],[Type],[ProcessType],[EffectiveTime],[IsReady],[CreatedTime],[ReadyTime],[Information],[Settings]
+  FROM [TOneWhS_Routing].[RoutingDatabase]  WITH(NOLOCK) 
   WHERE ID = @RoutingDatabaseId
 END
 

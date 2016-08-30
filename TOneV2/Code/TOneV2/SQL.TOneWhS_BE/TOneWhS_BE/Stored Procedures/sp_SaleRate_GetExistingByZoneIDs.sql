@@ -16,18 +16,9 @@ BEGIN
 		INSERT INTO @ZoneIDsTable SELECT CONVERT(BIGINT, ParsedString) FROM [TOneWhS_BE].[ParseStringList](@ZoneIDs)
 	END;
 	
-	WITH PriceListIDsCTE (PriceListID) AS (SELECT ID FROM TOneWhS_BE.SalePriceList WHERE OwnerType = @OwnerType AND OwnerID = @OwnerID)
-	SELECT ID,
-		PriceListID,
-		ZoneID,
-		CurrencyID,
-		RateTypeID,
-		Rate,
-		OtherRates,
-		BED,
-		EED,
-		Change
-	FROM TOneWhS_BE.SaleRate
+	WITH PriceListIDsCTE (PriceListID) AS (SELECT ID FROM [TOneWhS_BE].SalePriceList WITH(NOLOCK) WHERE OwnerType = @OwnerType AND OwnerID = @OwnerID)
+	SELECT ID,PriceListID,ZoneID,CurrencyID,RateTypeID,Rate,OtherRates,BED,EED,Change
+	FROM [TOneWhS_BE].SaleRate WITH(NOLOCK) 
 	WHERE PriceListID IN (SELECT PriceListID FROM PriceListIDsCTE)
 		AND ZoneID IN (SELECT ZoneID FROM @ZoneIDsTable)
 		AND (EED IS NULL OR EED > @MinEED)

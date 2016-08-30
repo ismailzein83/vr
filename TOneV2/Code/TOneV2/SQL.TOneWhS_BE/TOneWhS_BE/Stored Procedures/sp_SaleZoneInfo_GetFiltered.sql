@@ -10,10 +10,8 @@ AS
 BEGIN
 	
 	SET NOCOUNT ON;
-SELECT  [ID]
-      ,[Name]
-      ,[SellingNumberPlanID]
-  FROM [TOneWhS_BE].[SaleZone]
-  Where SellingNumberPlanID=@SellingNumberPlanID
-  and Name like('%' + @Filter + '%')
+SELECT  [ID],[Name],[SellingNumberPlanID]
+FROM	[TOneWhS_BE].[SaleZone] WITH(NOLOCK) 
+Where	SellingNumberPlanID=@SellingNumberPlanID
+		and Name like('%' + @Filter + '%')
 END

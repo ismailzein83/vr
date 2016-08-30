@@ -1,15 +1,16 @@
-﻿
-CREATE PROCEDURE [TOneWhS_BE].[sp_ZoneServiceConfig_Insert]
-	@ServiceFlag smallint ,
-	@Name nvarchar(255),
-	@Settings nvarchar(max)
+﻿CREATE PROCEDURE [TOneWhS_BE].[sp_ZoneServiceConfig_Insert]
+	@Symbol nvarchar(50),
+	@Settings nvarchar(max),
+	@Id int out
+	
 AS
 
 BEGIN
-
-IF NOT EXISTS(SELECT 1 FROM TOneWhS_BE.[ZoneServiceConfig] WHERE Name = @Name or ServiceFlag=@ServiceFlag)
+SET @Id =0;
+IF NOT EXISTS(SELECT 1 FROM TOneWhS_BE.[ZoneServiceConfig] WHERE Symbol = @Symbol )
 	BEGIN
-		INSERT INTO TOneWhS_BE.ZoneServiceConfig(ServiceFlag, Name, Settings)
-		VALUES (@ServiceFlag, @Name, @Settings)
+		INSERT INTO TOneWhS_BE.ZoneServiceConfig(Symbol, Settings)
+		VALUES ( @Symbol, @Settings)
+		Set @Id = @@IDENTITY
 	END
 END

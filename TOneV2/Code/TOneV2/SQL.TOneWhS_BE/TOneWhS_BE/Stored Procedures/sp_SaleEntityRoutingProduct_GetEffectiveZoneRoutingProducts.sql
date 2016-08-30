@@ -9,14 +9,8 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SaleEntityRoutingProduct_GetEffectiveZoneRouti
 	@EffectiveOn DATETIME
 AS
 BEGIN
-	SELECT ID,
-		OwnerType,
-		OwnerID,
-		ZoneID,
-		RoutingProductID,
-		BED,
-		EED
-	FROM TOneWhS_BE.SaleEntityRoutingProduct
+	SELECT ID,OwnerType,OwnerID,ZoneID,RoutingProductID,BED,EED
+	FROM [TOneWhS_BE].SaleEntityRoutingProduct WITH(NOLOCK) 
 	WHERE OwnerType = @OwnerType
 		AND OwnerID = @OwnerID
 		AND ZoneID IS NOT NULL

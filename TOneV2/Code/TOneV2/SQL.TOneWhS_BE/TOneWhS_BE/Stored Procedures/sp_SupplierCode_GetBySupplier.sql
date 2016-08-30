@@ -13,12 +13,9 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-	SELECT  sc.[ID]
-		  ,sc.Code
-		  ,sc.ZoneID
-		  ,sc.BED
-		  ,sc.EED
-	  FROM [TOneWhS_BE].SupplierCode sc LEFT JOIN [TOneWhS_BE].SupplierZone sz ON sc.ZoneID=sz.ID 
-	  Where  (sc.BED<=@When and (sc.EED is null or sc.EED > @when))
-	  and sz.SupplierID=@SupplierId
+SELECT  sc.[ID],sc.Code,sc.ZoneID,sc.BED,sc.EED
+FROM	[TOneWhS_BE].SupplierCode sc WITH(NOLOCK) 
+		LEFT JOIN [TOneWhS_BE].SupplierZone sz WITH(NOLOCK) ON sc.ZoneID=sz.ID 
+Where	(sc.BED<=@When and (sc.EED is null or sc.EED > @when))
+		and sz.SupplierID=@SupplierId
 END

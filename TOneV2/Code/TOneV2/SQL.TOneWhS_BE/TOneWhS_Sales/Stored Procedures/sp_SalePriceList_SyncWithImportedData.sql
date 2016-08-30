@@ -24,12 +24,12 @@ BEGIN
 				
 				insert into TOneWhS_BE.SaleRate (ID, PriceListID, ZoneID, CurrencyID, RateTypeID, Rate, OtherRates, BED, EED)
 				select ID, @ReservedSalePriceListId, ZoneID, CurrencyId, RateTypeID, NormalRate, OtherRates, BED, EED
-				from TOneWhS_Sales.RP_SaleRate_New newRate
+				from TOneWhS_Sales.RP_SaleRate_New newRate WITH(NOLOCK) 
 				where newRate.ProcessInstanceID = @ProcessInstanceId
 				
 				update TOneWhS_BE.SaleRate
 				set EED = changedRate.EED
-				from TOneWhS_BE.SaleRate rate inner join TOneWhS_Sales.RP_SaleRate_Changed changedRate on rate.ID = changedRate.ID
+				from TOneWhS_BE.SaleRate rate  WITH(NOLOCK) inner join TOneWhS_Sales.RP_SaleRate_Changed changedRate  WITH(NOLOCK) on rate.ID = changedRate.ID
 				where changedRate.ProcessInstanceID = @ProcessInstanceId
 			end
 			
@@ -37,12 +37,12 @@ BEGIN
 			
 			insert into TOneWhS_BE.SaleEntityRoutingProduct (ID, OwnerType, OwnerID, RoutingProductID, BED, EED)
 			select ID, @OwnerType, @OwnerID, RoutingProductID, BED, EED
-			from TOneWhS_Sales.RP_DefaultRoutingProduct_New newDRP
+			from TOneWhS_Sales.RP_DefaultRoutingProduct_New newDRP WITH(NOLOCK) 
 			where newDRP.ProcessInstanceID = @ProcessInstanceID
 			
 			update TOneWhS_BE.SaleEntityRoutingProduct
 			set EED = changedDRP.EED
-			from TOneWhS_BE.SaleEntityRoutingProduct serp inner join TOneWhS_Sales.RP_DefaultRoutingProduct_Changed changedDRP on serp.ID = changedDRP.ID
+			from TOneWhS_BE.SaleEntityRoutingProduct serp  WITH(NOLOCK) inner join TOneWhS_Sales.RP_DefaultRoutingProduct_Changed changedDRP on serp.ID = changedDRP.ID
 			where changedDRP.ProcessInstanceID = @ProcessInstanceID
 			
 			-- Sync zone routing products

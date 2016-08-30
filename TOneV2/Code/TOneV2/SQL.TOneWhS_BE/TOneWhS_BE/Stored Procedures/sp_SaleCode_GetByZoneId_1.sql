@@ -13,13 +13,9 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 /****** Script for SelectTopNRows command from SSMS  ******/
-	SELECT  [ID],
-			[Code],
-			[ZoneID],
-			[BED],
-			[EED]
-	FROM	[TOneWhS_BE].[SaleCode] sc
-	WHERE [ZoneID]=@ZoneID
-	   and ((sc.BED <= @when ) and (sc.EED is null or sc.EED > @when))
+SELECT  [ID],[Code],[ZoneID],[BED],[EED]
+FROM	[TOneWhS_BE].[SaleCode] sc WITH(NOLOCK) 
+WHERE	[ZoneID]=@ZoneID
+		and ((sc.BED <= @when ) and (sc.EED is null or sc.EED > @when))
         
 END

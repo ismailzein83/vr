@@ -11,10 +11,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    SELECT [ID]
-      ,[Name]
-      ,[Settings]
-      ,SellingNumberPlanID
-      from TOneWhS_BE.RoutingProduct
+    SELECT	[ID],[Name],[Settings],SellingNumberPlanID
+      from	[TOneWhS_BE].RoutingProduct WITH(NOLOCK) 
       where ID = @RoutingProductId 
 END

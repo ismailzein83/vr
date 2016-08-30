@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE TOneWhS_Sales.RP_RatePlanPreviewSummary_Get
+CREATE PROCEDURE [TOneWhS_Sales].[RP_RatePlanPreviewSummary_Get]
 	@ProcessInstanceID bigint
 AS
 BEGIN
@@ -16,6 +16,6 @@ BEGIN
 		NumberOfNewSaleZoneRoutingProducts,
 		NumberOfClosedSaleZoneRoutingProducts
 	
-	from TOneWhS_Sales.RP_RatePlanPreview_Summary
+	from [TOneWhS_Sales].RP_RatePlanPreview_Summary WITH(NOLOCK) 
 	where ProcessInstanceID = @ProcessInstanceID
 END

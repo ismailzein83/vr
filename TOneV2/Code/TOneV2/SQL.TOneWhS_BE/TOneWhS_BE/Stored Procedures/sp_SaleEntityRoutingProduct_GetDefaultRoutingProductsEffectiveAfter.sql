@@ -10,6 +10,6 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SaleEntityRoutingProduct_GetDefaultRoutingProd
 AS
 BEGIN
 	select ID, OwnerType, OwnerID, RoutingProductID, BED, EED
-	from TOneWhS_BE.SaleEntityRoutingProduct
+	from TOneWhS_BE.SaleEntityRoutingProduct WITH(NOLOCK) 
 	where OwnerType = @OwnerType and OwnerId = @OwnerId and ZoneID is null and (EED is null or EED > @MinDate)
 END

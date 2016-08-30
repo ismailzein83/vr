@@ -3,17 +3,9 @@ AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
+SET NOCOUNT ON;
+SELECT cpp.[ID],cpp.CustomerID,cpp.SellingProductID,cpp.AllDestinations,cpp.BED,cpp.EED
+FROM TOneWhS_BE.CustomerSellingProduct cpp WITH(NOLOCK)                     
 
-			SELECT
-				   cpp.[ID]
-				  ,cpp.CustomerID
-				  ,cpp.SellingProductID
-				  ,cpp.AllDestinations
-				  ,cpp.BED
-				  ,cpp.EED
-			FROM TOneWhS_BE.CustomerSellingProduct cpp                         
-           
-
-	SET NOCOUNT OFF
+SET NOCOUNT OFF
 END

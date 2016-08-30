@@ -22,8 +22,8 @@ With cteZoneCode AS
 	,SUM(Case When C.ChangeType = 3 AND Z.ZoneChangeType != 2 AND C.ZoneName = Z.ZoneName Then 1 else 0 END) as MovedCodes
 	,SUM(Case When C.ChangeType = 2 Then 1 else 0 END) as DeleteCodes
 	
-	 from TOneWhS_CP.SaleZone_Preview as Z
-	join TOneWhs_CP.SaleCode_Preview as C on Z.ZoneName = C.ZoneName OR Z.ZoneName = C.RecentZoneName
+	 from	TOneWhS_CP.SaleZone_Preview as Z WITH(NOLOCK) 
+			inner join [TOneWhs_CP].SaleCode_Preview as C  WITH(NOLOCK) on Z.ZoneName = C.ZoneName OR Z.ZoneName = C.RecentZoneName
 
 	where (@OnlyModified = 0 or C.ChangeType != 0)  and  z.ProcessInstanceID=@ProcessInstanceId and c.ProcessInstanceID=@ProcessInstanceId
 	group by Z.ZoneName
@@ -37,8 +37,8 @@ With cteZoneCode AS
 	 ,SUM(cteZoneCode.NewCodes) as NewCodes
 	 ,SUM(cteZoneCode.MovedCodes) as MovedCodes
 	 ,SUM(cteZoneCode.DeleteCodes) as DeletedCodes
- from TOneWhS_CP.SaleZone_Preview as Res
- Join cteZoneCode on Res.ZoneName = cteZoneCode.ZoneWithCodeChanges
+ from	[TOneWhS_CP].SaleZone_Preview as Res WITH(NOLOCK) 
+		inner Join cteZoneCode  WITH(NOLOCK) on Res.ZoneName = cteZoneCode.ZoneWithCodeChanges
  where res.ProcessInstanceID=@ProcessInstanceId
  
  group by Res.CountryId	
