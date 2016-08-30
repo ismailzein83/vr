@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Analytic.Entities
 {
-    public class DAProfCalcSettings : DataAnalysisDefinitionSettings
+    public class DAProfCalcSettings : DataAnalysisDefinitionSettings 
     {
         public int DataRecordTypeId { get; set; }
     }

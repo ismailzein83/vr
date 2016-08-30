@@ -239,7 +239,7 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\Templates\ParentBusinessEntityFieldFormulaTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\vr-genericdata-datarecordtypefields-formula-parentbusinessentity.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\Templates\VRDataRecordObjectFieldTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\vr_genericdata_datarecordobjectfield.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\vr-genericdata-datarecordobjectfield.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Array\Templates\ArrayFieldTypeTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Array\vr-genericdata-fieldtype-array-filtereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Array\vr-genericdata-fieldtype-array-runtimeeditor.js" />
@@ -301,7 +301,7 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\SummaryBatchTimeIntervalRange\vr-genericdata-summarytransformation-timeinterval-selector.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\SummaryBatchTimeIntervalRange\vr-genericdata-summarytransformation-summarybatchstartidentification-selector.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\Templates\VRDataRecordObjectTypeTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\vr_genericdata_datarecordobjecttype.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\vr-genericdata-datarecordobjecttype.js" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorStoreBatchTemplate.html" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorGenerateSummaryTemplate.html" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorUpdateSummaryTemplate.html" />

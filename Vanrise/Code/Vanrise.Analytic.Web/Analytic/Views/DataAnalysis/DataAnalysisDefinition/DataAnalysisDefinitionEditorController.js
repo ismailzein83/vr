@@ -11,8 +11,8 @@
         var dataAnalysisDefinitionId;
         var dataAnalysisDefinitionEntity;
 
-        //var settingsDirectiveAPI;
-        //var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var settingsDirectiveAPI;
+        var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -31,10 +31,10 @@
         function defineScope() {
             $scope.scopeModel = {};
 
-            //$scope.scopeModel.onSettingsDirectiveReady = function (api) {
-            //    settingsDirectiveAPI = api;
-            //    settingsDirectiveReadyDeferred.resolve();
-            //};
+            $scope.scopeModel.onSettingsDirectiveReady = function (api) {
+                settingsDirectiveAPI = api;
+                settingsDirectiveReadyDeferred.resolve();
+            };
 
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
@@ -64,7 +64,6 @@
             }
         }
 
-
         function GetDataAnalysisDefinition() {
             return VR_Analytic_DataAnalysisDefinitionAPIService.GetDataAnalysisDefinition(dataAnalysisDefinitionId).then(function (response) {
                 dataAnalysisDefinitionEntity = response;
@@ -72,7 +71,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSettingsDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -92,21 +91,20 @@
                     return;
                 $scope.scopeModel.name = dataAnalysisDefinitionEntity.Name;
             }
-            //function loadSettingsDirective() {
-            //    var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+            function loadSettingsDirective() {
+                var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-            //    settingsDirectiveReadyDeferred.promise.then(function () {
-            //        var settingsDirectivePayload;
-            //        if (dataAnalysisDefinitionEntity != undefined) {
-            //            settingsDirectivePayload = { dataAnalysisDefinitionSettings: dataAnalysisDefinitionEntity.Settings };
-            //        }
-            //        VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
-            //    });
+                settingsDirectiveReadyDeferred.promise.then(function () {
+                    var settingsDirectivePayload;
+                    if (dataAnalysisDefinitionEntity != undefined) {
+                        settingsDirectivePayload = { dataAnalysisDefinitionSettings: dataAnalysisDefinitionEntity.Settings };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
+                });
 
-            //    return settingsDirectiveLoadDeferred.promise;
-            //}
+                return settingsDirectiveLoadDeferred.promise;
+            }
         }
-
 
         function insert() {
             $scope.scopeModel.isLoading = true;
@@ -139,12 +137,12 @@
         }
 
         function buildDataAnalysisDefinitionObjFromScope() {
-            //var dataAnalysisDefinitionSettings = settingsDirectiveAPI.getData();
+            var dataAnalysisDefinitionSettings = settingsDirectiveAPI.getData();
 
             return {
                 DataAnalysisDefinitionId: dataAnalysisDefinitionEntity != undefined ? dataAnalysisDefinitionEntity.DataAnalysisDefinitionId : undefined,
                 Name: $scope.scopeModel.name,
-                //Settings: dataAnalysisDefinitionSettings
+                Settings: dataAnalysisDefinitionSettings
             };
         }
     }

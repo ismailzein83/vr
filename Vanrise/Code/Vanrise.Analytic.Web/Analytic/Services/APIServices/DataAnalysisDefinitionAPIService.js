@@ -28,9 +28,9 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'UpdateDataAnalysisDefinition'), dataAnalysisDefinitionItem);
         }
 
-        //function GetStyleFormatingExtensionConfigs() {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetStyleFormatingExtensionConfigs"));
-        //}
+        function GetDataAnalysisDefinitionSettingsExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDataAnalysisDefinitionSettingsExtensionConfigs"));
+        }
 
         //function GetDataAnalysisDefinitionsInfo(filter) {
         //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDataAnalysisDefinitionsInfo"), {
@@ -44,7 +44,7 @@
             GetDataAnalysisDefinition: GetDataAnalysisDefinition,
             AddDataAnalysisDefinition: AddDataAnalysisDefinition,
             UpdateDataAnalysisDefinition: UpdateDataAnalysisDefinition,
-            //GetStyleFormatingExtensionConfigs: GetStyleFormatingExtensionConfigs,
+            GetDataAnalysisDefinitionSettingsExtensionConfigs: GetDataAnalysisDefinitionSettingsExtensionConfigs,
             //GetDataAnalysisDefinitionsInfo: GetDataAnalysisDefinitionsInfo
         });
     }

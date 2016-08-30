@@ -73,14 +73,14 @@
 
 
                     function getDataAnalysisDefinitionSettingsTemplateConfigs() {
-                        return VR_Analytic_DataAnalysisDefinitionAPIService.GetStyleFormatingExtensionConfigs().then(function (response) {
+                        return VR_Analytic_DataAnalysisDefinitionAPIService.GetDataAnalysisDefinitionSettingsExtensionConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (dataAnalysisDefinitionSettings != undefined && dataAnalysisDefinitionSettings.StyleFormatingSettings != null) {
+                                if (dataAnalysisDefinitionSettings != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, dataAnalysisDefinitionSettings.StyleFormatingSettings.ConfigId, 'ExtensionConfigurationId');
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, dataAnalysisDefinitionSettings.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
@@ -92,7 +92,8 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { styleFormatingSettings: dataAnalysisDefinitionSettings.StyleFormatingSettings };
+                            var directivePayload = { dataAnalysisDefinitionSettings: dataAnalysisDefinitionSettings };
+
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -111,9 +112,7 @@
                             data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
                         }
                     }
-                    return {
-                        StyleFormatingSettings: data
-                    };
+                    return data;
                 };
 
                 if (ctrl.onReady != null) {

@@ -7,6 +7,7 @@ using Vanrise.Analytic.Data;
 using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Analytic.Business
 {
@@ -75,11 +76,11 @@ namespace Vanrise.Analytic.Business
             return updateOperationOutput;
         }
 
-        //public IEnumerable<StyleFormatingConfig> GetStyleFormatingExtensionConfigs()
-        //{
-        //    var templateConfigManager = new ExtensionConfigurationManager();
-        //    return templateConfigManager.GetExtensionConfigurations<StyleFormatingConfig>(StyleFormatingConfig.EXTENSION_TYPE);
-        //}
+        public IEnumerable<DataAnalysisDefinitionConfig> GetDataAnalysisDefinitionSettingsExtensionConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<DataAnalysisDefinitionConfig>(DataAnalysisDefinitionConfig.EXTENSION_TYPE);
+        }
 
         //public IEnumerable<DataAnalysisDefinitionInfo> GetDataAnalysisDefinitionsInfo(DataAnalysisDefinitionFilter filter)
         //{
