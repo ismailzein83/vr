@@ -31,7 +31,19 @@ namespace Vanrise.BEBridge.Data.SQL
         {
             return base.IsDataUpdated("[VR_BEBridge].[BEReceiveDefinition]", ref updateHandle);
         }
-
+        public bool Update(BEReceiveDefinition beReceiveDefinition)
+        {
+            string serializedSettings = beReceiveDefinition.Settings != null ? Serializer.Serialize(beReceiveDefinition.Settings) : null;
+            int affectedRecords = ExecuteNonQuerySP("[VR_BEBridge].[sp_BEReceiveDefinition_Update]",
+                beReceiveDefinition.BEReceiveDefinitionId, beReceiveDefinition.Name, serializedSettings);
+            return (affectedRecords > 0);
+        }
+        public bool Insert(BEReceiveDefinition beReceiveDefinition)
+        {
+            string serializedSettings = beReceiveDefinition.Settings != null ? Serializer.Serialize(beReceiveDefinition.Settings) : null;
+            int affectedRecords = ExecuteNonQuerySP("[VR_BEBridge].[sp_BEReceiveDefinition_Insert]", beReceiveDefinition.BEReceiveDefinitionId, beReceiveDefinition.Name, serializedSettings);
+            return affectedRecords > 0;
+        }
         #endregion
 
         #region Mappers
