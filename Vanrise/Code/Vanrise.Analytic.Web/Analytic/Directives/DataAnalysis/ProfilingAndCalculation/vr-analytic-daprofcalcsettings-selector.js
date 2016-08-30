@@ -41,7 +41,7 @@
                     var selectorPayload;
 
                     if (payload != undefined && payload.dataAnalysisDefinitionSettings != undefined) {
-                        selectorPayload = { selectedIds: payload.dataAnalysisDefinitionSettings.RecordTypeId };
+                        selectorPayload = { selectedIds: payload.dataAnalysisDefinitionSettings.DataRecordTypeId };
                     }
 
                     var daProfCalcSettingsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
