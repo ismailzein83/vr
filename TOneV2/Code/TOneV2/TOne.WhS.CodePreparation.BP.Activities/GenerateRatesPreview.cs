@@ -56,7 +56,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 if (connectedExistingZones != null)
                 {
                     List<ExistingRate> existingRates = new List<ExistingRate>();
-                    existingRates.AddRange(connectedExistingZones.SelectMany(item => item.ExistingRates));
+                    existingRates.AddRange(connectedExistingZones.SelectMany(item => item.ExistingRates).Where(item => item.RateEntity.RateTypeId == null));
                     ExistingRate SystemRate = existingRates.LastOrDefault();
 
                     if (SystemRate != null)

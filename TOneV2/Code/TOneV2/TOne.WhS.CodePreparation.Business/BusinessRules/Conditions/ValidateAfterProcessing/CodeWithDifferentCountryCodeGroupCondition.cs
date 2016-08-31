@@ -16,7 +16,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as AddedZone != null);
+            return (target as ZoneToProcess != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
@@ -26,21 +26,27 @@ namespace TOne.WhS.CodePreparation.Business
             ExistingZoneInfoByZoneName existingZonesInfoByZoneName = cpContext.ExistingZonesInfoByZoneName;
 
 
-            AddedZone addedZone = context.Target as AddedZone;
+            ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
+
+            if (zoneToProcess.ChangeType != ZoneChangeType.New)
+                return true;
+
 
             ExistingZoneInfo existingZoneInfoInContext;
+            int zoneToProcessCountryId = zoneToProcess.AddedZones.First().CountryId;
 
-            if (existingZonesInfoByZoneName.TryGetValue(addedZone.Name, out existingZoneInfoInContext))
-                return existingZoneInfoInContext.CountryId == addedZone.CountryId;
+            if (existingZonesInfoByZoneName.TryGetValue(zoneToProcess.ZoneName, out existingZoneInfoInContext))
+                return existingZoneInfoInContext.CountryId == zoneToProcessCountryId;
 
             return true;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
+            ZoneToProcess zoneToProcess = target as ZoneToProcess;
             CountryManager manager = new CountryManager();
-            AddedZone addedZone = target as AddedZone;
-            return string.Format("Zone {0} has a code that belongs to the code group of country {1}", addedZone.Name , manager.GetCountryName(addedZone.CountryId));
+            string countryName = manager.GetCountryName(zoneToProcess.AddedZones.First().CountryId);
+            return string.Format("Zone {0} has a code that belongs to the code group of country {1}", zoneToProcess.ZoneName, countryName);
         }
 
     }

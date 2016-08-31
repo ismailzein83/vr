@@ -8,7 +8,7 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.CodePreparation.Entities.Processing
 {
-    public class ExistingZone : IZone, IExistingEntity, IRuleTarget
+    public class ExistingZone : IZone, IExistingEntity
     {
         public BusinessEntity.Entities.SaleZone ZoneEntity { get; set; }
 

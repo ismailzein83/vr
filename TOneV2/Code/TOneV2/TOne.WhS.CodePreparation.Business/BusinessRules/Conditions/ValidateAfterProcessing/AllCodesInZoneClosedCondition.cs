@@ -7,6 +7,7 @@ using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.Common;
 using Vanrise.BusinessProcess.Entities;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.CodePreparation.Entities;
 
 namespace TOne.WhS.CodePreparation.Business
 {
@@ -15,20 +16,26 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ExistingZone != null);
+            return (target as ZoneToProcess != null || target as NotImportedZone != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
 
-            ExistingZone existingZone = context.Target as ExistingZone;
-            return !(existingZone.ChangedZone != null);
-               
+            ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
+            if (zoneToProcess != null)
+                return !(zoneToProcess.ChangeType == Entities.ZoneChangeType.Deleted);
+
+            NotImportedZone notImportedZone = context.Target as NotImportedZone;
+            return !notImportedZone.HasChanged;
+
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("All codes in zone {0} are closed, zone {0} will be closed", (target as ExistingZone).ZoneEntity.Name);
+            string zoneName = target as ZoneToProcess != null ? (target as ZoneToProcess).ZoneName : (target as NotImportedZone).ZoneName;
+
+            return string.Format("All codes in zone {0} are closed, zone {0} will be closed", zoneName);
         }
 
     }
