@@ -16,7 +16,7 @@ app.directive('vrModalcontent', [function () {
             //'<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">'
             var style = "";
             if ($('.modal-dialog').length > 0)
-                style = "top:" + ($('.modal-dialog').length + 1) * 5 + "px; left:" + ($('.modal-dialog').length + 1) * 5 + "px;";
+                style = "top:" + ($('.modal-dialog').length ) * 10 + "px; left:" + ($('.modal-dialog').length ) * 10 + "px;";
             var newElement = '<div class="modal-dialog" ng-style="{ ' + widthPart + ' }" style="'+style+'" >'
                                   + '  <div class="modal-content">'
                                     + '    <div class="modal-header" ng-show="title">'
