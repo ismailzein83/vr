@@ -98,6 +98,7 @@
     <add name="RoutingDBConnStringTemplateKey" connectionString="Data Source=localhost;Initial Catalog=TOneV2_#WorkflowType#_#DatabaseId#;User ID=sa;Password= "/>
     <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=TOne_Configuration;User ID=sa;Password= "/>
     <add name="MainDBConnString" connectionString=""/>
+    <add name="TOneV1RoutingDBConnString" connectionString="Server=192.168.110.185;Database=TOneV2_Dev_RoutingDB;User ID=Development;Password=dev!123"/>
   </connectionStrings>
   
   <!-- BEGIN CUSTOMER VARYING SECTION -->
@@ -142,6 +143,8 @@
     <add key="TOneWhS_Analytics_DBConnStringKey" value="TOneAnalyticsDBConnString"/>
     <!--<add key="RoutingDBDataFileDirectory" value=""/>--><!--RoutingDBDataFileDirectory key will override the SQL default directory if needed-->
     <!--<add key="RoutingDBLogFileDirectory" value=""/>--><!--RoutingDBLogFileDirectory key will override the SQL default directory if needed-->
+    <add key="Routing_TOneV1" value="true"/>
+    <add key="TOneV1RoutingDBConnStringKey" value="TOneV1RoutingDBConnString"/>
   </appSettings>
   <system.codedom>
     <compilers>

@@ -9,9 +9,9 @@ using Vanrise.Data.SQL;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
 {
-    public class SupplierZoneDataManager:BaseSQLDataManager,ISupplierZoneDataManager
+    public class SupplierZoneDataManager : BaseSQLDataManager, ISupplierZoneDataManager
     {
-       
+
         #region ctor/Local Variables
         public SupplierZoneDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
@@ -42,7 +42,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         #region Private Methods
         #endregion
-     
+
         #region Mappers
         SupplierZone SupplierZoneMapper(IDataReader reader)
         {
@@ -53,11 +53,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 SupplierZoneId = (long)reader["ID"],
                 Name = reader["Name"] as string,
                 BED = GetReaderValue<DateTime>(reader, "BED"),
-                EED = GetReaderValue<DateTime?>(reader, "EED")
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
+                SourceId = reader["SourceID"] as string
             };
             return supplierZone;
         }
         #endregion
-      
+
     }
 }

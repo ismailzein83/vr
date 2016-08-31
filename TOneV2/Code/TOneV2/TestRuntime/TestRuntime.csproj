@@ -797,6 +797,10 @@
       <Project>{0dad53e2-a011-4f21-afe6-97186c5b96db}</Project>
       <Name>TOne.WhS.Routing.Data.SQL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.Whs.Routing.Data.TOneV1SQL\TOne.Whs.Routing.Data.TOneV1SQL.csproj">
+      <Project>{de21aaf7-2047-4d8f-b4e4-336637b4b560}</Project>
+      <Name>TOne.Whs.Routing.Data.TOneV1SQL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Routing.Data\TOne.WhS.Routing.Data.csproj">
       <Project>{ad5a00af-b674-4f57-a5c1-85f78a351928}</Project>
       <Name>TOne.WhS.Routing.Data</Name>

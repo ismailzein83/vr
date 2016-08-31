@@ -60,16 +60,16 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         SaleZone SaleZoneMapper(IDataReader reader)
         {
-            SaleZone sellingNumberPlan = new SaleZone();
+            SaleZone saleZone = new SaleZone();
 
-            sellingNumberPlan.SaleZoneId = (long)reader["ID"];
-            sellingNumberPlan.SellingNumberPlanId = (int)reader["SellingNumberPlanID"];
-            sellingNumberPlan.CountryId = GetReaderValue<int>(reader, "CountryID");
-            sellingNumberPlan.Name = reader["Name"] as string;
-            sellingNumberPlan.BED = GetReaderValue<DateTime>(reader, "BED");
-            sellingNumberPlan.EED = GetReaderValue<DateTime?>(reader, "EED");
-
-            return sellingNumberPlan;
+            saleZone.SaleZoneId = (long)reader["ID"];
+            saleZone.SellingNumberPlanId = (int)reader["SellingNumberPlanID"];
+            saleZone.CountryId = GetReaderValue<int>(reader, "CountryID");
+            saleZone.Name = reader["Name"] as string;
+            saleZone.BED = GetReaderValue<DateTime>(reader, "BED");
+            saleZone.EED = GetReaderValue<DateTime?>(reader, "EED");
+            saleZone.SourceId = reader["SourceID"] as string;
+            return saleZone;
         }
 
         SaleZoneInfo SaleZoneInfoMapper(IDataReader reader)
