@@ -363,8 +363,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private void ValidateCarrierAccount(string caNameSuffix, CarrierAccountSettings caSettings)
         {
-            if (String.IsNullOrWhiteSpace(caNameSuffix))
-                throw new MissingArgumentValidationException("CarrierAccount.NameSuffix");
+            //if (String.IsNullOrWhiteSpace(caNameSuffix))
+            //    throw new MissingArgumentValidationException("CarrierAccount.NameSuffix"); // bug: 2164
 
             if (caSettings == null)
                 throw new MissingArgumentValidationException("CarrierAccount.CarrierAccountSettings");
