@@ -243,6 +243,8 @@
     <Content Include="Common\Directives\RateType\Templates\RateTypeGridTemplate.html" />
     <Content Include="Common\Directives\RateType\vr-common-ratetype-grid.js" />
     <Content Include="Common\Directives\RateType\vr-common-ratetype-selector.js" />
+    <Content Include="Common\Directives\Settings\BankDetailsSettings\Templates\BankDetailsSettingsTemplate.html" />
+    <Content Include="Common\Directives\Settings\BankDetailsSettings\vr-common-bankdetailssettings-editor.js" />
     <Content Include="Common\Directives\Settings\ProductInfoTechnicalSettings\Templates\ProductInfoTechnicalSettingsTemplate.html" />
     <Content Include="Common\Directives\Settings\ProductInfoTechnicalSettings\vr-common-productinfotechnicalsettings-editor.js" />
     <Content Include="Common\Directives\Settings\Templates\SettingsGridTemplate.html" />
@@ -292,6 +294,7 @@
     <Content Include="Common\Services\APIServices\VRMailMessageTemplateAPIService.js" />
     <Content Include="Common\Services\APIServices\VRMailMessageTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRObjectTypeDefinitionAPIService.js" />
+    <Content Include="Common\Services\BankDetailService.js" />
     <Content Include="Common\Services\TextManipulationService.js" />
     <Content Include="Common\Services\VRMailMessageTemplateService.js" />
     <Content Include="Common\Services\VRMailMessageTypeService.js" />
@@ -313,6 +316,8 @@
     <Content Include="Common\Services\VRObjectTypeDefinitionService.js" />
     <Content Include="Common\Services\VRObjectTypePropertyDefinitionService.js" />
     <Content Include="Common\Services\VRObjectVariableService.js" />
+    <Content Include="Common\Views\BankDetails\BankDetailsEditor.html" />
+    <Content Include="Common\Views\BankDetails\BankDetailsEditorController.js" />
     <Content Include="Common\Views\City\CityEditor.html" />
     <Content Include="Common\Views\City\CityEditorController.js" />
     <Content Include="Common\Views\City\CityManagement.html" />

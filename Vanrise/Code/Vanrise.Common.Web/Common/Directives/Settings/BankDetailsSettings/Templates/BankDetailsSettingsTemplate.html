@@ -1,0 +1,24 @@
+﻿
+<vr-columns width="fullrow">
+    <vr-tabs>
+        <vr-tab header="'Bank Details'">
+            <vr-columns width="fullrow">
+                <vr-button type="Add" data-onclick="ctrl.addBankDetail" standalone></vr-button>
+
+                <vr-validator validate="ctrl.isValid()">
+                    <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                                 on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeBankDetail" hidegridmenu>
+                        <vr-datagridcolumn headertext="'Bank'" field="'Entity.Bank'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Account Code'" field="'Entity.AccountCode'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Account Holder'" field="'Entity.AccountHolder'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'IBAN'" field="'Entity.IBAN'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Address'" field="'Entity.Address'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'AccountNumber'" field="'Entity.AccountNumber'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'SwiftCode'" field="'Entity.SwiftCode'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'SortCode'" field="'Entity.SortCode'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-validator>
+            </vr-columns>
+        </vr-tab>
+    </vr-tabs>
+</vr-columns>

@@ -59,6 +59,7 @@
     <Compile Include="City\CityQuery.cs" />
     <Compile Include="DateTimeRange.cs" />
     <Compile Include="DateTimeType.cs" />
+    <Compile Include="Settings\BankDetailsSettings\BankDetailsSettings.cs" />
     <Compile Include="Settings\ProductInfoTechnicalSettings\ProductInfo.cs" />
     <Compile Include="Settings\ProductInfoTechnicalSettings\ProductInfoTechnicalSettings.cs" />
     <Compile Include="TextManipulation\ITextManipulationActionContext.cs" />
