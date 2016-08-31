@@ -14,6 +14,8 @@ app.directive('vrIcon', [function ($compile) {
         'music': { value: "glyphicon-music", isimage: false },
         'above': { value: "glyphicon-arrow-up arrow-above", isimage: false },//#37c737
         'below': { value: "glyphicon-arrow-down arrow-below", isimage: false },//#ff1111
+        'increase': { value: "glyphicon-arrow-up arrow-below", isimage: false },
+        'decrease': { value: "glyphicon-arrow-down arrow-above", isimage: false } //#37c737
     }
    
     var directiveDefinitionObject = {

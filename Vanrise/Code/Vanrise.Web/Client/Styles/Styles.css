@@ -656,12 +656,12 @@ vr-modalcontent .action-bar {
 .highlight-btn .glyphicon {
     color: #EF4355 !important;
 }
-.glyphicon-arrow-up.arrow-above{
+.arrow-above{
     color:#37c737;
     font-size: 13px;
     top: 4px;
 }
-.glyphicon-arrow-down.arrow-below{
+.arrow-below{
    color:#ff1111;
    font-size: 13px;
    top: 4px;
