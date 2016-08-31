@@ -28,7 +28,10 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
     $scope.export = function () {
         var customers = (singleCustomerAccountDirectiveAPI != undefined && singleCustomerAccountDirectiveAPI.getSelectedIds() != undefined) ? singleCustomerAccountDirectiveAPI.getSelectedIds() : "";
         return BillingReportAPIService.ExportCarrierProfile($scope.fromDate, $scope.toDate, $scope.params.top, customers, currencySelectorAPI.getSelectedIds(), $scope.selectedCurrency.Symbol, $scope.selectedCurrency.Name).then(function (response) {
-            UtilsService.downloadFile(response.data, response.headers);
+            if (response.data.byteLength > 6000)
+                UtilsService.downloadFile(response.data, response.headers);
+            else
+                VRNotificationService.showWarning("No data to display");
         });
     };
 
