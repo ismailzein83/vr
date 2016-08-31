@@ -21,5 +21,7 @@ namespace Vanrise.Analytic.Entities
         public string Title { get; set; }
 
         public string Editor { get; set; }
+
+        public string GridDirective { get; set; }
     }
 }

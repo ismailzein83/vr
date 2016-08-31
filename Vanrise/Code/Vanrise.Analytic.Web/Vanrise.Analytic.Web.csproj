@@ -74,6 +74,7 @@
     <Compile Include="Controllers\AnalyticReportController.cs" />
     <Compile Include="Controllers\AnalyticTableController.cs" />
     <Compile Include="Controllers\DataAnalysisDefinitionController.cs" />
+    <Compile Include="Controllers\DataAnalysisItemDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
@@ -136,6 +137,12 @@
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\Templates\DataAnalysisDefinitionSettingsTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\vr-analytic-dataanalysisdefinition-grid.js" />
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\vr-analytic-dataanalysisdefinition-settings.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisItemDefinition\Templates\DataAnalysisItemDefinitionSettingsTemplate.html" />
+    <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisItemDefinition\vr-analytic-dataanalysisitemdefinition-settings.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\OutputDefinitions\Templates\RecordProfilingOutputSettingsEditorTemplate.html" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\OutputDefinitions\Templates\RecordProfilingOutputSettingsGridTemplate.html" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\OutputDefinitions\vr-analytic-recordprofilingoutputsettings-editor.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\OutputDefinitions\vr-analytic-recordprofilingoutputsettings-grid.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Templates\DAProfCalcSettingsSelectorTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\vr-analytic-daprofcalcsettings-selector.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticDimensionGridTemplate.html" />
@@ -214,7 +221,10 @@
     <Content Include="Analytic\Services\AnalyticReportService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticItemActionAPIService.js" />
     <Content Include="Analytic\Services\APIServices\DataAnalysisDefinitionAPIService.js" />
+    <Content Include="Analytic\Services\APIServices\DataAnalysisItemDefinitionAPIService.js" />
+    <Content Include="Analytic\Services\DataAnalysisDefinitionDrillDownService.js" />
     <Content Include="Analytic\Services\DataAnalysisDefinitionService.js" />
+    <Content Include="Analytic\Services\DataAnalysisItemDefinitionService.js" />
     <Content Include="Analytic\Services\RecordSearchService.js" />
     <Content Include="Analytic\Services\AnalyticService.js" />
     <Content Include="Analytic\Services\AnalyticTableService.js" />
@@ -227,6 +237,10 @@
     <Content Include="Analytic\Views\DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionEditorController.js" />
     <Content Include="Analytic\Views\DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionManagement.html" />
     <Content Include="Analytic\Views\DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionManagementController.js" />
+    <Content Include="Analytic\Views\DataAnalysis\DataAnalysisItemDefinition\DataAnalysisItemDefinitionEditorController.js" />
+    <Content Include="Analytic\Views\DataAnalysis\DataAnalysisItemDefinition\DataAnalysisItemDefinitionEditor.html" />
+    <Content Include="Analytic\Views\DataAnalysis\ProfilingAndCalculation\RecordProfilingOutputSettingsEditor.html" />
+    <Content Include="Analytic\Views\DataAnalysis\ProfilingAndCalculation\RecordProfilingOutputSettingsEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticGridWidgetSettings.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticGridWidgetSettingsController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticItemActionEditor.html" />

@@ -1,7 +1,8 @@
-﻿'use strict';
+﻿
+'use strict';
 
-app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysisDefinitionAPIService', 'VR_Analytic_DataAnalysisDefinitionService', 'VRNotificationService',
-    function (VR_Analytic_DataAnalysisDefinitionAPIService, VR_Analytic_DataAnalysisDefinitionService, VRNotificationService) {
+app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysisDefinitionAPIService', 'VR_Analytic_DataAnalysisDefinitionService', 'VR_Analytic_DataAnalysisDefinitionDrillDownService', 'VRNotificationService',
+    function (VR_Analytic_DataAnalysisDefinitionAPIService, VR_Analytic_DataAnalysisDefinitionService, VR_Analytic_DataAnalysisDefinitionDrillDownService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -21,11 +22,20 @@ app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysis
             this.initializeController = initializeController;
 
             var gridAPI;
+            var drillDownManager;
 
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.dataAnalysisDefinition = [];
-                $scope.scopeModel.menuActions = [];
+
+                $scope.scopeModel.menuActions = function (dataAnalysisDefinition) {
+                    var menuActions = buildCommonMenuActions();
+                    if (dataAnalysisDefinition.menuActions != null) {
+                        for (var i = 0; i < dataAnalysisDefinition.menuActions.length; i++)
+                            menuActions.push(dataAnalysisDefinition.menuActions[i]);
+                    }
+                    return menuActions;
+                };
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
@@ -34,13 +44,22 @@ app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysis
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VR_Analytic_DataAnalysisDefinitionAPIService.GetFilteredDataAnalysisDefinitions(dataRetrievalInput).then(function (response) {
+                        if (response && response.Data) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                var dataAnalysisDefinition = response.Data[i];
+                                VR_Analytic_DataAnalysisDefinitionDrillDownService.defineDataAnalysisItemDefinitionTabsAndMenuActions(dataAnalysisDefinition, gridAPI, null);
+                            }
+                        }
                         onResponseReady(response);
+
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
                 };
 
-                defineMenuActions();
+                $scope.scopeModel.showExpandIcon = function (dataItem) {
+                    return (dataItem.drillDownExtensionObject != null && dataItem.drillDownExtensionObject.drillDownDirectiveTabs.length > 0);
+                };
             }
             function defineAPI() {
                 var api = {};
@@ -63,13 +82,55 @@ app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysis
                     clicked: editDataAnalysisDefinition,
                 });
             }
-
+            function buildCommonMenuActions() {
+                return [{
+                    name: 'Edit',
+                    clicked: editDataAnalysisDefinition,
+                }];
+            }
             function editDataAnalysisDefinition(dataAnalysisDefinitionItem) {
                 var onDataAnalysisDefinitionUpdated = function (updatedDataAnalysisDefinition) {
                     gridAPI.itemUpdated(updatedDataAnalysisDefinition);
                 };
 
                 VR_Analytic_DataAnalysisDefinitionService.editDataAnalysisDefinition(dataAnalysisDefinitionItem.Entity.DataAnalysisDefinitionId, onDataAnalysisDefinitionUpdated);
+            }
+
+            function buildDrillDownTabs() {
+                var drillDownDefinitions = [];
+                drillDownDefinitions.push(buildRecordProfilingTab());
+
+                return drillDownDefinitions;
+            }
+            function buildRecordProfilingTab() {
+                var drillDownDefinition = {};
+
+                drillDownDefinition.title = "Record Profiling";
+                drillDownDefinition.directive = "vr-analytic-analyticconfig-dimension-grid";
+
+                drillDownDefinition.loadDirective = function (dataAnalysisItemDefinitionGridAPI, dataAnalysisDefinition) {
+                    dataAnalysisDefinition.dataAnalysisItemDefinitionGridAPI = dataAnalysisItemDefinitionGridAPI;
+                    var dataAnalysisItemDefinitionPayload = {
+                        dataAnalysisDefinitionSettings: dataAnalysisDefinition
+                    };
+                    return dataAnalysisDefinition.dataAnalysisItemDefinitionGridAPI.load(dataAnalysisItemDefinitionPayload);
+                };
+
+                drillDownDefinition.parentMenuActions = [{
+                    name: "Add Dimension",
+                    clicked: function (tableItem) {
+                        if (drillDownDefinition.setTabSelected != undefined)
+                            drillDownDefinition.setTabSelected(tableItem);
+
+                        var onDimensionAdded = function (dimensionObj) {
+                            if (tableItem.dimensionGridAPI != undefined) {
+                                tableItem.dimensionGridAPI.onAnalyticDimensionAdded(dimensionObj);
+                            }
+                        };
+                        VR_Analytic_AnalyticItemConfigService.addItemConfig(onDimensionAdded, tableItem.Entity.AnalyticTableId, VR_Analytic_AnalyticTypeEnum.Dimension.value);
+                    },
+                }];
+                return drillDownDefinition;
             }
         }
     }]);

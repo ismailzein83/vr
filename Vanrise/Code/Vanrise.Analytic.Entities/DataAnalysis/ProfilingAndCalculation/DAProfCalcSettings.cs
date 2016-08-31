@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.Analytic.Entities
+namespace Vanrise.Analytic.Entities 
 {
     public class DAProfCalcSettings : DataAnalysisDefinitionSettings 
     {
@@ -19,15 +19,18 @@ namespace Vanrise.Analytic.Entities
                     new DataAnalysisItemDefinitionConfig
                     {
                          TypeId = Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputDefinitions.RecordProfilingOutputSettings.S_ItemDefinitionTypeId,
-                          Editor="",
-                           Title = "Record Profiling"
+                         Title = "Record Profiling",
+                         Editor= "vr-analytic-recordprofilingoutputsettings-editor",
+                         GridDirective = "vr-analytic-recordprofilingoutputsettings-grid"
+                             
                     },
-                    new DataAnalysisItemDefinitionConfig
-                    {
-                         TypeId = Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputDefinitions.MergingProfiledOutputSettings.S_ItemDefinitionTypeId,
-                          Editor="",
-                           Title = "Profiled Merging"
-                    }
+                    //new DataAnalysisItemDefinitionConfig
+                    //{
+                    //     TypeId = Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputDefinitions.MergingProfiledOutputSettings.S_ItemDefinitionTypeId,
+                    //     Title = "Profiled Merging",
+                    //     Editor="",
+                    //     GridDirective = "vr-analytic-recordprofilingoutputsettings-grid"
+                    //},
                 };
             }
             set
