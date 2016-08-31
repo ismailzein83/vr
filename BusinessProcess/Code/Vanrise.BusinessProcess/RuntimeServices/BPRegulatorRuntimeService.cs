@@ -46,7 +46,8 @@ namespace Vanrise.BusinessProcess
 
         private void AssignPendingInstancesToServices(List<RuntimeServiceInstance> bpServiceInstances, out List<BPPendingInstanceInfo> runningInstances)
         {
-            var pendingInstancesInfo = _bpInstanceDataManager.GetPendingInstancesInfo(s_pendingStatuses);
+            int nbOfInstancesToRetrieve = bpServiceInstances.Count * s_maxWorkflowsPerServiceInstance;
+            var pendingInstancesInfo = _bpInstanceDataManager.GetPendingInstancesInfo(s_pendingStatuses, nbOfInstancesToRetrieve);
             if (pendingInstancesInfo != null && pendingInstancesInfo.Count > 0)
             {
                 var bpDefinitionsList = _bpDefinitionManager.GetBPDefinitions().ToList();

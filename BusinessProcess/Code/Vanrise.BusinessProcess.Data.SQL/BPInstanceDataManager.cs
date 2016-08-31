@@ -72,9 +72,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemsSP("[bp].[sp_BPInstance_GetPendingsByDefinitionId]", BPInstanceMapper, definitionId, String.Join(",", acceptableBPStatuses.Select(itm => (int)itm)), maxCounts, serviceInstanceId);
         }
 
-        public List<BPPendingInstanceInfo> GetPendingInstancesInfo(IEnumerable<BPInstanceStatus> statuses)
+        public List<BPPendingInstanceInfo> GetPendingInstancesInfo(IEnumerable<BPInstanceStatus> statuses, int nbOfInstancesToRetrieve)
         {
-            return GetItemsSP("[bp].[sp_BPInstance_GetPendingsInfo]", BPPendingInstanceInfoMapper, String.Join(",", statuses.Select(itm => (int)itm)));
+            return GetItemsSP("[bp].[sp_BPInstance_GetPendingsInfo]", BPPendingInstanceInfoMapper, String.Join(",", statuses.Select(itm => (int)itm)), nbOfInstancesToRetrieve);
         }
 
         public void UpdateInstanceStatus(long processInstanceId, BPInstanceStatus status, string message, Guid? workflowInstanceId)
