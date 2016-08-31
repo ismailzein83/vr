@@ -9,7 +9,7 @@
             sellNewCountries: sellNewCountries,
             editSettings: editSettings,
             editPricingSettings: editPricingSettings,
-            viewFutureNormalRate: viewFutureNormalRate
+            viewFutureRate: viewFutureRate
         };
 
         function sellNewCountries(customerId, onCountriesSold) {
@@ -55,16 +55,16 @@
             VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanPricingSettings.html", parameters, modalSettings);
         }
 
-        function viewFutureNormalRate(zoneName, futureNormalRate)
+        function viewFutureRate(zoneName, futureRate)
         {
             var parameters = {
                 zoneName: zoneName,
-                futureNormalRate: futureNormalRate
+                futureRate: futureRate
             };
 
             var settings = {};
 
-            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/FutureNormalRate.html", parameters, settings);
+            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/FutureRate.html", parameters, settings);
         }
     }
 

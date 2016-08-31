@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService", "VRCommon_RateTypeAPIService", 'WhS_Sales_RatePlanUtilsService', function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService, WhS_Sales_RatePlanUtilsService) {
+app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService", "VRCommon_RateTypeAPIService", 'WhS_Sales_RatePlanUtilsService', 'WhS_Sales_RatePlanService', function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService, WhS_Sales_RatePlanUtilsService, WhS_Sales_RatePlanService) {
     return {
         restrict: "E",
         scope: {
@@ -40,17 +40,29 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
             };
 
             $scope.areOtherRatesEditable = function () {
-                return (zoneItem.CurrentRate != null || zoneItem.NewRate != null);
+                if (zoneItem.CurrentRate != null)
+                    return true;
+                if (zoneItem.NewRate != null && WhS_Sales_RatePlanUtilsService.validateNewRate(zoneItem) == null)
+                    return true;
+                return false;
             };
+
+            $scope.onCurrentRateClicked = function (dataItem) {
+                WhS_Sales_RatePlanService.viewFutureRate(zoneItem.ZoneName, dataItem.FutureRate);
+            }
 
             $scope.onCurrentRateNewEEDChanged = function () {
                 zoneItem.IsDirty = true;
             };
 
-            $scope.onNewRateChanged = function (otherRate)
-            {
+            $scope.onNewRateChanged = function (dataItem) {
                 zoneItem.IsDirty = true;
-                WhS_Sales_RatePlanUtilsService.onNewRateChanged(otherRate, settings, true);
+                WhS_Sales_RatePlanUtilsService.onNewRateChanged(dataItem);
+            };
+
+            $scope.onNewRateBlurred = function (dataItem) {
+                zoneItem.IsDirty = true;
+                WhS_Sales_RatePlanUtilsService.onNewRateBlurred(dataItem, settings);
             };
 
             $scope.validateNewRate = function (otherRate) {
@@ -109,6 +121,10 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                                     zoneItem.IsDirty = true;
                                     otherRate.CurrentRateNewEED = closedOtherRate.EED;
                                 }
+                            }
+
+                            if (zoneItem.FutureOtherRates != null) {
+                                otherRate.FutureRate = zoneItem.FutureOtherRates[otherRate.Entity.RateTypeId];
                             }
 
                             WhS_Sales_RatePlanUtilsService.onNewRateChanged(otherRate);

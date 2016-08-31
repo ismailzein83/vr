@@ -76,6 +76,7 @@
     <Compile Include="BusinessRules\Conditions\NormalRateEEDGreaterThanZoneEED.cs" />
     <Compile Include="BusinessRules\Conditions\OtherRateBEDLessThanValidBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\OtherRateEEDGreaterThanValidEEDCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\RateIsLessThanOrEqualToZeroCondition.cs" />
     <Compile Include="RatePlanDraftManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CostCalculationMethodContext.cs" />

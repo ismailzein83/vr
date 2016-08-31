@@ -1,10 +1,10 @@
-﻿<div vr-modalcontent ng-controller="WhS_Sales_FutureNormalRateController" width="'25%'">
+﻿<div vr-modalcontent ng-controller="WhS_Sales_FutureRateController" width="'25%'">
     <vr-modalbody>
         <vr-form name="formFutureNormalRate">
             <vr-row>
                 <vr-columns width="1/2row">
                     <vr-label>Rate: </vr-label>
-                    <vr-label isvalue="true">{{scopeModel.rate}}</vr-label>
+                    <vr-label isvalue="true">{{scopeModel.rate | number: 4}}</vr-label>
                 </vr-columns>
                 <vr-columns width="1/2row">
                     <vr-label>BED: </vr-label>

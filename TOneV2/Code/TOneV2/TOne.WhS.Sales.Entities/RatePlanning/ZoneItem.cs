@@ -57,6 +57,7 @@ namespace TOne.WhS.Sales.Entities
         public IEnumerable<DraftRateToClose> ClosedRates { get; set; }
         public decimal? CalculatedRate { get; set; }
         public FutureRate FutureNormalRate { get; set; }
+        public Dictionary<int, FutureRate> FutureOtherRates { get; set; }
         #endregion
 
         #region Routing Product Properties

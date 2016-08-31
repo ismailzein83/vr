@@ -6,28 +6,36 @@
                      pagingtype="'PagingOnScroll'"
                      norowhighlightonclick="'true'"
                      idfield="Entity.RateTypeId">
-            <vr-datagridcolumn headertext="'Rate Type'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Current Rate'" field="'CurrentRate'" type="'Number'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Rate Type'" field="'Entity.Name'" type="'Text'" widthfactor="58"></vr-datagridcolumn>
 
-            <vr-datagridcolumn headertext="'New Rate'" disablesorting>
+            <vr-datagridcolumn headertext="'Current Rate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="10">
+                <div style="text-align: right">
+                    <span ng-if="dataItem.FutureRate != null">
+                        <a href="" ng-click="viewScope.onCurrentRateClicked(dataItem)" style="color: purple; text-decoration: underline">{{dataItem.CurrentRate | number: 4}}</a><sup style="text-decoration: none">*</sup>
+                    </span>
+                    <span ng-if="dataItem.FutureRate == null">{{dataItem.CurrentRate | number: 4}}</span>
+                </div>
+            </vr-datagridcolumn>
+
+            <vr-datagridcolumn headertext="'New Rate'" widthfactor="10" disablesorting>
                 <span vr-disabled="!viewScope.areOtherRatesEditable()">
                     <vr-textbox type="number"
                                 value="dataItem.NewRate"
-                                onblurtextbox="viewScope.onNewRateChanged(dataItem)"
+                                onvaluechanged="viewScope.onNewRateChanged(dataItem)"
+                                onblurtextbox="viewScope.onNewRateBlurred(dataItem)"
                                 customvalidate="viewScope.validateNewRate(dataItem)"
-                                minvalue="0"
                                 tonextinput>
                     </vr-textbox>
                 </span>
             </vr-datagridcolumn>
 
-            <vr-datagridcolumn headertext="'Rate Change Type'">
+            <vr-datagridcolumn widthfactor="2">
                 <div style="text-align: left">
-                    <span class="{{'glyphicon ' + dataItem.RateChangeTypeIcon}}" />
+                    <span class="{{'glyphicon ' + dataItem.RateChangeTypeIcon}}" title="{{dataItem.RateChangeTypeIconTooltip}}" />
                 </div>
             </vr-datagridcolumn>
 
-            <vr-datagridcolumn headertext="'BED'">
+            <vr-datagridcolumn headertext="'BED'" widthfactor="10">
                 <span vr-disabled="!viewScope.areOtherRatesEditable()">
                     <span vr-disabled="dataItem.CurrentRate != null">
                         <vr-datetimepicker type="date" value="dataItem.CurrentRateBED" ng-hide="dataItem.NewRate != null"></vr-datetimepicker>
@@ -35,7 +43,7 @@
                     <vr-datetimepicker type="date" value="dataItem.NewRateBED" customvalidate="viewScope.validateNewRateDates(dataItem)" ng-show="dataItem.NewRate != null" isrequired="dataItem.NewRate != null">
                 </span>
             </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'EED'">
+            <vr-datagridcolumn headertext="'EED'" widthfactor="10">
                 <span vr-disabled="!viewScope.areOtherRatesEditable()">
                     <vr-datetimepicker type="date" value="dataItem.CurrentRateNewEED" onvaluechanged="viewScope.onCurrentRateNewEEDChanged()" ng-hide="dataItem.NewRate != null"></vr-datetimepicker>
                     <vr-datetimepicker type="date" value="dataItem.NewRateEED" customvalidate="viewScope.validateNewRateDates(dataItem)" ng-show="dataItem.NewRate != null"></vr-datetimepicker>

@@ -87,31 +87,52 @@ namespace TOne.WhS.Sales.Business
                 }
             }
 
-            SetZoneFutureNormalRate(zoneItem);
+            SetFutureRates(zoneItem);
             SetZoneRateChanges(zoneItem);
-        }
-
-        private void SetZoneFutureNormalRate(ZoneItem zoneItem)
-        {
-            SaleEntityZoneRate futureRate = (_ownerType == SalePriceListOwnerType.SellingProduct) ?
-                _futureRateLocator.GetSellingProductZoneRate(_ownerId, zoneItem.ZoneId) :
-                _futureRateLocator.GetCustomerZoneRate(_ownerId, (int)_sellingProductId, zoneItem.ZoneId);
-
-            if (futureRate != null && futureRate.Rate != null)
-            {
-                zoneItem.FutureNormalRate = new FutureRate()
-                {
-                    RateTypeId = futureRate.Rate.RateTypeId,
-                    Rate = futureRate.Rate.NormalRate,
-                    BED = futureRate.Rate.BED,
-                    EED = futureRate.Rate.EED
-                };
-            }
         }
 
         #endregion
 
         #region Private Methods
+
+        private void SetFutureRates(ZoneItem zoneItem)
+        {
+            SaleEntityZoneRate futureRate = (_ownerType == SalePriceListOwnerType.SellingProduct) ?
+                _futureRateLocator.GetSellingProductZoneRate(_ownerId, zoneItem.ZoneId) :
+                _futureRateLocator.GetCustomerZoneRate(_ownerId, (int)_sellingProductId, zoneItem.ZoneId);
+
+            if (futureRate != null)
+            {
+                if (futureRate.Rate != null && futureRate.Rate.BED.Date > _effectiveOn.Date)
+                {
+                    zoneItem.FutureNormalRate = new FutureRate()
+                    {
+                        RateTypeId = futureRate.Rate.RateTypeId,
+                        Rate = GetConvertedRate(futureRate.Rate),
+                        BED = futureRate.Rate.BED,
+                        EED = futureRate.Rate.EED
+                    };
+                }
+
+                if (futureRate.RatesByRateType != null)
+                {
+                    zoneItem.FutureOtherRates = new Dictionary<int, FutureRate>();
+                    foreach (KeyValuePair<int, SaleRate> kvp in futureRate.RatesByRateType)
+                    {
+                        if (kvp.Value.BED.Date > _effectiveOn.Date)
+                        {
+                            zoneItem.FutureOtherRates.Add(kvp.Key, new FutureRate()
+                            {
+                                RateTypeId = kvp.Value.RateTypeId,
+                                Rate = GetConvertedRate(kvp.Value),
+                                BED = kvp.Value.BED,
+                                EED = kvp.Value.EED
+                            });
+                        }
+                    }
+                }
+            }
+        }
 
         private void SetZoneRateChanges(ZoneItem zoneItem)
         {

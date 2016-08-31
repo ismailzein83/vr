@@ -9,16 +9,16 @@
                      getrowstyle="getRowStyle"
                      isdynamicrowstyle="true">
 
-            <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'" widthfactor="20" disablesorting></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Effective Routing Product'"
+            <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'" widthfactor="23" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Product'"
                                field="'EffectiveRoutingProductName'"
                                type="'Text'"
                                isfielddynamic="true"
-                               widthfactor="15"
+                               widthfactor="8"
                                disablesorting>
             </vr-datagridcolumn>
 
-            <vr-datagridcolumn headertext="'Route Options'" widthfactor="50" disablesorting>
+            <vr-datagridcolumn headertext="'Route Options'" widthfactor="38.5" disablesorting>
                 <div vr-loader="dataItem.isLoadingRouteOptions">
                     <vr-whs-routing-zonerouteoptions on-ready="dataItem.onRouteOptionsReady"></vr-whs-routing-zonerouteoptions>
                 </div>
@@ -31,19 +31,20 @@
                                numberprecision="'LongPrecision'"
                                isfielddynamic="true"
                                columnindex="3 + $index"
+                               widthfactor="7"
                                disablesorting>
             </vr-datagridcolumn>
 
             <vr-datagridcolumn headertext="'Current Rate'"
-                               field="'CurrentRate'"
                                type="'Number'"
-                               numberprecision="'LongPrecision'"                              
+                               numberprecision="'LongPrecision'"
+                               widthfactor="7"
                                disablesorting>
                 <div style="text-align: right">
-                    <vr-label isvalue="true">
-                        <a href="" ng-if="dataItem.FutureNormalRate != null" ng-click="viewScope.onCurrentRateClicked(dataItem)" style="color: purple; text-decoration: underline">{{dataItem.CurrentRate}}</a>
-                        <span ng-if="dataItem.FutureNormalRate == null">{{dataItem.CurrentRate}}</span>
-                    </vr-label>
+                    <span ng-if="dataItem.FutureNormalRate != null">
+                        <a href="" ng-click="viewScope.onCurrentRateClicked(dataItem)" style="color: purple; text-decoration: underline">{{dataItem.CurrentRate | number: 4}}</a><sup style="text-decoration: none">*</sup>
+                    </span>
+                    <span ng-if="dataItem.FutureNormalRate == null">{{dataItem.CurrentRate | number: 4}}</span>
                 </div>
             </vr-datagridcolumn>
 
@@ -56,30 +57,30 @@
                                disablesorting>
             </vr-datagridcolumn>
 
-            <vr-datagridcolumn headertext="'New Rate'" disablesorting>
+            <vr-datagridcolumn headertext="'New Rate'" widthfactor="7" disablesorting>
                 <vr-textbox type="number"
                             value="dataItem.NewRate"
-                            minvalue="0"
                             customvalidate="dataItem.validateNewRate()"
-                            onblurtextbox="viewScope.onNewRateChanged(dataItem)"
+                            onvaluechanged="viewScope.onNewRateChanged(dataItem)"
+                            onblurtextbox="viewScope.onNewRateBlurred(dataItem)"
                             tonextinput>
                 </vr-textbox>
             </vr-datagridcolumn>
 
-            <vr-datagridcolumn headertext="'Rate Change Type'" isfielddynamic="true">
+            <vr-datagridcolumn isfielddynamic="true" widthfactor="1.5">
                 <div style="text-align: left">
-                    <span class="{{'glyphicon ' + dataItem.RateChangeTypeIcon}}" />
+                    <span class="{{'glyphicon ' + dataItem.RateChangeTypeIcon}}" title="{{dataItem.RateChangeTypeIconTooltip}}" />
                 </div>
             </vr-datagridcolumn>
 
-            <vr-datagridcolumn headertext="'BED'" disablesorting>
+            <vr-datagridcolumn headertext="'BED'" widthfactor="7" disablesorting>
                 <span vr-disabled="true">
                     <vr-datetimepicker type="date" value="dataItem.CurrentRateBED" ng-hide="dataItem.NewRate != null" customvalidate="dataItem.validateRateChangeDates()"></vr-datetimepicker>
                 </span>
                 <vr-datetimepicker type="date" value="dataItem.NewRateBED" ng-show="dataItem.NewRate != null" customvalidate="dataItem.validateNewRateDates()" isrequired="dataItem.showNewRateBED"></vr-datetimepicker>
             </vr-datagridcolumn>
 
-            <vr-datagridcolumn headertext="'EED'" disablesorting>
+            <vr-datagridcolumn headertext="'EED'" widthfactor="7" disablesorting>
                 <span vr-disabled="!dataItem.IsCurrentRateEditable">
                     <vr-datetimepicker type="date"
                                        value="dataItem.CurrentRateEED"

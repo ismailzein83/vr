@@ -2,24 +2,24 @@
 
     'use strict';
 
-    RatePlanUtilsService.$inject = ['UtilsService', 'WhS_BE_RateChangeTypeEnum'];
+    RatePlanUtilsService.$inject = ['UtilsService'];
 
-    function RatePlanUtilsService(UtilsService, WhS_BE_RateChangeTypeEnum)
-    {
+    function RatePlanUtilsService(UtilsService) {
         return {
+            onNewRateBlurred: onNewRateBlurred,
             onNewRateChanged: onNewRateChanged,
-            validateNewRate:validateNewRate,
+            validateNewRate: validateNewRate,
             validateNewRateDates: validateNewRateDates
         };
 
-        function onNewRateChanged(dataItem, settings, shouldSetNewRateDates)
-        {
-            if (shouldSetNewRateDates === true)
-                setNewRateDates(dataItem, settings);
+        function onNewRateChanged(dataItem) {
             setRateChangeTypeIcon(dataItem);
         }
-        function setNewRateDates(dataItem, settings)
-        {
+        function onNewRateBlurred(dataItem, settings) {
+            setNewRateDates(dataItem, settings);
+        }
+
+        function setNewRateDates(dataItem, settings) {
             if (dataItem.NewRate) // This check is false when newRate is undefined, null or an empty string
             {
                 dataItem.CurrentRateNewEED = (dataItem.CurrentRateEED != null) ? dataItem.CurrentRateEED : dataItem.ZoneEED;
@@ -39,35 +39,46 @@
         function getNowPlusDays(days) {
             return new Date(new Date().setDate(new Date().getDate() + days));
         }
-        function setRateChangeTypeIcon(dataItem)
-        {
+        function setRateChangeTypeIcon(dataItem) {
             if (dataItem.NewRate) // This check is false when newRate is undefined, null or an empty string
             {
                 if (dataItem.CurrentRate == null) {
                     dataItem.RateChangeTypeIcon = null;
+                    dataItem.RateChangeTypeIconTooltip = null;
                 }
                 else if (Number(dataItem.NewRate) > dataItem.CurrentRate) {
-                    dataItem.RateChangeTypeIcon = 'glyphicon-arrow-up arrow-above';
+                    dataItem.RateChangeTypeIcon = 'glyphicon-arrow-up arrow-below';
+                    dataItem.RateChangeTypeIconTooltip = 'Increase';
                 }
                 else if (Number(dataItem.NewRate) < dataItem.CurrentRate) {
-                    dataItem.RateChangeTypeIcon = 'glyphicon-arrow-down arrow-below';
+                    dataItem.RateChangeTypeIcon = 'glyphicon-arrow-down arrow-above';
+                    dataItem.RateChangeTypeIconTooltip = 'Decrease';
                 }
                 else {
                     dataItem.RateChangeTypeIcon = null;
+                    dataItem.RateChangeTypeIconTooltip = null;
                 }
             }
             else {
                 dataItem.RateChangeTypeIcon = null;
+                dataItem.RateChangeTypeIconTooltip = null;
             }
         }
 
-        function validateNewRate(dataItem) {
-            if (dataItem.CurrentRate != null && Number(dataItem.CurrentRate) == Number(dataItem.NewRate))
-                return 'New Rate = Current Rate';
+        function validateNewRate(dataItem)
+        {
+            var newRate = Number(dataItem.NewRate);
+            
+            if (isNaN(newRate))
+                return 'New rate must be a number';
+            if (newRate <= 0)
+                return 'New rate must be greater than 0';
+            if (dataItem.CurrentRate != null && Number(dataItem.CurrentRate) == newRate)
+                return 'New rate must be different than the current rate';
+
             return null;
         }
-        function validateNewRateDates(dataItem)
-        {
+        function validateNewRateDates(dataItem) {
             var zoneBED = new Date(dataItem.ZoneBED);
             var zoneEED = (dataItem.ZoneEED != null) ? new Date(dataItem.ZoneEED) : null;
 
