@@ -121,12 +121,12 @@
                                 if (negativeArray.length > 2)
                                     ctrl.value = oldValue;
                                // if (arr.length === 0) return;
-                                if (arr.length === 1 && (arr[0] === '-' || arr[0] === '.')) return;
+                               //if (arr.length === 1 && (arr[0] === '-' || arr[0] === '.')) return;
                                 if (arr.length === 2 && newValue === '-.') return;
                                 if (!isNaN(newValue) && newValue != "") {
                                     retrunedValue = newValue;
                                 }
-                                if (isNaN(newValue) ) {
+                                if (isNaN(newValue) && (newValue != '-') && (newValue != '.')) {
                                     ctrl.value = oldValue;
                                     retrunedValue=undefined;
                                 }
