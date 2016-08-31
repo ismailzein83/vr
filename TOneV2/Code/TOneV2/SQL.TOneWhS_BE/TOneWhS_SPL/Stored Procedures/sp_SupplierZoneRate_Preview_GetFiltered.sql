@@ -28,6 +28,7 @@ BEGIN
 	
 	Where	Z.ProcessInstanceID=@ProcessInstanceID 
 			AND c.ProcessInstanceID=@ProcessInstanceID
+			AND Orp.ProcessInstanceID=@ProcessInstanceID
 			AND (@CountryID is null or Z.CountryID = @CountryID) 
 			AND (@OnlyModified = 0 or C.ChangeType != 0 or z.RateChangeType != 0 or Orp.RateChangeType != 0)			
 

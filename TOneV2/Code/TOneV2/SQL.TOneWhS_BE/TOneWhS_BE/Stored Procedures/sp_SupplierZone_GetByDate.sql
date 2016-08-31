@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-Create PROCEDURE [TOneWhS_BE].[sp_SupplierZone_GetByDate] 
+CREATE PROCEDURE [TOneWhS_BE].[sp_SupplierZone_GetByDate] 
 	-- Add the parameters for the stored procedure here
 	@SupplierId INT,
 	@When DateTime
@@ -19,7 +19,8 @@ BEGIN
 		  ,sz.SupplierID
 		  ,sz.BED
 		  ,sz.EED
-	  FROM [TOneWhS_BE].SupplierZone sz
+		  ,sz.SourceID 
+	  FROM [TOneWhS_BE].SupplierZone sz WITH(NOLOCK)
 	  Where (sz.EED is null or sz.EED > @when)
 	  and sz.SupplierID=@SupplierId
 	  

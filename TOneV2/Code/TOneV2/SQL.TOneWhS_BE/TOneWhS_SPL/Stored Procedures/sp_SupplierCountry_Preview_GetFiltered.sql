@@ -25,7 +25,7 @@ With cteZoneCode AS
 	join TOneWhS_SPL.SupplierCode_Preview as C WITH(NOLOCK)  on Z.ZoneName = C.ZoneName OR Z.ZoneName = C.RecentZoneName
 	left outer join TOneWhS_SPL.SupplierOtherRate_Preview Orp WITH(NOLOCK)   on Orp.ZoneName = Z.ZoneName
 
-	where (@OnlyModified = 0 or C.ChangeType != 0 or z.RateChangeType != 0 or Orp.RateChangeType != 0)  and  z.ProcessInstanceID=@ProcessInstanceId and c.ProcessInstanceID=@ProcessInstanceId
+	where (@OnlyModified = 0 or C.ChangeType != 0 or z.RateChangeType != 0 or Orp.RateChangeType != 0)  and  z.ProcessInstanceID=@ProcessInstanceId and c.ProcessInstanceID=@ProcessInstanceId and Orp.ProcessInstanceID=@ProcessInstanceId 
 	group by Z.ZoneName
 )
 

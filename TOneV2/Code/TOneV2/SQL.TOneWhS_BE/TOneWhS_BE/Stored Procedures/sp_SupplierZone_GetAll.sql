@@ -10,7 +10,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-	SELECT	sz.[ID],sz.[Name],sz.SupplierID,sz.BED,sz.EED,sz.CountryID
+	SELECT	sz.[ID],sz.[Name],sz.SupplierID,sz.BED,sz.EED,sz.CountryID,sz.SourceID 
 	FROM	[TOneWhS_BE].SupplierZone sz WITH(NOLOCK) 
 	
 END
