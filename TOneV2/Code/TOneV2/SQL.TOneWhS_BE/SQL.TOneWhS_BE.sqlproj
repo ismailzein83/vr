@@ -375,5 +375,6 @@
     <Build Include="TOneWhS_SPL\Tables\SupplierOtherRate_Preview.sql" />
     <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierOtherRate_Preview_GetFiltered.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetFutureByOwner.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierCode_GetActiveCodesBySuppliers.sql" />
   </ItemGroup>
 </Project>
