@@ -27,7 +27,7 @@ IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 				   itemHeader.CreatedTime,
 				   itemHeader.LastUpdatedTime
 			INTO #RESULT
-			FROM [queue].[QueueItemHeader] itemHeader
+			FROM [queue].[QueueItemHeader] itemHeader WITH(NOLOCK)
 			Where (@QueueIDs  is null or itemHeader.QueueID in(select QueueID from @QueueIDsTable))
 			and (@QueueStatusIds  is null or itemHeader.Status in(select StatusID from @QueueStatusIDsTable))and (@CreatedTimeFrom is null or itemHeader.CreatedTime>=@CreatedTimeFrom)
 			and (@CreatedTimeTo is null or itemHeader.CreatedTime<=@CreatedTimeTo)

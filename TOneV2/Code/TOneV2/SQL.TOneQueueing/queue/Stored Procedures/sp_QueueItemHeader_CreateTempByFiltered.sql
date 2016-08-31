@@ -7,7 +7,7 @@ BEGIN
 IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	    BEGIN
 			With ExecutionFlowItemIds as (SELECT  itemHeader.[ItemID], itemHeader.[ExecutionFlowTriggerItemID]
-            FROM  [queue].[QueueItemHeader] itemHeader JOIN  @ItemIds ids ON itemHeader.ItemID = ids.ItemID)
+            FROM  [queue].[QueueItemHeader] itemHeader WITH(NOLOCK) JOIN  @ItemIds ids ON itemHeader.ItemID = ids.ItemID)
 
 			SELECT execFlowIds.[ItemID],
 				   itemHeader.QueueID,
@@ -20,8 +20,8 @@ IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 				   itemHeader.CreatedTime,
 				   itemHeader.LastUpdatedTime
 			INTO #RESULT
-			FROM [queue].[QueueItemHeader] itemHeader
-			JOIN ExecutionFlowItemIds execFlowIds 
+			FROM [queue].[QueueItemHeader] itemHeader WITH(NOLOCK)
+			INNER JOIN ExecutionFlowItemIds execFlowIds  WITH(NOLOCK)
 			ON   itemHeader.ExecutionFlowTriggerItemID = execFlowIds.ExecutionFlowTriggerItemID
 			
 			DECLARE @sql VARCHAR(1000)

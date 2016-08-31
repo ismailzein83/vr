@@ -18,7 +18,7 @@ BEGIN
       ,[ErrorMessage]
       ,[CreatedTime]
       ,[LastUpdatedTime]
-	FROM [queue].[QueueItemHeader]
+	FROM [queue].[QueueItemHeader] WITH(NOLOCK)
     WHERE
           ItemID = @ItemID AND QueueID = @QueueID
 END
