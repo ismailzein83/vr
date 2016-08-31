@@ -144,7 +144,7 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
                 Logger.InfoMessage.AppendLine(exc.ToString());
             }
         }
-        private MappingRule GetRule(string carrierId, StaticValues trunk, int currentSwitchId, DateTime date, int carrierType)
+        private MappingRule GetRule(string carrierId, StaticValues inOutCarrier, int currentSwitchId, DateTime date, int carrierType)
         {
             int carrierAccountId;
             if (CarrierAccounts.ContainsKey(carrierId)) carrierAccountId = CarrierAccounts[carrierId].CarrierAccountId;
@@ -177,7 +177,7 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
             {
                 Values = ((new List<int> { currentSwitchId }).Cast<Object>()).ToList()
             };
-            rule.Criteria.FieldsValues["Trunk"] = trunk;
+            rule.Criteria.FieldsValues["Carrier"] = inOutCarrier;
             return rule;
 
         }
