@@ -40,7 +40,7 @@
 
                 <vr-columns colnum="2" ng-if="reporttype.ParameterSettings.RequiresIsCost">
                     <vr-label>Cost</vr-label>
-                    <vr-switch value="params.isCost"></vr-switch>
+                    <vr-switch value="params.isCost" onvaluechanged="resetGroupBySupplier"></vr-switch>
                 </vr-columns>
 
                 <!--<vr-columns colnum="2" ng-if="reporttype.ParameterSettings.RequiresIsService">

@@ -131,6 +131,10 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             else
                 return $scope.export();
         }
+
+        $scope.resetGroupBySupplier = function () {
+            $scope.params.bySupplier = false;
+        }
         $scope.resetReportParams = function () {
             $scope.singleCustomer = null;
             $scope.customers = [];
