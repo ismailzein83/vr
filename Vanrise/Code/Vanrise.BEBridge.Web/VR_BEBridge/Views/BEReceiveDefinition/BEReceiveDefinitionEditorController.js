@@ -78,7 +78,7 @@
             return {
                 BEReceiveDefinitionId: receveiveDEfinitionEntity != undefined ? receveiveDEfinitionEntity.BEReceiveDefinitionId : undefined,
                 Name: $scope.scopeModel.name,
-                 Settings: settings
+                Settings: settings
             };
         }
         function update() {
