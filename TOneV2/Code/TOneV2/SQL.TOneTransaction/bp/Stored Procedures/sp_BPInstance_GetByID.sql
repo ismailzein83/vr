@@ -6,7 +6,7 @@ BEGIN
 	DECLARE @ID_Local bigint
 	SELECT @ID_Local = @ID
 	
-    SELECT	[ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument],[ExecutionStatus],[LockedByProcessID],[LastMessage],[RetryCount],EntityID
+    SELECT	[ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument],[ExecutionStatus],[LastMessage],EntityID
 			,[CreatedTime],[StatusUpdatedTime],[InitiatorUserId]
 	FROM	bp.[BPInstance] WITH(NOLOCK)
 	WHERE	ID = @ID_Local

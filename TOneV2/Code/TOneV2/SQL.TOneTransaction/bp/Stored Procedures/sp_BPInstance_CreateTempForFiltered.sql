@@ -13,8 +13,8 @@ BEGIN
 	
 IF OBJECT_ID(@TempTableName, N'U') IS NULL
 BEGIN	
-	SELECT	[ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument],[ExecutionStatus],[LockedByProcessID],
-			[LastMessage],[RetryCount],[CreatedTime],[StatusUpdatedTime],[InitiatorUserId],EntityID
+	SELECT	[ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument],[ExecutionStatus],
+			[LastMessage],[CreatedTime],[StatusUpdatedTime],[InitiatorUserId],EntityID
 	INTO	#RESULT
 	FROM	bp.[BPInstance] as bps WITH(NOLOCK)
 	WHERE	(@EntityID is null OR EntityID = @EntityID) and (@ArrStatus is NULL or bps.ExecutionStatus in (SELECT ParsedString FROM ParseStringList(@ArrStatus) ) ) and 
