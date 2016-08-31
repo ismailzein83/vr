@@ -27,16 +27,17 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         public List<Entities.BillingReport.BusinessCaseStatus> GetBusinessCaseStatus(DateTime fromDate, DateTime? toDate, int carrierAccountId, int topDestination, bool isSale, bool isAmount, int currencyId)
         {
-            string DurationField = "BS.SaleDurationInSeconds ";
+            string durationField = isSale ? "BS.SaleDurationInSeconds " : "BS.CostDurationInSeconds ";
             string amountField = isSale ? "BS.SaleNet / ISNULL(ERS.Rate, 1) " : "BS.CostNet / ISNULL(ERC.Rate, 1) ";
-            string amountDuration = isAmount ? amountField : DurationField;
+            string amountDuration = isAmount ? amountField : durationField;
             string carrierId = isSale ? "BS.CustomerId" : "BS.SupplierId";
+            string zone = isSale ? "BS.SaleZoneId" : "BS.SupplierZoneId";
             DateTime _toTodate = DateTime.Now;
             if (toDate.HasValue)
                 _toTodate = (DateTime)toDate;
 
             string query = String.Format(@"{2}
-                SELECT TOP (@TopDestination)  BS.SaleZoneId AS ZoneId ,Year(BS.BatchStart) AS YearDuration, 
+                SELECT TOP (@TopDestination)  {3} AS ZoneId ,Year(BS.BatchStart) AS YearDuration, 
                 MONTH(BS.BatchStart) AS MonthDuration, 
                 cast( (SUM({0} )/60 ) as decimal(13,4) ) AS SaleDuration 
                 From [TOneWhS_Analytics].[BillingStatsDaily] BS WITH(NOLOCK,INDEX(IX_BillingStatsDaily_BatchStart,IX_BillingStatsDaily_Id)),
@@ -44,10 +45,11 @@ namespace TOne.WhS.Analytics.Data.SQL
                 WHERE BS.BatchStart BETWEEN @FromDate AND @ToDate AND {1} = @CustomerId 
                 And ERC.CurrencyID = BS.CostCurrencyId AND BS.BatchStart >= ERC.BED AND (ERC.EED IS NULL OR BS.BatchStart < ERC.EED) 
                 And ERS.CurrencyID = BS.SaleCurrencyId AND BS.BatchStart >= ERS.BED AND (ERS.EED IS NULL OR BS.BatchStart < ERS.EED)
-                GROUP BY BS.SaleZoneId , Year(BS.BatchStart), MONTH(BS.BatchStart)",
+                GROUP BY {3} , Year(BS.BatchStart), MONTH(BS.BatchStart) ORDER BY (cast( (SUM({0} )/60 ) as decimal(13,4) )) ",
                 amountDuration,
                 carrierId,
-                GetExchangeRatesTable(currencyId)
+                GetExchangeRatesTable(currencyId),
+                zone
                 );
 
             return GetItemsText(query, BusinessCaseStatusMapper,
