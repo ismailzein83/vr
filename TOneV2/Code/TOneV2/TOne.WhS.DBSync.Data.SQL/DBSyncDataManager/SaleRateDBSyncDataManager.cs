@@ -32,6 +32,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "EED", DataType = typeof(DateTime) });
             dt.Columns.Add("Change", typeof(Byte));
             dt.Columns.Add("ID", typeof(int));
+            dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "RateTypeID", DataType = typeof(int) });
             dt.Columns.Add("SourceID", typeof(string));
            
             dt.BeginLoadData();
@@ -54,6 +55,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                     row[index++] = item.EED;
                 row[index++] = item.RateChange;
                 row[index++] = startingId++;
+                row[index++] = item.RateTypeId.HasValue ? item.RateTypeId : (object)DBNull.Value;
                 row[index++] = item.SourceId;
 
                 dt.Rows.Add(row);

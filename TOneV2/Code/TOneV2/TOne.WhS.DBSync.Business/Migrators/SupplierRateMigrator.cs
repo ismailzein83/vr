@@ -67,13 +67,11 @@ namespace TOne.WhS.DBSync.Business
             if (allSupplierZones != null && sourceItem.ZoneId.HasValue)
                 allSupplierZones.TryGetValue(sourceItem.ZoneId.Value.ToString(), out supplierZone);
 
-
-            Dictionary<int, decimal> otherRates = new Dictionary<int, decimal>();
-            if (sourceItem.OffPeakRate.HasValue)
-                otherRates.Add(_offPeakRateTypeId, sourceItem.OffPeakRate.Value);
-
-            if (sourceItem.WeekendRate.HasValue)
-                otherRates.Add(_weekendRateTypeId, sourceItem.WeekendRate.Value);
+            int? rateTypeId = null;
+             if (sourceItem.RateType.HasValue &&  sourceItem.RateType == RateTypeEnum.OffPeak)
+                rateTypeId = _offPeakRateTypeId;
+             else if (sourceItem.RateType.HasValue && sourceItem.RateType == RateTypeEnum.Weekend)
+                rateTypeId = _weekendRateTypeId;
 
             if (supplierZone != null && supplierPriceList != null && currency != null && sourceItem.BeginEffectiveDate.HasValue && sourceItem.Rate.HasValue)
                 return new SupplierRate
@@ -83,8 +81,8 @@ namespace TOne.WhS.DBSync.Business
                     NormalRate = sourceItem.Rate.Value,
                     CurrencyId = currency.CurrencyId,
                     PriceListId = supplierPriceList.PriceListId,
-                    OtherRates = otherRates,
                     ZoneId = supplierZone.SupplierZoneId,
+                    RateTypeId = rateTypeId,
                     RateChange = GetRateChangeType(sourceItem.Change.Value),
                     SourceId = sourceItem.SourceId
                 };
@@ -94,6 +92,7 @@ namespace TOne.WhS.DBSync.Business
                 return null;
             }
         }
+
 
         public override void FillTableInfo(bool useTempTables)
         {
@@ -111,6 +110,22 @@ namespace TOne.WhS.DBSync.Business
             {
                 return true;
             }
+        }
+
+        private SupplierRate SupplierRateMapper(SourceRate sourceItem, decimal? rate, int? rateTypeId, int currencyId, int priceListId, long supplierZoneId)
+        {
+            return new SupplierRate()
+            {
+                BED = sourceItem.BeginEffectiveDate.Value,
+                EED = sourceItem.EndEffectiveDate,
+                NormalRate = rate.Value,
+                CurrencyId = currencyId,
+                PriceListId = priceListId,
+                ZoneId = supplierZoneId,
+                RateTypeId = rateTypeId,
+                RateChange = GetRateChangeType(sourceItem.Change.Value),
+                SourceId = sourceItem.SourceId
+            };
         }
 
         private RateChangeType GetRateChangeType(Int16 sourceRateChangeType)

@@ -1,5 +1,6 @@
 ﻿using System;
 using Vanrise.Entities.EntitySynchronization;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.DBSync.Entities
 {
@@ -21,5 +22,6 @@ namespace TOne.WhS.DBSync.Entities
         public DateTime? EndEffectiveDate { get; set; }
         public Int16? Change { get; set; }
         public string CurrencyId { get; set; }
+        public RateTypeEnum? RateType { get; set; }
     }
 }

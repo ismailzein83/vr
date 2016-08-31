@@ -32,6 +32,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "EED", DataType = typeof(DateTime) });
             dt.Columns.Add("Change", typeof(Byte));
             dt.Columns.Add("SourceID", typeof(string));
+            dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "RateTypeID", DataType = typeof(int) });
             dt.Columns.Add("ID", typeof(long));
 
             dt.BeginLoadData();
@@ -54,6 +55,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                     row[index++] = item.EED;
                  row[index++] = item.RateChange;
                 row[index++] = item.SourceId;
+                row[index++] = item.RateTypeId.HasValue ? item.RateTypeId : (object)DBNull.Value;
                 row[index++] = startingId++;
 
                 dt.Rows.Add(row);
@@ -64,7 +66,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, SupplierRate> GetSupplierRates(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID]  ,[ZoneID] ,[PriceListID],[NormalRate],[OtherRates],[BED], [EED], [Change], [SourceID] FROM "
+            return GetItemsText("SELECT [ID]  ,[ZoneID] ,[PriceListID],[NormalRate], [RateTypeID],[OtherRates],[BED], [EED], [Change], [SourceID] FROM "
                 + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SupplierRateMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
@@ -79,6 +81,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 OtherRates = reader["OtherRates"] as string != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string) : null,
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
+                RateTypeId = GetReaderValue<int?>(reader, "RateTypeID"),
                 RateChange = GetReaderValue<RateChangeType>(reader, "Change"),
                 SourceId = reader["SourceID"] as string,
             };

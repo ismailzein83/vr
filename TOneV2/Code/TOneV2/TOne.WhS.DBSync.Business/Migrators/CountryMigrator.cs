@@ -30,6 +30,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override void AddItems(List<Country> itemsToAdd)
         {
+            int successfullCount = 0;
             List<Country> countries = new List<Country>();
             List<string> countriesNames = new List<string>();
             foreach (Country country in itemsToAdd)
@@ -38,10 +39,11 @@ namespace TOne.WhS.DBSync.Business
                 {
                     countriesNames.Add(ConvertCountryNameToSourceId(country.Name));
                     countries.Add(country);
+                    successfullCount++;
                 }
             }
             dbSyncDataManager.ApplyCountriesToTemp(countries, 1);
-            TotalRowsSuccess = itemsToAdd.Count;
+            TotalRowsSuccess = successfullCount;
         }
 
         public override IEnumerable<SourceCodeGroup> GetSourceItems()

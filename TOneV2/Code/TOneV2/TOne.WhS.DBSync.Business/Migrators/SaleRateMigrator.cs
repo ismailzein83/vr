@@ -68,13 +68,11 @@ namespace TOne.WhS.DBSync.Business
             if (allSaleZones != null && sourceItem.ZoneId.HasValue)
                 allSaleZones.TryGetValue(sourceItem.ZoneId.Value.ToString(), out saleZone);
 
-
-            Dictionary<int, decimal> otherRates = new Dictionary<int, decimal>();
-            if (sourceItem.OffPeakRate.HasValue)
-                otherRates.Add(_offPeakRateTypeId, sourceItem.OffPeakRate.Value);
-
-            if (sourceItem.WeekendRate.HasValue)
-                otherRates.Add(_weekendRateTypeId, sourceItem.WeekendRate.Value);
+            int? rateTypeId = null;
+            if (sourceItem.RateType.HasValue && sourceItem.RateType == RateTypeEnum.OffPeak)
+                rateTypeId = _offPeakRateTypeId;
+            else if (sourceItem.RateType.HasValue && sourceItem.RateType == RateTypeEnum.Weekend)
+                rateTypeId = _weekendRateTypeId;
 
             if (salePriceList != null && currency != null && saleZone != null && sourceItem.BeginEffectiveDate.HasValue && sourceItem.Rate.HasValue)
                 return new SaleRate
@@ -84,9 +82,9 @@ namespace TOne.WhS.DBSync.Business
                     NormalRate = sourceItem.Rate.Value,
                     CurrencyId = currency.CurrencyId,
                     PriceListId = salePriceList.PriceListId,
-                    OtherRates = otherRates,
                     RateChange =GetRateChangeType(sourceItem.Change.Value),
                     ZoneId = saleZone.SaleZoneId,
+                    RateTypeId = rateTypeId,
                     SourceId = sourceItem.SourceId
                 };
             else
