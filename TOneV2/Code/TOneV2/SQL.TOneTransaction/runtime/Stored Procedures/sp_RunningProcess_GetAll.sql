@@ -8,5 +8,5 @@ BEGIN
       ,[MachineName]
       ,[StartedTime]
       ,AdditionalInfo
-	 FROM [runtime].[RunningProcess]
+	 FROM [runtime].[RunningProcess] WITH(NOLOCK) 
 END

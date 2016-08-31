@@ -26,5 +26,5 @@ BEGIN
       ,[StartedTime]
       ,AdditionalInfo
 	 FROM [runtime].[RunningProcess]
-	 WHERE ID = @@identity
+	 WHERE ID = SCOPE_IDENTITY()
 END
