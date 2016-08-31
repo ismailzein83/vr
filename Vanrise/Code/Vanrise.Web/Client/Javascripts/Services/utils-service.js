@@ -740,6 +740,9 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
     }
 
     function diffDays(date1, date2) {
+        date2.setHours(23)
+        date2.setMinutes(59);
+        date2.setSeconds(59);
         var timeDiff = Math.abs(date2.getTime() - date1.getTime());
         var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
         return diffDays ;
