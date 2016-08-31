@@ -19,5 +19,7 @@ namespace TOne.WhS.BusinessEntity.Data
         IEnumerable<CodePrefixInfo> GetSpecificCodeByPrefixes(int prefixLength, IEnumerable<string> codePrefixes, DateTime? effectiveOn, bool isFuture);
 
         bool AreSupplierCodesUpdated(ref object updateHandle);
+
+        void LoadSupplierCodes(IEnumerable<RoutingSupplierInfo> activeSupplierInfo, string codePrefix, DateTime? effectiveOn, bool isFuture, Action<SupplierCode> onCodeLoaded);
     }
 }

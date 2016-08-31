@@ -7,8 +7,6 @@ namespace TOne.WhS.Routing.BP.Arguments
 {
     public class BuildSupplierZoneDetailsInput : BuildCarrierZoneDetailsInput
     {
-        public List<RoutingSupplierInfo> SupplierInfos { get; set; }
-
         public int RoutingDatabaseId { get; set; }
 
         public DateTime? EffectiveOn { get; set; }

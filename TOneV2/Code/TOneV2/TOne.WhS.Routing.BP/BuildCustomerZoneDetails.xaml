@@ -57,6 +57,8 @@
       <AssemblyReference>TOne.WhS.Routing.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP</AssemblyReference>
     </sco:Collection>
@@ -65,7 +67,7 @@
     <local:GenerateCustomerZoneDetails sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.WhS.Routing.BP.GenerateCustomerZoneDetails_1">
       <local:GenerateCustomerZoneDetails.CustomerInfos>
         <InArgument x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">Input.CustomerInfos</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">Input.CarrierInfos.Cast&lt;TOne.WhS.BusinessEntity.Entities.RoutingCustomerInfo&gt;()</mca:CSharpValue>
         </InArgument>
       </local:GenerateCustomerZoneDetails.CustomerInfos>
       <local:GenerateCustomerZoneDetails.EffectiveOn>
@@ -94,7 +96,7 @@
         </sap2010:ViewStateManager>
       </sap2010:WorkflowViewState.ViewStateManager>
     </local:GenerateCustomerZoneDetails>
-    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRDdXN0b21lclpvbmVEZXRhaWxzLnhhbWwGQANiDgIBAUEFYCkCAQJJC0loAgEJUwtTXwIBB0QLRH0CAQVOC05YAgED</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRDdXN0b21lclpvbmVEZXRhaWxzLnhhbWwGQgNkDgIBAUMFYikCAQJLC0toAgEJVQtVXwIBB0YLRr8BAgEFUAtQWAIBAw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

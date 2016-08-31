@@ -85,10 +85,10 @@ namespace TestRuntime
 
             runtimeServices.Add(bpService);
 
-            DataGroupingDistributorRuntimeService dataGroupingDistributorService = new DataGroupingDistributorRuntimeService { Interval = new TimeSpan(0, 0, 1) };
-            runtimeServices.Add(dataGroupingDistributorService);
-            DataGroupingExecutorRuntimeService dataGroupingExecutorService = new DataGroupingExecutorRuntimeService { Interval = new TimeSpan(0, 0, 1) };
-            runtimeServices.Add(dataGroupingExecutorService);
+            //DataGroupingDistributorRuntimeService dataGroupingDistributorService = new DataGroupingDistributorRuntimeService { Interval = new TimeSpan(0, 0, 1) };
+            //runtimeServices.Add(dataGroupingDistributorService);
+            //DataGroupingExecutorRuntimeService dataGroupingExecutorService = new DataGroupingExecutorRuntimeService { Interval = new TimeSpan(0, 0, 1) };
+            //runtimeServices.Add(dataGroupingExecutorService);
             //runtimeServices.Add(schedulerService);
             //runtimeServices.Add(dsRuntimeService);
             //runtimeServices.Add(bigDataService);

@@ -50,6 +50,8 @@
     <Compile Include="BuildSupplierZoneDetailsInput.cs" />
     <Compile Include="BuildCustomerZoneDetailsInput.cs" />
     <Compile Include="BuildRoutesByCodePrefixInput.cs" />
+    <Compile Include="LoadSupplierCodesInput.cs" />
+    <Compile Include="LoadSupplierCodesOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoutingProcessInput.cs" />
     <Compile Include="RPBuildCodeMatchesByCodePrefixInput.cs" />

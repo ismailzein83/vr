@@ -1,6 +1,5 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Routing.BP.BuildSupplierZoneDetails"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Routing.BP.LoadSupplierCodes"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
- xmlns:local="clr-namespace:TOne.WhS.Routing.BP"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
  xmlns:s="clr-namespace:System;assembly=mscorlib"
@@ -11,12 +10,14 @@
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:twbe="clr-namespace:TOne.WhS.BusinessEntity.Entities;assembly=TOne.WhS.BusinessEntity.Entities"
  xmlns:twrba="clr-namespace:TOne.WhS.Routing.BP.Arguments;assembly=TOne.WhS.Routing.BP.Arguments"
+ xmlns:twrba1="clr-namespace:TOne.WhS.Routing.BP.Activities;assembly=TOne.WhS.Routing.BP.Activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
-    <x:Property Name="Input" Type="InArgument(twrba:BuildSupplierZoneDetailsInput)" />
+    <x:Property Name="Input" Type="InArgument(twrba:LoadSupplierCodesInput)" />
+    <x:Property Name="Output" Type="OutArgument(twrba:LoadSupplierCodesOutput)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
-  <sap2010:WorkflowViewState.IdRef>TOne.WhS.Routing.BP.BuildSupplierZoneDetails_1</sap2010:WorkflowViewState.IdRef>
+  <sap2010:WorkflowViewState.IdRef>TOne.WhS.Routing.BP.LoadSupplierCodes_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System</x:String>
@@ -64,63 +65,70 @@
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
-    <local:GenerateSupplierZoneDetails sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.WhS.Routing.BP.GenerateSupplierZoneDetails_1">
-      <local:GenerateSupplierZoneDetails.EffectiveOn>
+    <Sequence.Variables>
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)" Name="activeSuppliersInfo" />
+    </Sequence.Variables>
+    <twrba1:GetActiveSupplierInfos sap2010:WorkflowViewState.IdRef="GetActiveSupplierInfos_1">
+      <twrba1:GetActiveSupplierInfos.ActiveRoutingSupplierInfos>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)">activeSuppliersInfo</mca:CSharpReference>
+        </OutArgument>
+      </twrba1:GetActiveSupplierInfos.ActiveRoutingSupplierInfos>
+    </twrba1:GetActiveSupplierInfos>
+    <twrba1:LoadSupplierCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadSupplierCodes_1">
+      <twrba1:LoadSupplierCodes.EffectiveOn>
         <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
           <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveOn</mca:CSharpValue>
         </InArgument>
-      </local:GenerateSupplierZoneDetails.EffectiveOn>
-      <local:GenerateSupplierZoneDetails.IsFuture>
+      </twrba1:LoadSupplierCodes.EffectiveOn>
+      <twrba1:LoadSupplierCodes.IsFuture>
         <InArgument x:TypeArguments="x:Boolean">
           <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
         </InArgument>
-      </local:GenerateSupplierZoneDetails.IsFuture>
-      <local:GenerateSupplierZoneDetails.RoutingDatabaseId>
+      </twrba1:LoadSupplierCodes.IsFuture>
+      <twrba1:LoadSupplierCodes.ParentWFRuntimeProcessId>
         <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">Input.RoutingDatabaseId</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.ParentWFRuntimeProcessId</mca:CSharpValue>
         </InArgument>
-      </local:GenerateSupplierZoneDetails.RoutingDatabaseId>
-      <local:GenerateSupplierZoneDetails.SupplierInfos>
+      </twrba1:LoadSupplierCodes.ParentWFRuntimeProcessId>
+      <twrba1:LoadSupplierCodes.Prefix>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">Input.CodePrefix</mca:CSharpValue>
+        </InArgument>
+      </twrba1:LoadSupplierCodes.Prefix>
+      <twrba1:LoadSupplierCodes.SupplierInfo>
         <InArgument x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)">
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)">Input.CarrierInfos.Cast&lt;TOne.WhS.BusinessEntity.Entities.RoutingSupplierInfo&gt;()</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)">activeSuppliersInfo</mca:CSharpValue>
         </InArgument>
-      </local:GenerateSupplierZoneDetails.SupplierInfos>
-      <sap2010:WorkflowViewState.ViewStateManager>
-        <sap2010:ViewStateManager>
-          <sap2010:ViewStateData Id="GenerateSupplierZoneDetails_2" sap2010:WorkflowViewState.IdRef="ViewStateData_1" />
-          <sap2010:ViewStateData Id="PrepareSupplierZoneDetailForDBApply_1" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
-          <sap2010:ViewStateData Id="ApplySupplierZoneDetailsToDB_1" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
-          <sap2010:ViewStateData Id="Parallel_1" sap2010:WorkflowViewState.IdRef="ViewStateData_4" />
-          <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_5" />
-          <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.GenerateSupplierZoneDetails_1" sap2010:WorkflowViewState.IdRef="ViewStateData_6" />
-        </sap2010:ViewStateManager>
-      </sap2010:WorkflowViewState.ViewStateManager>
-    </local:GenerateSupplierZoneDetails>
-    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRTdXBwbGllclpvbmVEZXRhaWxzLnhhbWwGQgNkDgIBAUMFYikCAQJGC0ZoAgEJUAtQXwIBB1ULVb8BAgEFSwtLWAIBAw==</sads:DebugSymbol.Symbol>
+      </twrba1:LoadSupplierCodes.SupplierInfo>
+    </twrba1:LoadSupplierCodes>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="twrba:LoadSupplierCodesOutput">
+          <mca:CSharpReference x:TypeArguments="twrba:LoadSupplierCodesOutput">Output</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="twrba:LoadSupplierCodesOutput">
+          <mca:CSharpValue x:TypeArguments="twrba:LoadSupplierCodesOutput">new LoadSupplierCodesOutput { RuntimeProcessId = Vanrise.Runtime.RunningProcessManager.CurrentProcess.ProcessId }</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcTG9hZFN1cHBsaWVyQ29kZXMueGFtbAxDA3YOAgEBRwVNJQIBIE4FaCACAQtpBXQOAgECSgtKhQECASFRC1FoAgEcWwtbZgIBGGALYFkCARRlC2V9AgEQVgtWWAIBDHELcc8BAgEHbAtsbAIBAw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ViewStateData_4" sap:VirtualizedContainerService.HintSize="794,86" />
-      <sap2010:ViewStateData Id="ViewStateData_5" sap:VirtualizedContainerService.HintSize="816,210">
+      <sap2010:ViewStateData Id="GetActiveSupplierInfos_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="LoadSupplierCodes_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="264,310">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ViewStateData_6" sap:VirtualizedContainerService.HintSize="856,290" />
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.GenerateSupplierZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="222,146">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.BuildSupplierZoneDetails_1" sap:VirtualizedContainerService.HintSize="262,226" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.LoadSupplierCodes_1" sap:VirtualizedContainerService.HintSize="304,390" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

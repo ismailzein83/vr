@@ -73,6 +73,14 @@
     <Reference Include="Vanrise.Queueing">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Runtime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplyCodeMatchesToDB.cs" />
@@ -83,6 +91,7 @@
     <Compile Include="ApplySupplierZoneDetailsToDB.cs" />
     <Compile Include="BuildCodeMatches.cs" />
     <Compile Include="BuildCustomerRoutes.cs" />
+    <Compile Include="CodePrefixRequest.cs" />
     <Compile Include="CreateRoutingDatabase.cs" />
     <Compile Include="LoadRoutingSettings.cs" />
     <Compile Include="DropOldRoutingDatabases.cs" />
@@ -108,6 +117,7 @@
     <Compile Include="RPBuildRoutes.cs" />
     <Compile Include="FinalizeCustomerRouteDatabase.cs" />
     <Compile Include="SetRoutingDatabaseReady.cs" />
+    <Compile Include="SupplierCodeRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.Business\TOne.Business.csproj">

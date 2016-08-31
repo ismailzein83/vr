@@ -83,13 +83,13 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
 
             CustomerRouteBulkInsert customerRouteBulkInsert = dbApplyStream as CustomerRouteBulkInsert;
             customerRouteBulkInsert.RouteStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}", 0, customer.SourceId, 0, record.Code, saleZone.SourceId,
-                record.Rate, 0, 0, DateTime.Now, 0, 0, 0, record.IsBlocked ? 1 : 0, 0, 0);
+                record.Rate, 0, 0, GetDateTimeForBCP(DateTime.Now), 0, 0, 0, record.IsBlocked ? 1 : 0, 0, 0);
 
             foreach (RouteOption option in record.Options)
             {
                 CarrierAccount supplier = carrierAccountManager.GetCarrierAccount(option.SupplierId);
                 SupplierZone supplierZone = supplierZoneManager.GetSupplierZone(option.SupplierZoneId);
-                customerRouteBulkInsert.RouteOptionStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}", 0, supplier.SourceId, supplierZone.SourceId, option.SupplierRate, 0, 0, 0, 0, DateTime.Now, option.Percentage.HasValue ? Convert.ToInt32(option.Percentage.Value) : default(decimal?));
+                customerRouteBulkInsert.RouteOptionStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}", 0, supplier.SourceId, supplierZone.SourceId, option.SupplierRate, 0, 0, 0, 0, GetDateTimeForBCP(DateTime.Now), option.Percentage.HasValue ? Convert.ToInt32(option.Percentage.Value) : default(decimal?));
             }
         }
 

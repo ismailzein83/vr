@@ -11,6 +11,8 @@ namespace TOne.WhS.Routing.BP.Arguments
 
         public int MaxCarrierId { get; set; }
 
+        public List<RoutingCarrierInfo> CarrierInfos { get; set; }
+
         public override string GetTitle()
         {
             return string.Format("#BPDefinitionTitle# By Ids: From {0} to {1}.", MinCarrierId, MaxCarrierId);

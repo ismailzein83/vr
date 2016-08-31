@@ -106,5 +106,29 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
         #endregion
+
+
+        public void LoadSupplierCodes(IEnumerable<RoutingSupplierInfo> activeSupplierInfo, string codePrefix, DateTime? effectiveOn, bool isFuture, Action<SupplierCode> onCodeLoaded)
+        {
+            DataTable dtActiveSuppliers = CarrierAccountDataManager.BuildRoutingSupplierInfoTable(activeSupplierInfo);
+            ExecuteReaderSPCmd("[TOneWhS_BE].[sp_SupplierCode_GetActiveCodesBySuppliers]",
+                (reader) =>
+                {
+                    while(reader.Read())
+                    {
+                        onCodeLoaded(SupplierCodeMapper(reader));
+                    }
+                },
+                (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@ActiveSuppliersInfo", SqlDbType.Structured);
+                dtPrm.Value = dtActiveSuppliers;
+                cmd.Parameters.Add(dtPrm);
+
+                cmd.Parameters.Add(new SqlParameter("@CodePrefix", codePrefix));
+                cmd.Parameters.Add(new SqlParameter("@EffectiveOn", effectiveOn));
+                cmd.Parameters.Add(new SqlParameter("@IsFuture", isFuture));
+            });
+        }
     }
 }

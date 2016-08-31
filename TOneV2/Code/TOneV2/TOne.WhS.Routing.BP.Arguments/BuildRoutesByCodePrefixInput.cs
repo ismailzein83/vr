@@ -6,6 +6,8 @@ namespace TOne.WhS.Routing.BP.Arguments
 {
     public class BuildRoutesByCodePrefixInput : BaseProcessInputArgument
     {
+        public int SupplierCodeServiceRuntimeProcessId { get; set; }
+
         public int RoutingDatabaseId { get; set; }
 
         public CodePrefix CodePrefix { get; set; }

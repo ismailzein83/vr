@@ -64,6 +64,8 @@
       <AssemblyReference>TOne.WhS.Routing.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP</AssemblyReference>
     </sco:Collection>
@@ -154,6 +156,18 @@
               </InArgument>
             </Assign.Value>
           </Assign>
+          <Assign sap2010:WorkflowViewState.IdRef="Assign_6">
+            <Assign.To>
+              <OutArgument x:TypeArguments="scg:List(twbe:RoutingCarrierInfo)">
+                <mca:CSharpReference x:TypeArguments="scg:List(twbe:RoutingCarrierInfo)">ProcessInputArgument.CarrierInfos</mca:CSharpReference>
+              </OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="scg:List(twbe:RoutingCarrierInfo)">
+                <mca:CSharpValue x:TypeArguments="scg:List(twbe:RoutingCarrierInfo)">item</mca:CSharpValue>
+              </InArgument>
+            </Assign.Value>
+          </Assign>
           <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
             <vbw:RunProcess.Input>
               <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
@@ -213,7 +227,7 @@
         </Sequence>
       </ActivityAction>
     </ParallelForEach>
-    <sads:DebugSymbol.Symbol>d1dDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXEJ1aWxkQ2FycmllclpvbmVEZXRhaWxzLnhhbWwkRwPZAQ4CAQFKM0o2AgECTQVdHwMBtwFeBdcBFwIBA1ALUFEDAcYBVQtVhQEDAb8BWgtabgMBuAFhC2GEAQMBsAFoCdUBFAIBBG0LeBQDAZsBeQuEARQDAYYBhQELkAEUAgFxkQELnAEUAgFcnQELqAEcAgFGqQEL1AEQAgEFdRF1fAMBpgFwEXBiAwGcAYEBEYEBWgMBkQF8EXx3AwGHAY0BEY0BfAIBfIgBEYgBYgIBcpkBEZkBWgIBZ5QBEZQBdwIBXaABEaABdwIBUqUBEaUBiwECAUidAXydAYIBAgFHrAERrAG6AQIBBrABD7YBIwIBO7kBD9IBGgIBELMBFbMBiwICATy6ARHFARoCASbGARHRASwCARHCARfCAXICATG9ARe9AXYCASfOARfOAZEBAgEcyQEXyQGrAgIBEg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1dDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXEJ1aWxkQ2FycmllclpvbmVEZXRhaWxzLnhhbWwnSQPnAQ4CAQFMM0w2AgECTwVfHwMBzAFgBeUBFwIBA1ILUlEDAdsBVwtXhQEDAdQBXAtcbgMBzQFjC2OEAQMBxQFqCeMBFAIBBG8LehQDAbABewuGARQDAZsBhwELkgEUAwGGAZMBC54BFAIBcZ8BC6oBFAIBXKsBC7YBHAIBRrcBC+IBEAIBBXcRd3wDAbsBchFyYgMBsQGDARGDAVoDAaYBfhF+dwMBnAGPARGPAXwDAZEBigERigFiAwGHAZsBEZsBWgIBfJYBEZYBdwIBcqcBEacBbAIBZ6IBEaIBkQECAV2uARGuAXcCAVKzARGzAYsBAgFIqwF8qwGCAQIBR7oBEboBugECAQa+AQ/EASMCATvHAQ/gARoCARDBARXBAYsCAgE8yAER0wEaAgEm1AER3wEsAgER0AEX0AFyAgExywEXywF2AgEn3AEX3AGRAQIBHNcBF9cBqwICARI=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -222,6 +236,7 @@
       <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="489,62" />
       <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="489,62" />
       <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="489,62" />
+      <sap2010:ViewStateData Id="Assign_6" sap:VirtualizedContainerService.HintSize="489,62" />
       <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,62" />
@@ -234,22 +249,22 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="489,398" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="511,992">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="511,1094">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="541,1142" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="563,1328">
+      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="541,1244" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="563,1430">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.BuildCarrierZoneDetails_1" sap:VirtualizedContainerService.HintSize="603,1408" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.BuildCarrierZoneDetails_1" sap:VirtualizedContainerService.HintSize="603,1510" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -12,6 +12,8 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public class GetSupplierCodesInput
     {
+        public int SupplierCodeServiceRuntimeProcessId { get; set; }
+
         public int CodePrefixLength { get; set; }
 
         public CodePrefix CodePrefix { get; set; }
@@ -30,6 +32,8 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public sealed class GetSupplierCodes : BaseAsyncActivity<GetSupplierCodesInput, GetSupplierCodesOutput>
     {
+        public InArgument<int> SupplierCodeServiceRuntimeProcessId { get; set; }
+
         [RequiredArgument]
         public InArgument<CodePrefix> CodePrefix { get; set; }
 
@@ -48,9 +52,12 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override GetSupplierCodesOutput DoWorkWithResult(GetSupplierCodesInput inputArgument, AsyncActivityHandle handle)
         {
             SupplierCodeManager manager = new SupplierCodeManager();
-            bool getChildCodes = !inputArgument.CodePrefix.IsCodeDivided;
-            IEnumerable<SupplierCode> supplierCodes = 
-                manager.GetActiveSupplierCodesByPrefix(inputArgument.CodePrefix.Code, inputArgument.EffectiveOn, inputArgument.IsFuture, getChildCodes, true, inputArgument.SupplierInfo);
+            IEnumerable<SupplierCode> supplierCodes =
+                new Vanrise.Runtime.InterRuntimeServiceManager().SendRequest(inputArgument.SupplierCodeServiceRuntimeProcessId, new SupplierCodeRequest
+                {
+                    ParentProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ParentProcessID.Value,
+                    CodePrefix = inputArgument.CodePrefix.Code
+                });
 
             return new GetSupplierCodesOutput
             {
@@ -62,6 +69,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             return new GetSupplierCodesInput
             {
+                SupplierCodeServiceRuntimeProcessId = this.SupplierCodeServiceRuntimeProcessId.Get(context),
                 CodePrefix = this.CodePrefix.Get(context),
                 EffectiveOn = this.EffectiveOn.Get(context),
                 IsFuture = this.IsFuture.Get(context),

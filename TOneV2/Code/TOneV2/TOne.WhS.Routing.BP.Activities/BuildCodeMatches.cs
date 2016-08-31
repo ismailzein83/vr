@@ -25,7 +25,7 @@ namespace TOne.WhS.Routing.BP.Activities
         public BaseQueue<CodeMatchesBatch> OutputQueue_2 { get; set; }
 
         public BaseQueue<CodeMatches> OutputQueueForCustomerRoutes { get; set; }
-        
+
         public bool IsCustomerRoutesProcess { get; set; }
     }
 
@@ -58,36 +58,47 @@ namespace TOne.WhS.Routing.BP.Activities
         public InOutArgument<BaseQueue<CodeMatchesBatch>> OutputQueue_2 { get; set; }
 
         public InOutArgument<BaseQueue<CodeMatches>> OutputQueueForCustomerRoutes { get; set; }
-        
-        protected override void DoWork(BuildCodeMatchesInput inputArgument, AsyncActivityHandle handle)
-        {
-            CodeMatchesBatch codeMatchesBatch = new CodeMatchesBatch();
 
+        protected override void DoWork(BuildCodeMatchesInput inputArgument, AsyncActivityHandle handle)
+        {            
+            CodeMatchesBatch codeMatchesBatch = null;
+            if (inputArgument.OutputQueue_1 != null || inputArgument.OutputQueue_2 != null)
+                codeMatchesBatch = new CodeMatchesBatch();
             BuildCodeMatchesContext codeMatchContext = new BuildCodeMatchesContext();
             codeMatchContext.SupplierZoneDetails = inputArgument.SupplierZoneDetails;
             codeMatchContext.CodePrefix = inputArgument.CodePrefix;
 
             CodeMatchBuilder builder = new CodeMatchBuilder();
+            MemoryQueue<CodeMatches> outputQueueForCustomerRoutes = inputArgument.OutputQueueForCustomerRoutes as MemoryQueue<CodeMatches>;
             builder.BuildCodeMatches(codeMatchContext, inputArgument.SaleCodes, inputArgument.SupplierCodes, codeMatch =>
             {
                 codeMatch.CodePrefix = inputArgument.CodePrefix;
-                if (inputArgument.IsCustomerRoutesProcess)
-                    inputArgument.OutputQueueForCustomerRoutes.Enqueue(codeMatch);
-
-                codeMatchesBatch.CodeMatches.Add(codeMatch);
-
-                if (codeMatchesBatch.CodeMatches.Count >= 10)
+                if (inputArgument.IsCustomerRoutesProcess && inputArgument.OutputQueueForCustomerRoutes != null)
                 {
-                    inputArgument.OutputQueue_1.Enqueue(codeMatchesBatch);
-                    inputArgument.OutputQueue_2.Enqueue(codeMatchesBatch);
-                    codeMatchesBatch = new CodeMatchesBatch();
+                    inputArgument.OutputQueueForCustomerRoutes.Enqueue(codeMatch);
+                }
+
+                if (codeMatchesBatch != null)
+                {
+                    codeMatchesBatch.CodeMatches.Add(codeMatch);
+
+                    if (codeMatchesBatch.CodeMatches.Count >= 10)
+                    {
+                        if (inputArgument.OutputQueue_1 != null)
+                            inputArgument.OutputQueue_1.Enqueue(codeMatchesBatch);
+                        if (inputArgument.OutputQueue_2 != null)
+                            inputArgument.OutputQueue_2.Enqueue(codeMatchesBatch);
+                        codeMatchesBatch = new CodeMatchesBatch();
+                    }
                 }
             });
 
-            if (codeMatchesBatch.CodeMatches.Count > 0)
+            if (codeMatchesBatch != null && codeMatchesBatch.CodeMatches.Count > 0)
             {
-                inputArgument.OutputQueue_1.Enqueue(codeMatchesBatch);
-                inputArgument.OutputQueue_2.Enqueue(codeMatchesBatch);
+                if (inputArgument.OutputQueue_1 != null)
+                    inputArgument.OutputQueue_1.Enqueue(codeMatchesBatch);
+                if (inputArgument.OutputQueue_2 != null)
+                    inputArgument.OutputQueue_2.Enqueue(codeMatchesBatch);
             }
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Building Code Matches is done", null);
@@ -110,14 +121,14 @@ namespace TOne.WhS.Routing.BP.Activities
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
-            if (this.OutputQueue_1.Get(context) == null)
-                this.OutputQueue_1.Set(context, new MemoryQueue<CodeMatchesBatch>());
+            //if (this.OutputQueue_1.Get(context) == null)
+            //    this.OutputQueue_1.Set(context, new MemoryQueue<CodeMatchesBatch>());
 
-            if (this.OutputQueue_2.Get(context) == null)
-                this.OutputQueue_2.Set(context, new MemoryQueue<CodeMatchesBatch>());
+            //if (this.OutputQueue_2.Get(context) == null)
+            //    this.OutputQueue_2.Set(context, new MemoryQueue<CodeMatchesBatch>());
 
-            if (this.OutputQueueForCustomerRoutes.Get(context) == null)
-                this.OutputQueueForCustomerRoutes.Set(context, new MemoryQueue<CodeMatches>());
+            //if (this.OutputQueueForCustomerRoutes.Get(context) == null)
+            //    this.OutputQueueForCustomerRoutes.Set(context, new MemoryQueue<CodeMatches>());
 
             base.OnBeforeExecute(context, handle);
         }
