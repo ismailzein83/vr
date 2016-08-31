@@ -100,8 +100,8 @@ appControllers.directive('draggablemodal', function ($document) {
         });
 
         function mousemove(event) {
-            y = event.screenY - startY;
-            x = event.screenX - startX;
+            y = (event.screenY - startY > 0 && event.screenY - startY < innerHeight - element.innerHeight()) ? event.screenY - startY : y;
+            x = (event.screenX - startX < innerWidth ) ? event.screenX - startX : x;
             element.parents().find('.modal-content').last().css({
                 top: y + 'px',
                 left: x + 'px'
