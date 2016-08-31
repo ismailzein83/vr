@@ -149,7 +149,7 @@
       <Variable x:TypeArguments="scg:IEnumerable(x:Int32)" Name="ImportedRateTypeIds" />
       <Variable x:TypeArguments="scg:IEnumerable(twses:ImportedDataByZone)" Name="ImportedDataByZone" />
       <Variable x:TypeArguments="scg:IEnumerable(twses:ImportedZone)" Name="ImportedZones" />
-      <Variable x:TypeArguments="scg:Dictionary(x:String, twses:ExistingRateGroup)" Name="ExistingRatesGroupsByZoneName" />
+      <Variable x:TypeArguments="twses:ExistingRateGroupByZoneName" Name="ExistingRatesGroupsByZoneName" />
       <Variable x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:OtherRatePreview))" Name="PreviewOtherRatesQueue">
         <Variable.Default>
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:OtherRatePreview))">new MemoryQueue&lt;IEnumerable&lt;TOne.WhS.SupplierPriceList.Entities.OtherRatePreview&gt;&gt;();</mca:CSharpValue>
@@ -432,15 +432,15 @@
                       </InArgument>
                     </twsba1:PrepareExistingCodes.ExistingZonesByZoneId>
                   </twsba1:PrepareExistingCodes>
-                  <twsba1:PrepareExistingRates sap2010:WorkflowViewState.IdRef="PrepareExistingRates_1">
+                  <twsba1:PrepareExistingRates sap2010:WorkflowViewState.IdRef="PrepareExistingRates_2">
                     <twsba1:PrepareExistingRates.ExistingRateEntities>
                       <InArgument x:TypeArguments="scg:IEnumerable(twbe:SupplierRate)">
                         <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SupplierRate)">ExistingRateEntities</mca:CSharpValue>
                       </InArgument>
                     </twsba1:PrepareExistingRates.ExistingRateEntities>
                     <twsba1:PrepareExistingRates.ExistingRatesGroupsByZoneName>
-                      <OutArgument x:TypeArguments="scg:Dictionary(x:String, twses:ExistingRateGroup)">
-                        <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:String, twses:ExistingRateGroup)">ExistingRatesGroupsByZoneName</mca:CSharpReference>
+                      <OutArgument x:TypeArguments="twses:ExistingRateGroupByZoneName">
+                        <mca:CSharpReference x:TypeArguments="twses:ExistingRateGroupByZoneName">ExistingRatesGroupsByZoneName</mca:CSharpReference>
                       </OutArgument>
                     </twsba1:PrepareExistingRates.ExistingRatesGroupsByZoneName>
                     <twsba1:PrepareExistingRates.ExistingZonesByZoneId>
@@ -540,15 +540,15 @@
                       </OutArgument>
                     </twsba1:ProcessCountryZones.NotImportedZones>
                   </twsba1:ProcessCountryZones>
-                  <twsba1:ProcessCountryRates Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessCountryRates_3">
+                  <twsba1:ProcessCountryRates Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessCountryRates_4">
                     <twsba1:ProcessCountryRates.ChangedRates>
                       <OutArgument x:TypeArguments="scg:IEnumerable(twses:ChangedRate)">
                         <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ChangedRate)">ChangedRates</mca:CSharpReference>
                       </OutArgument>
                     </twsba1:ProcessCountryRates.ChangedRates>
                     <twsba1:ProcessCountryRates.ExistingRatesGroupsByZoneName>
-                      <InArgument x:TypeArguments="scg:Dictionary(x:String, twses:ExistingRateGroup)">
-                        <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, twses:ExistingRateGroup)">ExistingRatesGroupsByZoneName</mca:CSharpValue>
+                      <InArgument x:TypeArguments="twses:ExistingRateGroupByZoneName">
+                        <mca:CSharpValue x:TypeArguments="twses:ExistingRateGroupByZoneName">ExistingRatesGroupsByZoneName</mca:CSharpValue>
                       </InArgument>
                     </twsba1:ProcessCountryRates.ExistingRatesGroupsByZoneName>
                     <twsba1:ProcessCountryRates.ExistingZonesByZoneId>
@@ -918,7 +918,7 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0LnhhbWzMAUoDmgcOAgEBYAtgcAMBkgNlC2XIAQMB6gJqC2rIAQMBwgJvC2/IAQMBmgJ0C3TQAQMB8gF5C3nQAQMBygF+C37QAQMBogGDAQuDAcsBAgF6iQELiQG6AQIBUpEBC5EB0wECASqbAQubAdYBAgECnwEFnwFbAwHnLaABBcQBKAMBzivFAQXQARgDAf0q0QEF1wEYAwHTKtgBBegBIwMB2inpAQX0ARgDAYkp9QEF+wEYAwHfKPwBBYcCJQMBjiiIAgW8AhADAaIlvQIFzQInAwGpJM4CBdkCGAMB2CPaAgXgAhgDAa4j4QIF5wIgAwGEI+gCBe4CJAMB2yLvAgX6AiADAYoi+wIF0AYQAwH9BtEGBdcGIAMB0wbYBgXoBhYDAdkF6QYFmAcKAwG6A6MBC6MBWAMBvy28AQu8AV4DAZctwQELwQFpAwHvLLcBC7cBeQMBxyyoAQuoAVQDAZ8ssgELsgF0AwH3K60BC60BeQMBzyvIAQvIAasBAwGmK80BC80BhQEDAf4q0QEo0QE8AwH8KtQBC9QBfQMB1CrgAQvgAYQBAwGrKuUBC+UBcQMBgyrbAQvbAXEDAdsp7AEL7AGwAQMBsinxAQvxAX8DAYop9QEo9QE3AwGIKfgBC/gBdwMB4CiEAguEAnkDAbco/wEL/wF8AwGPKIkCB5kCIQMBlSeaAgeqAiEDAZwmqwIHuwIhAwGjJcACC8ACdwMB+iTFAgvFAoABAwHSJMoCC8oCcQMBqiTRAgvRAqABAwGBJNYCC9YChAEDAdkj2gIo2gI7AwHXI90CC90CfAMBryPkAgvkAoUBAwGGI+ECYOECfAMBhSPrAgvrAlsDAdwi9wIL9wKFAQMBsyLyAgvyApMCAwGLIv8CB5YGEgMBwgqXBgfPBigDAf4G1AYL1AaFAQMB1QbRBmDRBrgBAwHUBuUGC+UGgAEDAasG4AYL4AaSAQMBgwbYBqEB2Aa9AQMBggbbBgvbBpcBAwHaBewGC+wGZAMBuwPwBgmNBxQDAY0EkAcJlgckAwHjA4wCDYwCgQEDAeYnlgINlgJhAwG+J5ECDZECWAMBliedAg2dAoEBAwHtJqcCDacCYQMBxSaiAg2iAlgDAZ0muAINuAJhAwH0Ja4CDa4CgQEDAcwlswINswJYAwGkJYADCYsGEwMB7gqMBgmVBhIDAcMKwgYNwgaNAQMBmQqpBg2pBnIDAfAJzAYNzAZhAwHHCbgGDbgGfAMBngmfBg2fBoQBAwH1CMcGDccGjAEDAcwImgYNmgaEAQMBowi9Bg29BoMBAwH6B6QGDaQGhAEDAdEHswYNswZ8AwGoB64GDa4GfAMB/wbxBguLBysDAZAEjAcLjAetAQMBjgSTBw+TB4kBAwHlA5AHZJAHeQMB5AODAw+DA3wDAeEhigMNiQYYAwHvCpMGNZMGOQMB7QqPBg+PBnoDAcQKgwcRgwdZAwGxBYgHEYgHZQMBiQX0BhH0Bl4DAeEE+QYR+QZkAwG5BP4GEf4GWgMBkQSMB3qMB6oBAwGPBI8DD58DLQMB3CCgAw+IBhoDAfAKlwMVlwOBAQMBtSGcAxWcA5MBAwGJIZIDFZIDYwMB3SChAxHEAxwDAdEexQMRzgQcAwHVFc8EEdoEJAMB/BTbBBHhBCQDAc4U4gQR8gQzAwHJE/MEEe8FHAMBowzwBRH7BRoDAcoL/AURhwYsAwHxCqIDE7IDMQMB1x+zAxPDAzEDAdIexgMTiAQwAwGUGokEE54EMAMB4xifBBPNBDADAdYV0gQX0gSBAgMBqRXXBBfXBJIBAwH9FNsENNsETQMB+xTeBBfeBIoBAwHPFOUEF+UEcwMBohTqBBfqBHMDAfYT7wQX7wRzAwHKE/QEE/8EJQMB8BKABROLBSUDAZcSjAUTlwUlAwG+EZgFE6MFJQMB5RCkBROvBSUDAYwQsAUTuwUlAwGzD7wFE8wFNgMBrg7NBRPdBTEDAakN3gUT7gU2AwGkDPgFF/gFcgMB9wvzBRfzBXYDAcsLhAYXhAaRAQMBngv/BRf/BbQCAwHyCqoDGaoDhwEDAbAgpQMZpQOFAQMBhCCvAxmvA48BAwHYH7YDGbYDhQEDAasfwAMZwAOPAQMB/x67Axm7A5UBAwHTHoUEGYUEhAEDAaUe+wMZ+wONAQMB+R3YAxnYA38DAc0d8QMZ8QN9AwGhHYAEGYAEbAMB9RznAxnnA4cBAwHJHMkDGckDhQEDAZ0c9gMZ9gN9AwHxG90DGd0DjwEDAcUb7AMZ7AN7AwGZG84DGc4DhQEDAe0a0wMZ0wNnAwHBGuIDGeIDhwEDAZUakQQZkQSHAQMB6BmMBBmMBI4BAwG8GZsEGZsEjQEDAZAZlgQZlgRzAwHkGKIEGaIEhQEDAbcYygQZygRsAwGLGMAEGcAEfQMB3xe2BBm2BIcBAwGzF6wEGawEjwEDAYcXxQQZxQSFAQMB2xa7BBm7BHMDAa8WsQQZsQR6AwGDFqcEGacEjQEDAdcV/AQZ/ASIAQMBnRP3BBn3BHUDAfESiAUZiAWIAQMBxBKDBRmDBXUDAZgSlAUZlAWIAQMB6xGPBRmPBXUDAb8RoAUZoAWQAQMBkhGbBRmbBX0DAeYQrAUZrAWQAQMBuRCnBRmnBX0DAY0QuAUZuAWQAQMB4A+zBRmzBX0DAbQPyQUZyQWYAQMBhw+/BRm/BYcBAwHbDsQFGcQFhQEDAa8O1QUZ1QWFAQMBgg7aBRnaBY8BAwHWDdAFGdAFhwEDAaoN6wUZ6wWZAQMB/QzhBRnhBYcBAwHRDOYFGeYFhQEDAaUM</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -942,7 +942,7 @@
       <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="2684,22" />
       <sap2010:ViewStateData Id="PrepareExistingZones_3" sap:VirtualizedContainerService.HintSize="2256,22" />
       <sap2010:ViewStateData Id="PrepareExistingCodes_3" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="PrepareExistingRates_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareExistingRates_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_8" sap:VirtualizedContainerService.HintSize="2234,86">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -953,7 +953,7 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ProcessCountryCodes_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="ProcessCountryZones_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="ProcessCountryRates_3" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ProcessCountryRates_4" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="2234,270">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -982,8 +982,8 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="1994,62" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="1994,22" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="2234,62" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="2234,22" />
       <sap2010:ViewStateData Id="Sequence_11" sap:VirtualizedContainerService.HintSize="2256,996">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">

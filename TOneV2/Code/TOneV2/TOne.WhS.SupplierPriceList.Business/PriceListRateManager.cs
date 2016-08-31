@@ -19,7 +19,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             context.ChangedRates = context.ExistingZones.SelectMany(item => item.ExistingRates.Where(itm => itm.ChangedRate != null).Select(x => x.ChangedRate));
         }
 
-        private void ProcessCountryRates(IEnumerable<ImportedZone> importedZones, Dictionary<string, ExistingRateGroup> existingRatesGroupsByZoneName, ZonesByName newAndExistingZones,
+        private void ProcessCountryRates(IEnumerable<ImportedZone> importedZones, ExistingRateGroupByZoneName existingRatesGroupsByZoneName, ZonesByName newAndExistingZones,
             IEnumerable<ExistingZone> existingZones, DateTime pricelistDate, IEnumerable<int> importedRateTypeIds, IEnumerable<NotImportedZone> notImportedZones)
         {
             ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
@@ -31,7 +31,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         #region Processing Imported Data Methods
 
         private void ProcessImportedData(IEnumerable<ImportedZone> importedZones, ZonesByName newAndExistingZones, ExistingZonesByName existingZonesByName,
-            Dictionary<string, ExistingRateGroup> existingRatesGroupsByZoneName, IEnumerable<int> importedRateTypeIds, DateTime pricelistDate)
+            ExistingRateGroupByZoneName existingRatesGroupsByZoneName, IEnumerable<int> importedRateTypeIds, DateTime pricelistDate)
         {
             foreach (ImportedZone importedZone in importedZones)
             {
@@ -62,7 +62,8 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             FillSystemRatesForImportedZone(importedZone, existingRateGroup);
             FillNotImportedOtherRatesWithClosedRates(importedZone, existingOtherRatesToCloseByRateTypeId);
-            FillNotImportedOtherRatesWithNotImportedRates(importedZone, existingRateGroup.OtherRates, importedRateTypeIds);
+            if (existingRateGroup != null)
+                FillNotImportedOtherRatesWithNotImportedRates(importedZone, existingRateGroup.OtherRates, importedRateTypeIds);
         }
 
         private void ProcessCountryNormalRates(ImportedRate importedRate, ExistingRateGroup existingRateGroup, ZonesByName newAndExistingZones, ExistingZonesByName existingZonesByName)
@@ -112,9 +113,9 @@ namespace TOne.WhS.SupplierPriceList.Business
                 List<ExistingRate> existingOtherRates = null;
                 if (existingRateGroup.OtherRates.TryGetValue(importedOtherRate.RateTypeId.Value, out existingOtherRates))
                 {
-                    if(existingOtherRates != null && existingOtherRates.Count > 0)
+                    if (existingOtherRates != null && existingOtherRates.Count > 0)
                         importedOtherRate.SystemRate = GetSystemRate(importedOtherRate, existingOtherRates);
-                }                
+                }
             }
         }
 
@@ -123,7 +124,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             foreach (KeyValuePair<int, List<ExistingRate>> item in existingOtherRatesToCloseByRateTypeId)
             {
                 NotImportedRate notImportedRate = this.GetNotImportedRate(item.Value, true);
-                if(notImportedRate != null)
+                if (notImportedRate != null)
                     importedZone.NotImportedOtherRates.Add(notImportedRate);
             }
         }
@@ -166,7 +167,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         #region Prcessing Not Imported Data Methods
 
-        private void ProcessNotImportedData(IEnumerable<ExistingZone> existingZones, IEnumerable<NotImportedZone> notImportedZones, Dictionary<string, ExistingRateGroup> existingRatesGroupsByZoneName)
+        private void ProcessNotImportedData(IEnumerable<ExistingZone> existingZones, IEnumerable<NotImportedZone> notImportedZones, ExistingRateGroupByZoneName existingRatesGroupsByZoneName)
         {
             //Make sure that Closing Rates for closed zones must be done before filling other sytem rates of not imported zones
             CloseRatesForClosedZones(existingZones);
@@ -203,7 +204,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             }
         }
 
-        private void FillRatesForNotImportedZones(IEnumerable<NotImportedZone> notImportedZones, Dictionary<string, ExistingRateGroup> existingRatesGroupsByZoneName)
+        private void FillRatesForNotImportedZones(IEnumerable<NotImportedZone> notImportedZones, ExistingRateGroupByZoneName existingRatesGroupsByZoneName)
         {
             ExistingRateGroup existingRateGroup;
             foreach (NotImportedZone notImportedZone in notImportedZones)
@@ -314,7 +315,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             return existingZonesByName;
 
         }
-        
+
         private void CloseExistingOverlapedRates(ImportedRate importedRate, List<ExistingRate> matchExistingRates, out bool shouldNotAddRate, out ExistingRate recentExistingRate)
         {
             shouldNotAddRate = false;

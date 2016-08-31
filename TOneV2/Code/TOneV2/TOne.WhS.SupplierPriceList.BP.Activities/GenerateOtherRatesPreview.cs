@@ -25,7 +25,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         [RequiredArgument]
         public InArgument<BaseQueue<IEnumerable<OtherRatePreview>>> PreviewOtherRatesQueue { get; set; }
-        
+
         protected override void Execute(CodeActivityContext context)
         {
             BaseQueue<IEnumerable<OtherRatePreview>> previewZonesRatesQueue = this.PreviewOtherRatesQueue.Get(context);
@@ -41,7 +41,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 {
                     foreach (ImportedRate importedOtherRate in importedZone.ImportedOtherRates.Values)
                     {
-                        otherRatesPreview.Add(new OtherRatePreview
+                        OtherRatePreview otherRatePreview = new OtherRatePreview()
                         {
                             ZoneName = importedZone.ZoneName,
                             ImportedRate = decimal.Round(importedOtherRate.Rate, 8),
@@ -51,7 +51,16 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                             SystemRateEED = importedOtherRate.SystemRate != null ? importedOtherRate.SystemRate.EED : (DateTime?)null,
                             RateTypeId = importedOtherRate.RateTypeId.Value,
                             ChangeTypeRate = GetRateChangeType(importedOtherRate)
-                        });
+                        };
+
+                        if (importedOtherRate.SystemRate != null)
+                        {
+                            otherRatePreview.SystemRate = importedOtherRate.SystemRate.RateEntity.NormalRate;
+                            otherRatePreview.SystemRateBED = importedOtherRate.SystemRate.BED;
+                            otherRatePreview.SystemRateEED = importedOtherRate.SystemRate.EED;
+                        }
+
+                        otherRatesPreview.Add(otherRatePreview);
                     }
 
                     foreach (NotImportedRate notImportedOtherRate in importedZone.NotImportedOtherRates)

@@ -26,7 +26,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             IEnumerable<SupplierZone> existingZones = context.GetValue(this.ExistingZoneEntities);
             int countryId = context.GetValue(this.CountryId);
 
-            Dictionary<long, ExistingZone> existingZoneDic = existingZones.Where(x => x.CountryId == countryId).ToDictionary<BusinessEntity.Entities.SupplierZone, long, ExistingZone>((zoneEntity) => 
+            Dictionary<long, ExistingZone> existingZoneDic = existingZones.OrderBy(item => item.BED).Where(x => x.CountryId == countryId).ToDictionary<BusinessEntity.Entities.SupplierZone, long, ExistingZone>((zoneEntity) => 
                 zoneEntity.SupplierZoneId, (zoneEntity) => new ExistingZone { ZoneEntity = zoneEntity });
 
             ExistingZonesByZoneId.Set(context, existingZoneDic);

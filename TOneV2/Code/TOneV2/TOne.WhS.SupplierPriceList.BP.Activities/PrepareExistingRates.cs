@@ -21,17 +21,17 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<Dictionary<long, ExistingZone>> ExistingZonesByZoneId { get; set; }
 
         [RequiredArgument]
-        public OutArgument<Dictionary<string, ExistingRateGroup>> ExistingRatesGroupsByZoneName { get; set; }
+        public OutArgument<ExistingRateGroupByZoneName> ExistingRatesGroupsByZoneName { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<SupplierRate> existingRateEntities = this.ExistingRateEntities.Get(context);
             Dictionary<long, ExistingZone> existingZonesByZoneId = this.ExistingZonesByZoneId.Get(context);
 
-            IEnumerable<ExistingRate> existingRates = existingRateEntities.Where(x => existingZonesByZoneId.ContainsKey(x.ZoneId)).MapRecords(
+            IEnumerable<ExistingRate> existingRates = existingRateEntities.OrderBy(item => item.BED).Where(x => existingZonesByZoneId.ContainsKey(x.ZoneId)).MapRecords(
               (rateEntity) => ExistingRateMapper(rateEntity, existingZonesByZoneId));
-
-            Dictionary<string, ExistingRateGroup> existingRatesGroupsByZoneName = StructureExistingRatesByRatesGroups(existingRates);
+            ExistingRateGroupByZoneName existingRatesGroupsByZoneName = new ExistingRateGroupByZoneName();
+            StructureExistingRatesByRatesGroups( existingRatesGroupsByZoneName, existingRates);
 
             ExistingRatesGroupsByZoneName.Set(context, existingRatesGroupsByZoneName);
         }
@@ -52,9 +52,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             existingRate.ParentZone.ExistingRates.Add(existingRate);
             return existingRate;
         }
-        Dictionary<string, ExistingRateGroup> StructureExistingRatesByRatesGroups(IEnumerable<ExistingRate> existingRates)
+        ExistingRateGroupByZoneName StructureExistingRatesByRatesGroups(ExistingRateGroupByZoneName existingRatesGroupsByZoneName, IEnumerable<ExistingRate> existingRates)
         {
-            Dictionary<string, ExistingRateGroup> existingRatesGroupsByZoneName = new Dictionary<string, ExistingRateGroup>();
             SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
 
             List<ExistingRate> existingOtherRates;

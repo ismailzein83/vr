@@ -14,7 +14,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
     {
         public IEnumerable<ImportedZone> ImportedZones { get; set; }
 
-        public Dictionary<string, ExistingRateGroup> ExistingRatesGroupsByZoneName { get; set; }
+        public ExistingRateGroupByZoneName ExistingRatesGroupsByZoneName { get; set; }
 
         public Dictionary<long, ExistingZone> ExistingZonesByZoneId { get; set; }
 
@@ -42,7 +42,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<IEnumerable<ImportedZone>> ImportedZones { get; set; }
 
         [RequiredArgument]
-        public InArgument<Dictionary<string, ExistingRateGroup>> ExistingRatesGroupsByZoneName { get; set; }
+        public InArgument<ExistingRateGroupByZoneName> ExistingRatesGroupsByZoneName { get; set; }
 
         [RequiredArgument]
         public InArgument<Dictionary<long, ExistingZone>> ExistingZonesByZoneId { get; set; }

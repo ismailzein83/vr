@@ -11,7 +11,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
     {
         IEnumerable<ImportedZone> ImportedZones { get; }
 
-        Dictionary<string, ExistingRateGroup> ExistingRatesGroupsByZoneName { get; }
+        ExistingRateGroupByZoneName ExistingRatesGroupsByZoneName { get; }
 
         IEnumerable<ExistingZone> ExistingZones { get; }
 

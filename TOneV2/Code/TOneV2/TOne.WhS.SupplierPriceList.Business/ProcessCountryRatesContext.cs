@@ -12,7 +12,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public IEnumerable<ImportedZone> ImportedZones { get; set; }
 
-        public Dictionary<string, ExistingRateGroup> ExistingRatesGroupsByZoneName  { get; set; }
+        public ExistingRateGroupByZoneName ExistingRatesGroupsByZoneName { get; set; }
 
         public IEnumerable<ExistingZone> ExistingZones { get; set; }
 

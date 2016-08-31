@@ -26,7 +26,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             IEnumerable<SupplierCode> existingCodeEntities = this.ExistingCodeEntities.Get(context);
             Dictionary<long, ExistingZone> existingZonesByZoneId = this.ExistingZonesByZoneId.Get(context);
 
-            IEnumerable<ExistingCode> existingCodes = existingCodeEntities.Where(x => existingZonesByZoneId.ContainsKey(x.ZoneId)).MapRecords(
+            IEnumerable<ExistingCode> existingCodes = existingCodeEntities.OrderBy(item => item.BED).Where(x => existingZonesByZoneId.ContainsKey(x.ZoneId)).MapRecords(
                 (codeEntity) => ExistingCodeMapper(codeEntity, existingZonesByZoneId));
 
             ExistingCodes.Set(context, existingCodes);
