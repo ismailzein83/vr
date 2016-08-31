@@ -98,7 +98,7 @@
     <add name="RoutingDBConnStringTemplateKey" connectionString="Data Source=localhost;Initial Catalog=TOneV2_#WorkflowType#_#DatabaseId#;User ID=sa;Password= "/>
     <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=TOne_Configuration;User ID=sa;Password= "/>
     <add name="MainDBConnString" connectionString=""/>
-    <add name="TOneV1RoutingDBConnString" connectionString="Server=192.168.110.185;Database=TOneV2_Dev_RoutingDB;User ID=Development;Password=dev!123"/>
+    <add name="TOneV1RoutingDBConnString" connectionString="Server=localhost;Database=TOne_RoutingDB;User ID=sa;Password= "/>
   </connectionStrings>
   
   <!-- BEGIN CUSTOMER VARYING SECTION -->
