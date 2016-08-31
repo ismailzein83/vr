@@ -394,6 +394,9 @@
     <Build Include="Analytic\Stored Procedures\sp_DataAnalysisDefinition_Update.sql" />
     <Build Include="Analytic\Stored Procedures\sp_DataAnalysisDefinition_Insert.sql" />
     <Build Include="Analytic\Stored Procedures\sp_DataAnalysisDefinition_GetAll.sql" />
+    <Build Include="Analytic\Stored Procedures\sp_DataAnalysisItemDefinition_Update.sql" />
+    <Build Include="Analytic\Stored Procedures\sp_DataAnalysisItemDefinition_Insert.sql" />
+    <Build Include="Analytic\Stored Procedures\sp_DataAnalysisItemDefinition_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
