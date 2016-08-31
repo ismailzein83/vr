@@ -49,8 +49,8 @@
     <Compile Include="BEReceiveDefinition\BEReceiveDefinitionQuery.cs" />
     <Compile Include="BEReceiveDefinition\BEReceiveDefinitionSettings.cs" />
     <Compile Include="ITargetBE.cs" />
-    <Compile Include="SourceBEs\FileSourceBatch.cs" />
-    <Compile Include="SourceBEs\SourceBeReadersConfig.cs" />
+    <Compile Include="BEReceiveDefinition\SourceBEs\FileSourceBatch.cs" />
+    <Compile Include="BEReceiveDefinition\SourceBEs\SourceBeReadersConfig.cs" />
     <Compile Include="TargetBEConvertor.cs" />
     <Compile Include="TargetBEConvertor\TargetBEConvertorConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
