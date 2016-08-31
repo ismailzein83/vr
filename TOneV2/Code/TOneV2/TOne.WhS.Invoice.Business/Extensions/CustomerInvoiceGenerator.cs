@@ -48,6 +48,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 {
 
                     DimensionValue saleZone = analyticRecord.DimensionValues[0];
+                    DimensionValue saleRate = analyticRecord.DimensionValues[1];
+                    DimensionValue saleCurrency = analyticRecord.DimensionValues[2];
                     MeasureValue saleDuration;
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
                     customerInvoiceDetails.Duration += Convert.ToDecimal(saleDuration.Value ?? 0.0);
@@ -59,12 +61,17 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     MeasureValue calls;
                     analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
                     customerInvoiceDetails.TotalNumberOfCalls += Convert.ToInt32(calls.Value ?? 0.0);
+
+
+
                     CustomerInvoiceItemDetails customerInvoiceItemDetails = new Entities.CustomerInvoiceItemDetails()
                     {
                         Duration = Convert.ToDecimal(saleDuration.Value ?? 0.0),
                         NumberOfCalls = Convert.ToInt32(calls.Value ?? 0.0),
                         SaleAmount = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0),
-                        DimensionName = saleZone.Name.ToString()
+                        DimensionName = saleZone.Name.ToString(),
+                        SaleRate = Convert.ToDecimal(saleRate.Value),
+                        SaleCurrency = saleCurrency.Name.ToString(),
                     };
                     generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem {
                         Details = customerInvoiceItemDetails,
@@ -76,8 +83,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
         private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecordsBySaleZone(string partnerId, DateTime fromDate, DateTime toDate)
         {
             AnalyticManager analyticManager = new AnalyticManager();
-            List<string> listDimensions = new List<string> { "SaleZone" };
-            List<string> listMeasures = new List<string> { "SaleNet", "NumberOfCalls", "SaleDuration" };
+            List<string> listDimensions = new List<string> { "SaleZone", "SaleRate", "SaleCurrency" };
+            List<string> listMeasures = new List<string> { "SaleNet", "NumberOfCalls", "SaleDuration"};
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
             {
                 Query = new AnalyticQuery()

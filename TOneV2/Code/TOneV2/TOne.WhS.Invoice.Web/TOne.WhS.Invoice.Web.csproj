@@ -179,6 +179,7 @@
     <Folder Include="WhS_Invoice\Views\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="WhS_Invoice\Reports\CustomerInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\CustomerInvoiceReport.rdlc" />
   </ItemGroup>
   <PropertyGroup>

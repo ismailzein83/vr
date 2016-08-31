@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
 
@@ -32,7 +33,12 @@ namespace TOne.WhS.Invoice.Business
                                  rdlcReportParameters.Add("Phone", new VRRdlcReportParameter { Value = String.Join(" ",carrierProfile.Settings.PhoneNumbers) ,IsVisible = true});
                              if (carrierProfile.Settings.Faxes != null)
                                  rdlcReportParameters.Add("Fax", new VRRdlcReportParameter { Value = String.Join(" ", carrierProfile.Settings.Faxes), IsVisible = true });
-
+                             if (carrierProfile.Settings.CompanyLogo != null)
+                             {
+                                 VRFileManager fileManager = new VRFileManager();
+                                 var logo = fileManager.GetFile(carrierProfile.Settings.CompanyLogo);
+                                 rdlcReportParameters.Add("Image", new VRRdlcReportParameter { Value = Convert.ToBase64String(logo.Content), IsVisible = true });
+                             }
                          }
                      }
                      else if (partnerId[0].Equals("Account"))
@@ -50,6 +56,12 @@ namespace TOne.WhS.Invoice.Business
                                  rdlcReportParameters.Add("Phone", new VRRdlcReportParameter { Value = String.Join(" ", carrierProfile.Settings.PhoneNumbers), IsVisible = true });
                              if (carrierProfile.Settings.Faxes != null)
                                  rdlcReportParameters.Add("Fax", new VRRdlcReportParameter { Value = String.Join(" ", carrierProfile.Settings.Faxes), IsVisible = true });
+                             if (carrierProfile.Settings.CompanyLogo != null)
+                             {
+                                 VRFileManager fileManager = new VRFileManager();
+                                 var logo = fileManager.GetFile(carrierProfile.Settings.CompanyLogo);
+                                 rdlcReportParameters.Add("Image", new VRRdlcReportParameter { Value =Convert.ToBase64String(logo.Content), IsVisible = true });
+                             }
                          }
                         
                      }
