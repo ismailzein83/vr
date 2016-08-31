@@ -134,7 +134,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 {
                     List<ExistingRate> existingRates = new List<ExistingRate>();
 
-                    existingRates.AddRange(connectedExistingZones.SelectMany(item => item.ExistingRates.Where(existingRate => !existingRate.RateEntity.RateTypeId.HasValue)).OrderBy(itm => itm.BED));
+                    existingRates.AddRange(connectedExistingZones.SelectMany(item => item.ExistingRates.Where(existingRate => !existingRate.RateEntity.RateTypeId.HasValue)));
                     recentExistingRate = existingRates.LastOrDefault();
                 }
             }

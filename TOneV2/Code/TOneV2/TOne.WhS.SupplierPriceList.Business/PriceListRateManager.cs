@@ -111,11 +111,10 @@ namespace TOne.WhS.SupplierPriceList.Business
             if (importedZone.ExistingZones == null || importedZone.ExistingZones.Count() == 0)
                 return;
 
-            List<ExistingZone> connectedExistingZones = importedZone.ExistingZones.GetConnectedEntities(DateTime.Today);
-            importedZone.ImportedNormalRate.SystemRate = GetSystemNormalRate(importedZone, connectedExistingZones);
+            importedZone.ImportedNormalRate.SystemRate = GetSystemNormalRate(importedZone);
             foreach (ImportedRate importedOtherRate in importedZone.ImportedOtherRates.Values)
             {
-                importedOtherRate.SystemRate = GetSystemOtherRate(importedOtherRate, connectedExistingZones);
+                importedOtherRate.SystemRate = GetSystemOtherRate(importedOtherRate, importedZone);
             }
         }
 
@@ -156,23 +155,28 @@ namespace TOne.WhS.SupplierPriceList.Business
             }
         }
 
-        private ExistingRate GetSystemNormalRate(ImportedZone importedZone, IEnumerable<ExistingZone> connectedExistingZones)
+        private ExistingRate GetSystemNormalRate(ImportedZone importedZone)
         {
             if (importedZone.ImportedNormalRate.ProcessInfo.RecentExistingRate != null)
                 return importedZone.ImportedNormalRate.ProcessInfo.RecentExistingRate;
 
-            IEnumerable<ExistingRate> existingNormalRates = connectedExistingZones.SelectMany(item => item.ExistingRates).FindAllRecords(itm => !itm.RateEntity.RateTypeId.HasValue);
-            return existingNormalRates.LastOrDefault();
+            IEnumerable<ExistingRate> existingNormalRates = importedZone.ExistingZones.SelectMany(item => item.ExistingRates).FindAllRecords(itm => !itm.RateEntity.RateTypeId.HasValue);
+            if (existingNormalRates != null)
+                return existingNormalRates.ToList().GetConnectedEntities(DateTime.Today).LastOrDefault();
+            
+            return null;
         }
 
-        private ExistingRate GetSystemOtherRate(ImportedRate importedOtherRate, IEnumerable<ExistingZone> connectedExistingZones)
+        private ExistingRate GetSystemOtherRate(ImportedRate importedOtherRate, ImportedZone importedZone)
         {
             if (importedOtherRate.ProcessInfo.RecentExistingRate != null)
                 return importedOtherRate.ProcessInfo.RecentExistingRate;
 
-            IEnumerable<ExistingRate> existingNormalRates = connectedExistingZones.SelectMany(item => item.ExistingRates.Where(existingRate => existingRate.RateEntity.RateTypeId.HasValue && existingRate.RateEntity.RateTypeId == importedOtherRate.RateTypeId));
-            return existingNormalRates.LastOrDefault();
+            IEnumerable<ExistingRate> existingOtherRates = importedZone.ExistingZones.SelectMany(item => item.ExistingRates.Where(existingRate => existingRate.RateEntity.RateTypeId.HasValue && existingRate.RateEntity.RateTypeId == importedOtherRate.RateTypeId));
+            if (existingOtherRates != null)
+                return existingOtherRates.ToList().GetConnectedEntities(DateTime.Today).LastOrDefault();
 
+            return null;
         }
 
         private void GetExistingOtherRatesToClose(Dictionary<int, List<ExistingRate>> existingOtherRates, Dictionary<int, ImportedRate> importedOtherRates,
@@ -184,7 +188,8 @@ namespace TOne.WhS.SupplierPriceList.Business
             {
                 if (!importedOtherRates.ContainsKey(importedRateTypeId))
                 {
-                    if (existingOtherRates.TryGetValue(importedRateTypeId, out matchExistingOtherRates))
+                    existingOtherRates.TryGetValue(importedRateTypeId, out matchExistingOtherRates);
+                    if (matchExistingOtherRates != null)
                     {
                         if (existingOtherRatesToCloseByRateTypeId.ContainsKey(importedRateTypeId))
                             existingOtherRatesToCloseByRateTypeId[importedRateTypeId].AddRange(matchExistingOtherRates);
@@ -240,30 +245,33 @@ namespace TOne.WhS.SupplierPriceList.Business
         private void FillRatesForNotImportedZones(IEnumerable<NotImportedZone> notImportedZones, Dictionary<string, ExistingRateGroup> existingRatesGroupsByZoneName, IEnumerable<ExistingZone> existingZones)
         {
             ExistingRateGroup existingRateGroup;
-
+            IEnumerable<ExistingRate> connectedExistingOtherRates;
             foreach (NotImportedZone notImportedZone in notImportedZones)
             {
-                IEnumerable<ExistingZone> connectedExistingZones = existingZones.FindAllRecords(item => item.Name.Equals(notImportedZone.ZoneName, StringComparison.InvariantCultureIgnoreCase)).ToList().GetConnectedEntities(DateTime.Today);
-                ExistingRate existingNormalRate = connectedExistingZones.SelectMany(item => item.ExistingRates).FindAllRecords(itm => !itm.RateEntity.RateTypeId.HasValue).LastOrDefault();
-
-                notImportedZone.NormalRate = NotImportedRateMapper(existingNormalRate);
-
                 List<ExistingRate> existingOtherRates = new List<ExistingRate>();
                 if (existingRatesGroupsByZoneName.TryGetValue(notImportedZone.ZoneName, out existingRateGroup))
                 {
-                    foreach (KeyValuePair<int, List<ExistingRate>> item in existingRateGroup.OtherRates)
+                    if (existingRateGroup != null)
                     {
-                        existingOtherRates.AddRange(item.Value);
+                        IEnumerable<ExistingRate> normalExistingRates = existingRateGroup.NormalRates.GetConnectedEntities(DateTime.Today);
+                        if (normalExistingRates != null)
+                            notImportedZone.NormalRate = NotImportedRateMapper(normalExistingRates.LastOrDefault());
+
+                        foreach (KeyValuePair<int, List<ExistingRate>> item in existingRateGroup.OtherRates)
+                        {
+                            connectedExistingOtherRates = item.Value.GetConnectedEntities(DateTime.Today);
+                            if (connectedExistingOtherRates != null)
+                                existingOtherRates.AddRange(item.Value);
+                        }
+                        notImportedZone.OtherRates.AddRange(existingOtherRates.MapRecords(NotImportedRateMapper));
                     }
                 }
-
-                notImportedZone.OtherRates.AddRange(existingOtherRates.MapRecords(NotImportedRateMapper));
             }
         }
 
         #endregion
 
-        
+
         #region Private Methods
 
         private NotImportedRate NotImportedRateMapper(ExistingRate existingRate)
@@ -431,8 +439,8 @@ namespace TOne.WhS.SupplierPriceList.Business
 
 
         #endregion
-      
-       
+
+
         //private bool SameRateOtherRates(ImportedRate importedRate, ExistingRate existingRate)
         //{
         //    int importedRatesCount = importedRate.OtherRates != null ? importedRate.OtherRates.Count : 0;
