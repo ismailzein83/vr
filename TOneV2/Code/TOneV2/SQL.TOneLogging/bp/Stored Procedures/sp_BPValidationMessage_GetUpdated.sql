@@ -15,7 +15,7 @@ IF (@GreaterThanID IS NULL)
 						  ,[Severity]
 						  ,[Message]
             INTO #temp_table
-			FROM [bp].[BPValidationMessage]
+			FROM [bp].[BPValidationMessage] WITH(NOLOCK) 
             WHERE ProcessInstanceID  = @BPInstanceID
             ORDER BY ID DESC
             
@@ -32,7 +32,7 @@ IF (@GreaterThanID IS NULL)
 						  ,[Severity]
 						  ,[Message]
             INTO #temp2_table
-            FROM [bp].[BPValidationMessage]
+            FROM [bp].[BPValidationMessage] WITH(NOLOCK) 
 			WHERE ProcessInstanceID  = @BPInstanceID 
 			AND ID >@GreaterThanID
             ORDER BY ID

@@ -18,7 +18,7 @@ IF (@GreaterThanID IS NULL)
 				  ,[Severity]
 				  ,[EventTime]
             INTO #temp_table
-			FROM [bp].[BPTracking]
+			FROM [bp].[BPTracking] WITH(NOLOCK) 
             WHERE ProcessInstanceID  = @BPInstanceID
             AND (@Severities is null or Severity in (select Severity from @SeveritiesTable))
             ORDER BY ID DESC
@@ -35,7 +35,7 @@ IF (@GreaterThanID IS NULL)
 				  ,[Severity]
 				  ,[EventTime]
             INTO #temp2_table
-            FROM [bp].[BPTracking]
+            FROM [bp].[BPTracking] WITH(NOLOCK) 
 			WHERE ProcessInstanceID  = @BPInstanceID 
 			AND ID >@GreaterThanID
 			AND (@Severities is null or Severity in (select Severity from @SeveritiesTable))

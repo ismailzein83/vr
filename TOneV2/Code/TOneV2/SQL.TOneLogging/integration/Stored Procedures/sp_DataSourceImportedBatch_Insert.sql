@@ -19,6 +19,6 @@ DECLARE @NewItemID BIGINT
 	Insert into integration.DataSourceImportedBatch(DataSourceId, BatchDescription, [BatchSize], RecordsCount, MappingResult, MapperMessage, QueueItemIds, LogEntryTime)
     values (@DataSourceId, @BatchDescription, @BatchSize, @RecordsCount, @MappingResult, @MapperMessage, @QueueItemIds, @LogEntryTime)
     
-    SET @NewItemID = @@IDENTITY
+    SET @NewItemID = SCOPE_IDENTITY()
     select @NewItemID
 END

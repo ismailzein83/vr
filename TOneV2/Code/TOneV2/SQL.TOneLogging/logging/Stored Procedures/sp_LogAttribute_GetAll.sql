@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE Logging.sp_LogAttribute_GetAll 	
+CREATE PROCEDURE [logging].[sp_LogAttribute_GetAll] 	
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -14,5 +14,5 @@ BEGIN
 	SELECT [ID]
       ,[AttributeType]
       ,[Description]
-  FROM [logging].[LogAttribute]
+  FROM [logging].[LogAttribute] WITH(NOLOCK) 
 END

@@ -28,7 +28,7 @@ BEGIN
 			[QueueItemIds],
 			[LogEntryTime]
 			INTO #RESULT
-			FROM [integration].[DataSourceImportedBatch]
+			FROM [integration].[DataSourceImportedBatch] WITH(NOLOCK) 
 			WHERE 
 				(@DataSourceId IS NULL OR DataSourceId = @DataSourceId) AND
 				(@BatchName IS NULL OR BatchDescription LIKE '%' + @BatchName + '%') AND

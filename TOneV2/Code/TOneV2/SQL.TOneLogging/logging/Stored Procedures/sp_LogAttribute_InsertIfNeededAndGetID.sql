@@ -22,7 +22,7 @@ BEGIN
 		VALUES
 		   (@AttributeType
 		   ,@Description)
-		SET @ID = @@IDENTITY
+		SET @ID = SCOPE_IDENTITY()
 	END
 	
 	SELECT @ID

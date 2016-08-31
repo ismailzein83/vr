@@ -24,7 +24,7 @@ BEGIN
 			[Message],
 			[LogEntryTime]
 			INTO #RESULT
-			FROM [integration].[DataSourceLog]
+			FROM [integration].[DataSourceLog] WITH(NOLOCK) 
 			WHERE 
 				(@DataSourceId IS NULL OR DataSourceId = @DataSourceId) AND
 				(Severity IN (SELECT Severity FROM @Severities)) AND

@@ -23,7 +23,7 @@ BEGIN
 			WHERE (@ArrSeverityID is NULL or Severity in (SELECT ParsedString FROM ParseStringList(@ArrSeverityID))) 
 			And ProcessInstanceID = @ProcessInstanceId 
 			
-			DECLARE @sql VARCHAR(1000)
+			DECLARE @sql VARCHAR(4000)
 			SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';
 			EXEC(@sql)
 		END

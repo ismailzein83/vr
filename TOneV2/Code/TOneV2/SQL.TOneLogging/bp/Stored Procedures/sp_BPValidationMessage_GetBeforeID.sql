@@ -11,7 +11,7 @@ BEGIN
 						  ,[TargetType]
 						  ,[Severity]
 						  ,[Message]
-	FROM [bp].[BPValidationMessage] 
+	FROM [bp].[BPValidationMessage]  WITH(NOLOCK) 
 	WHERE ID < @LessThanID 
 	AND  ProcessInstanceID = @BPInstanceID
 	ORDER BY ID DESC

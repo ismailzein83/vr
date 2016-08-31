@@ -58,7 +58,7 @@ BEGIN
 				  ,[Message]
 				  ,[EventTime]
 				  INTO #RESULT
-			  FROM [logging].[LogEntry]
+			  FROM [logging].[LogEntry] WITH(NOLOCK) 
 			  WHERE
 				  (@EntryType IS NULL OR EntryType IN (SELECT EntryType FROM @EntryTypeTable)) AND
 				  (@MachineIds IS NULL OR MachineNameId IN (SELECT MachineId FROM @MachineTable)) AND
