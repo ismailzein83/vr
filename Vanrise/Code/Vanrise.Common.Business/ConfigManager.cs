@@ -44,6 +44,15 @@ namespace Vanrise.Common.Business
 
             return productInfo;
         }
+        public IEnumerable<BankDetail> GetBankDetails()
+        {
+            SettingManager settingManager = new SettingManager();
+            BankDetailsSettings bankDetailsSettings = settingManager.GetSetting<BankDetailsSettings>(BankDetailsSettings.SETTING_TYPE);
+            IEnumerable<BankDetail> bankDetails = bankDetailsSettings.BankDetails;
+            if (bankDetails == null)
+                throw new NullReferenceException("BankDetailsSettings.BankDetails NullReferenceException");
+            return bankDetails;
+        }
         #endregion
 
     }

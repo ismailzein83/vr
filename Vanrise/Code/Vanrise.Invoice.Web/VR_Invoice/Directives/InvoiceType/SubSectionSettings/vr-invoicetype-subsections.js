@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeInvoicegridactions", ["UtilsService", "VRNotificationService","VR_Invoice_InvoiceTypeService",
+app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceTypeService",
     function (UtilsService, VRNotificationService, VR_Invoice_InvoiceTypeService) {
 
         var directiveDefinitionObject = {
@@ -13,7 +13,7 @@ app.directive("vrInvoicetypeInvoicegridactions", ["UtilsService", "VRNotificatio
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new InvoiceGridActions($scope, ctrl, $attrs);
+                var ctor = new SubSections($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,11 +21,11 @@ app.directive("vrInvoicetypeInvoicegridactions", ["UtilsService", "VRNotificatio
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/Templates/InvoiceGridActionsManagement.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/SubSectionSettings/Templates/SubSectionsManagement.html"
 
         };
 
-        function InvoiceGridActions($scope, ctrl, $attrs) {
+        function SubSections($scope, ctrl, $attrs) {
 
             var gridAPI;
             this.initializeController = initializeController;
@@ -36,18 +36,18 @@ app.directive("vrInvoicetypeInvoicegridactions", ["UtilsService", "VRNotificatio
                 ctrl.isValid = function () {
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
                         return null;
-                    return "You Should add at least one action.";
+                    return "You Should add at least one sub section.";
                 }
 
-                ctrl.addGridAction = function () {
-                    var onGridActionAdded = function (gridAction) {
-                        ctrl.datasource.push({ Entity: gridAction });
+                ctrl.addSubSection = function () {
+                    var onSubSectionAdded = function (subSection) {
+                        ctrl.datasource.push({ Entity: subSection });
                     }
 
-                    VR_Invoice_InvoiceTypeService.addGridAction(onGridActionAdded, ctrl.datasource);
+                    VR_Invoice_InvoiceTypeService.addSubSection(onSubSectionAdded, ctrl.datasource);
                 };
 
-                ctrl.removeAction = function (dataItem) {
+                ctrl.removeSubSection = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 }
@@ -59,26 +59,27 @@ app.directive("vrInvoicetypeInvoicegridactions", ["UtilsService", "VRNotificatio
                 var api = {};
 
                 api.getData = function () {
-                    var actions;
+                    var subSections;
                     if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
-                        actions = [];
+                        subSections = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            actions.push({
-                                ActionTypeName: currentItem.Entity.ActionTypeName,
+                            subSections.push({
+                                SectionTitle: currentItem.Entity.SectionTitle,
+                                Directive: currentItem.Entity.Directive,
                                 Settings: currentItem.Entity.Settings,
                             });
                         }
                     }
-                    return actions;
+                    return subSections;
                 }
 
                 api.load = function (payload) {
                     if (payload != undefined) {
-                        if (payload.invoiceGridActions != undefined) {
-                            for (var i = 0; i < payload.invoiceGridActions.length; i++) {
-                                var gridAction = payload.invoiceGridActions[i];
-                                ctrl.datasource.push({ Entity: gridAction });
+                        if (payload.subSections != undefined) {
+                            for (var i = 0; i < payload.subSections.length; i++) {
+                                var subSection = payload.subSections[i];
+                                ctrl.datasource.push({ Entity: subSection });
                             }
                         }
                     }
@@ -92,7 +93,7 @@ app.directive("vrInvoicetypeInvoicegridactions", ["UtilsService", "VRNotificatio
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editAction,
+                    clicked: editSubsection,
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -100,12 +101,13 @@ app.directive("vrInvoicetypeInvoicegridactions", ["UtilsService", "VRNotificatio
                 }
             }
 
-            function editAction(actionObj) {
-                var onGridActionUpdated = function (action) {
-                    var index = ctrl.datasource.indexOf(actionObj);
-                    ctrl.datasource[index] = { Entity: action };
+            function editSubsection(subSectionObj) {
+                var onSubSectionUpdated = function (subSection) {
+                    var index = ctrl.datasource.indexOf(subSectionObj);
+                    ctrl.datasource[index] = { Entity: subSection };
                 }
-                VR_Invoice_InvoiceTypeService.editGridAction(actionObj.Entity, onGridActionUpdated, ctrl.datasource);
+
+                VR_Invoice_InvoiceTypeService.editSubSection(subSectionObj.Entity, onSubSectionUpdated, ctrl.datasource);
             }
         }
 

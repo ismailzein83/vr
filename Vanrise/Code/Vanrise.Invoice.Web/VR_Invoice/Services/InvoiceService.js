@@ -29,7 +29,7 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
                 invoiceTypeId: invoiceTypeId
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/GenerateInvoiceEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/GenerateInvoiceEditor.html', parameters, settings);
         }
 
         function registerInvoiceRDLCReport() {

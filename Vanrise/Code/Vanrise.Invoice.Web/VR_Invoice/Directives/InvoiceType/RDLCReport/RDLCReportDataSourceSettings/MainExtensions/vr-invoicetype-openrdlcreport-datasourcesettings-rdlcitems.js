@@ -13,7 +13,7 @@ app.directive("vrInvoicetypeOpenrdlcreportDatasourcesettingsRdlcitems", ["UtilsS
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new OpenRDLCReportAction($scope, ctrl, $attrs);
+                var ctor = new RDLCItemsDataSourceSettings($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,11 +21,11 @@ app.directive("vrInvoicetypeOpenrdlcreportDatasourcesettingsRdlcitems", ["UtilsS
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/MainExtensions/RDLCReport/Templates/RDLCItemsDataSourceSettings.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/RDLCReport/RDLCReportDataSourceSettings/MainExtensions/Templates/RDLCItemsDataSourceSettings.html"
 
         };
 
-        function OpenRDLCReportAction($scope, ctrl, $attrs) {
+        function RDLCItemsDataSourceSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             function initializeController() {
                 $scope.scopeModel = {};

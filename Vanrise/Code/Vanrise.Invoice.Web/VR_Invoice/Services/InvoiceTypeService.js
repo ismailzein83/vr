@@ -10,7 +10,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
                 modalScope.onInvoiceTypeAdded = onInvoiceTypeAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/InvoiceTypeEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceTypeEditor.html', null, settings);
         }
         function editInvoiceType(onInvoiceTypeUpdated, invoiceTypeId) {
             var settings = {
@@ -23,7 +23,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
                 invoiceTypeId: invoiceTypeId
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/InvoiceTypeEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceTypeEditor.html', parameters, settings);
         }
 
         function addGridColumn(onGridColumnAdded, gridColumns) {
@@ -36,7 +36,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             var parameters = {
                 gridColumns: gridColumns
             };
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/MainGridColumnsEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/MainGridColumnsEditor.html', parameters, settings);
         }
 
         function editGridColumn(columnEntity, onGridColumnUpdated, gridColumns) {
@@ -51,7 +51,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
                 gridColumns: gridColumns
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/MainGridColumnsEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/MainGridColumnsEditor.html', parameters, settings);
         }
 
         function addSubSection(onSubSectionAdded, subSections) {
@@ -64,7 +64,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             var parameters = {
                 subSections: subSections
             };
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/SubSectionEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/SubSectionEditor.html', parameters, settings);
         }
 
         function editSubSection(subSectionEntity, onSubSectionUpdated, subSections) {
@@ -79,7 +79,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
                 subSections: subSections
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/SubSectionEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/SubSectionEditor.html', parameters, settings);
         }
 
         function addGridAction(onGridActionAdded, gridActions) {
@@ -92,7 +92,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             var parameters = {
                 gridActions: gridActions
             };
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/InvoiceGridActionEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceGridActionEditor.html', parameters, settings);
         }
 
         function editGridAction(actionEntity, onGridActionUpdated, gridActions) {
@@ -107,7 +107,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
                 gridActions: gridActions
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/InvoiceGridActionEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceGridActionEditor.html', parameters, settings);
         }
 
         function addDataSource(onDataSourceAdded, dataSources) {
@@ -120,7 +120,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             var parameters = {
                 dataSources: dataSources
             };
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/RDLCDataSourceEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/RDLCDataSourceEditor.html', parameters, settings);
         }
 
         function editDataSource(dataSourceEntity, onDataSourceUpdated, dataSources) {
@@ -135,7 +135,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
                 dataSources: dataSources
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/RDLCDataSourceEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/RDLCDataSourceEditor.html', parameters, settings);
         }
 
         function addParameter(onParameterAdded, parametersObj) {
@@ -148,7 +148,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             var parameters = {
                 parametersObj: parametersObj
             };
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/RDLCParameterEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/RDLCParameterEditor.html', parameters, settings);
         }
 
         function editParameter(parameterEntity, onParameterUpdated, parametersObj) {
@@ -163,7 +163,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
                 parameters: parametersObj
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/RDLCParameterEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/RDLCParameterEditor.html', parameters, settings);
         }
 
         function addSubSectionGridColumn(onSubSectionGridColumnAdded, gridColumns) {
@@ -176,7 +176,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             var parameters = {
                 gridColumns: gridColumns
             };
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/SubSectionGridColumnEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/SubSectionGridColumnEditor.html', parameters, settings);
         }
 
         function editSubSectionGridColumn(gridColumnEntity, onSubSectionGridColumnUpdated, gridColumns) {
@@ -191,8 +191,37 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
                 gridColumns: gridColumns
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/SubSectionGridColumnEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/SubSectionGridColumnEditor.html', parameters, settings);
         }
+
+        function addSubReport(onSubReportAdded, subReports) {
+            var settings = {
+
+            };
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onSubReportAdded = onSubReportAdded;
+            };
+            var parameters = {
+                subReports: subReports
+            };
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/RDLCSubReportEditor.html', parameters, settings);
+        }
+
+        function editSubReport(subReportEntity, onSubReportUpdated, subReports) {
+            var settings = {
+
+            };
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onSubReportUpdated = onSubReportUpdated;
+            };
+            var parameters = {
+                subReportEntity: subReportEntity,
+                subReports: subReports
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/RDLCSubReportEditor.html', parameters, settings);
+        }
+
         return ({
             addInvoiceType: addInvoiceType,
             editInvoiceType: editInvoiceType,
@@ -207,7 +236,9 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             addParameter: addParameter,
             editParameter: editParameter,
             addSubSectionGridColumn: addSubSectionGridColumn,
-            editSubSectionGridColumn: editSubSectionGridColumn
+            editSubSectionGridColumn: editSubSectionGridColumn,
+            addSubReport: addSubReport,
+            editSubReport: editSubReport
 
         });
     }]);

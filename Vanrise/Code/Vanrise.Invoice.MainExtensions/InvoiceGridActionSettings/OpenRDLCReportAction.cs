@@ -9,9 +9,23 @@ namespace Vanrise.Invoice.MainExtensions
 {
     public class OpenRDLCReportAction : InvoiceGridActionSettings
     {
+        public List<RDLCReportURL> RDLCReportsURLs { get; set; }
         public string ReportURL { get; set; }
-        public List<RDLCReportDataSource> DataSources { get; set; }
-        public List<RDLCReportParameter> Parameters { get; set; }
+        public List<RDLCReportParameter> MainReportParameters { get; set; }
+        public List<RDLCReportDataSource> MainReportDataSources { get; set; }
+        public List<RDLCSubReport> SubReports { get; set; }
+      
+    }
+    public class RDLCReportURL
+    {
+        public string ReportURL { get; set; }
+        public GenericData.Entities.RecordFilterGroup FilterGroup { get; set; }
+    }
+    public class RDLCSubReport
+    {
+        public string SubReportName { get; set; }
+        public List<RDLCReportDataSource> SubReportDataSources { get; set; }
+
     }
     public class RDLCReportDataSource
     {

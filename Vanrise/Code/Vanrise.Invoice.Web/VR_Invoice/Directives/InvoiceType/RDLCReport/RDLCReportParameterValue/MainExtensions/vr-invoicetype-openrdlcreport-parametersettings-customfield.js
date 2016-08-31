@@ -21,7 +21,7 @@ app.directive("vrInvoicetypeOpenrdlcreportParametersettingsCustomfield", ["Utils
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/MainExtensions/RDLCReport/Templates/CustomFieldRDLReportParameterValue.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/RDLCReport/RDLCReportParameterValue/MainExtensions/Templates/CustomFieldRDLReportParameterValue.html"
 
         };
 

@@ -21,7 +21,7 @@ app.directive("vrInvoicetypeMaingridcolumns", ["UtilsService", "VRNotificationSe
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/Templates/MainGridColumnsManagement.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/GridSettings/Templates/MainGridColumnsManagement.html"
 
         };
 

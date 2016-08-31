@@ -21,7 +21,7 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitem", ["UtilsServ
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/MainExtensions/InvoiceUISubSectionSettings/Templates/InvoiceItemSubSectionTemplate.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/SubSectionSettings/InvoiceUISubSectionSettings/MainExtensions/Templates/InvoiceItemSubSectionTemplate.html"
 
         };
 

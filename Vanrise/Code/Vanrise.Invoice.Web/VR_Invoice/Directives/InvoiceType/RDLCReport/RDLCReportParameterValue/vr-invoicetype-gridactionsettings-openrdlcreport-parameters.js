@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceTypeService",
+app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportParameters", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceTypeService",
     function (UtilsService, VRNotificationService, VR_Invoice_InvoiceTypeService) {
 
         var directiveDefinitionObject = {
@@ -13,7 +13,7 @@ app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationServic
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new SubSections($scope, ctrl, $attrs);
+                var ctor = new Parameters($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,11 +21,11 @@ app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationServic
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/Templates/SubSectionsManagement.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/RDLCReport/RDLCReportParameterValue/Templates/RDLCReportParameterManagement.html"
 
         };
 
-        function SubSections($scope, ctrl, $attrs) {
+        function Parameters($scope, ctrl, $attrs) {
 
             var gridAPI;
             this.initializeController = initializeController;
@@ -36,18 +36,17 @@ app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationServic
                 ctrl.isValid = function () {
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
                         return null;
-                    return "You Should add at least one sub section.";
+                    return "You Should add at least one parameter.";
                 }
 
-                ctrl.addSubSection = function () {
-                    var onSubSectionAdded = function (subSection) {
-                        ctrl.datasource.push({ Entity: subSection });
+                ctrl.addParameter = function () {
+                    var onParameterAdded = function (parameter) {
+                        ctrl.datasource.push({ Entity: parameter });
                     }
-
-                    VR_Invoice_InvoiceTypeService.addSubSection(onSubSectionAdded, ctrl.datasource);
+                    VR_Invoice_InvoiceTypeService.addParameter(onParameterAdded, ctrl.datasource);
                 };
 
-                ctrl.removeSubSection = function (dataItem) {
+                ctrl.removeParameter = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 }
@@ -59,27 +58,27 @@ app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationServic
                 var api = {};
 
                 api.getData = function () {
-                    var subSections;
+                    var parameters;
                     if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
-                        subSections = [];
+                        parameters = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            subSections.push({
-                                SectionTitle: currentItem.Entity.SectionTitle,
-                                Directive: currentItem.Entity.Directive,
-                                Settings: currentItem.Entity.Settings,
+                            parameters.push({
+                                ParameterName: currentItem.Entity.ParameterName,
+                                Value: currentItem.Entity.Value,
+                                IsVisible: currentItem.Entity.IsVisible,
                             });
                         }
                     }
-                    return subSections;
+                    return parameters;
                 }
 
                 api.load = function (payload) {
                     if (payload != undefined) {
-                        if (payload.subSections != undefined) {
-                            for (var i = 0; i < payload.subSections.length; i++) {
-                                var subSection = payload.subSections[i];
-                                ctrl.datasource.push({ Entity: subSection });
+                        if (payload.parameters != undefined) {
+                            for (var i = 0; i < payload.parameters.length; i++) {
+                                var parameter = payload.parameters[i];
+                                ctrl.datasource.push({ Entity: parameter });
                             }
                         }
                     }
@@ -93,7 +92,7 @@ app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationServic
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editSubsection,
+                    clicked: editParameter,
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -101,13 +100,12 @@ app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationServic
                 }
             }
 
-            function editSubsection(subSectionObj) {
-                var onSubSectionUpdated = function (subSection) {
-                    var index = ctrl.datasource.indexOf(subSectionObj);
-                    ctrl.datasource[index] = { Entity: subSection };
+            function editParameter(parameterObj) {
+                var onParameterUpdated = function (parameter) {
+                    var index = ctrl.datasource.indexOf(parameterObj);
+                    ctrl.datasource[index] = { Entity: parameter };
                 }
-
-                VR_Invoice_InvoiceTypeService.editSubSection(subSectionObj.Entity, onSubSectionUpdated, ctrl.datasource);
+                VR_Invoice_InvoiceTypeService.editParameter(parameterObj.Entity, onParameterUpdated, ctrl.datasource);
             }
         }
 

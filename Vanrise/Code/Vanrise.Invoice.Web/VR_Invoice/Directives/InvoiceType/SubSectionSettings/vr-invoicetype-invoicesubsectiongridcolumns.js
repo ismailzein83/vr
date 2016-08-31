@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportDatasources", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceTypeService",
-    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceTypeService) {
+app.directive("vrInvoicetypeInvoicesubsectiongridcolumns", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceTypeService", "VR_Invoice_InvoiceFieldEnum",
+    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceTypeService, VR_Invoice_InvoiceFieldEnum) {
 
         var directiveDefinitionObject = {
 
@@ -13,7 +13,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportDatasources", ["Util
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new DataSources($scope, ctrl, $attrs);
+                var ctor = new InvoiceSubSectionGridColumns($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,11 +21,11 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportDatasources", ["Util
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/RDLCReport/Templates/RDLCReportDataSourceManagement.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/SubSectionSettings/Templates/InvoiceSubSectionGridColumnsManagement.html"
 
         };
 
-        function DataSources($scope, ctrl, $attrs) {
+        function InvoiceSubSectionGridColumns($scope, ctrl, $attrs) {
 
             var gridAPI;
             this.initializeController = initializeController;
@@ -36,17 +36,17 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportDatasources", ["Util
                 ctrl.isValid = function () {
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
                         return null;
-                    return "You Should add at least one dataSource.";
+                    return "You Should add at least one column.";
                 }
 
-                ctrl.addDataSource = function () {
-                    var onDataSourceAdded = function (dataSource) {
-                        ctrl.datasource.push({ Entity: dataSource });
+                ctrl.addGridColumn = function () {
+                    var onSubSectionGridColumnAdded = function (gridColumn) {
+                        ctrl.datasource.push({ Entity: gridColumn });
                     }
-                    VR_Invoice_InvoiceTypeService.addDataSource(onDataSourceAdded, ctrl.datasource);
+                    VR_Invoice_InvoiceTypeService.addSubSectionGridColumn(onSubSectionGridColumnAdded, ctrl.datasource);
                 };
 
-                ctrl.removeDataSource = function (dataItem) {
+                ctrl.removeColumn = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 }
@@ -58,26 +58,28 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportDatasources", ["Util
                 var api = {};
 
                 api.getData = function () {
-                    var dataSources;
+                    var columns;
                     if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
-                        dataSources = [];
+                        columns = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            dataSources.push({
-                                DataSourceName: currentItem.Entity.DataSourceName,
-                                Settings: currentItem.Entity.Settings,
+                            columns.push({
+                                Header: currentItem.Entity.Header,
+                                FieldName: currentItem.Entity.FieldName,
+                                FieldType: currentItem.Entity.FieldType,
+                                WidthFactor: currentItem.Entity.WidthFactor,
                             });
                         }
                     }
-                    return dataSources;
+                    return columns;
                 }
 
                 api.load = function (payload) {
                     if (payload != undefined) {
-                        if (payload.dataSources != undefined) {
-                            for (var i = 0; i < payload.dataSources.length; i++) {
-                                var dataSource = payload.dataSources[i];
-                                ctrl.datasource.push({ Entity: dataSource });
+                        if (payload.gridColumns != undefined) {
+                            for (var i = 0; i < payload.gridColumns.length; i++) {
+                                var gridColumn = payload.gridColumns[i];
+                                ctrl.datasource.push({ Entity: gridColumn });
                             }
                         }
                     }
@@ -91,7 +93,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportDatasources", ["Util
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editDataSource,
+                    clicked: editColumn,
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -99,12 +101,12 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportDatasources", ["Util
                 }
             }
 
-            function editDataSource(dataSourceObj) {
-                var onDataSourceUpdated = function (dataSource) {
-                    var index = ctrl.datasource.indexOf(dataSourceObj);
-                    ctrl.datasource[index] = { Entity: dataSource };
+            function editColumn(columnObj) {
+                var onSubSectionGridColumnUpdated = function (column) {
+                    var index = ctrl.datasource.indexOf(columnObj);
+                    ctrl.datasource[index] = { Entity: column };
                 }
-                VR_Invoice_InvoiceTypeService.editDataSource(dataSourceObj.Entity, onDataSourceUpdated, ctrl.datasource);
+                VR_Invoice_InvoiceTypeService.editSubSectionGridColumn(columnObj.Entity, onSubSectionGridColumnUpdated, ctrl.datasource);
             }
         }
 
