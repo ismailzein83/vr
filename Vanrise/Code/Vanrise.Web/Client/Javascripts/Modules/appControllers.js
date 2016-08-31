@@ -86,10 +86,10 @@ appControllers.directive('draggablemodal', function ($document) {
           startY = 0,
           x = 0,
           y = 0;
-        element.parents().find('.modal-header').css({
+        element.parents().find('.modal-header').last().css({
             cursor: 'move'
         });
-        element.parents().find('.modal-header').on('mousedown', function (event) {
+        element.parents().find('.modal-header').last().on('mousedown', function (event) {
             // Prevent default dragging of selected content
             event.preventDefault();
             startX = event.screenX - x;
@@ -102,7 +102,7 @@ appControllers.directive('draggablemodal', function ($document) {
         function mousemove(event) {
             y = event.screenY - startY;
             x = event.screenX - startX;
-            element.parents().find('.modal-content').css({
+            element.parents().find('.modal-content').last().css({
                 top: y + 'px',
                 left: x + 'px'
             });

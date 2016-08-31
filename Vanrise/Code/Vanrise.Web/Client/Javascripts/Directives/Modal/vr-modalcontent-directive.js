@@ -14,7 +14,10 @@ app.directive('vrModalcontent', [function () {
             if (tAttrs.width != undefined)
                 widthPart = '\'width\': ' + tAttrs.width;
             //'<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">'
-            var newElement = '<div class="modal-dialog" ng-style="{ ' + widthPart + ' }">'
+            var style = "";
+            if ($('.modal-dialog').length > 0)
+                style = "top:" + ($('.modal-dialog').length + 1) * 5 + "px; left:" + ($('.modal-dialog').length + 1) * 5 + "px;";
+            var newElement = '<div class="modal-dialog" ng-style="{ ' + widthPart + ' }" style="'+style+'" >'
                                   + '  <div class="modal-content">'
                                     + '    <div class="modal-header" ng-show="title">'
                                       + '      <button type="button" class="close" aria-label="Close" ng-click="modalContext.closeModal()"><span aria-hidden="true">&times;</span></button>'
