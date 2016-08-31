@@ -14,5 +14,5 @@ BEGIN
 	SELECT [ID]
       ,[Name]
       ,[TriggerTypeInfo]
-      FROM runtime.SchedulerTaskTriggerType
+      FROM [runtime].SchedulerTaskTriggerType WITH(NOLOCK) 
 END

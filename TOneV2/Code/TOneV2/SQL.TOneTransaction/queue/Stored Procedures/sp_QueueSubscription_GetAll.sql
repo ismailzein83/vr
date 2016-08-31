@@ -14,8 +14,8 @@ BEGIN
     
 	SELECT [QueueID]
 		  ,[SubscribedQueueID]
-	FROM [queue].[QueueSubscription]
-	JOIN queue.QueueInstance sourceQueue ON sourceQueue.ID = [QueueID]
-	JOIN queue.QueueInstance subscribedQueue ON subscribedQueue.ID = [SubscribedQueueID]
+	FROM [queue].[QueueSubscription] WITH(NOLOCK) 
+	JOIN queue.QueueInstance sourceQueue  WITH(NOLOCK) ON sourceQueue.ID = [QueueID]
+	JOIN queue.QueueInstance subscribedQueue  WITH(NOLOCK) ON subscribedQueue.ID = [SubscribedQueueID]
 	WHERE sourceQueue.Status = @QueueStatus AND subscribedQueue.Status = @QueueStatus
 END

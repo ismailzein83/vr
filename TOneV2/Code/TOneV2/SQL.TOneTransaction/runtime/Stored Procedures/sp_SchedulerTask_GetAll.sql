@@ -21,8 +21,8 @@ BEGIN
       ,AC.[ActionTypeInfo]
       ,SC.[TaskSettings]
       ,SC.[OwnerId]
-      from runtime.ScheduleTask SC
-      JOIN runtime.SchedulerTaskTriggerType TR on SC.TriggerTypeId = TR.ID
-      JOIN runtime.SchedulerTaskActionType AC on SC.ActionTypeId = AC.ID
+      from runtime.ScheduleTask SC WITH(NOLOCK) 
+      JOIN runtime.SchedulerTaskTriggerType TR  WITH(NOLOCK) on SC.TriggerTypeId = TR.ID
+      JOIN runtime.SchedulerTaskActionType AC  WITH(NOLOCK) on SC.ActionTypeId = AC.ID
 
 END

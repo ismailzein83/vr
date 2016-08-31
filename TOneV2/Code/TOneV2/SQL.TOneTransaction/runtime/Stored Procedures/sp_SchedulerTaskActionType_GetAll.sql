@@ -14,5 +14,5 @@ BEGIN
 	SELECT [ID]
       ,[Name]
       ,[ActionTypeInfo]
-      FROM runtime.SchedulerTaskActionType
+      FROM runtime.SchedulerTaskActionType WITH(NOLOCK) 
 END

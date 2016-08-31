@@ -15,5 +15,5 @@ BEGIN
 	Insert into integration.DataSource ([Name], [AdapterID], [AdapterState], [TaskId], [Settings])
 	Values(@Name, @AdapterTypeId, @AdapterState, @TaskId, @Settings)
 	
-	Set @Id = @@IDENTITY
+	Set @Id = SCOPE_IDENTITY()
 END

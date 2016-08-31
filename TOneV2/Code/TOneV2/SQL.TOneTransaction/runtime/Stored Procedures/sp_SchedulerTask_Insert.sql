@@ -17,5 +17,5 @@ BEGIN
 	Insert into runtime.ScheduleTask([Name], IsEnabled, [TaskType], TriggerTypeId, ActionTypeId, TaskSettings, OwnerId)
 	values(@Name, @IsEnabled, @TaskType, @TriggerTypeId, @ActionTypeId, @TaskSettings, @OwnerId)
 	
-	SET @Id = @@IDENTITY
+	SET @Id = SCOPE_IDENTITY()
 END

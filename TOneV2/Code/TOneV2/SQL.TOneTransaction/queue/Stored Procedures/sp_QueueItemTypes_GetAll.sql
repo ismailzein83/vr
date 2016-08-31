@@ -16,6 +16,6 @@ BEGIN
       ,[Title]
       ,[DefaultQueueSettings]
       ,[CreatedTime]
-	FROM [queue].[QueueItemType]
+	FROM [queue].[QueueItemType] WITH(NOLOCK) 
     
 END

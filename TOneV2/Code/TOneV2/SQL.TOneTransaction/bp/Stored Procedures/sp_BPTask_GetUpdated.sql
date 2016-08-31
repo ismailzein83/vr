@@ -24,7 +24,7 @@ IF (@TimestampAfter IS NULL)
 			, [LastUpdatedTime]
 			, [timestamp]
             INTO #temp_table
-            FROM [BP].[BPTask] 
+            FROM [BP].[BPTask]  WITH(NOLOCK) 
             
             WHERE (@ProcessInstanceId is null or ProcessInstanceID = @ProcessInstanceId)
             AND (@UserId is null or ',' + AssignedUsers + ',' like '%,' +CONVERT(varchar(100), @UserId)  +',%')
@@ -53,7 +53,7 @@ ELSE
 			, [LastUpdatedTime]
 			, [timestamp]
             INTO #temp2_table
-            FROM [BP].[BPTask] 
+            FROM [BP].[BPTask]  WITH(NOLOCK) 
             
             WHERE (@ProcessInstanceId is null or ProcessInstanceID = @ProcessInstanceId)
             AND (@UserId is null or ',' + AssignedUsers + ',' like '%,' +CONVERT(varchar(100), @UserId)  +',%')

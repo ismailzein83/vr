@@ -19,9 +19,9 @@ BEGIN
 		st.IsEnabled,
 		ds.[Settings]
 
-	FROM integration.DataSource ds
-	INNER JOIN integration.AdapterType at ON at.ID = ds.AdapterID
-	INNER JOIN runtime.ScheduleTask st ON st.ID = ds.TaskId
+	FROM integration.DataSource ds WITH(NOLOCK) 
+	INNER JOIN integration.AdapterType at  WITH(NOLOCK) ON at.ID = ds.AdapterID
+	INNER JOIN runtime.ScheduleTask st  WITH(NOLOCK) ON st.ID = ds.TaskId
    
 	WHERE DS.[ID] = @DataSourceID
 END

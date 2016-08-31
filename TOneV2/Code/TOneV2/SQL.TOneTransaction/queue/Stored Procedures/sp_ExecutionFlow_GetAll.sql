@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CReate PROCEDURE [queue].sp_ExecutionFlow_GetAll 
+CREATE PROCEDURE [queue].[sp_ExecutionFlow_GetAll] 
 AS
 BEGIN
 	
@@ -11,7 +11,7 @@ BEGIN
 
     -- Insert statements for procedure here
 	SELECT ef.ID, ef.ExecutionFlowDefinitionID, ef.Name, efd.ExecutionTree
-	FROM queue.ExecutionFlow ef
-	JOIN queue.ExecutionFlowDefinition efd ON ef.ExecutionFlowDefinitionID = efd.ID
+	FROM queue.ExecutionFlow ef WITH(NOLOCK) 
+	INNER JOIN queue.ExecutionFlowDefinition efd  WITH(NOLOCK) ON ef.ExecutionFlowDefinitionID = efd.ID
 	
 END

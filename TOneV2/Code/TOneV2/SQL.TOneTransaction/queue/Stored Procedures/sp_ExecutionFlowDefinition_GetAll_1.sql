@@ -13,7 +13,7 @@ BEGIN
       ,[Name]
       ,[Title]
       ,[Stages]
-       from [queue].ExecutionFlowDefinition
+       from [queue].ExecutionFlowDefinition WITH(NOLOCK) 
        
      SET NOCOUNT OFF;
 END

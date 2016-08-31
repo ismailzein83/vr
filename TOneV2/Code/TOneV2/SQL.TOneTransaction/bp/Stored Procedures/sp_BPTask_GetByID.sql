@@ -8,8 +8,8 @@ CREATE PROCEDURE [bp].[sp_BPTask_GetByID]
 	
 AS
 BEGIN
-Select [ID], [ProcessInstanceID], [TypeID] , [Title] , [AssignedUsers], [AssignedUsersDescription], [ExecutedBy] , [Status] , 
-	   [TaskData] ,[TaskExecutionInformation] , [CreatedTime] , [LastUpdatedTime], [Notes], [Decision]
-from [bp].[BPTask]
-where ID = @TaskID 
+Select	[ID], [ProcessInstanceID], [TypeID] , [Title] , [AssignedUsers], [AssignedUsersDescription], [ExecutedBy] , [Status] , 
+		[TaskData] ,[TaskExecutionInformation] , [CreatedTime] , [LastUpdatedTime], [Notes], [Decision]
+from	[bp].[BPTask] WITH(NOLOCK) 
+where	ID = @TaskID 
 END

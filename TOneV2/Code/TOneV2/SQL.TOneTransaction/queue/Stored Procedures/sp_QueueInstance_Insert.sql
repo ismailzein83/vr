@@ -31,5 +31,5 @@ BEGIN
 		  ,@ItemTypeID
 		  ,@Settings)
 		  
-	SET @ID = @@identity
+	SET @ID = SCOPE_IDENTITY()
 END

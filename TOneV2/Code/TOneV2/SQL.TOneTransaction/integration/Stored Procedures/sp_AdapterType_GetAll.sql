@@ -15,5 +15,5 @@ BEGIN
 	SELECT [ID]
       ,[Name]
       ,[Info]
-       from integration.AdapterType
+       from integration.AdapterType WITH(NOLOCK) 
 END

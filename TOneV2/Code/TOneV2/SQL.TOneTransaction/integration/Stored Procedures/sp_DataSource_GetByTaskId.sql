@@ -19,7 +19,7 @@ BEGIN
       ,AD.[Info]
       ,DS.[TaskId]
       ,DS.[Settings]
-       from integration.DataSource  as DS
-       Join AdapterType as AD on DS.AdapterID = AD.ID
+       from integration.DataSource  as DS WITH(NOLOCK) 
+       inner Join AdapterType as AD  WITH(NOLOCK) on DS.AdapterID = AD.ID
        where DS.[TaskId] = @TaskID
 END

@@ -33,5 +33,5 @@ BEGIN
            ,@AssignedUsers
            ,@AssignedUsersDescription
            ,GETDATE())
-     SET @ID = @@identity
+     SET @ID = SCOPE_IDENTITY()
 END

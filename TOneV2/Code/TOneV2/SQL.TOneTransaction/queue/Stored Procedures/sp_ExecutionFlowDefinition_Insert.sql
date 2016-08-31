@@ -16,6 +16,6 @@ BEGIN
 		Insert into [queue].[ExecutionFlowDefinition] ([Name], [Title],[Stages])
 		values(@Name, @Title,@Stages)
 		
-		SET @Id = @@IDENTITY
+		SET @Id = SCOPE_IDENTITY()
 	END
 END

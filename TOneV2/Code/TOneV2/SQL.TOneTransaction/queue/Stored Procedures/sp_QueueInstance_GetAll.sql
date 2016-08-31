@@ -16,6 +16,6 @@ BEGIN
       ,qit.[ItemFQTN]
       ,CASE WHEN q.[Settings] IS NOT NULL THEN q.[Settings] ELSE qit.DefaultQueueSettings END AS [Settings]
       ,q.[CreatedTime]
-	FROM [queue].[QueueInstance] q
-	JOIN [queue].QueueItemType qit ON q.ItemTypeID = qit.ID
+	FROM [queue].[QueueInstance] q WITH(NOLOCK) 
+	JOIN [queue].QueueItemType qit  WITH(NOLOCK) ON q.ItemTypeID = qit.ID
 END

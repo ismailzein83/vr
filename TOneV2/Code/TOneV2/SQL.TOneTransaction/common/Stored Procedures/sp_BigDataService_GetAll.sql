@@ -11,5 +11,5 @@ BEGIN
       ,[RuntimeProcessID]
       ,[TotalCachedRecordsCount]
       ,[CachedObjectIds]
-   FROM [common].[BigDataService]
+   FROM [common].[BigDataService] WITH(NOLOCK) 
 END

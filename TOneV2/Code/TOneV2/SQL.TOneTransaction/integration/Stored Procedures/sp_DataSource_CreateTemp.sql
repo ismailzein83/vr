@@ -22,9 +22,9 @@ IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 		
 		SELECT ds.[ID],ds.[Name],ds.[adapterID],at.Name AS AdapterName,ds.[AdapterState],at.[Info],ds.[TaskId],st.IsEnabled,ds.[Settings]			
 		INTO #RESULT			
-		FROM	[integration].[DataSource] AS ds
-				INNER JOIN integration.AdapterType at ON at.ID = ds.AdapterID
-				INNER JOIN runtime.ScheduleTask st ON st.ID = ds.TaskId			
+		FROM	[integration].[DataSource] AS ds WITH(NOLOCK) 
+				INNER JOIN integration.AdapterType at  WITH(NOLOCK) ON at.ID = ds.AdapterID
+				INNER JOIN runtime.ScheduleTask st  WITH(NOLOCK) ON st.ID = ds.TaskId			
 		WHERE	(@Name IS NULL OR ds.Name LIKE '%' + @Name + '%')
 				AND (@AdapterTypeIDs IS NULL OR at.ID IN (SELECT AdapterTypeID FROM @AdapterTypeIDsTable))
 				AND (st.IsEnabled = isnull(@IsEnabled,st.IsEnabled))

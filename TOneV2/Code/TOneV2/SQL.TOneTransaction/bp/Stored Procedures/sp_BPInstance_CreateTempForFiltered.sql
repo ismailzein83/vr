@@ -11,32 +11,21 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 	
-	IF OBJECT_ID(@TempTableName, N'U') IS NULL
-	    BEGIN
-		
-			SELECT [ID]
-				  ,[Title]
-				  ,[ParentID]
-				  ,[DefinitionID]
-				  ,[WorkflowInstanceID]
-				  ,[InputArgument]
-				  ,[ExecutionStatus]
-				  ,[LastMessage]
-				  ,[CreatedTime]
-				  ,[StatusUpdatedTime]
-				  ,[InitiatorUserId]
-				  ,EntityID
-			INTO #RESULT
-			FROM bp.[BPInstance] as bps WITH(NOLOCK)
-			WHERE (@EntityID is null OR EntityID = @EntityID) and (@ArrStatus is NULL or bps.ExecutionStatus in (SELECT ParsedString FROM ParseStringList(@ArrStatus) ) ) and 
+IF OBJECT_ID(@TempTableName, N'U') IS NULL
+BEGIN	
+	SELECT	[ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument],[ExecutionStatus],[LockedByProcessID],
+			[LastMessage],[RetryCount],[CreatedTime],[StatusUpdatedTime],[InitiatorUserId],EntityID
+	INTO	#RESULT
+	FROM	bp.[BPInstance] as bps WITH(NOLOCK)
+	WHERE	(@EntityID is null OR EntityID = @EntityID) and (@ArrStatus is NULL or bps.ExecutionStatus in (SELECT ParsedString FROM ParseStringList(@ArrStatus) ) ) and 
 			(@ArrDefinitionID is NULL or  bps.DefinitionID in (SELECT ParsedString FROM ParseStringList(@ArrDefinitionID) ) ) and 
 			bps.CreatedTime >=  @DateFrom 
 			and (@DateTo is NULL or bps.CreatedTime < @DateTo)
-			ORDER BY CreatedTime DESC
+	ORDER BY CreatedTime DESC
 			
-			DECLARE @sql VARCHAR(1000)
-			SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';
-			EXEC(@sql)
-		END
+	DECLARE @sql VARCHAR(4000)
+	SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';
+	EXEC(@sql)
+END
 
 END

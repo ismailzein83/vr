@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE runtime.sp_FreezedTransactionLock_GetAll
+CREATE PROCEDURE [runtime].[sp_FreezedTransactionLock_GetAll]
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -12,5 +12,5 @@ BEGIN
 
     SELECT [ID]
       ,[TransactionLockItemIds]
-    FROM [runtime].[FreezedTransactionLock]
+    FROM [runtime].[FreezedTransactionLock] WITH(NOLOCK) 
 END

@@ -14,5 +14,5 @@ BEGIN
 	VALUES
 	(@ServiceURL, @RuntimeProcessId)
 	
-	SET @id = @@IDENTITY
+	SET @id = SCOPE_IDENTITY()
 END

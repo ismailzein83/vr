@@ -22,9 +22,9 @@ SELECT TOP(@NbOfRows)[ID]
 			, [CreatedTime] 
 			, [LastUpdatedTime]
 			, [timestamp]
-	FROM [BP].[BPTask]  
-	WHERE ID < @LessThanID 
-		  AND (@ProcessInstanceId is null or ProcessInstanceID = @ProcessInstanceId)
+	FROM	[BP].[BPTask]   WITH(NOLOCK) 
+	WHERE	ID < @LessThanID 
+			AND (@ProcessInstanceId is null or ProcessInstanceID = @ProcessInstanceId)
             AND (@UserId is null or ',' + AssignedUsers + ',' like '%,' +CONVERT(varchar(100), @UserId)  +',%')
 	
 	

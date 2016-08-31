@@ -16,6 +16,6 @@ BEGIN
       ,[LastRunTime]
       ,[NextRunTime]
       ,[ExecutionInfo]
-      from runtime.ScheduleTaskState
+      from runtime.ScheduleTaskState WITH(NOLOCK) 
       where [NextRunTime] is Null or cast([NextRunTime] as datetime) <= cast(GETDATE() as datetime)
 END

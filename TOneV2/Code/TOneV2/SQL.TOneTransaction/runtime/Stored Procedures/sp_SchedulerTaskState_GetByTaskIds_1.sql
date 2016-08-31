@@ -12,6 +12,6 @@ BEGIN
       ,[LastRunTime]
       ,[NextRunTime]
       ,[ExecutionInfo]
-	FROM [runtime].[ScheduleTaskState]
+	FROM [runtime].[ScheduleTaskState] WITH(NOLOCK) 
 	WHERE TaskId in (select TaskId from @TaskIdsTable)
 END
