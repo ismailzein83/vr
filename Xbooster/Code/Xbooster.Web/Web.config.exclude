@@ -47,11 +47,11 @@
     <add key="BusinessProcessTrackingDBConnStringKey" value="LogDBConnString" />
     <add key="BusinessProcessConfigDBConnStringKey" value="ConfigurationDBConnString" />
 
-    <add key="CDRComparisonDBConnStringKey" value="XBoosterDBConnString"/>
-    <add key="CDRComparisonOutputDBConnStringKey" value="CDRComparisonOutputDBConnString"/>
-    <add key="VRFile_CDRComparison_FileCDRSource_DBConnStringKey" value="CDRComparisonOutputDBConnString"/>
+    <add key="CDRComparisonDBConnStringKey" value="XBoosterDBConnString" />
+    <add key="CDRComparisonOutputDBConnStringKey" value="CDRComparisonOutputDBConnString" />
+    <add key="VRFile_CDRComparison_FileCDRSource_DBConnStringKey" value="CDRComparisonOutputDBConnString" />
 
-    <add key="VRFile_Max_Uncompressed_MB_Size" value="5"/>
+    <add key="VRFile_Max_Uncompressed_MB_Size" value="5" />
   </appSettings>
   
   <system.web>
