@@ -230,6 +230,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Security.Web">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Web.dll</HintPath>
     </Reference>
