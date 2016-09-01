@@ -17,6 +17,7 @@ BEGIN
 	SELECT grp.[ID]
 		  ,grp.[DestinationType]
 		  ,grp.[GroupSettings]
+		  ,grp.[Name]
 
 	FROM	[dbo].DestinationGroup  as grp WITH(NOLOCK) 
 END

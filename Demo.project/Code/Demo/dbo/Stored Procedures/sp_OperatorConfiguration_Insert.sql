@@ -17,11 +17,13 @@ CREATE PROCEDURE [dbo].[sp_OperatorConfiguration_Insert]
 	@ToDate datetime,
 	@Notes nvarchar(max),
 	@ServiceSubTypeSettings	nvarchar(MAX),
+	@DestinationGroup int,
+	@InterconnectOperator int,
 	@Id int out
 AS
 BEGIN
-	Insert into dbo.OperatorConfiguration([OperatorID], [Volume], [CDRDirection]  ,	[Percentage] ,	[Amount] ,	[Currency], [FromDate], [ToDate], [Notes] ,[ServiceSubTypeSettings])
-	Values(@OperatorID, @Volume, @CDRDirection ,	@Percentage ,	@Amount ,	@Currency, @FromDate, @ToDate, @Notes, @ServiceSubTypeSettings )
+	Insert into dbo.OperatorConfiguration([OperatorID], [Volume], [CDRDirection]  ,	[Percentage] ,	[Amount] ,	[Currency], [FromDate], [ToDate], [Notes] ,[ServiceSubTypeSettings],[DestinationGroup], [InterconnectOperator])
+	Values(@OperatorID, @Volume, @CDRDirection ,	@Percentage ,	@Amount ,	@Currency, @FromDate, @ToDate, @Notes, @ServiceSubTypeSettings,@DestinationGroup, @InterconnectOperator )
 
 	Set @Id = @@IDENTITY
 	END

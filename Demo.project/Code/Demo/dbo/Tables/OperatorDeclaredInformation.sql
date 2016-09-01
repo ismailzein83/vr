@@ -3,7 +3,7 @@
     [OperatorID]                          INT           NOT NULL,
     [FromDate]                            DATETIME      NOT NULL,
     [ToDate]                              DATETIME      NULL,
-    [ZoneID]                              BIGINT        NULL,
+    [DestinationGroup]                    INT           NULL,
     [Volume]                              INT           NOT NULL,
     [AmountType]                          INT           NOT NULL,
     [Notes]                               VARCHAR (MAX) NULL,
@@ -12,4 +12,6 @@
     [timestamp]                           ROWVERSION    NULL,
     CONSTRAINT [PK_OperatorDeclaredInformation] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

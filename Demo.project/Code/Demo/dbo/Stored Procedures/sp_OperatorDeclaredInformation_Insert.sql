@@ -8,7 +8,7 @@ CREATE PROCEDURE [dbo].[sp_OperatorDeclaredInformation_Insert]
 	@OperatorID int,
 	@FromDate datetime,
 	@ToDate datetime,
-	@ZoneID bigint,
+	@DestinationGroup bigint,
 	@Volume int,
 	@AmountType int,
 	@Attachment bigint, 
@@ -16,8 +16,8 @@ CREATE PROCEDURE [dbo].[sp_OperatorDeclaredInformation_Insert]
 	@Id int out
 AS
 BEGIN
-	Insert into dbo.OperatorDeclaredInformation([OperatorID],[FromDate],[ToDate], [ZoneID], [Volume], [AmountType], [Attachment], [Notes])
-	Values(@OperatorID,@FromDate,@ToDate, @ZoneID, @Volume, @AmountType, @Attachment, @Notes)
+	Insert into dbo.OperatorDeclaredInformation([OperatorID],[FromDate],[ToDate], [DestinationGroup], [Volume], [AmountType], [Attachment], [Notes])
+	Values(@OperatorID,@FromDate,@ToDate, @DestinationGroup, @Volume, @AmountType, @Attachment, @Notes)
 
 	Set @Id = @@IDENTITY
 	END

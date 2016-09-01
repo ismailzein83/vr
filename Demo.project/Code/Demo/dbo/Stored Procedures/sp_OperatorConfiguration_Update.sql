@@ -17,7 +17,9 @@ CREATE PROCEDURE [dbo].[sp_OperatorConfiguration_Update]
 	@FromDate datetime, 
 	@ToDate datetime,
 	@Notes nvarchar(max),
-	@ServiceSubTypeSettings	nvarchar(MAX)
+	@ServiceSubTypeSettings	nvarchar(MAX), 
+	@DestinationGroup int,
+	@InterconnectOperator int
 AS
 BEGIN
 
@@ -32,7 +34,9 @@ BEGIN
 		FromDate=@FromDate , 
 		ToDate=@ToDate ,
 		Notes=@Notes,
-		ServiceSubTypeSettings=@ServiceSubTypeSettings
+		ServiceSubTypeSettings=@ServiceSubTypeSettings,
+		DestinationGroup=@DestinationGroup,
+		InterconnectOperator=@InterconnectOperator
 
 	Where ID = @ID
 END

@@ -15,7 +15,7 @@ BEGIN
 			nnp.OperatorID,
 			nnp.FromDate,
 			nnp.ToDate,
-			nnp.ZoneID,
+			nnp.DestinationGroup,
 			nnp.Volume,
 			nnp.AmountType,
 			nnp.Attachment,

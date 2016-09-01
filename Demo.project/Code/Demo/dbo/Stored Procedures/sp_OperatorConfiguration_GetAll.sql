@@ -24,6 +24,8 @@ BEGIN
 		  ,config.[ToDate]
 		  ,config.[Notes]
 		  ,config.[ServiceSubTypeSettings]
+		  ,config.[DestinationGroup]
+		  ,config.[InterconnectOperator]
 
 	FROM	[dbo].OperatorConfiguration  as config WITH(NOLOCK) 
 END

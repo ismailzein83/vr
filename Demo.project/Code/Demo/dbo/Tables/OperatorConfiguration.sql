@@ -10,7 +10,11 @@
     [ToDate]                 DATETIME       NULL,
     [Notes]                  NVARCHAR (MAX) NULL,
     [ServiceSubTypeSettings] NVARCHAR (MAX) NULL,
+    [DestinationGroup]       INT            NULL,
+    [InterconnectOperator]   INT            NULL,
     [timestamp]              ROWVERSION     NULL,
     CONSTRAINT [PK_OperatorConfiguration] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

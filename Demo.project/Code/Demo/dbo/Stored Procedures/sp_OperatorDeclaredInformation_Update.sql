@@ -9,7 +9,7 @@ CREATE PROCEDURE [dbo].[sp_OperatorDeclaredInformation_Update]
 	@OperatorID int,
 	@FromDate datetime,
 	@ToDate datetime,
-	@ZoneID bigint,
+	@DestinationGroup int,
 	@Volume int,
 	@AmountType int,
 	@Attachment bigint, 
@@ -20,7 +20,7 @@ BEGIN
 
 	Update dbo.OperatorDeclaredInformation
 		Set OperatorID = @OperatorID,
-		ZoneID = @ZoneID,
+		DestinationGroup = @DestinationGroup,
 		Volume = @Volume,
 		AmountType = @AmountType,
 		FromDate = @FromDate,
