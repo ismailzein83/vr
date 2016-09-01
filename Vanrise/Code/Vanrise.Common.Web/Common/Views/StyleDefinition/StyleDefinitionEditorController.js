@@ -52,7 +52,7 @@
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
-                GetStyleDefinition().then(function () {
+                getStyleDefinition().then(function () {
                     loadAllControls();
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -65,7 +65,7 @@
         }
 
 
-        function GetStyleDefinition() {
+        function getStyleDefinition() {
             return VRCommon_StyleDefinitionAPIService.GetStyleDefinition(styleDefinitionId).then(function (response) {
                 styleDefinitionEntity = response;
             });

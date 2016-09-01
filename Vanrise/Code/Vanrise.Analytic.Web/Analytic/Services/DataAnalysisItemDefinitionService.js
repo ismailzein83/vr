@@ -7,11 +7,12 @@
 
     function dataAnalysisItemDefinitionService(VRModalService) {
 
-        function addDataAnalysisItemDefinition(dataAnalysisDefinitionId, onDataAnalysisItemDefinitionAdded) {
+        function addDataAnalysisItemDefinition(dataAnalysisDefinitionId, itemDefinitionTypeId, onDataAnalysisItemDefinitionAdded) {
             var settings = {};
 
             var parameters = {
                 dataAnalysisDefinitionId: dataAnalysisDefinitionId,
+                itemDefinitionTypeId: itemDefinitionTypeId
             };
 
             settings.onScopeReady = function (modalScope) {
@@ -20,11 +21,13 @@
             VRModalService.showModal('/Client/Modules/Analytic/Views/DataAnalysis/DataAnalysisItemDefinition/DataAnalysisItemDefinitionEditor.html', parameters, settings);
         };
 
-        function editDataAnalysisItemDefinition(dataAnalysisItemDefinitionId, onDataAnalysisItemDefinitionUpdated) {
+        function editDataAnalysisItemDefinition(dataAnalysisItemDefinitionId, dataAnalysisDefinitionId, itemDefinitionTypeId, onDataAnalysisItemDefinitionUpdated) {
             var settings = {};
 
             var parameters = {
                 dataAnalysisItemDefinitionId: dataAnalysisItemDefinitionId,
+                dataAnalysisDefinitionId: dataAnalysisDefinitionId,
+                itemDefinitionTypeId: itemDefinitionTypeId
             };
 
             settings.onScopeReady = function (modalScope) {

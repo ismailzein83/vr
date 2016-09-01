@@ -69,7 +69,10 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsGrid', ['VR_Analytic_DataA
                     gridAPI.itemUpdated(updatedRecordProfilingOutputSettings);
                 };
 
-                VR_Analytic_DataAnalysisItemDefinitionService.editDataAnalysisItemDefinition(dataAnalysisItemDefinition.Entity.DataAnalysisItemDefinitionId, onDataAnalysisItemDefinitionUpdated);
+                VR_Analytic_DataAnalysisItemDefinitionService.editDataAnalysisItemDefinition(dataAnalysisItemDefinition.Entity.DataAnalysisItemDefinitionId,
+                                                                                             dataAnalysisItemDefinition.Entity.DataAnalysisDefinitionId,
+                                                                                             dataAnalysisItemDefinition.Entity.Settings.ItemDefinitionTypeId,
+                                                                                             onDataAnalysisItemDefinitionUpdated);
             }
         }
     }]);

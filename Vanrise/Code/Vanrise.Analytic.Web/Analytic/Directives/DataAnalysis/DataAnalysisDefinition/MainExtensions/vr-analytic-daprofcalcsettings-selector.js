@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Analytic/Directives/DataAnalysis/ProfilingAndCalculation/Templates/DAProfCalcSettingsSelectorTemplate.html"
+            templateUrl: "/Client/Modules/Analytic/Directives/DataAnalysis/DataAnalysisDefinition/MainExtensions/Templates/DAProfCalcSettingsSelectorTemplate.html"
 
         };
         function DAProfCalcSettings($scope, ctrl, $attrs) {

@@ -1,7 +1,7 @@
 ﻿
 'use strict';
 
-app.directive('vrAnalyticDataanalysisitemdefinitionSettings', ['Retail_BE_ServiceTypeAPIService', 'UtilsService', 'VRUIUtilsService', function (Retail_BE_ServiceTypeAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrAnalyticDataanalysisitemdefinitionSettings', ['VR_Analytic_DataAnalysisDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', function (VR_Analytic_DataAnalysisDefinitionAPIService, UtilsService, VRUIUtilsService) {
     return {
         restrict: 'E',
         scope: {
@@ -9,21 +9,22 @@ app.directive('vrAnalyticDataanalysisitemdefinitionSettings', ['Retail_BE_Servic
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var chargingPolicySettings = new ChargingPolicySettings($scope, ctrl, $attrs);
-            chargingPolicySettings.initializeController();
+            var dataAnalysisItemDefinitionSettings = new DataAnalysisItemDefinitionSettings($scope, ctrl, $attrs);
+            dataAnalysisItemDefinitionSettings.initializeController();
         },
         controllerAs: 'ctrl',
         bindToController: true,
-        templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/ChargingPolicy/Templates/ChargingPolicySettingsTemplate.html'
+        templateUrl: '/Client/Modules/Analytic/Directives/DataAnalysis/DataAnalysisItemDefinition/Templates/DataAnalysisItemDefinitionSettingsTemplate.html'
     };
 
-    function ChargingPolicySettings($scope, ctrl, $attrs) {
+    function DataAnalysisItemDefinitionSettings($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
 
         var directiveAPI;
         var directiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
+
             $scope.scopeModel = {};
 
             $scope.scopeModel.onDirectiveReady = function (api) {
@@ -37,38 +38,51 @@ app.directive('vrAnalyticDataanalysisitemdefinitionSettings', ['Retail_BE_Servic
             var api = {};
 
             api.load = function (payload) {
+
                 var promises = [];
+                var dataAnalysisItemDefinition;
+                var dataAnalysisDefinitionId;
+                var itemDefinitionTypeId;
+                var context;
 
-                var serviceTypeId;
-                var chargingPolicy;
-                var chargingPolicyDefinitionSettings;
                 if (payload != undefined) {
-
-                    serviceTypeId = payload.serviceTypeId;
-                    chargingPolicy = payload.chargingPolicy;
+                    dataAnalysisItemDefinition = payload.dataAnalysisItemDefinition;
+                    dataAnalysisDefinitionId = payload.dataAnalysisDefinitionId;
+                    itemDefinitionTypeId = payload.itemDefinitionTypeId;
+                    context = payload.context;
                 }
 
-                var getChargingPolicyDefinitionSettingsPromise = getChargingPolicyDefinitionSettings();
-                promises.push(getChargingPolicyDefinitionSettingsPromise);
+                var getDataAnalysisDefinitionSettingsPromise = getDataAnalysisDefinitionSettings();
+                promises.push(getDataAnalysisDefinitionSettingsPromise);
 
                 var directiveLoadDeferred = UtilsService.createPromiseDeferred();
                 promises.push(directiveLoadDeferred.promise);
 
-                UtilsService.waitMultiplePromises([getChargingPolicyDefinitionSettingsPromise, directiveReadyDeferred.promise]).then(function () {
-                    var directivePayload = {
-                        definitionSettings: chargingPolicyDefinitionSettings,
-                        settings: (chargingPolicy != undefined) ? chargingPolicy.Settings : undefined
-                    };
+                UtilsService.waitMultiplePromises([getDataAnalysisDefinitionSettingsPromise, directiveReadyDeferred.promise]).then(function () {
+
+                    var directivePayload = {};
+                    directivePayload.context = buildContext();
+                    if (dataAnalysisItemDefinition != undefined)
+                        directivePayload.dataAnalysisItemDefinitionSettings = dataAnalysisItemDefinition.Settings;
+
                     VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                 });
 
-                function getChargingPolicyDefinitionSettings() {
-                    return Retail_BE_ServiceTypeAPIService.GetServiceTypeChargingPolicyDefinitionSettings(serviceTypeId).then(function (response) {
-                        chargingPolicyDefinitionSettings = response;
-                        if (response != null) {
-                            $scope.scopeModel.directiveEditor = chargingPolicyDefinitionSettings.ChargingPolicyEditor;
-                        }
+                function getDataAnalysisDefinitionSettings() {
+
+                    return VR_Analytic_DataAnalysisDefinitionAPIService.GetDataAnalysisDefinition(dataAnalysisDefinitionId).then(function (response) {
+ 
+                        var dataAnalysisDefinitionEntity = response;
+                        var itemsConfig = dataAnalysisDefinitionEntity.Settings.ItemsConfig;
+
+                        for (var i = 0; i < itemsConfig.length; i++) 
+                            if (itemsConfig[i].TypeId == itemDefinitionTypeId) {
+                                $scope.scopeModel.directiveEditor = itemsConfig[i].Editor;
+                            }
                     });
+                }
+                function buildContext() {
+                    return context;
                 }
 
                 return UtilsService.waitMultiplePromises(promises);

@@ -22,7 +22,6 @@ app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysis
             this.initializeController = initializeController;
 
             var gridAPI;
-            var drillDownManager;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -47,7 +46,7 @@ app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysis
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
                                 var dataAnalysisDefinition = response.Data[i];
-                                VR_Analytic_DataAnalysisDefinitionDrillDownService.defineDataAnalysisItemDefinitionTabsAndMenuActions(dataAnalysisDefinition, gridAPI, null);
+                                VR_Analytic_DataAnalysisDefinitionDrillDownService.defineDataAnalysisItemDefinitionTabsAndMenuActions(dataAnalysisDefinition, gridAPI);
                             }
                         }
                         onResponseReady(response);
@@ -76,12 +75,6 @@ app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysis
                     ctrl.onReady(api);
             }
 
-            function defineMenuActions() {
-                $scope.scopeModel.menuActions.push({
-                    name: 'Edit',
-                    clicked: editDataAnalysisDefinition,
-                });
-            }
             function buildCommonMenuActions() {
                 return [{
                     name: 'Edit',
@@ -94,43 +87,6 @@ app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysis
                 };
 
                 VR_Analytic_DataAnalysisDefinitionService.editDataAnalysisDefinition(dataAnalysisDefinitionItem.Entity.DataAnalysisDefinitionId, onDataAnalysisDefinitionUpdated);
-            }
-
-            function buildDrillDownTabs() {
-                var drillDownDefinitions = [];
-                drillDownDefinitions.push(buildRecordProfilingTab());
-
-                return drillDownDefinitions;
-            }
-            function buildRecordProfilingTab() {
-                var drillDownDefinition = {};
-
-                drillDownDefinition.title = "Record Profiling";
-                drillDownDefinition.directive = "vr-analytic-analyticconfig-dimension-grid";
-
-                drillDownDefinition.loadDirective = function (dataAnalysisItemDefinitionGridAPI, dataAnalysisDefinition) {
-                    dataAnalysisDefinition.dataAnalysisItemDefinitionGridAPI = dataAnalysisItemDefinitionGridAPI;
-                    var dataAnalysisItemDefinitionPayload = {
-                        dataAnalysisDefinitionSettings: dataAnalysisDefinition
-                    };
-                    return dataAnalysisDefinition.dataAnalysisItemDefinitionGridAPI.load(dataAnalysisItemDefinitionPayload);
-                };
-
-                drillDownDefinition.parentMenuActions = [{
-                    name: "Add Dimension",
-                    clicked: function (tableItem) {
-                        if (drillDownDefinition.setTabSelected != undefined)
-                            drillDownDefinition.setTabSelected(tableItem);
-
-                        var onDimensionAdded = function (dimensionObj) {
-                            if (tableItem.dimensionGridAPI != undefined) {
-                                tableItem.dimensionGridAPI.onAnalyticDimensionAdded(dimensionObj);
-                            }
-                        };
-                        VR_Analytic_AnalyticItemConfigService.addItemConfig(onDimensionAdded, tableItem.Entity.AnalyticTableId, VR_Analytic_AnalyticTypeEnum.Dimension.value);
-                    },
-                }];
-                return drillDownDefinition;
             }
         }
     }]);

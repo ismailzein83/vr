@@ -1,7 +1,7 @@
 ﻿
 'use strict';
-
-app.directive('vrAnalyticDataanalysisitemdefinitionSettings', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
+                
+app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) { 
     return {
         restrict: 'E',
         scope: {
@@ -14,68 +14,109 @@ app.directive('vrAnalyticDataanalysisitemdefinitionSettings', ['UtilsService', '
         },
         controllerAs: 'ctrl',
         bindToController: true,
-        templateUrl: '/Client/Modules/Analytic/Directives/DataAnalysis/ProfilingAndCalculation/Templates/RecordProfilingOutputSettingsEditorTemplate.html'
+        templateUrl: '/Client/Modules/Analytic/Directives/DataAnalysis/ProfilingAndCalculation/OutputDefinitions/Templates/RecordProfilingOutputSettingsEditorTemplate.html'
     };
 
     function RecordProfilingOutputSettingsEditor($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
 
-        //var directiveAPI;
-        //var directiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var recordFilterDirectiveAPI;
+        var recordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
+            var promises = [recordFilterDirectiveReadyDeferred.promise];
+
             $scope.scopeModel = {};
 
-            //$scope.scopeModel.onDirectiveReady = function (api) {
-            //    directiveAPI = api;
-            //    directiveReadyDeferred.resolve();
-            //};
+            $scope.scopeModel.onRecordFilterDirectiveReady = function (api) {
+                recordFilterDirectiveAPI = api;
+                recordFilterDirectiveReadyDeferred.resolve();
+            };
 
-            defineAPI();
+            UtilsService.waitMultiplePromises(promises).then(function () {
+                defineAPI();
+            })
+
         }
         function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
-                //var promises = [];
 
-                //var serviceTypeId;
-                //var chargingPolicy;
-                //var chargingPolicyDefinitionSettings;
-                //if (payload != undefined) {
+                console.log(payload);
 
-                //    serviceTypeId = payload.serviceTypeId;
-                //    chargingPolicy = payload.chargingPolicy;
-                //}
+                var promises = [];
 
-                //var getChargingPolicyDefinitionSettingsPromise = getChargingPolicyDefinitionSettings();
-                //promises.push(getChargingPolicyDefinitionSettingsPromise);
+                var context;
+                var filterGroup;
 
-                //var directiveLoadDeferred = UtilsService.createPromiseDeferred();
-                //promises.push(directiveLoadDeferred.promise);
+                if(payload != undefined){
+                    context = payload.context
+                    filterGroup = payload.dataAnalysisItemDefinitionSettings.RecordFilter;
+                }
 
-                //UtilsService.waitMultiplePromises([getChargingPolicyDefinitionSettingsPromise, directiveReadyDeferred.promise]).then(function () {
-                //    var directivePayload = {
-                //        definitionSettings: chargingPolicyDefinitionSettings,
-                //        settings: (chargingPolicy != undefined) ? chargingPolicy.Settings : undefined
-                //    };
-                //    VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
-                //});
+                //Loading Record Filter Directive
+                var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                var recordFilterDirectivePayload = {
+                    context: buildContext(),
+                    FilterGroup: filterGroup
+                };
+                VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
+                promises.push(recordFilterDirectiveLoadDeferred.promise);
 
-                //function getChargingPolicyDefinitionSettings() {
-                //    return Retail_BE_ServiceTypeAPIService.GetServiceTypeChargingPolicyDefinitionSettings(serviceTypeId).then(function (response) {
-                //        chargingPolicyDefinitionSettings = response;
-                //        if (response != null) {
-                //            $scope.scopeModel.directiveEditor = chargingPolicyDefinitionSettings.ChargingPolicyEditor;
-                //        }
-                //    });
-                //}
 
-                //return UtilsService.waitMultiplePromises(promises);
+                function virtual() {
+
+                    //var promises = [];
+
+                    //var serviceTypeId;
+                    //var chargingPolicy;
+                    //var chargingPolicyDefinitionSettings;
+                    //if (payload != undefined) {
+
+                    //    serviceTypeId = payload.serviceTypeId;
+                    //    chargingPolicy = payload.chargingPolicy;
+                    //}
+
+                    //var getChargingPolicyDefinitionSettingsPromise = getChargingPolicyDefinitionSettings();
+                    //promises.push(getChargingPolicyDefinitionSettingsPromise);
+
+                    //var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+                    //promises.push(directiveLoadDeferred.promise);
+
+                    //UtilsService.waitMultiplePromises([getChargingPolicyDefinitionSettingsPromise, directiveReadyDeferred.promise]).then(function () {
+                    //    var directivePayload = {
+                    //        definitionSettings: chargingPolicyDefinitionSettings,
+                    //        settings: (chargingPolicy != undefined) ? chargingPolicy.Settings : undefined
+                    //    };
+                    //    VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
+                    //});
+
+                    //function getChargingPolicyDefinitionSettings() {
+                    //    return Retail_BE_ServiceTypeAPIService.GetServiceTypeChargingPolicyDefinitionSettings(serviceTypeId).then(function (response) {
+                    //        chargingPolicyDefinitionSettings = response;
+                    //        if (response != null) {
+                    //            $scope.scopeModel.directiveEditor = chargingPolicyDefinitionSettings.ChargingPolicyEditor;
+                    //        }
+                    //    });
+                    //}
+
+                    //return UtilsService.waitMultiplePromises(promises);
+                }
+                function buildContext() {
+                    return context;
+                }
+
+                return UtilsService.waitMultiplePromises(promises);
+
             };
 
             api.getData = function () {
-                //return directiveAPI.getData();
+                var data = {
+                    $type: "Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputDefinitions.RecordProfilingOutputSettings, Vanrise.Analytic.Entities",
+                    RecordFilter: recordFilterDirectiveAPI.getData().filterObj
+                }
+                return data;
             };
 
             if (ctrl.onReady != null)

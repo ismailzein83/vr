@@ -2,11 +2,11 @@
 
     'use stict';
 
-    DataAnalysisGridService.$inject = ['VRModalService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_DataAnalysisItemDefinitionService'];
+    DataAnalysisGridService.$inject = ['VR_Analytic_DataAnalysisItemDefinitionService', 'VRModalService', 'VRNotificationService', 'VRUIUtilsService'];
 
-    function DataAnalysisGridService(VRModalService, VRNotificationService, VRUIUtilsService, VR_Analytic_DataAnalysisItemDefinitionService) {
+    function DataAnalysisGridService(VR_Analytic_DataAnalysisItemDefinitionService, VRModalService, VRNotificationService, VRUIUtilsService) {
 
-        function defineDataAnalysisItemDefinitionTabsAndMenuActions(dataAnalysisDefinition, gridAPI, criteriaFieldValues) {
+        function defineDataAnalysisItemDefinitionTabsAndMenuActions(dataAnalysisDefinition, gridAPI) {
             if (dataAnalysisDefinition.Entity.Settings == null || dataAnalysisDefinition.Entity.Settings.ItemsConfig == null)
                 return;
 
@@ -41,7 +41,7 @@
                     var dataAnalysisItemDefinitionQuery = {};
 
                     dataAnalysisItemDefinitionQuery.DataAnalysisDefinitionId = dataAnalysisDefinition.Entity.DataAnalysisDefinitionId;
-                    dataAnalysisItemDefinitionQuery.ItemDefinitionTypeId = dataAnalysisDefinition.Entity.Settings.ItemDefinitionTypeId;
+                    dataAnalysisItemDefinitionQuery.ItemDefinitionTypeId = dataAnalysisItemDefinitionConfig.TypeId;
 
                     return dataAnalysisItemDefinitionQuery;
                 }
@@ -61,20 +61,21 @@
 
                     dataAnalysisDefinition.drillDownExtensionObject.drillDownDirectiveTabs[dataAnalysisItemDefinitionConfigIndex].setTabSelected(dataAnalysisDefinition);
 
+                    var itemDefinitionTypeId = dataAnalysisItemDefinitionConfig.TypeId;
+
                     var onDataAnalysisItemDefinitionAdded = function (addedDataAnalysisItemDefinition) {
                         dataAnalysisDefinition.dataAnalysisItemDefinitionGridAPI.onItemAdded(addedDataAnalysisItemDefinition);
                     };
 
-                    VR_Analytic_DataAnalysisItemDefinitionService.addDataAnalysisItemDefinition(dataAnalysisDefinition.Entity.DataAnalysisDefinitionId, onDataAnalysisItemDefinitionAdded);
+                    VR_Analytic_DataAnalysisItemDefinitionService.addDataAnalysisItemDefinition(dataAnalysisDefinition.Entity.DataAnalysisDefinitionId, itemDefinitionTypeId, onDataAnalysisItemDefinitionAdded);
                 };
 
                 menuActions.push(menuAction);
             }
             function setMenuActions() {
                 dataAnalysisDefinition.menuActions = [];
-                for (var i = 0; i < menuActions.length; i++) {
+                for (var i = 0; i < menuActions.length; i++) 
                     dataAnalysisDefinition.menuActions.push(menuActions[i]);
-                }
             }
         }
 

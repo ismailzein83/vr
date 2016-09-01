@@ -1,11 +1,11 @@
 ﻿
-<vr-datagrid datasource="scopeModel.dataAnalysisDefinition"
+<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.dataAnalysisDefinition"
              dataretrievalfunction="scopeModel.dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
-             on-ready="scopeModel.onGridReady"
              menuactions="scopeModel.menuActions"
-             showexpand="scopeModel.showExpandIcon"
-             idfield="Entity.DataAnalysisDefinitionId">
+             showexpand="scopeModel.showExpandIcon">
+    <!--idfield="Entity.DataAnalysisDefinitionId">-->
     <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
 
     <vr-datagridexpandablerow>

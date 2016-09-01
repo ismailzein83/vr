@@ -2,15 +2,22 @@
 
     "use strict";
 
-    DataAnalysisItemDefinitionEditorController.$inject = ['$scope', 'VR_Analytic_DataAnalysisItemDefinitionAPIService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService'];
+    DataAnalysisItemDefinitionEditorController.$inject = ['$scope', 'VR_Analytic_DataAnalysisItemDefinitionAPIService', 'VR_Analytic_DataAnalysisDefinitionAPIService', 'VR_GenericData_DataRecordTypeAPIService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService'];
 
-    function DataAnalysisItemDefinitionEditorController($scope, VR_Analytic_DataAnalysisItemDefinitionAPIService, VRNotificationService, UtilsService, VRUIUtilsService, VRNavigationService) {
+    function DataAnalysisItemDefinitionEditorController($scope, VR_Analytic_DataAnalysisItemDefinitionAPIService, VR_Analytic_DataAnalysisDefinitionAPIService, VR_GenericData_DataRecordTypeAPIService, VRNotificationService, UtilsService, VRUIUtilsService, VRNavigationService) {
 
         var isEditMode;
 
         var dataAnalysisItemDefinitionId;
-        var dataAnalysisDefinitionId;
         var dataAnalysisItemDefinitionEntity;
+        var dataAnalysisDefinitionId;
+        var itemDefinitionTypeId;
+
+        var dataRecordTypeId;
+        var dataRecordTypeEntity;
+
+        var dataRecordTypeSelectorAPI;
+        var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var settingsDirectiveAPI;
         var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -23,15 +30,32 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
-            if (parameters != undefined && parameters != null) {
+            if (parameters != undefined) {
                 dataAnalysisItemDefinitionId = parameters.dataAnalysisItemDefinitionId;
                 dataAnalysisDefinitionId = parameters.dataAnalysisDefinitionId
+                itemDefinitionTypeId = parameters.itemDefinitionTypeId
             }
 
             isEditMode = (dataAnalysisItemDefinitionId != undefined);
         }
         function defineScope() {
             $scope.scopeModel = {};
+
+            $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
+                dataRecordTypeSelectorAPI = api;
+                dataRecordTypeSelectorReadyDeferred.resolve();
+            }
+            $scope.scopeModel.onDataRecordTypeSelectionChanged = function () {
+                var selectedId = dataRecordTypeSelectorAPI.getSelectedIds();
+                if (selectedId != undefined) {
+                    dataRecordTypeId = selectedId;
+
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isSelectorLoading = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeSelectorAPI, undefined, setLoader);
+                }
+            };
 
             $scope.scopeModel.onSettingsDirectiveReady = function (api) {
                 settingsDirectiveAPI = api;
@@ -54,7 +78,7 @@
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
-                GetDataAnalysisItemDefinition().then(function () {
+                getDataAnalysisItemDefinition().then(function () {
                     loadAllControls();
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -66,15 +90,19 @@
             }
         }
 
-
-        function GetDataAnalysisItemDefinition() {
+        function getDataAnalysisItemDefinition() {
             return VR_Analytic_DataAnalysisItemDefinitionAPIService.GetDataAnalysisItemDefinition(dataAnalysisItemDefinitionId).then(function (response) {
                 dataAnalysisItemDefinitionEntity = response;
             });
         }
+        function getDataRecordType() {
+            return VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(dataRecordTypeId).then(function (response) {
+                dataRecordTypeEntity = response;
+            });
+        }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSettingsDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadSettingsDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -96,21 +124,39 @@
                 $scope.scopeModel.name = dataAnalysisItemDefinitionEntity.Name;
                 $scope.scopeModel.title = dataAnalysisItemDefinitionEntity.Settings.Title;
             }
+            function loadDataRecordTypeSelector() {
+                var dataRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                dataRecordTypeSelectorReadyDeferred.promise.then(function () {
+                    var dataRecordTypeSelectorPayload = {};
+                    if (dataAnalysisItemDefinitionEntity != undefined && dataAnalysisItemDefinitionEntity.Settings != undefined) {
+                        dataRecordTypeId = dataAnalysisItemDefinitionEntity.Settings.RecordTypeId
+                        dataRecordTypeSelectorPayload.selectedIds = dataRecordTypeId;
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, dataRecordTypeSelectorPayload, dataRecordTypeSelectorLoadDeferred);
+                });
+
+                return dataRecordTypeSelectorLoadDeferred.promise;
+            }
             function loadSettingsDirective() {
                 var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 settingsDirectiveReadyDeferred.promise.then(function () {
-                    var settingsDirectivePayload;
-                    if (dataAnalysisItemDefinitionEntity != undefined) {
-                        settingsDirectivePayload = { dataAnalysisItemDefinition: dataAnalysisItemDefinitionEntity };
-                    }
+
+                    var settingsDirectivePayload = {};
+                    settingsDirectivePayload.dataAnalysisItemDefinition = dataAnalysisItemDefinitionEntity;
+                    settingsDirectivePayload.dataAnalysisDefinitionId = dataAnalysisDefinitionId;
+                    settingsDirectivePayload.itemDefinitionTypeId = itemDefinitionTypeId;
+                    settingsDirectivePayload.context = buildContext();
+
                     VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
                 });
 
                 return settingsDirectiveLoadDeferred.promise;
             }
-        }
 
+        }
 
         function insert() {
             $scope.scopeModel.isLoading = true;
@@ -142,22 +188,47 @@
             });
         }
 
+        function buildContext()
+        {
+            var context = {
+                getFields: function () {
+                    var fields = []
+                    getDataRecordType().then(function () {
+                        for (var i = 0 ; i < dataRecordTypeEntity.Fields.length; i++) {
+                            var field = dataRecordTypeEntity.Fields[i];
+                            fields.push({
+                                FieldName: field.Name,
+                                FieldTitle: field.Title,
+                                Type: field.Type
+                            })
+                        }
+                    });
+
+                    return fields;
+                }
+            }
+            return context;
+        }
+
         function buildDataAnalysisItemDefinitionObjFromScope() {
 
             var dataAnalysisItemDefinitionSettings = settingsDirectiveAPI.getData();
 
-            if (dataAnalysisItemDefinitionSettings != undefined)
+            if (dataAnalysisItemDefinitionSettings != undefined) {
                 dataAnalysisItemDefinitionSettings.Title = $scope.scopeModel.title;
+                dataAnalysisItemDefinitionSettings.RecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds()
+            }
 
             return {
                 DataAnalysisItemDefinitionId: dataAnalysisItemDefinitionEntity != undefined ? dataAnalysisItemDefinitionEntity.DataAnalysisItemDefinitionId : undefined,
                 DataAnalysisDefinitionId: dataAnalysisItemDefinitionEntity != undefined ? dataAnalysisItemDefinitionEntity.DataAnalysisDefinitionId : dataAnalysisDefinitionId,
                 Name: $scope.scopeModel.name,
-                Settings: dataAnalysisItemDefinitionSettings
-                //{
+                //Settings: {
                 //    $type: "Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputDefinitions.RecordProfilingOutputSettings, Vanrise.Analytic.Entities",
-                //    Title: $scope.scopeModel.title
+                //    Title: $scope.scopeModel.title,
+                //    RecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds()
                 //}
+                Settings: dataAnalysisItemDefinitionSettings
             };
         }
     }
