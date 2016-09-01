@@ -68,7 +68,7 @@ as (select * from (values
 (1505,'Network Elements',null,101,null,2,0),
 (1506,'Billing',null,null,'/images/menu-icons/billing.png',4,0),
 (1507,'Reports',null,null,'/images/menu-icons/NOC.png',5,0),
-(1508,'Entities Definition',null,-1,null,55,0)
+(1508,'Entities Definition',null,-100,null,55,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -248,13 +248,13 @@ as (select * from (values
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
 using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
+on		1=1 and t.[Name] = s.[Name]
 when matched then
 	update set
-	[Name] = s.[Name],[RequiredPermissions] = s.[RequiredPermissions]
+		[RequiredPermissions] = s.[RequiredPermissions]
 when not matched by target then
-	insert([ID],[Name],[RequiredPermissions])
-	values(s.[ID],s.[Name],s.[RequiredPermissions]);
+	insert([Name],[RequiredPermissions])
+	values(s.[Name],s.[RequiredPermissions]);
 
 --[genericdata].[DataStore]-------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
