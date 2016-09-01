@@ -62,9 +62,12 @@ app.directive('vrCommonStyledefinitionGrid', ['VRCommon_StyleDefinitionAPIServic
                 $scope.scopeModel.menuActions.push({
                     name: 'Edit',
                     clicked: editStyleDefinition,
+                    haspermission: hasEditStyleDefinitionPermission
                 });
             }
-
+            function hasEditStyleDefinitionPermission() {
+                return VRCommon_StyleDefinitionAPIService.HasUpdateStyleDefinitionPermission();
+            }
             function editStyleDefinition(styleDefinitionItem) {
                 var onStyleDefinitionUpdated = function (updatedStyleDefinition) {
                     gridAPI.itemUpdated(updatedStyleDefinition);

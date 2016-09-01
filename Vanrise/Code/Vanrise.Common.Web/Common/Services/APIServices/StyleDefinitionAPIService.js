@@ -2,9 +2,9 @@
 (function (appControllers) {
 
     "use strict";
-    StyleDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig'];
+    StyleDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig', 'SecurityService'];
 
-    function StyleDefinitionAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig) {
+    function StyleDefinitionAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig, SecurityService) {
 
         var controllerName = "StyleDefinition";
 
@@ -27,6 +27,15 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'UpdateStyleDefinition'), styleDefinitionItem);
         }
 
+
+        function HasAddStyleDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['AddStyleDefinition']));
+        }
+
+        function HasUpdateStyleDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['UpdateStyleDefinition']));
+        }
+
         function GetStyleFormatingExtensionConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetStyleFormatingExtensionConfigs"));
         }
@@ -42,6 +51,8 @@
             GetFilteredStyleDefinitions: GetFilteredStyleDefinitions,
             GetStyleDefinition: GetStyleDefinition,
             AddStyleDefinition: AddStyleDefinition,
+            HasAddStyleDefinitionPermission: HasAddStyleDefinitionPermission,
+            HasUpdateStyleDefinitionPermission:HasUpdateStyleDefinitionPermission,
             UpdateStyleDefinition: UpdateStyleDefinition,
             GetStyleFormatingExtensionConfigs: GetStyleFormatingExtensionConfigs,
             GetStyleDefinitionsInfo: GetStyleDefinitionsInfo

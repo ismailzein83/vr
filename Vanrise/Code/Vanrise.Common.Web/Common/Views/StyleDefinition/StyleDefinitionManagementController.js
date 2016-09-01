@@ -2,9 +2,9 @@
 
     "use strict";
 
-    StyleDefinitionManagementController.$inject = ['$scope', 'VRCommon_StyleDefinitionService', 'UtilsService', 'VRUIUtilsService'];
+    StyleDefinitionManagementController.$inject = ['$scope', 'VRCommon_StyleDefinitionService', 'VRCommon_StyleDefinitionAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function StyleDefinitionManagementController($scope, VRCommon_StyleDefinitionService, UtilsService, VRUIUtilsService) {
+    function StyleDefinitionManagementController($scope, VRCommon_StyleDefinitionService, VRCommon_StyleDefinitionAPIService, UtilsService, VRUIUtilsService) {
 
         var gridAPI;
 
@@ -13,20 +13,21 @@
 
 
         function defineScope() {
-            $scope.scopeModel = {};
 
-            $scope.scopeModel.search = function () {
+            $scope.search = function () {
                 var query = buildGridQuery();
                 return gridAPI.load(query);
             };
-            $scope.scopeModel.add = function () {
+            $scope.add = function () {
                 var onStyleDefinitionAdded = function (addedStyleDefinition) {
                     gridAPI.onStyleDefinitionAdded(addedStyleDefinition);
                 }
                 VRCommon_StyleDefinitionService.addStyleDefinition(onStyleDefinitionAdded);
             };
-
-            $scope.scopeModel.onGridReady = function (api) {
+            $scope.hasAddStyleDefinitionPermission =function () {
+                return VRCommon_StyleDefinitionAPIService.HasAddStyleDefinitionPermission()
+            }
+            $scope.onGridReady = function (api) {
                 gridAPI = api;
                 gridAPI.load({});
             };
@@ -38,7 +39,7 @@
 
         function buildGridQuery() {
             return {
-                Name: $scope.scopeModel.name,
+                Name: $scope.name,
             };
         }
     }
