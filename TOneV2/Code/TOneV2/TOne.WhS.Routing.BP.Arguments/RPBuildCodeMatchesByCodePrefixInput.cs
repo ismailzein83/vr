@@ -5,6 +5,8 @@ namespace TOne.WhS.Routing.BP.Arguments
 {
     public class RPBuildCodeMatchesByCodePrefixInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
+        public int SupplierCodeServiceRuntimeProcessId { get; set; }
+
         public int RoutingDatabaseId { get; set; }
 
         public CodePrefix CodePrefix { get; set; }

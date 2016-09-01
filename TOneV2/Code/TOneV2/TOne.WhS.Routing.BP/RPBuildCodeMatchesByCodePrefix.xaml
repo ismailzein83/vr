@@ -57,6 +57,8 @@
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
@@ -125,6 +127,11 @@
               <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
             </InArgument>
           </twrba1:GetSupplierCodes.IsFuture>
+          <twrba1:GetSupplierCodes.SupplierCodeServiceRuntimeProcessId>
+            <InArgument x:TypeArguments="x:Int32">
+              <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierCodeServiceRuntimeProcessId</mca:CSharpValue>
+            </InArgument>
+          </twrba1:GetSupplierCodes.SupplierCodeServiceRuntimeProcessId>
           <twrba1:GetSupplierCodes.SupplierCodes>
             <OutArgument x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">
               <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">supplierCodes</mca:CSharpReference>
@@ -281,7 +288,7 @@
         </twrba1:ApplyCodesToCodeSaleZoneTable.RoutingDatabaseId>
       </twrba1:ApplyCodesToCodeSaleZoneTable>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d1FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBCdWlsZENvZGVNYXRjaGVzQnlDb2RlUHJlZml4LnhhbWwxRgOdAg4CAQFMBZ0BEAMBhQKeAQWbAhACAQJNB2QSAwHAAmUHnAESAwGGAqgBB8wBIQMBrwHNAQfiASsCAX7jAQf4ASwCAU35AQeJAiUCASiKAgeaAi4CAQNOCWMfAwHBAmkJbykDAbkCcAmKASMDAZoCiwEJmwEpAwGHArUBDbUBjgEDAfkBugENugFqAwHtAbABDbABgwEDAeEBqwENqwFgAwHVAb8BDb8BdwMByQHEAQ3EAXIDAb0BqAGVAagBnAEDAbwByQENyQFzAwGwAdoBDdoBbwMBowHQAQ3QAXsDAZcB3wEN3wF5AwGLAdUBDdUBeQIBf/ABDfABcQIBcuYBDeYBhgECAWb1AQ31AXoCAVrrAQ3rAX4CAU6BAg2BAnECAUH8AQ38AXECATWGAg2GAmECASmSAg2SAnICARyNAg2NAnYCARCXAg2XAmECAQRWD1ZsAwHRAmAPYHQDAcwCUQ9RZAMBxwJbD1tcAwHCAmwPbIgBAwG6AngPeGwDAbMCcw9zZAMBrQKHAQ+HAYABAwGnAoIBD4IBfAMBoQJ9D31cAwGbAo4BD44BYwMBlAKTAQ+TAXQDAY4CmAEPmAF9AwGIAg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBCdWlsZENvZGVNYXRjaGVzQnlDb2RlUHJlZml4LnhhbWwySAOkAg4CAQFOBaQBEAMBhQKlAQWiAhACAQJPB2YSAwHGAmcHowESAwGGAq8BB9MBIQMBrwHUAQfpASsCAX7qAQf/ASwCAU2AAgeQAiUCASiRAgehAi4CAQNQCWUfAwHHAmsJcSkDAb8CcgmRASMDAZoCkgEJogEpAwGHArwBDbwBjgEDAfkBwQENwQFqAwHtAbcBDbcBgwEDAeEBsgENsgFgAwHVAcYBDcYBdwMByQHLAQ3LAXIDAb0BrwGVAa8BnAEDAbwB0AEN0AFzAwGwAeEBDeEBbwMBowHXAQ3XAXsDAZcB5gEN5gF5AwGLAdwBDdwBeQIBf/cBDfcBcQIBcu0BDe0BhgECAWb8AQ38AXoCAVryAQ3yAX4CAU6IAg2IAnECAUGDAg2DAnECATWNAg2NAmECASmZAg2ZAnICARyUAg2UAnYCARCeAg2eAmECAQRYD1hsAwHXAmIPYnQDAdICUw9TZAMBzQJdD11cAwHIAm4PbogBAwHAAnoPemwDAbkCdQ91ZAMBswKOAQ+OAYABAwGtAokBD4kBfAMBpwKEAQ+EAXUDAaECfw9/XAMBmwKVAQ+VAWMDAZQCmgEPmgF0AwGOAp8BD58BfQMBiAI=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

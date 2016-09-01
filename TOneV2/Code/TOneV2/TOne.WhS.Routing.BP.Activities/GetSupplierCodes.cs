@@ -32,6 +32,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public sealed class GetSupplierCodes : BaseAsyncActivity<GetSupplierCodesInput, GetSupplierCodesOutput>
     {
+        [RequiredArgument]
         public InArgument<int> SupplierCodeServiceRuntimeProcessId { get; set; }
 
         [RequiredArgument]

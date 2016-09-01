@@ -89,6 +89,11 @@
       <Variable x:TypeArguments="x:Int32" Default="0" Name="subProcessByPrefixCompleted" />
       <Variable x:TypeArguments="x:Int32" Default="0" Name="subProcessByZoneRangesCompleted" />
       <Variable x:TypeArguments="x:Int32" Name="supplierGroupSize" />
+      <Variable x:TypeArguments="scg:Dictionary(x:String, x:Int32)" Name="supplierCodePrefixesRuntimeProcessIds">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, x:Int32)">new Dictionary&lt;string, int&gt; { { "1", 0 }, { "2", 0 }, { "3", 0 }, { "4", 0 }, { "5", 0 }, { "6", 0 }, { "7", 0 }, { "8", 0 }, { "9", 0 } }</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
     </Sequence.Variables>
     <twrba1:CreateRoutingDatabase sap2010:WorkflowViewState.IdRef="CreateRoutingDatabase_2">
       <twrba1:CreateRoutingDatabase.DatabaseId>
@@ -132,23 +137,6 @@
           </OutArgument>
         </twrba1:GetActiveSupplierInfos.ActiveRoutingSupplierInfos>
       </twrba1:GetActiveSupplierInfos>
-      <twrba1:PrepareCodePrefixes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="PrepareCodePrefixes_1">
-        <twrba1:PrepareCodePrefixes.DistinctCodePrefixes>
-          <OutArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">
-            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">codePrefixes</mca:CSharpReference>
-          </OutArgument>
-        </twrba1:PrepareCodePrefixes.DistinctCodePrefixes>
-        <twrba1:PrepareCodePrefixes.EffectiveOn>
-          <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
-            <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveOn</mca:CSharpValue>
-          </InArgument>
-        </twrba1:PrepareCodePrefixes.EffectiveOn>
-        <twrba1:PrepareCodePrefixes.IsFuture>
-          <InArgument x:TypeArguments="x:Boolean">
-            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
-          </InArgument>
-        </twrba1:PrepareCodePrefixes.IsFuture>
-      </twrba1:PrepareCodePrefixes>
     </Parallel>
     <twrba1:LoadRoutingSettings CustomerGroupSize="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadRoutingSettings_1">
       <twrba1:LoadRoutingSettings.SupplierGroupSize>
@@ -157,48 +145,145 @@
         </OutArgument>
       </twrba1:LoadRoutingSettings.SupplierGroupSize>
     </twrba1:LoadRoutingSettings>
-    <local:BuildCarrierZoneDetails DisplayName="BuildSupplierZoneDetails" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.WhS.Routing.BP.SubProcesses.BuildCarrierZoneDetails_1">
-      <local:BuildCarrierZoneDetails.CarrierInfos>
-        <InArgument x:TypeArguments="scg:List(twbe:RoutingCarrierInfo)">
-          <mca:CSharpValue x:TypeArguments="scg:List(twbe:RoutingCarrierInfo)">supplierInfo.Cast&lt;TOne.WhS.BusinessEntity.Entities.RoutingCarrierInfo&gt;().ToList();</mca:CSharpValue>
-        </InArgument>
-      </local:BuildCarrierZoneDetails.CarrierInfos>
-      <local:BuildCarrierZoneDetails.GroupSize>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">supplierGroupSize</mca:CSharpValue>
-        </InArgument>
-      </local:BuildCarrierZoneDetails.GroupSize>
-      <local:BuildCarrierZoneDetails.ProcessInputArgument>
-        <InArgument x:TypeArguments="twrba:BuildCarrierZoneDetailsInput">
-          <mca:CSharpValue x:TypeArguments="twrba:BuildCarrierZoneDetailsInput" xml:space="preserve">new BuildSupplierZoneDetailsInput()
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_2">
+      <local:BuildCarrierZoneDetails DisplayName="BuildSupplierZoneDetails" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.WhS.Routing.BP.SubProcesses.BuildCarrierZoneDetails_1">
+        <local:BuildCarrierZoneDetails.CarrierInfos>
+          <InArgument x:TypeArguments="scg:List(twbe:RoutingCarrierInfo)">
+            <mca:CSharpValue x:TypeArguments="scg:List(twbe:RoutingCarrierInfo)">supplierInfo.Cast&lt;TOne.WhS.BusinessEntity.Entities.RoutingCarrierInfo&gt;().ToList();</mca:CSharpValue>
+          </InArgument>
+        </local:BuildCarrierZoneDetails.CarrierInfos>
+        <local:BuildCarrierZoneDetails.GroupSize>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">supplierGroupSize</mca:CSharpValue>
+          </InArgument>
+        </local:BuildCarrierZoneDetails.GroupSize>
+        <local:BuildCarrierZoneDetails.ProcessInputArgument>
+          <InArgument x:TypeArguments="twrba:BuildCarrierZoneDetailsInput">
+            <mca:CSharpValue x:TypeArguments="twrba:BuildCarrierZoneDetailsInput" xml:space="preserve">new BuildSupplierZoneDetailsInput()
             {
                 RoutingDatabaseId = routingDatabaseId,
                 EffectiveOn = Input.EffectiveOn,
                 IsFuture = Input.IsFuture,
             }</mca:CSharpValue>
-        </InArgument>
-      </local:BuildCarrierZoneDetails.ProcessInputArgument>
-      <sap2010:WorkflowViewState.ViewStateManager>
-        <sap2010:ViewStateManager>
-          <sap2010:ViewStateData Id="SplitListIntoGroups`1_1" sap2010:WorkflowViewState.IdRef="ViewStateData_1" />
-          <sap2010:ViewStateData Id="Assign_1" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
-          <sap2010:ViewStateData Id="Assign_4" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
-          <sap2010:ViewStateData Id="Assign_2" sap2010:WorkflowViewState.IdRef="ViewStateData_4" />
-          <sap2010:ViewStateData Id="Assign_5" sap2010:WorkflowViewState.IdRef="ViewStateData_5" />
-          <sap2010:ViewStateData Id="Assign_6" sap2010:WorkflowViewState.IdRef="ViewStateData_6" />
-          <sap2010:ViewStateData Id="RunProcess_1" sap2010:WorkflowViewState.IdRef="ViewStateData_7" />
-          <sap2010:ViewStateData Id="TerminateWorkflow_1" sap2010:WorkflowViewState.IdRef="ViewStateData_8" />
-          <sap2010:ViewStateData Id="Assign_3" sap2010:WorkflowViewState.IdRef="ViewStateData_9" />
-          <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap2010:WorkflowViewState.IdRef="ViewStateData_10" />
-          <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_11" />
-          <sap2010:ViewStateData Id="If_1" sap2010:WorkflowViewState.IdRef="ViewStateData_12" />
-          <sap2010:ViewStateData Id="Sequence_2" sap2010:WorkflowViewState.IdRef="ViewStateData_13" />
-          <sap2010:ViewStateData Id="ParallelForEach`1_2" sap2010:WorkflowViewState.IdRef="ViewStateData_14" />
-          <sap2010:ViewStateData Id="Sequence_3" sap2010:WorkflowViewState.IdRef="ViewStateData_15" />
-          <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.BuildCarrierZoneDetails_1" sap2010:WorkflowViewState.IdRef="ViewStateData_16" />
-        </sap2010:ViewStateManager>
-      </sap2010:WorkflowViewState.ViewStateManager>
-    </local:BuildCarrierZoneDetails>
+          </InArgument>
+        </local:BuildCarrierZoneDetails.ProcessInputArgument>
+        <sap2010:WorkflowViewState.ViewStateManager>
+          <sap2010:ViewStateManager>
+            <sap2010:ViewStateData Id="SplitListIntoGroups`1_1" sap2010:WorkflowViewState.IdRef="ViewStateData_1" />
+            <sap2010:ViewStateData Id="Assign_1" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
+            <sap2010:ViewStateData Id="Assign_4" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
+            <sap2010:ViewStateData Id="Assign_2" sap2010:WorkflowViewState.IdRef="ViewStateData_4" />
+            <sap2010:ViewStateData Id="Assign_5" sap2010:WorkflowViewState.IdRef="ViewStateData_5" />
+            <sap2010:ViewStateData Id="Assign_6" sap2010:WorkflowViewState.IdRef="ViewStateData_6" />
+            <sap2010:ViewStateData Id="RunProcess_1" sap2010:WorkflowViewState.IdRef="ViewStateData_7" />
+            <sap2010:ViewStateData Id="TerminateWorkflow_1" sap2010:WorkflowViewState.IdRef="ViewStateData_8" />
+            <sap2010:ViewStateData Id="Assign_3" sap2010:WorkflowViewState.IdRef="ViewStateData_9" />
+            <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap2010:WorkflowViewState.IdRef="ViewStateData_10" />
+            <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_11" />
+            <sap2010:ViewStateData Id="If_1" sap2010:WorkflowViewState.IdRef="ViewStateData_12" />
+            <sap2010:ViewStateData Id="Sequence_2" sap2010:WorkflowViewState.IdRef="ViewStateData_13" />
+            <sap2010:ViewStateData Id="ParallelForEach`1_2" sap2010:WorkflowViewState.IdRef="ViewStateData_14" />
+            <sap2010:ViewStateData Id="Sequence_3" sap2010:WorkflowViewState.IdRef="ViewStateData_15" />
+            <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.BuildCarrierZoneDetails_1" sap2010:WorkflowViewState.IdRef="ViewStateData_16" />
+          </sap2010:ViewStateManager>
+        </sap2010:WorkflowViewState.ViewStateManager>
+      </local:BuildCarrierZoneDetails>
+      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_8">
+        <twrba1:PrepareCodePrefixes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="PrepareCodePrefixes_2">
+          <twrba1:PrepareCodePrefixes.DistinctCodePrefixes>
+            <OutArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">
+              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">codePrefixes</mca:CSharpReference>
+            </OutArgument>
+          </twrba1:PrepareCodePrefixes.DistinctCodePrefixes>
+          <twrba1:PrepareCodePrefixes.EffectiveOn>
+            <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+              <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveOn</mca:CSharpValue>
+            </InArgument>
+          </twrba1:PrepareCodePrefixes.EffectiveOn>
+          <twrba1:PrepareCodePrefixes.IsFuture>
+            <InArgument x:TypeArguments="x:Boolean">
+              <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
+            </InArgument>
+          </twrba1:PrepareCodePrefixes.IsFuture>
+        </twrba1:PrepareCodePrefixes>
+        <twrba1:MakeCodePrefixesAvailableForSubProcesses sap2010:WorkflowViewState.IdRef="MakeCodePrefixesAvailableForSubProcesses_1">
+          <twrba1:MakeCodePrefixesAvailableForSubProcesses.CodePrefixes>
+            <InArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">
+              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">codePrefixes</mca:CSharpValue>
+            </InArgument>
+          </twrba1:MakeCodePrefixesAvailableForSubProcesses.CodePrefixes>
+        </twrba1:MakeCodePrefixesAvailableForSubProcesses>
+        <ParallelForEach x:TypeArguments="x:String" DisplayName="ParallelForEach&lt;String&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_5">
+          <ParallelForEach.Values>
+            <InArgument x:TypeArguments="scg:IEnumerable(x:String)">
+              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:String)">supplierCodePrefixesRuntimeProcessIds.Keys</mca:CSharpValue>
+            </InArgument>
+          </ParallelForEach.Values>
+          <ActivityAction x:TypeArguments="x:String">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="x:String" Name="codePrefix" />
+            </ActivityAction.Argument>
+            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
+              <Sequence.Variables>
+                <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="loadSupplierCodesCompletedEvent" />
+              </Sequence.Variables>
+              <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_3" WaitProcessCompleted="True">
+                <vbw:RunProcess.Input>
+                  <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
+                    <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new LoadSupplierCodesInput
+            {
+                CodePrefix = codePrefix,
+                EffectiveOn = Input.EffectiveOn,
+                IsFuture = Input.IsFuture,
+                ParentWFRuntimeProcessId = Vanrise.Runtime.RunningProcessManager.CurrentProcess.ProcessId
+            }</mca:CSharpValue>
+                  </InArgument>
+                </vbw:RunProcess.Input>
+                <vbw:RunProcess.ProcessCompletedEventPayload>
+                  <OutArgument x:TypeArguments="vb:ProcessCompletedEventPayload">
+                    <mca:CSharpReference x:TypeArguments="vb:ProcessCompletedEventPayload">loadSupplierCodesCompletedEvent</mca:CSharpReference>
+                  </OutArgument>
+                </vbw:RunProcess.ProcessCompletedEventPayload>
+              </vbw:RunProcess>
+              <If sap2010:WorkflowViewState.IdRef="If_3">
+                <If.Condition>
+                  <InArgument x:TypeArguments="x:Boolean">
+                    <mca:CSharpValue x:TypeArguments="x:Boolean">loadSupplierCodesCompletedEvent.ProcessStatus != Vanrise.BusinessProcess.Entities.BPInstanceStatus.Completed</mca:CSharpValue>
+                  </InArgument>
+                </If.Condition>
+                <If.Then>
+                  <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_3">
+                    <TerminateWorkflow.Reason>
+                      <InArgument x:TypeArguments="x:String">
+                        <mca:CSharpValue x:TypeArguments="x:String">String.Format("Reading Supplier Codes for prefix '{0}' failed due to error: {1}", codePrefix, loadSupplierCodesCompletedEvent.LastProcessMessage)</mca:CSharpValue>
+                      </InArgument>
+                    </TerminateWorkflow.Reason>
+                  </TerminateWorkflow>
+                </If.Then>
+                <If.Else>
+                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
+                    <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:Int32">
+                          <mca:CSharpReference x:TypeArguments="x:Int32">supplierCodePrefixesRuntimeProcessIds[codePrefix]</mca:CSharpReference>
+                        </OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:Int32">
+                          <mca:CSharpValue x:TypeArguments="x:Int32">(loadSupplierCodesCompletedEvent.ProcessOutput as LoadSupplierCodesOutput).RuntimeProcessId</mca:CSharpValue>
+                        </InArgument>
+                      </Assign.Value>
+                    </Assign>
+                  </Sequence>
+                </If.Else>
+              </If>
+            </Sequence>
+          </ActivityAction>
+        </ParallelForEach>
+        <twrba1:MakeCodePrefixesUnavailable sap2010:WorkflowViewState.IdRef="MakeCodePrefixesUnavailable_1" />
+        <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_7" Message="Loading Supplier Codes is done" />
+      </Sequence>
+    </Parallel>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4" Message="Prepared supplier zone details. Ready to start building code matches.">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
@@ -223,10 +308,12 @@
           <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
             <vbw:RunProcess.Input>
               <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
-                <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new RPBuildCodeMatchesByCodePrefixInput() { 
-             CodePrefix = codePrefix,
-             EffectiveOn = Input.EffectiveOn,
-               IsFuture = Input.IsFuture,
+                <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new RPBuildCodeMatchesByCodePrefixInput()
+            {
+                SupplierCodeServiceRuntimeProcessId = supplierCodePrefixesRuntimeProcessIds[codePrefix.Code.Substring(0, 1)],
+                CodePrefix = codePrefix,
+                EffectiveOn = Input.EffectiveOn,
+                IsFuture = Input.IsFuture,
                 RoutingDatabaseId = routingDatabaseId
             }</mca:CSharpValue>
               </InArgument>
@@ -284,6 +371,13 @@
         </Sequence>
       </ActivityAction>
     </ParallelForEach>
+    <twrba1:UnLoadSupplierCodesFromSubProcesses sap2010:WorkflowViewState.IdRef="UnLoadSupplierCodesFromSubProcesses_1">
+      <twrba1:UnLoadSupplierCodesFromSubProcesses.SubProcessesRuntimeProcessIds>
+        <InArgument x:TypeArguments="scg:List(x:Int32)">
+          <mca:CSharpValue x:TypeArguments="scg:List(x:Int32)">supplierCodePrefixesRuntimeProcessIds.Values.ToList()</mca:CSharpValue>
+        </InArgument>
+      </twrba1:UnLoadSupplierCodesFromSubProcesses.SubProcessesRuntimeProcessIds>
+    </twrba1:UnLoadSupplierCodesFromSubProcesses>
     <twrba1:GetDistinctSaleZoneIds sap2010:WorkflowViewState.IdRef="GetDistinctSaleZoneIds_1">
       <twrba1:GetDistinctSaleZoneIds.EffectiveOn>
         <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
@@ -440,16 +534,15 @@
         </InArgument>
       </twrba1:DropOldRoutingDatabases.ProcessType>
     </twrba1:DropOldRoutingDatabases>
-    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sVkwDvAMOAgEBVgtWrQECAQRZM1k2AgEDWjNaNgIBAl0FdyQDAbwEeAV+IAMBrgR/BZgBEAMB+wOZAQWfASIDAe4DoAEFyQElAwHJA8oBBdABIAMBuwPRAQWeAhcDAbYCnwIFrwIlAwGRArACBcACHwMB7AHBAgXHAiADAd4ByAIFmQMXAgFRmgMFoAMgAgFDoQMFpwMrAgE2qAMFrgMmAgEprwMFugMmAgEQbwtvcAMB7QRlC2VoAwHhBGALYGEDAdUEdAt0cgMByQRqC2qOAQMBvQR7C3uFAQMBsAR4YHh0AwGvBIABB4YBJwMBoQSHAQeXASQDAfwDnAELnAFhAwHvA6gBC6gBWQMB4gOjAQujAboBAwHWA60BC7IBIAMBygPNAQvNAYUBAwG9A8oBYMoBpwEDAbwD1AEL1AF3AwGvA9sBCZwCFAMBtwKnAgunAlgDAaoCogILogJoAwGeAqwCC6wCZQMBkgKzAguzAlsDAYUCuAILuAJyAwH5Ab0CC70CXQMB7QHEAgvEAoUBAwHgAcECYMECoQEDAd8BywILywJ4AwHSAdICCZcDFAIBUp0DC50DhQECAUWaA2CaA4YBAgFEpAMLpANZAgE3qwMLqwNZAgEqsgMLsgNyAgEdtwMLtwNwAgERgwENgwGAAQMBogSKAQ2KAXcDAZUEjwENjwFqAwGJBJQBDZQBWgMB/QPfAQvvARwDAZED8AELmwIQAwG4AtcCC+oCHAMBsgHrAguWAxACAVPiARHnASADAaED7AER7AGEAQMBkwPfAXzfAYIBAwGSA/MBEfMBkQEDAbkC9wEP/QEjAwGCA4ACD5kCGgMBxwLaAhHiAiADAcMB5wIR5wKLAQMBtAHXAnzXAoIBAwGzAe4CEe4CmQECAVTyAg/4AiMDAaIB+wIPlAMaAgFj+gEV+gHOAQMBgwOBAhGMAhoDAeUCjQIRmAIsAwHIAvUCFfUCgAIDAaMB/AIRhwMaAwGDAYgDEZMDLAIBZIkCF4kCcwMB9AKEAheEAncDAeYClQIXlQKRAQMB1wKQAheQApcCAwHJAoQDF4QDdwMBkwH/Ahf/AnsDAYQBkAMXkAORAQIBdIsDF4sDlwICAWU=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sb0wDmgQOAgEBVgtWrQECARFZM1k2AgEQWjNaNgIBD14LXvIBAgECYgV8JAMBggZ9BYMBIAMB8wWEAQWMARADAeQFjQEFkwEiAwHWBZQBBZ4CEAMBhASfAgWlAiADAfUDpgIF9QIXAwHnAvYCBfwCMgMB2QL9AgWNAyUDAbECjgMFngMfAwGJAp8DBaUDIAMB+gGmAwX3AxcCAWT4AwX+AyACAVX/AwWFBCsCAUeGBAWMBCYCATmNBAWYBCYCAR50C3RwAwG3BmoLamgDAaoGZQtlYQMBnQZ5C3lyAwGQBm8Lb44BAwGDBoABC4ABhQEDAfUFfWB9dAMB9AWFAQeLAScDAeUFkAELkAFhAwHXBZUBB74BJwMBrgW/AQedAhIDAYUEogILogKFAQMB9wOfAmCfAqcBAwH2A6kCC6kCdwMB6AOwAgnzAhQDAegC+QIL+QKHAQMB2gKFAwuFA1gDAcwCgAMLgANoAwG/AooDC4oDZQMBsgKRAwuRA1sDAaQClgMLlgNyAwGXApsDC5sDXQMBigKiAwuiA4UBAwH8AZ8DYJ8DoQEDAfsBqQMLqQN4AwHtAbADCfUDFAIBZfsDC/sDhQECAVf4A2D4A4YBAgFWggQLggRZAgFIiQQLiQRZAgE6kAQLkARyAgEslQQLlQRwAgEfiAENiAGAAQMB5gWdAQ2dAVsDAckFmAENmAG8AQMBvAWiAQ2nASADAa8FwAEJ0AEmAwGGBdEBCdcBOwMB+ATYAQmaAhsDAYkEmwIJmwJvAwGIBJwCCZwCmwEDAYYEtAILxgIcAwHIA8cCC/ICEAMB6QK1AwvIAxwDAcsByQML9AMQAgFmwwEPwwF5AwGhBcgBD8gBbAMBlAXNAQ/NAVwDAYcF1AEP1AFxAwH5BNsBD9sBiAEDAesE4gENmAIYAwGKBJwCeJwCmAEDAYcEtwIRvgIgAwHZA8MCEcMChAEDAcoDtAJ8tAKCAQMByQPKAhHKApEBAwHqAs4CD9QCIwMBuAPXAg/wAhoDAfkCuAMRwAMgAwHdAcUDEcUDiwEDAc0BtQN8tQOCAQMBzAHMAxHMA5kBAgFn0AMP1gMjAwG6AdkDD/IDGgIBd+YBD/cBIAMBywT4AQ+XAhQDAYsE0QIV0QLOAQMBuQPYAhHjAhoDAZkD5AIR7wIsAwH6AtMDFdMDgAIDAbsB2gMR5QMaAwGZAeYDEfEDLAIBeOkBFe8BIAMB3AT0ARX0AZEBAwHNBOYBgAHmAYYBAwHMBPsBFfsBwAEDAYwE/wEThQInAwG7BIgCE5UCHgMBmwTgAhfgAnMDAakD2wIX2wJ3AwGaA+wCF+wCkQEDAYoD5wIX5wKXAgMB+wLiAxfiA3cDAaoB3QMX3QN7AwGaAe4DF+4DkQEDAYkB6QMX6QOXAgIBeYICGYIC6AEDAbwEiQIVlAIeAwGcBJECG5ECswEDAawEjAIbjAKRAQMBnQQ=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="CreateRoutingDatabase_2" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="CreateRoutingDatabase_2" sap:VirtualizedContainerService.HintSize="917,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="917,22" />
       <sap2010:ViewStateData Id="GetActiveSupplierInfos_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="PrepareCodePrefixes_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="LoadRoutingSettings_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="917,86" />
+      <sap2010:ViewStateData Id="LoadRoutingSettings_1" sap:VirtualizedContainerService.HintSize="917,22" />
       <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="541,22" />
       <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="489,62" />
       <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="489,62" />
@@ -484,8 +577,39 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ViewStateData_16" sap:VirtualizedContainerService.HintSize="603,1510" />
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.BuildCarrierZoneDetails_1" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.BuildCarrierZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,1044" />
+      <sap2010:ViewStateData Id="PrepareCodePrefixes_2" sap:VirtualizedContainerService.HintSize="541,22" />
+      <sap2010:ViewStateData Id="MakeCodePrefixesAvailableForSubProcesses_1" sap:VirtualizedContainerService.HintSize="541,22" />
+      <sap2010:ViewStateData Id="RunProcess_3" sap:VirtualizedContainerService.HintSize="489,22" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_3" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="264,186">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="489,336" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="511,522">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ParallelForEach`1_5" sap:VirtualizedContainerService.HintSize="541,672" />
+      <sap2010:ViewStateData Id="MakeCodePrefixesUnavailable_1" sap:VirtualizedContainerService.HintSize="541,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_7" sap:VirtualizedContainerService.HintSize="541,22" />
+      <sap2010:ViewStateData Id="Sequence_8" sap:VirtualizedContainerService.HintSize="563,1044">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="917,1090" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="917,22" />
       <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
@@ -513,10 +637,11 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_4" sap:VirtualizedContainerService.HintSize="554,734" />
-      <sap2010:ViewStateData Id="GetDistinctSaleZoneIds_1" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="SplitListIntoGroups`1_1" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="ParallelForEach`1_4" sap:VirtualizedContainerService.HintSize="917,734" />
+      <sap2010:ViewStateData Id="UnLoadSupplierCodesFromSubProcesses_1" sap:VirtualizedContainerService.HintSize="917,22" />
+      <sap2010:ViewStateData Id="GetDistinctSaleZoneIds_1" sap:VirtualizedContainerService.HintSize="917,22" />
+      <sap2010:ViewStateData Id="SplitListIntoGroups`1_1" sap:VirtualizedContainerService.HintSize="917,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="917,22" />
       <sap2010:ViewStateData Id="RunProcess_2" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="TerminateWorkflow_2" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
@@ -537,7 +662,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_3" sap:VirtualizedContainerService.HintSize="554,734">
+      <sap2010:ViewStateData Id="ParallelForEach`1_3" sap:VirtualizedContainerService.HintSize="917,734">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -545,18 +670,18 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_6" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_6" sap:VirtualizedContainerService.HintSize="917,22" />
       <sap2010:ViewStateData Id="FinalizeProductRouteDatabase_1" sap:VirtualizedContainerService.HintSize="554,22" />
       <sap2010:ViewStateData Id="SetRoutingDatabaseReady_1" sap:VirtualizedContainerService.HintSize="554,22" />
       <sap2010:ViewStateData Id="DropOldRoutingDatabases_1" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,2502">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="939,3632">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RPRoutingProcess_1" sap:VirtualizedContainerService.HintSize="616,2582" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RPRoutingProcess_1" sap:VirtualizedContainerService.HintSize="979,3712" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
