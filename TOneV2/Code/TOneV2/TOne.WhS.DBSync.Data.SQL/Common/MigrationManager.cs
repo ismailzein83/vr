@@ -46,8 +46,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             }
             return Executed;
         }
-
-
+        
         public bool TruncateTables()
         {
             bool Executed = false;
@@ -262,15 +261,19 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public void CreateTempTables()
         {
-            foreach (DBTable dbTable in _Context.DBTables.Values)
+            DBTable requestedDbTable;
+            foreach (DBTableName requestedTable in _Context.MigrationRequestedTables)
             {
-                Database database = _Server.Databases[dbTable.Database];
-                bool tableExists = database.Tables.Contains(dbTable.Name + Constants._Temp, dbTable.Schema);
-                if (tableExists)
+                if (_Context.DBTables.TryGetValue(requestedTable, out requestedDbTable))
                 {
-                    database.Tables[dbTable.Name + Constants._Temp, dbTable.Schema].Drop();
+                    Database database = _Server.Databases[requestedDbTable.Database];
+                    bool tableExists = database.Tables.Contains(requestedDbTable.Name + Constants._Temp, requestedDbTable.Schema);
+                    if (tableExists)
+                    {
+                        database.Tables[requestedDbTable.Name + Constants._Temp, requestedDbTable.Schema].Drop();
+                    }
+                    createTable(requestedDbTable.Info);
                 }
-                createTable(dbTable.Info);
             }
         }
 
@@ -284,32 +287,46 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         private void DropOriginalTables()
         {
-            foreach (DBTable dbTable in _Context.DBTables.Values)
+            DBTable requestedDbTable;
+            foreach (DBTableName requestedTable in _Context.MigrationRequestedTables)
             {
-                dbTable.Info.Drop();
+                if (_Context.DBTables.TryGetValue(requestedTable, out requestedDbTable))
+                {
+                    requestedDbTable.Info.Drop();
+                }
             }
         }
 
         private void RenameTempTables()
         {
-            foreach (DBTable dbTable in _Context.DBTables.Values)
-            {
-                DBTable dbTempTable = new DBTable();
-                dbTempTable.Name = dbTable.Name + Constants._Temp;
-                dbTempTable.Schema = dbTable.Schema;
-                dbTempTable.Database = dbTable.Database;
-                _Server.Databases[dbTempTable.Database].Tables.Refresh();
-                Table tempTable = _Server.Databases[dbTempTable.Database].Tables[dbTempTable.Name, dbTempTable.Schema];
-                tempTable.Rename(tempTable.Name.Replace(Constants._Temp, ""));
-            }
+             DBTable requestedDbTable;
+             foreach (DBTableName requestedTable in _Context.MigrationRequestedTables)
+             {
+                 if (_Context.DBTables.TryGetValue(requestedTable, out requestedDbTable))
+                 {
+                     DBTable dbTempTable = new DBTable();
+                     dbTempTable.Name = requestedDbTable.Name + Constants._Temp;
+                     dbTempTable.Schema = requestedDbTable.Schema;
+                     dbTempTable.Database = requestedDbTable.Database;
+                     _Server.Databases[dbTempTable.Database].Tables.Refresh();
+                     Table tempTable = _Server.Databases[dbTempTable.Database].Tables[dbTempTable.Name, dbTempTable.Schema];
+                     tempTable.Rename(tempTable.Name.Replace(Constants._Temp, ""));
+                 }
+                
+             }
         }
 
         private void CreateIndexes()
         {
-            //Create Indexes Keys for Tables
-            foreach (DBTable table in _Context.DBTables.Values)
-                if (table.ScriptedIndexes != "")
-                    _Server.Databases[table.Database].ExecuteNonQuery(table.ScriptedIndexes);
+             DBTable requestedDbTable;
+             foreach (DBTableName requestedTable in _Context.MigrationRequestedTables)
+             {
+                 if (_Context.DBTables.TryGetValue(requestedTable, out requestedDbTable))
+                 {
+                     if (requestedDbTable.ScriptedIndexes != "")
+                    _Server.Databases[requestedDbTable.Database].ExecuteNonQuery(requestedDbTable.ScriptedIndexes);
+                 }
+             }
         }
 
         private void CreateFKs()
