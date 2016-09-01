@@ -58,6 +58,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             };
 
             $scope.getRowStyle = function (dataItem) {
+                
+                var rowStyle;
 
                 if (dataItem.NewRate) {
                     if (dataItem.RouteOptions != null) {
@@ -70,9 +72,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                         if (array.length == dataItem.RouteOptions.length) {
                             setColorOfRouteOptions(dataItem.RouteOptions, null);
-                            return { CssClass: "bg-danger" };
+                            rowStyle = { CssClass: "bg-danger" };
                         }
-
                         else if (array.length > 0) {
                             for (var i = 0; i < dataItem.RouteOptions.length; i++)
                                 dataItem.RouteOptions[i].Color = (UtilsService.contains(array, i)) ? 'orange' : null;
@@ -83,14 +84,16 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     setColorOfRouteOptions(dataItem.RouteOptions, null);
 
                     if (dataItem.CurrentRate == null)
-                        return { CssClass: "bg-success" };
+                        rowStyle = { CssClass: "bg-success" };
                 }
 
+                // Reload the route options directive to refresh the colors
                 if (dataItem.RouteOptionsAPI != undefined) {
-                    // Reload the route options directive to refresh the colors
                     var routeOptionsDirectivePayload = getRouteOptionsDirectivePayload(dataItem);
                     dataItem.RouteOptionsAPI.load(routeOptionsDirectivePayload);
                 }
+
+                return rowStyle;
             };
             function setColorOfRouteOptions(routeOptions, colorValue) {
                 if (routeOptions != null)
