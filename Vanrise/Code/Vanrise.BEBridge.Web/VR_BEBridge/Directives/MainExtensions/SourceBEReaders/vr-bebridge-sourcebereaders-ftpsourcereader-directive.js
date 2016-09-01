@@ -28,23 +28,27 @@ app.directive('vrBebridgeSourcebereadersFtpsourcereaderDirective', ['VRNotificat
                 var api = {};
                 api.load = function (payload) {
                     if (payload != undefined) {
-                        $scope.scopeModel.Extension = payload.Extension;
-                        $scope.scopeModel.Mask = payload.Mask;
-                        $scope.scopeModel.Directory = payload.Directory;
-                        $scope.scopeModel.ServerIp = payload.ServerIp;
-                        $scope.scopeModel.UserName = payload.UserName;
-                        $scope.scopeModel.Password = payload.Password;
+                        $scope.scopeModel.Extension = payload.Setting.Extension;
+                        $scope.scopeModel.Mask = payload.Setting.Mask;
+                        $scope.scopeModel.Directory = payload.Setting.Directory;
+                        $scope.scopeModel.ServerIP = payload.Setting.ServerIP;
+                        $scope.scopeModel.UserName = payload.Setting.UserName;
+                        $scope.scopeModel.Password = payload.Setting.Password;
                     }
                 };
                 api.getData = function () {
-                    return {
-                        $type: "Vanrise.BEBridge.MainExtensions.FTPSourceReader, Vanrise.BEBridge.MainExtensions",
+                    var setting =
+                    {
                         Extension: $scope.scopeModel.Extension,
                         Mask: $scope.scopeModel.Mask,
                         Directory: $scope.scopeModel.Directory,
-                        ServerIp: $scope.scopeModel.ServerIp,
+                        ServerIP: $scope.scopeModel.ServerIP,
                         UserName: $scope.scopeModel.UserName,
                         Password: $scope.scopeModel.Password
+                    }
+                    return {
+                        $type: "Vanrise.BEBridge.MainExtensions.SourceBEReaders.FTPSourceReader,  Vanrise.BEBridge.MainExtensions",
+                        Setting: setting
                     };
                 };
                 if (ctrl.onReady != null)

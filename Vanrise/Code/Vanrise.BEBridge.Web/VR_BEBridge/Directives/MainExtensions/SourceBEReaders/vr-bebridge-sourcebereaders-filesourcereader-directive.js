@@ -28,17 +28,21 @@ app.directive('vrBebridgeSourcebereadersFilesourcereaderDirective', ['VRNotifica
                 var api = {};
                 api.load = function (payload) {
                     if (payload != undefined) {
-                        $scope.scopeModel.Extension = payload.Extension;
-                        $scope.scopeModel.Mask = payload.Mask;
-                        $scope.scopeModel.Directory = payload.Directory;
+                        $scope.scopeModel.Extension = payload.Setting.Extension;
+                        $scope.scopeModel.Mask = payload.Setting.Mask;
+                        $scope.scopeModel.Directory = payload.Setting.Directory;
                     }
                 };
                 api.getData = function () {
-                    return {
-                        $type: "Vanrise.BEBridge.MainExtensions.SourceBEReaders.FileSourceReader, Vanrise.BEBridge.MainExtensions.SourceBEReaders",
+                    var setting =
+                    {
                         Extension: $scope.scopeModel.Extension,
                         Mask: $scope.scopeModel.Mask,
                         Directory: $scope.scopeModel.Directory
+                    }
+                    return {
+                        $type: "Vanrise.BEBridge.MainExtensions.SourceBEReaders.FileSourceReader, Vanrise.BEBridge.MainExtensions",
+                        Setting: setting
                     };
                 };
                 if (ctrl.onReady != null)
