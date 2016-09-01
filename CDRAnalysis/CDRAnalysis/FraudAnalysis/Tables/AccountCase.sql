@@ -1,5 +1,5 @@
-CREATE TABLE [FraudAnalysis].[AccountCase] (
-    [ID]                INT           IDENTITY (1, 1) NOT NULL,
+﻿CREATE TABLE [FraudAnalysis].[AccountCase] (
+    [ID]                INT           NOT NULL,
     [AccountNumber]     VARCHAR (50)  NOT NULL,
     [UserID]            INT           NULL,
     [Status]            INT           NOT NULL,
@@ -9,6 +9,8 @@ CREATE TABLE [FraudAnalysis].[AccountCase] (
     [Reason]            VARCHAR (MAX) NULL,
     CONSTRAINT [PK_AccountCase] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

@@ -50,13 +50,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemSP("FraudAnalysis.sp_AccountCase_GetLastByAccountNumber", AccountCaseMapper, accountNumber);
         }
 
-        public bool InsertAccountCase(AccountCase accountCaseObject, out int insertedId )
+        public bool InsertAccountCase(AccountCase accountCaseObject)
         {
-            object accountCaseID;
-
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Insert", out accountCaseID, accountCaseObject.AccountNumber, accountCaseObject.UserID, accountCaseObject.StatusID, accountCaseObject.ValidTill, accountCaseObject.Reason);
-
-            insertedId = (recordsAffected > 0) ? (int)accountCaseID : -1;
+           int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Insert", accountCaseObject.CaseID, accountCaseObject.AccountNumber, accountCaseObject.UserID, accountCaseObject.StatusID, accountCaseObject.ValidTill, accountCaseObject.Reason);
 
             return (recordsAffected > 0);
         }

@@ -10,7 +10,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
         BigResult<AccountCase> GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseQuery> input);
         AccountCase GetAccountCase(int caseID);
         AccountCase GetLastAccountCaseByAccountNumber(string accountNumber);
-        bool InsertAccountCase(AccountCase accountCaseObject, out int insertedId);
+        bool InsertAccountCase(AccountCase accountCaseObject);
         bool UpdateAccountCase(int caseID, int userID, CaseStatus statusID, DateTime? validTill, string reason);
         bool UpdateAccountCaseBatch(List<int> CaseIds, int userId, CaseStatus status);
         void SavetoDB(List<AccountCase> records);

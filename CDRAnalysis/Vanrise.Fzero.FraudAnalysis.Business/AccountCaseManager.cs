@@ -42,7 +42,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AccountCase accountCase = accountCaseDataManager.GetLastAccountCaseByAccountNumber(input.AccountNumber);
 
             if (accountCase == null || (accountCase.StatusID == CaseStatus.ClosedFraud) || (accountCase.StatusID == CaseStatus.ClosedWhiteList))
-                accountCaseDataManager.InsertAccountCase( new AccountCase() { AccountNumber= input.AccountNumber, UserID=userID,  StatusID= input.CaseStatus, ValidTill = input.ValidTill, Reason = input.Reason }, out caseID);
+            {
+                long newCaseId;
+                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(typeof(AccountCase), 1, out newCaseId);
+                caseID = (int)newCaseId;
+                accountCaseDataManager.InsertAccountCase(new AccountCase() { CaseID = caseID, AccountNumber = input.AccountNumber, UserID = userID, StatusID = input.CaseStatus, ValidTill = input.ValidTill, Reason = input.Reason });
+            }
             else
             {
                 caseID = accountCase.CaseID;
