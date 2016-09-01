@@ -14,13 +14,18 @@ namespace Vanrise.Rules
             _structureBehaviors = structureBehaviors.ToList();
 
             this.Rules = rules.ToList();
-            StructureRules(this, 0);
+            StructureRules(this, 0, null);
         }
 
-        void StructureRules(RuleNode node, int behaviorIndex)
+        void StructureRules(RuleNode node, int behaviorIndex, Dictionary<int, List<BaseRule>> priorities)
         {
+            if (priorities != null)
+                priorities = priorities.OrderBy(itm => itm.Key).ToDictionary(itm => itm.Key, itm => itm.Value);
+
             if (behaviorIndex >= _structureBehaviors.Count)
                 return;
+
+            int nextBehaviorIndex = behaviorIndex + 1;
             node.Behavior = _structureBehaviors[behaviorIndex].CreateNewBehaviorObject();
 
             List<BaseRule> notMatchedRules;
@@ -33,8 +38,11 @@ namespace Vanrise.Rules
                     if (childNode.Rules != null && childNode.Rules.Count() > 0)
                     {
                         childNode.ParentNode = node;
-                        StructureRules(childNode, (behaviorIndex + 1));
+                        Dictionary<int, List<BaseRule>> childNodePiorities = BuildPriorities(priorities, childNode.Priorities);
+                        StructureRules(childNode, nextBehaviorIndex, childNodePiorities);
                         node.ChildNodes.Add(childNode);
+                        if (nextBehaviorIndex >= _structureBehaviors.Count)
+                            OrderRules(childNode, childNodePiorities);
                     }
                 }
             }
@@ -44,8 +52,87 @@ namespace Vanrise.Rules
                 node.UnMatchedRulesNode.IsUnMatchedRulesNode = true;
                 node.UnMatchedRulesNode.ParentNode = node;
                 node.UnMatchedRulesNode.Rules = notMatchedRules;
-                StructureRules(node.UnMatchedRulesNode, (behaviorIndex + 1));
+                StructureRules(node.UnMatchedRulesNode, nextBehaviorIndex, priorities);
+                if (nextBehaviorIndex >= _structureBehaviors.Count)
+                    OrderRules(node, priorities);
             }
+        }
+
+        private void OrderRules(RuleNode node, Dictionary<int, List<BaseRule>> priorities)
+        {
+            if (priorities == null || priorities.Count == 0)
+                return;
+
+            if (node.Rules == null || node.Rules.Count == 0)
+                return;
+
+            List<BaseRule> rules = new List<BaseRule>();
+            foreach (var priority in priorities)
+            {
+                foreach (BaseRule rule in priority.Value)
+                {
+                    if (node.Rules.Contains(rule) && !rules.Contains(rule))
+                        rules.Add(rule);
+                }
+            }
+            node.Rules = rules;
+        }
+
+        private Dictionary<int, List<BaseRule>> BuildPriorities(Dictionary<int, List<BaseRule>> priorities, Dictionary<BaseRule, int> nodePriorities)
+        {
+            Dictionary<int, List<BaseRule>> result = new Dictionary<int, List<BaseRule>>();
+            int priority = 0;
+            List<BaseRule> baseRules;
+
+            if (nodePriorities == null || nodePriorities.Count == 0)
+                return priorities != null ? new Dictionary<int, List<BaseRule>>(priorities) : null;
+
+            if (priorities == null || priorities.Count == 0)
+            {
+                foreach (var nodePriority in nodePriorities)
+                {
+                    if (result.TryGetValue(nodePriority.Value, out baseRules))
+                    {
+                        baseRules.Add(nodePriority.Key);
+                    }
+                    else
+                    {
+                        baseRules = new List<BaseRule>() { nodePriority.Key };
+                        result.Add(priority, baseRules);
+                        priority++;
+                    }
+                }
+                return result;
+            }
+
+            foreach (KeyValuePair<int, List<BaseRule>> item in priorities)
+            {
+                Dictionary<int, List<BaseRule>> tempDict = new Dictionary<int, List<BaseRule>>();
+                foreach (BaseRule baseRule in item.Value)
+                {
+                    int rulePriority;
+                    if (nodePriorities.TryGetValue(baseRule, out rulePriority))
+                    {
+                        if (tempDict.TryGetValue(rulePriority, out baseRules))
+                        {
+                            baseRules.Add(baseRule);
+                        }
+                        else
+                        {
+                            baseRules = new List<BaseRule>() { baseRule };
+                            tempDict.Add(rulePriority, baseRules);
+                        }
+                    }
+                }
+                tempDict = tempDict.OrderBy(itm => itm.Key).ToDictionary(itm => itm.Key, itm => itm.Value);
+                foreach (var tempItem in tempDict)
+                {
+                    result.Add(priority, tempItem.Value);
+                    priority++;
+                }
+            }
+
+            return result.Count > 0 ? result : null;
         }
 
         public BaseRule GetMatchRule(BaseRuleTarget target)

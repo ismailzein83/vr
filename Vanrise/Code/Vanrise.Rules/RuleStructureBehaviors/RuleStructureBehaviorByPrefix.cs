@@ -12,9 +12,14 @@ namespace Vanrise.Rules.RuleStructureBehaviors
         Dictionary<string, RuleNode> _ruleNodesByPrefixes = new Dictionary<string, RuleNode>();
         int _minPrefixLength = int.MaxValue;
         int _maxPrefixLength = 0;
+        
 
         public override IEnumerable<RuleNode> StructureRules(IEnumerable<BaseRule> rules, out List<BaseRule> notMatchRules)
         {
+            int priority = 0;
+            int keyLength = 0;
+            List<BaseRule> baseRules;
+
             notMatchRules = new List<BaseRule>();
             foreach (var rule in rules)
             {
@@ -29,21 +34,31 @@ namespace Vanrise.Rules.RuleStructureBehaviors
                             _minPrefixLength = prefixLength;
                         if (prefixLength > _maxPrefixLength)
                             _maxPrefixLength = prefixLength;
-                        RuleNode matchNode = _ruleNodesByPrefixes.GetOrCreateItem(prefix, () => new RuleNode { Rules = new List<BaseRule>() });
+                        RuleNode matchNode = _ruleNodesByPrefixes.GetOrCreateItem(prefix, () => new RuleNode { Rules = new List<BaseRule>(), Priorities = new Dictionary<BaseRule,int>() });
                         matchNode.Rules.Add(rule);
+                        matchNode.Priorities.Add(rule, 0);
                     }
                 }
                 else
                     notMatchRules.Add(rule);
             }
+            _ruleNodesByPrefixes = _ruleNodesByPrefixes.OrderByDescending(itm => itm.Key.Length).ToDictionary(key => key.Key, value => value.Value);
 
             //add rules having parent prefixes
-            foreach(var ruleNodesByPrefix in _ruleNodesByPrefixes)
+            foreach (var ruleNodesByPrefix in _ruleNodesByPrefixes)
             {
-                foreach(var rule in _ruleNodesByPrefixes.Where(itm => itm.Key != ruleNodesByPrefix.Key && ruleNodesByPrefix.Key.StartsWith(itm.Key)).SelectMany(itm => itm.Value.Rules))
+                if (ruleNodesByPrefix.Key.Length != keyLength)
+                    priority++;
+
+                keyLength = ruleNodesByPrefix.Key.Length;
+
+                foreach (var rule in _ruleNodesByPrefixes.Where(itm => itm.Key != ruleNodesByPrefix.Key && ruleNodesByPrefix.Key.StartsWith(itm.Key)).SelectMany(itm => itm.Value.Rules))
                 {
                     if (!ruleNodesByPrefix.Value.Rules.Contains(rule))
+                    {
                         ruleNodesByPrefix.Value.Rules.Add(rule);
+                        ruleNodesByPrefix.Value.Priorities.Add(rule, priority);
+                    }
                 }
             }
             return _ruleNodesByPrefixes.Values;

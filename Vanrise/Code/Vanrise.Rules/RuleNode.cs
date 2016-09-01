@@ -19,5 +19,8 @@ namespace Vanrise.Rules
         internal BaseRuleStructureBehavior Behavior { get; set; }
 
         internal bool IsUnMatchedRulesNode { get; set; }
+
+        //public Dictionary<int, List<BaseRule>> Priorities { get; set; }
+        public Dictionary<BaseRule, int> Priorities { get; set; }
     }
 }
