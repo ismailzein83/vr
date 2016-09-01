@@ -24,9 +24,7 @@ namespace TOne.WhS.DBSync.Business
         }
         public override void FillTableInfo(bool useTempTables)
         {
-            DBTable dbTableSalePriceList = Context.DBTables[DBTableName.Rule];
-            if (dbTableSalePriceList != null)
-                dbTableSalePriceList.Records = dbSyncDataManager.GetRouteRules(useTempTables);
+
         }
 
         public override void AddItems(List<RouteRule> itemsToAdd)
