@@ -56,7 +56,9 @@ namespace TOne.BusinessEntity.Data.SQL
                             PriceListId = GetReaderValue<int>(reader, "PriceListID"),
                             Rate = reader["NormalRate"] != DBNull.Value ? Convert.ToDecimal(reader["NormalRate"]) : 0,
                             ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag"),
-                            ZoneId = GetReaderValue<int>(reader, "ZoneID")
+                            ZoneId = GetReaderValue<int>(reader, "ZoneID"),
+                            BED = GetReaderValue<DateTime>(reader, "BeginEffectiveDate"),
+                            EED = reader["EndEffectiveDate"] == DBNull.Value ? null : (DateTime?)reader["EndEffectiveDate"]
                         };
                         string supplierId = reader["SupplierID"] as string;
                         string customerId = reader["CustomerID"] as string;

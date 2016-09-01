@@ -19,5 +19,7 @@ namespace TOne.BusinessEntity.Entities
         public decimal Rate { get; set; }
 
         public short ServicesFlag { get; set; }
+        public DateTime BED { get; set; }
+        public DateTime? EED { get; set; }
     }
 }
