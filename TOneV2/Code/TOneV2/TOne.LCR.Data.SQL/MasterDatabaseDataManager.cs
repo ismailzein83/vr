@@ -33,11 +33,15 @@ namespace TOne.LCR.Data.SQL
                 string logFilePath = Path.Combine(logFileDirectory, databaseName);
                 string createDBWithPath = String.Format(@"
                                                         CREATE DATABASE {0} ON PRIMARY
-                                                        ( NAME = '{0}', FILENAME = N'{1}.mdf')
+                                                        ( NAME = '{0}', FILENAME = N'{1}.mdf', SIZE = 5120000KB , FILEGROWTH = 10%)
                                                          LOG ON 
-                                                        ( NAME = '{0}_log',FILENAME = N'{2}_log.ldf' )", 
+                                                        ( NAME = '{0}_log',FILENAME = N'{2}_log.ldf', SIZE = 204800KB , FILEGROWTH = 10% )
+                                                        
+
+",
                                                          databaseName, dataFilePath, logFilePath);
                 ExecuteNonQueryText(createDBWithPath, null);
+                ExecuteNonQueryText(string.Format("ALTER DATABASE {0} SET RECOVERY SIMPLE", databaseName), null);
             }
             else
                 ExecuteNonQueryText(String.Format(@"CREATE DATABASE {0}", databaseName), null);

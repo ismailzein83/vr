@@ -111,7 +111,9 @@ CREATE TABLE [dbo].[ZoneInfo](
 	                                                    [ZoneID] [int] NULL,
 	                                                    [SupplierID] [varchar](5) NOT NULL,
 	                                                    [NormalRate] float NULL,
-	                                                    [ServicesFlag] [smallint] NULL
+	                                                    [ServicesFlag] [smallint] NULL,
+                                                        [BED] [DateTime] Not NULL,
+                                                        [EED] [DateTime] NULL
                                                     ) 
                                                     CREATE TABLE [dbo].[CustomerZoneRate](
                                                         [RateID] [bigint] NOT NULL,
@@ -119,7 +121,9 @@ CREATE TABLE [dbo].[ZoneInfo](
 	                                                    [ZoneID] [int] NULL,
 	                                                    [CustomerID] [varchar](5) NOT NULL,
 	                                                    [NormalRate] [float] NULL,
-	                                                    [ServicesFlag] [smallint] NULL
+	                                                    [ServicesFlag] [smallint] NULL,
+                                                        [BED] [DateTime] Not NULL,
+                                                        [EED] [DateTime] NULL
                                                     ) 
                                                     CREATE TABLE [dbo].[ZoneMatch](
 	                                                    [OurZoneID] [int] NOT NULL,

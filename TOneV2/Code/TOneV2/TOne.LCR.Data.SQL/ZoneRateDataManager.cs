@@ -22,7 +22,7 @@ namespace TOne.LCR.Data.SQL
             {
                 foreach (var zr in zoneRates)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}", zr.RateId, zr.PriceListId, zr.ZoneId, zr.CarrierAccountId, zr.Rate, zr.ServicesFlag));
+                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", zr.RateId, zr.PriceListId, zr.ZoneId, zr.CarrierAccountId, zr.Rate, zr.ServicesFlag, GetDateTimeForBCP(zr.BED), zr.EED.HasValue ? GetDateTimeForBCP(zr.EED.Value) : ""));
                 }
                 wr.Close();
             }
