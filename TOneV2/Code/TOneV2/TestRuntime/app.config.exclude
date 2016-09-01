@@ -143,7 +143,7 @@
     <add key="TOneWhS_Analytics_DBConnStringKey" value="TOneAnalyticsDBConnString"/>
     <!--<add key="RoutingDBDataFileDirectory" value=""/>--><!--RoutingDBDataFileDirectory key will override the SQL default directory if needed-->
     <!--<add key="RoutingDBLogFileDirectory" value=""/>--><!--RoutingDBLogFileDirectory key will override the SQL default directory if needed-->
-    <add key="Routing_TOneV1" value="false"/><!--Routing_TOneV1 key if set to true will be used to build only current TOne route and route option tables-->
+    <!--<add key="Routing_TOneV1" value="false"/>--><!--Routing_TOneV1 key if set to true will be used to build only current TOne route and route option tables-->
     <add key="TOneV1RoutingDBConnStringKey" value="TOneV1RoutingDBConnString"/>
   </appSettings>
   <system.codedom>
