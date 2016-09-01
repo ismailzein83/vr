@@ -99,7 +99,7 @@ as (select * from (values
 (15001,'Tables','Analytic Table Management','#/view/Analytic/Views/GenericAnalytic/Definition/AnalyticTableManagement',1501,'VR_Analytic/AnalyticTable/GetFilteredAnalyticTables',null,null,null,0,2),
 (15002,'Reports','Analytic Report Management','#/view/Analytic/Views/GenericAnalytic/Definition/AnalyticReportManagement',1501,'VR_Analytic/AnalyticReport/GetFilteredAnalyticReports',null,null,null,0,3),
 (15003,'Voice Subscriber Identification','Voice Subscriber Identification',null,1502,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":1}',101,3),
-(15004,'Service Types','Service Type Management','#/view/Retail_BusinessEntity/Views/ServiceType/ServiceTypeManagement',1508,null,null,null,null,0,5),
+(15004,'Service Types','Service Type Management','#/view/Retail_BusinessEntity/Views/ServiceType/ServiceTypeManagement',1508,'Retail_BE/ServiceType/GetFilteredServiceTypes',null,null,null,0,3),
 (15006,'Data Subscriber Identification','Data Subscriber Identification',null,1502,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":3}',101,4),
 (15007,'EDR Log','EDR Log',null,1507,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":1,"TypeId":13}',202,2),
 (15010,'Service Levels','Service Levels',null,102,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":21}',0,2),
@@ -112,12 +112,12 @@ as (select * from (values
 (15024,'Service Level Identification','Service Level Identification',null,1502,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":13}',101,2),
 (15025,'NAS Devices','NAS Devices',null,1505,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":25}',0,2),
 (15030,'Voice Dashboard','Voice Dashboard',null,1214,null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":4,"TypeId":4}',202,3),
-(15031,'Account Types','Account Types','#/view/Retail_BusinessEntity/Views/AccountType/AccountTypeManagement',1508,null,null,null,null,0,4),
+(15031,'Account Types','Account Types','#/view/Retail_BusinessEntity/Views/AccountType/AccountTypeManagement',1508,'Retail_BE/AccountType/GetFilteredAccountTypes',null,null,null,0,2),
 (15032,'Tenants','Tenants','#/view/Security/Views/Tenant/TenantManagement',2,'VR_Sec/Tenants/GetFilteredTenants',null,null,null,0,5),
-(15033,'Account Parts','Account Parts','#/view/Retail_BusinessEntity/Views/AccountPartDefinition/AccountPartDefinitionManagement',1508,null,null,null,null,0,7),
-(15035,'Status Definitions','Status Definitions','#/view/Retail_BusinessEntity/Views/Status/StatusDefinitionManagement',1508,null,null,null,null,0,6),
-(15036,'Action Definitions','Action Definitions','#/view/Retail_BusinessEntity/Views/Action/Definition/ActionDefinitionManagement',1508,null,null,null,null,0,8),
-(15042,'Style Definitions','Style Definitions','#/view/Common/Views/StyleDefinition/StyleDefinitionManagement',1508,null,null,null,null,0,9),
+(15033,'Account Parts','Account Parts','#/view/Retail_BusinessEntity/Views/AccountPartDefinition/AccountPartDefinitionManagement',1508,'Retail_BE/AccountPartDefinition/GetFilteredAccountPartDefinitions',null,null,null,0,5),
+(15035,'Status Definitions','Status Definitions','#/view/Retail_BusinessEntity/Views/Status/StatusDefinitionManagement',1508,'Retail_BE/StatusDefinition/GetFilteredStatusDefinitions',null,null,null,0,4),
+(15036,'Action Definitions','Action Definitions','#/view/Retail_BusinessEntity/Views/Action/Definition/ActionDefinitionManagement',1508,'Retail_BE/ActionDefinition/GetFilteredActionDefinitions',null,null,null,0,6),
+(15042,'Style Definitions','Style Definitions','#/view/Common/Views/StyleDefinition/StyleDefinitionManagement',1508,'VRCommon/StyleDefinition/GetFilteredStyleDefinitions',null,null,null,0,7),
 (15043,'Balance Alert Rule','Balance Alert Rule',null,101,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":14}',101,4),
 (15045,'Credit Classes','Credit Classes','#/view/Retail_BusinessEntity/Views/CreditClass/CreditClassManagement',101,null,null,null,null,0,3)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -133,6 +133,27 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
 
+--[sec].[BusinessEntityModule]--------------------1701 to 1800--------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [sec].[BusinessEntityModule] on;
+;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1701,'Entities Definition',-1,0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[ParentId],[BreakInheritance]))
+merge	[sec].[BusinessEntityModule] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]
+when not matched by target then
+	insert([Id],[Name],[ParentId],[BreakInheritance])
+	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
+set identity_insert [sec].[BusinessEntityModule] off;
+
 --[sec].[BusinessEntity]-------------------5401 to 5700-------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
@@ -141,7 +162,17 @@ set identity_insert [sec].[BusinessEntity] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (5401,'BusinessProcess_BP_Account_Action','Account Action',602,0,'["View", "StartInstance", "ScheduleTask"]'),
-(5402,'BusinessProcess_BP_Source_BE_Sync','Source BE Sync',602,0,'["View", "StartInstance", "ScheduleTask"]')
+(5402,'BusinessProcess_BP_Source_BE_Sync','Source BE Sync',602,0,'["View", "StartInstance", "ScheduleTask"]'),
+(5403,'Retail_BE_Package','Retail_BE_Package',201,0,'["View","Add","Edit"]'),
+(5404,'Retail_BE_Account','Account',201,0,'["View","Add","Edit"]'),
+(5405,'Retail_BE_AccountPackage','Account Package',201,0,'["View","Add","Edit"]'),
+(5406,'Retail_BE_ChargingPolicy','Charging Policy',201,0,'["View","Add","Edit"]'),
+(5407,'Retail_BE_AccountType','Account Type',1701,0,'["View","Add","Edit"]'),
+(5408,'Retail_BE_ServiceType','Service Type',1701,0,'["View","Edit"]'),
+(5409,'Retail_BE_StatusDefinition','Status Definition',1701,0,'["View","Add","Edit"]'),
+(5410,'Retail_BE_AccountPartDefinition','Account Part Definition',1701,0,'["View","Add","Edit"]'),
+(5411,'Retail_BE_ActionDefinition','Action Definition',1701,0,'["View","Add","Edit"]'),
+(5412,'VRCommon_StyleDefinition','Style Definition',1701,0,'["View","Add","Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -154,6 +185,76 @@ when not matched by target then
 	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
+
+--[sec].[SystemAction]------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([Name],[RequiredPermissions])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('Retail_BE/Package/GetFilteredPackages','Retail_BE_Package:View'),
+('Retail_BE/Package/GetPackage','Retail_BE_Package:Edit'),
+('Retail_BE/Package/GetPackagesInfo','Retail_BE_Package:View'),
+('Retail_BE/Package/AddPackage','Retail_BE_Package:Add'),
+('Retail_BE/Package/UpdatePackage','Retail_BE_Package:Edit'),
+('Retail_BE/Account/GetFilteredAccounts','Retail_BE_Account: View'),
+('Retail_BE/Account/GetAccount',null),
+('Retail_BE/Account/GetAccountName',null),
+('Retail_BE/Account/AddAccount','Retail_BE_Account: Add'),
+('Retail_BE/Account/UpdateAccount','Retail_BE_Account: Edit'),
+('Retail_BE/AccountPackage/GetFilteredAccountPackages','Retail_BE_AccountPackage: View'),
+('Retail_BE/AccountPackage/GetAccountPackage',null),
+('Retail_BE/AccountPackage/AddAccountPackage','Retail_BE_AccountPackage: Add'),
+('Retail_BE/ChargingPolicy/GetFilteredChargingPolicies','Retail_BE_ChargingPolicy: View'),
+('Retail_BE/ChargingPolicy/GetChargingPolicy',null),
+('Retail_BE/ChargingPolicy/AddChargingPolicy','Retail_BE_ChargingPolicy: Add'),
+('Retail_BE/ChargingPolicy/UpdateChargingPolicy','Retail_BE_ChargingPolicy: Edit'),
+('Retail_BE/AccountType/GetFilteredAccountTypes','Retail_BE_AccountType: View'),
+('Retail_BE/AccountType/GetAccountType',null),
+('Retail_BE/AccountType/GetAccountTypesInfo',null),
+('Retail_BE/AccountType/GetAccountTypePartDefinitionExtensionConfigs',null),
+('Retail_BE/AccountType/AddAccountType','Retail_BE_AccountType: Add'),
+('Retail_BE/AccountType/UpdateAccountType','Retail_BE_AccountType: Edit'),
+('Retail_BE/ServiceType/GetFilteredServiceTypes','Retail_BE_ServiceType: View'),
+('Retail_BE/ServiceType/GetServiceTypesInfo',null),
+('Retail_BE/ServiceType/GetServiceType',null),
+('Retail_BE/ServiceType/GetServiceTypeChargingPolicyDefinitionSettings',null),
+('Retail_BE/ServiceType/UpdateServiceType','Retail_BE_ServiceType: Edit'),
+('Retail_BE/StatusDefinition/GetFilteredStatusDefinitions','Retail_BE_StatusDefinition: View'),
+('Retail_BE/StatusDefinition/AddStatusDefinition','Retail_BE_StatusDefinition: Add'),
+('Retail_BE/StatusDefinition/UpdateStatusDefinition','Retail_BE_StatusDefinition: Edit'),
+('Retail_BE/StatusDefinition/GetStatusDefinition',null),
+('Retail_BE/StatusDefinition/GetStatusDefinitionsInfo',null),
+('Retail_BE/AccountPartDefinition/GetFilteredAccountPartDefinitions','Retail_BE_AccountPartDefinition: View'),
+('Retail_BE/AccountPartDefinition/GetAccountPartDefinition',null),
+('Retail_BE/AccountPartDefinition/GetAccountPartDefinitionsInfo',null),
+('Retail_BE/AccountPartDefinition/GetAccountPartDefinitionExtensionConfigs',null),
+('Retail_BE/AccountPartDefinition/AddAccountPartDefinition','Retail_BE_AccountPartDefinition: Add'),
+('Retail_BE/AccountPartDefinition/UpdateAccountPartDefinition','Retail_BE_AccountPartDefinition: Edit'),
+('Retail_BE/ActionDefinition/AddActionDefinition','Retail_BE_ActionDefinition: Add'),
+('Retail_BE/ActionDefinition/UpdateActionDefinition','Retail_BE_ActionDefinition: Edit'),
+('Retail_BE/ActionDefinition/GetFilteredActionDefinitions','Retail_BE_ActionDefinition: View'),
+('Retail_BE/ActionDefinition/GetActionDefinition',null),
+('Retail_BE/ActionDefinition/GetActionBPDefinitionExtensionConfigs',null),
+('Retail_BE/ActionDefinition/GetProvisionerDefinitionExtensionConfigs',null),
+('Retail_BE/ActionDefinition/GetActionDefinitionsInfo',null),
+('VRCommon/StyleDefinition/GetFilteredStyleDefinitions','VRCommon_StyleDefinition: View'),
+('VRCommon/StyleDefinition/GetStyleDefinition',null),
+('VRCommon/StyleDefinition/AddStyleDefinition','VRCommon_StyleDefinition: Add'),
+('VRCommon/StyleDefinition/UpdateStyleDefinition','VRCommon_StyleDefinition: Edit'),
+('VRCommon/StyleDefinition/GetStyleFormatingExtensionConfigs',null),
+('VRCommon/StyleDefinition/GetStyleDefinitionsInfo',null)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Name],[RequiredPermissions]))
+merge	[sec].[SystemAction] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[RequiredPermissions] = s.[RequiredPermissions]
+when not matched by target then
+	insert([ID],[Name],[RequiredPermissions])
+	values(s.[ID],s.[Name],s.[RequiredPermissions]);
 
 --[genericdata].[DataStore]-------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
