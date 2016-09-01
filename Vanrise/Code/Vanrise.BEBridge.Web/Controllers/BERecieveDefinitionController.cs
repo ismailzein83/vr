@@ -11,6 +11,7 @@ using Vanrise.Web.Base;
 namespace Vanrise.BEBridge.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "BERecieveDefinition")]
+    [JSONWithTypeAttribute]
     public class BERecieveDefinitionController : BaseAPIController
     {
         BEReceiveDefinitionManager _manager = new BEReceiveDefinitionManager();
@@ -41,7 +42,7 @@ namespace Vanrise.BEBridge.Web.Controllers
         }
         [HttpPost]
         [Route("AddReceiveDefinition")]
-        public InsertOperationOutput<BEReceiveDefinitionDetail> AddStatusChargingSet(BEReceiveDefinition beReceiveDefinition)
+        public InsertOperationOutput<BEReceiveDefinitionDetail> AddReceiveDefinition(BEReceiveDefinition beReceiveDefinition)
         {
             return _manager.AddReceiveDefinition(beReceiveDefinition);
         }
