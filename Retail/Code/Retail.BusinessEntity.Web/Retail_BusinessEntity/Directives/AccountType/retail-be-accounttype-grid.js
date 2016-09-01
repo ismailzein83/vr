@@ -60,7 +60,7 @@ app.directive('retailBeAccounttypeGrid', ['Retail_BE_AccountTypeAPIService', 'Re
             $scope.scopeModel.menuActions.push({
                 name: 'Edit',
                 clicked: editAccountType,
-                //haspermission: hasEditAccountTypePermission
+                haspermission: hasEditAccountTypePermission
             });
         }
         function editAccountType(accountType) {

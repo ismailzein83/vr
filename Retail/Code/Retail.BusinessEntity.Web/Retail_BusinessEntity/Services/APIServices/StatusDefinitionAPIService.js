@@ -2,9 +2,9 @@
 (function (appControllers) {
 
     "use strict";
-    StatusDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Retail_BE_ModuleConfig'];
+    StatusDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Retail_BE_ModuleConfig', 'SecurityService'];
 
-    function StatusDefinitionAPIService(BaseAPIService, UtilsService, Retail_BE_ModuleConfig) {
+    function StatusDefinitionAPIService(BaseAPIService, UtilsService, Retail_BE_ModuleConfig, SecurityService) {
 
         var controllerName = "StatusDefinition";
 
@@ -21,6 +21,13 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateStatusDefinition'), statusDefinitionItem);
         }
 
+        function HasAddStatusDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['AddStatusDefinition']));
+        }
+
+        function HasUpdateStatusDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['UpdateStatusDefinition']));
+        }
         function GetStatusDefinition(statusDefinitionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetStatusDefinition'), {
                 statusDefinitionId: statusDefinitionId
@@ -37,6 +44,8 @@
             GetFilteredStatusDefinitions: GetFilteredStatusDefinitions,
             AddStatusDefinition: AddStatusDefinition,
             UpdateStatusDefinition: UpdateStatusDefinition,
+            HasAddStatusDefinitionPermission: HasAddStatusDefinitionPermission,
+            HasUpdateStatusDefinitionPermission:HasUpdateStatusDefinitionPermission,
             GetStatusDefinition: GetStatusDefinition,
             GetStatusDefinitionsInfo: GetStatusDefinitionsInfo,
         });

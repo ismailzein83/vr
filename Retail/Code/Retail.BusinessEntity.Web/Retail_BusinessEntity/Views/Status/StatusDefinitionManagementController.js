@@ -2,9 +2,9 @@
 
     "use strict";
 
-    StatusDefinitionManagementController.$inject = ['$scope', 'Retail_BE_StatusDefinitionService', 'UtilsService', 'VRUIUtilsService'];
+    StatusDefinitionManagementController.$inject = ['$scope', 'Retail_BE_StatusDefinitionService', 'Retail_BE_StatusDefinitionAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function StatusDefinitionManagementController($scope, Retail_BE_StatusDefinitionService, UtilsService, VRUIUtilsService) {
+    function StatusDefinitionManagementController($scope, Retail_BE_StatusDefinitionService, Retail_BE_StatusDefinitionAPIService, UtilsService, VRUIUtilsService) {
 
         var gridAPI;
 
@@ -16,38 +16,39 @@
 
 
         function defineScope() {
-            $scope.scopeModel = {};
-
-            $scope.scopeModel.search = function () {
+            $scope.search = function () {
                 var query = buildGridQuery();
                 return gridAPI.load(query);
             };
 
-            $scope.scopeModel.add = function () {
+            $scope.add = function () {
                 var onStatusDefinitionAdded = function (addedStatusDefinition) {
                     gridAPI.onStatusDefinitionAdded(addedStatusDefinition);
                 }
                 Retail_BE_StatusDefinitionService.addStatusDefinition(onStatusDefinitionAdded);
             };
+            $scope.hasAddStatusDefinitionPermission = function () {               
+                return Retail_BE_StatusDefinitionAPIService.HasAddStatusDefinitionPermission();
+            };
 
-            $scope.scopeModel.onGridReady = function (api) {
+            $scope.onGridReady = function (api) {
                 gridAPI = api;
                 gridAPI.load({});
             };
 
-            $scope.scopeModel.onEntityTypeSelectorReady = function (api) {
+            $scope.onEntityTypeSelectorReady = function (api) {
                 entityTypeAPI = api;
                 entityTypeSelectorReadyDeferred.resolve();
             }
         }
 
         function load(){
-            $scope.scopeModel.isloading = true;
+            $scope.isloading = true;
             loadAllControls().finally(function () {
-                $scope.scopeModel.isloading = false;
+                $scope.isloading = false;
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.scopeModel.isloading = false;
+                $scope.isloading = false;
             })
         }
 
@@ -67,7 +68,7 @@
 
         function buildGridQuery() {
             return {
-                Name: $scope.scopeModel.name,
+                Name: $scope.name,
                 EntityTypes: entityTypeAPI.getSelectedIds()
             };
         }

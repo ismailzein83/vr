@@ -66,9 +66,13 @@ app.directive('retailBeStatusdefinitionGrid', ['Retail_BE_StatusDefinitionAPISer
                 $scope.scopeModel.menuActions.push({
                     name: 'Edit',
                     clicked: editStatusDefinition,
+                    haspermission: hasEditServiceTypePermission
                 });
             }
 
+            function hasEditServiceTypePermission() {
+                return Retail_BE_StatusDefinitionAPIService.HasUpdateStatusDefinitionPermission();
+            }
             function editStatusDefinition(statusDefinitionItem) {
                 var onStatusDefinitionUpdated = function (updatedStatusDefinition) {
                     gridAPI.itemUpdated(updatedStatusDefinition);

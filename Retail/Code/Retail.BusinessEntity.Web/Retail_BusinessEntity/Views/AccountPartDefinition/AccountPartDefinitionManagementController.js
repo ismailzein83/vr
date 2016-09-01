@@ -11,26 +11,23 @@
         load();
 
         function defineScope() {
-            $scope.scopeModel = {};
-
-            $scope.scopeModel.onGridReady = function (api) {
+            $scope.onGridReady = function (api) {
                 gridAPI = api;
                 gridAPI.loadGrid({});
             };
 
-            $scope.scopeModel.search = function () {
+            $scope.search = function () {
                 var query = buildGridQuery();
                 return gridAPI.loadGrid(query);
             };
-
-            $scope.scopeModel.add = function () {
+            $scope.add = function () {
                 var onAccountPartDefinitionAdded = function (addedAccountPartDefinition) {
                     gridAPI.onAccountPartDefinitionAdded(addedAccountPartDefinition);
                 };
                 Retail_BE_AccountPartDefinitionService.addAccountPartDefinition(onAccountPartDefinitionAdded);
             };
 
-            $scope.scopeModel.hasAddAccountPartDefinitionPermission = function () {
+            $scope.hasAddAccountPartDefinitionPermission = function () {
                 return Retail_BE_AccountPartDefinitionAPIService.HasAddAccountPartDefinitionPermission();
             };
         }
@@ -40,7 +37,7 @@
 
         function buildGridQuery() {
             return {
-                Name: $scope.scopeModel.name
+                Name: $scope.name
             };
         }
     }

@@ -11,14 +11,13 @@
         load();
 
         function defineScope() {
-            $scope.scopeModel = {};
 
-            $scope.scopeModel.onGridReady = function (api) {
+            $scope.onGridReady = function (api) {
                 gridAPI = api;
                 gridAPI.loadGrid({});
             };
 
-            $scope.scopeModel.search = function () {
+            $scope.search = function () {
                 var query = buildGridQuery();
                 return gridAPI.loadGrid(query);
             };
@@ -31,7 +30,7 @@
 
         function buildGridQuery() {
             return {
-                Name: $scope.scopeModel.name,
+                Name: $scope.name,
             };
         }
     }

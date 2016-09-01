@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    ActionDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Retail_BE_ModuleConfig'];
+    ActionDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Retail_BE_ModuleConfig', 'SecurityService'];
 
-    function ActionDefinitionAPIService(BaseAPIService, UtilsService, Retail_BE_ModuleConfig) {
+    function ActionDefinitionAPIService(BaseAPIService, UtilsService, Retail_BE_ModuleConfig, SecurityService) {
 
         var controllerName = "ActionDefinition";
 
@@ -23,6 +23,14 @@
 
         function UpdateActionDefinition(actionDefinition) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateActionDefinition'), actionDefinition);
+        }
+
+        function HasAddActionDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['AddActionDefinition']));
+        }
+
+        function HasUpdateActionDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['UpdateActionDefinition']));
         }
         function GetActionDefinitionsInfo(filter)
         {
@@ -45,6 +53,8 @@
             GetActionDefinition: GetActionDefinition,
             AddActionDefinition: AddActionDefinition,
             UpdateActionDefinition: UpdateActionDefinition,
+            HasAddActionDefinitionPermission: HasAddActionDefinitionPermission,
+            HasUpdateActionDefinitionPermission:HasUpdateActionDefinitionPermission,
             GetActionBPDefinitionExtensionConfigs: GetActionBPDefinitionExtensionConfigs,
             GetProvisionerDefinitionExtensionConfigs: GetProvisionerDefinitionExtensionConfigs,
             GetActionDefinitionsInfo: GetActionDefinitionsInfo

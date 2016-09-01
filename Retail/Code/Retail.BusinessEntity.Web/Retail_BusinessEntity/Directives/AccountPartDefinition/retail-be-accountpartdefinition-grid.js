@@ -60,7 +60,7 @@ app.directive('retailBeAccountpartdefinitionGrid', ['Retail_BE_AccountPartDefini
             $scope.scopeModel.menuActions.push({
                 name: 'Edit',
                 clicked: editAccountPartDefinition,
-                //haspermission: hasEditAccountPartDefinitionPermission
+                haspermission: hasEditAccountPartDefinitionPermission
             });
         }
         function editAccountPartDefinition(accountPartDefinition) {

@@ -58,9 +58,12 @@ app.directive('retailBeServicetypeGrid', ['Retail_BE_ServiceTypeAPIService', 'Re
             $scope.scopeModel.menuActions.push({
                 name: 'Edit',
                 clicked: editServiceType,
+                haspermission: hasEditServiceTypePermission
             });
         }
-
+        function hasEditServiceTypePermission() {
+            return Retail_BE_ServiceTypeAPIService.HasUpdateServiceTypePermission();
+        }
         function editServiceType(serviceType) {
             var onServiceTypeUpdated = function (updatedServiceType) {
                 gridAPI.itemUpdated(updatedServiceType);

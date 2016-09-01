@@ -5,10 +5,10 @@
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-textbox label="Name" value="scopeModel.name"></vr-textbox>
+                    <vr-textbox label="Name" value="name"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <retail-be-entitytype-selector on-ready="scopeModel.onEntityTypeSelectorReady" ismultipleselection></retail-be-entitytype-selector>
+                    <retail-be-entitytype-selector on-ready="onEntityTypeSelectorReady" ismultipleselection></retail-be-entitytype-selector>
                 </vr-columns>
             </vr-row>
         </div>
@@ -16,15 +16,15 @@
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
-                    <vr-button type="Add" formname="formFilter" data-onclick="scopeModel.add"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
+                    <vr-button type="Add" formname="formFilter" data-onclick="add" haspermission="hasAddStatusDefinitionPermission"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
 
         <vr-row>
             <vr-columns width="fullrow" simplecol>
-                <retail-be-statusdefinition-grid on-ready="scopeModel.onGridReady"> </retail-be-statusdefinition-grid>
+                <retail-be-statusdefinition-grid on-ready="onGridReady"> </retail-be-statusdefinition-grid>
             </vr-columns>
         </vr-row>
 

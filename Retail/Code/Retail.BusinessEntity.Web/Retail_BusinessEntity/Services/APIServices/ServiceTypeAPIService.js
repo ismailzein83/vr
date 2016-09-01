@@ -33,13 +33,16 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateServiceType'), serviceType);
         }
 
-
+        function HasUpdateServiceTypePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['UpdateServiceType']));
+        }
         return {
             GetFilteredServiceTypes: GetFilteredServiceTypes,
             GetServiceType: GetServiceType,
             GetServiceTypesInfo: GetServiceTypesInfo,
             GetServiceTypeChargingPolicyDefinitionSettings: GetServiceTypeChargingPolicyDefinitionSettings,
             UpdateServiceType: UpdateServiceType,
+            HasUpdateServiceTypePermission: HasUpdateServiceTypePermission
 
         };
     }

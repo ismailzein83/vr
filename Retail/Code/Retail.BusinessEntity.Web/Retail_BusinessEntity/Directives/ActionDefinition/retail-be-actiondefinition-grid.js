@@ -60,7 +60,7 @@ app.directive('retailBeActiondefinitionGrid', ['Retail_BE_ActionDefinitionAPISer
             $scope.scopeModel.menuActions.push({
                 name: 'Edit',
                 clicked: editActionDefinition,
-                //haspermission: hasEditActionDefinitionPermission
+                haspermission: hasEditActionDefinitionPermission
             });
         }
         function editActionDefinition(actionDefinition) {
