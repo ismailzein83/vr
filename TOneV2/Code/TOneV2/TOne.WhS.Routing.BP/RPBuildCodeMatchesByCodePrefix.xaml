@@ -164,11 +164,19 @@
     </Parallel>
     <Parallel DisplayName="Parallel_BuildCodeMatch" sap2010:WorkflowViewState.IdRef="Parallel_2">
       <Parallel.Variables>
-        <Variable x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)" Name="queueCodeMatchesBatch" />
+        <Variable x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)" Name="queueCodeMatchesBatch">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)">new MemoryQueue&lt;CodeMatchesBatch&gt;()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
         <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="queuePreparedCodeMatches" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="buildCodeMatchesStatus" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareCodeMatchesStatus" />
-        <Variable x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)" Name="queueCodeMatchesBatchForSaleCode" />
+        <Variable x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)" Name="queueCodeMatchesBatchForSaleCode">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)">new MemoryQueue&lt;CodeMatchesBatch&gt;()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
         <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="queuePreparedCodeSaleZoneList" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareCodeSaleZoneStatus" />
       </Parallel.Variables>
@@ -288,7 +296,7 @@
         </twrba1:ApplyCodesToCodeSaleZoneTable.RoutingDatabaseId>
       </twrba1:ApplyCodesToCodeSaleZoneTable>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d1FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBCdWlsZENvZGVNYXRjaGVzQnlDb2RlUHJlZml4LnhhbWwySAOkAg4CAQFOBaQBEAMBhQKlAQWiAhACAQJPB2YSAwHGAmcHowESAwGGAq8BB9MBIQMBrwHUAQfpASsCAX7qAQf/ASwCAU2AAgeQAiUCASiRAgehAi4CAQNQCWUfAwHHAmsJcSkDAb8CcgmRASMDAZoCkgEJogEpAwGHArwBDbwBjgEDAfkBwQENwQFqAwHtAbcBDbcBgwEDAeEBsgENsgFgAwHVAcYBDcYBdwMByQHLAQ3LAXIDAb0BrwGVAa8BnAEDAbwB0AEN0AFzAwGwAeEBDeEBbwMBowHXAQ3XAXsDAZcB5gEN5gF5AwGLAdwBDdwBeQIBf/cBDfcBcQIBcu0BDe0BhgECAWb8AQ38AXoCAVryAQ3yAX4CAU6IAg2IAnECAUGDAg2DAnECATWNAg2NAmECASmZAg2ZAnICARyUAg2UAnYCARCeAg2eAmECAQRYD1hsAwHXAmIPYnQDAdICUw9TZAMBzQJdD11cAwHIAm4PbogBAwHAAnoPemwDAbkCdQ91ZAMBswKOAQ+OAYABAwGtAokBD4kBfAMBpwKEAQ+EAXUDAaECfw9/XAMBmwKVAQ+VAWMDAZQCmgEPmgF0AwGOAp8BD58BfQMBiAI=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBCdWlsZENvZGVNYXRjaGVzQnlDb2RlUHJlZml4LnhhbWw0SAOsAg4CAQFOBaQBEAMBnQKlAQWqAhACAQJPB2YSAwHeAmcHowESAwGeAqkBDakBjwECAQ+xAQ2xAY8BAgEDtwEH2wEhAwHHAdwBB/EBKwMBlgHyAQeHAiwCAWWIAgeYAiUCAUCZAgepAi4CARtQCWUfAwHfAmsJcSkDAdcCcgmRASMDAbICkgEJogEpAwGfAsQBDcQBjgEDAZECyQENyQFqAwGFAr8BDb8BgwEDAfkBugENugFgAwHtAc4BDc4BdwMB4QHTAQ3TAXIDAdUBtwGVAbcBnAEDAdQB2AEN2AFzAwHIAekBDekBbwMBuwHfAQ3fAXsDAa8B7gEN7gF5AwGjAeQBDeQBeQMBlwH/AQ3/AXEDAYoB9QEN9QGGAQIBfoQCDYQCegIBcvoBDfoBfgIBZpACDZACcQIBWYsCDYsCcQIBTZUCDZUCYQIBQaECDaECcgIBNJwCDZwCdgIBKKYCDaYCYQIBHFgPWGwDAe8CYg9idAMB6gJTD1NkAwHlAl0PXVwDAeACbg9uiAEDAdgCeg96bAMB0QJ1D3VkAwHLAo4BD44BgAEDAcUCiQEPiQF8AwG/AoQBD4QBdQMBuQJ/D39cAwGzApUBD5UBYwMBrAKaAQ+aAXQDAaYCnwEPnwF9AwGgAg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
