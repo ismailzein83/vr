@@ -38,15 +38,15 @@
     <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t" />
     <add key="Interconnect_BE_DBConnStringKey" value="InterconnectDBConnectionString" />
     <add key="SecurityDBConnStringKey" value="ConfigurationDBConnString" />
-    <add key="ConfigurationDBConnStringKey" value="ConfigurationDBConnString"/>
-    <add key="RuntimeConnStringKey" value="TransactionDBConnString"/>
-    <add key="IntegrationConnStringKey" value="TransactionDBConnString"/>
-    <add key="BusinessProcessDBConnStringKey" value="TransactionDBConnString"/>
-    <add key="QueueDBConnStringKey" value="TransactionDBConnString"/>
-    <add key="QueueItemDBConnStringKey" value="QueueItemDBConnString"/>
-    <add key="SummaryTransformationDBConnStringKey" value="TransactionDBConnString"/>
-    <add key="BusinessProcessTrackingDBConnStringKey" value="LogDBConnString"/>
-    <add key="RulesDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="ConfigurationDBConnStringKey" value="ConfigurationDBConnString" />
+    <add key="RuntimeConnStringKey" value="TransactionDBConnString" />
+    <add key="IntegrationConnStringKey" value="TransactionDBConnString" />
+    <add key="BusinessProcessDBConnStringKey" value="TransactionDBConnString" />
+    <add key="QueueDBConnStringKey" value="TransactionDBConnString" />
+    <add key="QueueItemDBConnStringKey" value="QueueItemDBConnString" />
+    <add key="SummaryTransformationDBConnStringKey" value="TransactionDBConnString" />
+    <add key="BusinessProcessTrackingDBConnStringKey" value="LogDBConnString" />
+    <add key="RulesDBConnStringKey" value="ConfigurationDBConnString" />
   </appSettings>
   <system.web>
     <compilation debug="true" targetFramework="4.5" />
