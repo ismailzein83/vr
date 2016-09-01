@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 
 namespace Vanrise.Rules
 {
@@ -66,23 +67,23 @@ namespace Vanrise.Rules
             if (node.Rules == null || node.Rules.Count == 0)
                 return;
 
-            List<BaseRule> rules = new List<BaseRule>();
+            HashSet<BaseRule> rules = new HashSet<BaseRule>();
             foreach (var priority in priorities)
             {
                 foreach (BaseRule rule in priority.Value)
                 {
-                    if (node.Rules.Contains(rule) && !rules.Contains(rule))
+                    if (node.Rules.Contains(rule))
                         rules.Add(rule);
                 }
             }
-            node.Rules = rules;
+            node.Rules = rules.ToList();
         }
 
         private Dictionary<int, List<BaseRule>> BuildPriorities(Dictionary<int, List<BaseRule>> priorities, Dictionary<BaseRule, int> nodePriorities)
         {
             Dictionary<int, List<BaseRule>> result = new Dictionary<int, List<BaseRule>>();
             int priority = 0;
-            List<BaseRule> baseRules;
+  
 
             if (nodePriorities == null || nodePriorities.Count == 0)
                 return priorities != null ? new Dictionary<int, List<BaseRule>>(priorities) : null;
@@ -91,16 +92,7 @@ namespace Vanrise.Rules
             {
                 foreach (var nodePriority in nodePriorities)
                 {
-                    if (result.TryGetValue(nodePriority.Value, out baseRules))
-                    {
-                        baseRules.Add(nodePriority.Key);
-                    }
-                    else
-                    {
-                        baseRules = new List<BaseRule>() { nodePriority.Key };
-                        result.Add(priority, baseRules);
-                        priority++;
-                    }
+                    result.GetOrCreateItem(nodePriority.Value).Add(nodePriority.Key);
                 }
                 return result;
             }
@@ -113,15 +105,7 @@ namespace Vanrise.Rules
                     int rulePriority;
                     if (nodePriorities.TryGetValue(baseRule, out rulePriority))
                     {
-                        if (tempDict.TryGetValue(rulePriority, out baseRules))
-                        {
-                            baseRules.Add(baseRule);
-                        }
-                        else
-                        {
-                            baseRules = new List<BaseRule>() { baseRule };
-                            tempDict.Add(rulePriority, baseRules);
-                        }
+                        tempDict.GetOrCreateItem(rulePriority).Add(baseRule);
                     }
                 }
                 tempDict = tempDict.OrderBy(itm => itm.Key).ToDictionary(itm => itm.Key, itm => itm.Value);
