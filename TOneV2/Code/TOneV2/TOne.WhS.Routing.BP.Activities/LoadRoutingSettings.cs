@@ -6,10 +6,8 @@ namespace TOne.WhS.Routing.BP.Activities
 {
     public sealed class LoadRoutingSettings : CodeActivity
     {
-        [RequiredArgument]
         public OutArgument<int> CustomerGroupSize { get; set; }
 
-        [RequiredArgument]
         public OutArgument<int> SupplierGroupSize { get; set; }
 
         protected override void Execute(CodeActivityContext context)
