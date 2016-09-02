@@ -23,6 +23,13 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
         var recordFilterDirectiveAPI;
         var recordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var dataRecordTypeFieldsSelectorAPI;
+        var dataRecordTypeFieldsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var aggregationFieldsRecordFilterDirectiveAPI;
+        var aggregationFieldsRecordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+
         function initializeController() {
             var promises = [recordFilterDirectiveReadyDeferred.promise];
 
@@ -33,10 +40,19 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                 recordFilterDirectiveReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onDataRecordTypeFieldsSelectorReady = function (api) {
+                dataRecordTypeFieldsSelectorAPI = api;
+                dataRecordTypeFieldsSelectorReadyDeferred.resolve();
+            }
+
+            $scope.scopeModel.onAggregationFieldsRecordFilterDirectiveReady = function (api) {
+                aggregationFieldsRecordFilterDirectiveAPI = api;
+                aggregationFieldsRecordFilterDirectiveReadyDeferred.resolve();
+            };
+
             UtilsService.waitMultiplePromises(promises).then(function () {
                 defineAPI();
             })
-
         }
         function defineAPI() {
             var api = {};
@@ -48,23 +64,90 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                 var promises = [];
 
                 var context;
-                var filterGroup;
+                var recordFilter;
+                var groupingFields;
+                var aggregationFields;
 
                 if(payload != undefined){
                     context = payload.context
-                    filterGroup = payload.dataAnalysisItemDefinitionSettings.RecordFilter;
+
+                    if (payload.dataAnalysisItemDefinitionSettings != undefined) {
+                        recordFilter = payload.dataAnalysisItemDefinitionSettings.RecordFilter;
+                        groupingFields = payload.dataAnalysisItemDefinitionSettings.GroupingFields;
+                        aggregationFields = payload.dataAnalysisItemDefinitionSettings.AggregationFields;
+                    }
                 }
 
                 //Loading Record Filter Directive
-                var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-                var recordFilterDirectivePayload = {
-                    context: buildContext(),
-                    FilterGroup: filterGroup
-                };
-                VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
-                promises.push(recordFilterDirectiveLoadDeferred.promise);
+                var recordFilterDirectiveLoadPromise = getRecordFilterDirectiveLoadPromise();
+                promises.push(recordFilterDirectiveLoadPromise);
+
+                //Loading Data Record Type Fields Selector
+                var dataRecordTypeFieldsSelectorLoadPromise = getDataRecordTypeFieldsSelectorLoadPromise();
+                promises.push(dataRecordTypeFieldsSelectorLoadPromise);
+
+                //Loading Aggregation Fields Record Filter Directive
+                var AggregationFieldsRecordFilterDirectiveLoadPromise = getAggregationFieldsRecordFilterDirectiveLoadPromise();
+                promises.push(AggregationFieldsRecordFilterDirectiveLoadPromise);
 
 
+                function getRecordFilterDirectiveLoadPromise() {
+                    var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    recordFilterDirectiveReadyDeferred.promise.then(function () {
+                        var recordFilterDirectivePayload = {};
+                        recordFilterDirectivePayload.context = buildContext();
+                        if(recordFilter != undefined){
+                            recordFilterDirectivePayload.FilterGroup = recordFilter;
+                        }
+
+                        VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
+                    })
+
+                    return recordFilterDirectiveLoadDeferred.promise;
+                }
+                function getDataRecordTypeFieldsSelectorLoadPromise() {
+                    var dataRecordTypeFieldsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    dataRecordTypeFieldsSelectorReadyDeferred.promise.then(function () {
+                        var dataRecordTypeFieldsSelectorPayload = {};
+                        dataRecordTypeFieldsSelectorPayload.dataRecordTypeId = context.getDataRecordTypeId();
+                        if (groupingFields != undefined) {
+                            dataRecordTypeFieldsSelectorPayload.selectedIds = buildDataRecordTypeFieldsSelectorPayload();
+                        }
+
+                        VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, dataRecordTypeFieldsSelectorPayload, dataRecordTypeFieldsSelectorLoadDeferred);
+                    });
+                    
+                    return dataRecordTypeFieldsSelectorLoadDeferred.promise;
+                }
+                function getAggregationFieldsRecordFilterDirectiveLoadPromise() {
+                    var aggregationFieldsRecordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                    
+                    aggregationFieldsRecordFilterDirectiveReadyDeferred.promise.then(function () {
+                        var aggregationFieldsRecordFilterDirectivePayload = {}
+                        aggregationFieldsRecordFilterDirectivePayload.context = buildContext();
+                        if (aggregationFields != undefined) {
+                            aggregationFieldsRecordFilterDirectivePayload.FilterGroup = aggregationFields.RecordFilter;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(aggregationFieldsRecordFilterDirectiveAPI, aggregationFieldsRecordFilterDirectivePayload, aggregationFieldsRecordFilterDirectiveLoadDeferred);
+                    })
+
+                    return aggregationFieldsRecordFilterDirectiveLoadDeferred.promise;
+                }
+
+                function buildContext() {
+                    return context;
+                }
+                function buildDataRecordTypeFieldsSelectorPayload() {
+                    var array = [];
+
+                    if (groupingFields != undefined) {
+                        for (var i = 0; i < groupingFields.length; i++)
+                            array.push(groupingFields[i].FieldName);
+                    }
+                    return array;
+                }
                 function virtual() {
 
                     //var promises = [];
@@ -103,19 +186,35 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
 
                     //return UtilsService.waitMultiplePromises(promises);
                 }
-                function buildContext() {
-                    return context;
-                }
 
                 return UtilsService.waitMultiplePromises(promises);
-
             };
 
             api.getData = function () {
+
+                var array = [];
+                array.push({ RecordFilter: aggregationFieldsRecordFilterDirectiveAPI.getData().filterObj })
+
                 var data = {
                     $type: "Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputDefinitions.RecordProfilingOutputSettings, Vanrise.Analytic.Entities",
-                    RecordFilter: recordFilterDirectiveAPI.getData().filterObj
+                    RecordFilter: recordFilterDirectiveAPI.getData().filterObj,
+                    GroupingFields: buildListOfDAProfCalcGroupingField(),
+                    AggregationFields: array
                 }
+
+                function buildListOfDAProfCalcGroupingField() {
+                    var array = [];
+
+                    var dataRecordTypeFieldsArray = dataRecordTypeFieldsSelectorAPI.getSelectedIds();
+                    for (var i = 0 ; i < dataRecordTypeFieldsArray.length; i++) {
+                        var daProfCalcGroupingField = {
+                            FieldName: dataRecordTypeFieldsArray[i]
+                        }
+                        array.push(daProfCalcGroupingField);
+                    }
+                    return array;
+                }
+
                 return data;
             };
 

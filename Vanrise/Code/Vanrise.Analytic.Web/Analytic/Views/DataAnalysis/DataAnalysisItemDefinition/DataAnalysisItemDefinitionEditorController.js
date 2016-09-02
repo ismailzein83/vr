@@ -18,6 +18,7 @@
 
         var dataRecordTypeSelectorAPI;
         var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var dataRecordTypeSelectionChangedDeferred;
 
         var settingsDirectiveAPI;
         var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -48,12 +49,25 @@
             $scope.scopeModel.onDataRecordTypeSelectionChanged = function () {
                 var selectedId = dataRecordTypeSelectorAPI.getSelectedIds();
                 if (selectedId != undefined) {
-                    dataRecordTypeId = selectedId;
 
-                    var setLoader = function (value) {
-                        $scope.scopeModel.isSelectorLoading = value;
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeSelectorAPI, undefined, setLoader);
+                    if (dataRecordTypeSelectionChangedDeferred != undefined) {
+                        dataRecordTypeSelectionChangedDeferred.resolve();
+                    }
+                    else {
+                        dataRecordTypeId = selectedId;
+
+                        var settingsDirectivePayload = {};
+                        //settingsDirectivePayload.dataAnalysisItemDefinition = dataAnalysisItemDefinitionEntity;
+                        settingsDirectivePayload.dataAnalysisDefinitionId = dataAnalysisDefinitionId;
+                        settingsDirectivePayload.itemDefinitionTypeId = itemDefinitionTypeId;
+                        settingsDirectivePayload.context = buildContext();
+
+                        var setLoader = function (value) {
+                            $scope.scopeModel.isSelectorLoading = value;
+                        };
+                        //VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeSelectorAPI, undefined, setLoader);
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, settingsDirectiveAPI, settingsDirectivePayload, setLoader);
+                    }
                 }
             };
 
@@ -144,13 +158,18 @@
 
                 settingsDirectiveReadyDeferred.promise.then(function () {
 
-                    var settingsDirectivePayload = {};
-                    settingsDirectivePayload.dataAnalysisItemDefinition = dataAnalysisItemDefinitionEntity;
-                    settingsDirectivePayload.dataAnalysisDefinitionId = dataAnalysisDefinitionId;
-                    settingsDirectivePayload.itemDefinitionTypeId = itemDefinitionTypeId;
-                    settingsDirectivePayload.context = buildContext();
+                    dataRecordTypeSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+                    dataRecordTypeSelectionChangedDeferred.promise.then(function () {
+                        dataRecordTypeSelectionChangedDeferred = undefined;
 
-                    VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
+                        var settingsDirectivePayload = {};
+                        settingsDirectivePayload.dataAnalysisItemDefinition = dataAnalysisItemDefinitionEntity;
+                        settingsDirectivePayload.dataAnalysisDefinitionId = dataAnalysisDefinitionId;
+                        settingsDirectivePayload.itemDefinitionTypeId = itemDefinitionTypeId;
+                        settingsDirectivePayload.context = buildContext();
+
+                        VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
+                    });
                 });
 
                 return settingsDirectiveLoadDeferred.promise;
@@ -205,6 +224,9 @@
                     });
 
                     return fields;
+                },
+                getDataRecordTypeId: function () {
+                    return dataRecordTypeId;
                 }
             }
             return context;
@@ -214,10 +236,13 @@
 
             var dataAnalysisItemDefinitionSettings = settingsDirectiveAPI.getData();
 
+
             if (dataAnalysisItemDefinitionSettings != undefined) {
                 dataAnalysisItemDefinitionSettings.Title = $scope.scopeModel.title;
                 dataAnalysisItemDefinitionSettings.RecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds()
             }
+
+            console.log(dataAnalysisItemDefinitionSettings);
 
             return {
                 DataAnalysisItemDefinitionId: dataAnalysisItemDefinitionEntity != undefined ? dataAnalysisItemDefinitionEntity.DataAnalysisItemDefinitionId : undefined,

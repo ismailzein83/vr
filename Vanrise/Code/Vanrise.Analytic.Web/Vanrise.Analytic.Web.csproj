@@ -77,9 +77,7 @@
     <Compile Include="Controllers\DataAnalysisItemDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Templates\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Analytic.Business\Vanrise.Analytic.Business.csproj">
       <Project>{374e7ef0-2080-4b79-bcd9-b5563694197c}</Project>
@@ -147,6 +145,8 @@
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\OutputDefinitions\vr-analytic-recordprofilingoutputsettings-grid.js" />
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\MainExtensions\Templates\DAProfCalcSettingsSelectorTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\MainExtensions\vr-analytic-daprofcalcsettings-selector.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Templates\DAProfCalcAggregationFieldManagementTemplate.html" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\vr-analytic-daprofcalcaggregationfield-management.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticDimensionGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticJoinGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticAggregateGridTemplate.html" />
