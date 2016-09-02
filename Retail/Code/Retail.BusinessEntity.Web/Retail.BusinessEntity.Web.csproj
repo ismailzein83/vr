@@ -155,6 +155,7 @@
     <Compile Include="Controllers\AccountPackageController.cs" />
     <Compile Include="Controllers\AccountPartDefinitionController.cs" />
     <Compile Include="Controllers\AccountServiceController.cs" />
+    <Compile Include="Controllers\OperatorDeclaredInfoController.cs" />
     <Compile Include="Controllers\AccountTypeController.cs" />
     <Compile Include="Controllers\ActionDefinitionController.cs" />
     <Compile Include="Controllers\ChargingPolicyController.cs" />
@@ -186,6 +187,7 @@
     <Content Include="Retail_BusinessEntity\Constant\AccountPartAvailabilityOptionsEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountPartRequiredOptionsEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountStatusEnum.js" />
+    <Content Include="Retail_BusinessEntity\Constant\TrafficDirectionEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ChargeTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ConnectionTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\EntityTypeEnum.js" />
@@ -204,6 +206,11 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountPartDefinition\Templates\AccountPartDefinitionGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountService\retail-be-accountservice-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountService\Templates\AccountServiceGridTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclaredInfo\retail-be-trafficdirection-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclaredInfo\retail-be-operatordeclaredinfo-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclaredInfo\retail-be-operatordeclaredinfoitem-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclaredInfo\Templates\OperatorDeclaredInfoGridTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclaredInfo\Templates\OperatorDeclaredInfoItemGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountType\retail-be-accounttype-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountType\retail-be-accounttype-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountType\retail-be-accounttype-part-definition.js" />
@@ -349,6 +356,7 @@
     <Content Include="Retail_BusinessEntity\Services\AccountPartDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountServiceService.js" />
+    <Content Include="Retail_BusinessEntity\Services\OperatorDeclaredInfoService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountTypeService.js" />
     <Content Include="Retail_BusinessEntity\Services\ActionDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\ActionRuntimeService.js" />
@@ -357,6 +365,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountPackageAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountPartDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountServiceAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\OperatorDeclaredInfoAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountTypeAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ActionDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ChargingPolicyAPIService.js" />
@@ -382,6 +391,12 @@
     <Content Include="Retail_BusinessEntity\Views\AccountPartDefinition\AccountPartDefinitionManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountService\AccountServiceEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountService\AccountServiceEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\OperatorDeclaredInfo\OperatorDeclaredInfoItemEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\OperatorDeclaredInfo\OperatorDeclaredInfoEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\OperatorDeclaredInfo\OperatorDeclaredInfoItemEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\OperatorDeclaredInfo\OperatorDeclaredInfoEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\OperatorDeclaredInfo\OperatorDeclaredInfoManagement.html" />
+    <Content Include="Retail_BusinessEntity\Views\OperatorDeclaredInfo\OperatorDeclaredInfoManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountType\AccountTypeEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountType\AccountTypeEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountType\AccountTypeManagement.html" />

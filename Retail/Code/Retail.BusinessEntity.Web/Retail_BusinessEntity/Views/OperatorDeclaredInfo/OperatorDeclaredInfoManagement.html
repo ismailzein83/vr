@@ -1,0 +1,22 @@
+﻿<vr-panel ng-controller="Retail_BE_OperatorDeclaredInfoManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+              
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
+                    <vr-button type="Add" data-onclick="add" ></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow" simplecol>
+                <retail-be-operatordeclaredinfo-grid on-ready="onGridReady"></retail-be-operatordeclaredinfo-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>

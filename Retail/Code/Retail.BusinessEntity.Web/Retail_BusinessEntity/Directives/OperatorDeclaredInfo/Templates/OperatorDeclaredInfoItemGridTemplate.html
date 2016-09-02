@@ -1,0 +1,15 @@
+﻿<vr-row>
+    <vr-columns width="normal">
+        <vr-button type="Add" data-onclick="ctrl.add" standalone></vr-button>
+    </vr-columns>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="ctrl.items" menuactions="ctrl.menuActions" ondeleterow="ctrl.removeitem" norowhighlightonclick="true" hidegridmenu>
+            <vr-datagridcolumn headertext="'Service Type'" field="'ServiceTypeName'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Traffic Direction'" field="'TrafficDirectionValue'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Volume'" field="'Volume'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Amount'" field="'Amount'"></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+
+</vr-row>
+

@@ -37,4 +37,14 @@ namespace Retail.BusinessEntity.Entities
 
         public Decimal Amount { get; set; }
     }
+
+    public class OperatorDeclaredInfoQuery
+    {
+
+    }
+    public class OperatorDeclaredInfoDetail
+    {
+        public OperatorDeclaredInfo Entity { get; set; }
+    }
+
 }

@@ -68,6 +68,7 @@
     <Compile Include="StatusChargingSetDataManager.cs" />
     <Compile Include="StatusDefinitionDataManager.cs" />
     <Compile Include="SwitchDataManager.cs" />
+    <Compile Include="OperatorDeclaredInfoDataManager.cs" />
     <Compile Include="ZoneDataManager.cs" />
     <Compile Include="PackageDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -103,6 +103,7 @@
     <Compile Include="AccountManager.cs" />
     <Compile Include="AccountPartDefinitionManager.cs" />
     <Compile Include="AccountServiceManager.cs" />
+    <Compile Include="OperatorDeclaredInfoManager.cs" />
     <Compile Include="AccountTypeManager.cs" />
     <Compile Include="Action\ActionDefinitionManager.cs" />
     <Compile Include="CreditClassManager.cs" />

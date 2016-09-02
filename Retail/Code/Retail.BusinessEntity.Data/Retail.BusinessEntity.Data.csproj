@@ -62,6 +62,7 @@
     <Compile Include="IServiceTypeDataManager.cs" />
     <Compile Include="IStatusChargingSetDataManager.cs" />
     <Compile Include="IStatusDefinitionDataManager.cs" />
+    <Compile Include="IOperatorDeclaredInfoDataManager.cs" />
     <Compile Include="ISwitchDataManager.cs" />
     <Compile Include="IZoneDataManager.cs" />
     <Compile Include="IPackageDataManager.cs" />
