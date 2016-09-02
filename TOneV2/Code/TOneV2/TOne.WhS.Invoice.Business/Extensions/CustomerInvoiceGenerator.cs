@@ -17,10 +17,21 @@ namespace TOne.WhS.Invoice.Business.Extensions
         {
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
             CustomerInvoiceDetails customerInvoiceDetails = null;
+
+            string[] partner = context.PartnerId.Split('_');
+
+
+
             var analyticResultBySaleZone = GetFilteredRecordsBySaleZone(context.PartnerId, context.FromDate, context.ToDate);
             if (analyticResultBySaleZone != null && analyticResultBySaleZone.Data != null)
             {
-                BuilInvoiceCustomerItemSet(analyticResultBySaleZone.Data, generatedInvoiceItemSets, out customerInvoiceDetails);
+                BuilInvoiceCustomerItemSet(partner[0],analyticResultBySaleZone.Data, generatedInvoiceItemSets, out customerInvoiceDetails);
+            }
+
+            var analyticResultBySaleCurrency = GetFilteredRecordsBySaleCurrency(context.PartnerId, context.FromDate, context.ToDate);
+            if (analyticResultBySaleCurrency != null && analyticResultBySaleCurrency.Data != null)
+            {
+                BuilInvoiceSaleCurrencyItemSet(partner[0], analyticResultBySaleCurrency.Data, generatedInvoiceItemSets);
             }
             var analyticResultBySupplierZone = GetFilteredRecordsBySupplierZone(context.PartnerId, context.FromDate, context.ToDate);
             if (analyticResultBySupplierZone != null && analyticResultBySupplierZone.Data != null)
@@ -38,12 +49,13 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 InvoiceItemSets = generatedInvoiceItemSets
             };
         }
-        private void BuilInvoiceCustomerItemSet(IEnumerable<AnalyticRecord> analyticRecords,List<GeneratedInvoiceItemSet> generatedInvoiceItemSets, out CustomerInvoiceDetails customerInvoiceDetails)
+        private void BuilInvoiceCustomerItemSet(string partnerType,IEnumerable<AnalyticRecord> analyticRecords,List<GeneratedInvoiceItemSet> generatedInvoiceItemSets, out CustomerInvoiceDetails customerInvoiceDetails)
         {
               GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
                 generatedInvoiceItemSet.SetName = "SaleZone";
                 generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
                 customerInvoiceDetails = new CustomerInvoiceDetails();
+                customerInvoiceDetails.PartnerType = partnerType;
                 foreach (var analyticRecord in analyticRecords)
                 {
 
@@ -62,7 +74,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
                     customerInvoiceDetails.TotalNumberOfCalls += Convert.ToInt32(calls.Value ?? 0.0);
 
-
+                  
 
                     CustomerInvoiceItemDetails customerInvoiceItemDetails = new Entities.CustomerInvoiceItemDetails()
                     {
@@ -71,7 +83,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         SaleAmount = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0),
                         DimensionName = saleZone.Name.ToString(),
                         SaleRate = Convert.ToDecimal(saleRate.Value),
-                        SaleCurrency = saleCurrency.Name.ToString(),
+                        SaleCurrency = saleCurrency.Value.ToString(),
                     };
                     generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem {
                         Details = customerInvoiceItemDetails,
@@ -117,6 +129,81 @@ namespace TOne.WhS.Invoice.Business.Extensions
             analyticQuery.Query.Filters.Add(dimensionFilter);
             return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
         }
+
+        private void BuilInvoiceSaleCurrencyItemSet(string partnerType, IEnumerable<AnalyticRecord> analyticRecords, List<GeneratedInvoiceItemSet> generatedInvoiceItemSets)
+        {
+            GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
+            generatedInvoiceItemSet.SetName = "SaleCurrency";
+            generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+            foreach (var analyticRecord in analyticRecords)
+            {
+
+                DimensionValue saleCurrency = analyticRecord.DimensionValues[0];
+                MeasureValue saleDuration;
+                analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
+                MeasureValue saleNet;
+                analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
+                MeasureValue calls;
+                analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
+
+
+
+                CustomerInvoiceItemDetails customerInvoiceItemDetails = new Entities.CustomerInvoiceItemDetails()
+                {
+                    Duration = Convert.ToDecimal(saleDuration.Value ?? 0.0),
+                    NumberOfCalls = Convert.ToInt32(calls.Value ?? 0.0),
+                    SaleAmount = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0),
+                    DimensionName = saleCurrency.Name.ToString(),
+                    SaleCurrency = saleCurrency.Value.ToString(),
+                };
+                generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
+                {
+                    Details = customerInvoiceItemDetails,
+                    Name = "SaleCurrency"
+                });
+            }
+            generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
+        }
+        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecordsBySaleCurrency(string partnerId, DateTime fromDate, DateTime toDate)
+        {
+            AnalyticManager analyticManager = new AnalyticManager();
+            List<string> listDimensions = new List<string> { "SaleCurrency" };
+            List<string> listMeasures = new List<string> { "SaleNet", "NumberOfCalls", "SaleDuration" };
+            Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
+            {
+                Query = new AnalyticQuery()
+                {
+                    DimensionFields = listDimensions,
+                    MeasureFields = listMeasures,
+                    TableId = 8,
+                    FromTime = fromDate,
+                    ToTime = toDate,
+                    ParentDimensions = new List<string>(),
+                    Filters = new List<DimensionFilter>(),
+                },
+                SortByColumnName = "DimensionValues[0].Name"
+            };
+            string[] partner = partnerId.Split('_');
+            string dimentionName = null;
+            if (partner[0].Equals("Profile"))
+            {
+                dimentionName = "CustomerProfile";
+            }
+            else if (partner[0].Equals("Account"))
+            {
+                dimentionName = "Customer";
+            }
+            DimensionFilter dimensionFilter = new DimensionFilter()
+            {
+                Dimension = dimentionName,
+                FilterValues = new List<object> { partner[1] }
+            };
+            analyticQuery.Query.Filters.Add(dimensionFilter);
+            return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
+        }
+
+
+
         private void BuilInvoiceSupplierZoneItemSet(IEnumerable<AnalyticRecord> analyticRecords, List<GeneratedInvoiceItemSet> generatedInvoiceItemSets)
         {
             GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();

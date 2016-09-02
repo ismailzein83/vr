@@ -181,6 +181,9 @@
   <ItemGroup>
     <EmbeddedResource Include="WhS_Invoice\Reports\CustomerInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\CustomerInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\AccountInvoice.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoice.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Report12.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
