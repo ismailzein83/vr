@@ -224,6 +224,7 @@
     <Content Include="Analytic\Services\APIServices\AnalyticItemActionAPIService.js" />
     <Content Include="Analytic\Services\APIServices\DataAnalysisDefinitionAPIService.js" />
     <Content Include="Analytic\Services\APIServices\DataAnalysisItemDefinitionAPIService.js" />
+    <Content Include="Analytic\Services\DAProfCalcAggregationFieldService.js" />
     <Content Include="Analytic\Services\DataAnalysisDefinitionDrillDownService.js" />
     <Content Include="Analytic\Services\DataAnalysisDefinitionService.js" />
     <Content Include="Analytic\Services\DataAnalysisItemDefinitionService.js" />
@@ -241,8 +242,8 @@
     <Content Include="Analytic\Views\DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionManagementController.js" />
     <Content Include="Analytic\Views\DataAnalysis\DataAnalysisItemDefinition\DataAnalysisItemDefinitionEditorController.js" />
     <Content Include="Analytic\Views\DataAnalysis\DataAnalysisItemDefinition\DataAnalysisItemDefinitionEditor.html" />
-    <Content Include="Analytic\Views\DataAnalysis\ProfilingAndCalculation\RecordProfilingOutputSettingsEditor.html" />
-    <Content Include="Analytic\Views\DataAnalysis\ProfilingAndCalculation\RecordProfilingOutputSettingsEditorController.js" />
+    <Content Include="Analytic\Views\DataAnalysis\ProfilingAndCalculation\DAProfCalcAggregationFieldEditor.html" />
+    <Content Include="Analytic\Views\DataAnalysis\ProfilingAndCalculation\DAProfCalcAggregationFieldEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticGridWidgetSettings.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticGridWidgetSettingsController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticItemActionEditor.html" />

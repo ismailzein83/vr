@@ -26,8 +26,8 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
         var dataRecordTypeFieldsSelectorAPI;
         var dataRecordTypeFieldsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var aggregationFieldsRecordFilterDirectiveAPI;
-        var aggregationFieldsRecordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var aggregationFieldsDirectiveAPI;
+        var aggregationFieldsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
 
         function initializeController() {
@@ -45,9 +45,9 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                 dataRecordTypeFieldsSelectorReadyDeferred.resolve();
             }
 
-            $scope.scopeModel.onAggregationFieldsRecordFilterDirectiveReady = function (api) {
-                aggregationFieldsRecordFilterDirectiveAPI = api;
-                aggregationFieldsRecordFilterDirectiveReadyDeferred.resolve();
+            $scope.scopeModel.onAggregationFieldsDirectiveReady = function (api) {
+                aggregationFieldsDirectiveAPI = api;
+                aggregationFieldsDirectiveReadyDeferred.resolve();
             };
 
             UtilsService.waitMultiplePromises(promises).then(function () {
@@ -86,9 +86,9 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                 var dataRecordTypeFieldsSelectorLoadPromise = getDataRecordTypeFieldsSelectorLoadPromise();
                 promises.push(dataRecordTypeFieldsSelectorLoadPromise);
 
-                //Loading Aggregation Fields Record Filter Directive
-                var AggregationFieldsRecordFilterDirectiveLoadPromise = getAggregationFieldsRecordFilterDirectiveLoadPromise();
-                promises.push(AggregationFieldsRecordFilterDirectiveLoadPromise);
+                //Loading Aggregation Fields Directive
+                var AggregationFieldsDirectiveLoadPromise = getAggregationFieldsDirectiveLoadPromise();
+                promises.push(AggregationFieldsDirectiveLoadPromise);
 
 
                 function getRecordFilterDirectiveLoadPromise() {
@@ -121,19 +121,18 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                     
                     return dataRecordTypeFieldsSelectorLoadDeferred.promise;
                 }
-                function getAggregationFieldsRecordFilterDirectiveLoadPromise() {
-                    var aggregationFieldsRecordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                function getAggregationFieldsDirectiveLoadPromise() {
+                    var aggregationFieldsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
                     
-                    aggregationFieldsRecordFilterDirectiveReadyDeferred.promise.then(function () {
-                        var aggregationFieldsRecordFilterDirectivePayload = {}
-                        aggregationFieldsRecordFilterDirectivePayload.context = buildContext();
-                        if (aggregationFields != undefined) {
-                            aggregationFieldsRecordFilterDirectivePayload.FilterGroup = aggregationFields.RecordFilter;
-                        }
-                        VRUIUtilsService.callDirectiveLoad(aggregationFieldsRecordFilterDirectiveAPI, aggregationFieldsRecordFilterDirectivePayload, aggregationFieldsRecordFilterDirectiveLoadDeferred);
+                    aggregationFieldsDirectiveReadyDeferred.promise.then(function () {
+                        var aggregationFieldsDirectivePayload = {}
+                        aggregationFieldsDirectivePayload.context = buildContext();
+                        aggregationFieldsDirectivePayload.aggregationFields = aggregationFields;
+
+                        VRUIUtilsService.callDirectiveLoad(aggregationFieldsDirectiveAPI, aggregationFieldsDirectivePayload, aggregationFieldsDirectiveLoadDeferred);
                     })
 
-                    return aggregationFieldsRecordFilterDirectiveLoadDeferred.promise;
+                    return aggregationFieldsDirectiveLoadDeferred.promise;
                 }
 
                 function buildContext() {
@@ -192,14 +191,13 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
 
             api.getData = function () {
 
-                var array = [];
-                array.push({ RecordFilter: aggregationFieldsRecordFilterDirectiveAPI.getData().filterObj })
+                console.log(aggregationFieldsDirectiveAPI.getData());
 
                 var data = {
                     $type: "Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputDefinitions.RecordProfilingOutputSettings, Vanrise.Analytic.Entities",
                     RecordFilter: recordFilterDirectiveAPI.getData().filterObj,
                     GroupingFields: buildListOfDAProfCalcGroupingField(),
-                    AggregationFields: array
+                    AggregationFields: aggregationFieldsDirectiveAPI.getData()
                 }
 
                 function buildListOfDAProfCalcGroupingField() {

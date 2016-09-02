@@ -1,0 +1,21 @@
+﻿
+<div vr-modalcontent ng-controller="VR_Analytic_DAProfCalcAggregationFieldController" width="'40%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formDAProfCalcAggregationFieldEditor">
+
+            <vr-row>
+                <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
+            </vr-row>
+            <!--<vr-common-objectpropertyevaluator-selective on-ready="scopeModel.onObjectPropertySelectiveReady"></vr-common-objectpropertyevaluator-selective>-->
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formDAProfCalcAggregationFieldEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
