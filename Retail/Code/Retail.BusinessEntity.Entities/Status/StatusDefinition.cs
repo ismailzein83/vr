@@ -20,5 +20,9 @@ namespace Retail.BusinessEntity.Entities
     public class StatusDefinitionSettings
     {
         public Guid StyleDefinitionId { get; set; }
+
+        public bool HasInitialCharge { get; set; }
+
+        public bool HasRecurringCharge { get; set; }
     }
 } 
