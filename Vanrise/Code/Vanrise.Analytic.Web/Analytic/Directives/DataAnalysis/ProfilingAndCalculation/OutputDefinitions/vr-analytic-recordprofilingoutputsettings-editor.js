@@ -82,7 +82,7 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                 var recordFilterDirectiveLoadPromise = getRecordFilterDirectiveLoadPromise();
                 promises.push(recordFilterDirectiveLoadPromise);
 
-                //Loading Data Record Type Fields Selector
+                //Loading Data Record Type Fields Selector (Grouping Directive)
                 var dataRecordTypeFieldsSelectorLoadPromise = getDataRecordTypeFieldsSelectorLoadPromise();
                 promises.push(dataRecordTypeFieldsSelectorLoadPromise);
 
@@ -111,12 +111,21 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
 
                     dataRecordTypeFieldsSelectorReadyDeferred.promise.then(function () {
                         var dataRecordTypeFieldsSelectorPayload = {};
-                        dataRecordTypeFieldsSelectorPayload.dataRecordTypeId = context.getDataRecordTypeId();
+
                         if (groupingFields != undefined) {
                             dataRecordTypeFieldsSelectorPayload.selectedIds = buildDataRecordTypeFieldsSelectorPayload();
                         }
 
-                        VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, dataRecordTypeFieldsSelectorPayload, dataRecordTypeFieldsSelectorLoadDeferred);
+                        //check if dataRecordType is selected
+                        var _dataRecordTypeId = context.getDataRecordTypeId();
+                        if (_dataRecordTypeId) {
+                            dataRecordTypeFieldsSelectorPayload.dataRecordTypeId = _dataRecordTypeId;
+                            VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, dataRecordTypeFieldsSelectorPayload, dataRecordTypeFieldsSelectorLoadDeferred);
+                        }
+                        else {
+                            dataRecordTypeFieldsSelectorLoadDeferred.resolve();
+                        }
+
                     });
                     
                     return dataRecordTypeFieldsSelectorLoadDeferred.promise;
@@ -134,6 +143,7 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
 
                     return aggregationFieldsDirectiveLoadDeferred.promise;
                 }
+
 
                 function buildContext() {
                     return context;

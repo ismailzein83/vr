@@ -4,9 +4,13 @@
         <vr-form name="formDAProfCalcAggregationFieldEditor">
 
             <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-textbox label="Field Name" value="scopeModel.fieldName"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
                 <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
             </vr-row>
-            <!--<vr-common-objectpropertyevaluator-selective on-ready="scopeModel.onObjectPropertySelectiveReady"></vr-common-objectpropertyevaluator-selective>-->
 
         </vr-form>
     </vr-modalbody>

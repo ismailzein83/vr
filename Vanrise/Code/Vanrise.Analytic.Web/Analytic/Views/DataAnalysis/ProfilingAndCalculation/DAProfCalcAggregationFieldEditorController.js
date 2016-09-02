@@ -8,7 +8,7 @@
 
         var isEditMode;
 
-        var daProfCalcAggregationFieldEntity;
+        var aggregationFieldEntity;
         var context;
 
         var recordFilterDirectiveAPI;
@@ -25,10 +25,10 @@
             console.log(parameters);
 
             if (parameters != undefined) {
-                daProfCalcAggregationFieldEntity = parameters.daProfCalcAggregationField;
+                aggregationFieldEntity = parameters.daProfCalcAggregationField;
                 context = parameters.context;
             }
-            isEditMode = (daProfCalcAggregationFieldEntity != undefined);
+            isEditMode = (aggregationFieldEntity != undefined);
         }
         function defineScope() {
             $scope.scopeModel = {};
@@ -98,7 +98,10 @@
                     UtilsService.buildTitleForAddEditor('Profiling and Calculation Aggregation Field');
             }
             function loadStaticData() {
+                if (aggregationFieldEntity == undefined)
+                    return;
 
+                $scope.scopeModel.fieldName = aggregationFieldEntity.FieldName;
             } 
             function loadRecordFilterDirective() {
                 var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -106,8 +109,8 @@
                 recordFilterDirectiveReadyDeferred.promise.then(function () {
                     var recordFilterDirectivePayload = {};
                     recordFilterDirectivePayload.context = context;
-                    if (daProfCalcAggregationFieldEntity != undefined && daProfCalcAggregationFieldEntity.RecordFilter != undefined) {
-                        recordFilterDirectivePayload.FilterGroup = daProfCalcAggregationFieldEntity.RecordFilter;
+                    if (aggregationFieldEntity != undefined && aggregationFieldEntity.RecordFilter != undefined) {
+                        recordFilterDirectivePayload.FilterGroup = aggregationFieldEntity.RecordFilter;
                     }
 
                     console.log(recordFilterDirectivePayload);
@@ -139,6 +142,7 @@
         function buildAggregationFieldObjectFromScope() {
 
             return {
+                FieldName: $scope.scopeModel.fieldName,
                 RecordFilter: recordFilterDirectiveAPI.getData().filterObj,
                 TimeRangeFilter: null,
                 RecordAggregate: null

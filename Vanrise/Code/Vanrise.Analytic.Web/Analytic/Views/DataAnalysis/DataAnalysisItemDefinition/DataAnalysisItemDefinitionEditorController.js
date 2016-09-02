@@ -48,26 +48,23 @@
             }
             $scope.scopeModel.onDataRecordTypeSelectionChanged = function () {
                 var selectedId = dataRecordTypeSelectorAPI.getSelectedIds();
+
+                console.log(selectedId);
+
                 if (selectedId != undefined) {
 
-                    if (dataRecordTypeSelectionChangedDeferred != undefined) {
-                        dataRecordTypeSelectionChangedDeferred.resolve();
-                    }
-                    else {
-                        dataRecordTypeId = selectedId;
+                    dataRecordTypeId = selectedId;
 
-                        var settingsDirectivePayload = {};
-                        //settingsDirectivePayload.dataAnalysisItemDefinition = dataAnalysisItemDefinitionEntity;
-                        settingsDirectivePayload.dataAnalysisDefinitionId = dataAnalysisDefinitionId;
-                        settingsDirectivePayload.itemDefinitionTypeId = itemDefinitionTypeId;
-                        settingsDirectivePayload.context = buildContext();
+                    var settingsDirectivePayload = {};
+                    //settingsDirectivePayload.dataAnalysisItemDefinition = dataAnalysisItemDefinitionEntity;
+                    settingsDirectivePayload.dataAnalysisDefinitionId = dataAnalysisDefinitionId;
+                    settingsDirectivePayload.itemDefinitionTypeId = itemDefinitionTypeId;
+                    settingsDirectivePayload.context = buildContext();
 
-                        var setLoader = function (value) {
-                            $scope.scopeModel.isSelectorLoading = value;
-                        };
-                        //VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeSelectorAPI, undefined, setLoader);
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, settingsDirectiveAPI, settingsDirectivePayload, setLoader);
-                    }
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isSelectorLoading = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, settingsDirectiveAPI, settingsDirectivePayload, setLoader, dataRecordTypeSelectionChangedDeferred);
                 }
             };
 
@@ -118,9 +115,10 @@
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadSettingsDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.scopeModel.isLoading = false;
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
-            });
+            })
 
             function setTitle() {
                 if (isEditMode) {
@@ -159,6 +157,8 @@
                 settingsDirectiveReadyDeferred.promise.then(function () {
 
                     dataRecordTypeSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+                    if (dataAnalysisItemDefinitionEntity == undefined) dataRecordTypeSelectionChangedDeferred.resolve();
+
                     dataRecordTypeSelectionChangedDeferred.promise.then(function () {
                         dataRecordTypeSelectionChangedDeferred = undefined;
 
@@ -174,7 +174,6 @@
 
                 return settingsDirectiveLoadDeferred.promise;
             }
-
         }
 
         function insert() {
@@ -212,16 +211,21 @@
             var context = {
                 getFields: function () {
                     var fields = []
-                    getDataRecordType().then(function () {
-                        for (var i = 0 ; i < dataRecordTypeEntity.Fields.length; i++) {
-                            var field = dataRecordTypeEntity.Fields[i];
-                            fields.push({
-                                FieldName: field.Name,
-                                FieldTitle: field.Title,
-                                Type: field.Type
-                            })
-                        }
-                    });
+
+                    if (dataRecordTypeId) {
+
+                        console.log(dataRecordTypeId);
+                        getDataRecordType().then(function () {
+                            for (var i = 0 ; i < dataRecordTypeEntity.Fields.length; i++) {
+                                var field = dataRecordTypeEntity.Fields[i];
+                                fields.push({
+                                    FieldName: field.Name,
+                                    FieldTitle: field.Title,
+                                    Type: field.Type
+                                })
+                            }
+                        });
+                    }
 
                     return fields;
                 },

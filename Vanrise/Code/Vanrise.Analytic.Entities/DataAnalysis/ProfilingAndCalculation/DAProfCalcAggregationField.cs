@@ -9,6 +9,9 @@ namespace Vanrise.Analytic.Entities
 {
     public class DAProfCalcAggregationField
     {
+
+        public string FieldName { get; set; }
+
         public RecordFilterGroup RecordFilter { get; set; }
 
         public TimeRangeFilter TimeRangeFilter { get; set; }
@@ -16,3 +19,4 @@ namespace Vanrise.Analytic.Entities
         public DARecordAggregate RecordAggregate { get; set; }
     }
 }
+ 
