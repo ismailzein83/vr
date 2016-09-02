@@ -55,6 +55,7 @@
     <Compile Include="GetBeforeIdInput.cs" />
     <Compile Include="GetUpdatedInput.cs" />
     <Compile Include="LastCallUpdateOutput.cs" />
+    <Compile Include="LastTestCallsSettingsData.cs" />
     <Compile Include="Profiles\ProfileSettings.cs" />
     <Compile Include="Profiles\Profile.cs" />
     <Compile Include="Profiles\ProfileDetail.cs" />

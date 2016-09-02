@@ -219,6 +219,8 @@
     <Content Include="QM_CLITester\Directives\Profile\vr-qm-clitester-profile-grid.js" />
     <Content Include="QM_CLITester\Directives\Profile\vr-qm-clitester-profile-selector.js" />
     <Content Include="QM_CLITester\Directives\Profile\vr-qm-clitester-profilesettings.js" />
+    <Content Include="QM_CLITester\Directives\TestCallSettings\Templates\LastTestCallsSettingsTemplate.html" />
+    <Content Include="QM_CLITester\Directives\TestCallSettings\vr-qm-clitester-lasttestcall-settings-editor.js" />
     <Content Include="QM_CLITester\Directives\TestCall\Templates\HisTestCallGridTemplate.html" />
     <Content Include="QM_CLITester\Directives\TestCall\Templates\TestCallDetailsTemplate.html" />
     <Content Include="QM_CLITester\Directives\TestCall\Templates\TestCallGridTemplate.html" />

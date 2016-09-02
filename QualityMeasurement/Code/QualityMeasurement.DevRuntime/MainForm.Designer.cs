@@ -1,4 +1,4 @@
-﻿namespace QM.Runtime
+namespace QM.Runtime
 {
     partial class MainForm
     {

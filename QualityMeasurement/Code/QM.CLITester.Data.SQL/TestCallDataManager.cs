@@ -56,20 +56,23 @@ namespace QM.CLITester.Data.SQL
             return GetItemsSP("QM_CLITester.sp_TestCall_GetAllbyBatchNumber", TestCallMapper, batchNumber);
         }
 
-        public List<TestCall> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, int userId)
+        public List<TestCall> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, int userId, int numberOfMinutes)
         {
             List<TestCall> listTestCalls = new List<TestCall>();
             byte[] timestamp = null;
 
-            ExecuteReaderSP("QM_CLITester.sp_TestCall_GetUpdated", (reader) =>
+            ExecuteReaderSP("QM_CLITester.sp_TestCall_GetLastTestCalls", (reader) =>
             {
-                while (reader.Read())
-                    listTestCalls.Add(TestCallMapper(reader));
-                if (reader.NextResult())
+                if (reader.Read())
+                {
                     while (reader.Read())
-                        timestamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
+                        listTestCalls.Add(TestCallMapper(reader));
+                    if (reader.NextResult())
+                        while (reader.Read())
+                            timestamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
+                }
             },
-               maxTimeStamp, nbOfRows, userId);
+               maxTimeStamp, numberOfMinutes, nbOfRows, userId);
             maxTimeStamp = timestamp;
             return listTestCalls;
         }

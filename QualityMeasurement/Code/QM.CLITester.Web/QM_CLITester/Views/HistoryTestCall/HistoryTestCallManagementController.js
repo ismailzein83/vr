@@ -41,6 +41,7 @@
             $scope.testResult = [];
             $scope.users = [];
             $scope.fromDate = new Date();
+            $scope.fromDate.setHours(0, 0, 0, 0);
 
             $scope.selectedSuppliers = [];
             $scope.selectedProfiles = [];

@@ -104,7 +104,10 @@ namespace QM.CLITester.Business
 
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
 
-            List<TestCall> listTestCalls = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId());
+            SettingManager settingManager = new SettingManager();
+            int numberOfMinutes = settingManager.GetSetting<LastTestCallsSettingsData>(Constants.LastTestCallSettings).LastTestCall;
+
+            List<TestCall> listTestCalls = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId(), numberOfMinutes);
             List<TestCallDetail> listTestCallDetails = new List<TestCallDetail>();
             foreach (TestCall testCall in listTestCalls)
             {

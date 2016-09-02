@@ -21,7 +21,7 @@ namespace QM.CLITester.Entities
         [Description("Partially Completed")]
         PartiallyCompleted = 30,
 
-        [Description("Progress Failed With Retry")]
+        [Description("Call Failed")]
         GetProgressFailedWithRetry = 40,
 
         [Description("Completed")]
@@ -30,7 +30,7 @@ namespace QM.CLITester.Entities
         [Description("Initiation Failed With No Retry")]
         InitiationFailedWithNoRetry = 60,
 
-        [Description("Progress Failed With No Retry")]
+        [Description("Call Failed")]
         GetProgressFailedWithNoRetry = 70
     }
 }

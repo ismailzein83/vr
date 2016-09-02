@@ -3,8 +3,8 @@
     Initiated: { value: 10, description: "Initiated" },
     InitiationFailedWithRetry: { value: 20, description: "Initiation Failed With Retry" },
     PartiallyCompleted: { value: 30, description: "Partially Completed" },
-    GetProgressFailedWithRetry: { value: 40, description: "Progress Failed With Retry" },
+    GetProgressFailedWithRetry: { value: 40, description: "Call Failed" },
     Completed: { value: 50, description: "Completed" },
     InitiationFailedWithNoRetry: { value: 60, description: "Initiation Failed With No Retry" },
-    GetProgressFailedWithNoRetry: { value: 70, description: "Progress Failed With No Retry" }
+    GetProgressFailedWithNoRetry: { value: 70, description: "Call Failed" }
 });
