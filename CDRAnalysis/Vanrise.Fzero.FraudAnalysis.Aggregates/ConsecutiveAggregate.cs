@@ -59,6 +59,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
             }
             return count > 0 ? (count + 1) : count;
         }
+
+        public override void UpdateExistingFromNew(AggregateState existingState, AggregateState newState)
+        {
+            ConsecutiveAggregateState existingConsecutiveAggregateState = existingState as ConsecutiveAggregateState;
+            ConsecutiveAggregateState newConsecutiveAggregateState = newState as ConsecutiveAggregateState;
+            for (int i = 0; i < _parametersSets.Count; i++)
+            {
+                existingConsecutiveAggregateState.ItemsStates[i].CDRTimes.AddRange(newConsecutiveAggregateState.ItemsStates[i].CDRTimes);
+            }
+        }
     }
 
     public class ConsecutiveAggregateState : AggregateState

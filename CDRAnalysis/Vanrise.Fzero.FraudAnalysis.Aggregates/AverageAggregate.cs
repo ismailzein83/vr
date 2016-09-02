@@ -39,6 +39,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
             else
                 return averageAggregateState.Sum / averageAggregateState.Count;
         }
+
+        public override void UpdateExistingFromNew(AggregateState existingState, AggregateState newState)
+        {
+            AverageAggregateState existingAverageState = existingState as AverageAggregateState;
+            AverageAggregateState newAverageState = newState as AverageAggregateState;
+            existingAverageState.Sum += newAverageState.Sum;
+            existingAverageState.Count += newAverageState.Count;
+        }
     }
 
     public class AverageAggregateState : AggregateState

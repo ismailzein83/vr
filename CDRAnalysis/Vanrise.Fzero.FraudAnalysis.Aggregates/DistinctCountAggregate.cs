@@ -72,6 +72,30 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
             else
                 return distinctCountAggregateState.DistinctItems.Count();
         }
+
+        public override void UpdateExistingFromNew(AggregateState existingState, AggregateState newState)
+        {
+            DistinctCountAggregateState existingDistinctCountAggregateState = existingState as DistinctCountAggregateState;
+            DistinctCountAggregateState newDistinctCountAggregateState = newState as DistinctCountAggregateState;
+            if (existingDistinctCountAggregateState.DistinctItems != null)
+            {
+                foreach(var itm in newDistinctCountAggregateState.DistinctItems)
+                {
+                    existingDistinctCountAggregateState.DistinctItems.Add(itm);
+                }
+            }
+            if (_parametersSets != null)
+            {
+                for (int i = 0; i < _parametersSets.Count; i++)
+                {
+                    var existingItems = existingDistinctCountAggregateState.ItemsStates[i].DistinctItems;
+                    foreach (var item in newDistinctCountAggregateState.ItemsStates[i].DistinctItems)
+                    {
+                        existingItems.Add(item);
+                    }
+                }
+            }
+        }
     }
 
 

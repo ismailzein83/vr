@@ -58,6 +58,25 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
             }
             return count;
         }
+
+        public override void UpdateExistingFromNew(AggregateState existingState, AggregateState newState)
+        {
+            GroupCountAggregateState existingGroupCountAggregateState = existingState as GroupCountAggregateState;
+            GroupCountAggregateState newGroupCountAggregateState = newState as GroupCountAggregateState;
+            for (int i = 0; i < _parametersSets.Count; i++)
+            {
+                GroupCountAggregateItemState existingItemState = existingGroupCountAggregateState.ItemsStates[i];
+                GroupCountAggregateItemState newItemState = newGroupCountAggregateState.ItemsStates[i];
+                foreach(var newHourCount in newItemState.HoursvsCalls)
+                {
+                    int value;
+                    if (existingItemState.HoursvsCalls.TryGetValue(newHourCount.Key, out value))
+                        existingItemState.HoursvsCalls[newHourCount.Key] = value + 1;
+                    else
+                        existingItemState.HoursvsCalls.Add(newHourCount.Key, 1);
+                }
+            }
+        }
     }
 
     public class GroupCountAggregateState : AggregateState

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common.Business;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
 
@@ -18,14 +19,25 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             //return;
             //Console.ReadKey();
             Console.WriteLine("Ismail Task started");
+           
+            var runtimeServices = new List<RuntimeService>();
+            TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
+            runtimeServices.Add(transactionLockRuntimeService);
+            BPRegulatorRuntimeService bpRegulatorService = new BPRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bpRegulatorService);
+            //DataGroupingDistributorRuntimeService dataGroupingDistributorService = new DataGroupingDistributorRuntimeService { Interval = new TimeSpan(0, 0, 1) };
+            //runtimeServices.Add(dataGroupingDistributorService);
+            //DataGroupingExecutorRuntimeService dataGroupingExecutorService = new DataGroupingExecutorRuntimeService { Interval = new TimeSpan(0, 0, 1) };
+            //runtimeServices.Add(dataGroupingExecutorService);
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
-            QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
+            QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueRegulatorService);
+            QueueActivationRuntimeService queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueActivationService);
             SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 5) };
             Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             
-            var runtimeServices = new List<RuntimeService>();
-
-            runtimeServices.Add(queueActivationService);
+         
 
             runtimeServices.Add(bpService);
 

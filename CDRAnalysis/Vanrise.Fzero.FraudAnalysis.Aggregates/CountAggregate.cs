@@ -69,6 +69,20 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
             else
                 return countAggregateState.Count;
         }
+
+        public override void UpdateExistingFromNew(AggregateState existingState, AggregateState newState)
+        {
+            CountAggregateState existingCountAggregateState = existingState as CountAggregateState;
+            CountAggregateState newCountAggregateState = newState as CountAggregateState;
+            existingCountAggregateState.Count += newCountAggregateState.Count;
+            if (_parametersSets != null)
+            {
+                for (int i = 0; i < _parametersSets.Count; i++)
+                {
+                    existingCountAggregateState.ItemsStates[i].Count += newCountAggregateState.ItemsStates[i].Count;
+                }
+            }
+        }
     }
 
     public class CountAggregateState : AggregateState

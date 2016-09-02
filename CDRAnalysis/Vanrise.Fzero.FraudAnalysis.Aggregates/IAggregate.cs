@@ -21,6 +21,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
 
         public abstract void Evaluate(AggregateState state, CDR cdr);
 
+        public abstract void UpdateExistingFromNew(AggregateState existingState, AggregateState newState);
+
         public abstract decimal GetResult(AggregateState state, INumberProfileParameters parametersSet);
     }
 }

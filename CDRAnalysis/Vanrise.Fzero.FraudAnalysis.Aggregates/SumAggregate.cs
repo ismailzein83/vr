@@ -64,6 +64,20 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
             else
                 return sumAggregateState.Sum;
         }
+
+        public override void UpdateExistingFromNew(AggregateState existingState, AggregateState newState)
+        {
+            SumAggregateState existingSumAggregateState = existingState as SumAggregateState;
+            SumAggregateState newSumAggregateState = newState as SumAggregateState;
+            existingSumAggregateState.Sum += newSumAggregateState.Sum;
+            if (_parametersSets != null)
+            {
+                for (int i = 0; i < _parametersSets.Count; i++)
+                {
+                    existingSumAggregateState.ItemsStates[i].Sum += newSumAggregateState.ItemsStates[i].Sum;
+                }
+            }
+        }
     }
 
     public class SumAggregateState : AggregateState
