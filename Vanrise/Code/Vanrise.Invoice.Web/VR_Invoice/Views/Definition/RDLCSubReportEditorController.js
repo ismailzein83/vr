@@ -6,13 +6,16 @@
 
     function rdlcsubReportEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
-        var subReports = [];
+        var context = [];
         var subReportEntity;
 
         var isEditMode;
 
         var subReportDataSourcesAPI;
         var subReportDataSourcesReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var recordFilterAPI;
+        var recordFilterReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -21,7 +24,7 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
-                subReports = parameters.subReports;
+                context = parameters.context;
                 subReportEntity = parameters.subReportEntity;
             }
             isEditMode = (subReportEntity != undefined);
@@ -29,6 +32,13 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.datasources = [];
+            $scope.scopeModel.selectedDataSource;
+
+            $scope.scopeModel.onRecordFilterReady = function (api) {
+                recordFilterAPI = api;
+                recordFilterReadyPromiseDeferred.resolve();
+            }
             $scope.scopeModel.onSubReportDataSourcesReady = function (api) {
                 subReportDataSourcesAPI = api;
                 subReportDataSourcesReadyPromiseDeferred.resolve();
@@ -46,7 +56,7 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSubReportDataSourcesDirective]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSubReportDataSourcesDirective, loadRecordFilterDirective]).then(function () {
 
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -61,26 +71,62 @@
                 $scope.title = UtilsService.buildTitleForAddEditor('Sub Report');
         }
         function loadStaticData() {
+            if (context != undefined)
+            {
+                var dataSources = context.getDataSourcesInfo();
+                if (dataSources != undefined)
+                    $scope.scopeModel.datasources = dataSources;
+            }
             if (subReportEntity != undefined) {
                 $scope.scopeModel.subReportName = subReportEntity.SubReportName;
+                $scope.scopeModel.repeatedSubReport = subReportEntity.RepeatedSubReport;
+                if (subReportEntity.ParentSubreportDataSource != undefined)
+                    $scope.scopeModel.selectedDataSource = UtilsService.getItemByVal($scope.scopeModel.datasources, subReportEntity.ParentSubreportDataSource.DataSourceName, "DataSourceName");
             }
         }
         function loadSubReportDataSourcesDirective() {
             var subReportDataSourcesLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             subReportDataSourcesReadyPromiseDeferred.promise.then(function () {
-                var subReportPayload = subReportEntity != undefined ? { dataSources: subReportEntity.SubReportDataSources } : undefined;
+                var subReportPayload = { context: getContext() };
+                if(subReportEntity != undefined)
+                    subReportPayload.dataSources = subReportEntity.SubReportDataSources;
                 VRUIUtilsService.callDirectiveLoad(subReportDataSourcesAPI, subReportPayload, subReportDataSourcesLoadPromiseDeferred);
             });
             return subReportDataSourcesLoadPromiseDeferred.promise;
         }
-
+        function loadRecordFilterDirective() {
+            var recordFilterLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            recordFilterReadyPromiseDeferred.promise.then(function () {
+                var recordFilterPayload = { context: getContext() }
+                if(subReportEntity != undefined)
+                {
+                    recordFilterPayload.FilterGroup = subReportEntity.FilterGroup;
+                }
+                VRUIUtilsService.callDirectiveLoad(recordFilterAPI, recordFilterPayload, recordFilterLoadPromiseDeferred);
+            });
+            return recordFilterLoadPromiseDeferred.promise;
+        }
         function builSubReportObjFromScope() {
+            var filter =  recordFilterAPI.getData();
             return {
                 SubReportName: $scope.scopeModel.subReportName,
-                SubReportDataSources: subReportDataSourcesAPI.getData()
+                SubReportDataSources: subReportDataSourcesAPI.getData(),
+                FilterGroup: filter != undefined ? filter.filterObj : undefined,
+                RepeatedSubReport: $scope.scopeModel.repeatedSubReport,
+                ParentSubreportDataSource: $scope.scopeModel.repeatedSubReport ? context.getDataSource($scope.scopeModel.selectedDataSource.DataSourceName) : undefined
             };
         }
-
+        function getContext()
+        {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            currentContext.showItemsFilter =function()
+            {
+                return $scope.scopeModel.repeatedSubReport;
+            }
+            return currentContext;
+        }
         function addSubReport() {
             var subReportObj = builSubReportObjFromScope();
             if ($scope.onSubReportAdded != undefined) {

@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportDatasources", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceTypeService",
+app.directive("vrInvoicetypeDatasources", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceTypeService",
     function (UtilsService, VRNotificationService, VR_Invoice_InvoiceTypeService) {
 
         var directiveDefinitionObject = {
@@ -21,15 +21,16 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportDatasources", ["Util
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/RDLCReport/RDLCReportDataSourceSettings/Templates/RDLCReportDataSourceManagement.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceDataSourceSettings/Templates/InvocieDataSourceManagement.html"
 
         };
 
         function DataSources($scope, ctrl, $attrs) {
 
             var gridAPI;
-            this.initializeController = initializeController;
+            var context;
 
+            this.initializeController = initializeController;
             function initializeController() {
                 ctrl.datasource = [];
 
@@ -43,7 +44,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportDatasources", ["Util
                     var onDataSourceAdded = function (dataSource) {
                         ctrl.datasource.push({ Entity: dataSource });
                     }
-                    VR_Invoice_InvoiceTypeService.addDataSource(onDataSourceAdded, ctrl.datasource);
+                    VR_Invoice_InvoiceTypeService.addDataSource(onDataSourceAdded, getContext());
                 };
 
                 ctrl.removeDataSource = function (dataItem) {
@@ -66,6 +67,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportDatasources", ["Util
                             dataSources.push({
                                 DataSourceName: currentItem.Entity.DataSourceName,
                                 Settings: currentItem.Entity.Settings,
+                                ItemsFilter: currentItem.Entity.ItemsFilter,
                             });
                         }
                     }
@@ -74,6 +76,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportDatasources", ["Util
 
                 api.load = function (payload) {
                     if (payload != undefined) {
+                        context = payload.context;
                         if (payload.dataSources != undefined) {
                             for (var i = 0; i < payload.dataSources.length; i++) {
                                 var dataSource = payload.dataSources[i];
@@ -104,7 +107,11 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportDatasources", ["Util
                     var index = ctrl.datasource.indexOf(dataSourceObj);
                     ctrl.datasource[index] = { Entity: dataSource };
                 }
-                VR_Invoice_InvoiceTypeService.editDataSource(dataSourceObj.Entity, onDataSourceUpdated, ctrl.datasource);
+                VR_Invoice_InvoiceTypeService.editDataSource(dataSourceObj.Entity, onDataSourceUpdated, getContext());
+            }
+            function getContext()
+            {
+                return context;
             }
         }
 

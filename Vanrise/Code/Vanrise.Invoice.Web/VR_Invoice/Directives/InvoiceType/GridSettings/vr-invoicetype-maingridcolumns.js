@@ -28,8 +28,9 @@ app.directive("vrInvoicetypeMaingridcolumns", ["UtilsService", "VRNotificationSe
         function MainGridColumns($scope, ctrl, $attrs) {
 
             var gridAPI;
-            this.initializeController = initializeController;
+            var context;
 
+            this.initializeController = initializeController;
             function initializeController() {
                 ctrl.datasource = [];
 
@@ -80,6 +81,7 @@ app.directive("vrInvoicetypeMaingridcolumns", ["UtilsService", "VRNotificationSe
                 api.load = function (payload) {
                     if(payload != undefined)
                     {
+                        context = payload.context;
                         if(payload.mainGridColumns != undefined)
                         {
                             for(var i=0;i<payload.mainGridColumns.length;i++)

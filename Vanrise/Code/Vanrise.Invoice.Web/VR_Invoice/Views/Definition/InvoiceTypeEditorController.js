@@ -2,9 +2,9 @@
 
     "use strict";
 
-    invoiceTypeEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService'];
+    invoiceTypeEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService','VR_GenericData_DataRecordTypeAPIService'];
 
-    function invoiceTypeEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService) {
+    function invoiceTypeEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService, VR_GenericData_DataRecordTypeAPIService) {
         var isEditMode;
         var invoiceTypeId;
         var invoiceTypeEntity;
@@ -26,6 +26,7 @@
 
         var invoicePartnerSettingsAPI;
         var invoicePartnerSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var dataRecordTypeEntity;
         defineScope();
         loadParameters();
         load();
@@ -45,7 +46,16 @@
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyPromiseDeferred.resolve();
             }
-
+            $scope.scopeModel.onDataRecordTypeSelectionChanged = function () {
+                $scope.scopeModel.isLoading = true;
+                var dataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
+                if (dataRecordTypeId != undefined) {
+                    VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(dataRecordTypeId).then(function (response) {
+                        $scope.scopeModel.isLoading = false;
+                        dataRecordTypeEntity = response;
+                    });
+                }
+            }
             $scope.scopeModel.onInvoicePartnerSettingsReady = function(api)
             {
                 invoicePartnerSettingsAPI = api;
@@ -163,7 +173,11 @@
             var invoiceGridActionsSectionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             invoiceGridActionsSectionReadyPromiseDeferred.promise.then(function () {
-                var invoiceGridActionsPayload = invoiceTypeEntity != undefined ? { invoiceGridActions: invoiceTypeEntity.Settings.UISettings.InvoiceGridActions } : undefined;
+                var invoiceGridActionsPayload = { context: getContext() }
+                if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings && invoiceTypeEntity.Settings.UISettings)
+                {
+                    invoiceGridActionsPayload.invoiceGridActions= invoiceTypeEntity.Settings.UISettings.InvoiceGridActions; 
+                }
                 VRUIUtilsService.callDirectiveLoad(invoiceGridActionsAPI, invoiceGridActionsPayload, invoiceGridActionsSectionLoadPromiseDeferred);
             });
             return invoiceGridActionsSectionLoadPromiseDeferred.promise;
@@ -193,7 +207,11 @@
             var mainGridColumnsSectionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             mainGridColumnsSectionReadyPromiseDeferred.promise.then(function () {
-                var mainGridColumnsPayload = invoiceTypeEntity != undefined ? { mainGridColumns: invoiceTypeEntity.Settings.UISettings.MainGridColumns } : undefined;
+                var mainGridColumnsPayload = { context: getContext() }
+                if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings && invoiceTypeEntity.Settings.UISettings)
+                {
+                    mainGridColumnsPayload.mainGridColumns = invoiceTypeEntity.Settings.UISettings.MainGridColumns;
+                }
                 VRUIUtilsService.callDirectiveLoad(mainGridColumnsAPI, mainGridColumnsPayload, mainGridColumnsSectionLoadPromiseDeferred);
             });
             return mainGridColumnsSectionLoadPromiseDeferred.promise;
@@ -207,6 +225,25 @@
                 VRUIUtilsService.callDirectiveLoad(subSectionsAPI, mainGridColumnsPayload, subSectionsSectionLoadPromiseDeferred);
             });
             return subSectionsSectionLoadPromiseDeferred.promise;
+        }
+
+        function getContext()
+        {
+            var context = {
+                getFields: function () {
+                    var fields = [];
+                    if (dataRecordTypeEntity != undefined && dataRecordTypeEntity.Fields !=undefined)
+                    {
+                        for (var i = 0; i < dataRecordTypeEntity.Fields.length; i++)
+                        {
+                            var field = dataRecordTypeEntity.Fields[i];
+                            fields.push({ FieldName: field.Name, FieldTitle: field.Title, Type: field.Type });
+                        }
+                    }
+                    return fields;
+                }
+            }
+            return context;
         }
 
         function insertInvoiceType() {

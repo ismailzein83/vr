@@ -28,6 +28,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportReportsettingsSubrep
         function SubReports($scope, ctrl, $attrs) {
 
             var gridAPI;
+            var context;
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -43,7 +44,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportReportsettingsSubrep
                     var onSubReportAdded = function (subReport) {
                         ctrl.datasource.push({ Entity: subReport });
                     }
-                    VR_Invoice_InvoiceTypeService.addSubReport(onSubReportAdded, ctrl.datasource);
+                    VR_Invoice_InvoiceTypeService.addSubReport(onSubReportAdded, getContext());
                 };
 
                 ctrl.removeSubReport = function (dataItem) {
@@ -66,6 +67,9 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportReportsettingsSubrep
                             subReports.push({
                                 SubReportName: currentItem.Entity.SubReportName,
                                 SubReportDataSources: currentItem.Entity.SubReportDataSources,
+                                FilterGroup: currentItem.Entity.FilterGroup,
+                                RepeatedSubReport: currentItem.Entity.RepeatedSubReport,
+                                ParentSubreportDataSource: currentItem.Entity.ParentSubreportDataSource,
                             });
                         }
                     }
@@ -74,6 +78,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportReportsettingsSubrep
 
                 api.load = function (payload) {
                     if (payload != undefined) {
+                        context = payload.context;
                         if (payload.subReports != undefined) {
                             for (var i = 0; i < payload.subReports.length; i++) {
                                 var subReport = payload.subReports[i];
@@ -86,7 +91,11 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportReportsettingsSubrep
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
+            function getContext()
+            {
+                
+                return context;
+            }
             function defineMenuActions() {
                 var defaultMenuActions = [
                 {
@@ -104,7 +113,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportReportsettingsSubrep
                     var index = ctrl.datasource.indexOf(subReportObj);
                     ctrl.datasource[index] = { Entity: subReport };
                 }
-                VR_Invoice_InvoiceTypeService.editSubReport(subReportObj.Entity, onSubReportUpdated, ctrl.datasource);
+                VR_Invoice_InvoiceTypeService.editSubReport(subReportObj.Entity, onSubReportUpdated, getContext());
             }
         }
 

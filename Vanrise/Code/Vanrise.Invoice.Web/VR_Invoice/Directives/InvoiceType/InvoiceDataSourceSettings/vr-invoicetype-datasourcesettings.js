@@ -147,6 +147,6 @@
         }
     }
 
-    app.directive('vrInvoicetypeOpenrdlcreportDatasourcesettings', DataSourceSettingsDirective);
+    app.directive('vrInvoicetypeDatasourcesettings', DataSourceSettingsDirective);
 
 })(app);

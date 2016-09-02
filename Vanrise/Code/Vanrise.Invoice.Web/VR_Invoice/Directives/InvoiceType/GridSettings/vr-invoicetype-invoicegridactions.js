@@ -28,6 +28,7 @@ app.directive("vrInvoicetypeInvoicegridactions", ["UtilsService", "VRNotificatio
         function InvoiceGridActions($scope, ctrl, $attrs) {
 
             var gridAPI;
+            var context;
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -44,7 +45,7 @@ app.directive("vrInvoicetypeInvoicegridactions", ["UtilsService", "VRNotificatio
                         ctrl.datasource.push({ Entity: gridAction });
                     }
 
-                    VR_Invoice_InvoiceTypeService.addGridAction(onGridActionAdded, ctrl.datasource);
+                    VR_Invoice_InvoiceTypeService.addGridAction(onGridActionAdded, getContext());
                 };
 
                 ctrl.removeAction = function (dataItem) {
@@ -75,6 +76,7 @@ app.directive("vrInvoicetypeInvoicegridactions", ["UtilsService", "VRNotificatio
 
                 api.load = function (payload) {
                     if (payload != undefined) {
+                        context = payload.context;
                         if (payload.invoiceGridActions != undefined) {
                             for (var i = 0; i < payload.invoiceGridActions.length; i++) {
                                 var gridAction = payload.invoiceGridActions[i];
@@ -105,7 +107,11 @@ app.directive("vrInvoicetypeInvoicegridactions", ["UtilsService", "VRNotificatio
                     var index = ctrl.datasource.indexOf(actionObj);
                     ctrl.datasource[index] = { Entity: action };
                 }
-                VR_Invoice_InvoiceTypeService.editGridAction(actionObj.Entity, onGridActionUpdated, ctrl.datasource);
+                VR_Invoice_InvoiceTypeService.editGridAction(actionObj.Entity, onGridActionUpdated, getContext());
+            }
+            function getContext()
+            {
+                return context;
             }
         }
 

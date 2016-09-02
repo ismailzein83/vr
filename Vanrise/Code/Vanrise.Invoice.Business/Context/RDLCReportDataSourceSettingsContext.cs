@@ -7,7 +7,7 @@ using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.Business.Context
 {
-    public class RDLCReportDataSourceSettingsContext : IRDLCReportDataSourceSettingsContext
+    public class RDLCReportDataSourceSettingsContext : IInvoiceDataSourceSettingsContext
     {
         public IInvoiceActionContext InvoiceActionContext { get; set; }
     }

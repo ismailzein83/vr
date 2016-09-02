@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="VR_Invoice_RDLCDataSourceEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="VR_Invoice_InvoiceDataSourceEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody maxheight="'700px'">
         <vr-form name="formDataSoureEditor">
             <vr-tabs>
@@ -8,9 +8,11 @@
                             <vr-textbox value="scopeModel.dataSourceName" label="DataSource Name" isrequired="true"></vr-textbox>
                         </vr-columns>
                     </vr-row>
+                    <vr-invoicetype-datasource-itemsfilter on-ready="scopeModel.onItemsFilterReady" normal-col-num="4" ng-if="scopeModel.showItemsFilter"></vr-invoicetype-datasource-itemsfilter>
                 </vr-tab>
                 <vr-tab header="'Settings'">
-                    <vr-invoicetype-openrdlcreport-datasourcesettings on-ready="scopeModel.onDataSourceSettingsReady" normal-col-num="4"></vr-invoicetype-openrdlcreport-datasourcesettings></vr-tab>
+                    <vr-invoicetype-datasourcesettings on-ready="scopeModel.onDataSourceSettingsReady" normal-col-num="4"></vr-invoicetype-datasourcesettings>
+                </vr-tab>
             </vr-tabs>
         </vr-form>
     </vr-modalbody>

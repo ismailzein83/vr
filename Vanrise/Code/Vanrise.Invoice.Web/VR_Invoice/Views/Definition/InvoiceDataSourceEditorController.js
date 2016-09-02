@@ -2,11 +2,11 @@
 
     'use strict';
 
-    RDLCDataSourceEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    InvoiceDataSourceEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
-    function RDLCDataSourceEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function InvoiceDataSourceEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
-        var dataSources = [];
+        var context;
         var dataSourceEntity;
 
         var isEditMode;
@@ -14,7 +14,8 @@
         var dataSourceSettingsAPI;
         var dataSourceSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-
+        var itemsFilterAPI;
+        var itemsFilterReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -22,7 +23,7 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
-                dataSources = parameters.dataSources;
+                context = parameters.context;
                 dataSourceEntity = parameters.dataSourceEntity;
             }
             isEditMode = (dataSourceEntity != undefined);
@@ -34,6 +35,13 @@
                 dataSourceSettingsAPI = api;
                 dataSourceSettingsReadyPromiseDeferred.resolve();
             }
+            $scope.scopeModel.showItemsFilter = false;
+            $scope.scopeModel.onItemsFilterReady = function(api)
+            {
+                itemsFilterAPI = api;
+                itemsFilterReadyPromiseDeferred.resolve();
+            }
+
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateDataSource() : addDataSource();
             };
@@ -47,7 +55,7 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataSourceSettingsDirective]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataSourceSettingsDirective, loadItemsFilterDirective]).then(function () {
 
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -74,11 +82,23 @@
             });
            return dataSourceSettingsLoadPromiseDeferred.promise;
         }
-
+        function loadItemsFilterDirective() {
+            if (context != undefined && context.showItemsFilter != undefined && context.showItemsFilter())
+            {
+                $scope.scopeModel.showItemsFilter = true;
+                var itemsFilterLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                itemsFilterReadyPromiseDeferred.promise.then(function () {
+                    var itemsFilterPayload = dataSourceEntity != undefined ? { itemsFilterEntity: dataSourceEntity.ItemsFilter } : undefined;
+                    VRUIUtilsService.callDirectiveLoad(itemsFilterAPI, itemsFilterPayload, itemsFilterLoadPromiseDeferred);
+                });
+                return itemsFilterLoadPromiseDeferred.promise;
+            }
+        }
         function builDataSourceObjFromScope() {
             return {
                 DataSourceName: $scope.scopeModel.dataSourceName,
-                Settings: dataSourceSettingsAPI.getData()
+                Settings: dataSourceSettingsAPI.getData(),
+                ItemsFilter: itemsFilterAPI != undefined? itemsFilterAPI.getData():undefined
             };
         }
 
@@ -99,6 +119,6 @@
         }
 
     }
-    appControllers.controller('VR_Invoice_RDLCDataSourceEditorController', RDLCDataSourceEditorController);
+    appControllers.controller('VR_Invoice_InvoiceDataSourceEditorController', InvoiceDataSourceEditorController);
 
 })(appControllers);

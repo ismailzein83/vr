@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GridActionSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService'];
+    ItemsfilterDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService'];
 
-    function GridActionSettingsDirective(UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService) {
+    function ItemsfilterDirective(UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -15,7 +15,7 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new GridActionSettings($scope, ctrl, $attrs);
+                var ctor = new DataSourceSettings($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -25,7 +25,7 @@
             }
         };
 
-        function GridActionSettings($scope, ctrl, $attrs) {
+        function DataSourceSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
@@ -33,7 +33,7 @@
             var directiveAPI;
             var directiveReadyDeferred;
             var directivePayload;
-            var context;
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
@@ -61,30 +61,29 @@
                     selectorAPI.clearDataSource();
 
                     var promises = [];
-                    var invoiceGridActionEntity;
+                    var itemsFilterEntity;
 
                     if (payload != undefined) {
-                        invoiceGridActionEntity = payload.invoiceGridActionEntity;
-                        context = payload.context;
+                        itemsFilterEntity = payload.itemsFilterEntity;
                     }
 
-                    if (invoiceGridActionEntity != undefined) {
+                    if (itemsFilterEntity != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
 
-                    var getInvoiceGeneratorConfigsPromise = getInvoiceGeneratorTemplateConfigs();
-                    promises.push(getInvoiceGeneratorConfigsPromise);
+                    var getItemsFilterConfigsPromise = getItemsFilterTemplateConfigs();
+                    promises.push(getItemsFilterConfigsPromise);
 
-                    function getInvoiceGeneratorTemplateConfigs() {
-                        return VR_Invoice_InvoiceTypeAPIService.GetInvoiceGridActionSettingsConfigs().then(function (response) {
+                    function getItemsFilterTemplateConfigs() {
+                        return VR_Invoice_InvoiceTypeAPIService.GetItemsFilterConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (invoiceGridActionEntity != undefined) {
+                                if (itemsFilterEntity != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, invoiceGridActionEntity.ConfigId, 'ExtensionConfigurationId');
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, itemsFilterEntity.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
@@ -96,7 +95,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { context: getContext(), invoiceGridActionEntity: invoiceGridActionEntity }
+                            var directivePayload = itemsFilterEntity;
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -122,10 +121,6 @@
                     ctrl.onReady(api);
                 }
             }
-            function getContext()
-            {
-                return context;
-            }
         }
 
         function getTamplate(attrs) {
@@ -138,7 +133,7 @@
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
-                            + 'label="Action Type"'
+                            + 'label="Items Filter"'
 
                             + ' isrequired="true"'
                             + 'hideremoveicon>'
@@ -152,6 +147,6 @@
         }
     }
 
-    app.directive('vrInvoicetypeGridactionsettings', GridActionSettingsDirective);
+    app.directive('vrInvoicetypeDatasourceItemsfilter', ItemsfilterDirective);
 
 })(app);

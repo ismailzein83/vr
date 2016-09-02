@@ -49,6 +49,7 @@
     <Compile Include="GeneratedInvoice\GeneratedInvoiceItemSet.cs" />
     <Compile Include="InvoiceType\CovertToGridColumnAttributeInput.cs" />
     <Compile Include="InvoiceType\IInvoiceActionContext.cs" />
+    <Compile Include="InvoiceType\InvoiceDataSource\InvoiceDataSource.cs" />
     <Compile Include="InvoiceType\InvoiceGeneratorConfig.cs" />
     <Compile Include="InvoiceType\InvoiceGridActionSettingsConfig.cs" />
     <Compile Include="InvoiceType\InvoiceSubSectionGridColumn.cs" />
@@ -59,6 +60,8 @@
     <Compile Include="InvoiceType\InvoiceTypeRuntime.cs" />
     <Compile Include="InvoiceType\InvoiceUISubSectionSettingsConfig.cs" />
     <Compile Include="InvoiceType\IPartnerManagerInfoContext.cs" />
+    <Compile Include="InvoiceType\ItemsFilter\ItemsFilter.cs" />
+    <Compile Include="InvoiceType\ItemsFilter\ItemsFilterConfig.cs" />
     <Compile Include="InvoiceType\RDLCDataSourceSettingsConfig.cs" />
     <Compile Include="InvoiceType\UISettings\InvoicePartnerSettingsConfig.cs" />
     <Compile Include="InvoiceType\UISettings\IRDLCReportParameterValueContext.cs" />
@@ -77,7 +80,7 @@
     <Compile Include="InvoiceType\InvoiceType.cs" />
     <Compile Include="InvoiceType\InvoiceTypeSettings.cs" />
     <Compile Include="InvoiceViewSettings.cs" />
-    <Compile Include="InvoiceType\UISettings\RDLCReportDataSourceSettings.cs" />
+    <Compile Include="InvoiceType\UISettings\InvoiceDataSourceSettings.cs" />
     <Compile Include="InvoiceType\UISettings\InvoiceTypeUISettings.cs" />
     <Compile Include="IPartnerManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -9,28 +9,20 @@ namespace Vanrise.Invoice.MainExtensions
 {
     public class OpenRDLCReportAction : InvoiceGridActionSettings
     {
-        public List<RDLCReportURL> RDLCReportsURLs { get; set; }
         public string ReportURL { get; set; }
         public List<RDLCReportParameter> MainReportParameters { get; set; }
-        public List<RDLCReportDataSource> MainReportDataSources { get; set; }
+        public List<InvoiceDataSource> MainReportDataSources { get; set; }
         public List<RDLCSubReport> SubReports { get; set; }
       
     }
-    public class RDLCReportURL
-    {
-        public string ReportURL { get; set; }
-        public GenericData.Entities.RecordFilterGroup FilterGroup { get; set; }
-    }
     public class RDLCSubReport
     {
+        public InvoiceDataSource ParentSubreportDataSource { get; set; }
+        public GenericData.Entities.RecordFilterGroup FilterGroup { get; set; }
         public string SubReportName { get; set; }
-        public List<RDLCReportDataSource> SubReportDataSources { get; set; }
+        public bool RepeatedSubReport { get; set; }
+        public List<Entities.InvoiceDataSource> SubReportDataSources { get; set; }
 
-    }
-    public class RDLCReportDataSource
-    {
-        public string DataSourceName { get; set; }
-        public RDLCReportDataSourceSettings  Settings { get; set; }
     }
     public class RDLCReportParameter
     {
@@ -38,4 +30,5 @@ namespace Vanrise.Invoice.MainExtensions
         public RDLCReportParameterValue Value { get; set; }
         public bool IsVisible { get; set; }
     }
+
 }

@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeOpenrdlcreportDatasourcesettingsBankdetails", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrInvoicetypeDatasourceItemsfilterGeneric", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -13,7 +13,7 @@ app.directive("vrInvoicetypeOpenrdlcreportDatasourcesettingsBankdetails", ["Util
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new BankDetailsDataSourceSettings($scope, ctrl, $attrs);
+                var ctor = new GenericItemsFilter($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,11 +21,11 @@ app.directive("vrInvoicetypeOpenrdlcreportDatasourcesettingsBankdetails", ["Util
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/RDLCReport/RDLCReportDataSourceSettings/MainExtensions/Templates/BankDetailsDataSourceSettings.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceDataSourceSettings/MainExtensions/ItemsFilter/Templates/GenericItemsFilterTemplate.html"
 
         };
 
-        function BankDetailsDataSourceSettings($scope, ctrl, $attrs) {
+        function GenericItemsFilter($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             function initializeController() {
                 $scope.scopeModel = {};
@@ -37,14 +37,19 @@ app.directive("vrInvoicetypeOpenrdlcreportDatasourcesettingsBankdetails", ["Util
 
                 api.load = function (payload) {
                     if (payload != undefined) {
+                        ctrl.comparedFieldName = payload.ComparedFieldName;
+                        ctrl.fieldName = payload.FieldName;
                     }
+
                     var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
                 }
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Invoice.MainExtensions.BankDetailsDataSourceSettings ,Vanrise.Invoice.MainExtensions",
+                        $type: "Vanrise.Invoice.MainExtensions.GenericItemsFilter ,Vanrise.Invoice.MainExtensions",
+                        FieldName: ctrl.fieldName,
+                        ComparedFieldName: ctrl.comparedFieldName
                     };
                 }
 

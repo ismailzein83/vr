@@ -44,10 +44,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InvoiceUISubSectionSettings\InvoiceItemSubSection.cs" />
-    <Compile Include="RDLCReportDataSourceSettings\BankDetailsDataSourceSettings.cs" />
+    <Compile Include="InvoiceDataSourceSettings\BankDetailsDataSourceSettings.cs" />
+    <Compile Include="InvoiceDataSourceSettings\InvoiceDataSourceItems.cs" />
+    <Compile Include="ItemsFilter\GenericItemsFilter.cs" />
     <Compile Include="RDLCReportParameterValue\CustomFieldRDLReportParameterValue.cs" />
     <Compile Include="RDLCReportParameterValue\FieldRDLReportParameterValue.cs" />
-    <Compile Include="RDLCReportDataSourceSettings\RDLCItemsDataSourceSettings.cs" />
+    <Compile Include="InvoiceDataSourceSettings\ItemsDataSourceSettings.cs" />
     <Compile Include="InvoiceGridActionSettings\OpenRDLCReportAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

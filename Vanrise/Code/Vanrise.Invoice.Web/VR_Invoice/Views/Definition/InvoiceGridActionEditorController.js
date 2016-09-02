@@ -6,7 +6,7 @@
 
     function invoiceItemActionEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
-        var gridActions = [];
+        var context;
         var actionEntity;
 
         var isEditMode;
@@ -22,7 +22,7 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
-                gridActions = parameters.gridActions;
+                context = parameters.context;
                 actionEntity = parameters.actionEntity;
             }
             isEditMode = (actionEntity != undefined);
@@ -70,7 +70,11 @@
         function loadGridActionSettingsDirective() {
             var gridActionSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             gridActionSettingsReadyPromiseDeferred.promise.then(function () {
-                var invoiceGridActionPayload = actionEntity != undefined ? { invoiceGridActionEntity: actionEntity.Settings } : undefined;
+                var invoiceGridActionPayload = { context: getContext() }
+                if(actionEntity != undefined)
+                {
+                    invoiceGridActionPayload.invoiceGridActionEntity = actionEntity.Settings;
+                }
                 VRUIUtilsService.callDirectiveLoad(gridActionSettingsAPI, invoiceGridActionPayload, gridActionSettingsLoadPromiseDeferred);
             });
             return gridActionSettingsLoadPromiseDeferred.promise;
@@ -81,6 +85,12 @@
                 ActionTypeName: $scope.scopeModel.actionTypeName,
                 Settings: gridActionSettingsAPI.getData()
             };
+        }
+
+        function getContext()
+        {
+           
+            return context;
         }
 
         function addGridAction() {

@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeOpenrdlcreportDatasourcesettingsRdlcitems", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrInvoicetypeDatasourcesettingsRdlcitems", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -21,7 +21,7 @@ app.directive("vrInvoicetypeOpenrdlcreportDatasourcesettingsRdlcitems", ["UtilsS
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/RDLCReport/RDLCReportDataSourceSettings/MainExtensions/Templates/RDLCItemsDataSourceSettings.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceDataSourceSettings/MainExtensions/DataSource/Templates/ItemsDataSourceSettings.html"
 
         };
 
@@ -78,7 +78,7 @@ app.directive("vrInvoicetypeOpenrdlcreportDatasourcesettingsRdlcitems", ["UtilsS
                 api.getData = function () {
                     console.log(ctrl.listItems);
                     return {
-                        $type: "Vanrise.Invoice.MainExtensions.RDLCItemsDataSourceSettings ,Vanrise.Invoice.MainExtensions",
+                        $type: "Vanrise.Invoice.MainExtensions.ItemsDataSourceSettings ,Vanrise.Invoice.MainExtensions",
                         ItemSetNames : ctrl.listItems
                     };
                 }

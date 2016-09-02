@@ -8,10 +8,10 @@ using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.MainExtensions
 {
-    public class RDLCItemsDataSourceSettings : RDLCReportDataSourceSettings
+    public class ItemsDataSourceSettings : InvoiceDataSourceSettings
     {
         public List<string> ItemSetNames { get; set; }
-        public override IEnumerable<dynamic> GetDataSourceItems(IRDLCReportDataSourceSettingsContext context)
+        public override IEnumerable<dynamic> GetDataSourceItems(IInvoiceDataSourceSettingsContext context)
         {
             InvoiceItemManager invoiceItemManager = new InvoiceItemManager();
             var invoiceItems = context.InvoiceActionContext.GetInvoiceItems(this.ItemSetNames);// invoiceItemManager.GetInvoiceItemsByItemSetNames(context.InvoiceId, this.ItemSetNames);

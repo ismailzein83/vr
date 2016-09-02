@@ -35,6 +35,8 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreport", ["UtilsService", 
 
             var subReportsDirectiveAPI;
             var subReportsDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var context;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.onMainReportDataSourcesDirectiveReady = function (api)
@@ -57,14 +59,20 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreport", ["UtilsService", 
                 var api = {};
 
                 api.load = function (payload) {
+                    var invoiceGridActionEntity;
                     if(payload != undefined)
                     {
-                        $scope.scopeModel.reportURL = payload.ReportURL
+                        invoiceGridActionEntity = payload.invoiceGridActionEntity;
+                        context = payload.context;
+                    }
+                    if (invoiceGridActionEntity != undefined)
+                    {
+                        $scope.scopeModel.reportURL = invoiceGridActionEntity.ReportURL;
                     }
                     var promises = [];
                     var mainReportDataSourcesLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     mainReportDataSourcesDirectiveReadyPromiseDeferred.promise.then(function () {
-                        var mainReportDataSourcesDirectivePayload = payload != undefined ? { dataSources: payload.MainReportDataSources } : undefined;
+                        var mainReportDataSourcesDirectivePayload = invoiceGridActionEntity != undefined ? { dataSources: invoiceGridActionEntity.MainReportDataSources } : undefined;
                         VRUIUtilsService.callDirectiveLoad(mainReportDataSourcesDirectiveAPI, mainReportDataSourcesDirectivePayload, mainReportDataSourcesLoadPromiseDeferred);
                     });
                     promises.push(mainReportDataSourcesLoadPromiseDeferred.promise);
@@ -72,14 +80,22 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreport", ["UtilsService", 
 
                     var mainReportParametersLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     mainReportParametersDirectiveReadyPromiseDeferred.promise.then(function () {
-                        var mainReportParametersDirectivePayload = payload != undefined ? { parameters: payload.MainReportParameters } : undefined;
+
+                        var mainReportParametersDirectivePayload = { context: getContext() }
+                        if (invoiceGridActionEntity != undefined) {
+                            mainReportParametersDirectivePayload.parameters = invoiceGridActionEntity.MainReportParameters;
+                        }
                         VRUIUtilsService.callDirectiveLoad(mainReportParametersDirectiveAPI, mainReportParametersDirectivePayload, mainReportParametersLoadPromiseDeferred);
                     });
                     promises.push(mainReportParametersLoadPromiseDeferred.promise);
 
                     var subReportsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     subReportsDirectiveReadyPromiseDeferred.promise.then(function () {
-                        var subReportsDirectivePayload = payload != undefined ? { subReports: payload.SubReports } : undefined;
+                        var subReportsDirectivePayload = { context: getContext() }
+                        if(invoiceGridActionEntity != undefined)
+                        {
+                            subReportsDirectivePayload.subReports = invoiceGridActionEntity.SubReports ;
+                        }
                         VRUIUtilsService.callDirectiveLoad(subReportsDirectiveAPI, subReportsDirectivePayload, subReportsLoadPromiseDeferred);
                     });
                     promises.push(subReportsLoadPromiseDeferred.promise);
@@ -99,6 +115,31 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreport", ["UtilsService", 
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+            function getContext()
+            {
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                currentContext.getDataSourcesInfo = function () {
+                    var dataSources = [];
+                    var mainReportDataSources = mainReportDataSourcesDirectiveAPI.getData();
+                    if (mainReportDataSources != undefined) {
+                        for (var i = 0; i < mainReportDataSources.length; i++) {
+                            var mainReportDataSource = mainReportDataSources[i];
+                            dataSources.push({ DataSourceName: mainReportDataSource.DataSourceName })
+                        }
+                    }
+                    return dataSources;
+                };
+                currentContext.getDataSource = function(dataSourceName)
+                {
+                    var mainReportDataSources = mainReportDataSourcesDirectiveAPI.getData();
+                    if (mainReportDataSources != undefined)
+                        return UtilsService.getItemByVal(mainReportDataSources, dataSourceName, "DataSourceName");
+                }
+
+                return currentContext;
             }
         }
 

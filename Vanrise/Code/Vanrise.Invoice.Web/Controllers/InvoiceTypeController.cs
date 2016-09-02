@@ -98,5 +98,12 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             return _manager.GetInvoicePartnerSettingsConfigs();
         }
+        [HttpGet]
+        [Route("GetItemsFilterConfigs")]
+        public IEnumerable<ItemsFilterConfig> GetItemsFilterConfigs()
+        {
+            return _manager.GetItemsFilterConfigs();
+        }
+        
     }
 }

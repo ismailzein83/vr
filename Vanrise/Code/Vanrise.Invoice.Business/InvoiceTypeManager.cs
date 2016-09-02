@@ -78,6 +78,13 @@ namespace Vanrise.Invoice.Business
             var extensionConfiguration = new ExtensionConfigurationManager();
             return extensionConfiguration.GetExtensionConfigurations<InvoicePartnerSettingsConfig>(InvoicePartnerSettingsConfig.EXTENSION_TYPE);
         }
+        public IEnumerable<ItemsFilterConfig> GetItemsFilterConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<ItemsFilterConfig>(ItemsFilterConfig.EXTENSION_TYPE);
+        }
+
+        
         public IEnumerable<InvoiceUISubSectionSettingsConfig> GetInvoiceUISubSectionSettingsConfigs()
         {
             var extensionConfiguration = new ExtensionConfigurationManager();

@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Invoice.Entities
 {
-    public abstract class RDLCReportDataSourceSettings
+    public abstract class InvoiceDataSourceSettings
     {
         public int ConfigId { get; set; }
-        public abstract IEnumerable<dynamic> GetDataSourceItems(IRDLCReportDataSourceSettingsContext context);
+        public abstract IEnumerable<dynamic> GetDataSourceItems(IInvoiceDataSourceSettingsContext context);
     }
-    public interface IRDLCReportDataSourceSettingsContext
+    public interface IInvoiceDataSourceSettingsContext
     {
         IInvoiceActionContext InvoiceActionContext { get;}
     }

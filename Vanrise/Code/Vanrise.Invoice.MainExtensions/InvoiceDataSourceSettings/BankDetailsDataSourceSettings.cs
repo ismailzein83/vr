@@ -7,9 +7,9 @@ using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.MainExtensions
 {
-    public class BankDetailsDataSourceSettings : RDLCReportDataSourceSettings
+    public class BankDetailsDataSourceSettings : InvoiceDataSourceSettings
     {
-        public override IEnumerable<dynamic> GetDataSourceItems(IRDLCReportDataSourceSettingsContext context)
+        public override IEnumerable<dynamic> GetDataSourceItems(IInvoiceDataSourceSettingsContext context)
         {
             Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
             return configManager.GetBankDetails();
