@@ -131,6 +131,7 @@
     <Compile Include="CreditClass\CreditClassQuery.cs" />
     <Compile Include="CreditClass\CreditControlSettings.cs" />
     <Compile Include="EntityType.cs" />
+    <Compile Include="OperatorDeclaredInfo.cs" />
     <Compile Include="Package\PackageItems\PackageItem.cs" />
     <Compile Include="Package\PackageItems\Types\ChargingPolicyPackageItem.cs" />
     <Compile Include="Package\PackageItems\Types\MoneyPackageItem.cs" />
