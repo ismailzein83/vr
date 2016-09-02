@@ -108,10 +108,10 @@
             }
         }
         function getTemplate(attrs) {
-            var label = "label='Recurring Charge'";
+            var label = "label='Recurring Period'";
 
             if (attrs.hidelabel != undefined) {
-                label = "label='Recurring Charges'";
+                label = "label='Recurring Periods'";
             }
 
             return '<vr-row><vr-columns colnum="{{periodDefinitionCtrl.normalColNum * 2}}">'

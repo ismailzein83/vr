@@ -30,21 +30,22 @@
             $scope.scopeModel = {};
             $scope.scopeModel.items = [];
             $scope.scopeModel.sectionItems = [];
-            $scope.scopeModel.chargingSetPeriodDefinitionDirectiveReady = function(api) {
+
+            $scope.scopeModel.chargingSetPeriodDefinitionDirectiveReady = function (api) {
                 chargingSetPeriodDefinitionAPI = api;
                 chargingSetPeriodDefinitionReadyDeferred.resolve();
             }
-            $scope.scopeModel.save = function() {
+            $scope.scopeModel.save = function () {
                 if (isEditMode) {
                     return update();
                 } else {
                     return insert();
                 }
             };
-            $scope.scopeModel.close = function() {
+            $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-            $scope.scopeModel.onEntityTypeSelectorReady = function(api) {
+            $scope.scopeModel.onEntityTypeSelectorReady = function (api) {
                 entityTypeAPI = api;
                 entityTypeSelectorReadyDeferred.resolve();
             }
@@ -114,6 +115,7 @@
                 var item = $scope.scopeModel.sectionItems[i];
                 var statusCharge = {
                     InitialCharge: item.HasInitialCharge ? item.InitialCharge : 0,
+                    RecurringCharge: item.RecurringCharge ? item.RecurringCharge : 0,
                     StatusDefinitionId: item.StatusDefinitionId,
                     RecurringPeriodSettings: item.directiveAPI.getData()
                 }
@@ -182,7 +184,7 @@
         }
 
         function loadAllControls() {
-            return utilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadEntityTypeSelector, loadStatusCharges]).then(function() {
+            return utilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadEntityTypeSelector, loadStatusCharges]).then(function () {
                 entityTypeSelectedReadyDeferred = undefined;
             }).catch(function (error) {
                 vrNotificationService.notifyExceptionWithClose(error, $scope);
@@ -203,15 +205,12 @@
                         if (currentStatusChargingEntity.StatusDefinitionId == currentItem.StatusDefinitionId) {
                             var sectionItem = {
                                 payload: currentStatusChargingEntity,
-                                entityStatusChargeInfo:currentItem,
+                                entityStatusChargeInfo: currentItem,
                                 readyPromiseDeferred: utilsService.createPromiseDeferred(),
                                 loadPromiseDeferred: utilsService.createPromiseDeferred(),
                             }
                             promises.push(sectionItem.loadPromiseDeferred.promise);
                             AddAPIToSectionItem(sectionItem);
-
-                          //  currentItem.InitialCharge = currentStatusChargingEntity.InitialCharge;
-
                         }
                     }
                 }
@@ -220,16 +219,16 @@
         }
 
         function getStatusChargeInfos(selectedEntityType) {
-           return retailBeStatusChargingSetApiService.GetStatusChargeInfos(selectedEntityType).then(function(response) {
+            return retailBeStatusChargingSetApiService.GetStatusChargeInfos(selectedEntityType).then(function (response) {
                 $scope.scopeModel.items = response;
             });
         }
 
-        function AddAPIToSectionItem(sectionItemObj)
-        {
+        function AddAPIToSectionItem(sectionItemObj) {
             var sectionItem = {
                 StatusName: sectionItemObj.entityStatusChargeInfo.StatusName,
                 InitialCharge: sectionItemObj.payload.InitialCharge,
+                RecurringCharge: sectionItemObj.payload.RecurringCharge,
                 HasInitialCharge: sectionItemObj.entityStatusChargeInfo.HasInitialCharge,
                 HasRecurringCharge: sectionItemObj.entityStatusChargeInfo.HasRecurringCharge,
                 StatusDefinitionId: sectionItemObj.payload.StatusDefinitionId

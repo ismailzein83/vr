@@ -1,7 +1,8 @@
 ﻿'use strict';
 
-app.directive('retailBeRecurringperiodWeekly', ['VRNotificationService',
-    function (vrNotificationService) {
+app.directive('retailBeRecurringperiodWeekly', ['VRNotificationService', 'UtilsService', 'VRUIUtilsService',
+    function (vrNotificationService, utilsService, vruiUtilsService) {
+
         return {
             restrict: 'E',
             scope: {
@@ -19,26 +20,48 @@ app.directive('retailBeRecurringperiodWeekly', ['VRNotificationService',
 
         function RecurringPeriodWeekly($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+            var daysOfWeekApi;
+            var daysOfWeekSelectorReadyDeferred = utilsService.createPromiseDeferred();
+            var dayOfWeekEntity;
 
             function initializeController() {
                 $scope.scopeModel = {};
-                defineAPI();
+                $scope.scopeModel.onDaysOfWeekSelectorReady = function (api) {
+                    daysOfWeekApi = api;
+                    daysOfWeekSelectorReadyDeferred.resolve();
+                }
             }
-            function defineAPI() {
+            function defineApi() {
+              
                 var api = {};
                 api.load = function (payload) {
                     if (payload != undefined) {
-                        $scope.scopeModel.DayOfWeek = payload.DayOfWeek;
+                        dayOfWeekEntity = payload.DayOfWeek;
                     }
                 };
                 api.getData = function () {
                     return {
                         $type: "Retail.BusinessEntity.MainExtensions.RecurringPeriods.WeeklyRecurringPeriodSettings, Retail.BusinessEntity.MainExtensions",
-                        DayOfWeek: $scope.scopeModel.DayOfWeek
+                        DayOfWeek: daysOfWeekApi.getSelectedIds()
                     };
                 };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+                function loadDayOfWeekSelector() {
+                    var dayOfWeekSelectorLoadDeferred = utilsService.createPromiseDeferred();
+                    daysOfWeekSelectorReadyDeferred.promise.then(function () {
+                        var dayOfWeekSelectorPayload = null;
+                        if (dayOfWeekEntity!=undefined) {
+                            dayOfWeekSelectorPayload = {
+                                selectedIds: dayOfWeekEntity
+                            };
+                        }
+                        vruiUtilsService.callDirectiveLoad(daysOfWeekApi, dayOfWeekSelectorPayload, dayOfWeekSelectorLoadDeferred);
+                    });
+                    return dayOfWeekSelectorLoadDeferred.promise;
+                }
+                loadDayOfWeekSelector();
             }
+            defineApi();
         }
     }]);
