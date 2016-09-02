@@ -1,0 +1,15 @@
+ - Reseller API
+Key: 491mfjuasbpn
+Password: Gs9qWz4hevNH
+
+
+ - Company
+Email: myahya2@vanrise.com
+Password: 123456789
+
+
+Reseller Account:
+U: myahya@vanrise.com
+P: ptBkRwtCpK
+
+Vanrise Company CID 2752
