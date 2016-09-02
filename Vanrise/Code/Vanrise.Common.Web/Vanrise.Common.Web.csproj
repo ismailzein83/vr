@@ -198,6 +198,7 @@
     <Content Include="Common\Directives\Currency\vr-common-currency-selector.js" />
     <Content Include="Common\Directives\Currency\vr-common-currency-grid.js" />
     <Content Include="Common\Directives\Currency\vr-common-currency-settings-editor.js" />
+    <Content Include="Common\Directives\Date\DayOfWeek\vr-common-daysofweek-selector.js" />
     <Content Include="Common\Directives\EmailTemplate\Templates\EmailTemplateSettings.html" />
     <Content Include="Common\Directives\EmailTemplate\Templates\EmailTemplateGridTemplate.html" />
     <Content Include="Common\Directives\EmailTemplate\vr-common-emailtemplate-grid.js" />
