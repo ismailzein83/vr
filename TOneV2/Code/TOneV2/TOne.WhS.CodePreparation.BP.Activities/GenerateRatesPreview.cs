@@ -51,32 +51,21 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     });
                 }
 
-                List<ExistingZone> connectedExistingZones = zoneToProcess.ExistingZones.GetConnectedEntities(DateTime.Today);
-              
-                if (connectedExistingZones != null)
+                ExistingRate systemRate = zoneToProcess.SystemRate;
+                if (systemRate != null)
                 {
-                    List<ExistingRate> existingRates = new List<ExistingRate>();
-                    existingRates.AddRange(connectedExistingZones.SelectMany(item => item.ExistingRates).Where(item => item.RateEntity.RateTypeId == null));
-                    ExistingRate SystemRate = existingRates.LastOrDefault();
+                    SalePriceList salePriceList = salePriceListManager.GetPriceList(systemRate.RateEntity.PriceListId);
 
-                    if (SystemRate != null)
+                    ratesPreview.Add(new RatePreview()
                     {
-                        SalePriceList salePriceList = salePriceListManager.GetPriceList(SystemRate.RateEntity.PriceListId);
-
-                        ratesPreview.Add(new RatePreview()
-                        {
-                            ZoneName = zoneToProcess.ZoneName,
-                            OnwerType = salePriceList.OwnerType,
-                            OwnerId = salePriceList.OwnerId,
-                            Rate = SystemRate.RateEntity.NormalRate,
-                            BED = SystemRate.BED,
-                            EED = SystemRate.EED
-                        });
-
-                    }
+                        ZoneName = zoneToProcess.ZoneName,
+                        OnwerType = salePriceList.OwnerType,
+                        OwnerId = salePriceList.OwnerId,
+                        Rate = systemRate.RateEntity.NormalRate,
+                        BED = systemRate.BED,
+                        EED = systemRate.EED
+                    });
                 }
-
-
             }
 
 
@@ -97,9 +86,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 }
 
             }
-
-
-
+            
             previewRatesQueue.Enqueue(ratesPreview);
 
         }

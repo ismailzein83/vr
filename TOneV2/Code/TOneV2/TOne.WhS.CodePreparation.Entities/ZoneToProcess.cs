@@ -10,26 +10,58 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
 {
     public class ZoneToProcess : IRuleTarget
     {
-        public ZoneToProcess()
-        {
-            CodesToAdd = new List<CodeToAdd>();
-            CodesToMove = new List<CodeToMove>();
-            CodesToClose = new List<CodeToClose>();
-            AddedZones = new List<AddedZone>();
-            ExistingZones = new List<ExistingZone>();
-
-        }
         public string ZoneName { get; set; }
 
-        public List<CodeToAdd> CodesToAdd { get; set; }
+        private List<CodeToAdd> _codesToAdd = new List<CodeToAdd>();
+        public List<CodeToAdd> CodesToAdd
+        {
+            get
+            {
+                return this._codesToAdd;
+            }
+        }
 
-        public List<CodeToMove> CodesToMove { get; set; }
 
-        public List<CodeToClose> CodesToClose { get; set; }
+        private List<CodeToMove> _codesToMove = new List<CodeToMove>();
 
-        public List<AddedZone> AddedZones { get; set; }
+        public List<CodeToMove> CodesToMove
+        {
+            get
+            {
+                return this._codesToMove;
+            }
+        }
 
-        public List<ExistingZone> ExistingZones { get; set; }
+
+        private List<CodeToClose> _codesToClose = new List<CodeToClose>();
+
+        public List<CodeToClose> CodesToClose
+        {
+            get
+            {
+                return this._codesToClose;
+            }
+        }
+
+        private List<AddedZone> _addedZones = new List<AddedZone>();
+
+        public List<AddedZone> AddedZones
+        {
+            get
+            {
+                return this._addedZones;
+            }
+        }
+
+
+        private List<ExistingZone> _existingZones = new List<ExistingZone>();
+        public List<ExistingZone> ExistingZones 
+        { 
+            get
+            {
+                return this._existingZones;
+            }
+        }
 
 
         private List<RateToAdd> _ratesToAdd = new List<RateToAdd>();
@@ -42,6 +74,7 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
             }
         }
 
+        public ExistingRate SystemRate { get; set; }
         public string RecentZoneName { get; set; }
 
         public DateTime BED { get; set; }

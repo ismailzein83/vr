@@ -16,5 +16,6 @@ namespace TOne.WhS.CodePreparation.Entities
         IEnumerable<AddedRate> NewRates { get; set; }
         DateTime EffectiveDate { get; set; }
         int SellingNumberPlanId { get; set; }
+        IEnumerable<NotImportedZone> NotImportedZones { get; }
     }
 }

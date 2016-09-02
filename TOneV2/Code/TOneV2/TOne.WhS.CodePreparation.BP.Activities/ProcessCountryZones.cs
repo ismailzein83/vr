@@ -8,6 +8,7 @@ using TOne.WhS.CodePreparation.Entities.Processing;
 using TOne.WhS.CodePreparation.Entities;
 using Vanrise.BusinessProcess;
 using TOne.WhS.BusinessEntity.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
@@ -100,7 +101,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
 
                 zoneToProcess.BED = GetZoneBED(zoneToProcess);
-                zoneToProcess.EED = zoneToProcess.ExistingZones.Count() > 0 ? zoneToProcess.ExistingZones.Select(x => x.EED).VRMinimumDate() : null;
+                zoneToProcess.EED = GetZoneEED(zoneToProcess);
 
                 zoneToProcess.ChangeType = GetZoneChangeType(zoneToProcess, closedExistingZones);
 
@@ -133,45 +134,55 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         private NotImportedZone NotImportedZoneInfoMapper(List<ExistingZone> existingZones)
         {
-            List<ExistingZone> linkedExistingZones = existingZones.GetConnectedEntities(DateTime.Today);
+            IEnumerable<ExistingZone> connectedEntities = this.GetConnectedExistingZones(existingZones);
 
             NotImportedZone notImportedZone = new NotImportedZone();
-            ExistingZone firstElementInTheList = linkedExistingZones.First();
-            ExistingZone lastElementInTheList = linkedExistingZones.Last();
-
-            List<ExistingRate> existingRates = GetExistingRatesByLinkedExistingZones(linkedExistingZones);
+            ExistingZone firstElementInTheList = connectedEntities.First();
+            ExistingZone lastElementInTheList = connectedEntities.Last();
 
             notImportedZone.ZoneName = firstElementInTheList.Name;
             //TODO: get it from foreach activity in the process
             notImportedZone.CountryId = firstElementInTheList.CountryId;
             notImportedZone.BED = firstElementInTheList.BED;
             notImportedZone.EED = lastElementInTheList.EED;
-            notImportedZone.ExistingRate = existingRates.LastOrDefault();
-            notImportedZone.HasChanged = linkedExistingZones.Any(x => x.ChangedZone != null);
+            notImportedZone.HasChanged = connectedEntities.Any(x => x.ChangedZone != null);
 
             return notImportedZone;
         }
 
-        private List<ExistingRate> GetExistingRatesByLinkedExistingZones(List<ExistingZone> linkedExistingZones)
+        private IEnumerable<ExistingZone> GetConnectedExistingZones(List<ExistingZone> existingZones)
         {
-            List<ExistingRate> existingRates = new List<ExistingRate>();
-
-            existingRates.AddRange(linkedExistingZones.SelectMany(item => item.ExistingRates).OrderBy(itm => itm.BED));
-
-            return existingRates;
+            return this.GetConnectedExistingZones(existingZones, null);
         }
+        private IEnumerable<ExistingZone> GetConnectedExistingZones(List<ExistingZone> existingZones, string zoneName)
+        {
+            IEnumerable<ExistingZone> connectedEntites = existingZones.GetConnectedEntities(DateTime.Now);
+            if (connectedEntites == null)
+            {
+                string message = "Not Imported Zone has missing existing zones";
+                if (zoneName != null)
+                    message = string.Format("Zone {0} is missing existing zones", zoneName);
+
+                throw new DataIntegrityValidationException(message);
+            }
+
+            return connectedEntites;
+        }
+    
 
         private DateTime GetZoneBED(ZoneToProcess zoneToProcess)
         {
-            List<DateTime?> minDates = new List<DateTime?>();
-
             if (zoneToProcess.AddedZones.Count() > 0)
-                minDates.Add(zoneToProcess.AddedZones.Min(item => item.BED));
+                return zoneToProcess.AddedZones.Min(item => item.BED);
 
-            if (zoneToProcess.ExistingZones.Count() > 0)
-                minDates.Add(zoneToProcess.ExistingZones.Min(item => item.BED));
+            IEnumerable<ExistingZone> connectedExistingZones = this.GetConnectedExistingZones(zoneToProcess.ExistingZones, zoneToProcess.ZoneName);
+            return connectedExistingZones.First().BED;
+        }
 
-            return minDates.VRMinimumDate().Value;
+        private DateTime? GetZoneEED(ZoneToProcess zoneToProcess)
+        {
+            IEnumerable<ExistingZone> connectedEntites = this.GetConnectedExistingZones(zoneToProcess.ExistingZones, zoneToProcess.ZoneName);
+            return connectedEntites.Last().EED;
         }
 
         private ZoneChangeType GetZoneChangeType(ZoneToProcess zoneToProcess, Dictionary<string, List<ExistingZone>> closedExistingZones)
@@ -199,7 +210,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             return ZoneChangeType.NotChanged;
         }
-
 
         private Dictionary<string, Dictionary<string, List<ExistingCode>>> StructureExistingCodesByZonesNames(IEnumerable<ExistingCode> existingCodes)
         {
@@ -232,6 +242,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             return existingCodeByZoneName;
         }
+
 
         #endregion
     }

@@ -19,8 +19,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public IEnumerable<ZoneToProcess> ZonesToProcess { get; set; }
         public DateTime EffectiveDate { get; set; }
         public SalePriceListsByOwner SalePriceListsByOwner { get; set; }
-
         public int SellingNumberPlanId { get; set; }
+        public IEnumerable<NotImportedZone> NotImportedZones { get; set; }
     }
 
     public class ProcessCountryRatesOutput
@@ -52,6 +52,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         [RequiredArgument]
         public InArgument<int> SellingNumberPlanId { get; set; }
 
+        [RequiredArgument]
+
+        public InArgument<IEnumerable<NotImportedZone>> NotImportedZones { get; set; }
 
         [RequiredArgument]
         public OutArgument<IEnumerable<ChangedRate>> ChangedRates { get; set; }
@@ -98,7 +101,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 ZonesToProcess = this.ZonesToProcess.Get(context),
                 EffectiveDate = this.EffectiveDate.Get(context),
                 SalePriceListsByOwner = this.SalePriceListsByOwner.Get(context),
-                SellingNumberPlanId = this.SellingNumberPlanId.Get(context)
+                SellingNumberPlanId = this.SellingNumberPlanId.Get(context),
+                NotImportedZones = this.NotImportedZones.Get(context)
             };
         }
 

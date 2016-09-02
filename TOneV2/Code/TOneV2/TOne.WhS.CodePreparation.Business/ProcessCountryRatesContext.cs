@@ -18,5 +18,7 @@ namespace TOne.WhS.CodePreparation.Business
         public DateTime EffectiveDate { get; set; }
         public SalePriceListsByOwner SalePriceListsByOwner { get; set; }
         public int SellingNumberPlanId { get; set; }
+
+        public IEnumerable<NotImportedZone> NotImportedZones { get; set; }
     }
 }

@@ -18,21 +18,24 @@ namespace TOne.WhS.CodePreparation.Business
         {
             IEnumerable<ZoneToProcess> newZones = context.ZonesToProcess.FindAllRecords(item => item.ChangeType == ZoneChangeType.New);
 
-            ProcessCountryRates(newZones, context.ExistingZones, salePriceListsByOwner, context.EffectiveDate, context.SellingNumberPlanId);
+            ProcessCountryRates(newZones, context.ExistingZones, context.ExistingRates,salePriceListsByOwner, context.NotImportedZones, context.EffectiveDate, context.SellingNumberPlanId);
 
             context.NewRates = context.ZonesToProcess.SelectMany(item => item.RatesToAdd).SelectMany(itm => itm.AddedRates);
 
             context.ChangedRates = context.ExistingRates.Where(itm => itm.ChangedRate != null).Select(itm => itm.ChangedRate);
         }
 
-        private void ProcessCountryRates(IEnumerable<ZoneToProcess> zonesToProcess, IEnumerable<ExistingZone> existingZones, SalePriceListsByOwner salePriceListsByOwner, DateTime effectiveDate, int sellingNumberPlanId)
+        private void ProcessCountryRates(IEnumerable<ZoneToProcess> zonesToProcess, IEnumerable<ExistingZone> existingZones, IEnumerable<ExistingRate> existingRates,
+            SalePriceListsByOwner salePriceListsByOwner, IEnumerable<NotImportedZone> notImportedZones, DateTime effectiveDate, int sellingNumberPlanId)
         {
-            CreateRatesForNewZones(sellingNumberPlanId, zonesToProcess, existingZones, effectiveDate, salePriceListsByOwner);
-            CloseRatesForClosedZones(existingZones);
+            ExistingRatesByZoneName existingRatesByZoneName = StructureExistingRatesByZoneName(existingRates);
+            ProcessImportedData(zonesToProcess, existingZones, existingRatesByZoneName, salePriceListsByOwner, effectiveDate, sellingNumberPlanId);
+            ProcessNotImportedData(notImportedZones, existingZones, existingRatesByZoneName);
         }
 
-        private void CreateRatesForNewZones(int sellingNumberPlanId, IEnumerable<ZoneToProcess> zonesToProcess, IEnumerable<ExistingZone> existingZones, DateTime effectiveDate, SalePriceListsByOwner salePriceListsByOwner)
+        private void ProcessImportedData(IEnumerable<ZoneToProcess> zonesToProcess, IEnumerable<ExistingZone> existingZones ,ExistingRatesByZoneName existingRatesByZoneName, SalePriceListsByOwner salePriceListsByOwner, DateTime effectiveDate, int sellingNumberPlanId)
         {
+
             //If no existing zones exist, no need to perform the whole process
             if (existingZones.Count() == 0)
                 return;
@@ -42,8 +45,93 @@ namespace TOne.WhS.CodePreparation.Business
 
             Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType = StructureZonesByType(existingZones, saleAreaSettingsData);
 
+            List<ExistingRate> existingRates;
             foreach (ZoneToProcess zoneToProcess in zonesToProcess)
             {
+                existingRatesByZoneName.TryGetValue(zoneToProcess.ZoneName, out existingRates);
+
+                ProcessData(zoneToProcess, saleAreaSettingsData, zonesByType, salePriceListsByOwner, effectiveDate, sellingNumberPlanId);
+                PrepareDataForPreview(zoneToProcess, existingRates);
+            }
+        }
+
+        private void ProcessNotImportedData(IEnumerable<NotImportedZone> notImportedZones, IEnumerable<ExistingZone> existingZones, ExistingRatesByZoneName existingRatesByZoneName)
+        {
+            CloseRatesForClosedZones(existingZones);
+            FillRatesForNotImportedZones(notImportedZones, existingRatesByZoneName);
+        }
+
+        private void FillRatesForNotImportedZones(IEnumerable<NotImportedZone> notImportedZones, ExistingRatesByZoneName existingRatesByZoneName)
+        {
+            List<ExistingRate> existingRates;
+            foreach (NotImportedZone notImportedZone in notImportedZones)
+            {
+                if (existingRatesByZoneName.TryGetValue(notImportedZone.ZoneName, out existingRates))
+                {
+                      notImportedZone.ExistingRate = this.GetExistingRate(existingRates);
+                }
+            }
+        }
+
+        private ExistingRate GetExistingRate(List<ExistingRate> existingRates)
+        {
+           return GetLastExistingRateFromConnectedExistingRates(existingRates);
+        }
+
+        private void PrepareDataForPreview(ZoneToProcess zoneToProcess, List<ExistingRate> existingRates)
+        {
+            FillSystemRatesForImportedZone(zoneToProcess, existingRates);
+        }
+
+        private void FillSystemRatesForImportedZone(ZoneToProcess zoneToProcess, List<ExistingRate> existingRates)
+        {
+            zoneToProcess.SystemRate = GetSystemRate(existingRates);
+        }
+
+        private ExistingRatesByZoneName StructureExistingRatesByZoneName(IEnumerable<ExistingRate> existingRates)
+        {
+            ExistingRatesByZoneName existingRatesByZoneName = new ExistingRatesByZoneName();
+            List<ExistingRate> existingRatesList = null;
+
+            if (existingRates != null)
+            {
+                foreach (ExistingRate item in existingRates)
+                {
+                    if (!existingRatesByZoneName.TryGetValue(item.ParentZone.Name, out existingRatesList))
+                    {
+                        existingRatesList = new List<ExistingRate>();
+                        existingRatesByZoneName.Add(item.ParentZone.Name, existingRatesList);
+                    }
+
+                    existingRatesList.Add(item);
+                }
+            }
+
+            return existingRatesByZoneName;
+        }
+
+        private ExistingRate GetSystemRate(List<ExistingRate> existingRates)
+        {
+            return GetLastExistingRateFromConnectedExistingRates(existingRates);
+        }
+
+        private ExistingRate GetLastExistingRateFromConnectedExistingRates(List<ExistingRate> existingRates)
+        {
+            List<ExistingRate> connectedExistingRates = existingRates.GetConnectedEntities(DateTime.Today);
+            if (connectedExistingRates == null)
+                return null;
+
+            return connectedExistingRates.Last();
+        }
+
+        private void ProcessData(ZoneToProcess zoneToProcess, SaleAreaSettingsData saleAreaSettingsData, Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType, SalePriceListsByOwner salePriceListsByOwner, DateTime effectiveDate, int sellingNumberPlanId)
+        {
+            CreateRatesForNewZones(zoneToProcess, sellingNumberPlanId, saleAreaSettingsData, zonesByType, effectiveDate, salePriceListsByOwner);
+        }
+
+        private void CreateRatesForNewZones(ZoneToProcess zoneToProcess, int sellingNumberPlanId, SaleAreaSettingsData saleAreaSettingsData,
+            Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType, DateTime effectiveDate, SalePriceListsByOwner salePriceListsByOwner)
+        {
                 SaleZoneTypeEnum saleZoneType = this.GetSaleZoneType(zoneToProcess.ZoneName, saleAreaSettingsData);
                 NewZoneRateLocator locator;
                 if (saleZoneType == SaleZoneTypeEnum.Fixed)
@@ -55,7 +143,7 @@ namespace TOne.WhS.CodePreparation.Business
                 
                 //in some case locators return null indicating that this new zone must not have new rates assigned
                 if (rates == null)
-                    continue;
+                    return;
 
                 foreach (NewZoneRateEntity zoneRate in rates)
                 {
@@ -90,7 +178,6 @@ namespace TOne.WhS.CodePreparation.Business
 
                     zoneToProcess.RatesToAdd.Add(rateToAdd);
                 }
-            }
         }
 
         private void CloseRatesForClosedZones(IEnumerable<ExistingZone> existingZones)

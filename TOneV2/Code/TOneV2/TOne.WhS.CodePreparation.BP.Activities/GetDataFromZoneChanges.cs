@@ -109,7 +109,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         private bool CodeIsExcludedFromCloseZoneAction(SaleCode saleCode, Changes changes)
         {
-            return (changes.NewCodes.Any(x => x.Code == saleCode.Code && x.ZoneId.HasValue && x.ZoneId.Value == saleCode.ZoneId) && changes.DeletedCodes.Any(x => x.Code == saleCode.Code));
+            return (changes.NewCodes.Any(x => x.Code == saleCode.Code && x.ZoneId.HasValue && x.ZoneId.Value == saleCode.ZoneId) || changes.DeletedCodes.Any(x => x.Code == saleCode.Code));
         }
 
 
