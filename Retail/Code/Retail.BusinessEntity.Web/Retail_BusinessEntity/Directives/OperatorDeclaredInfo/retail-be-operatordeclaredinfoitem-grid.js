@@ -1,12 +1,12 @@
 ﻿"use strict";
 
 app.directive("retailBeOperatordeclaredinfoitemGrid", [
-    'Retail_BE_AccountTypeService',
+    'Retail_BE_OperatorDeclaredInfoService',
     'Retail_BE_ServiceTypeAPIService',
     'Retail_Be_TrafficDirectionEnum',
     'UtilsService',
     'VRNotificationService',
-function (Retail_BE_AccountTypeService, Retail_BE_ServiceTypeAPIService, Retail_Be_TrafficDirectionEnum, UtilsService, VRNotificationService) {
+function (Retail_BE_OperatorDeclaredInfoService, Retail_BE_ServiceTypeAPIService, Retail_Be_TrafficDirectionEnum, UtilsService, VRNotificationService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -34,14 +34,12 @@ function (Retail_BE_AccountTypeService, Retail_BE_ServiceTypeAPIService, Retail_
     };
 
     function getDirectiveTemplateUrl() {
-        templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/OperatorDeclaredInfo/OperatorDeclaredInfoItemGridTemplate.html'
+      return'/Client/Modules/Retail_BusinessEntity/Directives/OperatorDeclaredInfo/Templates/OperatorDeclaredInfoItemGridTemplate.html'
     }
 
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
 
-        $scope.beList = [];
-        var treeAPI;
         function initializeController() {
             defineAPI();
         }
@@ -54,49 +52,45 @@ function (Retail_BE_AccountTypeService, Retail_BE_ServiceTypeAPIService, Retail_
                 var onOperatorDeclaredInfoItemAdded = function (obj) {
                     ctrl.items.push(obj);
                 }
-                Retail_BE_AccountTypeService.addOperatorDeclaredInfoItem(onOperatorDeclaredInfoItemAdded);
+                Retail_BE_OperatorDeclaredInfoService.addOperatorDeclaredInfoItem(onOperatorDeclaredInfoItemAdded);
             }
             ctrl.removeitem = function (obj) {
                 ctrl.items.splice(ctrl.items.indexOf(obj), 1);
             }
 
-            ctrl.requiredPermissionGridMenuActions = [{
+            ctrl.menuActions = [{
                 name: 'Edit',
-                clicked: editRequiredPermission
+                clicked: editItem
             }];
-            function editRequiredPermission(obj) {
+            function editItem(obj) {
                 var onOperatorDeclaredInfoItemUpdated = function (updatedObj) {
                     ctrl.items[ctrl.items.indexOf(obj)] = updatedObj;
                 }
-                Retail_BE_AccountTypeService.editOperatorDeclaredInfoItem(obj, onOperatorDeclaredInfoItemUpdated);
+                Retail_BE_OperatorDeclaredInfoService.editOperatorDeclaredInfoItem(obj, onOperatorDeclaredInfoItemUpdated);
             }
 
             api.getData = function () {              
-                return {
-                    Items: ctrl.items
-                }
+                return ctrl.items;
             };
 
 
             api.load = function (payload) {
-                    if (payload.Items.length > 0) {
-                        return Retail_BE_ServiceTypeAPIService.GetServiceTypesInfo(UtilsService.serializetoJson({})).then(function (response) {
-                            for (var i = 0; i < payload.Items; i++) {
-                                var obj = payload.Items[i];
+                if (payload!=undefined && payload.items.length > 0) {
+                    return Retail_BE_ServiceTypeAPIService.GetServiceTypesInfo(UtilsService.serializetoJson({})).then(function (response) {
+                            console.log(response)
+                            for (var i = 0; i < payload.items.length; i++) {
+                                var obj = payload.items[i];
                                 obj.ServiceTypeName = UtilsService.getItemByVal(response, obj.ServiceTypeId, "ServiceTypeId").Title;
-                                obj.ServiceTypeName = Retail_Be_TrafficDirectionEnum[obj.TrafficDirection].description;
-
+                                obj.TrafficDirectionValue = UtilsService.getItemByVal(UtilsService.getArrayEnum(Retail_Be_TrafficDirectionEnum), obj.TrafficDirection, "value").description;
                                 ctrl.items.push(obj);
                             }
                         });
-                    }
+                  }
              }
            
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
-
-
 
     }
 

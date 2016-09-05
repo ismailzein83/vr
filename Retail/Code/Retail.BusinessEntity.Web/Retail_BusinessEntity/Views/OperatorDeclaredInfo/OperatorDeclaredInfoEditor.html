@@ -4,16 +4,22 @@
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row>
-                        <vr-columns width="1/2row">
-                            <vr-textbox label="Name" value="scopeModel.name" isrequired></vr-textbox>
+                        <vr-columns width="1/3row">
+                            <vr-datetimepicker label="From Date" isrequired value="scopeModel.fromDate" type="date"></vr-datetimepicker>
                         </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-textbox label="Title" value="scopeModel.title" isrequired></vr-textbox>
+                        <vr-columns width="1/3row">
+                            <vr-datetimepicker label="To Date" isrequired value="scopeModel.toDate" type="date"></vr-datetimepicker>
                         </vr-columns>
-                    </vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-fileupload label="Attachment " value="scopeModel.file"></vr-fileupload>
+                        </vr-columns>
+                        <vr-columns width="fullrow">
+                            <vr-textarea label="Notes" value="scopeModel.notes"></vr-textarea>
+                        </vr-columns>
+                    </vr-row>                   
                 </vr-tab>
                 <vr-tab header="'Settings'">
-                   
+                    <retail-be-operatordeclaredinfoitem-grid on-ready="scopeModel.onOperatorItemsReady"> </retail-be-operatordeclaredinfoitem-grid>
                 </vr-tab>
             </vr-tabs>
         </vr-form>

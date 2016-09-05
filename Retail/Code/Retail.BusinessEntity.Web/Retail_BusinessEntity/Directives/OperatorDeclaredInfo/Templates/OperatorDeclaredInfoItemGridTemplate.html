@@ -1,6 +1,6 @@
 ﻿<vr-row>
     <vr-columns width="normal">
-        <vr-button type="Add" data-onclick="ctrl.add" standalone></vr-button>
+        <vr-button type="Add" data-onclick="ctrl.addItem" standalone></vr-button>
     </vr-columns>
     <vr-columns width="fullrow">
         <vr-datagrid datasource="ctrl.items" menuactions="ctrl.menuActions" ondeleterow="ctrl.removeitem" norowhighlightonclick="true" hidegridmenu>
@@ -10,6 +10,5 @@
             <vr-datagridcolumn headertext="'Amount'" field="'Amount'"></vr-datagridcolumn>
         </vr-datagrid>
     </vr-columns>
-
 </vr-row>
 

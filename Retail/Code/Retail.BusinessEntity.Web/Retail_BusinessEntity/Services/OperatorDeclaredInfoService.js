@@ -43,6 +43,7 @@
         };
 
         function editOperatorDeclaredInfoItem(operatorDeclaredInfoItem, onOperatorDeclaredInfoItemUpdated) {
+
             var parameters = {
                 operatorDeclaredInfoItem: operatorDeclaredInfoItem
             };
@@ -53,7 +54,7 @@
                 modalScope.onOperatorDeclaredInfoItemUpdated = onOperatorDeclaredInfoItemUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/OperatorDeclaredInfo/OperatorDeclaredInfoItemEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/OperatorDeclaredInfo/OperatorDeclaredInfoItemEditor.html', parameters, settings);
         };
         return {
             addOperatorDeclaredInfo: addOperatorDeclaredInfo,

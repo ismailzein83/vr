@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccounttypeGrid', ['Retail_BE_AccountTypeAPIService', 'Retail_BE_AccountTypeService', 'VRNotificationService', function (Retail_BE_AccountTypeAPIService, Retail_BE_AccountTypeService, VRNotificationService) {
+app.directive('retailBeOperatordeclaredinfoGrid', ['Retail_BE_OperatorDeclaredInfoAPIService', 'Retail_BE_OperatorDeclaredInfoService', 'VRNotificationService', function (Retail_BE_OperatorDeclaredInfoAPIService, Retail_BE_OperatorDeclaredInfoService, VRNotificationService) {
     return {
         restrict: 'E',
         scope: {
@@ -8,22 +8,22 @@ app.directive('retailBeAccounttypeGrid', ['Retail_BE_AccountTypeAPIService', 'Re
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var accountTypeGrid = new AccountTypeGrid($scope, ctrl, $attrs);
-            accountTypeGrid.initializeController();
+            var operatorDeclaredInfoGrid = new OperatorDeclaredInfoGrid($scope, ctrl, $attrs);
+            operatorDeclaredInfoGrid.initializeController();
         },
         controllerAs: 'ctrl',
         bindToController: true,
-        templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/OperatorDeclaredInfo/OperatorDeclaredInfoGridTemplate.html'
+        templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/OperatorDeclaredInfo/Templates/OperatorDeclaredInfoGridTemplate.html'
     };
 
-    function AccountTypeGrid($scope, ctrl, $attrs) {
+    function OperatorDeclaredInfoGrid($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
 
         var gridAPI;
 
         function initializeController() {
             $scope.scopeModel = {};
-            $scope.scopeModel.accountTypes = [];
+            $scope.scopeModel.operatorDeclaredInfos = [];
             $scope.scopeModel.menuActions = [];
 
             $scope.scopeModel.onGridReady = function (api) {
@@ -32,7 +32,7 @@ app.directive('retailBeAccounttypeGrid', ['Retail_BE_AccountTypeAPIService', 'Re
             };
 
             $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return Retail_BE_AccountTypeAPIService.GetFilteredAccountTypes(dataRetrievalInput).then(function (response) {
+                return Retail_BE_OperatorDeclaredInfoAPIService.GetFilteredOperatorDeclaredInfos(dataRetrievalInput).then(function (response) {
                     onResponseReady(response);
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -48,8 +48,8 @@ app.directive('retailBeAccounttypeGrid', ['Retail_BE_AccountTypeAPIService', 'Re
                 return gridAPI.retrieveData(query);
             };
 
-            api.onAccountTypeAdded = function (addedAccountType) {
-                gridAPI.itemAdded(addedAccountType);
+            api.onOperatorDeclaredInfoAdded = function (addedOperatorDeclaredInfo) {
+                gridAPI.itemAdded(addedOperatorDeclaredInfo);
             };
 
             if (ctrl.onReady != null)
@@ -59,18 +59,18 @@ app.directive('retailBeAccounttypeGrid', ['Retail_BE_AccountTypeAPIService', 'Re
         function defineMenuActions() {
             $scope.scopeModel.menuActions.push({
                 name: 'Edit',
-                clicked: editAccountType,
-                haspermission: hasEditAccountTypePermission
+                clicked: editOperatorDeclaredInfo//,
+               /// haspermission: hasEditOperatorDeclaredInfoPermission
             });
         }
-        function editAccountType(accountType) {
-            var onAccountTypeUpdated = function (updatedAccountType) {
-                gridAPI.itemUpdated(updatedAccountType);
+        function editOperatorDeclaredInfo(OperatorDeclaredInfo) {
+            var onOperatorDeclaredInfoUpdated = function (updatedOperatorDeclaredInfo) {
+                gridAPI.itemUpdated(updatedOperatorDeclaredInfo);
             };
-            Retail_BE_AccountTypeService.editAccountType(accountType.Entity.AccountTypeId, onAccountTypeUpdated);
+            Retail_BE_OperatorDeclaredInfoService.editOperatorDeclaredInfo(OperatorDeclaredInfo.Entity.OperatorDeclaredInfoId, onOperatorDeclaredInfoUpdated);
         }
-        function hasEditAccountTypePermission() {
-            return Retail_BE_AccountTypeAPIService.HasUpdateAccountTypePermission();
-        }
+        //function hasEditOperatorDeclaredInfoPermission() {
+        //    return Retail_BE_OperatorDeclaredInfoAPIService.HasUpdateOperatorDeclaredInfoPermission();
+        //}
     }
 }]);

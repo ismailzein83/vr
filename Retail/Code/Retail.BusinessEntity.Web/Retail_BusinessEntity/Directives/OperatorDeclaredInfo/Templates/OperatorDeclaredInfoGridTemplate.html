@@ -1,10 +1,10 @@
-﻿<vr-datagrid datasource="scopeModel.accountTypes"
+﻿<vr-datagrid datasource="scopeModel.operatorDeclaredInfos"
              dataretrievalfunction="scopeModel.dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              on-ready="scopeModel.onGridReady"
              menuactions="scopeModel.menuActions"
-             idfield="Entity.AccountTypeId">
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.AccountTypeId'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Title'" field="'Entity.Title'"></vr-datagridcolumn>
+             idfield="Entity.OperatorDeclaredInfoId">
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.OperatorDeclaredInfoId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'From Date'" field="'Entity.Settings.FromDate'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'To Date'" field="'Entity.Settings.ToDate'" type="'Date'"></vr-datagridcolumn>
 </vr-datagrid>

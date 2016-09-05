@@ -30,7 +30,7 @@ namespace Retail.BusinessEntity.Data.SQL
         {
             object OperatorDeclaredInfoId;
             string serializedSettings = OperatorDeclaredInfo.Settings != null ? Vanrise.Common.Serializer.Serialize(OperatorDeclaredInfo.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Retail_BE.sp_OperatorDeclaredInfo_Insert", out OperatorDeclaredInfoId,  serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_OperatorDeclaredInfo_Insert", out OperatorDeclaredInfoId,  serializedSettings);
             insertedId = (affectedRecords > 0) ? (int)OperatorDeclaredInfoId : -1;
             return (affectedRecords > 0);
         }
@@ -38,7 +38,7 @@ namespace Retail.BusinessEntity.Data.SQL
         public bool Update(OperatorDeclaredInfo OperatorDeclaredInfo)
         {
             string serializedSettings = OperatorDeclaredInfo.Settings != null ? Vanrise.Common.Serializer.Serialize(OperatorDeclaredInfo.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Retail_BE.sp_OperatorDeclaredInfo_Update", OperatorDeclaredInfo.OperatorDeclaredInfoId, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_OperatorDeclaredInfo_Update", OperatorDeclaredInfo.OperatorDeclaredInfoId, serializedSettings);
             return (affectedRecords > 0);
         }
 

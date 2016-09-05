@@ -2,9 +2,9 @@
 
     'use strict';
 
-    OperatorDeclaredInfoItemEditorController.$inject = ['$scope', 'Retail_BE_OperatorDeclaredInfoAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'Retail_BE_AccountPartAvailabilityOptionsEnum', 'Retail_BE_AccountPartRequiredOptionsEnum','Retail_BE_EntityTypeEnum'];
+    OperatorDeclaredInfoItemEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'Retail_Be_TrafficDirectionEnum'];
 
-    function OperatorDeclaredInfoItemEditorController($scope, Retail_BE_OperatorDeclaredInfoAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountPartAvailabilityOptionsEnum, Retail_BE_AccountPartRequiredOptionsEnum, Retail_BE_EntityTypeEnum) {
+    function OperatorDeclaredInfoItemEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_Be_TrafficDirectionEnum) {
         var isEditMode;
 
         var operatorDeclaredInfoItemEntity;
@@ -23,14 +23,14 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
-                operatorDeclaredInfoItemEntity = parameters.operatorDeclaredInfoItemEntity;
+                operatorDeclaredInfoItemEntity = parameters.operatorDeclaredInfoItem;
             }
             isEditMode = (operatorDeclaredInfoItemEntity != undefined);
         }
         function defineScope() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.onServiceTypeSelectorReady = function (api) {
+            $scope.scopeModel.onServiceTypeDirectiveReady = function (api) {
                 serviceTypeSelectorAPI = api;
                 serviceTypeSelectorReadyDeferred.resolve();
             }
@@ -79,16 +79,16 @@
 
         }
         function loadServiceTypeSelector() {
-                var serviceTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                serviceTypeSelectorReadyDeferred.promise.then(function () {
-                    var serviceTypeSelectorPayload
-                    if (operatorDeclaredInfoItemEntity != undefined)
-                        serviceTypeSelectorPayload = {
-                            selectedIds: operatorDeclaredInfoItemEntity.ServiceTypeId 
-                        };
-                    VRUIUtilsService.callDirectiveLoad(serviceTypeSelectorAPI, serviceTypeSelectorPayload, serviceTypeSelectorLoadDeferred);
-                });
-                return serviceTypeSelectorLoadDeferred.promise;
+            var serviceTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            serviceTypeSelectorReadyDeferred.promise.then(function () {
+                var serviceTypeSelectorPayload;
+                if (operatorDeclaredInfoItemEntity != undefined)
+                    serviceTypeSelectorPayload = {
+                        selectedIds: operatorDeclaredInfoItemEntity.ServiceTypeId 
+                    };
+                VRUIUtilsService.callDirectiveLoad(serviceTypeSelectorAPI, serviceTypeSelectorPayload, serviceTypeSelectorLoadDeferred);
+            });
+            return serviceTypeSelectorLoadDeferred.promise;
         }
         function loadTrafficDirectionSelector() {
             var trafficDirectionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -106,25 +106,28 @@
        
        function insertOperatorDeclaredInfoItem() {
             $scope.scopeModel.isLoading = true;
-            var OperatorDeclaredInfoObj = buildOperatorDeclaredInfoItemObjFromScope();
-            if ($scope.onOperatorDeclaredInfoAdded != undefined)
-                $scope.onOperatorDeclaredInfoAdded(response.InsertedObject);
+            var operatorDeclaredInfoObj = buildOperatorDeclaredInfoItemObjFromScope();
+            if ($scope.onOperatorDeclaredInfoItemAdded != undefined)
+                $scope.onOperatorDeclaredInfoItemAdded(operatorDeclaredInfoObj);
            $scope.modalContext.closeModal();            
           $scope.scopeModel.isLoading = false;
         }
         function updateOperatorDeclaredInfoItem() {
             $scope.scopeModel.isLoading = true;
-            var OperatorDeclaredInfoObj = buildOperatorDeclaredInfoItemObjFromScope();
-            if ($scope.onOperatorDeclaredInfoUpdated != undefined) {
-                $scope.onOperatorDeclaredInfoUpdated(OperatorDeclaredInfoObj);
+            var operatorDeclaredInfoObj = buildOperatorDeclaredInfoItemObjFromScope();
+            if ($scope.onOperatorDeclaredInfoItemUpdated != undefined) {
+                $scope.onOperatorDeclaredInfoItemUpdated(operatorDeclaredInfoObj);
             }
             $scope.scopeModel.isLoading = false;
             $scope.modalContext.closeModal();
 
         }
-        function buildOperatorDeclaredInfoItemObjFromScope() {     
+        function buildOperatorDeclaredInfoItemObjFromScope() {
             var obj = {
-                ServiceTypeId :serviceTypeSelectorAPI.getSelectedIds(),
+                $type: "Retail.BusinessEntity.Entities.OperatorDeclaredInfoItem, Retail.BusinessEntity.Entities",
+                ServiceTypeId: serviceTypeSelectorAPI.getSelectedIds(),
+                ServiceTypeName: $scope.scopeModel.serviceType.Title,
+                TrafficDirectionValue: $scope.scopeModel.trafficDirection.description,
                 TrafficDirection :trafficDirectionSelectorAPI.getSelectedIds(),
                 Volume: $scope.scopeModel.volume,
                 Amount: $scope.scopeModel.amount
