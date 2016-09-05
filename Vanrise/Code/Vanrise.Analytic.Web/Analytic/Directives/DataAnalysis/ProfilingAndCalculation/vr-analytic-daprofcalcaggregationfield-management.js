@@ -51,7 +51,7 @@
                 ctrl.onDeleteDAProfCalcAggregationField = function (daProfCalcAggregationField) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
                         if (confirmed) {
-                            var index = UtilsService.getItemIndexByVal(ctrl.daProfCalcAggregationFields, daProfCalcAggregationField.Name, 'Name');
+                            var index = UtilsService.getItemIndexByVal(ctrl.daProfCalcAggregationFields, daProfCalcAggregationField.FieldName, 'FieldName');
                             ctrl.daProfCalcAggregationFields.splice(index, 1);
                         }
                     });
@@ -64,33 +64,16 @@
 
                 api.load = function (payload) {
 
-                    console.log(payload);
-
-                    ctrl.daProfCalcAggregationFields = [];
-
-                    var aggregationFields;
-
                     if (payload != undefined) {
                         context = payload.context;
                     }
 
                     if (payload != undefined && payload.aggregationFields) {
-                        aggregationFields = payload.aggregationFields;
                         ctrl.daProfCalcAggregationFields = payload.aggregationFields;
                     }
                 };
 
                 api.getData = function () {
-
-                    //if (ctrl.daProfCalcAggregationFields.length > 0) {
-                    //    var properties = {};
-                    //    for (var i = 0; i < ctrl.daProfCalcAggregationFields.length; i++) {
-                    //        var daProfCalcAggregationField = ctrl.daProfCalcAggregationFields[i];
-                    //        properties[daProfCalcAggregationField.Name] = daProfCalcAggregationField;
-                    //    }
-                    //}
-
-                    console.log(ctrl.daProfCalcAggregationFields);
 
                     return ctrl.daProfCalcAggregationFields;
                 };

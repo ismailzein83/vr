@@ -107,6 +107,7 @@
                     var index = UtilsService.getItemIndexByVal(ctrl.objectTypePropertyDefinitions, objectTypePropertyDefinition.Name, 'Name');
                     ctrl.objectTypePropertyDefinitions[index] = updatedObjectTypePropertyDefinition;
                 };
+
                 VRCommon_VRObjectTypePropertyDefinitionService.editObjectTypePropertyDefinition(objectTypePropertyDefinition.Name, ctrl.objectTypePropertyDefinitions, context, onObjectTypePropertyDefinitionUpdated);
             }
         }

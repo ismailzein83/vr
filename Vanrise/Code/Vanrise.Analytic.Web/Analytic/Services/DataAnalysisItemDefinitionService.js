@@ -12,7 +12,7 @@
 
             var parameters = {
                 dataAnalysisDefinitionId: dataAnalysisDefinitionId,
-                itemDefinitionTypeId: itemDefinitionTypeId
+                itemDefinitionTypeId: itemDefinitionTypeId,
             };
 
             settings.onScopeReady = function (modalScope) {
@@ -27,7 +27,7 @@
             var parameters = {
                 dataAnalysisItemDefinitionId: dataAnalysisItemDefinitionId,
                 dataAnalysisDefinitionId: dataAnalysisDefinitionId,
-                itemDefinitionTypeId: itemDefinitionTypeId
+                itemDefinitionTypeId: itemDefinitionTypeId,
             };
 
             settings.onScopeReady = function (modalScope) {

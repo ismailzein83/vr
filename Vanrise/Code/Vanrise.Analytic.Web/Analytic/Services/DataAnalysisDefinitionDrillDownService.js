@@ -67,7 +67,9 @@
                         dataAnalysisDefinition.dataAnalysisItemDefinitionGridAPI.onItemAdded(addedDataAnalysisItemDefinition);
                     };
 
-                    VR_Analytic_DataAnalysisItemDefinitionService.addDataAnalysisItemDefinition(dataAnalysisDefinition.Entity.DataAnalysisDefinitionId, itemDefinitionTypeId, onDataAnalysisItemDefinitionAdded);
+                    VR_Analytic_DataAnalysisItemDefinitionService.addDataAnalysisItemDefinition(dataAnalysisDefinition.Entity.DataAnalysisDefinitionId,
+                                                                                                itemDefinitionTypeId,
+                                                                                                onDataAnalysisItemDefinitionAdded);
                 };
 
                 menuActions.push(menuAction);

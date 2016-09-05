@@ -9,6 +9,8 @@ namespace Vanrise.Analytic.Entities
 {
     public abstract class DARecordAggregate
     {
+        public int ConfigId { get; set; }
+
         public virtual DataRecordFieldType FieldType { get; set; }
 
         public abstract DARecordAggregateState CreateState(IDARecordAggregateCreateStateContext context);

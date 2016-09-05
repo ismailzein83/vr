@@ -7,7 +7,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
-    public class DARecordAggregateConfigs : ExtensionConfiguration
+    public class DARecordAggregateConfig : ExtensionConfiguration
     {
         public const string EXTENSION_TYPE = "Analytic_DARecordAggregate";
 

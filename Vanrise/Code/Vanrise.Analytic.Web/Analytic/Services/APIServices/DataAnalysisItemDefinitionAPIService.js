@@ -44,7 +44,7 @@
             GetDataAnalysisItemDefinition: GetDataAnalysisItemDefinition,
             AddDataAnalysisItemDefinition: AddDataAnalysisItemDefinition,
             UpdateDataAnalysisItemDefinition: UpdateDataAnalysisItemDefinition,
-            //GetDataAnalysisItemDefinitionSettingsExtensionConfigs: GetDataAnalysisItemDefinitionSettingsExtensionConfigs,
+            GetDARecordAggregateExtensionConfigs: GetDARecordAggregateExtensionConfigs,
             //GetDataAnalysisItemDefinitionsInfo: GetDataAnalysisItemDefinitionsInfo
         });
     }

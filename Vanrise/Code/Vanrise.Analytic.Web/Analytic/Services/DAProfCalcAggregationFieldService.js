@@ -14,8 +14,6 @@
                 context: context
             };
 
-            console.log(parameters);
-
             settings.onScopeReady = function (modalScope) {
                 modalScope.onDAProfCalcAggregationFieldAdded = onDAProfCalcAggregationFieldAdded
             };

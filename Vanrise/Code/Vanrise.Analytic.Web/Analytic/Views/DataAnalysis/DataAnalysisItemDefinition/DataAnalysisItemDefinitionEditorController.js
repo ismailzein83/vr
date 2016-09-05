@@ -11,6 +11,7 @@
         var dataAnalysisItemDefinitionId;
         var dataAnalysisItemDefinitionEntity;
         var dataAnalysisDefinitionId;
+        var dataAnalysisDefinitionEntity;
         var itemDefinitionTypeId;
 
         var dataRecordTypeId;
@@ -47,21 +48,21 @@
                 dataRecordTypeSelectorReadyDeferred.resolve();
             }
             $scope.scopeModel.onDataRecordTypeSelectionChanged = function () {
-                var selectedId = dataRecordTypeSelectorAPI.getSelectedIds();
-                if (selectedId != undefined) {
+                //var selectedId = dataRecordTypeSelectorAPI.getSelectedIds();
+                //if (selectedId != undefined) {
 
-                    dataRecordTypeId = selectedId;
+                //    dataRecordTypeId = selectedId;
 
-                    var settingsDirectivePayload = {};
-                    settingsDirectivePayload.dataAnalysisDefinitionId = dataAnalysisDefinitionId;
-                    settingsDirectivePayload.itemDefinitionTypeId = itemDefinitionTypeId;
-                    settingsDirectivePayload.context = buildContext();
+                //    var settingsDirectivePayload = {};
+                //    settingsDirectivePayload.dataAnalysisDefinitionId = dataAnalysisDefinitionId;
+                //    settingsDirectivePayload.itemDefinitionTypeId = itemDefinitionTypeId;
+                //    settingsDirectivePayload.context = buildContext();
 
-                    var setLoader = function (value) {
-                        $scope.scopeModel.isSelectorLoading = value;
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, settingsDirectiveAPI, settingsDirectivePayload, setLoader, dataRecordTypeSelectionChangedDeferred);
-                }
+                //    var setLoader = function (value) {
+                //        $scope.scopeModel.isSelectorLoading = value;
+                //    };
+                //    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, settingsDirectiveAPI, settingsDirectivePayload, setLoader, dataRecordTypeSelectionChangedDeferred);
+                //}
             };
 
             $scope.scopeModel.onSettingsDirectiveReady = function (api) {
@@ -85,7 +86,9 @@
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
-                getDataAnalysisItemDefinition().then(function () {
+                var promises = [getDataAnalysisItemDefinition(), getDataAnalysisDefinition()];
+
+                UtilsService.waitMultiplePromises(promises).then(function () {
                     loadAllControls();
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -93,13 +96,24 @@
                 });
             }
             else {
-                loadAllControls();
+                getDataAnalysisDefinition().then(function () {
+                    loadAllControls();
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.scopeModel.isLoading = false;
+                });
             }
         }
 
         function getDataAnalysisItemDefinition() {
             return VR_Analytic_DataAnalysisItemDefinitionAPIService.GetDataAnalysisItemDefinition(dataAnalysisItemDefinitionId).then(function (response) {
                 dataAnalysisItemDefinitionEntity = response;
+            });
+        }
+        function getDataAnalysisDefinition() {
+            return VR_Analytic_DataAnalysisDefinitionAPIService.GetDataAnalysisDefinition(dataAnalysisDefinitionId).then(function (response) {
+                dataAnalysisDefinitionEntity = response;
+                dataRecordTypeId = dataAnalysisDefinitionEntity.Settings.DataRecordTypeId;
             });
         }
         function getDataRecordType() {
@@ -147,17 +161,9 @@
                 return dataRecordTypeSelectorLoadDeferred.promise;
             }
             function loadSettingsDirective() {
-                if (!isEditMode) return;
-
                 var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 settingsDirectiveReadyDeferred.promise.then(function () {
-
-                    if (dataRecordTypeSelectionChangedDeferred == undefined)
-                    dataRecordTypeSelectionChangedDeferred = UtilsService.createPromiseDeferred();
-
-                    dataRecordTypeSelectionChangedDeferred.promise.then(function () {
-                        dataRecordTypeSelectionChangedDeferred = undefined;
 
                         var settingsDirectivePayload = {};
                         settingsDirectivePayload.dataAnalysisItemDefinition = dataAnalysisItemDefinitionEntity;
@@ -166,7 +172,6 @@
                         settingsDirectivePayload.context = buildContext();
 
                         VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
-                    });
                 });
 
                 return settingsDirectiveLoadDeferred.promise;
@@ -210,8 +215,6 @@
                     var fields = []
 
                     if (dataRecordTypeId) {
-
-                        console.log(dataRecordTypeId);
                         getDataRecordType().then(function () {
                             for (var i = 0 ; i < dataRecordTypeEntity.Fields.length; i++) {
                                 var field = dataRecordTypeEntity.Fields[i];
@@ -241,17 +244,11 @@
                 dataAnalysisItemDefinitionSettings.RecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds()
             }
 
-
             return {
                 DataAnalysisItemDefinitionId: dataAnalysisItemDefinitionEntity != undefined ? dataAnalysisItemDefinitionEntity.DataAnalysisItemDefinitionId : undefined,
                 DataAnalysisDefinitionId: dataAnalysisItemDefinitionEntity != undefined ? dataAnalysisItemDefinitionEntity.DataAnalysisDefinitionId : dataAnalysisDefinitionId,
                 Name: $scope.scopeModel.name,
                 Settings: dataAnalysisItemDefinitionSettings
-                //Settings: {
-                //    $type: "Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputDefinitions.RecordProfilingOutputSettings, Vanrise.Analytic.Entities",
-                //    Title: $scope.scopeModel.title,
-                //    RecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds()
-                //}
             };
         }
     }

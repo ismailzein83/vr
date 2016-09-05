@@ -133,6 +133,9 @@
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-dimension-editor.js" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-join-editor.js" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-measure-editor.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Templates\DAProfCalcCalculationFieldManagementTemplate.html" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\vr-analytic-daprofcalccalculationfield-management.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\Templates\DARecordAggregateSelectiveTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\Templates\DataAnalysisDefinitionGridTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\Templates\DataAnalysisDefinitionSettingsTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\vr-analytic-dataanalysisdefinition-grid.js" />
@@ -147,6 +150,7 @@
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\MainExtensions\vr-analytic-daprofcalcsettings-selector.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Templates\DAProfCalcAggregationFieldManagementTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\vr-analytic-daprofcalcaggregationfield-management.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\vr-analytic-darecordaggregate-selective.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticDimensionGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticJoinGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticAggregateGridTemplate.html" />
@@ -198,8 +202,12 @@
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\StyleRuleConditions\Templates\RangeConditionTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\StyleRuleConditions\vr-analytic-measurestyle-stylerulecondition-compare.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\StyleRuleConditions\vr-analytic-measurestyle-stylerulecondition-range.js" />
-    <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\CountAggregate\Templates\CountAggregateTemplate.html" />
-    <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\CountAggregate\vr-analytic-countaggregate.js" />
+    <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\Templates\CountAggregateTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\Templates\DistinctCountAggregateTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\Templates\SumAggregateTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\vr-analytic-distinctcountaggregate.js" />
+    <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\vr-analytic-countaggregate.js" />
+    <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\vr-analytic-sumaggregate.js" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\History\Templates\HistoryAnalyticReportRuntimeTemplates.html" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\History\vr-analytic-analyticreport-history-runtime.js" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RealTime\Chart\Templates\AnalyticRealTimeTimeVariationChart.html" />
@@ -227,6 +235,7 @@
     <Content Include="Analytic\Services\APIServices\DataAnalysisDefinitionAPIService.js" />
     <Content Include="Analytic\Services\APIServices\DataAnalysisItemDefinitionAPIService.js" />
     <Content Include="Analytic\Services\DAProfCalcAggregationFieldService.js" />
+    <Content Include="Analytic\Services\DAProfCalcCalculationFieldService.js" />
     <Content Include="Analytic\Services\DataAnalysisDefinitionDrillDownService.js" />
     <Content Include="Analytic\Services\DataAnalysisDefinitionService.js" />
     <Content Include="Analytic\Services\DataAnalysisItemDefinitionService.js" />
@@ -246,6 +255,8 @@
     <Content Include="Analytic\Views\DataAnalysis\DataAnalysisItemDefinition\DataAnalysisItemDefinitionEditor.html" />
     <Content Include="Analytic\Views\DataAnalysis\ProfilingAndCalculation\DAProfCalcAggregationFieldEditor.html" />
     <Content Include="Analytic\Views\DataAnalysis\ProfilingAndCalculation\DAProfCalcAggregationFieldEditorController.js" />
+    <Content Include="Analytic\Views\DataAnalysis\ProfilingAndCalculation\DAProfCalcCalculationFieldEditor.html" />
+    <Content Include="Analytic\Views\DataAnalysis\ProfilingAndCalculation\DAProfCalcCalculationFieldEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticGridWidgetSettings.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticGridWidgetSettingsController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticItemActionEditor.html" />

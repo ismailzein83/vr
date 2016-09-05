@@ -105,7 +105,7 @@
     <Compile Include="Config\Measure\AnalyticMeasureConfigQuery.cs" />
     <Compile Include="DataAnalysis\DARecordAggregate.cs" />
     <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinition.cs" />
-    <Compile Include="DataAnalysis\DataAnalysisItemDefinition\DARecordAggregateConfigs.cs" />
+    <Compile Include="DataAnalysis\DARecordAggregateConfig.cs" />
     <Compile Include="DataAnalysis\DataAnalysisItemDefinition\DataAnalysisItemDefinition.cs" />
     <Compile Include="DataAnalysis\DataAnalysisItemDefinition\DataAnalysisItemDefinitionDetail.cs" />
     <Compile Include="DataAnalysis\DataAnalysisItemDefinition\DataAnalysisItemDefinitionQuery.cs" />

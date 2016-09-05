@@ -43,12 +43,12 @@ namespace Vanrise.Analytic.Web.Controllers
             return _manager.UpdateDataAnalysisItemDefinition(dataAnalysisItemDefinitionItem);
         }
 
-        //[HttpGet]
-        //[Route("GetDataAnalysisItemDefinitionSettingsExtensionConfigs")]
-        //public IEnumerable<DataAnalysisItemDefinitionConfig> GetDataAnalysisItemDefinitionSettingsExtensionConfigs()
-        //{
-        //    return _manager.GetDataAnalysisItemDefinitionSettingsExtensionConfigs();
-        //}
+        [HttpGet]
+        [Route("GetDARecordAggregateExtensionConfigs")]
+        public IEnumerable<DARecordAggregateConfig> GetDARecordAggregateExtensionConfigs()
+        {
+            return _manager.GetDARecordAggregateExtensionConfigs();
+        }
 
         //[HttpGet]
         //[Route("GetDataAnalysisItemDefinitionsInfo")]

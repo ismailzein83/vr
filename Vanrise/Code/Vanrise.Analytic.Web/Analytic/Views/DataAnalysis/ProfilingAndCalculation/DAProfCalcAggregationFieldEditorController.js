@@ -25,12 +25,11 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
-            console.log(parameters);
-
             if (parameters != undefined) {
                 aggregationFieldEntity = parameters.daProfCalcAggregationField;
                 context = parameters.context;
             }
+
             isEditMode = (aggregationFieldEntity != undefined);
         }
         function defineScope() {
@@ -73,27 +72,11 @@
             $scope.scopeModel.isLoading = true;
 
             loadAllControls();
-
-            //if (isEditMode) {
-            //    setPropertyEntityFromParameters().then(function () {
-            //        loadAllControls()
-            //    });
-            //}
-            //else {
-            //    loadAllControls();
-            //}
         }
 
-        function setPropertyEntityFromParameters() {
-            propertyEntity = UtilsService.getItemByVal(properties, propertyName, 'Name');
-
-            var deferred = UtilsService.createPromiseDeferred();
-            deferred.resolve();
-            return deferred.promise;
-        }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadRecordFilterDirective, loadRecordAggregateSelective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadRecordFilterDirective, loadRecordAggregateSelective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -101,7 +84,7 @@
 
             function setTitle() {
                 $scope.title = (isEditMode) ?
-                    UtilsService.buildTitleForUpdateEditor((propertyEntity != undefined) ? propertyEntity.Name : null, 'Profiling and Calculation Aggregation Field') :
+                    UtilsService.buildTitleForUpdateEditor((aggregationFieldEntity != undefined) ? aggregationFieldEntity.FieldName : null, 'Profiling and Calculation Aggregation Field') :
                     UtilsService.buildTitleForAddEditor('Profiling and Calculation Aggregation Field');
             }
             function loadStaticData() {
@@ -115,7 +98,7 @@
 
                 recordFilterDirectiveReadyDeferred.promise.then(function () {
                     var recordFilterDirectivePayload = {};
-                    recordFilterDirectivePayload.context = context;
+                    recordFilterDirectivePayload.context = builContext();
                     if (aggregationFieldEntity != undefined && aggregationFieldEntity.RecordFilter != undefined) {
                         recordFilterDirectivePayload.FilterGroup = aggregationFieldEntity.RecordFilter;
                     }
@@ -129,8 +112,9 @@
                 var recordAggregateSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 recordAggregateSelectiveReadyDeferred.promise.then(function () {
-                    var recordAggregateSelectivePayload;
-                    if (aggregationFieldEntity != undefined && aggregationFieldEntity.RecordAggregate != undefined) {
+                    var recordAggregateSelectivePayload = {};
+                    recordAggregateSelectivePayload.context = builContext();
+                    if (aggregationFieldEntity != undefined) {
                         recordAggregateSelectivePayload.recordAggregate = aggregationFieldEntity.RecordAggregate;
                     }
 
@@ -157,14 +141,17 @@
             }
             $scope.modalContext.closeModal();
         }
-
+        
+        function builContext(){
+            return context;
+        }
         function buildAggregationFieldObjectFromScope() {
 
             return {
                 FieldName: $scope.scopeModel.fieldName,
                 RecordFilter: recordFilterDirectiveAPI.getData().filterObj,
                 TimeRangeFilter: null,
-                RecordAggregate: null
+                RecordAggregate: recordAggregateSelectiveAPI.getData()
             };
         }
     }

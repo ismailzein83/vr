@@ -1,7 +1,7 @@
 ﻿<vr-columns colnum="{{ctrl.normalColNum}}">
     <vr-switch label="Nullable" value="ctrl.isNullable" isrequired="true"></vr-switch>
 </vr-columns>
-    <vr-columns colnum="{{ctrl.normalColNum}}">
+<vr-columns colnum="{{ctrl.normalColNum}}">
     <vr-select on-ready="ctrl.onSelectorReady"
                datasource="ctrl.numberDataTypes"
                selectedvalues="ctrl.selectedNumberDataType"
@@ -13,7 +13,7 @@
                hideremoveicon>
     </vr-select>
 </vr-columns>
-    <vr-columns colnum="{{ctrl.normalColNum}}" ng-if="ctrl.selectedNumberDataType.showPrecision">
+<vr-columns colnum="{{ctrl.normalColNum}}" ng-if="ctrl.selectedNumberDataType.showPrecision">
     <vr-select on-ready="ctrl.onPrecisionSelectorReady"
                datasource="ctrl.numberDataPrecision"
                selectedvalues="ctrl.selectedNumberDataPrecision"
