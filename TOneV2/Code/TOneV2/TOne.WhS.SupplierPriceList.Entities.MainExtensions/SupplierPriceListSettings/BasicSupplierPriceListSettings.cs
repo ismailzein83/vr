@@ -84,23 +84,23 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                     string codeGroup = null;
                     if (obj.Fields.TryGetValue("CodeGroup", out codeGroupField))
                     {
-                        if (codeGroupField.FieldValue != null)
+                        if (codeGroupField.FieldValue != null && !String.IsNullOrWhiteSpace(codeGroupField.FieldValue.ToString()))
                             codeGroup = codeGroupField.FieldValue.ToString();
                     };
                     if (obj.Fields.TryGetValue("EffectiveDate", out codeEffectiveDateField))
                     {
-                        if (codeEffectiveDateField.FieldValue != null)
+                        if (codeEffectiveDateField.FieldValue != null && !String.IsNullOrWhiteSpace(codeEffectiveDateField.FieldValue.ToString()))
                             result = (DateTime)codeEffectiveDateField.FieldValue;
                     };
                     if (obj.Fields.TryGetValue("Zone", out zoneField))
                     {
                         string zone = null;
-                        if (zoneField.FieldValue != null)
+                        if (zoneField.FieldValue != null && !String.IsNullOrWhiteSpace(zoneField.FieldValue.ToString()))
                             zone = zoneField.FieldValue.ToString();
 
                         if (obj.Fields.TryGetValue("Code", out codeField))
                         {
-                            if (codeField.FieldValue == null || String.IsNullOrEmpty(codeField.FieldValue.ToString()))
+                            if (codeField.FieldValue == null || String.IsNullOrWhiteSpace(codeField.FieldValue.ToString()))
                             {
                                 priceListCodes.Add(new PriceListCode
                                 {
@@ -195,7 +195,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                     DateTime? result = null;
                     if (obj.Fields.TryGetValue("EffectiveDate", out rateEffectiveDateField))
                     {
-                        if (rateEffectiveDateField.FieldValue != null)
+                        if (rateEffectiveDateField.FieldValue != null && !String.IsNullOrWhiteSpace(rateEffectiveDateField.FieldValue.ToString()))
                             result = (DateTime)rateEffectiveDateField.FieldValue;
                     };
                     if (obj.Fields.TryGetValue("Zone", out zoneField))
@@ -203,12 +203,12 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                         if (obj.Fields.TryGetValue("Rate", out rateField))
                         {
                             decimal? rate = null;
-                            if(rateField.FieldValue != null)
+                            if (rateField.FieldValue != null && !String.IsNullOrWhiteSpace(rateField.FieldValue.ToString()))
                                 rate = (decimal)rateField.FieldValue;
                             priceListRates.Add(new PriceListRate
                             {
                                 ZoneName = zoneField.FieldValue !=null? zoneField.FieldValue.ToString() : null,
-                                Rate = rateField.FieldValue != null? (decimal)rateField.FieldValue : default(decimal?),
+                                Rate = rate,
                                 EffectiveDate = result
                             });
                         }
@@ -238,7 +238,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                             DateTime? result = null;
                             if (obj.Fields.TryGetValue("EffectiveDate", out rateEffectiveDateField))
                             {
-                                if (rateEffectiveDateField.FieldValue != null)
+                                if (rateEffectiveDateField.FieldValue != null && !String.IsNullOrWhiteSpace(rateEffectiveDateField.FieldValue.ToString()))
                                     result = (DateTime)rateEffectiveDateField.FieldValue;
                             };
                             if (obj.Fields.TryGetValue("Zone", out zoneField))
@@ -246,13 +246,13 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                 if (obj.Fields.TryGetValue("Rate", out rateField))
                                 {
                                     decimal? rate = null;
-                                    if (rateField.FieldValue != null)
+                                    if (rateField.FieldValue != null && !String.IsNullOrWhiteSpace(rateField.FieldValue.ToString()))
                                         rate = (decimal)rateField.FieldValue;
 
                                    PriceListRate priceListRate = new PriceListRate
                                     {
                                         ZoneName = zoneField.FieldValue != null ? zoneField.FieldValue.ToString() : null,
-                                        Rate = rateField.FieldValue != null ? (decimal)rateField.FieldValue : default(decimal?),
+                                        Rate = rate,
                                         EffectiveDate = result
                                     };
 
@@ -296,14 +296,14 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                             DateTime? result = null;
                             if (obj.Fields.TryGetValue("EffectiveDate", out serviceEffectiveDateField))
                             {
-                                if (serviceEffectiveDateField.FieldValue != null)
+                                if (serviceEffectiveDateField.FieldValue != null && !String.IsNullOrWhiteSpace(serviceEffectiveDateField.FieldValue.ToString()))
                                     result = (DateTime)serviceEffectiveDateField.FieldValue;
                             };
                             if (obj.Fields.TryGetValue("Zone", out zoneField))
                             {
                                 PriceListZoneService priceListZoneService = new PriceListZoneService
                                 {
-                                    ZoneName = zoneField.FieldValue != null ? zoneField.FieldValue.ToString() : null,
+                                    ZoneName = zoneField.FieldValue != null && !String.IsNullOrWhiteSpace(zoneField.FieldValue.ToString()) ? zoneField.FieldValue.ToString() : null,
                                     FlaggedServiceId = list.FlaggedServiceId,
                                     EffectiveDate = result
                                 };
