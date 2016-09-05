@@ -206,6 +206,7 @@ namespace TOne.WhS.Routing.Business
             {
                 Entity = routeOption,
                 SupplierName = _carrierAccountManager.GetCarrierAccountName(routeOption.SupplierId),
+                ConvertedSupplierRate = routeOption.SupplierRate
             };
 
             if (toCurrencyId.HasValue)
@@ -227,6 +228,7 @@ namespace TOne.WhS.Routing.Business
             {
                 Entity = rpRouteOptionSupplierZone,
                 SupplierZoneName = supplierZone != null ? supplierZone.Name : null,
+                ConvertedSupplierRate = rpRouteOptionSupplierZone.SupplierRate
             };
 
             if (toCurrencyId.HasValue)
