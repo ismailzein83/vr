@@ -54,7 +54,8 @@ namespace Vanrise.Queueing
         {
             if (activeActivatorInstances == null || activeActivatorInstances.Count == 0)
                 return;
-            List<PendingQueueItemInfo> pendingQueueItems = _queueItemDataManager.GetPendingQueueItems();
+            int maxNbOfPendingItems = s_maxNumberOfItemsPerActivator * activeActivatorInstances.Count;
+            List<PendingQueueItemInfo> pendingQueueItems = _queueItemDataManager.GetPendingQueueItems(maxNbOfPendingItems);
             if(pendingQueueItems != null && pendingQueueItems.Count > 0)
             {
                 Dictionary<int, AssignedQueueItemsCount> itemsCountByQueue = new Dictionary<int, AssignedQueueItemsCount>();
@@ -88,7 +89,7 @@ namespace Vanrise.Queueing
                 List<PendingQueueItemInfo> pendingQueueItemsToUpdate = new List<PendingQueueItemInfo>();
                 List<ActivatorInstanceItemsCount> activatorsToAssign = itemsCountByActivator.Values.Where(itm => itm.ItemsCount < s_maxNumberOfItemsPerActivator).OrderBy(itm => itm.ItemsCount).ToList();
                 int activatorInstanceIndex = 0;
-                foreach(var pendingQueueItem in pendingQueueItems.Where(itm => !itm.ActivatorInstanceId.HasValue).OrderBy(itm => itm.QueueItemId))
+                foreach(var pendingQueueItem in pendingQueueItems.Where(itm => !itm.ActivatorInstanceId.HasValue).OrderBy(itm => itm.ExecutionFlowTriggerItemID).ThenBy(itm => itm.QueueItemId))
                 {
                     if (activatorsToAssign.Count == 0)
                         break;

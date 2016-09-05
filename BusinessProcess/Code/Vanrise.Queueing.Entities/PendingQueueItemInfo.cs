@@ -10,6 +10,8 @@ namespace Vanrise.Queueing.Entities
     {
         public long QueueItemId { get; set; }
 
+        public long ExecutionFlowTriggerItemID { get; set; }
+
         public int QueueId { get; set; }
 
         public Guid? ActivatorInstanceId { get; set; }

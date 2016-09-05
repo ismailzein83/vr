@@ -47,7 +47,7 @@ namespace Vanrise.Queueing.Data
 
         QueueItem DequeueItem(int _queueId, Guid activatorInstanceId);
 
-        List<PendingQueueItemInfo> GetPendingQueueItems();
+        List<PendingQueueItemInfo> GetPendingQueueItems(int maxNbOfPendingItems);
 
         void SetQueueItemsActivatorInstances(List<PendingQueueItemInfo> pendingQueueItemsToUpdate);
 

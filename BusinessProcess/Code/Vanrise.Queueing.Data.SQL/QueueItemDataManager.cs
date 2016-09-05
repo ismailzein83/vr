@@ -272,6 +272,7 @@ namespace Vanrise.Queueing.Data.SQL
             return new PendingQueueItemInfo
             {
                 QueueItemId = (long)reader["ID"],
+                ExecutionFlowTriggerItemID = (long)reader["ExecutionFlowTriggerItemID"],
                 QueueId = (int)reader["QueueID"],
                 ActivatorInstanceId = GetReaderValue<Guid?>(reader, "ActivatorID")
             };
@@ -396,9 +397,9 @@ namespace Vanrise.Queueing.Data.SQL
             ExecuteNonQueryText(string.Format(query_SetItemsSuspended, queueId, String.Join(",", itemsIds)), null);
         }
 
-        public List<PendingQueueItemInfo> GetPendingQueueItems()
+        public List<PendingQueueItemInfo> GetPendingQueueItems(int maxNbOfPendingItems)
         {
-            return GetItemsSP("[queue].[sp_QueueItem_GetInfo]", PendingQueueItemInfoMapper);
+            return GetItemsSP("[queue].[sp_QueueItem_GetInfo]", PendingQueueItemInfoMapper, maxNbOfPendingItems);
         }
 
         public void SetQueueItemsActivatorInstances(List<PendingQueueItemInfo> pendingQueueItemsToUpdate)
