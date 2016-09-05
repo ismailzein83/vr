@@ -1,0 +1,18 @@
+﻿<vr-datagrid datasource="scopeModel.revenueComparisons"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions"
+             idfield="Entity.ActionDefinitionId">
+    <vr-datagridcolumn headertext="'Service Type'" field="'ServiceTypeDescription'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Event Direction'" field="'EventDirectionDescription'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'From Date'" field="'Entity.FromDate'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'To Date'" field="'Entity.ToDate'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'System Volume'" field="'Entity.SystemVolume'" type="'Number'" numberprecision="'2'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Declared Volume'" field="'Entity.DeclaredVolume'" type="'Number'" numberprecision="'2'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Difference Volume'" field="'Entity.DifferenceVolume'" type="'Number'" numberprecision="'2'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'System Amount'" field="'Entity.SystemAmount'" type="'Number'" numberprecision="'2'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Declared Amount'" field="'Entity.DeclaredAmount'" type="'Number'" numberprecision="'2'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Difference Amount'" field="'Entity.DifferenceAmount'" type="'Number'" numberprecision="'2'"></vr-datagridcolumn>
+
+</vr-datagrid>

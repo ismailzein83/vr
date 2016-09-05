@@ -144,6 +144,9 @@
     <Compile Include="POS\POS.cs" />
     <Compile Include="POS\POSSetting.cs" />
     <Compile Include="RecurringPeriod\RecurringPeriodConfig.cs" />
+    <Compile Include="RevenueComparison\RevenueComparison.cs" />
+    <Compile Include="RevenueComparison\RevenueComparisonDetail.cs" />
+    <Compile Include="RevenueComparison\RevenueComparisonQuery.cs" />
     <Compile Include="ServiceType\ServiceType.cs" />
     <Compile Include="Package\Package.cs" />
     <Compile Include="Package\PackageDetail.cs" />

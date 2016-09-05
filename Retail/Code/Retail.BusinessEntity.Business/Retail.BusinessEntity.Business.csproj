@@ -47,6 +47,12 @@
     <Reference Include="Vanrise.AccountBalance.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Analytic.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BEBridge.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.Entities.dll</HintPath>
     </Reference>
@@ -115,6 +121,7 @@
     <Compile Include="Extensions\AccountSynchronizer.cs" />
     <Compile Include="Extensions\BalanceAlertAccountAction.cs" />
     <Compile Include="Extensions\ChargingPolicyRuleDefinitionFilter.cs" />
+    <Compile Include="RevenueComparisonManager.cs" />
     <Compile Include="StatusChargingManager.cs" />
     <Compile Include="StatusDefinitionManager.cs" />
     <Compile Include="SwitchManager.cs" />

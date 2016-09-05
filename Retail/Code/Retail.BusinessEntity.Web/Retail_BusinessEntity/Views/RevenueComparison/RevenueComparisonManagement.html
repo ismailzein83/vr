@@ -1,0 +1,31 @@
+﻿
+<vr-panel ng-controller="Retail_BE_RevenueComparisonManagementController">
+    <vr-form name="formFilter">
+
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="From Date" isrequired value="scopeModel.fromDate" type="date"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="To Date" isrequired value="scopeModel.toDate" type="date"></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+        </div>
+
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="style">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+
+        <vr-row>
+            <vr-columns width="fullrow" simplecol>
+                <retail-be-revenuecomparison-grid on-ready="scopeModel.onGridReady"></retail-be-revenuecomparison-grid>
+            </vr-columns>
+        </vr-row>
+
+    </vr-form>
+</vr-panel>

@@ -21,12 +21,22 @@ namespace Retail.BusinessEntity.Business
             Dictionary<int, OperatorDeclaredInfo> cachedOperatorDeclaredInfos = this.GetCachedOperatorDeclaredInfos();
 
             Func<OperatorDeclaredInfo, bool> filterExpression = null;
-            //(OperatorDeclaredInfo) =>
-            //(input.Query.Name == null || OperatorDeclaredInfo.Name.ToLower().Contains(input.Query.Name.ToLower()));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedOperatorDeclaredInfos.ToBigResult(input, filterExpression, OperatorDeclaredInfoDetailMapper));
         }
 
+        public IEnumerable<OperatorDeclaredInfo> GetOperatorDeclaredInfoForSpecificPeriod(DateTime fromDate, DateTime toDate)
+        {
+            Dictionary<int, OperatorDeclaredInfo> cachedOperatorDeclaredInfos = this.GetCachedOperatorDeclaredInfos();
+            Func<OperatorDeclaredInfo, bool> filterExpression =
+            (OperatorDeclaredInfo) =>
+            (OperatorDeclaredInfo.Settings.FromDate >= fromDate)
+            &&
+            (OperatorDeclaredInfo.Settings.ToDate <= toDate);
+            return this.GetCachedOperatorDeclaredInfos().FindAllRecords(filterExpression);
+        }
+
+       
         public OperatorDeclaredInfo GetOperatorDeclaredInfo(int OperatorDeclaredInfoId)
         {
             return this.GetCachedOperatorDeclaredInfos().GetRecord(OperatorDeclaredInfoId);

@@ -160,6 +160,7 @@
     <Compile Include="Controllers\ActionDefinitionController.cs" />
     <Compile Include="Controllers\ChargingPolicyController.cs" />
     <Compile Include="Controllers\CreditClassController.cs" />
+    <Compile Include="Controllers\RevenueComparisonController.cs" />
     <Compile Include="Controllers\StatusChargingSetController.cs" />
     <Compile Include="Controllers\StatusDefinitionController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
@@ -331,6 +332,8 @@
     <Content Include="Retail_BusinessEntity\Directives\RecurringPeriod\retail-be-recurringperiod-monthly.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringPeriod\Templates\WeeklyPeriodTemplate .html" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringPeriod\Templates\MonthlyPeriodTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\retail-be-revenuecomparison-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\Templates\RevenueComparisonGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RingoExtensions\TargetConvertor\retail-be-targetconvertor-directive.js" />
     <Content Include="Retail_BusinessEntity\Directives\RingoExtensions\TargetConvertor\Templates\TargetConvertorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-grid.js" />
@@ -356,6 +359,7 @@
     <Content Include="Retail_BusinessEntity\Services\AccountPartDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountServiceService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\RevenueComparisonAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\OperatorDeclaredInfoService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountTypeService.js" />
     <Content Include="Retail_BusinessEntity\Services\ActionDefinitionService.js" />
@@ -429,6 +433,8 @@
     <Content Include="Retail_BusinessEntity\Views\Package\PackageManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\Package\ServiceEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Package\ServiceEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\RevenueComparison\RevenueComparisonManagement.html" />
+    <Content Include="Retail_BusinessEntity\Views\RevenueComparison\RevenueComparisonManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ChargingPolicyPartEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ChargingPolicyPartEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeEditor.html" />
