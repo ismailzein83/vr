@@ -56,9 +56,11 @@
     <Compile Include="IAccountServiceDataManager.cs" />
     <Compile Include="IAccountTypeDataManager.cs" />
     <Compile Include="IActionDefinitionDataManager.cs" />
+    <Compile Include="IAgentDataManager.cs" />
     <Compile Include="IChargingPolicyDataManager.cs" />
     <Compile Include="ICreditClassDataManager.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IPOSDataManager.cs" />
     <Compile Include="IServiceTypeDataManager.cs" />
     <Compile Include="IStatusChargingSetDataManager.cs" />
     <Compile Include="IStatusDefinitionDataManager.cs" />

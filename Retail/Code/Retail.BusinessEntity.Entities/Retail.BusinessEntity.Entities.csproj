@@ -102,6 +102,8 @@
     <Compile Include="Action\ActionDefinitionQuery.cs" />
     <Compile Include="Action\ExecutedActionsData.cs" />
     <Compile Include="Action\ProvisionerDefinitionConfig.cs" />
+    <Compile Include="Agent\Agent.cs" />
+    <Compile Include="Agent\AgentSetting.cs" />
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
     <Compile Include="BusinessManagers\IActionDefinitionManager.cs" />
     <Compile Include="BusinessManagers\IBEManager.cs" />
@@ -139,6 +141,8 @@
     <Compile Include="Package\PackageServiceDetail.cs" />
     <Compile Include="Package\PackageServiceQuery.cs" />
     <Compile Include="Package\ServicePackageItemConfig.cs" />
+    <Compile Include="POS\POS.cs" />
+    <Compile Include="POS\POSSetting.cs" />
     <Compile Include="RecurringPeriod\RecurringPeriodConfig.cs" />
     <Compile Include="ServiceType\ServiceType.cs" />
     <Compile Include="Package\Package.cs" />
