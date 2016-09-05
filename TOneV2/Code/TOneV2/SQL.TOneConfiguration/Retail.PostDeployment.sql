@@ -119,7 +119,8 @@ as (select * from (values
 (15036,'Action Definitions','Action Definitions','#/view/Retail_BusinessEntity/Views/Action/Definition/ActionDefinitionManagement',1508,'Retail_BE/ActionDefinition/GetFilteredActionDefinitions',null,null,null,0,6),
 (15042,'Style Definitions','Style Definitions','#/view/Common/Views/StyleDefinition/StyleDefinitionManagement',1508,'VRCommon/StyleDefinition/GetFilteredStyleDefinitions',null,null,null,0,7),
 (15043,'Balance Alert Rule','Balance Alert Rule',null,101,null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionId":14}',101,4),
-(15045,'Credit Classes','Credit Classes','#/view/Retail_BusinessEntity/Views/CreditClass/CreditClassManagement',101,null,null,null,null,0,3)
+(15045,'Credit Classes','Credit Classes','#/view/Retail_BusinessEntity/Views/CreditClass/CreditClassManagement',101,null,null,null,null,0,3),
+(15060,'Operator Declared Info','Operator Declared Info Management','#/view/Retail_BusinessEntity/Views/OperatorDeclaredInfo/OperatorDeclaredInfoManagement',101,null,null,null,null,0,4)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
