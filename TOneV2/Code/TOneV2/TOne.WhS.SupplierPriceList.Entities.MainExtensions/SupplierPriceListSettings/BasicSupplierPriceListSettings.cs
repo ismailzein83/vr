@@ -100,7 +100,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
 
                         if (obj.Fields.TryGetValue("Code", out codeField))
                         {
-                            if (codeField.FieldValue == null)
+                            if (codeField.FieldValue == null || String.IsNullOrEmpty(codeField.FieldValue.ToString()))
                             {
                                 priceListCodes.Add(new PriceListCode
                                 {
