@@ -30,7 +30,6 @@
 
             var directiveAPI;
             var directiveReadyDeferred;
-            var directivePayload;
 
             function initializeController() {
                 $scope.scopeModel = {};

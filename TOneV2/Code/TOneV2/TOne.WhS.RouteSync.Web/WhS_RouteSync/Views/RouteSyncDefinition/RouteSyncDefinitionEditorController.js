@@ -60,7 +60,7 @@
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
-                GetRouteSyncDefinition().then(function () {
+                getRouteSyncDefinition().then(function () {
                     loadAllControls();
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -72,7 +72,7 @@
             }
         }
 
-        function GetRouteSyncDefinition() {
+        function getRouteSyncDefinition() {
             return WhS_RouteSync_RouteSyncDefinitionAPIService.GetRouteSyncDefinition(routeSyncDefinitionId).then(function (response) {
                 routeSyncDefinitionEntity = response;
             });

@@ -49,7 +49,7 @@
                 drillDownTabs.push(drillDownTab);
             }
             function setDrillDownTabs() {
-                var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI, undefined);
+                var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI);
                 drillDownManager.setDrillDownExtensionObject(dataAnalysisDefinition);  
             }
 
