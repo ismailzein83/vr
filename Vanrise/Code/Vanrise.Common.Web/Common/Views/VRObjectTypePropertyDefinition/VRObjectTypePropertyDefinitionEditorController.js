@@ -23,11 +23,14 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
+            console.log(parameters);
+
             if (parameters != undefined) {
                 propertyName = parameters.propertyName;
                 properties = parameters.properties;
                 if (parameters.context != undefined)
                     objectType = parameters.context.getObjectType();
+                console.log(objectType);
             }
             isEditMode = (propertyName != undefined);
         }
