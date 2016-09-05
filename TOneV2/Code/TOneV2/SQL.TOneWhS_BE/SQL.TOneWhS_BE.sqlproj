@@ -376,5 +376,13 @@
     <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierOtherRate_Preview_GetFiltered.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetFutureByOwner.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierCode_GetActiveCodesBySuppliers.sql" />
+    <Build Include="TOneWhS_BE\Tables\VolumeCommitment.sql" />
+    <Build Include="TOneWhS_BE\Tables\SaleEntityService.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_VolumeCommitment_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_VolumeCommitment_Insert.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_VolumeCommitment_GetAll.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZonesServices_GetByDate.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityService_GetEffectiveZoneServices.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityService_GetEffectiveDefaultServices.sql" />
   </ItemGroup>
 </Project>
