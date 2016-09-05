@@ -53,7 +53,7 @@ namespace Vanrise.GenericData.Data.SQL
         public void WriteRecordToStream(StagingSummaryRecord record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", record.ProcessInstanceId, record.StageName, record.BatchStart, Convert.ToBase64String(record.Data));
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", record.ProcessInstanceId, record.StageName, GetDateTimeForBCP(record.BatchStart), Convert.ToBase64String(record.Data));
         }
 
 
