@@ -77,6 +77,8 @@
     <Folder Include="VR_AccountBalance\Stored Procedures\" />
     <Folder Include="VR_AccountBalance\User Defined Types\" />
     <Folder Include="VR_AccountBalance\Functions\" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Retail\Tables\Package.sql" />
@@ -207,5 +209,9 @@
     <Build Include="VR_AccountBalance\User Defined Types\LiveBalanceThresholdTableType.sql" />
     <Build Include="VR_AccountBalance\User Defined Types\LiveBalanceAlertRuleTableType.sql" />
     <Build Include="VR_AccountBalance\User Defined Types\AlertRuleThresholdActionsTableType.sql" />
+    <Build Include="dbo\Tables\OperatorDeclaredInfo.sql" />
+    <Build Include="Retail\Stored Procedures\sp_OperatorDeclaredInfo_Update.sql" />
+    <Build Include="Retail\Stored Procedures\sp_OperatorDeclaredInfo_Insert.sql" />
+    <Build Include="Retail\Stored Procedures\sp_OperatorDeclaredInfo_GetAll.sql" />
   </ItemGroup>
 </Project>

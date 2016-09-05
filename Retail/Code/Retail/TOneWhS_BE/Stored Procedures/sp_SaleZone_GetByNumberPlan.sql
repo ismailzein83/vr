@@ -9,7 +9,7 @@ AS
 BEGIN
 	
 	SET NOCOUNT ON;
-	SELECT  [ID],[SellingNumberPlanID],[CountryID],[Name],[BED],[EED]
-	FROM	[TOneWhS_BE].[SaleZone] sz with(nolock)
-	Where	SellingNumberPlanID=@SellingNumberPlanID
+SELECT  [ID],[SellingNumberPlanID],[CountryID],[Name],[BED],[EED],SourceID
+FROM	[TOneWhS_BE].[SaleZone] sz WITH(NOLOCK) 
+Where	SellingNumberPlanID=@SellingNumberPlanID
 END

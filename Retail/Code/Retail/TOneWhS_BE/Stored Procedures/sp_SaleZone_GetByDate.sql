@@ -14,10 +14,9 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-	SELECT  sz.[ID],sz.[Name],sz.CountryID,sz.SellingNumberPlanID,sz.BED,sz.EED
-	FROM	[TOneWhS_BE].SaleZone sz with(nolock)
-	Where	sz.SellingNumberPlanID=@SellingNumberPlanId
-			and (sz.EED is null or sz.EED > @when) and sz.CountryId = @CountryId
-	  
+SELECT  sz.[ID],sz.[Name],sz.CountryID,sz.SellingNumberPlanID,sz.BED,sz.EED
+FROM	[TOneWhS_BE].SaleZone sz WITH(NOLOCK) 
+Where	(sz.EED is null or sz.EED > @when) and sz.CountryId = @CountryId
+		and sz.SellingNumberPlanID=@SellingNumberPlanId
 	  
 END

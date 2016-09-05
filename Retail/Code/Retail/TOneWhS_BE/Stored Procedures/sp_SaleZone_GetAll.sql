@@ -3,6 +3,6 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	SELECT	[ID],[SellingNumberPlanID],[CountryID],[Name],[BED],[EED]
-	FROM	[TOneWhS_BE].[SaleZone] sz with(nolock)
+	SELECT	[ID],[SellingNumberPlanID],[CountryID],[Name],[BED],[EED],SourceID
+	FROM	[TOneWhS_BE].[SaleZone] sz WITH(NOLOCK) 
 END
