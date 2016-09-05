@@ -118,6 +118,9 @@
     <Compile Include="Deals\DealQuery.cs" />
     <Compile Include="Deals\DealSellingPart.cs" />
     <Compile Include="Deals\VolumeCommitment.cs" />
+    <Compile Include="Deals\VolumeCommitmentDetail.cs" />
+    <Compile Include="Deals\VolumeCommitmentInfo.cs" />
+    <Compile Include="Deals\VolumeCommitmentQuery.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="IBusinessEntity.cs" />
     <Compile Include="ICode.cs" />

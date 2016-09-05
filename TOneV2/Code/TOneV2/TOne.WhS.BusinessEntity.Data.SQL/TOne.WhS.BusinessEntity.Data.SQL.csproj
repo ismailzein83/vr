@@ -83,6 +83,7 @@
     <Compile Include="SupplierZoneDataManager.cs" />
     <Compile Include="SwitchConnectivityDataManager.cs" />
     <Compile Include="SwitchDataManager.cs" />
+    <Compile Include="VolumeCommitmentDataManager.cs" />
     <Compile Include="ZoneServiceConfigManager.cs" />
   </ItemGroup>
   <ItemGroup>

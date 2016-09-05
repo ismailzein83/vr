@@ -78,6 +78,7 @@
     <Compile Include="ISupplierZoneDataManager.cs" />
     <Compile Include="ISwitchConnectivityDataManager.cs" />
     <Compile Include="ISwitchDataManager.cs" />
+    <Compile Include="IVolumeCommitmentDataManager.cs" />
     <Compile Include="IZoneServiceConfigDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
