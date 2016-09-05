@@ -134,6 +134,8 @@
                 return mailMessageTypeSelectorLoadDeferred.promise;
             }
             function loadGrid() {
+                if (!isEditMode) return;
+
                 onMailMessageTypeSelectionChangedDeferred = UtilsService.createPromiseDeferred();
                 var gridLoadDeferred = UtilsService.createPromiseDeferred();
 

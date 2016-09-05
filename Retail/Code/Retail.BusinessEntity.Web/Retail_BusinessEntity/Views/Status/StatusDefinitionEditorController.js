@@ -60,7 +60,7 @@
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
-                    GetStatusDefinition().then(function () {
+                getStatusDefinition().then(function () {
                     loadAllControls();
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -72,8 +72,7 @@
             }
         }
 
-
-        function GetStatusDefinition() {
+        function getStatusDefinition() {
             return Retail_BE_StatusDefinitionAPIService.GetStatusDefinition(statusDefinitionId).then(function (response) {
                 statusDefinitionEntity = response;
             });
@@ -85,46 +84,47 @@
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
-        }
-        function setTitle() {
-            if (isEditMode) {
-                var statusDefinitionName = (statusDefinitionEntity != undefined) ? statusDefinitionEntity.Name : null;
-                $scope.title = UtilsService.buildTitleForUpdateEditor(statusDefinitionName, 'StatusDefinition');
-            }
-            else {
-                $scope.title = UtilsService.buildTitleForAddEditor('StatusDefinition');
-            }
-        }
-        function loadStaticData() {
-            if (statusDefinitionEntity == undefined)
-                return;
-            $scope.scopeModel.name = statusDefinitionEntity.Name;
-        }
-        function loadEntityTypeSelector() {
-            var entityTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-            entityTypeSelectorReadyDeferred.promise.then(function () {
-                var entityTypeSelectorPayload = null;
+
+            function setTitle() {
                 if (isEditMode) {
-                    entityTypeSelectorPayload = {
-                        selectedIds: statusDefinitionEntity.EntityType
-                    };
+                    var statusDefinitionName = (statusDefinitionEntity != undefined) ? statusDefinitionEntity.Name : null;
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(statusDefinitionName, 'StatusDefinition');
                 }
-                VRUIUtilsService.callDirectiveLoad(entityTypeAPI, entityTypeSelectorPayload, entityTypeSelectorLoadDeferred);
-            });
-            return entityTypeSelectorLoadDeferred.promise;
-        }
-        function loadStyleDefinitionSelector() {
-            var styleDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-            styleDefinitionSelectorReadyDeferred.promise.then(function () {
-                var styleDefinitionSelectorPayload = null;
-                if (isEditMode) {
-                    styleDefinitionSelectorPayload = {
-                        selectedIds: statusDefinitionEntity.Settings.StyleDefinitionId
-                    };
+                else {
+                    $scope.title = UtilsService.buildTitleForAddEditor('StatusDefinition');
                 }
-                VRUIUtilsService.callDirectiveLoad(styleDefinitionAPI, styleDefinitionSelectorPayload, styleDefinitionSelectorLoadDeferred);
-            });
-            return styleDefinitionSelectorLoadDeferred.promise;
+            }
+            function loadStaticData() {
+                if (statusDefinitionEntity == undefined)
+                    return;
+                $scope.scopeModel.name = statusDefinitionEntity.Name;
+            }
+            function loadEntityTypeSelector() {
+                var entityTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                entityTypeSelectorReadyDeferred.promise.then(function () {
+                    var entityTypeSelectorPayload = null;
+                    if (isEditMode) {
+                        entityTypeSelectorPayload = {
+                            selectedIds: statusDefinitionEntity.EntityType
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(entityTypeAPI, entityTypeSelectorPayload, entityTypeSelectorLoadDeferred);
+                });
+                return entityTypeSelectorLoadDeferred.promise;
+            }
+            function loadStyleDefinitionSelector() {
+                var styleDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                styleDefinitionSelectorReadyDeferred.promise.then(function () {
+                    var styleDefinitionSelectorPayload = null;
+                    if (isEditMode) {
+                        styleDefinitionSelectorPayload = {
+                            selectedIds: statusDefinitionEntity.Settings.StyleDefinitionId
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(styleDefinitionAPI, styleDefinitionSelectorPayload, styleDefinitionSelectorLoadDeferred);
+                });
+                return styleDefinitionSelectorLoadDeferred.promise;
+            }
         }
 
         function insert() {

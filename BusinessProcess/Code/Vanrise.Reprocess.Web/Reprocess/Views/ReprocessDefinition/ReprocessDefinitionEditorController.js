@@ -110,7 +110,7 @@
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
-                GetReprocessDefinition().then(function () {
+                getReprocessDefinition().then(function () {
                     loadAllControls();
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -123,7 +123,7 @@
         }
 
 
-        function GetReprocessDefinition() {
+        function getReprocessDefinition() {
             return Reprocess_ReprocessDefinitionAPIService.GetReprocessDefinition(reprocessDefinitionId).then(function (response) {
                 reprocessDefinitionEntity = response;
             });
@@ -135,77 +135,78 @@
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
-        }
-        function setTitle() {
-            if (isEditMode) {
-                var reprocessDefinitionName = (reprocessDefinitionEntity != undefined) ? reprocessDefinitionEntity.Name : null;
-                $scope.title = UtilsService.buildTitleForUpdateEditor(reprocessDefinitionName, 'ReprocessDefinition');
-            }
-            else {
-                $scope.title = UtilsService.buildTitleForAddEditor('ReprocessDefinition');
-            }
-        }
-        function loadStaticData() {
-            if (reprocessDefinitionEntity == undefined)
-                return;
-            $scope.scopeModel.name = reprocessDefinitionEntity.Name;
-        }
-        function loadDataRecordStorageSelector() {
-            var dataRecordStorageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-            dataRecordStorageSelectorReadyDeferred.promise.then(function () {
-                var dataRecordStorageSelectorPayload;
+
+            function setTitle() {
                 if (isEditMode) {
-                    dataRecordStorageSelectorPayload = {
-                        selectedIds: reprocessDefinitionEntity.Settings.SourceRecordStorageId
-                    };
+                    var reprocessDefinitionName = (reprocessDefinitionEntity != undefined) ? reprocessDefinitionEntity.Name : null;
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(reprocessDefinitionName, 'ReprocessDefinition');
                 }
-                VRUIUtilsService.callDirectiveLoad(dataRecordStorageAPI, dataRecordStorageSelectorPayload, dataRecordStorageSelectorLoadDeferred);
-            });
-            return dataRecordStorageSelectorLoadDeferred.promise;
-        }
-        function loadExecutionFlowDefinitionSelector() {
-            var executionFlowDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-            executionFlowDefinitionSelectorReadyDeferred.promise.then(function () {
-                var executionFlowDefinitionSelectorPayload;
-                if (isEditMode) {
-                    executionFlowDefinitionSelectorPayload = {
-                        selectedIds: reprocessDefinitionEntity.Settings.ExecutionFlowDefinitionId
-                    };
+                else {
+                    $scope.title = UtilsService.buildTitleForAddEditor('ReprocessDefinition');
                 }
-                VRUIUtilsService.callDirectiveLoad(executionFlowDefinitionAPI, executionFlowDefinitionSelectorPayload, executionFlowDefinitionSelectorLoadDeferred);
-            });
-            return executionFlowDefinitionSelectorLoadDeferred.promise;
-        }
-        function loadExecutionFlowStageSelector() {
-            if (reprocessDefinitionEntity == undefined || reprocessDefinitionEntity.Settings.ExecutionFlowDefinitionId == undefined)
-                return;
-
-            var executionFlowStageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-            if (onExecutionFlowDefinitionSelectionChangedDeferred == undefined)
-                onExecutionFlowDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
-            if (onDataRecordStorageSelectionChangedDeferred == undefined)
-                onDataRecordStorageSelectionChangedDeferred = UtilsService.createPromiseDeferred();
-
-            UtilsService.waitMultiplePromises([executionFlowStageSelectorReadyDeferred.promise, onExecutionFlowDefinitionSelectionChangedDeferred.promise, onDataRecordStorageSelectionChangedDeferred.promise])
-                .then(function () {
-                    setTimeout(function () {
-                        UtilsService.safeApply($scope, function () {
-                            onExecutionFlowDefinitionSelectionChangedDeferred = undefined;
-                            onDataRecordStorageSelectionChangedDeferred = undefined;
-                            var executionFlowStageSelectorPayload;
-                            executionFlowStageSelectorPayload = {
-                                executionFlowDefinitionId: reprocessDefinitionEntity.Settings.ExecutionFlowDefinitionId,
-                                filter: { Filters: [buildStageRecordTypeFilter()] },
-                                selectedIds: reprocessDefinitionEntity.Settings.InitiationStageNames
-                            };
-                            VRUIUtilsService.callDirectiveLoad(executionFlowStageAPI, executionFlowStageSelectorPayload, executionFlowStageSelectorLoadDeferred);
-                        });
-                    });
-                   
+            }
+            function loadStaticData() {
+                if (reprocessDefinitionEntity == undefined)
+                    return;
+                $scope.scopeModel.name = reprocessDefinitionEntity.Name;
+            }
+            function loadDataRecordStorageSelector() {
+                var dataRecordStorageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                dataRecordStorageSelectorReadyDeferred.promise.then(function () {
+                    var dataRecordStorageSelectorPayload;
+                    if (isEditMode) {
+                        dataRecordStorageSelectorPayload = {
+                            selectedIds: reprocessDefinitionEntity.Settings.SourceRecordStorageId
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(dataRecordStorageAPI, dataRecordStorageSelectorPayload, dataRecordStorageSelectorLoadDeferred);
                 });
+                return dataRecordStorageSelectorLoadDeferred.promise;
+            }
+            function loadExecutionFlowDefinitionSelector() {
+                var executionFlowDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                executionFlowDefinitionSelectorReadyDeferred.promise.then(function () {
+                    var executionFlowDefinitionSelectorPayload;
+                    if (isEditMode) {
+                        executionFlowDefinitionSelectorPayload = {
+                            selectedIds: reprocessDefinitionEntity.Settings.ExecutionFlowDefinitionId
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(executionFlowDefinitionAPI, executionFlowDefinitionSelectorPayload, executionFlowDefinitionSelectorLoadDeferred);
+                });
+                return executionFlowDefinitionSelectorLoadDeferred.promise;
+            }
+            function loadExecutionFlowStageSelector() {
+                if (reprocessDefinitionEntity == undefined || reprocessDefinitionEntity.Settings.ExecutionFlowDefinitionId == undefined)
+                    return;
 
-            return executionFlowStageSelectorLoadDeferred.promise;
+                var executionFlowStageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                if (onExecutionFlowDefinitionSelectionChangedDeferred == undefined)
+                    onExecutionFlowDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+                if (onDataRecordStorageSelectionChangedDeferred == undefined)
+                    onDataRecordStorageSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+
+                UtilsService.waitMultiplePromises([executionFlowStageSelectorReadyDeferred.promise, onExecutionFlowDefinitionSelectionChangedDeferred.promise, onDataRecordStorageSelectionChangedDeferred.promise])
+                    .then(function () {
+                        setTimeout(function () {
+                            UtilsService.safeApply($scope, function () {
+                                onExecutionFlowDefinitionSelectionChangedDeferred = undefined;
+                                onDataRecordStorageSelectionChangedDeferred = undefined;
+                                var executionFlowStageSelectorPayload;
+                                executionFlowStageSelectorPayload = {
+                                    executionFlowDefinitionId: reprocessDefinitionEntity.Settings.ExecutionFlowDefinitionId,
+                                    filter: { Filters: [buildStageRecordTypeFilter()] },
+                                    selectedIds: reprocessDefinitionEntity.Settings.InitiationStageNames
+                                };
+                                VRUIUtilsService.callDirectiveLoad(executionFlowStageAPI, executionFlowStageSelectorPayload, executionFlowStageSelectorLoadDeferred);
+                            });
+                        });
+
+                    });
+
+                return executionFlowStageSelectorLoadDeferred.promise;
+            }
         }
 
         function insert() {
@@ -237,7 +238,6 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
-
 
         function buildStageRecordTypeFilter() {
             return {

@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/WhS_Routing/Directives/MainExtensions/RouteReader/Templates/RouteSyncReaderTemplate.html"
+            templateUrl: "/Client/Modules/WhS_Routing/Directives/Extensions/RouteReader/Templates/RouteSyncReaderTemplate.html"
 
         };
         function RouteSyncReader($scope, ctrl, $attrs) {

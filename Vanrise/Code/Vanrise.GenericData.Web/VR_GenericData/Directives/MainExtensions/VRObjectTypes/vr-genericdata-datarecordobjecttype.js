@@ -61,11 +61,7 @@
 
                     VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, dataRecordObjectTypeSelectorLoadDeferred);
 
-                    return dataRecordObjectTypeSelectorLoadDeferred.promise.catch(function (error) {
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    }).finally(function () {
-                        $scope.scopeModel.isLoading = false;
-                    });
+                    return dataRecordObjectTypeSelectorLoadDeferred.promise
                 };
 
                 api.getData = function() {

@@ -53,7 +53,7 @@
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
-                GetCreditClass().then(function () {
+                getCreditClass().then(function () {
                     loadAllControls();
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -66,7 +66,7 @@
         }
 
 
-        function GetCreditClass() {
+        function getCreditClass() {
             return Retail_BE_CreditClassAPIService.GetCreditClass(creditClassId).then(function (response) {
                 creditClassEntity = response;
             });

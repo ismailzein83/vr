@@ -64,7 +64,6 @@
             }
         }
 
-
         function getStyleDefinition() {
             return VRCommon_StyleDefinitionAPIService.GetStyleDefinition(styleDefinitionId).then(function (response) {
                 styleDefinitionEntity = response;
@@ -77,33 +76,34 @@
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
-        }
-        function setTitle() {
-            if (isEditMode) {
-                var styleDefinitionName = (styleDefinitionEntity != undefined) ? styleDefinitionEntity.Name : null;
-                $scope.title = UtilsService.buildTitleForUpdateEditor(styleDefinitionName, 'StyleDefinition');
-            }
-            else {
-                $scope.title = UtilsService.buildTitleForAddEditor('StyleDefinition');
-            }
-        }
-        function loadStaticData() {
-            if (styleDefinitionEntity == undefined)
-                return;
-            $scope.scopeModel.name = styleDefinitionEntity.Name;
-        }
-        function loadSettingsDirective() {
-            var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-            settingsDirectiveReadyDeferred.promise.then(function () {
-                var settingsDirectivePayload;
-                if (styleDefinitionEntity != undefined) {
-                    settingsDirectivePayload = { styleDefinitionSettings: styleDefinitionEntity.StyleDefinitionSettings };
+            function setTitle() {
+                if (isEditMode) {
+                    var styleDefinitionName = (styleDefinitionEntity != undefined) ? styleDefinitionEntity.Name : null;
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(styleDefinitionName, 'StyleDefinition');
                 }
-                VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
-            });
+                else {
+                    $scope.title = UtilsService.buildTitleForAddEditor('StyleDefinition');
+                }
+            }
+            function loadStaticData() {
+                if (styleDefinitionEntity == undefined)
+                    return;
+                $scope.scopeModel.name = styleDefinitionEntity.Name;
+            }
+            function loadSettingsDirective() {
+                var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-            return settingsDirectiveLoadDeferred.promise;
+                settingsDirectiveReadyDeferred.promise.then(function () {
+                    var settingsDirectivePayload;
+                    if (styleDefinitionEntity != undefined) {
+                        settingsDirectivePayload = { styleDefinitionSettings: styleDefinitionEntity.StyleDefinitionSettings };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
+                });
+
+                return settingsDirectiveLoadDeferred.promise;
+            }
         }
 
         function insert() {

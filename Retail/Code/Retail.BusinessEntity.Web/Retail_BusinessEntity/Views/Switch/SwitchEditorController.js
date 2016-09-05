@@ -76,39 +76,39 @@
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
-        }
-        function setTitle() {
-            if (isEditMode) {
-                var switchName = (switchEntity != undefined) ? switchEntity.Name : null;
-                $scope.title = UtilsService.buildTitleForUpdateEditor(switchName, 'Switch');
-            }
-            else {
-                $scope.title = UtilsService.buildTitleForAddEditor('Switch');
-            }
-        }
-        function loadStaticData() {
-            if (switchEntity == undefined)
-                return;
-            $scope.scopeModel.name = switchEntity.Name;
 
-            if (switchEntity.Settings == null)
-                return;
-            $scope.scopeModel.description = switchEntity.Settings.Description;
-            $scope.scopeModel.location = switchEntity.Settings.Location;
-        }
-        function loadSettingsDirective()
-        {
-            var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-            settingsDirectiveReadyDeferred.promise.then(function () {
-                var settingsDirectivePayload;
-                if (switchEntity != undefined) {
-                    settingsDirectivePayload = { settings: switchEntity.Settings };
+            function setTitle() {
+                if (isEditMode) {
+                    var switchName = (switchEntity != undefined) ? switchEntity.Name : null;
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(switchName, 'Switch');
                 }
-                VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
-            });
+                else {
+                    $scope.title = UtilsService.buildTitleForAddEditor('Switch');
+                }
+            }
+            function loadStaticData() {
+                if (switchEntity == undefined)
+                    return;
+                $scope.scopeModel.name = switchEntity.Name;
 
-            return settingsDirectiveLoadDeferred.promise;
+                if (switchEntity.Settings == null)
+                    return;
+                $scope.scopeModel.description = switchEntity.Settings.Description;
+                $scope.scopeModel.location = switchEntity.Settings.Location;
+            }
+            function loadSettingsDirective() {
+                var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                settingsDirectiveReadyDeferred.promise.then(function () {
+                    var settingsDirectivePayload;
+                    if (switchEntity != undefined) {
+                        settingsDirectivePayload = { settings: switchEntity.Settings };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
+                });
+
+                return settingsDirectiveLoadDeferred.promise;
+            }
         }
 
         function insert() {
@@ -140,6 +140,7 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
+
         function buildSwitchObjFromScope()
         {
             var settings = settingsDirectiveAPI.getData();

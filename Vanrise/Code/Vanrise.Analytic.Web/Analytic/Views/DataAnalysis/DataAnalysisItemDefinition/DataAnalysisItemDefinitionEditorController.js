@@ -157,7 +157,7 @@
                 settingsDirectiveReadyDeferred.promise.then(function () {
 
                     dataRecordTypeSelectionChangedDeferred = UtilsService.createPromiseDeferred();
-                    if (dataAnalysisItemDefinitionEntity == undefined) dataRecordTypeSelectionChangedDeferred.resolve();
+                    if (!isEditMode) dataRecordTypeSelectionChangedDeferred.resolve();
 
                     dataRecordTypeSelectionChangedDeferred.promise.then(function () {
                         dataRecordTypeSelectionChangedDeferred = undefined;
