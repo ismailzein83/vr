@@ -135,7 +135,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             {
                 if (!importedRateTypeIds.Contains(item.Key))
                 {
-                    NotImportedRate notImportedRate = this.GetNotImportedRate(item.Value, true);
+                    NotImportedRate notImportedRate = this.GetNotImportedRate(item.Value, false);
                     if (notImportedRate != null)
                         importedZone.NotImportedOtherRates.Add(notImportedRate);
                 }

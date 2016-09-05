@@ -50,7 +50,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                             SystemRateBED = importedOtherRate.SystemRate != null ? importedOtherRate.SystemRate.BED : (DateTime?)null,
                             SystemRateEED = importedOtherRate.SystemRate != null ? importedOtherRate.SystemRate.EED : (DateTime?)null,
                             RateTypeId = importedOtherRate.RateTypeId.Value,
-                            ChangeTypeRate = GetRateChangeType(importedOtherRate)
+                            ChangeTypeRate = importedOtherRate.ChangeType
                         };
 
                         if (importedOtherRate.SystemRate != null)
@@ -72,7 +72,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                             SystemRateBED = notImportedOtherRate.BED,
                             SystemRateEED = notImportedOtherRate.EED,
                             RateTypeId = notImportedOtherRate.RateTypeId.Value,
-                            ChangeTypeRate = RateChangeType.Deleted
+                            ChangeTypeRate = notImportedOtherRate.HasChanged ? RateChangeType.Deleted : RateChangeType.NotChanged
                         });
                     }
                 }
@@ -100,11 +100,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             }
 
             previewZonesRatesQueue.Enqueue(otherRatesPreview);
-        }
-
-        private RateChangeType GetRateChangeType(ImportedRate importedRate)
-        {
-            return importedRate.ChangeType;
         }
     }
 }
